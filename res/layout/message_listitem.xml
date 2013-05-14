@@ -21,13 +21,14 @@
     	android:orientation="vertical"
     	android:background="@drawable/review_bg_left"> 
         
-		<TextView
+		<net.oschina.app.widget.LinkView
 			android:id="@+id/message_listitem_username" 
 			android:layout_width="fill_parent" 
 			android:layout_height="wrap_content"
 			android:includeFontPadding="false"
 			android:textSize="@dimen/text_size_15"
-			android:textColor="@color/listitem_black"/>
+			android:textColor="@color/listitem_black"
+			android:autoLink="web|email"/>
 
 		<RelativeLayout 
 	    	android:orientation="horizontal" 

@@ -1,18 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ViewSwitcher xmlns:android="http://schemas.android.com/apk/res/android"
-   	android:id="@+id/imagezoomdialog_view_switcher" 
-   	android:layout_width="fill_parent" 
-   	android:layout_height="fill_parent">
-	<ProgressBar
-		android:id="@+id/imagezoomdialog_progress" 
-		android:layout_width="wrap_content" 
-		android:layout_height="wrap_content"
-		android:layout_gravity="center"
-		style="?android:attr/progressBarStyleLarge"/>
-	<ImageView
-		android:id="@+id/imagezoomdialog_image"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		android:layout_gravity="center"
-		android:scaleType="matrix"/>
-</ViewSwitcher>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <ViewSwitcher
+        android:id="@+id/imagezoomdialog_view_switcher"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <ProgressBar
+            android:id="@+id/imagezoomdialog_progress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+        <ImageView
+            android:id="@+id/imagezoomdialog_image"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:scaleType="matrix" />
+    </ViewSwitcher>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:paddingBottom="10dip"
+        android:layout_alignParentBottom="true" >
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:visibility="gone"
+            android:background="@drawable/save_image" />
+    </LinearLayout>
+
+</RelativeLayout>

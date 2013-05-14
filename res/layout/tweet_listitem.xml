@@ -27,14 +27,24 @@
            	android:textSize="@dimen/text_size_14"
             android:textColor="@color/listitem_blue"/>
 
-		<TextView 
+	<!-- 	<TextView 
 			android:id="@+id/tweet_listitem_content" 
 			android:layout_width="wrap_content" 
 			android:layout_height="wrap_content"
 			android:layout_marginTop="8dip"
 			android:textSize="@dimen/text_size_15"
 			android:textColor="@color/listitem_black"
-			android:textColorLink="@color/listitem_blue"/>
+			android:textColorLink="@color/listitem_blue"/> -->
+		
+		<net.oschina.app.widget.LinkView 
+			android:id="@+id/tweet_listitem_content" 
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:layout_marginTop="8dip"
+			android:textSize="@dimen/text_size_15"
+			android:textColor="@color/listitem_black"
+			android:textColorLink="@color/listitem_blue"
+			android:autoLink="web|email"/>	
 			
 	    <ImageView 
 	    	android:id="@+id/tweet_listitem_image"
