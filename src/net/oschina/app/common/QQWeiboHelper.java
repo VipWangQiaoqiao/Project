@@ -10,9 +10,9 @@ import android.net.Uri;
 
 /**
  * 腾讯微博帮助类
- * @author liux (http://my.oschina.net/liux)
- * @version 1.0
- * @created 2012-3-22
+ * @author yeguozhong@yeah.net
+ * @version 2.0
+ * @created 2013-4-25
  */
 public class QQWeiboHelper {
 	
@@ -21,6 +21,7 @@ public class QQWeiboHelper {
 	private static final String Share_Site = "OSChina.net";
 	private static final String Share_AppKey = "96f54f97c4de46e393c4835a266207f4";
 	
+
 	/**
 	 * 分享到腾讯微博
 	 * @param activity
