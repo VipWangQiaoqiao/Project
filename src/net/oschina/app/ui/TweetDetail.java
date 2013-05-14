@@ -110,6 +110,7 @@ public class TweetDetail extends BaseActivity {
         this.initData();   
         //初始化表情视图
       	this.initGridView();
+      	
     }
     
     /**
@@ -351,7 +352,7 @@ public class TweetDetail extends BaseActivity {
 					String body = UIHelper.WEB_STYLE + tweetDetail.getBody();
 					body = body.replaceAll("(<img[^>]*?)\\s+width\\s*=\\s*\\S+","$1");
 					body = body.replaceAll("(<img[^>]*?)\\s+height\\s*=\\s*\\S+","$1");
-
+					
 					content.loadDataWithBaseURL(null, body, "text/html", "utf-8",null);
 					content.setWebViewClient(UIHelper.getWebViewClient());
 					

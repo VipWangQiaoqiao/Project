@@ -161,10 +161,10 @@ public class BlogDetail extends BaseActivity {
     	mDetail.setEnabled(false);
     	
     	mWebView = (WebView)findViewById(R.id.blog_detail_webview);
-    	mWebView.getSettings().setJavaScriptEnabled(false);
     	mWebView.getSettings().setSupportZoom(true);
     	mWebView.getSettings().setBuiltInZoomControls(true);
     	mWebView.getSettings().setDefaultFontSize(15);
+    	UIHelper.addWebImageShow(this, mWebView);
     	
     	mBack.setOnClickListener(UIHelper.finish(this));
     	mFavorite.setOnClickListener(favoriteClickListener);
@@ -276,6 +276,12 @@ public class BlogDetail extends BaseActivity {
 					if(isLoadImage){
 						body = body.replaceAll("(<img[^>]*?)\\s+width\\s*=\\s*\\S+","$1");
 						body = body.replaceAll("(<img[^>]*?)\\s+height\\s*=\\s*\\S+","$1");
+						
+						// 添加点击图片放大支持
+						body = body.replaceAll("(<img[^>]+src=\")(\\S+)\"",
+								"$1$2\" onClick=\"javascript:mWebViewImageListener.onImageClick('$2')\"");
+						
+						System.out.println(body);
 					}else{
 						body = body.replaceAll("<\\s*img\\s+([^>]*)\\s*>","");
 					}
@@ -856,7 +862,10 @@ public class BlogDetail extends BaseActivity {
 
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent event) {
-		gd.onTouchEvent(event);
+		if (isAllowFullScreen()) {
+			gd.onTouchEvent(event);
+		}
 		return super.dispatchTouchEvent(event);
 	}
+	
 }
