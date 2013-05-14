@@ -19,11 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.oschina.app.R;
-
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
