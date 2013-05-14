@@ -76,6 +76,8 @@ public class AppContext extends Application {
 	private int loginUid = 0;	//登录用户的id
 	private Hashtable<String, Object> memCacheRegion = new Hashtable<String, Object>();
 	
+	private String saveImagePath;//保存图片路径
+	
 	private Handler unLoginHandler = new Handler(){
 		public void handleMessage(Message msg) {
 			if(msg.what == 1){
@@ -90,8 +92,22 @@ public class AppContext extends Application {
 		super.onCreate();
         //注册App异常崩溃处理器
         Thread.setDefaultUncaughtExceptionHandler(AppException.getAppExceptionHandler());
+        
+        init();
 	}
 
+	/**
+	 * 初始化
+	 */
+	private void init(){
+		//设置保存图片的路径
+		saveImagePath = getProperty(AppConfig.SAVE_IMAGE_PATH);
+		if(StringUtils.isEmpty(saveImagePath)){
+			setProperty(AppConfig.SAVE_IMAGE_PATH, AppConfig.DEFAULT_SAVE_IMAGE_PATH);
+			saveImagePath = AppConfig.DEFAULT_SAVE_IMAGE_PATH;
+		}
+	}
+	
 	/**
 	 * 检测当前系统声音是否为正常模式
 	 * @return
@@ -1658,5 +1674,21 @@ public class AppContext extends Application {
 	}
 	public void removeProperty(String...key){
 		AppConfig.getAppConfig(this).remove(key);
+	}
+
+	/**
+	 * 获取内存中保存图片的路径
+	 * @return
+	 */
+	public String getSaveImagePath() {
+		return saveImagePath;
+	}
+	/**
+	 * 设置内存中保存图片的路径
+	 * @return
+	 */
+	public void setSaveImagePath(String saveImagePath) {
+		this.saveImagePath = saveImagePath;
 	}	
+	
 }
