@@ -147,7 +147,7 @@ public class SinaWeiboHelper {
 					//保存AccessToken
 					AppConfig.getAppConfig(cont).setAccessInfo(accessToken.getToken(), accessToken.getSecret(), accessToken.getExpiresIn());
 					//微博分享
-					shareMessage(cont, shareMsg, null);
+					shareMessage(cont, shareMsg, shareImg);
 	    		} 
 	    		catch (Exception e) 
 	    		{
@@ -237,7 +237,7 @@ public class SinaWeiboHelper {
         	}
         	else
         	{
-        		//分享带图片的微博
+        		weibo.shareToweiboWithFile(cont, accessToken.getToken(),  accessToken.getSecret(), shareMessage, shareImage);
         	}
 			
         	msg.what = Weibo_Share_Success;
