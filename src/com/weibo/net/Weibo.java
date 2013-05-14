@@ -380,4 +380,24 @@ public class Weibo {
         return true;
     }
     /*------------------------------------------------------------*/
+    
+	/**
+	 * 分享到微博 ,带图片
+	 */
+	public boolean shareToweiboWithFile(Activity context, String accessToken,
+			String tokenSecret, String content, String fileUrl) throws WeiboException {
+		Utility.setAuthorization(new Oauth2AccessTokenHeader());
+		WeiboParameters bundle = new WeiboParameters();
+		bundle.add("source", APP_KEY);
+		bundle.add("status", content);
+        if(fileUrl!=null){
+        	bundle.add("pic", fileUrl);
+        }		
+		String url = SERVER + "statuses/upload.json";
+		if (mAccessToken == null) {
+			mAccessToken = new AccessToken(accessToken, tokenSecret);
+		}
+		request(context, url, bundle, Utility.HTTPMETHOD_POST, mAccessToken);
+		return true;
+	}
 }
