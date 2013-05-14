@@ -7,6 +7,7 @@ import net.oschina.app.bean.Tweet;
 import net.oschina.app.common.BitmapManager;
 import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
+import net.oschina.app.widget.LinkView;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
@@ -32,7 +33,7 @@ public class ListViewTweetAdapter extends BaseAdapter {
 			public ImageView userface;  
 	        public TextView username;  
 		    public TextView date;  
-		    public TextView content;
+		    public LinkView content;
 		    public TextView commentCount;
 		    public TextView client;
 		    public ImageView image;
@@ -81,7 +82,7 @@ public class ListViewTweetAdapter extends BaseAdapter {
 			//获取控件对象
 			listItemView.userface = (ImageView)convertView.findViewById(R.id.tweet_listitem_userface);
 			listItemView.username = (TextView)convertView.findViewById(R.id.tweet_listitem_username);
-			listItemView.content = (TextView)convertView.findViewById(R.id.tweet_listitem_content);
+			listItemView.content = (LinkView)convertView.findViewById(R.id.tweet_listitem_content);
 			listItemView.image= (ImageView)convertView.findViewById(R.id.tweet_listitem_image);
 			listItemView.date= (TextView)convertView.findViewById(R.id.tweet_listitem_date);
 			listItemView.commentCount= (TextView)convertView.findViewById(R.id.tweet_listitem_commentCount);
@@ -97,10 +98,17 @@ public class ListViewTweetAdapter extends BaseAdapter {
 		Tweet tweet = listItems.get(position);
 		listItemView.username.setText(tweet.getAuthor());
 		listItemView.username.setTag(tweet);//设置隐藏参数(实体类)
-		listItemView.content.setText(tweet.getBody());
+		
+//		listItemView.content.setText(tweet.getBody());
+//		listItemView.content.parseLinkText();
+		listItemView.content.setLinkText(tweet.getBody());
+		listItemView.content.setTag(tweet);//设置隐藏参数(实体类)
+		
 		listItemView.date.setText(StringUtils.friendly_time(tweet.getPubDate()));
 		listItemView.commentCount.setText(tweet.getCommentCount()+"");
 
+		System.out.println(tweet.getBody());
+		
 		switch(tweet.getAppClient())
 		{	
 			default:
