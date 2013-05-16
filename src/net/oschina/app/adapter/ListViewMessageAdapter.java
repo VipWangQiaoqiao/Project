@@ -5,16 +5,17 @@ import java.util.List;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.bean.Messages;
+import net.oschina.app.bean.Tweet;
 import net.oschina.app.common.BitmapManager;
 import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.widget.LinkView;
+import net.oschina.app.widget.LinkView.OnLinkClickListener;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,7 +26,7 @@ import android.widget.TextView;
  * @version 1.0
  * @created 2012-3-21
  */
-public class ListViewMessageAdapter extends BaseAdapter {
+public class ListViewMessageAdapter extends MyBaseAdapter {
 	private Context context;// 运行上下文
 	private List<Messages> listItems;// 数据集合
 	private LayoutInflater listContainer;// 视图容器
@@ -111,7 +112,11 @@ public class ListViewMessageAdapter extends BaseAdapter {
 			UIHelper.parseMessageSpan(listItemView.username, msg.getSender(),
 					msg.getContent(), "");
 		}
+		
 		listItemView.username.setTag(msg);// 设置隐藏参数(实体类)
+		listItemView.username.setOnClickListener(linkViewClickListener);
+		listItemView.username.setLinkClickListener(linkClickListener);
+		
 		listItemView.date.setText(StringUtils.friendly_time(msg.getPubDate()));
 		listItemView.messageCount.setText("共有 " + msg.getMessageCount()
 				+ " 条留言");
@@ -155,6 +160,23 @@ public class ListViewMessageAdapter extends BaseAdapter {
 			Messages msg = (Messages) v.getTag();
 			UIHelper.showUserCenter(v.getContext(), msg.getFriendId(),
 					msg.getFriendName());
+		}
+	};
+	
+	private View.OnClickListener linkViewClickListener = new View.OnClickListener() {
+		public void onClick(View v) {
+			if(!isLinkViewClick()){
+				Messages msg = (Messages)v.getTag();
+				UIHelper.showMessageDetail(v.getContext(),
+						msg.getFriendId(), msg.getFriendName());
+			}
+			setLinkViewClick(false);
+		}
+	};
+	
+	private OnLinkClickListener linkClickListener = new OnLinkClickListener() {
+		public void onLinkClick() {
+			setLinkViewClick(true);
 		}
 	};
 }

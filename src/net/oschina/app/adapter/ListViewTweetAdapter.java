@@ -8,12 +8,12 @@ import net.oschina.app.common.BitmapManager;
 import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.widget.LinkView;
+import net.oschina.app.widget.LinkView.OnLinkClickListener;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,7 +23,7 @@ import android.widget.TextView;
  * @version 1.0
  * @created 2012-3-21
  */
-public class ListViewTweetAdapter extends BaseAdapter {
+public class ListViewTweetAdapter extends MyBaseAdapter {
 	private Context 					context;//运行上下文
 	private List<Tweet> 				listItems;//数据集合
 	private LayoutInflater 				listContainer;//视图容器
@@ -103,6 +103,8 @@ public class ListViewTweetAdapter extends BaseAdapter {
 //		listItemView.content.parseLinkText();
 		listItemView.content.setLinkText(tweet.getBody());
 		listItemView.content.setTag(tweet);//设置隐藏参数(实体类)
+		listItemView.content.setOnClickListener(linkViewClickListener);
+		listItemView.content.setLinkClickListener(linkClickListener);
 		
 		listItemView.date.setText(StringUtils.friendly_time(tweet.getPubDate()));
 		listItemView.commentCount.setText(tweet.getCommentCount()+"");
@@ -164,6 +166,21 @@ public class ListViewTweetAdapter extends BaseAdapter {
 	private View.OnClickListener imageClickListener = new View.OnClickListener(){
 		public void onClick(View v) {
 			UIHelper.showImageDialog(v.getContext(), (String)v.getTag());
+		}
+	};
+	
+	private View.OnClickListener linkViewClickListener = new View.OnClickListener() {
+		public void onClick(View v) {
+			if(!isLinkViewClick()){
+			    UIHelper.showTweetDetail(v.getContext(),((Tweet)v.getTag()).getId());
+			}
+			setLinkViewClick(false);
+		}
+	};
+	
+	private OnLinkClickListener linkClickListener = new OnLinkClickListener() {
+		public void onLinkClick() {
+			setLinkViewClick(true);
 		}
 	};
 }

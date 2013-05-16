@@ -1300,10 +1300,10 @@ public class UIHelper {
 		style = new SpannableStringBuilder(view.getText());
 		// style.clearSpans();// 这里会清除之前所有的样式
 		for (URLSpan url : urls) {
-			style.removeSpan(url);// 只需要移除之前的URL样式，再重新设置
-			MyURLSpan myURLSpan = new MyURLSpan(url.getURL());
-			style.setSpan(myURLSpan, span.getSpanStart(url),
-					span.getSpanEnd(url), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			 style.removeSpan(url);// 只需要移除之前的URL样式，再重新设置
+			 MyURLSpan myURLSpan =  view.new MyURLSpan(url.getURL());
+			 style.setSpan(myURLSpan, span.getSpanStart(url),
+		    		span.getSpanEnd(url), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		}
 
 		// 设置用户名字体加粗、高亮

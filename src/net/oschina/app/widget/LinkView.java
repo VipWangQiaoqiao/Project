@@ -3,12 +3,17 @@ package net.oschina.app.widget;
 import net.oschina.app.bean.URLs;
 import net.oschina.app.common.UIHelper;
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.SpannedString;
+import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
+import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.URLSpan;
 import android.util.AttributeSet;
 import android.view.View;
@@ -22,6 +27,7 @@ import android.widget.TextView;
  * @created 2012-3-21
  */
 public class LinkView extends TextView {
+	private OnLinkClickListener mLinkClickListener;
 
 	public LinkView(Context context) {
 		super(context);
@@ -35,17 +41,23 @@ public class LinkView extends TextView {
 		super(context, attrs, defStyle);
 	}
 
+	public OnLinkClickListener getLinkClickListener() {
+		return mLinkClickListener;
+	}
+
+	public void setLinkClickListener(OnLinkClickListener linkClickListener) {
+		this.mLinkClickListener = linkClickListener;
+	}
+
 	public void setLinkText(String linktxt) {
 		Spanned span = Html.fromHtml(linktxt);
 		setText(span);
 		setMovementMethod(LinkMovementMethod.getInstance());
-
 		parseLinkText(span);
 	}
 
 	public void parseLinkText(Spanned spanhtml) {
 		CharSequence text = getText();
-				
 		if (text instanceof Spannable) {
 			int end = text.length();
 			Spannable sp = (Spannable) getText();
@@ -60,6 +72,12 @@ public class LinkView extends TextView {
 			SpannableStringBuilder style = new SpannableStringBuilder(text);
 			// style.clearSpans();// 这里会清除之前所有的样式
 			for (URLSpan url : urls) {
+				if (!isNormalUrl(url)) {
+					style.removeSpan(url);// 只需要移除之前的URL样式，再重新设置
+					NoLinkSpan span = new NoLinkSpan(url.getURL());
+					style.setSpan(span, sp.getSpanStart(url),sp.getSpanEnd(url),Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+					continue;
+				}
 				style.removeSpan(url);// 只需要移除之前的URL样式，再重新设置
 				MyURLSpan myURLSpan = new MyURLSpan(url.getURL());
 				style.setSpan(myURLSpan, sp.getSpanStart(url),
@@ -80,7 +98,7 @@ public class LinkView extends TextView {
 		parseLinkText(null);
 	}
 
-	public static class MyURLSpan extends ClickableSpan {
+	public class MyURLSpan extends ClickableSpan {
 		private String mUrl;
 
 		public MyURLSpan(String url) {
@@ -89,6 +107,7 @@ public class LinkView extends TextView {
 
 		@Override
 		public void onClick(View widget) {
+			mLinkClickListener.onLinkClick();
 			URLs urls = URLs.parseURL(mUrl);
 			if (urls != null) {
 				UIHelper.showLinkRedirect(widget.getContext(),
@@ -98,5 +117,49 @@ public class LinkView extends TextView {
 			}
 		}
 	}
+    
+	/**
+	 * 无响应的ClickableSpan
+	 * 
+	 * @author yeguozhong@yeah.net
+	 *
+	 */
+	public class NoLinkSpan extends ClickableSpan {
+		private String text;
 
+		public NoLinkSpan(String text) {
+			super();
+			this.text = text;
+		}
+
+		@Override
+		public void updateDrawState(TextPaint ds) {
+			ds.setColor(Color.BLACK);
+			ds.setUnderlineText(false); // 去掉下划线
+		}
+
+		@Override
+		public void onClick(View widget) {
+			// doNothing...
+		}
+
+	}
+
+	public interface OnLinkClickListener {
+		void onLinkClick();
+	}
+
+	/**
+	 * 过滤掉一些不正常的链接
+	 * 
+	 * @param url
+	 * @return
+	 */
+	public boolean isNormalUrl(URLSpan url) {
+		String urlStr = url.getURL();
+		if (urlStr.endsWith(".sh")) {
+			return false;
+		}
+		return true;
+	}
 }

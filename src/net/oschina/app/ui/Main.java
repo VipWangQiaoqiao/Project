@@ -696,7 +696,7 @@ public class Main extends BaseActivity {
 		lvTweet.addFooterView(lvTweet_footer);// 添加底部视图 必须在setAdapter前
 		lvTweet.setAdapter(lvTweetAdapter);
 		lvTweet.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View view,
+			public void onItemClick(AdapterView<?> parent, final View view,
 					int position, long id) {
 				// 点击头部、底部栏无效
 				if (position == 0 || view == lvTweet_footer)
@@ -712,8 +712,7 @@ public class Main extends BaseActivity {
 					tweet = (Tweet) tv.getTag();
 				}
 				if (tweet == null)
-					return;
-
+					return;   			
 				// 跳转到动弹详情&评论页面
 				UIHelper.showTweetDetail(view.getContext(), tweet.getId());
 			}

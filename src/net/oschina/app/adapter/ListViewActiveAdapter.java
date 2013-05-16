@@ -4,17 +4,18 @@ import java.util.List;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.Active;
+import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.Active.ObjectReply;
 import net.oschina.app.common.BitmapManager;
 import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.widget.LinkView;
+import net.oschina.app.widget.LinkView.OnLinkClickListener;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,7 +26,7 @@ import android.widget.TextView;
  * @version 1.0
  * @created 2012-3-21
  */
-public class ListViewActiveAdapter extends BaseAdapter {
+public class ListViewActiveAdapter extends MyBaseAdapter {
 	private Context context;// 运行上下文
 	private List<Active> listItems;// 数据集合
 	private LayoutInflater listContainer;// 视图容器
@@ -33,7 +34,8 @@ public class ListViewActiveAdapter extends BaseAdapter {
 	private BitmapManager bmpManager;
 	private boolean faceClickEnable;
 
-	private static String AT_HOST_PRE = "http://my.oschina.net";
+	private final static String AT_HOST_PRE = "http://my.oschina.net";
+	private final static String MAIN_HOST = "http://www.oschina.net";
 	
 	static class ListItemView { // 自定义控件集合
 		public ImageView userface;
@@ -138,10 +140,13 @@ public class ListViewActiveAdapter extends BaseAdapter {
 		listItemView.username.setTag(active);// 设置隐藏参数(实体类)
 
 		// 把相对路径改成绝对路径
-		String message = addAbsolutePath(active.getMessage());
+		String message = modifyPath(active.getMessage());
+		
 		listItemView.content.setLinkText(message);
 		listItemView.content.setTag(active);// 设置隐藏参数(实体类)
-
+		listItemView.content.setOnClickListener(linkViewClickListener);
+		listItemView.content.setLinkClickListener(linkClickListener);
+		
 		listItemView.date
 				.setText(StringUtils.friendly_time(active.getPubDate()));
 		listItemView.commentCount.setText(active.getCommentCount() + "");
@@ -216,14 +221,30 @@ public class ListViewActiveAdapter extends BaseAdapter {
 	};
 
 	/**
-	 * 把相对路径改成绝对路径
+	 * 修正一些路径
 	 * 
 	 * @param message
 	 * @return
 	 */
-	private String addAbsolutePath(String message) {
+	private String modifyPath(String message) {
 		message = message.replaceAll("(<a[^>]+href=\")/([\\S]+)\"", "$1"
 				+ AT_HOST_PRE + "/$2\"");
+		message = message.replaceAll("(<a[^>]+href=\")http://m.oschina.net([\\S]+)\"", "$1"+MAIN_HOST+"$2\"");
 		return message;
 	}
+	
+	private View.OnClickListener linkViewClickListener = new View.OnClickListener() {
+		public void onClick(View v) {
+			if(!isLinkViewClick()){
+				UIHelper.showActiveRedirect(v.getContext(), (Active)v.getTag());
+			}
+			setLinkViewClick(false);
+		}
+	};
+	
+	private OnLinkClickListener linkClickListener = new OnLinkClickListener() {
+		public void onLinkClick() {
+			setLinkViewClick(true);
+		}
+	};
 }
