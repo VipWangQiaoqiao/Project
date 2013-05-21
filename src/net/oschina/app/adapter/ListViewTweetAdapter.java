@@ -108,8 +108,6 @@ public class ListViewTweetAdapter extends MyBaseAdapter {
 		
 		listItemView.date.setText(StringUtils.friendly_time(tweet.getPubDate()));
 		listItemView.commentCount.setText(tweet.getCommentCount()+"");
-
-		System.out.println(tweet.getBody());
 		
 		switch(tweet.getAppClient())
 		{	
