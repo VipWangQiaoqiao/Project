@@ -24,7 +24,12 @@ import android.widget.TextView;
  * @created 2012-3-21
  */
 public class LinkView extends TextView {
-	private OnLinkClickListener mLinkClickListener;
+	private OnLinkClickListener mLinkClickListener = new LinkView.OnLinkClickListener() {
+		@Override
+		public void onLinkClick() {
+
+		}
+	};
 
 	public LinkView(Context context) {
 		super(context);
@@ -72,7 +77,9 @@ public class LinkView extends TextView {
 				if (!isNormalUrl(url)) {
 					style.removeSpan(url);// 只需要移除之前的URL样式，再重新设置
 					NoLinkSpan span = new NoLinkSpan(url.getURL());
-					style.setSpan(span, sp.getSpanStart(url),sp.getSpanEnd(url),Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+					style.setSpan(span, sp.getSpanStart(url),
+							sp.getSpanEnd(url),
+							Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
 					continue;
 				}
 				style.removeSpan(url);// 只需要移除之前的URL样式，再重新设置
@@ -114,12 +121,12 @@ public class LinkView extends TextView {
 			}
 		}
 	}
-    
+
 	/**
 	 * 无响应的ClickableSpan
 	 * 
 	 * @author yeguozhong@yeah.net
-	 *
+	 * 
 	 */
 	public class NoLinkSpan extends ClickableSpan {
 		private String text;
