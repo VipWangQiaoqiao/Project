@@ -140,7 +140,6 @@ public class AppConfig {
 
 			// 读取app_config目录下的config
 			File dirConf = mContext.getDir(APP_CONFIG, Context.MODE_PRIVATE);
-			System.out.println(dirConf.getCanonicalPath());
 			fis = new FileInputStream(dirConf.getPath() + File.separator
 					+ APP_CONFIG);
 
