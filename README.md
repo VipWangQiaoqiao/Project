@@ -7,7 +7,7 @@ android-app
 
 启动Eclipse，点击菜单并导入Android客户端项目，请确保你当前的Android SDK是最新版。<br>
 如果编译出错，请修改项目根目录下的 project.properties 文件。<br>
-推荐使用Android 4.0 以上版本的SDK：
+推荐使用Android 4.0 以上版本的SDK,请使用JDK1.6编译：
 
 > target=android-15
 
