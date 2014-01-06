@@ -37,6 +37,7 @@
     <string name="clearwords">清除文字吗？</string>
     
     <string name="msg_load_is_null">读取失败，可能已被删除</string>
+    <string name="msg_load_audio_fail">读取语音文件失败</string>
     <string name="msg_login_email_error">无效的邮箱地址</string>
     <string name="msg_login_email_null">请输入邮箱</string>
     <string name="msg_login_pwd_null">请输入密码</string>

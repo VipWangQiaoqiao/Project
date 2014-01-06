@@ -60,7 +60,7 @@ public class FileUtils {
 		return "";
 	}
 
-	private static String readInStream(FileInputStream inStream) {
+	public static String readInStream(InputStream inStream) {
 		try {
 			ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 			byte[] buffer = new byte[512];

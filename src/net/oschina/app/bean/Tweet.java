@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import net.oschina.app.AppException;
+import net.oschina.app.common.FileUtils;
 import net.oschina.app.common.StringUtils;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -31,7 +32,7 @@ public class Tweet extends Entity{
 	public final static String NODE_IMGBIG = "imgBig";
 	public final static String NODE_APPCLIENT = "appclient";
 	public final static String NODE_START = "tweet";
-	
+	public final static String NODE_ATTACH = "attach";
 	public final static int CLIENT_MOBILE = 2;
 	public final static int CLIENT_ANDROID = 3;
 	public final static int CLIENT_IPHONE = 4;
@@ -47,6 +48,7 @@ public class Tweet extends Entity{
 	private String imgBig;
 	private File imageFile;
 	private int appClient; 
+	private String attach;
 	
 	public int getAppClient() {
 		return appClient;
@@ -109,6 +111,12 @@ public class Tweet extends Entity{
 		this.pubDate = pubDate;
 	}
 	
+	public String getAttach() {
+		return attach;
+	}
+	public void setAttach(String attach) {
+		this.attach = attach;
+	}
 	public static Tweet parse(InputStream inputStream) throws IOException, AppException {
 		Tweet tweet = null;
         //获得XmlPullParser解析器
@@ -163,6 +171,10 @@ public class Tweet extends Entity{
 				            else if(tag.equalsIgnoreCase(NODE_IMGBIG))
 				            {			            	
 				            	tweet.setImgBig(xmlParser.nextText());			            	
+				            }
+				            else if(tag.equalsIgnoreCase(NODE_ATTACH))
+				            {			            	
+				            	tweet.setAttach(xmlParser.nextText());			            	
 				            }
 				            else if(tag.equalsIgnoreCase(NODE_APPCLIENT))
 				            {			            	
