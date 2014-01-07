@@ -20,7 +20,9 @@ import net.oschina.app.common.MediaUtils;
 import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.widget.PullToRefreshListView;
+import android.animation.TypeEvaluator;
 import android.annotation.SuppressLint;
+import android.app.ActionBar.LayoutParams;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -30,6 +32,7 @@ import android.media.AudioTrack;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnBufferingUpdateListener;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.media.MediaPlayer.OnPreparedListener;
 import android.media.MediaPlayer.OnSeekCompleteListener;
 import android.net.Uri;
 import android.opengl.Visibility;
@@ -39,6 +42,7 @@ import android.os.Message;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -93,7 +97,9 @@ public class TweetDetail extends BaseActivity {
 	private WebView content;
 	private ImageView image;
 	private ImageView audio;
+	private TextView audioTime;
 	private MediaPlayer player;
+	private LinearLayout audioLayout;
 	private Handler mHandler;
 	private Tweet tweetDetail;
 
@@ -121,6 +127,7 @@ public class TweetDetail extends BaseActivity {
 
 	private final static int DATA_LOAD_ING = 0x001;
 	private final static int DATA_LOAD_COMPLETE = 0x002;
+	private final static int DEFAULT_AUDIO_TIME = 60;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -230,6 +237,9 @@ public class TweetDetail extends BaseActivity {
 				.findViewById(R.id.tweet_listitem_commentCount);
 		image = (ImageView) lvHeader.findViewById(R.id.tweet_listitem_image);
 		audio = (ImageView) lvHeader.findViewById(R.id.tweet_audio_controller);
+		audioTime = (TextView) lvHeader.findViewById(R.id.tweet_audio_time);
+		audioLayout = (LinearLayout) lvHeader
+				.findViewById(R.id.tweet_audio_layout);
 		content = (WebView) lvHeader.findViewById(R.id.tweet_listitem_content);
 		content.getSettings().setJavaScriptEnabled(false);
 		content.getSettings().setSupportZoom(true);
@@ -452,17 +462,36 @@ public class TweetDetail extends BaseActivity {
 							final AnimationDrawable anima = (AnimationDrawable) audio
 									.getDrawable();
 							anima.setOneShot(false);
-							audio.setOnClickListener(new OnClickListener() {
+							audioLayout.setVisibility(View.VISIBLE);
+							audioLayout
+									.setOnClickListener(new OnClickListener() {
+
+										@Override
+										public void onClick(View v) {
+											if (player.isPlaying()) {
+												player.pause();
+												anima.stop();
+											} else {
+												player.start();
+												anima.start();
+											}
+										}
+									});
+							player.setOnPreparedListener(new OnPreparedListener() {
 
 								@Override
-								public void onClick(View v) {
-									if (player.isPlaying()) {
-										player.pause();
-										anima.stop();
-									} else {
-										player.start();
-										anima.start();
-									}
+								public void onPrepared(MediaPlayer mp) {
+									// TODO Auto-generated method stub
+									int time = mp.getDuration() / 1000;
+									audioTime.setText(time + "s");
+									int width = 100 + time;
+									width = (int) TypedValue.applyDimension(
+											TypedValue.COMPLEX_UNIT_DIP, width,
+											getResources().getDisplayMetrics());
+									LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+											width,
+											LinearLayout.LayoutParams.MATCH_PARENT);
+									audioLayout.setLayoutParams(params);
 								}
 							});
 							player.setOnCompletionListener(new OnCompletionListener() {
@@ -573,6 +602,15 @@ public class TweetDetail extends BaseActivity {
 		};
 		this.loadLvCommentData(curId, curCatalog, 0, mCommentHandler,
 				UIHelper.LISTVIEW_ACTION_INIT);
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (null != this.player && this.player.isPlaying()) {
+			this.player.stop();
+			this.player.release();
+		}
+		super.onBackPressed();
 	}
 
 	/**

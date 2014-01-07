@@ -69,16 +69,40 @@
 	        android:scaleType="fitCenter"
 	        android:src="@drawable/image_loading"
 	        android:visibility="gone"/>
-
+		<LinearLayout 
+		     android:id="@+id/tweet_audio_layout"
+	    	android:orientation="horizontal" 
+	        android:layout_width="wrap_content"
+	        android:background="@drawable/shape_conor_fff1f2f3"
+	        android:visibility="gone"  
+	        android:layout_height="wrap_content">   
 	    <ImageView
 	        android:id="@+id/tweet_audio_controller"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:maxWidth="20dip"
-	        android:maxHeight="20dip"
+	        android:layout_width="30dip"
+	        android:layout_height="30dip"
+	        android:layout_marginTop="5dip"
+	        android:layout_marginBottom="5dip"
+	        android:layout_marginLeft="10dip"
 	        android:src="@anim/audio_animation_asc"
+	        android:background="@color/fff1f2f3"  
 	        android:visibility="gone" />
-			
+	     <View
+            android:id="@+id/view1"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    
+		 <TextView 
+	        	android:id="@+id/tweet_audio_time" 
+	            android:layout_width="wrap_content" 
+	         	android:layout_height="wrap_content"
+	         	android:textSize="@dimen/text_size_12"
+	         	android:paddingLeft="6dip"
+	         	android:paddingTop="12dip"
+	         	android:gravity="right"
+	         	android:paddingRight="10dip"
+	         	android:textColor="@color/listitem_gray"/>
+		  </LinearLayout>
 		<LinearLayout 
 	    	android:orientation="horizontal" 
 	        android:layout_width="wrap_content"  
@@ -89,6 +113,8 @@
 	         	android:layout_height="wrap_content"
 	         	android:textSize="@dimen/text_size_10"
 	         	android:textColor="@color/listitem_gray"/>
+
+
 	         	
 		    <ImageView 
 		      	android:layout_width="wrap_content" 

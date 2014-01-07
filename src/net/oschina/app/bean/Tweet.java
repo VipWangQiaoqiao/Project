@@ -37,6 +37,7 @@ public class Tweet extends Entity{
 	public final static int CLIENT_ANDROID = 3;
 	public final static int CLIENT_IPHONE = 4;
 	public final static int CLIENT_WINDOWS_PHONE = 5;
+	public final static int CLIENT_WECHAT=6;
 	
 	private String face;
 	private String body;

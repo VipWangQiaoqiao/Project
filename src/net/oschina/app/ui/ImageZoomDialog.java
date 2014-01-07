@@ -52,6 +52,7 @@ public class ImageZoomDialog extends BaseActivity implements OnTouchListener,
 	private Button zoomIn, zoomOut;
 	private ViewSwitcher mViewSwitcher;
 	private Button btnSave;
+	private Button btnClose;
 
 	// button zoom
 	private float scaleWidth = 1;
@@ -110,6 +111,15 @@ public class ImageZoomDialog extends BaseActivity implements OnTouchListener,
 					e.printStackTrace();
 					UIHelper.ToastMessage(ImageZoomDialog.this, "保存失败");
 				}
+			}
+		});
+		btnClose = (Button) findViewById(R.id.btn_close);
+		btnClose.setOnClickListener(new OnClickListener() {
+
+			@SuppressLint("NewApi")
+			@Override
+			public void onClick(View v) {
+				ImageZoomDialog.this.onBackPressed();
 			}
 		});
 	}
