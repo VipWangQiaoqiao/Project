@@ -71,11 +71,11 @@ public class MessageForward extends BaseActivity{
 			_content = mContent.getText().toString();
 			_receiver = mReceiver.getText().toString();
 			if(StringUtils.isEmpty(_content)){
-				UIHelper.ToastMessage(v.getContext(), "请输入留言内容");
+				UIHelper.showToast(v.getContext(), "请输入留言内容");
 				return;
 			}
 			if(StringUtils.isEmpty(_receiver)){
-				UIHelper.ToastMessage(v.getContext(), "请输入对方的昵称");
+				UIHelper.showToast(v.getContext(), "请输入对方的昵称");
 				return;
 			}
 			
@@ -94,7 +94,7 @@ public class MessageForward extends BaseActivity{
 					
 					if(msg.what == 1){
 						Result res = (Result)msg.obj;
-						UIHelper.ToastMessage(MessageForward.this, res.getErrorMessage());
+						UIHelper.showToast(MessageForward.this, res.getErrorMessage());
 						if(res.OK()){
 							//发送通知广播
 							if(res.getNotice() != null){

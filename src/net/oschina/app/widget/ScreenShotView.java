@@ -114,7 +114,7 @@ public class ScreenShotView extends View implements OnTouchListener {
         	bmDoubleClickTip = BitmapFactory.decodeStream(getResources().openRawResource(R.drawable._pointer));
         }
         
-		UIHelper.ToastMessage(mContext, "请滑动手指确定选区!");
+		UIHelper.showToast(mContext, "请滑动手指确定选区!");
 	}
 
 	@SuppressLint("DrawAllocation")

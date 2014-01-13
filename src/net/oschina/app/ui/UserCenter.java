@@ -293,7 +293,7 @@ public class UserCenter extends BaseActivity{
 									lvBlogData.remove(blog);
 									lvBlogAdapter.notifyDataSetChanged();
 								}
-								UIHelper.ToastMessage(UserCenter.this, res.getErrorMessage());
+								UIHelper.showToast(UserCenter.this, res.getErrorMessage());
 							}else{
 								((AppException)msg.obj).makeToast(UserCenter.this);
 							}
@@ -702,7 +702,7 @@ public class UserCenter extends BaseActivity{
 									break;
 							}
 						}
-						UIHelper.ToastMessage(UserCenter.this, res.getErrorMessage());
+						UIHelper.showToast(UserCenter.this, res.getErrorMessage());
 					}else{
 						((AppException)msg.obj).makeToast(UserCenter.this);
 					}

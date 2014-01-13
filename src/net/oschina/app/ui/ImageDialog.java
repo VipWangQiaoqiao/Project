@@ -83,7 +83,7 @@ public class ImageDialog extends BaseActivity {
 					mImage.setImageBitmap((Bitmap) msg.obj);
 					mViewSwitcher.showNext();
 				} else {
-					UIHelper.ToastMessage(ImageDialog.this, ErrMsg);
+					UIHelper.showToast(ImageDialog.this, ErrMsg);
 					finish();
 				}
 			}

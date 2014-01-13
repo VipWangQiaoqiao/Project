@@ -90,12 +90,12 @@ public class QuestionPub extends BaseActivity{
 			
 			String title = mTitle.getText().toString();
 			if(StringUtils.isEmpty(title)){
-				UIHelper.ToastMessage(v.getContext(), "请输入标题");
+				UIHelper.showToast(v.getContext(), "请输入标题");
 				return;
 			}
 			String content = mContent.getText().toString();
 			if(StringUtils.isEmpty(content)){
-				UIHelper.ToastMessage(v.getContext(), "请输入提问内容");
+				UIHelper.showToast(v.getContext(), "请输入提问内容");
 				return;
 			}
 			
@@ -120,7 +120,7 @@ public class QuestionPub extends BaseActivity{
 					if(mProgress!=null)mProgress.dismiss();
 					if(msg.what == 1){
 						Result res = (Result)msg.obj;
-						UIHelper.ToastMessage(QuestionPub.this, res.getErrorMessage());
+						UIHelper.showToast(QuestionPub.this, res.getErrorMessage());
 						if(res.OK()){
 							//发送通知广播
 							if(res.getNotice() != null){

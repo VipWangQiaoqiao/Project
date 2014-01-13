@@ -210,7 +210,7 @@ public class SoftwareDetail extends BaseActivity {
 				} else if (msg.what == 0) {
 					headButtonSwitch(DATA_LOAD_FAIL);
 
-					UIHelper.ToastMessage(SoftwareDetail.this,
+					UIHelper.showToast(SoftwareDetail.this,
 							R.string.msg_load_is_null);
 				} else if (msg.what == -1 && msg.obj != null) {
 					headButtonSwitch(DATA_LOAD_FAIL);
@@ -325,7 +325,7 @@ public class SoftwareDetail extends BaseActivity {
 							ac.saveObject(softwareDetail,
 									softwareDetail.getCacheKey());
 						}
-						UIHelper.ToastMessage(SoftwareDetail.this,
+						UIHelper.showToast(SoftwareDetail.this,
 								res.getErrorMessage());
 					} else {
 						((AppException) msg.obj).makeToast(SoftwareDetail.this);

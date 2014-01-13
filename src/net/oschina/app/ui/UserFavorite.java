@@ -190,7 +190,7 @@ public class UserFavorite extends BaseActivity {
 								lvFavoriteData.remove(fav);
 								lvFavoriteAdapter.notifyDataSetChanged();
 							}
-							UIHelper.ToastMessage(UserFavorite.this, res.getErrorMessage());
+							UIHelper.showToast(UserFavorite.this, res.getErrorMessage());
 						}else{
 							((AppException)msg.obj).makeToast(UserFavorite.this);
 						}

@@ -325,7 +325,7 @@ public class NewsDetail extends BaseActivity {
 				} else if (msg.what == 0) {
 					headButtonSwitch(DATA_LOAD_FAIL);
 
-					UIHelper.ToastMessage(NewsDetail.this,
+					UIHelper.showToast(NewsDetail.this,
 							R.string.msg_load_is_null);
 				} else if (msg.what == -1 && msg.obj != null) {
 					headButtonSwitch(DATA_LOAD_FAIL);
@@ -432,7 +432,7 @@ public class NewsDetail extends BaseActivity {
 	private View.OnClickListener shareClickListener = new View.OnClickListener() {
 		public void onClick(View v) {
 			if (newsDetail == null) {
-				UIHelper.ToastMessage(v.getContext(),
+				UIHelper.showToast(v.getContext(),
 						R.string.msg_read_detail_fail);
 				return;
 			}
@@ -492,7 +492,7 @@ public class NewsDetail extends BaseActivity {
 							// 重新保存缓存
 							ac.saveObject(newsDetail, newsDetail.getCacheKey());
 						}
-						UIHelper.ToastMessage(NewsDetail.this,
+						UIHelper.showToast(NewsDetail.this,
 								res.getErrorMessage());
 					} else {
 						((AppException) msg.obj).makeToast(NewsDetail.this);
@@ -641,7 +641,7 @@ public class NewsDetail extends BaseActivity {
 											lvCommentAdapter
 													.notifyDataSetChanged();
 										}
-										UIHelper.ToastMessage(NewsDetail.this,
+										UIHelper.showToast(NewsDetail.this,
 												res.getErrorMessage());
 									} else {
 										((AppException) msg.obj)
@@ -849,7 +849,7 @@ public class NewsDetail extends BaseActivity {
 
 			_content = mFootEditer.getText().toString();
 			if (StringUtils.isEmpty(_content)) {
-				UIHelper.ToastMessage(v.getContext(), "请输入评论内容");
+				UIHelper.showToast(v.getContext(), "请输入评论内容");
 				return;
 			}
 
@@ -875,7 +875,7 @@ public class NewsDetail extends BaseActivity {
 
 					if (msg.what == 1) {
 						Result res = (Result) msg.obj;
-						UIHelper.ToastMessage(NewsDetail.this,
+						UIHelper.showToast(NewsDetail.this,
 								res.getErrorMessage());
 						if (res.OK()) {
 							// 发送通知广播

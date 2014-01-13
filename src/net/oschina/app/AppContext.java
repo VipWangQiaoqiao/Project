@@ -81,7 +81,7 @@ public class AppContext extends Application {
 	private Handler unLoginHandler = new Handler(){
 		public void handleMessage(Message msg) {
 			if(msg.what == 1){
-				UIHelper.ToastMessage(AppContext.this, getString(R.string.msg_login_error));
+				UIHelper.showToast(AppContext.this, getString(R.string.msg_login_error));
 				UIHelper.showLoginDialog(AppContext.this);
 			}
 		}		

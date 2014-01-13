@@ -407,7 +407,7 @@ public class TweetPub extends BaseActivity{
 						
 						//没有挂载SD卡，无法保存文件
 						if(StringUtils.isEmpty(savePath)){
-							UIHelper.ToastMessage(TweetPub.this, "无法保存照片，请检查SD卡是否挂载");
+							UIHelper.showToast(TweetPub.this, "无法保存照片，请检查SD卡是否挂载");
 							return;
 						}
 
@@ -547,7 +547,7 @@ public class TweetPub extends BaseActivity{
 			
 			String content = mContent.getText().toString();
 			if(StringUtils.isEmpty(content)){
-				UIHelper.ToastMessage(v.getContext(), "请输入动弹内容");
+				UIHelper.showToast(v.getContext(), "请输入动弹内容");
 				return;
 			}
 			

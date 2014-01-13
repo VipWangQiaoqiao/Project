@@ -88,7 +88,7 @@ public class CommentPub extends BaseActivity{
 		public void onClick(View v) {	
 			_content = mContent.getText().toString();
 			if(StringUtils.isEmpty(_content)){
-				UIHelper.ToastMessage(v.getContext(), "请输入评论内容");
+				UIHelper.showToast(v.getContext(), "请输入评论内容");
 				return;
 			}
 			
@@ -110,7 +110,7 @@ public class CommentPub extends BaseActivity{
 					if(mProgress!=null)mProgress.dismiss();
 					if(msg.what == 1){
 						Result res = (Result)msg.obj;
-						UIHelper.ToastMessage(CommentPub.this, res.getErrorMessage());
+						UIHelper.showToast(CommentPub.this, res.getErrorMessage());
 						if(res.OK()){
 							//发送通知广播
 							if(res.getNotice() != null){

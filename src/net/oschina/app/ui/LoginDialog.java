@@ -75,11 +75,11 @@ public class LoginDialog extends BaseActivity{
 				boolean isRememberMe = chb_rememberMe.isChecked();
 				//判断输入
 				if(StringUtils.isEmpty(account)){
-					UIHelper.ToastMessage(v.getContext(), getString(R.string.msg_login_email_null));
+					UIHelper.showToast(v.getContext(), getString(R.string.msg_login_email_null));
 					return;
 				}
 				if(StringUtils.isEmpty(pwd)){
-					UIHelper.ToastMessage(v.getContext(), getString(R.string.msg_login_pwd_null));
+					UIHelper.showToast(v.getContext(), getString(R.string.msg_login_pwd_null));
 					return;
 				}
 				
@@ -118,7 +118,7 @@ public class LoginDialog extends BaseActivity{
 						//发送通知广播
 						UIHelper.sendBroadCast(LoginDialog.this, user.getNotice());
 						//提示登陆成功
-						UIHelper.ToastMessage(LoginDialog.this, R.string.msg_login_success);
+						UIHelper.showToast(LoginDialog.this, R.string.msg_login_success);
 						if(curLoginType == LOGIN_MAIN){
 							//跳转--加载用户动态
 							Intent intent = new Intent(LoginDialog.this, Main.class);
@@ -135,7 +135,7 @@ public class LoginDialog extends BaseActivity{
 				}else if(msg.what == 0){
 					mViewSwitcher.showPrevious();
 					btn_close.setVisibility(View.VISIBLE);
-					UIHelper.ToastMessage(LoginDialog.this, getString(R.string.msg_login_fail)+msg.obj);
+					UIHelper.showToast(LoginDialog.this, getString(R.string.msg_login_fail)+msg.obj);
 				}else if(msg.what == -1){
 					mViewSwitcher.showPrevious();
 					btn_close.setVisibility(View.VISIBLE);

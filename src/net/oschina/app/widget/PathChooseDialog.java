@@ -68,11 +68,11 @@ public class PathChooseDialog extends Dialog {
 				if (rs == 0) {
 					data.remove(position);
 					refleshListView(data, firstIndex);
-					UIHelper.ToastMessage(ctx, "删除成功");
+					UIHelper.showToast(ctx, "删除成功");
 				} else if (rs == 1) {
-					UIHelper.ToastMessage(ctx, "没有权限");
+					UIHelper.showToast(ctx, "没有权限");
 				} else if (rs == 2) {
-					UIHelper.ToastMessage(ctx, "不能删除非空目录");
+					UIHelper.showToast(ctx, "不能删除非空目录");
 				}
 
 			} else if (type == OnPathOperateListener.RENAME) {
@@ -88,7 +88,7 @@ public class PathChooseDialog extends Dialog {
 					public void onClick(DialogInterface dialog, int which) {
 						String input = et.getText().toString();
 						if (StringUtils.isEmpty(input)) {
-							UIHelper.ToastMessage(ctx, "输入不能为空");
+							UIHelper.showToast(ctx, "输入不能为空");
 						} else {
 							String newPath = pathStack.peek() + File.separator
 									+ input;
@@ -97,9 +97,9 @@ public class PathChooseDialog extends Dialog {
 							if (rs == true) {
 								pathName.setText(input);
 								data.set(position, newPath);
-								UIHelper.ToastMessage(ctx, "重命名成功");
+								UIHelper.showToast(ctx, "重命名成功");
 							} else {
-								UIHelper.ToastMessage(ctx, "重命名失败");
+								UIHelper.showToast(ctx, "重命名失败");
 							}
 						}
 						dialog.dismiss();
@@ -222,7 +222,7 @@ public class PathChooseDialog extends Dialog {
 					public void onClick(DialogInterface dialog, int which) {
 						String rs = et.getText().toString();
 						if (StringUtils.isEmpty(rs)) {
-							UIHelper.ToastMessage(ctx, "输入不能为空");
+							UIHelper.showToast(ctx, "输入不能为空");
 						} else {
 							String newPath = pathStack.peek() + File.separator
 									+ rs;
@@ -231,13 +231,13 @@ public class PathChooseDialog extends Dialog {
 							case SUCCESS:
 								data.add(newPath);
 								refleshListView(data, data.size()-1);
-								UIHelper.ToastMessage(ctx, "创建成功");
+								UIHelper.showToast(ctx, "创建成功");
 								break;
 							case ERROR:
-								UIHelper.ToastMessage(ctx, "创建失败");
+								UIHelper.showToast(ctx, "创建失败");
 								break;
 							case EXITS:
-								UIHelper.ToastMessage(ctx, "文件名重复");
+								UIHelper.showToast(ctx, "文件名重复");
 								break;
 							}
 						}

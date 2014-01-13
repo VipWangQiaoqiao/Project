@@ -86,11 +86,11 @@ public class ScreenShotShare extends BaseActivity {
 			public void onClick(View v) {
 				mTitle = etContent.getText().toString();
 				if (StringUtils.isEmpty(mTitle)) {
-					UIHelper.ToastMessage(ScreenShotShare.this, "输入不能为空");
+					UIHelper.showToast(ScreenShotShare.this, "输入不能为空");
 				} else {
 					String content = mTitle + " " + mUrl;
 					if (content.length() > MAX_CONTENT_SIZE) {
-						UIHelper.ToastMessage(ScreenShotShare.this,
+						UIHelper.showToast(ScreenShotShare.this,
 								"总字数不能超过140个字");
 					} else {
 						shareToQQWeibo(content, mCutImagePath);
@@ -105,11 +105,11 @@ public class ScreenShotShare extends BaseActivity {
 			public void onClick(View v) {
 				String input = etContent.getText().toString();
 				if (StringUtils.isEmpty(input)) {
-					UIHelper.ToastMessage(ScreenShotShare.this, "输入不能为空");
+					UIHelper.showToast(ScreenShotShare.this, "输入不能为空");
 				} else {
 					String content = input + " " + mUrl;
 					if (content.length() > MAX_CONTENT_SIZE) {
-						UIHelper.ToastMessage(ScreenShotShare.this,
+						UIHelper.showToast(ScreenShotShare.this,
 								"总字数不能超过140个字");
 					} else {
 						shareToSinaWeibo(content, mCutImagePath);

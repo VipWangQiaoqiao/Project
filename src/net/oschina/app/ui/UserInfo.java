@@ -216,7 +216,7 @@ public class UserInfo extends BaseActivity {
 				savedir.mkdirs();
 			}
 		} else {
-			UIHelper.ToastMessage(UserInfo.this, "无法保存上传的头像，请检查SD卡是否挂载");
+			UIHelper.showToast(UserInfo.this, "无法保存上传的头像，请检查SD卡是否挂载");
 			return null;
 		}
 		String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss")
@@ -248,7 +248,7 @@ public class UserInfo extends BaseActivity {
 				savedir.mkdirs();
 			}
 		} else {
-			UIHelper.ToastMessage(UserInfo.this, "无法保存上传的头像，请检查SD卡是否挂载");
+			UIHelper.showToast(UserInfo.this, "无法保存上传的头像，请检查SD卡是否挂载");
 			return null;
 		}
 		String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss")
@@ -346,7 +346,7 @@ public class UserInfo extends BaseActivity {
 				if (msg.what == 1 && msg.obj != null) {
 					Result res = (Result) msg.obj;
 					// 提示信息
-					UIHelper.ToastMessage(UserInfo.this, res.getErrorMessage());
+					UIHelper.showToast(UserInfo.this, res.getErrorMessage());
 					if (res.OK()) {
 						// 显示新头像
 						face.setImageBitmap(protraitBitmap);

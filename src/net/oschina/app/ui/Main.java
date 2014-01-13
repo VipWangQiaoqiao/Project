@@ -205,7 +205,7 @@ public class Main extends BaseActivity {
 		appContext = (AppContext) getApplication();
 		// 网络连接判断
 		if (!appContext.isNetworkConnected())
-			UIHelper.ToastMessage(this, R.string.network_not_connected);
+			UIHelper.showToast(this, R.string.network_not_connected);
 		// 初始化登录
 		appContext.initLoginInfo();
 
@@ -275,7 +275,7 @@ public class Main extends BaseActivity {
 			int what = intent.getIntExtra("MSG_WHAT", 0);
 			if (what == 1) {
 				Result res = (Result) intent.getSerializableExtra("RESULT");
-				UIHelper.ToastMessage(context, res.getErrorMessage(), 1000);
+				UIHelper.showToast(context, res.getErrorMessage(), 1000);
 				if (res.OK()) {
 					// 发送通知广播
 					if (res.getNotice() != null) {
@@ -296,7 +296,7 @@ public class Main extends BaseActivity {
 					public void handleMessage(Message msg) {
 						if (msg.what == 1) {
 							Result res = (Result) msg.obj;
-							UIHelper.ToastMessage(context,res.getErrorMessage(), 1000);
+							UIHelper.showToast(context,res.getErrorMessage(), 1000);
 							if (res.OK()) {
 								// 发送通知广播
 								if (res.getNotice() != null) {
@@ -781,7 +781,7 @@ public class Main extends BaseActivity {
 								lvTweetData.remove(tweet);
 								lvTweetAdapter.notifyDataSetChanged();
 							}
-							UIHelper.ToastMessage(Main.this,
+							UIHelper.showToast(Main.this,
 									res.getErrorMessage());
 						} else {
 							((AppException) msg.obj).makeToast(Main.this);
@@ -1017,7 +1017,7 @@ public class Main extends BaseActivity {
 								lvMsgData.remove(message);
 								lvMsgAdapter.notifyDataSetChanged();
 							}
-							UIHelper.ToastMessage(Main.this,
+							UIHelper.showToast(Main.this,
 									res.getErrorMessage());
 						} else {
 							((AppException) msg.obj).makeToast(Main.this);

@@ -292,7 +292,7 @@ public class QuestionDetail extends BaseActivity {
 				{
 					headButtonSwitch(DATA_LOAD_FAIL);
 					
-					UIHelper.ToastMessage(QuestionDetail.this, R.string.msg_load_is_null);
+					UIHelper.showToast(QuestionDetail.this, R.string.msg_load_is_null);
 				}
 				else if(msg.what == -1 && msg.obj != null)
 				{
@@ -398,7 +398,7 @@ public class QuestionDetail extends BaseActivity {
 	private View.OnClickListener shareClickListener = new View.OnClickListener() {
 		public void onClick(View v) {	
 			if(postDetail == null){
-				UIHelper.ToastMessage(v.getContext(), R.string.msg_read_detail_fail);
+				UIHelper.showToast(v.getContext(), R.string.msg_read_detail_fail);
 				return;
 			}
 			//分享到
@@ -453,7 +453,7 @@ public class QuestionDetail extends BaseActivity {
 							//重新保存缓存
 							ac.saveObject(postDetail, postDetail.getCacheKey());
 						}
-						UIHelper.ToastMessage(QuestionDetail.this, res.getErrorMessage());
+						UIHelper.showToast(QuestionDetail.this, res.getErrorMessage());
 					}else{
 						((AppException)msg.obj).makeToast(QuestionDetail.this);
 					}
@@ -579,7 +579,7 @@ public class QuestionDetail extends BaseActivity {
 									lvCommentData.remove(com);
 									lvCommentAdapter.notifyDataSetChanged();
 								}
-								UIHelper.ToastMessage(QuestionDetail.this, res.getErrorMessage());
+								UIHelper.showToast(QuestionDetail.this, res.getErrorMessage());
 							}else{
 								((AppException)msg.obj).makeToast(QuestionDetail.this);
 							}
@@ -766,7 +766,7 @@ public class QuestionDetail extends BaseActivity {
 			
 			_content = mFootEditer.getText().toString();
 			if(StringUtils.isEmpty(_content)){
-				UIHelper.ToastMessage(v.getContext(), "请输入回帖内容");
+				UIHelper.showToast(v.getContext(), "请输入回帖内容");
 				return;
 			}
 			
@@ -790,7 +790,7 @@ public class QuestionDetail extends BaseActivity {
 					
 					if(msg.what == 1){
 						Result res = (Result)msg.obj;
-						UIHelper.ToastMessage(QuestionDetail.this, res.getErrorMessage());
+						UIHelper.showToast(QuestionDetail.this, res.getErrorMessage());
 						if(res.OK()){
 							//发送通知广播
 							if(res.getNotice() != null){

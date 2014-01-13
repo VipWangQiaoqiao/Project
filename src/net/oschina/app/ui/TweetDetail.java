@@ -297,7 +297,7 @@ public class TweetDetail extends BaseActivity {
 									lvCommentData.remove(com);
 									lvCommentAdapter.notifyDataSetChanged();
 								}
-								UIHelper.ToastMessage(TweetDetail.this, res.getErrorMessage());
+								UIHelper.showToast(TweetDetail.this, res.getErrorMessage());
 							}else{
 								((AppException)msg.obj).makeToast(TweetDetail.this);
 							}
@@ -378,7 +378,7 @@ public class TweetDetail extends BaseActivity {
 						UIHelper.sendBroadCast(TweetDetail.this, (Notice)msg.obj);
 					}
 				}else if(msg.what == 0){
-						UIHelper.ToastMessage(TweetDetail.this, R.string.msg_load_is_null);	
+						UIHelper.showToast(TweetDetail.this, R.string.msg_load_is_null);	
 				}else{
 					((AppException)msg.obj).makeToast(TweetDetail.this);
 				}
@@ -614,7 +614,7 @@ public class TweetDetail extends BaseActivity {
 			
 			_content = mFootEditer.getText().toString();
 			if(StringUtils.isEmpty(_content)){
-				UIHelper.ToastMessage(v.getContext(), "请输入评论内容");
+				UIHelper.showToast(v.getContext(), "请输入评论内容");
 				return;
 			}
 			
@@ -638,7 +638,7 @@ public class TweetDetail extends BaseActivity {
 					
 					if(msg.what == 1 && msg.obj != null){
 						Result res = (Result)msg.obj;
-						UIHelper.ToastMessage(TweetDetail.this, res.getErrorMessage());
+						UIHelper.showToast(TweetDetail.this, res.getErrorMessage());
 						if(res.OK()){
 							//发送通知广播
 							if(res.getNotice() != null){

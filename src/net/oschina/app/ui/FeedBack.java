@@ -46,7 +46,7 @@ public class FeedBack extends BaseActivity{
 			String content = mEditer.getText().toString();
 			
 			if(StringUtils.isEmpty(content)) {
-				UIHelper.ToastMessage(v.getContext(), "反馈信息不能为空");
+				UIHelper.showToast(v.getContext(), "反馈信息不能为空");
 				return;
 			}
 			

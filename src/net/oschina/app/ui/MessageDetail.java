@@ -221,7 +221,7 @@ public class MessageDetail extends BaseActivity{
 								lvCommentData.remove(com);
 								lvCommentAdapter.notifyDataSetChanged();
 							}
-							UIHelper.ToastMessage(MessageDetail.this, res.getErrorMessage());
+							UIHelper.showToast(MessageDetail.this, res.getErrorMessage());
 						}else{
 							((AppException)msg.obj).makeToast(MessageDetail.this);
 						}
@@ -394,7 +394,7 @@ public class MessageDetail extends BaseActivity{
 			
 			_content = mFootEditer.getText().toString();
 			if(StringUtils.isEmpty(_content)){
-				UIHelper.ToastMessage(v.getContext(), "请输入留言内容");
+				UIHelper.showToast(v.getContext(), "请输入留言内容");
 				return;
 			}
 			
@@ -407,7 +407,7 @@ public class MessageDetail extends BaseActivity{
 					
 					if(msg.what == 1){
 						Result res = (Result)msg.obj;
-						UIHelper.ToastMessage(MessageDetail.this, res.getErrorMessage());
+						UIHelper.showToast(MessageDetail.this, res.getErrorMessage());
 						if(res.OK()){
 							//发送通知广播
 							if(res.getNotice() != null){

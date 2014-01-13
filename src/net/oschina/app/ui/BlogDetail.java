@@ -298,7 +298,7 @@ public class BlogDetail extends BaseActivity {
 				{
 					headButtonSwitch(DATA_LOAD_FAIL);
 					
-					UIHelper.ToastMessage(BlogDetail.this, R.string.msg_load_is_null);
+					UIHelper.showToast(BlogDetail.this, R.string.msg_load_is_null);
 				}
 				else if(msg.what == -1 && msg.obj != null)
 				{
@@ -394,7 +394,7 @@ public class BlogDetail extends BaseActivity {
 	private View.OnClickListener shareClickListener = new View.OnClickListener() {
 		public void onClick(View v) {	
 			if(blogDetail == null){
-				UIHelper.ToastMessage(v.getContext(), R.string.msg_read_detail_fail);
+				UIHelper.showToast(v.getContext(), R.string.msg_read_detail_fail);
 				return;
 			}
 			//分享到
@@ -450,7 +450,7 @@ public class BlogDetail extends BaseActivity {
 							//重新保存缓存
 							ac.saveObject(blogDetail, blogDetail.getCacheKey());
 						}
-						UIHelper.ToastMessage(BlogDetail.this, res.getErrorMessage());
+						UIHelper.showToast(BlogDetail.this, res.getErrorMessage());
 					}else{
 						((AppException)msg.obj).makeToast(BlogDetail.this);
 					}
@@ -576,7 +576,7 @@ public class BlogDetail extends BaseActivity {
 									lvCommentData.remove(com);
 									lvCommentAdapter.notifyDataSetChanged();
 								}
-								UIHelper.ToastMessage(BlogDetail.this, res.getErrorMessage());
+								UIHelper.showToast(BlogDetail.this, res.getErrorMessage());
 							}else{
 								((AppException)msg.obj).makeToast(BlogDetail.this);
 							}
@@ -760,7 +760,7 @@ public class BlogDetail extends BaseActivity {
 			
 			_content = mFootEditer.getText().toString();
 			if(StringUtils.isEmpty(_content)){
-				UIHelper.ToastMessage(v.getContext(), "请输入评论内容");
+				UIHelper.showToast(v.getContext(), "请输入评论内容");
 				return;
 			}
 			
@@ -781,7 +781,7 @@ public class BlogDetail extends BaseActivity {
 					
 					if(msg.what == 1){
 						Result res = (Result)msg.obj;
-						UIHelper.ToastMessage(BlogDetail.this, res.getErrorMessage());
+						UIHelper.showToast(BlogDetail.this, res.getErrorMessage());
 						if(res.OK()){
 							//发送通知广播
 							if(res.getNotice() != null){

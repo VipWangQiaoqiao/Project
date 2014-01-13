@@ -67,7 +67,7 @@ public class QQWeiboHelper2 {
 			case REQUEST:
 				oAuth = (OAuthV1) msg.obj;
 				if (oAuth.getStatus() == 1) {
-					UIHelper.ToastMessage(context, "Request Token 授权不通过");
+					UIHelper.showToast(context, "Request Token 授权不通过");
 				} else {
 					Intent intent = new Intent(context,
 							OAuthV1AuthorizeWebView.class);
@@ -79,7 +79,7 @@ public class QQWeiboHelper2 {
 			case ACCESS:
 				oAuth = (OAuthV1) msg.obj;
 				if (oAuth.getStatus() == 3) {
-					UIHelper.ToastMessage(context, "Access失败");
+					UIHelper.showToast(context, "Access失败");
 				} else {
 					OAuthV1Cache = oAuth;
 					ac.saveObject(oAuth, OAUTH_CACHE_FILE);
@@ -89,12 +89,12 @@ public class QQWeiboHelper2 {
 			case SEND:
 				String data = (String) msg.obj;
 				if (getReturnMsg(data, "ret").equals("0")) {
-					UIHelper.ToastMessage(context, "分享成功");
+					UIHelper.showToast(context, "分享成功");
 				} else if (getReturnMsg(data, "ret").equals("3") // access_token超时
 						&& getReturnMsg(data, "errcode").equals("4")) {
 					authenticate(); // 重新认证
 				} else {
-					UIHelper.ToastMessage(context, getReturnMsg(data, "msg"));
+					UIHelper.showToast(context, getReturnMsg(data, "msg"));
 				}
 				break;
 			}
@@ -163,7 +163,7 @@ public class QQWeiboHelper2 {
 			if (resultCode == OAuthV1AuthorizeWebView.RESULT_CODE) {
 				oAuth = (OAuthV1) data.getExtras().getSerializable("oauth");
 				if (oAuth.getStatus() == 2) {
-					UIHelper.ToastMessage(context, "获取验证码失败");
+					UIHelper.showToast(context, "获取验证码失败");
 				} else {
 					new Thread() {
 						@Override

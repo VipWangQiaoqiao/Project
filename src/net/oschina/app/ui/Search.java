@@ -283,7 +283,7 @@ public class Search extends BaseActivity{
      */
 	private void loadLvSearchData(final String catalog,final int pageIndex,final Handler handler,final int action){  
 		if(StringUtils.isEmpty(curSearchContent)){
-			UIHelper.ToastMessage(Search.this, "请输入搜索内容");
+			UIHelper.showToast(Search.this, "请输入搜索内容");
 			return;
 		}
 		

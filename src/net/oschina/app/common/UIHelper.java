@@ -686,7 +686,7 @@ public class UIHelper {
 								if (thread != null)
 									thread.start();
 								else
-									ToastMessage(context,
+									showToast(context,
 											R.string.msg_noaccess_delete);
 								dialog.dismiss();
 							}
@@ -718,7 +718,7 @@ public class UIHelper {
 								if (thread != null)
 									thread.start();
 								else
-									ToastMessage(context,
+									showToast(context,
 											R.string.msg_noaccess_delete);
 								dialog.dismiss();
 							}
@@ -936,7 +936,7 @@ public class UIHelper {
 						e.printStackTrace();
 					}
 				} else {
-					ToastMessage(imgView.getContext(), ErrMsg);
+					showToast(imgView.getContext(), ErrMsg);
 				}
 			}
 		};
@@ -1016,7 +1016,7 @@ public class UIHelper {
 			context.startActivity(it);
 		} catch (Exception e) {
 			e.printStackTrace();
-			ToastMessage(context, "无法浏览此网页", 500);
+			showToast(context, "无法浏览此网页", 500);
 		}
 	}
 
@@ -1336,15 +1336,15 @@ public class UIHelper {
 	 * 
 	 * @param msg
 	 */
-	public static void ToastMessage(Context cont, String msg) {
+	public static void showToast(Context cont, String msg) {
 		Toast.makeText(cont, msg, Toast.LENGTH_SHORT).show();
 	}
 
-	public static void ToastMessage(Context cont, int msg) {
+	public static void showToast(Context cont, int msg) {
 		Toast.makeText(cont, msg, Toast.LENGTH_SHORT).show();
 	}
 
-	public static void ToastMessage(Context cont, String msg, int time) {
+	public static void showToast(Context cont, String msg, int time) {
 		Toast.makeText(cont, msg, time).show();
 	}
 
@@ -1448,7 +1448,7 @@ public class UIHelper {
 		AppContext ac = (AppContext) activity.getApplication();
 		if (ac.isLogin()) {
 			ac.Logout();
-			ToastMessage(activity, "已退出登录");
+			showToast(activity, "已退出登录");
 		} else {
 			showLoginDialog(activity);
 		}
@@ -1463,10 +1463,10 @@ public class UIHelper {
 		AppContext ac = (AppContext) activity.getApplication();
 		if (ac.isLoadImage()) {
 			ac.setConfigLoadimage(false);
-			ToastMessage(activity, "已设置文章不加载图片");
+			showToast(activity, "已设置文章不加载图片");
 		} else {
 			ac.setConfigLoadimage(true);
-			ToastMessage(activity, "已设置文章加载图片");
+			showToast(activity, "已设置文章加载图片");
 		}
 	}
 
@@ -1485,9 +1485,9 @@ public class UIHelper {
 		final Handler handler = new Handler() {
 			public void handleMessage(Message msg) {
 				if (msg.what == 1) {
-					ToastMessage(ac, "缓存清除成功");
+					showToast(ac, "缓存清除成功");
 				} else {
-					ToastMessage(ac, "缓存清除失败");
+					showToast(ac, "缓存清除失败");
 				}
 			}
 		};

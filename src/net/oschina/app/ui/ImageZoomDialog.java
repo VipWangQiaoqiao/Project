@@ -105,10 +105,10 @@ public class ImageZoomDialog extends BaseActivity implements OnTouchListener,
 					ImageUtils.saveImageToSD(ImageZoomDialog.this,
 							saveImagePath + ImageUtils.getTempFileName()
 									+ ".jpg", bitmap, 100);
-					UIHelper.ToastMessage(ImageZoomDialog.this, "保存成功");
+					UIHelper.showToast(ImageZoomDialog.this, "保存成功");
 				} catch (IOException e) {
 					e.printStackTrace();
-					UIHelper.ToastMessage(ImageZoomDialog.this, "保存失败");
+					UIHelper.showToast(ImageZoomDialog.this, "保存失败");
 				}
 			}
 		});
@@ -128,7 +128,7 @@ public class ImageZoomDialog extends BaseActivity implements OnTouchListener,
 					mViewSwitcher.showNext();
 					btnSave.setVisibility(View.VISIBLE);
 				} else {
-					UIHelper.ToastMessage(ImageZoomDialog.this, ErrMsg);
+					UIHelper.showToast(ImageZoomDialog.this, ErrMsg);
 					finish();
 				}
 			}

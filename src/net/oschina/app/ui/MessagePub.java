@@ -82,7 +82,7 @@ public class MessagePub extends BaseActivity{
 			
 			_content = mContent.getText().toString();
 			if(StringUtils.isEmpty(_content)){
-				UIHelper.ToastMessage(v.getContext(), "请输入留言内容");
+				UIHelper.showToast(v.getContext(), "请输入留言内容");
 				return;
 			}
 			
@@ -101,7 +101,7 @@ public class MessagePub extends BaseActivity{
 					
 					if(msg.what == 1){
 						Result res = (Result)msg.obj;
-						UIHelper.ToastMessage(MessagePub.this, res.getErrorMessage());
+						UIHelper.showToast(MessagePub.this, res.getErrorMessage());
 						if(res.OK()){
 							//发送通知广播
 							if(res.getNotice() != null){
