@@ -5,6 +5,7 @@ import greendroid.widget.QuickAction;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -53,8 +54,8 @@ import net.oschina.app.ui.UserFavorite;
 import net.oschina.app.ui.UserFriend;
 import net.oschina.app.ui.UserInfo;
 import net.oschina.app.widget.LinkView;
-import net.oschina.app.widget.PathChooseDialog;
 import net.oschina.app.widget.LinkView.MyURLSpan;
+import net.oschina.app.widget.PathChooseDialog;
 import net.oschina.app.widget.PathChooseDialog.ChooseCompleteListener;
 import net.oschina.app.widget.ScreenShotView;
 import net.oschina.app.widget.ScreenShotView.OnScreenShotListener;
@@ -126,14 +127,16 @@ public class UIHelper {
 	public final static int REQUEST_CODE_FOR_REPLY = 0x02;
 
 	/** 表情图片匹配 */
-	private static Pattern facePattern = Pattern
-			.compile("\\[{1}([0-9]\\d*)\\]{1}");
+	private static Pattern facePattern = Pattern.compile("\\[{1}([0-9]\\d*)\\]{1}");
 
 	/** 全局web样式 */
 	public final static String WEB_STYLE = "<style>* {font-size:16px;line-height:20px;} p {color:#333;} a {color:#3E62A6;} img {max-width:310px;} "
 			+ "img.alignleft {float:left;max-width:120px;margin:0 10px 5px 0;border:1px solid #ccc;background:#fff;padding:2px;} "
 			+ "pre {font-size:9pt;line-height:12pt;font-family:Courier New,Arial;border:1px solid #ddd;border-left:5px solid #6CE26C;background:#f6f6f6;padding:5px;} "
 			+ "a.tag {font-size:15px;text-decoration:none;background-color:#bbd6f3;border-bottom:2px solid #3E6D8E;border-right:2px solid #7F9FB6;color:#284a7b;margin:2px 2px 2px 0;padding:2px 4px;white-space:nowrap;}</style>";
+
+	private static WeakReference<Toast> prevToast = new WeakReference<Toast>(null);
+	private static WeakReference<Context> prevContext = new WeakReference<Context>(null);
 
 	/**
 	 * 显示首页
@@ -356,8 +359,8 @@ public class UIHelper {
 	 * @param replyid
 	 * @param authorid
 	 */
-	public static void showCommentReply(Activity context, int id, int catalog,
-			int replyid, int authorid, String author, String content) {
+	public static void showCommentReply(Activity context, int id, int catalog, int replyid,
+			int authorid, String author, String content) {
 		Intent intent = new Intent(context, CommentPub.class);
 		intent.putExtra("id", id);
 		intent.putExtra("catalog", catalog);
@@ -378,8 +381,7 @@ public class UIHelper {
 	 * @param catalog
 	 * @param friendid
 	 */
-	public static void showMessageDetail(Context context, int friendid,
-			String friendname) {
+	public static void showMessageDetail(Context context, int friendid, String friendname) {
 		Intent intent = new Intent(context, MessageDetail.class);
 		intent.putExtra("friend_name", friendname);
 		intent.putExtra("friend_id", friendid);
@@ -395,11 +397,9 @@ public class UIHelper {
 	 * @param friendName
 	 *            对方名称
 	 */
-	public static void showMessagePub(Activity context, int friendId,
-			String friendName) {
+	public static void showMessagePub(Activity context, int friendId, String friendName) {
 		Intent intent = new Intent();
-		intent.putExtra("user_id",
-				((AppContext) context.getApplication()).getLoginUid());
+		intent.putExtra("user_id", ((AppContext) context.getApplication()).getLoginUid());
 		intent.putExtra("friend_id", friendId);
 		intent.putExtra("friend_name", friendName);
 		intent.setClass(context, MessagePub.class);
@@ -415,11 +415,9 @@ public class UIHelper {
 	 * @param messageContent
 	 *            留言内容
 	 */
-	public static void showMessageForward(Activity context, String friendName,
-			String messageContent) {
+	public static void showMessageForward(Activity context, String friendName, String messageContent) {
 		Intent intent = new Intent();
-		intent.putExtra("user_id",
-				((AppContext) context.getApplication()).getLoginUid());
+		intent.putExtra("user_id", ((AppContext) context.getApplication()).getLoginUid());
 		intent.putExtra("friend_name", friendName);
 		intent.putExtra("message_content", messageContent);
 		intent.setClass(context, MessageForward.class);
@@ -433,8 +431,7 @@ public class UIHelper {
 	 * @param title
 	 * @param url
 	 */
-	public static void showShareMore(Activity context, final String title,
-			final String url) {
+	public static void showShareMore(Activity context, final String title, final String url) {
 		Intent intent = new Intent(Intent.ACTION_SEND);
 		intent.setType("text/plain");
 		intent.putExtra(Intent.EXTRA_SUBJECT, "分享：" + title);
@@ -452,79 +449,72 @@ public class UIHelper {
 	 * @param url
 	 *            分享的链接
 	 */
-	public static void showShareDialog(final Activity context,
-			final String title, final String url) {
+	public static void showShareDialog(final Activity context, final String title, final String url) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setIcon(android.R.drawable.btn_star);
 		builder.setTitle(context.getString(R.string.share));
-		builder.setItems(R.array.app_share_items,
-				new DialogInterface.OnClickListener() {
-					AppConfig cfgHelper = AppConfig.getAppConfig(context);
-					AccessInfo access = cfgHelper.getAccessInfo();
+		builder.setItems(R.array.app_share_items, new DialogInterface.OnClickListener() {
+			AppConfig cfgHelper = AppConfig.getAppConfig(context);
+			AccessInfo access = cfgHelper.getAccessInfo();
 
-					public void onClick(DialogInterface arg0, int arg1) {
-						switch (arg1) {
-						case 0:// 新浪微博
-								// 分享的内容
-							final String shareMessage = title + " " + url;
-							// 初始化微博
-							if (SinaWeiboHelper.isWeiboNull()) {
-								SinaWeiboHelper.initWeibo();
-							}
-							// 判断之前是否登陆过
-							if (access != null) {
-								SinaWeiboHelper.progressDialog = new ProgressDialog(
-										context);
-								SinaWeiboHelper.progressDialog
-										.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-								SinaWeiboHelper.progressDialog
-										.setMessage(context
-												.getString(R.string.sharing));
-								SinaWeiboHelper.progressDialog
-										.setCancelable(true);
-								SinaWeiboHelper.progressDialog.show();
-								new Thread() {
-									public void run() {
-										SinaWeiboHelper.setAccessToken(
-												access.getAccessToken(),
-												access.getAccessSecret(),
-												access.getExpiresIn());
-										SinaWeiboHelper.shareMessage(context,
-												shareMessage);
-									}
-								}.start();
-							} else {
-								SinaWeiboHelper
-										.authorize(context, shareMessage);
-							}
-							break;
-						case 1:// 腾讯微博
-							QQWeiboHelper.shareToQQ(context, title, url);
-							break;
-						case 2:// 截图分享
-							addScreenShot(context, new OnScreenShotListener() {
-
-								@SuppressLint("NewApi")
-								public void onComplete(Bitmap bm) {
-									Intent intent = new Intent(context,ScreenShotShare.class);
-									intent.putExtra("title", title);
-									intent.putExtra("url", url);
-									intent.putExtra("cut_image_tmp_path",ScreenShotView.TEMP_SHARE_FILE_NAME);
-									try {
-										ImageUtils.saveImageToSD(context,ScreenShotView.TEMP_SHARE_FILE_NAME,bm, 100);
-									} catch (IOException e) {
-										e.printStackTrace();
-									}
-									context.startActivity(intent);
-								}
-							});
-							break;
-						case 3:// 更多
-							showShareMore(context, title, url);
-							break;
-						}
+			public void onClick(DialogInterface arg0, int arg1) {
+				switch (arg1) {
+				case 0:// 新浪微博
+						// 分享的内容
+					final String shareMessage = title + " " + url;
+					// 初始化微博
+					if (SinaWeiboHelper.isWeiboNull()) {
+						SinaWeiboHelper.initWeibo();
 					}
-				});
+					// 判断之前是否登陆过
+					if (access != null) {
+						SinaWeiboHelper.progressDialog = new ProgressDialog(context);
+						SinaWeiboHelper.progressDialog
+								.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+						SinaWeiboHelper.progressDialog.setMessage(context
+								.getString(R.string.sharing));
+						SinaWeiboHelper.progressDialog.setCancelable(true);
+						SinaWeiboHelper.progressDialog.show();
+						new Thread() {
+							public void run() {
+								SinaWeiboHelper.setAccessToken(access.getAccessToken(),
+										access.getAccessSecret(), access.getExpiresIn());
+								SinaWeiboHelper.shareMessage(context, shareMessage);
+							}
+						}.start();
+					} else {
+						SinaWeiboHelper.authorize(context, shareMessage);
+					}
+					break;
+				case 1:// 腾讯微博
+					QQWeiboHelper.shareToQQ(context, title, url);
+					break;
+				case 2:// 截图分享
+					addScreenShot(context, new OnScreenShotListener() {
+
+						@SuppressLint("NewApi")
+						public void onComplete(Bitmap bm) {
+							Intent intent = new Intent(context, ScreenShotShare.class);
+							intent.putExtra("title", title);
+							intent.putExtra("url", url);
+							intent.putExtra("cut_image_tmp_path",
+									ScreenShotView.TEMP_SHARE_FILE_NAME);
+							try {
+								ImageUtils.saveImageToSD(context,
+										ScreenShotView.TEMP_SHARE_FILE_NAME, bm, 100);
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+							context.startActivity(intent);
+						}
+					});
+					break;
+				case 3:// 更多
+					showShareMore(context, title, url);
+					break;
+				}
+			}
+		});
 		builder.create().show();
 	}
 
@@ -534,21 +524,19 @@ public class UIHelper {
 	 * @param context
 	 * @param thread
 	 */
-	public static void showFavoriteOptionDialog(final Activity context,
-			final Thread thread) {
+	public static void showFavoriteOptionDialog(final Activity context, final Thread thread) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setIcon(R.drawable.ic_dialog_menu);
 		builder.setTitle(context.getString(R.string.select));
-		builder.setItems(R.array.favorite_options,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface arg0, int arg1) {
-						switch (arg1) {
-						case 0:// 删除
-							thread.start();
-							break;
-						}
-					}
-				});
+		builder.setItems(R.array.favorite_options, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface arg0, int arg1) {
+				switch (arg1) {
+				case 0:// 删除
+					thread.start();
+					break;
+				}
+			}
+		});
 		builder.create().show();
 	}
 
@@ -559,29 +547,26 @@ public class UIHelper {
 	 * @param msg
 	 * @param thread
 	 */
-	public static void showMessageListOptionDialog(final Activity context,
-			final Messages msg, final Thread thread) {
+	public static void showMessageListOptionDialog(final Activity context, final Messages msg,
+			final Thread thread) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setIcon(R.drawable.ic_dialog_menu);
 		builder.setTitle(context.getString(R.string.select));
-		builder.setItems(R.array.message_list_options,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface arg0, int arg1) {
-						switch (arg1) {
-						case 0:// 回复
-							showMessagePub(context, msg.getFriendId(),
-									msg.getFriendName());
-							break;
-						case 1:// 转发
-							showMessageForward(context, msg.getFriendName(),
-									msg.getContent());
-							break;
-						case 2:// 删除
-							thread.start();
-							break;
-						}
-					}
-				});
+		builder.setItems(R.array.message_list_options, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface arg0, int arg1) {
+				switch (arg1) {
+				case 0:// 回复
+					showMessagePub(context, msg.getFriendId(), msg.getFriendName());
+					break;
+				case 1:// 转发
+					showMessageForward(context, msg.getFriendName(), msg.getContent());
+					break;
+				case 2:// 删除
+					thread.start();
+					break;
+				}
+			}
+		});
 		builder.create().show();
 	}
 
@@ -592,25 +577,23 @@ public class UIHelper {
 	 * @param msg
 	 * @param thread
 	 */
-	public static void showMessageDetailOptionDialog(final Activity context,
-			final Comment msg, final Thread thread) {
+	public static void showMessageDetailOptionDialog(final Activity context, final Comment msg,
+			final Thread thread) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setIcon(R.drawable.ic_dialog_menu);
 		builder.setTitle(context.getString(R.string.select));
-		builder.setItems(R.array.message_detail_options,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface arg0, int arg1) {
-						switch (arg1) {
-						case 0:// 转发
-							showMessageForward(context, msg.getAuthor(),
-									msg.getContent());
-							break;
-						case 1:// 删除
-							thread.start();
-							break;
-						}
-					}
-				});
+		builder.setItems(R.array.message_detail_options, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface arg0, int arg1) {
+				switch (arg1) {
+				case 0:// 转发
+					showMessageForward(context, msg.getAuthor(), msg.getContent());
+					break;
+				case 1:// 删除
+					thread.start();
+					break;
+				}
+			}
+		});
 		builder.create().show();
 	}
 
@@ -627,43 +610,36 @@ public class UIHelper {
 	 * @param thread
 	 *            处理删除评论的线程，若无删除操作传null
 	 */
-	public static void showCommentOptionDialog(final Activity context,
-			final int id, final int catalog, final Comment comment,
-			final Thread thread) {
+	public static void showCommentOptionDialog(final Activity context, final int id,
+			final int catalog, final Comment comment, final Thread thread) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setIcon(R.drawable.ic_dialog_menu);
 		builder.setTitle(context.getString(R.string.select));
 		if (thread != null) {
-			builder.setItems(R.array.comment_options_2,
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface arg0, int arg1) {
-							switch (arg1) {
-							case 0:// 回复
-								showCommentReply(context, id, catalog,
-										comment.getId(), comment.getAuthorId(),
-										comment.getAuthor(),
-										comment.getContent());
-								break;
-							case 1:// 删除
-								thread.start();
-								break;
-							}
-						}
-					});
+			builder.setItems(R.array.comment_options_2, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface arg0, int arg1) {
+					switch (arg1) {
+					case 0:// 回复
+						showCommentReply(context, id, catalog, comment.getId(),
+								comment.getAuthorId(), comment.getAuthor(), comment.getContent());
+						break;
+					case 1:// 删除
+						thread.start();
+						break;
+					}
+				}
+			});
 		} else {
-			builder.setItems(R.array.comment_options_1,
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface arg0, int arg1) {
-							switch (arg1) {
-							case 0:// 回复
-								showCommentReply(context, id, catalog,
-										comment.getId(), comment.getAuthorId(),
-										comment.getAuthor(),
-										comment.getContent());
-								break;
-							}
-						}
-					});
+			builder.setItems(R.array.comment_options_1, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface arg0, int arg1) {
+					switch (arg1) {
+					case 0:// 回复
+						showCommentReply(context, id, catalog, comment.getId(),
+								comment.getAuthorId(), comment.getAuthor(), comment.getContent());
+						break;
+					}
+				}
+			});
 		}
 		builder.create().show();
 	}
@@ -674,30 +650,22 @@ public class UIHelper {
 	 * @param context
 	 * @param thread
 	 */
-	public static void showBlogOptionDialog(final Context context,
-			final Thread thread) {
-		new AlertDialog.Builder(context)
-				.setIcon(android.R.drawable.ic_dialog_info)
+	public static void showBlogOptionDialog(final Context context, final Thread thread) {
+		new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_info)
 				.setTitle(context.getString(R.string.delete_blog))
-				.setPositiveButton(R.string.sure,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int which) {
-								if (thread != null)
-									thread.start();
-								else
-									showToast(context,
-											R.string.msg_noaccess_delete);
-								dialog.dismiss();
-							}
-						})
-				.setNegativeButton(R.string.cancle,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int which) {
-								dialog.dismiss();
-							}
-						}).create().show();
+				.setPositiveButton(R.string.sure, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						if (thread != null)
+							thread.start();
+						else
+							showToast(context, R.string.msg_noaccess_delete);
+						dialog.dismiss();
+					}
+				}).setNegativeButton(R.string.cancle, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				}).create().show();
 	}
 
 	/**
@@ -706,30 +674,22 @@ public class UIHelper {
 	 * @param context
 	 * @param thread
 	 */
-	public static void showTweetOptionDialog(final Context context,
-			final Thread thread) {
-		new AlertDialog.Builder(context)
-				.setIcon(android.R.drawable.ic_dialog_info)
+	public static void showTweetOptionDialog(final Context context, final Thread thread) {
+		new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_info)
 				.setTitle(context.getString(R.string.delete_tweet))
-				.setPositiveButton(R.string.sure,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int which) {
-								if (thread != null)
-									thread.start();
-								else
-									showToast(context,
-											R.string.msg_noaccess_delete);
-								dialog.dismiss();
-							}
-						})
-				.setNegativeButton(R.string.cancle,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int which) {
-								dialog.dismiss();
-							}
-						}).create().show();
+				.setPositiveButton(R.string.sure, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						if (thread != null)
+							thread.start();
+						else
+							showToast(context, R.string.msg_noaccess_delete);
+						dialog.dismiss();
+					}
+				}).setNegativeButton(R.string.cancle, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				}).create().show();
 	}
 
 	/**
@@ -738,30 +698,21 @@ public class UIHelper {
 	 * @param context
 	 * @param thread
 	 */
-	public static void showResendTweetDialog(final Context context,
-			final Thread thread) {
-		new AlertDialog.Builder(context)
-				.setIcon(android.R.drawable.ic_dialog_info)
+	public static void showResendTweetDialog(final Context context, final Thread thread) {
+		new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_info)
 				.setTitle(context.getString(R.string.republish_tweet))
-				.setPositiveButton(R.string.sure,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int which) {
-								dialog.dismiss();
-								if (context == TweetPub.mContext
-										&& TweetPub.mMessage != null)
-									TweetPub.mMessage
-											.setVisibility(View.VISIBLE);
-								thread.start();
-							}
-						})
-				.setNegativeButton(R.string.cancle,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int which) {
-								dialog.dismiss();
-							}
-						}).create().show();
+				.setPositiveButton(R.string.sure, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+						if (context == TweetPub.mContext && TweetPub.mMessage != null)
+							TweetPub.mMessage.setVisibility(View.VISIBLE);
+						thread.start();
+					}
+				}).setNegativeButton(R.string.cancle, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				}).create().show();
 	}
 
 	/**
@@ -832,8 +783,7 @@ public class UIHelper {
 	 * 
 	 * @param context
 	 */
-	public static void showFilePathDialog(Activity context,
-			ChooseCompleteListener listener) {
+	public static void showFilePathDialog(Activity context, ChooseCompleteListener listener) {
 		new PathChooseDialog(context, listener).show();
 	}
 
@@ -845,8 +795,7 @@ public class UIHelper {
 	 * @param hisuid
 	 * @param hisname
 	 */
-	public static void showUserCenter(Context context, int hisuid,
-			String hisname) {
+	public static void showUserCenter(Context context, int hisuid, String hisname) {
 		Intent intent = new Intent(context, UserCenter.class);
 		intent.putExtra("his_id", hisuid);
 		intent.putExtra("his_name", hisname);
@@ -868,8 +817,7 @@ public class UIHelper {
 	 * 
 	 * @param context
 	 */
-	public static void showUserFriend(Context context, int friendType,
-			int followers, int fans) {
+	public static void showUserFriend(Context context, int friendType, int followers, int fans) {
 		Intent intent = new Intent(context, UserFriend.class);
 		intent.putExtra("friend_type", friendType);
 		intent.putExtra("friend_followers", followers);
@@ -883,8 +831,7 @@ public class UIHelper {
 	 * @param imgFace
 	 * @param faceURL
 	 */
-	public static void showUserFace(final ImageView imgFace,
-			final String faceURL) {
+	public static void showUserFace(final ImageView imgFace, final String faceURL) {
 		showLoadImage(imgFace, faceURL,
 				imgFace.getContext().getString(R.string.msg_load_userface_fail));
 	}
@@ -896,8 +843,8 @@ public class UIHelper {
 	 * @param faceURL
 	 * @param errMsg
 	 */
-	public static void showLoadImage(final ImageView imgView,
-			final String imgURL, final String errMsg) {
+	public static void showLoadImage(final ImageView imgView, final String imgURL,
+			final String errMsg) {
 		// 读取本地图片
 		if (StringUtils.isEmpty(imgURL) || imgURL.endsWith("portrait.gif")) {
 			Bitmap bmp = BitmapFactory.decodeResource(imgView.getResources(),
@@ -909,8 +856,7 @@ public class UIHelper {
 		// 是否有缓存图片
 		final String filename = FileUtils.getFileName(imgURL);
 		// Environment.getExternalStorageDirectory();返回/sdcard
-		String filepath = imgView.getContext().getFilesDir() + File.separator
-				+ filename;
+		String filepath = imgView.getContext().getFilesDir() + File.separator + filename;
 		File file = new File(filepath);
 		if (file.exists()) {
 			Bitmap bmp = ImageUtils.getBitmap(imgView.getContext(), filename);
@@ -919,8 +865,7 @@ public class UIHelper {
 		}
 
 		// 从网络获取&写入图片缓存
-		String _errMsg = imgView.getContext().getString(
-				R.string.msg_load_image_fail);
+		String _errMsg = imgView.getContext().getString(R.string.msg_load_image_fail);
 		if (!StringUtils.isEmpty(errMsg))
 			_errMsg = errMsg;
 		final String ErrMsg = _errMsg;
@@ -930,8 +875,7 @@ public class UIHelper {
 					imgView.setImageBitmap((Bitmap) msg.obj);
 					try {
 						// 写图片缓存
-						ImageUtils.saveImage(imgView.getContext(), filename,
-								(Bitmap) msg.obj);
+						ImageUtils.saveImage(imgView.getContext(), filename, (Bitmap) msg.obj);
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -966,15 +910,13 @@ public class UIHelper {
 	public static void showUrlRedirect(Context context, String url) {
 		URLs urls = URLs.parseURL(url);
 		if (urls != null) {
-			showLinkRedirect(context, urls.getObjType(), urls.getObjId(),
-					urls.getObjKey());
+			showLinkRedirect(context, urls.getObjType(), urls.getObjId(), urls.getObjKey());
 		} else {
 			openBrowser(context, url);
 		}
 	}
 
-	public static void showLinkRedirect(Context context, int objType,
-			int objId, String objKey) {
+	public static void showLinkRedirect(Context context, int objType, int objId, String objKey) {
 		switch (objType) {
 		case URLs.URL_OBJ_TYPE_NEWS:
 			showNewsDetail(context, objId);
@@ -1042,18 +984,14 @@ public class UIHelper {
 	 * @param tmlKey
 	 * @return
 	 */
-	public static TextWatcher getTextWatcher(final Activity context,
-			final String temlKey) {
+	public static TextWatcher getTextWatcher(final Activity context, final String temlKey) {
 		return new TextWatcher() {
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				// 保存当前EditText正在编辑的内容
-				((AppContext) context.getApplication()).setProperty(temlKey,
-						s.toString());
+				((AppContext) context.getApplication()).setProperty(temlKey, s.toString());
 			}
 
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 			}
 
 			public void afterTextChanged(Editable s) {
@@ -1068,13 +1006,10 @@ public class UIHelper {
 	 * @param editer
 	 * @param temlKey
 	 */
-	public static void showTempEditContent(Activity context, EditText editer,
-			String temlKey) {
-		String tempContent = ((AppContext) context.getApplication())
-				.getProperty(temlKey);
+	public static void showTempEditContent(Activity context, EditText editer, String temlKey) {
+		String tempContent = ((AppContext) context.getApplication()).getProperty(temlKey);
 		if (!StringUtils.isEmpty(tempContent)) {
-			SpannableStringBuilder builder = parseFaceByText(context,
-					tempContent);
+			SpannableStringBuilder builder = parseFaceByText(context, tempContent);
 			editer.setText(builder);
 			editer.setSelection(tempContent.length());// 设置光标位置
 		}
@@ -1086,8 +1021,7 @@ public class UIHelper {
 	 * @param context
 	 * @param content
 	 */
-	public static SpannableStringBuilder parseFaceByText(Context context,
-			String content) {
+	public static SpannableStringBuilder parseFaceByText(Context context, String content) {
 		SpannableStringBuilder builder = new SpannableStringBuilder(content);
 		Matcher matcher = facePattern.matcher(content);
 		while (matcher.find()) {
@@ -1117,25 +1051,23 @@ public class UIHelper {
 	 * @param cont
 	 * @param editer
 	 */
-	public static void showClearWordsDialog(final Context cont,
-			final EditText editer, final TextView numwords) {
+	public static void showClearWordsDialog(final Context cont, final EditText editer,
+			final TextView numwords) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(cont);
 		builder.setTitle(R.string.clearwords);
-		builder.setPositiveButton(R.string.sure,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-						// 清除文字
-						editer.setText("");
-						numwords.setText("160");
-					}
-				});
-		builder.setNegativeButton(R.string.cancle,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				});
+		builder.setPositiveButton(R.string.sure, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+				// 清除文字
+				editer.setText("");
+				numwords.setText("160");
+			}
+		});
+		builder.setNegativeButton(R.string.cancle, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
 		builder.show();
 	}
 
@@ -1146,8 +1078,7 @@ public class UIHelper {
 	 * @param notice
 	 */
 	public static void sendBroadCast(Context context, Notice notice) {
-		if (!((AppContext) context.getApplicationContext()).isLogin()
-				|| notice == null)
+		if (!((AppContext) context.getApplicationContext()).isLogin() || notice == null)
 			return;
 		Intent intent = new Intent("net.oschina.app.action.APPWIDGET_UPDATE");
 		intent.putExtra("atmeCount", notice.getAtmeCount());
@@ -1163,8 +1094,7 @@ public class UIHelper {
 	 * @param context
 	 * @param notice
 	 */
-	public static void sendBroadCastTweet(Context context, int what,
-			Result res, Tweet tweet) {
+	public static void sendBroadCastTweet(Context context, int what, Result res, Tweet tweet) {
 		if (res == null && tweet == null)
 			return;
 		Intent intent = new Intent("net.oschina.app.action.APP_TWEETPUB");
@@ -1185,8 +1115,8 @@ public class UIHelper {
 	 * @return
 	 */
 	@SuppressLint("NewApi")
-	public static SpannableString parseActiveAction(String author,
-			int objecttype, int objectcatalog, String objecttitle) {
+	public static SpannableString parseActiveAction(String author, int objecttype,
+			int objectcatalog, String objecttitle) {
 		String title = "";
 		int start = 0;
 		int end = 0;
@@ -1230,10 +1160,10 @@ public class UIHelper {
 		// 设置用户名字体大小、加粗、高亮
 		sp.setSpan(new AbsoluteSizeSpan(14, true), 0, author.length(),
 				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		sp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0,
-				author.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		sp.setSpan(new ForegroundColorSpan(Color.parseColor("#0e5986")), 0,
-				author.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		sp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, author.length(),
+				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		sp.setSpan(new ForegroundColorSpan(Color.parseColor("#0e5986")), 0, author.length(),
+				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		// 设置标题字体大小、高亮
 		if (!StringUtils.isEmpty(objecttitle)) {
 			start = title.indexOf(objecttitle);
@@ -1241,9 +1171,8 @@ public class UIHelper {
 				end = start + objecttitle.length();
 				sp.setSpan(new AbsoluteSizeSpan(14, true), start, end,
 						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-				sp.setSpan(
-						new ForegroundColorSpan(Color.parseColor("#0e5986")),
-						start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				sp.setSpan(new ForegroundColorSpan(Color.parseColor("#0e5986")), start, end,
+						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 			}
 		}
 		return sp;
@@ -1259,10 +1188,10 @@ public class UIHelper {
 	public static SpannableString parseActiveReply(String name, String body) {
 		SpannableString sp = new SpannableString(name + "：" + body);
 		// 设置用户名字体加粗、高亮
-		sp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0,
-				name.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		sp.setSpan(new ForegroundColorSpan(Color.parseColor("#0e5986")), 0,
-				name.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		sp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, name.length(),
+				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		sp.setSpan(new ForegroundColorSpan(Color.parseColor("#0e5986")), 0, name.length(),
+				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		return sp;
 	}
 
@@ -1273,8 +1202,7 @@ public class UIHelper {
 	 * @param body
 	 * @return
 	 */
-	public static void parseMessageSpan(LinkView view, String name,
-			String body, String action) {
+	public static void parseMessageSpan(LinkView view, String name, String body, String action) {
 		Spanned span = null;
 		SpannableStringBuilder style = null;
 		int start = 0;
@@ -1300,17 +1228,17 @@ public class UIHelper {
 		style = new SpannableStringBuilder(view.getText());
 		// style.clearSpans();// 这里会清除之前所有的样式
 		for (URLSpan url : urls) {
-			 style.removeSpan(url);// 只需要移除之前的URL样式，再重新设置
-			 MyURLSpan myURLSpan =  view.new MyURLSpan(url.getURL());
-			 style.setSpan(myURLSpan, span.getSpanStart(url),
-		    		span.getSpanEnd(url), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			style.removeSpan(url);// 只需要移除之前的URL样式，再重新设置
+			MyURLSpan myURLSpan = view.new MyURLSpan(url.getURL());
+			style.setSpan(myURLSpan, span.getSpanStart(url), span.getSpanEnd(url),
+					Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		}
 
 		// 设置用户名字体加粗、高亮
-		style.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), start,
-				end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		style.setSpan(new ForegroundColorSpan(Color.parseColor("#0e5986")),
-				start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		style.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), start, end,
+				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		style.setSpan(new ForegroundColorSpan(Color.parseColor("#0e5986")), start, end,
+				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		view.setText(style);
 	}
 
@@ -1324,10 +1252,10 @@ public class UIHelper {
 	public static SpannableString parseQuoteSpan(String name, String body) {
 		SpannableString sp = new SpannableString("回复：" + name + "\n" + body);
 		// 设置用户名字体加粗、高亮
-		sp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 3,
-				3 + name.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		sp.setSpan(new ForegroundColorSpan(Color.parseColor("#0e5986")), 3,
-				3 + name.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		sp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 3, 3 + name.length(),
+				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		sp.setSpan(new ForegroundColorSpan(Color.parseColor("#0e5986")), 3, 3 + name.length(),
+				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		return sp;
 	}
 
@@ -1337,15 +1265,25 @@ public class UIHelper {
 	 * @param msg
 	 */
 	public static void showToast(Context cont, String msg) {
-		Toast.makeText(cont, msg, Toast.LENGTH_SHORT).show();
+		showToast(cont, msg, Toast.LENGTH_SHORT);
 	}
 
 	public static void showToast(Context cont, int msg) {
-		Toast.makeText(cont, msg, Toast.LENGTH_SHORT).show();
+		showToast(cont, cont.getString(msg), Toast.LENGTH_SHORT);
 	}
 
 	public static void showToast(Context cont, String msg, int time) {
-		Toast.makeText(cont, msg, time).show();
+		if (prevContext.get() != null && prevToast.get() != null && prevContext.get() == cont) {
+			Toast toast = prevToast.get();
+			toast.setText(msg);
+			toast.setDuration(time);
+			toast.show();
+			return;
+		}
+		Toast toast = Toast.makeText(cont, msg, time);
+		toast.show();
+		prevContext = new WeakReference<Context>(cont);
+		prevToast = new WeakReference<Toast>(toast);
 	}
 
 	/**
@@ -1390,15 +1328,11 @@ public class UIHelper {
 	 */
 	public static void showMenuLoginOrLogout(Activity activity, Menu menu) {
 		if (((AppContext) activity.getApplication()).isLogin()) {
-			menu.findItem(R.id.main_menu_user).setTitle(
-					R.string.main_menu_logout);
-			menu.findItem(R.id.main_menu_user).setIcon(
-					R.drawable.ic_menu_logout);
+			menu.findItem(R.id.main_menu_user).setTitle(R.string.main_menu_logout);
+			menu.findItem(R.id.main_menu_user).setIcon(R.drawable.ic_menu_logout);
 		} else {
-			menu.findItem(R.id.main_menu_user).setTitle(
-					R.string.main_menu_login);
-			menu.findItem(R.id.main_menu_user)
-					.setIcon(R.drawable.ic_menu_login);
+			menu.findItem(R.id.main_menu_user).setTitle(R.string.main_menu_login);
+			menu.findItem(R.id.main_menu_user).setIcon(R.drawable.ic_menu_login);
 		}
 	}
 
@@ -1408,15 +1342,12 @@ public class UIHelper {
 	 * @param activity
 	 * @param qa
 	 */
-	public static void showSettingLoginOrLogout(Activity activity,
-			QuickAction qa) {
+	public static void showSettingLoginOrLogout(Activity activity, QuickAction qa) {
 		if (((AppContext) activity.getApplication()).isLogin()) {
-			qa.setIcon(MyQuickAction.buildDrawable(activity,
-					R.drawable.ic_menu_logout));
+			qa.setIcon(MyQuickAction.buildDrawable(activity, R.drawable.ic_menu_logout));
 			qa.setTitle(activity.getString(R.string.main_menu_logout));
 		} else {
-			qa.setIcon(MyQuickAction.buildDrawable(activity,
-					R.drawable.ic_menu_login));
+			qa.setIcon(MyQuickAction.buildDrawable(activity, R.drawable.ic_menu_login));
 			qa.setTitle(activity.getString(R.string.main_menu_login));
 		}
 	}
@@ -1429,12 +1360,10 @@ public class UIHelper {
 	 */
 	public static void showSettingIsLoadImage(Activity activity, QuickAction qa) {
 		if (((AppContext) activity.getApplication()).isLoadImage()) {
-			qa.setIcon(MyQuickAction.buildDrawable(activity,
-					R.drawable.ic_menu_picnoshow));
+			qa.setIcon(MyQuickAction.buildDrawable(activity, R.drawable.ic_menu_picnoshow));
 			qa.setTitle(activity.getString(R.string.main_menu_picnoshow));
 		} else {
-			qa.setIcon(MyQuickAction.buildDrawable(activity,
-					R.drawable.ic_menu_picshow));
+			qa.setIcon(MyQuickAction.buildDrawable(activity, R.drawable.ic_menu_picshow));
 			qa.setTitle(activity.getString(R.string.main_menu_picshow));
 		}
 	}
@@ -1512,38 +1441,33 @@ public class UIHelper {
 	 * @param cont
 	 * @param crashReport
 	 */
-	public static void sendAppCrashReport(final Context cont,
-			final String crashReport) {
+	public static void sendAppCrashReport(final Context cont, final String crashReport) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(cont);
 		builder.setIcon(android.R.drawable.ic_dialog_info);
 		builder.setTitle(R.string.app_error);
 		builder.setMessage(R.string.app_error_message);
-		builder.setPositiveButton(R.string.submit_report,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-						// 发送异常报告
-						Intent i = new Intent(Intent.ACTION_SEND);
-						// i.setType("text/plain"); //模拟器
-						i.setType("message/rfc822"); // 真机
-						i.putExtra(Intent.EXTRA_EMAIL,
-								new String[] { "jxsmallmouse@163.com" });
-						i.putExtra(Intent.EXTRA_SUBJECT,
-								"开源中国Android客户端 - 错误报告");
-						i.putExtra(Intent.EXTRA_TEXT, crashReport);
-						cont.startActivity(Intent.createChooser(i, "发送错误报告"));
-						// 退出
-						AppManager.getAppManager().AppExit(cont);
-					}
-				});
-		builder.setNegativeButton(R.string.sure,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-						// 退出
-						AppManager.getAppManager().AppExit(cont);
-					}
-				});
+		builder.setPositiveButton(R.string.submit_report, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+				// 发送异常报告
+				Intent i = new Intent(Intent.ACTION_SEND);
+				// i.setType("text/plain"); //模拟器
+				i.setType("message/rfc822"); // 真机
+				i.putExtra(Intent.EXTRA_EMAIL, new String[] { "jxsmallmouse@163.com" });
+				i.putExtra(Intent.EXTRA_SUBJECT, "开源中国Android客户端 - 错误报告");
+				i.putExtra(Intent.EXTRA_TEXT, crashReport);
+				cont.startActivity(Intent.createChooser(i, "发送错误报告"));
+				// 退出
+				AppManager.getAppManager().AppExit(cont);
+			}
+		});
+		builder.setNegativeButton(R.string.sure, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+				// 退出
+				AppManager.getAppManager().AppExit(cont);
+			}
+		});
 		builder.show();
 	}
 
@@ -1556,20 +1480,18 @@ public class UIHelper {
 		AlertDialog.Builder builder = new AlertDialog.Builder(cont);
 		builder.setIcon(android.R.drawable.ic_dialog_info);
 		builder.setTitle(R.string.app_menu_surelogout);
-		builder.setPositiveButton(R.string.sure,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-						// 退出
-						AppManager.getAppManager().AppExit(cont);
-					}
-				});
-		builder.setNegativeButton(R.string.cancle,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				});
+		builder.setPositiveButton(R.string.sure, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+				// 退出
+				AppManager.getAppManager().AppExit(cont);
+			}
+		});
+		builder.setNegativeButton(R.string.cancle, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
 		builder.show();
 	}
 
@@ -1577,16 +1499,13 @@ public class UIHelper {
 	 * 添加截屏功能
 	 */
 	@SuppressLint("NewApi")
-	public static void addScreenShot(Activity context,
-			OnScreenShotListener mScreenShotListener) {
+	public static void addScreenShot(Activity context, OnScreenShotListener mScreenShotListener) {
 		BaseActivity cxt = null;
 		if (context instanceof BaseActivity) {
 			cxt = (BaseActivity) context;
 			cxt.setAllowFullScreen(false);
-			ScreenShotView screenShot = new ScreenShotView(cxt,
-					mScreenShotListener);
-			LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT,
-					LayoutParams.MATCH_PARENT);
+			ScreenShotView screenShot = new ScreenShotView(cxt, mScreenShotListener);
+			LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 			context.getWindow().addContentView(screenShot, lp);
 		}
 	}
