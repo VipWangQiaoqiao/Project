@@ -4,7 +4,6 @@ import java.util.List;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.Active;
-import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.Active.ObjectReply;
 import net.oschina.app.common.BitmapManager;
 import net.oschina.app.common.StringUtils;

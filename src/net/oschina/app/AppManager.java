@@ -15,16 +15,13 @@ import android.content.Context;
 public class AppManager {
 	
 	private static Stack<Activity> activityStack;
-	private static AppManager instance;
+	private static AppManager instance = new AppManager();
 	
 	private AppManager(){}
 	/**
 	 * 单一实例
 	 */
 	public static AppManager getAppManager(){
-		if(instance==null){
-			instance=new AppManager();
-		}
 		return instance;
 	}
 	/**

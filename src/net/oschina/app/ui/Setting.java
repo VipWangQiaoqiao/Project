@@ -24,21 +24,21 @@ import android.widget.ListView;
 
 public class Setting extends PreferenceActivity {
 
-	SharedPreferences mPreferences;
-	Preference account;
-	Preference myinfo;
-	Preference cache;
-	Preference feedback;
-	Preference update;
-	Preference about;
+	private SharedPreferences mPreferences;
+	private Preference account;
+	private Preference myinfo;
+	private Preference cache;
+	private Preference feedback;
+	private Preference update;
+	private Preference about;
 
-	Preference saveImagePath;
+	private Preference saveImagePath;
 
-	CheckBoxPreference httpslogin;
-	CheckBoxPreference loadimage;
-	CheckBoxPreference scroll;
-	CheckBoxPreference voice;
-	CheckBoxPreference checkup;
+	private CheckBoxPreference httpslogin;
+	private CheckBoxPreference loadimage;
+	private 	CheckBoxPreference scroll;
+	private 	CheckBoxPreference voice;
+	private 	CheckBoxPreference checkup;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
