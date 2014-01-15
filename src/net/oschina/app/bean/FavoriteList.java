@@ -22,6 +22,7 @@ import android.util.Xml;
  */
 public class FavoriteList extends Entity{
 	
+	private static final long serialVersionUID = -1500496704911870293L;
 	public final static int TYPE_ALL = 0x00;
 	public final static int TYPE_SOFTWARE = 0x01;
 	public final static int TYPE_POST = 0x02;
@@ -36,6 +37,7 @@ public class FavoriteList extends Entity{
 	 * 收藏实体类
 	 */
 	public static class Favorite implements Serializable {
+		private static final long serialVersionUID = -6137722539015975081L;
 		public int objid;
 		public int type;
 		public String title;

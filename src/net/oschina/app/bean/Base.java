@@ -10,6 +10,7 @@ import java.io.Serializable;
  */
 public abstract class Base implements Serializable {
 
+	private static final long serialVersionUID = 8710279364534806608L;
 	public final static String UTF8 = "UTF-8";
 	public final static String NODE_ROOT = "oschina";
 	

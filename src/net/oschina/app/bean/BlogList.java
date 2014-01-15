@@ -21,6 +21,7 @@ import android.util.Xml;
  */
 public class BlogList extends Entity{
 	
+	private static final long serialVersionUID = -42255795407962860L;
 	public static final int CATALOG_USER = 1;//用户博客
 	public static final int CATALOG_LATEST = 2;//最新博客
 	public static final int CATALOG_RECOMMEND = 3;//推荐博客

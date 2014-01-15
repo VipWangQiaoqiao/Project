@@ -22,6 +22,7 @@ import android.util.Xml;
  */
 public class News extends Entity{
 	
+	private static final long serialVersionUID = -8855459365192170589L;
 	public final static String NODE_ID = "id";
 	public final static String NODE_TITLE = "title";
 	public final static String NODE_URL = "url";
@@ -65,12 +66,14 @@ public class News extends Entity{
 	}	
 	
 	public class NewsType implements Serializable{
+		private static final long serialVersionUID = 3466703975731604908L;
 		public int type;
 		public String attachment;
 		public int authoruid2;
 	} 
 	
 	public static class Relative implements Serializable{
+		private static final long serialVersionUID = 7585117599244383997L;
 		public String title;
 		public String url;
 	} 

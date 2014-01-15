@@ -19,6 +19,7 @@ import android.util.Xml;
  */
 public class Software extends Entity {
 
+	private static final long serialVersionUID = 8725551164995122857L;
 	private String title;
 	private String extensionTitle;
 	private String license;

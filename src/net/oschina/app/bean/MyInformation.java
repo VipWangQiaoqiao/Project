@@ -19,6 +19,7 @@ import android.util.Xml;
  */
 public class MyInformation extends Entity{
 
+	private static final long serialVersionUID = -5306815472829425047L;
 	private String name;
 	private String face;
 	private String jointime;

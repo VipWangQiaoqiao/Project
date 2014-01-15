@@ -22,6 +22,7 @@ import android.util.Xml;
  */
 public class SearchList extends Entity{
 
+	private static final long serialVersionUID = -5831603199572101701L;
 	public final static String CATALOG_ALL = "all";
 	public final static String CATALOG_NEWS = "news";
 	public final static String CATALOG_POST = "post";
@@ -36,6 +37,7 @@ public class SearchList extends Entity{
 	 * 搜索结果实体类
 	 */
 	public static class Result implements Serializable {
+		private static final long serialVersionUID = -8202990007024237969L;
 		private int objid;
 		private int type;
 		private String title;

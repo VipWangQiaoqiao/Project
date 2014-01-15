@@ -21,6 +21,7 @@ import android.util.Xml;
  */
 public class MessageList extends Entity{
 
+	private static final long serialVersionUID = -3208335548340631450L;
 	private int pageSize;
 	private int messageCount;
 	private List<Messages> messagelist = new ArrayList<Messages>();

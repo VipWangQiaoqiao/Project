@@ -22,6 +22,7 @@ import android.util.Xml;
  */
 public class ActiveList extends Entity{
 
+	private static final long serialVersionUID = -547811597258187030L;
 	public final static int CATALOG_LASTEST = 1;//最新
 	public final static int CATALOG_ATME = 2;//@我
 	public final static int CATALOG_COMMENT = 3;//评论

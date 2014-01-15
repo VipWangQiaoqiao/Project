@@ -21,6 +21,7 @@ import android.util.Xml;
  */
 public class Result extends Base {
 
+	private static final long serialVersionUID = 534547191986166448L;
 	private int errorCode;
 	private String errorMessage;
 	

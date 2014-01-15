@@ -20,6 +20,7 @@ import android.util.Xml;
  */
 public class Tweet extends Entity{
 
+	private static final long serialVersionUID = 5577337445601511045L;
 	public final static String NODE_ID = "id";
 	public final static String NODE_FACE = "portrait";
 	public final static String NODE_BODY = "body";

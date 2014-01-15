@@ -21,6 +21,7 @@ import android.util.Xml;
  */
 public class PostList extends Entity{
 
+	private static final long serialVersionUID = -5249728078176008066L;
 	public final static int CATALOG_ASK = 1;
 	public final static int CATALOG_SHARE = 2;
 	public final static int CATALOG_OTHER = 3;

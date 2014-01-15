@@ -8,6 +8,7 @@ package net.oschina.app.bean;
  */
 public abstract class Entity extends Base {
 
+	private static final long serialVersionUID = -8195873215977973938L;
 	protected int id;
 
 	public int getId() {

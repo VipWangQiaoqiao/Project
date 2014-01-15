@@ -21,6 +21,7 @@ import android.util.Xml;
  */
 public class TweetList extends Entity{
 	
+	private static final long serialVersionUID = -2718192599378432439L;
 	public final static int CATALOG_LASTEST = 0;
 	public final static int CATALOG_HOT = -1;
 

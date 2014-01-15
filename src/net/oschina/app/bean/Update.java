@@ -20,6 +20,7 @@ import android.util.Xml;
  */
 public class Update implements Serializable{
 	
+	private static final long serialVersionUID = -1356876892850891288L;
 	public final static String UTF8 = "UTF-8";
 	public final static String NODE_ROOT = "oschina";
 	

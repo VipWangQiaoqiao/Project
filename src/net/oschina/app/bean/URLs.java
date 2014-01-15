@@ -15,6 +15,7 @@ import net.oschina.app.common.StringUtils;
  */
 public class URLs implements Serializable {
 	
+	private static final long serialVersionUID = 7857519034491978324L;
 	public final static String HOST = "www.oschina.net";//192.168.1.213  www.oschina.net
 	public final static String HTTP = "http://";
 	public final static String HTTPS = "https://";

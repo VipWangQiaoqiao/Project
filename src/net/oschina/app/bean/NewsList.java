@@ -21,6 +21,7 @@ import android.util.Xml;
  */
 public class NewsList extends Entity{
 
+	private static final long serialVersionUID = 1067118838408833362L;
 	public final static int CATALOG_ALL = 1;
 	public final static int CATALOG_INTEGRATION = 2;
 	public final static int CATALOG_SOFTWARE = 3;

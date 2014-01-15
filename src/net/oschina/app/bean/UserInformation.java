@@ -22,6 +22,7 @@ import android.util.Xml;
  */
 public class UserInformation extends Entity{
 	
+	private static final long serialVersionUID = -3213556862951637340L;
 	private int pageSize;
 	private User user = new User();
 	private List<Active> activelist = new ArrayList<Active>();	

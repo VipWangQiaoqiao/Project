@@ -21,6 +21,7 @@ import android.util.Xml;
  */
 public class Post extends Entity{
 
+	private static final long serialVersionUID = -3516769642058082230L;
 	public final static String NODE_ID = "id";
 	public final static String NODE_TITLE = "title";
 	public final static String NODE_URL = "url";

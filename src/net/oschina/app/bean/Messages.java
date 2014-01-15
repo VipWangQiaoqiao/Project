@@ -19,6 +19,7 @@ import android.util.Xml;
  */
 public class Messages extends Entity {
 
+	private static final long serialVersionUID = -3925850221488210386L;
 	public final static int CLIENT_MOBILE = 2;
 	public final static int CLIENT_ANDROID = 3;
 	public final static int CLIENT_IPHONE = 4;

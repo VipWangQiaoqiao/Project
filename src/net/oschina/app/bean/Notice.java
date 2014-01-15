@@ -20,6 +20,7 @@ import android.util.Xml;
  */
 public class Notice implements Serializable {
 	
+	private static final long serialVersionUID = -514440364121057808L;
 	public final static String UTF8 = "UTF-8";
 	public final static String NODE_ROOT = "oschina";
 	

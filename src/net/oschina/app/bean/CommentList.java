@@ -23,6 +23,7 @@ import android.util.Xml;
  */
 public class CommentList extends Entity{
 
+	private static final long serialVersionUID = -3774050923252926278L;
 	public final static int CATALOG_NEWS = 1;
 	public final static int CATALOG_POST = 2;
 	public final static int CATALOG_TWEET = 3;

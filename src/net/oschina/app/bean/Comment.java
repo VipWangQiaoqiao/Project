@@ -22,6 +22,7 @@ import android.util.Xml;
  */
 public class Comment extends Entity {
 
+	private static final long serialVersionUID = 2065611224058181800L;
 	public final static int CLIENT_MOBILE = 2;
 	public final static int CLIENT_ANDROID = 3;
 	public final static int CLIENT_IPHONE = 4;
@@ -37,12 +38,14 @@ public class Comment extends Entity {
 	private List<Refer> refers = new ArrayList<Refer>();
 	
 	public static class Reply implements Serializable{
+		private static final long serialVersionUID = -68197562147343428L;
 		public String rauthor;
 		public String rpubDate;
 		public String rcontent;
 	} 
 	
 	public static class Refer implements Serializable{
+		private static final long serialVersionUID = -2105903857710372541L;
 		public String refertitle;
 		public String referbody;
 	}

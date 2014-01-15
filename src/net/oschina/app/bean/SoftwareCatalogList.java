@@ -22,10 +22,12 @@ import android.util.Xml;
  */
 public class SoftwareCatalogList extends Entity{
 	
+	private static final long serialVersionUID = 4268726017815573396L;
 	private int softwarecount;
 	private List<SoftwareType> softwaretypelist = new ArrayList<SoftwareType>();
 	
 	public static class SoftwareType implements Serializable {
+		private static final long serialVersionUID = 4485149913109792673L;
 		public String name;
 		public int tag;
 	}

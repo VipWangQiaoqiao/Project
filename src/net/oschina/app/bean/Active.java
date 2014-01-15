@@ -20,6 +20,7 @@ import android.util.Xml;
  */
 public class Active extends Entity {
 
+	private static final long serialVersionUID = 571957002601600812L;
 	public final static int CATALOG_OTHER = 0;//其他
 	public final static int CATALOG_NEWS = 1;//新闻
 	public final static int CATALOG_POST = 2;//帖子
@@ -48,6 +49,7 @@ public class Active extends Entity {
 	private String url;
 	
 	public static class ObjectReply implements Serializable{
+		private static final long serialVersionUID = 2220005003172661567L;
 		public String objectName;
 		public String objectBody;
 	} 	

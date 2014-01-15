@@ -19,6 +19,7 @@ import android.util.Xml;
  */
 public class User extends Base {
 	
+	private static final long serialVersionUID = -4002920566772575737L;
 	public final static int	RELATION_ACTION_DELETE = 0x00;//取消关注
 	public final static int	RELATION_ACTION_ADD = 0x01;//加关注
 	

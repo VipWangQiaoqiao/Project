@@ -22,6 +22,7 @@ import android.util.Xml;
  */
 public class FriendList extends Entity{
 
+	private static final long serialVersionUID = 5016098486009072334L;
 	public final static int TYPE_FANS = 0x00;
 	public final static int TYPE_FOLLOWER = 0x01;
 	
@@ -31,6 +32,7 @@ public class FriendList extends Entity{
 	 * 好友实体类
 	 */
 	public static class Friend implements Serializable {
+		private static final long serialVersionUID = 2529506242704708444L;
 		private int userid;
 		private String name;
 		private String face;

@@ -22,6 +22,7 @@ import android.util.Xml;
  */
 public class SoftwareList extends Entity{
 	
+	private static final long serialVersionUID = -7345629622679197349L;
 	public final static String TAG_RECOMMEND = "recommend";//推荐
 	public final static String TAG_LASTEST = "time";//最新
 	public final static String TAG_HOT = "view";//热门
@@ -32,6 +33,7 @@ public class SoftwareList extends Entity{
 	private List<Software> softwarelist = new ArrayList<Software>();
 	
 	public static class Software implements Serializable {
+		private static final long serialVersionUID = 8103475660257988357L;
 		public String name;
 		public String description;
 		public String url;

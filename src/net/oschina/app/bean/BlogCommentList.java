@@ -23,6 +23,7 @@ import android.util.Xml;
  */
 public class BlogCommentList extends Entity{
 	
+	private static final long serialVersionUID = 6313759008717182102L;
 	private int pageSize;
 	private int allCount;
 	private List<Comment> commentlist = new ArrayList<Comment>();

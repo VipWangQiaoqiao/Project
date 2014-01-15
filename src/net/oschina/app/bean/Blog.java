@@ -19,6 +19,7 @@ import android.util.Xml;
  */
 public class Blog extends Entity {
 
+	private static final long serialVersionUID = -2702430135953749682L;
 	public final static int DOC_TYPE_REPASTE = 0;//转帖
 	public final static int DOC_TYPE_ORIGINAL = 1;//原创
 	
