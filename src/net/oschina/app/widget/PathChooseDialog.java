@@ -53,7 +53,6 @@ public class PathChooseDialog extends Dialog {
 	private Stack<String> pathStack = new Stack<String>();
 
 	private int firstIndex = 0;
-	private boolean isBack = false;
 
 	private View lastSelectItem; //上一个长按操作的View
 	
@@ -197,7 +196,6 @@ public class PathChooseDialog extends Dialog {
 			@Override
 			public void onClick(View v) {
 				if (pathStack.size() >= 2) {
-					isBack = true;
 					pathStack.pop();
 					data = FileUtils.listPath(pathStack.peek());
 					tvCurPath.setText(pathStack.peek());
