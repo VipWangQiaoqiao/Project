@@ -21,10 +21,11 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class Setting extends PreferenceActivity {
 
-	SharedPreferences mPreferences;
+    SharedPreferences mPreferences;
 	Preference account;
 	Preference myinfo;
 	Preference cache;
@@ -93,6 +94,10 @@ public class Setting extends PreferenceActivity {
 		saveImagePath.setSummary("目前路径:"+ac.getSaveImagePath());
 		saveImagePath.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			public boolean onPreferenceClick(Preference preference) {
+				if (!FileUtils.checkSaveLocationExists() && !FileUtils.checkExternalSDExists()) {
+    				Toast.makeText(Setting.this, "手机中尚未安装SD卡", Toast.LENGTH_SHORT).show();
+					return false;
+				}
 				UIHelper.showFilePathDialog(Setting.this,new ChooseCompleteListener() {
 					@Override
 					public void onComplete(String finalPath) {
