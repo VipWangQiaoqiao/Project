@@ -4,10 +4,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
 import android.os.Environment;
@@ -22,7 +24,7 @@ import android.util.Log;
  * @created 2012-3-21
  */
 public class FileUtils {
-	/**
+    /**
 	 * 写文本文件 在Android系统中，文件保存在 /data/data/PACKAGE_NAME/files 目录下
 	 * 
 	 * @param context
@@ -370,6 +372,17 @@ public class FileUtils {
 			status = false;
 		return status;
 	}
+	
+	/**
+	 * 检查是否安装外置的SD卡
+	 * 
+	 * @return
+	 */
+	public static boolean checkExternalSDExists() {
+		
+		Map<String, String> evn = System.getenv();
+		return evn.containsKey("SECONDARY_STORAGE");
+	}
 
 	/**
 	 * 删除目录(包括：目录里的所有文件)
@@ -380,7 +393,7 @@ public class FileUtils {
 	public static boolean deleteDirectory(String fileName) {
 		boolean status;
 		SecurityManager checker = new SecurityManager();
-
+		
 		if (!fileName.equals("")) {
 
 			File path = Environment.getExternalStorageDirectory();
@@ -493,13 +506,25 @@ public class FileUtils {
 	}
 
 	/**
-	 * 获取SD卡的根目录，末尾带\
+	 * 获取SD卡的根目录
 	 * 
 	 * @return
 	 */
 	public static String getSDRoot() {
-		return Environment.getExternalStorageDirectory().getAbsolutePath()
-				+ File.separator;
+		
+		return Environment.getExternalStorageDirectory().getAbsolutePath();
+	}
+	
+	/**
+	 * 获取手机外置SD卡的根目录
+	 * 
+	 * @return
+	 */
+	public static String getExternalSDRoot() {
+		
+		Map<String, String> evn = System.getenv();
+		
+		return evn.get("SECONDARY_STORAGE");
 	}
 
 	/**
@@ -513,9 +538,10 @@ public class FileUtils {
 		SecurityManager checker = new SecurityManager();
 		File path = new File(root);
 		checker.checkRead(root);
+		// 过滤掉以.开始的文件夹
 		if (path.isDirectory()) {
 			for (File f : path.listFiles()) {
-				if (f.isDirectory()) {
+				if (f.isDirectory() && !f.getName().startsWith(".")) {
 					allDir.add(f.getAbsolutePath());
 				}
 			}
