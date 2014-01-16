@@ -958,7 +958,7 @@ public class UIHelper {
 			context.startActivity(it);
 		} catch (Exception e) {
 			e.printStackTrace();
-			showToast(context, "无法浏览此网页", 500);
+			showToast(context, R.string.toast_cannot_browse_web, 500);
 		}
 	}
 
@@ -1272,6 +1272,10 @@ public class UIHelper {
 		showToast(cont, cont.getString(msg), Toast.LENGTH_SHORT);
 	}
 
+	public static void showToast(Context cont, int msg, int time) {
+		showToast(cont, cont.getString(msg), time);
+	}
+
 	public static void showToast(Context cont, String msg, int time) {
 		if (prevContext.get() != null && prevToast.get() != null && prevContext.get() == cont) {
 			Toast toast = prevToast.get();
@@ -1377,25 +1381,9 @@ public class UIHelper {
 		AppContext ac = (AppContext) activity.getApplication();
 		if (ac.isLogin()) {
 			ac.Logout();
-			showToast(activity, "已退出登录");
+			showToast(activity, R.string.toast_has_been_logged_out);
 		} else {
 			showLoginDialog(activity);
-		}
-	}
-
-	/**
-	 * 文章是否加载图片显示
-	 * 
-	 * @param activity
-	 */
-	public static void changeSettingIsLoadImage(Activity activity) {
-		AppContext ac = (AppContext) activity.getApplication();
-		if (ac.isLoadImage()) {
-			ac.setConfigLoadimage(false);
-			showToast(activity, "已设置文章不加载图片");
-		} else {
-			ac.setConfigLoadimage(true);
-			showToast(activity, "已设置文章加载图片");
 		}
 	}
 
@@ -1414,9 +1402,9 @@ public class UIHelper {
 		final Handler handler = new Handler() {
 			public void handleMessage(Message msg) {
 				if (msg.what == 1) {
-					showToast(ac, "缓存清除成功");
+					showToast(ac, R.string.toast_cache_clear_success);
 				} else {
-					showToast(ac, "缓存清除失败");
+					showToast(ac, R.string.toast_cache_clear_failed);
 				}
 			}
 		};
@@ -1500,7 +1488,7 @@ public class UIHelper {
 			ExitHelper.exitHelper.reset();
 			AppManager.getAppManager().AppExit(cont);
 		} else {
-			Toast.makeText(cont, "再按一次退出开源中国", Toast.LENGTH_SHORT).show();
+			showToast(cont, R.string.toast_click_again_to_exit);
 		}
 	}
 
