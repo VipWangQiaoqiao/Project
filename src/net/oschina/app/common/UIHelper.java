@@ -1495,6 +1495,46 @@ public class UIHelper {
 		builder.show();
 	}
 
+	public static void exitAppOnKeyBack(final Context cont) {
+		if (ExitHelper.exitHelper.isShouldExit()) {
+			ExitHelper.exitHelper.reset();
+			AppManager.getAppManager().AppExit(cont);
+		} else {
+			Toast.makeText(cont, "再按一次退出开源中国", Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	/**
+	 * 退出助手。用于返回键的再按一次退出。
+	 * 
+	 * @author Geek_Soledad <a target="_blank" href=
+	 *         "http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=XTAuOSVzPDM5LzI0OR0sLHM_MjA"
+	 *         style="text-decoration:none;"><img src=
+	 *         "http://rescdn.qqmail.com/zh_CN/htmledition/images/function/qm_open/ico_mailme_01.png"
+	 *         /></a>
+	 */
+	public static class ExitHelper {
+		protected static ExitHelper exitHelper = new ExitHelper();
+		private long startTime = -1;
+
+		private ExitHelper() {
+		}
+
+		public boolean isShouldExit() {
+			long currentTime = System.currentTimeMillis();
+			if (currentTime - startTime > 2000) {
+				startTime = currentTime;
+				return false;
+			} else {
+				return true;
+			}
+		}
+
+		public void reset() {
+			startTime = -1;
+		}
+	}
+
 	/**
 	 * 添加截屏功能
 	 */
