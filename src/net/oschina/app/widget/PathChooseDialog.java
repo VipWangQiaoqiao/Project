@@ -1,6 +1,7 @@
 package net.oschina.app.widget;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
@@ -30,13 +31,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 /**
- * 路径选择弹窗
+ * 路径选择弹
  * @author yeguozhong@yeah.net
  * 
  */
 public class PathChooseDialog extends Dialog {
 
-	private ListView lv;
+    private ListView lv;
 	private Button btnComfirm;
 	private Button btnBack;
 	private Button btnNew;
@@ -136,17 +137,30 @@ public class PathChooseDialog extends Dialog {
 		setCanceledOnTouchOutside(true);
 		init();
 	}
-
+	
+	/**
+	 * 初始化
+	 */
 	private void init() {
 		lv = (ListView) findViewById(android.R.id.list);
 		btnComfirm = (Button) findViewById(R.id.btn_comfirm);
 		btnBack = (Button) findViewById(R.id.btn_back);
 		btnNew = (Button) findViewById(R.id.btn_new);
 		tvCurPath = (TextView) findViewById(R.id.tv_cur_path);
-
-		String rootPath = Environment.getExternalStorageDirectory()
-				.getAbsolutePath();
-		data = FileUtils.listPath(rootPath);
+		
+		//获得内置SD卡的根路径
+		String rootPath = null;
+		if (FileUtils.checkExternalSDExists()) {
+			rootPath = "/storage";
+			data = new ArrayList<String>();
+			data.add(FileUtils.getSDRoot());
+			data.add(FileUtils.getExternalSDRoot());
+		} else {
+			rootPath = Environment.getExternalStorageDirectory()
+					.getAbsolutePath();
+			data = FileUtils.listPath(rootPath);
+		}
+		
 		tvCurPath.setText(rootPath);
 
 		pathStack.add(rootPath);
