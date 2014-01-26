@@ -18,6 +18,9 @@ import android.util.Xml;
  * @author liux (http://my.oschina.net/liux)
  * @version 1.0
  * @created 2012-3-21
+ * @changed 2014-01-21
+ * @difference
+ * 	1.添加语音动弹属性
  */
 public class Tweet extends Entity{
 
@@ -48,6 +51,7 @@ public class Tweet extends Entity{
 	private String imgSmall;
 	private String imgBig;
 	private File imageFile;
+	private File amrFile;// 语音
 	private int appClient; 
 	private String attach;
 	
@@ -62,7 +66,13 @@ public class Tweet extends Entity{
 	}
 	public void setImageFile(File imageFile) {
 		this.imageFile = imageFile;
-	}	
+	}
+	public File getAmrFile() {
+		return amrFile;
+	}
+	public void setAmrFile(File amrFile) {
+		this.amrFile = amrFile;
+	}
 	public String getImgSmall() {
 		return imgSmall;
 	}

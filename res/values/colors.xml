@@ -36,6 +36,9 @@
     <color name="frame_button_text_nor">#033a5c</color>
     <color name="frame_button_text_select">#FFFFFF</color>
     
+    <color name="weight_bar_buttondown">#63A3D7</color>
+    <color name="weight_bar_buttonup">#A4A9AE</color>
+    
     <color name="listitem_transparent">#00000000</color>
     <color name="listitem_black">#ff000000</color>
     <color name="listitem_white">#ffffffff</color>

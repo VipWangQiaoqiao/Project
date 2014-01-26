@@ -64,6 +64,9 @@
     <string name="software_detail_head_title">软件详情</string>
     <string name="tweet_detail_head_title">动弹详情</string>
     <string name="tweet_pub_head_title">动弹一下</string>
+    <string name="tweet_chatfooter_cancel_rcd">手指上滑，取消发送</string>
+    <string name="tweet_chatfooter_cancel_rcd_release">松开手指，取消发送</string>
+    <string name="tweet_chatfooter_too_short">录音时间太短</string>
     <string name="message_detail_head_title">我和%s的对话</string>
     <string name="user_center_head_title">用户空间</string>
     

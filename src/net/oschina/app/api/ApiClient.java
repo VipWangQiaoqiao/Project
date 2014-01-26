@@ -887,6 +887,8 @@ public class ApiClient {
 		Map<String, File> files = new HashMap<String, File>();
 		if(tweet.getImageFile() != null)
 			files.put("img", tweet.getImageFile());
+		if (tweet.getAmrFile() != null)
+			files.put("amr", tweet.getAmrFile());
 		
 		try{
 			return http_post(appContext, URLs.TWEET_PUB, params, files);		
