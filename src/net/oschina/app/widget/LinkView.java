@@ -1,10 +1,20 @@
 package net.oschina.app.widget;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
+import org.xml.sax.XMLReader;
+
 import net.oschina.app.bean.URLs;
+import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
 import android.content.Context;
 import android.graphics.Color;
+import android.text.Editable;
 import android.text.Html;
+import android.text.Html.TagHandler;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -51,7 +61,29 @@ public class LinkView extends TextView {
 		this.mLinkClickListener = linkClickListener;
 	}
 
+	public final static Pattern WECHAT_REG = Pattern.compile("(<{1}img[\\s]+class=\"wechat-emoji\"[\\s]+src=\"[^<]+\"[\\s]+alt=\"([^<\\s\"]+)\"[\\s]+[^<]*[>]{1})");
+
+	private static String filterWechat(String linktxt) {
+		System.out.println(linktxt);
+		if (null == linktxt)
+			return "";
+		try {
+			Matcher match = WECHAT_REG.matcher(linktxt);
+			if (null == match)
+				return linktxt;
+			while (match.find()) {
+				String target = match.group(1);
+				String rp = match.group(2);
+				linktxt = linktxt.replace(target, "[" + rp + "]");
+			}
+		} catch (Exception e) {
+			return linktxt;
+		}
+		return linktxt;
+	}
+
 	public void setLinkText(String linktxt) {
+		linktxt = filterWechat(linktxt);
 		Spanned span = Html.fromHtml(linktxt);
 		setText(span);
 		setMovementMethod(LinkMovementMethod.getInstance());
