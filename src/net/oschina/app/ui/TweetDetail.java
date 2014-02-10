@@ -462,6 +462,8 @@ public class TweetDetail extends BaseActivity {
 							final AnimationDrawable anima = (AnimationDrawable) audio
 									.getDrawable();
 							anima.setOneShot(false);
+                            anima.stop();
+    						anima.selectDrawable(0);
 							audioLayout.setVisibility(View.VISIBLE);
 							audioLayout
 									.setOnClickListener(new OnClickListener() {
