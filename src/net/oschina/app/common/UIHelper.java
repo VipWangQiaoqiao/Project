@@ -8,6 +8,13 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.SendMessageToWX;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
+import com.tencent.mm.sdk.openapi.WXMediaMessage;
+import com.tencent.mm.sdk.openapi.WXTextObject;
+import com.tencent.mm.sdk.openapi.WXWebpageObject;
+
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
@@ -436,7 +443,7 @@ public class UIHelper {
 	public static void showShareMore(Activity context, final String title,
 			final String url) {
 		Intent intent = new Intent(Intent.ACTION_SEND);
-		intent.setType("text/plain");
+		intent.setType("image/plain");
 		intent.putExtra(Intent.EXTRA_SUBJECT, "分享：" + title);
 		intent.putExtra(Intent.EXTRA_TEXT, title + " " + url);
 		context.startActivity(Intent.createChooser(intent, "选择分享"));
@@ -465,7 +472,7 @@ public class UIHelper {
 					public void onClick(DialogInterface arg0, int arg1) {
 						switch (arg1) {
 						case 0:// 新浪微博
-								// 分享的内容
+							// 分享的内容
 							final String shareMessage = title + " " + url;
 							// 初始化微博
 							if (SinaWeiboHelper.isWeiboNull()) {
@@ -501,7 +508,10 @@ public class UIHelper {
 						case 1:// 腾讯微博
 							QQWeiboHelper.shareToQQ(context, title, url);
 							break;
-						case 2:// 截图分享
+						case 2:// 微信朋友圈
+							WXFriendsHelper.shareToWXFriends(context, title, url);
+							break;
+						case 3:// 截图分享
 							addScreenShot(context, new OnScreenShotListener() {
 
 								@SuppressLint("NewApi")
@@ -519,7 +529,7 @@ public class UIHelper {
 								}
 							});
 							break;
-						case 3:// 更多
+						case 4:// 更多
 							showShareMore(context, title, url);
 							break;
 						}

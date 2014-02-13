@@ -5,6 +5,7 @@
     <string-array name="app_share_items">
         <item>新浪微博</item>
         <item>腾讯微博</item>
+        <item>微信朋友圈</item>
         <item>截图分享</item>
         <item>更多...</item>
     </string-array>

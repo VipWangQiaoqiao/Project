@@ -46,6 +46,7 @@
 			<ImageView
 				style="@style/main_footbar_cutline"
 				android:src="@drawable/widget_bar_cut_off"/>
+			<!-- 弹出操作菜单 -->
 			<ImageView
 				android:id="@+id/question_detail_footbar_share"
 				style="@style/main_footbar_image"
