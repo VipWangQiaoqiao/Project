@@ -2258,9 +2258,6 @@ public class Main extends BaseActivity {
 	 */
 	public boolean onCreateOptionsMenu(Menu menu) {
 		return false;
-		// MenuInflater inflater = getMenuInflater();
-		// inflater.inflate(R.menu.main_menu, menu);
-		// return true;
 	}
 
 	/**

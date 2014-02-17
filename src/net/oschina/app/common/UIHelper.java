@@ -8,13 +8,6 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.tencent.mm.sdk.openapi.IWXAPI;
-import com.tencent.mm.sdk.openapi.SendMessageToWX;
-import com.tencent.mm.sdk.openapi.WXAPIFactory;
-import com.tencent.mm.sdk.openapi.WXMediaMessage;
-import com.tencent.mm.sdk.openapi.WXTextObject;
-import com.tencent.mm.sdk.openapi.WXWebpageObject;
-
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
@@ -29,6 +22,8 @@ import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.Messages;
 import net.oschina.app.bean.News;
 import net.oschina.app.bean.Notice;
+import net.oschina.app.bean.Post;
+import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.URLs;
@@ -48,6 +43,7 @@ import net.oschina.app.ui.NewsDetail;
 import net.oschina.app.ui.QuestionDetail;
 import net.oschina.app.ui.QuestionPub;
 import net.oschina.app.ui.QuestionTag;
+import net.oschina.app.ui.ReportUi;
 import net.oschina.app.ui.ScreenShotShare;
 import net.oschina.app.ui.Search;
 import net.oschina.app.ui.Setting;
@@ -68,6 +64,7 @@ import net.oschina.app.widget.ScreenShotView.OnScreenShotListener;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ApplicationErrorReport.AnrInfo;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -75,6 +72,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
@@ -92,13 +90,19 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -443,7 +447,7 @@ public class UIHelper {
 	public static void showShareMore(Activity context, final String title,
 			final String url) {
 		Intent intent = new Intent(Intent.ACTION_SEND);
-		intent.setType("image/plain");
+		intent.setType("text/plain");
 		intent.putExtra(Intent.EXTRA_SUBJECT, "分享：" + title);
 		intent.putExtra(Intent.EXTRA_TEXT, title + " " + url);
 		context.startActivity(Intent.createChooser(intent, "选择分享"));
@@ -1391,6 +1395,17 @@ public class UIHelper {
 		Intent intent = new Intent(context, FeedBack.class);
 		context.startActivity(intent);
 	}
+	
+	/**
+	 * 显示用户举报
+	 * @param context
+	 * @param link
+	 */
+	public static void showReport(Context context, String link) {
+		Intent intent = new Intent(context, ReportUi.class);
+		intent.putExtra(Report.REPORT_LINK, link);
+		context.startActivity(intent);
+	}
 
 	/**
 	 * 菜单显示登录或登出
@@ -1615,5 +1630,59 @@ public class UIHelper {
 					UIHelper.showImageZoomDialog(cxt, bigImageUrl);
 			}
 		}, "mWebViewImageListener");
+	}
+	
+	@SuppressWarnings("deprecation")
+	public static void showQuestionOption(final Activity context, View aim, final Post postDetail) {
+		LayoutInflater inflater = (LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		final View mMenuView = inflater.inflate(R.layout.widget_bar_option_menu, null);
+		int w = context.getWindowManager().getDefaultDisplay().getWidth();
+		final PopupWindow option = new PopupWindow(mMenuView, w/2 - 50, LayoutParams.WRAP_CONTENT, true);
+		option.setOutsideTouchable(true);
+		option.setAnimationStyle(R.style.popupMenu);
+		ColorDrawable dw = new ColorDrawable(000000);
+		option.setBackgroundDrawable(dw);
+		View.OnClickListener click = new View.OnClickListener() {
+			public void onClick(View v) {
+				int id = v.getId();
+				switch (id) {
+				case R.id.question_option_share:
+					showShareDialog(context, postDetail.getTitle(), postDetail.getUrl());
+					break;
+				case R.id.question_option_report:
+					showReport(context, postDetail.getUrl());
+					break;
+				default:
+					break;
+				}
+				option.dismiss();
+			}
+		};
+		LinearLayout mShare = (LinearLayout) mMenuView.findViewById(R.id.question_option_share);
+		mShare.setOnClickListener(click);
+		LinearLayout mReport = (LinearLayout) mMenuView.findViewById(R.id.question_option_report);
+		mReport.setOnClickListener(click);
+		//mMenuView添加OnTouchListener监听判断获取触屏位置如果在选择框外面则销毁弹出框
+		mMenuView.setOnTouchListener(new OnTouchListener() {
+			
+			public boolean onTouch(View v, MotionEvent event) {
+				
+				int height = mMenuView.findViewById(R.id.pop_layout).getTop();
+				int y=(int) event.getY();
+				
+				if(event.getAction()==MotionEvent.ACTION_UP){
+					if(y<height){
+						option.dismiss();
+					}
+				}				
+				return true;
+			}
+		});
+		if (option.isShowing()) {
+			option.dismiss();
+		} else {
+			option.showAsDropDown(aim, -10, 0);
+		}
 	}
 }

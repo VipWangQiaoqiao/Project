@@ -29,6 +29,7 @@ import net.oschina.app.bean.NewsList;
 import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.Post;
 import net.oschina.app.bean.PostList;
+import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.SearchList;
 import net.oschina.app.bean.Software;
@@ -1198,6 +1199,16 @@ public class AppContext extends Application {
 	 */
 	public Result delBlog(int uid, int authoruid, int id) throws AppException { 	
 		return ApiClient.delBlog(this, uid, authoruid, id);
+	}
+	
+	/**
+	 * 举报讨论区帖子
+	 * @param report
+	 * @return
+	 * @throws AppException
+	 */
+	public Result report(Report report) throws AppException {
+		return ApiClient.report(this, report);
 	}
 	
 	/**

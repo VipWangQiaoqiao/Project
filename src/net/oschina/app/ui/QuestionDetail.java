@@ -23,24 +23,33 @@ import net.oschina.app.widget.PullToRefreshListView;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MotionEvent;
+import android.view.SubMenu;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.PopupMenu;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -67,7 +76,7 @@ public class QuestionDetail extends BaseActivity {
 	private BadgeView bv_comment;
 	private ImageView mDetail;
 	private ImageView mCommentList;
-	private ImageView mShare;
+	private ImageView mOption;
 	
 	private TextView mTitle;
 	private TextView mAuthor;
@@ -151,7 +160,7 @@ public class QuestionDetail extends BaseActivity {
     	
     	mDetail = (ImageView)findViewById(R.id.question_detail_footbar_detail);
     	mCommentList = (ImageView)findViewById(R.id.question_detail_footbar_commentlist);
-    	mShare = (ImageView)findViewById(R.id.question_detail_footbar_share);
+    	mOption = (ImageView)findViewById(R.id.question_detail_footbar_option);
     	mFavorite = (ImageView)findViewById(R.id.question_detail_footbar_favorite);
     	
     	mTitle = (TextView)findViewById(R.id.question_detail_title);
@@ -170,7 +179,7 @@ public class QuestionDetail extends BaseActivity {
     	mBack.setOnClickListener(UIHelper.finish(this));
     	mFavorite.setOnClickListener(favoriteClickListener);
     	mRefresh.setOnClickListener(refreshClickListener);
-    	mShare.setOnClickListener(shareClickListener);
+    	mOption.setOnClickListener(optionClickListener);
     	mDetail.setOnClickListener(detailClickListener);
     	mCommentList.setOnClickListener(commentlistClickListener);
     	mAuthor.setOnClickListener(authorClickListener);
@@ -395,14 +404,23 @@ public class QuestionDetail extends BaseActivity {
 		}
 	};
 	
-	private View.OnClickListener shareClickListener = new View.OnClickListener() {
-		public void onClick(View v) {	
-			if(postDetail == null){
+	private View.OnClickListener optionClickListener = new View.OnClickListener() {
+		public void onClick(View v) {
+			
+			UIHelper.showQuestionOption(QuestionDetail.this, mOption, postDetail);
+			
+			/*if (option.isShowing()) {
+				option.dismiss();
+			} else {
+				
+			}*/
+			/*if(postDetail == null){
 				UIHelper.ToastMessage(v.getContext(), R.string.msg_read_detail_fail);
 				return;
-			}
+			}*/
 			//分享到
-			UIHelper.showShareDialog(QuestionDetail.this, postDetail.getTitle(), postDetail.getUrl());
+			//UIHelper.showShareDialog(QuestionDetail.this, postDetail.getTitle(), postDetail.getUrl());
+			//UIHelper.showReport(QuestionDetail.this, postDetail.getUrl());
 		}
 	};
 	

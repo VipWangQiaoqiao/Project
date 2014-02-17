@@ -282,4 +282,9 @@
     <style name="tweet_largeCustomProgressBar" parent="@android:style/Widget.ProgressBar">
         <item name="android:indeterminateDrawable">@drawable/tweet_custom_loading</item>
     </style>
+    
+    <style name="popupMenu" parent="android:Animation">  
+        <item name="@android:windowEnterAnimation">@anim/head_in</item>  //进入时的动画   
+        <item name="@android:windowExitAnimation">@anim/head_out</item>    //退出时的动画   
+    </style>
 </resources>

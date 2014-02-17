@@ -48,9 +48,9 @@
 				android:src="@drawable/widget_bar_cut_off"/>
 			<!-- 弹出操作菜单 -->
 			<ImageView
-				android:id="@+id/question_detail_footbar_share"
+				android:id="@+id/question_detail_footbar_option"
 				style="@style/main_footbar_image"
-				android:src="@drawable/widget_bar_share"/>
+				android:src="@drawable/widget_bar_option"/>
 		</LinearLayout>
 		<LinearLayout
 			android:orientation="horizontal" 

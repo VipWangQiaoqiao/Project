@@ -25,6 +25,7 @@ import net.oschina.app.bean.NewsList;
 import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.Post;
 import net.oschina.app.bean.PostList;
+import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.SearchList;
 import net.oschina.app.bean.Software;
@@ -1418,6 +1419,28 @@ public class ApiClient {
 		
 		try{
 			return Software.parse(_post(appContext, URLs.SOFTWARE_DETAIL, params, null));
+		}catch(Exception e){
+			if(e instanceof AppException)
+				throw (AppException)e;
+			throw AppException.network(e);
+		}
+	}
+	
+	/**
+	 * 发送举报
+	 * @param appContext
+	 * @param report
+	 * @return
+	 * @throws AppException
+	 */
+	public static Result report(AppContext appContext, Report report) throws AppException {
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("uid", report.getReportId());
+		params.put("link", report.getLinkAddress());
+		params.put("reson", report.getReason());
+		
+		try{
+			return http_post(appContext, URLs.REPORT, params, null);		
 		}catch(Exception e){
 			if(e instanceof AppException)
 				throw (AppException)e;
