@@ -6,7 +6,7 @@
     <uses-sdk android:minSdkVersion="4" />
 
     <application android:name=".AppContext" android:icon="@drawable/icon" android:label="@string/app_name" >
-        <activity android:name=".AppStart" android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:screenOrientation="portrait">
+        <activity android:name=".AppStart" android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

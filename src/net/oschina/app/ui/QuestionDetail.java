@@ -406,21 +406,11 @@ public class QuestionDetail extends BaseActivity {
 	
 	private View.OnClickListener optionClickListener = new View.OnClickListener() {
 		public void onClick(View v) {
-			
-			UIHelper.showQuestionOption(QuestionDetail.this, mOption, postDetail);
-			
-			/*if (option.isShowing()) {
-				option.dismiss();
-			} else {
-				
-			}*/
-			/*if(postDetail == null){
+			if(postDetail == null){
 				UIHelper.ToastMessage(v.getContext(), R.string.msg_read_detail_fail);
 				return;
-			}*/
-			//分享到
-			//UIHelper.showShareDialog(QuestionDetail.this, postDetail.getTitle(), postDetail.getUrl());
-			//UIHelper.showReport(QuestionDetail.this, postDetail.getUrl());
+			}
+			UIHelper.showQuestionOption(QuestionDetail.this, mOption, postDetail);
 		}
 	};
 	

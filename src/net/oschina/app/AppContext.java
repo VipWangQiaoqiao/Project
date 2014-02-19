@@ -1207,7 +1207,7 @@ public class AppContext extends Application {
 	 * @return
 	 * @throws AppException
 	 */
-	public Result report(Report report) throws AppException {
+	public String report(Report report) throws AppException {
 		return ApiClient.report(this, report);
 	}
 	

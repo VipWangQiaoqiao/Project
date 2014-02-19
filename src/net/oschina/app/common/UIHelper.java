@@ -114,7 +114,8 @@ import android.widget.Toast;
  * @created 2012-3-21
  */
 public class UIHelper {
-
+	private final static String TAG = "UIHelper";
+	
 	public final static int LISTVIEW_ACTION_INIT = 0x01;
 	public final static int LISTVIEW_ACTION_REFRESH = 0x02;
 	public final static int LISTVIEW_ACTION_SCROLL = 0x03;
@@ -1648,9 +1649,15 @@ public class UIHelper {
 				int id = v.getId();
 				switch (id) {
 				case R.id.question_option_share:
+					Log.i(TAG, postDetail.getBody());
 					showShareDialog(context, postDetail.getTitle(), postDetail.getUrl());
 					break;
 				case R.id.question_option_report:
+					AppContext ac = (AppContext) context.getApplication();
+					if(!ac.isLogin()){
+						UIHelper.showLoginDialog(context);
+						return;
+					}	
 					showReport(context, postDetail.getUrl());
 					break;
 				default:

@@ -37,6 +37,7 @@ import net.oschina.app.bean.URLs;
 import net.oschina.app.bean.Update;
 import net.oschina.app.bean.User;
 import net.oschina.app.bean.UserInformation;
+import net.oschina.app.common.StringUtils;
 
 import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
@@ -1433,14 +1434,18 @@ public class ApiClient {
 	 * @return
 	 * @throws AppException
 	 */
-	public static Result report(AppContext appContext, Report report) throws AppException {
+	public static String report(AppContext appContext, Report report) throws AppException {
 		Map<String,Object> params = new HashMap<String,Object>();
-		params.put("uid", report.getReportId());
-		params.put("link", report.getLinkAddress());
-		params.put("reson", report.getReason());
-		
+		params.put("obj_id", report.getReportId());
+		params.put("url", report.getLinkAddress());
+		params.put("obj_type", report.getReason());
+		if (report.getOtherReason() != null) {
+			params.put("memo", report.getOtherReason());
+		} else {
+			params.put("memo", "其他原因");
+		}
 		try{
-			return http_post(appContext, URLs.REPORT, params, null);		
+			return StringUtils.toConvertString(_post(appContext, URLs.REPORT, params, null));		
 		}catch(Exception e){
 			if(e instanceof AppException)
 				throw (AppException)e;

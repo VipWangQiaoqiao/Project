@@ -65,7 +65,7 @@ public class URLs implements Serializable {
 	public final static String SEARCH_LIST = URL_API_HOST+"action/api/search_list";
 	public final static String PORTRAIT_UPDATE = URL_API_HOST+"action/api/portrait_update";
 	public final static String UPDATE_VERSION = URL_API_HOST+"MobileAppVersion.xml";
-	public final static String REPORT = URL_API_HOST + "action/api/report";
+	public final static String REPORT = URL_API_HOST + "action/communityManage/report";
 	
 	private final static String URL_HOST = "oschina.net";
 	private final static String URL_WWW_HOST = "www."+URL_HOST;

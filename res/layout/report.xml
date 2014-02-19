@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="fill_parent" 
 	android:layout_height="fill_parent">
     <ScrollView 
@@ -41,7 +42,7 @@
              	android:layout_marginTop="5dip" 
              	android:textSize="@dimen/text_size_10"
              	android:textColor="@color/black" 
-             	android:text="http://www.oschina.net/code/snippet_253900_23397" />
+             	android:text="举报链接" />
             <TextView
              	android:layout_width="wrap_content" 
              	android:layout_height="wrap_content"
@@ -59,18 +60,16 @@
 		        android:layout_width="fill_parent"
 		        android:layout_height="wrap_content"
 		        android:textSize="@dimen/text_size_13"
-		        android:lines="4"
 		        android:autoLink="web|email"
 		        android:gravity="top"
-		        android:visibility="gone"
-		        android:hint="最多250个字"/>
+		        android:hint="最多250个字" />
        	    <TextView
 		       	android:layout_width="fill_parent" 
 		       	android:layout_height="wrap_content"
 		       	android:textSize="@dimen/text_size_9"
 		       	android:textColor="@color/listitem_yellow"
 		       	android:gravity="center_vertical"
-		       	android:text="tip:请勿因个人喜好而举报" />
+		       	android:text="tips:请勿因个人喜好而举报" />
 	    	<Button
 		    	android:id="@+id/report_publish"
 		        android:layout_width="fill_parent"

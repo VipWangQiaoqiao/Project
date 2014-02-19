@@ -175,6 +175,7 @@ public class Result extends Base {
 			}
 
 		} catch (XmlPullParserException e) {
+			System.out.println("我的数据解析异常");
 			throw AppException.xml(e);
 		} finally {
 			stream.close();
