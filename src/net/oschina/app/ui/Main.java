@@ -8,6 +8,7 @@ import greendroid.widget.QuickActionWidget.OnQuickActionClickListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
@@ -19,6 +20,7 @@ import net.oschina.app.adapter.ListViewMessageAdapter;
 import net.oschina.app.adapter.ListViewNewsAdapter;
 import net.oschina.app.adapter.ListViewQuestionAdapter;
 import net.oschina.app.adapter.ListViewTweetAdapter;
+import net.oschina.app.api.ApiClient;
 import net.oschina.app.bean.Active;
 import net.oschina.app.bean.ActiveList;
 import net.oschina.app.bean.Blog;
@@ -33,6 +35,7 @@ import net.oschina.app.bean.PostList;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetList;
+import net.oschina.app.common.FileUtils;
 import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.common.UpdateManager;
@@ -49,6 +52,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -73,7 +77,7 @@ import android.widget.TextView;
  * @created 2012-3-21
  */
 public class Main extends BaseActivity {
-
+	
 	public static final int QUICKACTION_LOGIN_OR_LOGOUT = 0;
 	public static final int QUICKACTION_USERINFO = 1;
 	public static final int QUICKACTION_SOFTWARE = 2;
@@ -224,6 +228,8 @@ public class Main extends BaseActivity {
 
 		// 启动轮询通知信息
 		this.foreachUserNotice();
+		// 检查是否需要下载欢迎图片
+		this.checkBackGround();
 	}
 
 	@Override
@@ -246,6 +252,8 @@ public class Main extends BaseActivity {
 		super.onDestroy();
 		unregisterReceiver(tweetReceiver);
 	}
+	
+	
 
 	@Override
 	protected void onNewIntent(Intent intent) {
@@ -392,6 +400,21 @@ public class Main extends BaseActivity {
 			}
 		}
 	};
+	
+	private void checkBackGround() {
+		if (!appContext.isNetworkConnected()) {
+			return;
+		}
+		new Thread(){
+			public void run() {
+				// 将图片下载下来
+				try {
+					ApiClient.checkBackGround(appContext);
+				} catch (AppException e) {
+				}
+			}
+		}.start();
+	}
 
 	/**
 	 * 初始化所有ListView

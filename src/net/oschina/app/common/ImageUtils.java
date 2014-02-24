@@ -36,6 +36,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 /**
  * 图片操作工具包
@@ -96,6 +97,24 @@ public class ImageUtils {
 			BufferedOutputStream bos = new BufferedOutputStream(
 					new FileOutputStream(filePath));
 			bitmap.compress(CompressFormat.JPEG, quality, bos);
+			bos.flush();
+			bos.close();
+			if(ctx!=null){
+				scanPhoto(ctx, filePath);
+			}
+		}
+	}
+	
+	public static void saveBackgroundImage(Context ctx, String filePath, Bitmap bitmap, int quality) throws IOException{
+		if (bitmap != null) {
+			File file = new File(filePath.substring(0,
+					filePath.lastIndexOf(File.separator)));
+			if (!file.exists()) {
+				file.mkdirs();
+			}
+			BufferedOutputStream bos = new BufferedOutputStream(
+					new FileOutputStream(filePath));
+			bitmap.compress(CompressFormat.PNG, quality, bos);
 			bos.flush();
 			bos.close();
 			if(ctx!=null){

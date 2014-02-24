@@ -678,12 +678,7 @@ public class TweetPub extends BaseActivity{
 	 * @return
 	 */
 	private String getRecorderPath() {
-		String savePath = TweetPub.this.getCacheDir().getAbsolutePath() + "/voiceTweet/";
-		File savedir = new File(savePath);
-		if (!savedir.exists()) {
-			savedir.mkdirs();
-		}
-		return savePath;
+		return FileUtils.getAppCache(TweetPub.this, "voiceTweet");
 	}
 	
 	/**

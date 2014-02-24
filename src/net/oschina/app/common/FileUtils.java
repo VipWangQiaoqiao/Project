@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import net.oschina.app.ui.TweetPub;
 import android.content.Context;
 import android.os.Environment;
 import android.os.StatFs;
@@ -504,6 +505,24 @@ public class FileUtils {
 		}
 		return false;
 	}
+	
+	/**
+	 * 清空一个文件夹
+	 * @param files
+	 */
+	public static void clearFileWithPath(String filePath) {
+		List<File> files = FileUtils.listPathFiles(filePath);
+		if (files.isEmpty()) {
+			return;
+		}
+		for (File f : files) {
+			if (f.isDirectory()) {
+				clearFileWithPath(f.getAbsolutePath());
+			} else {
+				f.delete();
+			}
+		}
+	}
 
 	/**
 	 * 获取SD卡的根目录
@@ -548,6 +567,26 @@ public class FileUtils {
 		}
 		return allDir;
 	}
+	
+	/**
+	 * 获取一个文件夹下的所有文件
+	 * @param root
+	 * @return
+	 */
+	public static List<File> listPathFiles(String root) {
+		List<File> allDir = new ArrayList<File>();
+		SecurityManager checker = new SecurityManager();
+		File path = new File(root);
+		checker.checkRead(root);
+		File[] files = path.listFiles();
+		for (File f : files) {
+			if (f.isFile())
+				allDir.add(f);
+			else 
+				listPath(f.getAbsolutePath());
+		}
+		return allDir;
+	}
 
 	public enum PathStatus {
 		SUCCESS, EXITS, ERROR
@@ -579,5 +618,21 @@ public class FileUtils {
 		int start = absolutePath.lastIndexOf(File.separator) + 1;
 		int end = absolutePath.length();
 		return absolutePath.substring(start, end);
+	}
+	
+	/**
+	 * 获取应用程序缓存文件夹下的指定目录
+	 * @param context
+	 * @param dir
+	 * @return
+	 */
+	public static String getAppCache(Context context, String dir) {
+		String savePath = context.getCacheDir().getAbsolutePath() + "/" + dir + "/";
+		File savedir = new File(savePath);
+		if (!savedir.exists()) {
+			savedir.mkdirs();
+		}
+		savedir = null;
+		return savePath;
 	}
 }

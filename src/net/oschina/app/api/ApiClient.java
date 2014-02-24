@@ -1,14 +1,19 @@
 package net.oschina.app.api;
 
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
+import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
 import net.oschina.app.bean.ActiveList;
@@ -37,7 +42,11 @@ import net.oschina.app.bean.URLs;
 import net.oschina.app.bean.Update;
 import net.oschina.app.bean.User;
 import net.oschina.app.bean.UserInformation;
+import net.oschina.app.bean.WellcomeImage;
+import net.oschina.app.common.FileUtils;
+import net.oschina.app.common.ImageUtils;
 import net.oschina.app.common.StringUtils;
+import net.oschina.app.ui.ImageZoomDialog;
 
 import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
@@ -55,6 +64,8 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Bitmap.CompressFormat;
+import android.util.Log;
 
 /**
  * API客户端接口：用于访问网络数据
@@ -350,7 +361,6 @@ public class ApiClient {
 	 * @return
 	 */
 	public static Bitmap getNetBitmap(String url) throws AppException {
-		//System.out.println("image_url==> "+url);
 		HttpClient httpClient = null;
 		GetMethod httpGet = null;
 		Bitmap bitmap = null;
@@ -407,6 +417,38 @@ public class ApiClient {
 	public static Update checkVersion(AppContext appContext) throws AppException {
 		try{
 			return Update.parse(http_get(appContext, URLs.UPDATE_VERSION));		
+		}catch(Exception e){
+			if(e instanceof AppException)
+				throw (AppException)e;
+			throw AppException.network(e);
+		}
+	}
+	
+	/**
+	 * 检查是否有可下载的欢迎界面图片
+	 * @param appContext
+	 * @return
+	 * @throws AppException
+	 */
+	public static void checkBackGround(AppContext appContext) throws AppException {
+		try{
+			WellcomeImage update = WellcomeImage.parse(http_get(appContext, URLs.UPDATE_VERSION));
+			String filePath = FileUtils.getAppCache(appContext, "wellcomeback");
+			if(update.isUpdate()) {
+				String url = update.getDownloadUrl();
+				String fileName = update.getStartDate().replace("-", "") + "-" + update.getEndDate().replace("-", "");
+				List<File> files = FileUtils.listPathFiles(filePath);
+				if (!files.isEmpty()) {
+					if(files.get(0).getName().equalsIgnoreCase(fileName)) {
+						return;
+					}
+				}
+				Bitmap photo = getNetBitmap(url);
+				ImageUtils.saveImageToSD(appContext,
+						filePath + fileName + ".png", photo, 100);
+			} else {
+				FileUtils.clearFileWithPath(filePath);
+			}
 		}catch(Exception e){
 			if(e instanceof AppException)
 				throw (AppException)e;

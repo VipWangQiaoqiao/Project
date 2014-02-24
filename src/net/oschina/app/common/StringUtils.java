@@ -124,6 +124,17 @@ public class StringUtils {
 		}
 		return b;
 	}
+	
+	/**
+	 * 返回long类型的今天的日期
+	 * @return
+	 */
+	public static long getToday() {
+		Calendar cal = Calendar.getInstance();
+		String curDate = dateFormater2.get().format(cal.getTime());
+		curDate = curDate.replace("-", "");
+		return Long.parseLong(curDate);
+	}
 
 	/**
 	 * 判断给定字符串是否空白串。 空白串是指由空格、制表符、回车符、换行符组成的字符串 若输入字符串为null或空字符串，返回true
@@ -210,7 +221,12 @@ public class StringUtils {
 		}
 		return false;
 	}
-
+	
+	/**
+	 * 将一个InputStream流转换成字符串
+	 * @param is
+	 * @return
+	 */
 	public static String toConvertString(InputStream is) {
 		StringBuffer res = new StringBuffer();
 		InputStreamReader isr = new InputStreamReader(is);
