@@ -17,7 +17,12 @@ public class AudioRecordUtils {
 
 	private MediaRecorder mRecorder = null;
 	private double mEMA = 0.0;
-
+	
+	/**
+	 * 开启录音
+	 * @param path 存储的路径
+	 * @param name 文件的名字
+	 */
 	public void start(String path,String name) {
 		
 		if (mRecorder == null) {
@@ -28,7 +33,6 @@ public class AudioRecordUtils {
 			mRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
 			//指定音频编码方式
 			mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-			
 			//指定录制音频输出信息的文件
 			mRecorder.setOutputFile(path+"/"+name);
 			try {
@@ -70,7 +74,7 @@ public class AudioRecordUtils {
 		else
 			return 0;
 	}
-
+	
 	public double getAmplitudeEMA() {
 		double amp = getAmplitude();
 		mEMA = EMA_FILTER * amp + (1.0 - EMA_FILTER) * mEMA;

@@ -271,6 +271,7 @@ public class ImageUtils {
 	 * @param uri
 	 * @return
 	 */
+	@SuppressWarnings("deprecation")
 	public static String getAbsoluteImagePath(Activity context, Uri uri) {
 		String imagePath = "";
 		String[] proj = { MediaStore.Images.Media.DATA };
@@ -299,6 +300,7 @@ public class ImageUtils {
 	 *            MediaStore.Images.Thumbnails.MICRO_KIND
 	 * @return
 	 */
+	@SuppressWarnings("deprecation")
 	public static Bitmap loadImgThumbnail(Activity context, String imgName,
 			int kind) {
 		Bitmap bitmap = null;

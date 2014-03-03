@@ -35,6 +35,7 @@ import android.view.MenuInflater;
 import android.view.MotionEvent;
 import android.view.SubMenu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -142,6 +143,16 @@ public class QuestionDetail extends BaseActivity {
     	this.regOnDoubleEvent();
     }
     
+    // 隐藏输入发表回帖状态
+    private void hideEditor(View v) {
+    	imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    	if(mFootViewSwitcher.getDisplayedChild()==1){
+			mFootViewSwitcher.setDisplayedChild(0);
+			mFootEditer.clearFocus();
+			mFootEditer.setVisibility(View.GONE);
+		}
+    }
+    
     //初始化视图控件
     private void initView()
     {
@@ -219,11 +230,7 @@ public class QuestionDetail extends BaseActivity {
     	mFootEditer.setOnKeyListener(new View.OnKeyListener() {
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 				if (keyCode == KeyEvent.KEYCODE_BACK) {
-					if(mFootViewSwitcher.getDisplayedChild()==1){
-						mFootViewSwitcher.setDisplayedChild(0);
-						mFootEditer.clearFocus();
-						mFootEditer.setVisibility(View.GONE);
-					}
+					hideEditor(v);
 					return true;
 				}
 				return false;
@@ -392,7 +399,8 @@ public class QuestionDetail extends BaseActivity {
     }
     
     private View.OnClickListener refreshClickListener = new View.OnClickListener() {
-		public void onClick(View v) {	
+		public void onClick(View v) {
+			hideEditor(v);
 			initData(postId, true);
 			loadLvCommentData(curId,curCatalog,0,mCommentHandler,UIHelper.LISTVIEW_ACTION_REFRESH);
 		}

@@ -101,6 +101,16 @@ public class MessageDetail extends BaseActivity{
 		}
     }
     
+    // 隐藏输入发表回帖状态
+    private void hideEditor(View v) {
+    	imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    	if(mFootViewSwitcher.getDisplayedChild()==1){
+			mFootViewSwitcher.setDisplayedChild(0);
+			mFootEditer.clearFocus();
+			mFootEditer.setVisibility(View.GONE);
+		}
+    }
+    
     //初始化视图控件
     private void initView()
     {
@@ -143,11 +153,7 @@ public class MessageDetail extends BaseActivity{
     	mFootEditer.setOnKeyListener(new View.OnKeyListener() {
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 				if (keyCode == KeyEvent.KEYCODE_BACK) {
-					if(mFootViewSwitcher.getDisplayedChild()==1){
-						mFootViewSwitcher.setDisplayedChild(0);
-						mFootEditer.clearFocus();
-						mFootEditer.setVisibility(View.GONE);
-					}
+					hideEditor(v);
 					return true;
 				}
 				return false;
@@ -373,7 +379,8 @@ public class MessageDetail extends BaseActivity{
 	}
 	
 	private View.OnClickListener refreshClickListener = new View.OnClickListener() {
-		public void onClick(View v) {	
+		public void onClick(View v) {
+			hideEditor(v);
 			loadLvCommentData(curFriendId,curCatalog,0,mHandler,UIHelper.LISTVIEW_ACTION_REFRESH);
 		}
 	};

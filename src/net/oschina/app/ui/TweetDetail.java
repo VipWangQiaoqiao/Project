@@ -1,6 +1,5 @@
 package net.oschina.app.ui;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,26 +15,16 @@ import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.Tweet;
-import net.oschina.app.common.MediaUtils;
 import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
 import net.oschina.app.widget.PullToRefreshListView;
-import android.animation.TypeEvaluator;
-import android.annotation.SuppressLint;
-import android.app.ActionBar.LayoutParams;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.AudioTrack;
 import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnBufferingUpdateListener;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
-import android.media.MediaPlayer.OnSeekCompleteListener;
-import android.net.Uri;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -44,13 +33,8 @@ import android.text.SpannableString;
 import android.text.style.ImageSpan;
 import android.util.TypedValue;
 import android.view.KeyEvent;
-import android.view.Surface;
-import android.view.SurfaceHolder;
 import android.view.View;
-import android.view.SurfaceHolder.Callback;
 import android.view.View.OnClickListener;
-import android.view.animation.Animation;
-import android.view.animation.Transformation;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
 import android.widget.AbsListView;
@@ -60,8 +44,6 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.MediaController;
-import android.widget.MediaController.MediaPlayerControl;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
@@ -141,6 +123,17 @@ public class TweetDetail extends BaseActivity {
 		this.initGridView();
 
 	}
+	
+	// 隐藏输入发表回帖状态
+    private void hideEditor(View v) {
+    	imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    	if(mFootViewSwitcher.getDisplayedChild()==1){
+			mFootViewSwitcher.setDisplayedChild(0);
+			mFootEditer.clearFocus();
+			mFootEditer.setVisibility(View.GONE);
+			hideFace();// 隐藏表情
+		}
+    }
 
 	/**
 	 * 头部加载展示
@@ -209,12 +202,7 @@ public class TweetDetail extends BaseActivity {
 		mFootEditer.setOnKeyListener(new View.OnKeyListener() {
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 				if (keyCode == KeyEvent.KEYCODE_BACK) {
-					if (mFootViewSwitcher.getDisplayedChild() == 1) {
-						mFootViewSwitcher.setDisplayedChild(0);
-						mFootEditer.clearFocus();// 隐藏软键盘
-						mFootEditer.setVisibility(View.GONE);// 隐藏编辑框
-						hideFace();// 隐藏表情
-					}
+					hideEditor(v);
 					return true;
 				}
 				return false;
@@ -268,7 +256,7 @@ public class TweetDetail extends BaseActivity {
 						if (position == 0 || view == lvComment_footer
 								|| position == 1 || view == lvHeader)
 							return;
-
+						
 						Comment com = null;
 						// 判断是否是TextView
 						if (view instanceof TextView) {
@@ -304,7 +292,8 @@ public class TweetDetail extends BaseActivity {
 				} catch (Exception e) {
 					scrollEnd = false;
 				}
-
+				
+				// 滑动到底部加载更多的数据
 				if (scrollEnd && curLvDataState == UIHelper.LISTVIEW_DATA_MORE) {
 					mLvComment.setTag(UIHelper.LISTVIEW_DATA_LOADING);
 					lvComment_foot_more.setText(R.string.load_ing);
@@ -767,6 +756,7 @@ public class TweetDetail extends BaseActivity {
 
 	private View.OnClickListener refreshClickListener = new View.OnClickListener() {
 		public void onClick(View v) {
+			hideEditor(v);
 			loadTweetDetail(curId, mHandler, true);
 			loadLvCommentData(curId, curCatalog, 0, mCommentHandler,
 					UIHelper.LISTVIEW_ACTION_REFRESH);
