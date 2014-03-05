@@ -434,6 +434,10 @@ public class ApiClient {
 		try{
 			WellcomeImage update = WellcomeImage.parse(http_get(appContext, URLs.UPDATE_VERSION));
 			String filePath = FileUtils.getAppCache(appContext, "wellcomeback");
+			// 如果没有图片的链接地址则返回
+			if(StringUtils.isEmpty(update.getDownloadUrl())) {
+				return;
+			}
 			if(update.isUpdate()) {
 				String url = update.getDownloadUrl();
 				String fileName = update.getStartDate().replace("-", "") + "-" + update.getEndDate().replace("-", "");

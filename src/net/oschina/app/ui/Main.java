@@ -137,7 +137,7 @@ public class Main extends BaseActivity {
 	private int lvTweetSumData;
 	private int lvActiveSumData;
 	private int lvMsgSumData;
-
+	
 	private RadioButton fbNews;
 	private RadioButton fbQuestion;
 	private RadioButton fbTweet;
@@ -405,6 +405,7 @@ public class Main extends BaseActivity {
 		if (!appContext.isNetworkConnected()) {
 			return;
 		}
+		// 启动线程去检查服务器接口是否需要下载新的欢迎界面背景图片到手机
 		new Thread(){
 			public void run() {
 				// 将图片下载下来
