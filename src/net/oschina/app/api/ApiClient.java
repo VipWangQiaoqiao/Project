@@ -17,6 +17,7 @@ import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
 import net.oschina.app.bean.ActiveList;
+import net.oschina.app.bean.Barcode;
 import net.oschina.app.bean.Blog;
 import net.oschina.app.bean.BlogCommentList;
 import net.oschina.app.bean.BlogList;
@@ -170,7 +171,6 @@ public class ApiClient {
 	 * @throws AppException 
 	 */
 	private static InputStream http_get(AppContext appContext, String url) throws AppException {	
-		//System.out.println("get_url==> "+url);
 		String cookie = getCookie(appContext);
 		String userAgent = getUserAgent(appContext);
 		
@@ -189,7 +189,6 @@ public class ApiClient {
 					throw AppException.http(statusCode);
 				}
 				responseBody = httpGet.getResponseBodyAsString();
-				//System.out.println("XMLDATA=====>"+responseBody);
 				break;				
 			} catch (HttpException e) {
 				time++;
@@ -1491,11 +1490,28 @@ public class ApiClient {
 			params.put("memo", "其他原因");
 		}
 		try{
-			return StringUtils.toConvertString(_post(appContext, URLs.REPORT, params, null));		
+			return StringUtils.toConvertString(_post(appContext, URLs.REPORT, params, null));
 		}catch(Exception e){
 			if(e instanceof AppException)
 				throw (AppException)e;
 			throw AppException.network(e);
 		}
 	}
+	
+	/**
+	 * 二维码扫描签到
+	 * @param appContext
+	 * @param barcode
+	 * @return
+	 * @throws AppException
+	 */
+	public static String signIn(AppContext appContext, Barcode barcode) throws AppException {
+		try{
+			return StringUtils.toConvertString(http_get(appContext, barcode.getUrl()));
+		}catch(Exception e){
+			if(e instanceof AppException)
+				throw (AppException)e;
+			throw AppException.network(e);
+		}
+	} 
 }

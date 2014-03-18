@@ -428,6 +428,7 @@ public class TweetPub extends BaseActivity{
 			}
 			if (i >= RECORDER_TIME_MAXTIME - 10) {
 				if (i == RECORDER_TIME_MAXTIME - 10) {
+					// 震动
 					Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 					vibrator.vibrate(300);
 				}

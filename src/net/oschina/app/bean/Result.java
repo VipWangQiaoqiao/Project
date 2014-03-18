@@ -175,14 +175,11 @@ public class Result extends Base {
 			}
 
 		} catch (XmlPullParserException e) {
-			System.out.println("我的数据解析异常");
 			throw AppException.xml(e);
 		} finally {
 			stream.close();
 		}
-
 		return res;
-
 	}
 
 	public int getErrorCode() {
@@ -208,5 +205,4 @@ public class Result extends Base {
 	public String toString(){
 		return String.format("RESULT: CODE:%d,MSG:%s", errorCode, errorMessage);
 	}
-
 }

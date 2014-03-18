@@ -364,7 +364,7 @@ public class Main extends BaseActivity {
 		mGrid.addQuickAction(new MyQuickAction(this,
 				R.drawable.ic_menu_software, R.string.main_menu_software));
 		mGrid.addQuickAction(new MyQuickAction(this, R.drawable.ic_menu_search,
-				R.string.main_menu_search));
+				R.string.main_menu_sweep));
 		mGrid.addQuickAction(new MyQuickAction(this,
 				R.drawable.ic_menu_setting, R.string.main_menu_setting));
 		mGrid.addQuickAction(new MyQuickAction(this, R.drawable.ic_menu_exit,
@@ -388,8 +388,8 @@ public class Main extends BaseActivity {
 			case QUICKACTION_SOFTWARE:// 开源软件
 				UIHelper.showSoftware(Main.this);
 				break;
-			case QUICKACTION_SEARCH:// 搜索
-				UIHelper.showSearch(Main.this);
+			case QUICKACTION_SEARCH:// 
+				UIHelper.showCapture(Main.this);
 				break;
 			case QUICKACTION_SETTING:// 设置
 				UIHelper.showSetting(Main.this);

@@ -85,7 +85,7 @@ public class ReportUi extends BaseActivity {
 				report.setOtherReason(otherReason);
 			}
 			report.setReason(mReason.getSelectedItem().toString());
-			mProgress = ProgressDialog.show(v.getContext(), null, "举报信息发送中···",true,true);	
+			mProgress = ProgressDialog.show(v.getContext(), null, "举报信息发送中...",true,true);	
 			final Handler handler = new Handler(){
 				public void handleMessage(Message msg) {
 					if(mProgress!=null)mProgress.dismiss();

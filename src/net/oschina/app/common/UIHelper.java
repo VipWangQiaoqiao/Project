@@ -30,6 +30,7 @@ import net.oschina.app.bean.URLs;
 import net.oschina.app.ui.About;
 import net.oschina.app.ui.BaseActivity;
 import net.oschina.app.ui.BlogDetail;
+import net.oschina.app.ui.Capture;
 import net.oschina.app.ui.CommentPub;
 import net.oschina.app.ui.FeedBack;
 import net.oschina.app.ui.ImageDialog;
@@ -814,6 +815,15 @@ public class UIHelper {
 	 */
 	public static void showSearch(Context context) {
 		Intent intent = new Intent(context, Search.class);
+		context.startActivity(intent);
+	}
+	
+	/**
+	 * 显示扫一扫界面
+	 * @param context
+	 */
+	public static void showCapture(Context context) {
+		Intent intent = new Intent(context, Capture.class);
 		context.startActivity(intent);
 	}
 

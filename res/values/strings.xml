@@ -7,6 +7,7 @@
     <string name="main_menu_myinfo">我的资料</string>
     <string name="main_menu_software">开源软件</string>
     <string name="main_menu_search">搜索</string>
+    <string name="main_menu_sweep">扫一扫</string>
     <string name="main_menu_picshow">显示图片</string>
     <string name="main_menu_picnoshow">隐藏图片</string>
     <string name="main_menu_cache">清除缓存</string>
@@ -85,4 +86,6 @@
     <string name="ui_insert_image">插入图片</string>  
     
     <string name="setting_head_title">系统设置</string>
+    <string name="capture_head_title">扫一扫</string>
+    <string name="msg_camera_framework_bug">抱歉，Android相机出现问题。您可能需要重启设备。</string>
 </resources>

@@ -38,6 +38,7 @@ public class AppException extends Exception implements UncaughtExceptionHandler{
 	public final static byte TYPE_XML	 	= 0x05;
 	public final static byte TYPE_IO	 	= 0x06;
 	public final static byte TYPE_RUN	 	= 0x07;
+	public final static byte TYPE_JSON	 	= 0x08;
 	
 	private byte type;
 	private int code;
@@ -84,6 +85,9 @@ public class AppException extends Exception implements UncaughtExceptionHandler{
 			Toast.makeText(ctx, R.string.network_not_connected, Toast.LENGTH_SHORT).show();
 			break;
 		case TYPE_XML:
+			Toast.makeText(ctx, R.string.xml_parser_failed, Toast.LENGTH_SHORT).show();
+			break;
+		case TYPE_JSON:
 			Toast.makeText(ctx, R.string.xml_parser_failed, Toast.LENGTH_SHORT).show();
 			break;
 		case TYPE_IO:
@@ -163,6 +167,10 @@ public class AppException extends Exception implements UncaughtExceptionHandler{
 	
 	public static AppException xml(Exception e) {
 		return new AppException(TYPE_XML, 0, e);
+	}
+	
+	public static AppException json(Exception e) {
+		return new AppException(TYPE_JSON, 0, e);
 	}
 	
 	public static AppException network(Exception e) {

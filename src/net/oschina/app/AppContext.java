@@ -16,6 +16,7 @@ import java.util.UUID;
 
 import net.oschina.app.api.ApiClient;
 import net.oschina.app.bean.ActiveList;
+import net.oschina.app.bean.Barcode;
 import net.oschina.app.bean.Blog;
 import net.oschina.app.bean.BlogCommentList;
 import net.oschina.app.bean.BlogList;
@@ -56,6 +57,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.webkit.CacheManager;
 
 /**
@@ -1209,6 +1211,16 @@ public class AppContext extends Application {
 	 */
 	public String report(Report report) throws AppException {
 		return ApiClient.report(this, report);
+	}
+	
+	/**
+	 * 扫描二维码签到
+	 * @param barcode
+	 * @return
+	 * @throws AppException
+	 */
+	public String signIn(Barcode barcode) throws AppException{
+		return ApiClient.signIn(this, barcode);
 	}
 	
 	/**
