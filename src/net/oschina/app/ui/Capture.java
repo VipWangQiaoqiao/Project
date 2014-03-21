@@ -9,7 +9,6 @@ import net.oschina.app.AppException;
 import net.oschina.app.AppManager;
 import net.oschina.app.R;
 import net.oschina.app.bean.Barcode;
-import net.oschina.app.bean.JsonResult;
 import net.oschina.app.common.UIHelper;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -26,14 +25,13 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Vibrator;
 import android.provider.MediaStore;
+import android.text.ClipboardManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
-
 import com.barcode.camera.CameraManager;
 import com.barcode.core.CaptureActivityHandler;
 import com.barcode.core.FinishListener;
@@ -58,6 +56,7 @@ import com.google.zxing.common.HybridBinarizer;
  * @author 火蚁（http://my.oschina/LittleDY）
  *
  */
+@SuppressWarnings("deprecation")
 public final class Capture extends Activity implements SurfaceHolder.Callback {
 
 	private static final String TAG = Capture.class.getSimpleName();
@@ -342,30 +341,31 @@ public final class Capture extends Activity implements SurfaceHolder.Callback {
 			}
 		});
 		
-		try {
-			// 判断是否符合基本的json格式
-			if (!msg.matches("^\\{.*")) {
-				mProgress.dismiss();
-				return;
-			}
-			final Barcode barcode =  Barcode.parse(msg);
-			Log.i(TAG, barcode.toString());
-			int type = barcode.getType();
-			if (barcode.isRequireLogin()) {
-				if (!ac.isLogin()) {
-					UIHelper.showLoginDialog(Capture.this);
-					return;
+		// 判断是否符合基本的json格式
+		if (!msg.matches("^\\{.*")) {
+			showDialog(msg);
+		} else {
+			try {
+				Barcode barcode = Barcode.parse(msg);
+				Log.i(TAG, barcode.toString());
+				int type = barcode.getType();
+				if (barcode.isRequireLogin()) {
+					if (!ac.isLogin()) {
+						UIHelper.showLoginDialog(Capture.this);
+						return;
+					}
 				}
+				switch (type) {
+				case Barcode.SIGN_IN:// 签到
+					signin(barcode);
+					break;
+				default:
+					break;
+				}
+			} catch (AppException e) {
+				UIHelper.ToastMessage(this, "json数据解析异常");
+				mProgress.dismiss();
 			}
-			switch (type) {
-			case Barcode.SIGN_IN:// 签到
-				signin(barcode);
-				break;
-			default:
-				break;
-			}
-		} catch (AppException e) {
-			mProgress.dismiss();
 		}
 	}
 	
@@ -379,6 +379,34 @@ public final class Capture extends Activity implements SurfaceHolder.Callback {
 		bundle.putSerializable("barcode", barcode);
 		intent.putExtras(bundle);
 		startActivity(intent);
+	}
+	
+	/**
+	 * 扫描结果对话框
+	 * @param msg
+	 */
+	private void showDialog(final String msg) {
+		new AlertDialog.Builder(Capture.this).setTitle("扫描结果").
+		setMessage("非oschina提供活动签到二维码\n内容：" + msg).
+		setPositiveButton("复制", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				mProgress.dismiss();
+				dialog.dismiss();
+				//获取剪贴板管理服务
+				ClipboardManager cm =(ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+				//将文本数据复制到剪贴板
+				cm.setText(msg);
+				UIHelper.ToastMessage(Capture.this, "复制成功");
+			}
+		}).setNegativeButton("返回", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				mProgress.dismiss();
+				dialog.dismiss();
+				if ((source == IntentSource.NONE || source == IntentSource.ZXING_LINK) && lastResult != null) {
+					restartPreviewAfterDelay(0L);
+				}
+			}
+		}).show();
 	}
 
 	// 初始化照相机，CaptureActivityHandler解码

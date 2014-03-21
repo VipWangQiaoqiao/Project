@@ -363,7 +363,7 @@ public class Main extends BaseActivity {
 				R.string.main_menu_myinfo));
 		mGrid.addQuickAction(new MyQuickAction(this,
 				R.drawable.ic_menu_software, R.string.main_menu_software));
-		mGrid.addQuickAction(new MyQuickAction(this, R.drawable.ic_menu_search,
+		mGrid.addQuickAction(new MyQuickAction(this, R.drawable.ic_menu_sweep,
 				R.string.main_menu_sweep));
 		mGrid.addQuickAction(new MyQuickAction(this,
 				R.drawable.ic_menu_setting, R.string.main_menu_setting));

@@ -17,7 +17,7 @@
     <string name="submit_report">提交报告</string>
     
     <string name="load_more">更多</string>
-    <string name="load_ing">20条加载中···</string>
+    <string name="load_ing">加载中···</string>
     <string name="load_full">已加载全部</string>
     <string name="load_empty">暂无数据</string>
     <string name="load_error">加载数据出错</string>

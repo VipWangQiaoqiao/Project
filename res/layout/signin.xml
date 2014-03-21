@@ -23,7 +23,7 @@
              	android:layout_width="wrap_content" 
              	android:layout_height="wrap_content"
              	android:layout_gravity="center_horizontal" 
-             	android:layout_marginTop="30dip" 
+             	android:layout_marginTop="10dip" 
              	android:textSize="@dimen/text_size_18"
              	android:textColor="@color/black" 
              	android:textStyle="bold" 
@@ -49,7 +49,7 @@
              	android:layout_height="wrap_content"
              	android:layout_marginTop="10dip" 
              	android:layout_marginLeft="10dp" 
-             	android:textSize="@dimen/text_size_12"
+             	android:textSize="@dimen/text_size_13"
              	android:textColor="@color/black"  />
 	    	<Button
 		    	android:id="@+id/sigin_publish"
