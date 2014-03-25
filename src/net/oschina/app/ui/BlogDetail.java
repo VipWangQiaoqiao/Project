@@ -1,5 +1,7 @@
 package net.oschina.app.ui;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,16 +17,23 @@ import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.Result;
+import net.oschina.app.common.FileUtils;
 import net.oschina.app.common.StringUtils;
 import net.oschina.app.common.UIHelper;
+import net.oschina.app.ui.Capture.IntentSource;
 import net.oschina.app.widget.BadgeView;
 import net.oschina.app.widget.PullToRefreshListView;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.ClipboardManager;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -52,6 +61,8 @@ import android.widget.ViewSwitcher;
  * @created 2012-3-21
  */
 public class BlogDetail extends BaseActivity {
+	
+	public final static String TAG = "BlogDetail"; 
 	
 	private FrameLayout mHeader;
 	private LinearLayout mFooter;
@@ -225,11 +236,12 @@ public class BlogDetail extends BaseActivity {
 				return false;
 			}
 		});
-    	//编辑器添加文本监听
+    	// 编辑器添加文本监听
     	mFootEditer.addTextChangedListener(UIHelper.getTextWatcher(this, tempCommentKey));
     	
-    	//显示临时编辑内容
+    	// 显示临时编辑内容
     	UIHelper.showTempEditContent(this, mFootEditer, tempCommentKey);
+    	  
     }
     
     //初始化控件数据
@@ -270,7 +282,9 @@ public class BlogDetail extends BaseActivity {
 						bv_comment.hide();
 					}
 					
-					String body = UIHelper.WEB_STYLE + blogDetail.getBody() + "<div style=\"margin-bottom: 80px\" />";
+					String body = UIHelper.WEB_STYLE + blogDetail.getBody();
+					
+					Log.i(TAG, blogDetail.getBody());
 					//读取用户设置：是否加载文章图片--默认有wifi下始终加载图片
 					boolean isLoadImage;
 					AppContext ac = (AppContext)getApplication();
@@ -286,12 +300,10 @@ public class BlogDetail extends BaseActivity {
 						// 添加点击图片放大支持
 						body = body.replaceAll("(<img[^>]+src=\")(\\S+)\"",
 								"$1$2\" onClick=\"javascript:mWebViewImageListener.onImageClick('$2')\"");
-						
-						System.out.println(body);
 					}else{
 						body = body.replaceAll("<\\s*img\\s+([^>]*)\\s*>","");
 					}
-
+					
 					mWebView.loadDataWithBaseURL(null, body, "text/html", "utf-8",null);
 					mWebView.setWebViewClient(UIHelper.getWebViewClient());
 					

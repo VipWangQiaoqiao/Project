@@ -219,7 +219,7 @@ public class ApiClient {
 			}
 		}while(time < RETRY_TIME);
 		
-		responseBody = responseBody.replaceAll("\\p{Cntrl}", "");
+		//responseBody = responseBody.replaceAll("\\p{Cntrl}", "\r\n");
 		if(responseBody.contains("result") && responseBody.contains("errorCode") && appContext.containsProperty("user.uid")){
 			try {
 				Result res = Result.parse(new ByteArrayInputStream(responseBody.getBytes()));	

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import net.oschina.app.AppException;
+import net.oschina.app.common.FileUtils;
 import net.oschina.app.common.StringUtils;
 
 import org.xmlpull.v1.XmlPullParser;

@@ -91,6 +91,7 @@
 					android:id="@+id/blog_detail_webview"
 		        	android:layout_width="fill_parent"
 		        	android:layout_height="wrap_content"
+		        	android:scrollbars="vertical"
 			        android:background="@color/white"/>
 	        </LinearLayout>	
 	    </ScrollView>
