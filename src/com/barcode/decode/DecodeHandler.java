@@ -14,39 +14,40 @@
  * limitations under the License.
  */
 
-package com.barcode.core;
+package com.barcode.decode;
 
+import java.io.ByteArrayOutputStream;
+import java.util.Hashtable;
+import java.util.Map;
+
+import net.oschina.app.R;
+import net.oschina.app.ui.CaptureActivity;
 import android.graphics.Bitmap;
-
-import com.google.zxing.BinaryBitmap;
-import com.google.zxing.DecodeHintType;
-import com.google.zxing.LuminanceSource;
-import com.google.zxing.MultiFormatReader;
-import com.google.zxing.PlanarYUVLuminanceSource;
-import com.google.zxing.ReaderException;
-import com.google.zxing.Result;
-import com.google.zxing.common.HybridBinarizer;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
-import java.util.Map;
-
-import net.oschina.app.R;
-import net.oschina.app.ui.Capture;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.DecodeHintType;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.PlanarYUVLuminanceSource;
+import com.google.zxing.ReaderException;
+import com.google.zxing.Result;
+import com.google.zxing.common.HybridBinarizer;
 
 final class DecodeHandler extends Handler {
 
 	private static final String TAG = DecodeHandler.class.getSimpleName();
 
-	private final Capture activity;
-	private final MultiFormatReader multiFormatReader;
+	private final CaptureActivity activity;
+
+	private MultiFormatReader multiFormatReader;
+
 	private boolean running = true;
 
-	DecodeHandler(Capture activity, Map<DecodeHintType, Object> hints) {
+	DecodeHandler(CaptureActivity activity, Map<DecodeHintType, Object> hints) {
 		multiFormatReader = new MultiFormatReader();
 		multiFormatReader.setHints(hints);
 		this.activity = activity;
@@ -83,27 +84,22 @@ final class DecodeHandler extends Handler {
 	private void decode(byte[] data, int width, int height) {
 		long start = System.currentTimeMillis();
 		Result rawResult = null;
-		// PlanarYUVLuminanceSource source =
-		// activity.getCameraManager().buildLuminanceSource(data, width,
-		// height);
-		// ------------------------------------
 
 		byte[] rotatedData = new byte[data.length];
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++)
 				rotatedData[x * height + height - y - 1] = data[x + y * width];
 		}
-		int tmp = width; // Here we are swapping, that's the difference to #11
+		int tmp = width;
 		width = height;
 		height = tmp;
 
 		PlanarYUVLuminanceSource source = activity.getCameraManager()
 				.buildLuminanceSource(rotatedData, width, height);
-
-		// ------------------------------------
 		if (source != null) {
 			BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
 			try {
+				// 预览界面最终取到的是个bitmap，然后对其进行解码
 				rawResult = multiFormatReader.decodeWithState(bitmap);
 			} catch (ReaderException re) {
 				// continue
@@ -121,9 +117,7 @@ final class DecodeHandler extends Handler {
 				Message message = Message.obtain(handler,
 						R.id.decode_succeeded, rawResult);
 				Bundle bundle = new Bundle();
-				Bitmap grayscaleBitmap = toBitmap(source, source.renderCroppedGreyscaleBitmap());
-				bundle.putParcelable(DecodeThread.BARCODE_BITMAP,
-						grayscaleBitmap);
+				bundleThumbnail(source, bundle);
 				message.setData(bundle);
 				message.sendToTarget();
 			}
@@ -135,13 +129,22 @@ final class DecodeHandler extends Handler {
 		}
 	}
 
-	private static Bitmap toBitmap(LuminanceSource source, int[] pixels) {
-		int width = source.getWidth();
-		int height = source.getHeight();
-		Bitmap bitmap = Bitmap.createBitmap(width, height,
+	private static void bundleThumbnail(PlanarYUVLuminanceSource source,
+			Bundle bundle) {
+		int[] pixels = source.renderThumbnail();
+		int width = source.getThumbnailWidth();
+		int height = source.getThumbnailHeight();
+		Bitmap bitmap = Bitmap.createBitmap(pixels, 0, width, width, height,
 				Bitmap.Config.ARGB_8888);
-		bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
-		return bitmap;
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		bitmap.compress(Bitmap.CompressFormat.JPEG, 50, out);
+		bundle.putByteArray(DecodeThread.BARCODE_BITMAP, out.toByteArray());
+		bundle.putFloat(DecodeThread.BARCODE_SCALED_FACTOR, (float) width
+				/ source.getWidth());
 	}
 
+	public void setHints(Hashtable<DecodeHintType, Object> paramHashtable) {
+		multiFormatReader = new MultiFormatReader();
+		multiFormatReader.setHints(paramHashtable);
+	}
 }

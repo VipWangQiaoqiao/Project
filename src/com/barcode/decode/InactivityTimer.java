@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.barcode.core;
+package com.barcode.decode;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -25,16 +25,17 @@ import android.os.AsyncTask;
 import android.os.BatteryManager;
 import android.util.Log;
 
-import com.barcode.executor.AsyncTaskExecInterface;
-import com.barcode.executor.AsyncTaskExecManager;
-
 /**
  * Finishes an activity after a period of inactivity if the device is on battery
- * power.
+ * power. <br/>
+ * <br/>
+ * 
+ * 该活动监控器全程监控扫描活跃状态，与CaptureActivity生命周期相同
  */
 public final class InactivityTimer {
 
 	private static final String TAG = InactivityTimer.class.getSimpleName();
+
 	private static final long INACTIVITY_DELAY_MS = 5 * 60 * 1000L;
 	private final Activity activity;
 	private final AsyncTaskExecInterface taskExec;

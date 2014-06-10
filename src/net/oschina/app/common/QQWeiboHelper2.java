@@ -1,11 +1,11 @@
 package net.oschina.app.common;
 
 import net.oschina.app.AppContext;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-
 import com.tencent.weibo.api.TAPI;
 import com.tencent.weibo.constants.OAuthConstants;
 import com.tencent.weibo.oauthv1.OAuthV1;
@@ -21,6 +21,7 @@ import com.tencent.weibo.webview.OAuthV1AuthorizeWebView;
  * @author yeguozhong@yeah.net
  * 
  */
+@SuppressLint("Instantiatable")
 public class QQWeiboHelper2 {
 
 	private final static String APP_KEY = "96f54f97c4de46e393c4835a266207f4";
@@ -61,6 +62,7 @@ public class QQWeiboHelper2 {
 	 */
 	private Handler mHandler = new Handler() {
 
+		@SuppressLint("Instantiatable")
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {

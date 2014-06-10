@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 二维码扫描主界面 -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:oncon="http://schemas.android.com/apk/res/com.sitech.oncon.barcode"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
@@ -10,7 +9,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 
-    <com.barcode.core.ViewfinderView
+    <com.barcode.view.ViewfinderView
         android:id="@+id/viewfinder_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
@@ -38,5 +37,5 @@
             android:textColor="@color/status_text"
             android:textSize="15sp" />
     </LinearLayout>
-
+    
 </FrameLayout>

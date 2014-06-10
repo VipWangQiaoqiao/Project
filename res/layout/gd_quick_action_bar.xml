@@ -55,6 +55,7 @@
 			<LinearLayout
 				android:id="@+id/gdi_quick_action_items"
 				android:layout_width="wrap_content"
+				android:orientation="horizontal"
 				android:layout_height="wrap_content" />
 
 			<View

@@ -29,7 +29,7 @@ final class CameraConfigurationManager {
 	// below will still select the default (presumably 320x240) size for these.
 	// This prevents
 	// accidental selection of very low resolution on some devices.
-	private static final int MIN_PREVIEW_PIXELS = 470 * 320; // normal screen
+	private static final int MIN_PREVIEW_PIXELS = 480 * 320; // normal screen
 	private static final int MAX_PREVIEW_PIXELS = 1280 * 720;
 
 	private final Context context;
@@ -57,6 +57,14 @@ final class CameraConfigurationManager {
 		Log.i(TAG, "Screen resolution: " + screenResolution);
 		cameraResolution = findBestPreviewSizeValue(parameters,
 				screenResolution);
+		// 解决竖屏拉伸
+		Point screenResolutionForCamera = new Point();
+		screenResolutionForCamera.x = screenResolution.x;
+		screenResolutionForCamera.y = screenResolution.y;
+		if (screenResolution.x < screenResolution.y) {
+			screenResolutionForCamera.x = screenResolution.y;
+			screenResolutionForCamera.y = screenResolution.x;
+		}
 		Log.i(TAG, "Camera resolution: " + cameraResolution);
 	}
 

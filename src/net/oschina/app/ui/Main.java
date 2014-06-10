@@ -194,12 +194,16 @@ public class Main extends BaseActivity {
 
 	private TweetReceiver tweetReceiver;// 动弹发布接收器
 	private AppContext appContext;// 全局Context
+	
+	private DoubleClickExitHelper mDoubleClickExitHelper;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-
+		
+		mDoubleClickExitHelper = new DoubleClickExitHelper(this);
+		
 		// 注册广播接收器
 		tweetReceiver = new TweetReceiver();
 		IntentFilter filter = new IntentFilter();
@@ -2321,7 +2325,7 @@ public class Main extends BaseActivity {
 		boolean flag = true;
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			// 是否退出应用
-			UIHelper.Exit(this);
+			return mDoubleClickExitHelper.onKeyDown(keyCode, event);
 		} else if (keyCode == KeyEvent.KEYCODE_MENU) {
 			// 展示快捷栏&判断是否登录
 			UIHelper.showSettingLoginOrLogout(Main.this,

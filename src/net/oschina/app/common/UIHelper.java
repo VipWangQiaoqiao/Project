@@ -30,7 +30,7 @@ import net.oschina.app.bean.URLs;
 import net.oschina.app.ui.About;
 import net.oschina.app.ui.BaseActivity;
 import net.oschina.app.ui.BlogDetail;
-import net.oschina.app.ui.Capture;
+import net.oschina.app.ui.CaptureActivity;
 import net.oschina.app.ui.CommentPub;
 import net.oschina.app.ui.FeedBack;
 import net.oschina.app.ui.ImageDialog;
@@ -828,7 +828,7 @@ public class UIHelper {
 	 * @param context
 	 */
 	public static void showCapture(Context context) {
-		Intent intent = new Intent(context, Capture.class);
+		Intent intent = new Intent(context, CaptureActivity.class);
 		context.startActivity(intent);
 	}
 

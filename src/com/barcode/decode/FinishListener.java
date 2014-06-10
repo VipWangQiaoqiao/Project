@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.barcode.core;
+package com.barcode.decode;
 
 import android.app.Activity;
 import android.content.DialogInterface;
 
 /**
- * Simple listener used to exit the app in a few cases.
+ * 监听摄像头是否已被使用
  * 
  * @author Sean Owen
  */

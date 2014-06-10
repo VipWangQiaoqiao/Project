@@ -40,11 +40,9 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
-
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
@@ -75,7 +73,7 @@ import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+import android.annotation.SuppressLint;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.database.Cursor;
@@ -95,6 +93,7 @@ import android.webkit.CookieSyncManager;
  * @author ZhangJie (zhangjie2@staff.sina.com.cn)
  */
 
+@SuppressLint("DefaultLocale")
 public class Utility {
 
     private static WeiboParameters mRequestHeader = new WeiboParameters();
@@ -182,7 +181,8 @@ public class Utility {
         return sb.toString();
     }
 
-    public static String encodeUrl(WeiboParameters parameters) {
+    @SuppressWarnings("deprecation")
+	public static String encodeUrl(WeiboParameters parameters) {
         if (parameters == null) {
             return "";
         }
@@ -200,7 +200,8 @@ public class Utility {
         return sb.toString();
     }
 
-    public static Bundle decodeUrl(String s) {
+    @SuppressWarnings("deprecation")
+	public static Bundle decodeUrl(String s) {
         Bundle params = new Bundle();
         if (s != null) {
             String array[] = s.split("&");
@@ -543,7 +544,8 @@ public class Utility {
      * 
      * @return String : http response content
      */
-    private static String read(HttpResponse response) throws WeiboException {
+    @SuppressLint("DefaultLocale")
+	private static String read(HttpResponse response) throws WeiboException {
         String result = "";
         HttpEntity entity = response.getEntity();
         InputStream inputStream;
