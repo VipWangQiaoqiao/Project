@@ -13,6 +13,7 @@ import java.util.Map;
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
+import net.oschina.app.AppManager;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ListViewActiveAdapter;
 import net.oschina.app.adapter.ListViewBlogAdapter;
@@ -399,7 +400,7 @@ public class Main extends BaseActivity {
 				UIHelper.showSetting(Main.this);
 				break;
 			case QUICKACTION_EXIT:// 退出
-				UIHelper.Exit(Main.this);
+				AppManager.getAppManager().finishActivity(Main.this);
 				break;
 			}
 		}

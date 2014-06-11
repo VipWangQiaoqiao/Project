@@ -392,9 +392,11 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback,
 		if (flash.getTag() != null) {
 			cameraManager.setTorch(true);
 			flash.setTag(null);
+			flash.setBackgroundResource(R.drawable.flash_open);
 		} else {
 			cameraManager.setTorch(false);
 			flash.setTag("1");
+			flash.setBackgroundResource(R.drawable.flash_default);
 		}
 	}
 
