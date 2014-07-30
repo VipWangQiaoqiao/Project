@@ -776,8 +776,13 @@ public class TweetPub extends BaseActivity{
 		        	String attFormat = FileUtils.getFileFormat(theLarge);
 		        	if(!"photo".equals(MediaUtils.getContentType(attFormat)))
 		        	{
-		        		Toast.makeText(TweetPub.this, getString(R.string.choose_image), Toast.LENGTH_SHORT).show();
-		        		return;
+		        		runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+				        		Toast.makeText(TweetPub.this, getString(R.string.choose_image), Toast.LENGTH_SHORT).show();
+				        		return;
+							}
+						});
 		        	}
 		        	
 		        	//获取图片缩略图 只有Android2.1以上版本支持

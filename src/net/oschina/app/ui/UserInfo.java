@@ -352,7 +352,12 @@ public class UserInfo extends BaseActivity {
 						face.setImageBitmap(protraitBitmap);
 					}
 				} else if (msg.what == -1 && msg.obj != null) {
+					loading.setLoadText("上传出错·");
+					loading.hide();
 					((AppException) msg.obj).makeToast(UserInfo.this);
+				}else if(msg.what == -2){
+					loading.setLoadText("图像不存在，上传失败·");
+					loading.hide();
 				}
 			}
 		};
@@ -369,8 +374,13 @@ public class UserInfo extends BaseActivity {
 					protraitBitmap = ImageUtils.loadImgThumbnail(protraitPath,
 							200, 200);
 				} else {
-					loading.setLoadText("图像不存在，上传失败·");
-					loading.hide();
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							loading.setLoadText("图像不存在，上传失败·");
+							loading.hide();
+						}
+					});
 				}
 
 				if (protraitBitmap != null) {
@@ -388,8 +398,6 @@ public class UserInfo extends BaseActivity {
 						msg.what = 1;
 						msg.obj = res;
 					} catch (AppException e) {
-						loading.setLoadText("上传出错·");
-						loading.hide();
 						msg.what = -1;
 						msg.obj = e;
 					} catch (IOException e) {
@@ -397,8 +405,8 @@ public class UserInfo extends BaseActivity {
 					}
 					handler.sendMessage(msg);
 				} else {
-					loading.setLoadText("图像不存在，上传失败·");
-					loading.hide();
+					Message msg = new Message();
+					msg.what = -2;
 				}
 			};
 		}.start();

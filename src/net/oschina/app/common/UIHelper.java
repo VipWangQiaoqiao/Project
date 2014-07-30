@@ -472,6 +472,13 @@ public class UIHelper {
 	 */
 	public static void showShareDialog(final Activity context,
 			final String title, final String url) {
+		final String spiltUrl;
+		//判断分享的链接是否包含my
+		if(url.indexOf("my")>0){
+			spiltUrl = "http://m.oschina.net/" + url.substring(url.indexOf("blog"));
+		}else{
+			spiltUrl = "http://m.oschina.net/" + url.substring(22);
+		}
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setIcon(android.R.drawable.btn_star);
 		builder.setTitle(context.getString(R.string.share));
@@ -520,7 +527,7 @@ public class UIHelper {
 							QQWeiboHelper.shareToQQ(context, title, url);
 							break;
 						case 2:// 微信朋友圈
-							WXFriendsHelper.shareToWXFriends(context, title, url);
+							WXFriendsHelper.shareToWXFriends(context, title, spiltUrl);
 							break;
 						case 3:// 截图分享
 							addScreenShot(context, new OnScreenShotListener() {
@@ -541,7 +548,7 @@ public class UIHelper {
 							});
 							break;
 						case 4:// 更多
-							showShareMore(context, title, url);
+							showShareMore(context, title, spiltUrl);
 							break;
 						}
 					}
@@ -1635,7 +1642,7 @@ public class UIHelper {
 	/**
 	 * 添加网页的点击图片展示支持
 	 */
-	@SuppressLint("SetJavaScriptEnabled")
+	@SuppressLint({ "SetJavaScriptEnabled", "JavascriptInterface" })
 	public static void addWebImageShow(final Context cxt, WebView wv) {
 		wv.getSettings().setJavaScriptEnabled(true);
 		wv.addJavascriptInterface(new OnWebViewImageListener() {
