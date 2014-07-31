@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.regex.Pattern;
 
 /**
@@ -41,7 +42,7 @@ public class StringUtils {
 	};
 
 	/**
-	 * 将字符串转位日期类型
+	 * 将字符串转为日期类型
 	 * 
 	 * @param sdate
 	 * @return
@@ -61,7 +62,13 @@ public class StringUtils {
 	 * @return
 	 */
 	public static String friendly_time(String sdate) {
-		Date time = toDate(sdate);
+		Date time = null;
+		if (TimeZoneUtil.isInEasternEightZones()) {
+			time = toDate(sdate);
+		} else {
+			time = TimeZoneUtil.transformTime(toDate(sdate),
+					TimeZone.getTimeZone("GMT+08"), TimeZone.getDefault());
+		}
 		if (time == null) {
 			return "Unknown";
 		}
@@ -124,9 +131,10 @@ public class StringUtils {
 		}
 		return b;
 	}
-	
+
 	/**
 	 * 返回long类型的今天的日期
+	 * 
 	 * @return
 	 */
 	public static long getToday() {
@@ -221,9 +229,10 @@ public class StringUtils {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * 将一个InputStream流转换成字符串
+	 * 
 	 * @param is
 	 * @return
 	 */
