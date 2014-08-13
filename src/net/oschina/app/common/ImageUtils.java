@@ -35,6 +35,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.MediaStore.MediaColumns;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
@@ -99,13 +100,14 @@ public class ImageUtils {
 			bitmap.compress(CompressFormat.JPEG, quality, bos);
 			bos.flush();
 			bos.close();
-			if(ctx!=null){
+			if (ctx != null) {
 				scanPhoto(ctx, filePath);
 			}
 		}
 	}
-	
-	public static void saveBackgroundImage(Context ctx, String filePath, Bitmap bitmap, int quality) throws IOException{
+
+	public static void saveBackgroundImage(Context ctx, String filePath,
+			Bitmap bitmap, int quality) throws IOException {
 		if (bitmap != null) {
 			File file = new File(filePath.substring(0,
 					filePath.lastIndexOf(File.separator)));
@@ -117,7 +119,7 @@ public class ImageUtils {
 			bitmap.compress(CompressFormat.PNG, quality, bos);
 			bos.flush();
 			bos.close();
-			if(ctx!=null){
+			if (ctx != null) {
 				scanPhoto(ctx, filePath);
 			}
 		}
@@ -403,7 +405,7 @@ public class ImageUtils {
 		Bitmap thb_bitmap = zoomBitmap(cur_bitmap, new_img_size[0],
 				new_img_size[1]);
 		// 生成缩放后的图片文件
-		saveImageToSD(null,thumbfilePath, thb_bitmap, quality);
+		saveImageToSD(null, thumbfilePath, thb_bitmap, quality);
 	}
 
 	/**
@@ -471,25 +473,7 @@ public class ImageUtils {
 		int height = bitmap.getHeight();
 		int width = bitmap.getWidth();
 		float zoomScale;
-		/** 方式1 **/
-		// if(rWidth/rHeight>width/height){//以高为准
-		// zoomScale=((float) rHeight) / height;
-		// }else{
-		// //if(rWidth/rHeight<width/height)//以宽为准
-		// zoomScale=((float) rWidth) / width;
-		// }
-		/** 方式2 **/
-		// if(width*1.5 >= height) {//以宽为准
-		// if(width >= rWidth)
-		// zoomScale = ((float) rWidth) / width;
-		// else
-		// zoomScale = 1.0f;
-		// }else {//以高为准
-		// if(height >= rHeight)
-		// zoomScale = ((float) rHeight) / height;
-		// else
-		// zoomScale = 1.0f;
-		// }
+
 		/** 方式3 **/
 		if (width >= rWidth)
 			zoomScale = ((float) rWidth) / width;
@@ -704,5 +688,68 @@ public class ImageUtils {
 			return false;
 		}
 		return (b[0] == 0x42) && (b[1] == 0x4d);
+	}
+
+	/**
+	 * 获取图片路径 2014年8月12日
+	 * 
+	 * @param uri
+	 * @param cursor
+	 * @return E-mail:mr.huangwenwei@gmail.com
+	 */
+	public static String getImagePath(Uri uri, Activity context) {
+
+		String[] projection = { MediaColumns.DATA };
+		Cursor cursor = context.getContentResolver().query(uri, projection,
+				null, null, null);
+		if (cursor != null) {
+			cursor.moveToFirst();
+			int columIndex = cursor.getColumnIndexOrThrow(MediaColumns.DATA);
+			String ImagePath = cursor.getString(columIndex);
+			cursor.close();
+			return ImagePath;
+		}
+
+		return uri.toString();
+	}
+
+	static Bitmap bitmap = null;
+	/**
+	 *2014年8月13日
+	 *@param uri
+	 *@param context
+	 * E-mail:mr.huangwenwei@gmail.com
+	 */
+	public static Bitmap loadPicasaImageFromGalley(final Uri uri, final Activity context) {
+		
+		String[] projection = { MediaColumns.DATA, MediaColumns.DISPLAY_NAME };
+		Cursor cursor = context.getContentResolver().query(uri, projection,
+				null, null, null);
+		if (cursor != null) {
+			cursor.moveToFirst();
+
+			int columIndex = cursor.getColumnIndex(MediaColumns.DISPLAY_NAME);
+			if (columIndex != -1) {
+				new Thread(new Runnable() {
+
+					@Override
+					public void run() {
+						try {
+							bitmap = android.provider.MediaStore.Images.Media
+									.getBitmap(context.getContentResolver(),
+											uri);
+						} catch (FileNotFoundException e) {
+							e.printStackTrace();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+
+					}
+				}).start();
+			}
+			cursor.close();
+			return bitmap;
+		}else
+			return null;
 	}
 }

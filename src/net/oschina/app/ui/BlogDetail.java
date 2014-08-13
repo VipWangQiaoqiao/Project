@@ -215,7 +215,8 @@ public class BlogDetail extends BaseActivity {
 					imm.showSoftInput(v, 0);  
 		        }  
 		        else{  
-		            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);  
+		            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+		            hideEditor(v);
 		        }  
 			}
 		}); 
