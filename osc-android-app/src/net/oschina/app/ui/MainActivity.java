@@ -1,14 +1,13 @@
 package net.oschina.app.ui;
 
 import net.oschina.app.R;
-import net.oschina.app.base.BaseActivity;
 import net.oschina.app.interf.BaseViewInterface;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +20,7 @@ import android.widget.TabHost.TabSpec;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.widget.DrawerLayout;
 
+@SuppressLint("InflateParams")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class MainActivity extends ActionBarActivity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks, OnTabChangeListener, BaseViewInterface {
@@ -38,7 +38,7 @@ public class MainActivity extends ActionBarActivity implements
 	 * {@link #restoreActionBar()}.
 	 */
 	private CharSequence mTitle;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -121,9 +121,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
+		
 		int id = item.getItemId();
 		
 		return super.onOptionsItemSelected(item);
@@ -133,5 +131,4 @@ public class MainActivity extends ActionBarActivity implements
 	public void onTabChanged(String arg0) {
 		
 	}
-
 }

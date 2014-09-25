@@ -1,6 +1,7 @@
 package net.oschina.app.ui;
 
 import net.oschina.app.R;
+import net.oschina.app.base.BaseFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
@@ -24,13 +25,12 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 /**
- * Fragment used for managing interactions for and presentation of a navigation
- * drawer. See the <a href=
- * "https://developer.android.com/design/patterns/navigation-drawer.html#Interaction"
- * > design guidelines</a> for a complete explanation of the behaviors
- * implemented here.
+ * 侧滑菜单界面
+ * @author FireAnt（http://my.oschina.net/LittleDY）
+ * @created 2014年9月25日 下午6:00:05
+ *
  */
-public class NavigationDrawerFragment extends Fragment {
+public class NavigationDrawerFragment extends BaseFragment {
 
 	/**
 	 * Remember the position of the selected item.
@@ -68,9 +68,6 @@ public class NavigationDrawerFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// Read in the flag indicating whether or not the user has demonstrated
-		// awareness of the
-		// drawer. See PREF_USER_LEARNED_DRAWER for details.
 		SharedPreferences sp = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
 		mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
@@ -297,5 +294,23 @@ public class NavigationDrawerFragment extends Fragment {
 		 * Called when an item in the navigation drawer is selected.
 		 */
 		void onNavigationDrawerItemSelected(int position);
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void initView() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void initData() {
+		// TODO Auto-generated method stub
+		
 	}
 }
