@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+	
+    <string-array name="news_viewpage_arrays">
+        <item>最新资讯</item>
+        <item>最新博客</item>
+        <item>推荐阅读</item>
+    </string-array>
+    
+    <string-array name="tweets_viewpage_arrays">
+        <item>最新动弹</item>
+        <item>热门动弹</item>
+        <item>我的动弹</item>
+    </string-array>
+    
+    <string-array name="quests_viewpage_arrays">
+        <item>提问</item>
+        <item>分享</item>
+        <item>综合</item>
+        <item>职业</item>
+        <item>站务</item>
+    </string-array>
+    	
+</resources>
