@@ -1,7 +1,12 @@
 package net.oschina.app.base;
 
+import butterknife.ButterKnife;
 import net.oschina.app.R;
 import net.oschina.app.interf.BaseViewInterface;
+import net.oschina.app.ui.dialog.CommonToast;
+import net.oschina.app.ui.dialog.DialogControl;
+import net.oschina.app.ui.dialog.DialogHelper;
+import net.oschina.app.ui.dialog.WaitDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -19,17 +24,21 @@ import android.widget.TextView;
 
 /**
  * baseActionBar Activity
+ * 
  * @author FireAnt（http://my.oschina.net/LittleDY）
- * @created 2014年9月25日 上午11:30:15
- * 引用自：tonlin
+ * @created 2014年9月25日 上午11:30:15 引用自：tonlin
  */
-public abstract class BaseActivity extends ActionBarActivity implements View.OnClickListener, BaseViewInterface {
+public abstract class BaseActivity extends ActionBarActivity implements
+		DialogControl,View.OnClickListener, BaseViewInterface {
 	public static final String INTENT_ACTION_EXIT_APP = "INTENT_ACTION_EXIT_APP";
-
+	
+	private boolean _isVisible;
+	private WaitDialog _waitDialog;
+	
 	protected LayoutInflater mInflater;
 	private ActionBar mActionBar;
 	private TextView mTvActionTitle;
-	
+
 	// 退出广播
 	private BroadcastReceiver mExistReceiver = new BroadcastReceiver() {
 
@@ -58,6 +67,10 @@ public abstract class BaseActivity extends ActionBarActivity implements View.OnC
 
 		IntentFilter filter = new IntentFilter(INTENT_ACTION_EXIT_APP);
 		registerReceiver(mExistReceiver, filter);
+		// 通过注解绑定控件
+		ButterKnife.inject(this);
+		initView();
+		_isVisible = true;
 	}
 
 	@Override
@@ -177,5 +190,53 @@ public abstract class BaseActivity extends ActionBarActivity implements View.OnC
 	protected void onResume() {
 		super.onResume();
 	}
+	
+	public void showToast(int msgResid, int icon, int gravity) {
+		showToast(getString(msgResid), icon, gravity);
+	}
 
+	public void showToast(String message, int icon, int gravity) {
+		CommonToast toast = new CommonToast(this);
+		toast.setMessage(message);
+		toast.setMessageIc(icon);
+		toast.setLayoutGravity(gravity);
+		toast.show();
+	}
+
+	@Override
+	public WaitDialog showWaitDialog() {
+		return showWaitDialog(R.string.loading);
+	}
+
+	@Override
+	public WaitDialog showWaitDialog(int resid) {
+		return showWaitDialog(getString(resid));
+	}
+
+	@Override
+	public WaitDialog showWaitDialog(String message) {
+		if (_isVisible) {
+			if (_waitDialog == null) {
+				_waitDialog = DialogHelper.getWaitDialog(this, message);
+			}
+			if (_waitDialog != null) {
+				_waitDialog.setMessage(message);
+				_waitDialog.show();
+			}
+			return _waitDialog;
+		}
+		return null;
+	}
+
+	@Override
+	public void hideWaitDialog() {
+		if (_isVisible && _waitDialog != null) {
+			try {
+				_waitDialog.dismiss();
+				_waitDialog = null;
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+	}
 }

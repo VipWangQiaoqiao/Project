@@ -1,5 +1,6 @@
 package net.oschina.app.base;
 
+import butterknife.ButterKnife;
 import net.oschina.app.AppContext;
 import net.oschina.app.interf.BaseFragmentInterface;
 import android.os.Bundle;
@@ -36,6 +37,8 @@ public abstract class BaseFragment extends Fragment implements android.view.View
 			Bundle savedInstanceState) {
 		this.mInflater = inflater;
 		View view = inflater.inflate(getLayoutId(), null);
+		// 通过注解绑定控件
+		ButterKnife.inject(this, view);
 		initView();
 		return view;
 	}

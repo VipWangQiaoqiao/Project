@@ -19,7 +19,6 @@
     <color name="grayslate">#708090</color>
     <color name="lightblue">#0083FF</color>
     
-    
     <color name="main_green">#15A230</color>
     <color name="main_gray">#9A9A9A</color>
     <color name="main_black">#353535</color>
@@ -34,5 +33,13 @@
     
     <color name="actionbar_item_background_normal">@color/transparent</color>
     <color name="actionbar_item_background_pressed">#0b751e</color>
+    
+    <color name="ui_dialog_divider">@color/list_divider_color</color>
+    <color name="ui_dialog_list_text">#5E5E5E</color>
+    <color name="text_dark">#af000000</color>
+    <color name="text_light">#3f000000</color>
+    <color name="light_gray">#1a000000</color>
+    <color name="lightest_gray">#0a000000</color>
+    <color name="bg_touch">@color/lightest_gray</color>
 
 </resources>

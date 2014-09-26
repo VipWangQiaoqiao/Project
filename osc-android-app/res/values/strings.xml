@@ -13,5 +13,20 @@
     <string name="title_section3">Section 3</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    
+    <string name="loading">加载中…</string>
+    <string name="loading_no_more">没有更多数据.</string>
+    
+    <string name="unlogin">未登录</string>
+    <string name="unlogin_tip">您还未登录\r\n点击屏幕登录</string>
+    <string name="hint_username">输入账号/邮箱</string>
+    <string name="hint_password">密码</string>
+    <string name="login">登录</string>
+    <string name="tip_please_input_username">请输入用户名</string>
+    <string name="tip_illegal_email">请输入正确的email地址</string>
+	<string name="tip_please_input_password">请输入密码</string>
+    <string name="progress_login">正在登录…</string>
+    <string name="tip_login_error_for_network">对不起,无法登录.</string>
+    <string name="tip_no_internet">当前没有可用的网络链接</string>
 
 </resources>

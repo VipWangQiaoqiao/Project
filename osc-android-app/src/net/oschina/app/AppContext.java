@@ -1,6 +1,10 @@
 package net.oschina.app;
 
 import java.util.Properties;
+import java.util.UUID;
+
+import net.oschina.app.base.BaseApplication;
+import net.oschina.app.util.StringUtils;
 import android.app.Application;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -12,7 +16,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
  * @version 1.0
  * @created 2014-04-22
  */
-public class AppContext extends Application {
+public class AppContext extends BaseApplication {
 
 	// 手机网络类型
 	public static final int NETTYPE_WIFI = 0x01;
@@ -22,20 +26,24 @@ public class AppContext extends Application {
 	public static final int PAGE_SIZE = 20;// 默认分页大小
 	private static final int CACHE_TIME = 60 * 60000;// 缓存失效时间
 	
+	private static AppContext instance;
+	
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		// 注册App异常崩溃处理器
 		Thread.setDefaultUncaughtExceptionHandler(AppException
 				.getAppExceptionHandler(this));
+		instance = this;
 		init();
 	}
 	
 	/**
-	 * 初始化Application
+	 * 获得当前app运行的AppContext
+	 * @return
 	 */
-	private void init() {
-		
+	public static AppContext getInstance() {
+		return instance;
 	}
 	
 	public boolean containsProperty(String key) {
@@ -62,6 +70,20 @@ public class AppContext extends Application {
 
 	public void removeProperty(String... key) {
 		AppConfig.getAppConfig(this).remove(key);
+	}
+	
+	/**
+	 * 获取App唯一标识
+	 * 
+	 * @return
+	 */
+	public String getAppId() {
+		String uniqueID = getProperty(AppConfig.CONF_APP_UNIQUEID);
+		if (StringUtils.isEmpty(uniqueID)) {
+			uniqueID = UUID.randomUUID().toString();
+			setProperty(AppConfig.CONF_APP_UNIQUEID, uniqueID);
+		}
+		return uniqueID;
 	}
 
 	/**
