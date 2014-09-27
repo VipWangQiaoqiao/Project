@@ -36,11 +36,7 @@ public abstract class BaseFragment extends Fragment implements android.view.View
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		this.mInflater = inflater;
-		View view = inflater.inflate(getLayoutId(), null);
-		// 通过注解绑定控件
-		ButterKnife.inject(this, view);
-		initView();
-		return view;
+		return super.onCreateView(inflater, container, savedInstanceState);
 	}
 
 	@Override
@@ -64,5 +60,9 @@ public abstract class BaseFragment extends Fragment implements android.view.View
 	
 	protected View inflateView(int resId) {
 		return this.mInflater.inflate(resId, null);
+	}
+	
+	protected void initView(View view) {
+		
 	}
 }

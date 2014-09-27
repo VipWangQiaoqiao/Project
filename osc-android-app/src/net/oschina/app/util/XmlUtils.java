@@ -28,7 +28,7 @@ public class XmlUtils {
      */
     @SuppressWarnings("unchecked")
 	public static <T> T toBean(Class<T> type, InputStream is) {
-    	TLog.log(TAG, "开始解析xml：");
+    	TLog.log(TAG, "开始解析xml");
     	XStream xmStream = new XStream(new DomDriver("utf-8"));
     	xmStream.processAnnotations(type);
     	T obj = null;

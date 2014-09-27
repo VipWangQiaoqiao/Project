@@ -41,5 +41,11 @@
     <color name="light_gray">#1a000000</color>
     <color name="lightest_gray">#0a000000</color>
     <color name="bg_touch">@color/lightest_gray</color>
+    
+    <!-- 下拉刷新时，颜色值 -->
+    <color name="swiperefresh_color1">#ff00ddff</color>
+    <color name="swiperefresh_color2">#ffffbb33</color>
+    <color name="swiperefresh_color3">#ffff4444</color>
+    <color name="swiperefresh_color4">#ffaa66cc</color>
 
 </resources>

@@ -400,8 +400,6 @@ public class FileUtils {
 			checker.checkDelete(newPath.toString());
 			if (newPath.isDirectory()) {
 				String[] listfile = newPath.list();
-				// delete all files within the specified directory and then
-				// delete the directory
 				try {
 					for (int i = 0; i < listfile.length; i++) {
 						File deletedFile = new File(newPath.toString() + "/"
