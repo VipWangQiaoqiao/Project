@@ -38,10 +38,6 @@ public class BaseApplication extends Application {
 		super.onCreate();
 		_context = getApplicationContext();
 		_resource = _context.getResources();
-		init();
-	}
-
-	protected void init() {
 	}
 
 	public static synchronized BaseApplication context() {

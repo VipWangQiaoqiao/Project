@@ -8,7 +8,6 @@ import java.util.Map;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.api.ApiHttpClient;
-import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Tweet;
 import android.text.TextUtils;
 
@@ -16,7 +15,24 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 public class OSChinaApi {
-
+	
+	/**
+	 * 登陆
+	 * @param username
+	 * @param password
+	 * @param handler
+	 */
+	public static void login(String username, String password,
+			AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("username", username);
+		params.put("pwd", password);
+		params.put("keep_login", 1);
+		
+		String loginurl = "action/api/login_validate";
+		ApiHttpClient.post(loginurl, params, handler);
+	}
+	
 	/**
 	 * 获取新闻列表
 	 * 
@@ -363,19 +379,6 @@ public class OSChinaApi {
 		params.put("pageIndex", pageIndex);
 		params.put("pageSize", AppContext.PAGE_SIZE);
 		ApiHttpClient.get("action/api/search_list", params, handler);
-	}
-
-	public static void report(Report report, AsyncHttpResponseHandler handler) {
-		RequestParams params = new RequestParams();
-		params.put("obj_id", report.getReportId());
-		params.put("url", report.getLinkAddress());
-		params.put("obj_type", report.getReason());
-		if (!TextUtils.isEmpty(report.getOtherReason())) {
-			params.put("memo", report.getOtherReason());
-		} else {
-			params.put("memo", "其他原因");
-		}
-		ApiHttpClient.post("action/communityManage/report", params, handler);
 	}
 
 	public static void publicMessage(int uid, int receiver, String content,

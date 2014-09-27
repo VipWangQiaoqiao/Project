@@ -39,6 +39,12 @@ public class WaitDialog extends Dialog {
 			return true;
 		}
 	}
+	
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		this.dismiss();
+	}
 
 	public static void hide(Context context) {
 		if (context instanceof DialogControl)

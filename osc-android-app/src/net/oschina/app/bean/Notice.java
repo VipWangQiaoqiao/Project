@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 import net.oschina.app.AppException;
 
 /**
@@ -13,6 +15,7 @@ import net.oschina.app.AppException;
  * @created 2012-3-21
  */
 @SuppressWarnings("serial")
+@XStreamAlias("notice")
 public class Notice implements Serializable {
 	
 	public final static String UTF8 = "UTF-8";
@@ -22,10 +25,17 @@ public class Notice implements Serializable {
 	public final static int	TYPE_MESSAGE = 2;
 	public final static int	TYPE_COMMENT = 3;
 	public final static int	TYPE_NEWFAN = 4;
-
+	
+	@XStreamAlias("atmeCount")
 	private int atmeCount;
+	
+	@XStreamAlias("msgCount")
 	private int msgCount;
+	
+	@XStreamAlias("reviewCount")
 	private int reviewCount;
+	
+	@XStreamAlias("newFansCount")
 	private int newFansCount;
 	
 	public int getAtmeCount() {

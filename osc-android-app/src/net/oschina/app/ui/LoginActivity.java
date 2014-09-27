@@ -21,13 +21,16 @@ import android.widget.EditText;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.ApiHttpClient;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseActivity;
+import net.oschina.app.bean.LoginUserBean;
 import net.oschina.app.bean.Result;
-import net.oschina.app.bean.User;
+import net.oschina.app.bean.UserInformation;
 import net.oschina.app.util.SimpleTextWatcher;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.TLog;
+import net.oschina.app.util.XmlUtils;
 
 /**
  * @author FireAnt（http://my.oschina.net/LittleDY）
@@ -127,6 +130,7 @@ public class LoginActivity extends BaseActivity {
 		mPassword = mEtPassword.getText().toString();
 		
 		showWaitDialog(R.string.progress_login);
+		OSChinaApi.login(mUserName, mPassword, mHandler);
 	}
 	
 	private AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
@@ -150,18 +154,16 @@ public class LoginActivity extends BaseActivity {
 					ApiHttpClient.setCookie(ApiHttpClient.getCookie(AppContext
 							.getInstance()));
 				}
-				User user = User.parse(new ByteArrayInputStream(arg2));
-				user.setAccount(mUserName);
-				user.setPwd(mPassword);
-				user.setRememberMe(false);
-				Result res = user.getValidate();
+				LoginUserBean user = XmlUtils.toBean(LoginUserBean.class, new ByteArrayInputStream(arg2));
+				TLog.log(TAG, "name" + user.getUser().getName());
+				Result res = user.getResult();
 				if (res.OK()) {
 					// 保存登录信息
-					//AppContext.getInstance().saveLoginInfo(user);
+					AppContext.getInstance().saveLoginInfo(user.getUser());
 					hideWaitDialog();
 					handleLoginSuccess();
 				} else {
-					//AppContext.getInstance().cleanLoginInfo();
+					AppContext.getInstance().cleanLoginInfo();
 					hideWaitDialog();
 					AppContext.showToast(res.getErrorMessage());
 				}

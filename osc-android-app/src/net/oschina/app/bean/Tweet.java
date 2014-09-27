@@ -23,6 +23,7 @@ import android.util.Xml;
  * @changed 2014-01-21
  * @difference 1.添加语音动弹属性
  */
+@SuppressWarnings("serial")
 public class Tweet extends Entity implements Parcelable {
 
 	public final static String NODE_ID = "id";
@@ -175,7 +176,7 @@ public class Tweet extends Entity implements Parcelable {
 		// 获得XmlPullParser解析器
 		XmlPullParser xmlParser = Xml.newPullParser();
 		try {
-			xmlParser.setInput(inputStream, UTF8);
+			xmlParser.setInput(inputStream, "UTF8");
 			// 获得解析到的事件类别，这里有开始文档，结束文档，开始标签，结束标签，文本等等事件。
 			int evtType = xmlParser.getEventType();
 			// 一直循环，直到文档结束

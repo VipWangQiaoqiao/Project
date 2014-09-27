@@ -3,9 +3,15 @@ package net.oschina.app;
 import java.util.Properties;
 import java.util.UUID;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.PersistentCookieStore;
+
+import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.base.BaseApplication;
+import net.oschina.app.bean.UserInformation;
+import net.oschina.app.util.CyptoUtils;
+import net.oschina.app.util.FileUtils;
 import net.oschina.app.util.StringUtils;
-import android.app.Application;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 
@@ -28,6 +34,10 @@ public class AppContext extends BaseApplication {
 	
 	private static AppContext instance;
 	
+	private int loginUid;
+	
+	private boolean login;
+	
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -36,6 +46,15 @@ public class AppContext extends BaseApplication {
 				.getAppExceptionHandler(this));
 		instance = this;
 		init();
+	}
+	
+	private void init() {
+		// 初始化网络请求
+		AsyncHttpClient client = new AsyncHttpClient();
+		PersistentCookieStore myCookieStore = new PersistentCookieStore(this);
+		client.setCookieStore(myCookieStore);
+		ApiHttpClient.setHttpClient(client);
+		ApiHttpClient.setCookie(ApiHttpClient.getCookie(this));
 	}
 	
 	/**
@@ -101,6 +120,45 @@ public class AppContext extends BaseApplication {
 		if (info == null)
 			info = new PackageInfo();
 		return info;
+	}
+	
+	/**
+	 * 保存登录信息
+	 * 
+	 * @param username
+	 * @param pwd
+	 */
+	public void saveLoginInfo(final UserInformation user) {
+		this.loginUid = user.getUid();
+		this.login = true;
+		setProperties(new Properties() {
+			{
+				setProperty("user.uid", String.valueOf(user.getUid()));
+				setProperty("user.name", user.getName());
+				setProperty("user.face", FileUtils.getFileName(user.getPortrait()));// 用户头像-文件名
+				setProperty("user.account", user.getAccount());
+				setProperty("user.pwd",
+						CyptoUtils.encode("oschinaApp", user.getPwd()));
+				setProperty("user.location", user.getLocation());
+				setProperty("user.followers",
+						String.valueOf(user.getFollowers()));
+				setProperty("user.fans", String.valueOf(user.getFans()));
+				setProperty("user.score", String.valueOf(user.getScore()));
+				setProperty("user.isRememberMe",
+						String.valueOf(user.isRememberMe()));// 是否记住我的信息
+			}
+		});
+	}
+
+	/**
+	 * 清除登录信息
+	 */
+	public void cleanLoginInfo() {
+		this.loginUid = 0;
+		this.login = false;
+		removeProperty("user.uid", "user.name", "user.face", "user.account",
+				"user.pwd", "user.location", "user.followers", "user.fans",
+				"user.score", "user.isRememberMe");
 	}
 
 }
