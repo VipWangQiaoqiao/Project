@@ -138,6 +138,8 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 	// 下拉刷新数据
 	@Override
 	public void onRefresh() {
+		// 设置顶部正在刷新
+		setSwipeRefreshLoadingState();
 		mCurrentPage = 0;
 		mState = STATE_REFRESH;
 		requestData(true);
@@ -298,7 +300,25 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 	
 	// 完成刷新
 	protected void executeOnLoadFinish() {
+		setSwipeRefreshLoadedState();
 		mState = STATE_NONE;
+	}
+	
+	/** 设置顶部正在加载的状态 */
+	private void setSwipeRefreshLoadingState() {
+		if (mSwipeRefreshLayout != null) {
+			mSwipeRefreshLayout.setRefreshing(true);
+			// 防止多次重复刷新
+			mSwipeRefreshLayout.setEnabled(false);
+		}
+	}
+	
+	/** 设置顶部加载完毕的状态 */
+	private void setSwipeRefreshLoadedState() {
+		if (mSwipeRefreshLayout != null) {
+			mSwipeRefreshLayout.setRefreshing(false);
+			mSwipeRefreshLayout.setEnabled(true);
+		}
 	}
 
 	private void executeParserTask(byte[] data) {

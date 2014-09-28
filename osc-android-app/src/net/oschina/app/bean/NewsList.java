@@ -23,10 +23,10 @@ public class NewsList extends Entity implements ListEntity {
 	@XStreamAlias("catalog")
 	private int catalog;
 	
-	@XStreamAlias("pageSize")
+	@XStreamAlias("pagesize")
 	private int pageSize;
 	
-	@XStreamAlias("newsCount")
+	@XStreamAlias("newscount")
 	private int newsCount;
 	
 	@XStreamAlias("newslist")

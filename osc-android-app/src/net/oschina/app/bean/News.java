@@ -1,33 +1,25 @@
 package net.oschina.app.bean;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
-import android.util.Xml;
-
 /**
- * 新闻实体类
- * @author liux (http://my.oschina.net/liux)
- * @version 1.0
- * @created 2012-3-21
+ * 新闻、软件、帖子、博客实体类
+ * @author FireAnt（http://my.oschina.net/LittleDY）
+ * @created 2014年9月28日 上午10:16:59
+ *
  */
 @SuppressWarnings("serial")
 @XStreamAlias("news")
-public class News implements Serializable {
+public class News extends Entity {
 	
 	public final static int NEWSTYPE_NEWS = 0x00;//0 新闻
 	public final static int NEWSTYPE_SOFTWARE = 0x01;//1 软件
 	public final static int NEWSTYPE_POST = 0x02;//2 帖子
 	public final static int NEWSTYPE_BLOG = 0x03;//3 博客
-
+	
 	@XStreamAlias("title")
 	private String title;
 	
@@ -58,11 +50,19 @@ public class News implements Serializable {
 	@XStreamAlias("favorite")
 	private int favorite;
 	
-	@XStreamAlias("newtype")
-	private NewsType newType;
+	@XStreamAlias("newstype")
+	private NewsType newsType;
 	
 	@XStreamAlias("news")
 	private List<Relative> relatives;
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public String getTitle() {
 		return title;
@@ -145,11 +145,11 @@ public class News implements Serializable {
 	}
 
 	public NewsType getNewType() {
-		return newType;
+		return newsType;
 	}
 
 	public void setNewType(NewsType newType) {
-		this.newType = newType;
+		this.newsType = newType;
 	}
 
 	public List<Relative> getRelatives() {
@@ -159,7 +159,8 @@ public class News implements Serializable {
 	public void setRelatives(List<Relative> relatives) {
 		this.relatives = relatives;
 	}
-
+	
+	@XStreamAlias("newstype")
 	public class NewsType implements Serializable{
 		@XStreamAlias("type")
 		public int type;
@@ -187,6 +188,7 @@ public class News implements Serializable {
 		}
 	} 
 	
+	@XStreamAlias("relative")
 	public static class Relative implements Serializable{
 		@XStreamAlias("title")
 		public String title;
