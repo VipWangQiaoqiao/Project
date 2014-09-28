@@ -128,6 +128,7 @@ public class AppContext extends BaseApplication {
 	 * @param username
 	 * @param pwd
 	 */
+	@SuppressWarnings("serial")
 	public void saveLoginInfo(final UserInformation user) {
 		this.loginUid = user.getUid();
 		this.login = true;
@@ -159,6 +160,14 @@ public class AppContext extends BaseApplication {
 		removeProperty("user.uid", "user.name", "user.face", "user.account",
 				"user.pwd", "user.location", "user.followers", "user.fans",
 				"user.score", "user.isRememberMe");
+	}
+	
+	public int getLoginUid() {
+		return loginUid;
+	}
+
+	public boolean isLogin() {
+		return login;
 	}
 
 }

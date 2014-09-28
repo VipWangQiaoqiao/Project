@@ -1,7 +1,10 @@
 package net.oschina.app.ui;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import net.oschina.app.R;
 import net.oschina.app.interf.BaseViewInterface;
+import net.oschina.app.widget.MyFragmentTabHost;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.annotation.SuppressLint;
@@ -14,16 +17,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabContentFactory;
 import android.widget.TabHost.TabSpec;
-import android.support.v4.app.FragmentTabHost;
 import android.support.v4.widget.DrawerLayout;
 
 @SuppressLint("InflateParams")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class MainActivity extends ActionBarActivity implements
-		NavigationDrawerFragment.NavigationDrawerCallbacks, OnTabChangeListener, BaseViewInterface {
+		NavigationDrawerFragment.NavigationDrawerCallbacks, OnTabChangeListener, BaseViewInterface, 
+		View.OnClickListener {
 
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
@@ -31,7 +35,8 @@ public class MainActivity extends ActionBarActivity implements
 	 */
 	private NavigationDrawerFragment mNavigationDrawerFragment;
 	
-	private FragmentTabHost mTabHost;
+	@InjectView(android.R.id.tabhost)
+	MyFragmentTabHost mTabHost;
 	
 	/**
 	 * Used to store the last screen title. For use in
@@ -39,10 +44,14 @@ public class MainActivity extends ActionBarActivity implements
 	 */
 	private CharSequence mTitle;
 	
+	@InjectView(R.id.quick_option_iv)
+	View mAddBt;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		ButterKnife.inject(this);
 		initView();
 	}
 	
@@ -56,13 +65,15 @@ public class MainActivity extends ActionBarActivity implements
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
 		
-		mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
 		mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
 		if (android.os.Build.VERSION.SDK_INT > 10) {
 			mTabHost.getTabWidget().setShowDividers(0);
 		}
 
 		initTabs();
+		
+		// 中间按键图片触发
+		mAddBt.setOnClickListener(this);
 
 		mTabHost.setCurrentTab(0);
 		mTabHost.setOnTabChangedListener(this);
@@ -79,11 +90,15 @@ public class MainActivity extends ActionBarActivity implements
 		for (int i = 0; i < size; i++) {
 			MainTab mainTab = tabs[i];
 			TabSpec tab = mTabHost.newTabSpec(getString(mainTab.getResName()));
-			
 			View indicator = LayoutInflater.from(getApplicationContext()).inflate(R.layout.tab_indicator, null);
 			ImageView icon = (ImageView) indicator.findViewById(R.id.tab_icon);
 			icon.setImageResource(mainTab.getResIcon());
 			TextView title = (TextView) indicator.findViewById(R.id.tab_titile);
+			if (i == 2) {
+				title.setVisibility(View.GONE);
+				icon.setVisibility(View.GONE);
+				mTabHost.setNoTabChangedTag(getString(mainTab.getResName()));
+			}
 			title.setText(getString(mainTab.getResName()));
 			tab.setIndicator(indicator);
 			tab.setContent(new TabContentFactory() {
@@ -93,9 +108,10 @@ public class MainActivity extends ActionBarActivity implements
 					return new View(MainActivity.this);
 				}
 			});
-
+			
 			mTabHost.addTab(tab, mainTab.getClz(), null);
 		}
+		
 	}
 
 	@Override
@@ -128,7 +144,33 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	@Override
-	public void onTabChanged(String arg0) {
+	public void onTabChanged(String tabId) {
+		final int size = mTabHost.getTabWidget().getTabCount();
+		for (int i = 0; i < size; i++) {
+			View v = mTabHost.getTabWidget().getChildAt(i);
+			if (i == mTabHost.getCurrentTab()) {
+				v.findViewById(R.id.tab_icon).setSelected(true);
+				v.findViewById(R.id.tab_titile).setSelected(true);
+			} else {
+				v.findViewById(R.id.tab_icon).setSelected(false);
+				v.findViewById(R.id.tab_titile).setSelected(false);
+			}
+		}
+		supportInvalidateOptionsMenu();
+	}
+
+	@Override
+	public void onClick(View v) {
+		int id = v.getId();
+		switch (id) {
+		// 点击了快速操作按钮
+		case R.id.quick_option_iv:
+			Toast.makeText(MainActivity.this, "点击了快速操作按钮", Toast.LENGTH_SHORT).show();
+			break;
+
+		default:
+			break;
+		}
 		
 	}
 }
