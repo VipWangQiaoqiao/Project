@@ -1,5 +1,7 @@
 package net.oschina.app.interf;
 
+import android.view.View;
+
 
 /**
  * 基类fragment实现接口
@@ -9,7 +11,7 @@ package net.oschina.app.interf;
  */
 public interface BaseFragmentInterface {
 	
-	public void initView();
+	public void initView(View view);
 	
 	public void initData();
 }

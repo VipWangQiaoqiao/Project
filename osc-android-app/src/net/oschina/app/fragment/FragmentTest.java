@@ -33,7 +33,7 @@ public class FragmentTest extends BaseFragment {
 	}
 
 	@Override
-	public void initView() {
+	public void initView(View view) {
 		// TODO Auto-generated method stub
 
 	}

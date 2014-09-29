@@ -79,7 +79,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 	}
 
 	@Override
-	protected void initView(View view) {
+	public void initView(View view) {
 		
 		mSwipeRefreshLayout.setOnRefreshListener(this);
 		mSwipeRefreshLayout.setColorSchemeResources(R.color.swiperefresh_color1,

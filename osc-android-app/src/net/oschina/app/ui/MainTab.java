@@ -17,10 +17,10 @@ public enum MainTab {
 	QUICK(2, R.string.main_tab_name_quick, R.drawable.tab_icon_new,
 			Fragment.class),
 
-	QUESTION(3, R.string.main_tab_name_quest, R.drawable.tab_icon_new,
+	QUESTION(3, R.string.main_tab_name_question, R.drawable.tab_icon_new,
 			QuestViewPagerFragment.class),
 
-	FRIENDS(4, R.string.main_tab_name_friends, R.drawable.tab_icon_new,
+	EXPLORE(4, R.string.main_tab_name_explore, R.drawable.tab_icon_new,
 			Fragment.class);
 
 	private int idx;

@@ -77,6 +77,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
 	protected void onDestroy() {
 		unregisterReceiver(mExistReceiver);
 		mExistReceiver = null;
+		ButterKnife.reset(this);
 		super.onDestroy();
 	}
 

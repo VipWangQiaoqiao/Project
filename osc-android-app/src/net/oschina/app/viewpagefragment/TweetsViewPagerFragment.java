@@ -34,7 +34,7 @@ public class TweetsViewPagerFragment extends BaseViewPagerFragment {
 	}
 
 	@Override
-	public void initView() {
+	public void initView(View view) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -1,12 +1,14 @@
 package net.oschina.app.ui;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.content.SharedPreferences;
@@ -18,10 +20,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
 /**
@@ -30,7 +30,7 @@ import android.widget.Toast;
  * @created 2014年9月25日 下午6:00:05
  *
  */
-public class NavigationDrawerFragment extends BaseFragment {
+public class NavigationDrawerFragment extends BaseFragment implements OnClickListener {
 
 	/**
 	 * Remember the position of the selected item.
@@ -54,15 +54,33 @@ public class NavigationDrawerFragment extends BaseFragment {
 	private ActionBarDrawerToggle mDrawerToggle;
 
 	private DrawerLayout mDrawerLayout;
-	private ListView mDrawerListView;
+	private View mDrawerListView;
 	private View mFragmentContainerView;
 
 	private int mCurrentSelectedPosition = 0;
 	private boolean mFromSavedInstanceState;
 	private boolean mUserLearnedDrawer;
-
-	public NavigationDrawerFragment() {
-	}
+	
+	@InjectView(R.id.menu_item_userinfo)
+	View mMenu_item_userinfo;
+	
+	@InjectView(R.id.menu_item_team)
+	View mMenu_item_team;
+	
+	@InjectView(R.id.menu_item_opensoft)
+	View mMenu_item_opensoft;
+	
+	@InjectView(R.id.menu_item_note)
+	View mMenu_item_note;
+	
+	@InjectView(R.id.menu_item_bookmarks)
+	View mMenu_item_bookmarks;
+	
+	@InjectView(R.id.menu_item_setting)
+	View mMenu_item_setting;
+	
+	@InjectView(R.id.menu_item_exit)
+	View mMenu_item_exit;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -81,6 +99,12 @@ public class NavigationDrawerFragment extends BaseFragment {
 		// Select either the default item (0) or the last selected item.
 		selectItem(mCurrentSelectedPosition);
 	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		ButterKnife.reset(this);
+	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -93,24 +117,33 @@ public class NavigationDrawerFragment extends BaseFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		mDrawerListView = (ListView) inflater.inflate(
+		mDrawerListView = inflater.inflate(
 				R.layout.fragment_navigation_drawer, container, false);
-		mDrawerListView
-				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-					@Override
-					public void onItemClick(AdapterView<?> parent, View view,
-							int position, long id) {
-						selectItem(position);
-					}
-				});
-		mDrawerListView.setAdapter(new ArrayAdapter<String>(getActionBar()
-				.getThemedContext(), android.R.layout.simple_list_item_1,
-				android.R.id.text1, new String[] {
-						getString(R.string.title_section1),
-						getString(R.string.title_section2),
-						getString(R.string.title_section3), }));
-		mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+		ButterKnife.inject(this, mDrawerListView);
+		initView(mDrawerListView);
 		return mDrawerListView;
+	}
+	
+	@Override
+	public void onClick(View v) {
+		mDrawerLayout.closeDrawer(mFragmentContainerView);
+		Toast.makeText(getActivity(), "点击到了", Toast.LENGTH_LONG).show();
+	}
+
+	public void initView(View view) {
+		
+		mMenu_item_userinfo.setOnClickListener(this);
+		mMenu_item_team.setOnClickListener(this);
+		mMenu_item_opensoft.setOnClickListener(this);
+		mMenu_item_note.setOnClickListener(this);
+		mMenu_item_bookmarks.setOnClickListener(this);
+		
+		mMenu_item_setting.setOnClickListener(this);
+		mMenu_item_exit.setOnClickListener(this);
+	}
+
+	public void initData() {
+		
 	}
 
 	public boolean isDrawerOpen() {
@@ -209,9 +242,6 @@ public class NavigationDrawerFragment extends BaseFragment {
 
 	private void selectItem(int position) {
 		mCurrentSelectedPosition = position;
-		if (mDrawerListView != null) {
-			mDrawerListView.setItemChecked(position, true);
-		}
 		if (mDrawerLayout != null) {
 			mDrawerLayout.closeDrawer(mFragmentContainerView);
 		}
@@ -294,23 +324,5 @@ public class NavigationDrawerFragment extends BaseFragment {
 		 * Called when an item in the navigation drawer is selected.
 		 */
 		void onNavigationDrawerItemSelected(int position);
-	}
-
-	@Override
-	public void onClick(View v) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void initView() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void initData() {
-		// TODO Auto-generated method stub
-		
 	}
 }

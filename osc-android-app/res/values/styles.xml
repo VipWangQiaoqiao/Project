@@ -48,6 +48,45 @@
         <item name="windowActionBarOverlay">true</item>
     </style>
     
+    <style name="wrap_view">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    
+    <style name="fullline_view">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    
+    <!-- app main menu style start! -->
+    <!-- 菜单layout的样式 -->
+    <style name="MenuItemLayoutStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">55dip</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:paddingLeft">15dip</item>
+        <item name="android:paddingRight">15dip</item>
+        <item name="android:background">@drawable/list_item_background</item>
+    </style>
+
+    <!-- 菜单ImageView的样式 -->
+    <style name="MenuItemImageViewStyle">
+        <item name="android:layout_width">18dip</item>
+        <item name="android:layout_height">18dip</item>
+        <item name="android:layout_marginRight">15dip</item>
+    </style>
+
+    <!-- 菜单TextView的样式 -->
+    <style name="MenuItemTextViewStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#dcdcdc</item>
+        <item name="android:textSize">@dimen/text_size_20</item>
+    </style>
+    <!-- app main menu style end! -->
+    
     <!-- viewpage文本  滑动标签标题 -->
     <style name="viewpage_slidingTabTitle">
         <item name="android:layout_width">wrap_content</item>
@@ -59,16 +98,6 @@
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/viewpage_selector_slide_title</item>
         <item name="android:textSize">17sp</item>
-    </style>
-    
-    <style name="wrap_view">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-    </style>
-    
-    <style name="fullline_view">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
     </style>
     
     <style name="text_base" parent="@style/wrap_view">
@@ -223,7 +252,7 @@
 
     <style name="section_item_divider_vertical">
         <item name="android:background">@color/ui_dialog_divider</item>
-        <item name="android:layout_width">0.0px</item>
+        <item name="android:layout_width">0.1px</item>
         <item name="android:layout_height">fill_parent</item>
     </style>
 

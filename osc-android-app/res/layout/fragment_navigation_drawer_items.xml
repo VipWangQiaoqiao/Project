@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/menu_item_team"
+        style="@style/MenuItemLayoutStyle" >
+
+        <ImageView
+            style="@style/MenuItemImageViewStyle"
+            android:background="@drawable/tab_icon_new"
+            android:contentDescription="@null" />
+
+        <TextView
+            style="@style/MenuItemTextViewStyle"
+            android:text="@string/menu_myteam" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/menu_item_opensoft"
+        style="@style/MenuItemLayoutStyle" >
+
+        <ImageView
+            style="@style/MenuItemImageViewStyle"
+            android:background="@drawable/tab_icon_new"
+            android:contentDescription="@null" />
+
+        <TextView
+            style="@style/MenuItemTextViewStyle"
+            android:text="@string/menu_opensoft" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/menu_item_note"
+        style="@style/MenuItemLayoutStyle" >
+
+        <ImageView
+            style="@style/MenuItemImageViewStyle"
+            android:background="@drawable/tab_icon_new"
+            android:contentDescription="@null" />
+
+        <TextView
+            style="@style/MenuItemTextViewStyle"
+            android:text="@string/menu_note" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/menu_item_bookmarks"
+        style="@style/MenuItemLayoutStyle" >
+
+        <ImageView
+            style="@style/MenuItemImageViewStyle"
+            android:background="@drawable/tab_icon_new"
+            android:contentDescription="@null" />
+
+        <TextView
+            style="@style/MenuItemTextViewStyle"
+            android:text="@string/menu_bookmarks" />
+    </LinearLayout>
+    
+</LinearLayout>
