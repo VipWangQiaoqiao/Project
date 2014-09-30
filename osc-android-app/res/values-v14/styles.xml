@@ -14,6 +14,9 @@
         <item name="android:actionBarItemBackground">@drawable/socialize_titlebar_item_background_selector</item>
         <item name="android:dropDownListViewStyle">@style/DrapDownListView</item>
     </style>
+    
+    <style name="DialogBaseTheme" parent="@style/Theme.AppCompat.DialogWhenLarge">
+    </style>
 
     <style name="ActionBarBaseTheme.Preview" parent="@style/ActionBarBaseTheme">
         <item name="android:windowBackground">@android:color/black</item>

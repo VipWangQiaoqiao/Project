@@ -121,6 +121,14 @@ public class CommonDialog extends Dialog {
 			}
 		}
 	}
+	
+	
+
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		this.dismiss();
+	}
 
 	public void setContent(View view) {
 		setContent(view, contentPadding);

@@ -43,8 +43,6 @@
     <View
         android:id="@+id/title_divder"
         style="@style/dialog_divider"
-        android:visibility="visible"
-        android:layout_marginLeft="@dimen/global_dialog_padding"
-        android:layout_marginRight="@dimen/global_dialog_padding" />
+        android:visibility="visible" />
 
 </merge>

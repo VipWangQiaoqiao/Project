@@ -17,6 +17,14 @@
     <string name="menu_setting">设置</string>
     <string name="menu_exit">退出</string>
     
+    <!-- qucik option -->
+    <string name="quick_option_text">文字</string>
+    <string name="quick_option_album">相册</string>
+    <string name="quick_option_photo">拍照</string>
+    <string name="quick_option_voice">语音</string>
+    <string name="quick_option_note">便签</string>
+    <string name="quick_option_scan">扫一扫</string>
+    
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     

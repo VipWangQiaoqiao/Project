@@ -183,6 +183,11 @@
         <item name="android:windowBackground">@drawable/dialog_bottom_background</item>
         <item name="android:windowAnimationStyle">@style/dialog_animation</item>
     </style>
+    
+    <style name="quick_option_dialog" parent="@style/Theme.Base.AppCompat.DialogWhenLarge">
+        <item name="android:windowBackground">@color/white40</item>
+        <item name="android:windowAnimationStyle">@style/dialog_animation</item>
+    </style>
 
     <style name="dialog_animation" parent="android:Animation">
         <item name="@android:windowEnterAnimation">@anim/dialog_enter</item>
@@ -255,5 +260,5 @@
         <item name="android:layout_width">0.1px</item>
         <item name="android:layout_height">fill_parent</item>
     </style>
-
+    
 </resources>

@@ -4,13 +4,16 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import net.oschina.app.R;
 import net.oschina.app.interf.BaseViewInterface;
+import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.widget.MyFragmentTabHost;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -165,12 +168,21 @@ public class MainActivity extends ActionBarActivity implements
 		switch (id) {
 		// 点击了快速操作按钮
 		case R.id.quick_option_iv:
-			Toast.makeText(MainActivity.this, "点击了快速操作按钮", Toast.LENGTH_SHORT).show();
+			showQuickOption();
 			break;
 
 		default:
 			break;
 		}
-		
+	}
+	
+	// 显示快速操作界面
+	private void showQuickOption() {
+		final QuickOptionDialog dialog = new QuickOptionDialog(MainActivity.this);
+		dialog.setCancelable(true);
+		dialog.setCanceledOnTouchOutside(true);
+		dialog.show();
+//		Intent intent = new Intent(MainActivity.this, QuickOptionActivity.class);
+//		startActivity(intent);
 	}
 }

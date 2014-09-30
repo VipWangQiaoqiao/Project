@@ -70,7 +70,7 @@
     
     <dimen name="dialog_margin">7.0dip</dimen>
     <dimen name="global_padding">8.0dip</dimen>
-    <dimen name="global_dialog_padding">16.0dip</dimen>
+    <dimen name="global_dialog_padding">15.0dip</dimen>
    	<dimen name="text_regular_primary_size">14.0dip</dimen>
     <dimen name="text_large_secondary_size">12.0dip</dimen>
     <dimen name="text_large_primary_size">16.0dip</dimen>

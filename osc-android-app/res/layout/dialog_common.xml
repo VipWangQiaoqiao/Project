@@ -21,8 +21,6 @@
     <View
         android:id="@+id/button_bar_divider"
         style="@style/section_item_divider"
-        android:layout_marginLeft="@dimen/global_dialog_padding"
-        android:layout_marginRight="@dimen/global_dialog_padding"
         android:visibility="visible" />
 
     <LinearLayout

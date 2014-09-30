@@ -26,11 +26,13 @@ import android.widget.Toast;
 
 /**
  * 侧滑菜单界面
+ * 
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @created 2014年9月25日 下午6:00:05
- *
+ * 
  */
-public class NavigationDrawerFragment extends BaseFragment implements OnClickListener {
+public class NavigationDrawerFragment extends BaseFragment implements
+		OnClickListener {
 
 	/**
 	 * Remember the position of the selected item.
@@ -60,25 +62,25 @@ public class NavigationDrawerFragment extends BaseFragment implements OnClickLis
 	private int mCurrentSelectedPosition = 0;
 	private boolean mFromSavedInstanceState;
 	private boolean mUserLearnedDrawer;
-	
+
 	@InjectView(R.id.menu_item_userinfo)
 	View mMenu_item_userinfo;
-	
+
 	@InjectView(R.id.menu_item_team)
 	View mMenu_item_team;
-	
+
 	@InjectView(R.id.menu_item_opensoft)
 	View mMenu_item_opensoft;
-	
+
 	@InjectView(R.id.menu_item_note)
 	View mMenu_item_note;
-	
+
 	@InjectView(R.id.menu_item_bookmarks)
 	View mMenu_item_bookmarks;
-	
+
 	@InjectView(R.id.menu_item_setting)
 	View mMenu_item_setting;
-	
+
 	@InjectView(R.id.menu_item_exit)
 	View mMenu_item_exit;
 
@@ -96,10 +98,9 @@ public class NavigationDrawerFragment extends BaseFragment implements OnClickLis
 			mFromSavedInstanceState = true;
 		}
 
-		// Select either the default item (0) or the last selected item.
 		selectItem(mCurrentSelectedPosition);
 	}
-	
+
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
@@ -109,21 +110,21 @@ public class NavigationDrawerFragment extends BaseFragment implements OnClickLis
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		// Indicate that this fragment would like to influence the set of
-		// actions in the action bar.
 		setHasOptionsMenu(true);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		mDrawerListView = inflater.inflate(
-				R.layout.fragment_navigation_drawer, container, false);
+		mDrawerListView = inflater.inflate(R.layout.fragment_navigation_drawer,
+				container, false);
+		mDrawerListView.setOnClickListener(this);
 		ButterKnife.inject(this, mDrawerListView);
 		initView(mDrawerListView);
+		initData();
 		return mDrawerListView;
 	}
-	
+
 	@Override
 	public void onClick(View v) {
 		mDrawerLayout.closeDrawer(mFragmentContainerView);
@@ -131,13 +132,13 @@ public class NavigationDrawerFragment extends BaseFragment implements OnClickLis
 	}
 
 	public void initView(View view) {
-		
+
 		mMenu_item_userinfo.setOnClickListener(this);
 		mMenu_item_team.setOnClickListener(this);
 		mMenu_item_opensoft.setOnClickListener(this);
 		mMenu_item_note.setOnClickListener(this);
 		mMenu_item_bookmarks.setOnClickListener(this);
-		
+
 		mMenu_item_setting.setOnClickListener(this);
 		mMenu_item_exit.setOnClickListener(this);
 	}
@@ -276,17 +277,11 @@ public class NavigationDrawerFragment extends BaseFragment implements OnClickLis
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		// Forward the new configuration the drawer toggle component.
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		// If the drawer is open, show the global app actions in the action bar.
-		// See also
-		// showGlobalContextActionBar, which controls the top-left area of the
-		// action bar.
-		
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
@@ -299,11 +294,6 @@ public class NavigationDrawerFragment extends BaseFragment implements OnClickLis
 		return super.onOptionsItemSelected(item);
 	}
 
-	/**
-	 * Per the navigation drawer design guidelines, updates the action bar to
-	 * show the global app 'context', rather than just what's in the current
-	 * screen.
-	 */
 	private void showGlobalContextActionBar() {
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayShowTitleEnabled(true);
@@ -315,14 +305,7 @@ public class NavigationDrawerFragment extends BaseFragment implements OnClickLis
 		return ((ActionBarActivity) getActivity()).getSupportActionBar();
 	}
 
-	/**
-	 * Callbacks interface that all activities using this fragment must
-	 * implement.
-	 */
 	public static interface NavigationDrawerCallbacks {
-		/**
-		 * Called when an item in the navigation drawer is selected.
-		 */
 		void onNavigationDrawerItemSelected(int position);
 	}
 }

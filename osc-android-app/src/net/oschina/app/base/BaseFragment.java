@@ -1,6 +1,5 @@
 package net.oschina.app.base;
 
-import butterknife.ButterKnife;
 import net.oschina.app.AppContext;
 import net.oschina.app.interf.BaseFragmentInterface;
 import android.os.Bundle;
