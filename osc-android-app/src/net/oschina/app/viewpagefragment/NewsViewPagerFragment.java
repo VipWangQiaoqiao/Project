@@ -7,6 +7,8 @@ import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.base.BaseViewPagerFragment;
 import net.oschina.app.fragment.FragmentTest;
 import net.oschina.app.fragment.NewsFragment;
+import net.oschina.app.fragment.latestBlogsFragment;
+import net.oschina.app.fragment.recommendBlogFragment;
 
 /**
  * 
@@ -24,8 +26,8 @@ public class NewsViewPagerFragment extends BaseViewPagerFragment {
 	protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
 		String[] title = getResources().getStringArray(R.array.news_viewpage_arrays);
 		adapter.addTab(title[0], "news", NewsFragment.class, null);
-		adapter.addTab(title[1], "new_blogs", NewsFragment.class, null);
-		adapter.addTab(title[2], "featured_blogs", NewsFragment.class, null);
+		adapter.addTab(title[1], "new_blogs", latestBlogsFragment.class, null);
+		adapter.addTab(title[2], "featured_blogs", recommendBlogFragment.class, null);
 	}
 
 	@Override
