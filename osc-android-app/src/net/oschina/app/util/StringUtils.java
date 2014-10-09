@@ -8,6 +8,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.regex.Pattern;
 
 /**
@@ -56,8 +57,13 @@ public class StringUtils {
 	 * @return
 	 */
 	public static String friendly_time(String sdate) {
+		Date time = null;
 		
-		Date time = toDate(sdate);
+		if(TimeZoneUtil.isInEasternEightZones())
+			time =  toDate(sdate);
+		else
+			time = TimeZoneUtil.transformTime(toDate(sdate), 
+					TimeZone.getTimeZone("GMT+08"), TimeZone.getDefault());
 		
 		if (time == null) {
 			return "Unknown";
