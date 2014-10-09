@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.TLog;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 

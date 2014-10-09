@@ -7,6 +7,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * 
  * @date 2014年9月29日
  */
+@SuppressWarnings("serial")
 @XStreamAlias("blog")
 public class Blog extends Entity {
 	

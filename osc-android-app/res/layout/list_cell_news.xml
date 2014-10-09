@@ -40,22 +40,30 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/main_gray"
                 android:textSize="@dimen/text_size_12" />
+            
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/main_gray"
+                android:layout_marginLeft="@dimen/space_10"
+                android:textSize="@dimen/text_size_12" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/space_10"
-                android:visibility="gone" />
-
+                android:src="@drawable/widget_comment_count_icon" />
+            
             <TextView
-                android:id="@+id/tv_time"
-                android:layout_width="0dp"
+                android:id="@+id/tv_comment_count"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="right|center_vertical"
                 android:textColor="@color/main_gray"
+                android:layout_marginLeft="@dimen/space_2"
                 android:textSize="@dimen/text_size_12" />
+
         </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>

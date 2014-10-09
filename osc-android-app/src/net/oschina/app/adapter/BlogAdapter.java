@@ -3,6 +3,7 @@ package net.oschina.app.adapter;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Blog;
+import net.oschina.app.util.StringUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -17,13 +18,14 @@ import butterknife.InjectView;
 public class BlogAdapter extends ListBaseAdapter {
 
 	static class ViewHolder {
-		public TextView title, source, time;
+		public TextView title, source, time, comment_count;
 		public ImageView tip;
 		public ViewHolder(View view) {
 			title = (TextView) view.findViewById(R.id.tv_title);
 			source = (TextView) view.findViewById(R.id.tv_source);
 			time = (TextView) view.findViewById(R.id.tv_time);
 			tip = (ImageView) view.findViewById(R.id.iv_tip);
+			comment_count = (TextView) view.findViewById(R.id.tv_comment_count);
 		}
 	}
 
@@ -43,6 +45,8 @@ public class BlogAdapter extends ListBaseAdapter {
 
 		vh.title.setText(blog.getTitle());
 		vh.source.setText(blog.getAuthor());
+		vh.time.setText(StringUtils.friendly_time(blog.getPubDate()));
+		vh.comment_count.setText(blog.getCommentCount() + "");
 		return convertView;
 	}
 }

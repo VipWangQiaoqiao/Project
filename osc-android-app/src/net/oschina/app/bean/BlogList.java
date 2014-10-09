@@ -10,6 +10,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  *
  * @date 2014年9月28日
  */
+@SuppressWarnings("serial")
 @XStreamAlias("oschina")
 public class BlogList extends Entity implements ListEntity {
 	
