@@ -3,6 +3,9 @@ package net.oschina.app.bean;
 import java.io.Serializable;
 import java.util.List;
 
+import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TLog;
+
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
@@ -100,8 +103,8 @@ public class News extends Entity {
 		return authorId;
 	}
 
-	public void setAuthorId(int authorId) {
-		this.authorId = authorId;
+	public void setAuthorId(String authorId) {
+		this.authorId = StringUtils.toInt(authorId, 0);
 	}
 
 	public int getCommentCount() {

@@ -30,6 +30,8 @@ public class ListBaseAdapter extends BaseAdapter {
 	protected int mScreenWidth;
 
 	private LayoutInflater mInflater;
+	
+	private LinearLayout mFooterView;
 
 	protected LayoutInflater getLayoutInflater(Context context) {
 		if (mInflater == null) {
@@ -37,6 +39,10 @@ public class ListBaseAdapter extends BaseAdapter {
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		}
 		return mInflater;
+	}
+	
+	public View getFooterView() {
+		return this.mFooterView;
 	}
 
 	public void setScreenWidth(int width) {
@@ -156,6 +162,7 @@ public class ListBaseAdapter extends BaseAdapter {
 		return true;
 	}
 
+	@SuppressWarnings("deprecation")
 	@SuppressLint("InflateParams")
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -163,50 +170,50 @@ public class ListBaseAdapter extends BaseAdapter {
 			if (getState() == STATE_LOAD_MORE || getState() == STATE_NO_MORE
 					|| state == STATE_EMPTY_ITEM
 					|| getState() == STATE_NETWORK_ERROR) {
-				LinearLayout loadmore = (LinearLayout) LayoutInflater.from(
-						parent.getContext()).inflate(
-						R.layout.list_cell_footer, null);
+				mFooterView = (LinearLayout) LayoutInflater.from(
+						parent.getContext()).inflate(R.layout.list_cell_footer,
+						null);
 				if (!loadMoreHasBg()) {
-					loadmore.setBackgroundDrawable(null);
+					mFooterView.setBackgroundDrawable(null);
 				}
-				ProgressBar progress = (ProgressBar) loadmore
+				ProgressBar progress = (ProgressBar) mFooterView
 						.findViewById(R.id.progressbar);
-				TextView text = (TextView) loadmore.findViewById(R.id.text);
+				TextView text = (TextView) mFooterView.findViewById(R.id.text);
 				switch (getState()) {
 				case STATE_LOAD_MORE:
-					loadmore.setVisibility(View.VISIBLE);
+					mFooterView.setVisibility(View.VISIBLE);
 					progress.setVisibility(View.VISIBLE);
 					text.setVisibility(View.VISIBLE);
 					text.setText(_loadmoreText);
 					break;
 				case STATE_NO_MORE:
-					loadmore.setVisibility(View.VISIBLE);
+					mFooterView.setVisibility(View.VISIBLE);
 					progress.setVisibility(View.GONE);
 					text.setVisibility(View.VISIBLE);
 					text.setText(_loadFinishText);
 					break;
 				case STATE_EMPTY_ITEM:
 					progress.setVisibility(View.GONE);
-					loadmore.setVisibility(View.GONE);
+					mFooterView.setVisibility(View.GONE);
 					text.setVisibility(View.GONE);
 					break;
 				case STATE_NETWORK_ERROR:
-					loadmore.setVisibility(View.VISIBLE);
+					mFooterView.setVisibility(View.VISIBLE);
 					progress.setVisibility(View.GONE);
 					text.setVisibility(View.VISIBLE);
 					if (TDevice.hasInternet()) {
-						text.setText("对不起,出错了");
+						text.setText("加载出错了");
 					} else {
 						text.setText("没有可用的网络");
 					}
 					break;
 				default:
 					progress.setVisibility(View.GONE);
-					loadmore.setVisibility(View.GONE);
+					mFooterView.setVisibility(View.GONE);
 					text.setVisibility(View.GONE);
 					break;
 				}
-				return loadmore;
+				return mFooterView;
 			}
 		}
 		return getRealView(position, convertView, parent);

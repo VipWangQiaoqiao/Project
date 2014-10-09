@@ -11,6 +11,7 @@ import net.oschina.app.bean.ListEntity;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
+import net.oschina.app.util.TLog;
 
 import org.apache.http.Header;
 
@@ -22,6 +23,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -31,35 +34,36 @@ import butterknife.InjectView;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 public abstract class BaseListFragment extends BaseTabFragment implements
-		SwipeRefreshLayout.OnRefreshListener, OnItemClickListener {
+		SwipeRefreshLayout.OnRefreshListener, OnItemClickListener,
+		OnScrollListener {
 
 	public static final String BUNDLE_KEY_CATALOG = "BUNDLE_KEY_CATALOG";
-	
+
 	@InjectView(R.id.swiperefreshlayout)
 	protected SwipeRefreshLayout mSwipeRefreshLayout;
-	
+
 	@InjectView(R.id.listview)
 	protected ListView mListView;
-	
+
 	protected ListBaseAdapter mAdapter;
-	
+
 	@InjectView(R.id.error_layout)
 	protected EmptyLayout mErrorLayout;
-	
+
 	protected int mStoreEmptyState = -1;
 
 	protected int mCurrentPage = 0;
-	
+
 	protected int mCatalog = 1;
 
 	private AsyncTask<String, Void, ListEntity> mCacheTask;
 	private ParserTask mParserTask;
-	
+
 	@Override
 	protected int getLayoutId() {
 		return R.layout.fragment_pull_refresh_listview;
 	}
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -80,12 +84,12 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 
 	@Override
 	public void initView(View view) {
-		
+
 		mSwipeRefreshLayout.setOnRefreshListener(this);
-		mSwipeRefreshLayout.setColorSchemeResources(R.color.swiperefresh_color1,
-				R.color.swiperefresh_color2, R.color.swiperefresh_color3,
-				R.color.swiperefresh_color4);
-		
+		mSwipeRefreshLayout.setColorSchemeResources(
+				R.color.swiperefresh_color1, R.color.swiperefresh_color2,
+				R.color.swiperefresh_color3, R.color.swiperefresh_color4);
+
 		mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
 
 			@Override
@@ -98,6 +102,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 		});
 
 		mListView.setOnItemClickListener(this);
+		mListView.setOnScrollListener(this);
 
 		if (mAdapter != null) {
 			mListView.setAdapter(mAdapter);
@@ -134,7 +139,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 	}
 
 	protected abstract ListBaseAdapter getListAdapter();
-	
+
 	// 下拉刷新数据
 	@Override
 	public void onRefresh() {
@@ -297,13 +302,13 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 			mAdapter.notifyDataSetChanged();
 		}
 	}
-	
+
 	// 完成刷新
 	protected void executeOnLoadFinish() {
 		setSwipeRefreshLoadedState();
 		mState = STATE_NONE;
 	}
-	
+
 	/** 设置顶部正在加载的状态 */
 	private void setSwipeRefreshLoadingState() {
 		if (mSwipeRefreshLayout != null) {
@@ -312,7 +317,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 			mSwipeRefreshLayout.setEnabled(false);
 		}
 	}
-	
+
 	/** 设置顶部加载完毕的状态 */
 	private void setSwipeRefreshLoadedState() {
 		if (mSwipeRefreshLayout != null) {
@@ -368,5 +373,39 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 				executeOnLoadFinish();
 			}
 		}
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		if (mAdapter == null || mAdapter.getCount() == 0) {
+			return;
+		}
+		// 数据已经全部加载，或数据为空时，或正在加载，不处理滚动事件
+		if (mState == STATE_LOADMORE || mState == STATE_REFRESH) {
+			return;
+		}
+		// 判断是否滚动到底部
+		boolean scrollEnd = false;
+		try {
+			if (view.getPositionForView(mAdapter.getFooterView()) == view
+					.getLastVisiblePosition())
+				scrollEnd = true;
+		} catch (Exception e) {
+			scrollEnd = false;
+		}
+
+		if (mState == STATE_NONE && scrollEnd) {
+			if (mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
+				mCurrentPage++;
+				mState = STATE_LOADMORE;
+				requestData(false);
+			}
+		}
+	}
+
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem,
+			int visibleItemCount, int totalItemCount) {
+
 	}
 }
