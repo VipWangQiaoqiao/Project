@@ -11,6 +11,9 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @XStreamAlias("blog")
 public class Blog extends Entity {
 	
+	public static final String CATALOG_LATEST = "latest";
+	public static final String  CATALOG_RECOMMEND = "recommend";
+	
 	@XStreamAlias("title")
 	private String title;
 

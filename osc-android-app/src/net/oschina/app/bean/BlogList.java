@@ -14,10 +14,6 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @XStreamAlias("oschina")
 public class BlogList extends Entity implements ListEntity {
 	
-	public static final int CATALOG_USER = 1;
-	public static final int CATALOG_LATEST = 2;
-	public static final int  CATALOG_RECOMMEND = 3;
-	
 	@XStreamAlias("pagesize")
 	private int pagesize;
 	

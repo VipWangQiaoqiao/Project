@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
@@ -18,14 +19,15 @@ import butterknife.InjectView;
 public class BlogAdapter extends ListBaseAdapter {
 
 	static class ViewHolder {
-		public TextView title, source, time, comment_count;
-		public ImageView tip;
+		
+		@InjectView(R.id.tv_title) TextView title;
+		@InjectView(R.id.tv_source)TextView source;
+		@InjectView(R.id.tv_time)TextView time;
+		@InjectView(R.id.tv_comment_count) TextView comment_count;
+		@InjectView(R.id.iv_tip) ImageView tip;
+		
 		public ViewHolder(View view) {
-			title = (TextView) view.findViewById(R.id.tv_title);
-			source = (TextView) view.findViewById(R.id.tv_source);
-			time = (TextView) view.findViewById(R.id.tv_time);
-			tip = (ImageView) view.findViewById(R.id.iv_tip);
-			comment_count = (TextView) view.findViewById(R.id.tv_comment_count);
+			ButterKnife.inject(this,view);
 		}
 	}
 

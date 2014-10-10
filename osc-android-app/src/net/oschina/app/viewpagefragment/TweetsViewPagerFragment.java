@@ -1,11 +1,10 @@
 package net.oschina.app.viewpagefragment;
 
-import android.support.v4.app.Fragment;
-import android.view.View;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.base.BaseViewPagerFragment;
 import net.oschina.app.fragment.FragmentTest;
+import android.view.View;
 
 /**
  * 

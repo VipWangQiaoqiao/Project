@@ -11,10 +11,10 @@ import net.oschina.app.bean.ListEntity;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
-import net.oschina.app.util.TLog;
 
 import org.apache.http.Header;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -33,11 +33,13 @@ import butterknife.InjectView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
+@SuppressLint("NewApi")
 public abstract class BaseListFragment extends BaseTabFragment implements
 		SwipeRefreshLayout.OnRefreshListener, OnItemClickListener,
 		OnScrollListener {
 
 	public static final String BUNDLE_KEY_CATALOG = "BUNDLE_KEY_CATALOG";
+	public static final String BUNDLE_BLOG_TYPE = "BUNDLE_BLOG_TYPE";
 
 	@InjectView(R.id.swiperefreshlayout)
 	protected SwipeRefreshLayout mSwipeRefreshLayout;
@@ -55,7 +57,9 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 	protected int mCurrentPage = 0;
 
 	protected int mCatalog = 1;
-
+	
+	protected String blogType = "latest";
+	
 	private AsyncTask<String, Void, ListEntity> mCacheTask;
 	private ParserTask mParserTask;
 
@@ -79,6 +83,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 		Bundle args = getArguments();
 		if (args != null) {
 			mCatalog = args.getInt(BUNDLE_KEY_CATALOG);
+			blogType = args.getString(BUNDLE_BLOG_TYPE, blogType);
 		}
 	}
 

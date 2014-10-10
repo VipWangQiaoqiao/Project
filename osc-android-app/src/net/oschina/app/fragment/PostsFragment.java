@@ -3,13 +3,11 @@ package net.oschina.app.fragment;
 import java.io.InputStream;
 import java.io.Serializable;
 
-import net.oschina.app.adapter.NewsAdapter;
 import net.oschina.app.adapter.PostAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.ListEntity;
-import net.oschina.app.bean.NewsList;
 import net.oschina.app.bean.PostList;
 import net.oschina.app.util.XmlUtils;
 import android.view.View;

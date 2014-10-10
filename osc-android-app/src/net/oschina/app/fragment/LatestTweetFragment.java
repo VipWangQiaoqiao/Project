@@ -3,14 +3,14 @@ package net.oschina.app.fragment;
 import java.io.InputStream;
 import java.io.Serializable;
 
-import android.view.View;
-import android.widget.AdapterView;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.NewsList;
 import net.oschina.app.util.XmlUtils;
+import android.view.View;
+import android.widget.AdapterView;
 
 /**
  * @author HuangWenwei

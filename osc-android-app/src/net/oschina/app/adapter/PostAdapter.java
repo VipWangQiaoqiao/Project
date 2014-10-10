@@ -1,19 +1,15 @@
 package net.oschina.app.adapter;
 
-import java.nio.Buffer;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.InjectViews;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Post;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.CircleImageView;
-import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * post（讨论区帖子）适配器
