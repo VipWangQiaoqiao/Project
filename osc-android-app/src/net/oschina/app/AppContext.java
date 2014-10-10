@@ -55,6 +55,7 @@ public class AppContext extends BaseApplication {
 				.getAppExceptionHandler(this));
 		instance = this;
 		init();
+		initLogin();
 		// 初始化图片加载
 		initImageLoader(this);
 	}
@@ -66,6 +67,16 @@ public class AppContext extends BaseApplication {
 		client.setCookieStore(myCookieStore);
 		ApiHttpClient.setHttpClient(client);
 		ApiHttpClient.setCookie(ApiHttpClient.getCookie(this));
+	}
+	
+	private void initLogin() {
+		UserInformation user = getLoginUser();
+		if (null != user && user.getUid() > 0) {
+			login = true;
+			loginUid = user.getUid();
+		} else {
+			this.cleanLoginInfo();
+		}
 	}
 	
 	/**
@@ -178,7 +189,7 @@ public class AppContext extends BaseApplication {
 			{
 				setProperty("user.uid", String.valueOf(user.getUid()));
 				setProperty("user.name", user.getName());
-				setProperty("user.face", FileUtils.getFileName(user.getPortrait()));// 用户头像-文件名
+				setProperty("user.face", user.getPortrait());// 用户头像-文件名
 				setProperty("user.account", user.getAccount());
 				setProperty("user.pwd",
 						CyptoUtils.encode("oschinaApp", user.getPwd()));
@@ -191,6 +202,25 @@ public class AppContext extends BaseApplication {
 						String.valueOf(user.isRememberMe()));// 是否记住我的信息
 			}
 		});
+	}
+	
+	/**
+	 * 获得登录用户的信息
+	 * @return
+	 */
+	public UserInformation getLoginUser() {
+		UserInformation user = new UserInformation();
+		user.setUid(StringUtils.toInt(getProperty("user.uid"), 0));
+		user.setName(getProperty("user.name"));
+		user.setPortrait(getProperty("user.face"));
+		user.setAccount(getProperty("user.account"));
+		user.setPwd(CyptoUtils.decode("oschinaApp", getProperty("user.pwd")));
+		user.setLocation(getProperty("user.location"));
+		user.setFollowers(StringUtils.toInt(getProperty("user.followers"), 0));
+		user.setFans(StringUtils.toInt(getProperty("user.fans"), 0));
+		user.setScore(StringUtils.toInt(getProperty("user.score"), 0));
+		user.setRememberMe(StringUtils.toBool(getProperty("user.isRememberMe")));
+		return user;
 	}
 
 	/**

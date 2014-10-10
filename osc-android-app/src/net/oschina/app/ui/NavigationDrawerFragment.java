@@ -1,16 +1,24 @@
 package net.oschina.app.ui;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
+import net.oschina.app.bean.UserInformation;
+import net.oschina.app.util.UIHelper;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -22,7 +30,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 /**
  * 侧滑菜单界面
@@ -33,7 +42,9 @@ import android.widget.Toast;
  */
 public class NavigationDrawerFragment extends BaseFragment implements
 		OnClickListener {
-
+	
+	public static final String INTENT_ACTION_USER_CHANGE = "INTENT_ACTION_USER_CHANGE";
+	
 	/**
 	 * Remember the position of the selected item.
 	 */
@@ -62,9 +73,33 @@ public class NavigationDrawerFragment extends BaseFragment implements
 	private int mCurrentSelectedPosition = 0;
 	private boolean mFromSavedInstanceState;
 	private boolean mUserLearnedDrawer;
+	
+	private BroadcastReceiver mUserChangeReceiver = new BroadcastReceiver() {
+		
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			//接收到变化后，更新用户资料
+			setupUserView(true);
+		}
+	};
 
 	@InjectView(R.id.menu_item_userinfo)
 	View mMenu_item_userinfo;
+	
+	@InjectView(R.id.menu_user_info_layout)
+	View mUser_info_layout;
+	
+	@InjectView(R.id.menu_user_info_login_tips_layout)
+	View mUser_login_tips;
+	
+	@InjectView(R.id.menu_user_info_userface)
+	ImageView mUser_face;
+	
+	@InjectView(R.id.menu_user_info_username)
+	TextView mUser_name;
+	
+	@InjectView(R.id.menu_user_info_gender)
+	ImageView mUser_gender;
 
 	@InjectView(R.id.menu_item_team)
 	View mMenu_item_team;
@@ -83,6 +118,8 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
 	@InjectView(R.id.menu_item_exit)
 	View mMenu_item_exit;
+	
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -99,12 +136,21 @@ public class NavigationDrawerFragment extends BaseFragment implements
 		}
 
 		selectItem(mCurrentSelectedPosition);
+		
+		IntentFilter filter = new IntentFilter(INTENT_ACTION_USER_CHANGE);
+		getActivity().registerReceiver(mUserChangeReceiver, filter);
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
 		ButterKnife.reset(this);
+		// 注销用户变化监听广播
+		try {
+			getActivity().unregisterReceiver(mUserChangeReceiver);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -127,8 +173,35 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
 	@Override
 	public void onClick(View v) {
-		mDrawerLayout.closeDrawer(mFragmentContainerView);
-		Toast.makeText(getActivity(), "点击到了", Toast.LENGTH_LONG).show();
+		int id =  v.getId();
+		switch (id) {
+		case R.id.menu_item_userinfo:
+			onClickMenuItemUserInfo();
+			break;
+		case R.id.menu_item_team:
+			break;
+		case R.id.menu_item_opensoft:
+			break;
+		case R.id.menu_item_note:
+			break;
+		case R.id.menu_item_bookmarks:
+			break;
+		case R.id.menu_item_setting:
+			break;
+		case R.id.menu_item_exit:
+			break;
+		default:
+			break;
+		}
+	}
+	
+	private void onClickMenuItemUserInfo() {
+//		if (!AppContext.getInstance().isLogin()) {
+//			UIHelper.showLoginActivity(getActivity());
+//		} else {
+//			AppContext.showToast("已经登录了");
+//		}
+		UIHelper.showLoginActivity(getActivity());
 	}
 
 	public void initView(View view) {
@@ -144,7 +217,25 @@ public class NavigationDrawerFragment extends BaseFragment implements
 	}
 
 	public void initData() {
+		setupUserView(AppContext.getInstance().isLogin());
+	}
+	
+	private void setupUserView(final boolean reflash) {
+		//判断是否已经登录，如果已登录则显示用户的头像与信息
+		if(!AppContext.getInstance().isLogin()) {
+			mUser_face.setImageResource(R.drawable.ic_launcher);
+			mUser_name.setText("");
+			mUser_info_layout.setVisibility(View.GONE);
+			mUser_login_tips.setVisibility(View.VISIBLE);
+			return;
+		}
 		
+		mUser_info_layout.setVisibility(View.VISIBLE);
+		mUser_login_tips.setVisibility(View.GONE);
+		
+		UserInformation user = AppContext.getInstance().getLoginUser();
+		mUser_name.setText(user.getName());
+		ImageLoader.getInstance().displayImage(user.getPortrait(), mUser_face);
 	}
 
 	public boolean isDrawerOpen() {

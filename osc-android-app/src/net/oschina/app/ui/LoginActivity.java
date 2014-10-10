@@ -13,6 +13,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import butterknife.InjectView;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
@@ -26,6 +27,7 @@ import net.oschina.app.base.BaseActivity;
 import net.oschina.app.bean.LoginUserBean;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.UserInformation;
+import net.oschina.app.util.CyptoUtils;
 import net.oschina.app.util.SimpleTextWatcher;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -155,10 +157,12 @@ public class LoginActivity extends BaseActivity {
 							.getInstance()));
 				}
 				LoginUserBean user = XmlUtils.toBean(LoginUserBean.class, new ByteArrayInputStream(arg2));
-				TLog.log(TAG, "name" + user.getUser().getName());
 				Result res = user.getResult();
 				if (res.OK()) {
 					// 保存登录信息
+					user.getUser().setAccount(mUserName);
+					user.getUser().setPwd(mPassword);
+					user.getUser().setRememberMe(true);
 					AppContext.getInstance().saveLoginInfo(user.getUser());
 					hideWaitDialog();
 					handleLoginSuccess();
@@ -185,6 +189,7 @@ public class LoginActivity extends BaseActivity {
 		Intent data = new Intent();
 		data.putExtra(BUNDLE_KEY_REQUEST_CODE, requestCode);
 		setResult(RESULT_OK, data);
+		this.sendBroadcast(new Intent(NavigationDrawerFragment.INTENT_ACTION_USER_CHANGE));
 		finish();
 	}
 	
@@ -226,7 +231,7 @@ public class LoginActivity extends BaseActivity {
 
 	@Override
 	public void initData() {
-		
+		mEtUserName.setText(AppContext.getInstance().getProperty("user.account"));
+		mEtPassword.setText(CyptoUtils.decode("oschinaApp", AppContext.getInstance().getProperty("user.pwd")));
 	}
-	
 }

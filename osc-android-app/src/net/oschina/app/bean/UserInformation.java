@@ -193,8 +193,4 @@ public class UserInformation implements Serializable {
 	public void setRememberMe(boolean isRememberMe) {
 		this.isRememberMe = isRememberMe;
 	}
-	
-	class UserBean {
-		
-	}
 }
