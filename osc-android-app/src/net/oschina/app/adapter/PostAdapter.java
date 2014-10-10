@@ -4,6 +4,7 @@ import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Post;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.CircleImageView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,7 @@ public class PostAdapter extends ListBaseAdapter {
 		@InjectView(R.id.tv_post_count) TextView comment_count;
 		
 		@InjectView(R.id.iv_post_face)
-		public CircleImageView face;
+		public AvatarView face;
 		
 		public ViewHolder(View view) {
 			ButterKnife.inject(this, view);
@@ -47,6 +48,10 @@ public class PostAdapter extends ListBaseAdapter {
 		}
 
 		Post post = (Post) _data.get(position);
+		
+		vh.face.setUserInfo(post.getAuthorId(), post.getAuthor());
+		vh.face.setAvatarUrl(post.getPortrait());
+		
 		vh.title.setText(post.getTitle());
 		vh.author.setText(post.getAuthor());
 		vh.time.setText(StringUtils.friendly_time(post.getPubDate()));
