@@ -51,7 +51,7 @@ public class OSChinaApi {
 		params.put("dataType", "json");
 		ApiHttpClient.get("action/api/news_list", params, handler);
 	}
-
+	
 	public static void getBlogList(String type, int pageIndex,
 			AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams();

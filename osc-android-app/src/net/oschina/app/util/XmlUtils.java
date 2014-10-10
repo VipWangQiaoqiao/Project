@@ -45,7 +45,6 @@ public class XmlUtils {
 				}
 			}
 		}
-        
         return obj;  
     }
 }
