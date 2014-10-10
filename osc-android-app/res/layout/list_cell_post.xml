@@ -11,7 +11,7 @@
     android:background="@drawable/list_item_background"
     android:paddingBottom="9dip">   
 
-    <net.oschina.app.widget.CircleImageView
+    <net.oschina.app.widget.AvatarView
         style="@style/user_face_image"
     	android:id="@+id/iv_post_face"/>
 

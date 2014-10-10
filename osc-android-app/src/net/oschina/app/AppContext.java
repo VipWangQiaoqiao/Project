@@ -5,6 +5,12 @@ import java.util.UUID;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.PersistentCookieStore;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.base.BaseApplication;
@@ -12,8 +18,11 @@ import net.oschina.app.bean.UserInformation;
 import net.oschina.app.util.CyptoUtils;
 import net.oschina.app.util.FileUtils;
 import net.oschina.app.util.StringUtils;
+import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 
 /**
  * 全局应用程序类：用于保存和调用全局应用配置及访问网络数据
@@ -46,6 +55,8 @@ public class AppContext extends BaseApplication {
 				.getAppExceptionHandler(this));
 		instance = this;
 		init();
+		// 初始化图片加载
+		initImageLoader(this);
 	}
 	
 	private void init() {
@@ -55,6 +66,37 @@ public class AppContext extends BaseApplication {
 		client.setCookieStore(myCookieStore);
 		ApiHttpClient.setHttpClient(client);
 		ApiHttpClient.setCookie(ApiHttpClient.getCookie(this));
+	}
+	
+	/**
+	 * 配置图片加载器
+	 * @param context
+	 */
+	public static void initImageLoader(Context context) {
+		DisplayImageOptions displayOptions = new DisplayImageOptions.Builder()
+				.preProcessor(new BitmapProcessor() {
+					@Override
+					public Bitmap process(Bitmap source) {
+						return source;
+					}
+				}).cacheInMemory(true).cacheOnDisk(true)
+				.bitmapConfig(Config.ARGB_8888).build();
+		// This configuration tuning is custom. You can tune every option, you
+		// may tune some of them,
+		// or you can create default configuration by
+		// ImageLoaderConfiguration.createDefault(this);
+		// method.
+		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
+				context).threadPriority(Thread.NORM_PRIORITY - 2)
+				.denyCacheImageMultipleSizesInMemory()
+				.diskCacheFileNameGenerator(new Md5FileNameGenerator())
+				.diskCacheSize(50 * 1024 * 1024)
+				// 50 Mb
+				.tasksProcessingOrder(QueueProcessingType.LIFO)
+				.writeDebugLogs() // Remove for release app
+				.defaultDisplayImageOptions(displayOptions).build();
+		// Initialize ImageLoader with configuration.
+		ImageLoader.getInstance().init(config);
 	}
 	
 	/**
