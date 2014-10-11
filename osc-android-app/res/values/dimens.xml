@@ -75,5 +75,14 @@
     <dimen name="text_large_secondary_size">12.0dip</dimen>
     <dimen name="text_large_primary_size">16.0dip</dimen>
     
+    
+    <dimen name="tweet_item_margin">10dp</dimen>
+    <dimen name="tweet_item_border_width">1dp</dimen>
+    <dimen name="tweet_item_corner_radius">3dp</dimen>
+    <dimen name="tweet_item_padding_top_bottom">20dp</dimen>
+    <dimen name="tweet_item_padding_left_right">15dp</dimen>
+    <dimen name="tweet_item_profile_info_padd">10dp</dimen>
+    <dimen name="tweet_linkview_left">25dp</dimen>
+    
 
 </resources>
