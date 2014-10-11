@@ -15,7 +15,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RESTART_PACKAGES" />
 
-    <application	
+    <application
         android:name=".AppContext"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -35,6 +35,12 @@
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".ui.DetailActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/ActionBarBaseTheme"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
     </application>
 
 </manifest>

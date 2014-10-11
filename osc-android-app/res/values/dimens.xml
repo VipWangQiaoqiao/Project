@@ -75,5 +75,7 @@
     <dimen name="text_large_secondary_size">12.0dip</dimen>
     <dimen name="text_large_primary_size">16.0dip</dimen>
     
+    <dimen name="popo_menu_dialog_width">180dp</dimen>
+    
 
 </resources>

@@ -1,6 +1,7 @@
 package net.oschina.app.bean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.oschina.app.util.StringUtils;
@@ -55,8 +56,8 @@ public class News extends Entity {
 	@XStreamAlias("newstype")
 	private NewsType newsType;
 	
-	@XStreamAlias("news")
-	private List<Relative> relatives;
+	@XStreamAlias("relativies")
+	private List<Relative> relatives = new ArrayList<Relative>();
 	
 	public int getId() {
 		return id;
@@ -191,11 +192,14 @@ public class News extends Entity {
 	} 
 	
 	@XStreamAlias("relative")
-	public static class Relative implements Serializable{
-		@XStreamAlias("title")
+	public class Relative implements Serializable{
+		
+		@XStreamAlias("rtitle")
 		public String title;
-		@XStreamAlias("url")
+		
+		@XStreamAlias("rurl")
 		public String url;
+		
 		public String getTitle() {
 			return title;
 		}
