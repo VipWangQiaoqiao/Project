@@ -40,6 +40,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 
 	public static final String BUNDLE_KEY_CATALOG = "BUNDLE_KEY_CATALOG";
 	public static final String BUNDLE_BLOG_TYPE = "BUNDLE_BLOG_TYPE";
+	public static final String BUNDLE_TWEET_TYPE = "BUNDLE_TWEET_TYPE";
 
 	@InjectView(R.id.swiperefreshlayout)
 	protected SwipeRefreshLayout mSwipeRefreshLayout;

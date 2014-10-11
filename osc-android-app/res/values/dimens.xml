@@ -77,5 +77,14 @@
     
     <dimen name="popo_menu_dialog_width">180dp</dimen>
     
+    <dimen name="tweet_item_margin">10dp</dimen>
+    <dimen name="tweet_item_border_width">1dp</dimen>
+    <dimen name="tweet_item_corner_radius">3dp</dimen>
+    <dimen name="tweet_item_padding_top_bottom">20dp</dimen>
+    <dimen name="tweet_item_padding_left_right">15dp</dimen>
+    <dimen name="tweet_item_profile_info_padd">10dp</dimen>
+    <dimen name="tweet_linkview_left">25dp</dimen>
+    
+    
 
 </resources>

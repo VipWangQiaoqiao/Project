@@ -17,9 +17,9 @@ import android.widget.AdapterView;
  * 
  * @date 2014年9月30日
  */
-public class LatestTweetFragment extends BaseListFragment {
+public class TweetsFragment extends BaseListFragment {
 
-	protected static final String TAG = LatestTweetFragment.class
+	protected static final String TAG = TweetsFragment.class
 			.getSimpleName();
 	private static final String CACHE_KEY_PREFIX = "latesttweetlist_";
 
