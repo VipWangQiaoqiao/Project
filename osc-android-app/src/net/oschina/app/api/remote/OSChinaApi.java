@@ -1,6 +1,7 @@
 package net.oschina.app.api.remote;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +9,8 @@ import java.util.Map;
 import net.oschina.app.AppContext;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.bean.Tweet;
+import android.text.TextUtils;
+
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 

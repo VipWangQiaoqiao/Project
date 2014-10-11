@@ -117,4 +117,5 @@ public class Tweet extends Entity {
 	public static int getCatalogMine() {
 		return CATALOG_MINE;
 	}
+	
 }
