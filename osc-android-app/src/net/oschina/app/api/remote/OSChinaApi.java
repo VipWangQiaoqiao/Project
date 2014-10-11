@@ -291,17 +291,17 @@ public class OSChinaApi {
 
 	public static void publicTweet(Tweet tweet, AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams();
-		params.put("uid", tweet.getAuthorId());
+		params.put("uid", tweet.getAuthorid());
 		params.put("msg", tweet.getBody());
 
 		// Map<String, File> files = new HashMap<String, File>();
-		if (!TextUtils.isEmpty(tweet.getImageFilePath())) {
+/*		if (!TextUtils.isEmpty(tweet.getImageFilePath())) {
 			try {
 				params.put("img", new File(tweet.getImageFilePath()));
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
-		}
+		}*/
 		ApiHttpClient.post("action/api/tweet_pub", params, handler);
 	}
 

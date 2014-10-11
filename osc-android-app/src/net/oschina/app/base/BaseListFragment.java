@@ -40,6 +40,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 
 	public static final String BUNDLE_KEY_CATALOG = "BUNDLE_KEY_CATALOG";
 	public static final String BUNDLE_BLOG_TYPE = "BUNDLE_BLOG_TYPE";
+	public static final String BUNDLE_TWEET_TYPE = "BUNDLE_TWEET_TYPE";
 
 	@InjectView(R.id.swiperefreshlayout)
 	protected SwipeRefreshLayout mSwipeRefreshLayout;
@@ -59,6 +60,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 	protected int mCatalog = 1;
 	
 	protected String blogType = "latest";
+	protected int tweetType = 0;
 	
 	private AsyncTask<String, Void, ListEntity> mCacheTask;
 	private ParserTask mParserTask;
@@ -84,6 +86,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 		if (args != null) {
 			mCatalog = args.getInt(BUNDLE_KEY_CATALOG);
 			blogType = args.getString(BUNDLE_BLOG_TYPE, blogType);
+			tweetType = args.getInt(BUNDLE_TWEET_TYPE,tweetType);
 		}
 	}
 

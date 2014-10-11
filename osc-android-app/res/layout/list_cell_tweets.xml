@@ -2,7 +2,99 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/tweet_bg"
     android:orientation="vertical" >
-    
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+
+        android:layout_marginTop="@dimen/tweet_item_margin"
+        android:background="@drawable/tweet_bg_parent_rounded_corner"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/tweet_item_padding_top_bottom" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="5dp"
+            android:paddingRight="@dimen/tweet_item_padding_left_right" >
+
+            <net.oschina.app.widget.AvatarView
+                android:layout_marginTop="5dp"
+                android:id="@+id/iv_tweet_face"
+                style="@style/user_face_image" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="@dimen/tweet_item_profile_info_padd" >
+
+                <TextView
+                    android:id="@+id/tv_tweet_name"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textSize="@dimen/text_size_15"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_tweet_time"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/tweet_time_platform"
+                    android:textSize="@dimen/text_size_13" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_tweet_platform"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/tweet_time_platform"
+                android:textSize="@dimen/text_size_13" />
+        </LinearLayout>
+
+        <net.oschina.app.widget.LinkView
+            android:id="@+id/tweet_item"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:autoLink="web|email"
+            android:paddingLeft="@dimen/tweet_linkview_left"
+            android:paddingRight="5dp"
+            android:layout_marginLeft="25dp"
+            android:paddingTop="10dp"
+            android:text="@color/black"
+            android:textColorLink="@color/blue"
+            android:textSize="@dimen/text_size_15" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/tweet_item_padding_left_right"
+            android:paddingRight="@dimen/tweet_item_padding_left_right" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/space_10"
+                android:src="@drawable/widget_comment_count_icon" />
+
+            <TextView
+                android:id="@+id/tv_tweet_comment_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/space_2"
+                android:textColor="@color/main_gray"
+                android:textSize="@dimen/text_size_12" />
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>
