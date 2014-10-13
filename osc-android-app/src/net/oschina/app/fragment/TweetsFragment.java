@@ -36,7 +36,6 @@ public class TweetsFragment extends BaseListFragment {
 		super.onActivityCreated(savedInstanceState);
 	}
 
-
 	@Override
 	protected ListBaseAdapter getListAdapter() {
 		return new TweetAdapter();

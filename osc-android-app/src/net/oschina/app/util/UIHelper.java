@@ -2,15 +2,20 @@ package net.oschina.app.util;
 
 import java.util.regex.Pattern;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import net.oschina.app.AppContext;
 import net.oschina.app.bean.News;
 import net.oschina.app.interf.OnWebViewImageListener;
 import net.oschina.app.ui.DetailActivity;
+import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.ui.LoginActivity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
+import android.net.Uri;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
 /** 
@@ -103,20 +108,32 @@ public class UIHelper {
 	}
 	
 	/**
-	 * 设置显示图片，并支持点击查看
-	 * @param body
-	 * @return
+	 * 添加网页的点击图片展示支持
 	 */
+	@SuppressLint({ "JavascriptInterface", "SetJavaScriptEnabled" })
+	@JavascriptInterface
+	public static void addWebImageShow(final Context cxt, WebView wv) {
+		wv.getSettings().setJavaScriptEnabled(true);
+		wv.addJavascriptInterface(new OnWebViewImageListener() {
+			
+			@Override
+			public void onImageClick(String bigImageUrl) {
+				if (bigImageUrl != null) {
+					UIHelper.showImagePreview(cxt, new String[] { bigImageUrl });
+				}
+			}
+		}, "mWebViewImageListener");
+	}
+	
 	public static String setHtmlCotentSupportImagePreview(String body) {
 		// 读取用户设置：是否加载文章图片--默认有wifi下始终加载图片
-		if (TDevice.isWifiOpen()) {
+		if (AppContext.shouldLoadImage() || TDevice.isWifiOpen()) {
 			// 过滤掉 img标签的width,height属性
 			body = body.replaceAll("(<img[^>]*?)\\s+width\\s*=\\s*\\S+", "$1");
 			body = body.replaceAll("(<img[^>]*?)\\s+height\\s*=\\s*\\S+", "$1");
 			// 添加点击图片放大支持
 			body = body.replaceAll("(<img[^>]+src=\")(\\S+)\"",
 					"$1$2\" onClick=\"showImagePreview('$2')\"");
-			// mWebViewImageListener.onImageClick
 		} else {
 			// 过滤掉 img标签
 			body = body.replaceAll("<\\s*img\\s+([^>]*)\\s*>", "");
@@ -125,19 +142,88 @@ public class UIHelper {
 	}
 	
 	/**
-	 * 添加网页的点击图片展示支持
+	 * url跳转
+	 * 
+	 * @param context
+	 * @param url
 	 */
-	@SuppressLint({ "JavascriptInterface", "SetJavaScriptEnabled" })
-	public static void addWebImageShow(final Context cxt, WebView wv) {
-		wv.getSettings().setJavaScriptEnabled(true);
-		wv.addJavascriptInterface(new OnWebViewImageListener() {
-
-			@Override
-			public void onImageClick(String bigImageUrl) {
-				if (bigImageUrl != null) {
-					//UIHelper.showImagePreview(cxt, new String[] { bigImageUrl });
-				}
+	public static void showUrlRedirect(Context context, String url) {
+		if (url.startsWith(IAM_API_SHOWIMAGE)) {
+			String realUrl = url.substring(IAM_API_SHOWIMAGE.length());
+			try {
+				JSONObject json = new JSONObject(realUrl);
+				int idx = json.optInt("index");
+				String[] urls = json.getString("urls").split(",");
+				showImagePreview(context, idx, urls);
+			} catch (JSONException e) {
+				e.printStackTrace();
 			}
-		}, "mWebViewImageListener");
+			return;
+		}
+		URLsUtils urls = URLsUtils.parseURL(url);
+		if (urls != null) {
+			showLinkRedirect(context, urls.getObjType(), urls.getObjId(),
+					urls.getObjKey());
+		} else {
+			openBrowser(context, url);
+		}
+	}
+
+	public static void showLinkRedirect(Context context, int objType,
+			int objId, String objKey) {
+		switch (objType) {
+		case URLsUtils.URL_OBJ_TYPE_NEWS:
+			showNewsDetail(context, objId);
+			break;
+		case URLsUtils.URL_OBJ_TYPE_QUESTION:
+			//showQuestionDetail(context, objId);
+			break;
+		case URLsUtils.URL_OBJ_TYPE_QUESTION_TAG:
+			//showQuestionListByTag(context, objKey);
+			break;
+		case URLsUtils.URL_OBJ_TYPE_SOFTWARE:
+			//showSoftwareDetail(context, objKey);
+			break;
+		case URLsUtils.URL_OBJ_TYPE_ZONE:
+			//showUserCenter(context, objId, objKey);
+			break;
+		case URLsUtils.URL_OBJ_TYPE_TWEET:
+			//showTweetDetail(context, objId);
+			break;
+		case URLsUtils.URL_OBJ_TYPE_BLOG:
+			//showBlogDetail(context, objId);
+			break;
+		case URLsUtils.URL_OBJ_TYPE_OTHER:
+			openBrowser(context, objKey);
+			break;
+		}
+	}
+
+	/**
+	 * 打开浏览器
+	 * 
+	 * @param context
+	 * @param url
+	 */
+	public static void openBrowser(Context context, String url) {
+		try {
+			Uri uri = Uri.parse(url);
+			Intent it = new Intent(Intent.ACTION_VIEW, uri);
+			context.startActivity(it);
+		} catch (Exception e) {
+			e.printStackTrace();
+			AppContext.showToastShort("无法浏览此网页");
+		}
+	}
+	
+	@JavascriptInterface
+	public static void showImagePreview(Context context, String[] imageUrls) {
+		ImagePreviewActivity.showImagePrivew(context, 0, imageUrls);
+	}
+
+	@JavascriptInterface
+	public static void showImagePreview(Context context, int index,
+			String[] imageUrls) {
+		ImagePreviewActivity.showImagePrivew(context, index, imageUrls);
 	}
 }

@@ -70,6 +70,11 @@
 	<string name="tip_start_share">开始分享</string>
 	<string name="tip_share_done">分享完成</string>
 	
+	<string name="detail_menu_unfavorite">取消收藏</string>
+    <string name="detail_menu_favorite">收藏</string>
+    <string name="detail_menu_for_share">分享</string>
+    <string name="detail_menu_for_report">举报</string>
+	
 	<string name="add_favorite_success">收藏成功</string>
 	<string name="add_favorite_faile">收藏失败</string>
 	<string name="del_favorite_success">已取消收藏</string>

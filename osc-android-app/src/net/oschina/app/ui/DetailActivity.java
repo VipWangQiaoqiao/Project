@@ -6,9 +6,13 @@ import net.oschina.app.R;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseDetailFragment;
 import net.oschina.app.base.BaseFragment;
+import net.oschina.app.emoji.EmojiFragment;
 import net.oschina.app.fragment.FragmentTest;
 import net.oschina.app.fragment.NewsDetailFragment;
+import net.oschina.app.fragment.ToolbarFragment;
+import net.oschina.app.interf.EmojiFragmentControl;
 import net.oschina.app.interf.ToolbarEmojiVisiableControl;
+import net.oschina.app.interf.ToolbarFragmentControl;
 import net.oschina.app.util.TDevice;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -92,23 +96,23 @@ public class DetailActivity extends BaseActivity implements
 		mViewToolBarContaienr = findViewById(R.id.toolbar_container);
 		
 		// 加表情操作界面
-//		if (fragment instanceof EmojiFragmentControl) {
-//			EmojiFragment f = new EmojiFragment();
-//			mEmojiFragment = new WeakReference<BaseFragment>(f);
-//			trans.replace(R.id.emoji_container, f);
-//			((EmojiFragmentControl) fragment).setEmojiFragment(f);
-//		}
-//		// 加入操作工具条
-//		if (fragment instanceof ToolbarFragmentControl) {
-//			ToolbarFragment f = new ToolbarFragment();
-//			// mEmojiFragment = new WeakReference<BaseFragment>(f);
-//			trans.replace(R.id.toolbar_container, f);
-//			((ToolbarFragmentControl) fragment).setToolBarFragment(f);
-//
-//
-//			mViewEmojiContaienr.setVisibility(View.GONE);
-//			mViewToolBarContaienr.setVisibility(View.VISIBLE);
-//		}
+		if (fragment instanceof EmojiFragmentControl) {
+			EmojiFragment f = new EmojiFragment();
+			mEmojiFragment = new WeakReference<BaseFragment>(f);
+			trans.replace(R.id.emoji_container, f);
+			((EmojiFragmentControl) fragment).setEmojiFragment(f);
+		}
+		// 加入操作工具条
+		if (fragment instanceof ToolbarFragmentControl) {
+			ToolbarFragment f = new ToolbarFragment();
+			mEmojiFragment = new WeakReference<BaseFragment>(f);
+			trans.replace(R.id.toolbar_container, f);
+			((ToolbarFragmentControl) fragment).setToolBarFragment(f);
+
+
+			mViewEmojiContaienr.setVisibility(View.VISIBLE);
+			mViewToolBarContaienr.setVisibility(View.GONE);
+		}
 
 		trans.commit();
 	}

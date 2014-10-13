@@ -19,6 +19,7 @@ import net.oschina.app.util.CyptoUtils;
 import net.oschina.app.util.FileUtils;
 import net.oschina.app.util.StringUtils;
 import android.content.Context;
+import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
@@ -32,7 +33,21 @@ import android.graphics.Bitmap.Config;
  * @created 2014-04-22
  */
 public class AppContext extends BaseApplication {
-
+	
+	private static final String KEY_ACCESS_TOKEN = "KEY_ACCESS_TOKEN";
+	private static final String KEY_SOFTKEYBOARD_HEIGHT = "KEY_SOFTKEYBOARD_HEIGHT";
+	private static final String KEY_LOAD_IMAGE = "KEY_LOAD_IMAGE";
+	private static final String KEY_NOTIFICATION_SOUND = "KEY_NOTIFICATION_SOUND";
+	private static final String LAST_QUESTION_CATEGORY_IDX = "LAST_QUESTION_CATEGORY_IDX";
+	private static final String KEY_DAILY_ENGLISH = "KEY_DAILY_ENGLISH";
+	private static final String KEY_GET_LAST_DAILY_ENG = "KEY_GET_LAST_DAILY_ENG";
+	private static final String KEY_NOTIFICATION_DISABLE_WHEN_EXIT = "KEY_NOTIFICATION_DISABLE_WHEN_EXIT";
+	private static final String KEY_TWEET_DRAFT = "key_tweet_draft";
+	private static final String KEY_QUESTION_TITLE_DRAFT = "key_question_title_draft";
+	private static final String KEY_QUESTION_CONTENT_DRAFT = "key_question_content_draft";
+	private static final String KEY_QUESTION_TYPE_DRAFT = "key_question_type_draft";
+	private static final String KEY_QUESTION_LMK_DRAFT = "key_question_lmk_draft";
+	
 	// 手机网络类型
 	public static final int NETTYPE_WIFI = 0x01;
 	public static final int NETTYPE_CMWAP = 0x02;
@@ -241,5 +256,18 @@ public class AppContext extends BaseApplication {
 	public boolean isLogin() {
 		return login;
 	}
+	
+	public static boolean shouldLoadImage() {
+		return getPreferences().getBoolean(KEY_LOAD_IMAGE, true);
+	}
+	
+	public static void setSoftKeyboardHeight(int height) {
+		Editor editor = getPreferences().edit();
+		editor.putInt(KEY_SOFTKEYBOARD_HEIGHT, height);
+		apply(editor);
+	}
 
+	public static int getSoftKeyboardHeight() {
+		return getPreferences().getInt(KEY_SOFTKEYBOARD_HEIGHT, 0);
+	}
 }
