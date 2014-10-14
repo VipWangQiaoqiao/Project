@@ -131,10 +131,7 @@ public class EmojiFragment extends BaseFragment implements
 	}
 
 	private int caculateEmojiPanelHeight() {
-		mCurrentKeyboardHeigh = AppContext.getSoftKeyboardHeight();
-		if (mCurrentKeyboardHeigh == 0) {
-			mCurrentKeyboardHeigh = (int) TDevice.dpToPixel(180);
-		}
+		mCurrentKeyboardHeigh = (int) TDevice.dpToPixel(180);
 		int emojiPanelHeight = (int) (mCurrentKeyboardHeigh - TDevice
 				.dpToPixel(20));
 		int emojiHeight = (int) (emojiPanelHeight / 3);
@@ -206,13 +203,6 @@ public class EmojiFragment extends BaseFragment implements
 
 	@Override
 	public void onSoftKeyboardOpened(int keyboardHeightInPx) {
-		int realKeyboardHeight = keyboardHeightInPx
-				- TDevice.getStatusBarHeight();
-
-		AppContext.setSoftKeyboardHeight(realKeyboardHeight);
-		if (mCurrentKeyboardHeigh != realKeyboardHeight) {
-			caculateEmojiPanelHeight();
-		}
 
 		mIsKeyboardVisible = true;
 		hideEmojiPanel();

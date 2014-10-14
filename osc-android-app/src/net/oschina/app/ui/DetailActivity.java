@@ -2,6 +2,7 @@ package net.oschina.app.ui;
 
 import java.lang.ref.WeakReference;
 
+import butterknife.InjectView;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseDetailFragment;
@@ -36,8 +37,12 @@ public class DetailActivity extends BaseActivity implements
 	public static final int DISPLAY_QUESTION = 3;
 	public static final int DISPLAY_TWEET = 4;
 	public static final String BUNDLE_KEY_DISPLAY_TYPE = "BUNDLE_KEY_DISPLAY_TYPE";
-
-	private View mViewEmojiContaienr, mViewToolBarContaienr;
+	
+	@InjectView(R.id.emoji_container)
+	View mViewEmojiContaienr;
+	
+	@InjectView(R.id.toolbar_container)
+	View mViewToolBarContaienr;
 	private WeakReference<BaseFragment> mFragment, mEmojiFragment;
 
 	@Override
@@ -92,9 +97,6 @@ public class DetailActivity extends BaseActivity implements
 		mFragment = new WeakReference<BaseFragment>(fragment);
 		trans.replace(R.id.container, fragment);
 
-		mViewEmojiContaienr = findViewById(R.id.emoji_container);
-		mViewToolBarContaienr = findViewById(R.id.toolbar_container);
-		
 		// 加表情操作界面
 		if (fragment instanceof EmojiFragmentControl) {
 			EmojiFragment f = new EmojiFragment();

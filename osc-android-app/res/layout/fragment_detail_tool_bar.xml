@@ -25,7 +25,8 @@
             android:contentDescription="@null"
             android:paddingLeft="@dimen/space_8"
             android:paddingRight="@dimen/space_8"
-            android:src="@drawable/btn_opt_tools_to_text_selector" />
+            android:src="@drawable/btn_opt_tools_to_text_selector"
+            android:visibility="gone" />
 
         <View
             android:layout_width="1px"

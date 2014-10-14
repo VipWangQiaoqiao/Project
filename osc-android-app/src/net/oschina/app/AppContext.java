@@ -260,14 +260,5 @@ public class AppContext extends BaseApplication {
 	public static boolean shouldLoadImage() {
 		return getPreferences().getBoolean(KEY_LOAD_IMAGE, true);
 	}
-	
-	public static void setSoftKeyboardHeight(int height) {
-		Editor editor = getPreferences().edit();
-		editor.putInt(KEY_SOFTKEYBOARD_HEIGHT, height);
-		apply(editor);
-	}
 
-	public static int getSoftKeyboardHeight() {
-		return getPreferences().getInt(KEY_SOFTKEYBOARD_HEIGHT, 0);
-	}
 }
