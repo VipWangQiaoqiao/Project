@@ -10,9 +10,11 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.Result;
+import net.oschina.app.bean.ResultBean;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
+import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
@@ -42,6 +44,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ZoomButtonsController;
+import butterknife.InjectView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -71,7 +74,9 @@ public class BaseDetailFragment extends BaseFragment implements
 
 	private ListPopupWindow mMenuWindow;
 	private MenuAdapter mMenuAdapter;
+	
 	protected EmptyLayout mEmptyLayout;
+	
 	protected WebView mWebView;
 
 	protected WebViewClient mWebClient = new WebViewClient() {
@@ -384,7 +389,7 @@ public class BaseDetailFragment extends BaseFragment implements
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		if (position == 0) {
-			// handleFavoriteOrNot();
+			handleFavoriteOrNot();
 			handleShare();
 		} else if (position == 1) {
 			onReportMenuClick();
@@ -413,7 +418,7 @@ public class BaseDetailFragment extends BaseFragment implements
 			return;
 		}
 		int uid = AppContext.getInstance().getLoginUid();
-		if (mIsFavorited) {// mMenuAdapter.isFavorite()
+		if (mIsFavorited) {
 			OSChinaApi.delFavorite(uid, getFavoriteTargetId(),
 					getFavoriteTargetType(), mDelFavoriteHandler);
 		} else {
@@ -734,7 +739,7 @@ public class BaseDetailFragment extends BaseFragment implements
 		@Override
 		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 			try {
-				Result res = XmlUtils.toBean(Result.class, new ByteArrayInputStream(arg2));
+				Result res = XmlUtils.toBean(ResultBean.class, new ByteArrayInputStream(arg2)).getResult();
 				if (res.OK()) {
 					AppContext.showToastShort(R.string.add_favorite_success);
 					mMenuAdapter.setFavorite(true);
@@ -764,7 +769,7 @@ public class BaseDetailFragment extends BaseFragment implements
 		@Override
 		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 			try {
-				Result res = XmlUtils.toBean(Result.class, new ByteArrayInputStream(arg2));
+				Result res = XmlUtils.toBean(ResultBean.class, new ByteArrayInputStream(arg2)).getResult();
 				if (res.OK()) {
 					AppContext.showToastShort(R.string.del_favorite_success);
 					mMenuAdapter.setFavorite(false);

@@ -5,7 +5,6 @@ import java.lang.ref.WeakReference;
 import butterknife.InjectView;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseActivity;
-import net.oschina.app.base.BaseDetailFragment;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.emoji.EmojiFragment;
 import net.oschina.app.fragment.FragmentTest;
@@ -43,6 +42,7 @@ public class DetailActivity extends BaseActivity implements
 	
 	@InjectView(R.id.toolbar_container)
 	View mViewToolBarContaienr;
+	
 	private WeakReference<BaseFragment> mFragment, mEmojiFragment;
 
 	@Override

@@ -79,5 +79,18 @@
 	<string name="add_favorite_faile">收藏失败</string>
 	<string name="del_favorite_success">已取消收藏</string>
 	<string name="del_favorite_faile">取消收藏失败</string>
+	
+	<string name="tip_comment_content_empty">评论内容不能为空</string>
+	
+	<!-- notification messages -->
+	<string name="comment_blog">发布评论</string>
+	<string name="comment_publishing">正在发布你的评论…</string>
+	<string name="comment_publish_success">评论发布成功</string>
+	<string name="comment_publish_faile">发布评论失败</string>
+	
+	<string name="tweet_public">发布动弹</string>
+	<string name="tweet_publishing">正在发布你的动弹…</string>
+	<string name="tweet_publish_success">动弹发布成功</string>
+	<string name="tweet_publish_faile">发布动弹失败</string>
 
 </resources>

@@ -3,10 +3,15 @@ package net.oschina.app.fragment;
 import java.io.InputStream;
 import java.io.Serializable;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseDetailFragment;
+import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.Entity;
+import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.News;
 import net.oschina.app.bean.News.Relative;
 import net.oschina.app.bean.NewsDetail;
@@ -17,13 +22,17 @@ import net.oschina.app.fragment.ToolbarFragment.ToolAction;
 import net.oschina.app.interf.EmojiFragmentControl;
 import net.oschina.app.interf.ToolbarEmojiVisiableControl;
 import net.oschina.app.interf.ToolbarFragmentControl;
+import net.oschina.app.service.PublicCommentTask;
+import net.oschina.app.service.ServerTaskUtils;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,10 +47,12 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 			.getSimpleName();
 	private static final String NEWS_CACHE_KEY = "news_";
 	private static final String NEWS_DETAIL_SCREEN = "news_detail_screen";
-	private TextView mTvTitle, mTvSource, mTvTime;
+	@InjectView(R.id.tv_title) TextView mTvTitle;
+	@InjectView(R.id.tv_source) TextView mTvSource;
+	@InjectView(R.id.tv_time) TextView mTvTime;
+	@InjectView(R.id.tv_comment_count) TextView mTvCommentCount;
 	private int mNewsId;
 	private News mNews;
-	private TextView mTvCommentCount;
 	private EmojiFragment mEmojiFragment;
 	private ToolbarFragment mToolBarFragment;
 
@@ -72,7 +83,7 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 				if (act != null && act instanceof ToolbarEmojiVisiableControl) {
 					((ToolbarEmojiVisiableControl) act).toggleToolbarEmoji();
 				}
-//				mEmojiFragment.showKeyboardIfNoEmojiGrid();
+				mEmojiFragment.showKeyboardIfNoEmojiGrid();
 				break;
 			case ACTION_VIEW_COMMENT:
 				if (mNews != null)
@@ -92,38 +103,19 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 	};
 
 	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-//		ActionBarActivity act = (ActionBarActivity) activity;
-//		mTvCommentCount = (TextView) act.getSupportActionBar().getCustomView()
-//				.findViewById(R.id.tv_comment_count);
-//		mTvCommentCount.setOnClickListener(new View.OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				UIHelper.showComment(getActivity(), mNews.getId(),
-//						CommentList.CATALOG_NEWS);
-//			}
-//		});
-	}
-
-	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_news_detail,
 				container, false);
 
 		mNewsId = getActivity().getIntent().getIntExtra("news_id", 0);
-
+		ButterKnife.inject(this, view);
 		initViews(view);
 		return view;
 	}
 
 	private void initViews(View view) {
 		mEmptyLayout = (EmptyLayout) view.findViewById(R.id.error_layout);
-		mTvTitle = (TextView) view.findViewById(R.id.tv_title);
-		mTvSource = (TextView) view.findViewById(R.id.tv_source);
-		mTvTime = (TextView) view.findViewById(R.id.tv_time);
 
 		mWebView = (WebView) view.findViewById(R.id.webview);
 		initWebView(mWebView);
@@ -142,12 +134,12 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 
 	@Override
 	protected Entity parseData(InputStream is) throws Exception {
-		return XmlUtils.toBean(NewsDetail.class, is);
+		return XmlUtils.toBean(NewsDetail.class, is).getNews();
 	}
 
 	@Override
 	protected Entity readData(Serializable seri) {
-		return (NewsDetail) seri;
+		return (News) seri;
 	}
 
 //	@Override
@@ -170,7 +162,7 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 
 	@Override
 	protected void executeOnLoadDataSuccess(Entity entity) {
-		mNews = ((NewsDetail) entity).getNews();
+		mNews = (News) entity;
 		fillUI();
 		fillWebViewBody();
 	}
@@ -179,15 +171,11 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 		mTvTitle.setText(mNews.getTitle());
 		mTvSource.setText(mNews.getAuthor());
 		mTvTime.setText(StringUtils.friendly_time(mNews.getPubDate()));
-		// if (mTvCommentCount != null) {
-		// mTvCommentCount.setVisibility(View.VISIBLE);
-		// mTvCommentCount.setText(getString(R.string.comment_count,
-		// mNews.getCommentCount()));
-		// }
-//		if (mToolBarFragment != null) {
-//			mToolBarFragment.setCommentCount(mNews.getCommentCount());
-//		}
-//		notifyFavorite(mNews.getFavorite() == 1);
+		mTvCommentCount.setText(mNews.getCommentCount() + "评");
+		if (mToolBarFragment != null) {
+			mToolBarFragment.setCommentCount(mNews.getCommentCount());
+		}
+		notifyFavorite(mNews.getFavorite() == 1);
 	}
 
 	private void fillWebViewBody() {
@@ -229,9 +217,9 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 	@Override
 	protected void onFavoriteChanged(boolean flag) {
 		mNews.setFavorite(flag ? 1 : 0);
-//		if (mToolBarFragment != null) {
-//			mToolBarFragment.setFavorite(flag);
-//		}
+		if (mToolBarFragment != null) {
+			mToolBarFragment.setFavorite(flag);
+		}
 		saveCache(mNews);
 	}
 
@@ -258,27 +246,27 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 
 	@Override
 	public void onSendClick(String text) {
-//		if (!TDevice.hasInternet()) {
-//			AppContext.showToastShort(R.string.tip_network_error);
-//			return;
-//		}
-//		if (!AppContext.getInstance().isLogin()) {
-//			UIHelper.showLoginActivity(getActivity());
-//			return;
-//		}
-//		if (TextUtils.isEmpty(text)) {
-//			AppContext.showToastShort(R.string.tip_comment_content_empty);
-//			mEmojiFragment.requestFocusInput();
-//			return;
-//		}
-//		PublicCommentTask task = new PublicCommentTask();
-//		task.setId(mNewsId);
-//		task.setCatalog(CommentList.CATALOG_NEWS);
-//		task.setIsPostToMyZone(0);
-//		task.setContent(text);
-//		task.setUid(AppContext.instance().getLoginUid());
-//		ServerTaskUtils.publicComment(getActivity(), task);
-//		mEmojiFragment.reset();
+		if (!TDevice.hasInternet()) {
+			AppContext.showToastShort(R.string.tip_network_error);
+			return;
+		}
+		if (!AppContext.getInstance().isLogin()) {
+			UIHelper.showLoginActivity(getActivity());
+			return;
+		}
+		if (TextUtils.isEmpty(text)) {
+			AppContext.showToastShort(R.string.tip_comment_content_empty);
+			mEmojiFragment.requestFocusInput();
+			return;
+		}
+		PublicCommentTask task = new PublicCommentTask();
+		task.setId(mNewsId);
+		task.setCatalog(CommentList.CATALOG_NEWS);
+		task.setIsPostToMyZone(0);
+		task.setContent(text);
+		task.setUid(AppContext.getInstance().getLoginUid());
+		ServerTaskUtils.publicNewsComment(getActivity(), task);
+		mEmojiFragment.reset();
 	}
 
 	@Override
@@ -288,8 +276,7 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 
 	@Override
 	protected int getFavoriteTargetType() {
-		return 0;
-//		return mNews != null ? FavoriteList.TYPE_NEWS : -1;
+		return mNews != null ? FavoriteList.TYPE_NEWS : -1;
 	}
 
 	@Override

@@ -43,7 +43,7 @@
                         android:layout_marginTop="@dimen/space_4"
                         android:gravity="center_vertical"
                         android:orientation="horizontal" >
-                        
+
                         <TextView
                             android:id="@+id/tv_time"
                             android:layout_width="wrap_content"
@@ -57,10 +57,18 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/space_10"
-                            android:textColor="@color/lightblue"
                             android:clickable="true"
+                            android:textColor="@color/lightblue"
                             android:textSize="@dimen/text_size_12" />
 
+                        <TextView
+                            android:id="@+id/tv_comment_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/space_10"
+                            android:clickable="true"
+                            android:textColor="@color/main_gray"
+                            android:textSize="@dimen/text_size_12" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -78,4 +86,5 @@
             android:layout_height="match_parent"
             android:visibility="gone" />
     </RelativeLayout>
+
 </LinearLayout>

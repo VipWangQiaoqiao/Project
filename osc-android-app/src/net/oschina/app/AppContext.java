@@ -260,5 +260,4 @@ public class AppContext extends BaseApplication {
 	public static boolean shouldLoadImage() {
 		return getPreferences().getBoolean(KEY_LOAD_IMAGE, true);
 	}
-
 }

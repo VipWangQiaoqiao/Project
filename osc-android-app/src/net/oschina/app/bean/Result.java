@@ -27,12 +27,15 @@ public class Result implements Serializable {
 	public int getErrorCode() {
 		return errorCode;
 	}
-	public String getErrorMessage() {
-		return errorMessage;
-	}
+
 	public void setErrorCode(int errorCode) {
 		this.errorCode = errorCode;
 	}
+
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+
 	public void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
 	}
