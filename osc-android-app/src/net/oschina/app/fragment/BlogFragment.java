@@ -7,8 +7,10 @@ import net.oschina.app.adapter.BlogAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
+import net.oschina.app.bean.Blog;
 import net.oschina.app.bean.BlogList;
 import net.oschina.app.bean.ListEntity;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -52,7 +54,9 @@ public class BlogFragment extends BaseListFragment {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		
+		Blog blog = (Blog) mAdapter.getItem(position);
+		if (blog != null)
+			UIHelper.showUrlRedirect(view.getContext(), blog.getUrl());
 	}
 
 }

@@ -23,22 +23,22 @@ public class Blog extends Entity {
 	@XStreamAlias("where")
 	private String where;
 
-	@XStreamAlias("commentcount")
+	@XStreamAlias("commentCount")
 	private int commentCount;
 
 	@XStreamAlias("body")
 	private String body;
 
-	@XStreamAlias("authorname")
+	@XStreamAlias("author")
 	private String authorname;
 
-	@XStreamAlias("authoruid")
+	@XStreamAlias("authorid")
 	private int authoruid;
 
-	@XStreamAlias("documenttype")
+	@XStreamAlias("documentType")
 	private int documentType;
 
-	@XStreamAlias("pubdate")
+	@XStreamAlias("pubDate")
 	private String pubDate;
 
 	@XStreamAlias("favorite")

@@ -92,5 +92,7 @@
 	<string name="tweet_publishing">正在发布你的动弹…</string>
 	<string name="tweet_publish_success">动弹发布成功</string>
 	<string name="tweet_publish_faile">发布动弹失败</string>
+	
+	<string name="actionbar_title_comment">评论列表</string>
 
 </resources>

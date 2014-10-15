@@ -7,14 +7,19 @@ import org.json.JSONObject;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.bean.News;
+import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.interf.OnWebViewImageListener;
 import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.ui.LoginActivity;
+import net.oschina.app.ui.SimpleBackActivity;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
@@ -74,6 +79,20 @@ public class UIHelper {
 	}
 	
 	/**
+	 * 显示博客详情
+	 * 
+	 * @param context
+	 * @param blogId
+	 */
+	public static void showBlogDetail(Context context, int blogId) {
+		Intent intent = new Intent(context, DetailActivity.class);
+		intent.putExtra("blog_id", blogId);
+		intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+				DetailActivity.DISPLAY_BLOG);
+		context.startActivity(intent);
+	}
+	
+	/**
 	 * 新闻超链接点击跳转
 	 * 
 	 * @param context
@@ -99,11 +118,11 @@ public class UIHelper {
 				//showQuestionDetail(context, StringUtils.toInt(objId));
 				break;
 			case News.NEWSTYPE_BLOG:
-				//showBlogDetail(context, StringUtils.toInt(objId));
+				showBlogDetail(context, StringUtils.toInt(objId));
 				break;
 			}
 		} else {
-			//showUrlRedirect(context, url);
+			showUrlRedirect(context, url);
 		}
 	}
 	
@@ -117,6 +136,7 @@ public class UIHelper {
 		wv.addJavascriptInterface(new OnWebViewImageListener() {
 			
 			@Override
+			@JavascriptInterface
 			public void onImageClick(String bigImageUrl) {
 				if (bigImageUrl != null) {
 					UIHelper.showImagePreview(cxt, new String[] { bigImageUrl });
@@ -191,7 +211,7 @@ public class UIHelper {
 			//showTweetDetail(context, objId);
 			break;
 		case URLsUtils.URL_OBJ_TYPE_BLOG:
-			//showBlogDetail(context, objId);
+			showBlogDetail(context, objId);
 			break;
 		case URLsUtils.URL_OBJ_TYPE_OTHER:
 			openBrowser(context, objKey);
@@ -225,5 +245,43 @@ public class UIHelper {
 	public static void showImagePreview(Context context, int index,
 			String[] imageUrls) {
 		ImagePreviewActivity.showImagePrivew(context, index, imageUrls);
+	}
+	
+	public static void showSimpleBackForResult(Fragment fragment,
+			int requestCode, SimpleBackPage page, Bundle args) {
+		Intent intent = new Intent(fragment.getActivity(),
+				SimpleBackActivity.class);
+		intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, page.getValue());
+		intent.putExtra(SimpleBackActivity.BUNDLE_KEY_ARGS, args);
+		fragment.startActivityForResult(intent, requestCode);
+	}
+
+	public static void showSimpleBackForResult(Activity context,
+			int requestCode, SimpleBackPage page, Bundle args) {
+		Intent intent = new Intent(context, SimpleBackActivity.class);
+		intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, page.getValue());
+		intent.putExtra(SimpleBackActivity.BUNDLE_KEY_ARGS, args);
+		context.startActivityForResult(intent, requestCode);
+	}
+
+	public static void showSimpleBackForResult(Activity context,
+			int requestCode, SimpleBackPage page) {
+		Intent intent = new Intent(context, SimpleBackActivity.class);
+		intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, page.getValue());
+		context.startActivityForResult(intent, requestCode);
+	}
+
+	public static void showSimpleBack(Context context, SimpleBackPage page) {
+		Intent intent = new Intent(context, SimpleBackActivity.class);
+		intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, page.getValue());
+		context.startActivity(intent);
+	}
+
+	public static void showSimpleBack(Context context, SimpleBackPage page,
+			Bundle args) {
+		Intent intent = new Intent(context, SimpleBackActivity.class);
+		intent.putExtra(SimpleBackActivity.BUNDLE_KEY_ARGS, args);
+		intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, page.getValue());
+		context.startActivity(intent);
 	}
 }

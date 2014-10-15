@@ -52,6 +52,10 @@
             android:name=".ui.ImagePreviewActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.SimpleBackActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" />
 
         <service android:name="net.oschina.app.service.ServerTaskService" >
             <intent-filter>
@@ -62,7 +66,7 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="net.oschina.app.ACTION_PUBLIC_POST" />
-            </intent-filter>
+            </intent-filter>  
             <intent-filter>
                 <action android:name="net.oschina.app.ACTION_PUBLIC_TWEET" />
             </intent-filter>
