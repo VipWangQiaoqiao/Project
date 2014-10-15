@@ -18,6 +18,12 @@ public class Tweet extends Entity {
 	public final static int CATALOG_LATEST = 0;
 	public final static int CATALOG_HOT = -1;
 	public final static int CATALOG_MINE = 3;
+	
+	public final static int CLIENT_MOBILE = 2;
+	public final static int CLIENT_ANDROID = 3;
+	public final static int CLIENT_IPHONE = 4;
+	public final static int CLIENT_WINDOWS_PHONE = 5;
+	public final static int CLIENT_WECHAT=6;
 
 	@XStreamAlias("portrait")
 	private String portrait;
