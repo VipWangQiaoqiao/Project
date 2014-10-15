@@ -49,7 +49,7 @@
     <color name="swiperefresh_color4">#ffaa66cc</color>
     
     <!-- 动弹列表背景颜色 -->
-    <color name="tweet_bg">#d3d6db</color>
+    <color name="tweet_bg">#f9f7f7</color>
 	<color name="tweet_item_bg">#ffffff</color>
 	<color name="tweet_item_border">#c2c3c8</color>
 	<color name="tweet_time_platform">#a0a3a7</color>

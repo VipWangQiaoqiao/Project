@@ -8,9 +8,12 @@ import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.LinkView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * @author HuangWenwei
@@ -23,12 +26,15 @@ public class TweetAdapter extends ListBaseAdapter {
 
 		@InjectView(R.id.tv_tweet_name) TextView author;
 		@InjectView(R.id.tv_tweet_time) TextView time;
-		@InjectView(R.id.tv_tweet_platform) TextView platform;
 		@InjectView(R.id.tweet_item) LinkView content;
 		@InjectView(R.id.tv_tweet_comment_count) TextView commentcount;
+		@InjectView(R.id.tv_tweet_platform) TextView platform;
 		
 		@InjectView(R.id.iv_tweet_face) 
 		public AvatarView face;
+		
+		@InjectView(R.id.iv_tweet_image)
+		public ImageView image;
 
 
 		public ViewHolder(View view) {
@@ -53,8 +59,28 @@ public class TweetAdapter extends ListBaseAdapter {
 		vh.face.setAvatarUrl(tweet.getPortrait());
 		vh.author.setText(tweet.getAuthor());
 		vh.time.setText(StringUtils.friendly_time(tweet.getPubDate()));
+		vh.content.setLinkText(tweet.getBody());
 		vh.commentcount.setText(String.valueOf(tweet.getCommentCount()));
-		vh.content.setText(tweet.getBody());
+		if(tweet.getImgSmall()!=null){
+			vh.image.setVisibility(AvatarView.VISIBLE);
+			ImageLoader.getInstance().displayImage(tweet.getImgSmall(), vh.image);
+		}
+		switch (tweet.getAppclient()) {
+		case 2:
+			vh.platform.setText("来自：手机");
+		case 3:
+			vh.platform.setText("来自：Android");
+		case 4:
+			vh.platform.setText("来自：微信");
+		case 5:
+			vh.platform.setText("来自：Windows Phone");
+		case 6:
+			vh.platform.setText("来自：iPhone");
+			break;
+		default:
+			vh.platform.setText("来自：网页");
+			break;
+		}
 		return convertView;
 	}
 }

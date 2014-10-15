@@ -19,6 +19,8 @@ public class EmptyLayout extends LinearLayout implements
 	public static final int NETWORK_LOADING = 2;
 	public static final int NODATA = 3;
 	public static final int NODATA_ENABLE_CLICK = 5;
+	public static final int NO_LOGIN = 6;
+	
 	private ProgressBar animProgress;
 	private boolean clickEnable = true;
 	private Context context;
@@ -173,6 +175,8 @@ public class EmptyLayout extends LinearLayout implements
 		}
 	}
 
+
+
 	public void setNoDataContent(String noDataContent) {
 		strNoDataContent = noDataContent;
 	}
@@ -186,6 +190,10 @@ public class EmptyLayout extends LinearLayout implements
 			tv.setText(strNoDataContent);
 		else
 			tv.setText(R.string.error_view_no_data);
+	}
+	
+	private void setTvNoLoginContent() {
+		tv.setText(R.string.unlogin_tip);
 	}
 
 	@Override

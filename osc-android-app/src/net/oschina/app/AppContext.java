@@ -3,6 +3,17 @@ package net.oschina.app;
 import java.util.Properties;
 import java.util.UUID;
 
+import net.oschina.app.api.ApiHttpClient;
+import net.oschina.app.base.BaseApplication;
+import net.oschina.app.bean.UserInformation;
+import net.oschina.app.util.CyptoUtils;
+import net.oschina.app.util.StringUtils;
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.PersistentCookieStore;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -11,18 +22,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.process.BitmapProcessor;
-
-import net.oschina.app.api.ApiHttpClient;
-import net.oschina.app.base.BaseApplication;
-import net.oschina.app.bean.UserInformation;
-import net.oschina.app.util.CyptoUtils;
-import net.oschina.app.util.FileUtils;
-import net.oschina.app.util.StringUtils;
-import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
 
 /**
  * 全局应用程序类：用于保存和调用全局应用配置及访问网络数据

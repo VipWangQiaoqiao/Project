@@ -86,7 +86,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 		if (args != null) {
 			mCatalog = args.getInt(BUNDLE_KEY_CATALOG);
 			blogType = args.getString(BUNDLE_BLOG_TYPE, blogType);
-			tweetType = args.getInt(BUNDLE_TWEET_TYPE,tweetType);
+			tweetType = args.getInt(BUNDLE_KEY_CATALOG,tweetType);
 		}
 	}
 
@@ -124,13 +124,15 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 				mCurrentPage = 0;
 				mState = STATE_REFRESH;
 				requestData(false);
-			} else {
+			} else{
 				mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
 			}
+
 		}
 		if (mStoreEmptyState != -1) {
 			mErrorLayout.setErrorType(mStoreEmptyState);
 		}
+			
 	}
 
 	@Override
