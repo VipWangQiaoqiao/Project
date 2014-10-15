@@ -5,7 +5,7 @@
     android:versionName="2.0" >
 
     <uses-sdk
-        android:minSdkVersion="10"
+        android:minSdkVersion="8"
         android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -15,7 +15,14 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RESTART_PACKAGES" />
 
-    <application	
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
+
+    <application
         android:name=".AppContext"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -35,5 +42,35 @@
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".ui.DetailActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/ActionBarBaseTheme"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.ImagePreviewActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.SimpleBackActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" />
+
+        <service android:name="net.oschina.app.service.ServerTaskService" >
+            <intent-filter>
+                <action android:name="net.oschina.app.ACTION_PUBLIC_BLOG_COMMENT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="net.oschina.app.ACTION_PUBLIC_COMMENT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="net.oschina.app.ACTION_PUBLIC_POST" />
+            </intent-filter>  
+            <intent-filter>
+                <action android:name="net.oschina.app.ACTION_PUBLIC_TWEET" />
+            </intent-filter>
+        </service>
     </application>
+
 </manifest>
