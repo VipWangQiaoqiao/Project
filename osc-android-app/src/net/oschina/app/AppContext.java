@@ -3,6 +3,17 @@ package net.oschina.app;
 import java.util.Properties;
 import java.util.UUID;
 
+import net.oschina.app.api.ApiHttpClient;
+import net.oschina.app.base.BaseApplication;
+import net.oschina.app.bean.UserInformation;
+import net.oschina.app.util.CyptoUtils;
+import net.oschina.app.util.StringUtils;
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.PersistentCookieStore;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -11,19 +22,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.process.BitmapProcessor;
-
-import net.oschina.app.api.ApiHttpClient;
-import net.oschina.app.base.BaseApplication;
-import net.oschina.app.bean.UserInformation;
-import net.oschina.app.util.CyptoUtils;
-import net.oschina.app.util.FileUtils;
-import net.oschina.app.util.StringUtils;
-import android.content.Context;
-import android.content.SharedPreferences.Editor;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
 
 /**
  * 全局应用程序类：用于保存和调用全局应用配置及访问网络数据
@@ -47,7 +45,7 @@ public class AppContext extends BaseApplication {
 	private static final String KEY_QUESTION_CONTENT_DRAFT = "key_question_content_draft";
 	private static final String KEY_QUESTION_TYPE_DRAFT = "key_question_type_draft";
 	private static final String KEY_QUESTION_LMK_DRAFT = "key_question_lmk_draft";
-	
+
 	// 手机网络类型
 	public static final int NETTYPE_WIFI = 0x01;
 	public static final int NETTYPE_CMWAP = 0x02;
@@ -55,13 +53,13 @@ public class AppContext extends BaseApplication {
 
 	public static final int PAGE_SIZE = 20;// 默认分页大小
 	private static final int CACHE_TIME = 60 * 60000;// 缓存失效时间
-	
+
 	private static AppContext instance;
-	
+
 	private int loginUid;
-	
+
 	private boolean login;
-	
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -74,7 +72,7 @@ public class AppContext extends BaseApplication {
 		// 初始化图片加载
 		initImageLoader(this);
 	}
-	
+
 	private void init() {
 		// 初始化网络请求
 		AsyncHttpClient client = new AsyncHttpClient();
@@ -83,7 +81,7 @@ public class AppContext extends BaseApplication {
 		ApiHttpClient.setHttpClient(client);
 		ApiHttpClient.setCookie(ApiHttpClient.getCookie(this));
 	}
-	
+
 	private void initLogin() {
 		UserInformation user = getLoginUser();
 		if (null != user && user.getUid() > 0) {
@@ -93,9 +91,10 @@ public class AppContext extends BaseApplication {
 			this.cleanLoginInfo();
 		}
 	}
-	
+
 	/**
 	 * 配置图片加载器
+	 * 
 	 * @param context
 	 */
 	public static void initImageLoader(Context context) {
@@ -124,15 +123,16 @@ public class AppContext extends BaseApplication {
 		// Initialize ImageLoader with configuration.
 		ImageLoader.getInstance().init(config);
 	}
-	
+
 	/**
 	 * 获得当前app运行的AppContext
+	 * 
 	 * @return
 	 */
 	public static AppContext getInstance() {
 		return instance;
 	}
-	
+
 	public boolean containsProperty(String key) {
 		Properties props = getProperties();
 		return props.containsKey(key);
@@ -158,7 +158,7 @@ public class AppContext extends BaseApplication {
 	public void removeProperty(String... key) {
 		AppConfig.getAppConfig(this).remove(key);
 	}
-	
+
 	/**
 	 * 获取App唯一标识
 	 * 
@@ -189,7 +189,7 @@ public class AppContext extends BaseApplication {
 			info = new PackageInfo();
 		return info;
 	}
-	
+
 	/**
 	 * 保存登录信息
 	 * 
@@ -218,7 +218,7 @@ public class AppContext extends BaseApplication {
 			}
 		});
 	}
-	
+
 	/**
 	 * 获得登录用户的信息
 	 * @return
@@ -248,7 +248,7 @@ public class AppContext extends BaseApplication {
 				"user.pwd", "user.location", "user.followers", "user.fans",
 				"user.score", "user.isRememberMe");
 	}
-	
+
 	public int getLoginUid() {
 		return loginUid;
 	}

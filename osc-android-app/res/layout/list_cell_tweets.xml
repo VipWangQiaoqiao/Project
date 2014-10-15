@@ -8,36 +8,33 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-
-        android:layout_marginTop="@dimen/tweet_item_margin"
-        android:background="@drawable/tweet_bg_parent_rounded_corner"
+        android:descendantFocusability="blocksDescendants" 
         android:orientation="vertical"
-        android:paddingBottom="@dimen/tweet_item_padding_top_bottom" >
+        android:paddingBottom="2dp" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingLeft="5dp"
-            android:paddingRight="@dimen/tweet_item_padding_left_right" >
+            android:paddingRight="5dp" >
 
             <net.oschina.app.widget.AvatarView
-                android:layout_marginTop="5dp"
                 android:id="@+id/iv_tweet_face"
-                style="@style/user_face_image" />
+                style="@style/user_face_image"
+                android:layout_marginTop="5dp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/tweet_item_profile_info_padd"
                 android:orientation="vertical"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="@dimen/tweet_item_profile_info_padd" >
+                android:paddingTop="5dp" >
 
                 <TextView
                     android:id="@+id/tv_tweet_name"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
                     android:textSize="@dimen/text_size_15"
                     android:textStyle="bold" />
 
@@ -45,40 +42,41 @@
                     android:id="@+id/tv_tweet_time"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="2dp"
                     android:textColor="@color/tweet_time_platform"
                     android:textSize="@dimen/text_size_13" />
-            </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_tweet_platform"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:textColor="@color/tweet_time_platform"
-                android:textSize="@dimen/text_size_13" />
+            </LinearLayout>
         </LinearLayout>
 
         <net.oschina.app.widget.LinkView
             android:id="@+id/tweet_item"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="5dp"
             android:autoLink="web|email"
-            android:paddingLeft="@dimen/tweet_linkview_left"
-            android:paddingRight="5dp"
-            android:layout_marginLeft="25dp"
-            android:paddingTop="10dp"
+            android:paddingTop="5dp"
             android:text="@color/black"
             android:textColorLink="@color/blue"
             android:textSize="@dimen/text_size_15" />
 
+        <ImageView
+            android:id="@+id/iv_tweet_image"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingTop="5dp"
+            android:scaleType="fitStart"
+            android:visibility="gone" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginBottom="2dp"
             android:orientation="horizontal"
-            android:paddingLeft="@dimen/tweet_item_padding_left_right"
-            android:paddingRight="@dimen/tweet_item_padding_left_right" >
+            android:paddingLeft="2dp"
+            android:paddingTop="4dp" >
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -93,7 +91,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/space_2"
                 android:textColor="@color/main_gray"
-                android:textSize="@dimen/text_size_12" />
+                android:textSize="@dimen/text_size_10" />
+
+            <TextView
+                android:id="@+id/tv_tweet_platform"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="40dp"
+                android:textColor="@color/tweet_time_platform"
+                android:textSize="@dimen/text_size_10" />
         </LinearLayout>
     </LinearLayout>
 

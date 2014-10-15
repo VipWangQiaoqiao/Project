@@ -1,30 +1,26 @@
 package net.oschina.app.ui;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 import net.oschina.app.R;
 import net.oschina.app.interf.BaseViewInterface;
-import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.widget.MyFragmentTabHost;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabContentFactory;
 import android.widget.TabHost.TabSpec;
-import android.support.v4.widget.DrawerLayout;
+import android.widget.TextView;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 @SuppressLint("InflateParams")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)

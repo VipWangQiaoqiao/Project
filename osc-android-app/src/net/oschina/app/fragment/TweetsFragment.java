@@ -3,6 +3,7 @@ package net.oschina.app.fragment;
 import java.io.InputStream;
 import java.io.Serializable;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.TweetAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
@@ -10,30 +11,51 @@ import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.TweetsList;
+import net.oschina.app.ui.NavigationDrawerFragment;
+import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
 
 /**
  * @author HuangWenwei
- *
+ * 
  * @date 2014年10月10日
  */
 public class TweetsFragment extends BaseListFragment {
-	
+
 	protected static final String TAG = TweetsFragment.class.getSimpleName();
 	private static final String CACHE_KEY_PREFIX = "tweetslist_";
 	
+	private boolean mIsWatingLogin;
+
 	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		LayoutInflater inflate  = getLayoutInflater(savedInstanceState);
-		View view = inflate.inflate(net.oschina.app.R.layout.fragment_pull_refresh_listview, null);
-		ListView lv = (ListView) view.findViewById(R.id.listview);
-		lv.setDivider(null);
-		super.onActivityCreated(savedInstanceState);
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		IntentFilter filter = new IntentFilter(NavigationDrawerFragment.INTENT_ACTION_USER_CHANGE);
+		getActivity().registerReceiver(mReceiver, filter);
+	}
+
+	@Override
+	public void onResume() {
+		if(mIsWatingLogin){
+			mCurrentPage = 0;
+			mState = STATE_REFRESH;
+			requestData(false);
+		}
+		super.onResume();
+	}
+
+	@Override
+	public void onDestroy() {
+		getActivity().unregisterReceiver(mReceiver);
+		super.onDestroy();
 	}
 
 	@Override
@@ -60,7 +82,7 @@ public class TweetsFragment extends BaseListFragment {
 	@Override
 	protected void sendRequestData() {
 		OSChinaApi.getTweetList(tweetType, mCurrentPage, mHandler);
-	}
+		}
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -68,4 +90,54 @@ public class TweetsFragment extends BaseListFragment {
 		
 	}
 
+	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			setupContent();
+		}
+	};
+	
+	private void setupContent() {
+		if(mErrorLayout !=null){
+			mIsWatingLogin = true;
+			mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+			mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
+		}
+	}
+
+	@Override
+	protected void requestData(boolean refresh) {
+		mErrorLayout.setErrorMessage("");
+		if(tweetType>0){
+			if(AppContext.getInstance().isLogin()){
+				tweetType = AppContext.getInstance().getLoginUid();
+				mIsWatingLogin = false;
+				super.requestData(refresh);
+			}else{
+				mIsWatingLogin = true;
+				mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+				mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
+			}
+		}else{
+			mIsWatingLogin = false;
+			super.requestData(refresh);
+		}
+	}
+
+	@Override
+	public void initView(View view) {
+		super.initView(view);
+		mErrorLayout.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if(AppContext.getInstance().isLogin())
+					requestData(false);
+				else
+					UIHelper.showLoginActivity(getActivity());
+			}
+		});
+		
+	}
 }

@@ -15,7 +15,7 @@ import android.view.View;
  * @created 2014年9月25日 下午2:21:52
  *
  */
-public class TweetsViewPagerFragment extends BaseViewPagerFragment {
+public class TweetsViewPagerFragment extends BaseViewPagerFragment{
 	
     public static TweetsViewPagerFragment newInstance() {
         return new TweetsViewPagerFragment();
@@ -31,25 +31,19 @@ public class TweetsViewPagerFragment extends BaseViewPagerFragment {
 	
 	private Bundle getBundle(int catalog) {
 		Bundle bundle = new Bundle();
-		bundle.putInt(BaseListFragment.BUNDLE_TWEET_TYPE, catalog);
+		bundle.putInt(BaseListFragment.BUNDLE_KEY_CATALOG, catalog);
 		return bundle;
 	}
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void initView(View view) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void initData() {
-		// TODO Auto-generated method stub
-		
 	}
 }

@@ -86,7 +86,6 @@ public class LoginActivity extends BaseActivity {
 
 	@Override
 	protected int getLayoutId() {
-		// TODO Auto-generated method stub
 		return R.layout.activity_login;
 	}
 	
