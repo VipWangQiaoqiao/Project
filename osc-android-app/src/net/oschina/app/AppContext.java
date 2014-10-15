@@ -31,6 +31,20 @@ import com.nostra13.universalimageloader.core.process.BitmapProcessor;
  * @created 2014-04-22
  */
 public class AppContext extends BaseApplication {
+	
+	private static final String KEY_ACCESS_TOKEN = "KEY_ACCESS_TOKEN";
+	private static final String KEY_SOFTKEYBOARD_HEIGHT = "KEY_SOFTKEYBOARD_HEIGHT";
+	private static final String KEY_LOAD_IMAGE = "KEY_LOAD_IMAGE";
+	private static final String KEY_NOTIFICATION_SOUND = "KEY_NOTIFICATION_SOUND";
+	private static final String LAST_QUESTION_CATEGORY_IDX = "LAST_QUESTION_CATEGORY_IDX";
+	private static final String KEY_DAILY_ENGLISH = "KEY_DAILY_ENGLISH";
+	private static final String KEY_GET_LAST_DAILY_ENG = "KEY_GET_LAST_DAILY_ENG";
+	private static final String KEY_NOTIFICATION_DISABLE_WHEN_EXIT = "KEY_NOTIFICATION_DISABLE_WHEN_EXIT";
+	private static final String KEY_TWEET_DRAFT = "key_tweet_draft";
+	private static final String KEY_QUESTION_TITLE_DRAFT = "key_question_title_draft";
+	private static final String KEY_QUESTION_CONTENT_DRAFT = "key_question_content_draft";
+	private static final String KEY_QUESTION_TYPE_DRAFT = "key_question_type_draft";
+	private static final String KEY_QUESTION_LMK_DRAFT = "key_question_lmk_draft";
 
 	// 手机网络类型
 	public static final int NETTYPE_WIFI = 0x01;
@@ -39,13 +53,13 @@ public class AppContext extends BaseApplication {
 
 	public static final int PAGE_SIZE = 20;// 默认分页大小
 	private static final int CACHE_TIME = 60 * 60000;// 缓存失效时间
-	
+
 	private static AppContext instance;
-	
+
 	private int loginUid;
-	
+
 	private boolean login;
-	
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -58,7 +72,7 @@ public class AppContext extends BaseApplication {
 		// 初始化图片加载
 		initImageLoader(this);
 	}
-	
+
 	private void init() {
 		// 初始化网络请求
 		AsyncHttpClient client = new AsyncHttpClient();
@@ -67,7 +81,7 @@ public class AppContext extends BaseApplication {
 		ApiHttpClient.setHttpClient(client);
 		ApiHttpClient.setCookie(ApiHttpClient.getCookie(this));
 	}
-	
+
 	private void initLogin() {
 		UserInformation user = getLoginUser();
 		if (null != user && user.getUid() > 0) {
@@ -77,9 +91,10 @@ public class AppContext extends BaseApplication {
 			this.cleanLoginInfo();
 		}
 	}
-	
+
 	/**
 	 * 配置图片加载器
+	 * 
 	 * @param context
 	 */
 	public static void initImageLoader(Context context) {
@@ -108,15 +123,16 @@ public class AppContext extends BaseApplication {
 		// Initialize ImageLoader with configuration.
 		ImageLoader.getInstance().init(config);
 	}
-	
+
 	/**
 	 * 获得当前app运行的AppContext
+	 * 
 	 * @return
 	 */
 	public static AppContext getInstance() {
 		return instance;
 	}
-	
+
 	public boolean containsProperty(String key) {
 		Properties props = getProperties();
 		return props.containsKey(key);
@@ -142,7 +158,7 @@ public class AppContext extends BaseApplication {
 	public void removeProperty(String... key) {
 		AppConfig.getAppConfig(this).remove(key);
 	}
-	
+
 	/**
 	 * 获取App唯一标识
 	 * 
@@ -173,7 +189,7 @@ public class AppContext extends BaseApplication {
 			info = new PackageInfo();
 		return info;
 	}
-	
+
 	/**
 	 * 保存登录信息
 	 * 
@@ -202,7 +218,7 @@ public class AppContext extends BaseApplication {
 			}
 		});
 	}
-	
+
 	/**
 	 * 获得登录用户的信息
 	 * @return
@@ -232,7 +248,7 @@ public class AppContext extends BaseApplication {
 				"user.pwd", "user.location", "user.followers", "user.fans",
 				"user.score", "user.isRememberMe");
 	}
-	
+
 	public int getLoginUid() {
 		return loginUid;
 	}
@@ -240,5 +256,8 @@ public class AppContext extends BaseApplication {
 	public boolean isLogin() {
 		return login;
 	}
-
+	
+	public static boolean shouldLoadImage() {
+		return getPreferences().getBoolean(KEY_LOAD_IMAGE, true);
+	}
 }

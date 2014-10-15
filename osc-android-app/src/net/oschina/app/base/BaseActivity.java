@@ -51,6 +51,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		if (!hasActionBar()) {
 			supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
 		}
@@ -63,12 +64,14 @@ public abstract class BaseActivity extends ActionBarActivity implements
 		if (hasActionBar()) {
 			initActionBar(mActionBar);
 		}
-		init(savedInstanceState);
+		
+		// 通过注解绑定控件
+		ButterKnife.inject(this);
 
 		IntentFilter filter = new IntentFilter(INTENT_ACTION_EXIT_APP);
 		registerReceiver(mExistReceiver, filter);
-		// 通过注解绑定控件
-		ButterKnife.inject(this);
+		
+		init(savedInstanceState);
 		initView();
 		initData();
 		_isVisible = true;

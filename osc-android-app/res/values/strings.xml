@@ -52,5 +52,47 @@
     <string name="progress_login">正在登录…</string>
     <string name="tip_login_error_for_network">对不起,无法登录.</string>
     <string name="tip_no_internet">当前没有可用的网络链接</string>
+    
+    <string name="actionbar_title_news">资讯详情</string>
+    <string name="actionbar_title_blog">博客详情</string>
+    <string name="actionbar_title_software">软件详情</string>
+    <string name="actionbar_title_question">帖子详情</string>
+    <string name="actionbar_title_tweet">动弹详情</string>
+    <string name="actionbar_title_detail">详情</string>
+    
+    <string name="platform_qq">QQ</string>
+	<string name="platform_qzone">QQ空间</string>
+	<string name="platform_tencent_weibo">腾讯微博</string>
+	<string name="platform_sina">微博</string>
+	<string name="platform_weichat">微信</string>
+	<string name="platform_weichat_circle">朋友圈</string>
+	<string name="share_title">OSC分享</string>
+	<string name="tip_start_share">开始分享</string>
+	<string name="tip_share_done">分享完成</string>
+	
+	<string name="detail_menu_unfavorite">取消收藏</string>
+    <string name="detail_menu_favorite">收藏</string>
+    <string name="detail_menu_for_share">分享</string>
+    <string name="detail_menu_for_report">举报</string>
+	
+	<string name="add_favorite_success">收藏成功</string>
+	<string name="add_favorite_faile">收藏失败</string>
+	<string name="del_favorite_success">已取消收藏</string>
+	<string name="del_favorite_faile">取消收藏失败</string>
+	
+	<string name="tip_comment_content_empty">评论内容不能为空</string>
+	
+	<!-- notification messages -->
+	<string name="comment_blog">发布评论</string>
+	<string name="comment_publishing">正在发布你的评论…</string>
+	<string name="comment_publish_success">评论发布成功</string>
+	<string name="comment_publish_faile">发布评论失败</string>
+	
+	<string name="tweet_public">发布动弹</string>
+	<string name="tweet_publishing">正在发布你的动弹…</string>
+	<string name="tweet_publish_success">动弹发布成功</string>
+	<string name="tweet_publish_faile">发布动弹失败</string>
+	
+	<string name="actionbar_title_comment">评论列表</string>
 
 </resources>

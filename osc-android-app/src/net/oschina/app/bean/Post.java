@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 /**
  * 帖子实体类
@@ -59,7 +61,7 @@ public class Post extends Entity {
 	private int favorite;
 
 	@XStreamAlias("tags")
-	private List<String> tags;
+	private Tags tags;
 	
 	@XStreamAlias("answer")
 	private Answer answer;
@@ -160,11 +162,11 @@ public class Post extends Entity {
 		this.favorite = favorite;
 	}
 
-	public List<String> getTags() {
+	public Post.Tags getTags() {
 		return tags;
 	}
 
-	public void setTags(List<String> tags) {
+	public void setTags(Tags tags) {
 		this.tags = tags;
 	}
 
@@ -199,6 +201,19 @@ public class Post extends Entity {
 
 		public void setTime(String time) {
 			this.time = time;
+		}
+	}
+	
+	public static class Tags{
+		@XStreamImplicit(itemFieldName="tag")
+		private List<String> tags;
+
+		public List<String> getTags() {
+			return tags;
+		}
+
+		public void setTags(List<String> tags) {
+			this.tags = tags;
 		}
 	}
 }

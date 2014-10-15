@@ -97,7 +97,7 @@ public class BaseApplication extends Application {
 	}
 
 	public static void showToast(String message) {
-		showToast(message, Toast.LENGTH_LONG, 0, 17);
+		showToast(message, Toast.LENGTH_LONG, 0, Gravity.BOTTOM);
 	}
 
 	public static void showToast(int message, int icon) {

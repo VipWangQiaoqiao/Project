@@ -60,4 +60,8 @@ public abstract class BaseFragment extends Fragment implements android.view.View
 	protected View inflateView(int resId) {
 		return this.mInflater.inflate(resId, null);
 	}
+	
+	public boolean onBackPressed() {
+		return false;
+	}
 }
