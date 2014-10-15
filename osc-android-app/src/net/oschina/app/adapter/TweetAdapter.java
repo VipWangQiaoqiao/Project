@@ -3,6 +3,7 @@ package net.oschina.app.adapter;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Tweet;
+import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TLog;
 import net.oschina.app.widget.AvatarView;
@@ -49,7 +50,7 @@ public class TweetAdapter extends ListBaseAdapter {
 	}
 
 	@Override
-	protected View getRealView(int position, View convertView, ViewGroup parent) {
+	protected View getRealView(int position, View convertView, final ViewGroup parent) {
 		ViewHolder vh = null;
 		if (convertView == null || convertView.getTag() == null) {
 			convertView = getLayoutInflater(parent.getContext()).inflate(
@@ -59,7 +60,7 @@ public class TweetAdapter extends ListBaseAdapter {
 		} else
 			vh = (ViewHolder) convertView.getTag();
 
-		Tweet tweet = (Tweet) _data.get(position);
+		final Tweet tweet = (Tweet) _data.get(position);
 
 		vh.face.setUserInfo(tweet.getAuthorid(), tweet.getAuthor());
 		vh.face.setAvatarUrl(tweet.getPortrait());
@@ -72,6 +73,13 @@ public class TweetAdapter extends ListBaseAdapter {
 			vh.image.setVisibility(AvatarView.VISIBLE);
 			ImageLoader.getInstance().displayImage(tweet.getImgSmall(),
 					vh.image);
+			vh.image.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					ImagePreviewActivity.showImagePrivew(parent.getContext(), 0, new String[] {tweet.getImgBig()});
+				}
+			});
 		}
 		vh.platform.setVisibility(View.GONE);
 		boolean isShow = true;
