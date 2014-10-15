@@ -93,6 +93,20 @@ public class UIHelper {
 	}
 	
 	/**
+	 * 显示帖子详情
+	 * 
+	 * @param context
+	 * @param postId
+	 */
+	public static void showPostDetail(Context context, int postId) {
+		Intent intent = new Intent(context, DetailActivity.class);
+		intent.putExtra("post_id", postId);
+		intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+				DetailActivity.DISPLAY_POST);
+		context.startActivity(intent);
+	}
+	
+	/**
 	 * 新闻超链接点击跳转
 	 * 
 	 * @param context
@@ -115,7 +129,7 @@ public class UIHelper {
 				//showSoftwareDetail(context, objId);
 				break;
 			case News.NEWSTYPE_POST:
-				//showQuestionDetail(context, StringUtils.toInt(objId));
+				showPostDetail(context, StringUtils.toInt(objId));
 				break;
 			case News.NEWSTYPE_BLOG:
 				showBlogDetail(context, StringUtils.toInt(objId));
@@ -196,7 +210,7 @@ public class UIHelper {
 			showNewsDetail(context, objId);
 			break;
 		case URLsUtils.URL_OBJ_TYPE_QUESTION:
-			//showQuestionDetail(context, objId);
+			showPostDetail(context, objId);
 			break;
 		case URLsUtils.URL_OBJ_TYPE_QUESTION_TAG:
 			//showQuestionListByTag(context, objKey);

@@ -10,6 +10,7 @@ import net.oschina.app.emoji.EmojiFragment;
 import net.oschina.app.fragment.BlogDetailFragment;
 import net.oschina.app.fragment.FragmentTest;
 import net.oschina.app.fragment.NewsDetailFragment;
+import net.oschina.app.fragment.PostDetailFragment;
 import net.oschina.app.fragment.ToolbarFragment;
 import net.oschina.app.interf.EmojiFragmentControl;
 import net.oschina.app.interf.ToolbarEmojiVisiableControl;
@@ -34,7 +35,7 @@ public class DetailActivity extends BaseActivity implements
 	public static final int DISPLAY_NEWS = 0;
 	public static final int DISPLAY_BLOG = 1;
 	public static final int DISPLAY_SOFTWARE = 2;
-	public static final int DISPLAY_QUESTION = 3;
+	public static final int DISPLAY_POST = 3;
 	public static final int DISPLAY_TWEET = 4;
 	public static final String BUNDLE_KEY_DISPLAY_TYPE = "BUNDLE_KEY_DISPLAY_TYPE";
 	
@@ -81,9 +82,9 @@ public class DetailActivity extends BaseActivity implements
 			actionBarTitle = R.string.actionbar_title_software;
 			fragment = new FragmentTest();
 			break;
-		case DISPLAY_QUESTION:
+		case DISPLAY_POST:
 			actionBarTitle = R.string.actionbar_title_question;
-			fragment = new FragmentTest();
+			fragment = new PostDetailFragment();
 			break;
 		case DISPLAY_TWEET:
 			actionBarTitle = R.string.actionbar_title_tweet;
