@@ -189,7 +189,7 @@ public class PostDetailFragment extends BaseDetailFragment implements
 		String tags = "";
 		for (String tag : taglist.getTags()) {
 			tags += String
-					.format("<a class='tag' href='http://www.oschina.net/question/tag/%s' >&nbsp;%s&nbsp;</a>&nbsp;&nbsp;",
+					.format("<a class='tag project' href='http://www.oschina.net/question/tag/%s' >&nbsp;%s&nbsp;</a>&nbsp;&nbsp;",
 							URLEncoder.encode(tag), tag);
 		}
 		return String.format("<div style='margin-top:10px;'>%s</div>", tags);
