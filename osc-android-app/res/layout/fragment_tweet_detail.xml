@@ -11,7 +11,7 @@
         android:layout_weight="1" >
 
         <net.oschina.app.widget.CustomerScrollView
-            android:id="@+id/sv_news_container"
+            android:id="@+id/sv_tweet_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fadingEdge="none"
@@ -26,57 +26,49 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/list_item_background_normal"
-                    android:orientation="vertical"
+                    android:orientation="horizontal"
                     android:padding="@dimen/space_8" >
 
-                    <TextView
-                        android:id="@+id/tv_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/main_black"
-                        android:textSize="@dimen/text_size_18"
-                        android:textStyle="bold" />
+                    <net.oschina.app.widget.AvatarView
+                        android:id="@+id/iv_tweet_detail_face"
+                        style="@style/user_face_image" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/space_4"
                         android:layout_marginTop="@dimen/space_4"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal" >
+                        android:orientation="vertical" >
 
                         <TextView
-                            android:id="@+id/tv_time"
+                            android:id="@+id/tv_tweet_detail_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="火蚁"
+                            android:textColor="@color/lightblue"
+                            android:textSize="@dimen/text_size_15" />
+
+                        <TextView
+                            android:id="@+id/tv_tweet_detail_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="left|center_vertical"
                             android:textColor="@color/main_gray"
                             android:textSize="@dimen/text_size_12" />
-
-                        <TextView
-                            android:id="@+id/tv_source"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/space_10"
-                            android:clickable="true"
-                            android:textColor="@color/lightblue"
-                            android:textSize="@dimen/text_size_12" />
-
-                        <TextView
-                            android:id="@+id/tv_comment_count"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/space_10"
-                            android:clickable="true"
-                            android:textColor="@color/main_gray"
-                            android:textSize="@dimen/text_size_12" />
                     </LinearLayout>
                 </LinearLayout>
 
-                <WebView
-                    android:id="@+id/webview"
-                    android:layout_width="fill_parent"
+                <net.oschina.app.widget.LinkView
+                    android:id="@+id/tweet_detail_item"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/list_item_background_normal" />
+                    android:autoLink="web|email"
+                    android:paddingBottom="2dp"
+                    android:paddingRight="2dp"
+                    android:text="设计模式优缺点及应用场景整理"
+                    android:textColorLink="@color/blue"
+                    android:textSize="@dimen/text_size_15" />
             </LinearLayout>
         </net.oschina.app.widget.CustomerScrollView>
 

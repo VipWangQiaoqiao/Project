@@ -108,6 +108,19 @@ public class UIHelper {
 	}
 	
 	/**
+	 *显示动弹详情
+	 *@param context
+	 *@param id
+	 */
+	public static void showTweetDetail(Context context, int tweetid) {
+		Intent intent = new Intent(context, DetailActivity.class);
+		intent.putExtra("tweet_id", tweetid);
+		intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+				DetailActivity.DISPLAY_TWEET);
+		context.startActivity(intent);
+	}
+	
+	/**
 	 * 新闻超链接点击跳转
 	 * 
 	 * @param context
@@ -311,4 +324,5 @@ public class UIHelper {
 		args.putInt(CommentFrament.BUNDLE_KEY_CATALOG, catalog);
 		showSimpleBack(context, SimpleBackPage.COMMENT, args);
 	}
+
 }
