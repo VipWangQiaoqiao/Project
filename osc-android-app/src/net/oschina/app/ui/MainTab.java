@@ -2,6 +2,7 @@ package net.oschina.app.ui;
 
 import android.support.v4.app.Fragment;
 import net.oschina.app.R;
+import net.oschina.app.viewpagefragment.MyViewPagerFragment;
 import net.oschina.app.viewpagefragment.NewsViewPagerFragment;
 import net.oschina.app.viewpagefragment.QuestViewPagerFragment;
 import net.oschina.app.viewpagefragment.TweetsViewPagerFragment;
@@ -17,8 +18,8 @@ public enum MainTab {
 	QUICK(2, R.string.main_tab_name_quick, R.drawable.tab_icon_new,
 			Fragment.class),
 
-	QUESTION(3, R.string.main_tab_name_question, R.drawable.tab_icon_new,
-			QuestViewPagerFragment.class),
+	QUESTION(3, R.string.main_tab_name_my, R.drawable.tab_icon_new,
+			MyViewPagerFragment.class),
 
 	EXPLORE(4, R.string.main_tab_name_explore, R.drawable.tab_icon_new,
 			Fragment.class);

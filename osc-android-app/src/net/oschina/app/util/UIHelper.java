@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import net.oschina.app.AppContext;
 import net.oschina.app.bean.News;
 import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.fragment.CommentFrament;
 import net.oschina.app.interf.OnWebViewImageListener;
 import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.ImagePreviewActivity;
@@ -240,6 +241,11 @@ public class UIHelper {
 	 * @param url
 	 */
 	public static void openBrowser(Context context, String url) {
+		
+		if (StringUtils.isImgUrl(url)) {
+			ImagePreviewActivity.showImagePrivew(context, 0, new String[]{url});
+			return;
+		}
 		try {
 			Uri uri = Uri.parse(url);
 			Intent it = new Intent(Intent.ACTION_VIEW, uri);
@@ -297,5 +303,12 @@ public class UIHelper {
 		intent.putExtra(SimpleBackActivity.BUNDLE_KEY_ARGS, args);
 		intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, page.getValue());
 		context.startActivity(intent);
+	}
+	
+	public static void showComment(Context context, int id, int catalog) {
+		Bundle args = new Bundle();
+		args.putInt(CommentFrament.BUNDLE_KEY_ID, id);
+		args.putInt(CommentFrament.BUNDLE_KEY_CATALOG, catalog);
+		showSimpleBack(context, SimpleBackPage.COMMENT, args);
 	}
 }

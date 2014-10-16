@@ -153,6 +153,7 @@ public class Comment extends Entity {
 		public String refertitle;
 		@XStreamAlias("referbody")
 		public String referbody;
+		
 		public String getRefertitle() {
 			return refertitle;
 		}

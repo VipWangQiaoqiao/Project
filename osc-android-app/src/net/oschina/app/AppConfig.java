@@ -37,17 +37,13 @@ public class AppConfig {
 			.getExternalStorageDirectory()
 			+ File.separator
 			+ "OSChina"
-			+ File.separator
-			+ "git"
 			+ File.separator;
 	
-	//默认存放图片的路径
+	//默认存放文件下载的路径
 	public final static String DEFAULT_SAVE_FILE_PATH = Environment
 			.getExternalStorageDirectory()
 			+ File.separator
 			+ "OSChina"
-			+ File.separator
-			+ "git"
 			+ File.separator
 			+ "download"
 			+ File.separator;

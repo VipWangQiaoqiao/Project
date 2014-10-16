@@ -7,6 +7,7 @@
     <string name="main_tab_name_tweet">动弹</string>
     <string name="main_tab_name_quick">快速</string>
     <string name="main_tab_name_question">问答</string>
+    <string name="main_tab_name_my">我</string>
     <string name="main_tab_name_explore">发现</string>
     
     <!-- slide menu -->
@@ -14,6 +15,7 @@
     <string name="menu_opensoft">开源软件</string>
     <string name="menu_note">便签</string>
     <string name="menu_bookmarks">收藏夹</string>
+    <string name="menu_quests">讨论区</string>
     <string name="menu_setting">设置</string>
     <string name="menu_exit">退出</string>
     
@@ -80,6 +82,12 @@
 	<string name="del_favorite_success">已取消收藏</string>
 	<string name="del_favorite_faile">取消收藏失败</string>
 	
+	<string name="actionbar_title_question_tag">%s相关</string>
+    <string name="comment_count">评论:%s</string>
+    <string name="answer_count">回复:%s</string>
+    <string name="post_answer">回复</string>
+    <string name="comment_reply_count">共有%s条评论</string>
+    <string name="comment_refer_author">引用来自%s的评论</string>
 	<string name="tip_comment_content_empty">评论内容不能为空</string>
 	
 	<!-- notification messages -->
@@ -94,5 +102,12 @@
 	<string name="tweet_publish_faile">发布动弹失败</string>
 	
 	<string name="actionbar_title_comment">评论列表</string>
+	<string name="actionbar_title_questions">讨论区</string>
+	
+	<string name="from_mobile">来自: 手机</string>
+	<string name="from_android">来自: Android</string>
+	<string name="from_iphone">来自: iPhone</string>
+	<string name="from_windows_phone">来自: Windows Phone</string>
+	<string name="from_wechat">来自: 微信</string>
 
 </resources>

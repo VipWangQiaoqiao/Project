@@ -10,6 +10,7 @@ import java.net.URLEncoder;
  * 
  * @date 2014年10月10日
  */
+@SuppressWarnings("serial")
 public class URLsUtils implements Serializable {
 	public final static String HTTP = "http://";
 	public final static String HTTPS = "https://";

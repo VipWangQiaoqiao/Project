@@ -81,30 +81,27 @@ public class TweetAdapter extends ListBaseAdapter {
 				}
 			});
 		}
-		vh.platform.setVisibility(View.GONE);
-		boolean isShow = true;
+		vh.platform.setVisibility(View.VISIBLE);
 		switch (tweet.getAppclient()) {
 			case Tweet.CLIENT_MOBILE:
-				vh.platform.setText("来自:手机");
+				vh.platform.setText(R.string.from_mobile);
 				break;
 			case Tweet.CLIENT_ANDROID:
-				vh.platform.setText("来自:Android");
+				vh.platform.setText(R.string.from_android);
 				break;
 			case Tweet.CLIENT_IPHONE:
-				vh.platform.setText("来自:iPhone");
+				vh.platform.setText(R.string.from_iphone);
 				break;
 			case Tweet.CLIENT_WINDOWS_PHONE:
-				vh.platform.setText("来自:Windows Phone");
+				vh.platform.setText(R.string.from_windows_phone);
 				break;
 			case Tweet.CLIENT_WECHAT:
-				vh.platform.setText("来自:微信");
+				vh.platform.setText(R.string.from_wechat);
 				break;
 			default:
-				isShow = false;
+				vh.platform.setText("");
+				vh.platform.setVisibility(View.GONE);
 				break;
-		}
-		if (isShow) {
-			vh.platform.setVisibility(View.VISIBLE);
 		}
 		return convertView;
 	}

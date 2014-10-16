@@ -88,9 +88,8 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 				break;
 			case ACTION_VIEW_COMMENT:
 				if (mNews != null)
-					UIHelper.showSimpleBack(getActivity(), SimpleBackPage.COMMENT);
-//					UIHelper.showComment(getActivity(), mNews.getId(),
-//							CommentList.CATALOG_NEWS);
+					UIHelper.showComment(getActivity(), mNews.getId(),
+							CommentList.CATALOG_NEWS);
 				break;
 			case ACTION_FAVORITE:
 				handleFavoriteOrNot();
