@@ -2,10 +2,13 @@ package net.oschina.app.bean;
 
 import net.oschina.app.R;
 import net.oschina.app.fragment.FragmentTest;
+import net.oschina.app.viewpagefragment.QuestViewPagerFragment;
 
 public enum SimpleBackPage {
 
-	COMMENT(1, R.string.actionbar_title_comment, FragmentTest.class);
+	COMMENT(1, R.string.actionbar_title_comment, FragmentTest.class),
+	
+	QUEST(2, R.string.actionbar_title_questions, QuestViewPagerFragment.class);
 
 	private int title;
 	private Class<?> clz;

@@ -85,19 +85,19 @@ public class TweetAdapter extends ListBaseAdapter {
 		boolean isShow = true;
 		switch (tweet.getAppclient()) {
 			case Tweet.CLIENT_MOBILE:
-				vh.platform.setText("来自:手机");
+				vh.platform.setText("来自: 手机");
 				break;
 			case Tweet.CLIENT_ANDROID:
-				vh.platform.setText("来自:Android");
+				vh.platform.setText("来自: Android");
 				break;
 			case Tweet.CLIENT_IPHONE:
-				vh.platform.setText("来自:iPhone");
+				vh.platform.setText("来自: iPhone");
 				break;
 			case Tweet.CLIENT_WINDOWS_PHONE:
-				vh.platform.setText("来自:Windows Phone");
+				vh.platform.setText("来自: Windows Phone");
 				break;
 			case Tweet.CLIENT_WECHAT:
-				vh.platform.setText("来自:微信");
+				vh.platform.setText("来自: 微信");
 				break;
 			default:
 				isShow = false;

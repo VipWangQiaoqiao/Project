@@ -60,4 +60,18 @@
             android:text="@string/menu_bookmarks" />
     </LinearLayout>
     
+        <LinearLayout
+        android:id="@+id/menu_item_quests"
+        style="@style/MenuItemLayoutStyle" >
+
+        <ImageView
+            style="@style/MenuItemImageViewStyle"
+            android:background="@drawable/tab_icon_new"
+            android:contentDescription="@null" />
+
+        <TextView
+            style="@style/MenuItemTextViewStyle"
+            android:text="@string/menu_quests" />
+    </LinearLayout>
+    
 </LinearLayout>

@@ -7,6 +7,7 @@ import butterknife.InjectView;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
+import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.bean.UserInformation;
 import net.oschina.app.util.UIHelper;
 import android.support.v7.app.ActionBar;
@@ -112,6 +113,9 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
 	@InjectView(R.id.menu_item_bookmarks)
 	View mMenu_item_bookmarks;
+	
+	@InjectView(R.id.menu_item_quests)
+	View mMenu_item_quests;
 
 	@InjectView(R.id.menu_item_setting)
 	View mMenu_item_setting;
@@ -119,8 +123,6 @@ public class NavigationDrawerFragment extends BaseFragment implements
 	@InjectView(R.id.menu_item_exit)
 	View mMenu_item_exit;
 	
-	
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -186,6 +188,9 @@ public class NavigationDrawerFragment extends BaseFragment implements
 			break;
 		case R.id.menu_item_bookmarks:
 			break;
+		case R.id.menu_item_quests:
+			UIHelper.showSimpleBack(getActivity(), SimpleBackPage.QUEST);
+			break;
 		case R.id.menu_item_setting:
 			break;
 		case R.id.menu_item_exit:
@@ -211,6 +216,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
 		mMenu_item_opensoft.setOnClickListener(this);
 		mMenu_item_note.setOnClickListener(this);
 		mMenu_item_bookmarks.setOnClickListener(this);
+		mMenu_item_quests.setOnClickListener(this);
 
 		mMenu_item_setting.setOnClickListener(this);
 		mMenu_item_exit.setOnClickListener(this);
