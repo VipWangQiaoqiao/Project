@@ -1,5 +1,7 @@
 package net.oschina.app.ui;
 
+import com.tencent.mm.sdk.platformtools.Log;
+
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
 import net.oschina.app.AppManager;
@@ -32,6 +34,7 @@ public class ReportUi extends BaseActivity {
 	private final String TAG = "ReportUi";
 	private AppContext ac;
 	private TextView mLink;
+	private int mObjId;
 	private Spinner mReason;
 	private TextView mOtherReason;
 
@@ -68,6 +71,7 @@ public class ReportUi extends BaseActivity {
 	private void initData() {
 		Intent data = this.getIntent();
 		mLink.setText(data.getStringExtra(Report.REPORT_LINK));
+		mObjId = data.getIntExtra(Report.REPORT_ID, 0);
 	}
 	
 	private OnClickListener publishListener = new OnClickListener() {
@@ -77,7 +81,7 @@ public class ReportUi extends BaseActivity {
 			}
 			final Report report = new Report();
 			report.setLinkAddress(mLink.getText() + "");
-			report.setReportId(ac.getLoginUid());
+			report.setReportId(mObjId);
 			String otherReason = mOtherReason.getText().toString();
 			if (StringUtils.isEmpty(otherReason)) {
 				report.setOtherReason("其他原因");

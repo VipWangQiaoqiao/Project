@@ -1424,9 +1424,10 @@ public class UIHelper {
 	 * @param context
 	 * @param link
 	 */
-	public static void showReport(Context context, String link) {
+	public static void showReport(Context context, String link, int obj_id) {
 		Intent intent = new Intent(context, ReportUi.class);
 		intent.putExtra(Report.REPORT_LINK, link);
+		intent.putExtra(Report.REPORT_ID, obj_id);
 		context.startActivity(intent);
 	}
 
@@ -1680,7 +1681,7 @@ public class UIHelper {
 						UIHelper.showLoginDialog(context);
 						return;
 					}	
-					showReport(context, postDetail.getUrl());
+					showReport(context, postDetail.getUrl(), postDetail.getId());
 					break;
 				default:
 					break;
