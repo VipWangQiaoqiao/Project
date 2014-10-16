@@ -86,5 +86,16 @@
     <dimen name="tweet_item_profile_info_padd">10dp</dimen>
     <dimen name="tweet_linkview_left">25dp</dimen>
     
+    <dimen name="timeline_small_card_icon_width">12.0dip</dimen>
+    <dimen name="timeline_small_card_icon_height">12.0dip</dimen>
+    <dimen name="timeline_small_card_icon_margin_left">5.0dip</dimen>
+    <dimen name="timeline_small_card_triangle_margin_left">5.0dip</dimen>
+    <dimen name="timeline_small_card_triangle_margin_right">4.0dip</dimen>
+    <dimen name="timeline_small_card_title_margin_left">5.0dip</dimen>
+    <dimen name="timeline_small_card_title_text_size">12.0sp</dimen>
+    
+    <dimen name="timeline_small_card_height">20.0dip</dimen>
+    <dimen name="timeline_small_card_min_width">66.0dip</dimen>
+    <dimen name="timeline_small_card_padding_right">5.0dip</dimen>
 
 </resources>

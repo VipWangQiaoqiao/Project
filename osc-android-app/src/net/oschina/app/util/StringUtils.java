@@ -21,6 +21,9 @@ import java.util.regex.Pattern;
 public class StringUtils {
 	private final static Pattern emailer = Pattern
 			.compile("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*");
+	
+	private final static Pattern IMG_URL = Pattern
+			.compile(".*?(gif|jpeg|png|jpg|bmp)");
 
 	private final static ThreadLocal<SimpleDateFormat> dateFormater = new ThreadLocal<SimpleDateFormat>() {
 		@Override
@@ -184,6 +187,17 @@ public class StringUtils {
 		if (email == null || email.trim().length() == 0)
 			return false;
 		return emailer.matcher(email).matches();
+	}
+	
+	/**
+	 * 判断一个url是否为图片url
+	 * @param url
+	 * @return
+	 */
+	public static boolean isImgUrl(String url) {
+		if (url == null || url.trim().length() == 0)
+			return false;
+		return IMG_URL.matcher(url).matches();
 	}
 
 	/**
