@@ -10,6 +10,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.ListEntity;
+import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetsList;
 import net.oschina.app.ui.NavigationDrawerFragment;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -87,7 +88,9 @@ public class TweetsFragment extends BaseListFragment {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		
+		Tweet tweet = (Tweet) mAdapter.getItem(position);
+		if (tweet != null)
+			UIHelper.showTweetDetail(view.getContext(), tweet.getId());
 	}
 
 	private BroadcastReceiver mReceiver = new BroadcastReceiver() {

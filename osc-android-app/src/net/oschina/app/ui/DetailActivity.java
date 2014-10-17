@@ -2,7 +2,6 @@ package net.oschina.app.ui;
 
 import java.lang.ref.WeakReference;
 
-import butterknife.InjectView;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseFragment;
@@ -12,6 +11,7 @@ import net.oschina.app.fragment.FragmentTest;
 import net.oschina.app.fragment.NewsDetailFragment;
 import net.oschina.app.fragment.PostDetailFragment;
 import net.oschina.app.fragment.ToolbarFragment;
+import net.oschina.app.fragment.TweetDetailFragment;
 import net.oschina.app.interf.EmojiFragmentControl;
 import net.oschina.app.interf.ToolbarEmojiVisiableControl;
 import net.oschina.app.interf.ToolbarFragmentControl;
@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
+import butterknife.InjectView;
 
 /**
  * 详情activity（包括：资讯、博客、软件、问答、动弹）
@@ -88,7 +89,7 @@ public class DetailActivity extends BaseActivity implements
 			break;
 		case DISPLAY_TWEET:
 			actionBarTitle = R.string.actionbar_title_tweet;
-			fragment = new FragmentTest();
+			fragment = new TweetDetailFragment();
 			break;
 		default:
 			break;
