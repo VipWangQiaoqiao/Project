@@ -10,6 +10,7 @@ import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Blog;
 import net.oschina.app.bean.BlogList;
 import net.oschina.app.bean.ListEntity;
+import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import android.view.View;

@@ -31,7 +31,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     
     <string name="loading">加载中…</string>
-    <string name="loading_no_more">没有更多数据.</string>
+    <string name="loading_no_more">没有更多数据</string>
     
     <!-- Error View -->
     <string name="error_view_click_to_refresh">点击屏幕,重新加载</string>
@@ -52,7 +52,7 @@
     <string name="tip_illegal_email">请输入正确的email地址</string>
 	<string name="tip_please_input_password">请输入密码</string>
     <string name="progress_login">正在登录…</string>
-    <string name="tip_login_error_for_network">对不起,无法登录.</string>
+    <string name="tip_login_error_for_network">对不起,无法登录</string>
     <string name="tip_no_internet">当前没有可用的网络链接</string>
     
     <string name="actionbar_title_news">资讯详情</string>

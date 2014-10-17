@@ -7,10 +7,12 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 import net.oschina.app.R;
+import net.oschina.app.bean.Blog;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
+import net.oschina.app.util.TLog;
 
 import org.apache.http.Header;
 
@@ -59,7 +61,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 
 	protected int mCatalog = 1;
 	
-	protected String blogType = "latest";
+	protected String blogType;
 	protected int tweetType = 0;
 	
 	private AsyncTask<String, Void, ListEntity> mCacheTask;
@@ -182,7 +184,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 	}
 
 	private String getCacheKey() {
-		return new StringBuffer(getCacheKeyPrefix()).append(mCatalog)
+		return new StringBuffer(getCacheKeyPrefix())
 				.append("_").append(mCurrentPage).append("_")
 				.append(TDevice.getPageSize()).toString();
 	}
@@ -289,13 +291,21 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 		mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
 		if (data.size() == 0 && mState == STATE_REFRESH) {
 			mErrorLayout.setErrorType(EmptyLayout.NODATA);
-		} else if (data.size() < TDevice.getPageSize()) {
+		} else if (data.size() < getPageSize()) {
 			if (mState == STATE_REFRESH)
 				mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
 			else
 				mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
 		} else {
 			mAdapter.setState(ListBaseAdapter.STATE_LOAD_MORE);
+		}
+	}
+	
+	private int getPageSize() {
+		if (blogType != null && blogType.equals(Blog.CATALOG_LATEST)) {
+			return 19;
+		} else {
+			return TDevice.getPageSize();
 		}
 	}
 
@@ -408,7 +418,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 			if (mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
 				mCurrentPage++;
 				mState = STATE_LOADMORE;
-				requestData(false);
+				requestData(true);
 			}
 		}
 	}
