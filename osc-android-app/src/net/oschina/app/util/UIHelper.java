@@ -311,4 +311,12 @@ public class UIHelper {
 		args.putInt(CommentFrament.BUNDLE_KEY_CATALOG, catalog);
 		showSimpleBack(context, SimpleBackPage.COMMENT, args);
 	}
+	
+	public static void showBlogComment(Context context, int id, int ownerId) {
+		Bundle args = new Bundle();
+		args.putInt(CommentFrament.BUNDLE_KEY_ID, id);
+		args.putInt(CommentFrament.BUNDLE_KEY_OWNER_ID, ownerId);
+		args.putBoolean(CommentFrament.BUNDLE_KEY_BLOG, true);
+		showSimpleBack(context, SimpleBackPage.COMMENT, args);
+	}
 }

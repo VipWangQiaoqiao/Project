@@ -95,9 +95,8 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 				break;
 			case ACTION_VIEW_COMMENT:
 				if (mBlog != null)
-					UIHelper.showSimpleBack(getActivity(), SimpleBackPage.COMMENT);
-//					UIHelper.showBlogComment(getActivity(), mBlogId,
-//							mBlog.getAuthorId());
+					UIHelper.showBlogComment(getActivity(), mBlogId,
+							mBlog.getAuthorId());
 				break;
 			case ACTION_FAVORITE:
 				handleFavoriteOrNot();

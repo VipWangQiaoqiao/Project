@@ -88,9 +88,8 @@ public class PostDetailFragment extends BaseDetailFragment implements
 				mEmojiFragment.showKeyboardIfNoEmojiGrid();
 				break;
 			case ACTION_VIEW_COMMENT:
-				UIHelper.showSimpleBack(getActivity(), SimpleBackPage.COMMENT);
-//				UIHelper.showComment(getActivity(), mPostId,
-//						CommentList.CATALOG_POST);
+				UIHelper.showComment(getActivity(), mPostId,
+						CommentList.CATALOG_POST);
 				break;
 			case ACTION_FAVORITE:
 				handleFavoriteOrNot();

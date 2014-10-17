@@ -13,6 +13,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
+import net.oschina.app.bean.BlogCommentList;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.ListEntity;
@@ -125,17 +126,16 @@ public class CommentFrament extends BaseListFragment implements
 	@Override
 	protected ListEntity parseList(InputStream is) throws Exception {
 		if (mIsBlogComment) {
-//			return BlogCommentList.parse(is);
-			return null;
+			return XmlUtils.toBean(BlogCommentList.class, is);
 		} else {
-			return XmlUtils.toBean(CommentList.class, is);//CommentList.parse(is);
+			return XmlUtils.toBean(CommentList.class, is);
 		}
 	}
 
 	@Override
 	protected ListEntity readList(Serializable seri) {
-//		if (mIsBlogComment)
-//			return ((BlogCommentList) seri);
+		if (mIsBlogComment)
+			return ((BlogCommentList) seri);
 		return ((CommentList) seri);
 	}
 
