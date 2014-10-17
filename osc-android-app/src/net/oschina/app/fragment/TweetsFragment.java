@@ -66,7 +66,7 @@ public class TweetsFragment extends BaseListFragment {
 
 	@Override
 	protected String getCacheKeyPrefix() {
-		return CACHE_KEY_PREFIX;
+		return CACHE_KEY_PREFIX + "tweetType";
 	}
 
 	@Override

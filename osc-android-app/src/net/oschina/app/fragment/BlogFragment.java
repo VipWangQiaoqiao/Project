@@ -32,7 +32,7 @@ public class BlogFragment extends BaseListFragment {
 
 	@Override
 	protected String getCacheKeyPrefix() {
-		return CACHE_KEY_PREFIX;
+		return CACHE_KEY_PREFIX + blogType;
 	}
 
 	@Override
