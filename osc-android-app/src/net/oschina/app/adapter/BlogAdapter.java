@@ -44,6 +44,13 @@ public class BlogAdapter extends ListBaseAdapter {
 		}
 
 		Blog blog = (Blog) _data.get(position);
+		
+		vh.tip.setVisibility(View.VISIBLE);
+		if (blog.getDocumenttype() == Blog.DOC_TYPE_ORIGINAL) {
+			vh.tip.setImageResource(R.drawable.widget_original_icon);
+		} else {
+			vh.tip.setImageResource(R.drawable.widget_repaste_icon);
+		}
 
 		vh.title.setText(blog.getTitle());
 		vh.source.setText(blog.getAuthor());
