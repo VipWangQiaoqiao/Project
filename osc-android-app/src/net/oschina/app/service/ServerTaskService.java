@@ -306,7 +306,7 @@ public class ServerTaskService extends IntentService {
 				.setOnlyAlertOnce(true)
 				.setContentIntent(
 						PendingIntent.getActivity(this, 0, new Intent(), 0))
-				.setSmallIcon(R.drawable.ic_launcher);
+				.setSmallIcon(R.drawable.ic_notification);
 
 
 //		if (AppContext.isNotificationSoundEnable()) {
