@@ -1,9 +1,13 @@
 package net.oschina.app.base;
 
 import net.oschina.app.AppContext;
+import net.oschina.app.R;
 import net.oschina.app.interf.BaseFragmentInterface;
+import net.oschina.app.ui.dialog.DialogControl;
+import net.oschina.app.ui.dialog.WaitDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,5 +67,24 @@ public abstract class BaseFragment extends Fragment implements android.view.View
 	
 	public boolean onBackPressed() {
 		return false;
+	}
+	
+	protected void hideWaitDialog() {
+		FragmentActivity activity = getActivity();
+		if (activity instanceof DialogControl) {
+			((DialogControl) activity).hideWaitDialog();
+		}
+	}
+
+	protected WaitDialog showWaitDialog() {
+		return showWaitDialog(R.string.loading);
+	}
+	
+	protected WaitDialog showWaitDialog(int resid) {
+		FragmentActivity activity = getActivity();
+		if (activity instanceof DialogControl) {
+			return ((DialogControl) activity).showWaitDialog(resid);
+		}
+		return null;
 	}
 }

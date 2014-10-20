@@ -96,6 +96,8 @@
 	<string name="comment_publish_success">评论发布成功</string>
 	<string name="comment_publish_faile">发布评论失败</string>
 	
+	<string name="progress_submit">正在提交…</string>
+	
 	<string name="tweet_public">发布动弹</string>
 	<string name="tweet_publishing">正在发布你的动弹…</string>
 	<string name="tweet_publish_success">动弹发布成功</string>

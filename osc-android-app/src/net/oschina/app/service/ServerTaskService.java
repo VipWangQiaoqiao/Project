@@ -8,6 +8,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.OperationResponseHandler;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
@@ -21,6 +22,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.widget.BaseAdapter;
 
 public class ServerTaskService extends IntentService {
 	private static final String SERVICE_NAME = "ServerTaskService";
@@ -29,6 +31,8 @@ public class ServerTaskService extends IntentService {
 	public static final String ACTION_PUBLIC_POST = "net.oschina.app.ACTION_PUBLIC_POST";
 	public static final String ACTION_PUBLIC_TWEET = "net.oschina.app.ACTION_PUBLIC_TWEET";
 
+	public static final String KEY_ADAPTER = "adapter";
+	
 	public static final String BUNDLE_PUBLIC_COMMENT_TASK = "BUNDLE_PUBLIC_COMMENT_TASK";
 	public static final String BUNDLE_PUBLIC_POST_TASK = "BUNDLE_PUBLIC_POST_TASK";
 	public static final String BUNDLE_PUBLIC_TWEET_TASK = "BUNDLE_PUBLIC_TWEET_TASK";
@@ -36,8 +40,11 @@ public class ServerTaskService extends IntentService {
 	private static final String KEY_COMMENT = "comment_";
 	private static final String KEY_TWEET = "tweet_";
 	private static final String KEY_POST = "post_";
+	
 
 	public static List<String> penddingTasks = new ArrayList<String>();
+	
+	private ListBaseAdapter mAdapter;
 
 	class PublicCommentResponseHandler extends OperationResponseHandler {
 
@@ -53,7 +60,7 @@ public class ServerTaskService extends IntentService {
 			ResultBean resB = XmlUtils.toBean(ResultBean.class, is);
 			Result res = resB.getResult();
 			if (res.OK()) {
-				Comment comment = resB.getComment();
+				final Comment comment = resB.getComment();
 //				UIHelper.sendBroadCastCommentChanged(ServerTaskService.this,
 //						isBlog, task.getId(), task.getCatalog(),
 //						Comment.OPT_ADD, comment);
@@ -63,10 +70,13 @@ public class ServerTaskService extends IntentService {
 						getString(R.string.comment_publish_success), false,
 						true);
 				new Handler().postDelayed(new Runnable() {
-
+					
 					@Override
 					public void run() {
 						cancellNotification(id);
+						if (mAdapter != null && comment != null) {
+							mAdapter.addItem(0, comment);
+						}
 					}
 				}, 3000);
 				removePenddingTask(KEY_COMMENT + id);
@@ -221,6 +231,7 @@ public class ServerTaskService extends IntentService {
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		String action = intent.getAction();
+		
 		if (ACTION_PUBLIC_BLOG_COMMENT.equals(action)) {
 			PublicCommentTask task = intent
 					.getParcelableExtra(BUNDLE_PUBLIC_COMMENT_TASK);

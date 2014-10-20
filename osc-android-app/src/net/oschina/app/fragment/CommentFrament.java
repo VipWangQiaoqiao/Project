@@ -4,6 +4,11 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
 
+import org.apache.http.Header;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.tencent.mm.sdk.modelmsg.ShowMessageFromWX;
+
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.CommentAdapter;
@@ -21,16 +26,19 @@ import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.emoji.EmojiFragment;
 import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
+import net.oschina.app.service.PublicCommentTask;
+import net.oschina.app.service.ServerTaskUtils;
+import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 
 public class CommentFrament extends BaseListFragment implements
@@ -61,7 +69,7 @@ public class CommentFrament extends BaseListFragment implements
 		mEmojiFragment.setEmojiTextListener(this);
 		trans.replace(R.id.emoji_container, mEmojiFragment);
 		trans.commit();
-		activity.findViewById(R.id.emoji_container).setVisibility(View.GONE);
+		activity.findViewById(R.id.emoji_container).setVisibility(View.VISIBLE);
 	}
 
 	protected int getLayoutRes() {
@@ -159,9 +167,12 @@ public class CommentFrament extends BaseListFragment implements
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-//		final Comment comment = (Comment) mAdapter.getItem(position - 1);
-//		if (comment == null)
-//			return;
+		final Comment comment = (Comment) mAdapter.getItem(position);
+		if (comment == null)
+			return;
+		mEmojiFragment.setTag(comment);
+		mEmojiFragment.setInputHint("回复" + comment.getAuthor() + ":");
+		mEmojiFragment.requestFocusInput();
 //		final CommonDialog dialog = DialogHelper
 //				.getPinterestDialogCancelable(getActivity());
 //		String[] items = null;
@@ -191,14 +202,72 @@ public class CommentFrament extends BaseListFragment implements
 //		}
 	}
 
-	private void handleReplyComment(Comment comment) {
+	private void handleReplyComment(Comment comment, String text) {
+		showWaitDialog(R.string.progress_submit);
 		if (!AppContext.getInstance().isLogin()) {
 			UIHelper.showLoginActivity(getActivity());
 			return;
 		}
-//		UIHelper.showReplyCommentForResult(this, REQUEST_CODE,
-//				mIsBlogComment, mId, mCatalog, comment);
 		
+		AsyncHttpResponseHandler mReplyCommentHandler = new AsyncHttpResponseHandler() {
+
+			@Override
+			public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+				try {
+					ResultBean rsb = XmlUtils.toBean(ResultBean.class, new ByteArrayInputStream(arg2));
+					Result res = rsb.getResult();
+					if (res.OK()) {
+						hideWaitDialog();
+						AppContext.showToastShort(R.string.comment_publish_success);
+						
+						mAdapter.addItem(0, rsb.getComment());
+
+//						UIHelper.sendBroadCastCommentChanged(getActivity(),
+//								mIsBlogComment, mId, mCatalog, Comment.OPT_ADD,
+//								res.getComment());
+					} else {
+						hideWaitDialog();
+						AppContext.showToastShort(res.getErrorMessage());
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					onFailure(arg0, arg1, arg2, e);
+				}
+			}
+
+			@Override
+			public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+					Throwable arg3) {
+				hideWaitDialog();
+				AppContext.showToastShort(R.string.comment_publish_faile);
+			}
+		};
+		
+		if (mIsBlogComment) {
+			OSChinaApi.replyBlogComment(mId, AppContext.getInstance().getLoginUid(),
+					text, comment.getId(), comment.getAuthorId(),
+					mReplyCommentHandler);
+		} else {
+			OSChinaApi.replyComment(mId, mCatalog, comment.getId(),
+					comment.getAuthorId(),
+					AppContext.getInstance().getLoginUid(), text,
+					mReplyCommentHandler);
+		}
+	}
+	
+	private void handleComment(String text) {
+		PublicCommentTask task = new PublicCommentTask();
+		task.setId(mId);
+		task.setCatalog(mCatalog);
+		task.setContent(text);
+		task.setUid(AppContext.getInstance().getLoginUid());
+		ServerTaskUtils.publicNewsComment(getActivity(), task);
+		if (mIsBlogComment) {
+			ServerTaskUtils.publicBlogComment(getActivity(), task);
+		} else {
+			ServerTaskUtils.publicNewsComment(getActivity(), task);
+		}
+		mEmojiFragment.reset();
 	}
 
 	private void handleDeleteComment(Comment comment) {
@@ -223,6 +292,25 @@ public class CommentFrament extends BaseListFragment implements
 
 	@Override
 	public void onSendClick(String text) {
+		if (!TDevice.hasInternet()) {
+			AppContext.showToastShort(R.string.tip_network_error);
+			return;
+		}
+		if (!AppContext.getInstance().isLogin()) {
+			UIHelper.showLoginActivity(getActivity());
+			return;
+		}
+		if (TextUtils.isEmpty(text)) {
+			AppContext.showToastShort(R.string.tip_comment_content_empty);
+			mEmojiFragment.requestFocusInput();
+			return;
+		}
+		
+		if (mEmojiFragment.getInputTag() != null) {
+			handleReplyComment((Comment)mEmojiFragment.getInputTag(), text);
+		} else {
+			handleComment(text);
+		}
 	}
 
 	class DeleteOperationResponseHandler extends OperationResponseHandler {

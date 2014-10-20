@@ -149,7 +149,19 @@ public class EmojiFragment extends BaseFragment implements
 			hideEmojiPanel();
 			return true;
 		}
+		if (mEtInput.isFocused() && mEtInput.getTag() != null) {
+			reset();
+			return true;
+		}
 		return super.onBackPressed();
+	}
+	
+	public void setTag(Object object) {
+		this.mEtInput.setTag(object);
+	}
+	
+	public Object getInputTag() {
+		return this.mEtInput.getTag();
 	}
 
 	@Override
@@ -198,7 +210,7 @@ public class EmojiFragment extends BaseFragment implements
 			mBtnEmoji.setBackgroundResource(R.drawable.btn_emoji_selector);
 		}
 	}
-
+	
 	@Override
 	public void onSoftKeyboardOpened(int keyboardHeightInPx) {
 
@@ -269,6 +281,7 @@ public class EmojiFragment extends BaseFragment implements
 			hideEmojiPanel();
 		}
 		if (mEtInput != null) {
+			this.setTag(null);
 			mEtInput.getText().clear();
 			mEtInput.clearFocus();
 			mEtInput.setHint("说点什么");
