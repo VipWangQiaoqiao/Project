@@ -14,6 +14,13 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RESTART_PACKAGES" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <supports-screens
         android:anyDensity="true"
@@ -56,6 +63,11 @@
             android:name=".ui.SimpleBackActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.zbar.lib.CaptureActivity"
+            android:label="@string/qr_scan"
+            android:screenOrientation="portrait" >
+        </activity>
 
         <service android:name="net.oschina.app.service.ServerTaskService" >
             <intent-filter>
@@ -66,7 +78,7 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="net.oschina.app.ACTION_PUBLIC_POST" />
-            </intent-filter>  
+            </intent-filter>
             <intent-filter>
                 <action android:name="net.oschina.app.ACTION_PUBLIC_TWEET" />
             </intent-filter>
