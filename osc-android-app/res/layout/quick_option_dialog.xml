@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="@null"
             android:focusable="false"
-            android:src="@drawable/quickoption_icon_qq_selector" />
+            android:src="@drawable/btn_quickoption_selector" />
     </LinearLayout>
 
     <LinearLayout

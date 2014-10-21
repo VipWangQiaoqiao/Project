@@ -49,9 +49,9 @@
                 android:id="@+id/quick_option_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center"
+                android:layout_gravity="center"
                 android:contentDescription="@null"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/btn_quickoption_selector" />
         </FrameLayout>
     </LinearLayout>
 

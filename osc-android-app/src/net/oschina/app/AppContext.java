@@ -9,6 +9,7 @@ import net.oschina.app.bean.UserInformation;
 import net.oschina.app.util.CyptoUtils;
 import net.oschina.app.util.StringUtils;
 import android.content.Context;
+import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
@@ -259,5 +260,27 @@ public class AppContext extends BaseApplication {
 	
 	public static boolean shouldLoadImage() {
 		return getPreferences().getBoolean(KEY_LOAD_IMAGE, true);
+	}
+	
+	/**
+	 * 判断当前版本是否兼容目标版本的方法
+	 * 
+	 * @param VersionCode
+	 * @return
+	 */
+	public static boolean isMethodsCompat(int VersionCode) {
+		int currentVersion = android.os.Build.VERSION.SDK_INT;
+		return currentVersion >= VersionCode;
+	}
+	
+	public static String getTweetDraft() {
+		return getPreferences().getString(
+				KEY_TWEET_DRAFT + getInstance().getLoginUid(), "");
+	}
+
+	public static void setTweetDraft(String draft) {
+		Editor editor = getPreferences().edit();
+		editor.putString(KEY_TWEET_DRAFT + getInstance().getLoginUid(), draft);
+		apply(editor);
 	}
 }

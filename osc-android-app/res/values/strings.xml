@@ -99,12 +99,22 @@
 	<string name="progress_submit">正在提交…</string>
 	
 	<string name="tweet_public">发布动弹</string>
+	<string name="tweet_hint">今天你动弹了吗？</string>
 	<string name="tweet_publishing">正在发布你的动弹…</string>
 	<string name="tweet_publish_success">动弹发布成功</string>
 	<string name="tweet_publish_faile">发布动弹失败</string>
 	
+	<string name="ok">确定</string>
+	<string name="cancle">取消</string>
+	<string name="draft_tweet_message">是否保存为草稿?</string>
+	<string name="clearwords">是否清空内容？</string>
+	<string name="choose_picture">选择图片</string>
+	<string name="tip_content_empty">内容不能为空</string>
+	<string name="tip_content_too_long">内容太长</string>
+	
 	<string name="actionbar_title_comment">评论列表</string>
 	<string name="actionbar_title_questions">讨论区</string>
+	<string name="actionbar_title_tweetpub">弹一弹</string>
 	
 	<string name="from_mobile">来自: 手机</string>
 	<string name="from_android">来自: Android</string>

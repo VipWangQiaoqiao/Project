@@ -1,5 +1,8 @@
 package net.oschina.app.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
@@ -13,17 +16,17 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  */
 @SuppressWarnings("serial")
 @XStreamAlias("tweet")
-public class Tweet extends Entity {
-	
+public class Tweet extends Entity implements Parcelable {
+
 	public final static int CATALOG_LATEST = 0;
 	public final static int CATALOG_HOT = -1;
 	public final static int CATALOG_MINE = 3;
-	
+
 	public final static int CLIENT_MOBILE = 2;
 	public final static int CLIENT_ANDROID = 3;
 	public final static int CLIENT_IPHONE = 4;
 	public final static int CLIENT_WINDOWS_PHONE = 5;
-	public final static int CLIENT_WECHAT=6;
+	public final static int CLIENT_WECHAT = 6;
 
 	@XStreamAlias("portrait")
 	private String portrait;
@@ -45,83 +48,140 @@ public class Tweet extends Entity {
 	private String imgBig;
 	@XStreamAlias("attach")
 	private String attach;
-	
-/*	public File getImageFile() {
-		return imageFile;
+
+	private String imageFilePath;
+
+	public Tweet() {
 	}
-	public void setImageFile(File imageFile) {
-		this.imageFile = imageFile;
+
+	public Tweet(Parcel source) {
+		body = source.readString();
+		authorid = source.readInt();
+		imageFilePath = source.readString();
 	}
-	private File imageFile;*/
-	
+
 	public String getAttach() {
 		return attach;
 	}
+
 	public void setAttach(String attach) {
 		this.attach = attach;
 	}
+
 	public String getPortrait() {
 		return portrait;
 	}
+
 	public void setPortrait(String portrait) {
 		this.portrait = portrait;
 	}
+
 	public String getAuthor() {
 		return author;
 	}
+
 	public void setAuthor(String author) {
 		this.author = author;
 	}
+
 	public int getAuthorid() {
 		return authorid;
 	}
+
 	public void setAuthorid(int authorid) {
 		this.authorid = authorid;
 	}
+
 	public String getBody() {
 		return body;
 	}
+
 	public void setBody(String body) {
 		this.body = body;
 	}
+
 	public int getAppclient() {
 		return appclient;
 	}
+
 	public void setAppclient(int appclient) {
 		this.appclient = appclient;
 	}
+
 	public int getCommentCount() {
 		return commentCount;
 	}
+
 	public void setCommentCount(int commentCount) {
 		this.commentCount = commentCount;
 	}
+
 	public String getPubDate() {
 		return pubDate;
 	}
+
 	public void setPubDate(String pubDate) {
 		this.pubDate = pubDate;
 	}
+
 	public String getImgSmall() {
 		return imgSmall;
 	}
+
 	public void setImgSmall(String imgSmall) {
 		this.imgSmall = imgSmall;
 	}
+
 	public String getImgBig() {
 		return imgBig;
 	}
+
 	public void setImgBig(String imgBig) {
 		this.imgBig = imgBig;
 	}
+
 	public static int getCatalogLatest() {
 		return CATALOG_LATEST;
 	}
+
 	public static int getCatalogHot() {
 		return CATALOG_HOT;
 	}
+
 	public static int getCatalogMine() {
 		return CATALOG_MINE;
 	}
-	
+
+	public String getImageFilePath() {
+		return imageFilePath;
+	}
+
+	public void setImageFilePath(String imageFilePath) {
+		this.imageFilePath = imageFilePath;
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(body);
+		dest.writeInt(authorid);
+		dest.writeString(imageFilePath);
+	}
+
+	public static final Parcelable.Creator<Tweet> CREATOR = new Creator<Tweet>() {
+
+		@Override
+		public Tweet[] newArray(int size) {
+			return new Tweet[size];
+		}
+
+		@Override
+		public Tweet createFromParcel(Parcel source) {
+			return new Tweet(source);
+		}
+	};
 }

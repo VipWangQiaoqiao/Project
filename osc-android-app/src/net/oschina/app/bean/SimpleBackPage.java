@@ -2,14 +2,16 @@ package net.oschina.app.bean;
 
 import net.oschina.app.R;
 import net.oschina.app.fragment.CommentFrament;
-import net.oschina.app.fragment.FragmentTest;
+import net.oschina.app.fragment.TweetPubFragment;
 import net.oschina.app.viewpagefragment.QuestViewPagerFragment;
 
 public enum SimpleBackPage {
 
 	COMMENT(1, R.string.actionbar_title_comment, CommentFrament.class),
 	
-	QUEST(2, R.string.actionbar_title_questions, QuestViewPagerFragment.class);
+	QUEST(2, R.string.actionbar_title_questions, QuestViewPagerFragment.class),
+	
+	TWEET_PUB(3, R.string.actionbar_title_tweetpub, TweetPubFragment.class);
 
 	private int title;
 	private Class<?> clz;

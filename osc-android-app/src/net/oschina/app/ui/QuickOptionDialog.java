@@ -1,6 +1,9 @@
 package net.oschina.app.ui;
 
 import net.oschina.app.R;
+import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.fragment.TweetPubFragment;
+import net.oschina.app.util.UIHelper;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
@@ -80,12 +83,48 @@ public class QuickOptionDialog extends Dialog implements
 	@Override
 	public void onClick(View v) {
 		final int id = v.getId();
-		if (id == R.id.iv_close) {
+		switch (id) {
+		case R.id.iv_close:
 			dismiss();
-			return;
+			break;
+		case R.id.ly_quick_option_text:
+			onClickTweetPub(R.id.ly_quick_option_text);
+			break;
+		case R.id.ly_quick_option_album:
+			onClickTweetPub(R.id.ly_quick_option_album);
+			break;
+		case R.id.ly_quick_option_photo:
+			onClickTweetPub(R.id.ly_quick_option_photo);
+			break;
+		case R.id.ly_quick_option_voice:
+			break;
+		case R.id.ly_quick_option_scan:
+			break;
+		case R.id.ly_quick_option_note:
+			break;
+		default:
+			break;
 		}
 		if (mListener != null) {
 			mListener.onQuickOptionClick(id);
 		}
+		dismiss();
+	}
+	
+	private void onClickTweetPub(int id) {
+		Bundle bundle = new Bundle();
+		int type = -1;
+		switch (id) {
+		case R.id.ly_quick_option_album:
+			type = TweetPubFragment.ACTION_TYPE_ALBUM;
+			break;
+		case R.id.ly_quick_option_photo:
+			type = TweetPubFragment.ACTION_TYPE_PHOTO;
+			break;
+		default:
+			break;
+		}
+		bundle.putInt(TweetPubFragment.ACTION_TYPE, type);
+		UIHelper.showSimpleBack(getContext(), SimpleBackPage.TWEET_PUB, bundle);
 	}
 }

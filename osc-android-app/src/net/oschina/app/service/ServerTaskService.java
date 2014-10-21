@@ -12,6 +12,7 @@ import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
+import net.oschina.app.bean.Tweet;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import android.app.IntentService;
@@ -151,54 +152,54 @@ public class ServerTaskService extends IntentService {
 //		}
 //	}
 
-//	class PublicTweetResponseHandler extends OperationResponseHandler {
-//
-//		public PublicTweetResponseHandler(Looper looper, Object... args) {
-//			super(looper, args);
-//		}
-//
-//		@Override
-//		public void onSuccess(int code, ByteArrayInputStream is, Object[] args)
-//				throws Exception {
-//			Tweet tweet = (Tweet) args[0];
-//			final int id = tweet.getId();
-//			Result res = Result.parse(is);
-//			if (res.OK()) {
-//				notifySimpleNotifycation(id,
-//						getString(R.string.tweet_publish_success),
-//						getString(R.string.tweet_public),
-//						getString(R.string.tweet_publish_success), false, true);
-//				new Handler().postDelayed(new Runnable() {
-//
-//					@Override
-//					public void run() {
-//						cancellNotification(id);
-//					}
-//				}, 3000);
-//				removePenddingTask(KEY_TWEET + id);
-//			} else {
-//				onFailure(100, res.getErrorMessage(), args);
-//			}
-//		}
-//
-//		@Override
-//		public void onFailure(int code, String errorMessage, Object[] args) {
-//			Tweet tweet = (Tweet) args[0];
-//			int id = tweet.getId();
-//			notifySimpleNotifycation(id,
-//					getString(R.string.tweet_publish_faile),
-//					getString(R.string.tweet_public),
-//					code == 100 ? errorMessage
-//							: getString(R.string.tweet_publish_faile), false,
-//					true);
-//			removePenddingTask(KEY_TWEET + id);
-//		}
-//
-//		@Override
-//		public void onFinish() {
-//			tryToStopServie();
-//		}
-//	}
+	class PublicTweetResponseHandler extends OperationResponseHandler {
+
+		public PublicTweetResponseHandler(Looper looper, Object... args) {
+			super(looper, args);
+		}
+
+		@Override
+		public void onSuccess(int code, ByteArrayInputStream is, Object[] args)
+				throws Exception {
+			Tweet tweet = (Tweet) args[0];
+			final int id = tweet.getId();
+			Result res = XmlUtils.toBean(ResultBean.class, is).getResult();
+			if (res.OK()) {
+				notifySimpleNotifycation(id,
+						getString(R.string.tweet_publish_success),
+						getString(R.string.tweet_public),
+						getString(R.string.tweet_publish_success), false, true);
+				new Handler().postDelayed(new Runnable() {
+
+					@Override
+					public void run() {
+						cancellNotification(id);
+					}
+				}, 3000);
+				removePenddingTask(KEY_TWEET + id);
+			} else {
+				onFailure(100, res.getErrorMessage(), args);
+			}
+		}
+
+		@Override
+		public void onFailure(int code, String errorMessage, Object[] args) {
+			Tweet tweet = (Tweet) args[0];
+			int id = tweet.getId();
+			notifySimpleNotifycation(id,
+					getString(R.string.tweet_publish_faile),
+					getString(R.string.tweet_public),
+					code == 100 ? errorMessage
+							: getString(R.string.tweet_publish_faile), false,
+					true);
+			removePenddingTask(KEY_TWEET + id);
+		}
+
+		@Override
+		public void onFinish() {
+			tryToStopServie();
+		}
+	}
 
 	public ServerTaskService() {
 		this(SERVICE_NAME);
@@ -250,10 +251,10 @@ public class ServerTaskService extends IntentService {
 //				publicPost(post);
 //			}
 		} else if (ACTION_PUBLIC_TWEET.equals(action)) {
-//			Tweet tweet = intent.getParcelableExtra(BUNDLE_PUBLIC_TWEET_TASK);
-//			if (tweet != null) {
-//				publicTweet(tweet);
-//			}
+			Tweet tweet = intent.getParcelableExtra(BUNDLE_PUBLIC_TWEET_TASK);
+			if (tweet != null) {
+				publicTweet(tweet);
+			}
 		}
 	}
 
@@ -294,16 +295,16 @@ public class ServerTaskService extends IntentService {
 //				post));
 //	}
 //
-//	private void publicTweet(final Tweet tweet) {
-//		tweet.setId((int) System.currentTimeMillis());
-//		int id = tweet.getId();
-//		addPenddingTask(KEY_TWEET + id);
-//		notifySimpleNotifycation(id, getString(R.string.tweet_publishing),
-//				getString(R.string.tweet_public),
-//				getString(R.string.tweet_publishing), true, false);
-//		OSChinaApi.publicTweet(tweet, new PublicTweetResponseHandler(
-//				getMainLooper(), tweet));
-//	}
+	private void publicTweet(final Tweet tweet) {
+		tweet.setId((int) System.currentTimeMillis());
+		int id = tweet.getId();
+		addPenddingTask(KEY_TWEET + id);
+		notifySimpleNotifycation(id, getString(R.string.tweet_publishing),
+				getString(R.string.tweet_public),
+				getString(R.string.tweet_publishing), true, false);
+		OSChinaApi.publicTweet(tweet, new PublicTweetResponseHandler(
+				getMainLooper(), tweet));
+	}
 
 	private void notifySimpleNotifycation(int id, String ticker, String title,
 			String content, boolean ongoing, boolean autoCancel) {
