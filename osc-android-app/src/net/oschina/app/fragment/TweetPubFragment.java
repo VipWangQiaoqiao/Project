@@ -180,7 +180,6 @@ public class TweetPubFragment extends BaseFragment implements
 		Tweet tweet = new Tweet();
 		tweet.setAuthorid(AppContext.getInstance().getLoginUid());
 		tweet.setBody(content);
-		// tweet.setImageFile(imgFile);
 		if (imgFile != null && imgFile.exists()) {
 			tweet.setImageFilePath(imgFile.getAbsolutePath());
 		}

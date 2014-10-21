@@ -295,13 +295,13 @@ public class OSChinaApi {
 		params.put("msg", tweet.getBody());
 
 		// Map<String, File> files = new HashMap<String, File>();
-/*		if (!TextUtils.isEmpty(tweet.getImageFilePath())) {
+		if (!TextUtils.isEmpty(tweet.getImageFilePath())) {
 			try {
 				params.put("img", new File(tweet.getImageFilePath()));
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
-		}*/
+		}
 		ApiHttpClient.post("action/api/tweet_pub", params, handler);
 	}
 
