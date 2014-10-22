@@ -32,7 +32,7 @@ public class PostsFragment extends BaseListFragment {
 
 	@Override
 	protected String getCacheKeyPrefix() {
-		return CACHE_KEY_PREFIX;
+		return CACHE_KEY_PREFIX + mCatalog;
 	}
 
 	@Override
