@@ -49,15 +49,14 @@
             </LinearLayout>
         </LinearLayout>
 
-        <net.oschina.app.widget.LinkView
+        <net.oschina.app.widget.TweetTextView
             android:id="@+id/tweet_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:autoLink="web|email"
             android:text="设计模式优缺点及应用场景整理"
             android:layout_marginBottom="@dimen/space_5"
-            android:textColorLink="@color/blue"
-            android:textSize="@dimen/text_size_15" />
+            android:textSize="@dimen/text_size_14" />
 
         <ImageView
             android:id="@+id/iv_tweet_image"

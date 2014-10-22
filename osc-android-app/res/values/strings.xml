@@ -124,5 +124,19 @@
 	
 	<string name="qr_scan_tips">将二维码/条码放入框内，即可自动扫描</string>
 	<string name="actionbar_title_qr_scan">二维码/条码</string>
+	
+	<string name="send_message_to">发送留言给:</string>
+	<string name="hint_user_name">对方昵称</string>
+	<string name="hint_message">留言内容</string>
+	<string name="tip_message_public_success">发送成功</string>
+	<string name="tip_message_public_faile">发送失败</string>
+	<string name="send_to">发给</string>
+	<string name="message_count">%s条留言</string>
+	
+	<string name="confirm_delete_message">确定要删除和\"%s\"的所有留言吗?</string>
+	<string name="tip_delete_success">删除成功</string>
+	<string name="tip_delete_faile">无法删除</string>
+	
+	<string name="copy">复制</string>
 
 </resources>

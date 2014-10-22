@@ -8,6 +8,10 @@ import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TLog;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.LinkView;
+import net.oschina.app.widget.MyURLSpan;
+import net.oschina.app.widget.TweetTextView;
+import android.text.Html;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +36,7 @@ public class TweetAdapter extends ListBaseAdapter {
 		@InjectView(R.id.tv_tweet_time)
 		TextView time;
 		@InjectView(R.id.tweet_item)
-		LinkView content;
+		TweetTextView content;
 		@InjectView(R.id.tv_tweet_comment_count)
 		TextView commentcount;
 		@InjectView(R.id.tv_tweet_platform)
@@ -66,7 +70,11 @@ public class TweetAdapter extends ListBaseAdapter {
 		vh.face.setAvatarUrl(tweet.getPortrait());
 		vh.author.setText(tweet.getAuthor());
 		vh.time.setText(StringUtils.friendly_time(tweet.getPubDate()));
-		vh.content.setLinkText(tweet.getBody());
+		
+		Spanned span = Html.fromHtml(tweet.getBody());
+		vh.content.setText(span);
+		MyURLSpan.parseLinkText(vh.content, span);
+		
 		vh.commentcount.setText("评论(" + tweet.getCommentCount() + ")");
 		vh.image.setVisibility(AvatarView.GONE);
 		if (tweet.getImgSmall() != null && !TextUtils.isEmpty(tweet.getImgSmall())) {

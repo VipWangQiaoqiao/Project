@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import net.oschina.app.AppContext;
+import net.oschina.app.bean.Active;
 import net.oschina.app.bean.News;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.fragment.CommentFrament;
@@ -18,9 +19,17 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
@@ -147,6 +156,42 @@ public class UIHelper {
 				break;
 			case News.NEWSTYPE_BLOG:
 				showBlogDetail(context, StringUtils.toInt(objId));
+				break;
+			}
+		} else {
+			showUrlRedirect(context, url);
+		}
+	}
+	
+	/**
+	 * 动态点击跳转到相关新闻、帖子等
+	 * 
+	 * @param context
+	 * @param id
+	 * @param catalog
+	 *            0其他 1新闻 2帖子 3动弹 4博客
+	 */
+	public static void showActiveRedirect(Context context, Active active) {
+		String url = active.getUrl();
+		// url为空-旧方法
+		if (StringUtils.isEmpty(url)) {
+			int id = active.getObjectId();
+			int catalog = active.getActiveType();
+			switch (catalog) {
+			case Active.CATALOG_OTHER:
+				// 其他-无跳转
+				break;
+			case Active.CATALOG_NEWS:
+				showNewsDetail(context, id);
+				break;
+			case Active.CATALOG_POST:
+//				showQuestionDetail(context, id);
+				break;
+			case Active.CATALOG_TWEET:
+				showTweetDetail(context, id);
+				break;
+			case Active.CATALOG_BLOG:
+				showBlogDetail(context, id);
 				break;
 			}
 		} else {
@@ -331,6 +376,83 @@ public class UIHelper {
 		args.putInt(CommentFrament.BUNDLE_KEY_OWNER_ID, ownerId);
 		args.putBoolean(CommentFrament.BUNDLE_KEY_BLOG, true);
 		showSimpleBack(context, SimpleBackPage.COMMENT, args);
+	}
+	
+	public static SpannableString parseActiveAction(int objecttype,
+			int objectcatalog, String objecttitle) {
+		String title = "";
+		int start = 0;
+		int end = 0;
+		if (objecttype == 32 && objectcatalog == 0) {
+			title = "加入了开源中国";
+		} else if (objecttype == 1 && objectcatalog == 0) {
+			title = "添加了开源项目 " + objecttitle;
+		} else if (objecttype == 2 && objectcatalog == 1) {
+			title = "在讨论区提问：" + objecttitle;
+		} else if (objecttype == 2 && objectcatalog == 2) {
+			title = "发表了新话题：" + objecttitle;
+		} else if (objecttype == 3 && objectcatalog == 0) {
+			title = "发表了博客 " + objecttitle;
+		} else if (objecttype == 4 && objectcatalog == 0) {
+			title = "发表一篇新闻 " + objecttitle;
+		} else if (objecttype == 5 && objectcatalog == 0) {
+			title = "分享了一段代码 " + objecttitle;
+		} else if (objecttype == 6 && objectcatalog == 0) {
+			title = "发布了一个职位：" + objecttitle;
+		} else if (objecttype == 16 && objectcatalog == 0) {
+			title = "在新闻 " + objecttitle + " 发表评论";
+		} else if (objecttype == 17 && objectcatalog == 1) {
+			title = "回答了问题：" + objecttitle;
+		} else if (objecttype == 17 && objectcatalog == 2) {
+			title = "回复了话题：" + objecttitle;
+		} else if (objecttype == 17 && objectcatalog == 3) {
+			title = "在 " + objecttitle + " 对回帖发表评论";
+		} else if (objecttype == 18 && objectcatalog == 0) {
+			title = "在博客 " + objecttitle + " 发表评论";
+		} else if (objecttype == 19 && objectcatalog == 0) {
+			title = "在代码 " + objecttitle + " 发表评论";
+		} else if (objecttype == 20 && objectcatalog == 0) {
+			title = "在职位 " + objecttitle + " 发表评论";
+		} else if (objecttype == 101 && objectcatalog == 0) {
+			title = "回复了动态：" + objecttitle;
+		} else if (objecttype == 100) {
+			title = "更新了动态";
+		}
+		SpannableString sp = new SpannableString(title);
+		// 设置标题字体大小、高亮
+		if (!StringUtils.isEmpty(objecttitle)) {
+			start = title.indexOf(objecttitle);
+			if (objecttitle.length() > 0 && start > 0) {
+				end = start + objecttitle.length();
+				sp.setSpan(new AbsoluteSizeSpan(14, true), start, end,
+						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				sp.setSpan(
+						new ForegroundColorSpan(Color.parseColor("#0e5986")),
+						start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			}
+		}
+		return sp;
+	}
+
+	/**
+	 * 组合动态的回复文本
+	 * 
+	 * @param name
+	 * @param body
+	 * @return
+	 */
+	public static SpannableStringBuilder parseActiveReply(String name,
+			String body) {
+		Spanned span = Html.fromHtml(body.trim());
+		SpannableStringBuilder sp = new SpannableStringBuilder(name + "：");
+		sp.append(span);
+		// 设置用户名字体加粗、高亮
+		// sp.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0,
+		// name.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		sp.setSpan(new ForegroundColorSpan(Color.parseColor("#576B95")), 0,
+				name.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+		return sp;
 	}
 
 }
