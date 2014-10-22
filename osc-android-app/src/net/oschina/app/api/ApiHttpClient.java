@@ -3,6 +3,7 @@ package net.oschina.app.api;
 import java.util.Locale;
 
 import net.oschina.app.AppContext;
+import net.oschina.app.util.TLog;
 import android.content.Context;
 import android.util.Log;
 
@@ -62,7 +63,7 @@ public class ApiHttpClient {
 	}
 
 	public static void getDirect(String url, AsyncHttpResponseHandler handler) {
-		new AsyncHttpClient().get(url, handler);
+		client.get(url, handler);
 		log(new StringBuilder("GET ").append(url).toString());
 	}
 

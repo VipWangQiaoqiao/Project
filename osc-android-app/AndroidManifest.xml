@@ -65,7 +65,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.zbar.lib.CaptureActivity"
-            android:label="@string/qr_scan"
+            android:label="@string/actionbar_title_qr_scan"
             android:screenOrientation="portrait" >
         </activity>
 

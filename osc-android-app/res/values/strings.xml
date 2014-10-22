@@ -122,7 +122,7 @@
 	<string name="from_windows_phone">来自: Windows Phone</string>
 	<string name="from_wechat">来自: 微信</string>
 	
-	<string name="qr_scan_tips">将二维码放入框内，即可自动扫描</string>
-	<string name="qr_scan">二维码</string>
+	<string name="qr_scan_tips">将二维码/条码放入框内，即可自动扫描</string>
+	<string name="actionbar_title_qr_scan">二维码/条码</string>
 
 </resources>
