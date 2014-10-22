@@ -1,5 +1,7 @@
 package net.oschina.app.ui;
 
+import com.zbar.lib.CaptureActivity;
+
 import net.oschina.app.R;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.fragment.TweetPubFragment;
@@ -7,6 +9,7 @@ import net.oschina.app.util.UIHelper;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -99,6 +102,7 @@ public class QuickOptionDialog extends Dialog implements
 		case R.id.ly_quick_option_voice:
 			break;
 		case R.id.ly_quick_option_scan:
+			onClickScan();
 			break;
 		case R.id.ly_quick_option_note:
 			break;
@@ -126,5 +130,10 @@ public class QuickOptionDialog extends Dialog implements
 		}
 		bundle.putInt(TweetPubFragment.ACTION_TYPE, type);
 		UIHelper.showSimpleBack(getContext(), SimpleBackPage.TWEET_PUB, bundle);
+	}
+	
+	private void onClickScan() {
+		Intent intent = new Intent(getContext(), CaptureActivity.class);
+		getContext().startActivity(intent);
 	}
 }

@@ -24,6 +24,8 @@ public class StringUtils {
 	
 	private final static Pattern IMG_URL = Pattern
 			.compile(".*?(gif|jpeg|png|jpg|bmp)");
+	
+	private final static Pattern URL = Pattern.compile("^(https|http)://.*?$(net|com|.com.cn|org|me|)");
 
 	private final static ThreadLocal<SimpleDateFormat> dateFormater = new ThreadLocal<SimpleDateFormat>() {
 		@Override
@@ -198,6 +200,17 @@ public class StringUtils {
 		if (url == null || url.trim().length() == 0)
 			return false;
 		return IMG_URL.matcher(url).matches();
+	}
+	
+	/**
+	 * 判断是否为一个合法的url地址
+	 * @param str
+	 * @return
+	 */
+	public static boolean isUrl(String str) {
+		if (str == null || str.trim().length() == 0)
+			return false;
+		return URL.matcher(str).matches();
 	}
 
 	/**

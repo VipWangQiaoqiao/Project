@@ -444,4 +444,8 @@ public class OSChinaApi {
 		params.put("uid", uid);
 		ApiHttpClient.post("action/api/user_notice", params, handler);
 	}
+	
+	public static void singnIn(String url, AsyncHttpResponseHandler handler) {
+		ApiHttpClient.getDirect(url, handler);
+	}
 }
