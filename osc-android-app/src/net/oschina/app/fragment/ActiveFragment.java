@@ -102,6 +102,7 @@ public class ActiveFragment extends BaseListFragment implements
 	public void initView(View view) {
 		super.initView(view);
 		mListView.setOnItemLongClickListener(this);
+		mListView.setOnItemClickListener(this);
 		mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
 
 			@Override
@@ -129,7 +130,6 @@ public class ActiveFragment extends BaseListFragment implements
 
 	@Override
 	protected void requestData(boolean refresh) {
-		// mErrorLayout.setErrorMessage("");
 		if (AppContext.getInstance().isLogin()) {
 			mIsWatingLogin = false;
 			super.requestData(refresh);
@@ -173,24 +173,24 @@ public class ActiveFragment extends BaseListFragment implements
 	@Override
 	public boolean onItemLongClick(AdapterView<?> parent, View view,
 			int position, long id) {
-		final Active active = (Active) mAdapter.getItem(position - 1);
-		if (active == null)
-			return false;
-		String[] items = new String[] { getResources().getString(R.string.copy) };
-		final CommonDialog dialog = DialogHelper
-				.getPinterestDialogCancelable(getActivity());
-		dialog.setNegativeButton(R.string.cancle, null);
-//		dialog.setItemsWithoutChk(items, new OnItemClickListener() {
-//
-//			@Override
-//			public void onItemClick(AdapterView<?> parent, View view,
-//					int position, long id) {
-//				dialog.dismiss();
-//				TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(active
-//						.getMessage()));
-//			}
-//		});
-		dialog.show();
+//		final Active active = (Active) mAdapter.getItem(position);
+//		if (active == null)
+//			return false;
+//		String[] items = new String[] { getResources().getString(R.string.copy) };
+//		final CommonDialog dialog = DialogHelper
+//				.getPinterestDialogCancelable(getActivity());
+//		dialog.setNegativeButton(R.string.cancle, null);
+////		dialog.setItemsWithoutChk(items, new OnItemClickListener() {
+////
+////			@Override
+////			public void onItemClick(AdapterView<?> parent, View view,
+////					int position, long id) {
+////				dialog.dismiss();
+////				TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(active
+////						.getMessage()));
+////			}
+////		});
+//		dialog.show();
 		return true;
 	}
 }

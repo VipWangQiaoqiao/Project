@@ -10,6 +10,7 @@ import net.oschina.app.fragment.BlogDetailFragment;
 import net.oschina.app.fragment.FragmentTest;
 import net.oschina.app.fragment.NewsDetailFragment;
 import net.oschina.app.fragment.PostDetailFragment;
+import net.oschina.app.fragment.SoftwareDetailFragment;
 import net.oschina.app.fragment.ToolbarFragment;
 import net.oschina.app.fragment.TweetDetailFragment;
 import net.oschina.app.interf.EmojiFragmentControl;
@@ -81,7 +82,7 @@ public class DetailActivity extends BaseActivity implements
 			break;
 		case DISPLAY_SOFTWARE:
 			actionBarTitle = R.string.actionbar_title_software;
-			fragment = new FragmentTest();
+			fragment = new SoftwareDetailFragment();
 			break;
 		case DISPLAY_POST:
 			actionBarTitle = R.string.actionbar_title_question;

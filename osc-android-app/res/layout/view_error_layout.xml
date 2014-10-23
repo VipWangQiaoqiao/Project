@@ -29,9 +29,9 @@
 
                 <ProgressBar
                     android:id="@+id/animProgress"
-                    android:layout_width="79.0dip"
-                    android:layout_height="79.0dip"
-                    android:indeterminateDuration="1500" />
+                    android:layout_width="30dip"
+                    android:layout_height="30dip"
+                    style="@style/loading" />
             </RelativeLayout>
 
             <TextView

@@ -97,6 +97,7 @@ public class ActiveAdapter extends ListBaseAdapter {
 		switch (item.getAppClient()) {
 		default:
 			vh.from.setText("");
+			vh.from.setVisibility(View.GONE);
 			break;
 		case Tweet.CLIENT_MOBILE:
 			vh.from.setText(R.string.from_mobile);

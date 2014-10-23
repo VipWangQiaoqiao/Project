@@ -1,8 +1,6 @@
 package com.zbar.lib;
 
 import java.io.IOException;
-import java.lang.annotation.Inherited;
-
 import org.apache.http.Header;
 
 import net.oschina.app.AppContext;
@@ -12,10 +10,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.AssetFileDescriptor;
@@ -31,14 +26,11 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -94,6 +86,11 @@ public class CaptureActivity extends BaseActivity implements Callback {
 	
 	public boolean isNeedCapture() {
 		return isNeedCapture;
+	}
+	
+	@Override
+	protected boolean hasActionBar() {
+		return true;
 	}
 
 	public void setNeedCapture(boolean isNeedCapture) {
@@ -156,9 +153,6 @@ public class CaptureActivity extends BaseActivity implements Callback {
 		CameraManager.init(getApplication());
 		hasSurface = false;
 		inactivityTimer = new InactivityTimer(this);
-		
-		mContainer = (RelativeLayout) findViewById(R.id.capture_containter);
-		mCropLayout = (RelativeLayout) findViewById(R.id.capture_crop_layout);
 		
 		mFlash.setOnClickListener(this);
 		
@@ -457,7 +451,7 @@ public class CaptureActivity extends BaseActivity implements Callback {
 			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			mediaPlayer.setOnCompletionListener(beepListener);
 
-			AssetFileDescriptor file = getResources().openRawResourceFd(R.raw.beep);
+			AssetFileDescriptor file = getResources().openRawResourceFd(R.raw.qr_sacn);
 			try {
 				mediaPlayer.setDataSource(file.getFileDescriptor(), file.getStartOffset(), file.getLength());
 				file.close();
@@ -469,7 +463,7 @@ public class CaptureActivity extends BaseActivity implements Callback {
 		}
 	}
 
-	private static final long VIBRATE_DURATION = 50L;
+	private static final long VIBRATE_DURATION = 30L;
 
 	private void playBeepSoundAndVibrate() {
 		if (playBeep && mediaPlayer != null) {

@@ -7,8 +7,8 @@
 
     <net.oschina.app.widget.AvatarView
         android:id="@+id/iv_avatar"
-        android:layout_marginRight="@dimen/space_8"
-        style="@style/user_face_image" />
+        style="@style/user_face_image"
+        android:layout_marginRight="@dimen/space_8" />
 
     <TextView
         android:id="@+id/tv_name"
@@ -24,8 +24,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:textColor="@color/main_gray"
         android:text="20"
+        android:textColor="@color/main_gray"
         android:textSize="@dimen/text_size_12" />
 
     <LinearLayout
@@ -99,21 +99,24 @@
         android:src="@drawable/pic_bg"
         android:visibility="gone" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/iv_pic"
         android:layout_marginTop="@dimen/space_4"
         android:layout_toRightOf="@id/iv_avatar"
-        android:gravity="center_vertical"
-        android:orientation="horizontal" >
+        android:gravity="center_vertical" >
 
         <TextView
             android:id="@+id/tv_from"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/space_10"
-            android:layout_weight="1"
+            android:drawableLeft="@drawable/platform"
+            android:drawablePadding="@dimen/space_5"
+            android:layout_alignParentLeft="true"
+            android:gravity="center_vertical"
+            android:text="Android"
             android:textColor="@color/main_gray"
             android:textSize="@dimen/text_size_12" />
 
@@ -122,6 +125,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_alignParentRight="true"
             android:drawableLeft="@drawable/ic_comment_count"
             android:drawablePadding="@dimen/space_2"
             android:gravity="center_vertical"
@@ -129,18 +133,6 @@
             android:textSize="@dimen/text_size_12"
             android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/tv_retweet_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/space_10"
-            android:drawableLeft="@drawable/ic_retweet_count"
-            android:drawablePadding="@dimen/space_2"
-            android:gravity="center_vertical"
-            android:textColor="@color/main_gray"
-            android:textSize="@dimen/text_size_12"
-            android:visibility="gone" />
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

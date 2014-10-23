@@ -15,10 +15,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
+            android:layout_gravity="center"
             android:layout_marginBottom="@dimen/space_5"
-            android:layout_gravity="center" >
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
 
             <net.oschina.app.widget.AvatarView
                 android:id="@+id/iv_tweet_face"
@@ -27,16 +27,16 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/tweet_item_profile_info_padd"
                 android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/tweet_item_profile_info_padd"
                 android:orientation="vertical" >
 
                 <TextView
                     android:id="@+id/tv_tweet_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/lightblue"
                     android:text="火蚁"
+                    android:textColor="@color/lightblue"
                     android:textSize="@dimen/text_size_15" />
 
                 <TextView
@@ -53,18 +53,19 @@
             android:id="@+id/tweet_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:autoLink="web|email"
-            android:text="设计模式优缺点及应用场景整理"
             android:layout_marginBottom="@dimen/space_5"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="设计模式优缺点及应用场景整理"
             android:textSize="@dimen/text_size_14" />
 
         <ImageView
             android:id="@+id/iv_tweet_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_5"
             android:clickable="true"
             android:scaleType="fitStart"
-           	android:layout_marginBottom="@dimen/space_5"
             android:visibility="gone" />
 
         <LinearLayout
@@ -77,9 +78,12 @@
                 android:id="@+id/tv_tweet_platform"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="来自：Android"
-                android:textColor="@color/tweet_time_platform"
                 android:layout_marginRight="@dimen/space_10"
+                android:drawableLeft="@drawable/platform"
+                android:drawablePadding="@dimen/space_5"
+                android:gravity="center_vertical"
+                android:text="Android"
+                android:textColor="@color/tweet_time_platform"
                 android:textSize="@dimen/text_size_10" />
 
             <TextView
@@ -87,12 +91,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/space_2"
-                android:textColor="@color/lightblue"
                 android:layout_weight="1"
                 android:gravity="right"
                 android:text="评论(20)"
+                android:textColor="@color/lightblue"
                 android:textSize="@dimen/text_size_12" />
-            
         </LinearLayout>
     </LinearLayout>
 

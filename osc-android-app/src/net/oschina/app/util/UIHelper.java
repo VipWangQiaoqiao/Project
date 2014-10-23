@@ -130,6 +130,20 @@ public class UIHelper {
 	}
 	
 	/**
+	 * 显示软件详情
+	 * 
+	 * @param context
+	 * @param ident
+	 */
+	public static void showSoftwareDetail(Context context, String ident) {
+		Intent intent = new Intent(context, DetailActivity.class);
+		intent.putExtra("ident", ident);
+		intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+				DetailActivity.DISPLAY_SOFTWARE);
+		context.startActivity(intent);
+	}
+	
+	/**
 	 * 新闻超链接点击跳转
 	 * 
 	 * @param context
@@ -149,7 +163,7 @@ public class UIHelper {
 				showNewsDetail(context, newsId);
 				break;
 			case News.NEWSTYPE_SOFTWARE:
-				//showSoftwareDetail(context, objId);
+				showSoftwareDetail(context, objId);
 				break;
 			case News.NEWSTYPE_POST:
 				showPostDetail(context, StringUtils.toInt(objId));
@@ -176,7 +190,7 @@ public class UIHelper {
 		// url为空-旧方法
 		if (StringUtils.isEmpty(url)) {
 			int id = active.getObjectId();
-			int catalog = active.getActiveType();
+			int catalog = active.getCatalog();
 			switch (catalog) {
 			case Active.CATALOG_OTHER:
 				// 其他-无跳转
@@ -275,13 +289,13 @@ public class UIHelper {
 			//showQuestionListByTag(context, objKey);
 			break;
 		case URLsUtils.URL_OBJ_TYPE_SOFTWARE:
-			//showSoftwareDetail(context, objKey);
+			showSoftwareDetail(context, objKey);
 			break;
 		case URLsUtils.URL_OBJ_TYPE_ZONE:
 			//showUserCenter(context, objId, objKey);
 			break;
 		case URLsUtils.URL_OBJ_TYPE_TWEET:
-			//showTweetDetail(context, objId);
+			showTweetDetail(context, objId);
 			break;
 		case URLsUtils.URL_OBJ_TYPE_BLOG:
 			showBlogDetail(context, objId);

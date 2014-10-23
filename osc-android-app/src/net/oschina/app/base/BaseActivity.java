@@ -36,7 +36,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
 	private WaitDialog _waitDialog;
 	
 	protected LayoutInflater mInflater;
-	private ActionBar mActionBar;
+	protected ActionBar mActionBar;
 	private TextView mTvActionTitle;
 
 	// 退出广播
