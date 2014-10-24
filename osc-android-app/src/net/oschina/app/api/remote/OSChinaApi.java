@@ -9,6 +9,7 @@ import java.util.Map;
 import net.oschina.app.AppContext;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.bean.Tweet;
+import net.oschina.app.util.TLog;
 import android.text.TextUtils;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -289,7 +290,7 @@ public class OSChinaApi {
 		ApiHttpClient.post("action/api/blogcomment_pub", params, handler);
 	}
 
-	public static void publicTweet(Tweet tweet, AsyncHttpResponseHandler handler) {
+	public static void pubTweet(Tweet tweet, AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams();
 		params.put("uid", tweet.getAuthorid());
 		params.put("msg", tweet.getBody());
@@ -303,6 +304,14 @@ public class OSChinaApi {
 			}
 		}
 		ApiHttpClient.post("action/api/tweet_pub", params, handler);
+	}
+	
+	public static void pubSoftWareTweet(Tweet tweet, int softid, AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("uid", tweet.getAuthorid());
+		params.put("msg", tweet.getBody());
+		params.put("project", softid);
+		ApiHttpClient.post("action/api/software_tweet_pub", params, handler);
 	}
 
 	public static void deleteTweet(int uid, int tweetid,
@@ -447,5 +456,18 @@ public class OSChinaApi {
 	
 	public static void singnIn(String url, AsyncHttpResponseHandler handler) {
 		ApiHttpClient.getDirect(url, handler);
+	}
+	
+	/**
+	 * 获取软件的动态列表
+	 * @param softid
+	 * @param handler
+	 */
+	public static void getSoftTweetList(int softid, int page, AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("project", softid);
+		params.put("pageIndex", page);
+		params.put("pageSize", AppContext.PAGE_SIZE);
+		ApiHttpClient.get("action/api/software_tweet_list", params, handler);
 	}
 }

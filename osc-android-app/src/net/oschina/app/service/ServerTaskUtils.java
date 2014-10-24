@@ -8,25 +8,34 @@ import android.os.Bundle;
 public class ServerTaskUtils {
 	
 	public static void publicBlogComment(Context context, PublicCommentTask task) {
-		Intent intent = new Intent(ServerTaskService.ACTION_PUBLIC_BLOG_COMMENT);
+		Intent intent = new Intent(ServerTaskService.ACTION_PUB_BLOG_COMMENT);
 		Bundle bundle = new Bundle();
-		bundle.putParcelable(ServerTaskService.BUNDLE_PUBLIC_COMMENT_TASK, task);
+		bundle.putParcelable(ServerTaskService.BUNDLE_PUB_COMMENT_TASK, task);
 		intent.putExtras(bundle);
 		context.startService(intent);
 	}
 
 	public static void publicNewsComment(Context context, PublicCommentTask task) {
-		Intent intent = new Intent(ServerTaskService.ACTION_PUBLIC_COMMENT);
+		Intent intent = new Intent(ServerTaskService.ACTION_PUB_COMMENT);
 		Bundle bundle = new Bundle();
-		bundle.putParcelable(ServerTaskService.BUNDLE_PUBLIC_COMMENT_TASK, task);
+		bundle.putParcelable(ServerTaskService.BUNDLE_PUB_COMMENT_TASK, task);
 		intent.putExtras(bundle);
 		context.startService(intent);
 	}
 	
-	public static void publicTweet(Context context, Tweet tweet) {
-		Intent intent = new Intent(ServerTaskService.ACTION_PUBLIC_TWEET);
+	public static void pubTweet(Context context, Tweet tweet) {
+		Intent intent = new Intent(ServerTaskService.ACTION_PUB_TWEET);
 		Bundle bundle = new Bundle();
-		bundle.putParcelable(ServerTaskService.BUNDLE_PUBLIC_TWEET_TASK, tweet);
+		bundle.putParcelable(ServerTaskService.BUNDLE_PUB_TWEET_TASK, tweet);
+		intent.putExtras(bundle);
+		context.startService(intent);
+	}
+
+	public static void pubSoftWareTweet(Context context, Tweet tweet, int softid){
+		Intent intent = new Intent(ServerTaskService.ACTION_PUB_SOFTWARE_TWEET);
+		Bundle bundle = new Bundle();
+		bundle.putParcelable(ServerTaskService.BUNDLE_PUB_SOFTWARE_TWEET_TASK, tweet);
+		bundle.putInt(ServerTaskService.KEY_SOFTID, softid);
 		intent.putExtras(bundle);
 		context.startService(intent);
 	}

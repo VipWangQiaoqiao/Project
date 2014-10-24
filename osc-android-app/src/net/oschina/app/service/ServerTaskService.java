@@ -27,19 +27,23 @@ import android.widget.BaseAdapter;
 
 public class ServerTaskService extends IntentService {
 	private static final String SERVICE_NAME = "ServerTaskService";
-	public static final String ACTION_PUBLIC_BLOG_COMMENT = "net.oschina.app.ACTION_PUBLIC_BLOG_COMMENT";
-	public static final String ACTION_PUBLIC_COMMENT = "net.oschina.app.ACTION_PUBLIC_COMMENT";
-	public static final String ACTION_PUBLIC_POST = "net.oschina.app.ACTION_PUBLIC_POST";
-	public static final String ACTION_PUBLIC_TWEET = "net.oschina.app.ACTION_PUBLIC_TWEET";
+	public static final String ACTION_PUB_BLOG_COMMENT = "net.oschina.app.ACTION_PUB_BLOG_COMMENT";
+	public static final String ACTION_PUB_COMMENT = "net.oschina.app.ACTION_PUB_COMMENT";
+	public static final String ACTION_PUB_POST = "net.oschina.app.ACTION_PUB_POST";
+	public static final String ACTION_PUB_TWEET = "net.oschina.app.ACTION_PUB_TWEET";
+	public static final String ACTION_PUB_SOFTWARE_TWEET = "net.oschina.app.ACTION_PUB_SOFTWARE_TWEET";
 
 	public static final String KEY_ADAPTER = "adapter";
 	
-	public static final String BUNDLE_PUBLIC_COMMENT_TASK = "BUNDLE_PUBLIC_COMMENT_TASK";
-	public static final String BUNDLE_PUBLIC_POST_TASK = "BUNDLE_PUBLIC_POST_TASK";
-	public static final String BUNDLE_PUBLIC_TWEET_TASK = "BUNDLE_PUBLIC_TWEET_TASK";
+	public static final String BUNDLE_PUB_COMMENT_TASK = "BUNDLE_PUB_COMMENT_TASK";
+	public static final String BUNDLE_PUB_POST_TASK = "BUNDLE_PUB_POST_TASK";
+	public static final String BUNDLE_PUB_TWEET_TASK = "BUNDLE_PUB_TWEET_TASK";
+	public static final String BUNDLE_PUB_SOFTWARE_TWEET_TASK = "BUNDLE_PUB_SOFTWARE_TWEET_TASK";
+	public static final String KEY_SOFTID = "soft_id";
 
 	private static final String KEY_COMMENT = "comment_";
 	private static final String KEY_TWEET = "tweet_";
+	private static final String KEY_SOFTWARE_TWEET = "software_tweet_";
 	private static final String KEY_POST = "post_";
 	
 
@@ -153,9 +157,12 @@ public class ServerTaskService extends IntentService {
 //	}
 
 	class PublicTweetResponseHandler extends OperationResponseHandler {
-
+		
+		String key = null;
+		
 		public PublicTweetResponseHandler(Looper looper, Object... args) {
 			super(looper, args);
+			key = (String) args[1];
 		}
 
 		@Override
@@ -176,7 +183,7 @@ public class ServerTaskService extends IntentService {
 						cancellNotification(id);
 					}
 				}, 3000);
-				removePenddingTask(KEY_TWEET + id);
+				removePenddingTask(key + id);
 			} else {
 				onFailure(100, res.getErrorMessage(), args);
 			}
@@ -192,7 +199,7 @@ public class ServerTaskService extends IntentService {
 					code == 100 ? errorMessage
 							: getString(R.string.tweet_publish_faile), false,
 					true);
-			removePenddingTask(KEY_TWEET + id);
+			removePenddingTask(key + id);
 		}
 
 		@Override
@@ -200,7 +207,7 @@ public class ServerTaskService extends IntentService {
 			tryToStopServie();
 		}
 	}
-
+	
 	public ServerTaskService() {
 		this(SERVICE_NAME);
 	}
@@ -233,27 +240,33 @@ public class ServerTaskService extends IntentService {
 	protected void onHandleIntent(Intent intent) {
 		String action = intent.getAction();
 		
-		if (ACTION_PUBLIC_BLOG_COMMENT.equals(action)) {
+		if (ACTION_PUB_BLOG_COMMENT.equals(action)) {
 			PublicCommentTask task = intent
-					.getParcelableExtra(BUNDLE_PUBLIC_COMMENT_TASK);
+					.getParcelableExtra(BUNDLE_PUB_COMMENT_TASK);
 			if (task != null) {
 				publicBlogComment(task);
 			}
-		} else if (ACTION_PUBLIC_COMMENT.equals(action)) {
+		} else if (ACTION_PUB_COMMENT.equals(action)) {
 			PublicCommentTask task = intent
-					.getParcelableExtra(BUNDLE_PUBLIC_COMMENT_TASK);
+					.getParcelableExtra(BUNDLE_PUB_COMMENT_TASK);
 			if (task != null) {
 				publicComment(task);
 			}
-		} else if (ACTION_PUBLIC_POST.equals(action)) {
+		} else if (ACTION_PUB_POST.equals(action)) {
 //			Post post = intent.getParcelableExtra(BUNDLE_PUBLIC_POST_TASK);
 //			if (post != null) {
 //				publicPost(post);
 //			}
-		} else if (ACTION_PUBLIC_TWEET.equals(action)) {
-			Tweet tweet = intent.getParcelableExtra(BUNDLE_PUBLIC_TWEET_TASK);
+		} else if (ACTION_PUB_TWEET.equals(action)) {
+			Tweet tweet = intent.getParcelableExtra(BUNDLE_PUB_TWEET_TASK);
 			if (tweet != null) {
-				publicTweet(tweet);
+				pubTweet(tweet);
+			}
+		} else if (ACTION_PUB_SOFTWARE_TWEET.equals(action)) {
+			Tweet tweet = intent.getParcelableExtra(BUNDLE_PUB_SOFTWARE_TWEET_TASK);
+			int softid = intent.getIntExtra(KEY_SOFTID, -1);
+			if (tweet != null && softid != -1) {
+				pubSoftWareTweet(tweet, softid);
 			}
 		}
 	}
@@ -295,15 +308,25 @@ public class ServerTaskService extends IntentService {
 //				post));
 //	}
 //
-	private void publicTweet(final Tweet tweet) {
+	private void pubTweet(final Tweet tweet) {
 		tweet.setId((int) System.currentTimeMillis());
 		int id = tweet.getId();
 		addPenddingTask(KEY_TWEET + id);
 		notifySimpleNotifycation(id, getString(R.string.tweet_publishing),
 				getString(R.string.tweet_public),
 				getString(R.string.tweet_publishing), true, false);
-		OSChinaApi.publicTweet(tweet, new PublicTweetResponseHandler(
-				getMainLooper(), tweet));
+		OSChinaApi.pubTweet(tweet, new PublicTweetResponseHandler(
+				getMainLooper(), tweet, KEY_TWEET));
+	}
+	
+	private void pubSoftWareTweet(final Tweet tweet, int softid) {
+		tweet.setId((int) System.currentTimeMillis());
+		int id = tweet.getId();
+		addPenddingTask(KEY_SOFTWARE_TWEET + id);
+		notifySimpleNotifycation(id, getString(R.string.tweet_publishing),
+				getString(R.string.tweet_public),
+				getString(R.string.tweet_publishing), true, false);
+		OSChinaApi.pubSoftWareTweet(tweet, softid, new PublicTweetResponseHandler(getMainLooper(), tweet, KEY_SOFTWARE_TWEET));
 	}
 
 	private void notifySimpleNotifycation(int id, String ticker, String title,

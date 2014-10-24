@@ -115,6 +115,7 @@
 	<string name="actionbar_title_comment">评论列表</string>
 	<string name="actionbar_title_questions">讨论区</string>
 	<string name="actionbar_title_tweetpub">弹一弹</string>
+	<string name="actionbar_title_softtweet">软件动弹列表</string>
 	
 	<string name="from_mobile">手机</string>
 	<string name="from_android">Android</string>

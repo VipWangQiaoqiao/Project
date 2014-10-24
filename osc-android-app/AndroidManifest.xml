@@ -71,16 +71,19 @@
 
         <service android:name="net.oschina.app.service.ServerTaskService" >
             <intent-filter>
-                <action android:name="net.oschina.app.ACTION_PUBLIC_BLOG_COMMENT" />
+                <action android:name="net.oschina.app.ACTION_PUB_BLOG_COMMENT" />
             </intent-filter>
             <intent-filter>
-                <action android:name="net.oschina.app.ACTION_PUBLIC_COMMENT" />
+                <action android:name="net.oschina.app.ACTION_PUB_COMMENT" />
             </intent-filter>
             <intent-filter>
-                <action android:name="net.oschina.app.ACTION_PUBLIC_POST" />
+                <action android:name="net.oschina.app.ACTION_PUB_POST" />
             </intent-filter>
             <intent-filter>
-                <action android:name="net.oschina.app.ACTION_PUBLIC_TWEET" />
+                <action android:name="net.oschina.app.ACTION_PUB_TWEET" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="net.oschina.app.ACTION_PUB_SOFTWARE_TWEET" />
             </intent-filter>
         </service>
     </application>

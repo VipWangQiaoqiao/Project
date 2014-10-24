@@ -55,6 +55,10 @@ public class StringUtils {
 		}
 	}
 	
+	public static String getDateString(Date date) {
+		return dateFormater.get().format(date);
+	}
+	
 	/**
 	 * 以友好的方式显示时间
 	 * 

@@ -10,6 +10,7 @@ import net.oschina.app.bean.Active;
 import net.oschina.app.bean.News;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.fragment.CommentFrament;
+import net.oschina.app.fragment.SoftWareTweetsFrament;
 import net.oschina.app.interf.OnWebViewImageListener;
 import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.ImagePreviewActivity;
@@ -382,6 +383,12 @@ public class UIHelper {
 		args.putInt(CommentFrament.BUNDLE_KEY_ID, id);
 		args.putInt(CommentFrament.BUNDLE_KEY_CATALOG, catalog);
 		showSimpleBack(context, SimpleBackPage.COMMENT, args);
+	}
+	
+	public static void showSoftWareTweets(Context context, int id) {
+		Bundle args = new Bundle();
+		args.putInt(SoftWareTweetsFrament.BUNDLE_KEY_ID, id);
+		showSimpleBack(context, SimpleBackPage.SOFTWARE_TWEETS, args);
 	}
 	
 	public static void showBlogComment(Context context, int id, int ownerId) {

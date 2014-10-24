@@ -80,8 +80,6 @@ public class CaptureActivity extends BaseActivity implements Callback {
 	@InjectView(R.id.capture_loading)
 	View mLoading;
 	
-	private TranslateAnimation mAnimation;
-	
 	private boolean isNeedCapture = false;
 	
 	public boolean isNeedCapture() {
@@ -156,15 +154,17 @@ public class CaptureActivity extends BaseActivity implements Callback {
 		
 		mFlash.setOnClickListener(this);
 		
-		mAnimation = new TranslateAnimation(TranslateAnimation.ABSOLUTE, 0f, TranslateAnimation.ABSOLUTE, 0f,
+		TranslateAnimation mAnimation = new TranslateAnimation(TranslateAnimation.ABSOLUTE, 0f, TranslateAnimation.ABSOLUTE, 0f,
 				TranslateAnimation.RELATIVE_TO_PARENT, 0f, TranslateAnimation.RELATIVE_TO_PARENT, 0.9f);
 		mAnimation.setDuration(1500);
 		mAnimation.setRepeatCount(-1);
 		mAnimation.setRepeatMode(Animation.REVERSE);
 		mAnimation.setInterpolator(new LinearInterpolator());
 		mQrLineView.setAnimation(mAnimation);
+		
+		
 	}
-
+	
 	boolean flag = true;
 
 	protected void light() {
@@ -271,6 +271,7 @@ public class CaptureActivity extends BaseActivity implements Callback {
 			public void onClick(DialogInterface dialog, int which) {
 				handler.sendEmptyMessage(R.id.restart_preview);
 				dialog.dismiss();
+				finish();
 			}
 		});
 		dialog.show();
@@ -345,6 +346,7 @@ public class CaptureActivity extends BaseActivity implements Callback {
 			@Override
 			public void onDismiss(DialogInterface dialog) {
 				handler.sendEmptyMessage(R.id.restart_preview);
+				finish();
 			}
 		});
 		return dialog;
@@ -385,6 +387,7 @@ public class CaptureActivity extends BaseActivity implements Callback {
 			public void onClick(DialogInterface dialog, int which) {
 				handler.sendEmptyMessage(R.id.restart_preview);
 				dialog.dismiss();
+				finish();
 			}
 		});
 		dialog.show();

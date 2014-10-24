@@ -183,7 +183,7 @@ public class TweetPubFragment extends BaseFragment implements
 		if (imgFile != null && imgFile.exists()) {
 			tweet.setImageFilePath(imgFile.getAbsolutePath());
 		}
-		ServerTaskUtils.publicTweet(getActivity(), tweet);
+		ServerTaskUtils.pubTweet(getActivity(), tweet);
 		if (mIsKeyboardVisible) {
 			TDevice.hideSoftKeyboard(getActivity().getCurrentFocus());
 		}
@@ -207,8 +207,10 @@ public class TweetPubFragment extends BaseFragment implements
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		Bundle bundle = getArguments();
-		int action_type = bundle.getInt(ACTION_TYPE);
-		goToSelectPicture(action_type);
+		if (bundle != null) {
+			int action_type = bundle.getInt(ACTION_TYPE, 0);
+			goToSelectPicture(action_type);
+		}
 	}
 
 	@Override
@@ -491,7 +493,7 @@ public class TweetPubFragment extends BaseFragment implements
 			String storageState = Environment.getExternalStorageState();
 			if (storageState.equals(Environment.MEDIA_MOUNTED)) {
 				savePath = Environment.getExternalStorageDirectory()
-						.getAbsolutePath() + "/OSC-Happy/Camera/";
+						.getAbsolutePath() + "/oschina/Camera/";
 				File savedir = new File(savePath);
 				if (!savedir.exists()) {
 					savedir.mkdirs();

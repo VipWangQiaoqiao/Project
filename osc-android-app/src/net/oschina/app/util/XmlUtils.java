@@ -32,10 +32,12 @@ public class XmlUtils {
     	XStream xmStream = new XStream(new DomDriver("utf-8"));
     	xmStream.processAnnotations(type);
     	T obj = null;
+    	final String str = StringUtils.toConvertString(is);
     	try {
-    		obj = (T) xmStream.fromXML(is);
+    		obj = (T) xmStream.fromXML(str);
 		} catch (Exception e) {
 			TLog.log(TAG, "解析xml发生异常：" + e.getMessage());
+			TLog.log(TAG, "xml文本为：" + str);
 		} finally {
 			if (null != is) {
 				try {

@@ -48,7 +48,7 @@ public class CommentFrament extends BaseListFragment implements
 	public static final String BUNDLE_KEY_BLOG = "BUNDLE_KEY_BLOG";
 	public static final String BUNDLE_KEY_ID = "BUNDLE_KEY_ID";
 	public static final String BUNDLE_KEY_OWNER_ID = "BUNDLE_KEY_OWNER_ID";
-	protected static final String TAG = NewsFragment.class.getSimpleName();
+	protected static final String TAG = CommentFrament.class.getSimpleName();
 	private static final String BLOG_CACHE_KEY_PREFIX = "blogcomment_list";
 	private static final String CACHE_KEY_PREFIX = "comment_list";
 	private static final int REQUEST_CODE = 0x10;

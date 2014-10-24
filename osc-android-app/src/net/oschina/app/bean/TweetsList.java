@@ -14,7 +14,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @XStreamAlias("oschina")
 public class TweetsList extends Entity implements ListEntity {
 	
-	@XStreamAlias("tweetCount")
+	@XStreamAlias("tweetcount")
 	private int tweetCount;
 	@XStreamAlias("pagesize")
 	private int pagesize;

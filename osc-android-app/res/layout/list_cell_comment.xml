@@ -52,8 +52,8 @@
             android:id="@+id/ly_refers"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_5"
             android:layout_below="@id/ll_user_info"
+            android:layout_marginTop="@dimen/space_5"
             android:background="@drawable/comment_refer_container_bg"
             android:orientation="vertical" >
         </LinearLayout>
@@ -83,6 +83,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/ly_relies"
             android:layout_marginTop="@dimen/space_5"
+            android:drawableLeft="@drawable/platform"
+            android:drawablePadding="@dimen/space_5"
+            android:gravity="center_vertical"
             android:textColor="@color/main_gray"
             android:textSize="@dimen/text_size_12" />
 

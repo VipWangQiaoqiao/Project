@@ -11,9 +11,9 @@
     <!-- android.support.v4.widget.ContentLoadingProgressBar -->
     <ProgressBar
         android:id="@+id/progress"
-        style="@style/Widget.ProgressBar"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        style="@style/loading"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_centerInParent="true"
         android:visibility="visible" />
 

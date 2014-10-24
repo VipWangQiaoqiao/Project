@@ -33,19 +33,20 @@ public class TweetsFragment extends BaseListFragment {
 
 	protected static final String TAG = TweetsFragment.class.getSimpleName();
 	private static final String CACHE_KEY_PREFIX = "tweetslist_";
-	
+
 	private boolean mIsWatingLogin;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		IntentFilter filter = new IntentFilter(NavigationDrawerFragment.INTENT_ACTION_USER_CHANGE);
+		IntentFilter filter = new IntentFilter(
+				NavigationDrawerFragment.INTENT_ACTION_USER_CHANGE);
 		getActivity().registerReceiver(mReceiver, filter);
 	}
 
 	@Override
 	public void onResume() {
-		if(mIsWatingLogin){
+		if (mIsWatingLogin) {
 			mCurrentPage = 0;
 			mState = STATE_REFRESH;
 			requestData(false);
@@ -83,7 +84,7 @@ public class TweetsFragment extends BaseListFragment {
 	@Override
 	protected void sendRequestData() {
 		OSChinaApi.getTweetList(tweetType, mCurrentPage, mHandler);
-		}
+	}
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -100,9 +101,9 @@ public class TweetsFragment extends BaseListFragment {
 			setupContent();
 		}
 	};
-	
+
 	private void setupContent() {
-		if(mErrorLayout !=null){
+		if (mErrorLayout != null) {
 			mIsWatingLogin = true;
 			mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
 			mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
@@ -112,17 +113,17 @@ public class TweetsFragment extends BaseListFragment {
 	@Override
 	protected void requestData(boolean refresh) {
 		mErrorLayout.setErrorMessage("");
-		if(tweetType>0){
-			if(AppContext.getInstance().isLogin()){
+		if (tweetType > 0) {
+			if (AppContext.getInstance().isLogin()) {
 				tweetType = AppContext.getInstance().getLoginUid();
 				mIsWatingLogin = false;
 				super.requestData(refresh);
-			}else{
+			} else {
 				mIsWatingLogin = true;
 				mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
 				mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
 			}
-		}else{
+		} else {
 			mIsWatingLogin = false;
 			super.requestData(refresh);
 		}
@@ -135,12 +136,12 @@ public class TweetsFragment extends BaseListFragment {
 
 			@Override
 			public void onClick(View v) {
-				if(AppContext.getInstance().isLogin())
+				if (AppContext.getInstance().isLogin())
 					requestData(false);
 				else
 					UIHelper.showLoginActivity(getActivity());
 			}
 		});
-		
+
 	}
 }
