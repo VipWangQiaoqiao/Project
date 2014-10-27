@@ -278,4 +278,25 @@ public class AppContext extends BaseApplication {
 		editor.putString(KEY_TWEET_DRAFT + getInstance().getLoginUid(), draft);
 		apply(editor);
 	}
+	
+	public static boolean isNotificationSoundEnable() {
+		return getPreferences().getBoolean(KEY_NOTIFICATION_SOUND, false);
+	}
+
+	public static void setNotificationSoundEnable(boolean enable) {
+		Editor editor = getPreferences().edit();
+		editor.putBoolean(KEY_NOTIFICATION_SOUND, enable);
+		apply(editor);
+	}
+
+	public static boolean isNotificationDisableWhenExit() {
+		return getPreferences().getBoolean(KEY_NOTIFICATION_DISABLE_WHEN_EXIT,
+				false);
+	}
+
+	public static void setNotificationDisableWhenExit(boolean enable) {
+		Editor editor = getPreferences().edit();
+		editor.putBoolean(KEY_NOTIFICATION_DISABLE_WHEN_EXIT, enable);
+		apply(editor);
+	}
 }

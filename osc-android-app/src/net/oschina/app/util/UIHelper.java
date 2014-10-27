@@ -8,11 +8,14 @@ import org.json.JSONObject;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.bean.Active;
+import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.News;
+import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.fragment.CommentFrament;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
 import net.oschina.app.interf.OnWebViewImageListener;
+import net.oschina.app.service.NoticeService;
 import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.ui.LoginActivity;
@@ -510,5 +513,29 @@ public class UIHelper {
 					}
 				});
 		dialog.show();
+	}
+	
+	/**
+	 * 发送通知广播
+	 * 
+	 * @param context
+	 * @param notice
+	 */
+	public static void sendBroadCast(Context context, Notice notice) {
+		// if (!((AppContext) context.getApplicationContext()).isLogin()
+		// || notice == null)
+		// return;
+		TLog.log("发送通知广播");
+		Intent intent = new Intent(Constants.INTENT_ACTION_NOTICE);
+		intent.putExtra("atmeCount", notice.getAtmeCount());
+		intent.putExtra("msgCount", notice.getMsgCount());
+		intent.putExtra("reviewCount", notice.getReviewCount());
+		intent.putExtra("newFansCount", notice.getNewFansCount());
+		context.sendBroadcast(intent);
+	}
+	
+	public static void sendBroadcastForNotice(Context context) {
+		Intent intent = new Intent(NoticeService.INTENT_ACTION_BROADCAST);
+		context.sendBroadcast(intent);
 	}
 }

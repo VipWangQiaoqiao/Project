@@ -86,6 +86,12 @@
                 <action android:name="net.oschina.app.ACTION_PUB_SOFTWARE_TWEET" />
             </intent-filter>
         </service>
+
+        <receiver android:name="net.oschina.app.broadcast.AlarmReceiver" />
+
+        <service
+            android:name="net.oschina.app.service.NoticeService"
+            android:process=":notice" />
     </application>
 
 </manifest>

@@ -61,10 +61,5 @@ public class Notice implements Serializable {
 	}
 	public void setNewFansCount(int newFansCount) {
 		this.newFansCount = newFansCount;
-	}	
-	
-	public static Notice parse(InputStream inputStream) throws IOException, AppException {
-		Notice notice = null;
-        return notice;       
 	}
 }

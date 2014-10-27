@@ -152,5 +152,11 @@
     <string name="software_index">软件首页</string>
     <string name="software_download">软件下载</string>
     <string name="software_document">软件文档</string>
+    
+    <string name="you_have_news_messages">你有%s条最新消息</string>
+	<string name="atme_count">\@我(%s) </string>
+	<string name="msg_count">留言(%s) </string>
+	<string name="review_count">评论(%s) </string>
+	<string name="fans_count">新粉丝(%s) </string>
 
 </resources>

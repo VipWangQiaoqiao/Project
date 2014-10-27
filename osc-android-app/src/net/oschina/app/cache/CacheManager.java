@@ -127,7 +127,6 @@ public class CacheManager {
 		} else {
 			failure = existTime > other_cache_time ? true : false;
 		}
-		TLog.log("Test", String.valueOf(failure));
 		return failure;
 	}
 }
