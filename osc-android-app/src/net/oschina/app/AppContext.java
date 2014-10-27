@@ -47,11 +47,6 @@ public class AppContext extends BaseApplication {
 	private static final String KEY_QUESTION_TYPE_DRAFT = "key_question_type_draft";
 	private static final String KEY_QUESTION_LMK_DRAFT = "key_question_lmk_draft";
 
-	// 手机网络类型
-	public static final int NETTYPE_WIFI = 0x01;
-	public static final int NETTYPE_CMWAP = 0x02;
-	public static final int NETTYPE_CMNET = 0x03;
-
 	public static final int PAGE_SIZE = 20;// 默认分页大小
 	private static final int CACHE_TIME = 60 * 60000;// 缓存失效时间
 

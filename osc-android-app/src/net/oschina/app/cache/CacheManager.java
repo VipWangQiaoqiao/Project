@@ -10,9 +10,16 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+import net.oschina.app.util.TDevice;
+import net.oschina.app.util.TLog;
 import android.content.Context;
 
 public class CacheManager {
+	
+	// wifi缓存时间为5分钟
+	private static long wifi_cache_time = 5*60*1000;
+	// 其他网络环境为1小时
+	private static long other_cache_time = 60*60*1000;
 
 	/**
 	 * 保存对象
@@ -104,8 +111,23 @@ public class CacheManager {
 			return false;
 		boolean exist = false;
 		File data = context.getFileStreamPath(cachefile);
-		if (data.exists())
+		if (data.exists() && !isCacheDataFailure(data))
 			exist = true;
 		return exist;
+	}
+	
+	/**
+	 * 判断缓存是否已经失效
+	 */
+	private static boolean isCacheDataFailure(File date) {
+		long existTime = System.currentTimeMillis() - date.lastModified();
+		boolean failure = false;
+		if (TDevice.getNetworkType() == TDevice.NETTYPE_WIFI) {
+			failure = existTime > wifi_cache_time ? true : false;
+		} else {
+			failure = existTime > other_cache_time ? true : false;
+		}
+		TLog.log("Test", String.valueOf(failure));
+		return failure;
 	}
 }

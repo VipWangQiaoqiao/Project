@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.text.NumberFormat;
 import java.util.UUID;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseApplication;
 import android.annotation.TargetApi;
@@ -38,6 +39,11 @@ import android.view.inputmethod.InputMethodManager;
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class TDevice {
 
+	// 手机网络类型
+	public static final int NETTYPE_WIFI = 0x01;
+	public static final int NETTYPE_CMWAP = 0x02;
+	public static final int NETTYPE_CMNET = 0x03;
+	
 	public static boolean GTE_HC;
 	public static boolean GTE_ICS;
 	public static boolean PRE_HC;
@@ -45,6 +51,7 @@ public class TDevice {
 	private static Boolean _hasCamera = null;
 	private static Boolean _isTablet = null;
 	private static Integer _loadFactor = null;
+	
 	private static int _pageSize = -1;
 	public static float displayDensity = 0.0F;
 
@@ -624,5 +631,32 @@ public class TDevice {
 		} else {
 			return true;
 		}
+	}
+	
+	/**
+	 * 获取当前网络类型
+	 * @return 0：没有网络   1：WIFI网络   2：WAP网络    3：NET网络
+	 */
+	public static int getNetworkType() {
+		int netType = 0;
+		ConnectivityManager connectivityManager = (ConnectivityManager) AppContext.getInstance().getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+		if (networkInfo == null) {
+			return netType;
+		}		
+		int nType = networkInfo.getType();
+		if (nType == ConnectivityManager.TYPE_MOBILE) {
+			String extraInfo = networkInfo.getExtraInfo();
+			if(!StringUtils.isEmpty(extraInfo)){
+				if (extraInfo.toLowerCase().equals("cmnet")) {
+					netType = NETTYPE_CMNET;
+				} else {
+					netType = NETTYPE_CMWAP;
+				}
+			}
+		} else if (nType == ConnectivityManager.TYPE_WIFI) {
+			netType = NETTYPE_WIFI;
+		}
+		return netType;
 	}
 }
