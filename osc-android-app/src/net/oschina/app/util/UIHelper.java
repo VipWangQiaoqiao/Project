@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import net.oschina.app.AppContext;
+import net.oschina.app.R;
 import net.oschina.app.bean.Active;
 import net.oschina.app.bean.News;
 import net.oschina.app.bean.SimpleBackPage;
@@ -16,9 +17,11 @@ import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.ui.LoginActivity;
 import net.oschina.app.ui.SimpleBackActivity;
+import net.oschina.app.ui.dialog.CommonDialog;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -475,5 +478,37 @@ public class UIHelper {
 
 		return sp;
 	}
-
+	
+	/**
+	 * 发送App异常崩溃报告
+	 * 
+	 * @param cont
+	 * @param crashReport
+	 */
+	public static void sendAppCrashReport(final Context context,
+			final String crashReport) {
+		CommonDialog dialog = new CommonDialog(context);
+		
+		dialog.setTitle(R.string.app_error);
+		dialog.setMessage(R.string.app_error_message);
+		dialog.setPositiveButton(R.string.submit_report,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+						// 发送异常报告
+						TDevice.sendEmail(context, crashReport, "zhangdeyi@oschina.net");
+						// 退出
+						
+					}
+				});
+		dialog.setNegativeButton(R.string.cancle,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+						// 退出
+						
+					}
+				});
+		dialog.show();
+	}
 }

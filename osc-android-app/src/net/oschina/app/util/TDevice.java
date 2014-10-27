@@ -575,12 +575,14 @@ public class TDevice {
 		clip.setText(string);
 	}
 
-	public static void sendEmail(Context context, String email, String content) {
+	public static void sendEmail(Context context, String content, String... emails) {
 		try {
 			Intent intent = new Intent(Intent.ACTION_SEND);
-			intent.setType("text/plain");
+			// 模拟器
+			//intent.setType("text/plain");
+			intent.setType("message/rfc822"); // 真机
 			intent.putExtra(android.content.Intent.EXTRA_EMAIL,
-					new String[] { email });
+					emails);
 			context.startActivity(intent);
 		} catch (ActivityNotFoundException e) {
 			e.printStackTrace();

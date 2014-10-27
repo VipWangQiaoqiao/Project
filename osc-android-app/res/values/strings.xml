@@ -10,6 +10,10 @@
     <string name="main_tab_name_my">我</string>
     <string name="main_tab_name_explore">发现</string>
     
+    <string name="app_error">应用程序错误</string>
+    <string name="app_error_message">很抱歉，应用程序出现错误，即将退出。\n请提交错误报告，我们会尽快修复这个问题！</string>
+    <string name="submit_report">提交报告</string>
+    
     <!-- slide menu -->
     <string name="menu_myteam">我的团队</string>
     <string name="menu_opensoft">开源软件</string>

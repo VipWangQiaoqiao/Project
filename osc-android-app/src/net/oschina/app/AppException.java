@@ -10,6 +10,8 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Date;
 
+import net.oschina.app.util.UIHelper;
+
 import org.apache.http.HttpException;
 
 import android.content.Context;
@@ -243,17 +245,13 @@ public class AppException extends Exception implements UncaughtExceptionHandler{
 			return false;
 		}
 		
-		//final Context context = AppManager.getAppManager().currentActivity();
-		
 		final String crashReport = getCrashReport(AppContext.getInstance(), ex);
 		//显示异常信息&发送报告
 		new Thread() {
 			public void run() {
 				Looper.prepare();
 				// 拿到未捕获的异常，
-//				UIHelper.sendAppCrashReport(context, crashReport);
-				Toast.makeText(mContext, "出现未捕获异常", Toast.LENGTH_LONG).show();
-				Log.i("Test", crashReport);
+				UIHelper.sendAppCrashReport(AppContext.getInstance(), crashReport);
 				Looper.loop();
 			}
 
