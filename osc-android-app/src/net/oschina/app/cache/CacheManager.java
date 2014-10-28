@@ -122,6 +122,10 @@ public class CacheManager {
 	private static boolean isCacheDataFailure(File date) {
 		long existTime = System.currentTimeMillis() - date.lastModified();
 		boolean failure = false;
+		// 没有网络则直接返回否
+		if (!TDevice.hasInternet()) {
+			return false;
+		}
 		if (TDevice.getNetworkType() == TDevice.NETTYPE_WIFI) {
 			failure = existTime > wifi_cache_time ? true : false;
 		} else {

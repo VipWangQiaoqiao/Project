@@ -40,14 +40,15 @@ import android.text.style.ForegroundColorSpan;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
-/** 
+/**
  * 界面帮助类
+ * 
  * @author FireAnt（http://my.oschina.net/LittleDY）
- * @version 创建时间：2014年10月10日 下午3:33:36 
+ * @version 创建时间：2014年10月10日 下午3:33:36
  * 
  */
 public class UIHelper {
-	
+
 	/** 表情图片匹配 */
 	private static Pattern facePattern = Pattern
 			.compile("\\[{1}([0-9]\\d*)\\]{1}");
@@ -70,17 +71,17 @@ public class UIHelper {
 	public static final String WEB_LOAD_IMAGES = "<script type=\"text/javascript\"> var allImgUrls = getAllImgSrc(document.body.innerHTML);</script>";
 
 	private static final String IAM_API_SHOWIMAGE = "ima-api:action=showImage&data=";
-	
-	
+
 	/**
 	 * 显示登录界面
+	 * 
 	 * @param context
 	 */
 	public static void showLoginActivity(Context context) {
 		Intent intent = new Intent(context, LoginActivity.class);
 		context.startActivity(intent);
 	}
-	
+
 	/**
 	 * 显示新闻详情
 	 * 
@@ -94,7 +95,7 @@ public class UIHelper {
 				DetailActivity.DISPLAY_NEWS);
 		context.startActivity(intent);
 	}
-	
+
 	/**
 	 * 显示博客详情
 	 * 
@@ -108,7 +109,7 @@ public class UIHelper {
 				DetailActivity.DISPLAY_BLOG);
 		context.startActivity(intent);
 	}
-	
+
 	/**
 	 * 显示帖子详情
 	 * 
@@ -122,11 +123,12 @@ public class UIHelper {
 				DetailActivity.DISPLAY_POST);
 		context.startActivity(intent);
 	}
-	
+
 	/**
-	 *显示动弹详情
-	 *@param context
-	 *@param id
+	 * 显示动弹详情
+	 * 
+	 * @param context
+	 * @param id
 	 */
 	public static void showTweetDetail(Context context, int tweetid) {
 		Intent intent = new Intent(context, DetailActivity.class);
@@ -135,7 +137,7 @@ public class UIHelper {
 				DetailActivity.DISPLAY_TWEET);
 		context.startActivity(intent);
 	}
-	
+
 	/**
 	 * 显示软件详情
 	 * 
@@ -149,7 +151,7 @@ public class UIHelper {
 				DetailActivity.DISPLAY_SOFTWARE);
 		context.startActivity(intent);
 	}
-	
+
 	/**
 	 * 新闻超链接点击跳转
 	 * 
@@ -183,7 +185,7 @@ public class UIHelper {
 			showUrlRedirect(context, url);
 		}
 	}
-	
+
 	/**
 	 * 动态点击跳转到相关新闻、帖子等
 	 * 
@@ -206,7 +208,7 @@ public class UIHelper {
 				showNewsDetail(context, id);
 				break;
 			case Active.CATALOG_POST:
-//				showQuestionDetail(context, id);
+				showPostDetail(context, id);
 				break;
 			case Active.CATALOG_TWEET:
 				showTweetDetail(context, id);
@@ -219,7 +221,7 @@ public class UIHelper {
 			showUrlRedirect(context, url);
 		}
 	}
-	
+
 	/**
 	 * 添加网页的点击图片展示支持
 	 */
@@ -228,7 +230,7 @@ public class UIHelper {
 	public static void addWebImageShow(final Context cxt, WebView wv) {
 		wv.getSettings().setJavaScriptEnabled(true);
 		wv.addJavascriptInterface(new OnWebViewImageListener() {
-			
+
 			@Override
 			@JavascriptInterface
 			public void onImageClick(String bigImageUrl) {
@@ -238,7 +240,7 @@ public class UIHelper {
 			}
 		}, "mWebViewImageListener");
 	}
-	
+
 	public static String setHtmlCotentSupportImagePreview(String body) {
 		// 读取用户设置：是否加载文章图片--默认有wifi下始终加载图片
 		if (AppContext.shouldLoadImage() || TDevice.isWifiOpen()) {
@@ -254,7 +256,7 @@ public class UIHelper {
 		}
 		return body;
 	}
-	
+
 	/**
 	 * url跳转
 	 * 
@@ -293,13 +295,13 @@ public class UIHelper {
 			showPostDetail(context, objId);
 			break;
 		case URLsUtils.URL_OBJ_TYPE_QUESTION_TAG:
-			//showQuestionListByTag(context, objKey);
+			// showQuestionListByTag(context, objKey);
 			break;
 		case URLsUtils.URL_OBJ_TYPE_SOFTWARE:
 			showSoftwareDetail(context, objKey);
 			break;
 		case URLsUtils.URL_OBJ_TYPE_ZONE:
-			//showUserCenter(context, objId, objKey);
+			// showUserCenter(context, objId, objKey);
 			break;
 		case URLsUtils.URL_OBJ_TYPE_TWEET:
 			showTweetDetail(context, objId);
@@ -320,9 +322,10 @@ public class UIHelper {
 	 * @param url
 	 */
 	public static void openBrowser(Context context, String url) {
-		
+
 		if (StringUtils.isImgUrl(url)) {
-			ImagePreviewActivity.showImagePrivew(context, 0, new String[]{url});
+			ImagePreviewActivity.showImagePrivew(context, 0,
+					new String[] { url });
 			return;
 		}
 		try {
@@ -334,7 +337,7 @@ public class UIHelper {
 			AppContext.showToastShort("无法浏览此网页");
 		}
 	}
-	
+
 	@JavascriptInterface
 	public static void showImagePreview(Context context, String[] imageUrls) {
 		ImagePreviewActivity.showImagePrivew(context, 0, imageUrls);
@@ -345,7 +348,7 @@ public class UIHelper {
 			String[] imageUrls) {
 		ImagePreviewActivity.showImagePrivew(context, index, imageUrls);
 	}
-	
+
 	public static void showSimpleBackForResult(Fragment fragment,
 			int requestCode, SimpleBackPage page, Bundle args) {
 		Intent intent = new Intent(fragment.getActivity(),
@@ -383,20 +386,20 @@ public class UIHelper {
 		intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, page.getValue());
 		context.startActivity(intent);
 	}
-	
+
 	public static void showComment(Context context, int id, int catalog) {
 		Bundle args = new Bundle();
 		args.putInt(CommentFrament.BUNDLE_KEY_ID, id);
 		args.putInt(CommentFrament.BUNDLE_KEY_CATALOG, catalog);
 		showSimpleBack(context, SimpleBackPage.COMMENT, args);
 	}
-	
+
 	public static void showSoftWareTweets(Context context, int id) {
 		Bundle args = new Bundle();
 		args.putInt(SoftWareTweetsFrament.BUNDLE_KEY_ID, id);
 		showSimpleBack(context, SimpleBackPage.SOFTWARE_TWEETS, args);
 	}
-	
+
 	public static void showBlogComment(Context context, int id, int ownerId) {
 		Bundle args = new Bundle();
 		args.putInt(CommentFrament.BUNDLE_KEY_ID, id);
@@ -404,7 +407,7 @@ public class UIHelper {
 		args.putBoolean(CommentFrament.BUNDLE_KEY_BLOG, true);
 		showSimpleBack(context, SimpleBackPage.COMMENT, args);
 	}
-	
+
 	public static SpannableString parseActiveAction(int objecttype,
 			int objectcatalog, String objecttitle) {
 		String title = "";
@@ -481,7 +484,7 @@ public class UIHelper {
 
 		return sp;
 	}
-	
+
 	/**
 	 * 发送App异常崩溃报告
 	 * 
@@ -491,7 +494,7 @@ public class UIHelper {
 	public static void sendAppCrashReport(final Context context,
 			final String crashReport) {
 		CommonDialog dialog = new CommonDialog(context);
-		
+
 		dialog.setTitle(R.string.app_error);
 		dialog.setMessage(R.string.app_error_message);
 		dialog.setPositiveButton(R.string.submit_report,
@@ -499,9 +502,10 @@ public class UIHelper {
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
 						// 发送异常报告
-						TDevice.sendEmail(context, crashReport, "zhangdeyi@oschina.net");
+						TDevice.sendEmail(context, crashReport,
+								"zhangdeyi@oschina.net");
 						// 退出
-						
+
 					}
 				});
 		dialog.setNegativeButton(R.string.cancle,
@@ -509,12 +513,12 @@ public class UIHelper {
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
 						// 退出
-						
+
 					}
 				});
 		dialog.show();
 	}
-	
+
 	/**
 	 * 发送通知广播
 	 * 
@@ -522,18 +526,21 @@ public class UIHelper {
 	 * @param notice
 	 */
 	public static void sendBroadCast(Context context, Notice notice) {
-		// if (!((AppContext) context.getApplicationContext()).isLogin()
-		// || notice == null)
-		// return;
-		TLog.log("发送通知广播");
+		if (!((AppContext) context.getApplicationContext()).isLogin()
+				|| notice == null)
+			return;
+		TLog.log("NOTICE", "发送通知广播");
 		Intent intent = new Intent(Constants.INTENT_ACTION_NOTICE);
-		intent.putExtra("atmeCount", notice.getAtmeCount());
-		intent.putExtra("msgCount", notice.getMsgCount());
-		intent.putExtra("reviewCount", notice.getReviewCount());
-		intent.putExtra("newFansCount", notice.getNewFansCount());
+		Bundle bundle = new Bundle();
+		bundle.putSerializable("notice_bean", notice);
+		bundle.putInt("atmeCount", notice.getAtmeCount());
+		bundle.putInt("msgCount", notice.getMsgCount());
+		bundle.putInt("reviewCount", notice.getReviewCount());
+		bundle.putInt("newFansCount", notice.getNewFansCount());
+		intent.putExtras(bundle);
 		context.sendBroadcast(intent);
 	}
-	
+
 	public static void sendBroadcastForNotice(Context context) {
 		Intent intent = new Intent(NoticeService.INTENT_ACTION_BROADCAST);
 		context.sendBroadcast(intent);

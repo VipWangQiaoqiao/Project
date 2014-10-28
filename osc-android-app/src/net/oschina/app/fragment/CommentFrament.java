@@ -221,7 +221,7 @@ public class CommentFrament extends BaseListFragment implements
 						AppContext.showToastShort(R.string.comment_publish_success);
 						
 						mAdapter.addItem(0, rsb.getComment());
-
+						mEmojiFragment.reset();
 //						UIHelper.sendBroadCastCommentChanged(getActivity(),
 //								mIsBlogComment, mId, mCatalog, Comment.OPT_ADD,
 //								res.getComment());

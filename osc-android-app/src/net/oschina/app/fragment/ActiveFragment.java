@@ -11,8 +11,10 @@ import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Active;
 import net.oschina.app.bean.ActiveList;
+import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.Notice;
+import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -22,6 +24,7 @@ import net.oschina.app.util.XmlUtils;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -56,13 +59,13 @@ public class ActiveFragment extends BaseListFragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-//		IntentFilter filter = new IntentFilter(Constants.INTENT_ACTION_LOGOUT);
-//		getActivity().registerReceiver(mReceiver, filter);
+		IntentFilter filter = new IntentFilter(Constants.INTENT_ACTION_LOGOUT);
+		getActivity().registerReceiver(mReceiver, filter);
 	}
 
 	@Override
 	public void onDestroy() {
-//		getActivity().unregisterReceiver(mReceiver);
+		getActivity().unregisterReceiver(mReceiver);
 		super.onDestroy();
 	}
 
@@ -123,7 +126,7 @@ public class ActiveFragment extends BaseListFragment implements
 			else if (mCatalog == -1)
 				type = Notice.TYPE_MESSAGE;
 			if (type != -100) {
-//				UIHelper.sendBroadcastForNotice(getActivity());
+				UIHelper.sendBroadcastForNotice(getActivity());
 			}
 		}
 	}
@@ -157,7 +160,7 @@ public class ActiveFragment extends BaseListFragment implements
 			else if (mCatalog == -1)
 				type = Notice.TYPE_MESSAGE;
 			if (type != -100) {
-//				NoticeUtils.clearNotice(type);
+				NoticeUtils.clearNotice(type);
 			}
 		}
 	}

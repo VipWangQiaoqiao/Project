@@ -1,5 +1,6 @@
 package net.oschina.app.adapter;
 
+import net.oschina.app.widget.BadgeView;
 import android.os.Bundle;
 
 public final class ViewPageInfo {

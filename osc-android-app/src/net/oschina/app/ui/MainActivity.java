@@ -1,11 +1,15 @@
 package net.oschina.app.ui;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.bean.Constants;
+import net.oschina.app.bean.Notice;
+import net.oschina.app.cache.DataCleanManager;
 import net.oschina.app.interf.BaseViewInterface;
 import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
+import net.oschina.app.viewpagefragment.ActiveViewPagerFragment;
 import net.oschina.app.widget.BadgeView;
 import net.oschina.app.widget.MyFragmentTabHost;
 import android.annotation.SuppressLint;
@@ -53,6 +57,8 @@ public class MainActivity extends ActionBarActivity implements
 
 	// private Version mVersion;
 	private BadgeView mBvTweet;
+	
+	public static Notice mNotice;
 
 	private BroadcastReceiver mNoticeReceiver = new BroadcastReceiver() {
 
@@ -65,8 +71,8 @@ public class MainActivity extends ActionBarActivity implements
 			int activeCount = atmeCount + reviewCount + msgCount;// +
 																	// newFansCount;//
 																	// 信息总数
-
-			TLog.log("@me:" + atmeCount + " msg:" + msgCount + " review:"
+			mNotice = (Notice) intent.getSerializableExtra("notice_bean");
+			TLog.log("NOTICE", "@me:" + atmeCount + " msg:" + msgCount + " review:"
 					+ reviewCount + " newFans:" + newFansCount + " active:"
 					+ activeCount);
 
@@ -75,6 +81,7 @@ public class MainActivity extends ActionBarActivity implements
 				mBvTweet.show();
 			} else {
 				mBvTweet.hide();
+				mNotice = null;
 			}
 		}
 	};
@@ -105,7 +112,7 @@ public class MainActivity extends ActionBarActivity implements
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
-
+		
 		mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
 		if (android.os.Build.VERSION.SDK_INT > 10) {
 			mTabHost.getTabWidget().setShowDividers(0);
@@ -124,6 +131,12 @@ public class MainActivity extends ActionBarActivity implements
 
 		NoticeUtils.bindToService(this);
 		UIHelper.sendBroadcastForNotice(this);
+		
+		if (AppContext.isFristStart()) {
+			mNavigationDrawerFragment.openDrawerMenu();
+			DataCleanManager.cleanInternalCache(AppContext.getInstance());
+			AppContext.setFristStart(false);
+		}
 	}
 
 	@Override
@@ -172,10 +185,10 @@ public class MainActivity extends ActionBarActivity implements
 			if (mainTab.equals(MainTab.ME)) {
 				View cn = indicator.findViewById(R.id.tab_mes);
 				mBvTweet = new BadgeView(MainActivity.this, cn);
+				mBvTweet.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
 				mBvTweet.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
 				mBvTweet.setBackgroundResource(R.drawable.notification_bg);
 				mBvTweet.setGravity(Gravity.CENTER);
-				mBvTweet.setTextColor(Color.WHITE);
 			}
 		}
 	}	

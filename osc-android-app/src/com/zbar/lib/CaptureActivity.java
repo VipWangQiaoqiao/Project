@@ -254,6 +254,10 @@ public class CaptureActivity extends BaseActivity implements Callback {
 	}
 	
 	private void showUrlOption(final String url) {
+		if (url.contains("oschina.net")) {
+			UIHelper.showUrlRedirect(CaptureActivity.this, url);
+			return;
+		}
 		CommonDialog dialog = new CommonDialog(CaptureActivity.this);
 		dialog.setMessage("可能存在风险，是否打开链接?<br/>" + url);
 		dialog.setNegativeButton("打开", new DialogInterface.OnClickListener() {

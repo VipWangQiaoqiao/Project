@@ -339,6 +339,14 @@ public class PagerSlidingTabStrip extends HorizontalScrollView implements View.O
             requestLayout();
         }
     }
+    
+	public View getChild(int idx) {
+		return getTabsLayout().getChildAt(idx);
+	}
+
+	public View getBadgeView(int i) {
+		return getTabsLayout().getChildAt(i).findViewById(R.id.tab_mes);
+	}
 
     /**
      * 设置ViewPager

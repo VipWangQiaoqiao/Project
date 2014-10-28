@@ -1,5 +1,6 @@
 package net.oschina.app.base;
 
+import static net.oschina.app.AppConfig.KEY_FRITST_START;
 import net.oschina.app.R;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -7,6 +8,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
 import android.os.Build;
 import android.util.DisplayMetrics;
@@ -48,9 +50,9 @@ public class BaseApplication extends Application {
 		return _resource;
 	}
 
-	 public static SharedPreferences getPersistPreferences() {
-	 return context().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-	 }
+	public static SharedPreferences getPersistPreferences() {
+		return context().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+	}
 
 	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 	public static void apply(SharedPreferences.Editor editor) {
@@ -59,6 +61,18 @@ public class BaseApplication extends Application {
 		} else {
 			editor.commit();
 		}
+	}
+	
+	public static void set(String key, boolean value) {
+		Editor editor = getPreferences().edit();
+		editor.putBoolean(key, value);
+		apply(editor);
+	}
+	
+	public static void set(String key, String value) {
+		Editor editor = getPreferences().edit();
+		editor.putString(key, value);
+		apply(editor);
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -156,7 +170,7 @@ public class BaseApplication extends Application {
 				} else {
 					toast.setGravity(gravity, 0, 35);
 				}
-				
+
 				toast.setDuration(duration);
 				toast.show();
 				lastToast = message;

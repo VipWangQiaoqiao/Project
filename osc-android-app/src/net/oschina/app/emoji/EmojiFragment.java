@@ -274,7 +274,6 @@ public class EmojiFragment extends BaseFragment implements
 
 	public void reset() {
 		if (mIsKeyboardVisible) {
-			// TDevice.toogleSoftKeyboard(getActivity().getCurrentFocus());
 			TDevice.hideSoftKeyboard(mEtInput);
 		}
 		if (mLyEmoji.getVisibility() == View.VISIBLE) {

@@ -9,7 +9,6 @@ import java.util.Map;
 import net.oschina.app.AppContext;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.bean.Tweet;
-import net.oschina.app.util.TLog;
 import android.text.TextUtils;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;

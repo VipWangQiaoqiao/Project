@@ -3,14 +3,19 @@ package net.oschina.app.adapter;
 import java.util.ArrayList;
 
 import net.oschina.app.R;
+import net.oschina.app.ui.MainActivity;
+import net.oschina.app.widget.BadgeView;
 import net.oschina.app.widget.PagerSlidingTabStrip;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TabHost;
@@ -60,9 +65,10 @@ public class ViewPageFragmentAdapter extends FragmentPagerAdapter implements
 	public void notifyDataSetChanged() {
 		super.notifyDataSetChanged();
 		for (ViewPageInfo viewPageInfo : mTabs) {
-			TextView v = (TextView) LayoutInflater.from(mContext).inflate(
+			View v = LayoutInflater.from(mContext).inflate(
 					R.layout.base_viewpage_fragment_tab_item, null);
-			v.setText(viewPageInfo.title);
+			TextView title = (TextView) v.findViewById(R.id.tab_title);
+			title.setText(viewPageInfo.title);
 			mPagerStrip.addTab(v);
 		}
 	}
