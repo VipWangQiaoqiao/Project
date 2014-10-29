@@ -20,6 +20,9 @@ public class ResultBean extends Base {
 	
 	@XStreamAlias("comment")
 	private Comment comment;
+	
+	@XStreamAlias("relation")
+	private int relation;
 
 	public Result getResult() {
 		return result;
@@ -43,5 +46,13 @@ public class ResultBean extends Base {
 
 	public void setComment(Comment comment) {
 		this.comment = comment;
+	}
+	
+	public int getRelation() {
+		return relation;
+	}
+
+	public void setRelation(int relation) {
+		this.relation = relation;
 	}
 }

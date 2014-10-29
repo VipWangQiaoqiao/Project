@@ -10,6 +10,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Date;
 
+import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 
 import org.apache.http.HttpException;
@@ -229,7 +230,6 @@ public class AppException extends Exception implements UncaughtExceptionHandler{
 		if(!handleException(ex) && mDefaultHandler != null) {
 			mDefaultHandler.uncaughtException(thread, ex);
 		}
-
 	}
 	/**
 	 * 自定义异常处理:收集错误信息&发送错误报告
@@ -250,6 +250,7 @@ public class AppException extends Exception implements UncaughtExceptionHandler{
 		new Thread() {
 			public void run() {
 				Looper.prepare();
+				TLog.log("CRASH", crashReport);
 				// 拿到未捕获的异常，
 				UIHelper.sendAppCrashReport(AppContext.getInstance(), crashReport);
 				Looper.loop();

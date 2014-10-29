@@ -8,7 +8,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.SimpleBackPage;
-import net.oschina.app.bean.UserInformation;
+import net.oschina.app.bean.User;
 import net.oschina.app.util.UIHelper;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -234,7 +234,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
 		mUser_info_layout.setVisibility(View.VISIBLE);
 		mUser_login_tips.setVisibility(View.GONE);
 		
-		UserInformation user = AppContext.getInstance().getLoginUser();
+		User user = AppContext.getInstance().getLoginUser();
 		mUser_name.setText(user.getName());
 		ImageLoader.getInstance().displayImage(user.getPortrait(), mUser_face);
 	}

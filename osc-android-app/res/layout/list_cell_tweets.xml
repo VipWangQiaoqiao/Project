@@ -66,6 +66,7 @@
             android:layout_marginBottom="@dimen/space_5"
             android:clickable="true"
             android:scaleType="fitStart"
+            android:src="@drawable/pic_bg"
             android:visibility="gone" />
 
         <LinearLayout

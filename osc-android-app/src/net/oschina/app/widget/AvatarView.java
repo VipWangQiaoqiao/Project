@@ -2,6 +2,7 @@ package net.oschina.app.widget;
 
 import net.oschina.app.R;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.UIHelper;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -36,7 +37,7 @@ public class AvatarView extends CircleImageView  {
 			@Override
 			public void onClick(View v) {
 				if (!TextUtils.isEmpty(name)) {
-//					UIHelper.showUserCenter(getContext(), id, name);
+					UIHelper.showUserCenter(getContext(), id, name);
 				}
 			}
 		});

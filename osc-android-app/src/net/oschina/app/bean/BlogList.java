@@ -14,6 +14,9 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @XStreamAlias("oschina")
 public class BlogList extends Entity implements ListEntity {
 	
+	@XStreamAlias("blogsCount")
+	private int blogsCount;
+	
 	@XStreamAlias("pagesize")
 	private int pagesize;
 	
@@ -39,6 +42,22 @@ public class BlogList extends Entity implements ListEntity {
 	@Override
 	public List<?> getList() {
 		return bloglist;
+	}
+
+	public int getBlogsCount() {
+		return blogsCount;
+	}
+
+	public void setBlogsCount(int blogsCount) {
+		this.blogsCount = blogsCount;
+	}
+
+	public int getPagesize() {
+		return pagesize;
+	}
+
+	public void setPagesize(int pagesize) {
+		this.pagesize = pagesize;
 	}
 
 }

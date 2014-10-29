@@ -26,7 +26,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.bean.LoginUserBean;
 import net.oschina.app.bean.Result;
-import net.oschina.app.bean.UserInformation;
+import net.oschina.app.bean.User;
 import net.oschina.app.util.CyptoUtils;
 import net.oschina.app.util.SimpleTextWatcher;
 import net.oschina.app.util.StringUtils;

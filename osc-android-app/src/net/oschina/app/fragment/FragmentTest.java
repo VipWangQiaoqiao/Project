@@ -22,14 +22,20 @@ public class FragmentTest extends BaseFragment {
 	}
 	
 	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(getLayoutId(), null);
+		return view;
+	}
+
+	@Override
 	protected int getLayoutId() {
-		return R.layout.fragment_test;
+		return R.layout.fragment_user_center;
 	}
 
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override

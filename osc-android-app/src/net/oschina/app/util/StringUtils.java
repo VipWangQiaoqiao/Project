@@ -272,6 +272,10 @@ public class StringUtils {
 		return false;
 	}
 	
+	public static String getString(String s) {
+		return s == null ? "" : s;
+	}
+	
 	/**
 	 * 将一个InputStream流转换成字符串
 	 * @param is
