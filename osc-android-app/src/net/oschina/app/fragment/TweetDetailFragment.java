@@ -1,3 +1,4 @@
+
 package net.oschina.app.fragment;
 
 import java.io.ByteArrayInputStream;
@@ -434,3 +435,4 @@ public class TweetDetailFragment extends BaseFragment implements
 	}
 	
 }
+>>>>>>> refs/remotes/origin/master

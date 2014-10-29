@@ -59,6 +59,7 @@
                 android:autoLink="web|email"
                 android:paddingBottom="2dp"
                 android:paddingRight="2dp"
+                android:paddingLeft="2dp"
                 android:text="设计模式优缺点及应用场景整理"
                 android:textColorLink="@color/blue"
                 android:textSize="@dimen/text_size_15" />
@@ -74,5 +75,4 @@
                 android:visibility="gone" />
         </LinearLayout>
     </RelativeLayout>
-
 </LinearLayout>
