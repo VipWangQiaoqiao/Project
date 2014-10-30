@@ -7,18 +7,18 @@
     <View
         android:layout_width="wrap_content"
         android:layout_height="1px"
-        android:background="@color/list_divider_color" 
-        android:visibility="gone"/>
+        android:background="@color/list_divider_color"
+        android:visibility="gone" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/list_item_background"
         android:clickable="true"
-        android:orientation="horizontal"
         android:padding="@dimen/space_16" >
 
         <TextView
+            android:id="@+id/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/space_4"
@@ -30,16 +30,17 @@
             android:id="@+id/tv_join_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/text"
             android:textColor="@color/main_black"
             android:textSize="@dimen/text_size_16" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <View
         android:layout_width="wrap_content"
         android:layout_height="1px"
         android:background="@color/list_divider_color" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/list_item_background"
@@ -48,6 +49,7 @@
         android:padding="@dimen/space_16" >
 
         <TextView
+            android:id="@id/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/space_4"
@@ -59,16 +61,17 @@
             android:id="@+id/tv_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/text"
             android:textColor="@color/main_black"
             android:textSize="@dimen/text_size_16" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <View
         android:layout_width="wrap_content"
         android:layout_height="1px"
         android:background="@color/list_divider_color" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/list_item_background"
@@ -77,6 +80,7 @@
         android:padding="@dimen/space_16" >
 
         <TextView
+            android:id="@id/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/space_4"
@@ -88,16 +92,17 @@
             android:id="@+id/tv_development_platform"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/text"
             android:textColor="@color/main_black"
             android:textSize="@dimen/text_size_16" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <View
         android:layout_width="wrap_content"
         android:layout_height="1px"
         android:background="@color/list_divider_color" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/list_item_background"
@@ -106,6 +111,7 @@
         android:padding="@dimen/space_16" >
 
         <TextView
+            android:id="@id/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/space_4"
@@ -117,8 +123,9 @@
             android:id="@+id/tv_academic_focus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/text"
             android:textColor="@color/main_black"
             android:textSize="@dimen/text_size_16" />
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

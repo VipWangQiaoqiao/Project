@@ -122,6 +122,7 @@
 	<string name="actionbar_title_softtweet">软件动弹列表</string>
 	<string name="actionbar_title_user_center">用户中心</string>
 	<string name="actionbar_title_user_blog">用户博客列表</string>
+	<string name="actionbar_title_my_information">我的资料</string>
 	
 	<string name="following_count">关注 %s</string>
     <string name="follower_count">粉丝 %s</string>
@@ -132,6 +133,10 @@
     <string name="follow_each_other">取消互粉</string>
     <string name="latest_login_time">最近登录  %s</string>
     
+    <string name="actionbar_title_profile">个人中心</string>
+    <string name="favorite">收藏</string>
+    <string name="following">关注</string>
+    <string name="follower">粉丝</string>
     <string name="join_time">加入时间:</string>
     <string name="location">所在地区:</string>
     <string name="development_platform">开发平台:</string>
@@ -177,5 +182,6 @@
 	
 	<string name="blog">博客</string>
 	<string name="information">资料</string>
-
+	<string name="qrcode">二维码</string>
+	
 </resources>

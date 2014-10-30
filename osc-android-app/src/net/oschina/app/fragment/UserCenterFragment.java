@@ -117,6 +117,7 @@ public class UserCenterFragment extends BaseFragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_user_center, container,
 				false);
 
@@ -147,11 +148,14 @@ public class UserCenterFragment extends BaseFragment implements
 		case R.id.tv_information:
 			showInformationDialog();
 			break;
+		case R.id.iv_avatar:
+			UIHelper.showUserAvatar(getActivity(), mUser.getPortrait());
+			break;
 		default:
 			break;
 		}
 	}
-
+	
 	@Override
 	public void initView(View view) {
 		mListView.setOnItemClickListener(this);
@@ -161,6 +165,7 @@ public class UserCenterFragment extends BaseFragment implements
 				R.layout.fragment_user_center_header, null);
 
 		mIvAvatar = (ImageView) header.findViewById(R.id.iv_avatar);
+		mIvAvatar.setOnClickListener(this);
 		mIvGender = (ImageView) header.findViewById(R.id.iv_gender);
 		mTvName = (TextView) header.findViewById(R.id.tv_name);
 		mTvFollowing = (TextView) header.findViewById(R.id.tv_following_count);

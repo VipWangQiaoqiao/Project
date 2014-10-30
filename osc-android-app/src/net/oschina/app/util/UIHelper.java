@@ -22,6 +22,7 @@ import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.ui.LoginActivity;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.ui.dialog.CommonDialog;
+import net.oschina.app.widget.AvatarView;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -572,5 +573,26 @@ public class UIHelper {
 		Bundle args = new Bundle();
 		args.putInt(BaseListFragment.BUNDLE_KEY_CATALOG, uid);
 		showSimpleBack(context, SimpleBackPage.USER_BLOG, args);
+	}
+	
+	/**
+	 * 显示用户头像大图
+	 * @param context
+	 * @param avatarUrl
+	 */
+	public static void showUserAvatar(Context context, String avatarUrl) {
+		if (StringUtils.isEmpty(avatarUrl)) {
+			return;
+		}
+		String url = AvatarView.getLargeAvatar(avatarUrl);
+		ImagePreviewActivity.showImagePrivew(context, 0, new String[]{url});
+	}
+	
+	/**
+	 * 显示登陆用户的个人中心页面
+	 * @param context
+	 */
+	public static void showMyInformation(Context context) {
+		showSimpleBack(context, SimpleBackPage.MY_INFORMATION, null);
 	}
 }

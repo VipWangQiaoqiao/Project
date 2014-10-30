@@ -30,7 +30,7 @@ public class FragmentTest extends BaseFragment {
 
 	@Override
 	protected int getLayoutId() {
-		return R.layout.fragment_user_center;
+		return R.layout.fragment_my_information;
 	}
 
 	@Override

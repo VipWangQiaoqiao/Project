@@ -2,7 +2,7 @@ package net.oschina.app.bean;
 
 import net.oschina.app.R;
 import net.oschina.app.fragment.CommentFrament;
-import net.oschina.app.fragment.FragmentTest;
+import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
 import net.oschina.app.fragment.TweetPubFragment;
 import net.oschina.app.fragment.UserBlogFragment;
@@ -21,7 +21,9 @@ public enum SimpleBackPage {
 	
 	USER_CENTER(5, R.string.actionbar_title_user_center, UserCenterFragment.class),
 	
-	USER_BLOG(6, R.string.actionbar_title_user_blog, UserBlogFragment.class);
+	USER_BLOG(6, R.string.actionbar_title_user_blog, UserBlogFragment.class),
+	
+	MY_INFORMATION(7, R.string.actionbar_title_my_information, MyInformationFragment.class);
 	
 	private int title;
 	private Class<?> clz;

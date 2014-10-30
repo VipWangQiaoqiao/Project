@@ -196,12 +196,11 @@ public class NavigationDrawerFragment extends BaseFragment implements
 	}
 	
 	private void onClickMenuItemUserInfo() {
-//		if (!AppContext.getInstance().isLogin()) {
-//			UIHelper.showLoginActivity(getActivity());
-//		} else {
-//			AppContext.showToast("已经登录了");
-//		}
-		UIHelper.showLoginActivity(getActivity());
+		if (!AppContext.getInstance().isLogin()) {
+			UIHelper.showLoginActivity(getActivity());
+		} else {
+			UIHelper.showMyInformation(getActivity());
+		}
 	}
 
 	public void initView(View view) {
