@@ -16,7 +16,7 @@ public class LoginUserBean extends Entity {
 	private Result result;
 	
 	@XStreamAlias("user")
-	private UserInformation user;
+	private User user;
 
 	public Result getResult() {
 		return result;
@@ -26,11 +26,11 @@ public class LoginUserBean extends Entity {
 		this.result = result;
 	}
 
-	public UserInformation getUser() {
+	public User getUser() {
 		return user;
 	}
 
-	public void setUser(UserInformation user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 	

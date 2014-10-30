@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.base.BaseApplication;
-import net.oschina.app.bean.UserInformation;
+import net.oschina.app.bean.User;
 import net.oschina.app.util.CyptoUtils;
 import net.oschina.app.util.StringUtils;
 import android.content.Context;
@@ -65,7 +65,7 @@ public class AppContext extends BaseApplication {
 	}
 
 	private void initLogin() {
-		UserInformation user = getLoginUser();
+		User user = getLoginUser();
 		if (null != user && user.getUid() > 0) {
 			login = true;
 			loginUid = user.getUid();
@@ -179,7 +179,7 @@ public class AppContext extends BaseApplication {
 	 * @param pwd
 	 */
 	@SuppressWarnings("serial")
-	public void saveLoginInfo(final UserInformation user) {
+	public void saveLoginInfo(final User user) {
 		this.loginUid = user.getUid();
 		this.login = true;
 		setProperties(new Properties() {
@@ -205,8 +205,8 @@ public class AppContext extends BaseApplication {
 	 * 获得登录用户的信息
 	 * @return
 	 */
-	public UserInformation getLoginUser() {
-		UserInformation user = new UserInformation();
+	public User getLoginUser() {
+		User user = new User();
 		user.setUid(StringUtils.toInt(getProperty("user.uid"), 0));
 		user.setName(getProperty("user.name"));
 		user.setPortrait(getProperty("user.face"));

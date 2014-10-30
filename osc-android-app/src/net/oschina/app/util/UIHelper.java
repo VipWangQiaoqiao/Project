@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
+import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.Active;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.News;
@@ -301,7 +302,7 @@ public class UIHelper {
 			showSoftwareDetail(context, objKey);
 			break;
 		case URLsUtils.URL_OBJ_TYPE_ZONE:
-			// showUserCenter(context, objId, objKey);
+			showUserCenter(context, objId, objKey);
 			break;
 		case URLsUtils.URL_OBJ_TYPE_TWEET:
 			showTweetDetail(context, objId);
@@ -505,7 +506,7 @@ public class UIHelper {
 						TDevice.sendEmail(context, crashReport,
 								"zhangdeyi@oschina.net");
 						// 退出
-
+						
 					}
 				});
 		dialog.setNegativeButton(R.string.cancle,
@@ -544,5 +545,32 @@ public class UIHelper {
 	public static void sendBroadcastForNotice(Context context) {
 		Intent intent = new Intent(NoticeService.INTENT_ACTION_BROADCAST);
 		context.sendBroadcast(intent);
+	}
+	
+	/**
+	 * 显示用户中心页面
+	 * 
+	 * @param context
+	 * @param uid
+	 * @param hisuid
+	 * @param hisname
+	 */
+	public static void showUserCenter(Context context, int hisuid,
+			String hisname) {
+		Bundle args = new Bundle();
+		args.putInt("his_id", hisuid);
+		args.putString("his_name", hisname);
+		showSimpleBack(context, SimpleBackPage.USER_CENTER, args);
+	}
+	
+	/**
+	 * 显示用户的博客列表
+	 * @param context
+	 * @param uid
+	 */
+	public static void showUserBlog(Context context, int uid) {
+		Bundle args = new Bundle();
+		args.putInt(BaseListFragment.BUNDLE_KEY_CATALOG, uid);
+		showSimpleBack(context, SimpleBackPage.USER_BLOG, args);
 	}
 }
