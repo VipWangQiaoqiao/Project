@@ -164,7 +164,7 @@ public class EmptyLayout extends LinearLayout implements
 			img.setVisibility(View.VISIBLE);
 			animProgress.setVisibility(View.GONE);
 			setTvNoDataContent();
-			clickEnable = false;
+			clickEnable = true;
 			break;
 		case HIDE_LAYOUT:
 			setVisibility(View.GONE);

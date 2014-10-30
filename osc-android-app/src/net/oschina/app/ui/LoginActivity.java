@@ -13,7 +13,6 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import butterknife.InjectView;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
