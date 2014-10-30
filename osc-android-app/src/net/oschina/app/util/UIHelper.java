@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import net.oschina.app.AppContext;
+import net.oschina.app.AppManager;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.Active;
@@ -507,7 +508,7 @@ public class UIHelper {
 						TDevice.sendEmail(context, crashReport,
 								"zhangdeyi@oschina.net");
 						// 退出
-						
+						AppManager.getAppManager().AppExit(context);
 					}
 				});
 		dialog.setNegativeButton(R.string.cancle,
@@ -515,7 +516,7 @@ public class UIHelper {
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
 						// 退出
-
+						AppManager.getAppManager().AppExit(context);
 					}
 				});
 		dialog.show();

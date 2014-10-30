@@ -244,14 +244,14 @@ public class AppException extends Exception implements UncaughtExceptionHandler{
 		if(mContext == null) {
 			return false;
 		}
-		
-		final String crashReport = getCrashReport(AppContext.getInstance(), ex);
+		final Context context = AppManager.getAppManager().currentActivity();
+		final String crashReport = getCrashReport(context, ex);
 		//显示异常信息&发送报告
 		new Thread() {
 			public void run() {
 				Looper.prepare();
 				// 拿到未捕获的异常，
-				UIHelper.sendAppCrashReport(AppContext.getInstance(), crashReport);
+				UIHelper.sendAppCrashReport(context, crashReport);
 				Looper.loop();
 			}
 

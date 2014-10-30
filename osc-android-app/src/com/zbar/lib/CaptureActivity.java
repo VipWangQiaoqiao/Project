@@ -162,7 +162,6 @@ public class CaptureActivity extends BaseActivity implements Callback {
 		mAnimation.setInterpolator(new LinearInterpolator());
 		mQrLineView.setAnimation(mAnimation);
 		
-		
 	}
 	
 	boolean flag = true;

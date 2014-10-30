@@ -583,6 +583,9 @@ public class TDevice {
 			intent.setType("message/rfc822"); // 真机
 			intent.putExtra(android.content.Intent.EXTRA_EMAIL,
 					emails);
+			intent.putExtra(Intent.EXTRA_SUBJECT,
+					"OSCAndroid客户端耍脾气 - 症状诊断报告");
+			intent.putExtra(Intent.EXTRA_TEXT, content);
 			context.startActivity(intent);
 		} catch (ActivityNotFoundException e) {
 			e.printStackTrace();
