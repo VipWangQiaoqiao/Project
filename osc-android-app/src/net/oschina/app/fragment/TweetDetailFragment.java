@@ -434,3 +434,4 @@ public class TweetDetailFragment extends BaseFragment implements
 	}
 	
 }
+

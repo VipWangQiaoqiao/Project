@@ -14,14 +14,14 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @XStreamAlias("oschina")
 public class BlogList extends Entity implements ListEntity {
 	
-	@XStreamAlias("blogsCount")
-	private int blogsCount;
-	
 	@XStreamAlias("pagesize")
 	private int pagesize;
 	
 	@XStreamAlias("blogs")
 	private List<Blog> bloglist = new ArrayList<Blog>();
+	
+	@XStreamAlias("blogsCount")
+	private int blogsCount;
 
 	public int getPageSize() {
 		return pagesize;
@@ -44,14 +44,6 @@ public class BlogList extends Entity implements ListEntity {
 		return bloglist;
 	}
 
-	public int getBlogsCount() {
-		return blogsCount;
-	}
-
-	public void setBlogsCount(int blogsCount) {
-		this.blogsCount = blogsCount;
-	}
-
 	public int getPagesize() {
 		return pagesize;
 	}
@@ -60,4 +52,11 @@ public class BlogList extends Entity implements ListEntity {
 		this.pagesize = pagesize;
 	}
 
+	public int getBlogsCount() {
+		return blogsCount;
+	}
+
+	public void setBlogsCount(int blogsCount) {
+		this.blogsCount = blogsCount;
+	}
 }
