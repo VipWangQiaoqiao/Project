@@ -86,7 +86,7 @@ public class TweetDetailFragment extends BaseFragment implements
 
 		mTweetId = getActivity().getIntent().getIntExtra("tweet_id", 0);
 		ButterKnife.inject(this, view);
-		initView(view);
+		initView(view);	//初始化视图
 		requestTweetData(true);
 		return view;
 	}
@@ -115,22 +115,34 @@ public class TweetDetailFragment extends BaseFragment implements
 		mListView.setAdapter(commentAdapter);
 	}
 
+	/*
+	 * 获取动弹详情缓存
+	 */
 	private String getCacheKey() {
 		return new StringBuilder(TWEET_CACHE_KEY).append(mTweetId).toString();
 	}
 	
-	/*
-	 * 解析动弹详情
+	/**
+	 * 通过XStream解析服务器返回的数据
+	 * @param is	服务器返回的数据
+	 * @return
+	 * @throws Exception
 	 */
 	protected Entity parseData(InputStream is) throws Exception {
 		return XmlUtils.toBean(TweetDetail.class, is).getTweet();
 	}
 	
+	/**
+	 * 向服务器请求动弹详情数据
+	 */
 	protected void sendRequestData() {
 		mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
 		OSChinaApi.getTweetDetail(mTweetId, mDetailHandler);
 	}
 	
+	/**
+	 * 异步请求数据
+	 */
 	private AsyncHttpResponseHandler mDetailHandler = new AsyncHttpResponseHandler() {
 
 		@Override
@@ -219,6 +231,10 @@ public class TweetDetailFragment extends BaseFragment implements
 		}
 	}
 	
+	/**
+	 * 向服务器请求动弹详情列表
+	 * @param reflesh	是否刷新
+	 */
 	protected void requestTweetComment(boolean reflesh) {
 		String key = getCacheCommentKey() ;
 		if(TDevice.hasInternet() && (!CacheManager.isReadDataCache(getActivity(), key) || reflesh)){
@@ -232,7 +248,7 @@ public class TweetDetailFragment extends BaseFragment implements
 	}
 	
 	private void sendRequestCommentData() {
-		OSChinaApi.getCommentList(mTweetId, 3, mCurrentPage, mCommentHandler);
+		OSChinaApi.getCommentList(mTweetId, CommentList.CATALOG_TWEET, mCurrentPage, mCommentHandler);
 	}
 	
 	private AsyncHttpResponseHandler mCommentHandler = new AsyncHttpResponseHandler() {
@@ -244,7 +260,7 @@ public class TweetDetailFragment extends BaseFragment implements
 				if (mState == STATE_REFRESH) {
 					onRefreshNetworkSuccess();
 				}
-				executeParserTask(responseBytes);
+				executeParserTask(responseBytes);	//请求完成之后执行解析任务
 			}
 		}
 
@@ -299,15 +315,22 @@ public class TweetDetailFragment extends BaseFragment implements
 	}
 	
 
+	/**
+	 * 动弹详情请求成功之后，继续执行动弹评论的网络请求
+	 * @param entity	解析之后返回的bean
+	 */
 	protected void executeOnLoadTweetDetailDataSuccess(Entity entity) {
 		mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
 		mTweet = (Tweet) entity;
 		if(mTweet != null && mTweet.getId() >0){
-			fillUI();
-			requestTweetComment(true);
+			fillUI();	//填充视图
+			requestTweetComment(true);	//向服务器请求动弹评论列表
 		}
 	}
 
+	/**
+	 * 服务器返回的数据经过XStream解析之后得到的bean,填充视图。
+	 */
 	private void fillUI() {
 		face.setUserInfo(mTweet.getAuthorid(), mTweet.getAuthor());
 		face.setAvatarUrl(mTweet.getPortrait());
@@ -363,19 +386,32 @@ public class TweetDetailFragment extends BaseFragment implements
 
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
-		
+		if(commentAdapter == null || commentAdapter.getCount() == 0)
+			return;
+		// 数据已经全部加载，或数据为空时，或正在加载，不处理滚动事件
+		if (mState == STATE_LOADMORE || mState == STATE_REFRESH)
+			return;
+		// 判断是否滚动到底部
+		boolean scrollEnd = false;
+		try {
+			if (view.getPositionForView(commentAdapter.getFooterView()) == view.getLastVisiblePosition())
+				scrollEnd = true;
+		} catch (Exception e) {
+			scrollEnd = false;
+		}
+
+		if (mState == STATE_NONE && scrollEnd) {
+			if (commentAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
+				mCurrentPage++;
+				mState = STATE_LOADMORE;
+				requestTweetComment(true);
+			}
+		}
 	}
 
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
-		
-		if(commentAdapter != null && commentAdapter.getDataSize()>0 
-				&& mListView.getLastVisiblePosition() == (mListView.getCount() -1) ){
-			mState = STATE_LOADMORE;
-			mCurrentPage ++;
-			requestTweetComment(true);
-		}
 	}
 
 	@Override
@@ -410,8 +446,7 @@ public class TweetDetailFragment extends BaseFragment implements
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				ListEntity data = parseList(new ByteArrayInputStream(
-						reponseData));
+				ListEntity data = parseList(new ByteArrayInputStream(reponseData));
 				new SaveCacheTask(getActivity(), data, getCacheKey()).execute();
 				list = data.getList();
 			} catch (Exception e) {
