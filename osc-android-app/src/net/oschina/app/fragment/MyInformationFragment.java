@@ -47,6 +47,7 @@ public class MyInformationFragment extends BaseFragment {
 	@InjectView(R.id.iv_avatar)AvatarView mIvAvatar;
 	@InjectView(R.id.iv_gender)ImageView mIvGender;
 	@InjectView(R.id.tv_name) TextView mTvName;
+	@InjectView(R.id.tv_sigin) TextView mTvSign;
 	@InjectView(R.id.tv_favorite) TextView mTvFavorite;
 	@InjectView(R.id.tv_following) TextView mTvFollowing;
 	@InjectView(R.id.tv_follower) TextView mTvFollower;
@@ -129,6 +130,7 @@ public class MyInformationFragment extends BaseFragment {
 
 		mTvJoinTime.setText(mInfo.getJointime());
 		mTvLocation.setText(mInfo.getFrom());
+		mTvSign.setText(mInfo.getFrom());
 		mTvDevelopmentPlatform.setText(mInfo.getDevplatform());
 		mTvAcademicFocus.setText(mInfo.getExpertise());
 	}

@@ -43,13 +43,10 @@ import net.oschina.app.bean.BarCode;
 import net.oschina.app.bean.SingInResult;
 
 /**
- * 作者: 陈涛(1076559197@qq.com)
- * 
- * 时间: 2014年5月9日 下午12:25:31
- * 
- * 版本: V_1.0.0
- * 
- * 描述: 扫描界面
+ * 二维码扫描界面
+ * @author FireAnt（http://my.oschina.net/LittleDY）
+ * @created 2014年10月31日 上午10:44:54
+ *
  */
 public class CaptureActivity extends BaseActivity implements Callback {
 
@@ -57,8 +54,6 @@ public class CaptureActivity extends BaseActivity implements Callback {
 	private boolean hasSurface;
 	private InactivityTimer inactivityTimer;
 	private MediaPlayer mediaPlayer;
-	private boolean playBeep;
-	private static final float BEEP_VOLUME = 0.50f;
 	private boolean vibrate;
 	private int x = 0;
 	private int y = 0;
@@ -205,11 +200,7 @@ public class CaptureActivity extends BaseActivity implements Callback {
 			surfaceHolder.addCallback(this);
 			surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		}
-		playBeep = true;
-		AudioManager audioService = (AudioManager) getSystemService(AUDIO_SERVICE);
-		if (audioService.getRingerMode() != AudioManager.RINGER_MODE_NORMAL) {
-			playBeep = false;
-		}
+
 		initBeepSound();
 		vibrate = true;
 	}
@@ -255,6 +246,7 @@ public class CaptureActivity extends BaseActivity implements Callback {
 	private void showUrlOption(final String url) {
 		if (url.contains("oschina.net")) {
 			UIHelper.showUrlRedirect(CaptureActivity.this, url);
+			finish();
 			return;
 		}
 		CommonDialog dialog = new CommonDialog(CaptureActivity.this);
@@ -272,7 +264,6 @@ public class CaptureActivity extends BaseActivity implements Callback {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				handler.sendEmptyMessage(R.id.restart_preview);
 				dialog.dismiss();
 				finish();
 			}
@@ -348,7 +339,6 @@ public class CaptureActivity extends BaseActivity implements Callback {
 			
 			@Override
 			public void onDismiss(DialogInterface dialog) {
-				handler.sendEmptyMessage(R.id.restart_preview);
 				finish();
 			}
 		});
@@ -388,8 +378,6 @@ public class CaptureActivity extends BaseActivity implements Callback {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				handler.sendEmptyMessage(R.id.restart_preview);
-				dialog.dismiss();
 				finish();
 			}
 		});
@@ -415,7 +403,7 @@ public class CaptureActivity extends BaseActivity implements Callback {
 			setCropWidth(cropWidth);
 			setCropHeight(cropHeight);
 			// 设置是否需要截图
-			setNeedCapture(true);
+			setNeedCapture(false);
 
 		} catch (IOException ioe) {
 			return;
@@ -451,28 +439,15 @@ public class CaptureActivity extends BaseActivity implements Callback {
 	}
 
 	private void initBeepSound() {
-		if (playBeep && mediaPlayer == null) {
-			setVolumeControlStream(AudioManager.STREAM_MUSIC);
-			mediaPlayer = new MediaPlayer();
-			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-			mediaPlayer.setOnCompletionListener(beepListener);
-
-			AssetFileDescriptor file = getResources().openRawResourceFd(R.raw.qr_sacn);
-			try {
-				mediaPlayer.setDataSource(file.getFileDescriptor(), file.getStartOffset(), file.getLength());
-				file.close();
-				mediaPlayer.setVolume(BEEP_VOLUME, BEEP_VOLUME);
-				mediaPlayer.prepare();
-			} catch (IOException e) {
-				mediaPlayer = null;
-			}
-		}
+		mediaPlayer = MediaPlayer.create(this, R.raw.qr_sacn);
+		mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+		mediaPlayer.setOnCompletionListener(beepListener);
 	}
-
+	
 	private static final long VIBRATE_DURATION = 30L;
 
 	private void playBeepSoundAndVibrate() {
-		if (playBeep && mediaPlayer != null) {
+		if (mediaPlayer != null) {
 			mediaPlayer.start();
 		}
 		if (vibrate) {
@@ -483,19 +458,17 @@ public class CaptureActivity extends BaseActivity implements Callback {
 
 	private final OnCompletionListener beepListener = new OnCompletionListener() {
 		public void onCompletion(MediaPlayer mediaPlayer) {
-			mediaPlayer.seekTo(0);
+			mediaPlayer.release();
 		}
 	};
 
 	@Override
 	public void initView() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void initData() {
-		// TODO Auto-generated method stub
 		
 	}
 }
