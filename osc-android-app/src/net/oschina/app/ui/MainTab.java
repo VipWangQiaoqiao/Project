@@ -18,11 +18,11 @@ public enum MainTab {
 	QUICK(2, R.string.main_tab_name_quick, R.drawable.tab_icon_new,
 			Fragment.class),
 
-	ME(3, R.string.main_tab_name_my, R.drawable.tab_icon_new,
-			ActiveViewPagerFragment.class),
+	EXPLORE(3, R.string.main_tab_name_explore, R.drawable.tab_icon_new,
+			Fragment.class),
 
-	EXPLORE(4, R.string.main_tab_name_explore, R.drawable.tab_icon_new,
-			Fragment.class);
+	ME(4, R.string.main_tab_name_my, R.drawable.tab_icon_new,
+			ActiveViewPagerFragment.class);
 
 	private int idx;
 	private int resName;

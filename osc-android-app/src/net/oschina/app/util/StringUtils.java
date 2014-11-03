@@ -108,7 +108,7 @@ public class StringUtils {
 		} else if (days == 1) {
 			ftime = "昨天";
 		} else if (days == 2) {
-			ftime = "前天";
+			ftime = "前天 ";
 		} else if (days > 2 && days < 31) {
 			ftime = days + "天前";
 		} else if (days >= 31 && days <= 2 * 31) {
