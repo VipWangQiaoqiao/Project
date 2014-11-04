@@ -139,13 +139,6 @@ public class EmptyLayout extends LinearLayout implements
 				img.setBackgroundResource(R.drawable.page_icon_network);
 			}
 			img.setVisibility(View.VISIBLE);
-			img.setOnClickListener(new View.OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					UIHelper.showLoginActivity(getContext());
-				}
-			});
 			animProgress.setVisibility(View.GONE);
 			clickEnable = true;
 			break;

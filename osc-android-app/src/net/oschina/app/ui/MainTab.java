@@ -2,7 +2,7 @@ package net.oschina.app.ui;
 
 import net.oschina.app.R;
 import net.oschina.app.fragment.ExploreFragment;
-import net.oschina.app.viewpagefragment.ActiveViewPagerFragment;
+import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.viewpagefragment.NewsViewPagerFragment;
 import net.oschina.app.viewpagefragment.TweetsViewPagerFragment;
 
@@ -21,7 +21,7 @@ public enum MainTab {
 			ExploreFragment.class),
 
 	ME(4, R.string.main_tab_name_my, R.drawable.tab_icon_new,
-			ActiveViewPagerFragment.class);
+			MyInformationFragment.class);
 
 	private int idx;
 	private int resName;

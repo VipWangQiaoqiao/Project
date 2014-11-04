@@ -15,10 +15,9 @@
     <string name="submit_report">打报告去</string>
     
     <!-- slide menu -->
-    <string name="menu_myteam">我的团队</string>
+    <string name="menu_rss">订阅</string>
     <string name="menu_opensoft">开源软件</string>
-    <string name="menu_note">便签</string>
-    <string name="menu_bookmarks">收藏夹</string>
+    <string name="menu_blog">博客区</string>
     <string name="menu_quests">讨论区</string>
     <string name="menu_setting">设置</string>
     <string name="menu_exit">退出</string>
@@ -184,6 +183,10 @@
 	<string name="blog">博客</string>
 	<string name="information">资料</string>
 	<string name="qrcode">二维码</string>
+	<string name="message">消息</string>
+	<string name="team">团队</string>
+	<string name="note">便签</string>
+	<string name="bookmarks">收藏夹</string>
 	
 	<string name="active">动态</string>
 	<string name="activities">活动</string>

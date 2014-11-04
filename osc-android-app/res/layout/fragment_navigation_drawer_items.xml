@@ -5,7 +5,7 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        android:id="@+id/menu_item_team"
+        android:id="@+id/menu_item_quests"
         style="@style/MenuItemLayoutStyle" >
 
         <ImageView
@@ -15,7 +15,7 @@
 
         <TextView
             style="@style/MenuItemTextViewStyle"
-            android:text="@string/menu_myteam" />
+            android:text="@string/menu_quests" />
     </LinearLayout>
 
     <LinearLayout
@@ -33,7 +33,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/menu_item_note"
+        android:id="@+id/menu_item_blog"
         style="@style/MenuItemLayoutStyle" >
 
         <ImageView
@@ -43,11 +43,11 @@
 
         <TextView
             style="@style/MenuItemTextViewStyle"
-            android:text="@string/menu_note" />
+            android:text="@string/menu_blog" />
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/menu_item_bookmarks"
+        android:id="@+id/menu_item_rss"
         style="@style/MenuItemLayoutStyle" >
 
         <ImageView
@@ -57,21 +57,7 @@
 
         <TextView
             style="@style/MenuItemTextViewStyle"
-            android:text="@string/menu_bookmarks" />
+            android:text="@string/menu_rss" />
     </LinearLayout>
-    
-        <LinearLayout
-        android:id="@+id/menu_item_quests"
-        style="@style/MenuItemLayoutStyle" >
 
-        <ImageView
-            style="@style/MenuItemImageViewStyle"
-            android:background="@drawable/tab_icon_new"
-            android:contentDescription="@null" />
-
-        <TextView
-            style="@style/MenuItemTextViewStyle"
-            android:text="@string/menu_quests" />
-    </LinearLayout>
-    
 </LinearLayout>
