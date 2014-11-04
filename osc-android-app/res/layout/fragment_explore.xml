@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<net.oschina.app.widget.CustomerScrollView xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:id="@+id/rl_active"
+            style="@style/option_item_rl"
+            android:layout_marginTop="@dimen/space_15" >
+
+            <TextView
+                style="@style/option_item_text"
+                android:text="@string/active" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            style="@style/option_item_rl"
+            android:layout_marginTop="@dimen/space_15" >
+
+            <TextView
+                style="@style/option_item_text"
+                android:text="@string/friends" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/list_divider_color" />
+
+        <RelativeLayout style="@style/option_item_rl" >
+
+            <TextView
+                style="@style/option_item_text"
+                android:text="@string/activities" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/list_divider_color" />
+
+        <RelativeLayout style="@style/option_item_rl" >
+
+            <TextView
+                style="@style/option_item_text"
+                android:text="@string/discuss" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+</net.oschina.app.widget.CustomerScrollView>

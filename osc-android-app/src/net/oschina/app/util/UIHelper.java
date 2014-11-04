@@ -543,7 +543,11 @@ public class UIHelper {
 		intent.putExtras(bundle);
 		context.sendBroadcast(intent);
 	}
-
+	
+	/**
+	 * 发送通知广播
+	 * @param context
+	 */
 	public static void sendBroadcastForNotice(Context context) {
 		Intent intent = new Intent(NoticeService.INTENT_ACTION_BROADCAST);
 		context.sendBroadcast(intent);
@@ -594,6 +598,14 @@ public class UIHelper {
 	 * @param context
 	 */
 	public static void showMyInformation(Context context) {
-		showSimpleBack(context, SimpleBackPage.MY_INFORMATION, null);
+		showSimpleBack(context, SimpleBackPage.MY_INFORMATION);
+	}
+	
+	/**
+	 * 显示我的所有动态
+	 * @param context
+	 */
+	public static void showMyActive(Context context) {
+		showSimpleBack(context, SimpleBackPage.MY_ACTIVE);
 	}
 }

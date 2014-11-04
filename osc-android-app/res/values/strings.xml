@@ -65,6 +65,7 @@
     <string name="actionbar_title_question">帖子详情</string>
     <string name="actionbar_title_tweet">动弹详情</string>
     <string name="actionbar_title_detail">详情</string>
+    <string name="actionbar_title_active">动态</string>
     
     <string name="platform_qq">QQ</string>
 	<string name="platform_qzone">QQ空间</string>
@@ -183,5 +184,10 @@
 	<string name="blog">博客</string>
 	<string name="information">资料</string>
 	<string name="qrcode">二维码</string>
+	
+	<string name="active">动态</string>
+	<string name="activities">活动</string>
+	<string name="discuss">讨论</string>
+	<string name="friends">同城</string>
 
 </resources>

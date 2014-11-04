@@ -199,7 +199,7 @@ public class MainActivity extends ActionBarActivity implements
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 		if (intent.getBooleanExtra("NOTICE", false)) {
-			mTabHost.setCurrentTab(3);
+			mTabHost.setCurrentTab(4);
 		}
 	}
 

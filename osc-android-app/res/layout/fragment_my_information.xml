@@ -114,10 +114,6 @@
                         android:textSize="@dimen/text_size_14" />
                 </LinearLayout>
 
-                <View
-                    android:layout_width="1px"
-                    android:layout_height="30dp"
-                    android:background="@color/list_divider_color" />
 
                 <LinearLayout
                     android:id="@+id/ly_following"
@@ -145,11 +141,6 @@
                         android:textColor="@color/main_gray"
                         android:textSize="@dimen/text_size_14" />
                 </LinearLayout>
-
-                <View
-                    android:layout_width="1px"
-                    android:layout_height="30dp"
-                    android:background="@color/list_divider_color" />
 
                 <LinearLayout
                     android:id="@+id/ly_follower"
@@ -200,31 +191,15 @@
 
             <RelativeLayout
                 android:id="@+id/rl_blog"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/list_item_background"
-                android:clickable="true"
-                android:orientation="horizontal"
-                android:padding="@dimen/space_11" >
+                style="@style/option_item_rl" >
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/space_4"
-                    android:drawableLeft="@drawable/ic_action_comment"
-                    android:drawablePadding="@dimen/space_5"
-                    android:gravity="center_vertical"
-                    android:text="@string/blog"
-                    android:textColor="@color/main_gray"
-                    android:textSize="@dimen/text_size_16" />
+                   	style="@style/option_item_text"
+                    android:text="@string/blog" />
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/space_10"
-                    android:src="@drawable/ic_item_goto_right_tip" />
+                    android:contentDescription="@null"
+                    style="@style/option_item_goto_right" />
             </RelativeLayout>
 
             <View
@@ -234,31 +209,14 @@
 
             <RelativeLayout
                 android:id="@+id/rl_qrcode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/list_item_background"
-                android:clickable="true"
-                android:orientation="horizontal"
-                android:padding="@dimen/space_11" >
-
+                style="@style/option_item_rl" >
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/space_4"
-                    android:drawableLeft="@drawable/ic_action_comment"
-                    android:drawablePadding="@dimen/space_5"
-                    android:gravity="center_vertical"
-                    android:text="@string/qrcode"
-                    android:textColor="@color/main_gray"
-                    android:textSize="@dimen/text_size_16" />
+                   	style="@style/option_item_text"
+                    android:text="@string/qrcode" />
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/space_10"
-                    android:src="@drawable/ic_item_goto_right_tip" />
+                    android:contentDescription="@null"
+                    style="@style/option_item_goto_right" />
             </RelativeLayout>
         </LinearLayout>
     </net.oschina.app.widget.CustomerScrollView>
@@ -266,6 +224,7 @@
     <net.oschina.app.ui.empty.EmptyLayout
         android:id="@+id/error_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 
 </FrameLayout>
