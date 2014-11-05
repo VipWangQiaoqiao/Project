@@ -5,6 +5,8 @@ import java.util.regex.Pattern;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.zbar.lib.CaptureActivity;
+
 import net.oschina.app.AppContext;
 import net.oschina.app.AppManager;
 import net.oschina.app.R;
@@ -607,5 +609,22 @@ public class UIHelper {
 	 */
 	public static void showMyActive(Context context) {
 		showSimpleBack(context, SimpleBackPage.MY_ACTIVE);
+	}
+	
+	/**
+	 * 显示扫一扫界面
+	 * @param context
+	 */
+	public static void showScanActivity(Context context) {
+		Intent intent = new Intent(context, CaptureActivity.class);
+		context.startActivity(intent);
+	}
+	
+	/**
+	 * 显示用户的消息中心
+	 * @param context
+	 */
+	public static void showMyMes(Context context) {
+		showSimpleBack(context, SimpleBackPage.MY_MES);
 	}
 }

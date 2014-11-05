@@ -87,25 +87,25 @@ public class ActiveViewPagerFragment extends BaseViewPagerFragment {
 		super.onViewCreated(view, savedInstanceState);
 		IntentFilter filter = new IntentFilter(Constants.INTENT_ACTION_NOTICE);
 		getActivity().registerReceiver(mNoticeReceiver, filter);
-		mBvAtMe = new BadgeView(getActivity(), mTabStrip.getBadgeView(1));
+		mBvAtMe = new BadgeView(getActivity(), mTabStrip.getBadgeView(0));
 		mBvAtMe.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
 		mBvAtMe.setBadgePosition(BadgeView.POSITION_CENTER);
 		mBvAtMe.setBackgroundResource(R.drawable.notification_bg);
 
-		mBvComment = new BadgeView(getActivity(), mTabStrip.getBadgeView(2));
+		mBvComment = new BadgeView(getActivity(), mTabStrip.getBadgeView(1));
 		mBvComment.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
 		mBvComment.setBadgePosition(BadgeView.POSITION_CENTER);
 		mBvComment.setBackgroundResource(R.drawable.notification_bg);
 
-		mBvMsg = new BadgeView(getActivity(), mTabStrip.getBadgeView(4));
+		mBvMsg = new BadgeView(getActivity(), mTabStrip.getBadgeView(2));
 		mBvMsg.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
 		mBvMsg.setBadgePosition(BadgeView.POSITION_CENTER);
 		mBvMsg.setBackgroundResource(R.drawable.notification_bg);
 
-		mTabStrip.getBadgeView(1).setVisibility(View.VISIBLE);
+		mTabStrip.getBadgeView(0).setVisibility(View.VISIBLE);
 
+		mTabStrip.getBadgeView(1).setVisibility(View.VISIBLE);
 		mTabStrip.getBadgeView(2).setVisibility(View.VISIBLE);
-		mTabStrip.getBadgeView(4).setVisibility(View.VISIBLE);
 	}
 
 	@Override
@@ -118,16 +118,12 @@ public class ActiveViewPagerFragment extends BaseViewPagerFragment {
 	@Override
 	protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
 		String[] title = getResources().getStringArray(
-				R.array.my_viewpage_arrays);
-		adapter.addTab(title[0], "active_all", ActiveFragment.class,
-				getBundle(ActiveList.CATALOG_LASTEST));
-		adapter.addTab(title[1], "active_me", ActiveFragment.class,
+				R.array.mymes_viewpage_arrays);
+		adapter.addTab(title[0], "active_me", ActiveFragment.class,
 				getBundle(ActiveList.CATALOG_ATME));
-		adapter.addTab(title[2], "active_comment", ActiveFragment.class,
+		adapter.addTab(title[1], "active_comment", ActiveFragment.class,
 				getBundle(ActiveList.CATALOG_COMMENT));
-		adapter.addTab(title[3], "active_myself", ActiveFragment.class,
-				getBundle(ActiveList.CATALOG_MYSELF));
-		adapter.addTab(title[4], "active_mes", MessageFragment.class, null);
+		adapter.addTab(title[2], "active_mes", MessageFragment.class, null);
 	}
 
 	private Bundle getBundle(int catalog) {
@@ -138,19 +134,16 @@ public class ActiveViewPagerFragment extends BaseViewPagerFragment {
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void initView(View view) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void initData() {
-		// TODO Auto-generated method stub
 
 	}
 }

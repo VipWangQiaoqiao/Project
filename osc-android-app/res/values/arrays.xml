@@ -18,11 +18,9 @@
         <item>职业</item>
         <item>站务</item>
     </string-array>
-    <string-array name="my_viewpage_arrays">
-        <item>所有</item>
+    <string-array name="mymes_viewpage_arrays">
         <item>\@我</item>
         <item>评论</item>
-        <item>我自己</item>
         <item>留言</item>
     </string-array>
     

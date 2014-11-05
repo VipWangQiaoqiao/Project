@@ -33,6 +33,16 @@ public class ExploreFragment extends BaseFragment {
 	
 	@InjectView(R.id.tv_mes) View mMesView;
 	
+	@InjectView(R.id.rl_find_osc)View mFindOSCer;
+	
+	@InjectView(R.id.rl_city)View mCity;
+	
+	@InjectView(R.id.rl_activities)View mActivities;
+	
+	@InjectView(R.id.rl_scan)View mScan;
+	
+	@InjectView(R.id.rl_shake)View mShake;
+	
 	private static BadgeView mMesCount; 
 	
 	private BroadcastReceiver mNoticeReceiver = new BroadcastReceiver() {
@@ -103,6 +113,18 @@ public class ExploreFragment extends BaseFragment {
 		case R.id.rl_active:
 			UIHelper.showMyActive(getActivity());
 			break;
+		case R.id.rl_find_osc:
+			break;
+		case R.id.rl_city:
+			break;
+		case R.id.rl_activities:
+			break;
+		case R.id.rl_scan:
+			UIHelper.showScanActivity(getActivity());
+			break;
+		case R.id.rl_shake:
+			
+			break;
 		default:
 			break;
 		}
@@ -116,11 +138,16 @@ public class ExploreFragment extends BaseFragment {
 		mMesCount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
 		mMesCount.setBadgePosition(BadgeView.POSITION_CENTER);
 		mMesCount.setBackgroundResource(R.drawable.notification_bg);
+		
+		mFindOSCer.setOnClickListener(this);
+		mCity.setOnClickListener(this);
+		mActivities.setOnClickListener(this);
+		mScan.setOnClickListener(this);
+		mShake.setOnClickListener(this);
 	}
 
 	@Override
 	public void initData() {
 
 	}
-
 }

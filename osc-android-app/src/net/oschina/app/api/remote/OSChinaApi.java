@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.oschina.app.AppContext;
+import net.oschina.app.AppException;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.bean.Tweet;
 import android.text.TextUtils;
@@ -435,10 +436,17 @@ public class OSChinaApi {
 
 	public static void getNotices(int uid, AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams();
-		params.put("uid", uid);
+		params.put("uid1", uid);
 		ApiHttpClient.post("action/api/user_notice", params, handler);
 	}
 
+	/**
+	 * 清空通知消息
+	 * @param uid
+	 * @param type 1:@我的信息 2:未读消息 3:评论个数 4:新粉丝个数
+	 * @return
+	 * @throws AppException
+	 */
 	public static void clearNotice(int uid, int type,
 			AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams();

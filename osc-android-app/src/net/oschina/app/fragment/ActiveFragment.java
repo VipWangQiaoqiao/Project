@@ -26,6 +26,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -102,7 +106,27 @@ public class ActiveFragment extends BaseListFragment implements
 	}
 	
 	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.my_active_menu, menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.show_mes:
+			UIHelper.showMyMes(getActivity());
+			break;
+		default:
+			break;
+		}
+		return true;
+	}
+	
+	@Override
 	public void initView(View view) {
+		if (mCatalog == ActiveList.CATALOG_LASTEST) {
+			setHasOptionsMenu(true);
+		}
 		super.initView(view);
 		mListView.setOnItemLongClickListener(this);
 		mListView.setOnItemClickListener(this);

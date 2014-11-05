@@ -69,8 +69,7 @@ public class MainActivity extends ActionBarActivity implements
 			int msgCount = intent.getIntExtra("msgCount", 0);// 留言
 			int reviewCount = intent.getIntExtra("reviewCount", 0);// 评论
 			int newFansCount = intent.getIntExtra("newFansCount", 0);// 新粉丝
-			int activeCount = atmeCount + reviewCount + msgCount;// +
-																	// newFansCount;//
+			int activeCount = atmeCount + reviewCount + msgCount + newFansCount;//
 																	// 信息总数
 			mNotice = (Notice) intent.getSerializableExtra("notice_bean");
 			TLog.log("NOTICE", "@me:" + atmeCount + " msg:" + msgCount + " review:"

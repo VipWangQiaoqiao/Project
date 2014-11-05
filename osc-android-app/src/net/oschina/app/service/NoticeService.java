@@ -11,8 +11,10 @@ import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.NoticeDetail;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
+import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.broadcast.AlarmReceiver;
 import net.oschina.app.ui.MainActivity;
+import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
@@ -173,7 +175,8 @@ public class NoticeService extends Service {
 		}
 		contentText = sb.toString();
 
-		Intent intent = new Intent(this, MainActivity.class);
+		Intent intent = new Intent(this, SimpleBackActivity.class);
+		intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, SimpleBackPage.MY_MES.getValue());
 		intent.putExtra("NOTICE", true);
 
 		if (atmeCount == 0 && msgCount == 0 && reviewCount == 0

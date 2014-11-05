@@ -320,6 +320,7 @@
        	<item name="android:gravity">center_vertical</item>
        	<item name="android:textColor">@color/main_gray</item>
        	<item name="android:clickable">true</item>
+       	<item name="android:layout_centerVertical">true</item>
        	<item name="android:textSize">@dimen/text_size_16</item>
     </style>
     <style name="option_item_goto_right">

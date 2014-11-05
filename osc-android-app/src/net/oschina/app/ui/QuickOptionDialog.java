@@ -102,7 +102,7 @@ public class QuickOptionDialog extends Dialog implements
 		case R.id.ly_quick_option_voice:
 			break;
 		case R.id.ly_quick_option_scan:
-			onClickScan();
+			UIHelper.showScanActivity(getContext());
 			break;
 		case R.id.ly_quick_option_note:
 			break;
@@ -130,10 +130,5 @@ public class QuickOptionDialog extends Dialog implements
 		}
 		bundle.putInt(TweetPubFragment.ACTION_TYPE, type);
 		UIHelper.showSimpleBack(getContext(), SimpleBackPage.TWEET_PUB, bundle);
-	}
-	
-	private void onClickScan() {
-		Intent intent = new Intent(getContext(), CaptureActivity.class);
-		getContext().startActivity(intent);
 	}
 }
