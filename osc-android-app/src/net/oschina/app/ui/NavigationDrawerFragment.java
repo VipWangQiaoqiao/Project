@@ -178,6 +178,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
 		case R.id.menu_item_team:
 			break;
 		case R.id.menu_item_opensoft:
+			UIHelper.showSimpleBack(getActivity(), SimpleBackPage.OPENSOURCE_SOFTWARE);
 			break;
 		case R.id.menu_item_note:
 			break;

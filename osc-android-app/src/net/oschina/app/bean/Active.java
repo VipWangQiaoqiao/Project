@@ -25,7 +25,7 @@ public class Active extends Entity {
 	public final static int CLIENT_ANDROID = 3;
 	public final static int CLIENT_IPHONE = 4;
 	public final static int CLIENT_WINDOWS_PHONE = 5;
-
+	
 	@XStreamAlias("portrait")
 	private String portrait;
 

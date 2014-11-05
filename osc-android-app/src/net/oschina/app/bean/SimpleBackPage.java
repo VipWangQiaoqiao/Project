@@ -7,6 +7,7 @@ import net.oschina.app.fragment.SoftWareTweetsFrament;
 import net.oschina.app.fragment.TweetPubFragment;
 import net.oschina.app.fragment.UserBlogFragment;
 import net.oschina.app.fragment.UserCenterFragment;
+import net.oschina.app.viewpagefragment.OpensourceSoftwareFragment;
 import net.oschina.app.viewpagefragment.QuestViewPagerFragment;
 
 public enum SimpleBackPage {
@@ -23,8 +24,10 @@ public enum SimpleBackPage {
 	
 	USER_BLOG(6, R.string.actionbar_title_user_blog, UserBlogFragment.class),
 	
-	MY_INFORMATION(7, R.string.actionbar_title_my_information, MyInformationFragment.class);
+	MY_INFORMATION(7, R.string.actionbar_title_my_information, MyInformationFragment.class),
 	
+	OPENSOURCE_SOFTWARE(8, R.string.actionbar_title_softwarelist, OpensourceSoftwareFragment.class);
+		
 	private int title;
 	private Class<?> clz;
 	private int value;

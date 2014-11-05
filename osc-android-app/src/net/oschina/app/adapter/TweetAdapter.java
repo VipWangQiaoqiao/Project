@@ -8,6 +8,7 @@ import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TLog;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.LinkView;
+import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
 import android.text.Html;
