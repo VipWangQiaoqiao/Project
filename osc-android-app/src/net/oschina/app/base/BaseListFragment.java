@@ -12,6 +12,7 @@ import net.oschina.app.bean.ListEntity;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
+import net.oschina.app.util.TLog;
 
 import org.apache.http.Header;
 
