@@ -5,6 +5,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import net.oschina.app.AppContext;
+import net.oschina.app.AppManager;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.SimpleBackPage;
@@ -100,21 +101,18 @@ public class NavigationDrawerFragment extends BaseFragment implements
 	
 	@InjectView(R.id.menu_user_info_gender)
 	ImageView mUser_gender;
-
-	@InjectView(R.id.menu_item_team)
-	View mMenu_item_team;
-
-	@InjectView(R.id.menu_item_opensoft)
-	View mMenu_item_opensoft;
-
-	@InjectView(R.id.menu_item_note)
-	View mMenu_item_note;
-
-	@InjectView(R.id.menu_item_bookmarks)
-	View mMenu_item_bookmarks;
 	
 	@InjectView(R.id.menu_item_quests)
 	View mMenu_item_quests;
+
+	@InjectView(R.id.menu_item_opensoft)
+	View mMenu_item_opensoft;
+	
+	@InjectView(R.id.menu_item_blog)
+	View mMenu_item_blog;
+
+	@InjectView(R.id.menu_item_rss)
+	View mMenu_item_rss;
 
 	@InjectView(R.id.menu_item_setting)
 	View mMenu_item_setting;
@@ -175,21 +173,20 @@ public class NavigationDrawerFragment extends BaseFragment implements
 		case R.id.menu_item_userinfo:
 			onClickMenuItemUserInfo();
 			break;
-		case R.id.menu_item_team:
+		case R.id.menu_item_quests:
+			UIHelper.showSimpleBack(getActivity(), SimpleBackPage.QUEST);
 			break;
 		case R.id.menu_item_opensoft:
 			UIHelper.showSimpleBack(getActivity(), SimpleBackPage.OPENSOURCE_SOFTWARE);
 			break;
-		case R.id.menu_item_note:
+		case R.id.menu_item_blog:
 			break;
-		case R.id.menu_item_bookmarks:
-			break;
-		case R.id.menu_item_quests:
-			UIHelper.showSimpleBack(getActivity(), SimpleBackPage.QUEST);
+		case R.id.menu_item_rss:
 			break;
 		case R.id.menu_item_setting:
 			break;
 		case R.id.menu_item_exit:
+			AppManager.getAppManager().AppExit(getActivity());
 			break;
 		default:
 			break;
@@ -207,10 +204,9 @@ public class NavigationDrawerFragment extends BaseFragment implements
 	public void initView(View view) {
 
 		mMenu_item_userinfo.setOnClickListener(this);
-		mMenu_item_team.setOnClickListener(this);
+		mMenu_item_rss.setOnClickListener(this);
 		mMenu_item_opensoft.setOnClickListener(this);
-		mMenu_item_note.setOnClickListener(this);
-		mMenu_item_bookmarks.setOnClickListener(this);
+		mMenu_item_blog.setOnClickListener(this);
 		mMenu_item_quests.setOnClickListener(this);
 
 		mMenu_item_setting.setOnClickListener(this);

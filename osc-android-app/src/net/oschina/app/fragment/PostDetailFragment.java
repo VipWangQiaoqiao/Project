@@ -47,7 +47,6 @@ public class PostDetailFragment extends BaseDetailFragment implements
 	protected static final String TAG = PostDetailFragment.class
 			.getSimpleName();
 	private static final String POST_CACHE_KEY = "post_";
-	private static final String QUESTION_DETAIL_SCREEN = "question_detail_screen";
 	@InjectView(R.id.tv_title) TextView mTvTitle;
 	@InjectView(R.id.tv_source) TextView mTvSource;
 	@InjectView(R.id.tv_time) TextView mTvTime;

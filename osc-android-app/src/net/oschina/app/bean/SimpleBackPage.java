@@ -1,6 +1,7 @@
 package net.oschina.app.bean;
 
 import net.oschina.app.R;
+import net.oschina.app.fragment.ActiveFragment;
 import net.oschina.app.fragment.CommentFrament;
 import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
@@ -26,7 +27,9 @@ public enum SimpleBackPage {
 	
 	MY_INFORMATION(7, R.string.actionbar_title_my_information, MyInformationFragment.class),
 	
-	OPENSOURCE_SOFTWARE(8, R.string.actionbar_title_softwarelist, OpensourceSoftwareFragment.class);
+	MY_ACTIVE(8, R.string.actionbar_title_active, ActiveFragment.class),
+	
+	OPENSOURCE_SOFTWARE(9, R.string.actionbar_title_softwarelist, OpensourceSoftwareFragment.class);
 		
 	private int title;
 	private Class<?> clz;

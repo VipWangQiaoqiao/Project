@@ -11,14 +11,13 @@
     <string name="main_tab_name_explore">发现</string>
     
     <string name="app_error">应用程序错误</string>
-    <string name="app_error_message">很抱歉，应用程序出现错误，即将退出。\n请提交错误报告，我们会尽快修复这个问题！</string>
-    <string name="submit_report">提交报告</string>
+    <string name="app_error_message">很抱歉，小屁孩耍脾气啦。<br/>给它家长提个醒呗！</string>
+    <string name="submit_report">打报告去</string>
     
     <!-- slide menu -->
-    <string name="menu_myteam">我的团队</string>
+    <string name="menu_rss">订阅</string>
     <string name="menu_opensoft">开源软件</string>
-    <string name="menu_note">便签</string>
-    <string name="menu_bookmarks">收藏夹</string>
+    <string name="menu_blog">博客区</string>
     <string name="menu_quests">讨论区</string>
     <string name="menu_setting">设置</string>
     <string name="menu_exit">退出</string>
@@ -65,6 +64,7 @@
     <string name="actionbar_title_question">帖子详情</string>
     <string name="actionbar_title_tweet">动弹详情</string>
     <string name="actionbar_title_detail">详情</string>
+    <string name="actionbar_title_active">动态</string>
     
     <string name="platform_qq">QQ</string>
 	<string name="platform_qzone">QQ空间</string>
@@ -184,5 +184,14 @@
 	<string name="blog">博客</string>
 	<string name="information">资料</string>
 	<string name="qrcode">二维码</string>
+	<string name="message">消息</string>
+	<string name="team">团队</string>
+	<string name="note">便签</string>
+	<string name="bookmarks">收藏夹</string>
+	
+	<string name="active">动态</string>
+	<string name="activities">活动</string>
+	<string name="discuss">讨论</string>
+	<string name="friends">同城</string>
 
 </resources>

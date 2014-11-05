@@ -13,7 +13,6 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import butterknife.InjectView;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
@@ -35,6 +34,7 @@ import net.oschina.app.util.TLog;
 import net.oschina.app.util.XmlUtils;
 
 /**
+ * 用户登录界面
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @version 创建时间：2014年9月26日 下午3:24:31
  * 

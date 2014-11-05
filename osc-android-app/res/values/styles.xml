@@ -303,4 +303,33 @@
         <item name="android:indeterminateOnly">true</item>
     </style>
     
+    <!-- 操作项样式 start -->
+    <style name="option_item_rl">
+       	<item name="android:layout_width">match_parent</item>
+       	<item name="android:layout_height">wrap_content</item>
+       	<item name="android:background">@drawable/list_item_background</item>
+       	<item name="android:clickable">true</item>
+       	<item name="android:padding">@dimen/space_11</item>
+    </style>
+    <style name="option_item_text">
+        <item name="android:layout_width">wrap_content</item>
+       	<item name="android:layout_height">wrap_content</item>
+       	<item name="android:layout_marginRight">@dimen/space_4</item>
+       	<item name="android:drawableLeft">@drawable/ic_action_comment</item>
+       	<item name="android:drawablePadding">@dimen/space_5</item>
+       	<item name="android:gravity">center_vertical</item>
+       	<item name="android:textColor">@color/main_gray</item>
+       	<item name="android:clickable">true</item>
+       	<item name="android:textSize">@dimen/text_size_16</item>
+    </style>
+    <style name="option_item_goto_right">
+        <item name="android:layout_width">wrap_content</item>
+       	<item name="android:layout_height">wrap_content</item>
+       	<item name="android:layout_alignParentRight">true</item>
+       	<item name="android:layout_centerVertical">true</item>
+       	<item name="android:src">@drawable/ic_item_goto_right_tip</item>
+       	<item name="android:layout_marginRight">@dimen/space_10</item>
+    </style>
+    <!-- 操作项样式end -->
+    
 </resources>

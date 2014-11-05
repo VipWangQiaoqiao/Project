@@ -12,7 +12,10 @@ import butterknife.InjectView;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,12 +28,14 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseFragment;
+import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.MyInformation;
 import net.oschina.app.bean.User;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
+import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
@@ -47,17 +52,34 @@ public class MyInformationFragment extends BaseFragment {
 	@InjectView(R.id.iv_avatar)AvatarView mIvAvatar;
 	@InjectView(R.id.iv_gender)ImageView mIvGender;
 	@InjectView(R.id.tv_name) TextView mTvName;
+	@InjectView(R.id.tv_sigin) TextView mTvSign;
 	@InjectView(R.id.tv_favorite) TextView mTvFavorite;
 	@InjectView(R.id.tv_following) TextView mTvFollowing;
 	@InjectView(R.id.tv_follower) TextView mTvFollower;
-	@InjectView(R.id.tv_join_time) TextView mTvJoinTime;
-	@InjectView(R.id.tv_location) TextView mTvLocation;
-	@InjectView(R.id.tv_development_platform) TextView mTvDevelopmentPlatform;
-	@InjectView(R.id.tv_academic_focus) TextView mTvAcademicFocus;
+//	@InjectView(R.id.tv_join_time) TextView mTvJoinTime;
+//	@InjectView(R.id.tv_location) TextView mTvLocation;
+//	@InjectView(R.id.tv_development_platform) TextView mTvDevelopmentPlatform;
+//	@InjectView(R.id.tv_academic_focus) TextView mTvAcademicFocus;
 	@InjectView(R.id.error_layout) EmptyLayout mEmptyView;
+	
+	@InjectView(R.id.error_layout) EmptyLayout mErrorLayout;
+	
+	private boolean mIsWatingLogin;
 	
 	private User mInfo;
 	private AsyncTask<String, Void, User> mCacheTask;
+	
+	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if (mErrorLayout != null) {
+				mIsWatingLogin = true;
+				mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+				mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
+			}
+		}
+	};
 
 	private AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
 
@@ -85,7 +107,20 @@ public class MyInformationFragment extends BaseFragment {
 			mEmptyView.setErrorType(EmptyLayout.NETWORK_ERROR);
 		}
 	};
-
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		IntentFilter filter = new IntentFilter(Constants.INTENT_ACTION_LOGOUT);
+		getActivity().registerReceiver(mReceiver, filter);
+	}
+	
+	@Override
+	public void onDestroy() {
+		getActivity().unregisterReceiver(mReceiver);
+		super.onDestroy();
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -93,7 +128,7 @@ public class MyInformationFragment extends BaseFragment {
 				false);
 		ButterKnife.inject(this, view);
 		initView(view);
-		requestData(true);
+		requestData(false);
 		return view;
 	}
 	
@@ -104,7 +139,11 @@ public class MyInformationFragment extends BaseFragment {
 
 			@Override
 			public void onClick(View v) {
-				requestData(true);
+				if (AppContext.getInstance().isLogin()) {
+					requestData(true);
+				} else {
+					UIHelper.showLoginActivity(getActivity());
+				}
 			}
 		});
 		
@@ -127,10 +166,11 @@ public class MyInformationFragment extends BaseFragment {
 		mTvFollowing.setText(String.valueOf(mInfo.getFollowerscount()));
 		mTvFollower.setText(String.valueOf(mInfo.getFanscount()));
 
-		mTvJoinTime.setText(mInfo.getJointime());
-		mTvLocation.setText(mInfo.getFrom());
-		mTvDevelopmentPlatform.setText(mInfo.getDevplatform());
-		mTvAcademicFocus.setText(mInfo.getExpertise());
+//		mTvJoinTime.setText(mInfo.getJointime());
+//		mTvLocation.setText(mInfo.getFrom());
+		mTvSign.setText(mInfo.getFrom());
+//		mTvDevelopmentPlatform.setText(mInfo.getDevplatform());
+//		mTvAcademicFocus.setText(mInfo.getExpertise());
 	}
 
 	private void handleLogout() {
@@ -152,13 +192,21 @@ public class MyInformationFragment extends BaseFragment {
 	}
 
 	private void requestData(boolean refresh) {
-		mEmptyView.setErrorType(EmptyLayout.NETWORK_LOADING);
-		String key = getCacheKey();
-		if (TDevice.hasInternet()
-				&& (!CacheManager.isReadDataCache(getActivity(), key) || refresh)) {
-			sendRequestData();
+		
+		if (AppContext.getInstance().isLogin()) {
+			mIsWatingLogin = false;
+			mEmptyView.setErrorType(EmptyLayout.NETWORK_LOADING);
+			String key = getCacheKey();
+			if (TDevice.hasInternet()
+					&& (!CacheManager.isReadDataCache(getActivity(), key) || refresh)) {
+				sendRequestData();
+			} else {
+				readCacheData(key);
+			}
 		} else {
-			readCacheData(key);
+			mIsWatingLogin = true;
+			mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+			mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
 		}
 	}
 

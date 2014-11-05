@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import net.oschina.app.AppContext;
+import net.oschina.app.AppManager;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.Active;
@@ -507,7 +508,7 @@ public class UIHelper {
 						TDevice.sendEmail(context, crashReport,
 								"zhangdeyi@oschina.net");
 						// 退出
-						
+						AppManager.getAppManager().AppExit(context);
 					}
 				});
 		dialog.setNegativeButton(R.string.cancle,
@@ -515,7 +516,7 @@ public class UIHelper {
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
 						// 退出
-
+						AppManager.getAppManager().AppExit(context);
 					}
 				});
 		dialog.show();
@@ -542,7 +543,11 @@ public class UIHelper {
 		intent.putExtras(bundle);
 		context.sendBroadcast(intent);
 	}
-
+	
+	/**
+	 * 发送通知广播
+	 * @param context
+	 */
 	public static void sendBroadcastForNotice(Context context) {
 		Intent intent = new Intent(NoticeService.INTENT_ACTION_BROADCAST);
 		context.sendBroadcast(intent);
@@ -593,6 +598,14 @@ public class UIHelper {
 	 * @param context
 	 */
 	public static void showMyInformation(Context context) {
-		showSimpleBack(context, SimpleBackPage.MY_INFORMATION, null);
+		showSimpleBack(context, SimpleBackPage.MY_INFORMATION);
+	}
+	
+	/**
+	 * 显示我的所有动态
+	 * @param context
+	 */
+	public static void showMyActive(Context context) {
+		showSimpleBack(context, SimpleBackPage.MY_ACTIVE);
 	}
 }

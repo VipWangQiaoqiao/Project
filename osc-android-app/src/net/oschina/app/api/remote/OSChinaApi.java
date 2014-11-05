@@ -179,7 +179,7 @@ public class OSChinaApi {
 			AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams();
 		params.put("id", id);
-		params.put("pageIndex", page-1);
+		params.put("pageIndex", page);
 		params.put("pageSize", AppContext.PAGE_SIZE);
 		ApiHttpClient.get("action/api/blogcomment_list", params, handler);
 	}

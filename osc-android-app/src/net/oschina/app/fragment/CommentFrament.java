@@ -52,7 +52,6 @@ public class CommentFrament extends BaseListFragment implements
 	private static final String BLOG_CACHE_KEY_PREFIX = "blogcomment_list";
 	private static final String CACHE_KEY_PREFIX = "comment_list";
 	private static final int REQUEST_CODE = 0x10;
-	private static final String COMMENT_SCREEN = "comment_screen";
 
 	private int mId, mOwnerId;
 	private boolean mIsBlogComment;

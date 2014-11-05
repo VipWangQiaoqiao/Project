@@ -51,23 +51,29 @@
                     android:textColor="@color/main_black"
                     android:textSize="@dimen/text_size_18" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_name"
-                    android:layout_marginTop="@dimen/space_5"
-                    android:layout_toRightOf="@id/iv_avatar"
-                    android:contentDescription="@null"
-                    android:singleLine="true"
-                    android:text="广东 茂名" />
-
                 <ImageView
+                    android:id="@+id/go_right"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/space_10"
                     android:layout_marginRight="@dimen/space_10"
                     android:src="@drawable/ic_item_goto_right_tip" />
+
+                <TextView
+                    android:id="@+id/tv_sigin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignRight="@id/go_right"
+                    android:layout_below="@id/tv_name"
+                    android:layout_marginRight="@dimen/space_15"
+                    android:layout_marginTop="@dimen/space_5"
+                    android:layout_toRightOf="@id/iv_avatar"
+                    android:contentDescription="@null"
+                    android:ellipsize="marquee"
+                    android:singleLine="true"
+                    android:text="这个人很懒，啥也没写这个人很懒，啥也没写这个人很懒，啥也没写这个人很懒，啥也没写这个人很懒，啥也没写" />
             </RelativeLayout>
 
             <View
@@ -108,11 +114,6 @@
                         android:textSize="@dimen/text_size_14" />
                 </LinearLayout>
 
-                <View
-                    android:layout_width="1px"
-                    android:layout_height="30dp"
-                    android:background="@color/list_divider_color" />
-
                 <LinearLayout
                     android:id="@+id/ly_following"
                     android:layout_width="0dp"
@@ -139,11 +140,6 @@
                         android:textColor="@color/main_gray"
                         android:textSize="@dimen/text_size_14" />
                 </LinearLayout>
-
-                <View
-                    android:layout_width="1px"
-                    android:layout_height="30dp"
-                    android:background="@color/list_divider_color" />
 
                 <LinearLayout
                     android:id="@+id/ly_follower"
@@ -173,54 +169,35 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="1px"
-                android:background="@color/list_divider_color" />
-
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="1px"
-                android:layout_marginTop="10dp"
-                android:background="@color/list_divider_color" />
-
-            <include layout="@layout/fragment_user_center_information" />
-
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="1px"
-                android:layout_marginTop="10dp"
-                android:background="@color/list_divider_color" />
+            <include
+                layout="@layout/fragment_user_center_information"
+                android:visibility="gone" />
 
             <RelativeLayout
-                android:id="@+id/rl_blog"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/list_item_background"
-                android:clickable="true"
-                android:orientation="horizontal"
-                android:padding="@dimen/space_11" >
+                style="@style/option_item_rl"
+                android:layout_marginTop="10dp" >
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/space_4"
-                    android:drawableLeft="@drawable/ic_action_comment"
-                    android:drawablePadding="@dimen/space_5"
-                    android:gravity="center_vertical"
-                    android:text="@string/blog"
-                    android:textColor="@color/main_gray"
-                    android:textSize="@dimen/text_size_16" />
+                    android:id="@+id/text"
+                    style="@style/option_item_text"
+                    android:text="@string/message" />
+
+                <TextView
+                    android:layout_width="18dip"
+                    android:layout_height="18dip"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/text"
+                    android:background="@drawable/notification_bg"
+                    android:gravity="center"
+                    android:text="1"
+                    android:visibility="gone"
+                    android:textColor="@color/white" />
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/space_10"
-                    android:src="@drawable/ic_item_goto_right_tip" />
+                    style="@style/option_item_goto_right"
+                    android:contentDescription="@null" />
             </RelativeLayout>
-            
+
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="1px"
@@ -228,38 +205,72 @@
 
             <RelativeLayout
                 android:id="@+id/rl_qrcode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/list_item_background"
-                android:clickable="true"
-                android:orientation="horizontal"
-                android:padding="@dimen/space_11" >
+                style="@style/option_item_rl" >
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/space_4"
-                    android:drawableLeft="@drawable/ic_action_comment"
-                    android:drawablePadding="@dimen/space_5"
-                    android:gravity="center_vertical"
-                    android:text="@string/qrcode"
-                    android:textColor="@color/main_gray"
-                    android:textSize="@dimen/text_size_16" />
+                    style="@style/option_item_text"
+                    android:text="@string/team" />
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/space_10"
-                    android:src="@drawable/ic_item_goto_right_tip" />
+                    style="@style/option_item_goto_right"
+                    android:contentDescription="@null" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1px"
+                android:background="@color/list_divider_color" />
+
+            <RelativeLayout
+                android:id="@+id/rl_blog"
+                style="@style/option_item_rl" >
+
+                <TextView
+                    style="@style/option_item_text"
+                    android:text="@string/blog" />
+
+                <ImageView
+                    style="@style/option_item_goto_right"
+                    android:contentDescription="@null" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1px"
+                android:background="@color/list_divider_color" />
+
+            <RelativeLayout style="@style/option_item_rl" >
+
+                <TextView
+                    style="@style/option_item_text"
+                    android:text="@string/note" />
+
+                <ImageView
+                    style="@style/option_item_goto_right"
+                    android:contentDescription="@null" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1px"
+                android:background="@color/list_divider_color" />
+
+            <RelativeLayout style="@style/option_item_rl" >
+
+                <TextView
+                    style="@style/option_item_text"
+                    android:text="@string/bookmarks" />
+
+                <ImageView
+                    style="@style/option_item_goto_right"
+                    android:contentDescription="@null" />
             </RelativeLayout>
         </LinearLayout>
     </net.oschina.app.widget.CustomerScrollView>
-    
-    <net.oschina.app.ui.empty.EmptyLayout 
+
+    <net.oschina.app.ui.empty.EmptyLayout
         android:id="@+id/error_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
 </FrameLayout>

@@ -46,7 +46,9 @@ public abstract class BaseViewPagerFragment extends BaseFragment{
 	@Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("position", mViewPager.getCurrentItem());
+        if (outState != null) {
+        	outState.putInt("position", mViewPager.getCurrentItem());
+        }
     }
 	
 	protected abstract void onSetupTabAdapter(ViewPageFragmentAdapter adapter);

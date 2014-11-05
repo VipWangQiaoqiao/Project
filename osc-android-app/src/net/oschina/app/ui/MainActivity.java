@@ -1,6 +1,7 @@
 package net.oschina.app.ui;
 
 import net.oschina.app.AppContext;
+import net.oschina.app.AppManager;
 import net.oschina.app.R;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.Notice;
@@ -101,6 +102,7 @@ public class MainActivity extends ActionBarActivity implements
 		setContentView(R.layout.activity_main);
 		ButterKnife.inject(this);
 		initView();
+		AppManager.getAppManager().addActivity(this);
 	}
 
 	@Override
@@ -197,7 +199,7 @@ public class MainActivity extends ActionBarActivity implements
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 		if (intent.getBooleanExtra("NOTICE", false)) {
-			mTabHost.setCurrentTab(3);
+			mTabHost.setCurrentTab(4);
 		}
 	}
 

@@ -1,6 +1,7 @@
 package net.oschina.app.base;
 
 import butterknife.ButterKnife;
+import net.oschina.app.AppManager;
 import net.oschina.app.R;
 import net.oschina.app.interf.BaseViewInterface;
 import net.oschina.app.ui.dialog.CommonToast;
@@ -75,6 +76,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
 		initView();
 		initData();
 		_isVisible = true;
+		AppManager.getAppManager().addActivity(this);
 	}
 
 	@Override
