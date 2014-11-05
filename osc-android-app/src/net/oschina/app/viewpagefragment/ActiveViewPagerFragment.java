@@ -35,7 +35,6 @@ public class ActiveViewPagerFragment extends BaseViewPagerFragment {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			TLog.log("NOTICE", "动态收到广播");
 			setNotice();
 		}
 	};
@@ -46,7 +45,7 @@ public class ActiveViewPagerFragment extends BaseViewPagerFragment {
 		setNotice();
 	}
 
-	public void setNotice() {
+	private void setNotice() {
 		if (MainActivity.mNotice != null) {
 
 			Notice notice = MainActivity.mNotice;

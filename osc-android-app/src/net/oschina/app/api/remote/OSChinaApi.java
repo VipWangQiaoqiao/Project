@@ -447,12 +447,6 @@ public class OSChinaApi {
 		ApiHttpClient.post("action/api/notice_clear", params, handler);
 	}
 
-	public static void getUserNotice(int uid, AsyncHttpResponseHandler handler) {
-		RequestParams params = new RequestParams();
-		params.put("uid", uid);
-		ApiHttpClient.post("action/api/user_notice", params, handler);
-	}
-	
 	public static void singnIn(String url, AsyncHttpResponseHandler handler) {
 		ApiHttpClient.getDirect(url, handler);
 	}

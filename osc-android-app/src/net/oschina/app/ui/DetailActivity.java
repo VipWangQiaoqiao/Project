@@ -116,8 +116,8 @@ public class DetailActivity extends BaseActivity implements
 			((ToolbarFragmentControl) fragment).setToolBarFragment(f);
 
 
-			mViewEmojiContaienr.setVisibility(View.VISIBLE);
-			mViewToolBarContaienr.setVisibility(View.GONE);
+			mViewEmojiContaienr.setVisibility(View.GONE);
+			mViewToolBarContaienr.setVisibility(View.VISIBLE);
 		}
 
 		trans.commit();

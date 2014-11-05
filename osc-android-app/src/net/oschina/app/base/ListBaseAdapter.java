@@ -7,6 +7,7 @@ import net.oschina.app.R;
 import net.oschina.app.util.TDevice;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,7 @@ public class ListBaseAdapter extends BaseAdapter {
 	protected int mScreenWidth;
 
 	private LayoutInflater mInflater;
-	
+
 	private LinearLayout mFooterView;
 
 	protected LayoutInflater getLayoutInflater(Context context) {
@@ -40,7 +41,7 @@ public class ListBaseAdapter extends BaseAdapter {
 		}
 		return mInflater;
 	}
-	
+
 	public View getFooterView() {
 		return this.mFooterView;
 	}
@@ -102,10 +103,10 @@ public class ListBaseAdapter extends BaseAdapter {
 		return arg0;
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void setData(ArrayList data) {
 		_data = data;
-		notifyDataSetChanged();
+		onRequestComplete(data);
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -119,7 +120,7 @@ public class ListBaseAdapter extends BaseAdapter {
 			_data = new ArrayList();
 		}
 		_data.addAll(data);
-		notifyDataSetChanged();
+		onRequestComplete(data);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -128,7 +129,7 @@ public class ListBaseAdapter extends BaseAdapter {
 			_data = new ArrayList();
 		}
 		_data.add(obj);
-		notifyDataSetChanged();
+		onRequestComplete(obj);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -137,17 +138,17 @@ public class ListBaseAdapter extends BaseAdapter {
 			_data = new ArrayList();
 		}
 		_data.add(pos, obj);
-		notifyDataSetChanged();
+		onRequestComplete(obj);
 	}
 
 	public void removeItem(Object obj) {
 		_data.remove(obj);
-		notifyDataSetChanged();
+		onRequestComplete(obj);
 	}
 
 	public void clear() {
 		_data.clear();
-		notifyDataSetChanged();
+		onRequestComplete();
 	}
 
 	public void setLoadmoreText(int loadmoreText) {
@@ -221,5 +222,42 @@ public class ListBaseAdapter extends BaseAdapter {
 
 	protected View getRealView(int position, View convertView, ViewGroup parent) {
 		return null;
+	}
+
+	private void onRequestComplete(final List<Object> result) {
+		new Handler().postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				if (result.size() == 0) { // no results
+
+				} else {
+
+					notifyDataSetChanged();
+				}
+			}
+		}, 1);
+	}
+
+	private void onRequestComplete(final Object result) {
+		new Handler().postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				if (result != null) { // no results
+
+				} else {
+
+					notifyDataSetChanged();
+				}
+			}
+		}, 1);
+	}
+
+	private void onRequestComplete() {
+		new Handler().postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				notifyDataSetChanged();
+			}
+		}, 1);
 	}
 }

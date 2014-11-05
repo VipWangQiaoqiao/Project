@@ -8,6 +8,7 @@ import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TLog;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.LinkView;
+import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
 import android.text.Html;
@@ -28,6 +29,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  * @date 2014年10月10日
  */
 public class TweetAdapter extends ListBaseAdapter {
+	private final static String AT_HOST_PRE = "http://my.oschina.net";
+	private final static String MAIN_HOST = "http://www.oschina.net";
 
 	static class ViewHolder {
 
@@ -71,11 +74,15 @@ public class TweetAdapter extends ListBaseAdapter {
 		vh.author.setText(tweet.getAuthor());
 		vh.time.setText(StringUtils.friendly_time(tweet.getPubDate()));
 		
-		Spanned span = Html.fromHtml(tweet.getBody());
+		vh.content.setMovementMethod(MyLinkMovementMethod.a());
+		vh.content.setFocusable(false);
+		vh.content.setDispatchToParent(true);
+		vh.content.setLongClickable(false);
+		Spanned span = Html.fromHtml(modifyPath(tweet.getBody()));
 		vh.content.setText(span);
 		MyURLSpan.parseLinkText(vh.content, span);
 		
-		vh.commentcount.setText("评论(" + tweet.getCommentCount() + ")");
+		vh.commentcount.setText(tweet.getCommentCount() + "");
 		vh.image.setVisibility(AvatarView.GONE);
 		if (tweet.getImgSmall() != null && !TextUtils.isEmpty(tweet.getImgSmall())) {
 			vh.image.setVisibility(AvatarView.VISIBLE);
@@ -112,5 +119,14 @@ public class TweetAdapter extends ListBaseAdapter {
 				break;
 		}
 		return convertView;
+	}
+	
+	private String modifyPath(String message) {
+		message = message.replaceAll("(<a[^>]+href=\")/([\\S]+)\"", "$1"
+				+ AT_HOST_PRE + "/$2\"");
+		message = message.replaceAll(
+				"(<a[^>]+href=\")http://m.oschina.net([\\S]+)\"", "$1"
+						+ MAIN_HOST + "$2\"");
+		return message;
 	}
 }

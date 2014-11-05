@@ -174,38 +174,9 @@
                 android:visibility="gone" />
 
             <RelativeLayout
+                android:id="@+id/rl_qrcode"
                 style="@style/option_item_rl"
                 android:layout_marginTop="10dp" >
-
-                <TextView
-                    android:id="@+id/text"
-                    style="@style/option_item_text"
-                    android:text="@string/message" />
-
-                <TextView
-                    android:layout_width="18dip"
-                    android:layout_height="18dip"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@id/text"
-                    android:background="@drawable/notification_bg"
-                    android:gravity="center"
-                    android:text="1"
-                    android:visibility="gone"
-                    android:textColor="@color/white" />
-
-                <ImageView
-                    style="@style/option_item_goto_right"
-                    android:contentDescription="@null" />
-            </RelativeLayout>
-
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="1px"
-                android:background="@color/list_divider_color" />
-
-            <RelativeLayout
-                android:id="@+id/rl_qrcode"
-                style="@style/option_item_rl" >
 
                 <TextView
                     style="@style/option_item_text"
