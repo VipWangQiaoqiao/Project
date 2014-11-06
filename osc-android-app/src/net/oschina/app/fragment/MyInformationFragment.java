@@ -287,10 +287,10 @@ public class MyInformationFragment extends BaseFragment {
 			UIHelper.showUserAvatar(getActivity(), mInfo.getPortrait());
 			break;
 		case R.id.ly_follower:
-			//UIHelper.showFriends(getActivity(), 1);
+			UIHelper.showFriends(getActivity(), AppContext.getInstance().getLoginUid(), 1);
 			break;
 		case R.id.ly_following:
-			//UIHelper.showFriends(getActivity(), 0);
+			UIHelper.showFriends(getActivity(), AppContext.getInstance().getLoginUid(), 0);
 			break;
 		case R.id.ly_favorite:
 			//UIHelper.showUserFavorite(getActivity());

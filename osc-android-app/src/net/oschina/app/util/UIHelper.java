@@ -17,6 +17,7 @@ import net.oschina.app.bean.News;
 import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.fragment.CommentFrament;
+import net.oschina.app.fragment.FriendsFragment;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
 import net.oschina.app.interf.OnWebViewImageListener;
 import net.oschina.app.service.NoticeService;
@@ -25,6 +26,7 @@ import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.ui.LoginActivity;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.ui.dialog.CommonDialog;
+import net.oschina.app.viewpagefragment.FriendsViewPagerFragment;
 import net.oschina.app.widget.AvatarView;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -626,5 +628,16 @@ public class UIHelper {
 	 */
 	public static void showMyMes(Context context) {
 		showSimpleBack(context, SimpleBackPage.MY_MES);
+	}
+	
+	/**
+	 * 显示用户的关注/粉丝列表
+	 * @param context
+	 */
+	public static void showFriends(Context context, int uid, int tabIdx) {
+		Bundle args = new Bundle();
+		args.putInt(FriendsViewPagerFragment.BUNDLE_KEY_TABIDX, tabIdx);
+		args.putInt(FriendsFragment.BUNDLE_KEY_UID, uid);
+		showSimpleBack(context, SimpleBackPage.MY_FRIENDS, args);
 	}
 }

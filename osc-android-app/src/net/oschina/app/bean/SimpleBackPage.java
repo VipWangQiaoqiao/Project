@@ -9,6 +9,7 @@ import net.oschina.app.fragment.TweetPubFragment;
 import net.oschina.app.fragment.UserBlogFragment;
 import net.oschina.app.fragment.UserCenterFragment;
 import net.oschina.app.viewpagefragment.ActiveViewPagerFragment;
+import net.oschina.app.viewpagefragment.FriendsViewPagerFragment;
 import net.oschina.app.viewpagefragment.OpensourceSoftwareFragment;
 import net.oschina.app.viewpagefragment.QuestViewPagerFragment;
 
@@ -32,7 +33,9 @@ public enum SimpleBackPage {
 	
 	MY_MES(9, R.string.actionbar_title_mes, ActiveViewPagerFragment.class),
 	
-	OPENSOURCE_SOFTWARE(10, R.string.actionbar_title_softwarelist, OpensourceSoftwareFragment.class);
+	OPENSOURCE_SOFTWARE(10, R.string.actionbar_title_softwarelist, OpensourceSoftwareFragment.class),
+	
+	MY_FRIENDS(11, R.string.actionbar_title_my_friends, FriendsViewPagerFragment.class);
 		
 	private int title;
 	private Class<?> clz;

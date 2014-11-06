@@ -16,10 +16,6 @@ import android.view.View;
  *
  */
 public class QuestViewPagerFragment extends BaseViewPagerFragment {
-	
-    public static QuestViewPagerFragment newInstance() {
-        return new QuestViewPagerFragment();
-    }
 
 	@Override
 	protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {

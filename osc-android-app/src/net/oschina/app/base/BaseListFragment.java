@@ -83,7 +83,8 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 		initView(view);
 		return view;
 	}
-
+	
+	@Override
 	public void onCreate(android.os.Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Bundle args = getArguments();

@@ -416,6 +416,9 @@ public class UserCenterFragment extends BaseFragment implements
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
+		if (position - 1 < 0) {
+			return;
+		}
 		Active active = (Active) mAdapter.getItem(position - 1);
 		if (active != null)
 			UIHelper.showActiveRedirect(view.getContext(), active);

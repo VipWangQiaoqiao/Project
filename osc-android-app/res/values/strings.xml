@@ -125,6 +125,7 @@
 	<string name="actionbar_title_user_center">用户中心</string>
 	<string name="actionbar_title_user_blog">用户博客列表</string>
 	<string name="actionbar_title_my_information">我的资料</string>
+	<string name="actionbar_title_my_friends">关注/粉丝</string>
 	
 	<string name="following_count">关注 %s</string>
     <string name="follower_count">粉丝 %s</string>
