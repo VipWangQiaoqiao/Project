@@ -25,7 +25,7 @@ public class EmptyLayout extends LinearLayout implements
 	private ProgressBar animProgress;
 	private boolean clickEnable = true;
 	private Context context;
-	private ImageView img;
+	public ImageView img;
 	private android.view.View.OnClickListener listener;
 	private int mErrorState;
 	private RelativeLayout mLayout;

@@ -16,7 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 
 /**
- * 新闻资讯
+ * 问答
  * 
  * @author william_sim
  */

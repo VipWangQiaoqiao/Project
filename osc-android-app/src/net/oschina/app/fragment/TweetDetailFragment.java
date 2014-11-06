@@ -32,7 +32,9 @@ import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
-import net.oschina.app.widget.LinkView;
+import net.oschina.app.widget.MyLinkMovementMethod;
+import net.oschina.app.widget.MyURLSpan;
+import net.oschina.app.widget.TweetTextView;
 
 import org.apache.http.Header;
 
@@ -40,6 +42,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Html;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,17 +63,19 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class TweetDetailFragment extends BaseFragment implements
 		EmojiTextListener, EmojiFragmentControl,OnScrollListener ,OnOperationListener,OnItemClickListener{
 	
+	private final static String AT_HOST_PRE = "http://my.oschina.net";
+	private final static String MAIN_HOST = "http://www.oschina.net";
+	
 	private static final String TWEET_CACHE_KEY = "tweet_";
 	private static final String CACHE_KEY_TWEET_COMMENT = "tweet_comment_";
 	protected static final String TAG = TweetDetailFragment.class.getSimpleName();
-	private static final String TWEET_DETAIL_SCREEN = "tweet_detail_screen";
 	private ParserTask mParserTask;
 	
 	ListView mListView;
 	AvatarView face;
 	TextView author;
 	TextView time;
-	LinkView content;
+	TweetTextView content;
 	public ImageView image;
 	
 	private int mCurrentPage = 0;
@@ -108,7 +114,7 @@ public class TweetDetailFragment extends BaseFragment implements
 		face = (AvatarView) header.findViewById(R.id.iv_tweet_detail_face);
 		author = (TextView) header.findViewById(R.id.tv_tweet_detail_name);
 		time = (TextView) header.findViewById(R.id.tv_tweet_detail_time);
-		content = (LinkView) header.findViewById(R.id.tv_tweet_detail_item);
+		content = (TweetTextView) header.findViewById(R.id.tv_tweet_detail_item);
 		image = (ImageView) header.findViewById(R.id.iv_tweet_detail_image);
 		mListView.addHeaderView(header);
 		commentAdapter = new CommentAdapter(this, true);
@@ -232,7 +238,7 @@ public class TweetDetailFragment extends BaseFragment implements
 	}
 	
 	private void sendRequestCommentData() {
-		OSChinaApi.getCommentList(mTweetId, 3, mCurrentPage, mCommentHandler);
+		OSChinaApi.getCommentList(mTweetId, CommentList.CATALOG_TWEET, mCurrentPage, mCommentHandler);
 	}
 	
 	private AsyncHttpResponseHandler mCommentHandler = new AsyncHttpResponseHandler() {
@@ -307,13 +313,30 @@ public class TweetDetailFragment extends BaseFragment implements
 			requestTweetComment(true);
 		}
 	}
+	
+	private String modifyPath(String message) {
+		message = message.replaceAll("(<a[^>]+href=\")/([\\S]+)\"", "$1"
+				+ AT_HOST_PRE + "/$2\"");
+		message = message.replaceAll(
+				"(<a[^>]+href=\")http://m.oschina.net([\\S]+)\"", "$1"
+						+ MAIN_HOST + "$2\"");
+		return message;
+	}
 
 	private void fillUI() {
 		face.setUserInfo(mTweet.getAuthorid(), mTweet.getAuthor());
 		face.setAvatarUrl(mTweet.getPortrait());
 		author.setText(mTweet.getAuthor());
 		time.setText(StringUtils.friendly_time(mTweet.getPubDate()));
-		content.setLinkText(mTweet.getBody());
+		content.setMovementMethod(MyLinkMovementMethod.a());
+		content.setFocusable(false);
+		content.setDispatchToParent(true);
+		content.setLongClickable(false);
+		Spanned span = Html.fromHtml(modifyPath(mTweet.getBody()));
+		content.setText(span);
+		MyURLSpan.parseLinkText(content, span);
+		
+		
 		image.setVisibility(AvatarView.GONE);
 		if (mTweet.getImgSmall() != null && !TextUtils.isEmpty(mTweet.getImgSmall())) {
 			image.setVisibility(AvatarView.VISIBLE);
@@ -363,19 +386,36 @@ public class TweetDetailFragment extends BaseFragment implements
 
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		if (commentAdapter == null || commentAdapter.getCount() == 0) {
+			return;
+		}
+		// 数据已经全部加载，或数据为空时，或正在加载，不处理滚动事件
+		if (mState == STATE_LOADMORE || mState == STATE_REFRESH) {
+			return;
+		}
+		// 判断是否滚动到底部
+		boolean scrollEnd = false;
+		try {
+			if (view.getPositionForView(commentAdapter.getFooterView()) == view
+					.getLastVisiblePosition())
+				scrollEnd = true;
+		} catch (Exception e) {
+			scrollEnd = false;
+		}
+
+		if (mState == STATE_NONE && scrollEnd) {
+			if (commentAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
+				mCurrentPage++;
+				mState = STATE_LOADMORE;
+				requestTweetComment(true);
+			}
+		}
 		
 	}
 
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
-		
-		if(commentAdapter != null && commentAdapter.getDataSize()>0 
-				&& mListView.getLastVisiblePosition() == (mListView.getCount() -1) ){
-			mState = STATE_LOADMORE;
-			mCurrentPage ++;
-			requestTweetComment(true);
-		}
 	}
 
 	@Override

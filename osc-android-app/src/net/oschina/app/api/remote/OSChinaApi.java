@@ -123,6 +123,11 @@ public class OSChinaApi {
 		ApiHttpClient.get("action/api/favorite_list", params, handler);
 	}
 
+	/**
+	 * 分类列表
+	 * @param tag	第一级:0
+	 * @param handler
+	 */
 	public static void getSoftwareCatalogList(int tag,
 			AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams("tag", tag);
@@ -138,6 +143,11 @@ public class OSChinaApi {
 		ApiHttpClient.get("action/api/softwaretag_list", params, handler);
 	}
 
+	/**
+	 * @param searchTag　　软件分类　　推荐:recommend 最新:time 热门:view 国产:list_cn
+	 * @param page
+	 * @param handler
+	 */
 	public static void getSoftwareList(String searchTag, int page,
 			AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams();

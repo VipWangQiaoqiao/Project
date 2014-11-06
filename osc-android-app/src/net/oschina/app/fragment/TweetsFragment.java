@@ -122,6 +122,13 @@ public class TweetsFragment extends BaseListFragment {
 				mIsWatingLogin = true;
 				mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
 				mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
+				mErrorLayout.img.setOnClickListener(new View.OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						UIHelper.showLoginActivity(getActivity());
+					}
+				});
 			}
 		} else {
 			mIsWatingLogin = false;

@@ -117,6 +117,7 @@
 	<string name="tip_content_empty">内容不能为空</string>
 	<string name="tip_content_too_long">内容太长</string>
 	
+	<string name="actionbar_title_softwarelist">开源软件</string>
 	<string name="actionbar_title_comment">评论列表</string>
 	<string name="actionbar_title_questions">讨论区</string>
 	<string name="actionbar_title_tweetpub">弹一弹</string>

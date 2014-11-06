@@ -51,7 +51,6 @@ public class PostAdapter extends ListBaseAdapter {
 		
 		vh.face.setUserInfo(post.getAuthorId(), post.getAuthor());
 		vh.face.setAvatarUrl(post.getPortrait());
-		
 		vh.title.setText(post.getTitle());
 		vh.author.setText(post.getAuthor());
 		vh.time.setText(StringUtils.friendly_time(post.getPubDate()));
