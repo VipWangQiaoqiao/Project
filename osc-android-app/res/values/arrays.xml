@@ -37,4 +37,14 @@
         <item>国产</item>
     </string-array>
     
+    <string-array name="userfavorite">
+        <item>软件</item>
+        <item>话题</item>
+        <item>代码</item>
+        <item>博客</item>
+        <item>资讯</item>
+    </string-array>
+    
+    
+    
 </resources>

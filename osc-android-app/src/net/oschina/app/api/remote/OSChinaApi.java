@@ -240,6 +240,11 @@ public class OSChinaApi {
 		ApiHttpClient.get("action/api/blog_detail", params, handler);
 	}
 
+	/**
+	 * 获取软件详情
+	 * @param ident
+	 * @param handler
+	 */
 	public static void getSoftwareDetail(String ident,
 			AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams("ident", ident);

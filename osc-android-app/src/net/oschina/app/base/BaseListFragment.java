@@ -65,6 +65,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 	protected String blogType;
 	protected int tweetType = 0;
 	protected String softwareType = "recommend";
+	protected int userfavoriteType = 0;
 	
 	private AsyncTask<String, Void, ListEntity> mCacheTask;
 	private ParserTask mParserTask;
@@ -92,6 +93,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 			blogType = args.getString(BUNDLE_BLOG_TYPE, blogType);
 			tweetType = args.getInt(BUNDLE_KEY_CATALOG,tweetType);
 			softwareType = args.getString(BUNDLE_SOFTWARE, softwareType);
+			userfavoriteType = args.getInt(BUNDLE_KEY_CATALOG, userfavoriteType);
 		}
 	}
 

@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -172,7 +173,7 @@ public class MyInformationFragment extends BaseFragment {
 //		mTvDevelopmentPlatform.setText(mInfo.getDevplatform());
 //		mTvAcademicFocus.setText(mInfo.getExpertise());
 	}
-
+	
 	private void handleLogout() {
 //		CommonDialog dialog = DialogHelper
 //				.getPinterestDialogCancelable(getActivity());
@@ -293,7 +294,7 @@ public class MyInformationFragment extends BaseFragment {
 			//UIHelper.showFriends(getActivity(), 0);
 			break;
 		case R.id.ly_favorite:
-			//UIHelper.showUserFavorite(getActivity());
+			UIHelper.showUserFavorite(getActivity(),AppContext.getInstance().getLoginUid());
 			break;
 		case R.id.rl_blog:
 			UIHelper.showUserBlog(getActivity(), AppContext.getInstance().getLoginUid());

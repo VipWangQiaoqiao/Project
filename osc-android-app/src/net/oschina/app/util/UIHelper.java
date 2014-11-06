@@ -35,6 +35,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -626,5 +627,16 @@ public class UIHelper {
 	 */
 	public static void showMyMes(Context context) {
 		showSimpleBack(context, SimpleBackPage.MY_MES);
+	}
+
+	/**
+	 * 显示用户收藏界面
+	 * @param activity
+	 */
+	public static void showUserFavorite(Context context, int uid) {
+		
+		Bundle args = new Bundle();
+		args.putInt(BaseListFragment.BUNDLE_KEY_CATALOG, uid);
+		showSimpleBack(context, SimpleBackPage.USER_FAVORITE);
 	}
 }
