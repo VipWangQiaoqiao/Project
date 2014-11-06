@@ -131,7 +131,7 @@ public class UIHelper {
 				DetailActivity.DISPLAY_POST);
 		context.startActivity(intent);
 	}
-	
+
 	/**
 	 * 显示相关Tag帖子列表
 	 * 
@@ -560,16 +560,17 @@ public class UIHelper {
 		intent.putExtras(bundle);
 		context.sendBroadcast(intent);
 	}
-	
+
 	/**
 	 * 发送通知广播
+	 * 
 	 * @param context
 	 */
 	public static void sendBroadcastForNotice(Context context) {
 		Intent intent = new Intent(NoticeService.INTENT_ACTION_BROADCAST);
 		context.sendBroadcast(intent);
 	}
-	
+
 	/**
 	 * 显示用户中心页面
 	 * 
@@ -585,9 +586,10 @@ public class UIHelper {
 		args.putString("his_name", hisname);
 		showSimpleBack(context, SimpleBackPage.USER_CENTER, args);
 	}
-	
+
 	/**
 	 * 显示用户的博客列表
+	 * 
 	 * @param context
 	 * @param uid
 	 */
@@ -596,55 +598,61 @@ public class UIHelper {
 		args.putInt(BaseListFragment.BUNDLE_KEY_CATALOG, uid);
 		showSimpleBack(context, SimpleBackPage.USER_BLOG, args);
 	}
-	
+
 	/**
 	 * 显示用户头像大图
+	 * 
 	 * @param context
 	 * @param avatarUrl
-	  */
+	 */
 	public static void showUserAvatar(Context context, String avatarUrl) {
 		if (StringUtils.isEmpty(avatarUrl)) {
 			return;
 		}
 		String url = AvatarView.getLargeAvatar(avatarUrl);
-		ImagePreviewActivity.showImagePrivew(context, 0, new String[]{url});
+		ImagePreviewActivity.showImagePrivew(context, 0, new String[] { url });
 	}
-	
+
 	/**
 	 * 显示登陆用户的个人中心页面
+	 * 
 	 * @param context
 	 */
 	public static void showMyInformation(Context context) {
 		showSimpleBack(context, SimpleBackPage.MY_INFORMATION);
 	}
-	
+
 	/**
 	 * 显示我的所有动态
+	 * 
 	 * @param context
 	 */
 	public static void showMyActive(Context context) {
 		showSimpleBack(context, SimpleBackPage.MY_ACTIVE);
 	}
-	
+
 	/**
 	 * 显示扫一扫界面
+	 * 
 	 * @param context
 	 */
 	public static void showScanActivity(Context context) {
 		Intent intent = new Intent(context, CaptureActivity.class);
 		context.startActivity(intent);
 	}
-	
+
 	/**
 	 * 显示用户的消息中心
+	 * 
 	 * @param context
 	 */
 	public static void showMyMes(Context context) {
 		showSimpleBack(context, SimpleBackPage.MY_MES);
 	}
-	
+
 	/**
 	 * 显示用户的关注/粉丝列表
+	 * 
 	 * @param context
 	 */
 	public static void showFriends(Context context, int uid, int tabIdx) {

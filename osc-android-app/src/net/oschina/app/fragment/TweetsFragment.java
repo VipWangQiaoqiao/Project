@@ -131,16 +131,16 @@ public class TweetsFragment extends BaseListFragment {
 	@Override
 	public void initView(View view) {
 		super.initView(view);
-		mErrorLayout.setOnClickListener(new View.OnClickListener() {
+		mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				if (AppContext.getInstance().isLogin())
-					requestData(false);
-				else
+				if (AppContext.getInstance().isLogin()) {
+					requestData(true);
+				} else {
 					UIHelper.showLoginActivity(getActivity());
+				}
 			}
 		});
-
 	}
 }
