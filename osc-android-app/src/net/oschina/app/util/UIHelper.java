@@ -18,6 +18,7 @@ import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.fragment.CommentFrament;
 import net.oschina.app.fragment.FriendsFragment;
+import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
 import net.oschina.app.interf.OnWebViewImageListener;
 import net.oschina.app.service.NoticeService;
@@ -129,6 +130,18 @@ public class UIHelper {
 		intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
 				DetailActivity.DISPLAY_POST);
 		context.startActivity(intent);
+	}
+	
+	/**
+	 * 显示相关Tag帖子列表
+	 * 
+	 * @param context
+	 * @param tag
+	 */
+	public static void showPostListByTag(Context context, String tag) {
+		Bundle args = new Bundle();
+		args.putString(QuestionTagFragment.BUNDLE_KEY_TAG, tag);
+		showSimpleBack(context, SimpleBackPage.QUESTION_TAG, args);
 	}
 
 	/**
@@ -302,7 +315,7 @@ public class UIHelper {
 			showPostDetail(context, objId);
 			break;
 		case URLsUtils.URL_OBJ_TYPE_QUESTION_TAG:
-			// showQuestionListByTag(context, objKey);
+			showPostListByTag(context, objKey);
 			break;
 		case URLsUtils.URL_OBJ_TYPE_SOFTWARE:
 			showSoftwareDetail(context, objKey);
@@ -588,7 +601,7 @@ public class UIHelper {
 	 * 显示用户头像大图
 	 * @param context
 	 * @param avatarUrl
-	 */
+	  */
 	public static void showUserAvatar(Context context, String avatarUrl) {
 		if (StringUtils.isEmpty(avatarUrl)) {
 			return;
