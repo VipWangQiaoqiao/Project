@@ -52,7 +52,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		AppManager.getAppManager().addActivity(this);
 		if (!hasActionBar()) {
 			supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
 		}
@@ -76,7 +76,6 @@ public abstract class BaseActivity extends ActionBarActivity implements
 		initView();
 		initData();
 		_isVisible = true;
-		AppManager.getAppManager().addActivity(this);
 	}
 
 	@Override

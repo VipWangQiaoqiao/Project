@@ -57,7 +57,7 @@ public class AppManager {
 		if(activity != null && !activity.isFinishing()){
 			activityStack.remove(activity);
 			activity.finish();
-			activity=null;
+			activity = null;
 		}
 	}
 	/**
@@ -88,8 +88,8 @@ public class AppManager {
 	public void AppExit(Context context) {
 		try {
 			finishAllActivity();
-			ActivityManager activityMgr= (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-			activityMgr.restartPackage(context.getPackageName());
+			// 杀死该应用进程
+			android.os.Process.killProcess(android.os.Process.myPid());
 			System.exit(0);
 		} catch (Exception e) {	}
 	}
