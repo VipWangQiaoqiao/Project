@@ -112,23 +112,15 @@ public class TweetsFragment extends BaseListFragment {
 
 	@Override
 	protected void requestData(boolean refresh) {
-		mErrorLayout.setErrorMessage("");
 		if (tweetType > 0) {
 			if (AppContext.getInstance().isLogin()) {
-				tweetType = AppContext.getInstance().getLoginUid();
+				mCatalog = AppContext.getInstance().getLoginUid();
 				mIsWatingLogin = false;
 				super.requestData(refresh);
 			} else {
 				mIsWatingLogin = true;
 				mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
 				mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
-				mErrorLayout.img.setOnClickListener(new View.OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						UIHelper.showLoginActivity(getActivity());
-					}
-				});
 			}
 		} else {
 			mIsWatingLogin = false;
@@ -139,16 +131,16 @@ public class TweetsFragment extends BaseListFragment {
 	@Override
 	public void initView(View view) {
 		super.initView(view);
-		mErrorLayout.setOnClickListener(new View.OnClickListener() {
+		mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				if (AppContext.getInstance().isLogin())
-					requestData(false);
-				else
+				if (AppContext.getInstance().isLogin()) {
+					requestData(true);
+				} else {
 					UIHelper.showLoginActivity(getActivity());
+				}
 			}
 		});
-
 	}
 }

@@ -142,11 +142,11 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	protected void onDestroy() {
+		super.onDestroy();
 		NoticeUtils.unbindFromService(this);
 		unregisterReceiver(mNoticeReceiver);
 		mNoticeReceiver = null;
 		NoticeUtils.tryToShutDown(this);
-		super.onDestroy();
 	}
 
 	@Override
@@ -192,13 +192,13 @@ public class MainActivity extends ActionBarActivity implements
 				mBvTweet.setGravity(Gravity.CENTER);
 			}
 		}
-	}	
+	}
 	
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 		if (intent.getBooleanExtra("NOTICE", false)) {
-			mTabHost.setCurrentTab(4);
+			mTabHost.setCurrentTab(3);
 		}
 	}
 

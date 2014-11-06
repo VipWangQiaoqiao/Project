@@ -17,6 +17,9 @@ import net.oschina.app.bean.News;
 import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.fragment.CommentFrament;
+import net.oschina.app.fragment.FriendsFragment;
+import net.oschina.app.fragment.MessageDetailFragment;
+import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
 import net.oschina.app.interf.OnWebViewImageListener;
 import net.oschina.app.service.NoticeService;
@@ -25,6 +28,7 @@ import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.ui.LoginActivity;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.ui.dialog.CommonDialog;
+import net.oschina.app.viewpagefragment.FriendsViewPagerFragment;
 import net.oschina.app.widget.AvatarView;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -131,6 +135,18 @@ public class UIHelper {
 	}
 
 	/**
+	 * 显示相关Tag帖子列表
+	 * 
+	 * @param context
+	 * @param tag
+	 */
+	public static void showPostListByTag(Context context, String tag) {
+		Bundle args = new Bundle();
+		args.putString(QuestionTagFragment.BUNDLE_KEY_TAG, tag);
+		showSimpleBack(context, SimpleBackPage.QUESTION_TAG, args);
+	}
+
+	/**
 	 * 显示动弹详情
 	 * 
 	 * @param context
@@ -175,7 +191,7 @@ public class UIHelper {
 			String objId = news.getNewType().attachment;
 			switch (newsType) {
 			case News.NEWSTYPE_NEWS:
-				showNewsDetail(context, newsId);
+				showNewsDetail(context, newsId); 
 				break;
 			case News.NEWSTYPE_SOFTWARE:
 				showSoftwareDetail(context, objId);
@@ -301,7 +317,7 @@ public class UIHelper {
 			showPostDetail(context, objId);
 			break;
 		case URLsUtils.URL_OBJ_TYPE_QUESTION_TAG:
-			// showQuestionListByTag(context, objKey);
+			showPostListByTag(context, objKey);
 			break;
 		case URLsUtils.URL_OBJ_TYPE_SOFTWARE:
 			showSoftwareDetail(context, objKey);
@@ -546,16 +562,17 @@ public class UIHelper {
 		intent.putExtras(bundle);
 		context.sendBroadcast(intent);
 	}
-	
+
 	/**
 	 * 发送通知广播
+	 * 
 	 * @param context
 	 */
 	public static void sendBroadcastForNotice(Context context) {
 		Intent intent = new Intent(NoticeService.INTENT_ACTION_BROADCAST);
 		context.sendBroadcast(intent);
 	}
-	
+
 	/**
 	 * 显示用户中心页面
 	 * 
@@ -571,9 +588,10 @@ public class UIHelper {
 		args.putString("his_name", hisname);
 		showSimpleBack(context, SimpleBackPage.USER_CENTER, args);
 	}
-	
+
 	/**
 	 * 显示用户的博客列表
+	 * 
 	 * @param context
 	 * @param uid
 	 */
@@ -582,9 +600,10 @@ public class UIHelper {
 		args.putInt(BaseListFragment.BUNDLE_KEY_CATALOG, uid);
 		showSimpleBack(context, SimpleBackPage.USER_BLOG, args);
 	}
-	
+
 	/**
 	 * 显示用户头像大图
+	 * 
 	 * @param context
 	 * @param avatarUrl
 	 */
@@ -593,36 +612,40 @@ public class UIHelper {
 			return;
 		}
 		String url = AvatarView.getLargeAvatar(avatarUrl);
-		ImagePreviewActivity.showImagePrivew(context, 0, new String[]{url});
+		ImagePreviewActivity.showImagePrivew(context, 0, new String[] { url });
 	}
-	
+
 	/**
 	 * 显示登陆用户的个人中心页面
+	 * 
 	 * @param context
 	 */
 	public static void showMyInformation(Context context) {
 		showSimpleBack(context, SimpleBackPage.MY_INFORMATION);
 	}
-	
+
 	/**
 	 * 显示我的所有动态
+	 * 
 	 * @param context
 	 */
 	public static void showMyActive(Context context) {
 		showSimpleBack(context, SimpleBackPage.MY_ACTIVE);
 	}
-	
+
 	/**
 	 * 显示扫一扫界面
+	 * 
 	 * @param context
 	 */
 	public static void showScanActivity(Context context) {
 		Intent intent = new Intent(context, CaptureActivity.class);
 		context.startActivity(intent);
 	}
-	
+
 	/**
 	 * 显示用户的消息中心
+	 * 
 	 * @param context
 	 */
 	public static void showMyMes(Context context) {
@@ -638,5 +661,32 @@ public class UIHelper {
 		Bundle args = new Bundle();
 		args.putInt(BaseListFragment.BUNDLE_KEY_CATALOG, uid);
 		showSimpleBack(context, SimpleBackPage.USER_FAVORITE);
+	}
+	
+	/*
+	 * 显示用户的关注/粉丝列表
+	 * 
+	 * @param context
+	 */
+	public static void showFriends(Context context, int uid, int tabIdx) {
+		Bundle args = new Bundle();
+		args.putInt(FriendsViewPagerFragment.BUNDLE_KEY_TABIDX, tabIdx);
+		args.putInt(FriendsFragment.BUNDLE_KEY_UID, uid);
+		showSimpleBack(context, SimpleBackPage.MY_FRIENDS, args);
+	}
+	
+	/**
+	 * 显示留言对话页面
+	 * 
+	 * @param context
+	 * @param catalog
+	 * @param friendid
+	 */
+	public static void showMessageDetail(Context context, int friendid,
+			String friendname) {
+		Bundle args = new Bundle();
+		args.putInt(MessageDetailFragment.BUNDLE_KEY_FID, friendid);
+		args.putString(MessageDetailFragment.BUNDLE_KEY_FNAME, friendname);
+		showSimpleBack(context, SimpleBackPage.MESSAGE_DETAIL, args);
 	}
 }

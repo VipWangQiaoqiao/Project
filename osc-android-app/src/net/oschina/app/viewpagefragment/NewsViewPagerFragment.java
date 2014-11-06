@@ -18,10 +18,6 @@ import android.view.View;
  */
 public class NewsViewPagerFragment extends BaseViewPagerFragment {
 	
-    public static NewsViewPagerFragment newInstance() {
-        return new NewsViewPagerFragment();
-    }
-
 	@Override
 	protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
 		String[] title = getResources().getStringArray(R.array.news_viewpage_arrays);

@@ -17,10 +17,6 @@ import android.view.View;
  */
 public class TweetsViewPagerFragment extends BaseViewPagerFragment{
 	
-    public static TweetsViewPagerFragment newInstance() {
-        return new TweetsViewPagerFragment();
-    }
-
 	@Override
 	protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
 		String[] title = getResources().getStringArray(R.array.tweets_viewpage_arrays);

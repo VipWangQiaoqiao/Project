@@ -3,12 +3,15 @@ package net.oschina.app.bean;
 import net.oschina.app.R;
 import net.oschina.app.fragment.ActiveFragment;
 import net.oschina.app.fragment.CommentFrament;
+import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.MyInformationFragment;
+import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
 import net.oschina.app.fragment.TweetPubFragment;
 import net.oschina.app.fragment.UserBlogFragment;
 import net.oschina.app.fragment.UserCenterFragment;
 import net.oschina.app.viewpagefragment.ActiveViewPagerFragment;
+import net.oschina.app.viewpagefragment.FriendsViewPagerFragment;
 import net.oschina.app.viewpagefragment.OpensourceSoftwareFragment;
 import net.oschina.app.viewpagefragment.QuestViewPagerFragment;
 import net.oschina.app.viewpagefragment.UserFavoriteViewPageFragment;
@@ -34,7 +37,13 @@ public enum SimpleBackPage {
 	MY_MES(9, R.string.actionbar_title_mes, ActiveViewPagerFragment.class),
 	
 	OPENSOURCE_SOFTWARE(10, R.string.actionbar_title_softwarelist, OpensourceSoftwareFragment.class),
-	USER_FAVORITE(11,R.string.actionbar_title_user_favorite,UserFavoriteViewPageFragment.class);
+	
+	MY_FRIENDS(11, R.string.actionbar_title_my_friends, FriendsViewPagerFragment.class),
+	
+	QUESTION_TAG(12, R.string.actionbar_title_question, QuestionTagFragment.class),
+	
+	MESSAGE_DETAIL(13, R.string.actionbar_title_message_detail, MessageDetailFragment.class),
+	USER_FAVORITE(14,R.string.actionbar_title_user_favorite,UserFavoriteViewPageFragment.class);
 		
 	private int title;
 	private Class<?> clz;

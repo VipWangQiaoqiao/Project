@@ -2,6 +2,7 @@ package net.oschina.app.base;
 
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
+import net.oschina.app.util.TLog;
 import net.oschina.app.widget.PagerSlidingTabStrip;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -11,6 +12,8 @@ import android.view.ViewGroup;
 
 /**
  * 带有导航条的基类
+ * @author FireAnt（http://my.oschina.net/LittleDY）
+ * @created 2014年11月6日 下午4:59:50
  *
  */
 public abstract class BaseViewPagerFragment extends BaseFragment{
@@ -45,10 +48,12 @@ public abstract class BaseViewPagerFragment extends BaseFragment{
 	
 	@Override
     public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+		TLog.log("BUG", "调用了onSaveInstanceState方法");
+		//No call for super(). Bug on API Level > 11.
         if (outState != null) {
         	outState.putInt("position", mViewPager.getCurrentItem());
         }
+        //super.onSaveInstanceState(outState);
     }
 	
 	protected abstract void onSetupTabAdapter(ViewPageFragmentAdapter adapter);

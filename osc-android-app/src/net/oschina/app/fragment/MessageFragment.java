@@ -11,11 +11,14 @@ import net.oschina.app.api.OperationResponseHandler;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
+import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.MessageList;
 import net.oschina.app.bean.Messages;
+import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
+import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -53,13 +56,13 @@ public class MessageFragment extends BaseListFragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-//		IntentFilter filter = new IntentFilter(Constants.INTENT_ACTION_LOGOUT);
-//		getActivity().registerReceiver(mLogoutReceiver, filter);
+		IntentFilter filter = new IntentFilter(Constants.INTENT_ACTION_LOGOUT);
+		getActivity().registerReceiver(mLogoutReceiver, filter);
 	}
 
 	@Override
 	public void onDestroy() {
-//		getActivity().unregisterReceiver(mLogoutReceiver);
+		getActivity().unregisterReceiver(mLogoutReceiver);
 		super.onDestroy();
 	}
 
@@ -112,7 +115,7 @@ public class MessageFragment extends BaseListFragment implements
 			}
 		});
 		if (AppContext.getInstance().isLogin()) {
-//			UIHelper.sendBroadcastForNotice(getActivity());
+			UIHelper.sendBroadcastForNotice(getActivity());
 		}
 	}
 
@@ -137,16 +140,16 @@ public class MessageFragment extends BaseListFragment implements
 
 	@Override
 	protected void onRefreshNetworkSuccess() {
-//		NoticeUtils.clearNotice(Notice.TYPE_MESSAGE);
+		NoticeUtils.clearNotice(Notice.TYPE_MESSAGE);
 	}
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-//		Messages message = (Messages) mAdapter.getItem(position - 1);
-//		if (message != null)
-//			UIHelper.showMessageDetail(getActivity(), message.getFriendId(),
-//					message.getFriendName());
+		Messages message = (Messages) mAdapter.getItem(position);
+		if (message != null)
+			UIHelper.showMessageDetail(getActivity(), message.getFriendId(),
+					message.getFriendName());
 	}
 
 	@Override

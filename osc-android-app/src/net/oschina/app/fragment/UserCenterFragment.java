@@ -59,7 +59,7 @@ public class UserCenterFragment extends BaseFragment implements
 	@InjectView(R.id.lv_user_active)
 	ListView mListView;
 	private ImageView mIvAvatar, mIvGender;
-	private TextView mTvName, mTvFollowing, mTvFollower, mBtnPrivateMsg,
+	private TextView mTvName, mTvFollowing, mTvFollower, mTvSore, mBtnPrivateMsg,
 			mBtnFollowUser, mTvLastestLoginTime;
 
 	private ActiveAdapter mAdapter;
@@ -135,20 +135,28 @@ public class UserCenterFragment extends BaseFragment implements
 	public void onClick(View v) {
 		final int id = v.getId();
 		switch (id) {
+		case R.id.iv_avatar:
+			UIHelper.showUserAvatar(getActivity(), mUser.getPortrait());
+			break;
+		case R.id.tv_following_count:
+			UIHelper.showFriends(getActivity(), mUser.getUid(), 0);
+			break;
+		case R.id.tv_follower_count:
+			UIHelper.showFriends(getActivity(), mUser.getUid(), 1);
+			break;
+		case R.id.tv_score:
+			break;
 		case R.id.tv_follow_user:
 			handleUserRelation();
 			break;
 		case R.id.tv_private_message:
-			// UIHelper.showMessagePub(getActivity(), mHisUid, mHisName);
+			UIHelper.showMessageDetail(getActivity(), mHisUid, mHisName);
 			break;
 		case R.id.tv_blog:
 			UIHelper.showUserBlog(getActivity(), mHisUid);
 			break;
 		case R.id.tv_information:
 			showInformationDialog();
-			break;
-		case R.id.iv_avatar:
-			UIHelper.showUserAvatar(getActivity(), mUser.getPortrait());
 			break;
 		default:
 			break;
@@ -168,7 +176,11 @@ public class UserCenterFragment extends BaseFragment implements
 		mIvGender = (ImageView) header.findViewById(R.id.iv_gender);
 		mTvName = (TextView) header.findViewById(R.id.tv_name);
 		mTvFollowing = (TextView) header.findViewById(R.id.tv_following_count);
+		mTvFollowing.setOnClickListener(this);
 		mTvFollower = (TextView) header.findViewById(R.id.tv_follower_count);
+		mTvFollower.setOnClickListener(this);
+		mTvSore = (TextView) header.findViewById(R.id.tv_score);
+		mTvSore.setOnClickListener(this);
 		mTvLastestLoginTime = (TextView) header
 				.findViewById(R.id.tv_latest_login_time);
 
@@ -416,6 +428,9 @@ public class UserCenterFragment extends BaseFragment implements
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
+		if (position - 1 < 0) {
+			return;
+		}
 		Active active = (Active) mAdapter.getItem(position - 1);
 		if (active != null)
 			UIHelper.showActiveRedirect(view.getContext(), active);
