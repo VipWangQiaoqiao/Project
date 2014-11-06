@@ -39,4 +39,12 @@ public class ServerTaskUtils {
 		intent.putExtras(bundle);
 		context.startService(intent);
 	}
+	
+	public static void pubTweetComment(Context context, PublicCommentTask task){
+		Intent intent = new Intent(ServerTaskService.ACTION_PUB_COMMENT);
+		Bundle bundle = new Bundle();
+		bundle.putParcelable(ServerTaskService.BUNDLE_PUB_COMMENT_TASK, task);
+		intent.putExtras(bundle);
+		context.startService(intent);
+	}
 }

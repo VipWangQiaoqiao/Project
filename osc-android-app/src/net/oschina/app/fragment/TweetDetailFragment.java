@@ -109,7 +109,7 @@ public class TweetDetailFragment extends BaseFragment implements
 		mListView = (ListView) view.findViewById(R.id.tweet_detail_listview);
 		mErrorLayout = (EmptyLayout) view.findViewById(R.id.error_layout);
 		mListView.setOnScrollListener(this);
-		mListView.setOnItemClickListener(this);
+		mListView.setOnItemClickListener(commentreply);
 		View header = LayoutInflater.from(getActivity()).inflate(R.layout.tweet_listview_head, null);
 		face = (AvatarView) header.findViewById(R.id.iv_tweet_detail_face);
 		author = (TextView) header.findViewById(R.id.tv_tweet_detail_name);
@@ -120,7 +120,20 @@ public class TweetDetailFragment extends BaseFragment implements
 		commentAdapter = new CommentAdapter(this, true);
 		mListView.setAdapter(commentAdapter);
 	}
+	OnItemClickListener commentreply = new OnItemClickListener() {
 
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			final Comment comment = (Comment) commentAdapter.getItem(position);
+			if (comment == null)
+				return;
+			mEmojiFragment.setTag(comment);
+			mEmojiFragment.setInputHint("@" + comment.getAuthor() + " ");
+			mEmojiFragment.requestFocusInput();
+		}
+	};
+	
 	private String getCacheKey() {
 		return new StringBuilder(TWEET_CACHE_KEY).append(mTweetId).toString();
 	}
@@ -336,7 +349,6 @@ public class TweetDetailFragment extends BaseFragment implements
 		content.setText(span);
 		MyURLSpan.parseLinkText(content, span);
 		
-		
 		image.setVisibility(AvatarView.GONE);
 		if (mTweet.getImgSmall() != null && !TextUtils.isEmpty(mTweet.getImgSmall())) {
 			image.setVisibility(AvatarView.VISIBLE);
@@ -376,11 +388,10 @@ public class TweetDetailFragment extends BaseFragment implements
 		}
 		PublicCommentTask task = new PublicCommentTask();
 		task.setId(mTweetId);
-		task.setCatalog(CommentList.CATALOG_POST);
+		task.setCatalog(CommentList.CATALOG_TWEET);
 		task.setIsPostToMyZone(0);
-		task.setContent(text);
 		task.setUid(AppContext.getInstance().getLoginUid());
-		ServerTaskUtils.publicNewsComment(getActivity(), task);
+		ServerTaskUtils.pubTweetComment(getActivity(), task);
 		mEmojiFragment.reset();
 	}
 

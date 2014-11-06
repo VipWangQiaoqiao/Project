@@ -105,11 +105,6 @@ public class CommentFrament extends BaseListFragment implements
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == REQUEST_CODE 
 				&& resultCode == Activity.RESULT_OK) {
-			//if (mState == STATE_NONE) {
-				//mCurrentPage = 0;
-				//mState = STATE_REFRESH;
-				//requestData(true);
-			//} 
 			Comment comment = data.getParcelableExtra(Comment.BUNDLE_KEY_COMMENT);
 			if(comment != null) {
 				mAdapter.addItem(0,comment);

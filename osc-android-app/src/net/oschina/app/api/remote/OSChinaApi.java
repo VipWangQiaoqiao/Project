@@ -256,6 +256,15 @@ public class OSChinaApi {
 		ApiHttpClient.get("action/api/tweet_detail", params, handler);
 	}
 
+	/**
+	 * 用户针对某个新闻，帖子，动弹，消息发表评论的接口，参数使用POST方式提交
+	 * @param catalog　　		1新闻　　2 帖子　　３　动弹　　４消息中心
+	 * @param id				被评论的某条新闻，帖子，动弹或者某条消息的id
+	 * @param uid				当天登陆用户的UID
+	 * @param content			发表的评论内容
+	 * @param isPostToMyZone	是否转发到我的空间，０不转发　　１转发到我的空间（注意该功能之对某条动弹进行评论是有效，其他情况下服务器借口可以忽略该参数）
+	 * @param handler
+	 */
 	public static void publicComment(int catalog, int id, int uid,
 			String content, int isPostToMyZone, AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams();

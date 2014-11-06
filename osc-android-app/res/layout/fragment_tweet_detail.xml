@@ -9,7 +9,6 @@
         android:layout_height="match_parent"
         android:cacheColorHint="#ffffffff"
         android:descendantFocusability="blocksDescendants"
-        android:divider="@null"
         android:dividerHeight="0dp"
         android:footerDividersEnabled="false"
         android:headerDividersEnabled="false"
