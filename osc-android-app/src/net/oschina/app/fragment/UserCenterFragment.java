@@ -150,7 +150,7 @@ public class UserCenterFragment extends BaseFragment implements
 			handleUserRelation();
 			break;
 		case R.id.tv_private_message:
-			// UIHelper.showMessagePub(getActivity(), mHisUid, mHisName);
+			UIHelper.showMessageDetail(getActivity(), mHisUid, mHisName);
 			break;
 		case R.id.tv_blog:
 			UIHelper.showUserBlog(getActivity(), mHisUid);

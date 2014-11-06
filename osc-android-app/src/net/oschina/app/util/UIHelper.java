@@ -18,6 +18,7 @@ import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.fragment.CommentFrament;
 import net.oschina.app.fragment.FriendsFragment;
+import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
 import net.oschina.app.interf.OnWebViewImageListener;
@@ -189,7 +190,7 @@ public class UIHelper {
 			String objId = news.getNewType().attachment;
 			switch (newsType) {
 			case News.NEWSTYPE_NEWS:
-				showNewsDetail(context, newsId);
+				showNewsDetail(context, newsId); 
 				break;
 			case News.NEWSTYPE_SOFTWARE:
 				showSoftwareDetail(context, objId);
@@ -660,5 +661,20 @@ public class UIHelper {
 		args.putInt(FriendsViewPagerFragment.BUNDLE_KEY_TABIDX, tabIdx);
 		args.putInt(FriendsFragment.BUNDLE_KEY_UID, uid);
 		showSimpleBack(context, SimpleBackPage.MY_FRIENDS, args);
+	}
+	
+	/**
+	 * 显示留言对话页面
+	 * 
+	 * @param context
+	 * @param catalog
+	 * @param friendid
+	 */
+	public static void showMessageDetail(Context context, int friendid,
+			String friendname) {
+		Bundle args = new Bundle();
+		args.putInt(MessageDetailFragment.BUNDLE_KEY_FID, friendid);
+		args.putString(MessageDetailFragment.BUNDLE_KEY_FNAME, friendname);
+		showSimpleBack(context, SimpleBackPage.MESSAGE_DETAIL, args);
 	}
 }

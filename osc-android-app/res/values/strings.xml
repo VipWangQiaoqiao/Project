@@ -66,6 +66,7 @@
     <string name="actionbar_title_detail">详情</string>
     <string name="actionbar_title_active">好友圈</string>
     <string name="actionbar_title_mes">消息中心</string>
+    <string name="actionbar_title_message_detail">对话</string>
     
     <string name="platform_qq">QQ</string>
 	<string name="platform_qzone">QQ空间</string>

@@ -3,6 +3,7 @@ package net.oschina.app.fragment;
 import java.io.InputStream;
 import java.io.Serializable;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.FriendAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
@@ -96,8 +97,13 @@ public class FriendsFragment extends BaseListFragment {
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		Friend item = (Friend) mAdapter.getItem(position);
-		if (item != null)
-			UIHelper.showUserCenter(getActivity(), item.getUserid(),
-					item.getName());
+		if (item != null) {
+			if (mUid == AppContext.getInstance().getLoginUid()) {
+				UIHelper.showMessageDetail(getActivity(), item.getUserid(), item.getName());
+				return;
+			}
+			UIHelper.showUserCenter(getActivity(), item.getUserid(),item.getName());
+		}
+			
 	}
 }

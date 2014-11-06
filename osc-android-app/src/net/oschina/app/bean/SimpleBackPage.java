@@ -3,6 +3,7 @@ package net.oschina.app.bean;
 import net.oschina.app.R;
 import net.oschina.app.fragment.ActiveFragment;
 import net.oschina.app.fragment.CommentFrament;
+import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
@@ -38,7 +39,9 @@ public enum SimpleBackPage {
 	
 	MY_FRIENDS(11, R.string.actionbar_title_my_friends, FriendsViewPagerFragment.class),
 	
-	QUESTION_TAG(12, R.string.actionbar_title_question, QuestionTagFragment.class);
+	QUESTION_TAG(12, R.string.actionbar_title_question, QuestionTagFragment.class),
+	
+	MESSAGE_DETAIL(13, R.string.actionbar_title_message_detail, MessageDetailFragment.class);
 		
 	private int title;
 	private Class<?> clz;
