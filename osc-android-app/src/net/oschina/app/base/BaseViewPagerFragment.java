@@ -50,7 +50,7 @@ public abstract class BaseViewPagerFragment extends BaseFragment{
     public void onSaveInstanceState(Bundle outState) {
 		TLog.log("BUG", "调用了onSaveInstanceState方法");
 		//No call for super(). Bug on API Level > 11.
-        if (outState != null) {
+        if (outState != null && mViewPager != null) {
         	outState.putInt("position", mViewPager.getCurrentItem());
         }
         //super.onSaveInstanceState(outState);
