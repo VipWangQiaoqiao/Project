@@ -13,10 +13,6 @@ allprojects {
   }
 }
 
-ext {
-  /* manifest './AndroidManifest.xml' */
-}
-
 apply plugin: 'com.android.application'
 
 android {
