@@ -14,6 +14,18 @@ allprojects {
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'checkstyle'
+
+check.dependsOn 'checkstyle'
+
+task checkstyle(type: Checkstyle) {
+  source 'src'
+  include '**/*.java'
+  exclude '**/gen/**'
+  ignoreFailures true
+
+  classpath = files()
+}
 
 android {
   compileSdkVersion 15
