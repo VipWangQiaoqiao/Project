@@ -29,7 +29,6 @@ public class OSChinaApi {
 		params.put("username", username);
 		params.put("pwd", password);
 		params.put("keep_login", 1);
-		
 		String loginurl = "action/api/login_validate";
 		ApiHttpClient.post(loginurl, params, handler);
 	}
@@ -65,7 +64,6 @@ public class OSChinaApi {
 	public static void getPostList(int catalog, int page,
 			AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams();
-		// params.put("access_token", "");
 		params.put("catalog", catalog);
 		params.put("pageIndex", page);
 		params.put("pageSize", AppContext.PAGE_SIZE);
@@ -85,11 +83,9 @@ public class OSChinaApi {
 	public static void getTweetList(int uid, int page,
 			AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams();
-		// params.put("access_token", "");
 		params.put("uid", uid);
 		params.put("pageIndex", page);
 		params.put("pageSize", AppContext.PAGE_SIZE);
-		// params.put("dataType", "json");
 		ApiHttpClient.get("action/api/tweet_list", params, handler);
 	}
 

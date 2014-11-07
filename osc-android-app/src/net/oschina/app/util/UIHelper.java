@@ -525,7 +525,7 @@ public class UIHelper {
 						dialog.dismiss();
 						// 发送异常报告
 						TDevice.sendEmail(context, crashReport,
-								"zhangdeyi@oschina.net");
+								"apposchina@gmail.com");
 						// 退出
 						AppManager.getAppManager().AppExit(context);
 					}
