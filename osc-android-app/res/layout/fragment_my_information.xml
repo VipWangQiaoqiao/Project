@@ -176,7 +176,7 @@
             <RelativeLayout
                 android:id="@+id/rl_qrcode"
                 style="@style/option_item_rl"
-                android:layout_marginTop="10dp" >
+                android:layout_marginTop="20dp" >
 
                 <TextView
                     style="@style/option_item_text"

@@ -689,4 +689,12 @@ public class UIHelper {
 		args.putString(MessageDetailFragment.BUNDLE_KEY_FNAME, friendname);
 		showSimpleBack(context, SimpleBackPage.MESSAGE_DETAIL, args);
 	}
+	
+	/**
+	 * 显示设置界面
+	 * @param context
+	 */
+	public static void showSetting(Context context) {
+		showSimpleBack(context, SimpleBackPage.SETTING);
+	}
 }

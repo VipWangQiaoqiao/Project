@@ -47,7 +47,7 @@ public class FriendsFragment extends BaseListFragment {
 	@Override
 	public void initView(View view) {
 		super.initView(view);
-		// UIHelper.sendBroadcastForNotice(getActivity());
+		UIHelper.sendBroadcastForNotice(getActivity());
 		mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 	}
 
@@ -88,7 +88,7 @@ public class FriendsFragment extends BaseListFragment {
 
 	@Override
 	protected void onRefreshNetworkSuccess() {
-		if (mCatalog == FriendsList.TYPE_FANS) {
+		if (mCatalog == FriendsList.TYPE_FANS && mUid == AppContext.getInstance().getLoginUid()) {
 			NoticeUtils.clearNotice(Notice.TYPE_NEWFAN);
 		}
 	}

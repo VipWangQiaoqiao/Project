@@ -54,6 +54,7 @@ public class AvatarView extends CircleImageView {
 
 	public void setAvatarUrl(String url) {
 		setTag(url);
+		setImageResource(R.drawable.widget_dface_loading);
 		if (this.getTag() != null && this.getTag().equals(url)) {
 			if (null == url || url.endsWith(PGIF) || StringUtils.isEmpty(url)) {
 				setImageResource(R.drawable.widget_dface);
@@ -63,12 +64,10 @@ public class AvatarView extends CircleImageView {
 		}
 	}
 
-	// http://static.oschina.net/uploads/user/63/127726_50.png?t=1390533116000
 	public static String getSmallAvatar(String source) {
 		return source;
 	}
 
-	// http://static.oschina.net/uploads/user/63/127726_100.png?t=1390533116000
 	public static String getMiddleAvatar(String source) {
 		if (source == null)
 			return "";

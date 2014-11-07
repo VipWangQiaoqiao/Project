@@ -184,6 +184,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
 		case R.id.menu_item_rss:
 			break;
 		case R.id.menu_item_setting:
+			UIHelper.showSetting(getActivity());
 			break;
 		case R.id.menu_item_exit:
 			AppManager.getAppManager().AppExit(getActivity());

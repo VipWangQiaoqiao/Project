@@ -3,6 +3,7 @@ package net.oschina.app.bean;
 import net.oschina.app.R;
 import net.oschina.app.fragment.ActiveFragment;
 import net.oschina.app.fragment.CommentFrament;
+import net.oschina.app.fragment.FragmentTest;
 import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.fragment.QuestionTagFragment;
@@ -43,7 +44,10 @@ public enum SimpleBackPage {
 	QUESTION_TAG(12, R.string.actionbar_title_question, QuestionTagFragment.class),
 	
 	MESSAGE_DETAIL(13, R.string.actionbar_title_message_detail, MessageDetailFragment.class),
-	USER_FAVORITE(14,R.string.actionbar_title_user_favorite,UserFavoriteViewPageFragment.class);
+	
+	USER_FAVORITE(14, R.string.actionbar_title_user_favorite, UserFavoriteViewPageFragment.class),
+	
+	SETTING(15, R.string.actionbar_title_setting, FragmentTest.class);
 		
 	private int title;
 	private Class<?> clz;

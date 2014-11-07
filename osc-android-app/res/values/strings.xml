@@ -128,6 +128,7 @@
 	<string name="actionbar_title_user_favorite">用户收藏</string>
 	<string name="actionbar_title_my_information">我的资料</string>
 	<string name="actionbar_title_my_friends">关注/粉丝</string>
+	<string name="actionbar_title_setting">设置</string>
 	
 	<string name="following_count">关注 %s</string>
     <string name="follower_count">粉丝 %s</string>
@@ -199,5 +200,14 @@
 	<string name="friends">同城</string>
 	<string name="find_oscer">找人</string>
 	<string name="shake">摇一摇</string>
+	
+	<string name="loading_img">加载图片</string>
+	<string name="mes_notice">消息通知</string>
+	<string name="clear_cache">清理缓存</string>
+	<string name="update">检查新版本</string>
+	<string name="about">关于开源中国</string>
+	<string name="feedback">意见反馈</string>
+	<string name="exit">退出</string>
+	<string name="grade">去评分</string>
 
 </resources>
