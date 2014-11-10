@@ -113,6 +113,13 @@ public class OSChinaApi {
 		ApiHttpClient.get("action/api/friends_list", params, handler);
 	}
 
+	/**
+	 * 获取用户收藏
+	 * @param 			uid 指定用户UID
+	 * @param type  	收藏类型:   0:全部收藏　1:软件　2:话题　3:博客　4:新闻　5:代码
+	 * @param page
+	 * @param handler
+	 */
 	public static void getFavoriteList(int uid, int type, int page,
 			AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams();

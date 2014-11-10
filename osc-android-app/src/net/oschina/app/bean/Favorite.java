@@ -13,11 +13,12 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @XStreamAlias("favorite")
 public class Favorite implements Serializable {
 	
-	public static final int CATALOG_SOFTWARE = 0;
-	public static final int CATALOG_TOPIC = 1;
-	public static final int CATALOG_CODE = 2;
+	public static final int CATALOG_ALL = 0;
+	public static final int CATALOG_SOFTWARE = 1;
+	public static final int CATALOG_TOPIC = 2;
 	public static final int CATALOG_BLOGS = 3;
 	public static final int CATALOG_NEWS = 4;
+	public static final int CATALOG_CODE = 5;
 	
 	@XStreamAlias("objid")
 	public int objid;

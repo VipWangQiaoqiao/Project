@@ -116,7 +116,7 @@ public class TweetDetailFragment extends BaseFragment implements
 		time = (TextView) header.findViewById(R.id.tv_tweet_detail_time);
 		content = (TweetTextView) header.findViewById(R.id.tv_tweet_detail_item);
 		image = (ImageView) header.findViewById(R.id.iv_tweet_detail_image);
-		mListView.addHeaderView(header);
+		mListView.addHeaderView(header,null,false);
 		commentAdapter = new CommentAdapter(this, true);
 		mListView.setAdapter(commentAdapter);
 	}
@@ -125,9 +125,12 @@ public class TweetDetailFragment extends BaseFragment implements
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-			final Comment comment = (Comment) commentAdapter.getItem(position);
+			final Comment comment = (Comment) commentAdapter.getItem(position-1);
 			if (comment == null)
 				return;
+			if(!AppContext.getInstance().isLogin()){
+				UIHelper.showLoginActivity(getActivity());
+			}
 			mEmojiFragment.setTag(comment);
 			mEmojiFragment.setInputHint("@" + comment.getAuthor() + " ");
 			mEmojiFragment.requestFocusInput();
