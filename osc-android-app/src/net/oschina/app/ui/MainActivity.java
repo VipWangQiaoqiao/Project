@@ -59,31 +59,36 @@ public class MainActivity extends ActionBarActivity implements
 
 	public static Notice mNotice;
 
-	private BroadcastReceiver mNoticeReceiver = new BroadcastReceiver() {
+	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			int atmeCount = intent.getIntExtra("atmeCount", 0);// @我
-			int msgCount = intent.getIntExtra("msgCount", 0);// 留言
-			int reviewCount = intent.getIntExtra("reviewCount", 0);// 评论
-			int newFansCount = intent.getIntExtra("newFansCount", 0);// 新粉丝
-			int activeCount = atmeCount + reviewCount + msgCount + newFansCount;//
-			// 信息总数
-			mNotice = (Notice) intent.getSerializableExtra("notice_bean");
-			TLog.log("NOTICE", "@me:" + atmeCount + " msg:" + msgCount
-					+ " review:" + reviewCount + " newFans:" + newFansCount
-					+ " active:" + activeCount);
+			if (intent.getAction().equals(Constants.INTENT_ACTION_NOTICE)) {
+				int atmeCount = intent.getIntExtra("atmeCount", 0);// @我
+				int msgCount = intent.getIntExtra("msgCount", 0);// 留言
+				int reviewCount = intent.getIntExtra("reviewCount", 0);// 评论
+				int newFansCount = intent.getIntExtra("newFansCount", 0);// 新粉丝
+				int activeCount = atmeCount + reviewCount + msgCount + newFansCount;//
+				// 信息总数
+				mNotice = (Notice) intent.getSerializableExtra("notice_bean");
+				TLog.log("NOTICE", "@me:" + atmeCount + " msg:" + msgCount
+						+ " review:" + reviewCount + " newFans:" + newFansCount
+						+ " active:" + activeCount);
 
-			if (activeCount > 0) {
-				mBvTweet.setText(activeCount + "");
-				mBvTweet.show();
-			} else {
+				if (activeCount > 0) {
+					mBvTweet.setText(activeCount + "");
+					mBvTweet.show();
+				} else {
+					mBvTweet.hide();
+					mNotice = null;
+				}
+			} else if (intent.getAction().equals(Constants.INTENT_ACTION_LOGOUT)) {
 				mBvTweet.hide();
 				mNotice = null;
 			}
 		}
 	};
-
+	
 	/**
 	 * Used to store the last screen title. For use in
 	 * {@link #restoreActionBar()}.
@@ -126,8 +131,9 @@ public class MainActivity extends ActionBarActivity implements
 		mTabHost.setOnTabChangedListener(this);
 
 		IntentFilter filter = new IntentFilter(Constants.INTENT_ACTION_NOTICE);
-		registerReceiver(mNoticeReceiver, filter);
-
+		filter.addAction(Constants.INTENT_ACTION_LOGOUT);
+		registerReceiver(mReceiver, filter);
+		
 		NoticeUtils.bindToService(this);
 		UIHelper.sendBroadcastForNotice(this);
 
@@ -142,8 +148,8 @@ public class MainActivity extends ActionBarActivity implements
 	protected void onDestroy() {
 		super.onDestroy();
 		NoticeUtils.unbindFromService(this);
-		unregisterReceiver(mNoticeReceiver);
-		mNoticeReceiver = null;
+		unregisterReceiver(mReceiver);
+		mReceiver = null;
 		NoticeUtils.tryToShutDown(this);
 	}
 

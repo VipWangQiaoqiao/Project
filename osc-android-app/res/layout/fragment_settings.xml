@@ -2,14 +2,16 @@
 <net.oschina.app.widget.CustomerScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
+    android:scrollbars="none"
     android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
-        
+
         <RelativeLayout
+            android:id="@+id/rl_loading_img"
             style="@style/option_item_rl"
             android:layout_marginTop="20dip" >
 
@@ -20,6 +22,7 @@
                 android:textSize="@dimen/text_size_16" />
 
             <net.oschina.app.widget.togglebutton.ToggleButton
+                android:id="@+id/tb_loading_img"
                 android:layout_width="45dp"
                 android:layout_height="20dp"
                 android:layout_alignParentRight="true" />
@@ -32,7 +35,9 @@
             android:layout_marginRight="@dimen/space_8"
             android:background="@color/list_divider_color" />
 
-        <RelativeLayout style="@style/option_item_rl" >
+        <RelativeLayout 
+            android:id="@+id/rl_notification_settings"
+            style="@style/option_item_rl" >
 
             <TextView
                 style="@style/option_item_text_parent"
@@ -48,11 +53,13 @@
             android:layout_marginRight="@dimen/space_8"
             android:background="@color/list_divider_color" />
 
-        <RelativeLayout style="@style/option_item_rl" >
+        <RelativeLayout 
+            android:id="@+id/rl_clean_cache"
+            style="@style/option_item_rl" >
 
             <TextView
                 style="@style/option_item_text_parent"
-                android:text="@string/clear_cache"
+                android:text="@string/clean_cache"
                 android:textColor="@color/main_black"
                 android:textSize="@dimen/text_size_16" />
 
@@ -60,10 +67,10 @@
                 android:id="@+id/tv_cache_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/main_gray"
-                android:textSize="@dimen/text_size_14"
+                android:layout_alignParentRight="true"
                 android:text="10M"
-                android:layout_alignParentRight="true" />
+                android:textColor="@color/main_gray"
+                android:textSize="@dimen/text_size_14" />
         </RelativeLayout>
 
         <View
@@ -73,21 +80,39 @@
             android:layout_marginRight="@dimen/space_8"
             android:background="@color/list_divider_color" />
 
-        <RelativeLayout style="@style/option_item_rl" >
+        <RelativeLayout 
+            android:id="@+id/rl_check_update"
+            style="@style/option_item_rl" >
 
             <TextView
                 style="@style/option_item_text_parent"
                 android:text="@string/update"
                 android:textColor="@color/main_black"
                 android:textSize="@dimen/text_size_16" />
-            
-            <TextView
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/main_gray"
-                android:textSize="@dimen/text_size_14"
-                android:text="已经是最新版"
-                android:layout_alignParentRight="true" />
+                android:layout_alignParentRight="true"
+                android:orientation="horizontal" >
+
+                <ProgressBar
+                    android:id="@+id/pb_loading"
+                    style="@style/loading"
+                    android:layout_width="18dip"
+                    android:layout_height="18dip"
+                    android:layout_alignParentRight="true"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="已经是最新版"
+                    android:textColor="@color/main_gray"
+                    android:textSize="@dimen/text_size_14"
+                    android:visibility="gone" />
+            </LinearLayout>
         </RelativeLayout>
 
         <View
@@ -98,6 +123,7 @@
             android:background="@color/list_divider_color" />
 
         <RelativeLayout
+            android:id="@+id/rl_feedback"
             style="@style/option_item_rl"
             android:layout_marginTop="20dip" >
 
@@ -115,7 +141,9 @@
             android:layout_marginRight="@dimen/space_8"
             android:background="@color/list_divider_color" />
 
-        <RelativeLayout style="@style/option_item_rl" >
+        <RelativeLayout 
+            android:id="@+id/rl_grade"
+            style="@style/option_item_rl" >
 
             <TextView
                 style="@style/option_item_text_parent"
@@ -132,6 +160,7 @@
             android:background="@color/list_divider_color" />
 
         <RelativeLayout
+            android:id="@+id/rl_about"
             style="@style/option_item_rl"
             android:layout_marginTop="20dip" >
 
@@ -149,7 +178,9 @@
             android:layout_marginRight="@dimen/space_8"
             android:background="@color/list_divider_color" />
 
-        <RelativeLayout style="@style/option_item_rl" >
+        <RelativeLayout 
+            android:id="@+id/rl_exit"
+            style="@style/option_item_rl" >
 
             <TextView
                 style="@style/option_item_text_parent"

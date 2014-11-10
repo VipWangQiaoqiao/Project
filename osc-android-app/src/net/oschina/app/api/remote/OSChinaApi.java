@@ -491,4 +491,8 @@ public class OSChinaApi {
 		params.put("pageSize", AppContext.PAGE_SIZE);
 		ApiHttpClient.get("action/api/software_tweet_list", params, handler);
 	}
+	
+	public static void checkUpdate(AsyncHttpResponseHandler handler) {
+		ApiHttpClient.get("MobileAppVersion.xml", handler);
+	}
 }

@@ -3,6 +3,7 @@ package net.oschina.app.service;
 import java.io.ByteArrayInputStream;
 import java.lang.ref.WeakReference;
 
+import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
@@ -200,8 +201,12 @@ public class NoticeService extends Service {
 				.setContentText(contentText).setAutoCancel(true)
 				.setContentIntent(pi).setSmallIcon(R.drawable.ic_notification);
 		
-		if (AppContext.isNotificationSoundEnable()) {
+		if (AppContext.get(AppConfig.KEY_NOTIFICATION_SOUND, true)) {
 			builder.setSound(Uri.parse("android.resource://" + AppContext.getInstance().getPackageName() + "/" + R.raw.notificationsound));
+		}
+		if (AppContext.get(AppConfig.KEY_NOTIFICATION_VIBRATION, true)) {
+			long[] vibrate = {0, 10, 20, 30};
+			builder.setVibrate(vibrate);
 		}
 		
 		Notification notification = builder.build();
@@ -218,7 +223,9 @@ public class NoticeService extends Service {
 				Notice notice = XmlUtils.toBean(NoticeDetail.class, new ByteArrayInputStream(arg2)).getNotice();
 				if (notice != null) {
 					UIHelper.sendBroadCast(NoticeService.this, notice);
-					notification(notice);
+					if (AppContext.get(AppConfig.KEY_NOTIFICATION_ACCEPT, true)) {
+						notification(notice);
+					}
 					mNotice = notice;
 				}
 			} catch (Exception e) {

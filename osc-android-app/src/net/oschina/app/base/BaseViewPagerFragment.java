@@ -40,21 +40,20 @@ public abstract class BaseViewPagerFragment extends BaseFragment{
         onSetupTabAdapter(mTabsAdapter);
         mTabsAdapter.notifyDataSetChanged();
         mViewPager.setOffscreenPageLimit(2);
-        if (savedInstanceState != null) {
-        	int pos = savedInstanceState.getInt("position");
-        	mViewPager.setCurrentItem(pos, true);
-        }
+//        if (savedInstanceState != null) {
+//        	int pos = savedInstanceState.getInt("position");
+//        	mViewPager.setCurrentItem(pos, true);
+//        }
 	}
 	
-	@Override
-    public void onSaveInstanceState(Bundle outState) {
-		TLog.log("BUG", "调用了onSaveInstanceState方法");
-		//No call for super(). Bug on API Level > 11.
-        if (outState != null && mViewPager != null) {
-        	outState.putInt("position", mViewPager.getCurrentItem());
-        }
-        //super.onSaveInstanceState(outState);
-    }
+//	@Override
+//    public void onSaveInstanceState(Bundle outState) {
+//		//No call for super(). Bug on API Level > 11.
+//        if (outState != null && mViewPager != null) {
+//        	outState.putInt("position", mViewPager.getCurrentItem());
+//        }
+//        //super.onSaveInstanceState(outState);
+//    }
 	
 	protected abstract void onSetupTabAdapter(ViewPageFragmentAdapter adapter);
 }

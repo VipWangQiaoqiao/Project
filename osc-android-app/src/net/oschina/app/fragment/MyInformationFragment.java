@@ -74,10 +74,15 @@ public class MyInformationFragment extends BaseFragment {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			if (mErrorLayout != null) {
-				mIsWatingLogin = true;
-				mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-				mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
+			String action = intent.getAction();
+			if (action.equals(Constants.INTENT_ACTION_LOGOUT)) {
+				if (mErrorLayout != null) {
+					mIsWatingLogin = true;
+					mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+					mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
+				}
+			} else if (action.equals(Constants.INTENT_ACTION_USER_CHANGE)) {
+				requestData(true);
 			}
 		}
 	};
@@ -113,6 +118,7 @@ public class MyInformationFragment extends BaseFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		IntentFilter filter = new IntentFilter(Constants.INTENT_ACTION_LOGOUT);
+		filter.addAction(Constants.INTENT_ACTION_USER_CHANGE);
 		getActivity().registerReceiver(mReceiver, filter);
 	}
 	

@@ -1,16 +1,21 @@
 package net.oschina.app;
 
 import static  net.oschina.app.AppConfig.*;
+
+import java.io.File;
 import java.util.Properties;
 import java.util.UUID;
 
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.base.BaseApplication;
+import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.User;
+import net.oschina.app.cache.DataCleanManager;
 import net.oschina.app.util.CyptoUtils;
+import net.oschina.app.util.MethodsCompat;
 import net.oschina.app.util.StringUtils;
 import android.content.Context;
-import android.content.SharedPreferences.Editor;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
@@ -239,8 +244,49 @@ public class AppContext extends BaseApplication {
 		return login;
 	}
 	
-	public static boolean shouldLoadImage() {
-		return getPreferences().getBoolean(KEY_LOAD_IMAGE, true);
+	/**
+	 * 用户注销
+	 */
+	public void Logout() {
+		cleanLoginInfo();
+		ApiHttpClient.cleanCookie();
+		this.cleanCookie();
+		this.login = false;
+		this.loginUid = 0;
+
+		Intent intent = new Intent(Constants.INTENT_ACTION_LOGOUT);
+		sendBroadcast(intent);
+	}
+	
+	/**
+	 * 清除保存的缓存
+	 */
+	public void cleanCookie() {
+		removeProperty(AppConfig.CONF_COOKIE);
+	}
+	
+	/**
+	 * 清除app缓存
+	 */
+	public void clearAppCache() {
+		DataCleanManager.cleanDatabases(this);
+		// 清除数据缓存
+		DataCleanManager.cleanInternalCache(this);
+		// 2.2版本才有将应用缓存转移到sd卡的功能
+		if (isMethodsCompat(android.os.Build.VERSION_CODES.FROYO)) {
+			DataCleanManager.cleanCustomCache(MethodsCompat.getExternalCacheDir(this));
+		}
+		// 清除编辑器保存的临时内容
+		Properties props = getProperties();
+		for (Object key : props.keySet()) {
+			String _key = key.toString();
+			if (_key.startsWith("temp"))
+				removeProperty(_key);
+		}
+	}
+	
+	public static void setLoadImage(boolean flag) {
+		set(KEY_LOAD_IMAGE, flag);
 	}
 	
 	/**
@@ -262,24 +308,7 @@ public class AppContext extends BaseApplication {
 	public static void setTweetDraft(String draft) {
 		set(KEY_TWEET_DRAFT + getInstance().getLoginUid(), draft);
 	}
-	
-	public static boolean isNotificationSoundEnable() {
-		return getPreferences().getBoolean(KEY_NOTIFICATION_SOUND, true);
-	}
 
-	public static void setNotificationSoundEnable(boolean enable) {
-		set(KEY_NOTIFICATION_SOUND, enable);
-	}
-
-	public static boolean isNotificationDisableWhenExit() {
-		return getPreferences().getBoolean(KEY_NOTIFICATION_DISABLE_WHEN_EXIT,
-				true);
-	}
-
-	public static void setNotificationDisableWhenExit(boolean enable) {
-		set(KEY_NOTIFICATION_DISABLE_WHEN_EXIT, enable);
-	}
-	
 	public static boolean isFristStart() {
 		return getPreferences().getBoolean(KEY_FRITST_START,
 				true);

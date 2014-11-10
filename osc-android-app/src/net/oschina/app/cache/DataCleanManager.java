@@ -21,6 +21,7 @@ public class DataCleanManager {
 	 */
 	public static void cleanInternalCache(Context context) {
 		deleteFilesByDirectory(context.getCacheDir());
+		deleteFilesByDirectory(context.getFilesDir());
 	}
 
 	/**
@@ -78,6 +79,14 @@ public class DataCleanManager {
 	public static void cleanCustomCache(String filePath) {
 		deleteFilesByDirectory(new File(filePath));
 	}
+	
+	/**
+	 * 清除自定义路径下的文件，使用需小心，请不要误删。而且只支持目录下的文件删除
+	 * @param filePath
+	 */
+	public static void cleanCustomCache(File file) {
+		deleteFilesByDirectory(file);
+	}
 
 	/**
 	 * 清除本应用所有的数据
@@ -101,8 +110,11 @@ public class DataCleanManager {
 	 */
 	private static void deleteFilesByDirectory(File directory) {
 		if (directory != null && directory.exists() && directory.isDirectory()) {
-			for (File item : directory.listFiles()) {
-				item.delete();
+			for (File child : directory.listFiles()) {
+				if (child.isDirectory()) {
+					deleteFilesByDirectory(child);
+				} 
+				child.delete();
 			}
 		}
 	}
