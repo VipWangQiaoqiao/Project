@@ -2,6 +2,8 @@ package net.oschina.app.api;
 
 import java.util.Locale;
 
+import org.apache.http.client.params.ClientPNames;
+
 import net.oschina.app.AppContext;
 import net.oschina.app.util.TLog;
 import android.content.Context;
@@ -104,6 +106,7 @@ public class ApiHttpClient {
 		client.addHeader("Accept-Language", Locale.getDefault().toString());
 		client.addHeader("Host", HOST);
 		client.addHeader("Connection", "Keep-Alive");
+		client.getHttpClient().getParams().setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, true);
 		setUserAgent(ApiClientHelper.getUserAgent(AppContext.getInstance()));
 	}
 
