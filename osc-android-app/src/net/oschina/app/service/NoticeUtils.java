@@ -2,6 +2,7 @@ package net.oschina.app.service;
 
 import java.util.HashMap;
 
+import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.util.TLog;
 import android.content.ComponentName;
@@ -103,7 +104,7 @@ public class NoticeUtils {
 	}
 
 	public static void tryToShutDown(Context context) {
-		if (AppContext.isNotificationDisableWhenExit()) {
+		if (AppContext.get(AppConfig.KEY_NOTIFICATION_DISABLE_WHEN_EXIT, false)) {
 			context.sendBroadcast(new Intent(
 					NoticeService.INTENT_ACTION_SHUTDOWN));
 		}

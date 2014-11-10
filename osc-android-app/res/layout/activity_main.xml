@@ -23,28 +23,22 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dip" >
 
                 <net.oschina.app.widget.MyFragmentTabHost
                     android:id="@android:id/tabhost"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" >
-
-                    <FrameLayout
-                        android:id="@android:id/tabcontent"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_gravity="center"
-                        android:layout_weight="0" />
-                </net.oschina.app.widget.MyFragmentTabHost>
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dip" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:background="#D6D6D6" />
             </RelativeLayout>
-			
-            <!-- 快速操作按钮  -->
+
+            <!-- 快速操作按钮 -->
             <ImageView
                 android:id="@+id/quick_option_iv"
                 android:layout_width="wrap_content"

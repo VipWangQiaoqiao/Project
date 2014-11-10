@@ -19,24 +19,30 @@ import android.preference.PreferenceManager;
 public class AppConfig {
 
 	private final static String APP_CONFIG = "config";
+	
+	public final static String CONF_COOKIE = "cookie";
 
 	public final static String CONF_APP_UNIQUEID = "APP_UNIQUEID";
 	
 	public static final String KEY_ACCESS_TOKEN = "KEY_ACCESS_TOKEN";
 	public static final String KEY_SOFTKEYBOARD_HEIGHT = "KEY_SOFTKEYBOARD_HEIGHT";
+	
 	public static final String KEY_LOAD_IMAGE = "KEY_LOAD_IMAGE";
+	public static final String KEY_NOTIFICATION_ACCEPT = "KEY_NOTIFICATION_ACCEPT";
 	public static final String KEY_NOTIFICATION_SOUND = "KEY_NOTIFICATION_SOUND";
+	public static final String KEY_NOTIFICATION_VIBRATION = "KEY_NOTIFICATION_VIBRATION";
+	public static final String KEY_NOTIFICATION_DISABLE_WHEN_EXIT = "KEY_NOTIFICATION_DISABLE_WHEN_EXIT";
+	
 	public static final String LAST_QUESTION_CATEGORY_IDX = "LAST_QUESTION_CATEGORY_IDX";
 	public static final String KEY_DAILY_ENGLISH = "KEY_DAILY_ENGLISH";
 	public static final String KEY_GET_LAST_DAILY_ENG = "KEY_GET_LAST_DAILY_ENG";
-	public static final String KEY_NOTIFICATION_DISABLE_WHEN_EXIT = "KEY_NOTIFICATION_DISABLE_WHEN_EXIT";
-	public static final String KEY_TWEET_DRAFT = "key_tweet_draft";
-	public static final String KEY_QUESTION_TITLE_DRAFT = "key_question_title_draft";
-	public static final String KEY_QUESTION_CONTENT_DRAFT = "key_question_content_draft";
-	public static final String KEY_QUESTION_TYPE_DRAFT = "key_question_type_draft";
-	public static final String KEY_QUESTION_LMK_DRAFT = "key_question_lmk_draft";
+	public static final String KEY_TWEET_DRAFT = "KEY_TWEET_DRAFT";
+	public static final String KEY_QUESTION_TITLE_DRAFT = "KEY_QUESTION_TITLE_DRAFT";
+	public static final String KEY_QUESTION_CONTENT_DRAFT = "KEY_QUESTION_CONTENT_DRAFT";
+	public static final String KEY_QUESTION_TYPE_DRAFT = "KEY_QUESTION_TYPE_DRAFT";
+	public static final String KEY_QUESTION_LMK_DRAFT = "KEY_QUESTION_LMK_DRAFT";
 	
-	public static final String KEY_FRITST_START = "key_frist_start";
+	public static final String KEY_FRITST_START = "KEY_FRIST_START";
 	
 	//默认存放图片的路径
 	public final static String DEFAULT_SAVE_IMAGE_PATH = Environment

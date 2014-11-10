@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -137,6 +138,7 @@ public class ExploreFragment extends BaseFragment {
 		mMesCount = new BadgeView(getActivity(), mMesView);
 		mMesCount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
 		mMesCount.setBadgePosition(BadgeView.POSITION_CENTER);
+		mMesCount.setGravity(Gravity.CENTER);
 		mMesCount.setBackgroundResource(R.drawable.notification_bg);
 		
 		mFindOSCer.setOnClickListener(this);

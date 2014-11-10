@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import com.zbar.lib.CaptureActivity;
 
+import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.AppManager;
 import net.oschina.app.R;
@@ -38,6 +39,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Html;
@@ -265,7 +268,7 @@ public class UIHelper {
 
 	public static String setHtmlCotentSupportImagePreview(String body) {
 		// 读取用户设置：是否加载文章图片--默认有wifi下始终加载图片
-		if (AppContext.shouldLoadImage() || TDevice.isWifiOpen()) {
+		if (AppContext.get(AppConfig.KEY_LOAD_IMAGE, true) || TDevice.isWifiOpen()) {
 			// 过滤掉 img标签的width,height属性
 			body = body.replaceAll("(<img[^>]*?)\\s+width\\s*=\\s*\\S+", "$1");
 			body = body.replaceAll("(<img[^>]*?)\\s+height\\s*=\\s*\\S+", "$1");
@@ -524,8 +527,8 @@ public class UIHelper {
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
 						// 发送异常报告
-						TDevice.sendEmail(context, crashReport,
-								"zhangdeyi@oschina.net");
+						TDevice.sendEmail(context, "OSCAndroid客户端耍脾气 - 症状诊断报告", crashReport, 
+								"apposchina@gmail.com");
 						// 退出
 						AppManager.getAppManager().AppExit(context);
 					}
@@ -688,5 +691,51 @@ public class UIHelper {
 		args.putInt(MessageDetailFragment.BUNDLE_KEY_FID, friendid);
 		args.putString(MessageDetailFragment.BUNDLE_KEY_FNAME, friendname);
 		showSimpleBack(context, SimpleBackPage.MESSAGE_DETAIL, args);
+	}
+	
+	/**
+	 * 显示设置界面
+	 * @param context
+	 */
+	public static void showSetting(Context context) {
+		showSimpleBack(context, SimpleBackPage.SETTING);
+	}
+	
+	/**
+	 * 显示通知设置界面
+	 * @param context
+	 */
+	public static void showSettingNotification(Context context) {
+		showSimpleBack(context, SimpleBackPage.SETTING_NOTIFICATION);
+	}
+	
+	/**
+	 * 清除app缓存
+	 * 
+	 * @param activity
+	 */
+	public static void clearAppCache(Activity activity) {
+		final Handler handler = new Handler() {
+			public void handleMessage(Message msg) {
+				if (msg.what == 1) {
+					AppContext.showToastShort("缓存清除成功");
+				} else {
+					AppContext.showToastShort("缓存清除失败");
+				}
+			}
+		};
+		new Thread() {
+			public void run() {
+				Message msg = new Message();
+				try {
+					AppContext.getInstance().clearAppCache();
+					msg.what = 1;
+				} catch (Exception e) {
+					e.printStackTrace();
+					msg.what = -1;
+				}
+				handler.sendMessage(msg);
+			}
+		}.start();
 	}
 }

@@ -6,6 +6,8 @@ import net.oschina.app.fragment.CommentFrament;
 import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.fragment.QuestionTagFragment;
+import net.oschina.app.fragment.SettingsFragment;
+import net.oschina.app.fragment.SettingsNotificationFragment;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
 import net.oschina.app.fragment.TweetPubFragment;
 import net.oschina.app.fragment.UserBlogFragment;
@@ -43,7 +45,12 @@ public enum SimpleBackPage {
 	QUESTION_TAG(12, R.string.actionbar_title_question, QuestionTagFragment.class),
 	
 	MESSAGE_DETAIL(13, R.string.actionbar_title_message_detail, MessageDetailFragment.class),
-	USER_FAVORITE(14,R.string.actionbar_title_user_favorite,UserFavoriteViewPageFragment.class);
+	
+	USER_FAVORITE(14, R.string.actionbar_title_user_favorite, UserFavoriteViewPageFragment.class),
+	
+	SETTING(15, R.string.actionbar_title_setting, SettingsFragment.class),
+	
+	SETTING_NOTIFICATION(16, R.string.actionbar_title_setting_notification, SettingsNotificationFragment.class);
 		
 	private int title;
 	private Class<?> clz;

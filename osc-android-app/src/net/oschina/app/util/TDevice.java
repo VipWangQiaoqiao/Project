@@ -574,8 +574,15 @@ public class TDevice {
 				.getSystemService(Context.CLIPBOARD_SERVICE);
 		clip.setText(string);
 	}
-
-	public static void sendEmail(Context context, String content, String... emails) {
+	
+	/**
+	 * 发送邮件
+	 * @param context 
+	 * @param subject 主题
+	 * @param content 内容
+	 * @param emails 邮件地址
+	 */
+	public static void sendEmail(Context context, String subject, String content, String... emails) {
 		try {
 			Intent intent = new Intent(Intent.ACTION_SEND);
 			// 模拟器
@@ -583,8 +590,7 @@ public class TDevice {
 			intent.setType("message/rfc822"); // 真机
 			intent.putExtra(android.content.Intent.EXTRA_EMAIL,
 					emails);
-			intent.putExtra(Intent.EXTRA_SUBJECT,
-					"OSCAndroid客户端耍脾气 - 症状诊断报告");
+			intent.putExtra(Intent.EXTRA_SUBJECT,subject);
 			intent.putExtra(Intent.EXTRA_TEXT, content);
 			context.startActivity(intent);
 		} catch (ActivityNotFoundException e) {

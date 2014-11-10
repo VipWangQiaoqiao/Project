@@ -2,6 +2,8 @@ package net.oschina.app.adapter;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Comment;
@@ -70,25 +72,25 @@ public class CommentAdapter extends ListBaseAdapter {
 
 		vh.from.setVisibility(View.VISIBLE);
 		switch (item.getAppClient()) {
-			default:
-				vh.from.setText("");
-				vh.from.setVisibility(View.GONE);
-				break;
-			case Tweet.CLIENT_MOBILE:
-				vh.from.setText(R.string.from_mobile);
-				break;
-			case Tweet.CLIENT_ANDROID:
-				vh.from.setText(R.string.from_android);
-				break;
-			case Tweet.CLIENT_IPHONE:
-				vh.from.setText(R.string.from_iphone);
-				break;
-			case Tweet.CLIENT_WINDOWS_PHONE:
-				vh.from.setText(R.string.from_windows_phone);
-				break;
-			case Tweet.CLIENT_WECHAT:
-				vh.from.setText(R.string.from_wechat);
-				break;
+		default:
+			vh.from.setText("");
+			vh.from.setVisibility(View.GONE);
+			break;
+		case Tweet.CLIENT_MOBILE:
+			vh.from.setText(R.string.from_mobile);
+			break;
+		case Tweet.CLIENT_ANDROID:
+			vh.from.setText(R.string.from_android);
+			break;
+		case Tweet.CLIENT_IPHONE:
+			vh.from.setText(R.string.from_iphone);
+			break;
+		case Tweet.CLIENT_WINDOWS_PHONE:
+			vh.from.setText(R.string.from_windows_phone);
+			break;
+		case Tweet.CLIENT_WECHAT:
+			vh.from.setText(R.string.from_wechat);
+			break;
 		}
 
 		// setup refers
@@ -169,38 +171,27 @@ public class CommentAdapter extends ListBaseAdapter {
 		vh.avatar.setAvatarUrl(item.getPortrait());
 		vh.avatar.setUserInfo(item.getAuthorId(), item.getAuthor());
 
-		vh.more.setVisibility(View.GONE);
-		vh.more.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				if (mListener != null) {
-					mListener.onMoreClick(item);
-				}
-			}
-		});
-
-		vh.split.setVisibility(showSplit ? View.VISIBLE : View.GONE);
 		return convertView;
 	}
 
 	static class ViewHolder {
+		@InjectView(R.id.iv_avatar)
 		AvatarView avatar;
-		TextView name, time, from;
+		@InjectView(R.id.tv_name)
+		TextView name;
+		@InjectView(R.id.tv_time)
+		TextView time;
+		@InjectView(R.id.tv_from)
+		TextView from;
+		@InjectView(R.id.tv_content)
 		TweetTextView content;
-		LinearLayout relies, refers;
-		View split, more;
+		@InjectView(R.id.ly_relies)
+		LinearLayout relies;
+		@InjectView(R.id.ly_refers)
+		LinearLayout refers;
 
 		ViewHolder(View view) {
-			avatar = (AvatarView) view.findViewById(R.id.iv_avatar);
-			name = (TextView) view.findViewById(R.id.tv_name);
-			content = (TweetTextView) view.findViewById(R.id.tv_content);
-			time = (TextView) view.findViewById(R.id.tv_time);
-			from = (TextView) view.findViewById(R.id.tv_from);
-			refers = (LinearLayout) view.findViewById(R.id.ly_refers);
-			relies = (LinearLayout) view.findViewById(R.id.ly_relies);
-			split = view.findViewById(R.id.split);
-			more = view.findViewById(R.id.iv_more);
+			ButterKnife.inject(this, view);
 		}
 	}
 }

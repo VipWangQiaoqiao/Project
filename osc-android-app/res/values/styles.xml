@@ -311,17 +311,19 @@
        	<item name="android:clickable">true</item>
        	<item name="android:padding">@dimen/space_11</item>
     </style>
-    <style name="option_item_text">
+    <style name="option_item_text_parent">
         <item name="android:layout_width">wrap_content</item>
        	<item name="android:layout_height">wrap_content</item>
        	<item name="android:layout_marginRight">@dimen/space_4</item>
-       	<item name="android:drawableLeft">@drawable/ic_action_comment</item>
-       	<item name="android:drawablePadding">@dimen/space_5</item>
        	<item name="android:gravity">center_vertical</item>
        	<item name="android:textColor">@color/main_gray</item>
        	<item name="android:clickable">false</item>
        	<item name="android:layout_centerVertical">true</item>
        	<item name="android:textSize">@dimen/text_size_16</item>
+    </style>
+    <style name="option_item_text" parent="@style/option_item_text_parent">
+       	<item name="android:drawableLeft">@drawable/ic_action_comment</item>
+       	<item name="android:drawablePadding">@dimen/space_5</item>
     </style>
     <style name="option_item_goto_right">
         <item name="android:layout_width">wrap_content</item>

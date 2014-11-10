@@ -27,7 +27,7 @@
         android:layout_alignParentRight="true"
         android:text="8分钟前"
         android:textColor="@color/tweet_time_platform"
-        android:textSize="@dimen/text_size_13" />
+        android:textSize="@dimen/text_size_12" />
 
     <net.oschina.app.widget.TweetTextView
         android:id="@+id/tweet_item"
@@ -39,7 +39,7 @@
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:textColor="@color/main_black"
-        android:textSize="@dimen/text_size_13" />
+        android:textSize="@dimen/text_size_12" />
 
     <ImageView
         android:id="@+id/iv_tweet_image"

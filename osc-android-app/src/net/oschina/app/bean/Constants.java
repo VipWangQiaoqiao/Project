@@ -9,6 +9,8 @@ package net.oschina.app.bean;
 
 public class Constants {
 	
+	public static final String INTENT_ACTION_USER_CHANGE = "INTENT_ACTION_USER_CHANGE";
+	
 	public static final String INTENT_ACTION_NOTICE = "net.oschina.action.APPWIDGET_UPDATE";
 	
 	public static final String INTENT_ACTION_LOGOUT = "net.oschina.action.LOGOUT";

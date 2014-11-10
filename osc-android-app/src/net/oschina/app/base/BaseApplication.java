@@ -1,6 +1,7 @@
 package net.oschina.app.base;
 
 import static net.oschina.app.AppConfig.KEY_FRITST_START;
+import static net.oschina.app.AppConfig.KEY_LOAD_IMAGE;
 import net.oschina.app.R;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -73,6 +74,26 @@ public class BaseApplication extends Application {
 		Editor editor = getPreferences().edit();
 		editor.putString(key, value);
 		apply(editor);
+	}
+	
+	public static boolean get(String key, boolean defValue) {
+		return getPreferences().getBoolean(key, defValue);
+	}
+	
+	public static String get(String key, String defValue) {
+		return getPreferences().getString(key, defValue);
+	}
+	
+	public static int get(String key, int defValue) {
+		return getPreferences().getInt(key, defValue);
+	}
+	
+	public static long get(String key, long defValue) {
+		return getPreferences().getLong(key, defValue);
+	}
+	
+	public static float get(String key, float defValue) {
+		return getPreferences().getFloat(key, defValue);
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)

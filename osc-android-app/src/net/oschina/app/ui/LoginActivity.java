@@ -18,6 +18,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.ApiHttpClient;
@@ -151,7 +152,7 @@ public class LoginActivity extends BaseActivity {
 						tmpcookies += (c.getName() + "=" + c.getValue()) + ";";
 					}
 					TLog.log(TAG, "cookies:" + tmpcookies);
-					AppContext.getInstance().setProperty("cookie", tmpcookies);
+					AppContext.getInstance().setProperty(AppConfig.CONF_COOKIE, tmpcookies);
 					ApiHttpClient.setCookie(ApiHttpClient.getCookie(AppContext
 							.getInstance()));
 				}

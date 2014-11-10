@@ -34,7 +34,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 
-
 /**
  * 动态fragment
  * @author FireAnt（http://my.oschina.net/LittleDY）

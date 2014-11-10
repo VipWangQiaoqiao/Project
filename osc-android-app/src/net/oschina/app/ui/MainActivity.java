@@ -10,7 +10,6 @@ import net.oschina.app.interf.BaseViewInterface;
 import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
-import net.oschina.app.viewpagefragment.ActiveViewPagerFragment;
 import net.oschina.app.widget.BadgeView;
 import net.oschina.app.widget.MyFragmentTabHost;
 import android.annotation.SuppressLint;
@@ -19,7 +18,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -58,34 +56,39 @@ public class MainActivity extends ActionBarActivity implements
 
 	// private Version mVersion;
 	private BadgeView mBvTweet;
-	
+
 	public static Notice mNotice;
 
-	private BroadcastReceiver mNoticeReceiver = new BroadcastReceiver() {
+	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			int atmeCount = intent.getIntExtra("atmeCount", 0);// @我
-			int msgCount = intent.getIntExtra("msgCount", 0);// 留言
-			int reviewCount = intent.getIntExtra("reviewCount", 0);// 评论
-			int newFansCount = intent.getIntExtra("newFansCount", 0);// 新粉丝
-			int activeCount = atmeCount + reviewCount + msgCount + newFansCount;//
-																	// 信息总数
-			mNotice = (Notice) intent.getSerializableExtra("notice_bean");
-			TLog.log("NOTICE", "@me:" + atmeCount + " msg:" + msgCount + " review:"
-					+ reviewCount + " newFans:" + newFansCount + " active:"
-					+ activeCount);
+			if (intent.getAction().equals(Constants.INTENT_ACTION_NOTICE)) {
+				int atmeCount = intent.getIntExtra("atmeCount", 0);// @我
+				int msgCount = intent.getIntExtra("msgCount", 0);// 留言
+				int reviewCount = intent.getIntExtra("reviewCount", 0);// 评论
+				int newFansCount = intent.getIntExtra("newFansCount", 0);// 新粉丝
+				int activeCount = atmeCount + reviewCount + msgCount + newFansCount;//
+				// 信息总数
+				mNotice = (Notice) intent.getSerializableExtra("notice_bean");
+				TLog.log("NOTICE", "@me:" + atmeCount + " msg:" + msgCount
+						+ " review:" + reviewCount + " newFans:" + newFansCount
+						+ " active:" + activeCount);
 
-			if (activeCount > 0) {
-				mBvTweet.setText(activeCount + "");
-				mBvTweet.show();
-			} else {
+				if (activeCount > 0) {
+					mBvTweet.setText(activeCount + "");
+					mBvTweet.show();
+				} else {
+					mBvTweet.hide();
+					mNotice = null;
+				}
+			} else if (intent.getAction().equals(Constants.INTENT_ACTION_LOGOUT)) {
 				mBvTweet.hide();
 				mNotice = null;
 			}
 		}
 	};
-
+	
 	/**
 	 * Used to store the last screen title. For use in
 	 * {@link #restoreActionBar()}.
@@ -113,7 +116,7 @@ public class MainActivity extends ActionBarActivity implements
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
-		
+
 		mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
 		if (android.os.Build.VERSION.SDK_INT > 10) {
 			mTabHost.getTabWidget().setShowDividers(0);
@@ -128,11 +131,12 @@ public class MainActivity extends ActionBarActivity implements
 		mTabHost.setOnTabChangedListener(this);
 
 		IntentFilter filter = new IntentFilter(Constants.INTENT_ACTION_NOTICE);
-		registerReceiver(mNoticeReceiver, filter);
-
+		filter.addAction(Constants.INTENT_ACTION_LOGOUT);
+		registerReceiver(mReceiver, filter);
+		
 		NoticeUtils.bindToService(this);
 		UIHelper.sendBroadcastForNotice(this);
-		
+
 		if (AppContext.isFristStart()) {
 			mNavigationDrawerFragment.openDrawerMenu();
 			DataCleanManager.cleanInternalCache(AppContext.getInstance());
@@ -144,8 +148,8 @@ public class MainActivity extends ActionBarActivity implements
 	protected void onDestroy() {
 		super.onDestroy();
 		NoticeUtils.unbindFromService(this);
-		unregisterReceiver(mNoticeReceiver);
-		mNoticeReceiver = null;
+		unregisterReceiver(mReceiver);
+		mReceiver = null;
 		NoticeUtils.tryToShutDown(this);
 	}
 
@@ -160,13 +164,13 @@ public class MainActivity extends ActionBarActivity implements
 		for (int i = 0; i < size; i++) {
 			MainTab mainTab = tabs[i];
 			TabSpec tab = mTabHost.newTabSpec(getString(mainTab.getResName()));
-			View indicator = LayoutInflater.from(
-					getApplicationContext()).inflate(R.layout.tab_indicator,
-					null);
+			View indicator = LayoutInflater.from(getApplicationContext())
+					.inflate(R.layout.tab_indicator, null);
 			TextView title = (TextView) indicator.findViewById(R.id.tab_title);
 			Drawable drawable = this.getResources().getDrawable(
 					mainTab.getResIcon());
-			title.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
+			title.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null,
+					null);
 			if (i == 2) {
 				indicator.setVisibility(View.INVISIBLE);
 				mTabHost.setNoTabChangedTag(getString(mainTab.getResName()));
@@ -193,7 +197,7 @@ public class MainActivity extends ActionBarActivity implements
 			}
 		}
 	}
-	
+
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);

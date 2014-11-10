@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
@@ -90,16 +91,19 @@ public class ActiveViewPagerFragment extends BaseViewPagerFragment {
 		mBvAtMe = new BadgeView(getActivity(), mTabStrip.getBadgeView(0));
 		mBvAtMe.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
 		mBvAtMe.setBadgePosition(BadgeView.POSITION_CENTER);
+		mBvAtMe.setGravity(Gravity.CENTER);
 		mBvAtMe.setBackgroundResource(R.drawable.notification_bg);
 
 		mBvComment = new BadgeView(getActivity(), mTabStrip.getBadgeView(1));
 		mBvComment.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
 		mBvComment.setBadgePosition(BadgeView.POSITION_CENTER);
+		mBvComment.setGravity(Gravity.CENTER);
 		mBvComment.setBackgroundResource(R.drawable.notification_bg);
 
 		mBvMsg = new BadgeView(getActivity(), mTabStrip.getBadgeView(2));
 		mBvMsg.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
 		mBvMsg.setBadgePosition(BadgeView.POSITION_CENTER);
+		mBvMsg.setGravity(Gravity.CENTER);
 		mBvMsg.setBackgroundResource(R.drawable.notification_bg);
 
 		mTabStrip.getBadgeView(0).setVisibility(View.VISIBLE);

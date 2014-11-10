@@ -121,7 +121,6 @@ public class MessageFragment extends BaseListFragment implements
 
 	@Override
 	protected void requestData(boolean refresh) {
-		mErrorLayout.setErrorMessage("");
 		if (AppContext.getInstance().isLogin()) {
 			mIsWatingLogin = false;
 			super.requestData(refresh);
