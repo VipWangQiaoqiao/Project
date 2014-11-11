@@ -3,75 +3,67 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/list_item_background_normal"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:padding="@dimen/space_8" >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" >
 
+        <net.oschina.app.widget.AvatarView
+            android:id="@+id/iv_tweet_detail_face"
+            style="@style/user_face_image"
+            android:layout_marginRight="@dimen/space_8" />
+
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:id="@+id/ll_user_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/iv_tweet_detail_face"
+            android:background="@color/list_item_background_normal"
             android:orientation="vertical" >
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/list_item_background_normal"
-                android:orientation="horizontal"
-                android:padding="@dimen/space_8" >
-
-                <net.oschina.app.widget.AvatarView
-                    android:id="@+id/iv_tweet_detail_face"
-                    style="@style/user_face_image" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/space_4"
-                    android:layout_marginTop="@dimen/space_4"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical" >
-
-                    <TextView
-                        android:id="@+id/tv_tweet_detail_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="火蚁"
-                        android:textColor="@color/lightblue"
-                        android:textSize="@dimen/text_size_15" />
-
-                    <TextView
-                        android:id="@+id/tv_tweet_detail_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="left|center_vertical"
-                        android:textColor="@color/main_gray"
-                        android:textSize="@dimen/text_size_12" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <net.oschina.app.widget.TweetTextView
-                android:id="@+id/tv_tweet_detail_item"
+            <TextView
+                android:id="@+id/tv_tweet_detail_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:textColor="@color/main_black"
-                android:textSize="@dimen/text_size_14" />
+                android:text="火蚁"
+                android:textColor="@color/lightblue"
+                android:textSize="@dimen/text_size_15" />
 
-
-            <ImageView
-                android:id="@+id/iv_tweet_detail_image"
+            <TextView
+                android:id="@+id/tv_tweet_detail_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/space_5"
-                android:layout_marginLeft="8dp"
-                android:clickable="true"
-                android:scaleType="fitStart"
-                android:visibility="gone" />
+                android:gravity="left|center_vertical"
+                android:text="两分钟前"
+                android:textColor="@color/main_gray"
+                android:textSize="@dimen/text_size_12" />
         </LinearLayout>
+
+        <net.oschina.app.widget.TweetTextView
+            android:id="@+id/tv_tweet_detail_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_tweet_detail_face"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="sfdf"
+            android:layout_marginTop="@dimen/space_4"
+            android:textColor="@color/main_black"
+            android:textSize="@dimen/text_size_14" />
+
+        <ImageView
+            android:id="@+id/iv_tweet_detail_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_tweet_detail_item"
+            android:layout_marginBottom="@dimen/space_5"
+            android:layout_toRightOf="@id/iv_tweet_detail_face"
+            android:clickable="true"
+            android:scaleType="fitStart"
+            android:visibility="gone" />
     </RelativeLayout>
 
 </LinearLayout>

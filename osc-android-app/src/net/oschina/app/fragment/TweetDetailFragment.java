@@ -1,7 +1,6 @@
 package net.oschina.app.fragment;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -10,179 +9,448 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.CommentAdapter;
 import net.oschina.app.adapter.CommentAdapter.OnOperationListener;
+import net.oschina.app.api.OperationResponseHandler;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.CommentList;
-import net.oschina.app.bean.Entity;
-import net.oschina.app.bean.ListEntity;
+import net.oschina.app.bean.Constants;
+import net.oschina.app.bean.Result;
+import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.Tweet;
-import net.oschina.app.bean.TweetDetail;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.emoji.EmojiFragment;
 import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
 import net.oschina.app.interf.EmojiFragmentControl;
 import net.oschina.app.service.PublicCommentTask;
 import net.oschina.app.service.ServerTaskUtils;
-import net.oschina.app.ui.ImagePreviewActivity;
+import net.oschina.app.ui.dialog.CommonDialog;
+import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
-import net.oschina.app.widget.AvatarView;
-import net.oschina.app.widget.MyLinkMovementMethod;
-import net.oschina.app.widget.MyURLSpan;
-import net.oschina.app.widget.TweetTextView;
 
 import org.apache.http.Header;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.Html;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import butterknife.ButterKnife;
+import android.widget.ZoomButtonsController;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 
 public class TweetDetailFragment extends BaseFragment implements
-		EmojiTextListener, EmojiFragmentControl,OnScrollListener ,OnOperationListener,OnItemClickListener{
-	
-	private final static String AT_HOST_PRE = "http://my.oschina.net";
-	private final static String MAIN_HOST = "http://www.oschina.net";
-	
-	private static final String TWEET_CACHE_KEY = "tweet_";
+		EmojiTextListener, EmojiFragmentControl, OnOperationListener,
+		OnItemClickListener, OnItemLongClickListener {
+	protected static final String TAG = TweetDetailFragment.class
+			.getSimpleName();
+	private static final int REQUEST_CODE = 0x1;
+	private static final String CACHE_KEY_PREFIX = "tweet_";
 	private static final String CACHE_KEY_TWEET_COMMENT = "tweet_comment_";
-	protected static final String TAG = TweetDetailFragment.class.getSimpleName();
-	private ParserTask mParserTask;
-	
-	ListView mListView;
-	AvatarView face;
-	TextView author;
-	TextView time;
-	TweetTextView content;
-	public ImageView image;
-	
-	private int mCurrentPage = 0;
+	private ListView mListView;
+	private EmptyLayout mEmptyView;
+	private ImageView mIvAvatar, mIvPic;
+	private TextView mTvName, mTvFrom, mTvTime, mTvCommentCount;
+	private WebView mContent;
 	private int mTweetId;
 	private Tweet mTweet;
+	private int mCurrentPage = 0;
+	private CommentAdapter mAdapter;
 	private EmojiFragment mEmojiFragment;
-	private EmptyLayout mErrorLayout;
-	private CommentAdapter commentAdapter;
+	private BroadcastReceiver mCommentReceiver;
+
+	class CommentChangeReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			int opt = intent.getIntExtra(Comment.BUNDLE_KEY_OPERATION, 0);
+			int id = intent.getIntExtra(Comment.BUNDLE_KEY_ID, 0);
+			int catalog = intent.getIntExtra(Comment.BUNDLE_KEY_CATALOG, 0);
+			boolean isBlog = intent.getBooleanExtra(Comment.BUNDLE_KEY_BLOG,
+					false);
+			Comment comment = intent
+					.getParcelableExtra(Comment.BUNDLE_KEY_COMMENT);
+			onCommentChanged(opt, id, catalog, isBlog, comment);
+		}
+	}
+
+	private OnScrollListener mScrollListener = new OnScrollListener() {
+
+		@Override
+		public void onScrollStateChanged(AbsListView view, int scrollState) {
+		}
+
+		@Override
+		public void onScroll(AbsListView view, int firstVisibleItem,
+				int visibleItemCount, int totalItemCount) {
+			if (mAdapter != null
+					&& mAdapter.getDataSize() > 0
+					&& mListView.getLastVisiblePosition() == (mListView
+							.getCount() - 1)) {
+				if (mState == STATE_NONE
+						&& mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
+					mState = STATE_LOADMORE;
+					mCurrentPage++;
+					requestTweetCommentData(true);
+				}
+			}
+		}
+	};
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+			Comment comment = data
+					.getParcelableExtra(Comment.BUNDLE_KEY_COMMENT);
+			if (comment != null && mTweet != null) {
+				// mAdapter.addItem(0, comment);
+				// mTweet.setCommentCount(mTweet.getCommentCount() + 1);
+				// mTvCommentCount.setText(getString(R.string.comment_count,
+				// mTweet.getCommentCount()));
+			}
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+
+	private void onCommentChanged(int opt, int id, int catalog, boolean isBlog,
+			Comment comment) {
+		if (Comment.OPT_ADD == opt && catalog == CommentList.CATALOG_TWEET
+				&& id == mTweetId) {
+			if (mTweet != null && mTvCommentCount != null) {
+				mTweet.setCommentCount(mTweet.getCommentCount() + 1);
+
+				mAdapter.addItem(0, comment);
+				mTvCommentCount.setText(getString(R.string.comment_count,
+						mTweet.getCommentCount()));
+			}
+		}
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+//		IntentFilter filter = new IntentFilter(
+//				Constants.INTENT_ACTION_COMMENT_CHANGED);
+//		mCommentReceiver = new CommentChangeReceiver();
+//		getActivity().registerReceiver(mCommentReceiver, filter);
+		super.onCreate(savedInstanceState);
+	}
+
+	@Override
+	public void onDestroy() {
+		if (mCommentReceiver != null) {
+			getActivity().unregisterReceiver(mCommentReceiver);
+		}
+		super.onDestroy();
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_tweet_detail, container, false);
-
+		View view = inflater.inflate(R.layout.fragment_tweet_detail,
+				container, false);
 		mTweetId = getActivity().getIntent().getIntExtra("tweet_id", 0);
-		ButterKnife.inject(this, view);
-		initView(view);
+
+		initViews(view);
+
 		requestTweetData(true);
 		return view;
 	}
-	
-	protected void requestTweetData(boolean refresh){
-		String key = getCacheKey();
-		if(TDevice.hasInternet() && (!CacheManager.isReadDataCache(getActivity(),key) || refresh)){
-			sendRequestData();
-		}
-	}
-	
-	@Override
-	public void initView(View view) {
-		mListView = (ListView) view.findViewById(R.id.tweet_detail_listview);
-		mErrorLayout = (EmptyLayout) view.findViewById(R.id.error_layout);
-		mListView.setOnScrollListener(this);
-		mListView.setOnItemClickListener(commentreply);
-		View header = LayoutInflater.from(getActivity()).inflate(R.layout.tweet_listview_head, null);
-		face = (AvatarView) header.findViewById(R.id.iv_tweet_detail_face);
-		author = (TextView) header.findViewById(R.id.tv_tweet_detail_name);
-		time = (TextView) header.findViewById(R.id.tv_tweet_detail_time);
-		content = (TweetTextView) header.findViewById(R.id.tv_tweet_detail_item);
-		image = (ImageView) header.findViewById(R.id.iv_tweet_detail_image);
-		mListView.addHeaderView(header,null,false);
-		commentAdapter = new CommentAdapter(this, true);
-		mListView.setAdapter(commentAdapter);
-	}
-	OnItemClickListener commentreply = new OnItemClickListener() {
 
-		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position,
-				long id) {
-			final Comment comment = (Comment) commentAdapter.getItem(position-1);
-			if (comment == null)
-				return;
-			if(!AppContext.getInstance().isLogin()){
-				UIHelper.showLoginActivity(getActivity());
+	@SuppressLint("InflateParams")
+	private void initViews(View view) {
+		mEmptyView = (EmptyLayout) view.findViewById(R.id.error_layout);
+		mListView = (ListView) view.findViewById(R.id.listview);
+		mListView.setOnScrollListener(mScrollListener);
+		mListView.setOnItemClickListener(this);
+		mListView.setOnItemLongClickListener(this);
+		View header = LayoutInflater.from(getActivity()).inflate(
+				R.layout.list_header_tweet_detail, null);
+		mIvAvatar = (ImageView) header.findViewById(R.id.iv_avatar);
+		mIvAvatar.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				UIHelper.showUserCenter(getActivity(), mTweet.getAuthorid(),
+						mTweet.getAuthor());
 			}
-			mEmojiFragment.setTag(comment);
-			mEmojiFragment.setInputHint("@" + comment.getAuthor() + " ");
-			mEmojiFragment.requestFocusInput();
+		});
+
+		mTvName = (TextView) header.findViewById(R.id.tv_name);
+		mTvFrom = (TextView) header.findViewById(R.id.tv_from);
+		mTvTime = (TextView) header.findViewById(R.id.tv_time);
+		mTvCommentCount = (TextView) header.findViewById(R.id.tv_comment_count);
+		mContent = (WebView) header.findViewById(R.id.webview);
+		mIvPic = (ImageView) header.findViewById(R.id.iv_pic);
+		mIvPic.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (mTweet != null && !TextUtils.isEmpty(mTweet.getImgSmall())) {
+					UIHelper.showImagePreview(getActivity(),
+							new String[] { mTweet.getImgBig() });
+				}
+			}
+		});
+		initWebView(mContent);
+
+		mListView.addHeaderView(header);
+		mAdapter = new CommentAdapter(this, true);
+		mListView.setAdapter(mAdapter);
+	}
+
+	@SuppressLint("SetJavaScriptEnabled")
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	private void initWebView(WebView webView) {
+		WebSettings settings = webView.getSettings();
+		settings.setDefaultFontSize(20);
+		settings.setJavaScriptEnabled(true);
+		settings.setSupportZoom(true);
+		settings.setBuiltInZoomControls(true);
+		int sysVersion = Build.VERSION.SDK_INT;
+		if (sysVersion >= 11) {
+			settings.setDisplayZoomControls(false);
+		} else {
+			ZoomButtonsController zbc = new ZoomButtonsController(webView);
+			zbc.getZoomControls().setVisibility(View.GONE);
 		}
-	};
-	
-	private String getCacheKey() {
-		return new StringBuilder(TWEET_CACHE_KEY).append(mTweetId).toString();
+		UIHelper.addWebImageShow(getActivity(), webView);
 	}
-	
-	/*
-	 * 解析动弹详情
-	 */
-	protected Entity parseData(InputStream is) throws Exception {
-		return XmlUtils.toBean(TweetDetail.class, is).getTweet();
+
+	private void fillUI() {
+		ImageLoader.getInstance().displayImage(mTweet.getPortrait(), mIvAvatar);
+		mTvName.setText(mTweet.getAuthor());
+		mTvTime.setText(StringUtils.friendly_time(mTweet.getPubDate()));
+		switch (mTweet.getAppclient()) {
+		default:
+			mTvFrom.setText("");
+			break;
+		case Tweet.CLIENT_MOBILE:
+			mTvFrom.setText(R.string.from_mobile);
+			break;
+		case Tweet.CLIENT_ANDROID:
+			mTvFrom.setText(R.string.from_android);
+			break;
+		case Tweet.CLIENT_IPHONE:
+			mTvFrom.setText(R.string.from_iphone);
+			break;
+		case Tweet.CLIENT_WINDOWS_PHONE:
+			mTvFrom.setText(R.string.from_windows_phone);
+			break;
+		case Tweet.CLIENT_WECHAT:
+			mTvFrom.setText(R.string.from_wechat);
+			break;
+		}
+
+		mTvCommentCount.setText(getString(R.string.comment_count,
+				mTweet.getCommentCount()));
+
+
+		// set content
+		String body = UIHelper.WEB_STYLE + mTweet.getBody();
+		body = body.replaceAll("(<img[^>]*?)\\s+width\\s*=\\s*\\S+", "$1");
+		body = body.replaceAll("(<img[^>]*?)\\s+height\\s*=\\s*\\S+", "$1");
+
+		mContent.loadDataWithBaseURL(null, body, "text/html", "utf-8", null);
+		//mContent.setWebViewClient(UIHelper.getWebViewClient());
+
+		if (TextUtils.isEmpty(mTweet.getImgSmall())) {
+			return;
+		}
+		DisplayImageOptions options = new DisplayImageOptions.Builder()
+				.cacheInMemory(true).cacheOnDisk(true)
+				.postProcessor(new BitmapProcessor() {
+
+					@Override
+					public Bitmap process(Bitmap arg0) {
+						return arg0;
+					}
+				}).build();
+		mIvPic.setVisibility(View.VISIBLE);
+		ImageLoader.getInstance().displayImage(mTweet.getImgSmall(), mIvPic,
+				options);
 	}
-	
-	protected void sendRequestData() {
-		mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+
+	private void sendRequestData() {
+		mState = STATE_REFRESH;
+		mEmptyView.setErrorType(EmptyLayout.NETWORK_LOADING);
 		OSChinaApi.getTweetDetail(mTweetId, mDetailHandler);
 	}
-	
-	private AsyncHttpResponseHandler mDetailHandler = new AsyncHttpResponseHandler() {
+
+	private void sendRequestCommentData() {
+		OSChinaApi.getCommentList(mTweetId, CommentList.CATALOG_TWEET,
+				mCurrentPage, mCommentHandler);
+	}
+
+	@Override
+	public void setEmojiFragment(EmojiFragment fragment) {
+		mEmojiFragment = fragment;
+		mEmojiFragment.setEmojiTextListener(this);
+	}
+
+	@Override
+	public void onSendClick(String text) {
+		if (!TDevice.hasInternet()) {
+			AppContext.showToastShort(R.string.tip_network_error);
+			return;
+		}
+		if (!AppContext.getInstance().isLogin()) {
+			UIHelper.showLoginActivity(getActivity());
+			mEmojiFragment.hideKeyboard();
+			return;
+		}
+		if (TextUtils.isEmpty(text)) {
+			AppContext.showToastShort(R.string.tip_comment_content_empty);
+			mEmojiFragment.requestFocusInput();
+			return;
+		}
+		PublicCommentTask task = new PublicCommentTask();
+		task.setId(mTweetId);
+		task.setCatalog(CommentList.CATALOG_TWEET);
+		task.setIsPostToMyZone(0);
+		task.setContent(text);
+		task.setUid(AppContext.getInstance().getLoginUid());
+		ServerTaskUtils.pubTweetComment(getActivity(), task);
+		mEmojiFragment.reset();
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+//		final Comment comment = (Comment) mAdapter.getItem(position - 1);
+//		if (comment == null)
+//			return;
+//		if (AppContext.getInstance().isLogin()
+//				&& AppContext.getInstance().getLoginUid() == comment.getAuthorId()) {
+//			final CommonDialog dialog = DialogHelper
+//					.getPinterestDialogCancelable(getActivity());
+//			String[] items = new String[] { getString(R.string.reply),
+//					getString(R.string.delete) };
+//			dialog.setTitle(R.string.operation);
+//			dialog.setItemsWithoutChk(items, new OnItemClickListener() {
+//
+//				@Override
+//				public void onItemClick(AdapterView<?> parent, View view,
+//						int position, long id) {
+//					dialog.dismiss();
+//					if (position == 0) {
+//						handleReplyComment(comment);
+//					} else if (position == 1) {
+//						handleDeleteComment(comment);
+//					}
+//				}
+//
+//			});
+//			dialog.setNegativeButton(R.string.cancle, null);
+//			dialog.show();
+//		} else {
+//			handleReplyComment(comment);
+//		}
+	}
+
+	@Override
+	public void onMoreClick(final Comment comment) {
+	}
+
+	private void handleReplyComment(Comment comment) {
+//		if (!AppContext.instance().isLogin()) {
+//			UIHelper.showLogin(getActivity());
+//			return;
+//		}
+//		UIHelper.showReplyCommentForResult(this, REQUEST_CODE, false, mTweetId,
+//				CommentList.CATALOG_TWEET, comment);
+	}
+
+	private void handleDeleteComment(Comment comment) {
+//		if (!AppContext.getInstance().isLogin()) {
+//			UIHelper.showLoginActivity(getActivity());
+//			return;
+//		}
+//		AppContext.showToastShort(R.string.deleting);
+//		OSChinaApi.deleteComment(mTweetId, CommentList.CATALOG_TWEET,
+//				comment.getId(), comment.getAuthorId(),
+//				new DeleteOperationResponseHandler(comment));
+	}
+
+	class DeleteOperationResponseHandler extends OperationResponseHandler {
+
+		DeleteOperationResponseHandler(Object... args) {
+			super(args);
+		}
 
 		@Override
-		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+		public void onSuccess(int code, ByteArrayInputStream is, Object[] args) {
 			try {
-				Entity entity = parseData(new ByteArrayInputStream(arg2));
+				Result res = XmlUtils.toBean(ResultBean.class, is).getResult();
+				if (res.OK()) {
+					//AppContext.showToastShort(R.string.delete_success);
 
-				if (entity != null && entity.getId() > 0) {
-					executeOnLoadTweetDetailDataSuccess(entity);
-					new SaveCacheTask(getActivity(), entity, getCacheKey()).execute();
+					mAdapter.removeItem(args[0]);
+
+					mTweet.setCommentCount(mTweet.getCommentCount() - 1);
+					mTvCommentCount.setText(getString(R.string.comment_count,
+							mTweet.getCommentCount()));
 				} else {
-					throw new RuntimeException("load detail error");
+					AppContext.showToastShort(res.getErrorMessage());
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				onFailure(arg0, arg1, arg2, e);
+				onFailure(code, e.getMessage(), args);
 			}
 		}
 
 		@Override
-		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-				Throwable arg3) {
-			readCacheData(getCacheKey());
+		public void onFailure(int code, String errorMessage, Object[] args) {
+			//AppContext.showToastShort(R.string.delete_faile);
 		}
-	};
-	
+	}
+
+	protected void requestTweetData(boolean refresh) {
+		String key = getCacheKey();
+		if (TDevice.hasInternet()
+				&& (!CacheManager.isReadDataCache(getActivity(), key) || refresh)) {
+			sendRequestData();
+		} else {
+			readCacheData(key);
+		}
+	}
+
+	private String getCacheKey() {
+		return CACHE_KEY_PREFIX + mTweetId;
+	}
+
 	private void readCacheData(String cacheKey) {
 		new CacheTask(getActivity()).execute(cacheKey);
 	}
-	
+
 	private class CacheTask extends AsyncTask<String, Void, Tweet> {
 		private WeakReference<Context> mContext;
 
@@ -208,21 +476,14 @@ public class TweetDetailFragment extends BaseFragment implements
 		protected void onPostExecute(Tweet tweet) {
 			super.onPostExecute(tweet);
 			if (tweet != null) {
-				executeOnLoadTweetDetailDataSuccess(tweet);
+				executeOnLoadDataSuccess(tweet);
 			} else {
 				executeOnLoadDataError(null);
 			}
 			executeOnLoadFinish();
 		}
 	}
-	
-	private void executeOnLoadDataError(Object object) {
-		mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-	}
-	private void executeOnLoadFinish() {
-		mState = STATE_NONE;
-	}
-	
+
 	private class SaveCacheTask extends AsyncTask<Void, Void, Void> {
 		private WeakReference<Context> mContext;
 		private Serializable seri;
@@ -240,252 +501,198 @@ public class TweetDetailFragment extends BaseFragment implements
 			return null;
 		}
 	}
-	
-	protected void requestTweetComment(boolean reflesh) {
-		String key = getCacheCommentKey() ;
-		if(TDevice.hasInternet() && (!CacheManager.isReadDataCache(getActivity(), key) || reflesh)){
-			sendRequestCommentData();
-		}
-	}
-	
-	protected ListEntity parseList(InputStream is) throws Exception {
-		CommentList list = XmlUtils.toBean(CommentList.class, is);
-		return list;
-	}
-	
-	private void sendRequestCommentData() {
-		OSChinaApi.getCommentList(mTweetId, CommentList.CATALOG_TWEET, mCurrentPage, mCommentHandler);
-	}
-	
-	private AsyncHttpResponseHandler mCommentHandler = new AsyncHttpResponseHandler() {
+
+	private AsyncHttpResponseHandler mDetailHandler = new AsyncHttpResponseHandler() {
 
 		@Override
-		public void onSuccess(int statusCode, Header[] headers,
-				byte[] responseBytes) {
-			if (isAdded()) {
-				if (mState == STATE_REFRESH) {
-					onRefreshNetworkSuccess();
+		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+			try {
+				mTweet = XmlUtils.toBean(Tweet.class, new ByteArrayInputStream(arg2));
+				if (mTweet != null && mTweet.getId() > 0) {
+					executeOnLoadDataSuccess(mTweet);
+					new SaveCacheTask(getActivity(), mTweet, getCacheKey())
+							.execute();
+				} else {
+					throw new RuntimeException("load detail error");
 				}
-				executeParserTask(responseBytes);
+			} catch (Exception e) {
+				e.printStackTrace();
+				onFailure(arg0, arg1, arg2, e);
 			}
 		}
 
 		@Override
 		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
 				Throwable arg3) {
-			if (isAdded()) {
-				readCacheData(getCacheKey());
-			}
+			readCacheData(getCacheKey());
 		}
 	};
-	
-	private void executeParserTask(byte[] data) {
-		cancelParserTask();
-		mParserTask = new ParserTask(data);
-		mParserTask.execute();
-	}
-	
-	private void cancelParserTask() {
-		if (mParserTask != null) {
-			mParserTask.cancel(true);
-			mParserTask = null;
-		}
-	}
-	
-	protected void onRefreshNetworkSuccess() {
-	}
-	
-	private void executeOnLoadCommentDataSuccess(List<?> data) {
-		if (mState == STATE_REFRESH)
-			commentAdapter.clear();
-		commentAdapter.addData(data);
-		mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-		if (data.size() == 0 && mState == STATE_REFRESH) {
-			mErrorLayout.setErrorType(EmptyLayout.NODATA);
-		} else if (data.size() < getPageSize()) {
-			if (mState == STATE_REFRESH)
-				commentAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
-			else
-				commentAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
+
+	private void executeOnLoadDataSuccess(Tweet tweet) {
+		mTweet = tweet;
+		if (mTweet != null && mTweet.getId() > 0) {
+			fillUI();
+			mCurrentPage = 0;
+
+			mState = STATE_REFRESH;
+			mCurrentPage = 0;
+			mEmptyView.setErrorType(EmptyLayout.NETWORK_LOADING);
+			requestTweetCommentData(true);
 		} else {
-			commentAdapter.setState(ListBaseAdapter.STATE_LOAD_MORE);
+			throw new RuntimeException("load detail error");
 		}
 	}
-	
-	private int getPageSize() {
-			return TDevice.getPageSize();
+
+	private void executeOnLoadFinish() {
+		mState = STATE_NONE;
+	}
+
+	private void executeOnLoadDataError(Object object) {
+		mEmptyView.setErrorType(EmptyLayout.NETWORK_ERROR);
+	}
+
+	protected void requestTweetCommentData(boolean refresh) {
+		String key = getCacheCommentKey();
+		if (TDevice.hasInternet()
+				&& (!CacheManager.isReadDataCache(getActivity(), key) || refresh)) {
+			sendRequestCommentData();
+		} else {
+			readCacheCommentData(key);
+		}
 	}
 
 	private String getCacheCommentKey() {
 		return CACHE_KEY_TWEET_COMMENT + mTweetId + "_" + mCurrentPage;
 	}
-	
 
-	protected void executeOnLoadTweetDetailDataSuccess(Entity entity) {
-		mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-		mTweet = (Tweet) entity;
-		if(mTweet != null && mTweet.getId() >0){
-			fillUI();
-			requestTweetComment(true);
-		}
-	}
-	
-	private String modifyPath(String message) {
-		message = message.replaceAll("(<a[^>]+href=\")/([\\S]+)\"", "$1"
-				+ AT_HOST_PRE + "/$2\"");
-		message = message.replaceAll(
-				"(<a[^>]+href=\")http://m.oschina.net([\\S]+)\"", "$1"
-						+ MAIN_HOST + "$2\"");
-		return message;
+	private void readCacheCommentData(String cacheKey) {
+		new CacheCommentTask(getActivity()).execute(cacheKey);
 	}
 
-	private void fillUI() {
-		face.setUserInfo(mTweet.getAuthorid(), mTweet.getAuthor());
-		face.setAvatarUrl(mTweet.getPortrait());
-		author.setText(mTweet.getAuthor());
-		time.setText(StringUtils.friendly_time(mTweet.getPubDate()));
-		content.setMovementMethod(MyLinkMovementMethod.a());
-		content.setFocusable(false);
-		content.setDispatchToParent(true);
-		content.setLongClickable(false);
-		Spanned span = Html.fromHtml(modifyPath(mTweet.getBody()));
-		content.setText(span);
-		MyURLSpan.parseLinkText(content, span);
-		
-		image.setVisibility(AvatarView.GONE);
-		if (mTweet.getImgSmall() != null && !TextUtils.isEmpty(mTweet.getImgSmall())) {
-			image.setVisibility(AvatarView.VISIBLE);
-			ImageLoader.getInstance().displayImage(mTweet.getImgSmall(),
-					image);
-			image.setOnClickListener(new View.OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					ImagePreviewActivity.showImagePrivew(getActivity(), 0, new String[] {mTweet.getImgBig()});
-				}
-			});
-		}
-	}
+	private class CacheCommentTask extends AsyncTask<String, Void, CommentList> {
+		private WeakReference<Context> mContext;
 
-	@Override
-	public void setEmojiFragment(EmojiFragment fragment) {
-		mEmojiFragment = fragment;
-		mEmojiFragment.setEmojiTextListener(this);
-		mEmojiFragment.setButtonMoreVisibility(View.GONE);
-	}
-
-	@Override
-	public void onSendClick(String text) {
-		if (!TDevice.hasInternet()) {
-			AppContext.showToastShort(R.string.tip_network_error);
-			return;
-		}
-		if (!AppContext.getInstance().isLogin()) {
-			UIHelper.showLoginActivity(getActivity());
-			return;
-		}
-		if (TextUtils.isEmpty(text)) {
-			AppContext.showToastShort(R.string.tip_comment_content_empty);
-			mEmojiFragment.requestFocusInput();
-			return;
-		}
-		PublicCommentTask task = new PublicCommentTask();
-		task.setId(mTweetId);
-		task.setCatalog(CommentList.CATALOG_TWEET);
-		task.setIsPostToMyZone(0);
-		task.setUid(AppContext.getInstance().getLoginUid());
-		ServerTaskUtils.pubTweetComment(getActivity(), task);
-		mEmojiFragment.reset();
-	}
-
-	@Override
-	public void onScrollStateChanged(AbsListView view, int scrollState) {
-		if (commentAdapter == null || commentAdapter.getCount() == 0) {
-			return;
-		}
-		// 数据已经全部加载，或数据为空时，或正在加载，不处理滚动事件
-		if (mState == STATE_LOADMORE || mState == STATE_REFRESH) {
-			return;
-		}
-		// 判断是否滚动到底部
-		boolean scrollEnd = false;
-		try {
-			if (view.getPositionForView(commentAdapter.getFooterView()) == view
-					.getLastVisiblePosition())
-				scrollEnd = true;
-		} catch (Exception e) {
-			scrollEnd = false;
-		}
-
-		if (mState == STATE_NONE && scrollEnd) {
-			if (commentAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
-				mCurrentPage++;
-				mState = STATE_LOADMORE;
-				requestTweetComment(true);
-			}
-		}
-		
-	}
-
-	@Override
-	public void onScroll(AbsListView view, int firstVisibleItem,
-			int visibleItemCount, int totalItemCount) {
-	}
-
-	@Override
-	public void onMoreClick(Comment comment) {}
-
-	@Override
-	public void onClick(View v) {
-		
-	}
-
-	@Override
-	public void initData() {
-		
-	}
-
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-		
-	}
-	
-	class ParserTask extends AsyncTask<Void, Void, String> {
-
-		private byte[] reponseData;
-		private boolean parserError;
-		private List<?> list;
-
-		public ParserTask(byte[] data) {
-			this.reponseData = data;
+		private CacheCommentTask(Context context) {
+			mContext = new WeakReference<Context>(context);
 		}
 
 		@Override
-		protected String doInBackground(Void... params) {
-			try {
-				ListEntity data = parseList(new ByteArrayInputStream(
-						reponseData));
-				new SaveCacheTask(getActivity(), data, getCacheKey()).execute();
-				list = data.getList();
-			} catch (Exception e) {
-				e.printStackTrace();
-				parserError = true;
+		protected CommentList doInBackground(String... params) {
+			if (mContext.get() != null) {
+				Serializable seri = CacheManager.readObject(mContext.get(),
+						params[0]);
+				if (seri == null) {
+					return null;
+				} else {
+					return (CommentList) seri;
+				}
 			}
 			return null;
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
-			super.onPostExecute(result);
-			if (parserError) {
-				readCacheData(getCacheKey());
-			} else {
+		protected void onPostExecute(CommentList list) {
+			super.onPostExecute(list);
+			if (list != null) {
 				executeOnLoadCommentDataSuccess(list);
-				executeOnLoadFinish();
+			} else {
+				executeOnLoadCommentDataError(null);
 			}
+			executeOnLoadCommentFinish();
 		}
 	}
-	
-}
 
+	private AsyncHttpResponseHandler mCommentHandler = new AsyncHttpResponseHandler() {
+
+		@Override
+		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+			try {
+				CommentList list = XmlUtils.toBean(CommentList.class, new ByteArrayInputStream(arg2));
+				executeOnLoadCommentDataSuccess(list);
+				new SaveCacheTask(getActivity(), list, getCacheCommentKey())
+						.execute();
+			} catch (Exception e) {
+				e.printStackTrace();
+				onFailure(arg0, arg1, arg2, e);
+			}
+		}
+
+		@Override
+		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+				Throwable arg3) {
+			mEmptyView.setErrorType(EmptyLayout.HIDE_LAYOUT);
+		}
+
+		public void onFinish() {
+			mState = STATE_NONE;
+		}
+	};
+
+	private void executeOnLoadCommentDataSuccess(CommentList list) {
+		if (mState == STATE_REFRESH)
+			mAdapter.clear();
+		List<Comment> data = list.getCommentlist();
+		mAdapter.addData(data);
+		mEmptyView.setErrorType(EmptyLayout.HIDE_LAYOUT);
+		if (data.size() == 0 && mState == STATE_REFRESH) {
+			mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
+		} else if (data.size() < TDevice.getPageSize()) {
+			if (mState == STATE_REFRESH)
+				mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
+			else
+				mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
+		} else {
+			mAdapter.setState(ListBaseAdapter.STATE_LOAD_MORE);
+		}
+	}
+
+	private void executeOnLoadCommentFinish() {
+		mState = STATE_NONE;
+	}
+
+	private void executeOnLoadCommentDataError(Object object) {
+		mEmptyView.setErrorType(EmptyLayout.NETWORK_ERROR);
+	}
+
+	@Override
+	public boolean onItemLongClick(AdapterView<?> parent, View view,
+			int position, long id) {
+//		final Comment item = (Comment) mAdapter.getItem(position - 1);
+//		if (item == null)
+//			return false;
+//		String[] items = new String[] { getResources().getString(R.string.copy) };
+//		final CommonDialog dialog = DialogHelper
+//				.getPinterestDialogCancelable(getActivity());
+//		dialog.setNegativeButton(R.string.cancle, null);
+//		dialog.setItemsWithoutChk(items, new OnItemClickListener() {
+//
+//			@Override
+//			public void onItemClick(AdapterView<?> parent, View view,
+//					int position, long id) {
+//				dialog.dismiss();
+//				TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(item
+//						.getContent()));
+//			}
+//		});
+//		dialog.show();
+		return true;
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void initView(View view) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void initData() {
+		// TODO Auto-generated method stub
+		
+	}
+}

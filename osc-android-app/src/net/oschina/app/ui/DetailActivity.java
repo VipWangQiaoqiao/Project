@@ -13,6 +13,7 @@ import net.oschina.app.fragment.PostDetailFragment;
 import net.oschina.app.fragment.SoftwareDetailFragment;
 import net.oschina.app.fragment.ToolbarFragment;
 import net.oschina.app.fragment.TweetDetailFragment;
+import net.oschina.app.fragment.TweetDetailFragment1;
 import net.oschina.app.interf.EmojiFragmentControl;
 import net.oschina.app.interf.ToolbarEmojiVisiableControl;
 import net.oschina.app.interf.ToolbarFragmentControl;
