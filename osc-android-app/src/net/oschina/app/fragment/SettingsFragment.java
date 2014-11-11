@@ -1,24 +1,17 @@
 package net.oschina.app.fragment;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-
-import org.apache.http.Header;
 
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.AppManager;
 import net.oschina.app.R;
-import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseFragment;
-import net.oschina.app.bean.Update;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.util.FileUtils;
 import net.oschina.app.util.MethodsCompat;
-import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
-import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.togglebutton.ToggleButton;
 import net.oschina.app.widget.togglebutton.ToggleButton.OnToggleChanged;
 import android.content.DialogInterface;
@@ -28,46 +21,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-import com.loopj.android.http.AsyncHttpResponseHandler;
-
 public class SettingsFragment extends BaseFragment {
-	
-	@InjectView(R.id.tb_loading_img) ToggleButton mTbLoadImg;
-	@InjectView(R.id.tv_cache_size) TextView mTvCacheSize;
-	
-	@InjectView(R.id.pb_loading) ProgressBar mPbCheckLoading;
-	@InjectView(R.id.tv_version) TextView mTvVersionStatus;
-	
-	private boolean mIsCheckingUpdate = true;
-	
-	private AsyncHttpResponseHandler mCheckUpdateHandle = new AsyncHttpResponseHandler() {
 
-		@Override
-		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-				Throwable arg3) {
-			if (getActivity() == null || !getActivity().isFinishing()) {
-				mIsCheckingUpdate = false;
-				mPbCheckLoading.setVisibility(View.GONE);
-				AppContext.showToast("未能获取到新版本信息");
-			}
-		}
-
-		@Override
-		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-			if (getActivity() == null || !getActivity().isFinishing()) { 
-				mIsCheckingUpdate = false;
-				mPbCheckLoading.setVisibility(View.GONE);
-				Update update = XmlUtils.toBean(Update.class, new ByteArrayInputStream(arg2));
-				mTvVersionStatus.setText(update.getUpdate().getAndroid().getVersionName());
-				mTvVersionStatus.setVisibility(View.VISIBLE);
-			}
-		}
-	};
+	@InjectView(R.id.tb_loading_img)
+	ToggleButton mTbLoadImg;
+	@InjectView(R.id.tv_cache_size)
+	TextView mTvCacheSize;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater,
@@ -79,7 +42,7 @@ public class SettingsFragment extends BaseFragment {
 		initData();
 		return view;
 	}
-	
+
 	@Override
 	public void initView(View view) {
 		mTbLoadImg.setOnToggleChanged(new OnToggleChanged() {
@@ -89,13 +52,11 @@ public class SettingsFragment extends BaseFragment {
 				AppContext.setLoadImage(on);
 			}
 		});
-		
+
 		view.findViewById(R.id.rl_loading_img).setOnClickListener(this);
-		view.findViewById(R.id.rl_notification_settings).setOnClickListener(this);
+		view.findViewById(R.id.rl_notification_settings).setOnClickListener(
+				this);
 		view.findViewById(R.id.rl_clean_cache).setOnClickListener(this);
-		view.findViewById(R.id.rl_check_update).setOnClickListener(this);
-		view.findViewById(R.id.rl_feedback).setOnClickListener(this);
-		view.findViewById(R.id.rl_grade).setOnClickListener(this);
 		view.findViewById(R.id.rl_about).setOnClickListener(this);
 		view.findViewById(R.id.rl_exit).setOnClickListener(this);
 	}
@@ -105,12 +66,8 @@ public class SettingsFragment extends BaseFragment {
 			mTbLoadImg.setToggleOn();
 		else
 			mTbLoadImg.setToggleOff();
-		
+
 		caculateCacheSize();
-		
-		mIsCheckingUpdate = true;
-		
-		checkUpdate();
 	}
 
 	/**
@@ -148,18 +105,8 @@ public class SettingsFragment extends BaseFragment {
 		case R.id.rl_clean_cache:
 			onClickCleanCache();
 			break;
-		case R.id.rl_check_update:
-			if (!mIsCheckingUpdate) {
-				checkUpdate();
-			}
-			break;
-		case R.id.rl_feedback:
-			showFeedBack();
-			break;
-		case R.id.rl_grade:
-			TDevice.openAppInMarket(getActivity());
-			break;
 		case R.id.rl_about:
+			UIHelper.showAboutOSC(getActivity());
 			break;
 		case R.id.rl_exit:
 			onClickExit();
@@ -167,9 +114,9 @@ public class SettingsFragment extends BaseFragment {
 		default:
 			break;
 		}
-		
+
 	}
-	
+
 	private void onClickCleanCache() {
 		CommonDialog dialog = DialogHelper
 				.getPinterestDialogCancelable(getActivity());
@@ -187,31 +134,22 @@ public class SettingsFragment extends BaseFragment {
 		dialog.setNegativeButton(R.string.cancle, null);
 		dialog.show();
 	}
-	
-	private void checkUpdate() {
-		mIsCheckingUpdate = true;
-		mPbCheckLoading.setVisibility(View.VISIBLE);
-		mTvVersionStatus.setVisibility(View.GONE);
-		OSChinaApi.checkUpdate(mCheckUpdateHandle);
-	}
-	
-	private void showFeedBack() {
-		TDevice.sendEmail(getActivity(), "用户反馈-OSC Android客户端", "", "apposchina@gmail.com");
-	}
-	
+
 	private void onClickExit() {
 		final CommonDialog dialog = DialogHelper
 				.getPinterestDialogCancelable(getActivity());
-		
+
 		OnClickListener click = new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				int id = v.getId();
 				dialog.dismiss();
 				switch (id) {
 				case R.id.rl_app_exit:
-					AppContext.set(AppConfig.KEY_NOTIFICATION_DISABLE_WHEN_EXIT, false);
+					AppContext
+							.set(AppConfig.KEY_NOTIFICATION_DISABLE_WHEN_EXIT,
+									false);
 					AppManager.getAppManager().AppExit(getActivity());
 					getActivity().finish();
 					break;

@@ -391,7 +391,7 @@ public class TDevice {
 			}
 		}
 	}
-
+	
 	public static void setFullScreen(Activity activity) {
 		WindowManager.LayoutParams params = activity.getWindow()
 				.getAttributes();

@@ -1,6 +1,7 @@
 package net.oschina.app.bean;
 
 import net.oschina.app.R;
+import net.oschina.app.fragment.AboutOSCFragment;
 import net.oschina.app.fragment.ActiveFragment;
 import net.oschina.app.fragment.CommentFrament;
 import net.oschina.app.fragment.MessageDetailFragment;
@@ -50,7 +51,9 @@ public enum SimpleBackPage {
 	
 	SETTING(15, R.string.actionbar_title_setting, SettingsFragment.class),
 	
-	SETTING_NOTIFICATION(16, R.string.actionbar_title_setting_notification, SettingsNotificationFragment.class);
+	SETTING_NOTIFICATION(16, R.string.actionbar_title_setting_notification, SettingsNotificationFragment.class),
+	
+	ABOUT_OSC(17, R.string.actionbar_title_about_osc, AboutOSCFragment.class);
 		
 	private int title;
 	private Class<?> clz;

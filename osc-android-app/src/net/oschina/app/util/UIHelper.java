@@ -710,6 +710,14 @@ public class UIHelper {
 	}
 	
 	/**
+	 * 显示关于界面
+	 * @param context
+	 */
+	public static void showAboutOSC(Context context) {
+		showSimpleBack(context, SimpleBackPage.ABOUT_OSC);
+	}
+	
+	/**
 	 * 清除app缓存
 	 * 
 	 * @param activity
