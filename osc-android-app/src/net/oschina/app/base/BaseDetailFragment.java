@@ -127,23 +127,6 @@ public class BaseDetailFragment extends BaseFragment implements
 			ZoomButtonsController zbc = new ZoomButtonsController(webView);
 			zbc.getZoomControls().setVisibility(View.GONE);
 		}
-		UIHelper.addWebImageShow(getActivity(), webView);
-	}
-
-	public class JavaScriptInterface {
-
-		private Context ctx;
-
-		public JavaScriptInterface(Context ctx) {
-			this.ctx = ctx;
-		}
-
-		public void onImageClick(String bigImageUrl) {
-			if (bigImageUrl != null) {
-				// UIHelper.showImageZoomDialog(cxt, bigImageUrl);
-				UIHelper.showImagePreview(ctx, new String[] { bigImageUrl });
-			}
-		}
 	}
 
 	protected void recycleWebView() {

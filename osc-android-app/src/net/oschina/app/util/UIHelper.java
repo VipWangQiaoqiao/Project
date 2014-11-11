@@ -83,7 +83,7 @@ public class UIHelper {
 
 	public static final String WEB_LOAD_IMAGES = "<script type=\"text/javascript\"> var allImgUrls = getAllImgSrc(document.body.innerHTML);</script>";
 
-	private static final String IAM_API_SHOWIMAGE = "ima-api:action=showImage&data=";
+	private static final String SHOWIMAGE = "ima-api:action=showImage&data=";
 
 	/**
 	 * 显示登录界面
@@ -194,7 +194,7 @@ public class UIHelper {
 			String objId = news.getNewType().attachment;
 			switch (newsType) {
 			case News.NEWSTYPE_NEWS:
-				showNewsDetail(context, newsId); 
+				showNewsDetail(context, newsId);
 				break;
 			case News.NEWSTYPE_SOFTWARE:
 				showSoftwareDetail(context, objId);
@@ -268,10 +268,12 @@ public class UIHelper {
 
 	public static String setHtmlCotentSupportImagePreview(String body) {
 		// 读取用户设置：是否加载文章图片--默认有wifi下始终加载图片
-		if (AppContext.get(AppConfig.KEY_LOAD_IMAGE, true) || TDevice.isWifiOpen()) {
+		if (AppContext.get(AppConfig.KEY_LOAD_IMAGE, true)
+				|| TDevice.isWifiOpen()) {
 			// 过滤掉 img标签的width,height属性
 			body = body.replaceAll("(<img[^>]*?)\\s+width\\s*=\\s*\\S+", "$1");
 			body = body.replaceAll("(<img[^>]*?)\\s+height\\s*=\\s*\\S+", "$1");
+			// 添加点击图片放大支持
 			// 添加点击图片放大支持
 			body = body.replaceAll("(<img[^>]+src=\")(\\S+)\"",
 					"$1$2\" onClick=\"showImagePreview('$2')\"");
@@ -289,8 +291,8 @@ public class UIHelper {
 	 * @param url
 	 */
 	public static void showUrlRedirect(Context context, String url) {
-		if (url.startsWith(IAM_API_SHOWIMAGE)) {
-			String realUrl = url.substring(IAM_API_SHOWIMAGE.length());
+		if (url.startsWith(SHOWIMAGE)) {
+			String realUrl = url.substring(SHOWIMAGE.length());
 			try {
 				JSONObject json = new JSONObject(realUrl);
 				int idx = json.optInt("index");
@@ -527,8 +529,8 @@ public class UIHelper {
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
 						// 发送异常报告
-						TDevice.sendEmail(context, "OSCAndroid客户端耍脾气 - 症状诊断报告", crashReport, 
-								"apposchina@gmail.com");
+						TDevice.sendEmail(context, "OSCAndroid客户端耍脾气 - 症状诊断报告",
+								crashReport, "apposchina@gmail.com");
 						// 退出
 						AppManager.getAppManager().AppExit(context);
 					}
@@ -657,15 +659,16 @@ public class UIHelper {
 
 	/**
 	 * 显示用户收藏界面
+	 * 
 	 * @param activity
 	 */
 	public static void showUserFavorite(Context context, int uid) {
-		
+
 		Bundle args = new Bundle();
 		args.putInt(BaseListFragment.BUNDLE_KEY_CATALOG, uid);
 		showSimpleBack(context, SimpleBackPage.USER_FAVORITE);
 	}
-	
+
 	/*
 	 * 显示用户的关注/粉丝列表
 	 * 
@@ -677,7 +680,7 @@ public class UIHelper {
 		args.putInt(FriendsFragment.BUNDLE_KEY_UID, uid);
 		showSimpleBack(context, SimpleBackPage.MY_FRIENDS, args);
 	}
-	
+
 	/**
 	 * 显示留言对话页面
 	 * 
@@ -692,31 +695,34 @@ public class UIHelper {
 		args.putString(MessageDetailFragment.BUNDLE_KEY_FNAME, friendname);
 		showSimpleBack(context, SimpleBackPage.MESSAGE_DETAIL, args);
 	}
-	
+
 	/**
 	 * 显示设置界面
+	 * 
 	 * @param context
 	 */
 	public static void showSetting(Context context) {
 		showSimpleBack(context, SimpleBackPage.SETTING);
 	}
-	
+
 	/**
 	 * 显示通知设置界面
+	 * 
 	 * @param context
 	 */
 	public static void showSettingNotification(Context context) {
 		showSimpleBack(context, SimpleBackPage.SETTING_NOTIFICATION);
 	}
-	
+
 	/**
 	 * 显示关于界面
+	 * 
 	 * @param context
 	 */
 	public static void showAboutOSC(Context context) {
 		showSimpleBack(context, SimpleBackPage.ABOUT_OSC);
 	}
-	
+
 	/**
 	 * 清除app缓存
 	 * 

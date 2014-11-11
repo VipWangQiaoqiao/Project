@@ -15,7 +15,6 @@ import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.Post;
 import net.oschina.app.bean.PostDetail;
-import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.emoji.EmojiFragment;
 import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
 import net.oschina.app.fragment.ToolbarFragment.OnActionClickListener;
@@ -174,6 +173,7 @@ public class PostDetailFragment extends BaseDetailFragment implements
 				+ "<div style=\"margin-bottom: 80px\" />";
 		body = UIHelper.setHtmlCotentSupportImagePreview(body);
 		body += UIHelper.WEB_LOAD_IMAGES;
+		UIHelper.addWebImageShow(getActivity(), mWebView);
 		mWebView.setWebViewClient(mWebClient);
 		mWebView.loadDataWithBaseURL(null, body, "text/html", "utf-8", null);
 	}

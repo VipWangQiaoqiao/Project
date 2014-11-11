@@ -35,6 +35,8 @@ public class AboutOSCFragment extends BaseFragment {
 	
 	@InjectView(R.id.tv_version_name)
 	TextView mTvVersionName;
+	
+	private Update mUpdate;
 
 	private boolean mIsCheckingUpdate = true;
 
@@ -46,7 +48,8 @@ public class AboutOSCFragment extends BaseFragment {
 			if (getActivity() == null || !getActivity().isFinishing()) {
 				mIsCheckingUpdate = false;
 				mPbCheckLoading.setVisibility(View.GONE);
-				AppContext.showToast("未能获取到新版本信息");
+				mTvVersionStatus.setText("未能获取到新版本信息");
+				mTvVersionStatus.setTag(false);
 			}
 		}
 
@@ -55,11 +58,11 @@ public class AboutOSCFragment extends BaseFragment {
 			if (getActivity() == null || !getActivity().isFinishing()) {
 				mIsCheckingUpdate = false;
 				mPbCheckLoading.setVisibility(View.GONE);
-				Update update = XmlUtils.toBean(Update.class,
+				mUpdate = XmlUtils.toBean(Update.class,
 						new ByteArrayInputStream(arg2));
 				int curVersionCode = TDevice.getVersionCode(AppContext
 						.getInstance().getPackageName());
-				if (curVersionCode < update.getUpdate().getAndroid()
+				if (curVersionCode < mUpdate.getUpdate().getAndroid()
 						.getVersionCode()) {
 					mTvVersionStatus.setText("发现新版本");
 					mTvVersionStatus.setTextColor(getResources().getColor(
@@ -71,6 +74,7 @@ public class AboutOSCFragment extends BaseFragment {
 					mTvVersionStatus.setTag(true);
 				} else {
 					mTvVersionStatus.setText("已经是最新版");
+					mTvVersionStatus.setTag(null);
 				}
 				mTvVersionStatus.setVisibility(View.VISIBLE);
 			}
@@ -135,9 +139,9 @@ public class AboutOSCFragment extends BaseFragment {
 	}
 
 	private void onClickUpdate() {
-		if ((Boolean) mTvVersionStatus.getTag()) {
-			AppContext.showToast("已经有新版本");
-		} else {
+		if (mTvVersionStatus.getTag() != null && (Boolean) mTvVersionStatus.getTag()) {
+			UIHelper.openBrowser(getActivity(), mUpdate.getUpdate().getAndroid().getDownloadUrl());
+		} else if (mTvVersionStatus.getTag() != null) {
 			checkUpdate();
 		}
 	}

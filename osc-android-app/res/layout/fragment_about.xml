@@ -64,6 +64,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/main_gray"
                     android:textSize="@dimen/text_size_14"
+                    android:tag="false"
                     android:visibility="gone" />
             </LinearLayout>
         </RelativeLayout>

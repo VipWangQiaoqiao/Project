@@ -56,7 +56,6 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
 	protected static final String TAG = SoftwareDetailFragment.class
 			.getSimpleName();
 	private static final String SOFTWARE_CACHE_KEY = "software_";
-	private static final String SOFTWARE_DETAIL_SCREEN = "software_detail_screen";
 	
 	@InjectView(R.id.tv_software_license)
 	TextView mTvLicense;
@@ -213,7 +212,7 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
 		String body = UIHelper.WEB_STYLE + mSoftware.getBody();
 		body = UIHelper.setHtmlCotentSupportImagePreview(body);
 		body += UIHelper.WEB_LOAD_IMAGES;
-		mWebView.setWebViewClient(mWebClient);
+		UIHelper.addWebImageShow(getActivity(), mWebView);
 		mWebView.loadDataWithBaseURL(null, body, "text/html", "utf-8", null);
 	}
 

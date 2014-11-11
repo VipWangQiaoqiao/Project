@@ -28,6 +28,7 @@ import net.oschina.app.service.ServerTaskUtils;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
+import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import android.app.Activity;
@@ -47,7 +48,6 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 	protected static final String TAG = NewsDetailFragment.class
 			.getSimpleName();
 	private static final String NEWS_CACHE_KEY = "news_";
-	private static final String NEWS_DETAIL_SCREEN = "news_detail_screen";
 	@InjectView(R.id.tv_title) TextView mTvTitle;
 	@InjectView(R.id.tv_source) TextView mTvSource;
 	@InjectView(R.id.tv_time) TextView mTvTime;
@@ -209,9 +209,8 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 		body += "<br/>";
 
 		body += UIHelper.WEB_LOAD_IMAGES;
-
-		mWebView.setWebViewClient(mWebClient);
 		UIHelper.addWebImageShow(getActivity(), mWebView);
+		mWebView.setWebViewClient(mWebClient);
 		mWebView.loadDataWithBaseURL(null, body, "text/html", "utf-8", null);
 	}
 
