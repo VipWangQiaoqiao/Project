@@ -20,11 +20,8 @@
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/space_2"
-            android:layout_marginTop="@dimen/space_4"
             android:layout_toRightOf="@id/iv_avatar"
             android:textColor="@color/main_purple"
-            android:text="火蚁"
             android:textSize="@dimen/text_size_16" />
 
         <TextView
@@ -33,7 +30,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_name"
             android:layout_toRightOf="@id/iv_avatar"
-            android:text="4天前"
             android:textColor="@color/main_gray"
             android:textSize="@dimen/text_size_12" />
 
@@ -41,9 +37,10 @@
             android:id="@+id/tv_from"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_name"
             android:layout_alignParentRight="true"
-            android:text="Android"
+            android:layout_below="@id/tv_name"
+            android:drawableLeft="@drawable/platform"
+            android:drawablePadding="@dimen/space_5"
             android:textColor="@color/main_gray"
             android:textSize="@dimen/text_size_12" />
     </RelativeLayout>
@@ -68,8 +65,9 @@
             android:id="@+id/iv_pic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/space_8"
+            android:layout_marginBottom="@dimen/space_8"
             android:contentDescription="@null"
-            android:layout_margin="@dimen/space_8"
             android:maxHeight="150dp"
             android:maxWidth="150dp"
             android:src="@drawable/pic_bg"

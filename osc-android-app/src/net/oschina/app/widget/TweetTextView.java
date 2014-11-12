@@ -11,6 +11,9 @@ import android.view.MotionEvent;
 import android.widget.TextView;
 
 public class TweetTextView extends TextView {
+	
+	private final static String AT_HOST_PRE = "https://my.oschina.net";
+	private final static String MAIN_HOST = "https://www.oschina.net";
 
 	private boolean dispatchToParent;
 
@@ -99,5 +102,14 @@ public class TweetTextView extends TextView {
 
 	public void setDispatchToParent(boolean flag) {
 		dispatchToParent = flag;
+	}
+	
+	public static String modifyPath(String message) {
+		message = message.replaceAll("(<a[^>]+href=\")/([\\S]+)\"", "$1"
+				+ AT_HOST_PRE + "/$2\"");
+		message = message.replaceAll(
+				"(<a[^>]+href=\")http://m.oschina.net([\\S]+)\"", "$1"
+						+ MAIN_HOST + "$2\"");
+		return message;
 	}
 }

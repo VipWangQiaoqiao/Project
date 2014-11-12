@@ -30,8 +30,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  * @date 2014年10月10日
  */
 public class TweetAdapter extends ListBaseAdapter {
-	private final static String AT_HOST_PRE = "http://my.oschina.net";
-	private final static String MAIN_HOST = "http://www.oschina.net";
 
 	static class ViewHolder {
 
@@ -80,7 +78,7 @@ public class TweetAdapter extends ListBaseAdapter {
 		vh.content.setFocusable(false);
 		vh.content.setDispatchToParent(true);
 		vh.content.setLongClickable(false);
-		Spanned span = Html.fromHtml(modifyPath(tweet.getBody()));
+		Spanned span = Html.fromHtml(TweetTextView.modifyPath(tweet.getBody()));
 		vh.content.setText(span);
 		MyURLSpan.parseLinkText(vh.content, span);
 
@@ -111,15 +109,6 @@ public class TweetAdapter extends ListBaseAdapter {
 			break;
 		}
 		return convertView;
-	}
-
-	private String modifyPath(String message) {
-		message = message.replaceAll("(<a[^>]+href=\")/([\\S]+)\"", "$1"
-				+ AT_HOST_PRE + "/$2\"");
-		message = message.replaceAll(
-				"(<a[^>]+href=\")http://m.oschina.net([\\S]+)\"", "$1"
-						+ MAIN_HOST + "$2\"");
-		return message;
 	}
 
 	private void showTweetImage(ViewHolder vh, String imgSmall,

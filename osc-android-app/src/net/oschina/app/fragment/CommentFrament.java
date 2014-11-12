@@ -28,6 +28,9 @@ import net.oschina.app.emoji.EmojiFragment;
 import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
 import net.oschina.app.service.PublicCommentTask;
 import net.oschina.app.service.ServerTaskUtils;
+import net.oschina.app.ui.dialog.CommonDialog;
+import net.oschina.app.ui.dialog.DialogHelper;
+import net.oschina.app.util.HTMLSpirit;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
@@ -39,6 +42,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 
 public class CommentFrament extends BaseListFragment implements
@@ -338,24 +342,24 @@ public class CommentFrament extends BaseListFragment implements
 	@Override
 	public boolean onItemLongClick(AdapterView<?> parent, View view,
 			int position, long id) {
-//		final Comment item = (Comment) mAdapter.getItem(position - 1);
-//		if (item == null)
-//			return false;
-//		String[] items = new String[] { getResources().getString(R.string.copy) };
-//		final CommonDialog dialog = DialogHelper
-//				.getPinterestDialogCancelable(getActivity());
-//		dialog.setNegativeButton(R.string.cancle, null);
-//		dialog.setItemsWithoutChk(items, new OnItemClickListener() {
-//
-//			@Override
-//			public void onItemClick(AdapterView<?> parent, View view,
-//					int position, long id) {
-//				dialog.dismiss();
-//				TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(item
-//						.getContent()));
-//			}
-//		});
-//		dialog.show();
+		final Comment item = (Comment) mAdapter.getItem(position - 1);
+		if (item == null)
+			return false;
+		String[] items = new String[] { getResources().getString(R.string.copy) };
+		final CommonDialog dialog = DialogHelper
+				.getPinterestDialogCancelable(getActivity());
+		dialog.setNegativeButton(R.string.cancle, null);
+		dialog.setItemsWithoutChk(items, new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				dialog.dismiss();
+				TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(item
+						.getContent()));
+			}
+		});
+		dialog.show();
 		return true;
 	}
 

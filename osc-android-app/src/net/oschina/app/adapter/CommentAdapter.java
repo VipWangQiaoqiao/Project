@@ -64,7 +64,7 @@ public class CommentAdapter extends ListBaseAdapter {
 		vh.content.setFocusable(false);
 		vh.content.setDispatchToParent(true);
 		vh.content.setLongClickable(false);
-		Spanned span = Html.fromHtml(item.getContent());
+		Spanned span = Html.fromHtml(TweetTextView.modifyPath(item.getContent()));
 		vh.content.setText(span);
 		MyURLSpan.parseLinkText(vh.content, span);
 

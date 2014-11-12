@@ -15,10 +15,10 @@ import net.oschina.app.base.BaseFragment;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.CommentList;
-import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.Tweet;
+import net.oschina.app.bean.TweetDetail;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.emoji.EmojiFragment;
 import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
@@ -28,6 +28,7 @@ import net.oschina.app.service.ServerTaskUtils;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.HTMLSpirit;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -41,7 +42,6 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -157,10 +157,10 @@ public class TweetDetailFragment extends BaseFragment implements
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-//		IntentFilter filter = new IntentFilter(
-//				Constants.INTENT_ACTION_COMMENT_CHANGED);
-//		mCommentReceiver = new CommentChangeReceiver();
-//		getActivity().registerReceiver(mCommentReceiver, filter);
+		// IntentFilter filter = new IntentFilter(
+		// Constants.INTENT_ACTION_COMMENT_CHANGED);
+		// mCommentReceiver = new CommentChangeReceiver();
+		// getActivity().registerReceiver(mCommentReceiver, filter);
 		super.onCreate(savedInstanceState);
 	}
 
@@ -175,8 +175,8 @@ public class TweetDetailFragment extends BaseFragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_tweet_detail,
-				container, false);
+		View view = inflater.inflate(R.layout.fragment_tweet_detail, container,
+				false);
 		mTweetId = getActivity().getIntent().getIntExtra("tweet_id", 0);
 
 		initViews(view);
@@ -188,7 +188,7 @@ public class TweetDetailFragment extends BaseFragment implements
 	@SuppressLint("InflateParams")
 	private void initViews(View view) {
 		mEmptyView = (EmptyLayout) view.findViewById(R.id.error_layout);
-		mListView = (ListView) view.findViewById(R.id.listview);
+		mListView = (ListView) view.findViewById(R.id.tweet_detail_listview);
 		mListView.setOnScrollListener(mScrollListener);
 		mListView.setOnItemClickListener(this);
 		mListView.setOnItemLongClickListener(this);
@@ -251,7 +251,7 @@ public class TweetDetailFragment extends BaseFragment implements
 		mTvTime.setText(StringUtils.friendly_time(mTweet.getPubDate()));
 		switch (mTweet.getAppclient()) {
 		default:
-			mTvFrom.setText("");
+			mTvFrom.setVisibility(View.GONE);
 			break;
 		case Tweet.CLIENT_MOBILE:
 			mTvFrom.setText(R.string.from_mobile);
@@ -273,14 +273,13 @@ public class TweetDetailFragment extends BaseFragment implements
 		mTvCommentCount.setText(getString(R.string.comment_count,
 				mTweet.getCommentCount()));
 
-
 		// set content
 		String body = UIHelper.WEB_STYLE + mTweet.getBody();
 		body = body.replaceAll("(<img[^>]*?)\\s+width\\s*=\\s*\\S+", "$1");
 		body = body.replaceAll("(<img[^>]*?)\\s+height\\s*=\\s*\\S+", "$1");
 
 		mContent.loadDataWithBaseURL(null, body, "text/html", "utf-8", null);
-		//mContent.setWebViewClient(UIHelper.getWebViewClient());
+		// mContent.setWebViewClient(UIHelper.getWebViewClient());
 
 		if (TextUtils.isEmpty(mTweet.getImgSmall())) {
 			return;
@@ -332,6 +331,30 @@ public class TweetDetailFragment extends BaseFragment implements
 			mEmojiFragment.requestFocusInput();
 			return;
 		}
+
+		if (mEmojiFragment.getInputTag() != null) {
+			handleReplyComment((Comment) mEmojiFragment.getInputTag(), text);
+		} else {
+			handleComment(text);
+		}
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		final Comment comment = (Comment) mAdapter.getItem(position - 1);
+		if (comment == null)
+			return;
+		mEmojiFragment.setTag(comment);
+		mEmojiFragment.setInputHint("回复" + comment.getAuthor() + ":");
+		mEmojiFragment.requestFocusInput();
+	}
+
+	@Override
+	public void onMoreClick(final Comment comment) {
+	}
+
+	private void handleComment(String text) {
 		PublicCommentTask task = new PublicCommentTask();
 		task.setId(mTweetId);
 		task.setCatalog(CommentList.CATALOG_TWEET);
@@ -342,62 +365,63 @@ public class TweetDetailFragment extends BaseFragment implements
 		mEmojiFragment.reset();
 	}
 
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-//		final Comment comment = (Comment) mAdapter.getItem(position - 1);
-//		if (comment == null)
-//			return;
-//		if (AppContext.getInstance().isLogin()
-//				&& AppContext.getInstance().getLoginUid() == comment.getAuthorId()) {
-//			final CommonDialog dialog = DialogHelper
-//					.getPinterestDialogCancelable(getActivity());
-//			String[] items = new String[] { getString(R.string.reply),
-//					getString(R.string.delete) };
-//			dialog.setTitle(R.string.operation);
-//			dialog.setItemsWithoutChk(items, new OnItemClickListener() {
-//
-//				@Override
-//				public void onItemClick(AdapterView<?> parent, View view,
-//						int position, long id) {
-//					dialog.dismiss();
-//					if (position == 0) {
-//						handleReplyComment(comment);
-//					} else if (position == 1) {
-//						handleDeleteComment(comment);
-//					}
-//				}
-//
-//			});
-//			dialog.setNegativeButton(R.string.cancle, null);
-//			dialog.show();
-//		} else {
-//			handleReplyComment(comment);
-//		}
-	}
+	private void handleReplyComment(Comment comment, String text) {
+		showWaitDialog(R.string.progress_submit);
+		if (!AppContext.getInstance().isLogin()) {
+			UIHelper.showLoginActivity(getActivity());
+			return;
+		}
 
-	@Override
-	public void onMoreClick(final Comment comment) {
-	}
+		AsyncHttpResponseHandler mReplyCommentHandler = new AsyncHttpResponseHandler() {
 
-	private void handleReplyComment(Comment comment) {
-//		if (!AppContext.instance().isLogin()) {
-//			UIHelper.showLogin(getActivity());
-//			return;
-//		}
-//		UIHelper.showReplyCommentForResult(this, REQUEST_CODE, false, mTweetId,
-//				CommentList.CATALOG_TWEET, comment);
+			@Override
+			public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+				try {
+					ResultBean rsb = XmlUtils.toBean(ResultBean.class,
+							new ByteArrayInputStream(arg2));
+					Result res = rsb.getResult();
+					if (res.OK()) {
+						hideWaitDialog();
+						AppContext
+								.showToastShort(R.string.comment_publish_success);
+
+						mAdapter.addItem(0, rsb.getComment());
+						mEmojiFragment.reset();
+						// UIHelper.sendBroadCastCommentChanged(getActivity(),
+						// mIsBlogComment, mId, mCatalog, Comment.OPT_ADD,
+						// res.getComment());
+					} else {
+						hideWaitDialog();
+						AppContext.showToastShort(res.getErrorMessage());
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+					onFailure(arg0, arg1, arg2, e);
+				}
+			}
+
+			@Override
+			public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+					Throwable arg3) {
+				hideWaitDialog();
+				AppContext.showToastShort(R.string.comment_publish_faile);
+			}
+		};
+
+		OSChinaApi.replyComment(mTweetId, CommentList.CATALOG_TWEET, comment
+				.getId(), comment.getAuthorId(), AppContext.getInstance()
+				.getLoginUid(), text, mReplyCommentHandler);
 	}
 
 	private void handleDeleteComment(Comment comment) {
-//		if (!AppContext.getInstance().isLogin()) {
-//			UIHelper.showLoginActivity(getActivity());
-//			return;
-//		}
-//		AppContext.showToastShort(R.string.deleting);
-//		OSChinaApi.deleteComment(mTweetId, CommentList.CATALOG_TWEET,
-//				comment.getId(), comment.getAuthorId(),
-//				new DeleteOperationResponseHandler(comment));
+		if (!AppContext.getInstance().isLogin()) {
+			UIHelper.showLoginActivity(getActivity());
+			return;
+		}
+		AppContext.showToastShort(R.string.deleting);
+		OSChinaApi.deleteComment(mTweetId, CommentList.CATALOG_TWEET,
+				comment.getId(), comment.getAuthorId(),
+				new DeleteOperationResponseHandler(comment));
 	}
 
 	class DeleteOperationResponseHandler extends OperationResponseHandler {
@@ -411,7 +435,7 @@ public class TweetDetailFragment extends BaseFragment implements
 			try {
 				Result res = XmlUtils.toBean(ResultBean.class, is).getResult();
 				if (res.OK()) {
-					//AppContext.showToastShort(R.string.delete_success);
+					AppContext.showToastShort(R.string.delete_success);
 
 					mAdapter.removeItem(args[0]);
 
@@ -429,7 +453,7 @@ public class TweetDetailFragment extends BaseFragment implements
 
 		@Override
 		public void onFailure(int code, String errorMessage, Object[] args) {
-			//AppContext.showToastShort(R.string.delete_faile);
+			AppContext.showToastShort(R.string.delete_faile);
 		}
 	}
 
@@ -507,7 +531,8 @@ public class TweetDetailFragment extends BaseFragment implements
 		@Override
 		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 			try {
-				mTweet = XmlUtils.toBean(Tweet.class, new ByteArrayInputStream(arg2));
+				mTweet = XmlUtils.toBean(TweetDetail.class,
+						new ByteArrayInputStream(arg2)).getTweet();
 				if (mTweet != null && mTweet.getId() > 0) {
 					executeOnLoadDataSuccess(mTweet);
 					new SaveCacheTask(getActivity(), mTweet, getCacheKey())
@@ -607,7 +632,8 @@ public class TweetDetailFragment extends BaseFragment implements
 		@Override
 		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 			try {
-				CommentList list = XmlUtils.toBean(CommentList.class, new ByteArrayInputStream(arg2));
+				CommentList list = XmlUtils.toBean(CommentList.class,
+						new ByteArrayInputStream(arg2));
 				executeOnLoadCommentDataSuccess(list);
 				new SaveCacheTask(getActivity(), list, getCacheCommentKey())
 						.execute();
@@ -657,42 +683,41 @@ public class TweetDetailFragment extends BaseFragment implements
 	@Override
 	public boolean onItemLongClick(AdapterView<?> parent, View view,
 			int position, long id) {
-//		final Comment item = (Comment) mAdapter.getItem(position - 1);
-//		if (item == null)
-//			return false;
-//		String[] items = new String[] { getResources().getString(R.string.copy) };
-//		final CommonDialog dialog = DialogHelper
-//				.getPinterestDialogCancelable(getActivity());
-//		dialog.setNegativeButton(R.string.cancle, null);
-//		dialog.setItemsWithoutChk(items, new OnItemClickListener() {
-//
-//			@Override
-//			public void onItemClick(AdapterView<?> parent, View view,
-//					int position, long id) {
-//				dialog.dismiss();
-//				TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(item
-//						.getContent()));
-//			}
-//		});
-//		dialog.show();
+		final Comment item = (Comment) mAdapter.getItem(position - 1);
+		if (item == null)
+			return false;
+		String[] items = new String[] { getResources().getString(R.string.copy) };
+		final CommonDialog dialog = DialogHelper
+				.getPinterestDialogCancelable(getActivity());
+		dialog.setNegativeButton(R.string.cancle, null);
+		dialog.setItemsWithoutChk(items, new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				dialog.dismiss();
+				TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(item.getContent()));
+			}
+		});
+		dialog.show();
 		return true;
 	}
 
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void initView(View view) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void initData() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
