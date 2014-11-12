@@ -73,7 +73,6 @@ public class TweetDetailFragment extends BaseFragment implements
 		OnItemClickListener, OnItemLongClickListener {
 	protected static final String TAG = TweetDetailFragment.class
 			.getSimpleName();
-	private static final int REQUEST_CODE = 0x1;
 	private static final String CACHE_KEY_PREFIX = "tweet_";
 	private static final String CACHE_KEY_TWEET_COMMENT = "tweet_comment_";
 	private ListView mListView;
@@ -87,6 +86,41 @@ public class TweetDetailFragment extends BaseFragment implements
 	private CommentAdapter mAdapter;
 	private EmojiFragment mEmojiFragment;
 	private BroadcastReceiver mCommentReceiver;
+
+	private AsyncHttpResponseHandler mCommentHandler = new AsyncHttpResponseHandler() {
+
+		@Override
+		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+			try {
+				ResultBean rsb = XmlUtils.toBean(ResultBean.class,
+						new ByteArrayInputStream(arg2));
+				Result res = rsb.getResult();
+				if (res.OK()) {
+					hideWaitDialog();
+					AppContext.showToastShort(R.string.comment_publish_success);
+					mAdapter.addItem(0, rsb.getComment());
+					mEmojiFragment.reset();
+					setTweetCommentCount(1);
+					// UIHelper.sendBroadCastCommentChanged(getActivity(),
+					// mIsBlogComment, mId, mCatalog, Comment.OPT_ADD,
+					// res.getComment());
+				} else {
+					hideWaitDialog();
+					AppContext.showToastShort(res.getErrorMessage());
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				onFailure(arg0, arg1, arg2, e);
+			}
+		}
+
+		@Override
+		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+				Throwable arg3) {
+			hideWaitDialog();
+			AppContext.showToastShort(R.string.comment_publish_faile);
+		}
+	};
 
 	class CommentChangeReceiver extends BroadcastReceiver {
 
@@ -125,21 +159,6 @@ public class TweetDetailFragment extends BaseFragment implements
 			}
 		}
 	};
-
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-			Comment comment = data
-					.getParcelableExtra(Comment.BUNDLE_KEY_COMMENT);
-			if (comment != null && mTweet != null) {
-				// mAdapter.addItem(0, comment);
-				// mTweet.setCommentCount(mTweet.getCommentCount() + 1);
-				// mTvCommentCount.setText(getString(R.string.comment_count,
-				// mTweet.getCommentCount()));
-			}
-		}
-		super.onActivityResult(requestCode, resultCode, data);
-	}
 
 	private void onCommentChanged(int opt, int id, int catalog, boolean isBlog,
 			Comment comment) {
@@ -306,7 +325,7 @@ public class TweetDetailFragment extends BaseFragment implements
 
 	private void sendRequestCommentData() {
 		OSChinaApi.getCommentList(mTweetId, CommentList.CATALOG_TWEET,
-				mCurrentPage, mCommentHandler);
+				mCurrentPage, mCommentListHandler);
 	}
 
 	@Override
@@ -332,11 +351,7 @@ public class TweetDetailFragment extends BaseFragment implements
 			return;
 		}
 
-		if (mEmojiFragment.getInputTag() != null) {
-			handleReplyComment((Comment) mEmojiFragment.getInputTag(), text);
-		} else {
-			handleComment(text);
-		}
+		handleComment(text);
 	}
 
 	@Override
@@ -355,62 +370,22 @@ public class TweetDetailFragment extends BaseFragment implements
 	}
 
 	private void handleComment(String text) {
-		PublicCommentTask task = new PublicCommentTask();
-		task.setId(mTweetId);
-		task.setCatalog(CommentList.CATALOG_TWEET);
-		task.setIsPostToMyZone(0);
-		task.setContent(text);
-		task.setUid(AppContext.getInstance().getLoginUid());
-		ServerTaskUtils.pubTweetComment(getActivity(), task);
-		mEmojiFragment.reset();
-	}
-
-	private void handleReplyComment(Comment comment, String text) {
 		showWaitDialog(R.string.progress_submit);
 		if (!AppContext.getInstance().isLogin()) {
 			UIHelper.showLoginActivity(getActivity());
 			return;
 		}
-
-		AsyncHttpResponseHandler mReplyCommentHandler = new AsyncHttpResponseHandler() {
-
-			@Override
-			public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-				try {
-					ResultBean rsb = XmlUtils.toBean(ResultBean.class,
-							new ByteArrayInputStream(arg2));
-					Result res = rsb.getResult();
-					if (res.OK()) {
-						hideWaitDialog();
-						AppContext
-								.showToastShort(R.string.comment_publish_success);
-
-						mAdapter.addItem(0, rsb.getComment());
-						mEmojiFragment.reset();
-						// UIHelper.sendBroadCastCommentChanged(getActivity(),
-						// mIsBlogComment, mId, mCatalog, Comment.OPT_ADD,
-						// res.getComment());
-					} else {
-						hideWaitDialog();
-						AppContext.showToastShort(res.getErrorMessage());
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-					onFailure(arg0, arg1, arg2, e);
-				}
-			}
-
-			@Override
-			public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-					Throwable arg3) {
-				hideWaitDialog();
-				AppContext.showToastShort(R.string.comment_publish_faile);
-			}
-		};
-
-		OSChinaApi.replyComment(mTweetId, CommentList.CATALOG_TWEET, comment
-				.getId(), comment.getAuthorId(), AppContext.getInstance()
-				.getLoginUid(), text, mReplyCommentHandler);
+		if (mEmojiFragment.getInputTag() != null) {
+			Comment comment = (Comment) mEmojiFragment.getInputTag();
+			OSChinaApi.replyComment(mTweetId, CommentList.CATALOG_TWEET, comment
+					.getId(), comment.getAuthorId(), AppContext.getInstance()
+					.getLoginUid(), text, mCommentHandler);
+		} else {
+			OSChinaApi.publicComment(CommentList.CATALOG_TWEET, mTweetId,
+					AppContext.getInstance().getLoginUid(), text, 0,
+					mCommentHandler);
+		}
+		
 	}
 
 	private void handleDeleteComment(Comment comment) {
@@ -436,12 +411,8 @@ public class TweetDetailFragment extends BaseFragment implements
 				Result res = XmlUtils.toBean(ResultBean.class, is).getResult();
 				if (res.OK()) {
 					AppContext.showToastShort(R.string.delete_success);
-
 					mAdapter.removeItem(args[0]);
-
-					mTweet.setCommentCount(mTweet.getCommentCount() - 1);
-					mTvCommentCount.setText(getString(R.string.comment_count,
-							mTweet.getCommentCount()));
+					setTweetCommentCount(-1);
 				} else {
 					AppContext.showToastShort(res.getErrorMessage());
 				}
@@ -455,6 +426,16 @@ public class TweetDetailFragment extends BaseFragment implements
 		public void onFailure(int code, String errorMessage, Object[] args) {
 			AppContext.showToastShort(R.string.delete_faile);
 		}
+	}
+	
+	private void setTweetCommentCount(int addCount) {
+		mAdapter.notifyDataSetChanged();
+		if (mTweet.getCommentCount() + addCount == -1) {
+			return;
+		}
+		mTweet.setCommentCount(mTweet.getCommentCount() + addCount);
+		mTvCommentCount.setText(getString(R.string.comment_count,
+				mTweet.getCommentCount()));
 	}
 
 	protected void requestTweetData(boolean refresh) {
@@ -627,7 +608,7 @@ public class TweetDetailFragment extends BaseFragment implements
 		}
 	}
 
-	private AsyncHttpResponseHandler mCommentHandler = new AsyncHttpResponseHandler() {
+	private AsyncHttpResponseHandler mCommentListHandler = new AsyncHttpResponseHandler() {
 
 		@Override
 		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
@@ -683,10 +664,19 @@ public class TweetDetailFragment extends BaseFragment implements
 	@Override
 	public boolean onItemLongClick(AdapterView<?> parent, View view,
 			int position, long id) {
+		if (position - 1 == -1) {
+			return false;
+		}
 		final Comment item = (Comment) mAdapter.getItem(position - 1);
 		if (item == null)
 			return false;
-		String[] items = new String[] { getResources().getString(R.string.copy) };
+		int itemsLen = item.getAuthorId() == AppContext.getInstance()
+				.getLoginUid() ? 2 : 1;
+		String[] items = new String[itemsLen];
+		items[0] = getResources().getString(R.string.copy);
+		if (itemsLen == 2) {
+			items[1] = getResources().getString(R.string.delete);
+		}
 		final CommonDialog dialog = DialogHelper
 				.getPinterestDialogCancelable(getActivity());
 		dialog.setNegativeButton(R.string.cancle, null);
@@ -696,7 +686,12 @@ public class TweetDetailFragment extends BaseFragment implements
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				dialog.dismiss();
-				TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(item.getContent()));
+				if (position == 0) {
+					TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(item
+							.getContent()));
+				} else if (position == 1) {
+					handleDeleteComment(item);
+				}
 			}
 		});
 		dialog.show();

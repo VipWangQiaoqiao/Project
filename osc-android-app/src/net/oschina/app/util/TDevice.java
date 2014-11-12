@@ -573,6 +573,7 @@ public class TDevice {
 		ClipboardManager clip = (ClipboardManager) BaseApplication.context()
 				.getSystemService(Context.CLIPBOARD_SERVICE);
 		clip.setText(string);
+		AppContext.showToast(R.string.copy_success);
 	}
 	
 	/**

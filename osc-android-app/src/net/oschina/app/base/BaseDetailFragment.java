@@ -78,7 +78,40 @@ public class BaseDetailFragment extends BaseFragment implements
 	protected EmptyLayout mEmptyLayout;
 	
 	protected WebView mWebView;
+	
+	protected AsyncHttpResponseHandler mCommentHandler = new AsyncHttpResponseHandler() {
 
+		@Override
+		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+			try {
+				ResultBean rsb = XmlUtils.toBean(ResultBean.class, new ByteArrayInputStream(arg2));
+				Result res = rsb.getResult();
+				if (res.OK()) {
+					hideWaitDialog();
+					AppContext.showToastShort(R.string.comment_publish_success);
+					
+					commentPubSuccess();
+//					UIHelper.sendBroadCastCommentChanged(getActivity(),
+//							mIsBlogComment, mId, mCatalog, Comment.OPT_ADD,
+//							res.getComment());
+				} else {
+					hideWaitDialog();
+					AppContext.showToastShort(res.getErrorMessage());
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				onFailure(arg0, arg1, arg2, e);
+			}
+		}
+
+		@Override
+		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+				Throwable arg3) {
+			hideWaitDialog();
+			AppContext.showToastShort(R.string.comment_publish_faile);
+		}
+	};
+	
 	protected WebViewClient mWebClient = new WebViewClient() {
 
 		private boolean receivedError = false;
@@ -356,6 +389,10 @@ public class BaseDetailFragment extends BaseFragment implements
 	protected String getShareContent() {
 		return "";
 	}
+	
+	protected void commentPubSuccess() {
+		
+	}
 
 	private void showMoreOptionMenu(View view) {
 		mMenuWindow = new ListPopupWindow(getActivity());
@@ -384,6 +421,8 @@ public class BaseDetailFragment extends BaseFragment implements
 			mMenuWindow = null;
 		}
 	}
+	
+	
 
 	protected void onReportMenuClick() {
 	}

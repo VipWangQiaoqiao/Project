@@ -219,6 +219,15 @@ public class ListBaseAdapter extends BaseAdapter {
 		}
 		return getRealView(position, convertView, parent);
 	}
+	
+	public void setNoMore() {
+		if (mFooterView != null) {
+			mFooterView.setVisibility(View.VISIBLE);
+			mFooterView.findViewById(R.id.progressbar).setVisibility(View.GONE);
+			mFooterView.findViewById(R.id.text).setVisibility(View.VISIBLE);
+			((TextView) mFooterView.findViewById(R.id.text)).setText(_loadFinishText);
+		}
+	}
 
 	protected View getRealView(int position, View convertView, ViewGroup parent) {
 		return null;
@@ -231,7 +240,6 @@ public class ListBaseAdapter extends BaseAdapter {
 				if (result.size() == 0) { // no results
 
 				} else {
-
 					notifyDataSetChanged();
 				}
 			}
@@ -245,7 +253,6 @@ public class ListBaseAdapter extends BaseAdapter {
 				if (result != null) { // no results
 
 				} else {
-
 					notifyDataSetChanged();
 				}
 			}

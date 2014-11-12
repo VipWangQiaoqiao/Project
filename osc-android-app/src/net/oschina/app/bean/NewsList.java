@@ -20,6 +20,9 @@ public class NewsList extends Entity implements ListEntity {
 	public final static int CATALOG_INTEGRATION = 2;
 	public final static int CATALOG_SOFTWARE = 3;
 	
+	public final static int CATALOG_WEEK = 4;
+	public final static int CATALOG_MONTH = 5;
+	
 	@XStreamAlias("catalog")
 	private int catalog;
 	

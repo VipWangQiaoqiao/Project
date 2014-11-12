@@ -9,6 +9,7 @@ import java.util.Map;
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
 import net.oschina.app.api.ApiHttpClient;
+import net.oschina.app.bean.NewsList;
 import net.oschina.app.bean.Tweet;
 import android.text.TextUtils;
 
@@ -48,7 +49,11 @@ public class OSChinaApi {
 		params.put("catalog", catalog);
 		params.put("pageIndex", page);
 		params.put("pageSize", AppContext.PAGE_SIZE);
-		params.put("dataType", "json");
+		if (catalog == NewsList.CATALOG_WEEK) {
+			params.put("show", "week");
+		}else if (catalog == NewsList.CATALOG_MONTH) {
+			params.put("show", "month");
+		}
 		ApiHttpClient.get("action/api/news_list", params, handler);
 	}
 	

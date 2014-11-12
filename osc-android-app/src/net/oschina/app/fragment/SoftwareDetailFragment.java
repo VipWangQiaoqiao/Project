@@ -295,7 +295,13 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
 		Tweet tweet = new Tweet();
 		tweet.setAuthorid(AppContext.getInstance().getLoginUid());
 		tweet.setBody(text);
-		ServerTaskUtils.pubSoftWareTweet(getActivity(), tweet, mSoftware.getId());
+		showWaitDialog(R.string.progress_submit);
+		OSChinaApi.pubSoftWareTweet(tweet, mSoftware.getId(), mCommentHandler);
+	}
+
+	@Override
+	protected void commentPubSuccess() {
+		super.commentPubSuccess();
 		mEmojiFragment.reset();
 	}
 }

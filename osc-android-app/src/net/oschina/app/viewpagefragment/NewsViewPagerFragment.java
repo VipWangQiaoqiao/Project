@@ -5,6 +5,7 @@ import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.BaseViewPagerFragment;
 import net.oschina.app.bean.Blog;
+import net.oschina.app.bean.NewsList;
 import net.oschina.app.fragment.BlogFragment;
 import net.oschina.app.fragment.NewsFragment;
 import android.os.Bundle;
@@ -21,32 +22,29 @@ public class NewsViewPagerFragment extends BaseViewPagerFragment {
 	@Override
 	protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
 		String[] title = getResources().getStringArray(R.array.news_viewpage_arrays);
-		adapter.addTab(title[0], "news", NewsFragment.class, null);
-		adapter.addTab(title[1], "new_blogs", BlogFragment.class, getBundle(Blog.CATALOG_LATEST));
-		adapter.addTab(title[2], "featured_blogs", BlogFragment.class, getBundle(Blog.CATALOG_RECOMMEND));
+		adapter.addTab(title[0], "news", NewsFragment.class, getBundle(NewsList.CATALOG_ALL));
+		adapter.addTab(title[1], "news_week", NewsFragment.class, getBundle(NewsList.CATALOG_WEEK));
+		adapter.addTab(title[2], "news_month", NewsFragment.class, getBundle(NewsList.CATALOG_MONTH));
 	}
 	
-	private Bundle getBundle(String blogType) {
+	private Bundle getBundle(int newType) {
 		Bundle bundle = new Bundle();
-		bundle.putString(BaseListFragment.BUNDLE_BLOG_TYPE, blogType);
+		bundle.putInt(BaseListFragment.BUNDLE_KEY_CATALOG, newType);
 		return bundle;
 	}
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void initView(View view) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void initData() {
-		// TODO Auto-generated method stub
 		
 	}
 }

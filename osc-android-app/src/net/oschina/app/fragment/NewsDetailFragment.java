@@ -259,13 +259,13 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 			mEmojiFragment.requestFocusInput();
 			return;
 		}
-		PublicCommentTask task = new PublicCommentTask();
-		task.setId(mNewsId);
-		task.setCatalog(CommentList.CATALOG_NEWS);
-		task.setIsPostToMyZone(0);
-		task.setContent(text);
-		task.setUid(AppContext.getInstance().getLoginUid());
-		ServerTaskUtils.publicNewsComment(getActivity(), task);
+		showWaitDialog(R.string.progress_submit);
+		OSChinaApi.publicComment(CommentList.CATALOG_NEWS, mNewsId, AppContext.getInstance().getLoginUid(), text, 0, mCommentHandler);
+	}
+
+	@Override
+	protected void commentPubSuccess() {
+		super.commentPubSuccess();
 		mEmojiFragment.reset();
 	}
 

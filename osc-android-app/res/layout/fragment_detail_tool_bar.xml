@@ -34,18 +34,6 @@
             android:background="@color/list_divider_color" />
 
         <FrameLayout
-            android:id="@+id/favor_layout"
-            android:layout_width="0.0dip"
-            android:layout_height="fill_parent"
-            android:layout_weight="1.0" >
-
-            <ImageView
-                android:id="@+id/action_favor"
-                style="@style/toolbar_action"
-                android:src="@drawable/ic_action_favor" />
-        </FrameLayout>
-
-        <FrameLayout
             android:id="@+id/write_comment_layout"
             android:layout_width="0.0dip"
             android:layout_height="fill_parent"
@@ -55,6 +43,18 @@
                 android:id="@+id/action_write_comment"
                 style="@style/toolbar_action"
                 android:src="@drawable/ic_action_write" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/favor_layout"
+            android:layout_width="0.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0" >
+
+            <ImageView
+                android:id="@+id/action_favor"
+                style="@style/toolbar_action"
+                android:src="@drawable/ic_action_favor" />
         </FrameLayout>
 
         <FrameLayout

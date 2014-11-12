@@ -50,7 +50,6 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 	protected static final String TAG = BlogDetailFragment.class
 			.getSimpleName();
 	private static final String BLOG_CACHE_KEY = "blog_";
-	private static final String BLOG_DETAIL_SCREEN = "blog_detail_screen";
 	@InjectView(R.id.tv_title) TextView mTvTitle;
 	@InjectView(R.id.tv_source) TextView mTvSource;
 	@InjectView(R.id.tv_time) TextView mTvTime;
@@ -260,11 +259,13 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 			mEmojiFragment.requestFocusInput();
 			return;
 		}
-		PublicCommentTask task = new PublicCommentTask();
-		task.setId(mBlogId);
-		task.setContent(text);
-		task.setUid(AppContext.getInstance().getLoginUid());
-		ServerTaskUtils.publicBlogComment(getActivity(), task);
+		showWaitDialog(R.string.progress_submit);
+		OSChinaApi.publicBlogComment(mBlogId, AppContext.getInstance().getLoginUid(), text, mCommentHandler);
+	}
+
+	@Override
+	protected void commentPubSuccess() {
+		super.commentPubSuccess();
 		mEmojiFragment.reset();
 	}
 

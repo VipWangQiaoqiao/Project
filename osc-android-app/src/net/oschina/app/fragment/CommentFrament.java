@@ -7,8 +7,6 @@ import java.io.Serializable;
 import org.apache.http.Header;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.tencent.mm.sdk.modelmsg.ShowMessageFromWX;
-
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.CommentAdapter;
@@ -26,8 +24,6 @@ import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.emoji.EmojiFragment;
 import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
-import net.oschina.app.service.PublicCommentTask;
-import net.oschina.app.service.ServerTaskUtils;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.util.HTMLSpirit;
@@ -61,6 +57,41 @@ public class CommentFrament extends BaseListFragment implements
 	private boolean mIsBlogComment;
 
 	private EmojiFragment mEmojiFragment;
+	
+	private AsyncHttpResponseHandler mCommentHandler = new AsyncHttpResponseHandler() {
+
+		@Override
+		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+			try {
+				ResultBean rsb = XmlUtils.toBean(ResultBean.class, new ByteArrayInputStream(arg2));
+				Result res = rsb.getResult();
+				if (res.OK()) {
+					hideWaitDialog();
+					AppContext.showToastShort(R.string.comment_publish_success);
+					
+					mAdapter.addItem(0, rsb.getComment());
+					mAdapter.notifyDataSetChanged();
+					mEmojiFragment.reset();
+//					UIHelper.sendBroadCastCommentChanged(getActivity(),
+//							mIsBlogComment, mId, mCatalog, Comment.OPT_ADD,
+//							res.getComment());
+				} else {
+					hideWaitDialog();
+					AppContext.showToastShort(res.getErrorMessage());
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				onFailure(arg0, arg1, arg2, e);
+			}
+		}
+
+		@Override
+		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+				Throwable arg3) {
+			hideWaitDialog();
+			AppContext.showToastShort(R.string.comment_publish_faile);
+		}
+	};
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -171,33 +202,6 @@ public class CommentFrament extends BaseListFragment implements
 		mEmojiFragment.setTag(comment);
 		mEmojiFragment.setInputHint("回复" + comment.getAuthor() + ":");
 		mEmojiFragment.requestFocusInput();
-//		final CommonDialog dialog = DialogHelper
-//				.getPinterestDialogCancelable(getActivity());
-//		String[] items = null;
-//		if (AppContext.instance().isLogin()
-//				&& AppContext.instance().getLoginUid() == comment.getAuthorId()) {
-//			items = new String[] { getString(R.string.reply),
-//					getString(R.string.delete) };
-//			dialog.setTitle(R.string.operation);
-//			dialog.setItemsWithoutChk(items, new OnItemClickListener() {
-//
-//				@Override
-//				public void onItemClick(AdapterView<?> parent, View view,
-//						int position, long id) {
-//					dialog.dismiss();
-//					if (position == 0) {
-//						handleReplyComment(comment);
-//					} else if (position == 1) {
-//						handleDeleteComment(comment);
-//					}
-//				}
-//
-//			});
-//			dialog.setNegativeButton(R.string.cancle, null);
-//			dialog.show();
-//		} else {
-//			handleReplyComment(comment);
-//		}
 	}
 
 	private void handleReplyComment(Comment comment, String text) {
@@ -207,86 +211,42 @@ public class CommentFrament extends BaseListFragment implements
 			return;
 		}
 		
-		AsyncHttpResponseHandler mReplyCommentHandler = new AsyncHttpResponseHandler() {
-
-			@Override
-			public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-				try {
-					ResultBean rsb = XmlUtils.toBean(ResultBean.class, new ByteArrayInputStream(arg2));
-					Result res = rsb.getResult();
-					if (res.OK()) {
-						hideWaitDialog();
-						AppContext.showToastShort(R.string.comment_publish_success);
-						
-						mAdapter.addItem(0, rsb.getComment());
-						mEmojiFragment.reset();
-//						UIHelper.sendBroadCastCommentChanged(getActivity(),
-//								mIsBlogComment, mId, mCatalog, Comment.OPT_ADD,
-//								res.getComment());
-					} else {
-						hideWaitDialog();
-						AppContext.showToastShort(res.getErrorMessage());
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-					onFailure(arg0, arg1, arg2, e);
-				}
-			}
-
-			@Override
-			public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-					Throwable arg3) {
-				hideWaitDialog();
-				AppContext.showToastShort(R.string.comment_publish_faile);
-			}
-		};
-		
 		if (mIsBlogComment) {
 			OSChinaApi.replyBlogComment(mId, AppContext.getInstance().getLoginUid(),
 					text, comment.getId(), comment.getAuthorId(),
-					mReplyCommentHandler);
+					mCommentHandler);
 		} else {
 			OSChinaApi.replyComment(mId, mCatalog, comment.getId(),
 					comment.getAuthorId(),
 					AppContext.getInstance().getLoginUid(), text,
-					mReplyCommentHandler);
+					mCommentHandler);
 		}
 	}
 	
 	private void handleComment(String text) {
-		PublicCommentTask task = new PublicCommentTask();
-		task.setId(mId);
-		task.setCatalog(mCatalog);
-		task.setContent(text);
-		task.setUid(AppContext.getInstance().getLoginUid());
-		ServerTaskUtils.publicNewsComment(getActivity(), task);
+		showWaitDialog(R.string.progress_submit);
 		if (mIsBlogComment) {
-			ServerTaskUtils.publicBlogComment(getActivity(), task);
+			OSChinaApi.publicBlogComment(mId, AppContext.getInstance().getLoginUid(), text, mCommentHandler);
 		} else {
-			ServerTaskUtils.publicNewsComment(getActivity(), task);
+			OSChinaApi.publicComment(mCatalog, mId, AppContext.getInstance().getLoginUid(), text, 1, mCommentHandler);
 		}
-		mEmojiFragment.reset();
 	}
 
-	private void handleDeleteComment(Comment comment) {
-//		if (!AppContext.getInstance().isLogin()) {
-//			UIHelper.showLoginActivity(getActivity());
-//			return;
-//		}
-//		AppContext.showToastShort(R.string.deleting);
-//		if (mIsBlogComment) {
-//			OSChinaApi.deleteBlogComment(AppContext.getInstance().getLoginUid(), mId,
-//					comment.getId(), comment.getAuthorId(), mOwnerId,
-//					new DeleteOperationResponseHandler(comment));
-//		} else {
-//			OSChinaApi.deleteComment(mId, mCatalog, comment.getId(), comment
-//					.getAuthorId(), new DeleteOperationResponseHandler(comment));
-//		}
+	private void handleDeleteComment(Comment comment) { 
+		if (!AppContext.getInstance().isLogin()) {
+			UIHelper.showLoginActivity(getActivity());
+			return;
+		}
+		AppContext.showToastShort(R.string.deleting);
+		if (mIsBlogComment) {
+			OSChinaApi.deleteBlogComment(AppContext.getInstance().getLoginUid(), mId,
+					comment.getId(), comment.getAuthorId(), mOwnerId,
+					new DeleteOperationResponseHandler(comment));
+		} else {
+			OSChinaApi.deleteComment(mId, mCatalog, comment.getId(), comment
+					.getAuthorId(), new DeleteOperationResponseHandler(comment));
+		}
 	}
-
-//	@Override
-//	public void onMoreClick(final Comment comment) {
-//	}
 
 	@Override
 	public void onSendClick(String text) {
@@ -322,8 +282,8 @@ public class CommentFrament extends BaseListFragment implements
 			try {
 				Result res = XmlUtils.toBean(ResultBean.class, is).getResult();
 				if (res.OK()) {
-//					AppContext.showToastShort(R.string.delete_success);
-//					mAdapter.removeItem(args[0]);
+					AppContext.showToastShort(R.string.delete_success);
+					mAdapter.removeItem(args[0]);
 				} else {
 					AppContext.showToastShort(res.getErrorMessage());
 				}
@@ -335,17 +295,22 @@ public class CommentFrament extends BaseListFragment implements
 
 		@Override
 		public void onFailure(int code, String errorMessage, Object[] args) {
-//			AppContext.showToastShort(R.string.delete_faile);
+			AppContext.showToastShort(R.string.delete_faile);
 		}
 	}
 	
 	@Override
 	public boolean onItemLongClick(AdapterView<?> parent, View view,
 			int position, long id) {
-		final Comment item = (Comment) mAdapter.getItem(position - 1);
+		final Comment item = (Comment) mAdapter.getItem(position);
 		if (item == null)
 			return false;
-		String[] items = new String[] { getResources().getString(R.string.copy) };
+		int itemsLen = item.getAuthorId() == AppContext.getInstance().getLoginUid() ? 2 : 1;
+		String[] items = new String[itemsLen];
+		items[0] = getResources().getString(R.string.copy);
+		if (itemsLen == 2) {
+			items[1] = getResources().getString(R.string.delete);
+		}
 		final CommonDialog dialog = DialogHelper
 				.getPinterestDialogCancelable(getActivity());
 		dialog.setNegativeButton(R.string.cancle, null);
@@ -355,8 +320,12 @@ public class CommentFrament extends BaseListFragment implements
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				dialog.dismiss();
-				TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(item
-						.getContent()));
+				if (position == 0) {
+					TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(item
+							.getContent()));
+				} else if(position == 1) {
+					handleDeleteComment(item);
+				}
 			}
 		});
 		dialog.show();
