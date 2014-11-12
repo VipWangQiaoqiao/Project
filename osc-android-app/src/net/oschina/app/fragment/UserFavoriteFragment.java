@@ -8,8 +8,10 @@ import net.oschina.app.adapter.UserFavoriteAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
+import net.oschina.app.bean.Favorite;
 import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.ListEntity;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -26,7 +28,7 @@ public class UserFavoriteFragment extends BaseListFragment {
 
 	@Override
 	protected String getCacheKeyPrefix() {
-		return CACHE_KEY_PREFIX + mCatalog;
+		return CACHE_KEY_PREFIX + userfavoriteType;
 	}
 
 	@Override
@@ -49,6 +51,30 @@ public class UserFavoriteFragment extends BaseListFragment {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		super.onItemClick(parent, view, position, id);
+		
+		Favorite favorite = (Favorite) mAdapter.getItem(position);
+		if(favorite!=null){
+			switch(favorite.getType()){
+			
+			case Favorite.CATALOG_BLOGS:
+				UIHelper.showUrlRedirect(getActivity(), favorite.getUrl());
+				break;
+			case Favorite.CATALOG_CODE:
+				UIHelper.showUrlRedirect(getActivity(), favorite.getUrl());
+				break;
+			case Favorite.CATALOG_NEWS:
+				UIHelper.showUrlRedirect(getActivity(), favorite.getUrl());
+				break;
+			case Favorite.CATALOG_SOFTWARE:
+				UIHelper.showUrlRedirect(getActivity(), favorite.getUrl());
+				break;
+			case Favorite.CATALOG_TOPIC:
+				UIHelper.showUrlRedirect(getActivity(), favorite.getUrl());
+				break;
+				
+			}
+		}
+		
+		
 	}
 }

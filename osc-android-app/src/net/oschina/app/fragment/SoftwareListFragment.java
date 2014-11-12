@@ -50,10 +50,9 @@ public class SoftwareListFragment extends BaseListFragment {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		SoftwareDec softwaredec = (SoftwareDec) mAdapter.getItem(position-1);
+		SoftwareDec softwaredec = (SoftwareDec) mAdapter.getItem(position);
 		if(softwaredec!=null)
 			UIHelper.showUrlRedirect(getActivity(), softwaredec.getUrl());
 	}
-	
 	
 }
