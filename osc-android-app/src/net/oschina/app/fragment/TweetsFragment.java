@@ -114,7 +114,7 @@ public class TweetsFragment extends BaseListFragment {
 	protected void requestData(boolean refresh) {
 		if (tweetType > 0) {
 			if (AppContext.getInstance().isLogin()) {
-				mCatalog = AppContext.getInstance().getLoginUid();
+				tweetType = AppContext.getInstance().getLoginUid();
 				mIsWatingLogin = false;
 				super.requestData(refresh);
 			} else {
