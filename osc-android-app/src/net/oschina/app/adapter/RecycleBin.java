@@ -1,5 +1,6 @@
 package net.oschina.app.adapter;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.util.SparseArray;
 import android.view.View;
@@ -64,7 +65,8 @@ public class RecycleBin {
    *
    * @param scrap The view to add
    */
-  void addScrapView(View scrap, int position, int viewType) {
+  @SuppressLint("NewApi")
+void addScrapView(View scrap, int position, int viewType) {
     if (viewTypeCount == 1) {
       currentScrapViews.put(position, scrap);
     } else {
@@ -77,7 +79,8 @@ public class RecycleBin {
   }
 
   /** Move all views remaining in activeViews to scrapViews. */
-  void scrapActiveViews() {
+  @SuppressLint("NewApi")
+void scrapActiveViews() {
     final View[] activeViews = this.activeViews;
     final int[] activeViewTypes = this.activeViewTypes;
     final boolean multipleScraps = viewTypeCount > 1;
