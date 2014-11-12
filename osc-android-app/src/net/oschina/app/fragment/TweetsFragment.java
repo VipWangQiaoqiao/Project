@@ -2,7 +2,7 @@ package net.oschina.app.fragment;
 
 import java.io.InputStream;
 import java.io.Serializable;
-import com.umeng.socialize.utils.Log;
+
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.TweetAdapter;
@@ -84,8 +84,6 @@ public class TweetsFragment extends BaseListFragment {
 	@Override
 	protected void sendRequestData() {
 		OSChinaApi.getTweetList(tweetType, mCurrentPage, mHandler);
-		Log.e("获取用户uid:", String.valueOf(tweetType));
-		
 	}
 
 	@Override
