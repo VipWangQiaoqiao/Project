@@ -1,6 +1,5 @@
 package net.oschina.app.viewpagefragment;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.base.BaseListFragment;
@@ -20,15 +19,11 @@ public class TweetsViewPagerFragment extends BaseViewPagerFragment{
 	
 	@Override
 	protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
-		int my_id;
-		if(AppContext.getInstance()!=null)
-			my_id = AppContext.getInstance().getLoginUid();
-		else
-			my_id = Tweet.CATALOG_MINE;
+
 		String[] title = getResources().getStringArray(R.array.tweets_viewpage_arrays);
 		adapter.addTab(title[0], "new_tweets", TweetsFragment.class, getBundle(Tweet.CATALOG_LATEST));
 		adapter.addTab(title[1], "hot_tweets", TweetsFragment.class, getBundle(Tweet.CATALOG_HOT));
-		adapter.addTab(title[2], "my_tweets", TweetsFragment.class, getBundle(my_id));
+		adapter.addTab(title[2], "my_tweets", TweetsFragment.class, getBundle(Tweet.CATALOG_MINE));
 	}
 	
 	private Bundle getBundle(int catalog) {

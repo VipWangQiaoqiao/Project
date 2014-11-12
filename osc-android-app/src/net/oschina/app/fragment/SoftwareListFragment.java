@@ -10,7 +10,10 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.ListEntity;
+import net.oschina.app.bean.Software;
+import net.oschina.app.bean.SoftwareDec;
 import net.oschina.app.bean.SoftwareList;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
 public class SoftwareListFragment extends BaseListFragment {
@@ -47,8 +50,9 @@ public class SoftwareListFragment extends BaseListFragment {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		super.onItemClick(parent, view, position, id);
+		SoftwareDec softwaredec = (SoftwareDec) mAdapter.getItem(position);
+		if(softwaredec!=null)
+			UIHelper.showUrlRedirect(getActivity(), softwaredec.getUrl());
 	}
-	
 	
 }
