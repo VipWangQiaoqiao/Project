@@ -28,7 +28,7 @@
                     android:layout_height="60dp"
                     android:layout_marginRight="@dimen/space_10"
                     android:contentDescription="@null"
-                    android:src="@drawable/widget_dface"
+                    android:src="@drawable/widget_dface_loading"
                     app:border_color="@color/lightblue"
                     app:border_width="3dip" />
 
@@ -47,7 +47,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/space_5"
                     android:layout_toRightOf="@id/iv_avatar"
-                    android:text="火蚁"
                     android:textColor="@color/main_black"
                     android:textSize="@dimen/text_size_18" />
 
@@ -72,8 +71,7 @@
                     android:layout_toRightOf="@id/iv_avatar"
                     android:contentDescription="@null"
                     android:ellipsize="marquee"
-                    android:singleLine="true"
-                    android:text="这个人很懒，啥也没写这个人很懒，啥也没写这个人很懒，啥也没写这个人很懒，啥也没写这个人很懒，啥也没写" />
+                    android:singleLine="true" />
             </RelativeLayout>
 
             <View
@@ -201,17 +199,35 @@
                 android:visibility="gone" />
 
             <RelativeLayout
-                android:id="@+id/rl_qrcode"
+                android:id="@+id/rl_message"
                 style="@style/option_item_rl"
                 android:layout_marginTop="20dp" >
 
                 <TextView
                     style="@style/option_item_text"
-                    android:text="@string/team" />
+                    android:text="@string/message" />
 
-                <ImageView
-                    style="@style/option_item_goto_right"
-                    android:contentDescription="@null" />
+                <TextView
+                    android:id="@+id/tv_mes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/space_10" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1px"
+                android:background="@color/list_divider_color" />
+
+            <RelativeLayout
+                android:id="@+id/rl_team"
+                style="@style/option_item_rl" >
+
+                <TextView
+                    style="@style/option_item_text"
+                    android:text="@string/team" />
             </RelativeLayout>
 
             <View
@@ -226,10 +242,6 @@
                 <TextView
                     style="@style/option_item_text"
                     android:text="@string/blog" />
-
-                <ImageView
-                    style="@style/option_item_goto_right"
-                    android:contentDescription="@null" />
             </RelativeLayout>
 
             <View
@@ -237,32 +249,19 @@
                 android:layout_height="1px"
                 android:background="@color/list_divider_color" />
 
-            <RelativeLayout style="@style/option_item_rl" >
+            <RelativeLayout 
+                android:id="@+id/rl_note"
+                style="@style/option_item_rl" >
 
                 <TextView
                     style="@style/option_item_text"
                     android:text="@string/note" />
-
-                <ImageView
-                    style="@style/option_item_goto_right"
-                    android:contentDescription="@null" />
             </RelativeLayout>
 
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="1px"
                 android:background="@color/list_divider_color" />
-
-            <RelativeLayout style="@style/option_item_rl" >
-
-                <TextView
-                    style="@style/option_item_text"
-                    android:text="@string/bookmarks" />
-
-                <ImageView
-                    style="@style/option_item_goto_right"
-                    android:contentDescription="@null" />
-            </RelativeLayout>
         </LinearLayout>
     </net.oschina.app.widget.CustomerScrollView>
 

@@ -1,12 +1,8 @@
 package net.oschina.app.bean;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-
-import net.oschina.app.AppException;
 
 /**
  * 通知信息实体类

@@ -19,9 +19,10 @@ import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,8 +32,10 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.MyInformation;
+import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.User;
 import net.oschina.app.cache.CacheManager;
+import net.oschina.app.ui.MainActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -40,6 +43,7 @@ import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
+import net.oschina.app.widget.BadgeView;
 
 /**
  * 登录用户中心页面
@@ -57,13 +61,14 @@ public class MyInformationFragment extends BaseFragment {
 	@InjectView(R.id.tv_favorite) TextView mTvFavorite;
 	@InjectView(R.id.tv_following) TextView mTvFollowing;
 	@InjectView(R.id.tv_follower) TextView mTvFollower;
+	@InjectView(R.id.tv_mes) View mMesView;
 //	@InjectView(R.id.tv_join_time) TextView mTvJoinTime;
 //	@InjectView(R.id.tv_location) TextView mTvLocation;
 //	@InjectView(R.id.tv_development_platform) TextView mTvDevelopmentPlatform;
 //	@InjectView(R.id.tv_academic_focus) TextView mTvAcademicFocus;
-	@InjectView(R.id.error_layout) EmptyLayout mEmptyView;
-	
 	@InjectView(R.id.error_layout) EmptyLayout mErrorLayout;
+	
+	private static BadgeView mMesCount;
 	
 	private boolean mIsWatingLogin;
 	
@@ -75,6 +80,7 @@ public class MyInformationFragment extends BaseFragment {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
+			TLog.log("NOTICE", "收到广播" + action);
 			if (action.equals(Constants.INTENT_ACTION_LOGOUT)) {
 				if (mErrorLayout != null) {
 					mIsWatingLogin = true;
@@ -83,6 +89,9 @@ public class MyInformationFragment extends BaseFragment {
 				}
 			} else if (action.equals(Constants.INTENT_ACTION_USER_CHANGE)) {
 				requestData(true);
+			} else if (action.equals(Constants.INTENT_ACTION_NOTICE)) {
+				TLog.log("NOTICE", "动态收到广播");
+				setNotice();
 			}
 		}
 	};
@@ -95,7 +104,7 @@ public class MyInformationFragment extends BaseFragment {
 				mInfo = XmlUtils.toBean(MyInformation.class, new ByteArrayInputStream(arg2)).getUser();
 				if (mInfo != null) {
 					fillUI();
-					mEmptyView.setErrorType(EmptyLayout.HIDE_LAYOUT);
+					mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
 					new SaveCacheTask(getActivity(), mInfo, getCacheKey())
 							.execute();
 				} else {
@@ -110,7 +119,7 @@ public class MyInformationFragment extends BaseFragment {
 		@Override
 		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
 				Throwable arg3) {
-			mEmptyView.setErrorType(EmptyLayout.NETWORK_ERROR);
+			mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
 		}
 	};
 	
@@ -119,7 +128,36 @@ public class MyInformationFragment extends BaseFragment {
 		super.onCreate(savedInstanceState);
 		IntentFilter filter = new IntentFilter(Constants.INTENT_ACTION_LOGOUT);
 		filter.addAction(Constants.INTENT_ACTION_USER_CHANGE);
+		filter.addAction(Constants.INTENT_ACTION_NOTICE);
 		getActivity().registerReceiver(mReceiver, filter);
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		setNotice();
+	}
+	
+	private void setNotice() {
+		if (MainActivity.mNotice != null) {
+
+			Notice notice = MainActivity.mNotice;
+			int atmeCount = notice.getAtmeCount();// @我
+			int msgCount = notice.getMsgCount();// 留言
+			int reviewCount = notice.getReviewCount();// 评论
+			int newFansCount = notice.getNewFansCount();// 新粉丝
+			int activeCount = atmeCount + reviewCount + msgCount + newFansCount;// 信息总数
+
+			if (activeCount > 0) {
+				mMesCount.setText(activeCount + "");
+				mMesCount.show();
+			} else {
+				mMesCount.hide();
+			}
+
+		} else {
+			mMesCount.hide();
+		}
 	}
 	
 	@Override
@@ -141,8 +179,9 @@ public class MyInformationFragment extends BaseFragment {
 	
 	@Override
 	public void initView(View view) {
+		mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
 		mIvAvatar.setOnClickListener(this);
-		mEmptyView.setOnLayoutClickListener(new View.OnClickListener() {
+		mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -153,13 +192,20 @@ public class MyInformationFragment extends BaseFragment {
 				}
 			}
 		});
-		
 		view.findViewById(R.id.rl_user_center).setOnClickListener(this);
 		view.findViewById(R.id.ly_favorite).setOnClickListener(this);
 		view.findViewById(R.id.ly_following).setOnClickListener(this);
 		view.findViewById(R.id.ly_follower).setOnClickListener(this);
+		view.findViewById(R.id.rl_message).setOnClickListener(this);
+		view.findViewById(R.id.rl_team).setOnClickListener(this);
 		view.findViewById(R.id.rl_blog).setOnClickListener(this);
-		view.findViewById(R.id.rl_qrcode).setOnClickListener(this);
+		view.findViewById(R.id.rl_note).setOnClickListener(this);
+		
+		mMesCount = new BadgeView(getActivity(), mMesView);
+		mMesCount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+		mMesCount.setBadgePosition(BadgeView.POSITION_CENTER);
+		mMesCount.setGravity(Gravity.CENTER);
+		mMesCount.setBackgroundResource(R.drawable.notification_bg);
 	}
 
 	private void fillUI() {
@@ -180,29 +226,10 @@ public class MyInformationFragment extends BaseFragment {
 //		mTvAcademicFocus.setText(mInfo.getExpertise());
 	}
 	
-	private void handleLogout() {
-//		CommonDialog dialog = DialogHelper
-//				.getPinterestDialogCancelable(getActivity());
-//		dialog.setMessage(R.string.message_logout);
-//		dialog.setPositiveButton(R.string.ok,
-//				new DialogInterface.OnClickListener() {
-//
-//					@Override
-//					public void onClick(DialogInterface dialog, int which) {
-//						AppContext.instance().Logout();
-//						AppContext.showToastShort(R.string.tip_logout_success);
-//						getActivity().finish();
-//					}
-//				});
-//		dialog.setNegativeButton(R.string.cancle, null);
-//		dialog.show();
-	}
-
 	private void requestData(boolean refresh) {
 		
 		if (AppContext.getInstance().isLogin()) {
 			mIsWatingLogin = false;
-			mEmptyView.setErrorType(EmptyLayout.NETWORK_LOADING);
 			String key = getCacheKey();
 			if (TDevice.hasInternet()
 					&& (!CacheManager.isReadDataCache(getActivity(), key) || refresh)) {
@@ -262,9 +289,9 @@ public class MyInformationFragment extends BaseFragment {
 			mInfo = info;
 			if (mInfo != null) {
 				fillUI();
-				mEmptyView.setErrorType(EmptyLayout.HIDE_LAYOUT);
+				mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
 			} else {
-				mEmptyView.setErrorType(EmptyLayout.NETWORK_ERROR);
+				mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
 			}
 		}
 	}
@@ -302,10 +329,16 @@ public class MyInformationFragment extends BaseFragment {
 		case R.id.ly_favorite:
 			UIHelper.showUserFavorite(getActivity(),AppContext.getInstance().getLoginUid());
 			break;
+		case R.id.rl_message:
+			UIHelper.showMyMes(getActivity());
+			break;
+		case R.id.rl_team:
+			
+			break;
 		case R.id.rl_blog:
 			UIHelper.showUserBlog(getActivity(), AppContext.getInstance().getLoginUid());
 			break;
-		case R.id.rl_qrcode:
+		case R.id.rl_note:
 			
 			break;
 		case R.id.rl_user_center:

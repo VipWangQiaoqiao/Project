@@ -12,7 +12,6 @@ import net.oschina.app.bean.ListEntity;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
-import net.oschina.app.util.TLog;
 
 import org.apache.http.Header;
 
@@ -62,12 +61,12 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 	protected int mCurrentPage = 0;
 
 	protected int mCatalog = 1;
-	
+
 	protected String blogType;
 	protected int tweetType = 0;
 	protected String softwareType = "recommend";
 	protected int userfavoriteType = 1;
-	
+
 	private AsyncTask<String, Void, ListEntity> mCacheTask;
 	private ParserTask mParserTask;
 
@@ -85,7 +84,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 		initView(view);
 		return view;
 	}
-	
+
 	@Override
 	public void onCreate(android.os.Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -93,9 +92,10 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 		if (args != null) {
 			mCatalog = args.getInt(BUNDLE_KEY_CATALOG);
 			blogType = args.getString(BUNDLE_BLOG_TYPE, blogType);
-			tweetType = args.getInt(BUNDLE_KEY_CATALOG,tweetType);
+			tweetType = args.getInt(BUNDLE_KEY_CATALOG, tweetType);
 			softwareType = args.getString(BUNDLE_SOFTWARE, softwareType);
-			userfavoriteType = args.getInt(BUNDLE_KEY_CATALOG, userfavoriteType);
+			userfavoriteType = args
+					.getInt(BUNDLE_KEY_CATALOG, userfavoriteType);
 		}
 	}
 
@@ -133,7 +133,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 				mCurrentPage = 0;
 				mState = STATE_REFRESH;
 				requestData(false);
-			} else{
+			} else {
 				mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
 			}
 
@@ -141,7 +141,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 		if (mStoreEmptyState != -1) {
 			mErrorLayout.setErrorType(mStoreEmptyState);
 		}
-			
+
 	}
 
 	@Override
@@ -191,9 +191,9 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 	}
 
 	private String getCacheKey() {
-		return new StringBuffer(getCacheKeyPrefix())
-				.append("_").append(mCurrentPage).append("_")
-				.append(TDevice.getPageSize()).toString();
+		return new StringBuffer(getCacheKeyPrefix()).append("_")
+				.append(mCurrentPage).append("_").append(TDevice.getPageSize())
+				.toString();
 	}
 
 	protected void requestData(boolean refresh) {
@@ -307,7 +307,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 			mAdapter.setState(ListBaseAdapter.STATE_LOAD_MORE);
 		}
 	}
-	
+
 	private int getPageSize() {
 		if (blogType != null && blogType.equals(Blog.CATALOG_LATEST)) {
 			return 19;
@@ -410,13 +410,13 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
 		// 数据已经全部加载，或数据为空时，或正在加载，不处理滚动事件
-		if (mState == STATE_NOMORE || mState == STATE_LOADMORE || mState == STATE_REFRESH) {
+		if (mState == STATE_NOMORE || mState == STATE_LOADMORE
+				|| mState == STATE_REFRESH) {
 			return;
 		}
 		if (mAdapter != null
 				&& mAdapter.getDataSize() > 0
-				&& mListView.getLastVisiblePosition() == (mListView
-						.getCount() - 1)) {
+				&& mListView.getLastVisiblePosition() == (mListView.getCount() - 1)) {
 			if (mState == STATE_NONE
 					&& mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
 				mState = STATE_LOADMORE;

@@ -164,9 +164,6 @@ public class BaseDetailFragment extends BaseFragment implements
 
 	protected void recycleWebView() {
 		if (mWebView != null) {
-			// webView.loadUrl("about:blank");
-			// webView.destroy();
-			// webView = null;
 			mWebView.setVisibility(View.GONE);
 			mWebView.removeAllViews();
 			mWebView.destroy();
@@ -322,6 +319,7 @@ public class BaseDetailFragment extends BaseFragment implements
 			try {
 				Entity entity = parseData(new ByteArrayInputStream(arg2));
 				if (entity != null) {
+					mEmptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
 					executeOnLoadDataSuccess(entity);
 					saveCache(entity);
 				} else {
@@ -348,7 +346,6 @@ public class BaseDetailFragment extends BaseFragment implements
 	}
 
 	protected void executeOnLoadDataSuccess(Entity entity) {
-
 	}
 
 	protected void executeOnLoadDataError(String object) {

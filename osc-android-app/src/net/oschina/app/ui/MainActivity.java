@@ -187,7 +187,7 @@ public class MainActivity extends ActionBarActivity implements
 
 			mTabHost.addTab(tab, mainTab.getClz(), null);
 
-			if (mainTab.equals(MainTab.EXPLORE)) {
+			if (mainTab.equals(MainTab.ME)) {
 				View cn = indicator.findViewById(R.id.tab_mes);
 				mBvTweet = new BadgeView(MainActivity.this, cn);
 				mBvTweet.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);

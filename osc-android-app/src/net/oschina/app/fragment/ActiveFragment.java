@@ -18,6 +18,7 @@ import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.HTMLSpirit;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
@@ -26,12 +27,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 
 /**
@@ -102,23 +103,6 @@ public class ActiveFragment extends BaseListFragment implements
 	@Override
 	protected ListEntity readList(Serializable seri) {
 		return ((ActiveList) seri);
-	}
-	
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.my_active_menu, menu);
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.show_mes:
-			UIHelper.showMyMes(getActivity());
-			break;
-		default:
-			break;
-		}
-		return true;
 	}
 	
 	@Override
@@ -199,24 +183,24 @@ public class ActiveFragment extends BaseListFragment implements
 	@Override
 	public boolean onItemLongClick(AdapterView<?> parent, View view,
 			int position, long id) {
-//		final Active active = (Active) mAdapter.getItem(position);
-//		if (active == null)
-//			return false;
-//		String[] items = new String[] { getResources().getString(R.string.copy) };
-//		final CommonDialog dialog = DialogHelper
-//				.getPinterestDialogCancelable(getActivity());
-//		dialog.setNegativeButton(R.string.cancle, null);
-////		dialog.setItemsWithoutChk(items, new OnItemClickListener() {
-////
-////			@Override
-////			public void onItemClick(AdapterView<?> parent, View view,
-////					int position, long id) {
-////				dialog.dismiss();
-////				TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(active
-////						.getMessage()));
-////			}
-////		});
-//		dialog.show();
+		final Active active = (Active) mAdapter.getItem(position);
+		if (active == null)
+			return false;
+		String[] items = new String[] { getResources().getString(R.string.copy) };
+		final CommonDialog dialog = DialogHelper
+				.getPinterestDialogCancelable(getActivity());
+		dialog.setNegativeButton(R.string.cancle, null);
+		dialog.setItemsWithoutChk(items, new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				dialog.dismiss();
+				TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(active
+						.getMessage()));
+			}
+		});
+		dialog.show();
 		return true;
 	}
 }
