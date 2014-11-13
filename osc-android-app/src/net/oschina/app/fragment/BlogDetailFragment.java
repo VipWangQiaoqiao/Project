@@ -286,6 +286,11 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 	protected int getFavoriteTargetType() {
 		return mBlog != null ? FavoriteList.TYPE_BLOG : -1;
 	}
+	
+	@Override
+	protected String getShareTitle() {
+		return getString(R.string.share_title_blog);
+	}
 
 	@Override
 	protected String getShareContent() {

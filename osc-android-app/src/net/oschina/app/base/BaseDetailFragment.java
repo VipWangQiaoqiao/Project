@@ -8,10 +8,13 @@ import java.lang.ref.WeakReference;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.cache.CacheManager;
+import net.oschina.app.ui.ShareDialog;
+import net.oschina.app.ui.ShareDialog.OnSharePlatformClick;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.TLog;
@@ -33,6 +36,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.internal.widget.ListPopupWindow;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +59,7 @@ import com.umeng.socialize.controller.listener.SocializeListeners.SnsPostListene
 import com.umeng.socialize.controller.listener.SocializeListeners.UMAuthListener;
 import com.umeng.socialize.exception.SocializeException;
 import com.umeng.socialize.media.QZoneShareContent;
+import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.sso.QZoneSsoHandler;
 import com.umeng.socialize.sso.SinaSsoHandler;
 import com.umeng.socialize.sso.TencentWBSsoHandler;
@@ -387,6 +392,11 @@ public class BaseDetailFragment extends BaseFragment implements
 		return "";
 	}
 	
+	protected UMImage getShareImg() {
+		UMImage img = new UMImage(getActivity(), R.drawable.ic_launcher);
+		return img;
+	}
+	
 	protected void commentPubSuccess() {
 		
 	}
@@ -447,50 +457,50 @@ public class BaseDetailFragment extends BaseFragment implements
 	}
 
 	protected void handleShare() {
-//		if (TextUtils.isEmpty(getShareContent())
-//				|| TextUtils.isEmpty(getShareUrl())) {
-//			return;
-//		}
-//		final ShareDialog dialog = new ShareDialog(getActivity());
-//		dialog.setCancelable(true);
-//		dialog.setCanceledOnTouchOutside(true);
-//		dialog.setTitle(R.string.share_to);
-//		dialog.setOnPlatformClickListener(new OnSharePlatformClick() {
-//
-//			@Override
-//			public void onPlatformClick(SHARE_MEDIA media) {
-//				switch (media) {
-//				case QQ:
-//					shareToQQ(media);
-//					break;
-//				case QZONE:
-//					shareToQZone();
-//					break;
-//				case TENCENT:
-//					shareToTencentWeibo();
-//					break;
-//				case SINA:
-//					shareToSinaWeibo();
-//					break;
-//				case WEIXIN:
-//					shareToWeiChat();
-//					break;
-//				case WEIXIN_CIRCLE:
-//					shareToWeiChatCircle();
-//					break;
-//				default:
-//					break;
-//				}
-//				dialog.dismiss();
-//			}
-//		});
-//		dialog.setNegativeButton(R.string.cancle, null);
-//		dialog.show();
+		if (TextUtils.isEmpty(getShareContent())
+				|| TextUtils.isEmpty(getShareUrl())) {
+			return;
+		}
+		final ShareDialog dialog = new ShareDialog(getActivity());
+		dialog.setCancelable(true);
+		dialog.setCanceledOnTouchOutside(true);
+		dialog.setTitle(R.string.share_to);
+		dialog.setOnPlatformClickListener(new OnSharePlatformClick() {
+
+			@Override
+			public void onPlatformClick(SHARE_MEDIA media) {
+				switch (media) {
+				case QQ:
+					shareToQQ(media);
+					break;
+				case QZONE:
+					shareToQZone();
+					break;
+				case TENCENT:
+					shareToTencentWeibo();
+					break;
+				case SINA:
+					shareToSinaWeibo();
+					break;
+				case WEIXIN:
+					shareToWeiChat();
+					break;
+				case WEIXIN_CIRCLE:
+					shareToWeiChatCircle();
+					break;
+				default:
+					break;
+				}
+				dialog.dismiss();
+			}
+		});
+		dialog.show();
 	}
 
+	@SuppressWarnings("deprecation")
 	private void shareToWeiChatCircle() {
 		// 支持微信朋友圈
-		UMWXHandler wxCircleHandler = new UMWXHandler(getActivity(),"WEICHAT_APPID");
+		UMWXHandler wxCircleHandler = new UMWXHandler(getActivity(), Constants.WEICHAT_APPID);
 		wxCircleHandler.setToCircle(true);
 		wxCircleHandler.addToSocialSDK();
 		// 设置微信朋友圈分享内容
@@ -498,7 +508,7 @@ public class BaseDetailFragment extends BaseFragment implements
 		circleMedia.setShareContent(getShareContent());
 		// 设置朋友圈title
 		circleMedia.setTitle(getShareTitle());
-		// circleMedia.setShareImage(localImage);
+		circleMedia.setShareImage(getShareImg());
 		circleMedia.setTargetUrl(getShareUrl());
 		mController.setShareMedia(circleMedia);
 		mController.postShare(getActivity(), SHARE_MEDIA.WEIXIN_CIRCLE,
@@ -517,10 +527,10 @@ public class BaseDetailFragment extends BaseFragment implements
 				});
 	}
 
+	@SuppressWarnings("deprecation")
 	private void shareToWeiChat() {
 		// 添加微信平台
-		UMWXHandler wxHandler = new UMWXHandler(getActivity(),
-				"");
+		UMWXHandler wxHandler = new UMWXHandler(getActivity(), Constants.WEICHAT_APPID);
 		wxHandler.addToSocialSDK();
 		// 设置微信好友分享内容
 		WeiXinShareContent weixinContent = new WeiXinShareContent();
@@ -531,7 +541,7 @@ public class BaseDetailFragment extends BaseFragment implements
 		// 设置分享内容跳转URL
 		weixinContent.setTargetUrl(getShareUrl());
 		// 设置分享图片
-		// weixinContent.setShareImage(localImage);
+		weixinContent.setShareImage(getShareImg());
 		mController.setShareMedia(weixinContent);
 		mController.postShare(getActivity(), SHARE_MEDIA.WEIXIN,
 				new SnsPostListener() {
@@ -550,7 +560,7 @@ public class BaseDetailFragment extends BaseFragment implements
 	}
 
 	private void shareToSinaWeibo() {
-		// 设置腾讯微博SSO handler
+		// 设置新浪微博SSO handler
 		mController.getConfig().setSsoHandler(new SinaSsoHandler());
 		if (OauthHelper.isAuthenticated(getActivity(), SHARE_MEDIA.SINA)) {
 			shareContent(SHARE_MEDIA.SINA);
@@ -627,8 +637,7 @@ public class BaseDetailFragment extends BaseFragment implements
 	}
 
 	private void shareToQZone() {
-		QZoneSsoHandler qZoneSsoHandler = new QZoneSsoHandler(getActivity(),
-				"", "");
+		QZoneSsoHandler qZoneSsoHandler = new QZoneSsoHandler(getActivity(), Constants.QQ_APPID, Constants.QQ_APPKEY);
 		qZoneSsoHandler.addToSocialSDK();
 		QZoneShareContent qzone = new QZoneShareContent();
 		// 设置分享文字
@@ -638,7 +647,7 @@ public class BaseDetailFragment extends BaseFragment implements
 		// 设置分享内容的标题
 		qzone.setTitle(getShareTitle());
 		// 设置分享图片
-		// qzone.setShareImage(urlImage);
+		qzone.setShareImage(getShareImg());
 		mController.setShareMedia(qzone);
 		mController.postShare(getActivity(), SHARE_MEDIA.QZONE,
 				new SnsPostListener() {
@@ -657,12 +666,12 @@ public class BaseDetailFragment extends BaseFragment implements
 	}
 
 	protected void shareToQQ(SHARE_MEDIA media) {
-		UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(getActivity(),
-				"", "");
+		UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(getActivity(), Constants.QQ_APPID, Constants.QQ_APPKEY);
 		qqSsoHandler.setTargetUrl(getShareUrl());
-		qqSsoHandler.setTitle(getShareContent());
+		qqSsoHandler.setTitle(getShareTitle());
 		qqSsoHandler.addToSocialSDK();
 		mController.setShareContent(getShareContent());
+		mController.setShareImage(getShareImg());
 		mController.postShare(getActivity(), media, new SnsPostListener() {
 
 			@Override

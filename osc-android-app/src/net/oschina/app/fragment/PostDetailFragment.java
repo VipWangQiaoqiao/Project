@@ -254,6 +254,11 @@ public class PostDetailFragment extends BaseDetailFragment implements
 	protected int getFavoriteTargetType() {
 		return mPost != null ? FavoriteList.TYPE_POST : -1;
 	}
+	
+	@Override
+	protected String getShareTitle() {
+		return getString(R.string.share_title_post);
+	}
 
 	@Override
 	protected String getShareContent() {
@@ -262,6 +267,6 @@ public class PostDetailFragment extends BaseDetailFragment implements
 
 	@Override
 	protected String getShareUrl() {
-		return mPost != null ? mPost.getUrl() : null;
+		return mPost != null ? mPost.getUrl().replace("http://www", "http://m") : null;
 	}
 }

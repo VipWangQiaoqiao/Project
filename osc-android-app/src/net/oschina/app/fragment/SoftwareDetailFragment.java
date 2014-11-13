@@ -266,6 +266,11 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
 	protected int getFavoriteTargetType() {
 		return mSoftware != null ? FavoriteList.TYPE_SOFTWARE : -1;
 	}
+	
+	@Override
+	protected String getShareTitle() {
+		return getString(R.string.share_title_soft);
+	}
 
 	@Override
 	protected String getShareContent() {
@@ -274,7 +279,7 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
 
 	@Override
 	protected String getShareUrl() {
-		return mSoftware != null ? mSoftware.getUrl() : "";
+		return mSoftware != null ? mSoftware.getUrl().replace("http://www", "http://m") : "";
 	}
 
 	@Override

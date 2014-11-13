@@ -68,14 +68,19 @@
     <string name="actionbar_title_mes">消息中心</string>
     <string name="actionbar_title_message_detail">对话</string>
     
+    <string name="share_to">分享到</string>
     <string name="platform_qq">QQ</string>
 	<string name="platform_qzone">QQ空间</string>
 	<string name="platform_tencent_weibo">腾讯微博</string>
 	<string name="platform_sina">微博</string>
 	<string name="platform_weichat">微信</string>
 	<string name="platform_weichat_circle">朋友圈</string>
-	<string name="share_title">OSC分享</string>
-	<string name="tip_start_share">开始分享</string>
+	<string name="share_title">开源中国分享</string>
+	<string name="share_title_news">开源中国资讯分享</string>
+	<string name="share_title_blog">开源中国博客分享</string>
+	<string name="share_title_soft">开源中国软件分享</string>
+	<string name="share_title_post">开源中国帖子分享</string>
+	<string name="tip_start_share">开始分享…</string>
 	<string name="tip_share_done">分享完成</string>
 	
 	<string name="detail_menu_unfavorite">取消收藏</string>

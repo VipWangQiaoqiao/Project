@@ -280,22 +280,17 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 	}
 
 	@Override
+	protected String getShareTitle() {
+		return getString(R.string.share_title_news);
+	}
+
+	@Override
 	protected String getShareContent() {
 		return mNews != null ? mNews.getTitle() : null;
 	}
 
 	@Override
 	protected String getShareUrl() {
-		return mNews != null ? mNews.getUrl() : null;
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
+		return mNews != null ? mNews.getUrl().replace("http://www", "http://m") : null;
 	}
 }
