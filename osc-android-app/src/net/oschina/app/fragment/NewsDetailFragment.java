@@ -180,18 +180,18 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 	}
 
 	private void fillWebViewBody() {
-		String body = UIHelper.WEB_STYLE + mNews.getBody();
-
-		body = UIHelper.setHtmlCotentSupportImagePreview(body);
-
+		StringBuffer body = new StringBuffer(UIHelper.setHtmlCotentSupportImagePreview(mNews.getBody()));
+		
+		body.append(UIHelper.WEB_STYLE).append(UIHelper.WEB_LOAD_IMAGES);
+		
 		// 更多关于***软件的信息
 		String softwareName = mNews.getSoftwareName();
 		String softwareLink = mNews.getSoftwareLink();
 		if (!StringUtils.isEmpty(softwareName)
 				&& !StringUtils.isEmpty(softwareLink))
-			body += String
+			body.append(String
 					.format("<div id='oschina_software' style='margin-top:8px;color:#FF0000;font-weight:bold'>更多关于:&nbsp;<a href='%s'>%s</a>&nbsp;的详细信息</div>",
-							softwareLink, softwareName);
+							softwareLink, softwareName));
 
 		// 相关新闻
 		if (mNews.getRelatives().size() > 0) {
@@ -201,17 +201,16 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 						"<a href='%s' style='text-decoration:none'>%s</a><p/>",
 						relative.url, relative.title);
 			}
-			body += "<p/><div style=\"height:1px;width:100%;background:#DADADA;margin-bottom:10px;\"/>"
+			body.append("<p/><div style=\"height:1px;width:100%;background:#DADADA;margin-bottom:10px;\"/>"
 					+ String.format("<br/> <b>相关资讯</b> <div><p/>%s</div>",
-							strRelative);
+							strRelative));
 		}
 
-		body += "<br/>";
+		body.append("<br/>");
 
-		body += UIHelper.WEB_LOAD_IMAGES;
 		UIHelper.addWebImageShow(getActivity(), mWebView);
 		mWebView.setWebViewClient(mWebClient);
-		mWebView.loadDataWithBaseURL(null, body, "text/html", "utf-8", null);
+		mWebView.loadDataWithBaseURL(null, body.toString(), "text/html", "utf-8", null);
 	}
 
 	@Override

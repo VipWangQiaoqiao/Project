@@ -46,10 +46,14 @@ public class PostDetailFragment extends BaseDetailFragment implements
 	protected static final String TAG = PostDetailFragment.class
 			.getSimpleName();
 	private static final String POST_CACHE_KEY = "post_";
-	@InjectView(R.id.tv_title) TextView mTvTitle;
-	@InjectView(R.id.tv_source) TextView mTvSource;
-	@InjectView(R.id.tv_time) TextView mTvTime;
-	@InjectView(R.id.tv_comment_count) TextView mTvCommentCount;
+	@InjectView(R.id.tv_title)
+	TextView mTvTitle;
+	@InjectView(R.id.tv_source)
+	TextView mTvSource;
+	@InjectView(R.id.tv_time)
+	TextView mTvTime;
+	@InjectView(R.id.tv_comment_count)
+	TextView mTvCommentCount;
 	private WebView mWebView;
 	private int mPostId;
 	private Post mPost;
@@ -104,8 +108,8 @@ public class PostDetailFragment extends BaseDetailFragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_news_detail,
-				container, false);
+		View view = inflater.inflate(R.layout.fragment_news_detail, container,
+				false);
 
 		mPostId = getActivity().getIntent().getIntExtra("post_id", 0);
 		ButterKnife.inject(this, view);
@@ -142,10 +146,10 @@ public class PostDetailFragment extends BaseDetailFragment implements
 		return (Post) seri;
 	}
 
-//	@Override
-//	protected void onCommentChanged(int opt, int id, int catalog,
-//			boolean isBlog, Comment comment) {
-//	}
+	// @Override
+	// protected void onCommentChanged(int opt, int id, int catalog,
+	// boolean isBlog, Comment comment) {
+	// }
 
 	@Override
 	protected void executeOnLoadDataSuccess(Entity entity) {
@@ -158,7 +162,8 @@ public class PostDetailFragment extends BaseDetailFragment implements
 		mTvTitle.setText(mPost.getTitle());
 		mTvSource.setText(mPost.getAuthor());
 		mTvTime.setText(StringUtils.friendly_time(mPost.getPubDate()));
-		mTvCommentCount.setText(mPost.getAnswerCount() + "回/" + mPost.getViewCount() + "阅");
+		mTvCommentCount.setText(mPost.getAnswerCount() + "回/"
+				+ mPost.getViewCount() + "阅");
 		if (mToolBarFragment != null) {
 			mToolBarFragment.setCommentCount(mPost.getAnswerCount() + "/"
 					+ mPost.getViewCount());
@@ -168,25 +173,26 @@ public class PostDetailFragment extends BaseDetailFragment implements
 
 	private void fillWebViewBody() {
 		// 显示标签
-		String tags = getPostTags(mPost.getTags());
-		String body = UIHelper.WEB_STYLE + mPost.getBody() + tags
-				+ "<div style=\"margin-bottom: 80px\" />";
-		body = UIHelper.setHtmlCotentSupportImagePreview(body);
-		body += UIHelper.WEB_LOAD_IMAGES;
+		StringBuffer body = new StringBuffer(
+				UIHelper.setHtmlCotentSupportImagePreview(mPost.getBody()));
+		body.append(UIHelper.WEB_STYLE)
+			.append(UIHelper.WEB_LOAD_IMAGES)
+			.append(getPostTags(mPost.getTags()))
+			.append("<div style=\"margin-bottom: 80px\" />");
 		UIHelper.addWebImageShow(getActivity(), mWebView);
 		mWebView.setWebViewClient(mWebClient);
-		mWebView.loadDataWithBaseURL(null, body, "text/html", "utf-8", null);
+		mWebView.loadDataWithBaseURL(null, body.toString(), "text/html", "utf-8", null);
 	}
 
 	@SuppressWarnings("deprecation")
 	private String getPostTags(Post.Tags taglist) {
 		if (taglist == null)
 			return "";
-		String tags = "";
+		StringBuffer tags = new StringBuffer();
 		for (String tag : taglist.getTags()) {
-			tags += String
+			tags.append(String
 					.format("<a class='tag' href='http://www.oschina.net/question/tag/%s' >&nbsp;%s&nbsp;</a>&nbsp;&nbsp;",
-							URLEncoder.encode(tag), tag);
+							URLEncoder.encode(tag), tag));
 		}
 		return String.format("<div style='margin-top:10px;'>%s</div>", tags);
 	}
@@ -228,9 +234,10 @@ public class PostDetailFragment extends BaseDetailFragment implements
 			return;
 		}
 		showWaitDialog(R.string.progress_submit);
-		OSChinaApi.publicComment(CommentList.CATALOG_POST, mPostId, AppContext.getInstance().getLoginUid(), text, 0, mCommentHandler);
+		OSChinaApi.publicComment(CommentList.CATALOG_POST, mPostId, AppContext
+				.getInstance().getLoginUid(), text, 0, mCommentHandler);
 	}
-	
+
 	@Override
 	protected void commentPubSuccess() {
 		super.commentPubSuccess();
@@ -244,7 +251,7 @@ public class PostDetailFragment extends BaseDetailFragment implements
 			mToolBarFragment.setFavorite(flag);
 		}
 	}
-	
+
 	@Override
 	protected int getFavoriteTargetId() {
 		return mPost != null ? mPost.getId() : -1;
@@ -254,7 +261,7 @@ public class PostDetailFragment extends BaseDetailFragment implements
 	protected int getFavoriteTargetType() {
 		return mPost != null ? FavoriteList.TYPE_POST : -1;
 	}
-	
+
 	@Override
 	protected String getShareTitle() {
 		return getString(R.string.share_title_post);
@@ -267,6 +274,7 @@ public class PostDetailFragment extends BaseDetailFragment implements
 
 	@Override
 	protected String getShareUrl() {
-		return mPost != null ? mPost.getUrl().replace("http://www", "http://m") : null;
+		return mPost != null ? mPost.getUrl().replace("http://www", "http://m")
+				: null;
 	}
 }

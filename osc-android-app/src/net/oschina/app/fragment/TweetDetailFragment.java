@@ -31,8 +31,10 @@ import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.HTMLSpirit;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
+import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
+import net.oschina.app.widget.AvatarView;
 
 import org.apache.http.Header;
 
@@ -77,7 +79,7 @@ public class TweetDetailFragment extends BaseFragment implements
 	private static final String CACHE_KEY_TWEET_COMMENT = "tweet_comment_";
 	private ListView mListView;
 	private EmptyLayout mEmptyView;
-	private ImageView mIvAvatar, mIvPic;
+	private AvatarView mIvAvatar;
 	private TextView mTvName, mTvFrom, mTvTime, mTvCommentCount;
 	private WebView mContent;
 	private int mTweetId;
@@ -213,32 +215,13 @@ public class TweetDetailFragment extends BaseFragment implements
 		mListView.setOnItemLongClickListener(this);
 		View header = LayoutInflater.from(getActivity()).inflate(
 				R.layout.list_header_tweet_detail, null);
-		mIvAvatar = (ImageView) header.findViewById(R.id.iv_avatar);
-		mIvAvatar.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				UIHelper.showUserCenter(getActivity(), mTweet.getAuthorid(),
-						mTweet.getAuthor());
-			}
-		});
+		mIvAvatar = (AvatarView) header.findViewById(R.id.iv_avatar);
 
 		mTvName = (TextView) header.findViewById(R.id.tv_name);
 		mTvFrom = (TextView) header.findViewById(R.id.tv_from);
 		mTvTime = (TextView) header.findViewById(R.id.tv_time);
 		mTvCommentCount = (TextView) header.findViewById(R.id.tv_comment_count);
 		mContent = (WebView) header.findViewById(R.id.webview);
-		mIvPic = (ImageView) header.findViewById(R.id.iv_pic);
-		mIvPic.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				if (mTweet != null && !TextUtils.isEmpty(mTweet.getImgSmall())) {
-					UIHelper.showImagePreview(getActivity(),
-							new String[] { mTweet.getImgBig() });
-				}
-			}
-		});
 		initWebView(mContent);
 
 		mListView.addHeaderView(header);
@@ -265,7 +248,8 @@ public class TweetDetailFragment extends BaseFragment implements
 	}
 
 	private void fillUI() {
-		ImageLoader.getInstance().displayImage(mTweet.getPortrait(), mIvAvatar);
+		mIvAvatar.setAvatarUrl(mTweet.getPortrait());
+		mIvAvatar.setUserInfo(mTweet.getAuthorid(), mTweet.getAuthor());
 		mTvName.setText(mTweet.getAuthor());
 		mTvTime.setText(StringUtils.friendly_time(mTweet.getPubDate()));
 		switch (mTweet.getAppclient()) {
@@ -293,28 +277,14 @@ public class TweetDetailFragment extends BaseFragment implements
 				mTweet.getCommentCount()));
 
 		// set content
-		String body = UIHelper.WEB_STYLE + mTweet.getBody();
-		body = body.replaceAll("(<img[^>]*?)\\s+width\\s*=\\s*\\S+", "$1");
-		body = body.replaceAll("(<img[^>]*?)\\s+height\\s*=\\s*\\S+", "$1");
-
+		String tweetBody = TextUtils.isEmpty(mTweet.getImgSmall()) ? mTweet
+				.getBody() : mTweet.getBody() + "<br/><img src=\""
+				+ mTweet.getImgSmall() + "\">";
+		tweetBody = UIHelper.setHtmlCotentSupportImagePreview(tweetBody);
+		String body = UIHelper.WEB_STYLE + UIHelper.WEB_LOAD_IMAGES + tweetBody;
+		TLog.log("Tweet", body);
+		mContent.setWebViewClient(UIHelper.getWebViewClient());
 		mContent.loadDataWithBaseURL(null, body, "text/html", "utf-8", null);
-		// mContent.setWebViewClient(UIHelper.getWebViewClient());
-
-		if (TextUtils.isEmpty(mTweet.getImgSmall())) {
-			return;
-		}
-		DisplayImageOptions options = new DisplayImageOptions.Builder()
-				.cacheInMemory(true).cacheOnDisk(true)
-				.postProcessor(new BitmapProcessor() {
-
-					@Override
-					public Bitmap process(Bitmap arg0) {
-						return arg0;
-					}
-				}).build();
-		mIvPic.setVisibility(View.VISIBLE);
-		ImageLoader.getInstance().displayImage(mTweet.getImgSmall(), mIvPic,
-				options);
 	}
 
 	private void sendRequestData() {
@@ -377,15 +347,16 @@ public class TweetDetailFragment extends BaseFragment implements
 		}
 		if (mEmojiFragment.getInputTag() != null) {
 			Comment comment = (Comment) mEmojiFragment.getInputTag();
-			OSChinaApi.replyComment(mTweetId, CommentList.CATALOG_TWEET, comment
-					.getId(), comment.getAuthorId(), AppContext.getInstance()
-					.getLoginUid(), text, mCommentHandler);
+			OSChinaApi
+					.replyComment(mTweetId, CommentList.CATALOG_TWEET, comment
+							.getId(), comment.getAuthorId(), AppContext
+							.getInstance().getLoginUid(), text, mCommentHandler);
 		} else {
 			OSChinaApi.publicComment(CommentList.CATALOG_TWEET, mTweetId,
 					AppContext.getInstance().getLoginUid(), text, 0,
 					mCommentHandler);
 		}
-		
+
 	}
 
 	private void handleDeleteComment(Comment comment) {
@@ -427,7 +398,7 @@ public class TweetDetailFragment extends BaseFragment implements
 			AppContext.showToastShort(R.string.delete_faile);
 		}
 	}
-	
+
 	private void setTweetCommentCount(int addCount) {
 		mAdapter.notifyDataSetChanged();
 		if (mTweet.getCommentCount() + addCount == -1) {

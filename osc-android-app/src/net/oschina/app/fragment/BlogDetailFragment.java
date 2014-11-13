@@ -214,12 +214,11 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 	}
 
 	private void fillWebViewBody() {
-		String body = UIHelper.WEB_STYLE + mBlog.getBody();
-		body = UIHelper.setHtmlCotentSupportImagePreview(body);
-		body += UIHelper.WEB_LOAD_IMAGES;
+		StringBuffer body = new StringBuffer(UIHelper.setHtmlCotentSupportImagePreview(mBlog.getBody()));
+		body.append(UIHelper.WEB_STYLE).append(UIHelper.WEB_LOAD_IMAGES);
 		UIHelper.addWebImageShow(getActivity(), mWebView);
 		mWebView.setWebViewClient(mWebClient);
-		mWebView.loadDataWithBaseURL(null, body, "text/html", "utf-8", null);
+		mWebView.loadDataWithBaseURL(null, body.toString(), "text/html", "utf-8", null);
 	}
 
 	@Override

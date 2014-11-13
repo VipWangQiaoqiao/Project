@@ -71,34 +71,35 @@ import com.umeng.socialize.weixin.media.WeiXinShareContent;
 
 public class BaseDetailFragment extends BaseFragment implements
 		OnItemClickListener {
-	
+
 	public static final String INTENT_ACTION_COMMENT_CHANGED = "INTENT_ACTION_COMMENT_CHAGED";
-	
+
 	final UMSocialService mController = UMServiceFactory
 			.getUMSocialService("com.umeng.share");
 
 	private ListPopupWindow mMenuWindow;
 	private MenuAdapter mMenuAdapter;
-	
+
 	protected EmptyLayout mEmptyLayout;
-	
+
 	protected WebView mWebView;
-	
+
 	protected AsyncHttpResponseHandler mCommentHandler = new AsyncHttpResponseHandler() {
 
 		@Override
 		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 			try {
-				ResultBean rsb = XmlUtils.toBean(ResultBean.class, new ByteArrayInputStream(arg2));
+				ResultBean rsb = XmlUtils.toBean(ResultBean.class,
+						new ByteArrayInputStream(arg2));
 				Result res = rsb.getResult();
 				if (res.OK()) {
 					hideWaitDialog();
 					AppContext.showToastShort(R.string.comment_publish_success);
-					
+
 					commentPubSuccess();
-//					UIHelper.sendBroadCastCommentChanged(getActivity(),
-//							mIsBlogComment, mId, mCatalog, Comment.OPT_ADD,
-//							res.getComment());
+					// UIHelper.sendBroadCastCommentChanged(getActivity(),
+					// mIsBlogComment, mId, mCatalog, Comment.OPT_ADD,
+					// res.getComment());
 				} else {
 					hideWaitDialog();
 					AppContext.showToastShort(res.getErrorMessage());
@@ -116,7 +117,7 @@ public class BaseDetailFragment extends BaseFragment implements
 			AppContext.showToastShort(R.string.comment_publish_faile);
 		}
 	};
-	
+
 	protected WebViewClient mWebClient = new WebViewClient() {
 
 		private boolean receivedError = false;
@@ -180,9 +181,9 @@ public class BaseDetailFragment extends BaseFragment implements
 		return true;
 	}
 
-//	protected void onCommentChanged(int opt, int id, int catalog,
-//			boolean isBlog, Comment comment) {
-//	}
+	// protected void onCommentChanged(int opt, int id, int catalog,
+	// boolean isBlog, Comment comment) {
+	// }
 
 	private CommentChangeReceiver mReceiver;
 	private AsyncTask<String, Void, Entity> mCacheTask;
@@ -391,14 +392,14 @@ public class BaseDetailFragment extends BaseFragment implements
 	protected String getShareContent() {
 		return "";
 	}
-	
+
 	protected UMImage getShareImg() {
 		UMImage img = new UMImage(getActivity(), R.drawable.ic_launcher);
 		return img;
 	}
-	
+
 	protected void commentPubSuccess() {
-		
+
 	}
 
 	private void showMoreOptionMenu(View view) {
@@ -428,8 +429,6 @@ public class BaseDetailFragment extends BaseFragment implements
 			mMenuWindow = null;
 		}
 	}
-	
-	
 
 	protected void onReportMenuClick() {
 	}
@@ -459,6 +458,7 @@ public class BaseDetailFragment extends BaseFragment implements
 	protected void handleShare() {
 		if (TextUtils.isEmpty(getShareContent())
 				|| TextUtils.isEmpty(getShareUrl())) {
+			AppContext.showToast("内容加载失败...");
 			return;
 		}
 		final ShareDialog dialog = new ShareDialog(getActivity());
@@ -500,7 +500,8 @@ public class BaseDetailFragment extends BaseFragment implements
 	@SuppressWarnings("deprecation")
 	private void shareToWeiChatCircle() {
 		// 支持微信朋友圈
-		UMWXHandler wxCircleHandler = new UMWXHandler(getActivity(), Constants.WEICHAT_APPID);
+		UMWXHandler wxCircleHandler = new UMWXHandler(getActivity(),
+				Constants.WEICHAT_APPID);
 		wxCircleHandler.setToCircle(true);
 		wxCircleHandler.addToSocialSDK();
 		// 设置微信朋友圈分享内容
@@ -511,26 +512,14 @@ public class BaseDetailFragment extends BaseFragment implements
 		circleMedia.setShareImage(getShareImg());
 		circleMedia.setTargetUrl(getShareUrl());
 		mController.setShareMedia(circleMedia);
-		mController.postShare(getActivity(), SHARE_MEDIA.WEIXIN_CIRCLE,
-				new SnsPostListener() {
-
-					@Override
-					public void onStart() {
-						AppContext.showToastShort(R.string.tip_start_share);
-					}
-
-					@Override
-					public void onComplete(SHARE_MEDIA arg0, int arg1,
-							SocializeEntity arg2) {
-						AppContext.showToastShort(R.string.tip_share_done);
-					}
-				});
+		mController.postShare(getActivity(), SHARE_MEDIA.WEIXIN_CIRCLE, null);
 	}
 
 	@SuppressWarnings("deprecation")
 	private void shareToWeiChat() {
 		// 添加微信平台
-		UMWXHandler wxHandler = new UMWXHandler(getActivity(), Constants.WEICHAT_APPID);
+		UMWXHandler wxHandler = new UMWXHandler(getActivity(),
+				Constants.WEICHAT_APPID);
 		wxHandler.addToSocialSDK();
 		// 设置微信好友分享内容
 		WeiXinShareContent weixinContent = new WeiXinShareContent();
@@ -543,20 +532,7 @@ public class BaseDetailFragment extends BaseFragment implements
 		// 设置分享图片
 		weixinContent.setShareImage(getShareImg());
 		mController.setShareMedia(weixinContent);
-		mController.postShare(getActivity(), SHARE_MEDIA.WEIXIN,
-				new SnsPostListener() {
-
-					@Override
-					public void onStart() {
-						AppContext.showToastShort(R.string.tip_start_share);
-					}
-
-					@Override
-					public void onComplete(SHARE_MEDIA arg0, int arg1,
-							SocializeEntity arg2) {
-						AppContext.showToastShort(R.string.tip_share_done);
-					}
-				});
+		mController.postShare(getActivity(), SHARE_MEDIA.WEIXIN, null);
 	}
 
 	private void shareToSinaWeibo() {
@@ -621,23 +597,12 @@ public class BaseDetailFragment extends BaseFragment implements
 
 	private void shareContent(SHARE_MEDIA media) {
 		mController.setShareContent(getShareContent() + getShareUrl());
-		mController.directShare(getActivity(), media, new SnsPostListener() {
-
-			@Override
-			public void onStart() {
-				AppContext.showToastShort(R.string.tip_start_share);
-			}
-
-			@Override
-			public void onComplete(SHARE_MEDIA arg0, int arg1,
-					SocializeEntity arg2) {
-				AppContext.showToastShort(R.string.tip_share_done);
-			}
-		});
+		mController.directShare(getActivity(), media, null);
 	}
 
 	private void shareToQZone() {
-		QZoneSsoHandler qZoneSsoHandler = new QZoneSsoHandler(getActivity(), Constants.QQ_APPID, Constants.QQ_APPKEY);
+		QZoneSsoHandler qZoneSsoHandler = new QZoneSsoHandler(getActivity(),
+				Constants.QQ_APPID, Constants.QQ_APPKEY);
 		qZoneSsoHandler.addToSocialSDK();
 		QZoneShareContent qzone = new QZoneShareContent();
 		// 设置分享文字
@@ -649,42 +614,18 @@ public class BaseDetailFragment extends BaseFragment implements
 		// 设置分享图片
 		qzone.setShareImage(getShareImg());
 		mController.setShareMedia(qzone);
-		mController.postShare(getActivity(), SHARE_MEDIA.QZONE,
-				new SnsPostListener() {
-
-					@Override
-					public void onStart() {
-						AppContext.showToastShort(R.string.tip_start_share);
-					}
-
-					@Override
-					public void onComplete(SHARE_MEDIA arg0, int arg1,
-							SocializeEntity arg2) {
-						AppContext.showToastShort(R.string.tip_share_done);
-					}
-				});
+		mController.postShare(getActivity(), SHARE_MEDIA.QZONE, null);
 	}
 
 	protected void shareToQQ(SHARE_MEDIA media) {
-		UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(getActivity(), Constants.QQ_APPID, Constants.QQ_APPKEY);
+		UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(getActivity(),
+				Constants.QQ_APPID, Constants.QQ_APPKEY);
 		qqSsoHandler.setTargetUrl(getShareUrl());
 		qqSsoHandler.setTitle(getShareTitle());
 		qqSsoHandler.addToSocialSDK();
 		mController.setShareContent(getShareContent());
 		mController.setShareImage(getShareImg());
-		mController.postShare(getActivity(), media, new SnsPostListener() {
-
-			@Override
-			public void onStart() {
-				AppContext.showToastShort(R.string.tip_start_share);
-			}
-
-			@Override
-			public void onComplete(SHARE_MEDIA arg0, int arg1,
-					SocializeEntity arg2) {
-				AppContext.showToastShort(R.string.tip_share_done);
-			}
-		});
+		mController.postShare(getActivity(), media, null);
 	}
 
 	protected void notifyFavorite(boolean favorite) {
@@ -767,7 +708,8 @@ public class BaseDetailFragment extends BaseFragment implements
 		@Override
 		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 			try {
-				Result res = XmlUtils.toBean(ResultBean.class, new ByteArrayInputStream(arg2)).getResult();
+				Result res = XmlUtils.toBean(ResultBean.class,
+						new ByteArrayInputStream(arg2)).getResult();
 				if (res.OK()) {
 					AppContext.showToastShort(R.string.add_favorite_success);
 					mMenuAdapter.setFavorite(true);
@@ -797,7 +739,8 @@ public class BaseDetailFragment extends BaseFragment implements
 		@Override
 		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 			try {
-				Result res = XmlUtils.toBean(ResultBean.class, new ByteArrayInputStream(arg2)).getResult();
+				Result res = XmlUtils.toBean(ResultBean.class,
+						new ByteArrayInputStream(arg2)).getResult();
 				if (res.OK()) {
 					AppContext.showToastShort(R.string.del_favorite_success);
 					mMenuAdapter.setFavorite(false);
@@ -825,32 +768,32 @@ public class BaseDetailFragment extends BaseFragment implements
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-//			int opt = intent.getIntExtra(Comment.BUNDLE_KEY_OPERATION, 0);
-//			int id = intent.getIntExtra(Comment.BUNDLE_KEY_ID, 0);
-//			int catalog = intent.getIntExtra(Comment.BUNDLE_KEY_CATALOG, 0);
-//			boolean isBlog = intent.getBooleanExtra(Comment.BUNDLE_KEY_BLOG,
-//					false);
-//			Comment comment = intent
-//					.getParcelableExtra(Comment.BUNDLE_KEY_COMMENT);
-//			onCommentChanged(opt, id, catalog, isBlog, comment);
+			// int opt = intent.getIntExtra(Comment.BUNDLE_KEY_OPERATION, 0);
+			// int id = intent.getIntExtra(Comment.BUNDLE_KEY_ID, 0);
+			// int catalog = intent.getIntExtra(Comment.BUNDLE_KEY_CATALOG, 0);
+			// boolean isBlog = intent.getBooleanExtra(Comment.BUNDLE_KEY_BLOG,
+			// false);
+			// Comment comment = intent
+			// .getParcelableExtra(Comment.BUNDLE_KEY_COMMENT);
+			// onCommentChanged(opt, id, catalog, isBlog, comment);
 		}
 	}
 
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void initView(View view) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void initData() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

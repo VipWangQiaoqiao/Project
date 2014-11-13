@@ -209,11 +209,10 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
 	}
 
 	private void fillWebViewBody() {
-		String body = UIHelper.WEB_STYLE + mSoftware.getBody();
-		body = UIHelper.setHtmlCotentSupportImagePreview(body);
-		body += UIHelper.WEB_LOAD_IMAGES;
+		StringBuffer body = new StringBuffer(UIHelper.setHtmlCotentSupportImagePreview(mSoftware.getBody()));
+		body.append(UIHelper.WEB_STYLE).append(UIHelper.WEB_LOAD_IMAGES);
 		UIHelper.addWebImageShow(getActivity(), mWebView);
-		mWebView.loadDataWithBaseURL(null, body, "text/html", "utf-8", null);
+		mWebView.loadDataWithBaseURL(null, body.toString(), "text/html", "utf-8", null);
 	}
 
 	@Override

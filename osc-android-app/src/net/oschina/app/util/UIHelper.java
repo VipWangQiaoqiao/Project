@@ -51,6 +51,7 @@ import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 /**
  * 界面帮助类
@@ -263,6 +264,22 @@ public class UIHelper {
 				}
 			}
 		}, "mWebViewImageListener");
+	}
+	
+	/**
+	 * 获取webviewClient对象
+	 * 
+	 * @return
+	 */
+	public static WebViewClient getWebViewClient() {
+
+		return new WebViewClient() {
+			@Override
+			public boolean shouldOverrideUrlLoading(WebView view, String url) {
+				showUrlRedirect(view.getContext(), url);
+				return true;
+			}
+		};
 	}
 
 	public static String setHtmlCotentSupportImagePreview(String body) {
