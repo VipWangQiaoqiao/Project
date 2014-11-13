@@ -32,18 +32,12 @@ public class ListBaseAdapter extends BaseAdapter {
 
 	private LayoutInflater mInflater;
 
-	private LinearLayout mFooterView;
-
 	protected LayoutInflater getLayoutInflater(Context context) {
 		if (mInflater == null) {
 			mInflater = (LayoutInflater) context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		}
 		return mInflater;
-	}
-
-	public View getFooterView() {
-		return this.mFooterView;
 	}
 
 	public void setScreenWidth(int width) {
@@ -171,7 +165,7 @@ public class ListBaseAdapter extends BaseAdapter {
 			if (getState() == STATE_LOAD_MORE || getState() == STATE_NO_MORE
 					|| state == STATE_EMPTY_ITEM
 					|| getState() == STATE_NETWORK_ERROR) {
-				mFooterView = (LinearLayout) LayoutInflater.from(
+				View mFooterView = LayoutInflater.from(
 						parent.getContext()).inflate(R.layout.list_cell_footer,
 						null);
 				if (!loadMoreHasBg()) {
@@ -218,15 +212,6 @@ public class ListBaseAdapter extends BaseAdapter {
 			}
 		}
 		return getRealView(position, convertView, parent);
-	}
-	
-	public void setNoMore() {
-		if (mFooterView != null) {
-			mFooterView.setVisibility(View.VISIBLE);
-			mFooterView.findViewById(R.id.progressbar).setVisibility(View.GONE);
-			mFooterView.findViewById(R.id.text).setVisibility(View.VISIBLE);
-			((TextView) mFooterView.findViewById(R.id.text)).setText(_loadFinishText);
-		}
 	}
 
 	protected View getRealView(int position, View convertView, ViewGroup parent) {

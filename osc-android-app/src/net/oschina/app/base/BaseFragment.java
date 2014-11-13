@@ -22,6 +22,7 @@ public abstract class BaseFragment extends Fragment implements android.view.View
 	protected static final int STATE_NONE = 0;
 	protected static final int STATE_REFRESH = 1;
 	protected static final int STATE_LOADMORE = 2;
+	protected static final int STATE_NOMORE = 3;
 	protected int mState = STATE_NONE;
 	
 	protected LayoutInflater mInflater;

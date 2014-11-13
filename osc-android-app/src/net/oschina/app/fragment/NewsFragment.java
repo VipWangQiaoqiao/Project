@@ -2,6 +2,7 @@ package net.oschina.app.fragment;
 
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.List;
 
 import net.oschina.app.adapter.NewsAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
@@ -10,11 +11,10 @@ import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.News;
 import net.oschina.app.bean.NewsList;
+import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
-import android.os.Bundle;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 
 /**
@@ -41,9 +41,6 @@ public class NewsFragment extends BaseListFragment {
 	@Override
 	protected ListEntity parseList(InputStream is) throws Exception {
 		NewsList list = XmlUtils.toBean(NewsList.class, is);
-		if (mCatalog == NewsList.CATALOG_WEEK || mCatalog == NewsList.CATALOG_MONTH) {
-			mState = ListBaseAdapter.STATE_NO_MORE;
-		}
 		return list;
 	}
 
@@ -64,20 +61,19 @@ public class NewsFragment extends BaseListFragment {
 		if (news != null)
 			UIHelper.showNewsRedirect(view.getContext(), news);
 	}
+	
 
 	@Override
-	public void onScrollStateChanged(AbsListView view, int scrollState) {
+	protected void executeOnLoadDataSuccess(List<?> data) {
 		if (mCatalog == NewsList.CATALOG_WEEK || mCatalog == NewsList.CATALOG_MONTH) {
-			mState = ListBaseAdapter.STATE_NO_MORE;
-			try {
-				if (view.getPositionForView(mAdapter.getFooterView()) == view
-						.getLastVisiblePosition()) {
-					mAdapter.setNoMore();
-				}
-			} catch (Exception e) {
-			}
+			mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+			if (mState == STATE_REFRESH)
+				mAdapter.clear();
+			mAdapter.addData(data);
+			mState = STATE_NOMORE;
+			mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
 			return;
 		}
-		super.onScrollStateChanged(view, scrollState);
+		super.executeOnLoadDataSuccess(data);
 	}
 }

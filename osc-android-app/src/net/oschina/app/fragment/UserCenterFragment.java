@@ -439,35 +439,24 @@ public class UserCenterFragment extends BaseFragment implements
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
-
-	}
-
-	@Override
-	public void onScrollStateChanged(AbsListView view, int scrollState) {
-		if (mAdapter == null || mAdapter.getCount() == 0) {
-			return;
-		}
 		// 数据已经全部加载，或数据为空时，或正在加载，不处理滚动事件
-		if (mState == STATE_LOADMORE || mState == STATE_REFRESH) {
+		if (mState == STATE_NOMORE || mState == STATE_LOADMORE || mState == STATE_REFRESH) {
 			return;
 		}
-		// 判断是否滚动到底部
-		boolean scrollEnd = false;
-		try {
-			if (view.getPositionForView(mAdapter.getFooterView()) == view
-					.getLastVisiblePosition())
-				scrollEnd = true;
-		} catch (Exception e) {
-			scrollEnd = false;
-		}
-
-		if (mState == STATE_NONE && scrollEnd) {
-			if (mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
-				mActivePage++;
+		if (mAdapter != null
+				&& mAdapter.getDataSize() > 0
+				&& mListView.getLastVisiblePosition() == (mListView
+						.getCount() - 1)) {
+			if (mState == STATE_NONE
+					&& mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
 				mState = STATE_LOADMORE;
+				mActivePage++;
 				sendGetUserInfomation();
 			}
 		}
 	}
 
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+	}
 }
