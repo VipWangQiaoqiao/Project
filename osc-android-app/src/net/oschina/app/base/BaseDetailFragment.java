@@ -118,56 +118,6 @@ public class BaseDetailFragment extends BaseFragment implements
 		}
 	};
 
-	protected WebViewClient mWebClient = new WebViewClient() {
-
-		private boolean receivedError = false;
-
-		@Override
-		public void onPageStarted(WebView view, String url, Bitmap favicon) {
-			receivedError = false;
-		}
-
-		@Override
-		public boolean shouldOverrideUrlLoading(WebView view, String url) {
-			UIHelper.showUrlRedirect(view.getContext(), url);
-			return true;
-		}
-
-		@Override
-		public void onPageFinished(WebView view, String url) {
-			if (mEmptyLayout != null) {
-				if (receivedError) {
-					mEmptyLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-				} else {
-					mEmptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-				}
-			}
-		}
-
-		@Override
-		public void onReceivedError(WebView view, int errorCode,
-				String description, String failingUrl) {
-			receivedError = true;
-		}
-	};
-
-	@SuppressLint({ "SetJavaScriptEnabled", "JavascriptInterface" })
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	protected void initWebView(WebView webView) {
-		WebSettings settings = webView.getSettings();
-		settings.setDefaultFontSize(15);
-		settings.setJavaScriptEnabled(true);
-		settings.setSupportZoom(true);
-		settings.setBuiltInZoomControls(true);
-		int sysVersion = Build.VERSION.SDK_INT;
-		if (sysVersion >= 11) {
-			settings.setDisplayZoomControls(false);
-		} else {
-			ZoomButtonsController zbc = new ZoomButtonsController(webView);
-			zbc.getZoomControls().setVisibility(View.GONE);
-		}
-	}
-
 	protected void recycleWebView() {
 		if (mWebView != null) {
 			mWebView.setVisibility(View.GONE);

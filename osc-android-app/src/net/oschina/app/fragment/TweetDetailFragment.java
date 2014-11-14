@@ -23,6 +23,7 @@ import net.oschina.app.cache.CacheManager;
 import net.oschina.app.emoji.EmojiFragment;
 import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
 import net.oschina.app.interf.EmojiFragmentControl;
+import net.oschina.app.interf.OnWebViewImageListener;
 import net.oschina.app.service.PublicCommentTask;
 import net.oschina.app.service.ServerTaskUtils;
 import net.oschina.app.ui.dialog.CommonDialog;
@@ -53,6 +54,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.AbsListView;
@@ -222,29 +224,11 @@ public class TweetDetailFragment extends BaseFragment implements
 		mTvTime = (TextView) header.findViewById(R.id.tv_time);
 		mTvCommentCount = (TextView) header.findViewById(R.id.tv_comment_count);
 		mContent = (WebView) header.findViewById(R.id.webview);
-		initWebView(mContent);
+		UIHelper.initWebView(mContent);
 
 		mListView.addHeaderView(header);
 		mAdapter = new CommentAdapter(this, true);
 		mListView.setAdapter(mAdapter);
-	}
-
-	@SuppressLint("SetJavaScriptEnabled")
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private void initWebView(WebView webView) {
-		WebSettings settings = webView.getSettings();
-		settings.setDefaultFontSize(20);
-		settings.setJavaScriptEnabled(true);
-		settings.setSupportZoom(true);
-		settings.setBuiltInZoomControls(true);
-		int sysVersion = Build.VERSION.SDK_INT;
-		if (sysVersion >= 11) {
-			settings.setDisplayZoomControls(false);
-		} else {
-			ZoomButtonsController zbc = new ZoomButtonsController(webView);
-			zbc.getZoomControls().setVisibility(View.GONE);
-		}
-		UIHelper.addWebImageShow(getActivity(), webView);
 	}
 
 	private void fillUI() {
@@ -276,15 +260,35 @@ public class TweetDetailFragment extends BaseFragment implements
 		mTvCommentCount.setText(getString(R.string.comment_count,
 				mTweet.getCommentCount()));
 
-		// set content
+		fillWebViewBody();
+	}
+	
+	/**
+	 * 填充webview内容
+	 */
+	private void fillWebViewBody() {
+		StringBuffer body = new StringBuffer();
+		body.append(UIHelper.WEB_STYLE + UIHelper.WEB_LOAD_IMAGES);
 		String tweetBody = TextUtils.isEmpty(mTweet.getImgSmall()) ? mTweet
 				.getBody() : mTweet.getBody() + "<br/><img src=\""
 				+ mTweet.getImgSmall() + "\">";
-		tweetBody = UIHelper.setHtmlCotentSupportImagePreview(tweetBody);
-		String body = UIHelper.WEB_STYLE + UIHelper.WEB_LOAD_IMAGES + tweetBody;
-		TLog.log("Tweet", body);
-		mContent.setWebViewClient(UIHelper.getWebViewClient());
-		mContent.loadDataWithBaseURL(null, body, "text/html", "utf-8", null);
+		body.append(setHtmlCotentSupportImagePreview(tweetBody));
+		UIHelper.addWebImageShow(getActivity(), mContent);
+		mContent.loadDataWithBaseURL(null, body.toString(), "text/html", "utf-8", null);
+	}
+	
+	/**
+	 * 添加图片放大支持
+	 * @param body
+	 * @return
+	 */
+	private String setHtmlCotentSupportImagePreview(String body) {
+		// 过滤掉 img标签的width,height属性
+		body = body.replaceAll("(<img[^>]*?)\\s+width\\s*=\\s*\\S+", "$1");
+		body = body.replaceAll("(<img[^>]*?)\\s+height\\s*=\\s*\\S+", "$1");
+		return body.replaceAll("(<img[^>]+src=\")(\\S+)\"",
+				"$1$2\" onClick=\"javascript:mWebViewImageListener.showImagePreview('"
+						+ mTweet.getImgBig() + "')\"");
 	}
 
 	private void sendRequestData() {

@@ -149,6 +149,8 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 		mEmptyLayout = (EmptyLayout) view.findViewById(R.id.error_layout);
 
 		mWebView = (WebView) view.findViewById(R.id.webview);
+		
+		UIHelper.initWebView(mWebView);
 	}
 
 	@Override
@@ -216,8 +218,6 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 	private void fillWebViewBody() {
 		StringBuffer body = new StringBuffer(UIHelper.setHtmlCotentSupportImagePreview(mBlog.getBody()));
 		body.append(UIHelper.WEB_STYLE).append(UIHelper.WEB_LOAD_IMAGES);
-		UIHelper.addWebImageShow(getActivity(), mWebView);
-		mWebView.setWebViewClient(mWebClient);
 		mWebView.loadDataWithBaseURL(null, body.toString(), "text/html", "utf-8", null);
 	}
 

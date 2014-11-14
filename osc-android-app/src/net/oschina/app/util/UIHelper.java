@@ -32,12 +32,14 @@ import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.viewpagefragment.FriendsViewPagerFragment;
 import net.oschina.app.widget.AvatarView;
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -49,9 +51,12 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
+import android.view.View;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ZoomButtonsController;
 
 /**
  * 界面帮助类
@@ -246,6 +251,24 @@ public class UIHelper {
 			showUrlRedirect(context, url);
 		}
 	}
+	
+	@SuppressLint({ "SetJavaScriptEnabled", "JavascriptInterface" })
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	public static void initWebView(WebView webView) {
+		WebSettings settings = webView.getSettings();
+		settings.setDefaultFontSize(15);
+		settings.setJavaScriptEnabled(true);
+		settings.setSupportZoom(true);
+		settings.setBuiltInZoomControls(true);
+		int sysVersion = Build.VERSION.SDK_INT;
+		if (sysVersion >= 11) {
+			settings.setDisplayZoomControls(false);
+		} else {
+			ZoomButtonsController zbc = new ZoomButtonsController(webView);
+			zbc.getZoomControls().setVisibility(View.GONE);
+		}
+		webView.setWebViewClient(UIHelper.getWebViewClient());
+	}
 
 	/**
 	 * 添加网页的点击图片展示支持
@@ -258,8 +281,8 @@ public class UIHelper {
 
 			@Override
 			@JavascriptInterface
-			public void onImageClick(String bigImageUrl) {
-				if (bigImageUrl != null) {
+			public void showImagePreview(String bigImageUrl) {
+				if (bigImageUrl != null && !StringUtils.isEmpty(bigImageUrl)) {
 					UIHelper.showImagePreview(cxt, new String[] { bigImageUrl });
 				}
 			}

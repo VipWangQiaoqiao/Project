@@ -119,7 +119,7 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 		mEmptyLayout = (EmptyLayout) view.findViewById(R.id.error_layout);
 
 		mWebView = (WebView) view.findViewById(R.id.webview);
-		initWebView(mWebView);
+		UIHelper.initWebView(mWebView);
 	}
 
 	@Override
@@ -205,11 +205,7 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 					+ String.format("<br/> <b>相关资讯</b> <div><p/>%s</div>",
 							strRelative));
 		}
-
 		body.append("<br/>");
-
-		UIHelper.addWebImageShow(getActivity(), mWebView);
-		mWebView.setWebViewClient(mWebClient);
 		mWebView.loadDataWithBaseURL(null, body.toString(), "text/html", "utf-8", null);
 	}
 

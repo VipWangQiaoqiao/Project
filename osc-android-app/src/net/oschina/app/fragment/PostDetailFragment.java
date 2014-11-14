@@ -122,7 +122,7 @@ public class PostDetailFragment extends BaseDetailFragment implements
 		mEmptyLayout = (EmptyLayout) view.findViewById(R.id.error_layout);
 
 		mWebView = (WebView) view.findViewById(R.id.webview);
-		initWebView(mWebView);
+		UIHelper.initWebView(mWebView);
 	}
 
 	@Override
@@ -179,8 +179,6 @@ public class PostDetailFragment extends BaseDetailFragment implements
 			.append(UIHelper.WEB_LOAD_IMAGES)
 			.append(getPostTags(mPost.getTags()))
 			.append("<div style=\"margin-bottom: 80px\" />");
-		UIHelper.addWebImageShow(getActivity(), mWebView);
-		mWebView.setWebViewClient(mWebClient);
 		mWebView.loadDataWithBaseURL(null, body.toString(), "text/html", "utf-8", null);
 	}
 

@@ -143,7 +143,7 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
 	private void initViews(View view) {
 		mEmptyLayout = (EmptyLayout) view.findViewById(R.id.error_layout);
 
-		initWebView(mWebView);
+		UIHelper.initWebView(mWebView);
 
 		view.findViewById(R.id.btn_software_index).setOnClickListener(this);
 		view.findViewById(R.id.btn_software_download).setOnClickListener(this);
@@ -211,7 +211,6 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
 	private void fillWebViewBody() {
 		StringBuffer body = new StringBuffer(UIHelper.setHtmlCotentSupportImagePreview(mSoftware.getBody()));
 		body.append(UIHelper.WEB_STYLE).append(UIHelper.WEB_LOAD_IMAGES);
-		UIHelper.addWebImageShow(getActivity(), mWebView);
 		mWebView.loadDataWithBaseURL(null, body.toString(), "text/html", "utf-8", null);
 	}
 
