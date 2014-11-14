@@ -1,20 +1,48 @@
 package net.oschina.app.fragment;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
+import org.apache.http.Header;
+
+import butterknife.ButterKnife;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
+
+import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.CommentAdapter;
 import net.oschina.app.adapter.CommentAdapter.OnOperationListener;
 import net.oschina.app.api.OperationResponseHandler;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.base.BaseFragment;
+import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.CommentList;
+import net.oschina.app.bean.ListEntity;
+import net.oschina.app.bean.NewsList;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.Tweet;
@@ -23,108 +51,29 @@ import net.oschina.app.cache.CacheManager;
 import net.oschina.app.emoji.EmojiFragment;
 import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
 import net.oschina.app.interf.EmojiFragmentControl;
-import net.oschina.app.interf.OnWebViewImageListener;
-import net.oschina.app.service.PublicCommentTask;
-import net.oschina.app.service.ServerTaskUtils;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.HTMLSpirit;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
-import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
 
-import org.apache.http.Header;
-
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.JavascriptInterface;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.ZoomButtonsController;
-
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.process.BitmapProcessor;
-
-public class TweetDetailFragment extends BaseFragment implements
+public class TweetDetailFragment extends BaseListFragment implements
 		EmojiTextListener, EmojiFragmentControl, OnOperationListener,
 		OnItemClickListener, OnItemLongClickListener {
-	protected static final String TAG = TweetDetailFragment.class
-			.getSimpleName();
+
 	private static final String CACHE_KEY_PREFIX = "tweet_";
 	private static final String CACHE_KEY_TWEET_COMMENT = "tweet_comment_";
-	private ListView mListView;
-	private EmptyLayout mEmptyView;
 	private AvatarView mIvAvatar;
 	private TextView mTvName, mTvFrom, mTvTime, mTvCommentCount;
 	private WebView mContent;
 	private int mTweetId;
 	private Tweet mTweet;
-	private int mCurrentPage = 0;
-	private CommentAdapter mAdapter;
 	private EmojiFragment mEmojiFragment;
 	private BroadcastReceiver mCommentReceiver;
-
-	private AsyncHttpResponseHandler mCommentHandler = new AsyncHttpResponseHandler() {
-
-		@Override
-		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-			try {
-				ResultBean rsb = XmlUtils.toBean(ResultBean.class,
-						new ByteArrayInputStream(arg2));
-				Result res = rsb.getResult();
-				if (res.OK()) {
-					hideWaitDialog();
-					AppContext.showToastShort(R.string.comment_publish_success);
-					mAdapter.addItem(0, rsb.getComment());
-					mEmojiFragment.reset();
-					setTweetCommentCount(1);
-					// UIHelper.sendBroadCastCommentChanged(getActivity(),
-					// mIsBlogComment, mId, mCatalog, Comment.OPT_ADD,
-					// res.getComment());
-				} else {
-					hideWaitDialog();
-					AppContext.showToastShort(res.getErrorMessage());
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				onFailure(arg0, arg1, arg2, e);
-			}
-		}
-
-		@Override
-		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-				Throwable arg3) {
-			hideWaitDialog();
-			AppContext.showToastShort(R.string.comment_publish_faile);
-		}
-	};
 
 	class CommentChangeReceiver extends BroadcastReceiver {
 
@@ -140,29 +89,6 @@ public class TweetDetailFragment extends BaseFragment implements
 			onCommentChanged(opt, id, catalog, isBlog, comment);
 		}
 	}
-
-	private OnScrollListener mScrollListener = new OnScrollListener() {
-
-		@Override
-		public void onScrollStateChanged(AbsListView view, int scrollState) {
-		}
-
-		@Override
-		public void onScroll(AbsListView view, int firstVisibleItem,
-				int visibleItemCount, int totalItemCount) {
-			if (mAdapter != null
-					&& mAdapter.getDataSize() > 0
-					&& mListView.getLastVisiblePosition() == (mListView
-							.getCount() - 1)) {
-				if (mState == STATE_NONE
-						&& mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
-					mState = STATE_LOADMORE;
-					mCurrentPage++;
-					requestTweetCommentData(true);
-				}
-			}
-		}
-	};
 
 	private void onCommentChanged(int opt, int id, int catalog, boolean isBlog,
 			Comment comment) {
@@ -184,7 +110,38 @@ public class TweetDetailFragment extends BaseFragment implements
 		// Constants.INTENT_ACTION_COMMENT_CHANGED);
 		// mCommentReceiver = new CommentChangeReceiver();
 		// getActivity().registerReceiver(mCommentReceiver, filter);
+		Bundle args = getActivity().getIntent().getExtras();
+		if (args != null) {
+			mTweetId = args.getInt("tweet_id", 0);
+		}
 		super.onCreate(savedInstanceState);
+	}
+
+	@Override
+	protected ListBaseAdapter getListAdapter() {
+		return new CommentAdapter(this, true);
+	}
+
+	@Override
+	protected String getCacheKeyPrefix() {
+		return CACHE_KEY_TWEET_COMMENT + mTweetId + "_" + mCurrentPage;
+	}
+
+	@Override
+	protected ListEntity parseList(InputStream is) throws Exception {
+		CommentList list = XmlUtils.toBean(CommentList.class, is);
+		return list;
+	}
+
+	@Override
+	protected ListEntity readList(Serializable seri) {
+		return ((CommentList) seri);
+	}
+
+	@Override
+	protected void sendRequestData() {
+		OSChinaApi.getCommentList(mTweetId, CommentList.CATALOG_TWEET,
+				mCurrentPage, mHandler);
 	}
 
 	@Override
@@ -196,24 +153,15 @@ public class TweetDetailFragment extends BaseFragment implements
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater,
-			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_tweet_detail, container,
-				false);
-		mTweetId = getActivity().getIntent().getIntExtra("tweet_id", 0);
-
-		initViews(view);
-
-		requestTweetData(true);
-		return view;
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		// 通过注解绑定控件
+		ButterKnife.inject(this, view);
+		this.initViews(view);
+		requestTweetData(false);
 	}
 
 	@SuppressLint("InflateParams")
 	private void initViews(View view) {
-		mEmptyView = (EmptyLayout) view.findViewById(R.id.error_layout);
-		mListView = (ListView) view.findViewById(R.id.tweet_detail_listview);
-		mListView.setOnScrollListener(mScrollListener);
-		mListView.setOnItemClickListener(this);
 		mListView.setOnItemLongClickListener(this);
 		View header = LayoutInflater.from(getActivity()).inflate(
 				R.layout.list_header_tweet_detail, null);
@@ -227,8 +175,11 @@ public class TweetDetailFragment extends BaseFragment implements
 		UIHelper.initWebView(mContent);
 
 		mListView.addHeaderView(header);
-		mAdapter = new CommentAdapter(this, true);
-		mListView.setAdapter(mAdapter);
+		super.initView(view);
+	}
+
+	protected boolean requestDataIfViewCreated() {
+		return false;
 	}
 
 	private void fillUI() {
@@ -262,7 +213,7 @@ public class TweetDetailFragment extends BaseFragment implements
 
 		fillWebViewBody();
 	}
-	
+
 	/**
 	 * 填充webview内容
 	 */
@@ -274,11 +225,13 @@ public class TweetDetailFragment extends BaseFragment implements
 				+ mTweet.getImgSmall() + "\">";
 		body.append(setHtmlCotentSupportImagePreview(tweetBody));
 		UIHelper.addWebImageShow(getActivity(), mContent);
-		mContent.loadDataWithBaseURL(null, body.toString(), "text/html", "utf-8", null);
+		mContent.loadDataWithBaseURL(null, body.toString(), "text/html",
+				"utf-8", null);
 	}
-	
+
 	/**
 	 * 添加图片放大支持
+	 * 
 	 * @param body
 	 * @return
 	 */
@@ -289,17 +242,6 @@ public class TweetDetailFragment extends BaseFragment implements
 		return body.replaceAll("(<img[^>]+src=\")(\\S+)\"",
 				"$1$2\" onClick=\"javascript:mWebViewImageListener.showImagePreview('"
 						+ mTweet.getImgBig() + "')\"");
-	}
-
-	private void sendRequestData() {
-		mState = STATE_REFRESH;
-		mEmptyView.setErrorType(EmptyLayout.NETWORK_LOADING);
-		OSChinaApi.getTweetDetail(mTweetId, mDetailHandler);
-	}
-
-	private void sendRequestCommentData() {
-		OSChinaApi.getCommentList(mTweetId, CommentList.CATALOG_TWEET,
-				mCurrentPage, mCommentListHandler);
 	}
 
 	@Override
@@ -343,6 +285,41 @@ public class TweetDetailFragment extends BaseFragment implements
 	public void onMoreClick(final Comment comment) {
 	}
 
+	private AsyncHttpResponseHandler mCommentHandler = new AsyncHttpResponseHandler() {
+
+		@Override
+		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+			try {
+				ResultBean rsb = XmlUtils.toBean(ResultBean.class,
+						new ByteArrayInputStream(arg2));
+				Result res = rsb.getResult();
+				if (res.OK()) {
+					hideWaitDialog();
+					AppContext.showToastShort(R.string.comment_publish_success);
+					mAdapter.addItem(0, rsb.getComment());
+					mEmojiFragment.reset();
+					setTweetCommentCount(1);
+					// UIHelper.sendBroadCastCommentChanged(getActivity(),
+					// mIsBlogComment, mId, mCatalog, Comment.OPT_ADD,
+					// res.getComment());
+				} else {
+					hideWaitDialog();
+					AppContext.showToastShort(res.getErrorMessage());
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				onFailure(arg0, arg1, arg2, e);
+			}
+		}
+
+		@Override
+		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+				Throwable arg3) {
+			hideWaitDialog();
+			AppContext.showToastShort(R.string.comment_publish_faile);
+		}
+	};
+
 	private void handleComment(String text) {
 		showWaitDialog(R.string.progress_submit);
 		if (!AppContext.getInstance().isLogin()) {
@@ -362,18 +339,7 @@ public class TweetDetailFragment extends BaseFragment implements
 		}
 
 	}
-
-	private void handleDeleteComment(Comment comment) {
-		if (!AppContext.getInstance().isLogin()) {
-			UIHelper.showLoginActivity(getActivity());
-			return;
-		}
-		AppContext.showToastShort(R.string.deleting);
-		OSChinaApi.deleteComment(mTweetId, CommentList.CATALOG_TWEET,
-				comment.getId(), comment.getAuthorId(),
-				new DeleteOperationResponseHandler(comment));
-	}
-
+	
 	class DeleteOperationResponseHandler extends OperationResponseHandler {
 
 		DeleteOperationResponseHandler(Object... args) {
@@ -403,6 +369,17 @@ public class TweetDetailFragment extends BaseFragment implements
 		}
 	}
 
+	private void handleDeleteComment(Comment comment) {
+		if (!AppContext.getInstance().isLogin()) {
+			UIHelper.showLoginActivity(getActivity());
+			return;
+		}
+		AppContext.showToastShort(R.string.deleting);
+		OSChinaApi.deleteComment(mTweetId, CommentList.CATALOG_TWEET,
+				comment.getId(), comment.getAuthorId(),
+				new DeleteOperationResponseHandler(comment));
+	}
+
 	private void setTweetCommentCount(int addCount) {
 		mAdapter.notifyDataSetChanged();
 		if (mTweet.getCommentCount() + addCount == -1) {
@@ -413,11 +390,38 @@ public class TweetDetailFragment extends BaseFragment implements
 				mTweet.getCommentCount()));
 	}
 
+	private AsyncHttpResponseHandler mDetailHandler = new AsyncHttpResponseHandler() {
+
+		@Override
+		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+			try {
+				mTweet = XmlUtils.toBean(TweetDetail.class,
+						new ByteArrayInputStream(arg2)).getTweet();
+				if (mTweet != null && mTweet.getId() > 0) {
+					executeOnLoadDataSuccess(mTweet);
+					new SaveCacheTask(getActivity(), mTweet, getCacheKey())
+							.execute();
+				} else {
+					throw new RuntimeException("load detail error");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				onFailure(arg0, arg1, arg2, e);
+			}
+		}
+
+		@Override
+		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+				Throwable arg3) {
+			readCacheData(getCacheKey());
+		}
+	};
+
 	protected void requestTweetData(boolean refresh) {
 		String key = getCacheKey();
 		if (TDevice.hasInternet()
 				&& (!CacheManager.isReadDataCache(getActivity(), key) || refresh)) {
-			sendRequestData();
+			OSChinaApi.getTweetDetail(mTweetId, mDetailHandler);
 		} else {
 			readCacheData(key);
 		}
@@ -482,33 +486,6 @@ public class TweetDetailFragment extends BaseFragment implements
 		}
 	}
 
-	private AsyncHttpResponseHandler mDetailHandler = new AsyncHttpResponseHandler() {
-
-		@Override
-		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-			try {
-				mTweet = XmlUtils.toBean(TweetDetail.class,
-						new ByteArrayInputStream(arg2)).getTweet();
-				if (mTweet != null && mTweet.getId() > 0) {
-					executeOnLoadDataSuccess(mTweet);
-					new SaveCacheTask(getActivity(), mTweet, getCacheKey())
-							.execute();
-				} else {
-					throw new RuntimeException("load detail error");
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				onFailure(arg0, arg1, arg2, e);
-			}
-		}
-
-		@Override
-		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-				Throwable arg3) {
-			readCacheData(getCacheKey());
-		}
-	};
-
 	private void executeOnLoadDataSuccess(Tweet tweet) {
 		mTweet = tweet;
 		if (mTweet != null && mTweet.getId() > 0) {
@@ -517,123 +494,11 @@ public class TweetDetailFragment extends BaseFragment implements
 
 			mState = STATE_REFRESH;
 			mCurrentPage = 0;
-			mEmptyView.setErrorType(EmptyLayout.NETWORK_LOADING);
-			requestTweetCommentData(true);
+			mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+			sendRequestData();
 		} else {
 			throw new RuntimeException("load detail error");
 		}
-	}
-
-	private void executeOnLoadFinish() {
-		mState = STATE_NONE;
-	}
-
-	private void executeOnLoadDataError(Object object) {
-		mEmptyView.setErrorType(EmptyLayout.NETWORK_ERROR);
-	}
-
-	protected void requestTweetCommentData(boolean refresh) {
-		String key = getCacheCommentKey();
-		if (TDevice.hasInternet()
-				&& (!CacheManager.isReadDataCache(getActivity(), key) || refresh)) {
-			sendRequestCommentData();
-		} else {
-			readCacheCommentData(key);
-		}
-	}
-
-	private String getCacheCommentKey() {
-		return CACHE_KEY_TWEET_COMMENT + mTweetId + "_" + mCurrentPage;
-	}
-
-	private void readCacheCommentData(String cacheKey) {
-		new CacheCommentTask(getActivity()).execute(cacheKey);
-	}
-
-	private class CacheCommentTask extends AsyncTask<String, Void, CommentList> {
-		private WeakReference<Context> mContext;
-
-		private CacheCommentTask(Context context) {
-			mContext = new WeakReference<Context>(context);
-		}
-
-		@Override
-		protected CommentList doInBackground(String... params) {
-			if (mContext.get() != null) {
-				Serializable seri = CacheManager.readObject(mContext.get(),
-						params[0]);
-				if (seri == null) {
-					return null;
-				} else {
-					return (CommentList) seri;
-				}
-			}
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(CommentList list) {
-			super.onPostExecute(list);
-			if (list != null) {
-				executeOnLoadCommentDataSuccess(list);
-			} else {
-				executeOnLoadCommentDataError(null);
-			}
-			executeOnLoadCommentFinish();
-		}
-	}
-
-	private AsyncHttpResponseHandler mCommentListHandler = new AsyncHttpResponseHandler() {
-
-		@Override
-		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-			try {
-				CommentList list = XmlUtils.toBean(CommentList.class,
-						new ByteArrayInputStream(arg2));
-				executeOnLoadCommentDataSuccess(list);
-				new SaveCacheTask(getActivity(), list, getCacheCommentKey())
-						.execute();
-			} catch (Exception e) {
-				e.printStackTrace();
-				onFailure(arg0, arg1, arg2, e);
-			}
-		}
-
-		@Override
-		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-				Throwable arg3) {
-			mEmptyView.setErrorType(EmptyLayout.HIDE_LAYOUT);
-		}
-
-		public void onFinish() {
-			mState = STATE_NONE;
-		}
-	};
-
-	private void executeOnLoadCommentDataSuccess(CommentList list) {
-		if (mState == STATE_REFRESH)
-			mAdapter.clear();
-		List<Comment> data = list.getCommentlist();
-		mAdapter.addData(data);
-		mEmptyView.setErrorType(EmptyLayout.HIDE_LAYOUT);
-		if (data.size() == 0 && mState == STATE_REFRESH) {
-			mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
-		} else if (data.size() < TDevice.getPageSize()) {
-			if (mState == STATE_REFRESH)
-				mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
-			else
-				mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
-		} else {
-			mAdapter.setState(ListBaseAdapter.STATE_LOAD_MORE);
-		}
-	}
-
-	private void executeOnLoadCommentFinish() {
-		mState = STATE_NONE;
-	}
-
-	private void executeOnLoadCommentDataError(Object object) {
-		mEmptyView.setErrorType(EmptyLayout.NETWORK_ERROR);
 	}
 
 	@Override
@@ -671,23 +536,5 @@ public class TweetDetailFragment extends BaseFragment implements
 		});
 		dialog.show();
 		return true;
-	}
-
-	@Override
-	public void onClick(View v) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void initView(View view) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void initData() {
-		// TODO Auto-generated method stub
-
 	}
 }

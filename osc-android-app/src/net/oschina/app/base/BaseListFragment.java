@@ -79,10 +79,15 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View view = inflater.inflate(getLayoutId(), container, false);
+		return view;
+	}
+
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
 		// 通过注解绑定控件
 		ButterKnife.inject(this, view);
 		initView(view);
-		return view;
 	}
 
 	@Override
@@ -141,7 +146,6 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 		if (mStoreEmptyState != -1) {
 			mErrorLayout.setErrorType(mStoreEmptyState);
 		}
-
 	}
 
 	@Override
