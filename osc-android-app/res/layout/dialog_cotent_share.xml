@@ -30,7 +30,9 @@
                 android:text="@string/platform_weichat" />
         </LinearLayout>
 
-        <LinearLayout style="@style/dialog_content_share_ll" >
+        <LinearLayout 
+            android:id="@+id/ly_share_sina_weibo"
+            style="@style/dialog_content_share_ll" >
 
             <TextView
                 style="@style/dialog_content_share_text"
@@ -40,7 +42,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/ly_share_sina_weibo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/space_16"

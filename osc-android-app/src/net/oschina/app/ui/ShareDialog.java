@@ -67,6 +67,28 @@ public class ShareDialog extends CommonDialog implements
 	public void onClick(View v) {
 		final int id = v.getId();
 		SHARE_MEDIA media = null;
+		switch (id) {
+		case R.id.ly_share_weichat_circle:
+			media = SHARE_MEDIA.WEIXIN_CIRCLE;
+			break;
+		case R.id.ly_share_weichat:
+			media = SHARE_MEDIA.WEIXIN;
+			break;
+		case R.id.ly_share_sina_weibo:
+			media = SHARE_MEDIA.SINA;
+			break;
+		case R.id.ly_share_qq:
+			media = SHARE_MEDIA.QQ;
+			break;
+		case R.id.ly_share_qzone:
+			media = SHARE_MEDIA.QQ;
+			break;
+		case R.id.ly_share_tencent_weibo:
+			media = SHARE_MEDIA.TENCENT;
+			break;
+		default:
+			break;
+		}
 		if (id == R.id.ly_share_qq) {
 			media = SHARE_MEDIA.QQ;
 		} else if (id == R.id.ly_share_qzone) {
