@@ -28,6 +28,7 @@ public class ListBaseAdapter extends BaseAdapter {
 
 	protected int _loadmoreText;
 	protected int _loadFinishText;
+	protected int _noreDateText;
 	protected int mScreenWidth;
 
 	private LayoutInflater mInflater;
@@ -58,6 +59,7 @@ public class ListBaseAdapter extends BaseAdapter {
 	public ListBaseAdapter() {
 		_loadmoreText = R.string.loading;
 		_loadFinishText = R.string.loading_no_more;
+		_noreDateText = R.string.error_view_no_data;
 	}
 
 	@Override
@@ -189,8 +191,8 @@ public class ListBaseAdapter extends BaseAdapter {
 					break;
 				case STATE_EMPTY_ITEM:
 					progress.setVisibility(View.GONE);
-					mFooterView.setVisibility(View.GONE);
-					text.setVisibility(View.GONE);
+					mFooterView.setVisibility(View.VISIBLE);
+					text.setText(_noreDateText);
 					break;
 				case STATE_NETWORK_ERROR:
 					mFooterView.setVisibility(View.VISIBLE);

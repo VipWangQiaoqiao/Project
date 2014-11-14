@@ -312,7 +312,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 		}
 	}
 
-	private int getPageSize() {
+	protected int getPageSize() {
 		if (blogType != null && blogType.equals(Blog.CATALOG_LATEST)) {
 			return 19;
 		} else {

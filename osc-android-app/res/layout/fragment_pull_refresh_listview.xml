@@ -18,11 +18,11 @@
             android:background="@color/white"
             android:scrollingCache="true" />
     </net.oschina.app.widget.CBSwipeRefreshLayout>
-
+	
     <net.oschina.app.ui.empty.EmptyLayout
         android:id="@+id/error_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
 </RelativeLayout>

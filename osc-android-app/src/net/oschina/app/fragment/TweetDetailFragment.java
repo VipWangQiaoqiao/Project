@@ -5,30 +5,21 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.List;
-
 import org.apache.http.Header;
-
 import butterknife.ButterKnife;
-
 import com.loopj.android.http.AsyncHttpResponseHandler;
-
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import net.oschina.app.AppContext;
@@ -42,7 +33,6 @@ import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.ListEntity;
-import net.oschina.app.bean.NewsList;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.Tweet;
@@ -146,10 +136,10 @@ public class TweetDetailFragment extends BaseListFragment implements
 
 	@Override
 	public void onDestroy() {
+		super.onDestroy();
 		if (mCommentReceiver != null) {
 			getActivity().unregisterReceiver(mCommentReceiver);
 		}
-		super.onDestroy();
 	}
 
 	@Override
@@ -398,7 +388,7 @@ public class TweetDetailFragment extends BaseListFragment implements
 				mTweet = XmlUtils.toBean(TweetDetail.class,
 						new ByteArrayInputStream(arg2)).getTweet();
 				if (mTweet != null && mTweet.getId() > 0) {
-					executeOnLoadDataSuccess(mTweet);
+					executeOnLoadTweetDetailSuccess(mTweet);
 					new SaveCacheTask(getActivity(), mTweet, getCacheKey())
 							.execute();
 				} else {
@@ -419,6 +409,7 @@ public class TweetDetailFragment extends BaseListFragment implements
 
 	protected void requestTweetData(boolean refresh) {
 		String key = getCacheKey();
+		mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
 		if (TDevice.hasInternet()
 				&& (!CacheManager.isReadDataCache(getActivity(), key) || refresh)) {
 			OSChinaApi.getTweetDetail(mTweetId, mDetailHandler);
@@ -460,7 +451,7 @@ public class TweetDetailFragment extends BaseListFragment implements
 		protected void onPostExecute(Tweet tweet) {
 			super.onPostExecute(tweet);
 			if (tweet != null) {
-				executeOnLoadDataSuccess(tweet);
+				executeOnLoadTweetDetailSuccess(tweet);
 			} else {
 				executeOnLoadDataError(null);
 			}
@@ -485,8 +476,25 @@ public class TweetDetailFragment extends BaseListFragment implements
 			return null;
 		}
 	}
+	
+	protected void executeOnLoadDataSuccess(List<?> data) {
+		if (mState == STATE_REFRESH)
+			mAdapter.clear();
+		mAdapter.addData(data);
+		mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+		if (data.size() == 0 && mState == STATE_REFRESH) {
+			mAdapter.setState(ListBaseAdapter.STATE_EMPTY_ITEM);
+		} else if (data.size() < TDevice.getPageSize()) {
+			if (mState == STATE_REFRESH)
+				mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
+			else
+				mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
+		} else {
+			mAdapter.setState(ListBaseAdapter.STATE_LOAD_MORE);
+		}
+	}
 
-	private void executeOnLoadDataSuccess(Tweet tweet) {
+	private void executeOnLoadTweetDetailSuccess(Tweet tweet) {
 		mTweet = tweet;
 		if (mTweet != null && mTweet.getId() > 0) {
 			fillUI();
@@ -494,7 +502,7 @@ public class TweetDetailFragment extends BaseListFragment implements
 
 			mState = STATE_REFRESH;
 			mCurrentPage = 0;
-			mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+			mAdapter.setState(ListBaseAdapter.STATE_LOAD_MORE);
 			sendRequestData();
 		} else {
 			throw new RuntimeException("load detail error");
