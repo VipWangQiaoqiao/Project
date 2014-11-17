@@ -11,9 +11,12 @@ import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.News;
 import net.oschina.app.bean.NewsList;
+import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -23,7 +26,7 @@ import android.widget.AdapterView;
  * @created 2014年11月12日 下午4:17:45
  *
  */
-public class NewsFragment extends BaseListFragment {
+public class NewsFragment extends BaseListFragment implements OnTabReselectListener {
 	
 	protected static final String TAG = NewsFragment.class.getSimpleName();
 	private static final String CACHE_KEY_PREFIX = "newslist_";
@@ -75,5 +78,10 @@ public class NewsFragment extends BaseListFragment {
 			return;
 		}
 		super.executeOnLoadDataSuccess(data);
+	}
+
+	@Override
+	public void onTabReselect() {
+		onRefresh();
 	}
 }

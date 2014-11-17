@@ -18,6 +18,7 @@ import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetsList;
+import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.ui.NavigationDrawerFragment;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
@@ -42,7 +43,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
  * 
  * @date 2014年10月10日
  */
-public class TweetsFragment extends BaseListFragment implements OnItemLongClickListener {
+public class TweetsFragment extends BaseListFragment implements OnItemLongClickListener, OnTabReselectListener {
 
 	protected static final String TAG = TweetsFragment.class.getSimpleName();
 	private static final String CACHE_KEY_PREFIX = "tweetslist_";
@@ -245,5 +246,10 @@ public class TweetsFragment extends BaseListFragment implements OnItemLongClickL
 				});
 		dialog.setNegativeButton(R.string.cancle, null);
 		dialog.show();
+	}
+
+	@Override
+	public void onTabReselect() {
+		onRefresh();
 	}
 }

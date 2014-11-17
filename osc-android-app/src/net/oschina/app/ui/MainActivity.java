@@ -7,6 +7,7 @@ import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.Notice;
 import net.oschina.app.cache.DataCleanManager;
 import net.oschina.app.interf.BaseViewInterface;
+import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
@@ -21,6 +22,7 @@ import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -29,9 +31,9 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.RadioButton;
+import android.view.View.OnTouchListener;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabContentFactory;
 import android.widget.TabHost.TabSpec;
@@ -42,8 +44,8 @@ import butterknife.InjectView;
 @SuppressLint("InflateParams")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class MainActivity extends ActionBarActivity implements
-		NavigationDrawerFragment.NavigationDrawerCallbacks,
-		OnTabChangeListener, BaseViewInterface, View.OnClickListener {
+		NavigationDrawerFragment.NavigationDrawerCallbacks, 
+		OnTabChangeListener, BaseViewInterface, View.OnClickListener, OnTouchListener {
 
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
@@ -184,9 +186,8 @@ public class MainActivity extends ActionBarActivity implements
 					return new View(MainActivity.this);
 				}
 			});
-
 			mTabHost.addTab(tab, mainTab.getClz(), null);
-
+			
 			if (mainTab.equals(MainTab.ME)) {
 				View cn = indicator.findViewById(R.id.tab_mes);
 				mBvTweet = new BadgeView(MainActivity.this, cn);
@@ -195,6 +196,7 @@ public class MainActivity extends ActionBarActivity implements
 				mBvTweet.setBackgroundResource(R.drawable.notification_bg);
 				mBvTweet.setGravity(Gravity.CENTER);
 			}
+			mTabHost.getTabWidget().getChildAt(i).setOnTouchListener(this);
 		}
 	}
 
@@ -270,8 +272,25 @@ public class MainActivity extends ActionBarActivity implements
 		dialog.setCancelable(true);
 		dialog.setCanceledOnTouchOutside(true);
 		dialog.show();
-		// Intent intent = new Intent(MainActivity.this,
-		// QuickOptionActivity.class);
-		// startActivity(intent);
+	}
+
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		v.performClick();
+		boolean consumed = false;
+	    // use getTabHost().getCurrentTabView to decide if the current tab is
+	    // touched again
+	    if (event.getAction() == MotionEvent.ACTION_DOWN
+	            && v.equals(mTabHost.getCurrentTabView())) {
+	        // use getTabHost().getCurrentView() to get a handle to the view
+	        // which is displayed in the tab - and to get this views context
+	        Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(mTabHost.getCurrentTabTag());
+	        if (currentFragment instanceof OnTabReselectListener) {
+	            OnTabReselectListener listener = (OnTabReselectListener) currentFragment;
+	            listener.onTabReselect();
+	            consumed = true;
+	        }
+	    }
+	    return consumed;
 	}
 }

@@ -6,16 +6,18 @@ import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.BaseViewPagerFragment;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.fragment.TweetsFragment;
+import net.oschina.app.interf.OnTabReselectListener;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.View;
 
 /**
- * 
+ * 动弹界面（包括最新动弹、热门动弹、我的动弹）
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @created 2014年9月25日 下午2:21:52
  *
  */
-public class TweetsViewPagerFragment extends BaseViewPagerFragment{
+public class TweetsViewPagerFragment extends BaseViewPagerFragment implements OnTabReselectListener {
 	
 	@Override
 	protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
@@ -42,5 +44,15 @@ public class TweetsViewPagerFragment extends BaseViewPagerFragment{
 
 	@Override
 	public void initData() {
+	}
+
+	@Override
+	public void onTabReselect() {
+		int currentIndex = mViewPager.getCurrentItem();
+		Fragment currentFragment = getChildFragmentManager().getFragments().get(currentIndex);
+		if (currentFragment instanceof OnTabReselectListener) {
+            OnTabReselectListener listener = (OnTabReselectListener) currentFragment;
+            listener.onTabReselect();
+        }
 	}
 }

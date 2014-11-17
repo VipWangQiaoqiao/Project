@@ -167,6 +167,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 	@Override
 	public void onRefresh() {
 		// 设置顶部正在刷新
+		mListView.setSelection(0);
 		setSwipeRefreshLoadingState();
 		mCurrentPage = 0;
 		mState = STATE_REFRESH;

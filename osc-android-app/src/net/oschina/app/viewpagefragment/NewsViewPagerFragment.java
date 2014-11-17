@@ -8,7 +8,10 @@ import net.oschina.app.bean.Blog;
 import net.oschina.app.bean.NewsList;
 import net.oschina.app.fragment.BlogFragment;
 import net.oschina.app.fragment.NewsFragment;
+import net.oschina.app.interf.OnTabReselectListener;
+import net.oschina.app.util.TLog;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.View;
 
 /**
@@ -17,7 +20,7 @@ import android.view.View;
  * @created 2014年9月25日 下午2:21:52
  *
  */
-public class NewsViewPagerFragment extends BaseViewPagerFragment {
+public class NewsViewPagerFragment extends BaseViewPagerFragment implements OnTabReselectListener {
 	
 	@Override
 	protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
@@ -46,5 +49,15 @@ public class NewsViewPagerFragment extends BaseViewPagerFragment {
 	@Override
 	public void initData() {
 		
+	}
+
+	@Override
+	public void onTabReselect() {
+		int currentIndex = mViewPager.getCurrentItem();
+		Fragment currentFragment = getChildFragmentManager().getFragments().get(currentIndex);
+		if (currentFragment instanceof OnTabReselectListener) {
+            OnTabReselectListener listener = (OnTabReselectListener) currentFragment;
+            listener.onTabReselect();
+        }
 	}
 }
