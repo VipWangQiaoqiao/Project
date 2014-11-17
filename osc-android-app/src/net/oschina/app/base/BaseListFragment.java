@@ -166,6 +166,9 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 	// 下拉刷新数据
 	@Override
 	public void onRefresh() {
+		if (mState == STATE_REFRESH) {
+			return;
+		}
 		// 设置顶部正在刷新
 		mListView.setSelection(0);
 		setSwipeRefreshLoadingState();

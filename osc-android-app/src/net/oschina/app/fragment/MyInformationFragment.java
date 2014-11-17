@@ -39,7 +39,6 @@ import net.oschina.app.ui.MainActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
-import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
@@ -80,7 +79,6 @@ public class MyInformationFragment extends BaseFragment {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
-			TLog.log("NOTICE", "收到广播" + action);
 			if (action.equals(Constants.INTENT_ACTION_LOGOUT)) {
 				if (mErrorLayout != null) {
 					mIsWatingLogin = true;
@@ -90,7 +88,6 @@ public class MyInformationFragment extends BaseFragment {
 			} else if (action.equals(Constants.INTENT_ACTION_USER_CHANGE)) {
 				requestData(true);
 			} else if (action.equals(Constants.INTENT_ACTION_NOTICE)) {
-				TLog.log("NOTICE", "动态收到广播");
 				setNotice();
 			}
 		}

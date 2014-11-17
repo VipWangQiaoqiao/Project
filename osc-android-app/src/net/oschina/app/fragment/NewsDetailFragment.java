@@ -13,7 +13,6 @@ import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.News;
-import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.bean.News.Relative;
 import net.oschina.app.bean.NewsDetail;
 import net.oschina.app.emoji.EmojiFragment;
@@ -23,12 +22,9 @@ import net.oschina.app.fragment.ToolbarFragment.ToolAction;
 import net.oschina.app.interf.EmojiFragmentControl;
 import net.oschina.app.interf.ToolbarEmojiVisiableControl;
 import net.oschina.app.interf.ToolbarFragmentControl;
-import net.oschina.app.service.PublicCommentTask;
-import net.oschina.app.service.ServerTaskUtils;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
-import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import android.app.Activity;
@@ -180,7 +176,9 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 	}
 
 	private void fillWebViewBody() {
-		StringBuffer body = new StringBuffer(UIHelper.setHtmlCotentSupportImagePreview(mNews.getBody()));
+		
+		StringBuffer body = new StringBuffer();
+		body.append(UIHelper.setHtmlCotentSupportImagePreview(mNews.getBody()));
 		
 		body.append(UIHelper.WEB_STYLE).append(UIHelper.WEB_LOAD_IMAGES);
 		

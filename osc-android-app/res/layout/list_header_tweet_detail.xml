@@ -58,8 +58,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_marginTop="@dimen/space_8"
+        android:layout_height="@dimen/space_10"
         android:background="@color/list_divider_color" />
 
     <RelativeLayout

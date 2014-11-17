@@ -18,9 +18,9 @@ public class URLsUtils implements Serializable {
 	private final static String URL_SPLITTER = "/";
 	private final static String URL_UNDERLINE = "_";
 
-	private final static String URL_HOST = "oschina.net";
-	private final static String URL_WWW_HOST = "www." + URL_HOST;
-	private final static String URL_MY_HOST = "my." + URL_HOST;
+	public final static String URL_HOST = "oschina.net";
+	public final static String URL_WWW_HOST = "www." + URL_HOST;
+	public final static String URL_MY_HOST = "my." + URL_HOST;
 
 	private final static String URL_TYPE_NEWS = URL_WWW_HOST + URL_SPLITTER + "news" + URL_SPLITTER;
 	private final static String URL_TYPE_SOFTWARE = URL_WWW_HOST + URL_SPLITTER + "p" + URL_SPLITTER;
