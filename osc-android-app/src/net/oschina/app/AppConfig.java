@@ -49,6 +49,8 @@ public class AppConfig {
 			.getExternalStorageDirectory()
 			+ File.separator
 			+ "OSChina"
+			+ File.separator
+			+ "osc_img"
 			+ File.separator;
 	
 	//默认存放文件下载的路径

@@ -1,20 +1,30 @@
 package net.oschina.app.ui;
 
+import java.io.IOException;
+
 import uk.co.senab.photoview.PhotoView;
+import net.oschina.app.AppConfig;
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.RecyclingPagerAdapter;
 import net.oschina.app.base.BaseActivity;
+import net.oschina.app.bean.Constants;
+import net.oschina.app.util.ImageUtils;
+import net.oschina.app.util.TLog;
 import net.oschina.app.widget.HackyViewPager;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -29,6 +39,8 @@ public class ImagePreviewActivity extends BaseActivity implements
 	private static final String BUNDLE_KEY_INDEX = "bundle_key_index";
 	private HackyViewPager mViewPager;
 	private SamplePagerAdapter mAdapter;
+	private TextView mTvImgIndex;
+	private ImageView mIvMore;
 	private int mCurrentPostion = 0;
 	private String[] mImageUrls;
 
@@ -41,8 +53,8 @@ public class ImagePreviewActivity extends BaseActivity implements
 	}
 
 	@Override
-	protected boolean hasBackButton() {
-		return true;
+	protected boolean hasActionBar() {
+		return false;
 	}
 
 	@Override
@@ -63,9 +75,78 @@ public class ImagePreviewActivity extends BaseActivity implements
 		mViewPager.setOnPageChangeListener(this);
 		mViewPager.setCurrentItem(index);
 		
+		mTvImgIndex = (TextView) findViewById(R.id.tv_img_index);
+		mIvMore = (ImageView) findViewById(R.id.iv_more);
+		mIvMore.setOnClickListener(this);
+		
 		onPageSelected(index);
 	}
+	
+	@Override
+	public void onClick(View v) {
+		int id = v.getId();
+		switch (id) {
+		case R.id.iv_more:
+			saveImg();
+			break;
 
+		default:
+			break;
+		}
+	}
+
+	@Override
+	public void initView() {
+		
+	}
+
+	@Override
+	public void initData() {
+		
+	}
+	
+	private void saveImg() {
+		try {
+			if (mAdapter.getCount() > 0) {
+				String imgUrl = mAdapter.getItem(mCurrentPostion);
+				String filePath = AppConfig.DEFAULT_SAVE_IMAGE_PATH
+						+ getFileName(imgUrl);
+				ImageUtils.saveImageToSD(
+						this,
+						filePath,
+						ImageLoader.getInstance().loadImageSync(imgUrl),
+						100);
+				AppContext.showToastShort(getString(
+						R.string.tip_save_image_suc, filePath));
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			AppContext.showToastShort(R.string.tip_save_image_faile);
+		}
+	}
+	
+	private String getFileName(String imgUrl) {
+		return imgUrl.substring(imgUrl.lastIndexOf('/'));
+	}
+
+	@Override
+	public void onPageScrollStateChanged(int arg0) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onPageScrolled(int arg0, float arg1, int arg2) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onPageSelected(int idx) {
+		mCurrentPostion = idx;
+		if (mImageUrls != null && mImageUrls.length > 1) {
+			mTvImgIndex.setText((mCurrentPostion + 1) + "/" + mImageUrls.length);
+		}
+	}
+	
 	static class SamplePagerAdapter extends RecyclingPagerAdapter {
 
 		private String[] images = new String[] {};
@@ -126,6 +207,7 @@ public class ImagePreviewActivity extends BaseActivity implements
 						public void onLoadingFailed(String imageUri, View view,
 								FailReason failReason) {
 							bar.setVisibility(View.GONE);
+							AppContext.showToast(R.string.tip_load_image_faile);
 						}
 					});
 			return convertView;
@@ -140,48 +222,5 @@ public class ImagePreviewActivity extends BaseActivity implements
 				progress = (ProgressBar) view.findViewById(R.id.progress);
 			}
 		}
-	}
-
-	@Override
-	public void onPageScrollStateChanged(int arg0) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void onPageScrolled(int arg0, float arg1, int arg2) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void onPageSelected(int idx) {
-		mCurrentPostion = idx;
-		if (mImageUrls != null && mImageUrls.length > 1) {
-			setActionBarTitle((mCurrentPostion + 1) + "/" + mImageUrls.length);
-		}
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-	}
-
-	@Override
-	public void onClick(View v) {
-		
-	}
-
-	@Override
-	public void initView() {
-		
-	}
-
-	@Override
-	public void initData() {
-		
 	}
 }
