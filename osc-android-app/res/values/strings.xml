@@ -220,6 +220,7 @@
 	<string name="loading_img">加载图片</string>
 	<string name="mes_notice">消息通知</string>
 	<string name="clean_cache">清理缓存</string>
+	<string name="loading_more">自动加载\"更多\"</string>
 	<string name="update">检查新版本</string>
 	<string name="about">关于开源中国</string>
 	<string name="feedback">意见反馈</string>
@@ -241,5 +242,7 @@
 	<string name="tip_save_image_suc">图片已保存(手机相册-> osc_img)</string>
 	<string name="tip_save_image_faile">无法保存图片</string>
 	<string name="tip_load_image_faile">加载图片失败</string>
+	
+	<string name="down_state">正在下载：%s</string>
 
 </resources>

@@ -7,7 +7,10 @@ import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.Notice;
 import net.oschina.app.cache.DataCleanManager;
 import net.oschina.app.interf.BaseViewInterface;
+import net.oschina.app.interf.ICallbackResult;
 import net.oschina.app.interf.OnTabReselectListener;
+import net.oschina.app.service.DownloadService;
+import net.oschina.app.service.DownloadService.DownloadBinder;
 import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
@@ -16,12 +19,15 @@ import net.oschina.app.widget.MyFragmentTabHost;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -44,8 +50,9 @@ import butterknife.InjectView;
 @SuppressLint("InflateParams")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class MainActivity extends ActionBarActivity implements
-		NavigationDrawerFragment.NavigationDrawerCallbacks, 
-		OnTabChangeListener, BaseViewInterface, View.OnClickListener, OnTouchListener {
+		NavigationDrawerFragment.NavigationDrawerCallbacks,
+		OnTabChangeListener, BaseViewInterface, View.OnClickListener,
+		OnTouchListener {
 
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
@@ -70,7 +77,8 @@ public class MainActivity extends ActionBarActivity implements
 				int msgCount = intent.getIntExtra("msgCount", 0);// 留言
 				int reviewCount = intent.getIntExtra("reviewCount", 0);// 评论
 				int newFansCount = intent.getIntExtra("newFansCount", 0);// 新粉丝
-				int activeCount = atmeCount + reviewCount + msgCount + newFansCount;//
+				int activeCount = atmeCount + reviewCount + msgCount
+						+ newFansCount;//
 				// 信息总数
 				mNotice = (Notice) intent.getSerializableExtra("notice_bean");
 				TLog.log("NOTICE", "@me:" + atmeCount + " msg:" + msgCount
@@ -84,13 +92,14 @@ public class MainActivity extends ActionBarActivity implements
 					mBvTweet.hide();
 					mNotice = null;
 				}
-			} else if (intent.getAction().equals(Constants.INTENT_ACTION_LOGOUT)) {
+			} else if (intent.getAction()
+					.equals(Constants.INTENT_ACTION_LOGOUT)) {
 				mBvTweet.hide();
 				mNotice = null;
 			}
 		}
 	};
-	
+
 	/**
 	 * Used to store the last screen title. For use in
 	 * {@link #restoreActionBar()}.
@@ -135,7 +144,7 @@ public class MainActivity extends ActionBarActivity implements
 		IntentFilter filter = new IntentFilter(Constants.INTENT_ACTION_NOTICE);
 		filter.addAction(Constants.INTENT_ACTION_LOGOUT);
 		registerReceiver(mReceiver, filter);
-		
+
 		NoticeUtils.bindToService(this);
 		UIHelper.sendBroadcastForNotice(this);
 
@@ -187,7 +196,7 @@ public class MainActivity extends ActionBarActivity implements
 				}
 			});
 			mTabHost.addTab(tab, mainTab.getClz(), null);
-			
+
 			if (mainTab.equals(MainTab.ME)) {
 				View cn = indicator.findViewById(R.id.tab_mes);
 				mBvTweet = new BadgeView(MainActivity.this, cn);
@@ -278,19 +287,21 @@ public class MainActivity extends ActionBarActivity implements
 	public boolean onTouch(View v, MotionEvent event) {
 		v.performClick();
 		boolean consumed = false;
-	    // use getTabHost().getCurrentTabView to decide if the current tab is
-	    // touched again
-	    if (event.getAction() == MotionEvent.ACTION_DOWN
-	            && v.equals(mTabHost.getCurrentTabView())) {
-	        // use getTabHost().getCurrentView() to get a handle to the view
-	        // which is displayed in the tab - and to get this views context
-	        Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(mTabHost.getCurrentTabTag());
-	        if (currentFragment instanceof OnTabReselectListener) {
-	            OnTabReselectListener listener = (OnTabReselectListener) currentFragment;
-	            listener.onTabReselect();
-	            consumed = true;
-	        }
-	    }
-	    return consumed;
+		// use getTabHost().getCurrentTabView to decide if the current tab is
+		// touched again
+		if (event.getAction() == MotionEvent.ACTION_DOWN
+				&& v.equals(mTabHost.getCurrentTabView())) {
+			// use getTabHost().getCurrentView() to get a handle to the view
+			// which is displayed in the tab - and to get this views context
+			Fragment currentFragment = getSupportFragmentManager()
+					.findFragmentByTag(mTabHost.getCurrentTabTag());
+			if (currentFragment != null
+					&& currentFragment instanceof OnTabReselectListener) {
+				OnTabReselectListener listener = (OnTabReselectListener) currentFragment;
+				listener.onTabReselect();
+				consumed = true;
+			}
+		}
+		return consumed;
 	}
 }

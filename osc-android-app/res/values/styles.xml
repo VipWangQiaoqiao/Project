@@ -336,6 +336,12 @@
         <item name="android:src">@drawable/ic_item_goto_right_tip</item>
         <item name="android:layout_marginRight">@dimen/space_10</item>
     </style>
+    
+    <style name="option_item_toggleButton">
+        <item name="android:layout_width">45dp</item>
+        <item name="android:layout_height">20dp</item>
+    </style>
+    
     <!-- 操作项样式end -->
 
 

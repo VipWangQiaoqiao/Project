@@ -466,6 +466,8 @@ public class TDevice {
 	}
 
 	public static void installAPK(Context context, File file) {
+		if (file == null || !file.exists())
+			return;
 		Intent intent = new Intent();
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		intent.setAction(Intent.ACTION_VIEW);

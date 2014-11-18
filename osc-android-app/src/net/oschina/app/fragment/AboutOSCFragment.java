@@ -140,7 +140,7 @@ public class AboutOSCFragment extends BaseFragment {
 
 	private void onClickUpdate() {
 		if (mTvVersionStatus.getTag() != null && (Boolean) mTvVersionStatus.getTag()) {
-			UIHelper.openBrowser(getActivity(), mUpdate.getUpdate().getAndroid().getDownloadUrl());
+			UIHelper.openDownLoadService(getActivity(), mUpdate.getUpdate().getAndroid().getDownloadUrl(), mUpdate.getUpdate().getAndroid().getVersionName());
 		} else if (mTvVersionStatus.getTag() != null) {
 			checkUpdate();
 		}

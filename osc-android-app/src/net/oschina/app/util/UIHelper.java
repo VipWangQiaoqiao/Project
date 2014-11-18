@@ -22,11 +22,15 @@ import net.oschina.app.fragment.FriendsFragment;
 import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
+import net.oschina.app.interf.ICallbackResult;
 import net.oschina.app.interf.OnWebViewImageListener;
+import net.oschina.app.service.DownloadService;
 import net.oschina.app.service.NoticeService;
+import net.oschina.app.service.DownloadService.DownloadBinder;
 import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.ui.LoginActivity;
+import net.oschina.app.ui.MainActivity;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.viewpagefragment.FriendsViewPagerFragment;
@@ -34,14 +38,17 @@ import net.oschina.app.widget.AvatarView;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.text.Html;
@@ -790,5 +797,33 @@ public class UIHelper {
 				handler.sendMessage(msg);
 			}
 		}.start();
+	}
+	
+	public static void openDownLoadService(Context context, String downurl, String tilte) {
+		final ICallbackResult callback = new ICallbackResult() {
+			
+			@Override
+			public void OnBackResult(Object s) {
+			}
+		};
+		ServiceConnection conn = new ServiceConnection() {
+
+			@Override
+			public void onServiceDisconnected(ComponentName name) {
+			}
+
+			@Override
+			public void onServiceConnected(ComponentName name, IBinder service) {
+				DownloadBinder binder = (DownloadBinder) service;
+				binder.addCallback(callback);
+				binder.start();
+
+			}
+		};
+		Intent intent = new Intent(context, DownloadService.class);
+		intent.putExtra(DownloadService.BUNDLE_KEY_DOWNLOAD_URL, downurl);
+		intent.putExtra(DownloadService.BUNDLE_KEY_TITLE, tilte);
+		context.startService(intent);
+		context.bindService(intent, conn, Context.BIND_AUTO_CREATE); 
 	}
 }
