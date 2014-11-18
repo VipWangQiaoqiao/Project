@@ -1,5 +1,6 @@
 package net.oschina.app.ui;
 
+import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.AppManager;
 import net.oschina.app.R;
@@ -14,6 +15,7 @@ import net.oschina.app.service.DownloadService.DownloadBinder;
 import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
+import net.oschina.app.util.UpdateManager;
 import net.oschina.app.widget.BadgeView;
 import net.oschina.app.widget.MyFragmentTabHost;
 import android.annotation.SuppressLint;
@@ -27,6 +29,7 @@ import android.content.ServiceConnection;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -63,7 +66,6 @@ public class MainActivity extends ActionBarActivity implements
 	@InjectView(android.R.id.tabhost)
 	MyFragmentTabHost mTabHost;
 
-	// private Version mVersion;
 	private BadgeView mBvTweet;
 
 	public static Notice mNotice;
@@ -153,6 +155,22 @@ public class MainActivity extends ActionBarActivity implements
 			DataCleanManager.cleanInternalCache(AppContext.getInstance());
 			AppContext.setFristStart(false);
 		}
+		
+		checkUpdate();
+	}
+	
+	private void checkUpdate() {
+		if (!AppContext.get(AppConfig.KEY_CHECK_UPDATE, true)) {
+			return;
+		}
+		Handler handler = new Handler();
+		handler.postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				new UpdateManager(MainActivity.this, false).checkUpdate();
+			}
+		}, 2000);
 	}
 
 	@Override

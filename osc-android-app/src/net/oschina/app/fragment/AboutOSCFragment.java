@@ -1,34 +1,21 @@
 package net.oschina.app.fragment;
 
-import java.io.ByteArrayInputStream;
-
-import org.apache.http.Header;
-
-import com.loopj.android.http.AsyncHttpResponseHandler;
-
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
-import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.Update;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
-import net.oschina.app.util.XmlUtils;
-import android.graphics.drawable.Drawable;
+import net.oschina.app.util.UpdateManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class AboutOSCFragment extends BaseFragment {
-
-	@InjectView(R.id.pb_loading)
-	ProgressBar mPbCheckLoading;
 
 	@InjectView(R.id.tv_version)
 	TextView mTvVersionStatus;
@@ -36,51 +23,6 @@ public class AboutOSCFragment extends BaseFragment {
 	@InjectView(R.id.tv_version_name)
 	TextView mTvVersionName;
 	
-	private Update mUpdate;
-
-	private boolean mIsCheckingUpdate = true;
-
-	private AsyncHttpResponseHandler mCheckUpdateHandle = new AsyncHttpResponseHandler() {
-
-		@Override
-		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-				Throwable arg3) {
-			if (getActivity() == null || !getActivity().isFinishing()) {
-				mIsCheckingUpdate = false;
-				mPbCheckLoading.setVisibility(View.GONE);
-				mTvVersionStatus.setText("未能获取到新版本信息");
-				mTvVersionStatus.setTag(false);
-			}
-		}
-
-		@Override
-		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-			if (getActivity() == null || !getActivity().isFinishing()) {
-				mIsCheckingUpdate = false;
-				mPbCheckLoading.setVisibility(View.GONE);
-				mUpdate = XmlUtils.toBean(Update.class,
-						new ByteArrayInputStream(arg2));
-				int curVersionCode = TDevice.getVersionCode(AppContext
-						.getInstance().getPackageName());
-				if (curVersionCode < mUpdate.getUpdate().getAndroid()
-						.getVersionCode()) {
-					mTvVersionStatus.setText("发现新版本");
-					mTvVersionStatus.setTextColor(getResources().getColor(
-							R.color.red));
-					Drawable drawable = getResources().getDrawable(
-							R.drawable.notification_bg);
-					mTvVersionStatus.setCompoundDrawablesWithIntrinsicBounds(
-							drawable, null, null, null);
-					mTvVersionStatus.setTag(true);
-				} else {
-					mTvVersionStatus.setText("已经是最新版");
-					mTvVersionStatus.setTag(null);
-				}
-				mTvVersionStatus.setVisibility(View.VISIBLE);
-			}
-		}
-	};
-
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -102,11 +44,7 @@ public class AboutOSCFragment extends BaseFragment {
 	}
 
 	public void initData() {
-		mIsCheckingUpdate = true;
-		
 		mTvVersionName.setText("V " + TDevice.getVersionName());
-		
-		checkUpdate();
 	}
 
 	@Override
@@ -114,9 +52,7 @@ public class AboutOSCFragment extends BaseFragment {
 		final int id = v.getId();
 		switch (id) {
 		case R.id.rl_check_update:
-			if (!mIsCheckingUpdate) {
-				onClickUpdate();
-			}
+			onClickUpdate();
 			break;
 		case R.id.rl_feedback:
 			showFeedBack();
@@ -139,18 +75,7 @@ public class AboutOSCFragment extends BaseFragment {
 	}
 
 	private void onClickUpdate() {
-		if (mTvVersionStatus.getTag() != null && (Boolean) mTvVersionStatus.getTag()) {
-			UIHelper.openDownLoadService(getActivity(), mUpdate.getUpdate().getAndroid().getDownloadUrl(), mUpdate.getUpdate().getAndroid().getVersionName());
-		} else if (mTvVersionStatus.getTag() != null) {
-			checkUpdate();
-		}
-	}
-
-	private void checkUpdate() {
-		mIsCheckingUpdate = true;
-		mPbCheckLoading.setVisibility(View.VISIBLE);
-		mTvVersionStatus.setVisibility(View.GONE);
-		OSChinaApi.checkUpdate(mCheckUpdateHandle);
+		new UpdateManager(getActivity(), true).checkUpdate();
 	}
 
 	private void showFeedBack() {
