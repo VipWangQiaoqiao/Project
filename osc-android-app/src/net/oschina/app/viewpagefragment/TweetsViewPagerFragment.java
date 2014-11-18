@@ -50,7 +50,7 @@ public class TweetsViewPagerFragment extends BaseViewPagerFragment implements On
 	public void onTabReselect() {
 		int currentIndex = mViewPager.getCurrentItem();
 		Fragment currentFragment = getChildFragmentManager().getFragments().get(currentIndex);
-		if (currentFragment instanceof OnTabReselectListener) {
+		if (currentFragment != null && currentFragment instanceof OnTabReselectListener) {
             OnTabReselectListener listener = (OnTabReselectListener) currentFragment;
             listener.onTabReselect();
         }

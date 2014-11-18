@@ -301,9 +301,10 @@ public class MainActivity extends ActionBarActivity implements
 		dialog.show();
 	}
 
+	@SuppressLint("ClickableViewAccessibility")
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-		v.performClick();
+		super.onTouchEvent(event);
 		boolean consumed = false;
 		// use getTabHost().getCurrentTabView to decide if the current tab is
 		// touched again
