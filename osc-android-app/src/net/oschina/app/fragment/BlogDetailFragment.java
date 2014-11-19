@@ -216,7 +216,8 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 	}
 
 	private void fillWebViewBody() {
-		StringBuffer body = new StringBuffer(UIHelper.setHtmlCotentSupportImagePreview(mBlog.getBody()));
+		StringBuffer body = new StringBuffer();
+		body.append(UIHelper.setHtmlCotentSupportImagePreview(mBlog.getBody()));
 		body.append(UIHelper.WEB_STYLE).append(UIHelper.WEB_LOAD_IMAGES);
 		mWebView.loadDataWithBaseURL(null, body.toString(), "text/html", "utf-8", null);
 	}

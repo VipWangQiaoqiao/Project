@@ -223,15 +223,7 @@ public class MainActivity extends ActionBarActivity implements
 				mBvTweet.setBackgroundResource(R.drawable.notification_bg);
 				mBvTweet.setGravity(Gravity.CENTER);
 			}
-			mTabHost.getTabWidget().getChildAt(i).setOnTouchListener(this);
-		}
-	}
-
-	@Override
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-		if (intent.getBooleanExtra("NOTICE", false)) {
-			mTabHost.setCurrentTab(3);
+			mTabHost.getTabWidget().getChildAt(i).setOnTouchListener(this);	
 		}
 	}
 

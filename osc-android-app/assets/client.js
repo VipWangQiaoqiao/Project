@@ -11,7 +11,7 @@ function showImagePreview(url) {
 }
 
 function getAllImgSrc(htmlstr) {
-    var reg=/<img.+?src=('|")?([^'"]+)('|")?(?:\s+|>)/g;
+    var reg=/<img.+?src=('|")?([^'"]+)('|")?(?:\s+|>)/gim;
     var arr = [];
     while(tem=reg.exec(htmlstr)){
         arr.push(tem[2]);

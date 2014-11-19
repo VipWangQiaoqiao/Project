@@ -173,8 +173,8 @@ public class PostDetailFragment extends BaseDetailFragment implements
 
 	private void fillWebViewBody() {
 		// 显示标签
-		StringBuffer body = new StringBuffer(
-				UIHelper.setHtmlCotentSupportImagePreview(mPost.getBody()));
+		StringBuffer body = new StringBuffer();
+		body.append(UIHelper.setHtmlCotentSupportImagePreview(mPost.getBody()));
 		body.append(UIHelper.WEB_STYLE)
 			.append(UIHelper.WEB_LOAD_IMAGES)
 			.append(getPostTags(mPost.getTags()))

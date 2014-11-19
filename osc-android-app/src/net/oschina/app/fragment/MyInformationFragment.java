@@ -159,8 +159,8 @@ public class MyInformationFragment extends BaseFragment {
 	
 	@Override
 	public void onDestroy() {
-		getActivity().unregisterReceiver(mReceiver);
 		super.onDestroy();
+		getActivity().unregisterReceiver(mReceiver);
 	}
 	
 	@Override

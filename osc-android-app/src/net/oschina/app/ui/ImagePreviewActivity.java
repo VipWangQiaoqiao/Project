@@ -143,7 +143,9 @@ public class ImagePreviewActivity extends BaseActivity implements
 	public void onPageSelected(int idx) {
 		mCurrentPostion = idx;
 		if (mImageUrls != null && mImageUrls.length > 1) {
-			mTvImgIndex.setText((mCurrentPostion + 1) + "/" + mImageUrls.length);
+			if (mTvImgIndex != null) {
+				mTvImgIndex.setText((mCurrentPostion + 1) + "/" + mImageUrls.length);
+			}
 		}
 	}
 	

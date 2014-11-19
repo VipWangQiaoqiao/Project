@@ -289,7 +289,7 @@ public class StringUtils {
 			String line;
 			line = read.readLine();
 			while (line != null) {
-				res.append(line);
+				res.append(line + "\n");
 				line = read.readLine();
 			}
 		} catch (IOException e) {
