@@ -17,7 +17,7 @@
         android:layout_toRightOf="@id/iv_avatar"
         android:text="火蚁"
         android:textColor="@color/lightblue"
-        android:textSize="@dimen/text_size_14" />
+        android:textSize="@dimen/text_size_13" />
 
     <TextView
         android:id="@+id/tv_time"
@@ -46,7 +46,7 @@
         android:layout_marginTop="@dimen/space_4"
         android:layout_toRightOf="@id/iv_avatar"
         android:textColor="@color/main_black"
-        android:textSize="@dimen/text_size_12" />
+        android:textSize="@dimen/text_size_14" />
 
     <LinearLayout
         android:id="@+id/ly_relies"

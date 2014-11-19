@@ -61,6 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:layout_marginLeft="6dp"
                 android:layout_marginRight="6dp"
                 android:background="@drawable/btn_emoji_selector" />
         </RelativeLayout>

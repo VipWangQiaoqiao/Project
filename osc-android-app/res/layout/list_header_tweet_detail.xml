@@ -7,7 +7,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/list_item_background_normal"
         android:padding="@dimen/space_8" >
 
         <net.oschina.app.widget.AvatarView

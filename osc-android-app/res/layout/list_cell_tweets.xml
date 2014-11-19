@@ -16,27 +16,19 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/iv_tweet_face"
         android:textColor="@color/lightblue"
-        android:textSize="@dimen/text_size_14" />
-
-    <TextView
-        android:id="@+id/tv_tweet_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:textColor="@color/tweet_time_platform"
-        android:textSize="@dimen/text_size_12" />
+        android:textSize="@dimen/text_size_13" />
 
     <net.oschina.app.widget.TweetTextView
         android:id="@+id/tweet_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_tweet_time"
+        android:layout_below="@id/tv_tweet_name"
         android:layout_marginTop="@dimen/space_4"
         android:layout_toRightOf="@id/iv_tweet_face"
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:textColor="@color/main_black"
-        android:textSize="@dimen/text_size_13" />
+        android:textSize="@dimen/text_size_15" />
 
     <ImageView
         android:id="@+id/iv_tweet_image"
@@ -60,13 +52,22 @@
         android:gravity="center_vertical" >
 
         <TextView
+            android:id="@+id/tv_tweet_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/tweet_time_platform"
+            android:layout_marginRight="@dimen/space_10"
+            android:textSize="@dimen/text_size_11" />
+
+        <TextView
             android:id="@+id/tv_tweet_platform"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tv_tweet_time"
             android:drawableLeft="@drawable/platform"
             android:drawablePadding="@dimen/space_5"
             android:textColor="@color/main_gray"
-            android:textSize="@dimen/text_size_10" />
+            android:textSize="@dimen/text_size_11" />
 
         <TextView
             android:id="@+id/tv_tweet_comment_count"

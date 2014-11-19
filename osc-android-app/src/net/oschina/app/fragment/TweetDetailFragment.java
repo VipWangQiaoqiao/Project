@@ -163,7 +163,7 @@ public class TweetDetailFragment extends BaseListFragment implements
 		mTvCommentCount = (TextView) header.findViewById(R.id.tv_comment_count);
 		mContent = (WebView) header.findViewById(R.id.webview);
 		UIHelper.initWebView(mContent);
-
+		mListView.setHeaderDividersEnabled(false);
 		mListView.addHeaderView(header);
 		super.initView(view);
 	}
@@ -288,7 +288,7 @@ public class TweetDetailFragment extends BaseListFragment implements
 					AppContext.showToastShort(R.string.comment_publish_success);
 					mAdapter.addItem(0, rsb.getComment());
 					mEmojiFragment.reset();
-					setTweetCommentCount(1);
+					setTweetCommentCount();
 					// UIHelper.sendBroadCastCommentChanged(getActivity(),
 					// mIsBlogComment, mId, mCatalog, Comment.OPT_ADD,
 					// res.getComment());
@@ -343,7 +343,7 @@ public class TweetDetailFragment extends BaseListFragment implements
 				if (res.OK()) {
 					AppContext.showToastShort(R.string.delete_success);
 					mAdapter.removeItem(args[0]);
-					setTweetCommentCount(-1);
+					setTweetCommentCount();
 				} else {
 					AppContext.showToastShort(res.getErrorMessage());
 				}
@@ -370,12 +370,10 @@ public class TweetDetailFragment extends BaseListFragment implements
 				new DeleteOperationResponseHandler(comment));
 	}
 
-	private void setTweetCommentCount(int addCount) {
+	private void setTweetCommentCount() {
 		mAdapter.notifyDataSetChanged();
-		if (mTweet.getCommentCount() + addCount == -1) {
-			return;
-		}
-		mTweet.setCommentCount(mTweet.getCommentCount() + addCount);
+		
+		mTweet.setCommentCount(mAdapter.getDataSize());
 		mTvCommentCount.setText(getString(R.string.comment_count,
 				mTweet.getCommentCount()));
 	}
@@ -481,6 +479,7 @@ public class TweetDetailFragment extends BaseListFragment implements
 		if (mState == STATE_REFRESH)
 			mAdapter.clear();
 		mAdapter.addData(data);
+		setTweetCommentCount();
 		mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
 		if (data.size() == 0 && mState == STATE_REFRESH) {
 			mAdapter.setState(ListBaseAdapter.STATE_EMPTY_ITEM);
@@ -498,11 +497,9 @@ public class TweetDetailFragment extends BaseListFragment implements
 		mTweet = tweet;
 		if (mTweet != null && mTweet.getId() > 0) {
 			fillUI();
-			mCurrentPage = 0;
 
 			mState = STATE_REFRESH;
 			mCurrentPage = 0;
-			mAdapter.setState(ListBaseAdapter.STATE_LOAD_MORE);
 			sendRequestData();
 		} else {
 			throw new RuntimeException("load detail error");
