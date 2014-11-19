@@ -59,8 +59,8 @@ public class UserCenterFragment extends BaseFragment implements
 	@InjectView(R.id.lv_user_active)
 	ListView mListView;
 	private ImageView mIvAvatar, mIvGender;
-	private TextView mTvName, mTvFollowing, mTvFollower, mTvSore, mBtnPrivateMsg,
-			mBtnFollowUser, mTvLastestLoginTime;
+	private TextView mTvName, mTvFollowing, mTvFollower, mTvSore,
+			mBtnPrivateMsg, mBtnFollowUser, mTvLastestLoginTime;
 
 	private ActiveAdapter mAdapter;
 	private int mHisUid;
@@ -150,6 +150,10 @@ public class UserCenterFragment extends BaseFragment implements
 			handleUserRelation();
 			break;
 		case R.id.tv_private_message:
+			if (mHisUid == AppContext.getInstance().getLoginUid()) {
+				AppContext.showToast("不能给自己发送留言:)");
+				return;
+			}
 			UIHelper.showMessageDetail(getActivity(), mHisUid, mHisName);
 			break;
 		case R.id.tv_blog:
@@ -162,7 +166,7 @@ public class UserCenterFragment extends BaseFragment implements
 			break;
 		}
 	}
-	
+
 	@Override
 	public void initView(View view) {
 		mListView.setOnItemClickListener(this);
@@ -217,8 +221,10 @@ public class UserCenterFragment extends BaseFragment implements
 	private void fillUI() {
 		mListView.setVisibility(View.VISIBLE);
 		((AvatarView) mIvAvatar).setAvatarUrl(mUser.getPortrait());
-		mTvName.setText(mUser.getName());
-
+		mHisUid = mUser.getUid();
+		mHisName = mUser.getName();
+		mTvName.setText(mHisName);
+		
 		int genderIcon = R.drawable.userinfo_icon_male;
 		if (FEMALE.equals(mUser.getGender())) {
 			genderIcon = R.drawable.userinfo_icon_female;
@@ -274,16 +280,21 @@ public class UserCenterFragment extends BaseFragment implements
 	}
 
 	private CommonDialog mInformationDialog;
-	
+
 	private void showInformationDialog() {
 		if (mInformationDialog == null) {
-			mInformationDialog = DialogHelper.getPinterestDialogCancelable(getActivity());
+			mInformationDialog = DialogHelper
+					.getPinterestDialogCancelable(getActivity());
 			View view = LayoutInflater.from(getActivity()).inflate(
 					R.layout.fragment_user_center_information, null);
-			((TextView)view.findViewById(R.id.tv_join_time)).setText(StringUtils.friendly_time(mUser.getJointime()));
-			((TextView)view.findViewById(R.id.tv_location)).setText(StringUtils.getString(mUser.getFrom()));
-			((TextView)view.findViewById(R.id.tv_development_platform)).setText(StringUtils.getString(mUser.getDevplatform()));
-			((TextView)view.findViewById(R.id.tv_academic_focus)).setText(StringUtils.getString(mUser.getExpertise()));
+			((TextView) view.findViewById(R.id.tv_join_time))
+					.setText(StringUtils.friendly_time(mUser.getJointime()));
+			((TextView) view.findViewById(R.id.tv_location))
+					.setText(StringUtils.getString(mUser.getFrom()));
+			((TextView) view.findViewById(R.id.tv_development_platform))
+					.setText(StringUtils.getString(mUser.getDevplatform()));
+			((TextView) view.findViewById(R.id.tv_academic_focus))
+					.setText(StringUtils.getString(mUser.getExpertise()));
 			mInformationDialog.setContent(view);
 		}
 		mInformationDialog.show();
@@ -440,13 +451,13 @@ public class UserCenterFragment extends BaseFragment implements
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
 		// 数据已经全部加载，或数据为空时，或正在加载，不处理滚动事件
-		if (mState == STATE_NOMORE || mState == STATE_LOADMORE || mState == STATE_REFRESH) {
+		if (mState == STATE_NOMORE || mState == STATE_LOADMORE
+				|| mState == STATE_REFRESH) {
 			return;
 		}
 		if (mAdapter != null
 				&& mAdapter.getDataSize() > 0
-				&& mListView.getLastVisiblePosition() == (mListView
-						.getCount() - 1)) {
+				&& mListView.getLastVisiblePosition() == (mListView.getCount() - 1)) {
 			if (mState == STATE_NONE
 					&& mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
 				mState = STATE_LOADMORE;
