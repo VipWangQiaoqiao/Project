@@ -9,6 +9,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseDetailFragment;
 import net.oschina.app.bean.Blog;
 import net.oschina.app.bean.BlogDetail;
+import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.emoji.EmojiFragment;
@@ -23,6 +24,7 @@ import net.oschina.app.service.ServerTaskUtils;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
+import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
@@ -53,7 +55,6 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 	@InjectView(R.id.tv_title) TextView mTvTitle;
 	@InjectView(R.id.tv_source) TextView mTvSource;
 	@InjectView(R.id.tv_time) TextView mTvTime;
-	@InjectView(R.id.tv_comment_count) TextView mTvCommentCount;
 	private WebView mWebView;
 	private int mBlogId;
 	private Blog mBlog;
@@ -208,7 +209,6 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 		mTvTitle.setText(mBlog.getTitle());
 		mTvSource.setText(mBlog.getAuthor());
 		mTvTime.setText(StringUtils.friendly_time(mBlog.getPubDate()));
-		mTvCommentCount.setText(mBlog.getCommentCount() + "评");
 		if (mToolBarFragment != null) {
 			mToolBarFragment.setCommentCount(mBlog.getCommentCount());
 		}
@@ -219,6 +219,7 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 		StringBuffer body = new StringBuffer();
 		body.append(UIHelper.setHtmlCotentSupportImagePreview(mBlog.getBody()));
 		body.append(UIHelper.WEB_STYLE).append(UIHelper.WEB_LOAD_IMAGES);
+		TLog.log("BUG", body.toString());
 		mWebView.loadDataWithBaseURL(null, body.toString(), "text/html", "utf-8", null);
 	}
 
@@ -264,8 +265,8 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 	}
 
 	@Override
-	protected void commentPubSuccess() {
-		super.commentPubSuccess();
+	protected void commentPubSuccess(Comment comment) {
+		super.commentPubSuccess(comment);
 		mEmojiFragment.reset();
 	}
 

@@ -8,6 +8,7 @@ import java.lang.ref.WeakReference;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.Result;
@@ -17,22 +18,18 @@ import net.oschina.app.ui.ShareDialog;
 import net.oschina.app.ui.ShareDialog.OnSharePlatformClick;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
-import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
 import org.apache.http.Header;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.internal.widget.ListPopupWindow;
@@ -40,22 +37,15 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ZoomButtonsController;
-import butterknife.InjectView;
-
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.bean.SocializeEntity;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
-import com.umeng.socialize.controller.listener.SocializeListeners.SnsPostListener;
 import com.umeng.socialize.controller.listener.SocializeListeners.UMAuthListener;
 import com.umeng.socialize.exception.SocializeException;
 import com.umeng.socialize.media.QZoneShareContent;
@@ -96,10 +86,7 @@ public class BaseDetailFragment extends BaseFragment implements
 					hideWaitDialog();
 					AppContext.showToastShort(R.string.comment_publish_success);
 
-					commentPubSuccess();
-					// UIHelper.sendBroadCastCommentChanged(getActivity(),
-					// mIsBlogComment, mId, mCatalog, Comment.OPT_ADD,
-					// res.getComment());
+					commentPubSuccess(rsb.getComment());
 				} else {
 					hideWaitDialog();
 					AppContext.showToastShort(res.getErrorMessage());
@@ -131,9 +118,9 @@ public class BaseDetailFragment extends BaseFragment implements
 		return true;
 	}
 
-	// protected void onCommentChanged(int opt, int id, int catalog,
-	// boolean isBlog, Comment comment) {
-	// }
+	protected void onCommentChanged(int opt, int id, int catalog,
+			boolean isBlog, Comment comment) {
+	}
 
 	private CommentChangeReceiver mReceiver;
 	private AsyncTask<String, Void, Entity> mCacheTask;
@@ -348,19 +335,7 @@ public class BaseDetailFragment extends BaseFragment implements
 		return img;
 	}
 
-	protected void commentPubSuccess() {
-
-	}
-
-	private void showMoreOptionMenu(View view) {
-		mMenuWindow = new ListPopupWindow(getActivity());
-		mMenuWindow.setModal(true);
-		mMenuWindow.setContentWidth(getResources().getDimensionPixelSize(
-				R.dimen.popo_menu_dialog_width));
-		mMenuWindow.setAdapter(mMenuAdapter);
-		mMenuWindow.setOnItemClickListener(this);
-		mMenuWindow.setAnchorView(view);
-		mMenuWindow.show();
+	protected void commentPubSuccess(Comment comment) {
 	}
 
 	@Override
@@ -608,7 +583,7 @@ public class BaseDetailFragment extends BaseFragment implements
 
 		@Override
 		public int getCount() {
-			return 2;// hasReport ? 3 : 2;
+			return 2;
 		}
 
 		@Override
@@ -718,14 +693,14 @@ public class BaseDetailFragment extends BaseFragment implements
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			// int opt = intent.getIntExtra(Comment.BUNDLE_KEY_OPERATION, 0);
-			// int id = intent.getIntExtra(Comment.BUNDLE_KEY_ID, 0);
-			// int catalog = intent.getIntExtra(Comment.BUNDLE_KEY_CATALOG, 0);
-			// boolean isBlog = intent.getBooleanExtra(Comment.BUNDLE_KEY_BLOG,
-			// false);
-			// Comment comment = intent
-			// .getParcelableExtra(Comment.BUNDLE_KEY_COMMENT);
-			// onCommentChanged(opt, id, catalog, isBlog, comment);
+			int opt = intent.getIntExtra(Comment.BUNDLE_KEY_OPERATION, 0);
+			int id = intent.getIntExtra(Comment.BUNDLE_KEY_ID, 0);
+			int catalog = intent.getIntExtra(Comment.BUNDLE_KEY_CATALOG, 0);
+			boolean isBlog = intent.getBooleanExtra(Comment.BUNDLE_KEY_BLOG,
+					false);
+			Comment comment = intent
+					.getParcelableExtra(Comment.BUNDLE_KEY_COMMENT);
+			onCommentChanged(opt, id, catalog, isBlog, comment);
 		}
 	}
 

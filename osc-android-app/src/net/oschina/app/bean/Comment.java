@@ -3,6 +3,8 @@ package net.oschina.app.bean;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
@@ -14,7 +16,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  */
 @SuppressWarnings("serial")
 @XStreamAlias("comment")
-public class Comment extends Entity {
+public class Comment extends Entity implements Parcelable {
 
 	public static final String BUNDLE_KEY_COMMENT = "bundle_key_comment";
 	public static final String BUNDLE_KEY_ID = "bundle_key_id";
@@ -53,6 +55,39 @@ public class Comment extends Entity {
 	
 	@XStreamAlias("refers")
 	private List<Refer> refers = new ArrayList<Refer>();
+	
+	@SuppressWarnings("unchecked")
+	public Comment(Parcel source) {
+		id = source.readInt();
+		portrait = source.readString();
+		author = source.readString();
+		authorId = source.readInt();
+		pubDate = source.readString();
+		appClient = source.readInt();
+		content = source.readString();
+
+		replies = source.readArrayList(Reply.class.getClassLoader());
+		refers = source.readArrayList(Refer.class.getClassLoader());
+	}
+	
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeInt(id);
+		dest.writeString(portrait);
+		dest.writeString(author);
+		dest.writeInt(authorId);
+		dest.writeString(pubDate);
+		dest.writeInt(appClient);
+		dest.writeString(content);
+
+		dest.writeList(replies);
+		dest.writeList(refers);
+	}
+	
+	@Override
+	public int describeContents() {
+		return 0;
+	}
 	
 	public String getPortrait() {
 		return portrait;
@@ -119,13 +154,23 @@ public class Comment extends Entity {
 	}
 
 	@XStreamAlias("reply")
-	public static class Reply implements Serializable {
+	public static class Reply implements Serializable, Parcelable {
 		@XStreamAlias("rauthor")
 		public String rauthor;
 		@XStreamAlias("rpubDate")
 		public String rpubDate;
 		@XStreamAlias("rcontent")
 		public String rcontent;
+		
+		public Reply() {
+		}
+
+		public Reply(Parcel source) {
+			rauthor = source.readString();
+			rpubDate = source.readString();
+			rcontent = source.readString();
+		}
+		
 		public String getRauthor() {
 			return rauthor;
 		}
@@ -144,15 +189,49 @@ public class Comment extends Entity {
 		public void setRcontent(String rcontent) {
 			this.rcontent = rcontent;
 		}
+		
+		@Override
+		public void writeToParcel(Parcel dest, int flags) {
+			dest.writeString(rauthor);
+			dest.writeString(rpubDate);
+			dest.writeString(rcontent);
+		}
+
+		@Override
+		public int describeContents() {
+			return 0;
+		}
+
+		public static final Parcelable.Creator<Reply> CREATOR = new Creator<Reply>() {
+
+			@Override
+			public Reply[] newArray(int size) {
+				return new Reply[size];
+			}
+
+			@Override
+			public Reply createFromParcel(Parcel source) {
+				return new Reply(source);
+			}
+		};
+		
 	}
 	
 	@XStreamAlias("refer")
-	public static class Refer implements Serializable {
+	public static class Refer implements Serializable, Parcelable {
 		
 		@XStreamAlias("refertitle")
 		public String refertitle;
 		@XStreamAlias("referbody")
 		public String referbody;
+		
+		public Refer() {
+		}
+
+		public Refer(Parcel source) {
+			referbody = source.readString();
+			refertitle = source.readString();
+		}
 		
 		public String getRefertitle() {
 			return refertitle;
@@ -166,5 +245,42 @@ public class Comment extends Entity {
 		public void setReferbody(String referbody) {
 			this.referbody = referbody;
 		}
+		
+		@Override
+		public void writeToParcel(Parcel dest, int flags) {
+			dest.writeString(referbody);
+			dest.writeString(refertitle);
+		}
+
+		@Override
+		public int describeContents() {
+			return 0;
+		}
+
+		public static final Parcelable.Creator<Refer> CREATOR = new Creator<Comment.Refer>() {
+
+			@Override
+			public Refer[] newArray(int size) {
+				return new Refer[size];
+			}
+
+			@Override
+			public Refer createFromParcel(Parcel source) {
+				return new Refer(source);
+			}
+		};
 	}
+	
+	public static final Parcelable.Creator<Comment> CREATOR = new Creator<Comment>() {
+
+		@Override
+		public Comment[] newArray(int size) {
+			return new Comment[size];
+		}
+
+		@Override
+		public Comment createFromParcel(Parcel source) {
+			return new Comment(source);
+		}
+	};
 }

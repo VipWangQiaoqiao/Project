@@ -13,6 +13,7 @@ import net.oschina.app.AppManager;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.Active;
+import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.News;
 import net.oschina.app.bean.Notice;
@@ -634,6 +635,10 @@ public class UIHelper {
 	 */
 	public static void showUserCenter(Context context, int hisuid,
 			String hisname) {
+		if (hisuid == 0 && hisname.equalsIgnoreCase("匿名")) {
+			AppContext.showToast("提醒你，该用户为非会员");
+			return;
+		}
 		Bundle args = new Bundle();
 		args.putInt("his_id", hisuid);
 		args.putString("his_name", hisname);
@@ -825,5 +830,29 @@ public class UIHelper {
 		intent.putExtra(DownloadService.BUNDLE_KEY_TITLE, tilte);
 		context.startService(intent);
 		context.bindService(intent, conn, Context.BIND_AUTO_CREATE); 
+	}
+	
+	/**
+	 * 发送广播告知评论发生变化
+	 * 
+	 * @param context
+	 * @param isBlog
+	 * @param id
+	 * @param catalog
+	 * @param operation
+	 * @param replyComment
+	 */
+	public static void sendBroadCastCommentChanged(Context context,
+			boolean isBlog, int id, int catalog, int operation,
+			Comment replyComment) {
+		Intent intent = new Intent(Constants.INTENT_ACTION_COMMENT_CHANGED);
+		Bundle args = new Bundle();
+		args.putInt(Comment.BUNDLE_KEY_ID, id);
+		args.putInt(Comment.BUNDLE_KEY_CATALOG, catalog);
+		args.putBoolean(Comment.BUNDLE_KEY_BLOG, isBlog);
+		args.putInt(Comment.BUNDLE_KEY_OPERATION, operation);
+		args.putParcelable(Comment.BUNDLE_KEY_COMMENT, replyComment);
+		intent.putExtras(args);
+		context.sendBroadcast(intent);
 	}
 }

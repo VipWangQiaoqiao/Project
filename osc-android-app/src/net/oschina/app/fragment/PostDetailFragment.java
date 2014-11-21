@@ -10,6 +10,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseDetailFragment;
+import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.FavoriteList;
@@ -52,8 +53,6 @@ public class PostDetailFragment extends BaseDetailFragment implements
 	TextView mTvSource;
 	@InjectView(R.id.tv_time)
 	TextView mTvTime;
-	@InjectView(R.id.tv_comment_count)
-	TextView mTvCommentCount;
 	private WebView mWebView;
 	private int mPostId;
 	private Post mPost;
@@ -162,8 +161,6 @@ public class PostDetailFragment extends BaseDetailFragment implements
 		mTvTitle.setText(mPost.getTitle());
 		mTvSource.setText(mPost.getAuthor());
 		mTvTime.setText(StringUtils.friendly_time(mPost.getPubDate()));
-		mTvCommentCount.setText(mPost.getAnswerCount() + "回/"
-				+ mPost.getViewCount() + "阅");
 		if (mToolBarFragment != null) {
 			mToolBarFragment.setCommentCount(mPost.getAnswerCount() + "/"
 					+ mPost.getViewCount());
@@ -237,8 +234,8 @@ public class PostDetailFragment extends BaseDetailFragment implements
 	}
 
 	@Override
-	protected void commentPubSuccess() {
-		super.commentPubSuccess();
+	protected void commentPubSuccess(Comment comment) {
+		super.commentPubSuccess(comment);
 		mEmojiFragment.reset();
 	}
 

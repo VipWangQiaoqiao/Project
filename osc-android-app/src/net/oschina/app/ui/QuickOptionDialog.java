@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -63,14 +64,14 @@ public class QuickOptionDialog extends Dialog implements
 	}
 
 	public QuickOptionDialog(Context context) {
-		this(context, R.style.quick_option_dialog);
+		this(context, R.style.dialog_bottom);
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
-		// getWindow().setGravity(Gravity.BOTTOM);
+		getWindow().setGravity(Gravity.BOTTOM);
 
 		WindowManager m = getWindow().getWindowManager();
 		Display d = m.getDefaultDisplay();

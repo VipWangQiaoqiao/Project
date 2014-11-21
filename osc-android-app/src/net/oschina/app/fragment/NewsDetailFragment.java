@@ -9,6 +9,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseDetailFragment;
+import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.FavoriteList;
@@ -47,7 +48,6 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 	@InjectView(R.id.tv_title) TextView mTvTitle;
 	@InjectView(R.id.tv_source) TextView mTvSource;
 	@InjectView(R.id.tv_time) TextView mTvTime;
-	@InjectView(R.id.tv_comment_count) TextView mTvCommentCount;
 	private int mNewsId;
 	private News mNews;
 	private EmojiFragment mEmojiFragment;
@@ -138,24 +138,21 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 	protected Entity readData(Serializable seri) {
 		return (News) seri;
 	}
+	
+	
 
-//	@Override
-//	protected void onCommentChanged(int opt, int id, int catalog,
-//			boolean isBlog, Comment comment) {
-//		if (id == mNewsId && catalog == CommentList.CATALOG_NEWS && !isBlog) {
-//			if (Comment.OPT_ADD == opt && mNews != null) {
-//				mNews.setCommentCount(mNews.getCommentCount() + 1);
-//				// if (mTvCommentCount != null) {
-//				// mTvCommentCount.setVisibility(View.VISIBLE);
-//				// mTvCommentCount.setText(getString(R.string.comment_count,
-//				// mNews.getCommentCount()));
-//				// }
-//				if (mToolBarFragment != null) {
-//					mToolBarFragment.setCommentCount(mNews.getCommentCount());
-//				}
-//			}
-//		}
-//	}
+	@Override
+	protected void onCommentChanged(int opt, int id, int catalog,
+			boolean isBlog, Comment comment) {
+		if (id == mNewsId && catalog == CommentList.CATALOG_NEWS && !isBlog) {
+			if (Comment.OPT_ADD == opt && mNews != null) {
+				mNews.setCommentCount(mNews.getCommentCount() + 1);
+				if (mToolBarFragment != null) {
+					mToolBarFragment.setCommentCount(mNews.getCommentCount());
+				}
+			}
+		}
+	}
 
 	@Override
 	protected void executeOnLoadDataSuccess(Entity entity) {
@@ -168,7 +165,6 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 		mTvTitle.setText(mNews.getTitle());
 		mTvSource.setText(mNews.getAuthor());
 		mTvTime.setText(StringUtils.friendly_time(mNews.getPubDate()));
-		mTvCommentCount.setText(mNews.getCommentCount() + "评");
 		if (mToolBarFragment != null) {
 			mToolBarFragment.setCommentCount(mNews.getCommentCount());
 		}
@@ -257,9 +253,12 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 	}
 
 	@Override
-	protected void commentPubSuccess() {
-		super.commentPubSuccess();
+	protected void commentPubSuccess(Comment comment) {
+		super.commentPubSuccess(comment);
 		mEmojiFragment.reset();
+		UIHelper.sendBroadCastCommentChanged(getActivity(),
+				false, mNewsId, CommentList.CATALOG_NEWS, Comment.OPT_ADD,
+				comment);
 	}
 
 	@Override

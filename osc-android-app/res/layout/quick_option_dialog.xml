@@ -1,34 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/gray" >
+    android:layout_height="wrap_content" >
 
     <LinearLayout
-        android:id="@+id/ll_foot"
+        android:id="@+id/ll_option_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/white"
-        android:gravity="center"
-        android:padding="10dip" >
-
-        <ImageView
-            android:id="@+id/iv_close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@null"
-            android:focusable="false"
-            android:src="@drawable/btn_quickoption_selector" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_above="@id/ll_foot"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="bottom"
         android:orientation="vertical"
-        android:layout_marginBottom="50dip"
         android:padding="@dimen/space_16" >
 
         <LinearLayout
@@ -181,6 +160,25 @@
                     android:textSize="@dimen/text_size_12" />
             </LinearLayout>
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_foot"
+        android:layout_below="@id/ll_option_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center"
+        android:padding="10dip"
+        android:visibility="visible" >
+
+        <ImageView
+            android:id="@+id/iv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            android:focusable="false"
+            android:src="@drawable/btn_quickoption_selector" />
     </LinearLayout>
 
 </RelativeLayout>

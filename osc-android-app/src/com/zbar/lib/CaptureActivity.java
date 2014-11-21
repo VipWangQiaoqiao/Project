@@ -83,7 +83,7 @@ public class CaptureActivity extends BaseActivity implements Callback {
 	
 	@Override
 	protected boolean hasActionBar() {
-		return true;
+		return false;
 	}
 
 	public void setNeedCapture(boolean isNeedCapture) {

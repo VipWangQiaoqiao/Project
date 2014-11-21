@@ -1,6 +1,9 @@
 package net.oschina.app.ui;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import uk.co.senab.photoview.PhotoView;
 import net.oschina.app.AppConfig;
@@ -47,11 +50,12 @@ public class ImagePreviewActivity extends BaseActivity implements
 	public static void showImagePrivew(Context context, int index,
 			String[] images) {
 		Intent intent = new Intent(context, ImagePreviewActivity.class);
+		
 		intent.putExtra(BUNDLE_KEY_IMAGES, images);
 		intent.putExtra(BUNDLE_KEY_INDEX, index);
 		context.startActivity(intent);
 	}
-
+	
 	@Override
 	protected boolean hasActionBar() {
 		return false;

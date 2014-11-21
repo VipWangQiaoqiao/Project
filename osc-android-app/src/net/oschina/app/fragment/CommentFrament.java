@@ -72,9 +72,9 @@ public class CommentFrament extends BaseListFragment implements
 					mAdapter.addItem(0, rsb.getComment());
 					mAdapter.notifyDataSetChanged();
 					mEmojiFragment.reset();
-//					UIHelper.sendBroadCastCommentChanged(getActivity(),
-//							mIsBlogComment, mId, mCatalog, Comment.OPT_ADD,
-//							res.getComment());
+					UIHelper.sendBroadCastCommentChanged(getActivity(),
+							mIsBlogComment, mId, mCatalog, Comment.OPT_ADD,
+							rsb.getComment());
 				} else {
 					hideWaitDialog();
 					AppContext.showToastShort(res.getErrorMessage());

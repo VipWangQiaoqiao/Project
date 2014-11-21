@@ -58,7 +58,8 @@ public class CommentAdapter extends ListBaseAdapter {
 
 		final Comment item = (Comment) _data.get(position);
 
-		vh.name.setText(item.getAuthor());
+		// 若Authorid为0，则显示非会员
+		vh.name.setText(item.getAuthor() + (item.getAuthorId() == 0 ? "(非会员)" : ""));
 
 		vh.content.setMovementMethod(MyLinkMovementMethod.a());
 		vh.content.setFocusable(false);

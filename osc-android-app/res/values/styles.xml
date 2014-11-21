@@ -82,7 +82,7 @@
     <style name="MenuItemTextViewStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">#dcdcdc</item>
+        <item name="android:textColor">#8D8D8D</item>
         <item name="android:textSize">@dimen/text_size_20</item>
     </style>
     <!-- app main menu style end! -->

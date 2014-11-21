@@ -7,7 +7,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseDetailFragment;
-import net.oschina.app.bean.CommentList;
+import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.Software;
@@ -20,7 +20,6 @@ import net.oschina.app.fragment.ToolbarFragment.ToolAction;
 import net.oschina.app.interf.EmojiFragmentControl;
 import net.oschina.app.interf.ToolbarEmojiVisiableControl;
 import net.oschina.app.interf.ToolbarFragmentControl;
-import net.oschina.app.service.ServerTaskUtils;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -45,10 +44,10 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 
 /**
- * 软件详情
- * 
- * @author william_sim
- * @since 2014/09/02
+ * 软件详情页面
+ * @author FireAnt（http://my.oschina.net/LittleDY）
+ * @created 2014年11月21日 上午10:41:45
+ *
  */
 public class SoftwareDetailFragment extends BaseDetailFragment implements
 	ToolbarFragmentControl, EmojiTextListener, EmojiFragmentControl {
@@ -303,8 +302,8 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
 	}
 
 	@Override
-	protected void commentPubSuccess() {
-		super.commentPubSuccess();
+	protected void commentPubSuccess(Comment comment) {
+		super.commentPubSuccess(comment);
 		mEmojiFragment.reset();
 	}
 }
