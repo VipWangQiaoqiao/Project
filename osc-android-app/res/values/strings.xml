@@ -138,6 +138,9 @@
 	<string name="actionbar_title_setting_notification">新消息提醒</string>
 	<string name="actionbar_title_about_osc">关于开源中国</string>
 	
+	<!-- 博客区 -->	
+	<string name="actionbar_title_blog_area">博客区</string>
+	
 	<string name="following_count">关注 %s</string>
     <string name="follower_count">粉丝 %s</string>
     <string name="score">积分 %s</string>
