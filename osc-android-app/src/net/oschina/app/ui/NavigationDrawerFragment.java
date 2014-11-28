@@ -1,9 +1,5 @@
 package net.oschina.app.ui;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 import net.oschina.app.AppContext;
 import net.oschina.app.AppManager;
 import net.oschina.app.R;
@@ -11,20 +7,18 @@ import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.bean.User;
 import net.oschina.app.util.UIHelper;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,6 +28,10 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * 侧滑菜单界面
@@ -43,338 +41,345 @@ import android.widget.TextView;
  * 
  */
 public class NavigationDrawerFragment extends BaseFragment implements
-		OnClickListener {
-	
-	public static final String INTENT_ACTION_USER_CHANGE = "INTENT_ACTION_USER_CHANGE";
-	
-	/**
-	 * Remember the position of the selected item.
-	 */
-	private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
+        OnClickListener {
 
-	/**
-	 * A pointer to the current callbacks instance (the Activity).
-	 */
-	private NavigationDrawerCallbacks mCallbacks;
+    public static final String INTENT_ACTION_USER_CHANGE = "INTENT_ACTION_USER_CHANGE";
 
-	/**
-	 * Helper component that ties the action bar to the navigation drawer.
-	 */
-	private ActionBarDrawerToggle mDrawerToggle;
+    /**
+     * Remember the position of the selected item.
+     */
+    private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
 
-	private DrawerLayout mDrawerLayout;
-	private View mDrawerListView;
-	private View mFragmentContainerView;
+    /**
+     * A pointer to the current callbacks instance (the Activity).
+     */
+    private NavigationDrawerCallbacks mCallbacks;
 
-	private int mCurrentSelectedPosition = 0;
-	private boolean mFromSavedInstanceState;
-	
-	private BroadcastReceiver mUserChangeReceiver = new BroadcastReceiver() {
-		
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			//接收到变化后，更新用户资料
-			setupUserView(true);
-		}
-	};
+    /**
+     * Helper component that ties the action bar to the navigation drawer.
+     */
+    private ActionBarDrawerToggle mDrawerToggle;
 
-	@InjectView(R.id.menu_item_userinfo)
-	View mMenu_item_userinfo;
-	
-	@InjectView(R.id.menu_user_info_layout)
-	View mUser_info_layout;
-	
-	@InjectView(R.id.menu_user_info_login_tips_layout)
-	View mUser_login_tips;
-	
-	@InjectView(R.id.menu_user_info_userface)
-	ImageView mUser_face;
-	
-	@InjectView(R.id.menu_user_info_username)
-	TextView mUser_name;
-	
-	@InjectView(R.id.menu_user_info_gender)
-	ImageView mUser_gender;
-	
-	@InjectView(R.id.menu_item_quests)
-	View mMenu_item_quests;
+    private DrawerLayout mDrawerLayout;
+    private View mDrawerListView;
+    private View mFragmentContainerView;
 
-	@InjectView(R.id.menu_item_opensoft)
-	View mMenu_item_opensoft;
-	
-	@InjectView(R.id.menu_item_blog)
-	View mMenu_item_blog;
+    private int mCurrentSelectedPosition = 0;
+    private boolean mFromSavedInstanceState;
 
-	@InjectView(R.id.menu_item_rss)
-	View mMenu_item_rss;
+    private final BroadcastReceiver mUserChangeReceiver = new BroadcastReceiver() {
 
-	@InjectView(R.id.menu_item_setting)
-	View mMenu_item_setting;
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // 接收到变化后，更新用户资料
+            setupUserView(true);
+        }
+    };
 
-	@InjectView(R.id.menu_item_exit)
-	View mMenu_item_exit;
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @InjectView(R.id.menu_item_userinfo)
+    View mMenu_item_userinfo;
 
-		if (savedInstanceState != null) {
-			mCurrentSelectedPosition = savedInstanceState
-					.getInt(STATE_SELECTED_POSITION);
-			mFromSavedInstanceState = true;
-		}
+    @InjectView(R.id.menu_user_info_layout)
+    View mUser_info_layout;
 
-		selectItem(mCurrentSelectedPosition);
-		
-		IntentFilter filter = new IntentFilter(INTENT_ACTION_USER_CHANGE);
-		getActivity().registerReceiver(mUserChangeReceiver, filter);
-	}
+    @InjectView(R.id.menu_user_info_login_tips_layout)
+    View mUser_login_tips;
 
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		ButterKnife.reset(this);
-		// 注销用户变化监听广播
-		try {
-			getActivity().unregisterReceiver(mUserChangeReceiver);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
+    @InjectView(R.id.menu_user_info_userface)
+    ImageView mUser_face;
 
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		setHasOptionsMenu(true);
-	}
+    @InjectView(R.id.menu_user_info_username)
+    TextView mUser_name;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		mDrawerListView = inflater.inflate(R.layout.fragment_navigation_drawer,
-				container, false);
-		mDrawerListView.setOnClickListener(this);
-		ButterKnife.inject(this, mDrawerListView);
-		initView(mDrawerListView);
-		initData();
-		return mDrawerListView;
-	}
+    @InjectView(R.id.menu_user_info_gender)
+    ImageView mUser_gender;
 
-	@Override
-	public void onClick(View v) {
-		int id =  v.getId();
-		switch (id) {
-		case R.id.menu_item_userinfo:
-			onClickMenuItemUserInfo();
-			break;
-		case R.id.menu_item_quests:
-			UIHelper.showSimpleBack(getActivity(), SimpleBackPage.QUEST);
-			break;
-		case R.id.menu_item_opensoft:
-			UIHelper.showSimpleBack(getActivity(), SimpleBackPage.OPENSOURCE_SOFTWARE);
-			break;
-		case R.id.menu_item_blog:
-			break;
-		case R.id.menu_item_rss:
-			break;
-		case R.id.menu_item_setting:
-			UIHelper.showSetting(getActivity());
-			break;
-		case R.id.menu_item_exit:
-			AppManager.getAppManager().AppExit(getActivity());
-			break;
-		default:
-			break;
-		}
-	}
-	
-	private void onClickMenuItemUserInfo() {
-		if (!AppContext.getInstance().isLogin()) {
-			UIHelper.showLoginActivity(getActivity());
-		} else {
-			UIHelper.showMyInformation(getActivity());
-		}
-	}
+    @InjectView(R.id.menu_item_quests)
+    View mMenu_item_quests;
 
-	public void initView(View view) {
+    @InjectView(R.id.menu_item_opensoft)
+    View mMenu_item_opensoft;
 
-		mMenu_item_userinfo.setOnClickListener(this);
-		mMenu_item_rss.setOnClickListener(this);
-		mMenu_item_opensoft.setOnClickListener(this);
-		mMenu_item_blog.setOnClickListener(this);
-		mMenu_item_quests.setOnClickListener(this);
+    @InjectView(R.id.menu_item_blog)
+    View mMenu_item_blog;
 
-		mMenu_item_setting.setOnClickListener(this);
-		mMenu_item_exit.setOnClickListener(this);
-	}
+    @InjectView(R.id.menu_item_rss)
+    View mMenu_item_rss;
 
-	public void initData() {
-		setupUserView(AppContext.getInstance().isLogin());
-	}
-	
-	private void setupUserView(final boolean reflash) {
-		//判断是否已经登录，如果已登录则显示用户的头像与信息
-		if(!AppContext.getInstance().isLogin()) {
-			mUser_face.setImageResource(R.drawable.ic_launcher);
-			mUser_name.setText("");
-			mUser_info_layout.setVisibility(View.GONE);
-			mUser_login_tips.setVisibility(View.VISIBLE);
-			return;
-		}
-		
-		mUser_info_layout.setVisibility(View.VISIBLE);
-		mUser_login_tips.setVisibility(View.GONE);
-		
-		User user = AppContext.getInstance().getLoginUser();
-		mUser_name.setText(user.getName());
-		ImageLoader.getInstance().displayImage(user.getPortrait(), mUser_face);
-	}
+    @InjectView(R.id.menu_item_setting)
+    View mMenu_item_setting;
 
-	public boolean isDrawerOpen() {
-		return mDrawerLayout != null
-				&& mDrawerLayout.isDrawerOpen(mFragmentContainerView);
-	}
+    @InjectView(R.id.menu_item_exit)
+    View mMenu_item_exit;
 
-	/**
-	 * Users of this fragment must call this method to set up the navigation
-	 * drawer interactions.
-	 * 
-	 * @param fragmentId
-	 *            The android:id of this fragment in its activity's layout.
-	 * @param drawerLayout
-	 *            The DrawerLayout containing this fragment's UI.
-	 */
-	public void setUp(int fragmentId, DrawerLayout drawerLayout) {
-		mFragmentContainerView = getActivity().findViewById(fragmentId);
-		mDrawerLayout = drawerLayout;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		// set a custom shadow that overlays the main content when the drawer
-		// opens
-		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
-				GravityCompat.START);
-		// set up the drawer's list view with items and click listener
+        if (savedInstanceState != null) {
+            mCurrentSelectedPosition = savedInstanceState
+                    .getInt(STATE_SELECTED_POSITION);
+            mFromSavedInstanceState = true;
+        }
 
-		ActionBar actionBar = getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setHomeButtonEnabled(true);
+        selectItem(mCurrentSelectedPosition);
 
-		// ActionBarDrawerToggle ties together the the proper interactions
-		// between the navigation drawer and the action bar app icon.
-		mDrawerToggle = new ActionBarDrawerToggle(getActivity(), /* host Activity */
-		mDrawerLayout, /* DrawerLayout object */
-		R.drawable.ic_drawer, /* nav drawer image to replace 'Up' caret */
-		R.string.navigation_drawer_open, /*
-										 * "open drawer" description for
-										 * accessibility
-										 */
-		R.string.navigation_drawer_close /*
-										 * "close drawer" description for
-										 * accessibility
-										 */
-		) {
-			@Override
-			public void onDrawerClosed(View drawerView) {
-				super.onDrawerClosed(drawerView);
-				if (!isAdded()) {
-					return;
-				}
+        IntentFilter filter = new IntentFilter(INTENT_ACTION_USER_CHANGE);
+        getActivity().registerReceiver(mUserChangeReceiver, filter);
+    }
 
-				getActivity().supportInvalidateOptionsMenu(); // calls
-																// onPrepareOptionsMenu()
-			}
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ButterKnife.reset(this);
+        // 注销用户变化监听广播
+        try {
+            getActivity().unregisterReceiver(mUserChangeReceiver);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-			@Override
-			public void onDrawerOpened(View drawerView) {
-				super.onDrawerOpened(drawerView);
-				if (!isAdded()) {
-					return;
-				}
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
-				getActivity().supportInvalidateOptionsMenu(); // calls
-																// onPrepareOptionsMenu()
-			}
-		};
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        mDrawerListView = inflater.inflate(R.layout.fragment_navigation_drawer,
+                container, false);
+        mDrawerListView.setOnClickListener(this);
+        ButterKnife.inject(this, mDrawerListView);
+        initView(mDrawerListView);
+        initData();
+        return mDrawerListView;
+    }
 
-		// Defer code dependent on restoration of previous instance state.
-		mDrawerLayout.post(new Runnable() {
-			@Override
-			public void run() {
-				mDrawerToggle.syncState();
-			}
-		});
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id) {
+        case R.id.menu_item_userinfo:
+            onClickMenuItemUserInfo();
+            break;
+        case R.id.menu_item_quests:
+            UIHelper.showSimpleBack(getActivity(), SimpleBackPage.QUEST);
+            break;
+        case R.id.menu_item_opensoft:
+            UIHelper.showSimpleBack(getActivity(),
+                    SimpleBackPage.OPENSOURCE_SOFTWARE);
+            break;
+        case R.id.menu_item_blog:
+            UIHelper.showSimpleBack(getActivity(), SimpleBackPage.BLOG);
+            break;
+        case R.id.menu_item_rss:
+            break;
+        case R.id.menu_item_setting:
+            UIHelper.showSetting(getActivity());
+            break;
+        case R.id.menu_item_exit:
+            AppManager.getAppManager().AppExit(getActivity());
+            break;
+        default:
+            break;
+        }
+    }
 
-		mDrawerLayout.setDrawerListener(mDrawerToggle);
-	}
-	
-	public void openDrawerMenu() {
-		mDrawerLayout.openDrawer(mFragmentContainerView);
-	}
+    private void onClickMenuItemUserInfo() {
+        if (!AppContext.getInstance().isLogin()) {
+            UIHelper.showLoginActivity(getActivity());
+        } else {
+            UIHelper.showMyInformation(getActivity());
+        }
+    }
 
-	private void selectItem(int position) {
-		mCurrentSelectedPosition = position;
-		if (mDrawerLayout != null) {
-			mDrawerLayout.closeDrawer(mFragmentContainerView);
-		}
-		if (mCallbacks != null) {
-			mCallbacks.onNavigationDrawerItemSelected(position);
-		}
-	}
+    @Override
+    public void initView(View view) {
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		try {
-			mCallbacks = (NavigationDrawerCallbacks) activity;
-		} catch (ClassCastException e) {
-			throw new ClassCastException(
-					"Activity must implement NavigationDrawerCallbacks.");
-		}
-	}
+        mMenu_item_userinfo.setOnClickListener(this);
+        mMenu_item_rss.setOnClickListener(this);
+        mMenu_item_opensoft.setOnClickListener(this);
+        mMenu_item_blog.setOnClickListener(this);
+        mMenu_item_quests.setOnClickListener(this);
 
-	@Override
-	public void onDetach() {
-		super.onDetach();
-		mCallbacks = null;
-	}
+        mMenu_item_setting.setOnClickListener(this);
+        mMenu_item_exit.setOnClickListener(this);
+    }
 
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
-	}
+    @Override
+    public void initData() {
+        setupUserView(AppContext.getInstance().isLogin());
+    }
 
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		super.onConfigurationChanged(newConfig);
-		mDrawerToggle.onConfigurationChanged(newConfig);
-	}
+    private void setupUserView(final boolean reflash) {
+        // 判断是否已经登录，如果已登录则显示用户的头像与信息
+        if (!AppContext.getInstance().isLogin()) {
+            mUser_face.setImageResource(R.drawable.ic_launcher);
+            mUser_name.setText("");
+            mUser_info_layout.setVisibility(View.GONE);
+            mUser_login_tips.setVisibility(View.VISIBLE);
+            return;
+        }
 
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-	}
+        mUser_info_layout.setVisibility(View.VISIBLE);
+        mUser_login_tips.setVisibility(View.GONE);
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if (mDrawerToggle.onOptionsItemSelected(item)) {
-			return true;
-		}
+        User user = AppContext.getInstance().getLoginUser();
+        mUser_name.setText(user.getName());
+        ImageLoader.getInstance().displayImage(user.getPortrait(), mUser_face);
+    }
 
-		return super.onOptionsItemSelected(item);
-	}
+    public boolean isDrawerOpen() {
+        return mDrawerLayout != null
+                && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
+    }
 
-	private void showGlobalContextActionBar() {
-		ActionBar actionBar = getActionBar();
-		actionBar.setDisplayShowTitleEnabled(true);
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-		actionBar.setTitle(R.string.app_name);
-	}
+    /**
+     * Users of this fragment must call this method to set up the navigation
+     * drawer interactions.
+     * 
+     * @param fragmentId
+     *            The android:id of this fragment in its activity's layout.
+     * @param drawerLayout
+     *            The DrawerLayout containing this fragment's UI.
+     */
+    public void setUp(int fragmentId, DrawerLayout drawerLayout) {
+        mFragmentContainerView = getActivity().findViewById(fragmentId);
+        mDrawerLayout = drawerLayout;
 
-	private ActionBar getActionBar() {
-		return ((ActionBarActivity) getActivity()).getSupportActionBar();
-	}
+        // set a custom shadow that overlays the main content when the drawer
+        // opens
+        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
+                GravityCompat.START);
+        // set up the drawer's list view with items and click listener
 
-	public static interface NavigationDrawerCallbacks {
-		void onNavigationDrawerItemSelected(int position);
-	}
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+
+        // ActionBarDrawerToggle ties together the the proper interactions
+        // between the navigation drawer and the action bar app icon.
+        mDrawerToggle = new ActionBarDrawerToggle(getActivity(), /*
+                                                                  * host
+                                                                  * Activity
+                                                                  */
+        mDrawerLayout, /* DrawerLayout object */
+        R.drawable.ic_drawer, /* nav drawer image to replace 'Up' caret */
+        R.string.navigation_drawer_open, /*
+                                          * "open drawer" description for
+                                          * accessibility
+                                          */
+        R.string.navigation_drawer_close /*
+                                          * "close drawer" description for
+                                          * accessibility
+                                          */
+        ) {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                if (!isAdded()) {
+                    return;
+                }
+
+                getActivity().supportInvalidateOptionsMenu(); // calls
+                                                              // onPrepareOptionsMenu()
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                if (!isAdded()) {
+                    return;
+                }
+
+                getActivity().supportInvalidateOptionsMenu(); // calls
+                                                              // onPrepareOptionsMenu()
+            }
+        };
+
+        // Defer code dependent on restoration of previous instance state.
+        mDrawerLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mDrawerToggle.syncState();
+            }
+        });
+
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+    }
+
+    public void openDrawerMenu() {
+        mDrawerLayout.openDrawer(mFragmentContainerView);
+    }
+
+    private void selectItem(int position) {
+        mCurrentSelectedPosition = position;
+        if (mDrawerLayout != null) {
+            mDrawerLayout.closeDrawer(mFragmentContainerView);
+        }
+        if (mCallbacks != null) {
+            mCallbacks.onNavigationDrawerItemSelected(position);
+        }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mCallbacks = (NavigationDrawerCallbacks) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(
+                    "Activity must implement NavigationDrawerCallbacks.");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showGlobalContextActionBar() {
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        actionBar.setTitle(R.string.app_name);
+    }
+
+    private ActionBar getActionBar() {
+        return ((ActionBarActivity) getActivity()).getSupportActionBar();
+    }
+
+    public static interface NavigationDrawerCallbacks {
+        void onNavigationDrawerItemSelected(int position);
+    }
 }

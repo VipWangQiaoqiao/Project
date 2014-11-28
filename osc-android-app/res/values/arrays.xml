@@ -18,6 +18,10 @@
         <item>职业</item>
         <item>站务</item>
     </string-array>
+    <string-array name="blogs_viewpage_arrays">
+        <item>最新博客</item>
+        <item>推荐阅读</item>
+    </string-array>
     <string-array name="mymes_viewpage_arrays">
         <item>\@我</item>
         <item>评论</item>
