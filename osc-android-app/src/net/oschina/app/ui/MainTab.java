@@ -11,16 +11,16 @@ public enum MainTab {
 	NEWS(0, R.string.main_tab_name_news, R.drawable.tab_icon_new,
 			NewsViewPagerFragment.class),
 
-	TWEET(1, R.string.main_tab_name_tweet, R.drawable.tab_icon_new,
+	TWEET(1, R.string.main_tab_name_tweet, R.drawable.tab_icon_tweet,
 			TweetsViewPagerFragment.class),
 
 	QUICK(2, R.string.main_tab_name_quick, R.drawable.tab_icon_new,
 			null),
 
-	EXPLORE(3, R.string.main_tab_name_explore, R.drawable.tab_icon_new,
+	EXPLORE(3, R.string.main_tab_name_explore, R.drawable.tab_icon_explore,
 			ExploreFragment.class),
 
-	ME(4, R.string.main_tab_name_my, R.drawable.tab_icon_new,
+	ME(4, R.string.main_tab_name_my, R.drawable.tab_icon_me,
 			MyInformationFragment.class);
 
 	private int idx;

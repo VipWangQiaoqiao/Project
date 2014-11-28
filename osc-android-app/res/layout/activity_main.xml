@@ -39,6 +39,7 @@
             </RelativeLayout>
 
             <!-- 快速操作按钮 -->
+
             <ImageView
                 android:id="@+id/quick_option_iv"
                 android:layout_width="wrap_content"
@@ -50,6 +51,7 @@
     </LinearLayout>
 
     <!-- 左侧侧滑菜单 -->
+
     <fragment
         android:id="@+id/navigation_drawer"
         android:name="net.oschina.app.ui.NavigationDrawerFragment"

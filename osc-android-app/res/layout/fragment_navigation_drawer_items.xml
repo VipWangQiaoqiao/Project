@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#e2e2e2"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -18,6 +19,11 @@
             android:text="@string/menu_quests" />
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#d2d2d2" />
+
     <LinearLayout
         android:id="@+id/menu_item_opensoft"
         style="@style/MenuItemLayoutStyle" >
@@ -31,6 +37,11 @@
             style="@style/MenuItemTextViewStyle"
             android:text="@string/menu_opensoft" />
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#d2d2d2" />
 
     <LinearLayout
         android:id="@+id/menu_item_blog"
@@ -46,6 +57,11 @@
             android:text="@string/menu_blog" />
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#d2d2d2" />
+
     <LinearLayout
         android:id="@+id/menu_item_rss"
         style="@style/MenuItemLayoutStyle" >
@@ -59,5 +75,10 @@
             style="@style/MenuItemTextViewStyle"
             android:text="@string/menu_rss" />
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#d2d2d2" />
 
 </LinearLayout>

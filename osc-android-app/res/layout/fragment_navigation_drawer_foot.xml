@@ -26,12 +26,6 @@
             android:text="@string/menu_setting" />
     </LinearLayout>
     
-    <View 
-        android:layout_width="0.1dip"
-        android:layout_height="match_parent"
-        android:layout_margin="10dip"
-        android:background="@color/red"/>
-
     <LinearLayout
         android:id="@+id/menu_item_exit"
         android:layout_width="0dip"
