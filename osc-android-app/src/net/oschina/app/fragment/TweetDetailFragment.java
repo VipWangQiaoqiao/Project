@@ -36,6 +36,7 @@ import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.RecordButtonUtil;
+import net.oschina.app.widget.RecordButtonUtil.OnPlayListener;
 
 import org.apache.http.Header;
 
@@ -43,6 +44,7 @@ import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -53,7 +55,7 @@ import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 
@@ -72,7 +74,7 @@ public class TweetDetailFragment extends BaseListFragment implements
     private Tweet mTweet;
     private EmojiFragment mEmojiFragment;
     private BroadcastReceiver mCommentReceiver;
-    private ImageView mImgRecordSound;
+    private RelativeLayout mRlRecordSound;
 
     class CommentChangeReceiver extends BroadcastReceiver {
 
@@ -172,10 +174,42 @@ public class TweetDetailFragment extends BaseListFragment implements
         mTvCommentCount = (TextView) header.findViewById(R.id.tv_comment_count);
         mContent = (WebView) header.findViewById(R.id.webview);
         UIHelper.initWebView(mContent);
-        mImgRecordSound = (ImageView) header.findViewById(R.id.record_sound);
+        initSoundView(header);
+
         mListView.setHeaderDividersEnabled(false);
         mListView.addHeaderView(header);
         super.initView(view);
+    }
+
+    /**
+     * 初始化声音动弹的录音View
+     * 
+     * @param header
+     */
+    private void initSoundView(View header) {
+        final RecordButtonUtil util = new RecordButtonUtil();
+        final AnimationDrawable drawable = (AnimationDrawable) header
+                .findViewById(R.id.tweet_img_record).getBackground();
+        mRlRecordSound = (RelativeLayout) header
+                .findViewById(R.id.tweet_bg_record);
+        mRlRecordSound.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                util.startPlay(mTweet.getAttach());
+            }
+        });
+
+        util.setOnPlayListener(new OnPlayListener() {
+            @Override
+            public void stopPlay() {
+                drawable.stop();
+            }
+
+            @Override
+            public void starPlay() {
+                drawable.start();
+            }
+        });
     }
 
     @Override
@@ -212,16 +246,9 @@ public class TweetDetailFragment extends BaseListFragment implements
         mTvCommentCount.setText(getString(R.string.comment_count,
                 mTweet.getCommentCount()));
         if (MyURLSpan.RECORD_SOUND.matcher(mTweet.getBody().trim()).matches()) {
-            mImgRecordSound.setImageResource(R.drawable.ic_launcher);
-            mImgRecordSound.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    RecordButtonUtil util = new RecordButtonUtil();
-                    util.startPlay(mTweet.getAttach());
-                }
-            });
+            mRlRecordSound.setVisibility(View.VISIBLE);
         } else {
-            mImgRecordSound.setImageBitmap(null);
+            mRlRecordSound.setVisibility(View.GONE);
         }
         fillWebViewBody();
     }

@@ -3,6 +3,7 @@ package net.oschina.app.widget;
 import java.io.File;
 
 import net.oschina.app.util.UIHelper;
+import net.oschina.app.widget.RecordButtonUtil.OnPlayListener;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -179,30 +180,12 @@ public class RecordButton extends Button {
     }
 
     /**
-     * 结束录音的监听器
-     * 
-     * @param listener
-     */
-    public void setOnFinishedRecordListener(OnFinishedRecordListener listener) {
-        mFinishedListerer = listener;
-    }
-
-    /**
      * 设置录音时显示的dialog
      * 
      * @param dialog
      */
     public void setRecordDialog(Dialog dialog) {
         mRecordDialog = dialog;
-    }
-
-    /**
-     * dialog中音量改变的回调方法
-     * 
-     * @param l
-     */
-    public void setOnVolumeChangeListener(OnVolumeChangeListener l) {
-        mVolumeListener = l;
     }
 
     /**
@@ -219,6 +202,41 @@ public class RecordButton extends Button {
      */
     public void startPlay() {
         mAudioUtil.startPlay();
+    }
+
+    /**
+     * 删除当前文件
+     */
+    public void delete() {
+        File file = new File(mAudioFile);
+        file.delete();
+    }
+
+    /**
+     * 结束录音的监听器
+     * 
+     * @param listener
+     */
+    public void setOnFinishedRecordListener(OnFinishedRecordListener listener) {
+        mFinishedListerer = listener;
+    }
+
+    /**
+     * dialog中音量改变的回调方法
+     * 
+     * @param l
+     */
+    public void setOnVolumeChangeListener(OnVolumeChangeListener l) {
+        mVolumeListener = l;
+    }
+
+    /**
+     * 播放结束监听器
+     * 
+     * @param l
+     */
+    public void setOnPlayListener(OnPlayListener l) {
+        mAudioUtil.setOnPlayListener(l);
     }
 
     /******************************* inline class ****************************************/

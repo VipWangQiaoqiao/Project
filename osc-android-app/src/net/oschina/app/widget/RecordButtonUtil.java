@@ -26,6 +26,7 @@ public class RecordButtonUtil {
 
     private MediaRecorder mRecorder;
     private MediaPlayer mPlayer;
+    private OnPlayListener listener;
 
     public boolean isPlaying() {
         return mIsPlaying;
@@ -38,6 +39,15 @@ public class RecordButtonUtil {
      */
     public void setAudioPath(String path) {
         this.mAudioPath = path;
+    }
+
+    /**
+     * 播放声音结束时调用
+     * 
+     * @param l
+     */
+    public void setOnPlayListener(OnPlayListener l) {
+        this.listener = l;
     }
 
     // 初始化 录音器
@@ -98,10 +108,16 @@ public class RecordButtonUtil {
                 mPlayer.setDataSource(audioPath);
                 mPlayer.prepare();
                 mPlayer.start();
+                if (listener != null) {
+                    listener.starPlay();
+                }
                 mIsPlaying = true;
                 mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
+                        if (listener != null) {
+                            listener.stopPlay();
+                        }
                         mp.release();
                         mPlayer = null;
                         mIsPlaying = false;
@@ -120,5 +136,17 @@ public class RecordButtonUtil {
      */
     public void startPlay() {
         startPlay(mAudioPath);
+    }
+
+    public interface OnPlayListener {
+        /**
+         * 播放声音结束时调用
+         */
+        void stopPlay();
+
+        /**
+         * 播放声音开始时调用
+         */
+        void starPlay();
     }
 }

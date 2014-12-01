@@ -10,8 +10,10 @@ import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.RecordButton;
 import net.oschina.app.widget.RecordButton.OnFinishedRecordListener;
 import net.oschina.app.widget.RecordButton.OnVolumeChangeListener;
+import net.oschina.app.widget.RecordButtonUtil.OnPlayListener;
 import net.oschina.app.widget.RecordDialog;
 import android.app.Dialog;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -34,12 +37,16 @@ public class TweetRecordFragment extends BaseFragment {
 
     @InjectView(R.id.tweet_layout_record)
     RelativeLayout mLayout;
+    @InjectView(R.id.tweet_img_record)
+    ImageView mImgPlay;
     @InjectView(R.id.tweet_btn_record)
     RecordButton mBtnRecort;
     @InjectView(R.id.listen)
     Button mBtnListen;
     @InjectView(R.id.cancle)
     Button mBtnCancle;
+
+    private AnimationDrawable background;
 
     @Override
     public void onClick(View v) {
@@ -58,6 +65,17 @@ public class TweetRecordFragment extends BaseFragment {
     public void initView(View view) {
         mBtnCancle.setOnClickListener(this);
         mBtnListen.setOnClickListener(this);
+        mBtnRecort.setOnPlayListener(new OnPlayListener() {
+            @Override
+            public void starPlay() {
+                background.start();
+            }
+
+            @Override
+            public void stopPlay() {
+                background.stop();
+            }
+        });
         mBtnRecort.setOnFinishedRecordListener(new OnFinishedRecordListener() {
             @Override
             public void onFinishedRecord(String audioPath, int recordTime) {
@@ -97,7 +115,9 @@ public class TweetRecordFragment extends BaseFragment {
     }
 
     @Override
-    public void initData() {}
+    public void initData() {
+        background = (AnimationDrawable) mImgPlay.getBackground();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -107,6 +127,7 @@ public class TweetRecordFragment extends BaseFragment {
                 container, false);
         ButterKnife.inject(this, rootView);
         initView(rootView);
+        initData();
         return rootView;
     }
 
