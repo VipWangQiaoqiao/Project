@@ -11,6 +11,7 @@ import net.oschina.app.fragment.SettingsFragment;
 import net.oschina.app.fragment.SettingsNotificationFragment;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
 import net.oschina.app.fragment.TweetPubFragment;
+import net.oschina.app.fragment.TweetRecordFragment;
 import net.oschina.app.fragment.UserBlogFragment;
 import net.oschina.app.fragment.UserCenterFragment;
 import net.oschina.app.viewpagefragment.ActiveViewPagerFragment;
@@ -65,7 +66,9 @@ public enum SimpleBackPage {
 
     ABOUT_OSC(17, R.string.actionbar_title_about_osc, AboutOSCFragment.class),
 
-    BLOG(18, R.string.actionbar_title_blog_area, BlogViewPagerFragment.class);
+    BLOG(18, R.string.actionbar_title_blog_area, BlogViewPagerFragment.class),
+
+    RECORD(19, R.string.actionbar_title_tweetpub, TweetRecordFragment.class);
 
     private int title;
     private Class<?> clz;

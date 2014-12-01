@@ -104,7 +104,7 @@ public class NoticeUtils {
 	}
 
 	public static void tryToShutDown(Context context) {
-		if (AppContext.get(AppConfig.KEY_NOTIFICATION_DISABLE_WHEN_EXIT, false)) {
+		if (AppContext.get(AppConfig.KEY_NOTIFICATION_DISABLE_WHEN_EXIT, true)) {
 			context.sendBroadcast(new Intent(
 					NoticeService.INTENT_ACTION_SHUTDOWN));
 		}

@@ -114,6 +114,7 @@ public class QuickOptionDialog extends Dialog implements
 			onClickTweetPub(R.id.ly_quick_option_photo);
 			break;
 		case R.id.ly_quick_option_voice:
+			 UIHelper.showSimpleBack(getContext(), SimpleBackPage.RECORD);
 			break;
 		case R.id.ly_quick_option_scan:
 			UIHelper.showScanActivity(getContext());
