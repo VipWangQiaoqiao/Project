@@ -14,10 +14,13 @@ import net.oschina.app.widget.RecordDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -29,28 +32,36 @@ import butterknife.InjectView;
  */
 public class TweetRecordFragment extends BaseFragment {
 
+    @InjectView(R.id.tweet_layout_record)
+    RelativeLayout mLayout;
     @InjectView(R.id.tweet_btn_record)
     RecordButton mBtnRecort;
-    @InjectView(R.id.button1)
-    Button button1;
+    @InjectView(R.id.listen)
+    Button mBtnListen;
+    @InjectView(R.id.cancle)
+    Button mBtnCancle;
 
     @Override
-    public void onClick(View v) {}
+    public void onClick(View v) {
+        switch (v.getId()) {
+        case R.id.listen:
+            mBtnRecort.setAudioPath(mBtnRecort.getCurrentAudioPath());
+            mBtnRecort.startPlay();
+            break;
+        case R.id.cancle:
+            mLayout.setVisibility(View.GONE);
+            break;
+        }
+    }
 
     @Override
     public void initView(View view) {
-        button1.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mBtnRecort.setAudioPath(mBtnRecort.getCurrentAudioPath());
-                mBtnRecort.startPlay();
-            }
-        });
-
+        mBtnCancle.setOnClickListener(this);
+        mBtnListen.setOnClickListener(this);
         mBtnRecort.setOnFinishedRecordListener(new OnFinishedRecordListener() {
             @Override
             public void onFinishedRecord(String audioPath, int recordTime) {
-                handleSubmit(audioPath);
+                mLayout.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -97,6 +108,27 @@ public class TweetRecordFragment extends BaseFragment {
         ButterKnife.inject(this, rootView);
         initView(rootView);
         return rootView;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.pub_tweet_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.public_menu_send:
+            handleSubmit(mBtnRecort.getCurrentAudioPath());
+            break;
+        }
+        return true;
     }
 
     /**
