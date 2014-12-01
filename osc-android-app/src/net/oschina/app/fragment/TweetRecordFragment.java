@@ -1,10 +1,13 @@
 package net.oschina.app.fragment;
 
+import java.io.File;
+
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.service.ServerTaskUtils;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.RecordButton;
@@ -57,6 +60,7 @@ public class TweetRecordFragment extends BaseFragment {
             break;
         case R.id.cancle:
             mLayout.setVisibility(View.GONE);
+            mBtnRecort.delete();
             break;
         }
     }
@@ -84,7 +88,7 @@ public class TweetRecordFragment extends BaseFragment {
 
             @Override
             public void onCancleRecord() {
-                UIHelper.toast("录音取消");
+                AppContext.showToastShort(R.string.cancle_record);
             }
         });
 
@@ -164,7 +168,15 @@ public class TweetRecordFragment extends BaseFragment {
             UIHelper.showLoginActivity(getActivity());
             return;
         }
-
+        if (StringUtils.isEmpty(audioPath)) {
+            AppContext.showToastShort(R.string.record_sound_notfound);
+            return;
+        }
+        File file = new File(audioPath);
+        if (!file.exists()) {
+            AppContext.showToastShort(R.string.record_sound_notfound);
+            return;
+        }
         Tweet tweet = new Tweet();
         tweet.setAuthorid(AppContext.getInstance().getLoginUid());
         tweet.setAudioPath(audioPath);

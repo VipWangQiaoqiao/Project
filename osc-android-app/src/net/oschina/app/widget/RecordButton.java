@@ -2,7 +2,8 @@ package net.oschina.app.widget;
 
 import java.io.File;
 
-import net.oschina.app.util.UIHelper;
+import net.oschina.app.AppContext;
+import net.oschina.app.R;
 import net.oschina.app.widget.RecordButtonUtil.OnPlayListener;
 import android.app.Dialog;
 import android.content.Context;
@@ -126,7 +127,7 @@ public class RecordButton extends Button {
         mRecordDialog.dismiss();
         long intervalTime = System.currentTimeMillis() - mStartTime;
         if (intervalTime < MIN_INTERVAL_TIME) {
-            UIHelper.toast("时间太短了");
+            AppContext.showToastShort(R.string.record_sound_short);
             File file = new File(mAudioFile);
             file.delete();
             return;

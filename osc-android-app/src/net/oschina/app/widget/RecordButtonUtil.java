@@ -2,8 +2,9 @@ package net.oschina.app.widget;
 
 import java.io.IOException;
 
+import net.oschina.app.AppContext;
+import net.oschina.app.R;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.UIHelper;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Environment;
@@ -127,7 +128,7 @@ public class RecordButtonUtil {
                 e.printStackTrace();
             }
         } else {
-            UIHelper.toast("没有找到录音");
+            AppContext.showToastShort(R.string.record_sound_notfound);
         }
     }
 

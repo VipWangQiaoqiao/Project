@@ -115,6 +115,10 @@
 	<string name="tweet_publish_success">动弹发布成功</string>
 	<string name="tweet_publish_faile">发布动弹失败</string>
 	<string name="tweet_play_faile">动弹播放失败</string>
+	<string name="tweet_audio_faile">语音动弹发布失败</string>
+	<string name="cancle_record">取消录音</string>
+	<string name="record_sound_notfound">找不到录音</string>
+	<string name="record_sound_short">时间太短了</string>
 	
 	<string name="ok">确定</string>
 	<string name="cancle">取消</string>

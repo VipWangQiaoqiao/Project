@@ -62,7 +62,6 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 import android.widget.ZoomButtonsController;
 
 import com.zbar.lib.CaptureActivity;
@@ -98,16 +97,6 @@ public class UIHelper {
     public static final String WEB_LOAD_IMAGES = "<script type=\"text/javascript\"> var allImgUrls = getAllImgSrc(document.body.innerHTML);</script>";
 
     private static final String SHOWIMAGE = "ima-api:action=showImage&data=";
-
-    /**
-     * 显示一个toast
-     * 
-     * @param content
-     */
-    public static void toast(CharSequence content) {
-        Toast.makeText(AppManager.getAppManager().currentActivity(), content,
-                Toast.LENGTH_SHORT).show();
-    }
 
     /**
      * 显示登录界面
