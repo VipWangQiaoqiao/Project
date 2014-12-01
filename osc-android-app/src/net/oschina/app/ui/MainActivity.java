@@ -286,8 +286,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	// 显示快速操作界面
 	private void showQuickOption() {
-		final QuickOptionDialog dialog = new QuickOptionDialog(
-				MainActivity.this);
+		final QuickOptionDialog dialog = new QuickOptionDialog(MainActivity.this);
 		dialog.setCancelable(true);
 		dialog.setCanceledOnTouchOutside(true);
 		dialog.show();

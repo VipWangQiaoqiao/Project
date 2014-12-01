@@ -20,9 +20,9 @@
         android:id="@+id/bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/space_8"
         android:background="@color/list_item_background_normal"
-        android:gravity="bottom" >
+        android:gravity="bottom"
+        android:padding="@dimen/space_8" >
 
         <RelativeLayout
             android:id="@+id/rl_img"
