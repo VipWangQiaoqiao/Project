@@ -3,7 +3,6 @@ package net.oschina.app.fragment;
 import java.io.InputStream;
 import java.io.Serializable;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import net.oschina.app.adapter.SoftwareCatalogListAdapter;
@@ -12,7 +11,6 @@ import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.SoftwareCatalogList;
-import net.oschina.app.bean.SoftwareType;
 import net.oschina.app.util.XmlUtils;
 
 public class SoftwareCatalogListFragment extends BaseListFragment {
