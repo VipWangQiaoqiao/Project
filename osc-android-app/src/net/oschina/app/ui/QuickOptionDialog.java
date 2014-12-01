@@ -1,7 +1,5 @@
 package net.oschina.app.ui;
 
-import com.zbar.lib.CaptureActivity;
-
 import net.oschina.app.R;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.fragment.TweetPubFragment;
@@ -9,7 +7,6 @@ import net.oschina.app.util.UIHelper;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.Gravity;
@@ -17,9 +14,17 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
 
 public class QuickOptionDialog extends Dialog implements
 		android.view.View.OnClickListener {
+
+	private ImageView mClose;
+	
+	
 
 	public interface OnQuickOptionformClick {
 		void onQuickOptionClick(int id);
@@ -49,8 +54,16 @@ public class QuickOptionDialog extends Dialog implements
 				this);
 		contentView.findViewById(R.id.ly_quick_option_note).setOnClickListener(
 				this);
-		contentView.findViewById(R.id.iv_close).setOnClickListener(
-				this);
+		mClose = (ImageView) contentView.findViewById(R.id.iv_close);
+
+		
+		Animation operatingAnim = AnimationUtils.loadAnimation(getContext(), R.anim.quick_option_close);  
+		LinearInterpolator lin = new LinearInterpolator();  
+		operatingAnim.setInterpolator(lin);
+		
+		mClose.startAnimation(operatingAnim);
+		
+		mClose.setOnClickListener(this);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		contentView.setOnTouchListener(new View.OnTouchListener() {
 
@@ -64,7 +77,7 @@ public class QuickOptionDialog extends Dialog implements
 	}
 
 	public QuickOptionDialog(Context context) {
-		this(context, R.style.dialog_bottom);
+		this(context, R.style.quick_option_dialog);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -115,7 +128,7 @@ public class QuickOptionDialog extends Dialog implements
 		}
 		dismiss();
 	}
-	
+
 	private void onClickTweetPub(int id) {
 		Bundle bundle = new Bundle();
 		int type = -1;

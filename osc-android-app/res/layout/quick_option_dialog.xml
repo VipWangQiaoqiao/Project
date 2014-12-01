@@ -7,8 +7,7 @@
         android:id="@+id/ll_option_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/space_16" >
+        android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -17,71 +16,45 @@
 
             <LinearLayout
                 android:id="@+id/ly_quick_option_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical" >
+                style="@style/quick_option_item" >
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:src="@drawable/quickoption_icon_qq_selector" />
-
-                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/space_8"
-                    android:text="@string/quick_option_text"
-                    android:textColor="@color/main_gray"
-                    android:textSize="@dimen/text_size_12" />
+                    android:src="@drawable/quickoption_icon_text_selector" />
+
+                <TextView
+                    style="@style/quick_option_item_text"
+                    android:text="@string/quick_option_text" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/ly_quick_option_album"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical" >
+                style="@style/quick_option_item" >
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:src="@drawable/quickoption_icon_qq_selector" />
-
-                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/space_8"
-                    android:text="@string/quick_option_album"
-                    android:textColor="@color/main_gray"
-                    android:textSize="@dimen/text_size_12" />
+                    android:src="@drawable/quickoption_icon_album_selector" />
+
+                <TextView
+                    style="@style/quick_option_item_text"
+                    android:text="@string/quick_option_album" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/ly_quick_option_photo"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical" >
+                style="@style/quick_option_item" >
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:src="@drawable/quickoption_icon_qq_selector" />
-
-                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/space_8"
-                    android:text="@string/quick_option_photo"
-                    android:textColor="@color/main_gray"
-                    android:textSize="@dimen/text_size_12" />
+                    android:background="@null"
+                    android:src="@drawable/quickoption_icon_photo_selector" />
+
+                <TextView
+                    style="@style/quick_option_item_text"
+                    android:text="@string/quick_option_photo" />
             </LinearLayout>
         </LinearLayout>
 
@@ -89,84 +62,58 @@
             android:id="@+id/ly_quick_option_voice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_16"
             android:orientation="horizontal" >
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical" >
+            <LinearLayout style="@style/quick_option_item" >
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:src="@drawable/quickoption_icon_qq_selector" />
-
-                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/space_8"
-                    android:text="@string/quick_option_voice"
-                    android:textColor="@color/main_gray"
-                    android:textSize="@dimen/text_size_12" />
+                    android:background="@null"
+                    android:src="@drawable/quickoption_icon_voice_selector" />
+
+                <TextView
+                    style="@style/quick_option_item_text"
+                    android:text="@string/quick_option_voice" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/ly_quick_option_scan"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical" >
+                style="@style/quick_option_item" >
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:src="@drawable/quickoption_icon_qq_selector" />
-
-                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/space_8"
-                    android:text="@string/quick_option_scan"
-                    android:textColor="@color/main_gray"
-                    android:textSize="@dimen/text_size_12" />
+                    android:background="@null"
+                    android:src="@drawable/quickoption_icon_scan_selector" />
+
+                <TextView
+                    style="@style/quick_option_item_text"
+                    android:text="@string/quick_option_scan" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/ly_quick_option_note"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical" >
+                style="@style/quick_option_item" >
 
                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:src="@drawable/quickoption_icon_qq_selector" />
-
-                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/space_8"
-                    android:text="@string/quick_option_note"
-                    android:textColor="@color/main_gray"
-                    android:textSize="@dimen/text_size_12" />
+                    android:background="@null"
+                    android:src="@drawable/quickoption_icon_note_selector" />
+
+                <TextView
+                    style="@style/quick_option_item_text"
+                    android:text="@string/quick_option_note" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_foot"
-        android:layout_below="@id/ll_option_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/ll_option_container"
         android:background="@color/white"
         android:gravity="center"
         android:padding="10dip"
@@ -174,11 +121,11 @@
 
         <ImageView
             android:id="@+id/iv_close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:contentDescription="@null"
             android:focusable="false"
-            android:src="@drawable/btn_quickoption_selector" />
+            android:src="@drawable/btn_quickoption_route" />
     </LinearLayout>
 
 </RelativeLayout>
