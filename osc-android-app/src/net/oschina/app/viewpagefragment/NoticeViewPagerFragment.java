@@ -8,14 +8,17 @@ import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.BaseViewPagerFragment;
 import net.oschina.app.bean.ActiveList;
 import net.oschina.app.bean.Constants;
+import net.oschina.app.bean.FriendsList;
 import net.oschina.app.bean.Notice;
 import net.oschina.app.fragment.ActiveFragment;
+import net.oschina.app.fragment.FriendsFragment;
 import net.oschina.app.fragment.MessageFragment;
 import net.oschina.app.ui.MainActivity;
 import net.oschina.app.util.TLog;
@@ -28,9 +31,9 @@ import net.oschina.app.widget.BadgeView;
  * @created 2014年9月25日 下午2:21:52
  * 
  */
-public class ActiveViewPagerFragment extends BaseViewPagerFragment {
+public class NoticeViewPagerFragment extends BaseViewPagerFragment {
 
-	public static BadgeView mBvAtMe, mBvComment, mBvMsg;
+	public static BadgeView mBvAtMe, mBvComment, mBvMsg, mBvFans;
 	
 	private BroadcastReceiver mNoticeReceiver = new BroadcastReceiver() {
 
@@ -54,7 +57,6 @@ public class ActiveViewPagerFragment extends BaseViewPagerFragment {
 			int msgCount = notice.getMsgCount();// 留言
 			int reviewCount = notice.getReviewCount();// 评论
 			int newFansCount = notice.getNewFansCount();// 新粉丝
-			int activeCount = atmeCount + reviewCount + msgCount + newFansCount;// 信息总数
 
 			if (atmeCount > 0) {
 				mBvAtMe.setText(atmeCount + "");
@@ -75,6 +77,13 @@ public class ActiveViewPagerFragment extends BaseViewPagerFragment {
 				mBvMsg.show();
 			} else {
 				mBvMsg.hide();
+			}
+			
+			if (newFansCount > 0) {
+				mBvFans.setText(newFansCount + "");
+				mBvFans.show();
+			} else {
+				mBvFans.hide();
 			}
 		} else {
 			mBvAtMe.hide();
@@ -105,11 +114,20 @@ public class ActiveViewPagerFragment extends BaseViewPagerFragment {
 		mBvMsg.setBadgePosition(BadgeView.POSITION_CENTER);
 		mBvMsg.setGravity(Gravity.CENTER);
 		mBvMsg.setBackgroundResource(R.drawable.notification_bg);
+		
+		
+		mBvFans = new BadgeView(getActivity(), mTabStrip.getBadgeView(3));
+		mBvFans.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+		mBvFans.setBadgePosition(BadgeView.POSITION_CENTER);
+		mBvFans.setGravity(Gravity.CENTER);
+		mBvFans.setBackgroundResource(R.drawable.notification_bg);
 
 		mTabStrip.getBadgeView(0).setVisibility(View.VISIBLE);
 
 		mTabStrip.getBadgeView(1).setVisibility(View.VISIBLE);
 		mTabStrip.getBadgeView(2).setVisibility(View.VISIBLE);
+		
+		mTabStrip.getBadgeView(3).setVisibility(View.VISIBLE);
 	}
 
 	@Override
@@ -128,6 +146,9 @@ public class ActiveViewPagerFragment extends BaseViewPagerFragment {
 		adapter.addTab(title[1], "active_comment", ActiveFragment.class,
 				getBundle(ActiveList.CATALOG_COMMENT));
 		adapter.addTab(title[2], "active_mes", MessageFragment.class, null);
+		Bundle bundle = getBundle(FriendsList.TYPE_FANS);
+		bundle.putInt(FriendsFragment.BUNDLE_KEY_UID, AppContext.getInstance().getLoginUid());
+		adapter.addTab(title[3], "active_fans", FriendsFragment.class, bundle);
 	}
 
 	private Bundle getBundle(int catalog) {

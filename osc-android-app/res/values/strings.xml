@@ -18,7 +18,7 @@
     <string name="menu_rss">订阅</string>
     <string name="menu_opensoft">开源软件</string>
     <string name="menu_blog">博客区</string>
-    <string name="menu_quests">讨论区</string>
+    <string name="menu_quests">技术问答</string>
     <string name="menu_setting">设置</string>
     <string name="menu_exit">退出</string>
     
@@ -131,7 +131,7 @@
 	
 	<string name="actionbar_title_softwarelist">开源软件</string>
 	<string name="actionbar_title_comment">评论列表</string>
-	<string name="actionbar_title_questions">讨论区</string>
+	<string name="actionbar_title_questions">技术问答</string>
 	<string name="actionbar_title_tweetpub">弹一弹</string>
 	<string name="actionbar_title_softtweet">软件动弹列表</string>
 	<string name="actionbar_title_user_center">用户中心</string>

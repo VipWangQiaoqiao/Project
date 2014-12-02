@@ -180,17 +180,6 @@ public class NoticeService extends Service {
 		intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, SimpleBackPage.MY_MES.getValue());
 		intent.putExtra("NOTICE", true);
 
-		if (atmeCount == 0 && msgCount == 0 && reviewCount == 0
-				&& newFansCount > 0) {
-			// only fans
-//			Bundle args = new Bundle();
-//			args.putInt(FriendViewPagerFragment.BUNDLE_KEY_TABIDX, 1);
-//			intent = new Intent(this, SimpleBackActivity.class);
-//			intent.putExtra(SimpleBackActivity.BUNDLE_KEY_ARGS, args);
-//			intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE,
-//					SimpleBackPage.FRIENDS.getValue());
-		}
-
 		intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP
 				| Intent.FLAG_ACTIVITY_NEW_TASK);
 		PendingIntent pi = PendingIntent.getActivity(this, 1000, intent,

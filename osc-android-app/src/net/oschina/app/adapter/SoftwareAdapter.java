@@ -2,7 +2,7 @@ package net.oschina.app.adapter;
 
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.bean.SoftwareDec;
+import net.oschina.app.bean.SoftwareList.SoftwareDec;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -33,7 +33,7 @@ public class SoftwareAdapter extends ListBaseAdapter {
 		
 		SoftwareDec softwareDes = (SoftwareDec) _data.get(position);
 		vh.name.setText(softwareDes.getName());
-		vh.des.setText(softwareDes.getDes());
+		vh.des.setText(softwareDes.getDescription());
 		
 		return convertView;
 	}

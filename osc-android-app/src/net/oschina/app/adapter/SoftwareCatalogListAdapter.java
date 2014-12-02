@@ -2,7 +2,7 @@ package net.oschina.app.adapter;
 
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.bean.SoftwareType;
+import net.oschina.app.bean.SoftwareCatalogList.SoftwareType;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;

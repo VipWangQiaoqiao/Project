@@ -4,9 +4,10 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
  * 软件实体类
+ * 
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @created 2014年10月23日 下午3:03:25
- *
+ * 
  */
 @SuppressWarnings("serial")
 @XStreamAlias("software")
@@ -14,43 +15,43 @@ public class Software extends Entity {
 	
 	@XStreamAlias("title")
 	private String title;
-	
+
 	@XStreamAlias("extensiontitle")
 	private String extensionTitle;
-	
+
 	@XStreamAlias("license")
 	private String license;
-	
+
 	@XStreamAlias("body")
 	private String body;
-	
+
 	@XStreamAlias("homepage")
 	private String homepage;
-	
+
 	@XStreamAlias("document")
 	private String document;
-	
+
 	@XStreamAlias("download")
 	private String download;
-	
+
 	@XStreamAlias("logo")
 	private String logo;
-	
+
 	@XStreamAlias("language")
 	private String language;
-	
+
 	@XStreamAlias("os")
 	private String os;
-	
+
 	@XStreamAlias("recordtime")
 	private String recordtime;
-	
+
 	@XStreamAlias("url")
 	private String url;
-	
+
 	@XStreamAlias("favorite")
 	private int favorite;
-	
+
 	@XStreamAlias("tweetCount")
 	private int tweetCount;
 

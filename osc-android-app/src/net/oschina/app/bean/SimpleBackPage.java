@@ -14,7 +14,7 @@ import net.oschina.app.fragment.TweetPubFragment;
 import net.oschina.app.fragment.TweetRecordFragment;
 import net.oschina.app.fragment.UserBlogFragment;
 import net.oschina.app.fragment.UserCenterFragment;
-import net.oschina.app.viewpagefragment.ActiveViewPagerFragment;
+import net.oschina.app.viewpagefragment.NoticeViewPagerFragment;
 import net.oschina.app.viewpagefragment.BlogViewPagerFragment;
 import net.oschina.app.viewpagefragment.FriendsViewPagerFragment;
 import net.oschina.app.viewpagefragment.OpensourceSoftwareFragment;
@@ -42,7 +42,7 @@ public enum SimpleBackPage {
 
     MY_ACTIVE(8, R.string.actionbar_title_active, ActiveFragment.class),
 
-    MY_MES(9, R.string.actionbar_title_mes, ActiveViewPagerFragment.class),
+    MY_MES(9, R.string.actionbar_title_mes, NoticeViewPagerFragment.class),
 
     OPENSOURCE_SOFTWARE(10, R.string.actionbar_title_softwarelist,
             OpensourceSoftwareFragment.class),

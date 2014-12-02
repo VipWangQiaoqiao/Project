@@ -4,7 +4,7 @@ import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.BaseViewPagerFragment;
-import net.oschina.app.bean.SoftwareDec;
+import net.oschina.app.bean.SoftwareList;
 import net.oschina.app.fragment.SoftwareCatalogListFragment;
 import net.oschina.app.fragment.SoftwareListFragment;
 import android.os.Bundle;
@@ -20,10 +20,10 @@ public class OpensourceSoftwareFragment extends BaseViewPagerFragment {
 	protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
 		String[] title = getResources().getStringArray(R.array.opensourcesoftware);
 		adapter.addTab(title[0], "software_catalog", SoftwareCatalogListFragment.class, null);
-		adapter.addTab(title[1], "software_recommend", SoftwareListFragment.class, getBundle(SoftwareDec.CATALOG_RECOMMEND));
-		adapter.addTab(title[2], "software_latest", SoftwareListFragment.class, getBundle(SoftwareDec.CATALOG_TIME));
-		adapter.addTab(title[3], "software_hot", SoftwareListFragment.class, getBundle(SoftwareDec.CATALOG_VIEW));
-		adapter.addTab(title[4], "software_china", SoftwareListFragment.class, getBundle(SoftwareDec.CATALOG_LIST_CN));
+		adapter.addTab(title[1], "software_recommend", SoftwareListFragment.class, getBundle(SoftwareList.CATALOG_RECOMMEND));
+		adapter.addTab(title[2], "software_latest", SoftwareListFragment.class, getBundle(SoftwareList.CATALOG_TIME));
+		adapter.addTab(title[3], "software_hot", SoftwareListFragment.class, getBundle(SoftwareList.CATALOG_VIEW));
+		adapter.addTab(title[4], "software_china", SoftwareListFragment.class, getBundle(SoftwareList.CATALOG_LIST_CN));
 	}
 	
 	private Bundle getBundle(String catalog) {
