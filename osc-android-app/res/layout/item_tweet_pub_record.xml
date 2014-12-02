@@ -22,19 +22,9 @@
             <!-- 用作背景 -->
 
             <ImageView
-                android:id="@+id/tweet_img_record_bg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/audio0"
-                android:contentDescription="@null" />
-
-            <ImageView
                 android:id="@+id/tweet_img_record"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/tweet_img_record"
-                android:layout_alignLeft="@+id/tweet_img_record"
-                android:layout_alignTop="@+id/tweet_img_record"
                 android:background="@anim/audio_animations"
                 android:contentDescription="@null" />
         </RelativeLayout>
