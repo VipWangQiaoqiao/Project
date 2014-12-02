@@ -34,7 +34,6 @@ import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
-import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.RecordButtonUtil;
 import net.oschina.app.widget.RecordButtonUtil.OnPlayListener;
 
@@ -245,10 +244,10 @@ public class TweetDetailFragment extends BaseListFragment implements
 
         mTvCommentCount.setText(getString(R.string.comment_count,
                 mTweet.getCommentCount()));
-        if (MyURLSpan.RECORD_SOUND.matcher(mTweet.getBody().trim()).matches()) {
-            mRlRecordSound.setVisibility(View.VISIBLE);
-        } else {
+        if (StringUtils.isEmpty(mTweet.getAttach())) {
             mRlRecordSound.setVisibility(View.GONE);
+        } else {
+            mRlRecordSound.setVisibility(View.VISIBLE);
         }
         fillWebViewBody();
     }
