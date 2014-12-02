@@ -103,33 +103,35 @@ public class RecordButtonUtil {
     }
 
     public void startPlay(String audioPath) {
-        if (!StringUtils.isEmpty(audioPath)) {
-            mPlayer = new MediaPlayer();
-            try {
-                mPlayer.setDataSource(audioPath);
-                mPlayer.prepare();
-                mPlayer.start();
-                if (listener != null) {
-                    listener.starPlay();
-                }
-                mIsPlaying = true;
-                mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(MediaPlayer mp) {
-                        if (listener != null) {
-                            listener.stopPlay();
-                        }
-                        mp.release();
-                        mPlayer = null;
-                        mIsPlaying = false;
+        if (!mIsPlaying) {
+            if (!StringUtils.isEmpty(audioPath)) {
+                mPlayer = new MediaPlayer();
+                try {
+                    mPlayer.setDataSource(audioPath);
+                    mPlayer.prepare();
+                    mPlayer.start();
+                    if (listener != null) {
+                        listener.starPlay();
                     }
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
+                    mIsPlaying = true;
+                    mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mp) {
+                            if (listener != null) {
+                                listener.stopPlay();
+                            }
+                            mp.release();
+                            mPlayer = null;
+                            mIsPlaying = false;
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                AppContext.showToastShort(R.string.record_sound_notfound);
             }
-        } else {
-            AppContext.showToastShort(R.string.record_sound_notfound);
-        }
+        } // end playing
     }
 
     /**

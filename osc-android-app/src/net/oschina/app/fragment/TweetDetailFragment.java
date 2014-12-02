@@ -54,6 +54,7 @@ import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
@@ -187,8 +188,10 @@ public class TweetDetailFragment extends BaseListFragment implements
      */
     private void initSoundView(View header) {
         final RecordButtonUtil util = new RecordButtonUtil();
-        final AnimationDrawable drawable = (AnimationDrawable) header
-                .findViewById(R.id.tweet_img_record).getBackground();
+        final ImageView playerButton = (ImageView) header
+                .findViewById(R.id.tweet_img_record);
+        final AnimationDrawable drawable = (AnimationDrawable) playerButton
+                .getBackground();
         mRlRecordSound = (RelativeLayout) header
                 .findViewById(R.id.tweet_bg_record);
         mRlRecordSound.setOnClickListener(new OnClickListener() {

@@ -1,6 +1,7 @@
 package net.oschina.app.widget;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -22,19 +23,18 @@ import android.widget.Button;
  * 
  */
 public class RecordButton extends Button {
-    private static final int MIN_INTERVAL_TIME = 1000; // 录音最短时间
+    private static final int MIN_INTERVAL_TIME = 700; // 录音最短时间
     private static final int MAX_INTERVAL_TIME = 60000; // 录音最长时间
 
     private boolean mIsCancel = false; // 手指抬起或划出时判断是否主动取消录音
 
-    private int mYpositon = 0;// 录音按钮top值
     private long mStartTime;// 录音起始时间
 
     private static Dialog mRecordDialog;
 
     private String mAudioFile = null;
     private OnFinishedRecordListener mFinishedListerer;
-    private static OnVolumeChangeListener mVolumeListener;
+    private OnVolumeChangeListener mVolumeListener;
 
     private RecordButtonUtil mAudioUtil;
     private ObtainDecibelThread mThread;
@@ -56,11 +56,8 @@ public class RecordButton extends Button {
     }
 
     private void init() {
-        mVolumeHandler = new ShowVolumeHandler();
+        mVolumeHandler = new ShowVolumeHandler(this);
         mAudioUtil = new RecordButtonUtil();
-        int[] location = new int[2];
-        getLocationOnScreen(location);
-        mYpositon = location[1];
         initSavePath();
     }
 
@@ -84,16 +81,17 @@ public class RecordButton extends Button {
             initlization();
             break;
         case MotionEvent.ACTION_UP:
-            if (!mIsCancel) {
-                finishRecord();
-            } else {
+            if (mIsCancel && event.getY() < -50) {
                 cancelRecord();
+            } else {
+                finishRecord();
             }
             mIsCancel = false;
             break;
-        case MotionEvent.ACTION_MOVE:// 当手指移动到view外面，会cancel
-            if (event.getY() < mYpositon) {
-                mIsCancel = false;
+        case MotionEvent.ACTION_MOVE:
+            // 当手指移动到view外面，会cancel
+            if (event.getY() < -50) {
+                mIsCancel = true;
             }
             break;
         }
@@ -240,7 +238,7 @@ public class RecordButton extends Button {
         mAudioUtil.setOnPlayListener(l);
     }
 
-    /******************************* inline class ****************************************/
+    /******************************* inner class ****************************************/
 
     private class ObtainDecibelThread extends Thread {
         private volatile boolean running = true;
@@ -258,14 +256,16 @@ public class RecordButton extends Button {
                     e.printStackTrace();
                 }
                 if (System.currentTimeMillis() - mStartTime >= MAX_INTERVAL_TIME) {
-                    finishRecord();
+                    // 如果超过最长录音时间
+                    mVolumeHandler.sendEmptyMessage(-1);
                 }
-                if (mAudioUtil == null || !running) {
-                    break;
-                }
-                int volumn = mAudioUtil.getVolumn();
-                if (volumn != 0) {
-                    mVolumeHandler.sendEmptyMessage(volumn);
+                if (mAudioUtil != null && running) {
+                    // 如果用户仍在录音
+                    int volumn = mAudioUtil.getVolumn();
+                    if (volumn != 0)
+                        mVolumeHandler.sendEmptyMessage(volumn);
+                } else {
+                    exit();
                 }
             }
         }
@@ -279,35 +279,38 @@ public class RecordButton extends Button {
     };
 
     static class ShowVolumeHandler extends Handler {
+        private final WeakReference<RecordButton> mOuterInstance;
+
+        public ShowVolumeHandler(RecordButton outer) {
+            mOuterInstance = new WeakReference<RecordButton>(outer);
+        }
+
         @Override
         public void handleMessage(Message msg) {
-            /* 当前音量 */
-            if (mVolumeListener != null) {
-                mVolumeListener.onVolumeChange(mRecordDialog, msg.what);
+            RecordButton outerButton = mOuterInstance.get();
+            if (msg.what != -1) {
+                // 大于0时 表示当前录音的音量
+                if (outerButton.mVolumeListener != null) {
+                    outerButton.mVolumeListener.onVolumeChange(mRecordDialog,
+                            msg.what);
+                }
+            } else {
+                // -1 时表示录音超时
+                outerButton.finishRecord();
             }
         }
     }
 
-    /**
-     * 音量改变的监听器
-     */
+    /** 音量改变的监听器 */
     public interface OnVolumeChangeListener {
         void onVolumeChange(Dialog dialog, int volume);
     }
 
     public interface OnFinishedRecordListener {
-
-        /**
-         * 用户手动取消
-         */
+        /** 用户手动取消 */
         public void onCancleRecord();
 
-        /**
-         * 录音完成
-         * 
-         * @param audioPath
-         * @param recordTime
-         */
+        /** 录音完成 */
         public void onFinishedRecord(String audioPath, int recordTime);
     }
 }
