@@ -205,12 +205,24 @@ public class UserCenterFragment extends BaseFragment implements
 		if (mAdapter == null) {
 			mAdapter = new ActiveAdapter();
 
-			mState = STATE_REFRESH;
-			mListView.setVisibility(View.GONE);
-			mEmptyView.setErrorType(EmptyLayout.NETWORK_LOADING);
-			sendGetUserInfomation();
+			fristSendGetUserInfomation();
 		}
 		mListView.setAdapter(mAdapter);
+		
+		mEmptyView.setOnLayoutClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				fristSendGetUserInfomation();
+			}
+		});
+	}
+	
+	private void fristSendGetUserInfomation() {
+		mState = STATE_REFRESH;
+		mListView.setVisibility(View.GONE);
+		mEmptyView.setErrorType(EmptyLayout.NETWORK_LOADING);
+		sendGetUserInfomation();
 	}
 
 	private void sendGetUserInfomation() {
