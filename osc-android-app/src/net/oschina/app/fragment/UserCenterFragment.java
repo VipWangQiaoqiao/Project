@@ -208,16 +208,16 @@ public class UserCenterFragment extends BaseFragment implements
 			fristSendGetUserInfomation();
 		}
 		mListView.setAdapter(mAdapter);
-		
+
 		mEmptyView.setOnLayoutClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				fristSendGetUserInfomation();
 			}
 		});
 	}
-	
+
 	private void fristSendGetUserInfomation() {
 		mState = STATE_REFRESH;
 		mListView.setVisibility(View.GONE);
@@ -236,7 +236,7 @@ public class UserCenterFragment extends BaseFragment implements
 		mHisUid = mUser.getUid();
 		mHisName = mUser.getName();
 		mTvName.setText(mHisName);
-		
+
 		int genderIcon = R.drawable.userinfo_icon_male;
 		if (FEMALE.equals(mUser.getGender())) {
 			genderIcon = R.drawable.userinfo_icon_female;
@@ -247,6 +247,7 @@ public class UserCenterFragment extends BaseFragment implements
 				mUser.getFollowers()));
 		mTvFollower
 				.setText(getString(R.string.follower_count, mUser.getFans()));
+		mTvSore.setText(getString(R.string.score, mUser.getScore()));
 		mTvLastestLoginTime.setText(getString(R.string.latest_login_time,
 				StringUtils.friendly_time(mUser.getLatestonline())));
 		updateUserRelation();

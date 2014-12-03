@@ -57,6 +57,7 @@ public class MyInformationFragment extends BaseFragment {
 	@InjectView(R.id.iv_gender)ImageView mIvGender;
 	@InjectView(R.id.tv_name) TextView mTvName;
 	@InjectView(R.id.tv_sigin) TextView mTvSign;
+	@InjectView(R.id.tv_score) TextView mTvScore;
 	@InjectView(R.id.tv_favorite) TextView mTvFavorite;
 	@InjectView(R.id.tv_following) TextView mTvFollowing;
 	@InjectView(R.id.tv_follower) TextView mTvFollower;
@@ -116,7 +117,7 @@ public class MyInformationFragment extends BaseFragment {
 		@Override
 		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
 				Throwable arg3) {
-			mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+			AppContext.showToast("网络异常，无法加载用户信息");
 		}
 	};
 	
@@ -212,6 +213,7 @@ public class MyInformationFragment extends BaseFragment {
 		mIvGender
 				.setImageResource(StringUtils.toInt(mInfo.getGender()) == 1 ? R.drawable.userinfo_icon_male
 						: R.drawable.userinfo_icon_female);
+		mTvScore.setText(String.valueOf(mInfo.getScore()));
 		mTvFavorite.setText(String.valueOf(mInfo.getFavoritecount()));
 		mTvFollowing.setText(String.valueOf(mInfo.getFollowerscount()));
 		mTvFollower.setText(String.valueOf(mInfo.getFanscount()));
