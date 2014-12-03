@@ -315,7 +315,7 @@ public class MyInformationFragment extends BaseFragment {
 		final int id = v.getId();
 		switch (id) {
 		case R.id.iv_avatar:
-			UIHelper.showUserAvatar(getActivity(), mInfo.getPortrait());
+			UIHelper.showUserAvatar(getActivity(), AppContext.getInstance().getLoginUser().getPortrait());
 			break;
 		case R.id.ly_follower:
 			UIHelper.showFriends(getActivity(), AppContext.getInstance().getLoginUid(), 1);
@@ -339,7 +339,7 @@ public class MyInformationFragment extends BaseFragment {
 			
 			break;
 		case R.id.rl_user_center:
-			UIHelper.showUserCenter(getActivity(), AppContext.getInstance().getLoginUid(), mInfo.getName());
+			UIHelper.showUserCenter(getActivity(), AppContext.getInstance().getLoginUid(), AppContext.getInstance().getLoginUser().getName());
 			break;
 		default:
 			break;
