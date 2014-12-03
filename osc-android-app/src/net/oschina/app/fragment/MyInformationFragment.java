@@ -330,6 +330,7 @@ public class MyInformationFragment extends BaseFragment {
 			break;
 		case R.id.rl_message:
 			UIHelper.showMyMes(getActivity());
+			setNoticeReaded();
 			break;
 		case R.id.rl_team:
 			
@@ -346,6 +347,11 @@ public class MyInformationFragment extends BaseFragment {
 		default:
 			break;
 		}
+	}
+	
+	private void setNoticeReaded() {
+		mMesCount.setText("");
+		mMesCount.hide();
 	}
 
 	@Override

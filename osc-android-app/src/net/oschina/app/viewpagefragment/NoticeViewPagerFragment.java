@@ -34,7 +34,7 @@ import net.oschina.app.widget.BadgeView;
 public class NoticeViewPagerFragment extends BaseViewPagerFragment {
 
 	public static BadgeView mBvAtMe, mBvComment, mBvMsg, mBvFans;
-	
+
 	private BroadcastReceiver mNoticeReceiver = new BroadcastReceiver() {
 
 		@Override
@@ -47,6 +47,7 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
 	public void onResume() {
 		super.onResume();
 		setNotice();
+		setNoticeStatus();
 	}
 
 	private void setNotice() {
@@ -78,7 +79,7 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
 			} else {
 				mBvMsg.hide();
 			}
-			
+
 			if (newFansCount > 0) {
 				mBvFans.setText(newFansCount + "");
 				mBvFans.show();
@@ -89,6 +90,23 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
 			mBvAtMe.hide();
 			mBvComment.hide();
 			mBvMsg.hide();
+			mBvFans.hide();
+		}
+	}
+
+	private void setNoticeStatus() {
+		Notice notice = MainActivity.mNotice;
+		if (notice == null) {
+			return;
+		}
+		if (notice.getReviewCount() != 0 && notice.getAtmeCount() == 0) {
+			mViewPager.setCurrentItem(1);
+		} else if (notice.getMsgCount() != 0 && notice.getReviewCount() == 0
+				&& notice.getAtmeCount() == 0) {
+			mViewPager.setCurrentItem(2);
+		} else if (notice.getNewFansCount() != 0 && notice.getMsgCount() == 0
+				&& notice.getReviewCount() == 0 && notice.getAtmeCount() == 0) {
+			mViewPager.setCurrentItem(3);
 		}
 	}
 
@@ -114,8 +132,7 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
 		mBvMsg.setBadgePosition(BadgeView.POSITION_CENTER);
 		mBvMsg.setGravity(Gravity.CENTER);
 		mBvMsg.setBackgroundResource(R.drawable.notification_bg);
-		
-		
+
 		mBvFans = new BadgeView(getActivity(), mTabStrip.getBadgeView(3));
 		mBvFans.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
 		mBvFans.setBadgePosition(BadgeView.POSITION_CENTER);
@@ -126,7 +143,7 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
 
 		mTabStrip.getBadgeView(1).setVisibility(View.VISIBLE);
 		mTabStrip.getBadgeView(2).setVisibility(View.VISIBLE);
-		
+
 		mTabStrip.getBadgeView(3).setVisibility(View.VISIBLE);
 	}
 
@@ -147,7 +164,8 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
 				getBundle(ActiveList.CATALOG_COMMENT));
 		adapter.addTab(title[2], "active_mes", MessageFragment.class, null);
 		Bundle bundle = getBundle(FriendsList.TYPE_FANS);
-		bundle.putInt(FriendsFragment.BUNDLE_KEY_UID, AppContext.getInstance().getLoginUid());
+		bundle.putInt(FriendsFragment.BUNDLE_KEY_UID, AppContext.getInstance()
+				.getLoginUid());
 		adapter.addTab(title[3], "active_fans", FriendsFragment.class, bundle);
 	}
 

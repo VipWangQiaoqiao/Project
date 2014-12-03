@@ -3,19 +3,14 @@ package net.oschina.app.adapter;
 import java.util.ArrayList;
 
 import net.oschina.app.R;
-import net.oschina.app.ui.MainActivity;
-import net.oschina.app.widget.BadgeView;
+import net.oschina.app.util.TLog;
 import net.oschina.app.widget.PagerSlidingTabStrip;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TabHost;
@@ -91,16 +86,17 @@ public class ViewPageFragmentAdapter extends FragmentPagerAdapter implements
 
 	@Override
 	public void onPageScrollStateChanged(int state) {
+		TLog.log("Test", "滑动了" + state);
 	}
 
 	@Override
 	public void onPageScrolled(int position, float positionOffset,
 			int positionOffsetPixels) {
-
+		TLog.log("Test", "滑动了" + position);
 	}
 
 	@Override
 	public void onPageSelected(int position) {
-		
+		TLog.log("Test", "滑动了" + position);
 	}
 }

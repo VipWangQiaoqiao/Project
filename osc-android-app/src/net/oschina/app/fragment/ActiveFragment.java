@@ -15,6 +15,7 @@ import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.Notice;
 import net.oschina.app.service.NoticeUtils;
+import net.oschina.app.ui.MainActivity;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -27,6 +28,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -80,7 +82,26 @@ public class ActiveFragment extends BaseListFragment implements
 			mState = STATE_REFRESH;
 			requestData(false);
 		}
+		new Handler().postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				refreshNotice();
+			}
+		}, 800);
 		super.onResume();
+	}
+	
+	private void refreshNotice() {
+		Notice notice = MainActivity.mNotice;
+		if (notice == null) {
+			return;
+		}
+		if (notice.getAtmeCount() > 0 && mCatalog == ActiveList.CATALOG_ATME) {
+			onRefresh();
+		} else if (notice.getReviewCount() > 0 && mCatalog == ActiveList.CATALOG_COMMENT) {
+			onRefresh();
+		}
 	}
 
 	@Override

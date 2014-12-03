@@ -39,7 +39,7 @@ public abstract class BaseViewPagerFragment extends BaseFragment{
 
         onSetupTabAdapter(mTabsAdapter);
         mTabsAdapter.notifyDataSetChanged();
-        mViewPager.setOffscreenPageLimit(2);
+        mViewPager.setOffscreenPageLimit(1);
 //        if (savedInstanceState != null) {
 //        	int pos = savedInstanceState.getInt("position");
 //        	mViewPager.setCurrentItem(pos, true);

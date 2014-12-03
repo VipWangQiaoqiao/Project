@@ -259,6 +259,10 @@ public class MainActivity extends ActionBarActivity implements
                 v.setSelected(false);
             }
         }
+        if (tabId.equals(getString(MainTab.ME.getResName()))) {
+        	mBvTweet.setText("");
+        	mBvTweet.hide();
+        }
         supportInvalidateOptionsMenu();
     }
 

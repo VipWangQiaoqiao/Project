@@ -14,11 +14,13 @@ import net.oschina.app.bean.FriendsList.Friend;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.Notice;
 import net.oschina.app.service.NoticeUtils;
+import net.oschina.app.ui.MainActivity;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,8 +49,6 @@ public class FriendsFragment extends BaseListFragment {
 	@Override
 	public void initView(View view) {
 		super.initView(view);
-		UIHelper.sendBroadcastForNotice(getActivity());
-		mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 	}
 
 	@Override
@@ -57,6 +57,25 @@ public class FriendsFragment extends BaseListFragment {
 		Bundle args = getArguments();
 		if (args != null) {
 			mUid = args.getInt(BUNDLE_KEY_UID, 0);
+		}
+	}
+	
+	@Override
+	public void onResume() {
+		new Handler().postDelayed(new Runnable() {
+
+			@Override
+			public void run() {
+				refreshNotice();
+			}
+		}, 800);
+		super.onResume();
+	}
+
+	private void refreshNotice() {
+		Notice notice = MainActivity.mNotice;
+		if (notice != null && notice.getNewFansCount() > 0) {
+			onRefresh();
 		}
 	}
 
