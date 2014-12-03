@@ -205,10 +205,12 @@ public class TweetDetailFragment extends BaseListFragment implements
             @Override
             public void stopPlay() {
                 drawable.stop();
+                playerButton.setBackgroundDrawable(drawable.getFrame(0));
             }
 
             @Override
             public void starPlay() {
+                playerButton.setBackgroundDrawable(drawable);
                 drawable.start();
             }
         });

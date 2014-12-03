@@ -44,17 +44,20 @@ public class TweetRecordFragment extends BaseFragment {
     ImageView mImgPlay;
     @InjectView(R.id.tweet_btn_record)
     RecordButton mBtnRecort;
-    @InjectView(R.id.listen)
-    Button mBtnListen;
+    @InjectView(R.id.speech)
+    Button mBtnSpeech;
     @InjectView(R.id.cancle)
     Button mBtnCancle;
 
     private AnimationDrawable background;
+    private final String strSpeech = "#语音动弹#";
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-        case R.id.listen:
+        case R.id.speech:
+            break;
+        case R.id.tweet_img_record:
             mBtnRecort.setAudioPath(mBtnRecort.getCurrentAudioPath());
             mBtnRecort.startPlay();
             break;
@@ -68,16 +71,19 @@ public class TweetRecordFragment extends BaseFragment {
     @Override
     public void initView(View view) {
         mBtnCancle.setOnClickListener(this);
-        mBtnListen.setOnClickListener(this);
+        mBtnSpeech.setOnClickListener(this);
+        mImgPlay.setOnClickListener(this);
         mBtnRecort.setOnPlayListener(new OnPlayListener() {
             @Override
             public void starPlay() {
+                mImgPlay.setBackgroundDrawable(background);
                 background.start();
             }
 
             @Override
             public void stopPlay() {
                 background.stop();
+                mImgPlay.setBackgroundDrawable(background.getFrame(0));
             }
         });
         mBtnRecort.setOnFinishedRecordListener(new OnFinishedRecordListener() {
@@ -180,7 +186,8 @@ public class TweetRecordFragment extends BaseFragment {
         Tweet tweet = new Tweet();
         tweet.setAuthorid(AppContext.getInstance().getLoginUid());
         tweet.setAudioPath(audioPath);
-        tweet.setBody("#语音动弹#");
+        tweet.setBody(strSpeech);
         ServerTaskUtils.pubTweet(getActivity(), tweet);
+        getActivity().finish();
     }
 }
