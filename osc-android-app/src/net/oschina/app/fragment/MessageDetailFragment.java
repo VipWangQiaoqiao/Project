@@ -7,18 +7,27 @@ import java.io.Serializable;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.MessageDetailAdapter;
+import net.oschina.app.api.OperationResponseHandler;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
+import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.ListEntity;
+import net.oschina.app.bean.Messages;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.emoji.EmojiFragment;
 import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
+import net.oschina.app.fragment.MessageFragment.DeleteMessageOperationHandler;
+import net.oschina.app.fragment.TweetDetailFragment.DeleteOperationResponseHandler;
+import net.oschina.app.ui.dialog.CommonDialog;
+import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.HTMLSpirit;
+import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
@@ -27,6 +36,7 @@ import org.apache.http.Header;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -35,11 +45,13 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 public class MessageDetailFragment extends BaseListFragment implements
-		EmojiTextListener {
+		EmojiTextListener, OnItemLongClickListener {
 	protected static final String TAG = ActiveFragment.class.getSimpleName();
 	public static final String BUNDLE_KEY_FID = "BUNDLE_KEY_FID";
 	public static final String BUNDLE_KEY_FNAME = "BUNDLE_KEY_FNAME";
@@ -55,7 +67,8 @@ public class MessageDetailFragment extends BaseListFragment implements
 		@Override
 		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 			try {
-				ResultBean resb = XmlUtils.toBean(ResultBean.class, new ByteArrayInputStream(arg2));
+				ResultBean resb = XmlUtils.toBean(ResultBean.class,
+						new ByteArrayInputStream(arg2));
 				Result res = resb.getResult();
 				if (res.OK()) {
 					AppContext
@@ -156,6 +169,7 @@ public class MessageDetailFragment extends BaseListFragment implements
 		super.initView(view);
 		mListView.setDivider(null);
 		mListView.setDividerHeight(0);
+		mListView.setOnItemLongClickListener(this);
 		mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
 
 			@Override
@@ -205,7 +219,90 @@ public class MessageDetailFragment extends BaseListFragment implements
 			AppContext.showToastShort(R.string.tip_content_empty);
 			return;
 		}
-		OSChinaApi.publicMessage(AppContext.getInstance().getLoginUid(), mFid, text,
-				mPublicHandler);
+		OSChinaApi.publicMessage(AppContext.getInstance().getLoginUid(), mFid,
+				text, mPublicHandler);
+	}
+
+	@Override
+	public boolean onItemLongClick(AdapterView<?> parent, View view,
+			int position, long id) {
+		final Comment message = (Comment) mAdapter.getItem(position);
+		final CommonDialog dialog = DialogHelper
+				.getPinterestDialogCancelable(getActivity());
+		dialog.setItemsWithoutChk(
+				getResources().getStringArray(R.array.message_list_options),
+				new OnItemClickListener() {
+
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view,
+							int position, long id) {
+						dialog.dismiss();
+						switch (position) {
+						case 0:
+							TDevice.copyTextToBoard(HTMLSpirit
+									.delHTMLTag(message.getContent()));
+							break;
+						case 1:
+							handleDeleteMessage(message);
+							break;
+						default:
+							break;
+						}
+					}
+				});
+		dialog.setNegativeButton(R.string.cancle, null);
+		dialog.show();
+		return true;
+	}
+
+	private void handleDeleteMessage(final Comment message) {
+		CommonDialog dialog = DialogHelper
+				.getPinterestDialogCancelable(getActivity());
+		dialog.setMessage(getString(R.string.confirm_delete_one_message,
+				message.getAuthor()));
+		dialog.setNegativeButton(R.string.cancle, null);
+		dialog.setPositiveButton(R.string.ok,
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+						showWaitDialog(R.string.progress_submit);
+						OSChinaApi.deleteComment(mFid,
+								CommentList.CATALOG_MESSAGE, message.getId(),
+								message.getAuthorId(),
+								new DeleteMessageOperationHandler(message));
+					}
+				});
+		dialog.show();
+	}
+
+	class DeleteMessageOperationHandler extends OperationResponseHandler {
+
+		public DeleteMessageOperationHandler(Object... args) {
+			super(args);
+		}
+
+		@Override
+		public void onSuccess(int code, ByteArrayInputStream is, Object[] args)
+				throws Exception {
+			Result res = XmlUtils.toBean(ResultBean.class, is).getResult();
+			if (res.OK()) {
+				Comment msg = (Comment) args[0];
+				mAdapter.removeItem(msg);
+				mAdapter.notifyDataSetChanged();
+				hideWaitDialog();
+				AppContext.showToastShort(R.string.tip_delete_success);
+			} else {
+				AppContext.showToastShort(res.getErrorMessage());
+				hideWaitDialog();
+			}
+		}
+
+		@Override
+		public void onFailure(int code, String errorMessage, Object[] args) {
+			AppContext.showToastShort(R.string.tip_delete_faile);
+			hideWaitDialog();
+		}
 	}
 }

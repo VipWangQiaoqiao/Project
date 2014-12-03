@@ -55,4 +55,9 @@
         <item>粉丝</item>
     </string-array>
     
+    <string-array name="message_list_options">
+        <item>复制</item>
+        <item>删除</item>
+    </string-array>
+    
 </resources>

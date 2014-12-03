@@ -11,7 +11,6 @@ import net.oschina.app.api.OperationResponseHandler;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.bean.ActiveList;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.MessageList;
@@ -24,6 +23,8 @@ import net.oschina.app.ui.MainActivity;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.HTMLSpirit;
+import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import android.content.BroadcastReceiver;
@@ -117,9 +118,9 @@ public class MessageFragment extends BaseListFragment implements
 	@Override
 	public void initView(View view) {
 		super.initView(view);
-		mListView.setOnItemLongClickListener(this);
 		mListView.setDivider(null);
 		mListView.setDividerHeight(0);
+		mListView.setOnItemLongClickListener(this);
 		mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
 
 			@Override
@@ -171,38 +172,31 @@ public class MessageFragment extends BaseListFragment implements
 	@Override
 	public boolean onItemLongClick(AdapterView<?> parent, View view,
 			int position, long id) {
-		// final Messages message = (Messages) mAdapter.getItem(position - 1);
-		// final CommonDialog dialog = DialogHelper
-		// .getPinterestDialogCancelable(getActivity());
-		// dialog.setItemsWithoutChk(
-		// getResources().getStringArray(R.array.message_list_options),
-		// new OnItemClickListener() {
-		//
-		// @Override
-		// public void onItemClick(AdapterView<?> parent, View view,
-		// int position, long id) {
-		// dialog.dismiss();
-		// switch (position) {
-		// case 0:
-		// UIHelper.showMessagePub(getActivity(),
-		// message.getFriendId(),
-		// message.getFriendName());
-		// break;
-		// case 1:
-		// UIHelper.showMessageForward(getActivity(),
-		// message.getFriendName(),
-		// message.getContent());
-		// break;
-		// case 2:
-		// handleDeleteMessage(message);
-		// break;
-		// default:
-		// break;
-		// }
-		// }
-		// });
-		// dialog.setNegativeButton(R.string.cancle, null);
-		// dialog.show();
+		final Messages message = (Messages) mAdapter.getItem(position);
+		final CommonDialog dialog = DialogHelper
+				.getPinterestDialogCancelable(getActivity());
+		dialog.setItemsWithoutChk(
+				getResources().getStringArray(R.array.message_list_options),
+				new OnItemClickListener() {
+
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view,
+							int position, long id) {
+						dialog.dismiss();
+						switch (position) {
+						case 0:
+							TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(message.getContent()));
+							break;
+						case 1:
+							handleDeleteMessage(message);
+							break;
+						default:
+							break;
+						}
+					}
+				});
+		dialog.setNegativeButton(R.string.cancle, null);
+		dialog.show();
 		return true;
 	}
 
@@ -241,6 +235,7 @@ public class MessageFragment extends BaseListFragment implements
 			if (res.OK()) {
 				Messages msg = (Messages) args[0];
 				mAdapter.removeItem(msg);
+				mAdapter.notifyDataSetChanged();
 				hideWaitDialog();
 				AppContext.showToastShort(R.string.tip_delete_success);
 			} else {
