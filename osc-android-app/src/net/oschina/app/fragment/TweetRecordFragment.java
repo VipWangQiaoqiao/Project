@@ -7,15 +7,13 @@ import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.service.ServerTaskUtils;
+import net.oschina.app.util.DensityUtils;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.RecordButton;
 import net.oschina.app.widget.RecordButton.OnFinishedRecordListener;
-import net.oschina.app.widget.RecordButton.OnVolumeChangeListener;
 import net.oschina.app.widget.RecordButtonUtil.OnPlayListener;
-import net.oschina.app.widget.RecordDialog;
-import android.app.Dialog;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -70,6 +69,12 @@ public class TweetRecordFragment extends BaseFragment {
 
     @Override
     public void initView(View view) {
+        RelativeLayout.LayoutParams params = (LayoutParams) mBtnRecort
+                .getLayoutParams();
+        params.width = DensityUtils.getScreenW(getActivity());
+        params.height = (int) (DensityUtils.getScreenH(getActivity()) * 0.4);
+        mBtnRecort.setLayoutParams(params);
+
         mBtnCancle.setOnClickListener(this);
         mBtnSpeech.setOnClickListener(this);
         mImgPlay.setOnClickListener(this);
@@ -95,31 +100,6 @@ public class TweetRecordFragment extends BaseFragment {
             @Override
             public void onCancleRecord() {
                 AppContext.showToastShort(R.string.cancle_record);
-            }
-        });
-
-        RecordDialog dialog = new RecordDialog(getActivity());
-        mBtnRecort.setRecordDialog(dialog);
-        mBtnRecort.setOnVolumeChangeListener(new OnVolumeChangeListener() {
-            @Override
-            public void onVolumeChange(Dialog d, int volume) {
-                RecordDialog dialog = (RecordDialog) d;
-                switch (volume) {
-                case 6:
-                    break;
-                case 5:
-                    break;
-                case 4:
-                    break;
-                case 3:
-                    break;
-                case 2:
-                    break;
-                case 1:
-                    break;
-                default:
-                    break;
-                }
             }
         });
     }
