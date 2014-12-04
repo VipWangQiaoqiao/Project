@@ -21,7 +21,7 @@
     
     <color name="main_green">#40AA53</color>
     <color name="main_gray">#9A9A9A</color>
-    <color name="main_black">#353535</color>
+    <color name="main_black">#333</color>
     <color name="main_purple">#576B95</color>
     <color name="actionbar_background">@color/main_green</color>
     <color name="transparent">#00000000</color>
