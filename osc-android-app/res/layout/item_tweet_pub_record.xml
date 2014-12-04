@@ -19,8 +19,6 @@
             android:background="@drawable/audio_bg"
             android:padding="3dp" >
 
-            <!-- 用作背景 -->
-
             <ImageView
                 android:id="@+id/tweet_img_record"
                 android:layout_width="wrap_content"
@@ -43,11 +41,11 @@
                 android:text="取消" />
 
             <Button
-                android:id="@+id/listen"
+                android:id="@+id/speech"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="试听" />
+                android:text="附言" />
         </LinearLayout>
     </RelativeLayout>
 
