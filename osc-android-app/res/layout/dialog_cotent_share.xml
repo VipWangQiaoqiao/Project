@@ -30,7 +30,7 @@
                 android:text="@string/platform_weichat" />
         </LinearLayout>
 
-        <LinearLayout 
+        <LinearLayout
             android:id="@+id/ly_share_sina_weibo"
             style="@style/dialog_content_share_ll" >
 

@@ -6,6 +6,7 @@ import net.oschina.app.AppManager;
 import net.oschina.app.R;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.Notice;
+import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.cache.DataCleanManager;
 import net.oschina.app.interf.BaseViewInterface;
 import net.oschina.app.interf.OnTabReselectListener;
@@ -235,6 +236,7 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+    	getMenuInflater().inflate(R.menu.main_activity_menu, menu);
         if (!mNavigationDrawerFragment.isDrawerOpen()) {
             restoreActionBar();
             return true;
@@ -245,6 +247,14 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        switch (id) {
+		case R.id.search:
+			UIHelper.showSimpleBack(this, SimpleBackPage.SEARCH);
+			break;
+
+		default:
+			break;
+		}
         return super.onOptionsItemSelected(item);
     }
 

@@ -136,6 +136,7 @@ public class UpdateManager {
 	private void showFaileDialog() {
 		CommonDialog dialog = DialogHelper.getPinterestDialogCancelable(mContext);
 		dialog.setMessage("网络异常，无法获取新版本信息");
+		dialog.setPositiveButton("", null);
 		dialog.show();
 	}
 }

@@ -7,6 +7,7 @@ import net.oschina.app.fragment.CommentFrament;
 import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.fragment.QuestionTagFragment;
+import net.oschina.app.fragment.SearchFragment;
 import net.oschina.app.fragment.SettingsFragment;
 import net.oschina.app.fragment.SettingsNotificationFragment;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
@@ -19,6 +20,7 @@ import net.oschina.app.viewpagefragment.BlogViewPagerFragment;
 import net.oschina.app.viewpagefragment.FriendsViewPagerFragment;
 import net.oschina.app.viewpagefragment.OpensourceSoftwareFragment;
 import net.oschina.app.viewpagefragment.QuestViewPagerFragment;
+import net.oschina.app.viewpagefragment.SearchViewPageFragment;
 import net.oschina.app.viewpagefragment.UserFavoriteViewPageFragment;
 
 public enum SimpleBackPage {
@@ -68,7 +70,9 @@ public enum SimpleBackPage {
 
     BLOG(18, R.string.actionbar_title_blog_area, BlogViewPagerFragment.class),
 
-    RECORD(19, R.string.actionbar_title_tweetpub, TweetRecordFragment.class);
+    RECORD(19, R.string.actionbar_title_tweetpub, TweetRecordFragment.class),
+    
+    SEARCH(20, R.string.actionbar_title_search, SearchViewPageFragment.class);
 
     private int title;
     private Class<?> clz;
