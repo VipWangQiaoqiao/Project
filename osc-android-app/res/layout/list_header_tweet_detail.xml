@@ -55,21 +55,22 @@
         android:layout_height="wrap_content"
         android:background="@color/list_item_background_normal" />
 
-        <RelativeLayout
-            android:id="@+id/tweet_bg_record"
-            android:layout_width="150dp"
-            android:layout_height="55dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/audio_bg"
-            android:padding="3dp" >
+    <RelativeLayout
+        android:id="@+id/tweet_bg_record"
+        android:layout_width="150dp"
+        android:layout_height="55dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/icon_record_layout"
+        android:padding="3dp" >
 
-            <ImageView
-                android:id="@+id/tweet_img_record"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@anim/audio_animations"
-                android:contentDescription="@null" />
-        </RelativeLayout>
+        <ImageView
+            android:id="@+id/tweet_img_record"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_centerVertical="true"
+            android:background="@anim/audio_animations"
+            android:contentDescription="@null" />
+    </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
