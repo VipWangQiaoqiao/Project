@@ -85,7 +85,7 @@ public class RecordButtonUtil {
         if (mRecorder != null && mIsRecording) {
             volumn = mRecorder.getMaxAmplitude();
             if (volumn != 0)
-                volumn = (int) (10 * Math.log(volumn) / Math.log(10)) / 7;
+                volumn = (int) (10 * Math.log(volumn) / Math.log(10)) / 5;
         }
         return volumn;
     }

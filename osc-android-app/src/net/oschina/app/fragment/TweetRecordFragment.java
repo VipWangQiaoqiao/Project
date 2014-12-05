@@ -13,8 +13,6 @@ import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.RecordButton;
 import net.oschina.app.widget.RecordButton.OnFinishedRecordListener;
-import net.oschina.app.widget.RecordButtonUtil.OnPlayListener;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,10 +20,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -39,31 +37,19 @@ public class TweetRecordFragment extends BaseFragment {
 
     @InjectView(R.id.tweet_layout_record)
     RelativeLayout mLayout;
-    @InjectView(R.id.tweet_img_record)
-    ImageView mImgPlay;
     @InjectView(R.id.tweet_btn_record)
     RecordButton mBtnRecort;
-    @InjectView(R.id.speech)
-    Button mBtnSpeech;
-    @InjectView(R.id.cancle)
-    Button mBtnCancle;
+    @InjectView(R.id.tweet_time_record)
+    TextView mTvTime;
+    @InjectView(R.id.tweet_edit_record)
+    EditText mEtSpeech;
 
-    private AnimationDrawable background;
-    private final String strSpeech = "#语音动弹#";
+    private String strSpeech = "#语音动弹#";
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-        case R.id.speech:
-            break;
-        case R.id.tweet_img_record:
-            mBtnRecort.setAudioPath(mBtnRecort.getCurrentAudioPath());
-            mBtnRecort.startPlay();
-            break;
-        case R.id.cancle:
-            mLayout.setVisibility(View.GONE);
-            mBtnRecort.delete();
-            break;
+        if (v == mLayout) {
+            mBtnRecort.playRecord();
         }
     }
 
@@ -74,40 +60,29 @@ public class TweetRecordFragment extends BaseFragment {
         params.width = DensityUtils.getScreenW(getActivity());
         params.height = (int) (DensityUtils.getScreenH(getActivity()) * 0.4);
         mBtnRecort.setLayoutParams(params);
+        mLayout.setOnClickListener(this);
 
-        mBtnCancle.setOnClickListener(this);
-        mBtnSpeech.setOnClickListener(this);
-        mImgPlay.setOnClickListener(this);
-        mBtnRecort.setOnPlayListener(new OnPlayListener() {
-            @Override
-            public void starPlay() {
-                mImgPlay.setBackgroundDrawable(background);
-                background.start();
-            }
-
-            @Override
-            public void stopPlay() {
-                background.stop();
-                mImgPlay.setBackgroundDrawable(background.getFrame(0));
-            }
-        });
         mBtnRecort.setOnFinishedRecordListener(new OnFinishedRecordListener() {
+
             @Override
             public void onFinishedRecord(String audioPath, int recordTime) {
                 mLayout.setVisibility(View.VISIBLE);
+                if (recordTime < 10) {
+                    mTvTime.setText("0" + recordTime + "\"");
+                } else {
+                    mTvTime.setText(recordTime + "\"");
+                }
             }
 
             @Override
             public void onCancleRecord() {
-                AppContext.showToastShort(R.string.cancle_record);
+                mLayout.setVisibility(View.GONE);
             }
         });
     }
 
     @Override
-    public void initData() {
-        background = (AnimationDrawable) mImgPlay.getBackground();
-    }
+    public void initData() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -163,6 +138,8 @@ public class TweetRecordFragment extends BaseFragment {
             AppContext.showToastShort(R.string.record_sound_notfound);
             return;
         }
+
+        strSpeech = mEtSpeech.getText().toString();
         Tweet tweet = new Tweet();
         tweet.setAuthorid(AppContext.getInstance().getLoginUid());
         tweet.setAudioPath(audioPath);
