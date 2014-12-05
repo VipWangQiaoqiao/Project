@@ -2,51 +2,65 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white" >
+    android:background="#f9f9f9" >
+
+    <EditText
+        android:id="@+id/tweet_edit_record"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_record_button"
+        android:gravity="top"
+        android:hint="为你的声音附一段描述…"
+        android:minLines="4"
+        android:padding="7dp" />
+
+    <TextView
+        android:id="@+id/tweet_text_record"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/tweet_edit_record"
+        android:layout_below="@+id/tweet_edit_record"
+        android:text="你还可以输入50字"
+        android:textColor="#999999" />
 
     <RelativeLayout
         android:id="@+id/tweet_layout_record"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/tweet_edit_record"
+        android:layout_below="@+id/tweet_edit_record"
+        android:layout_marginTop="14dp"
+        android:padding="3dp"
         android:visibility="gone" >
 
-        <RelativeLayout
-            android:id="@+id/tweet_bg_record"
-            android:layout_width="150dp"
-            android:layout_height="60dp"
-            android:layout_alignParentTop="true"
-            android:layout_margin="10dp"
-            android:background="@drawable/audio_bg"
-            android:padding="3dp" >
+        <ImageView
+            android:id="@+id/tweet_img_layout"
+            android:layout_width="95dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="7dp"
+            android:background="@drawable/icon_record_layout"
+            android:contentDescription="@null" />
 
-            <ImageView
-                android:id="@+id/tweet_img_record"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@anim/audio_animations"
-                android:contentDescription="@null" />
-        </RelativeLayout>
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="3dp"
+            android:contentDescription="@null"
+            android:src="@drawable/icon_record" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tweet_time_record"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tweet_bg_record"
-            android:orientation="horizontal" >
-
-            <Button
-                android:id="@+id/cancle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="取消" />
-
-            <Button
-                android:id="@+id/speech"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="附言" />
-        </LinearLayout>
+            android:layout_centerVertical="true"
+            android:textColor="#666666"
+            android:layout_toRightOf="@+id/tweet_img_layout"
+            android:textSize="18sp" />
     </RelativeLayout>
 
     <net.oschina.app.widget.RecordButton

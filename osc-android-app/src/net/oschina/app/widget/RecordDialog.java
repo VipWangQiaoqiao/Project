@@ -10,7 +10,7 @@ import android.view.Window;
 import android.widget.ImageView;
 
 /**
- * 录音时弹出的指示音量大小的dialog
+ * 弹出的指示音量大小的dialog
  * 
  * @author kymjs(kymjs123@gmail.com)
  * 
@@ -55,4 +55,5 @@ public class RecordDialog extends Dialog {
     public void setImageDrawable(Drawable drawable) {
         mImgVolume.setImageDrawable(drawable);
     }
+
 }

@@ -8,9 +8,8 @@ import net.oschina.app.R;
 import net.oschina.app.util.KJAnimations;
 import net.oschina.app.widget.RecordButtonUtil.OnPlayListener;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
@@ -19,6 +18,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 /**
  * 录音专用Button，可弹出自定义的录音dialog。需要配合{@link #RecordButtonUtil}使用
@@ -27,21 +27,25 @@ import android.widget.RelativeLayout;
  * 
  */
 public class RecordButton extends RelativeLayout {
-    private static final int MIN_INTERVAL_TIME = 700; // 录音最短时间
-    private static final int MAX_INTERVAL_TIME = 60000; // 录音最长时间
-
-    private boolean mIsCancel = false; // 手指抬起或划出时判断是否主动取消录音
-
-    private long mStartTime;// 录音起始时间
+    private static final int MIN_INTERVAL_TIME = 900; // 录音最短时间(毫秒)
+    private static final int MAX_INTERVAL_TIME = 60; // 录音最长时间（秒）
+    private static final int HANDLE_FLAG = 33333721;// 用作massage的标示
 
     private ImageView mImgPlay;
     private ImageView mImgListen;
     private ImageView mImgDelete;
-    int[] xy = new int[2];
+    private int mLeftButtonX = 0; // 左边界值（mImgListen右值）
+    private int mRightButtonX = 0; // 右边界值（mImgDelete左值）
 
+    private View bottomFlag;
+    private View topFlag;
+    private TextView mTvRecordTime;
+    private ImageView mImgVolume;
+
+    private long mStartTime;// 录音起始时间
     private String mAudioFile = null;
+    private boolean mIsCancel = false; // 手指抬起或划出时判断是否主动取消录音
     private OnFinishedRecordListener mFinishedListerer;
-    private OnVolumeChangeListener mVolumeListener;
 
     private RecordButtonUtil mAudioUtil;
     private ObtainDecibelThread mThread;
@@ -70,17 +74,11 @@ public class RecordButton extends RelativeLayout {
         mImgDelete = (ImageView) findViewById(R.id.recordview_delete);
         mImgListen = (ImageView) findViewById(R.id.recordview_listen);
         mImgPlay = (ImageView) findViewById(R.id.recordview_start);
+        bottomFlag = findViewById(R.id.recordview_text);
+        topFlag = findViewById(R.id.recordview_layout);
+        mTvRecordTime = (TextView) findViewById(R.id.recordview_text_time);
+        mImgVolume = (ImageView) findViewById(R.id.recordview_img_volume);
         initPlayButtonEvent();
-    }
-
-    // 调用该方法设置录音文件存储点
-    private void initSavePath() {
-        mAudioFile = RecordButtonUtil.AUDOI_DIR;
-        File file = new File(mAudioFile);
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-        mAudioFile += File.separator + System.currentTimeMillis() + ".amr";
     }
 
     @Override
@@ -90,29 +88,42 @@ public class RecordButton extends RelativeLayout {
         }
         switch (event.getAction()) {
         case MotionEvent.ACTION_DOWN:
-            initlization();
+            initBorderLine();
+            initRecorder();
+            bottomFlag.setVisibility(View.GONE);
+            mTvRecordTime.setText("0\"");
+            topFlag.setVisibility(View.VISIBLE);
+            break;
+        case MotionEvent.ACTION_MOVE:
+            if (event.getY() < 0) {
+                viewToInit();
+                break;
+            }
+            if (event.getX() > mRightButtonX) {
+                mIsCancel = true;
+                scaleView(mImgDelete, 1.5f);
+            } else if (event.getX() < mLeftButtonX) {
+                scaleView(mImgListen, 1.5f);
+            } else {
+                mIsCancel = false;
+                viewToInit();
+            }
             break;
         case MotionEvent.ACTION_UP:
-            scaleView(mImgDelete, 1f);
-            scaleView(mImgListen, 1f);
             if (mIsCancel && event.getY() < -50) {
+                cancelRecord();
+            } else if (event.getX() < mLeftButtonX) {// 试听
+                playRecord();
+                finishRecord();
+            } else if (event.getX() > mRightButtonX) {// 删除
                 cancelRecord();
             } else {
                 finishRecord();
             }
+            viewToInit();
+            bottomFlag.setVisibility(View.VISIBLE);
+            topFlag.setVisibility(View.GONE);
             mIsCancel = false;
-            break;
-        case MotionEvent.ACTION_MOVE:
-            if (event.getX() > getDeleteButtonX()) {
-                mIsCancel = true;
-                scaleView(mImgDelete, 1.5f);
-            } else if (event.getX() < getListenButtonX()) {
-                scaleView(mImgListen, 1.5f);
-            } else {
-                mIsCancel = false;
-                scaleView(mImgDelete, 1f);
-                scaleView(mImgListen, 1f);
-            }
             break;
         }
         return true;
@@ -133,14 +144,20 @@ public class RecordButton extends RelativeLayout {
         });
     }
 
-    private int getDeleteButtonX() {
+    /**
+     * 需要等控件显示了以后才能调用
+     */
+    private void initBorderLine() {
+        int[] xy = new int[2];
+        mImgListen.getLocationInWindow(xy);
+        mLeftButtonX = xy[0] + mImgListen.getWidth();
         mImgDelete.getLocationInWindow(xy);
-        return xy[0];
+        mRightButtonX = xy[0];
     }
 
-    private int getListenButtonX() {
-        mImgListen.getLocationInWindow(xy);
-        return xy[0] + mImgListen.getWidth();
+    private void viewToInit() {
+        scaleView(mImgDelete, 1f);
+        scaleView(mImgListen, 1f);
     }
 
     @SuppressLint("NewApi")
@@ -151,13 +168,73 @@ public class RecordButton extends RelativeLayout {
         }
     }
 
+    private void changeVolume(int volume) {
+        switch (volume) {
+        case 0:
+        case 1:
+        case 2:
+            mImgVolume.setImageResource(R.drawable.audio0);
+            break;
+        case 3:
+            mImgVolume.setImageResource(R.drawable.audio1);
+            break;
+        case 4:
+            mImgVolume.setImageResource(R.drawable.audio2);
+            break;
+        case 5:
+            mImgVolume.setImageResource(R.drawable.audio3);
+            break;
+        }
+    }
+
+    public void playRecord() {
+        mAudioUtil.setOnPlayListener(new OnPlayListener() {
+            Dialog dialog = null;
+
+            @Override
+            public void stopPlay() {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+
+            @Override
+            public void starPlay() {
+                dialog = new RecordDialog(getContext());
+                dialog.setCancelable(false);
+                dialog.show();
+            }
+        });
+        mAudioUtil.startPlay();
+    }
+
     /****************************** ui method end ******************************/
+
+    /**
+     * 调用该方法设置录音文件存储点
+     */
+    private void initSavePath() {
+        mAudioFile = RecordButtonUtil.AUDOI_DIR;
+        File file = new File(mAudioFile);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        mAudioFile += File.separator + System.currentTimeMillis() + ".amr";
+    }
+
     /**
      * 初始化 dialog和录音器
      */
-    private void initlization() {
+    private void initRecorder() {
         mStartTime = System.currentTimeMillis();
         startRecording();
+    }
+
+    /**
+     * 获取当前已经录音的秒数
+     */
+    private int getRecordTime() {
+        return (int) ((System.currentTimeMillis() - mStartTime) / 1000);
     }
 
     /**
@@ -170,11 +247,14 @@ public class RecordButton extends RelativeLayout {
             AppContext.showToastShort(R.string.record_sound_short);
             File file = new File(mAudioFile);
             file.delete();
+            if (mFinishedListerer != null) {
+                mFinishedListerer.onCancleRecord();
+            }
             return;
-        }
-        if (mFinishedListerer != null) {
-            mFinishedListerer.onFinishedRecord(mAudioFile,
-                    (int) ((System.currentTimeMillis() - mStartTime) / 1000));
+        } else {
+            if (mFinishedListerer != null) {
+                mFinishedListerer.onFinishedRecord(mAudioFile, getRecordTime());
+            }
         }
     }
 
@@ -253,15 +333,6 @@ public class RecordButton extends RelativeLayout {
     }
 
     /**
-     * dialog中音量改变的回调方法
-     * 
-     * @param l
-     */
-    public void setOnVolumeChangeListener(OnVolumeChangeListener l) {
-        mVolumeListener = l;
-    }
-
-    /**
      * 播放结束监听器
      * 
      * @param l
@@ -287,28 +358,20 @@ public class RecordButton extends RelativeLayout {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                if (System.currentTimeMillis() - mStartTime >= MAX_INTERVAL_TIME) {
-                    // 如果超过最长录音时间
-                    mVolumeHandler.sendEmptyMessage(-1);
-                }
+
+                Message msg = mVolumeHandler.obtainMessage();
+                msg.what = HANDLE_FLAG;
+                msg.arg1 = getRecordTime();
                 if (mAudioUtil != null && running) {
                     // 如果用户仍在录音
-                    int volumn = mAudioUtil.getVolumn();
-                    if (volumn != 0)
-                        mVolumeHandler.sendEmptyMessage(volumn);
+                    msg.arg2 = mAudioUtil.getVolumn();
                 } else {
                     exit();
                 }
+                mVolumeHandler.sendMessage(msg);
             }
         }
     }
-
-    private final OnDismissListener onDismiss = new OnDismissListener() {
-        @Override
-        public void onDismiss(DialogInterface dialog) {
-            stopRecording();
-        }
-    };
 
     static class ShowVolumeHandler extends Handler {
         private final WeakReference<RecordButton> mOuterInstance;
@@ -320,21 +383,15 @@ public class RecordButton extends RelativeLayout {
         @Override
         public void handleMessage(Message msg) {
             RecordButton outerButton = mOuterInstance.get();
-            if (msg.what != -1) {
-                // 大于0时 表示当前录音的音量
-                if (outerButton.mVolumeListener != null) {
-                    outerButton.mVolumeListener.onVolumeChange(msg.what);
+            if (msg.what == HANDLE_FLAG) {
+                if (msg.arg1 > MAX_INTERVAL_TIME) {
+                    outerButton.finishRecord();
+                } else {
+                    outerButton.changeVolume(msg.arg2);
+                    outerButton.mTvRecordTime.setText(msg.arg1 + "\"");
                 }
-            } else {
-                // -1 时表示录音超时
-                outerButton.finishRecord();
             }
         }
-    }
-
-    /** 音量改变的监听器 */
-    public interface OnVolumeChangeListener {
-        void onVolumeChange(int volume);
     }
 
     public interface OnFinishedRecordListener {
