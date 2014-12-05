@@ -52,10 +52,11 @@
 
                 <ImageView
                     android:id="@+id/go_right"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
+                    android:clickable="true"
                     android:layout_marginLeft="@dimen/space_10"
                     android:layout_marginRight="@dimen/space_10"
                     android:src="@drawable/ic_item_goto_right_tip" />

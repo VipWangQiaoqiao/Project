@@ -9,6 +9,7 @@ import org.apache.http.Header;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+import com.google.zxing.WriterException;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -18,6 +19,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -36,7 +38,10 @@ import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.User;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.ui.MainActivity;
+import net.oschina.app.ui.dialog.CommonDialog;
+import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.QrCodeUtils;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -67,6 +72,7 @@ public class MyInformationFragment extends BaseFragment {
 //	@InjectView(R.id.tv_development_platform) TextView mTvDevelopmentPlatform;
 //	@InjectView(R.id.tv_academic_focus) TextView mTvAcademicFocus;
 	@InjectView(R.id.error_layout) EmptyLayout mErrorLayout;
+	@InjectView(R.id.go_right) ImageView mGoRightImg;
 	
 	private static BadgeView mMesCount;
 	
@@ -204,6 +210,12 @@ public class MyInformationFragment extends BaseFragment {
 		mMesCount.setBadgePosition(BadgeView.POSITION_CENTER);
 		mMesCount.setGravity(Gravity.CENTER);
 		mMesCount.setBackgroundResource(R.drawable.notification_bg);
+		mGoRightImg.setOnClickListener(this);
+		try {
+			mGoRightImg.setImageBitmap(QrCodeUtils.Create2DCode("https://my.oschina.net/javayou"));
+		} catch (WriterException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void fillUI() {
@@ -319,6 +331,9 @@ public class MyInformationFragment extends BaseFragment {
 		case R.id.iv_avatar:
 			UIHelper.showUserAvatar(getActivity(), AppContext.getInstance().getLoginUser().getPortrait());
 			break;
+		case R.id.go_right:
+			showMyQrCode();
+		 	break;
 		case R.id.ly_follower:
 			UIHelper.showFriends(getActivity(), AppContext.getInstance().getLoginUid(), 1);
 			break;
@@ -347,6 +362,21 @@ public class MyInformationFragment extends BaseFragment {
 		default:
 			break;
 		}
+	}
+	
+	private void showMyQrCode() {
+		
+		CommonDialog dialog = DialogHelper.getPinterestDialogCancelable(getActivity());
+		View view = LayoutInflater.from(getActivity()).inflate(
+				R.layout.dialog_my_qr_code, null);
+		ImageView qr_code = (ImageView) view.findViewById(R.id.iv_qr_code);
+		try {
+			qr_code.setImageBitmap(QrCodeUtils.Create2DCode(String.format("http://my.oschina.net/u/%s", AppContext.getInstance().getLoginUid())));
+		} catch (WriterException e) {
+			e.printStackTrace();
+		}
+		dialog.setContent(view);
+		dialog.show();
 	}
 	
 	private void setNoticeReaded() {

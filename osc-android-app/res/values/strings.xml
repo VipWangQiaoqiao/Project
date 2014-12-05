@@ -254,5 +254,7 @@
 	<string name="tip_load_image_faile">加载图片失败</string>
 	
 	<string name="down_state">正在下载：%s</string>
+	
+	<string name="qr_code_tip">扫一扫上面的二维码，加我为好友</string>
 
 </resources>
