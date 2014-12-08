@@ -38,6 +38,7 @@ import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.User;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.ui.MainActivity;
+import net.oschina.app.ui.MyQrodeDialog;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -365,17 +366,7 @@ public class MyInformationFragment extends BaseFragment {
 	}
 	
 	private void showMyQrCode() {
-		
-		CommonDialog dialog = DialogHelper.getPinterestDialogCancelable(getActivity());
-		View view = LayoutInflater.from(getActivity()).inflate(
-				R.layout.dialog_my_qr_code, null);
-		ImageView qr_code = (ImageView) view.findViewById(R.id.iv_qr_code);
-		try {
-			qr_code.setImageBitmap(QrCodeUtils.Create2DCode(String.format("http://my.oschina.net/u/%s", AppContext.getInstance().getLoginUid())));
-		} catch (WriterException e) {
-			e.printStackTrace();
-		}
-		dialog.setContent(view);
+		MyQrodeDialog dialog = new MyQrodeDialog(getActivity());
 		dialog.show();
 	}
 	

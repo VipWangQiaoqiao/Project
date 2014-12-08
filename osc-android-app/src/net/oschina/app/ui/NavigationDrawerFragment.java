@@ -8,6 +8,7 @@ import net.oschina.app.util.UIHelper;
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -131,7 +132,15 @@ public class NavigationDrawerFragment extends BaseFragment implements
 			break;
 		default:
 			break;
+			
 		}
+		mDrawerLayout.postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				mDrawerLayout.closeDrawers();
+			}
+		}, 800);
 	}
 
 	@Override
