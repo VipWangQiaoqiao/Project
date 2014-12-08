@@ -5,11 +5,11 @@ import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.util.UIHelper;
+import net.oschina.app.widget.ActionBarDrawerToggle;
+import net.oschina.app.widget.DrawerArrowDrawable;
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -51,6 +51,8 @@ public class NavigationDrawerFragment extends BaseFragment implements
 	 */
 	private ActionBarDrawerToggle mDrawerToggle;
 
+	private DrawerArrowDrawable drawerArrow;
+
 	private DrawerLayout mDrawerLayout;
 	private View mDrawerListView;
 	private View mFragmentContainerView;
@@ -87,7 +89,6 @@ public class NavigationDrawerFragment extends BaseFragment implements
 		}
 
 		selectItem(mCurrentSelectedPosition);
-
 	}
 
 	@Override
@@ -132,10 +133,10 @@ public class NavigationDrawerFragment extends BaseFragment implements
 			break;
 		default:
 			break;
-			
+
 		}
 		mDrawerLayout.postDelayed(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				mDrawerLayout.closeDrawers();
@@ -187,30 +188,25 @@ public class NavigationDrawerFragment extends BaseFragment implements
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
 
-		// ActionBarDrawerToggle ties together the the proper interactions
-		// between the navigation drawer and the action bar app icon.
-		mDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout,
-				R.drawable.ic_drawer, /* nav drawer image to replace 'Up' caret */
-				R.string.navigation_drawer_open,
-				R.string.navigation_drawer_close) {
+		drawerArrow = new DrawerArrowDrawable(getActivity()) {
 			@Override
-			public void onDrawerClosed(View drawerView) {
-				super.onDrawerClosed(drawerView);
-				if (!isAdded()) {
-					return;
-				}
+			public boolean isLayoutRtl() {
+				return false;
+			}
+		};
 
-				getActivity().supportInvalidateOptionsMenu();
+		mDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout,
+				drawerArrow, R.string.navigation_drawer_open,
+				R.string.navigation_drawer_close) {
+
+			public void onDrawerClosed(View view) {
+				super.onDrawerClosed(view);
+				getActivity().invalidateOptionsMenu();
 			}
 
-			@Override
 			public void onDrawerOpened(View drawerView) {
 				super.onDrawerOpened(drawerView);
-				if (!isAdded()) {
-					return;
-				}
-
-				getActivity().supportInvalidateOptionsMenu();
+				getActivity().invalidateOptionsMenu();
 			}
 		};
 
@@ -220,7 +216,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
 				mDrawerToggle.syncState();
 			}
 		});
-
+		
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 	}
 
