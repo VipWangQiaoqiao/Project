@@ -68,10 +68,6 @@ public class MyInformationFragment extends BaseFragment {
 	@InjectView(R.id.tv_following) TextView mTvFollowing;
 	@InjectView(R.id.tv_follower) TextView mTvFollower;
 	@InjectView(R.id.tv_mes) View mMesView;
-//	@InjectView(R.id.tv_join_time) TextView mTvJoinTime;
-//	@InjectView(R.id.tv_location) TextView mTvLocation;
-//	@InjectView(R.id.tv_development_platform) TextView mTvDevelopmentPlatform;
-//	@InjectView(R.id.tv_academic_focus) TextView mTvAcademicFocus;
 	@InjectView(R.id.error_layout) EmptyLayout mErrorLayout;
 	@InjectView(R.id.go_right) ImageView mGoRightImg;
 	
@@ -124,7 +120,7 @@ public class MyInformationFragment extends BaseFragment {
 		@Override
 		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
 				Throwable arg3) {
-			AppContext.showToast("网络异常，无法加载用户信息");
+			
 		}
 	};
 	
@@ -231,11 +227,7 @@ public class MyInformationFragment extends BaseFragment {
 		mTvFollowing.setText(String.valueOf(mInfo.getFollowerscount()));
 		mTvFollower.setText(String.valueOf(mInfo.getFanscount()));
 
-//		mTvJoinTime.setText(mInfo.getJointime());
-//		mTvLocation.setText(mInfo.getFrom());
 		mTvSign.setText(mInfo.getFrom());
-//		mTvDevelopmentPlatform.setText(mInfo.getDevplatform());
-//		mTvAcademicFocus.setText(mInfo.getExpertise());
 	}
 	
 	private void requestData(boolean refresh) {
