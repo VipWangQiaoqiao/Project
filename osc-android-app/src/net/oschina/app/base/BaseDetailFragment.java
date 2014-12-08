@@ -48,11 +48,8 @@ import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
 import com.umeng.socialize.controller.listener.SocializeListeners.UMAuthListener;
 import com.umeng.socialize.exception.SocializeException;
-import com.umeng.socialize.media.QZoneShareContent;
 import com.umeng.socialize.media.UMImage;
-import com.umeng.socialize.sso.QZoneSsoHandler;
 import com.umeng.socialize.sso.SinaSsoHandler;
-import com.umeng.socialize.sso.TencentWBSsoHandler;
 import com.umeng.socialize.sso.UMQQSsoHandler;
 import com.umeng.socialize.utils.OauthHelper;
 import com.umeng.socialize.weixin.controller.UMWXHandler;
@@ -393,25 +390,26 @@ public class BaseDetailFragment extends BaseFragment implements
 		dialog.setOnPlatformClickListener(new OnSharePlatformClick() {
 
 			@Override
-			public void onPlatformClick(SHARE_MEDIA media) {
-				switch (media) {
-				case QQ:
-					shareToQQ(media);
+			public void onPlatformClick(int id) {
+				
+				switch (id) {
+				case R.id.ly_share_weichat_circle:
+					shareToWeiChatCircle();
 					break;
-				case QZONE:
-					shareToQZone();
-					break;
-				case TENCENT:
-					shareToTencentWeibo();
-					break;
-				case SINA:
-					shareToSinaWeibo();
-					break;
-				case WEIXIN:
+				case R.id.ly_share_weichat:
 					shareToWeiChat();
 					break;
-				case WEIXIN_CIRCLE:
-					shareToWeiChatCircle();
+				case R.id.ly_share_sina_weibo:
+					shareToSinaWeibo();
+					break;
+				case R.id.ly_share_qq:
+					shareToQQ(SHARE_MEDIA.QQ);
+					break;
+				case R.id.ly_share_copy_link:
+					TDevice.copyTextToBoard(getShareUrl());
+					break;
+				case R.id.ly_share_more_option:
+					TDevice.showSystemShareOption(getActivity(), getShareTitle(), getShareUrl());
 					break;
 				default:
 					break;
@@ -489,57 +487,10 @@ public class BaseDetailFragment extends BaseFragment implements
 					});
 		}
 	}
-
-	private void shareToTencentWeibo() {
-		// 设置腾讯微博SSO handler
-		mController.getConfig().setSsoHandler(new TencentWBSsoHandler());
-		if (OauthHelper.isAuthenticated(getActivity(), SHARE_MEDIA.TENCENT)) {
-			shareContent(SHARE_MEDIA.TENCENT);
-		} else {
-			mController.doOauthVerify(getActivity(), SHARE_MEDIA.TENCENT,
-					new UMAuthListener() {
-
-						@Override
-						public void onStart(SHARE_MEDIA arg0) {
-						}
-
-						@Override
-						public void onError(SocializeException arg0,
-								SHARE_MEDIA arg1) {
-						}
-
-						@Override
-						public void onComplete(Bundle arg0, SHARE_MEDIA arg1) {
-							shareContent(SHARE_MEDIA.TENCENT);
-						}
-
-						@Override
-						public void onCancel(SHARE_MEDIA arg0) {
-						}
-					});
-		}
-	}
-
+	
 	private void shareContent(SHARE_MEDIA media) {
 		mController.setShareContent(getShareContent() + getShareUrl());
 		mController.directShare(getActivity(), media, null);
-	}
-
-	private void shareToQZone() {
-		QZoneSsoHandler qZoneSsoHandler = new QZoneSsoHandler(getActivity(),
-				Constants.QQ_APPID, Constants.QQ_APPKEY);
-		qZoneSsoHandler.addToSocialSDK();
-		QZoneShareContent qzone = new QZoneShareContent();
-		// 设置分享文字
-		qzone.setShareContent(getShareContent());
-		// 设置点击消息的跳转URL
-		qzone.setTargetUrl(getShareUrl());
-		// 设置分享内容的标题
-		qzone.setTitle(getShareTitle());
-		// 设置分享图片
-		qzone.setShareImage(getShareImg());
-		mController.setShareMedia(qzone);
-		mController.postShare(getActivity(), SHARE_MEDIA.QZONE, null);
 	}
 
 	protected void shareToQQ(SHARE_MEDIA media) {
@@ -706,19 +657,16 @@ public class BaseDetailFragment extends BaseFragment implements
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void initView(View view) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void initData() {
-		// TODO Auto-generated method stub
 
 	}
 }

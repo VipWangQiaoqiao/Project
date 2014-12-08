@@ -16,7 +16,7 @@ public class ShareDialog extends CommonDialog implements
 		android.view.View.OnClickListener {
 
 	public interface OnSharePlatformClick {
-		void onPlatformClick(SHARE_MEDIA media);
+		void onPlatformClick(int id);
 	}
 
 	private OnSharePlatformClick mListener;
@@ -31,8 +31,8 @@ public class ShareDialog extends CommonDialog implements
 		View shareView = getLayoutInflater().inflate(
 				R.layout.dialog_cotent_share, null);
 		shareView.findViewById(R.id.ly_share_qq).setOnClickListener(this);
-		shareView.findViewById(R.id.ly_share_qzone).setOnClickListener(this);
-		shareView.findViewById(R.id.ly_share_tencent_weibo).setOnClickListener(
+		shareView.findViewById(R.id.ly_share_copy_link).setOnClickListener(this);
+		shareView.findViewById(R.id.ly_share_more_option).setOnClickListener(
 				this);
 		shareView.findViewById(R.id.ly_share_sina_weibo).setOnClickListener(
 				this);
@@ -66,45 +66,8 @@ public class ShareDialog extends CommonDialog implements
 	@Override
 	public void onClick(View v) {
 		final int id = v.getId();
-		SHARE_MEDIA media = null;
-		switch (id) {
-		case R.id.ly_share_weichat_circle:
-			media = SHARE_MEDIA.WEIXIN_CIRCLE;
-			break;
-		case R.id.ly_share_weichat:
-			media = SHARE_MEDIA.WEIXIN;
-			break;
-		case R.id.ly_share_sina_weibo:
-			media = SHARE_MEDIA.SINA;
-			break;
-		case R.id.ly_share_qq:
-			media = SHARE_MEDIA.QQ;
-			break;
-		case R.id.ly_share_qzone:
-			media = SHARE_MEDIA.QQ;
-			break;
-		case R.id.ly_share_tencent_weibo:
-			media = SHARE_MEDIA.TENCENT;
-			break;
-		default:
-			break;
-		}
-		if (id == R.id.ly_share_qq) {
-			media = SHARE_MEDIA.QQ;
-		} else if (id == R.id.ly_share_qzone) {
-			media = SHARE_MEDIA.QZONE;
-		} else if (id == R.id.ly_share_tencent_weibo) {
-			media = SHARE_MEDIA.TENCENT;
-		} else if (id == R.id.ly_share_sina_weibo) {
-			media = SHARE_MEDIA.SINA;
-		} else if (id == R.id.ly_share_weichat) {
-			media = SHARE_MEDIA.WEIXIN;
-		} else if (id == R.id.ly_share_weichat_circle) {
-			media = SHARE_MEDIA.WEIXIN_CIRCLE;
-		}
-
-		if (mListener != null && media != null) {
-			mListener.onPlatformClick(media);
+		if (mListener != null) {
+			mListener.onPlatformClick(id);
 		}
 	}
 }
