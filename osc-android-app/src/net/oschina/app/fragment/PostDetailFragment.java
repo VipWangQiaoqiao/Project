@@ -23,8 +23,6 @@ import net.oschina.app.fragment.ToolbarFragment.ToolAction;
 import net.oschina.app.interf.EmojiFragmentControl;
 import net.oschina.app.interf.ToolbarEmojiVisiableControl;
 import net.oschina.app.interf.ToolbarFragmentControl;
-import net.oschina.app.service.PublicCommentTask;
-import net.oschina.app.service.ServerTaskUtils;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -162,8 +160,7 @@ public class PostDetailFragment extends BaseDetailFragment implements
 		mTvSource.setText(mPost.getAuthor());
 		mTvTime.setText(StringUtils.friendly_time(mPost.getPubDate()));
 		if (mToolBarFragment != null) {
-			mToolBarFragment.setCommentCount(mPost.getAnswerCount() + "/"
-					+ mPost.getViewCount());
+			mToolBarFragment.setCommentCount(mPost.getAnswerCount());
 		}
 		notifyFavorite(mPost.getFavorite() == 1);
 	}
