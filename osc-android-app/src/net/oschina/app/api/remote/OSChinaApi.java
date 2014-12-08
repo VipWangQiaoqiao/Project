@@ -533,4 +533,27 @@ public class OSChinaApi {
     public static void checkUpdate(AsyncHttpResponseHandler handler) {
         ApiHttpClient.get("MobileAppVersion.xml", handler);
     }
+    
+    /**
+     * 查找用户
+     * @param username
+     * @param handler
+     */
+    public static void findUser(String username, AsyncHttpResponseHandler handler) {
+    	RequestParams params = new RequestParams();
+        params.put("username", username);
+        ApiHttpClient.get("action/api/find_user", params, handler);
+    }
+    
+    /**
+     * 获取我的活动列表
+     * @param pageIndex
+     * @param handler
+     */
+    public static void getEventList(int pageIndex, AsyncHttpResponseHandler handler) {
+    	RequestParams params = new RequestParams();
+        params.put("pageIndex", pageIndex);
+        params.put("pageSize", AppContext.PAGE_SIZE);
+        ApiHttpClient.get("action/api/my_event_list", params, handler);
+    }
 }
