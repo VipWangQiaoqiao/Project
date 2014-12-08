@@ -4,10 +4,6 @@
     android:orientation="vertical"
     android:background="#e2e2e2" >
 	
-    <include 
-        android:id="@+id/menu_item_userinfo"
-        layout="@layout/fragment_navigation_drawer_header"
-        android:visibility="gone" />
     <net.oschina.app.widget.CustomerScrollView
         android:layout_width="match_parent"
         android:layout_height="0dip"

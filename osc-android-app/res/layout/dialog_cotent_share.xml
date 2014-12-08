@@ -73,7 +73,7 @@
 
             <TextView
                 style="@style/dialog_content_share_text"
-                android:drawableTop="@drawable/share_icon_more_option_selector"
+                android:drawableTop="@drawable/share_icon_tencentweibo_selector"
                 android:text="@string/platform_more_option" />
         </LinearLayout>
     </LinearLayout>
