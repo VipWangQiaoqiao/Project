@@ -13,6 +13,8 @@ import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.RecordButton;
 import net.oschina.app.widget.RecordButton.OnFinishedRecordListener;
+import net.oschina.app.widget.RecordButtonUtil.OnPlayListener;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
@@ -43,8 +46,13 @@ public class TweetRecordFragment extends BaseFragment {
     TextView mTvTime;
     @InjectView(R.id.tweet_edit_record)
     EditText mEtSpeech;
+    @InjectView(R.id.tweet_img_volume)
+    ImageView mImgVolume;
+
+    private AnimationDrawable drawable; // 录音播放时的动画背景
 
     private String strSpeech = "#语音动弹#";
+    private int currentRecordTime = 0;
 
     @Override
     public void onClick(View v) {
@@ -66,6 +74,7 @@ public class TweetRecordFragment extends BaseFragment {
 
             @Override
             public void onFinishedRecord(String audioPath, int recordTime) {
+                currentRecordTime = recordTime;
                 mLayout.setVisibility(View.VISIBLE);
                 if (recordTime < 10) {
                     mTvTime.setText("0" + recordTime + "\"");
@@ -77,6 +86,21 @@ public class TweetRecordFragment extends BaseFragment {
             @Override
             public void onCancleRecord() {
                 mLayout.setVisibility(View.GONE);
+            }
+        });
+
+        drawable = (AnimationDrawable) mImgVolume.getBackground();
+        mBtnRecort.getAudioUtil().setOnPlayListener(new OnPlayListener() {
+            @Override
+            public void stopPlay() {
+                drawable.stop();
+                mImgVolume.setBackgroundDrawable(drawable.getFrame(0));
+            }
+
+            @Override
+            public void starPlay() {
+                mImgVolume.setBackgroundDrawable(drawable);
+                drawable.start();
             }
         });
     }
@@ -139,7 +163,10 @@ public class TweetRecordFragment extends BaseFragment {
             return;
         }
 
-        strSpeech = mEtSpeech.getText().toString();
+        String body = mEtSpeech.getText().toString();
+        if (!StringUtils.isEmpty(body)) {
+            strSpeech = body;
+        }
         Tweet tweet = new Tweet();
         tweet.setAuthorid(AppContext.getInstance().getLoginUid());
         tweet.setAudioPath(audioPath);

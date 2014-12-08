@@ -6,6 +6,7 @@ import net.oschina.app.fragment.ActiveFragment;
 import net.oschina.app.fragment.CommentFrament;
 import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.MyInformationFragment;
+import net.oschina.app.fragment.NoteBookFragment;
 import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.fragment.SettingsFragment;
 import net.oschina.app.fragment.SettingsNotificationFragment;
@@ -14,9 +15,9 @@ import net.oschina.app.fragment.TweetPubFragment;
 import net.oschina.app.fragment.TweetRecordFragment;
 import net.oschina.app.fragment.UserBlogFragment;
 import net.oschina.app.fragment.UserCenterFragment;
-import net.oschina.app.viewpagefragment.NoticeViewPagerFragment;
 import net.oschina.app.viewpagefragment.BlogViewPagerFragment;
 import net.oschina.app.viewpagefragment.FriendsViewPagerFragment;
+import net.oschina.app.viewpagefragment.NoticeViewPagerFragment;
 import net.oschina.app.viewpagefragment.OpensourceSoftwareFragment;
 import net.oschina.app.viewpagefragment.QuestViewPagerFragment;
 import net.oschina.app.viewpagefragment.UserFavoriteViewPageFragment;
@@ -68,7 +69,9 @@ public enum SimpleBackPage {
 
     BLOG(18, R.string.actionbar_title_blog_area, BlogViewPagerFragment.class),
 
-    RECORD(19, R.string.actionbar_title_tweetpub, TweetRecordFragment.class);
+    RECORD(19, R.string.actionbar_title_tweetpub, TweetRecordFragment.class),
+
+    NOTE(20, R.string.actionbar_title_note, NoteBookFragment.class);
 
     private int title;
     private Class<?> clz;

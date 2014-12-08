@@ -20,11 +20,10 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 
 public class QuickOptionDialog extends Dialog implements
-		android.view.View.OnClickListener {
+        android.view.View.OnClickListener {
 
-	private ImageView mClose;
-	
-	
+    private ImageView mClose;
+
     public interface OnQuickOptionformClick {
         void onQuickOptionClick(int id);
     }
@@ -36,35 +35,35 @@ public class QuickOptionDialog extends Dialog implements
         super(context, flag, listener);
     }
 
-	@SuppressLint("InflateParams")
-	private QuickOptionDialog(Context context, int defStyle) {
-		super(context, defStyle);
-		View contentView = getLayoutInflater().inflate(
-				R.layout.quick_option_dialog, null);
-		contentView.findViewById(R.id.ly_quick_option_text).setOnClickListener(
-				this);
-		contentView.findViewById(R.id.ly_quick_option_album)
-				.setOnClickListener(this);
-		contentView.findViewById(R.id.ly_quick_option_photo)
-				.setOnClickListener(this);
-		contentView.findViewById(R.id.ly_quick_option_voice)
-				.setOnClickListener(this);
-		contentView.findViewById(R.id.ly_quick_option_scan).setOnClickListener(
-				this);
-		contentView.findViewById(R.id.ly_quick_option_note).setOnClickListener(
-				this);
-		mClose = (ImageView) contentView.findViewById(R.id.iv_close);
+    @SuppressLint("InflateParams")
+    private QuickOptionDialog(Context context, int defStyle) {
+        super(context, defStyle);
+        View contentView = getLayoutInflater().inflate(
+                R.layout.quick_option_dialog, null);
+        contentView.findViewById(R.id.ly_quick_option_text).setOnClickListener(
+                this);
+        contentView.findViewById(R.id.ly_quick_option_album)
+                .setOnClickListener(this);
+        contentView.findViewById(R.id.ly_quick_option_photo)
+                .setOnClickListener(this);
+        contentView.findViewById(R.id.ly_quick_option_voice)
+                .setOnClickListener(this);
+        contentView.findViewById(R.id.ly_quick_option_scan).setOnClickListener(
+                this);
+        contentView.findViewById(R.id.ly_quick_option_note).setOnClickListener(
+                this);
+        mClose = (ImageView) contentView.findViewById(R.id.iv_close);
 
-		
-		Animation operatingAnim = AnimationUtils.loadAnimation(getContext(), R.anim.quick_option_close);  
-		LinearInterpolator lin = new LinearInterpolator();  
-		operatingAnim.setInterpolator(lin);
-		
-		mClose.startAnimation(operatingAnim);
-		
-		mClose.setOnClickListener(this);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		contentView.setOnTouchListener(new View.OnTouchListener() {
+        Animation operatingAnim = AnimationUtils.loadAnimation(getContext(),
+                R.anim.quick_option_close);
+        LinearInterpolator lin = new LinearInterpolator();
+        operatingAnim.setInterpolator(lin);
+
+        mClose.startAnimation(operatingAnim);
+
+        mClose.setOnClickListener(this);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        contentView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 QuickOptionDialog.this.dismiss();
@@ -75,11 +74,10 @@ public class QuickOptionDialog extends Dialog implements
 
     }
 
+    public QuickOptionDialog(Context context) {
+        this(context, R.style.quick_option_dialog);
+    }
 
-	public QuickOptionDialog(Context context) {
-		this(context, R.style.quick_option_dialog);
-	}
-	
     @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle bundle) {
@@ -120,6 +118,7 @@ public class QuickOptionDialog extends Dialog implements
             UIHelper.showScanActivity(getContext());
             break;
         case R.id.ly_quick_option_note:
+            UIHelper.showSimpleBack(getContext(), SimpleBackPage.NOTE);
             break;
         default:
             break;

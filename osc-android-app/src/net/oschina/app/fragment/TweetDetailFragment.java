@@ -190,6 +190,8 @@ public class TweetDetailFragment extends BaseListFragment implements
         final RecordButtonUtil util = new RecordButtonUtil();
         final ImageView playerButton = (ImageView) header
                 .findViewById(R.id.tweet_img_record);
+        final TextView playerTime = (TextView) header
+                .findViewById(R.id.tweet_tv_record);
         final AnimationDrawable drawable = (AnimationDrawable) playerButton
                 .getBackground();
         mRlRecordSound = (RelativeLayout) header
@@ -197,7 +199,7 @@ public class TweetDetailFragment extends BaseListFragment implements
         mRlRecordSound.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                util.startPlay(mTweet.getAttach());
+                util.startPlay(mTweet.getAttach(), playerTime);
             }
         });
 

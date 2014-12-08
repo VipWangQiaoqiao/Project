@@ -46,12 +46,13 @@
             android:contentDescription="@null" />
 
         <ImageView
+            android:id="@+id/tweet_img_volume"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="3dp"
             android:contentDescription="@null"
-            android:src="@drawable/icon_record" />
+            android:background="@anim/audio_animations"/>
 
         <TextView
             android:id="@+id/tweet_time_record"

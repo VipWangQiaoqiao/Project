@@ -8,7 +8,6 @@ import net.oschina.app.R;
 import net.oschina.app.util.KJAnimations;
 import net.oschina.app.widget.RecordButtonUtil.OnPlayListener;
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
@@ -45,6 +44,7 @@ public class RecordButton extends RelativeLayout {
     private long mStartTime;// 录音起始时间
     private String mAudioFile = null;
     private boolean mIsCancel = false; // 手指抬起或划出时判断是否主动取消录音
+    private boolean mTouchInPlayButton = false; // 手指是按在录音按钮上而不是空白区域
     private OnFinishedRecordListener mFinishedListerer;
 
     private RecordButtonUtil mAudioUtil;
@@ -86,13 +86,12 @@ public class RecordButton extends RelativeLayout {
         if (mAudioFile == null) {
             return false;
         }
+        if (!mTouchInPlayButton) {
+            return false;
+        }
         switch (event.getAction()) {
         case MotionEvent.ACTION_DOWN:
             initBorderLine();
-            initRecorder();
-            bottomFlag.setVisibility(View.GONE);
-            mTvRecordTime.setText("0\"");
-            topFlag.setVisibility(View.VISIBLE);
             break;
         case MotionEvent.ACTION_MOVE:
             if (event.getY() < 0) {
@@ -124,6 +123,7 @@ public class RecordButton extends RelativeLayout {
             bottomFlag.setVisibility(View.VISIBLE);
             topFlag.setVisibility(View.GONE);
             mIsCancel = false;
+            mTouchInPlayButton = false;
             break;
         }
         return true;
@@ -132,12 +132,31 @@ public class RecordButton extends RelativeLayout {
     /****************************** ui method ******************************/
 
     private void initPlayButtonEvent() {
+        mImgDelete.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancelRecord();
+            }
+        });
+
+        mImgListen.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playRecord();
+            }
+        });
+
         mImgPlay.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     mImgPlay.startAnimation(KJAnimations.clickAnimation(0.8f,
                             400));
+                    initRecorder();
+                    bottomFlag.setVisibility(View.GONE);
+                    mTvRecordTime.setText("0\"");
+                    topFlag.setVisibility(View.VISIBLE);
+                    mTouchInPlayButton = true;
                 }
                 return false;
             }
@@ -185,27 +204,6 @@ public class RecordButton extends RelativeLayout {
             mImgVolume.setImageResource(R.drawable.audio3);
             break;
         }
-    }
-
-    public void playRecord() {
-        mAudioUtil.setOnPlayListener(new OnPlayListener() {
-            Dialog dialog = null;
-
-            @Override
-            public void stopPlay() {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-            }
-
-            @Override
-            public void starPlay() {
-                dialog = new RecordDialog(getContext());
-                dialog.setCancelable(false);
-                dialog.show();
-            }
-        });
-        mAudioUtil.startPlay();
     }
 
     /****************************** ui method end ******************************/
@@ -289,6 +287,14 @@ public class RecordButton extends RelativeLayout {
     }
 
     /******************************* public method ****************************************/
+
+    public RecordButtonUtil getAudioUtil() {
+        return mAudioUtil;
+    }
+
+    public void playRecord() {
+        mAudioUtil.startPlay();
+    }
 
     /**
      * 获取最近一次录音的文件路径

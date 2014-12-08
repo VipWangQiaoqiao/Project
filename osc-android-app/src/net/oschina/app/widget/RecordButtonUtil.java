@@ -8,6 +8,7 @@ import net.oschina.app.util.StringUtils;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Environment;
+import android.widget.TextView;
 
 /**
  * {@link #RecordButton}需要的工具类
@@ -102,13 +103,17 @@ public class RecordButtonUtil {
         }
     }
 
-    public void startPlay(String audioPath) {
+    public void startPlay(String audioPath, TextView timeView) {
         if (!mIsPlaying) {
             if (!StringUtils.isEmpty(audioPath)) {
                 mPlayer = new MediaPlayer();
                 try {
                     mPlayer.setDataSource(audioPath);
                     mPlayer.prepare();
+                    if (timeView != null) {
+                        int len = (mPlayer.getDuration() + 500) / 1000;
+                        timeView.setText(len + "s");
+                    }
                     mPlayer.start();
                     if (listener != null) {
                         listener.starPlay();
@@ -138,7 +143,7 @@ public class RecordButtonUtil {
      * 开始播放
      */
     public void startPlay() {
-        startPlay(mAudioPath);
+        startPlay(mAudioPath, null);
     }
 
     public interface OnPlayListener {
