@@ -30,7 +30,7 @@
                 android:text="@string/platform_weichat" />
         </LinearLayout>
 
-        <LinearLayout 
+        <LinearLayout
             android:id="@+id/ly_share_sina_weibo"
             style="@style/dialog_content_share_ll" >
 
@@ -58,23 +58,23 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/ly_share_qzone"
+            android:id="@+id/ly_share_copy_link"
             style="@style/dialog_content_share_ll" >
 
             <TextView
                 style="@style/dialog_content_share_text"
-                android:drawableTop="@drawable/share_icon_qqzone_selector"
-                android:text="@string/platform_qzone" />
+                android:drawableTop="@drawable/share_icon_copy_link_selector"
+                android:text="@string/platform_copy_link" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/ly_share_tencent_weibo"
+            android:id="@+id/ly_share_more_option"
             style="@style/dialog_content_share_ll" >
 
             <TextView
                 style="@style/dialog_content_share_text"
                 android:drawableTop="@drawable/share_icon_tencentweibo_selector"
-                android:text="@string/platform_tencent_weibo" />
+                android:text="@string/platform_more_option" />
         </LinearLayout>
     </LinearLayout>
 

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+    
+    <LinearLayout 
+        android:id="@+id/ll_user_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:gravity="center_vertical"
+        android:background="@drawable/list_item_background"
+        android:clickable="true"
+        android:orientation="horizontal"
+        android:visibility="gone" >
+        
+        <net.oschina.app.widget.AvatarView 
+            android:id="@+id/iv_acatar"
+            style="@style/user_face_image"/>
+        
+        <TextView 
+            android:id="@+id/tv_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/space_10"
+            android:text="火蚁"
+            android:textColor="@color/main_black"/>
+        
+    </LinearLayout>
+    
+    <include 
+		android:id="@+id/loading"        
+        layout="@layout/list_cell_footer"
+        android:visibility="gone"/>
+
+</LinearLayout>

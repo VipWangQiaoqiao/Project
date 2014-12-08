@@ -70,8 +70,8 @@
     
     <string name="share_to">分享到</string>
     <string name="platform_qq">QQ</string>
-	<string name="platform_qzone">QQ空间</string>
-	<string name="platform_tencent_weibo">腾讯微博</string>
+	<string name="platform_copy_link">复制链接</string>
+	<string name="platform_more_option">更多</string>
 	<string name="platform_sina">微博</string>
 	<string name="platform_weichat">微信</string>
 	<string name="platform_weichat_circle">朋友圈</string>
@@ -143,7 +143,10 @@
 	<string name="actionbar_title_setting_notification">新消息提醒</string>
 	<string name="actionbar_title_about_osc">关于开源中国</string>
 	<string name="actionbar_title_note">便签</string>
-	
+	<string name="actionbar_title_search">搜索</string>
+	<string name="actionbar_title_find_user">找人</string>
+	<string name="actionbar_title_event">活动</string>
+	<string name="actionbar_title_same_city">同城</string>
 	
 	<!-- 博客区 -->	
 	<string name="actionbar_title_blog_area">博客区</string>
@@ -255,5 +258,7 @@
 	<string name="tip_load_image_faile">加载图片失败</string>
 	
 	<string name="down_state">正在下载：%s</string>
+	
+	<string name="qr_code_tip">扫一扫上面的二维码，加我为好友</string>
 
 </resources>

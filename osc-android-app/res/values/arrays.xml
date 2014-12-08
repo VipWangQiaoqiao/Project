@@ -50,6 +50,14 @@
         <item>资讯</item>
     </string-array>
     
+    <string-array name="search">
+        <item>软件</item>
+        <item>问答</item>
+        <item>博客</item>
+        <item>新闻</item>
+        <item>代码</item>
+    </string-array>
+    
     <string-array name="friends_viewpage_arrays">
         <item>关注</item>
         <item>粉丝</item>

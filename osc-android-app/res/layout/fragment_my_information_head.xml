@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/net.oschina.app"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/rl_user_center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/list_item_background"
+        android:clickable="true"
+        android:padding="@dimen/space_8" >
+
+        <net.oschina.app.widget.AvatarView
+            android:id="@+id/iv_avatar"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginRight="@dimen/space_10"
+            android:contentDescription="@null"
+            android:src="@drawable/widget_dface_loading"
+            app:border_color="@color/lightblue"
+            app:border_width="3dip" />
+
+        <ImageView
+            android:id="@+id/iv_gender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/iv_avatar"
+            android:layout_alignRight="@id/iv_avatar"
+            android:layout_margin="2dip"
+            android:background="@drawable/userinfo_icon_male" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_5"
+            android:layout_toRightOf="@id/iv_avatar"
+            android:textColor="@color/main_black"
+            android:textSize="@dimen/text_size_18" />
+
+        <ImageView
+            android:id="@+id/go_right"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/space_10"
+            android:layout_marginRight="@dimen/space_10"
+            android:clickable="true" />
+
+        <TextView
+            android:id="@+id/tv_sigin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@id/go_right"
+            android:layout_below="@id/tv_name"
+            android:layout_marginRight="@dimen/space_15"
+            android:layout_marginTop="@dimen/space_5"
+            android:layout_toRightOf="@id/iv_avatar"
+            android:contentDescription="@null"
+            android:ellipsize="marquee"
+            android:singleLine="true" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1px"
+        android:background="@color/list_divider_color" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:id="@+id/ly_score"
+            style="@style/uset_information_ll" >
+
+            <TextView
+                android:id="@+id/tv_score"
+                style="@style/user_formation_text" />
+
+            <TextView
+                style="@style/user_formation_info"
+                android:text="@string/user_score" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ly_favorite"
+            style="@style/uset_information_ll" >
+
+            <TextView
+                android:id="@+id/tv_favorite"
+                style="@style/user_formation_text" />
+
+            <TextView
+                style="@style/user_formation_info"
+                android:text="@string/favorite" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ly_following"
+            style="@style/uset_information_ll" >
+
+            <TextView
+                android:id="@+id/tv_following"
+                style="@style/user_formation_text" />
+
+            <TextView
+                style="@style/user_formation_info"
+                android:text="@string/following" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ly_follower"
+            style="@style/uset_information_ll" >
+
+            <TextView
+                android:id="@+id/tv_follower"
+                style="@style/user_formation_text" />
+
+            <TextView
+                style="@style/user_formation_info"
+                android:text="@string/follower" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -9,6 +9,7 @@ import org.apache.http.Header;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+import com.google.zxing.WriterException;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -18,6 +19,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -36,7 +38,11 @@ import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.User;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.ui.MainActivity;
+import net.oschina.app.ui.MyQrodeDialog;
+import net.oschina.app.ui.dialog.CommonDialog;
+import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.QrCodeUtils;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -62,11 +68,8 @@ public class MyInformationFragment extends BaseFragment {
 	@InjectView(R.id.tv_following) TextView mTvFollowing;
 	@InjectView(R.id.tv_follower) TextView mTvFollower;
 	@InjectView(R.id.tv_mes) View mMesView;
-//	@InjectView(R.id.tv_join_time) TextView mTvJoinTime;
-//	@InjectView(R.id.tv_location) TextView mTvLocation;
-//	@InjectView(R.id.tv_development_platform) TextView mTvDevelopmentPlatform;
-//	@InjectView(R.id.tv_academic_focus) TextView mTvAcademicFocus;
 	@InjectView(R.id.error_layout) EmptyLayout mErrorLayout;
+	@InjectView(R.id.go_right) ImageView mGoRightImg;
 	
 	private static BadgeView mMesCount;
 	
@@ -117,7 +120,7 @@ public class MyInformationFragment extends BaseFragment {
 		@Override
 		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
 				Throwable arg3) {
-			AppContext.showToast("网络异常，无法加载用户信息");
+			
 		}
 	};
 	
@@ -204,6 +207,12 @@ public class MyInformationFragment extends BaseFragment {
 		mMesCount.setBadgePosition(BadgeView.POSITION_CENTER);
 		mMesCount.setGravity(Gravity.CENTER);
 		mMesCount.setBackgroundResource(R.drawable.notification_bg);
+		mGoRightImg.setOnClickListener(this);
+		try {
+			mGoRightImg.setImageBitmap(QrCodeUtils.Create2DCode("https://my.oschina.net/javayou"));
+		} catch (WriterException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void fillUI() {
@@ -218,11 +227,7 @@ public class MyInformationFragment extends BaseFragment {
 		mTvFollowing.setText(String.valueOf(mInfo.getFollowerscount()));
 		mTvFollower.setText(String.valueOf(mInfo.getFanscount()));
 
-//		mTvJoinTime.setText(mInfo.getJointime());
-//		mTvLocation.setText(mInfo.getFrom());
 		mTvSign.setText(mInfo.getFrom());
-//		mTvDevelopmentPlatform.setText(mInfo.getDevplatform());
-//		mTvAcademicFocus.setText(mInfo.getExpertise());
 	}
 	
 	private void requestData(boolean refresh) {
@@ -319,6 +324,9 @@ public class MyInformationFragment extends BaseFragment {
 		case R.id.iv_avatar:
 			UIHelper.showUserAvatar(getActivity(), AppContext.getInstance().getLoginUser().getPortrait());
 			break;
+		case R.id.go_right:
+			showMyQrCode();
+		 	break;
 		case R.id.ly_follower:
 			UIHelper.showFriends(getActivity(), AppContext.getInstance().getLoginUid(), 1);
 			break;
@@ -347,6 +355,11 @@ public class MyInformationFragment extends BaseFragment {
 		default:
 			break;
 		}
+	}
+	
+	private void showMyQrCode() {
+		MyQrodeDialog dialog = new MyQrodeDialog(getActivity());
+		dialog.show();
 	}
 	
 	private void setNoticeReaded() {

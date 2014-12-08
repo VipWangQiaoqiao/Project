@@ -4,6 +4,8 @@ import net.oschina.app.R;
 import net.oschina.app.fragment.AboutOSCFragment;
 import net.oschina.app.fragment.ActiveFragment;
 import net.oschina.app.fragment.CommentFrament;
+import net.oschina.app.fragment.EventFragment;
+import net.oschina.app.fragment.FindUserFragment;
 import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.fragment.NoteBookFragment;
@@ -20,6 +22,7 @@ import net.oschina.app.viewpagefragment.FriendsViewPagerFragment;
 import net.oschina.app.viewpagefragment.NoticeViewPagerFragment;
 import net.oschina.app.viewpagefragment.OpensourceSoftwareFragment;
 import net.oschina.app.viewpagefragment.QuestViewPagerFragment;
+import net.oschina.app.viewpagefragment.SearchViewPageFragment;
 import net.oschina.app.viewpagefragment.UserFavoriteViewPageFragment;
 
 public enum SimpleBackPage {
@@ -71,7 +74,15 @@ public enum SimpleBackPage {
 
     RECORD(19, R.string.actionbar_title_tweetpub, TweetRecordFragment.class),
 
-    NOTE(20, R.string.actionbar_title_note, NoteBookFragment.class);
+    SEARCH(20, R.string.actionbar_title_search, SearchViewPageFragment.class),
+
+    FIND_USER(21, R.string.actionbar_title_find_user, FindUserFragment.class),
+
+    EVENT_LIST(22, R.string.actionbar_title_event, EventFragment.class),
+
+    SAME_CITY(23, R.string.actionbar_title_same_city, EventFragment.class),
+
+    NOTE(24, R.string.actionbar_title_note, NoteBookFragment.class);
 
     private int title;
     private Class<?> clz;

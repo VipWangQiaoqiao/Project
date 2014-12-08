@@ -385,5 +385,30 @@
         <item name="android:textSize">@dimen/text_size_12</item>
     </style>
     <!-- quick option style end -->
+    
+    <style name="uset_information_ll">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/list_item_background</item>
+        <item name="android:clickable">true</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:padding">@dimen/space_4</item>
+    </style>
+    <style name="user_formation_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/space_2</item>
+        <item name="android:textColor">@color/main_black</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+    </style>
+    <style name="user_formation_info">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/space_2</item>
+        <item name="android:textColor">@color/main_gray</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+    </style>
 
 </resources>

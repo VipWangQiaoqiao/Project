@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
+import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.util.UIHelper;
 
 /** 
@@ -49,10 +50,13 @@ public class ExploreFragment extends BaseFragment {
 			UIHelper.showMyActive(getActivity());
 			break;
 		case R.id.rl_find_osc:
+			UIHelper.showSimpleBack(getActivity(), SimpleBackPage.FIND_USER);
 			break;
 		case R.id.rl_city:
+			UIHelper.showSimpleBack(getActivity(), SimpleBackPage.SAME_CITY);
 			break;
 		case R.id.rl_activities:
+			UIHelper.showSimpleBack(getActivity(), SimpleBackPage.EVENT_LIST);
 			break;
 		case R.id.rl_scan:
 			UIHelper.showScanActivity(getActivity());

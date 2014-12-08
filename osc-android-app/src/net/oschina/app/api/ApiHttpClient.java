@@ -5,7 +5,6 @@ import java.util.Locale;
 import org.apache.http.client.params.ClientPNames;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.util.TLog;
 import android.content.Context;
 import android.util.Log;
 

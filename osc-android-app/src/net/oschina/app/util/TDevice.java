@@ -648,6 +648,22 @@ public class TDevice {
 	}
 	
 	/**
+	 * 调用系统安装了的应用分享
+	 * 
+	 * @param context
+	 * @param title
+	 * @param url
+	 */
+	public static void showSystemShareOption(Activity context, final String title,
+			final String url) {
+		Intent intent = new Intent(Intent.ACTION_SEND);
+		intent.setType("text/plain");
+		intent.putExtra(Intent.EXTRA_SUBJECT, "分享：" + title);
+		intent.putExtra(Intent.EXTRA_TEXT, title + " " + url);
+		context.startActivity(Intent.createChooser(intent, "选择分享"));
+	}
+	
+	/**
 	 * 获取当前网络类型
 	 * @return 0：没有网络   1：WIFI网络   2：WAP网络    3：NET网络
 	 */
