@@ -29,8 +29,9 @@ public class EmojiSpan extends DynamicDrawableSpan {
 				if (emoji != null) {
 					mDrawable = AppContext.getInstance().getResources()
 							.getDrawable(emoji.getResId());
-					int size = mSize;
-					mDrawable.setBounds(0, 0, 40, 40);
+					// 获取drawable不同分辨率下的大小
+					int size = mDrawable.getIntrinsicWidth() - 20;
+					mDrawable.setBounds(0, 0, size, size);
 				}
 			} catch (Exception e) {
 				// swallow

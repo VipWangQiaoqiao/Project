@@ -16,6 +16,9 @@ public class EmojiEditText extends EditText {
 			.compile("\\[(([\u4e00-\u9fa5]+)|([a-zA-z]+))\\]");
 	public static final Pattern EMOJI_PATTERN = Pattern
 			.compile("\\[[(0-9)]+\\]");
+	
+	// 暂时不起作用，EmojiSpan的方法getDrawable内部已经获取了
+	public static final int emojiSize = 55;
 
 	public EmojiEditText(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -42,7 +45,7 @@ public class EmojiEditText extends EditText {
 			String value = m.group();
 			Emoji emoji = EmojiHelper.getEmojiByNumber(value);
 			if (emoji != null) {
-				sp.setSpan(new EmojiSpan(value, 30, 1), s, e,
+				sp.setSpan(new EmojiSpan(value, emojiSize, 1), s, e,
 						Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 			}
 		}
@@ -54,7 +57,7 @@ public class EmojiEditText extends EditText {
 			String value = m2.group();
 			Emoji emoji = EmojiHelper.getEmoji(value);
 			if (emoji != null) {
-				sp.setSpan(new EmojiSpan(value, 30, 0), s, e,
+				sp.setSpan(new EmojiSpan(value, emojiSize, 0), s, e,
 						Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 			}
 		}
