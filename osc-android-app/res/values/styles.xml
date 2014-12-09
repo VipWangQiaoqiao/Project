@@ -26,6 +26,7 @@
     <style name="ActionBarBaseStyle" parent="@style/Widget.AppCompat.Light.ActionBar">
         <item name="background">@color/actionbar_background</item>
         <item name="titleTextStyle">@style/TitleStyle</item>
+        <item name="android:icon">@android:color/transparent</item>
         <item name="subtitleTextStyle">@style/SubTitle</item>
     </style>
 

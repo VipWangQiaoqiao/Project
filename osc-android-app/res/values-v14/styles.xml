@@ -4,6 +4,7 @@
     <style name="ActionBarBaseStyle" parent="@style/Widget.AppCompat.Light.ActionBar">
         <item name="android:background">@color/actionbar_background</item>
         <item name="android:titleTextStyle">@style/TitleStyle</item>
+        <item name="android:icon">@android:color/transparent</item>
         <item name="android:subtitleTextStyle">@style/SubTitle</item>
     </style>
 
