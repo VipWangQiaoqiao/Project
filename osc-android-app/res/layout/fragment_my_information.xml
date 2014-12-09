@@ -12,14 +12,17 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <include 
-                android:id="@+id/user_information"
-                layout="@layout/fragment_my_information_head"/>
+            <include
+                layout="@layout/fragment_my_information_head" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/rl_message"
-                style="@style/option_item_rl"
-                android:layout_marginTop="20dp" >
+                style="@style/option_item_rl" >
+
+                <ImageView
+                    style="@style/option_item_img"
+                    android:background="@drawable/icon_my_message"
+                    android:contentDescription="@null" />
 
                 <TextView
                     style="@style/option_item_text"
@@ -29,52 +32,66 @@
                     android:id="@+id/tv_mes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/space_10" />
-            </RelativeLayout>
+                    android:layout_marginRight="@dimen/space_10"
+                    android:gravity="right" />
+            </LinearLayout>
 
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="1px"
                 android:background="@color/list_divider_color" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/rl_team"
                 style="@style/option_item_rl" >
+
+                <ImageView
+                    style="@style/option_item_img"
+                    android:background="@drawable/icon_my_team"
+                    android:contentDescription="@null" />
 
                 <TextView
                     style="@style/option_item_text"
                     android:text="@string/team" />
-            </RelativeLayout>
+            </LinearLayout>
 
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="1px"
                 android:background="@color/list_divider_color" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/rl_blog"
                 style="@style/option_item_rl" >
+
+                <ImageView
+                    style="@style/option_item_img"
+                    android:background="@drawable/icon_my_blog"
+                    android:contentDescription="@null" />
 
                 <TextView
                     style="@style/option_item_text"
                     android:text="@string/blog" />
-            </RelativeLayout>
+            </LinearLayout>
 
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="1px"
                 android:background="@color/list_divider_color" />
 
-            <RelativeLayout 
+            <LinearLayout
                 android:id="@+id/rl_note"
                 style="@style/option_item_rl" >
+
+                <ImageView
+                    style="@style/option_item_img"
+                    android:background="@drawable/icon_my_note"
+                    android:contentDescription="@null" />
 
                 <TextView
                     style="@style/option_item_text"
                     android:text="@string/note" />
-            </RelativeLayout>
+            </LinearLayout>
 
             <View
                 android:layout_width="wrap_content"

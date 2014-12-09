@@ -44,9 +44,9 @@
     <string name="error_view_network_error_click_to_refresh">没有可用的网络</string>
     <string name="tip_network_error">没有可用的网络</string>
     
-    <string name="unlogin">未登录</string>
+    <string name="unlogin">未登录，请先登录</string>
     <string name="unlogin_tip">您还未登录\r\n点击屏幕登录</string>
-    <string name="main_menu_login_tips">点击登录</string>
+    <string name="my_information_unlogin_tips">未登录</string>
     
     <string name="hint_username">输入账号/邮箱</string>
     <string name="hint_password">密码</string>

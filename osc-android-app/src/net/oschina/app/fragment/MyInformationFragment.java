@@ -62,14 +62,15 @@ public class MyInformationFragment extends BaseFragment {
 	@InjectView(R.id.iv_avatar)AvatarView mIvAvatar;
 	@InjectView(R.id.iv_gender)ImageView mIvGender;
 	@InjectView(R.id.tv_name) TextView mTvName;
-	@InjectView(R.id.tv_sigin) TextView mTvSign;
 	@InjectView(R.id.tv_score) TextView mTvScore;
 	@InjectView(R.id.tv_favorite) TextView mTvFavorite;
 	@InjectView(R.id.tv_following) TextView mTvFollowing;
 	@InjectView(R.id.tv_follower) TextView mTvFollower;
 	@InjectView(R.id.tv_mes) View mMesView;
 	@InjectView(R.id.error_layout) EmptyLayout mErrorLayout;
-	@InjectView(R.id.go_right) ImageView mGoRightImg;
+	@InjectView(R.id.iv_qr_code) ImageView mQrCode;
+	@InjectView(R.id.ll_user_container) View mUserContainer;
+	@InjectView(R.id.rl_user_unlogin) View mUserUnLogin;
 	
 	private static BadgeView mMesCount;
 	
@@ -86,8 +87,7 @@ public class MyInformationFragment extends BaseFragment {
 			if (action.equals(Constants.INTENT_ACTION_LOGOUT)) {
 				if (mErrorLayout != null) {
 					mIsWatingLogin = true;
-					mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-					mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
+					steupUser();
 				}
 			} else if (action.equals(Constants.INTENT_ACTION_USER_CHANGE)) {
 				requestData(true);
@@ -105,7 +105,6 @@ public class MyInformationFragment extends BaseFragment {
 				mInfo = XmlUtils.toBean(MyInformation.class, new ByteArrayInputStream(arg2)).getUser();
 				if (mInfo != null) {
 					fillUI();
-					mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
 					new SaveCacheTask(getActivity(), mInfo, getCacheKey())
 							.execute();
 				} else {
@@ -123,6 +122,16 @@ public class MyInformationFragment extends BaseFragment {
 			
 		}
 	};
+	
+	private void steupUser() {
+		if (mIsWatingLogin) {
+			mUserContainer.setVisibility(View.GONE);
+			mUserUnLogin.setVisibility(View.VISIBLE);
+		} else {
+			mUserContainer.setVisibility(View.VISIBLE);
+			mUserUnLogin.setVisibility(View.GONE);
+		}
+	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -193,7 +202,6 @@ public class MyInformationFragment extends BaseFragment {
 				}
 			}
 		});
-		view.findViewById(R.id.rl_user_center).setOnClickListener(this);
 		view.findViewById(R.id.ly_favorite).setOnClickListener(this);
 		view.findViewById(R.id.ly_following).setOnClickListener(this);
 		view.findViewById(R.id.ly_follower).setOnClickListener(this);
@@ -201,18 +209,19 @@ public class MyInformationFragment extends BaseFragment {
 		view.findViewById(R.id.rl_team).setOnClickListener(this);
 		view.findViewById(R.id.rl_blog).setOnClickListener(this);
 		view.findViewById(R.id.rl_note).setOnClickListener(this);
+		mUserUnLogin.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				UIHelper.showLoginActivity(getActivity());
+			}
+		});
 		
 		mMesCount = new BadgeView(getActivity(), mMesView);
 		mMesCount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
 		mMesCount.setBadgePosition(BadgeView.POSITION_CENTER);
 		mMesCount.setGravity(Gravity.CENTER);
 		mMesCount.setBackgroundResource(R.drawable.notification_bg);
-		mGoRightImg.setOnClickListener(this);
-		try {
-			mGoRightImg.setImageBitmap(QrCodeUtils.Create2DCode("https://my.oschina.net/javayou"));
-		} catch (WriterException e) {
-			e.printStackTrace();
-		}
+		mQrCode.setOnClickListener(this);
 	}
 
 	private void fillUI() {
@@ -227,7 +236,6 @@ public class MyInformationFragment extends BaseFragment {
 		mTvFollowing.setText(String.valueOf(mInfo.getFollowerscount()));
 		mTvFollower.setText(String.valueOf(mInfo.getFanscount()));
 
-		mTvSign.setText(mInfo.getFrom());
 	}
 	
 	private void requestData(boolean refresh) {
@@ -243,9 +251,9 @@ public class MyInformationFragment extends BaseFragment {
 			}
 		} else {
 			mIsWatingLogin = true;
-			mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-			mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
 		}
+		
+		steupUser();
 	}
 
 	private void readCacheData(String key) {
@@ -319,19 +327,24 @@ public class MyInformationFragment extends BaseFragment {
 	}
 	@Override
 	public void onClick(View v) {
+		if (mIsWatingLogin) {
+			AppContext.showToast(R.string.unlogin);
+			UIHelper.showLoginActivity(getActivity());
+			return;
+		}
 		final int id = v.getId();
 		switch (id) {
 		case R.id.iv_avatar:
 			UIHelper.showUserAvatar(getActivity(), AppContext.getInstance().getLoginUser().getPortrait());
 			break;
-		case R.id.go_right:
+		case R.id.iv_qr_code:
 			showMyQrCode();
 		 	break;
-		case R.id.ly_follower:
-			UIHelper.showFriends(getActivity(), AppContext.getInstance().getLoginUid(), 1);
-			break;
 		case R.id.ly_following:
 			UIHelper.showFriends(getActivity(), AppContext.getInstance().getLoginUid(), 0);
+			break;
+		case R.id.ly_follower:
+			UIHelper.showFriends(getActivity(), AppContext.getInstance().getLoginUid(), 1);
 			break;
 		case R.id.ly_favorite:
 			UIHelper.showUserFavorite(getActivity(),AppContext.getInstance().getLoginUid());
