@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal" 
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants" 
+    android:paddingLeft="6dip"
+    android:paddingRight="6dip"
+    android:paddingTop="10dip"
+    android:background="@drawable/list_item_background"
+    android:paddingBottom="9dip">   
+
+    <net.oschina.app.widget.AvatarView
+        style="@style/user_face_image"
+    	android:id="@+id/iv_post_face"/>
+
+	<LinearLayout
+    	android:layout_width="fill_parent" 
+    	android:layout_height="wrap_content"
+    	android:orientation="vertical"
+    	android:layout_marginLeft="6dip"> 
+
+	    <TextView android:id="@+id/tv_post_title" 
+	        android:layout_width="fill_parent" 
+	     	android:layout_height="wrap_content"
+	     	android:includeFontPadding="false"
+     		android:textSize="@dimen/text_size_15"
+	     	android:maxLines="2"
+	    	android:ellipsize="end"/> 	
+	
+	    <LinearLayout 
+	    	android:orientation="horizontal" 
+	        android:layout_width="fill_parent"  
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="8dip">   
+	        	       	
+	       	<TextView android:id="@+id/tv_post_author"  
+	    		android:layout_width="wrap_content" 
+	           	android:layout_height="wrap_content" 
+	           	android:textSize="@dimen/text_size_10"/>
+	       	
+	       	<TextView android:id="@+id/tv_post_date"  
+	    		android:layout_width="wrap_content" 
+	           	android:layout_height="wrap_content"
+	           	android:layout_marginLeft="@dimen/space_10" 
+	           	android:textSize="@dimen/text_size_10"/>
+	            
+	       	<TextView android:id="@+id/tv_post_count"  
+	    		android:layout_width="wrap_content" 
+	           	android:layout_height="wrap_content" 
+	           	android:layout_marginLeft="@dimen/space_10"
+	           	android:textSize="@dimen/text_size_10"/>
+	            
+       	</LinearLayout>
+       	
+    </LinearLayout>
+
+</LinearLayout> 

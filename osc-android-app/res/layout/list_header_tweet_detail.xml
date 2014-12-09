@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/space_8" >
+
+        <net.oschina.app.widget.AvatarView
+            android:id="@+id/iv_avatar"
+            style="@style/user_face_image"
+            android:layout_marginRight="@dimen/space_8"
+            android:contentDescription="@null" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/iv_avatar"
+            android:textColor="@color/main_purple"
+            android:textSize="@dimen/text_size_16" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_name"
+            android:layout_toRightOf="@id/iv_avatar"
+            android:textColor="@color/main_gray"
+            android:textSize="@dimen/text_size_12" />
+
+        <TextView
+            android:id="@+id/tv_from"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/tv_name"
+            android:drawableLeft="@drawable/platform"
+            android:drawablePadding="@dimen/space_5"
+            android:textColor="@color/main_gray"
+            android:textSize="@dimen/text_size_12" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/list_divider_color" />
+
+    <WebView
+        android:id="@+id/webview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/list_item_background_normal" />
+
+    <RelativeLayout
+        android:id="@+id/tweet_bg_record"
+        android:layout_width="95dp"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/icon_record_layout"
+        android:padding="3dp" >
+
+        <ImageView
+            android:id="@+id/tweet_img_record"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:background="@anim/audio_animations"
+            android:contentDescription="@null" />
+
+        <TextView
+            android:id="@+id/tweet_tv_record"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="3dp"
+            android:textColor="@android:color/white"
+            android:textSize="15sp" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_10"
+        android:background="@color/list_divider_color" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/list_item_background_normal" >
+
+        <TextView
+            android:id="@+id/tv_comment_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/space_8"
+            android:text="@string/comment_count"
+            android:textColor="@color/main_gray"
+            android:textSize="@dimen/text_size_14" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="bottom"
+            android:orientation="horizontal" >
+
+            <View
+                android:layout_width="20dp"
+                android:layout_height="1px"
+                android:background="@color/list_divider_color" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/comment_line_triangle" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1px"
+                android:layout_weight="1"
+                android:background="@color/list_divider_color" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>
