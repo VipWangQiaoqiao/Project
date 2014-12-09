@@ -6,7 +6,9 @@ import net.oschina.app.R;
 import net.oschina.app.adapter.NotebookAdapter;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.NotebookData;
+import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.db.NoteDatabase;
+import net.oschina.app.util.UIHelper;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,6 +23,12 @@ import android.widget.ListView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+/**
+ * 便签列表界面
+ * 
+ * @author kymjs(kymjs123@gmail.com)
+ * 
+ */
 public class NoteBookFragment extends BaseFragment implements
         OnItemClickListener, OnItemLongClickListener {
 
@@ -48,7 +56,7 @@ public class NoteBookFragment extends BaseFragment implements
         noteDb = new NoteDatabase(getActivity());
         datas = noteDb.query();
         if (datas != null) {
-            adapter = new NotebookAdapter(datas, getActivity());
+            adapter = new NotebookAdapter(getActivity(), datas);
         }
     }
 
@@ -75,13 +83,17 @@ public class NoteBookFragment extends BaseFragment implements
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view,
             int position, long id) {
+        noteDb.delete(datas.get(position).getId());
+        refurbish();
         return false;
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
             long id) {
-
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(NoteEditFragment.NOTE_KEY, datas.get(position));
+        UIHelper.showSimpleBack(getActivity(), SimpleBackPage.NOTE_EDIT, bundle);
     }
 
     @Override
@@ -99,6 +111,7 @@ public class NoteBookFragment extends BaseFragment implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.public_menu_send:
+            UIHelper.showSimpleBack(getActivity(), SimpleBackPage.NOTE_EDIT);
             break;
         }
         return true;

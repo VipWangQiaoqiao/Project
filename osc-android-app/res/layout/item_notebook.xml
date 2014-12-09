@@ -20,14 +20,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:text="艰苦奋斗将开放数据库" />
+            android:text="标题" />
 
         <TextView
             android:id="@+id/item_note_tv_howlong"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/item_note_tv_title"
-            android:text="艰苦奋斗将开放数据库" />
+            android:text="14天前" />
 
         <TextView
             android:id="@+id/item_note_tv_time"
@@ -36,7 +36,7 @@
             android:layout_alignBottom="@+id/item_note_tv_howlong"
             android:layout_alignTop="@+id/item_note_tv_howlong"
             android:layout_toRightOf="@+id/item_note_tv_howlong"
-            android:text="艰苦奋斗将开放数据库" />
+            android:text="18:30" />
 
         <TextView
             android:id="@+id/item_note_tv_date"
@@ -45,7 +45,7 @@
             android:layout_alignBottom="@+id/item_note_tv_howlong"
             android:layout_alignTop="@+id/item_note_tv_howlong"
             android:layout_toRightOf="@+id/item_note_tv_time"
-            android:text="艰苦奋斗将开放数据库" />
+            android:text="12月1日" />
     </RelativeLayout>
 
 </LinearLayout>

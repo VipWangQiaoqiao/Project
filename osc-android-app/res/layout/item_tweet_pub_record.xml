@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/tweet_edit_record"
         android:layout_below="@+id/tweet_edit_record"
-        android:text="你还可以输入50字"
+        android:text="你还可以输入160字"
         android:textColor="#999999" />
 
     <RelativeLayout

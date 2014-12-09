@@ -1,29 +1,30 @@
 package net.oschina.app.bean;
 
-public class NotebookData {
-    private String title;
-    private String content;
-    private String date;
+import java.io.Serializable;
+
+public class NotebookData implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    private int id;
     private String time;
-    
-    public NotebookData() {
-        super();
+    private String date;
+    private String content;
+    private boolean star;
+
+    public int getId() {
+        return id;
     }
 
-    public NotebookData(String title, String content, String date, String time) {
-        super();
-        this.title = title;
-        this.content = content;
-        this.date = date;
-        this.time = time;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public boolean isStar() {
+        return star;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setStar(boolean star) {
+        this.star = star;
     }
 
     public String getContent() {
@@ -49,5 +50,5 @@ public class NotebookData {
     public void setTime(String time) {
         this.time = time;
     }
-    
+
 }

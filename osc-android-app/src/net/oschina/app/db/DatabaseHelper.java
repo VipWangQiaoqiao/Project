@@ -12,9 +12,10 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static String TABLE_NAME = " Notebook ";
-    public static final String CREATE_TABLE = "create table " + TABLE_NAME
+    public static String CREATE_TABLE = "create table "
+            + TABLE_NAME
             + " (_id integer primary key autoincrement,"
-            + " date varchar(10), time varchar(10), title text, content text)";
+            + " time varchar(10), date varchar(10), content text, star integer)";
 
     public DatabaseHelper(Context context) {
         super(context, TABLE_NAME, null, 1);
@@ -26,8 +27,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-    }
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
 
 }

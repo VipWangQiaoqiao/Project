@@ -9,6 +9,7 @@ import net.oschina.app.fragment.FindUserFragment;
 import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.fragment.NoteBookFragment;
+import net.oschina.app.fragment.NoteEditFragment;
 import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.fragment.SettingsFragment;
 import net.oschina.app.fragment.SettingsNotificationFragment;
@@ -82,7 +83,9 @@ public enum SimpleBackPage {
 
     SAME_CITY(23, R.string.actionbar_title_same_city, EventFragment.class),
 
-    NOTE(24, R.string.actionbar_title_note, NoteBookFragment.class);
+    NOTE(24, R.string.actionbar_title_note, NoteBookFragment.class),
+
+    NOTE_EDIT(25, R.string.actionbar_title_note, NoteEditFragment.class);
 
     private int title;
     private Class<?> clz;

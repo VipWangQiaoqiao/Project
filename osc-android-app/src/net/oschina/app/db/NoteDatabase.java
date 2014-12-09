@@ -15,10 +15,18 @@ public class NoteDatabase {
         dbHelper = new DatabaseHelper(context);
     }
 
-    public void add(String date, String time, String title, String content) {
+    public void save(NotebookData data) {
         SQLiteDatabase sqlite = dbHelper.getWritableDatabase();
-        String sql = ("insert into" + DatabaseHelper.TABLE_NAME + "(date, time, title, content) values(?, ?, ?, ?)");
-        sqlite.execSQL(sql, new String[] { date, time, title, content });
+        if (data.getId() != 0) {
+            String sql = ("update " + DatabaseHelper.TABLE_NAME + " set time=?, date=?, content=?, star=? where _id=?");
+            sqlite.execSQL(sql, new String[] { data.getTime(), data.getDate(),
+                    data.getContent(), data.isStar() ? "1" : "0",
+                    data.getId() + "" });
+        } else {
+            String sql = ("insert into" + DatabaseHelper.TABLE_NAME + "(time, date, content, star) values(?, ?, ?, ?)");
+            sqlite.execSQL(sql, new String[] { data.getTime(), data.getDate(),
+                    data.getContent(), data.isStar() ? "1" : "0" });
+        }
         dbHelper.close();
     }
 
@@ -33,10 +41,11 @@ public class NoteDatabase {
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor
                     .moveToNext()) {
                 NotebookData notebookData = new NotebookData();
-                notebookData.setDate(cursor.getString(1)); // 第0列为主键
-                notebookData.setTime(cursor.getString(2));
-                notebookData.setTitle(cursor.getString(3));
-                notebookData.setContent(cursor.getString(4));
+                notebookData.setId(cursor.getInt(0));
+                notebookData.setTime(cursor.getString(1));
+                notebookData.setDate(cursor.getString(2));
+                notebookData.setContent(cursor.getString(3));
+                notebookData.setStar(0 != cursor.getInt(4)); // C判断法：非0即真
                 data.add(notebookData);
             }
             if (!cursor.isClosed()) {
@@ -48,10 +57,10 @@ public class NoteDatabase {
         return data;
     }
 
-    public void delete(String titleFlag) {
+    public void delete(int id) {
         SQLiteDatabase sqlite = dbHelper.getWritableDatabase();
-        String sql = ("delete from" + DatabaseHelper.TABLE_NAME + "where title=?");
-        sqlite.execSQL(sql, new String[] { titleFlag });
+        String sql = ("delete from" + DatabaseHelper.TABLE_NAME + "where _id=?");
+        sqlite.execSQL(sql, new Integer[] { id });
         dbHelper.close();
     }
 }

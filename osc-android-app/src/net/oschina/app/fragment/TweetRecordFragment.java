@@ -16,6 +16,10 @@ import net.oschina.app.widget.RecordButton.OnFinishedRecordListener;
 import net.oschina.app.widget.RecordButtonUtil.OnPlayListener;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.Selection;
+import android.text.Spannable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,10 +48,14 @@ public class TweetRecordFragment extends BaseFragment {
     RecordButton mBtnRecort;
     @InjectView(R.id.tweet_time_record)
     TextView mTvTime;
+    @InjectView(R.id.tweet_text_record)
+    TextView mTvInputLen;
     @InjectView(R.id.tweet_edit_record)
     EditText mEtSpeech;
     @InjectView(R.id.tweet_img_volume)
     ImageView mImgVolume;
+
+    public static int MAX_LEN = 160;
 
     private AnimationDrawable drawable; // 录音播放时的动画背景
 
@@ -71,7 +79,6 @@ public class TweetRecordFragment extends BaseFragment {
         mLayout.setOnClickListener(this);
 
         mBtnRecort.setOnFinishedRecordListener(new OnFinishedRecordListener() {
-
             @Override
             public void onFinishedRecord(String audioPath, int recordTime) {
                 currentRecordTime = recordTime;
@@ -101,6 +108,33 @@ public class TweetRecordFragment extends BaseFragment {
             public void starPlay() {
                 mImgVolume.setBackgroundDrawable(drawable);
                 drawable.start();
+            }
+        });
+
+        mEtSpeech.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                    int count) {
+                if (s.length() > MAX_LEN) {
+                    mTvInputLen.setText("已达到最大长度");
+                } else {
+                    mTvInputLen.setText("您还可以输入" + (MAX_LEN - s.length())
+                            + "个字符");
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                    int after) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() > MAX_LEN) {
+                    mEtSpeech.setText(s.subSequence(0, MAX_LEN));
+                    CharSequence text = mEtSpeech.getText();
+                    if (text instanceof Spannable)
+                        Selection.setSelection((Spannable) text, MAX_LEN);
+                }
             }
         });
     }

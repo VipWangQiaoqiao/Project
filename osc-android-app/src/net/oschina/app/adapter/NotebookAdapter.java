@@ -2,6 +2,7 @@ package net.oschina.app.adapter;
 
 import java.util.ArrayList;
 
+import net.oschina.app.R;
 import net.oschina.app.bean.NotebookData;
 import android.content.Context;
 import android.view.View;
@@ -10,28 +11,28 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 public class NotebookAdapter extends BaseAdapter {
-    private ArrayList<NotebookData> data;
+    private ArrayList<NotebookData> datas;
     private final Context context;
 
-    public NotebookAdapter(ArrayList<NotebookData> data, Context context) {
+    public NotebookAdapter(Context context, ArrayList<NotebookData> datas) {
         super();
-        this.data = data;
+        this.datas = datas;
         this.context = context;
     }
 
     public void refurbishData(ArrayList<NotebookData> data) {
-        this.data = data;
+        this.datas = data;
         notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return data.size();
+        return datas.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return data.get(position);
+        return datas.get(position);
     }
 
     @Override
@@ -43,30 +44,29 @@ public class NotebookAdapter extends BaseAdapter {
         TextView title;
         TextView date;
         TextView time;
+        TextView how_long;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        // ViewHolder viewHolder;
-        // if (convertView == null) {
-        // viewHolder = new ViewHolder();
-        // convertView = LayoutInflater.from(context).inflate(
-        // R.layout.notebook_item, null);
-        // viewHolder.title = (TextView) convertView
-        // .findViewById(R.id.text_note_title);
-        // viewHolder.date = (TextView) convertView
-        // .findViewById(R.id.text_note_date);
-        // viewHolder.time = (TextView) convertView
-        // .findViewById(R.id.text_note_time);
-        // convertView.setTag(viewHolder);
-        // } else {
-        // viewHolder = (ViewHolder) convertView.getTag();
-        // }
-        //
-        // viewHolder.title.setText(data.get(position).getTitle());
-        // viewHolder.date.setText(data.get(position).getDate());
-        // viewHolder.time.setText(data.get(position).getTime());
-        return convertView;
-    }
+    public View getView(int position, View v, ViewGroup parent) {
+        ViewHolder holder;
+        if (v == null) {
+            holder = new ViewHolder();
+            v = View.inflate(context, R.layout.item_notebook, null);
+            holder.title = (TextView) v.findViewById(R.id.item_note_tv_title);
+            holder.date = (TextView) v.findViewById(R.id.item_note_tv_date);
+            holder.time = (TextView) v.findViewById(R.id.item_note_tv_time);
+            holder.how_long = (TextView) v
+                    .findViewById(R.id.item_note_tv_howlong);
+            v.setTag(holder);
+        } else {
+            holder = (ViewHolder) v.getTag();
+        }
 
+        holder.time.setText(datas.get(position).getTime());
+        holder.title.setText(datas.get(position).getContent());
+        holder.date.setText(datas.get(position).getDate());
+        holder.how_long.setText("13" + "天前");
+        return v;
+    }
 }
