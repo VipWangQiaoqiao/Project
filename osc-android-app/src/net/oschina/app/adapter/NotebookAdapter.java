@@ -10,6 +10,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+/**
+ * 便签列表适配器
+ * 
+ * @author kymjs
+ * 
+ */
 public class NotebookAdapter extends BaseAdapter {
     private ArrayList<NotebookData> datas;
     private final Context context;
@@ -45,6 +51,7 @@ public class NotebookAdapter extends BaseAdapter {
         TextView date;
         TextView time;
         TextView how_long;
+        View root;
     }
 
     @Override
@@ -53,6 +60,7 @@ public class NotebookAdapter extends BaseAdapter {
         if (v == null) {
             holder = new ViewHolder();
             v = View.inflate(context, R.layout.item_notebook, null);
+            holder.root = v.findViewById(R.id.item_root_layout);
             holder.title = (TextView) v.findViewById(R.id.item_note_tv_title);
             holder.date = (TextView) v.findViewById(R.id.item_note_tv_date);
             holder.time = (TextView) v.findViewById(R.id.item_note_tv_time);
@@ -63,6 +71,7 @@ public class NotebookAdapter extends BaseAdapter {
             holder = (ViewHolder) v.getTag();
         }
 
+        holder.root.setBackgroundColor(datas.get(position).getColor());
         holder.time.setText(datas.get(position).getTime());
         holder.title.setText(datas.get(position).getContent());
         holder.date.setText(datas.get(position).getDate());

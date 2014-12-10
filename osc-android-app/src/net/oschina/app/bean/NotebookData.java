@@ -10,6 +10,7 @@ public class NotebookData implements Serializable {
     private String date;
     private String content;
     private boolean star;
+    private int color;
 
     public int getId() {
         return id;
@@ -49,6 +50,14 @@ public class NotebookData implements Serializable {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 
 }
