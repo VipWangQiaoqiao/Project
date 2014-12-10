@@ -13,6 +13,7 @@ import net.oschina.app.api.OperationResponseHandler;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
+import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
@@ -85,24 +86,19 @@ public class TweetsFragment extends BaseListFragment implements OnItemLongClickL
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		IntentFilter filter = new IntentFilter(
-				NavigationDrawerFragment.INTENT_ACTION_USER_CHANGE);
-		getActivity().registerReceiver(mReceiver, filter);
-	}
-
-	@Override
-	public void onResume() {
-		if (mIsWatingLogin) {
-			mCurrentPage = 0;
-			mState = STATE_REFRESH;
-			requestData(false);
+		if (mCatalog > 0) {
+			IntentFilter filter = new IntentFilter(
+					Constants.INTENT_ACTION_USER_CHANGE);
+			filter.addAction(Constants.INTENT_ACTION_LOGOUT);
+			getActivity().registerReceiver(mReceiver, filter);
 		}
-		super.onResume();
 	}
 
 	@Override
 	public void onDestroy() {
-		getActivity().unregisterReceiver(mReceiver);
+		if (mCatalog > 0) {
+			getActivity().unregisterReceiver(mReceiver);
+		}
 		super.onDestroy();
 	}
 
@@ -113,7 +109,7 @@ public class TweetsFragment extends BaseListFragment implements OnItemLongClickL
 
 	@Override
 	protected String getCacheKeyPrefix() {
-		return CACHE_KEY_PREFIX + tweetType;
+		return CACHE_KEY_PREFIX + mCatalog;
 	}
 
 	@Override
@@ -129,7 +125,7 @@ public class TweetsFragment extends BaseListFragment implements OnItemLongClickL
 
 	@Override
 	protected void sendRequestData() {
-		OSChinaApi.getTweetList(tweetType, mCurrentPage, mHandler);
+		OSChinaApi.getTweetList(mCatalog, mCurrentPage, mHandler);
 	}
 
 	@Override
@@ -149,7 +145,12 @@ public class TweetsFragment extends BaseListFragment implements OnItemLongClickL
 	};
 
 	private void setupContent() {
-		if (mErrorLayout != null) {
+		if (AppContext.getInstance().isLogin()) {
+			mIsWatingLogin = false;
+			mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+			requestData(true);
+		} else {
+			mCatalog = TweetsList.CATALOG_ME;
 			mIsWatingLogin = true;
 			mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
 			mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
@@ -158,9 +159,9 @@ public class TweetsFragment extends BaseListFragment implements OnItemLongClickL
 
 	@Override
 	protected void requestData(boolean refresh) {
-		if (tweetType > 0) {
+		if (mCatalog > 0) {
 			if (AppContext.getInstance().isLogin()) {
-				tweetType = AppContext.getInstance().getLoginUid();
+				mCatalog = AppContext.getInstance().getLoginUid();
 				mIsWatingLogin = false;
 				super.requestData(refresh);
 			} else {
@@ -182,10 +183,16 @@ public class TweetsFragment extends BaseListFragment implements OnItemLongClickL
 
 			@Override
 			public void onClick(View v) {
-				if (AppContext.getInstance().isLogin()) {
-					requestData(true);
+				if (mCatalog > 0) {
+					if (AppContext.getInstance().isLogin()) {
+						mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+						requestData(true);
+					} else {
+						UIHelper.showLoginActivity(getActivity());
+					}
 				} else {
-					UIHelper.showLoginActivity(getActivity());
+					mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+					requestData(true);
 				}
 			}
 		});

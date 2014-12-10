@@ -5,6 +5,7 @@ import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.BaseViewPagerFragment;
 import net.oschina.app.bean.Tweet;
+import net.oschina.app.bean.TweetsList;
 import net.oschina.app.fragment.TweetsFragment;
 import net.oschina.app.interf.OnTabReselectListener;
 import android.os.Bundle;
@@ -23,9 +24,9 @@ public class TweetsViewPagerFragment extends BaseViewPagerFragment implements On
 	protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
 
 		String[] title = getResources().getStringArray(R.array.tweets_viewpage_arrays);
-		adapter.addTab(title[0], "new_tweets", TweetsFragment.class, getBundle(Tweet.CATALOG_LATEST));
-		adapter.addTab(title[1], "hot_tweets", TweetsFragment.class, getBundle(Tweet.CATALOG_HOT));
-		adapter.addTab(title[2], "my_tweets", TweetsFragment.class, getBundle(Tweet.CATALOG_MINE));
+		adapter.addTab(title[0], "new_tweets", TweetsFragment.class, getBundle(TweetsList.CATALOG_LATEST));
+		adapter.addTab(title[1], "hot_tweets", TweetsFragment.class, getBundle(TweetsList.CATALOG_HOT));
+		adapter.addTab(title[2], "my_tweets", TweetsFragment.class, getBundle(TweetsList.CATALOG_ME));
 	}
 	
 	private Bundle getBundle(int catalog) {

@@ -34,8 +34,6 @@ import butterknife.InjectView;
 public class NavigationDrawerFragment extends BaseFragment implements
 		OnClickListener {
 
-	public static final String INTENT_ACTION_USER_CHANGE = "INTENT_ACTION_USER_CHANGE";
-
 	/**
 	 * Remember the position of the selected item.
 	 */

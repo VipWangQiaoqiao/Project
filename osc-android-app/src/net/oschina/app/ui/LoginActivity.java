@@ -24,6 +24,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseActivity;
+import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.LoginUserBean;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.User;
@@ -189,7 +190,7 @@ public class LoginActivity extends BaseActivity {
 		Intent data = new Intent();
 		data.putExtra(BUNDLE_KEY_REQUEST_CODE, requestCode);
 		setResult(RESULT_OK, data);
-		this.sendBroadcast(new Intent(NavigationDrawerFragment.INTENT_ACTION_USER_CHANGE));
+		this.sendBroadcast(new Intent(Constants.INTENT_ACTION_USER_CHANGE));
 		finish();
 	}
 	

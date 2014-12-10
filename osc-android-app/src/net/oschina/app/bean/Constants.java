@@ -10,7 +10,7 @@ package net.oschina.app.bean;
 
 public class Constants {
 
-    public static final String INTENT_ACTION_USER_CHANGE = "INTENT_ACTION_USER_CHANGE";
+    public static final String INTENT_ACTION_USER_CHANGE = "net.oschina.action.USER_CHANGE";
 
     public static final String INTENT_ACTION_COMMENT_CHANGED = "net.oschina.action.COMMENT_CHANGED";
 

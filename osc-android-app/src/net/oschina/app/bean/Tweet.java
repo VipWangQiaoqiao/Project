@@ -17,10 +17,6 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @XStreamAlias("tweet")
 public class Tweet extends Entity implements Parcelable {
 
-    public final static int CATALOG_LATEST = 0;
-    public final static int CATALOG_HOT = -1;
-    public final static int CATALOG_MINE = 3;
-
     public final static int CLIENT_MOBILE = 2;
     public final static int CLIENT_ANDROID = 3;
     public final static int CLIENT_IPHONE = 4;
@@ -138,18 +134,6 @@ public class Tweet extends Entity implements Parcelable {
 
     public void setImgBig(String imgBig) {
         this.imgBig = imgBig;
-    }
-
-    public static int getCatalogLatest() {
-        return CATALOG_LATEST;
-    }
-
-    public static int getCatalogHot() {
-        return CATALOG_HOT;
-    }
-
-    public static int getCatalogMine() {
-        return CATALOG_MINE;
     }
 
     public String getImageFilePath() {

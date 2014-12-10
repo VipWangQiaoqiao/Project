@@ -41,7 +41,6 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 
     public static final String BUNDLE_KEY_CATALOG = "BUNDLE_KEY_CATALOG";
     public static final String BUNDLE_BLOG_TYPE = "BUNDLE_BLOG_TYPE";
-    public static final String BUNDLE_TWEET_TYPE = "BUNDLE_TWEET_TYPE";
     public static final String BUNDLE_SOFTWARE = "BUNDLE_SOFTWARE";
     public static final String BUNDLE_FAVORITE = "BUNDLE_FAVORITE";
 
@@ -63,7 +62,6 @@ public abstract class BaseListFragment extends BaseTabFragment implements
     protected int mCatalog = 1;
 
     protected String blogType;
-    protected int tweetType = 0;
     protected String softwareType = "recommend";
     protected int userfavoriteType = 1;
 
@@ -95,9 +93,8 @@ public abstract class BaseListFragment extends BaseTabFragment implements
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         if (args != null) {
-            mCatalog = args.getInt(BUNDLE_KEY_CATALOG);
+            mCatalog = args.getInt(BUNDLE_KEY_CATALOG, 0);
             blogType = args.getString(BUNDLE_BLOG_TYPE, blogType);
-            tweetType = args.getInt(BUNDLE_KEY_CATALOG, tweetType);
             softwareType = args.getString(BUNDLE_SOFTWARE, softwareType);
             userfavoriteType = args
                     .getInt(BUNDLE_KEY_CATALOG, userfavoriteType);
