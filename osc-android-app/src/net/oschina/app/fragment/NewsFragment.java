@@ -13,11 +13,8 @@ import net.oschina.app.bean.News;
 import net.oschina.app.bean.NewsList;
 import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
-import android.R;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 

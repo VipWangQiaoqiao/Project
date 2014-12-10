@@ -1,6 +1,7 @@
 package net.oschina.app.fragment;
 
 import java.io.ByteArrayInputStream;
+import java.util.List;
 
 import org.apache.http.Header;
 
@@ -17,15 +18,22 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 import android.widget.TextView;
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
+import net.oschina.app.adapter.FindUserAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseFragment;
-import net.oschina.app.bean.UserInformation;
+import net.oschina.app.base.ListBaseAdapter;
+import net.oschina.app.bean.FindUserList;
+import net.oschina.app.bean.ListEntity;
+import net.oschina.app.bean.User;
+import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
-import net.oschina.app.widget.AvatarView;
 
 /** 
  * 查找用户界面
@@ -34,31 +42,29 @@ import net.oschina.app.widget.AvatarView;
  * 
  */
 
-public class FindUserFragment extends BaseFragment {
+public class FindUserFragment extends BaseFragment implements OnItemClickListener {
 	
 	private SearchView mSearchView;
 	
-	@InjectView(R.id.ll_user_info) View mUserInfo;
+	@InjectView(R.id.lv_list) ListView mListView;
 	
-	@InjectView(R.id.iv_acatar) AvatarView mIvAvatar;
-	
-	@InjectView(R.id.tv_username) TextView mTvName;
-	
-	@InjectView(R.id.loading) View mLoading;
+    @InjectView(R.id.error_layout)
+    EmptyLayout mErrorLayout;
+    
+	private ListBaseAdapter mAdapter;
 	
 	private AsyncHttpResponseHandler mHandle = new AsyncHttpResponseHandler() {
 		
 		@Override
 		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-			mLoading.setVisibility(View.GONE);
-			UserInformation user = XmlUtils.toBean(UserInformation.class, new ByteArrayInputStream(arg2));
-			
+			mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+			ListEntity list = XmlUtils.toBean(FindUserList.class, new ByteArrayInputStream(arg2));
+			executeOnLoadDataSuccess(list.getList());
 		}
 		
 		@Override
 		public void onFailure(int arg0, Header[] arg1, byte[] arg2, Throwable arg3) {
-			mLoading.setVisibility(View.GONE);
-			AppContext.showToast("加载失败");
+			mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
 		}
 	};
 
@@ -106,29 +112,46 @@ public class FindUserFragment extends BaseFragment {
 		if (nickName == null || StringUtils.isEmpty(nickName)) {
 			return;
 		}
-		mLoading.setVisibility(View.VISIBLE);
-		mUserInfo.setVisibility(View.GONE);
+		mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+		mListView.setVisibility(View.GONE);
 		OSChinaApi.findUser(nickName, mHandle);
 	}
 
 	@Override
 	public void onClick(View v) {
-		int id = v.getId();
-		switch (id) {
-		case R.id.ll_user_info:
-			break;
-		default:
-			break;
-		}
 	}
 
 	@Override
 	public void initView(View view) {
-		mUserInfo.setOnClickListener(this);
+		mAdapter = new FindUserAdapter();
+		mListView.setAdapter(mAdapter);
+		mListView.setOnItemClickListener(this);
+		
+		mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				search(mSearchView.getQuery().toString());
+			}
+		});
 	}
 
 	@Override
 	public void initData() {
 		
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		User user = (User) mAdapter.getItem(position);
+		if (user != null)
+			UIHelper.showUserCenter(getActivity(), user.getUid(), user.getName());
+	}
+	
+	private void executeOnLoadDataSuccess(List<?> data) {
+		mAdapter.clear();
+		mAdapter.addData(data);
+		mListView.setVisibility(View.VISIBLE);
 	}
 }
