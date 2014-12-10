@@ -401,6 +401,7 @@
         <item name="android:layout_weight">1</item>
         <item name="android:clickable">true</item>
         <item name="android:gravity">center_horizontal</item>
+        <item name="android:background">@drawable/my_infomation_option_item_background</item>
         <item name="android:orientation">vertical</item>
         <item name="android:padding">@dimen/space_4</item>
     </style>

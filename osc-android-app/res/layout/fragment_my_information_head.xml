@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:orientation="vertical"
-        android:visibility="gone" >
+        android:visibility="visible" >
 
         <RelativeLayout
             android:id="@+id/rl_user_center"
@@ -46,7 +46,6 @@
                 android:layout_below="@id/iv_avatar"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/space_5"
-                android:text="火蚁"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_18" />
 
@@ -64,8 +63,8 @@
 
         <View
             android:layout_width="wrap_content"
-            android:layout_height="1px"
-            android:background="@color/list_divider_color" />
+            android:layout_height="2px"
+            android:background="#18be40" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -131,7 +130,8 @@
         android:id="@+id/rl_user_unlogin"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:visibility="gone" >
 
         <net.oschina.app.widget.AvatarView
             android:id="@id/iv_avatar"
