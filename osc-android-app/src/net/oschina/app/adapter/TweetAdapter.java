@@ -4,15 +4,22 @@ import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.ui.ImagePreviewActivity;
+import net.oschina.app.util.DensityUtils;
+import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ImageSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -30,7 +37,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class TweetAdapter extends ListBaseAdapter {
 
     static class ViewHolder {
-
         @InjectView(R.id.tv_tweet_name)
         TextView author;
         @InjectView(R.id.tv_tweet_time)
@@ -51,6 +57,15 @@ public class TweetAdapter extends ListBaseAdapter {
         public ViewHolder(View view) {
             ButterKnife.inject(this, view);
         }
+    }
+
+    private Bitmap recordBitmap;
+
+    private void initRecordImg(Context cxt) {
+        recordBitmap = BitmapFactory.decodeResource(cxt.getResources(),
+                R.drawable.audio3);
+        recordBitmap = ImageUtils.zoomBitmap(recordBitmap,
+                DensityUtils.dip2px(cxt, 20f), DensityUtils.dip2px(cxt, 20f));
     }
 
     @Override
@@ -78,7 +93,19 @@ public class TweetAdapter extends ListBaseAdapter {
         vh.content.setLongClickable(false);
 
         Spanned span = Html.fromHtml(TweetTextView.modifyPath(tweet.getBody()));
-        vh.content.setText(span);
+        if (!StringUtils.isEmpty(tweet.getAttach())) {
+            if (recordBitmap == null) {
+                initRecordImg(parent.getContext());
+            }
+            ImageSpan recordImg = new ImageSpan(parent.getContext(),
+                    recordBitmap);
+            SpannableString str = new SpannableString("c" + span);
+            str.setSpan(recordImg, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+            vh.content.setText(str);
+        } else {
+            vh.content.setText(span);
+        }
+
         MyURLSpan.parseLinkText(vh.content, span);
 
         vh.commentcount.setText(tweet.getCommentCount() + "");

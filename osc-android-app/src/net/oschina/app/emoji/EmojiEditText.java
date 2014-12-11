@@ -12,74 +12,74 @@ import android.widget.EditText;
 
 public class EmojiEditText extends EditText {
 
-	public static final Pattern EMOJI = Pattern
-			.compile("\\[(([\u4e00-\u9fa5]+)|([a-zA-z]+))\\]");
-	public static final Pattern EMOJI_PATTERN = Pattern
-			.compile("\\[[(0-9)]+\\]");
-	
-	// 暂时不起作用，EmojiSpan的方法getDrawable内部已经获取了
-	public static final int emojiSize = 55;
+    public static final Pattern EMOJI = Pattern
+            .compile("\\[(([\u4e00-\u9fa5]+)|([a-zA-z]+))\\]");
+    public static final Pattern EMOJI_PATTERN = Pattern
+            .compile("\\[[(0-9)]+\\]");
 
-	public EmojiEditText(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
-	}
+    // 暂时不起作用，EmojiSpan的方法getDrawable内部已经获取了
+    public static final int emojiSize = 55;
 
-	public EmojiEditText(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
+    public EmojiEditText(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+    }
 
-	public EmojiEditText(Context context) {
-		super(context);
-	}
+    public EmojiEditText(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
 
-	@Override
-	protected void onTextChanged(CharSequence text, int start,
-			int lengthBefore, int lengthAfter) {
-		super.onTextChanged(text, start, lengthBefore, lengthAfter);
-		Spannable sp = getText();
-		String str = getText().toString();
-		Matcher m = EMOJI_PATTERN.matcher(str);
-		while (m.find()) {
-			int s = m.start();
-			int e = m.end();
-			String value = m.group();
-			Emoji emoji = EmojiHelper.getEmojiByNumber(value);
-			if (emoji != null) {
-				sp.setSpan(new EmojiSpan(value, emojiSize, 1), s, e,
-						Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-			}
-		}
+    public EmojiEditText(Context context) {
+        super(context);
+    }
 
-		Matcher m2 = EMOJI.matcher(str);
-		while (m2.find()) {
-			int s = m2.start();
-			int e = m2.end();
-			String value = m2.group();
-			Emoji emoji = EmojiHelper.getEmoji(value);
-			if (emoji != null) {
-				sp.setSpan(new EmojiSpan(value, emojiSize, 0), s, e,
-						Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-			}
-		}
-	}
+    @Override
+    protected void onTextChanged(CharSequence text, int start,
+            int lengthBefore, int lengthAfter) {
+        super.onTextChanged(text, start, lengthBefore, lengthAfter);
+        Spannable sp = getText();
+        String str = getText().toString();
+        Matcher m = EMOJI_PATTERN.matcher(str);
+        while (m.find()) {
+            int s = m.start();
+            int e = m.end();
+            String value = m.group();
+            Emoji emoji = EmojiHelper.getEmojiByNumber(value);
+            if (emoji != null) {
+                sp.setSpan(new EmojiSpan(value, emojiSize, 1), s, e,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
 
-	public void insertEmoji(Emoji emoji) {
-		if (emoji == null)
-			return;
-		int start = getSelectionStart();
-		int end = getSelectionEnd();
-		String value = emoji.getValue2();
-		if (start < 0) {
-			append(value);
-		} else {
-			getText().replace(Math.min(start, end), Math.max(start, end),
-					value, 0, value.length());
-		}
-	}
+        Matcher m2 = EMOJI.matcher(str);
+        while (m2.find()) {
+            int s = m2.start();
+            int e = m2.end();
+            String value = m2.group();
+            Emoji emoji = EmojiHelper.getEmoji(value);
+            if (emoji != null) {
+                sp.setSpan(new EmojiSpan(value, emojiSize, 0), s, e,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+    }
 
-	public void delete() {
-		KeyEvent event = new KeyEvent(0, 0, 0, KeyEvent.KEYCODE_DEL, 0, 0, 0,
-				0, KeyEvent.KEYCODE_ENDCALL);
-		dispatchKeyEvent(event);
-	}
+    public void insertEmoji(Emoji emoji) {
+        if (emoji == null)
+            return;
+        int start = getSelectionStart();
+        int end = getSelectionEnd();
+        String value = emoji.getValue2();
+        if (start < 0) {
+            append(value);
+        } else {
+            getText().replace(Math.min(start, end), Math.max(start, end),
+                    value, 0, value.length());
+        }
+    }
+
+    public void delete() {
+        KeyEvent event = new KeyEvent(0, 0, 0, KeyEvent.KEYCODE_DEL, 0, 0, 0,
+                0, KeyEvent.KEYCODE_ENDCALL);
+        dispatchKeyEvent(event);
+    }
 }
