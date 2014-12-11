@@ -8,12 +8,11 @@
     <ImageView
         android:id="@+id/note_detail_img_menu"
         style="@style/note_detail_menu"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginRight="25dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="30dp"
         android:contentDescription="@null"
-        android:padding="5dp"
         android:scaleType="fitXY"
         android:src="@drawable/ic_launcher"
         android:visibility="invisible" />
@@ -21,46 +20,46 @@
     <net.oschina.app.widget.NoteItemCircleView
         android:id="@+id/note_detail_img_green"
         style="@style/note_detail_menu_item"
-        android:layout_above="@+id/note_detail_img_menu"
         android:layout_alignLeft="@+id/note_detail_img_menu"
-        android:src="#bcf7aa"
+        android:layout_below="@+id/note_detail_img_menu"
+        android:src="#ffcef3d4"
         app:border_color="@color/white"
-        app:border_width="3dip" />
+        app:border_width="2dip" />
 
     <net.oschina.app.widget.NoteItemCircleView
         android:id="@+id/note_detail_img_blue"
         style="@style/note_detail_menu_item"
-        android:layout_above="@+id/note_detail_img_green"
         android:layout_alignLeft="@+id/note_detail_img_menu"
-        android:src="#aadff7"
+        android:layout_below="@+id/note_detail_img_green"
+        android:src="#ffb9e5f2"
         app:border_color="@color/white"
-        app:border_width="3dip" />
+        app:border_width="2dip" />
 
     <net.oschina.app.widget.NoteItemCircleView
         android:id="@+id/note_detail_img_purple"
         style="@style/note_detail_menu_item"
-        android:layout_above="@+id/note_detail_img_blue"
         android:layout_alignLeft="@+id/note_detail_img_menu"
-        android:src="#c045fc"
+        android:layout_below="@+id/note_detail_img_blue"
+        android:src="#ffede7e9"
         app:border_color="@color/white"
-        app:border_width="3dip" />
+        app:border_width="2dip" />
 
     <net.oschina.app.widget.NoteItemCircleView
         android:id="@+id/note_detail_img_yellow"
         style="@style/note_detail_menu_item"
-        android:layout_above="@+id/note_detail_img_purple"
         android:layout_alignLeft="@+id/note_detail_img_menu"
-        android:src="#f7f4aa"
+        android:layout_below="@+id/note_detail_img_purple"
+        android:src="#fffbf5b9"
         app:border_color="@color/white"
-        app:border_width="3dip" />
+        app:border_width="2dip" />
 
     <net.oschina.app.widget.NoteItemCircleView
         android:id="@+id/note_detail_img_red"
         style="@style/note_detail_menu_item"
-        android:layout_above="@+id/note_detail_img_yellow"
         android:layout_alignLeft="@+id/note_detail_img_menu"
-        android:src="#fca9a9"
+        android:layout_below="@+id/note_detail_img_yellow"
+        android:src="#fffcd4d3"
         app:border_color="@color/white"
-        app:border_width="3dip" />
+        app:border_width="2dip" />
 
 </RelativeLayout>

@@ -98,7 +98,7 @@ public class KJAnimations {
             int top = imageView.getTop();
             int left = imageView.getLeft();
             if (top == 0) {
-                top = menu.getTop() * (-i);
+                top = (menu.getHeight() + 50) * i;
             }
             if (left == 0) {
                 left = menu.getLeft();
@@ -107,7 +107,7 @@ public class KJAnimations {
             set.addAnimation(getRotateAnimation(-360, 0, durationMillis));
             set.addAnimation(getAlphaAnimation(0.5f, 1.0f, durationMillis));
             set.addAnimation(getTranslateAnimation(menu.getLeft() - left, 0,
-                    menu.getTop() - top, 0, durationMillis));
+                    menu.getTop() - top + 30, 0, durationMillis));// 加30是由于图片上部有一些透明高度
             set.setFillAfter(true);
             set.setDuration(durationMillis);
             set.setStartOffset((i * 100)
@@ -144,7 +144,7 @@ public class KJAnimations {
             set.addAnimation(getAlphaAnimation(1.0f, 0.5f, durationMillis));
             set.addAnimation(getTranslateAnimation(0, menu.getLeft()
                     - imageView.getLeft(), 0,
-                    menu.getTop() - imageView.getTop(), durationMillis));
+                    menu.getTop() - imageView.getTop() + 30, durationMillis));// 加30是由于图片上部有一些透明高度
             set.setFillAfter(true);
             set.setDuration(durationMillis);
             set.setStartOffset(((relativeLayout.getChildCount() - i) * 100)

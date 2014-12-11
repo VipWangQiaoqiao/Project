@@ -9,7 +9,9 @@ import net.oschina.app.bean.NotebookData;
 import net.oschina.app.db.NoteDatabase;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.util.KJAnimations;
+import net.oschina.app.util.StringUtils;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -33,12 +36,17 @@ import butterknife.InjectView;
 public class NoteEditFragment extends BaseFragment implements OnTouchListener {
     @InjectView(R.id.note_detail_edit)
     EditText mEtContent;
-    @InjectView(R.id.note_detail_root_layout)
-    RelativeLayout mLayoutRoot;
-    @InjectView(R.id.note_detail_menu)
-    RelativeLayout mLayoutMenu;
+    @InjectView(R.id.note_detail_tv_date)
+    TextView mTvDate;
+    @InjectView(R.id.note_detail_titlebar)
+    RelativeLayout mLayoutTitle;
+    @InjectView(R.id.note_detail_img_thumbtack)
+    ImageView mImgThumbtack;
+
     @InjectView(R.id.note_detail_img_button)
     ImageView mImgMenu;
+    @InjectView(R.id.note_detail_menu)
+    RelativeLayout mLayoutMenu;
 
     @InjectView(R.id.note_detail_img_green)
     ImageView mImgGreen;
@@ -54,6 +62,23 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
     private NotebookData editData;
     private NoteDatabase noteDb;
     public static final String NOTE_KEY = "notebook_key";
+
+    public static final int[] bg = { 0xffe5fce8,// 绿色
+            0xfffffdd7,// 黄色
+            0xffffddde,// 红色
+            0xffccf2fd,// 蓝色
+            0xfff7f5f6,// 紫色
+    };
+    public static final int[] titleBg = { 0xffcef3d4,// 绿色
+            0xfffbf5b9,// 黄色
+            0xfffcd4d3,// 红色
+            0xffb9e5f2,// 蓝色
+            0xffede7e9,// 紫色
+    };
+
+    public static final int[] thumbtack = { R.drawable.green,
+            R.drawable.yellow, R.drawable.red, R.drawable.blue,
+            R.drawable.purple };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,22 +96,24 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
     public void onClick(View v) {
         switch (v.getId()) {
         case R.id.note_detail_img_green:
-            editData.setColor(0xffbcf7aa);
+            editData.setColor(0);
             break;
         case R.id.note_detail_img_blue:
-            editData.setColor(0xffaadff7);
+            editData.setColor(3);
             break;
         case R.id.note_detail_img_purple:
-            editData.setColor(0xffc045fc);
+            editData.setColor(4);
             break;
         case R.id.note_detail_img_yellow:
-            editData.setColor(0xfff7f4aa);
+            editData.setColor(1);
             break;
         case R.id.note_detail_img_red:
-            editData.setColor(0xfffca9a9);
+            editData.setColor(2);
             break;
         }
-        mLayoutRoot.setBackgroundColor(editData.getColor());
+        mImgThumbtack.setImageResource(thumbtack[editData.getColor()]);
+        mEtContent.setBackgroundColor(bg[editData.getColor()]);
+        mLayoutTitle.setBackgroundColor(titleBg[editData.getColor()]);
         closeMenu();
     }
 
@@ -108,6 +135,10 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
         if (editData == null) {
             editData = new NotebookData();
         }
+        if (StringUtils.isEmpty(editData.getDate())) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd");
+            editData.setDate(dateFormat.format(new Date()));
+        }
     }
 
     @Override
@@ -117,8 +148,16 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
         mImgPurple.setOnClickListener(this);
         mImgYellow.setOnClickListener(this);
         mImgRed.setOnClickListener(this);
-        mLayoutRoot.setBackgroundColor(editData.getColor());
+
+        mEtContent.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        mEtContent.setSingleLine(false);
+        mEtContent.setHorizontallyScrolling(false);
         mEtContent.setText(editData.getContent());
+        mTvDate.setText(editData.getDate());
+
+        mEtContent.setBackgroundColor(bg[editData.getColor()]);
+        mLayoutTitle.setBackgroundColor(titleBg[editData.getColor()]);
+        mImgThumbtack.setImageResource(thumbtack[editData.getColor()]);
 
         mImgMenu.setOnTouchListener(this);
         mLayoutMenu.setOnTouchListener(this);
@@ -169,13 +208,10 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
      * 保存已编辑内容到数据库
      */
     private void save() {
-        Date date = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM年dd月");
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
         editData.setStar(false);
         editData.setContent(mEtContent.getText().toString());
-        editData.setDate(dateFormat.format(date));
-        editData.setTime(timeFormat.format(date));
+        editData.setTime(timeFormat.format(new Date()));
         noteDb.save(editData);
     }
 }

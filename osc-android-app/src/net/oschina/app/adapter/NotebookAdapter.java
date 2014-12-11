@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.NotebookData;
+import net.oschina.app.fragment.NoteEditFragment;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,7 +72,8 @@ public class NotebookAdapter extends BaseAdapter {
             holder = (ViewHolder) v.getTag();
         }
 
-        holder.root.setBackgroundColor(datas.get(position).getColor());
+        holder.root.setBackgroundColor(NoteEditFragment.bg[datas.get(position)
+                .getColor()]);
         holder.time.setText(datas.get(position).getTime());
         holder.title.setText(datas.get(position).getContent());
         holder.date.setText(datas.get(position).getDate());

@@ -417,8 +417,8 @@
     </style>
     
     <style name="note_detail_menu">
-        <item name="android:layout_height">50dp</item>
-        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_width">30dp</item>
     </style>
     
     <style name="note_detail_menu_item" parent="note_detail_menu">
