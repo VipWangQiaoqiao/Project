@@ -414,5 +414,19 @@
     <style name="user_formation_info" parent="@style/user_formation_text" > 
         <item name="android:textSize">@dimen/text_size_12</item>
     </style>
+    
+    <style name="note_detail_menu">
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_width">50dp</item>
+    </style>
+    
+    <style name="note_detail_menu_item" parent="note_detail_menu">
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+    </style>
+    <style name="note_detail_menu_setup" parent="note_detail_menu">
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_marginRight">5dp</item>
+    </style>
 
 </resources>
