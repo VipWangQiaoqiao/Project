@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/note_detail_root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -11,4 +12,20 @@
         android:gravity="top"
         android:inputType="text" />
 
-</LinearLayout>
+    <include
+        android:id="@+id/note_detail_menu"
+        layout="@layout/layout_note_detail_menu" />
+
+    <ImageView
+        android:id="@+id/note_detail_img_button"
+        style="@style/note_detail_menu"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="25dp"
+        android:contentDescription="@null"
+        android:padding="5dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_launcher" />
+
+</RelativeLayout>

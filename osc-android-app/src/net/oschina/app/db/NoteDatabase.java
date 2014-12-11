@@ -18,14 +18,19 @@ public class NoteDatabase {
     public void save(NotebookData data) {
         SQLiteDatabase sqlite = dbHelper.getWritableDatabase();
         if (data.getId() != 0) {
-            String sql = ("update " + DatabaseHelper.TABLE_NAME + " set time=?, date=?, content=?, star=? where _id=?");
-            sqlite.execSQL(sql, new String[] { data.getTime(), data.getDate(),
-                    data.getContent(), data.isStar() ? "1" : "0",
-                    data.getId() + "" });
+            String sql = ("update " + DatabaseHelper.TABLE_NAME + " set time=?, date=?, content=?, star=?,color=? where _id=?");
+            sqlite.execSQL(
+                    sql,
+                    new String[] { data.getTime(), data.getDate(),
+                            data.getContent(), data.isStar() ? "1" : "0",
+                            data.getColor() + "", data.getId() + "" });
         } else {
-            String sql = ("insert into" + DatabaseHelper.TABLE_NAME + "(time, date, content, star) values(?, ?, ?, ?)");
-            sqlite.execSQL(sql, new String[] { data.getTime(), data.getDate(),
-                    data.getContent(), data.isStar() ? "1" : "0" });
+            String sql = ("insert into" + DatabaseHelper.TABLE_NAME + "(time, date, content, star, color) values(?, ?, ?, ?, ?)");
+            sqlite.execSQL(
+                    sql,
+                    new String[] { data.getTime(), data.getDate(),
+                            data.getContent(), data.isStar() ? "1" : "0",
+                            data.getColor() + "" });
         }
         dbHelper.close();
     }
@@ -46,6 +51,8 @@ public class NoteDatabase {
                 notebookData.setDate(cursor.getString(2));
                 notebookData.setContent(cursor.getString(3));
                 notebookData.setStar(0 != cursor.getInt(4)); // C判断法：非0即真
+
+                notebookData.setColor(cursor.getInt(5));
                 data.add(notebookData);
             }
             if (!cursor.isClosed()) {
