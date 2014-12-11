@@ -541,7 +541,7 @@ public class OSChinaApi {
      */
     public static void findUser(String username, AsyncHttpResponseHandler handler) {
     	RequestParams params = new RequestParams();
-        params.put("username", username);
+        params.put("name", username);
         ApiHttpClient.get("action/api/find_user", params, handler);
     }
     
@@ -550,9 +550,10 @@ public class OSChinaApi {
      * @param pageIndex
      * @param handler
      */
-    public static void getEventList(int pageIndex, AsyncHttpResponseHandler handler) {
+    public static void getEventList(int pageIndex, int uid, AsyncHttpResponseHandler handler) {
     	RequestParams params = new RequestParams();
         params.put("pageIndex", pageIndex);
+        params.put("uid", uid);
         params.put("pageSize", AppContext.PAGE_SIZE);
         ApiHttpClient.get("action/api/my_event_list", params, handler);
     }
