@@ -66,12 +66,6 @@ public class User implements Serializable {
 	@XStreamAlias("favoritecount")
 	private int favoritecount;
 	
-	@XStreamAlias("fanscount")
-	private int fanscount;
-	
-	@XStreamAlias("followerscount")
-	private int followerscount;
-	
 	private String account;
 	
 	private String pwd;
@@ -196,22 +190,6 @@ public class User implements Serializable {
 
 	public void setFavoritecount(int favoritecount) {
 		this.favoritecount = favoritecount;
-	}
-
-	public int getFanscount() {
-		return fanscount;
-	}
-
-	public void setFanscount(int fanscount) {
-		this.fanscount = fanscount;
-	}
-
-	public int getFollowerscount() {
-		return followerscount;
-	}
-
-	public void setFollowerscount(int followerscount) {
-		this.followerscount = followerscount;
 	}
 
 	public String getAccount() {

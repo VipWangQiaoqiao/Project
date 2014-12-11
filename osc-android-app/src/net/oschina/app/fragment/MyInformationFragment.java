@@ -68,7 +68,7 @@ public class MyInformationFragment extends BaseFragment {
     @InjectView(R.id.tv_following)
     TextView mTvFollowing;
     @InjectView(R.id.tv_follower)
-    TextView mTvFollower;
+    TextView mTvFans;
     @InjectView(R.id.tv_mes)
     View mMesView;
     @InjectView(R.id.error_layout)
@@ -242,9 +242,8 @@ public class MyInformationFragment extends BaseFragment {
                         : R.drawable.userinfo_icon_female);
         mTvScore.setText(String.valueOf(mInfo.getScore()));
         mTvFavorite.setText(String.valueOf(mInfo.getFavoritecount()));
-        mTvFollowing.setText(String.valueOf(mInfo.getFollowerscount()));
-        mTvFollower.setText(String.valueOf(mInfo.getFanscount()));
-
+        mTvFollowing.setText(String.valueOf(mInfo.getFollowers()));
+        mTvFans.setText(String.valueOf(mInfo.getFans()));
     }
 
     private void requestData(boolean refresh) {
