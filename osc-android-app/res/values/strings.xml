@@ -147,6 +147,7 @@
 	<string name="actionbar_title_search">搜索</string>
 	<string name="actionbar_title_find_user">找人</string>
 	<string name="actionbar_title_event">我参与的活动</string>
+	<string name="actionbar_title_event_apply">活动出席人员</string>
 	<string name="actionbar_title_same_city">同城</string>
 	
 	<!-- 博客区 -->	

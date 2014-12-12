@@ -557,4 +557,18 @@ public class OSChinaApi {
         params.put("pageSize", AppContext.PAGE_SIZE);
         ApiHttpClient.get("action/api/my_event_list", params, handler);
     }
+    
+    /**
+     * 获取某活动已出席的人员列表
+     * @param eventId
+     * @param pageIndex
+     * @param handler
+     */
+    public static void getEventApplies(int eventId, int pageIndex, AsyncHttpResponseHandler handler) {
+    	RequestParams params = new RequestParams();
+        params.put("pageIndex", pageIndex);
+        params.put("event_id", eventId);
+        params.put("pageSize", AppContext.PAGE_SIZE);
+        ApiHttpClient.get("action/api/event_attend_user", params, handler);
+    }
 }

@@ -4,6 +4,7 @@ import net.oschina.app.R;
 import net.oschina.app.fragment.AboutOSCFragment;
 import net.oschina.app.fragment.ActiveFragment;
 import net.oschina.app.fragment.CommentFrament;
+import net.oschina.app.fragment.EventAppliesFragment;
 import net.oschina.app.fragment.EventFragment;
 import net.oschina.app.fragment.FindUserFragment;
 import net.oschina.app.fragment.MessageDetailFragment;
@@ -80,12 +81,14 @@ public enum SimpleBackPage {
     FIND_USER(21, R.string.actionbar_title_find_user, FindUserFragment.class),
 
     EVENT_LIST(22, R.string.actionbar_title_event, EventFragment.class),
+    
+    EVENT_APPLY(23, R.string.actionbar_title_event_apply, EventAppliesFragment.class),
 
-    SAME_CITY(23, R.string.actionbar_title_same_city, EventFragment.class),
+    SAME_CITY(24, R.string.actionbar_title_same_city, EventFragment.class),
 
-    NOTE(24, R.string.actionbar_title_note, NoteBookFragment.class),
+    NOTE(25, R.string.actionbar_title_note, NoteBookFragment.class),
 
-    NOTE_EDIT(25, R.string.actionbar_title_note, NoteEditFragment.class);
+    NOTE_EDIT(26, R.string.actionbar_title_note, NoteEditFragment.class);
 
     private int title;
     private Class<?> clz;

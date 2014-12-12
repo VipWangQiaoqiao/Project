@@ -10,12 +10,14 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseDetailFragment;
+import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.Post;
 import net.oschina.app.bean.PostDetail;
+import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.emoji.EmojiFragment;
 import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
 import net.oschina.app.fragment.ToolbarFragment.OnActionClickListener;
@@ -151,10 +153,17 @@ public class EventDetailFragment extends BaseDetailFragment implements
 		case R.id.rl_event_location:
 			break;
 		case R.id.rl_event_attend:
+			showEventApplies();
 			break;
 		default:
 			break;
 		}
+	}
+	
+	private void showEventApplies() {
+		Bundle args = new Bundle();
+		args.putInt(BaseListFragment.BUNDLE_KEY_CATALOG, mPost.getEvent().getId());
+		UIHelper.showSimpleBack(getActivity(), SimpleBackPage.EVENT_APPLY, args);
 	}
 
 	@Override
