@@ -5,7 +5,6 @@ import java.util.List;
 
 import net.oschina.app.R;
 import net.oschina.app.util.TDevice;
-import net.oschina.app.util.TLog;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
@@ -164,7 +163,6 @@ public class ListBaseAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (position == getCount() - 1) {// 最后一条
-            TLog.log(position + "---" + _data.size());
             if (position < _data.size()) {
                 position = getCount() - 2;// footview
             }

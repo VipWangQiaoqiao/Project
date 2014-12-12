@@ -42,7 +42,7 @@
             android:layout_width="95dp"
             android:layout_height="match_parent"
             android:layout_marginRight="7dp"
-            android:background="@drawable/icon_record_layout"
+            android:background="@drawable/selector_record_layout"
             android:contentDescription="@null" />
 
         <ImageView
@@ -51,16 +51,16 @@
             android:layout_height="25dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="3dp"
-            android:contentDescription="@null"
-            android:background="@anim/audio_animations"/>
+            android:background="@anim/audio_animations"
+            android:contentDescription="@null" />
 
         <TextView
             android:id="@+id/tweet_time_record"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:textColor="#666666"
             android:layout_toRightOf="@+id/tweet_img_layout"
+            android:textColor="#666666"
             android:textSize="18sp" />
     </RelativeLayout>
 

@@ -103,6 +103,18 @@ public class RecordButtonUtil {
         }
     }
 
+    public void stopPlay() {
+        if (mPlayer != null) {
+            mPlayer.stop();
+            mPlayer.release();
+            mPlayer = null;
+            mIsPlaying = false;
+            if (listener != null) {
+                listener.stopPlay();
+            }
+        }
+    }
+
     public void startPlay(String audioPath, TextView timeView) {
         if (!mIsPlaying) {
             if (!StringUtils.isEmpty(audioPath)) {
@@ -122,12 +134,7 @@ public class RecordButtonUtil {
                     mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
                         public void onCompletion(MediaPlayer mp) {
-                            if (listener != null) {
-                                listener.stopPlay();
-                            }
-                            mp.release();
-                            mPlayer = null;
-                            mIsPlaying = false;
+                            stopPlay();
                         }
                     });
                 } catch (Exception e) {
@@ -136,6 +143,8 @@ public class RecordButtonUtil {
             } else {
                 AppContext.showToastShort(R.string.record_sound_notfound);
             }
+        } else {
+            stopPlay();
         } // end playing
     }
 

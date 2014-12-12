@@ -75,6 +75,7 @@ public class TweetDetailFragment extends BaseListFragment implements
     private EmojiFragment mEmojiFragment;
     private BroadcastReceiver mCommentReceiver;
     private RelativeLayout mRlRecordSound;
+    private final RecordButtonUtil util = new RecordButtonUtil();
 
     class CommentChangeReceiver extends BroadcastReceiver {
 
@@ -187,7 +188,6 @@ public class TweetDetailFragment extends BaseListFragment implements
      * @param header
      */
     private void initSoundView(View header) {
-        final RecordButtonUtil util = new RecordButtonUtil();
         final ImageView playerButton = (ImageView) header
                 .findViewById(R.id.tweet_img_record);
         final TextView playerTime = (TextView) header
@@ -216,6 +216,14 @@ public class TweetDetailFragment extends BaseListFragment implements
                 drawable.start();
             }
         });
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (util != null && util.isPlaying()) {
+            util.stopPlay();
+        }
     }
 
     @Override
