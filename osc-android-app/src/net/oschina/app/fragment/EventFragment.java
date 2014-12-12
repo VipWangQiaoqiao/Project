@@ -18,7 +18,7 @@ import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.EventList;
-import net.oschina.app.bean.EventList.Event;
+import net.oschina.app.bean.Event;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.UIHelper;
@@ -111,7 +111,7 @@ public class EventFragment extends BaseListFragment {
 			long id) {
 		Event event = (Event) mAdapter.getItem(position);
 		if (event != null)
-			UIHelper.showPostDetail(view.getContext(), event.getId());
+			UIHelper.showEventDetail(view.getContext(), event.getId());
 	}
 
 }

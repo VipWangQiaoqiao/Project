@@ -63,6 +63,7 @@
     <string name="actionbar_title_software">软件详情</string>
     <string name="actionbar_title_question">帖子详情</string>
     <string name="actionbar_title_tweet">动弹详情</string>
+    <string name="actionbar_title_event_detail">活动详情</string>
     <string name="actionbar_title_detail">详情</string>
     <string name="actionbar_title_active">好友圈</string>
     <string name="actionbar_title_mes">消息中心</string>
@@ -260,5 +261,8 @@
 	<string name="down_state">正在下载：%s</string>
 	
 	<string name="qr_code_tip">扫一扫上面的二维码，加我为好友</string>
+	
+	<string name="event_start_time">开始：%s</string>
+	<string name="event_end_time">结束：%s</string>
 
 </resources>

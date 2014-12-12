@@ -65,6 +65,17 @@ public class Post extends Entity {
 	
 	@XStreamAlias("answer")
 	private Answer answer;
+	
+	@XStreamAlias("event")
+	private Event event;
+
+	public Event getEvent() {
+		return event;
+	}
+
+	public void setEvent(Event event) {
+		this.event = event;
+	}
 
 	public String getTitle() {
 		return title;

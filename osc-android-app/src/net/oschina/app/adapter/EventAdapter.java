@@ -4,7 +4,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.bean.EventList.Event;
+import net.oschina.app.bean.Event;
 import net.oschina.app.bean.Post;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.AvatarView;
@@ -50,7 +50,7 @@ public class EventAdapter extends ListBaseAdapter {
 
 		Event item = (Event) _data.get(position);
 		
-		ImageLoader.getInstance().displayImage("http://static.oschina.net/uploads/cover/guangzhou_1032619_195698_vsAud_bi.jpg", vh.img);
+		ImageLoader.getInstance().displayImage(item.getImg(), vh.img);
 		vh.title.setText(item.getTitle());
 		vh.time.setText(item.getStartTime());
 		vh.spot.setText(item.getSpot());

@@ -7,6 +7,7 @@ import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.emoji.EmojiFragment;
 import net.oschina.app.fragment.BlogDetailFragment;
+import net.oschina.app.fragment.EventDetailFragment;
 import net.oschina.app.fragment.NewsDetailFragment;
 import net.oschina.app.fragment.PostDetailFragment;
 import net.oschina.app.fragment.SoftwareDetailFragment;
@@ -38,6 +39,7 @@ public class DetailActivity extends BaseActivity implements
 	public static final int DISPLAY_SOFTWARE = 2;
 	public static final int DISPLAY_POST = 3;
 	public static final int DISPLAY_TWEET = 4;
+	public static final int DISPLAY_EVENT = 5;
 	public static final String BUNDLE_KEY_DISPLAY_TYPE = "BUNDLE_KEY_DISPLAY_TYPE";
 	
 	@InjectView(R.id.emoji_container)
@@ -91,6 +93,9 @@ public class DetailActivity extends BaseActivity implements
 			actionBarTitle = R.string.actionbar_title_tweet;
 			fragment = new TweetDetailFragment();
 			break;
+		case DISPLAY_EVENT:
+			actionBarTitle = R.string.actionbar_title_event_detail;
+			fragment = new EventDetailFragment();
 		default:
 			break;
 		}

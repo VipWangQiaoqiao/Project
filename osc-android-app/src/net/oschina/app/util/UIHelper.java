@@ -149,6 +149,19 @@ public class UIHelper {
                 DetailActivity.DISPLAY_POST);
         context.startActivity(intent);
     }
+    
+    /**
+     * 显示活动详情
+     * @param context
+     * @param eventId
+     */
+    public static void showEventDetail(Context context, int eventId) {
+    	Intent intent = new Intent(context, DetailActivity.class);
+        intent.putExtra("post_id", eventId);
+        intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+                DetailActivity.DISPLAY_EVENT);
+        context.startActivity(intent);
+    }
 
     /**
      * 显示相关Tag帖子列表
