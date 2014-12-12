@@ -37,6 +37,7 @@
     <dimen name="text_size_9">9.0dip</dimen>
     <dimen name="text_size_8">8.0dip</dimen>
     <dimen name="text_size_7">7.0dip</dimen>
+    <dimen name="space_35">35.0dip</dimen>
     <dimen name="space_30">30.0dip</dimen>
     <dimen name="space_29">29.0dip</dimen>
     <dimen name="space_28">28.0dip</dimen>

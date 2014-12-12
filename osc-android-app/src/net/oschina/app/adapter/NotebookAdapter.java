@@ -5,10 +5,14 @@ import java.util.ArrayList;
 import net.oschina.app.R;
 import net.oschina.app.bean.NotebookData;
 import net.oschina.app.fragment.NoteEditFragment;
-import android.content.Context;
+import net.oschina.app.util.DensityUtils;
+import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 /**
@@ -19,12 +23,12 @@ import android.widget.TextView;
  */
 public class NotebookAdapter extends BaseAdapter {
     private ArrayList<NotebookData> datas;
-    private final Context context;
+    private final Activity aty;
 
-    public NotebookAdapter(Context context, ArrayList<NotebookData> datas) {
+    public NotebookAdapter(Activity aty, ArrayList<NotebookData> datas) {
         super();
         this.datas = datas;
-        this.context = context;
+        this.aty = aty;
     }
 
     public void refurbishData(ArrayList<NotebookData> data) {
@@ -48,11 +52,11 @@ public class NotebookAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        TextView title;
         TextView date;
-        TextView time;
-        TextView how_long;
-        View root;
+        ImageView state;
+        ImageView thumbtack;
+        View titleBar;
+        TextView content;
     }
 
     @Override
@@ -60,24 +64,34 @@ public class NotebookAdapter extends BaseAdapter {
         ViewHolder holder;
         if (v == null) {
             holder = new ViewHolder();
-            v = View.inflate(context, R.layout.item_notebook, null);
-            holder.root = v.findViewById(R.id.item_root_layout);
-            holder.title = (TextView) v.findViewById(R.id.item_note_tv_title);
+            v = View.inflate(aty, R.layout.item_notebook, null);
+            holder.titleBar = v.findViewById(R.id.item_note_titlebar);
             holder.date = (TextView) v.findViewById(R.id.item_note_tv_date);
-            holder.time = (TextView) v.findViewById(R.id.item_note_tv_time);
-            holder.how_long = (TextView) v
-                    .findViewById(R.id.item_note_tv_howlong);
+            holder.state = (ImageView) v.findViewById(R.id.item_note_img_state);
+            holder.thumbtack = (ImageView) v
+                    .findViewById(R.id.item_note_img_thumbtack);
+            holder.content = (TextView) v.findViewById(R.id.item_note_content);
             v.setTag(holder);
         } else {
             holder = (ViewHolder) v.getTag();
         }
 
-        holder.root.setBackgroundColor(NoteEditFragment.bg[datas.get(position)
-                .getColor()]);
-        holder.time.setText(datas.get(position).getTime());
-        holder.title.setText(datas.get(position).getContent());
+        RelativeLayout.LayoutParams params = (LayoutParams) holder.content
+                .getLayoutParams();
+        params.width = DensityUtils.getScreenW(aty) / 2;
+        params.height = (int) (params.width - aty.getResources().getDimension(
+                R.dimen.space_35));
+        holder.content.setLayoutParams(params);
+
+        holder.titleBar.setBackgroundColor(NoteEditFragment.sTitleBackGrounds[datas.get(
+                position).getColor()]);
         holder.date.setText(datas.get(position).getDate());
-        holder.how_long.setText("13" + "天前");
+        // holder.state.setImageResource(resId);
+        holder.thumbtack.setImageResource(NoteEditFragment.sThumbtackImgs[datas.get(
+                position).getColor()]);
+        holder.content.setText(datas.get(position).getContent());
+        holder.content.setBackgroundColor(NoteEditFragment.sBackGrounds[datas.get(
+                position).getColor()]);
         return v;
     }
 }

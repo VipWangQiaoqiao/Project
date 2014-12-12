@@ -2,6 +2,7 @@ package net.oschina.app.ui;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.fragment.NoteEditFragment;
 import net.oschina.app.fragment.TweetPubFragment;
 import net.oschina.app.util.UIHelper;
 import android.annotation.SuppressLint;
@@ -118,8 +119,11 @@ public class QuickOptionDialog extends Dialog implements
             UIHelper.showScanActivity(getContext());
             break;
         case R.id.ly_quick_option_note:
-            UIHelper.showSimpleBack(getContext(), SimpleBackPage.NOTE);
-            UIHelper.showSimpleBack(getContext(), SimpleBackPage.NOTE_EDIT);
+            Bundle bundle = new Bundle();
+            bundle.putInt(NoteEditFragment.NOTE_FROMWHERE_KEY,
+                    NoteEditFragment.QUICK_DIALOG);
+            UIHelper.showSimpleBack(getContext(), SimpleBackPage.NOTE_EDIT,
+                    bundle);
             break;
         default:
             break;
