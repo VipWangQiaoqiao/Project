@@ -30,7 +30,7 @@
         android:smallScreens="true"
         android:xlargeScreens="true" />
 
-    <application 
+    <application
         android:name=".AppContext"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"

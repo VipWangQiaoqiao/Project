@@ -312,6 +312,15 @@ public class AppContext extends BaseApplication {
         set(KEY_TWEET_DRAFT + getInstance().getLoginUid(), draft);
     }
 
+    public static String getNoteDraft() {
+        return getPreferences().getString(
+                AppConfig.KEY_NOTE_DRAFT + getInstance().getLoginUid(), "");
+    }
+
+    public static void setNoteDraft(String draft) {
+        set(AppConfig.KEY_NOTE_DRAFT + getInstance().getLoginUid(), draft);
+    }
+
     public static boolean isFristStart() {
         return getPreferences().getBoolean(KEY_FRITST_START, true);
     }

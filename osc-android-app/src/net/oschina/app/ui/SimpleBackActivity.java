@@ -10,96 +10,97 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 import android.view.View;
 
 public class SimpleBackActivity extends BaseActivity {
 
-	public final static String BUNDLE_KEY_PAGE = "BUNDLE_KEY_PAGE";
-	public final static String BUNDLE_KEY_ARGS = "BUNDLE_KEY_ARGS";
-	private static final String TAG = "FLAG_TAG";
-	private WeakReference<Fragment> mFragment;
+    public final static String BUNDLE_KEY_PAGE = "BUNDLE_KEY_PAGE";
+    public final static String BUNDLE_KEY_ARGS = "BUNDLE_KEY_ARGS";
+    private static final String TAG = "FLAG_TAG";
+    private WeakReference<Fragment> mFragment;
 
-	@Override
-	protected int getLayoutId() {
-		return R.layout.activity_simple_fragment;
-	}
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_simple_fragment;
+    }
 
-	@Override
-	protected boolean hasBackButton() {
-		return true;
-	}
+    @Override
+    protected boolean hasBackButton() {
+        return true;
+    }
 
-	@Override
-	protected void init(Bundle savedInstanceState) {
-		super.init(savedInstanceState);
-		Intent data = getIntent();
-		if (data == null) {
-			throw new RuntimeException(
-					"you must provide a page info to display");
-		}
-		int pageValue = data.getIntExtra(BUNDLE_KEY_PAGE, 0);
-		SimpleBackPage page = SimpleBackPage.getPageByValue(pageValue);
-		if (page == null) {
-			throw new IllegalArgumentException("can not find page by value:"
-					+ pageValue);
-		}
+    @Override
+    protected void init(Bundle savedInstanceState) {
+        super.init(savedInstanceState);
+        Intent data = getIntent();
+        if (data == null) {
+            throw new RuntimeException(
+                    "you must provide a page info to display");
+        }
+        int pageValue = data.getIntExtra(BUNDLE_KEY_PAGE, 0);
+        SimpleBackPage page = SimpleBackPage.getPageByValue(pageValue);
+        if (page == null) {
+            throw new IllegalArgumentException("can not find page by value:"
+                    + pageValue);
+        }
 
-		setActionBarTitle(page.getTitle());
+        setActionBarTitle(page.getTitle());
 
-		try {
-			Fragment fragment = (Fragment) page.getClz().newInstance();
+        try {
+            Fragment fragment = (Fragment) page.getClz().newInstance();
 
-			Bundle args = data.getBundleExtra(BUNDLE_KEY_ARGS);
-			if (args != null) {
-				fragment.setArguments(args);
-			}
+            Bundle args = data.getBundleExtra(BUNDLE_KEY_ARGS);
+            if (args != null) {
+                fragment.setArguments(args);
+            }
 
-			FragmentTransaction trans = getSupportFragmentManager()
-					.beginTransaction();
-			trans.replace(R.id.container, fragment, TAG);
-			trans.commit();
+            FragmentTransaction trans = getSupportFragmentManager()
+                    .beginTransaction();
+            trans.replace(R.id.container, fragment, TAG);
+            trans.commit();
 
-			mFragment = new WeakReference<Fragment>(fragment);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new IllegalArgumentException(
-					"generate fragment error. by value:" + pageValue);
-		}
-	}
+            mFragment = new WeakReference<Fragment>(fragment);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException(
+                    "generate fragment error. by value:" + pageValue);
+        }
+    }
 
-	@Override
-	public void onBackPressed() {
-		if (mFragment != null && mFragment.get() != null
-				&& mFragment.get() instanceof BaseFragment) {
-			BaseFragment bf = (BaseFragment) mFragment.get();
-			if (!bf.onBackPressed()) {
-				super.onBackPressed();
-			}
-		} else {
-			super.onBackPressed();
-		}
-	}
+    @Override
+    public void onBackPressed() {
+        if (mFragment != null && mFragment.get() != null
+                && mFragment.get() instanceof BaseFragment) {
+            BaseFragment bf = (BaseFragment) mFragment.get();
+            if (!bf.onBackPressed()) {
+                super.onBackPressed();
+            }
+        } else {
+            super.onBackPressed();
+        }
+    }
 
-	@Override
-	protected void onActivityResult(int arg0, int arg1, Intent arg2) {
-		super.onActivityResult(arg0, arg1, arg2);
-	}
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.ACTION_DOWN
+                && mFragment.get() instanceof BaseFragment) {
+            ((BaseFragment) mFragment.get()).onBackPressed();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
-	@Override
-	public void onClick(View v) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    protected void onActivityResult(int arg0, int arg1, Intent arg2) {
+        super.onActivityResult(arg0, arg1, arg2);
+    }
 
-	@Override
-	public void initView() {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void onClick(View v) {}
 
-	@Override
-	public void initData() {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void initView() {}
+
+    @Override
+    public void initData() {}
 }

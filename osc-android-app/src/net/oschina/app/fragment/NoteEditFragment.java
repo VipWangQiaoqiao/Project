@@ -3,15 +3,23 @@ package net.oschina.app.fragment;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.NotebookData;
+import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.db.NoteDatabase;
 import net.oschina.app.ui.SimpleBackActivity;
+import net.oschina.app.ui.dialog.CommonDialog;
+import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.util.KJAnimations;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.UIHelper;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -61,22 +69,29 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
 
     private NotebookData editData;
     private NoteDatabase noteDb;
-    public static final String NOTE_KEY = "notebook_key";
+    private boolean isNewNote;
+    private int whereFrom = QUICK_DIALOG;// 从哪个界面来
 
-    public static final int[] bg = { 0xffe5fce8,// 绿色
+    public static final String NOTE_KEY = "notebook_key";
+    public static final String NOTE_FROMWHERE_KEY = "fromwhere_key";
+    public static final int QUICK_DIALOG = 0;
+    public static final int NOTEBOOK_FRAGMENT = 1;
+    public static final int NOTEBOOK_ITEM = 2;
+
+    public static final int[] sBackGrounds = { 0xffe5fce8,// 绿色
             0xfffffdd7,// 黄色
             0xffffddde,// 红色
             0xffccf2fd,// 蓝色
             0xfff7f5f6,// 紫色
     };
-    public static final int[] titleBg = { 0xffcef3d4,// 绿色
-            0xfffbf5b9,// 黄色
-            0xfffcd4d3,// 红色
-            0xffb9e5f2,// 蓝色
-            0xffede7e9,// 紫色
+    public static final int[] sTitleBackGrounds = { 0xffcef3d4,// 绿色
+            0xffebe5a9,// 黄色
+            0xffecc4c3,// 红色
+            0xffa9d5e2,// 蓝色
+            0xffddd7d9,// 紫色
     };
 
-    public static final int[] thumbtack = { R.drawable.green,
+    public static final int[] sThumbtackImgs = { R.drawable.green,
             R.drawable.yellow, R.drawable.red, R.drawable.blue,
             R.drawable.purple };
 
@@ -111,9 +126,9 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
             editData.setColor(2);
             break;
         }
-        mImgThumbtack.setImageResource(thumbtack[editData.getColor()]);
-        mEtContent.setBackgroundColor(bg[editData.getColor()]);
-        mLayoutTitle.setBackgroundColor(titleBg[editData.getColor()]);
+        mImgThumbtack.setImageResource(sThumbtackImgs[editData.getColor()]);
+        mEtContent.setBackgroundColor(sBackGrounds[editData.getColor()]);
+        mLayoutTitle.setBackgroundColor(sTitleBackGrounds[editData.getColor()]);
         closeMenu();
     }
 
@@ -134,9 +149,11 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
         noteDb = new NoteDatabase(getActivity());
         if (editData == null) {
             editData = new NotebookData();
+            editData.setContent(AppContext.getNoteDraft());
+            isNewNote = true;
         }
         if (StringUtils.isEmpty(editData.getDate())) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
             editData.setDate(dateFormat.format(new Date()));
         }
     }
@@ -155,9 +172,9 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
         mEtContent.setText(editData.getContent());
         mTvDate.setText(editData.getDate());
 
-        mEtContent.setBackgroundColor(bg[editData.getColor()]);
-        mLayoutTitle.setBackgroundColor(titleBg[editData.getColor()]);
-        mImgThumbtack.setImageResource(thumbtack[editData.getColor()]);
+        mEtContent.setBackgroundColor(sBackGrounds[editData.getColor()]);
+        mLayoutTitle.setBackgroundColor(sTitleBackGrounds[editData.getColor()]);
+        mImgThumbtack.setImageResource(sThumbtackImgs[editData.getColor()]);
 
         mImgMenu.setOnTouchListener(this);
         mLayoutMenu.setOnTouchListener(this);
@@ -185,6 +202,7 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
                 SimpleBackActivity.BUNDLE_KEY_ARGS);
         if (bundle != null) {
             editData = (NotebookData) bundle.getSerializable(NOTE_KEY);
+            whereFrom = bundle.getInt(NOTE_FROMWHERE_KEY, QUICK_DIALOG);
         }
     }
 
@@ -197,7 +215,12 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.public_menu_send:
-            save();
+            if (!StringUtils.isEmpty(mEtContent.getText().toString())) {
+                save();
+                if (whereFrom == QUICK_DIALOG) {
+                    UIHelper.showSimpleBack(getActivity(), SimpleBackPage.NOTE);
+                }
+            }
             getActivity().finish();
             break;
         }
@@ -208,10 +231,44 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
      * 保存已编辑内容到数据库
      */
     private void save() {
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+        editData.setTime(dateFormat.format(new Date()));
         editData.setStar(false);
         editData.setContent(mEtContent.getText().toString());
-        editData.setTime(timeFormat.format(new Date()));
         noteDb.save(editData);
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        if (isNewNote) {
+            final String content = mEtContent.getText().toString();
+            if (!TextUtils.isEmpty(content)) {
+                CommonDialog dialog = DialogHelper
+                        .getPinterestDialogCancelable(getActivity());
+                dialog.setMessage(R.string.draft_tweet_message);
+                dialog.setNegativeButton(R.string.cancle,
+                        new OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                    int which) {
+                                AppContext.setNoteDraft("");
+                                getActivity().finish();
+                            }
+                        });
+                dialog.setPositiveButton(R.string.ok, new OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        AppContext.setNoteDraft(content);
+                        getActivity().finish();
+                    }
+                });
+                dialog.show();
+                return true;
+            }
+        }
+        return super.onBackPressed();
     }
 }

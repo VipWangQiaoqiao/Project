@@ -11,6 +11,7 @@ import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.MyInformation;
 import net.oschina.app.bean.Notice;
+import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.bean.User;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.ui.MainActivity;
@@ -36,6 +37,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -217,7 +219,14 @@ public class MyInformationFragment extends BaseFragment {
         view.findViewById(R.id.rl_message).setOnClickListener(this);
         view.findViewById(R.id.rl_team).setOnClickListener(this);
         view.findViewById(R.id.rl_blog).setOnClickListener(this);
-        view.findViewById(R.id.rl_note).setOnClickListener(this);
+        view.findViewById(R.id.rl_note).setOnClickListener(
+                new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        UIHelper.showSimpleBack(getActivity(),
+                                SimpleBackPage.NOTE);
+                    }
+                });
         mUserUnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -374,7 +383,7 @@ public class MyInformationFragment extends BaseFragment {
                     .getLoginUid());
             break;
         case R.id.rl_note:
-
+            // 内部类独立实现，修改为未登录也可以使用便签功能
             break;
         case R.id.rl_user_center:
             UIHelper.showUserCenter(getActivity(), AppContext.getInstance()
