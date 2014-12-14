@@ -24,6 +24,7 @@ import net.oschina.app.service.DownloadService;
 import net.oschina.app.service.DownloadService.DownloadBinder;
 import net.oschina.app.service.NoticeService;
 import net.oschina.app.ui.DetailActivity;
+import net.oschina.app.ui.EventLocationActivity;
 import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.ui.LoginActivity;
 import net.oschina.app.ui.SimpleBackActivity;
@@ -870,5 +871,16 @@ public class UIHelper {
         args.putParcelable(Comment.BUNDLE_KEY_COMMENT, replyComment);
         intent.putExtras(args);
         context.sendBroadcast(intent);
+    }
+    
+    /**
+     * 显示活动地址地图信息
+     * 
+     * @param context
+     * @param page
+     */
+    public static void showEventLocation(Context context) {
+        Intent intent = new Intent(context, EventLocationActivity.class);
+        context.startActivity(intent);
     }
 }
