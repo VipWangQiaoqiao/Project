@@ -151,7 +151,7 @@ public class EventDetailFragment extends BaseDetailFragment implements
 		int id = v.getId();
 		switch (id) {
 		case R.id.rl_event_location:
-			UIHelper.showEventLocation(getActivity());
+			UIHelper.showEventLocation(getActivity(), mPost.getEvent().getCity(), mPost.getEvent().getSpot());
 			break;
 		case R.id.rl_event_attend:
 			showEventApplies();

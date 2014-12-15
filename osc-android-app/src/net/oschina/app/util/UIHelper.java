@@ -879,8 +879,10 @@ public class UIHelper {
      * @param context
      * @param page
      */
-    public static void showEventLocation(Context context) {
+    public static void showEventLocation(Context context, String city, String location) {
         Intent intent = new Intent(context, EventLocationActivity.class);
+        intent.putExtra("city", city);
+        intent.putExtra("location", location);
         context.startActivity(intent);
     }
 }
