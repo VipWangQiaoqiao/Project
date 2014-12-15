@@ -53,8 +53,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity 
-            android:name=".ui.EventLocationActivity"/>
+        <activity android:name=".ui.EventLocationActivity"/>
         <activity
             android:name=".ui.LoginActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -133,14 +132,6 @@
             android:name="UMENG_CHANNEL"
             android:value="channel_beta" >
         </meta-data>
-
-        <!-- 百度地图service -->
-        <service
-            android:name="com.baidu.location.f"
-            android:enabled="true"
-            android:process=":remote" >
-        </service>
-
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="pIbgtjFevz8LlkbNsYUNl4Qp" />
