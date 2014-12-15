@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 public class NotebookAdapter extends BaseAdapter {
     private ArrayList<NotebookData> datas;
     private final Activity aty;
+    private boolean isShow = false;
 
     public NotebookAdapter(Activity aty, ArrayList<NotebookData> datas) {
         super();
@@ -31,9 +33,23 @@ public class NotebookAdapter extends BaseAdapter {
         this.aty = aty;
     }
 
-    public void refurbishData(ArrayList<NotebookData> data) {
-        this.datas = data;
+    public void refurbishData(ArrayList<NotebookData> datas) {
+        this.datas = datas;
         notifyDataSetChanged();
+    }
+
+    public void showCheckBox() {
+        isShow = true;
+        notifyDataSetChanged();
+    }
+
+    public void hideCheckBox() {
+        isShow = false;
+        notifyDataSetChanged();
+    }
+
+    public boolean isShowCheckBox() {
+        return isShow;
     }
 
     @Override
@@ -57,6 +73,7 @@ public class NotebookAdapter extends BaseAdapter {
         ImageView thumbtack;
         View titleBar;
         TextView content;
+        CheckBox cbox;
     }
 
     @Override
@@ -70,6 +87,7 @@ public class NotebookAdapter extends BaseAdapter {
             holder.state = (ImageView) v.findViewById(R.id.item_note_img_state);
             holder.thumbtack = (ImageView) v
                     .findViewById(R.id.item_note_img_thumbtack);
+            holder.cbox = (CheckBox) v.findViewById(R.id.item_note_checkbox);
             holder.content = (TextView) v.findViewById(R.id.item_note_content);
             v.setTag(holder);
         } else {
@@ -83,15 +101,24 @@ public class NotebookAdapter extends BaseAdapter {
                 R.dimen.space_35));
         holder.content.setLayoutParams(params);
 
-        holder.titleBar.setBackgroundColor(NoteEditFragment.sTitleBackGrounds[datas.get(
-                position).getColor()]);
+        holder.titleBar
+                .setBackgroundColor(NoteEditFragment.sTitleBackGrounds[datas
+                        .get(position).getColor()]);
         holder.date.setText(datas.get(position).getDate());
         // holder.state.setImageResource(resId);
-        holder.thumbtack.setImageResource(NoteEditFragment.sThumbtackImgs[datas.get(
-                position).getColor()]);
+        holder.thumbtack.setImageResource(NoteEditFragment.sThumbtackImgs[datas
+                .get(position).getColor()]);
         holder.content.setText(datas.get(position).getContent());
-        holder.content.setBackgroundColor(NoteEditFragment.sBackGrounds[datas.get(
-                position).getColor()]);
+        holder.content.setBackgroundColor(NoteEditFragment.sBackGrounds[datas
+                .get(position).getColor()]);
+
+        if (isShow) {
+            holder.cbox.setVisibility(View.VISIBLE);
+            holder.cbox.setChecked(datas.get(position).isChecked());
+        } else {
+            holder.cbox.setVisibility(View.GONE);
+        }
+
         return v;
     }
 }

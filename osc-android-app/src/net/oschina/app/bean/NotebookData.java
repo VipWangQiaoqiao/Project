@@ -12,6 +12,16 @@ public class NotebookData implements Serializable {
     private boolean star;
     private int color;
 
+    private boolean checked; // view需要，非交互数据需要
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
+
     public int getId() {
         return id;
     }
