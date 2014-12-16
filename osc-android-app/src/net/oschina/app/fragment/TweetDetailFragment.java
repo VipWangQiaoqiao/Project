@@ -471,7 +471,7 @@ public class TweetDetailFragment extends BaseListFragment implements
         String key = getCacheKey();
         mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
         if (TDevice.hasInternet()
-                && (!CacheManager.isReadDataCache(getActivity(), key) || refresh)) {
+                && (!CacheManager.isExistDataCache(getActivity(), key) || refresh)) {
             OSChinaApi.getTweetDetail(mTweetId, mDetailHandler);
         } else {
             readCacheData(key);
