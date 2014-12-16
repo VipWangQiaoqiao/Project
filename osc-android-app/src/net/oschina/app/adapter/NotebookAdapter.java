@@ -1,16 +1,17 @@
 package net.oschina.app.adapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.NotebookData;
 import net.oschina.app.fragment.NoteEditFragment;
 import net.oschina.app.util.DensityUtils;
+import net.oschina.app.widget.DragGridBaseAdapter;
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
@@ -22,34 +23,25 @@ import android.widget.TextView;
  * @author kymjs
  * 
  */
-public class NotebookAdapter extends BaseAdapter {
+public class NotebookAdapter extends BaseAdapter implements DragGridBaseAdapter {
     private ArrayList<NotebookData> datas;
     private final Activity aty;
-    private boolean isShow = false;
+    private int currentHidePosition = -1;
+    private final int width;
+    private final int height;
+    private boolean dataChange = false;
 
     public NotebookAdapter(Activity aty, ArrayList<NotebookData> datas) {
         super();
         this.datas = datas;
         this.aty = aty;
+        width = DensityUtils.getScreenW(aty) / 2;
+        height = (int) aty.getResources().getDimension(R.dimen.space_35);
     }
 
     public void refurbishData(ArrayList<NotebookData> datas) {
         this.datas = datas;
         notifyDataSetChanged();
-    }
-
-    public void showCheckBox() {
-        isShow = true;
-        notifyDataSetChanged();
-    }
-
-    public void hideCheckBox() {
-        isShow = false;
-        notifyDataSetChanged();
-    }
-
-    public boolean isShowCheckBox() {
-        return isShow;
     }
 
     @Override
@@ -67,18 +59,30 @@ public class NotebookAdapter extends BaseAdapter {
         return 0;
     }
 
+    public ArrayList<NotebookData> getDatas() {
+        return datas;
+    }
+
+    /**
+     * 数据是否发生了改变
+     * 
+     * @return
+     */
+    public boolean getDataChange() {
+        return dataChange;
+    }
+
     static class ViewHolder {
         TextView date;
         ImageView state;
         ImageView thumbtack;
         View titleBar;
         TextView content;
-        CheckBox cbox;
     }
 
     @Override
     public View getView(int position, View v, ViewGroup parent) {
-        ViewHolder holder;
+        ViewHolder holder = null;
         if (v == null) {
             holder = new ViewHolder();
             v = View.inflate(aty, R.layout.item_notebook, null);
@@ -87,7 +91,6 @@ public class NotebookAdapter extends BaseAdapter {
             holder.state = (ImageView) v.findViewById(R.id.item_note_img_state);
             holder.thumbtack = (ImageView) v
                     .findViewById(R.id.item_note_img_thumbtack);
-            holder.cbox = (CheckBox) v.findViewById(R.id.item_note_checkbox);
             holder.content = (TextView) v.findViewById(R.id.item_note_content);
             v.setTag(holder);
         } else {
@@ -96,9 +99,8 @@ public class NotebookAdapter extends BaseAdapter {
 
         RelativeLayout.LayoutParams params = (LayoutParams) holder.content
                 .getLayoutParams();
-        params.width = DensityUtils.getScreenW(aty) / 2;
-        params.height = (int) (params.width - aty.getResources().getDimension(
-                R.dimen.space_35));
+        params.width = width;
+        params.height = (params.width - height);
         holder.content.setLayoutParams(params);
 
         holder.titleBar
@@ -111,14 +113,36 @@ public class NotebookAdapter extends BaseAdapter {
         holder.content.setText(datas.get(position).getContent());
         holder.content.setBackgroundColor(NoteEditFragment.sBackGrounds[datas
                 .get(position).getColor()]);
-
-        if (isShow) {
-            holder.cbox.setVisibility(View.VISIBLE);
-            holder.cbox.setChecked(datas.get(position).isChecked());
+        if (position == currentHidePosition) {
+            v.setVisibility(View.GONE);
         } else {
-            holder.cbox.setVisibility(View.GONE);
+            v.setVisibility(View.VISIBLE);
         }
-
         return v;
+    }
+
+    @Override
+    public void reorderItems(int oldPosition, int newPosition) {
+        dataChange = true;
+        if (oldPosition >= datas.size() || oldPosition < 0) {
+            return;
+        }
+        NotebookData temp = datas.get(oldPosition);
+        if (oldPosition < newPosition) {
+            for (int i = oldPosition; i < newPosition; i++) {
+                Collections.swap(datas, i, i + 1);
+            }
+        } else if (oldPosition > newPosition) {
+            for (int i = oldPosition; i > newPosition; i--) {
+                Collections.swap(datas, i, i - 1);
+            }
+        }
+        datas.set(newPosition, temp);
+    }
+
+    @Override
+    public void setHideItem(int hidePosition) {
+        this.currentHidePosition = hidePosition;
+        notifyDataSetChanged();
     }
 }

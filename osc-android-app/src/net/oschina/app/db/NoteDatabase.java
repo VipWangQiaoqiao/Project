@@ -1,6 +1,7 @@
 package net.oschina.app.db;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.oschina.app.bean.NotebookData;
 import android.content.Context;
@@ -33,6 +34,19 @@ public class NoteDatabase {
                             data.getColor() + "" });
         }
         dbHelper.close();
+    }
+
+    public void reset(List<NotebookData> datas) {
+        SQLiteDatabase sqlite = dbHelper.getWritableDatabase();
+        sqlite.execSQL("delete from " + DatabaseHelper.TABLE_NAME);
+        for (NotebookData data : datas) {
+            String sql = ("insert into" + DatabaseHelper.TABLE_NAME + "(time, date, content, star, color) values(?, ?, ?, ?, ?)");
+            sqlite.execSQL(
+                    sql,
+                    new String[] { data.getTime(), data.getDate(),
+                            data.getContent(), data.isStar() ? "1" : "0",
+                            data.getColor() + "" });
+        }
     }
 
     public ArrayList<NotebookData> query() {

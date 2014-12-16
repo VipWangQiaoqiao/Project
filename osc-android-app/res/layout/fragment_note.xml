@@ -12,43 +12,20 @@
         android:layout_height="fill_parent"
         android:visibility="visible" >
 
-        <GridView
+        <net.oschina.app.widget.DragGridView
             android:id="@+id/frag_note_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:numColumns="2" />
     </net.oschina.app.widget.CBSwipeRefreshLayout>
 
-    <RelativeLayout
-        android:id="@+id/frag_note_menu"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" >
-
-        <ImageView
-            android:id="@+id/frag_note_temp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:contentDescription="@null" />
-
-        <ImageView
-            android:id="@+id/frag_note_img_del"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="20dp"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_launcher" />
-        <ImageView
-            android:id="@+id/frag_note_img_upload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/frag_note_img_del"
-            android:layout_alignBottom="@+id/frag_note_img_del"
-            android:layout_toRightOf="@+id/frag_note_img_del"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_launcher" />
-    </RelativeLayout>
+    <ImageView
+        android:id="@+id/frag_note_trash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        android:src="@drawable/ic_launcher" />
 
 </RelativeLayout>

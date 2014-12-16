@@ -9,8 +9,12 @@ import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.NotebookData;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.db.NoteDatabase;
-import net.oschina.app.util.KJAnimations;
 import net.oschina.app.util.UIHelper;
+import net.oschina.app.widget.DragGridView;
+import net.oschina.app.widget.DragGridView.OnDeleteListener;
+import net.oschina.app.widget.DragGridView.OnMoveListener;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
@@ -22,10 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -36,20 +37,14 @@ import butterknife.InjectView;
  * 
  */
 public class NoteBookFragment extends BaseFragment implements
-        OnItemClickListener, OnItemLongClickListener, OnRefreshListener {
+        OnItemClickListener, OnRefreshListener {
 
     @InjectView(R.id.frag_note_list)
-    GridView mList;
+    DragGridView mList;
+    @InjectView(R.id.frag_note_trash)
+    ImageView mImgTrash;
     @InjectView(R.id.swiperefreshlayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
-    @InjectView(R.id.frag_note_menu)
-    RelativeLayout mMenu;
-    @InjectView(R.id.frag_note_img_del)
-    ImageView mImgDel;
-    @InjectView(R.id.frag_note_img_upload)
-    ImageView mImgRefresh;
-    @InjectView(R.id.frag_note_temp)
-    ImageView mMenuBtn;
 
     private NoteDatabase noteDb;
     private ArrayList<NotebookData> datas;
@@ -70,7 +65,7 @@ public class NoteBookFragment extends BaseFragment implements
     @Override
     public void initData() {
         noteDb = new NoteDatabase(getActivity());
-        datas = noteDb.query();
+        datas = noteDb.query();// 查询操作，忽略耗时
         if (datas != null) {
             adapter = new NotebookAdapter(getActivity(), datas);
         }
@@ -79,9 +74,34 @@ public class NoteBookFragment extends BaseFragment implements
     @Override
     public void initView(View view) {
         mList.setAdapter(adapter);
-        mList.setOnItemLongClickListener(this);
         mList.setOnItemClickListener(this);
-        mImgDel.setOnClickListener(this);
+        mList.setTrashView(mImgTrash);
+        mList.setSelector(new ColorDrawable(Color.TRANSPARENT));
+        mList.setOnDeleteListener(new OnDeleteListener() {
+            @Override
+            public void onDelete(int position) {
+                delete(datas.get(position));
+            }
+        });
+        mList.setOnMoveListener(new OnMoveListener() {
+            @Override
+            public void startMove() {
+                mSwipeRefreshLayout.setEnabled(false);
+            }
+
+            @Override
+            public void endMove() {
+                setListCanPull();
+                if (adapter.getDataChange()) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            noteDb.reset(adapter.getDatas());
+                        }
+                    }).start();
+                }
+            }
+        });
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorSchemeResources(
                 R.color.swiperefresh_color1, R.color.swiperefresh_color2,
@@ -92,9 +112,50 @@ public class NoteBookFragment extends BaseFragment implements
     public void onResume() {
         super.onResume();
         refurbish();
-        if (!AppContext.getInstance().isLogin()) {
+        setListCanPull();
+    }
+
+    /*************** private method *********************/
+
+    @Override
+    public void onRefresh() {
+        if (mState == STATE_REFRESH) {
+            return;
+        }
+
+        // 设置顶部正在刷新
+        mList.setSelection(0);
+        setSwipeRefreshLoadingState();
+
+        /* !!! 设置耗时操作 !!! */
+
+        refurbish();
+        setSwipeRefreshLoadedState();
+    }
+
+    /**
+     * 设置顶部正在加载的状态
+     */
+    private void setSwipeRefreshLoadingState() {
+        mState = STATE_REFRESH;
+        if (mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setRefreshing(true);
+            // 防止多次重复刷新
             mSwipeRefreshLayout.setEnabled(false);
         }
+        mList.setDragEnable(false);
+    }
+
+    /**
+     * 设置顶部加载完毕的状态
+     */
+    private void setSwipeRefreshLoadedState() {
+        mState = STATE_NOMORE;
+        if (mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setRefreshing(false);
+            mSwipeRefreshLayout.setEnabled(true);
+        }
+        mList.setDragEnable(true);
     }
 
     /**
@@ -108,66 +169,39 @@ public class NoteBookFragment extends BaseFragment implements
     }
 
     /**
-     * 长按显示功能操作菜单
+     * 删除数据
+     * 
+     * @param data
      */
-    @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view,
-            int position, long id) {
-        if (!adapter.isShowCheckBox()) {
-            adapter.showCheckBox();
-            mSwipeRefreshLayout.setEnabled(false);
-            mMenu.setVisibility(View.VISIBLE);
-            KJAnimations.openAnimation(mMenu, mMenuBtn, 500);
+    private void delete(NotebookData data) {
+        noteDb.delete(data.getId());
+        if (datas != null && adapter != null) {
+            adapter.refurbishData(datas);
+            mList.setAdapter(adapter);
         }
-        return false;
     }
+
+    /**
+     * 未登陆用户不能下拉同步，只能使用本地存储
+     */
+    private void setListCanPull() {
+        if (!AppContext.getInstance().isLogin()) {
+            mSwipeRefreshLayout.setEnabled(false);
+        } else {
+            mSwipeRefreshLayout.setEnabled(true);
+        }
+    }
+
+    /*************** function method *********************/
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
             long id) {
-        if (adapter.isShowCheckBox()) {
-            datas.get(position).setChecked(!datas.get(position).isChecked());
-            adapter.refurbishData(datas);
-        } else {
-            Bundle bundle = new Bundle();
-            bundle.putInt(NoteEditFragment.NOTE_FROMWHERE_KEY,
-                    NoteEditFragment.NOTEBOOK_ITEM);
-            bundle.putSerializable(NoteEditFragment.NOTE_KEY,
-                    datas.get(position));
-            UIHelper.showSimpleBack(getActivity(), SimpleBackPage.NOTE_EDIT,
-                    bundle);
-        }
-    }
-
-    /**
-     * 删除选中项
-     */
-    private void delete() {
-        for (NotebookData data : datas) {
-            if (data.isChecked()) {
-                noteDb.delete(data.getId());
-            }
-        }
-    }
-
-    /**
-     * 同步选中项
-     */
-    private void upload() {
-        for (NotebookData data : datas) {
-            if (data.isChecked()) {
-                noteDb.delete(data.getId());
-            }
-        }
-    }
-
-    /**
-     * 功能菜单操作完成后的界面恢复工作
-     */
-    private void finishHandle() {
-        refurbish();
-        adapter.hideCheckBox();
-        KJAnimations.closeAnimation(mMenu, mMenuBtn, 500);
+        Bundle bundle = new Bundle();
+        bundle.putInt(NoteEditFragment.NOTE_FROMWHERE_KEY,
+                NoteEditFragment.NOTEBOOK_ITEM);
+        bundle.putSerializable(NoteEditFragment.NOTE_KEY, datas.get(position));
+        UIHelper.showSimpleBack(getActivity(), SimpleBackPage.NOTE_EDIT, bundle);
     }
 
     @Override
@@ -196,52 +230,5 @@ public class NoteBookFragment extends BaseFragment implements
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-        case R.id.frag_note_img_del:
-            delete();
-            finishHandle();
-            break;
-        case R.id.frag_note_img_upload:
-            upload();
-            finishHandle();
-            break;
-        }
-    }
-
-    @Override
-    public void onRefresh() {
-        if (mState == STATE_REFRESH) {
-            return;
-        }
-
-        // 设置顶部正在刷新
-        mList.setSelection(0);
-        setSwipeRefreshLoadingState();
-
-        /* !!! 设置耗时操作 !!! */
-
-        refurbish();
-        setSwipeRefreshLoadedState();
-    }
-
-    /** 设置顶部正在加载的状态 */
-    private void setSwipeRefreshLoadingState() {
-        mState = STATE_REFRESH;
-        if (mSwipeRefreshLayout != null) {
-            mSwipeRefreshLayout.setRefreshing(true);
-            // 防止多次重复刷新
-            mSwipeRefreshLayout.setEnabled(false);
-        }
-    }
-
-    /** 设置顶部加载完毕的状态 */
-    private void setSwipeRefreshLoadedState() {
-        mState = STATE_NOMORE;
-        if (mSwipeRefreshLayout != null) {
-            mSwipeRefreshLayout.setRefreshing(false);
-            mSwipeRefreshLayout.setEnabled(true);
-        }
-    }
-
+    public void onClick(View v) {}
 }
