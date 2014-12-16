@@ -1,5 +1,9 @@
 package net.oschina.app.ui;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.InfoWindow.OnInfoWindowClickListener;
@@ -31,7 +35,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * 活动地图位置显示
@@ -114,18 +117,19 @@ public class EventLocationActivity extends BaseActivity implements
 		MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(14.0f);
 		mBaiduMap.setMapStatus(msu);
 
-		View view = mInflater.inflate(R.layout.event_spot_pupwindow, null, false);
-		
+		View view = mInflater.inflate(R.layout.event_spot_pupwindow, null,
+				false);
+
 		TextView spot = (TextView) view.findViewById(R.id.tv_spot);
 		spot.setText(mLocation);
 		OnInfoWindowClickListener listener = new OnInfoWindowClickListener() {
 			public void onInfoWindowClick() {
-				startNavi(location, location);
+				onClickInfoWindow(location);
 			}
 		};
 		InfoWindow mInfoWindow = new InfoWindow(
 				BitmapDescriptorFactory.fromView(view), location, -80, listener);
-		
+
 		mBaiduMap.showInfoWindow(mInfoWindow);
 	}
 
@@ -140,31 +144,56 @@ public class EventLocationActivity extends BaseActivity implements
 						.fromResource(R.drawable.icon_gcoding)));
 		mBaiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(result
 				.getLocation()));
-		Toast.makeText(EventLocationActivity.this, result.getAddress(),
-				Toast.LENGTH_LONG).show();
 	}
 
 	@Override
 	public void onClick(View v) {
 
 	}
-	
+
+	private void onClickInfoWindow(final LatLng location) {
+		// 开启定位图层
+		mBaiduMap.setMyLocationEnabled(true);
+		// 定位初始化
+		final LocationClient mLocClient = new LocationClient(
+				EventLocationActivity.this);
+		mLocClient.registerLocationListener(new BDLocationListener() {
+
+			@Override
+			public void onReceivePoi(BDLocation arg0) {
+
+			}
+
+			@Override
+			public void onReceiveLocation(BDLocation arg0) {
+				mLocClient.stop();
+				LatLng start = new LatLng(arg0.getLatitude(), arg0
+						.getLongitude());
+				startNavi(start, location);
+			}
+		});
+		LocationClientOption option = new LocationClientOption();
+		option.setOpenGps(true);// 打开gps
+		option.setCoorType("bd09ll"); // 设置坐标类型
+		option.setScanSpan(1000);
+		mLocClient.setLocOption(option);
+		mLocClient.start();
+	}
+
 	/**
 	 * 开始导航
 	 * 
 	 * @param view
 	 */
-	public void startNavi(LatLng pt1, LatLng pt2) {
+	private void startNavi(LatLng pt1, LatLng pt2) {
 		// 构建 导航参数
 		NaviPara para = new NaviPara();
 		para.startPoint = pt1;
-		para.startName = "从这里开始";
 		para.endPoint = pt2;
-		para.endName = "到这里结束";
-
 		try {
 			BaiduMapNavigation.openBaiduMapNavi(para, this);
 		} catch (BaiduMapAppNotSupportNaviException e) {
+			AppContext.showToast("抱歉，你的百度地图暂不支持打开导航");
 		}
 	}
 
