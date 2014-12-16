@@ -96,6 +96,9 @@ public class PostDetailFragment extends BaseDetailFragment implements
 			case ACTION_SHARE:
 				handleShare();
 				break;
+			case ACTION_REPORT:
+				onReportMenuClick();
+				break;
 			default:
 				break;
 			}
@@ -208,6 +211,8 @@ public class PostDetailFragment extends BaseDetailFragment implements
 		mToolBarFragment
 				.setActionVisiable(ToolAction.ACTION_VIEW_COMMENT, true);
 		mToolBarFragment.setActionVisiable(ToolAction.ACTION_SHARE, true);
+		
+		mToolBarFragment.setActionVisiable(ToolAction.ACTION_REPORT, true);
 	}
 
 	@Override
@@ -245,6 +250,11 @@ public class PostDetailFragment extends BaseDetailFragment implements
 	}
 
 	@Override
+	protected boolean hasReportMenu() {
+		return true;
+	}
+
+	@Override
 	protected int getFavoriteTargetId() {
 		return mPost != null ? mPost.getId() : -1;
 	}
@@ -268,5 +278,15 @@ public class PostDetailFragment extends BaseDetailFragment implements
 	protected String getShareUrl() {
 		return mPost != null ? mPost.getUrl().replace("http://www", "http://m")
 				: null;
+	}
+	
+	@Override
+	protected String getRepotrUrl() {
+		return mPost != null ? mPost.getUrl() : "";
+	}
+	
+	@Override
+	protected int getRepotrId() {
+		return mPost != null ? mPostId : 0;
 	}
 }

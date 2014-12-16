@@ -11,9 +11,11 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.Entity;
+import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.cache.CacheManager;
+import net.oschina.app.ui.ReportDialog;
 import net.oschina.app.ui.ShareDialog;
 import net.oschina.app.ui.ShareDialog.OnSharePlatformClick;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -26,6 +28,7 @@ import org.apache.http.Header;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
@@ -42,7 +45,9 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
+
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.TextHttpResponseHandler;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
@@ -182,7 +187,7 @@ public class BaseDetailFragment extends BaseFragment implements
 	protected void requestData(boolean refresh) {
 		String key = getCacheKey();
 		if (TDevice.hasInternet()
-				&& (!CacheManager.isReadDataCache(getActivity(), key) || refresh)) {
+				&& (!CacheManager.isExistDataCache(getActivity(), key) || refresh)) {
 			sendRequestData();
 		} else {
 			readCacheData(key);
@@ -351,8 +356,68 @@ public class BaseDetailFragment extends BaseFragment implements
 			mMenuWindow = null;
 		}
 	}
+	
+	private AsyncHttpResponseHandler mReportHandler = new TextHttpResponseHandler() {
+
+		@Override
+		public void onSuccess(int arg0, Header[] arg1, String arg2) {
+			if (TextUtils.isEmpty(arg2)) {
+				AppContext.showToastShort(R.string.tip_report_success);
+			} else {
+				AppContext.showToastShort(new String(arg2));
+			}
+		}
+
+		@Override
+		public void onFailure(int arg0, Header[] arg1, String arg2,
+				Throwable arg3) {
+			AppContext.showToastShort(R.string.tip_report_faile);
+		}
+
+		@Override
+		public void onFinish() {
+			hideWaitDialog();
+		}
+	};
 
 	protected void onReportMenuClick() {
+		if (getRepotrId() == 0) {
+			AppContext.showToast("正在加载，请稍等...");
+		}
+		if (!AppContext.getInstance().isLogin()) {
+			UIHelper.showLoginActivity(getActivity());
+			return;
+		}
+		int reportId = getRepotrId();
+		
+		final ReportDialog dialog = new ReportDialog(getActivity(),
+				getRepotrUrl(), reportId);
+		dialog.setCancelable(true);
+		dialog.setTitle(R.string.report);
+		dialog.setCanceledOnTouchOutside(true);
+		dialog.setNegativeButton(R.string.cancle, null);
+		dialog.setPositiveButton(R.string.ok,
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface d, int which) {
+						Report report = null;
+						if ((report = dialog.getReport()) != null) {
+							showWaitDialog(R.string.progress_submit);
+							OSChinaApi.report(report, mReportHandler);
+						}
+						d.dismiss();
+					}
+				});
+		dialog.show();
+	}
+	
+	protected String getRepotrUrl() {
+		return "";
+	}
+	
+	protected int getRepotrId() {
+		return 0;
 	}
 
 	protected void handleFavoriteOrNot() {

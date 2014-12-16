@@ -91,16 +91,6 @@ public class CacheManager {
 	}
 
 	/**
-	 * 判断缓存数据是否可读
-	 * 
-	 * @param cachefile
-	 * @return
-	 */
-	public static boolean isReadDataCache(Context context, String cachefile) {
-		return readObject(context, cachefile) != null;
-	}
-
-	/**
 	 * 判断缓存是否存在
 	 * 
 	 * @param cachefile

@@ -10,7 +10,10 @@ import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.bean.NewsList;
+import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Tweet;
+import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TLog;
 import android.text.TextUtils;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -570,5 +573,24 @@ public class OSChinaApi {
         params.put("event_id", eventId);
         params.put("pageSize", AppContext.PAGE_SIZE);
         ApiHttpClient.get("action/api/event_attend_user", params, handler);
+    }
+    
+    /**
+     * 举报
+     * @param report
+     * @param handler
+     */
+    public static void report(Report report, AsyncHttpResponseHandler handler) {
+    	RequestParams params = new RequestParams();
+		params.put("obj_id", report.getReportId());
+		params.put("url", report.getLinkAddress());
+		params.put("obj_type", report.getReason());
+		if (report.getOtherReason() != null && !StringUtils.isEmpty(report.getOtherReason())) {
+			params.put("memo", report.getOtherReason());
+		} else {
+			params.put("memo", "其他原因");
+		}
+		TLog.log("Test", report.getReportId() + "" + report.getLinkAddress() + report.getReason() + report.getOtherReason());
+		ApiHttpClient.post("action/communityManage/report", params, handler);
     }
 }

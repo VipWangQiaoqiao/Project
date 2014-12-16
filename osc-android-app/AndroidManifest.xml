@@ -135,6 +135,11 @@
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="pIbgtjFevz8LlkbNsYUNl4Qp" />
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" >
+        </service>
     </application>
 
 </manifest>

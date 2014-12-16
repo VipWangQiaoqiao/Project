@@ -19,16 +19,11 @@ import net.oschina.app.fragment.ToolbarFragment.ToolAction;
 import net.oschina.app.interf.EmojiFragmentControl;
 import net.oschina.app.interf.ToolbarEmojiVisiableControl;
 import net.oschina.app.interf.ToolbarFragmentControl;
-import net.oschina.app.service.PublicCommentTask;
-import net.oschina.app.service.ServerTaskUtils;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
-import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
-
-import org.apache.http.Header;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -42,9 +37,6 @@ import android.webkit.WebView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.TextHttpResponseHandler;
 
 public class BlogDetailFragment extends BaseDetailFragment implements
 		EmojiTextListener, EmojiFragmentControl, ToolbarFragmentControl {
@@ -107,29 +99,6 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 			default:
 				break;
 			}
-		}
-	};
-
-	private AsyncHttpResponseHandler mReportHandler = new TextHttpResponseHandler() {
-
-		@Override
-		public void onSuccess(int arg0, Header[] arg1, String arg2) {
-//			if (TextUtils.isEmpty(arg2)) {
-//				AppContext.showToastShort(R.string.tip_report_success);
-//			} else {
-//				AppContext.showToastShort(R.string.tip_report_faile);
-//			}
-		}
-
-		@Override
-		public void onFailure(int arg0, Header[] arg1, String arg2,
-				Throwable arg3) {
-//			AppContext.showToastShort(R.string.tip_report_faile);
-		}
-
-		@Override
-		public void onFinish() {
-//			hideWaitDialog();
 		}
 	};
 
@@ -219,7 +188,6 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 		StringBuffer body = new StringBuffer();
 		body.append(UIHelper.setHtmlCotentSupportImagePreview(mBlog.getBody()));
 		body.append(UIHelper.WEB_STYLE).append(UIHelper.WEB_LOAD_IMAGES);
-		TLog.log("BUG", body.toString());
 		mWebView.loadDataWithBaseURL(null, body.toString(), "text/html", "utf-8", null);
 	}
 
@@ -302,35 +270,14 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 	protected String getShareUrl() {
 		return mBlog != null ? mBlog.getUrl() : null;
 	}
+	
+	@Override
+	protected String getRepotrUrl() {
+		return mBlog != null ? mBlog.getUrl() : "";
+	}
 
 	@Override
-	protected void onReportMenuClick() {
-//		if (!AppContext.getInstance().isLogin()) {
-//			UIHelper.showLoginActivity(getActivity());
-//			return;
-//		}
-//		if (mBlog == null)
-//			return;
-//		int reportId = AppContext.getInstance().getLoginUid();
-//		final ReportDialog dialog = new ReportDialog(getActivity(),
-//				mBlog.getUrl(), reportId);
-//		dialog.setCancelable(true);
-//		dialog.setTitle(R.string.report);
-//		dialog.setCanceledOnTouchOutside(true);
-//		dialog.setNegativeButton(R.string.cancle, null);
-//		dialog.setPositiveButton(R.string.ok,
-//				new DialogInterface.OnClickListener() {
-//
-//					@Override
-//					public void onClick(DialogInterface d, int which) {
-//						Report report = null;
-//						if ((report = dialog.getReport()) != null) {
-//							showWaitDialog(R.string.progress_submit);
-//							NewsApi.report(report, mReportHandler);
-//						}
-//						d.dismiss();
-//					}
-//				});
-//		dialog.show();
+	protected int getRepotrId() {
+		return mBlog != null ? mBlogId : 0;
 	}
 }

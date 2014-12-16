@@ -203,7 +203,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
     protected void requestData(boolean refresh) {
         String key = getCacheKey();
         if (TDevice.hasInternet()
-                && (!CacheManager.isReadDataCache(getActivity(), key) || refresh)) {
+                && (!CacheManager.isExistDataCache(getActivity(), key) || refresh)) {
             sendRequestData();
         } else {
             readCacheData(key);
@@ -296,7 +296,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 
     protected void executeOnLoadDataSuccess(List<?> data) {
         mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-        if (mState == STATE_REFRESH)
+        if (mCurrentPage == 0)
             mAdapter.clear();
         mAdapter.addData(data);
         if (data.size() == 0 && mState == STATE_REFRESH) {
@@ -312,11 +312,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
     }
 
     protected int getPageSize() {
-        if (blogType != null && blogType.equals(Blog.CATALOG_LATEST)) {
-            return 19;
-        } else {
-            return TDevice.getPageSize();
-        }
+    	return TDevice.getPageSize();
     }
 
     protected void onRefreshNetworkSuccess() {

@@ -261,7 +261,7 @@ public class MyInformationFragment extends BaseFragment {
             mIsWatingLogin = false;
             String key = getCacheKey();
             if (TDevice.hasInternet()
-                    && (!CacheManager.isReadDataCache(getActivity(), key) || refresh)) {
+                    && (!CacheManager.isExistDataCache(getActivity(), key) || refresh)) {
                 sendRequestData();
             } else {
                 readCacheData(key);
