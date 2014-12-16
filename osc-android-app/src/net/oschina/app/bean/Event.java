@@ -18,8 +18,8 @@ public class Event implements Serializable {
 	@XStreamAlias("id")
 	private int id;
 	
-	@XStreamAlias("img")
-	private String img;
+	@XStreamAlias("cover")
+	private String cover;
 	
 	@XStreamAlias("title")
 	private String title;
@@ -64,12 +64,12 @@ public class Event implements Serializable {
 		this.id = id;
 	}
 
-	public String getImg() {
-		return img;
+	public String getCover() {
+		return cover;
 	}
 
-	public void setImg(String img) {
-		this.img = img;
+	public void setCover(String cover) {
+		this.cover = cover;
 	}
 
 	public String getTitle() {

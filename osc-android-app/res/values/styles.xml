@@ -173,7 +173,7 @@
         <item name="android:layout_alignParentBottom">true</item>
     </style>
 
-    <style name="dialog_common" parent="@style/Theme.Base.AppCompat.Dialog.FixedSize">
+    <style name="dialog_common" parent="@style/Theme.Base.AppCompat.Dialog.Light.FixedSize">
         <item name="android:windowBackground">@drawable/dialog_background</item>
     </style>
 

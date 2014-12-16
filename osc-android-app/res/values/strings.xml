@@ -266,5 +266,12 @@
 	
 	<string name="event_start_time">开始：%s</string>
 	<string name="event_end_time">结束：%s</string>
+	
+	<string name="report">举报</string>
+	<string name="report_link">链接地址</string>
+	<string name="report_reson">举报原因</string>
+	<string name="hint_report_desc">其他原因</string>
+	<string name="tip_report_success">举报成功</string>
+	<string name="tip_report_faile">举报失败</string>
 
 </resources>

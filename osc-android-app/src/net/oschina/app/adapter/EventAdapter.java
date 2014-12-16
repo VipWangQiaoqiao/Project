@@ -50,7 +50,7 @@ public class EventAdapter extends ListBaseAdapter {
 
 		Event item = (Event) _data.get(position);
 		
-		ImageLoader.getInstance().displayImage(item.getImg(), vh.img);
+		ImageLoader.getInstance().displayImage(item.getCover(), vh.img);
 		vh.title.setText(item.getTitle());
 		vh.time.setText(item.getStartTime());
 		vh.spot.setText(item.getSpot());

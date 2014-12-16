@@ -83,24 +83,24 @@ public class CommonDialog extends Dialog {
 			// TODO Check content view height and change height
 
 		} else {
-			content.addOnLayoutChangeListener(new OnLayoutChangeListener() {
-
-				@Override
-				public void onLayoutChange(View v, int left, int top,
-						int right, int bottom, int oldLeft, int oldTop,
-						int oldRight, int oldBottom) {
-					int height = v.getHeight();
-					int contentHeight = container.getHeight();
-					int winHeight = BaseApplication.getDisplaySize()[1];
-					int needHeight = height - winHeight * 8 / 10;
-					if (needHeight > 0) {
-						container
-								.setLayoutParams(new LinearLayout.LayoutParams(
-										LayoutParams.MATCH_PARENT,
-										contentHeight - needHeight));
-					}
-				}
-			});
+//			content.addOnLayoutChangeListener(new OnLayoutChangeListener() {
+//
+//				@Override
+//				public void onLayoutChange(View v, int left, int top,
+//						int right, int bottom, int oldLeft, int oldTop,
+//						int oldRight, int oldBottom) {
+//					int height = v.getHeight();
+//					int contentHeight = container.getHeight();
+//					int winHeight = BaseApplication.getDisplaySize()[1];
+//					int needHeight = height - winHeight * 8 / 10;
+//					if (needHeight > 0) {
+//						container
+//								.setLayoutParams(new LinearLayout.LayoutParams(
+//										LayoutParams.MATCH_PARENT,
+//										contentHeight - needHeight));
+//					}
+//				}
+//			});
 		}
 		super.setContentView(content);
 	}
@@ -139,7 +139,7 @@ public class CommonDialog extends Dialog {
 		container.setPadding(padding, padding, padding, padding);
 		FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
 				FrameLayout.LayoutParams.MATCH_PARENT,
-				FrameLayout.LayoutParams.WRAP_CONTENT);
+				FrameLayout.LayoutParams.MATCH_PARENT);
 		container.addView(view, lp);
 	}
 
