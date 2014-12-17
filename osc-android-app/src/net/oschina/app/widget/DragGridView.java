@@ -151,11 +151,10 @@ public class DragGridView extends GridView {
                 return;
             }
             isDrag = true; // 设置可以拖拽
+            mHandler.sendEmptyMessage(HANDLE_START);
             mVibrator.vibrate(50); // 震动一下
             mStartDragItemView.setVisibility(View.INVISIBLE);// 隐藏该item
             createDragImage(mDragBitmap, mDownX, mDownY);
-
-            mHandler.sendEmptyMessage(HANDLE_START);
         }
     };
 
