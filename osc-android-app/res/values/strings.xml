@@ -145,6 +145,7 @@
 	<string name="actionbar_title_setting_notification">新消息提醒</string>
 	<string name="actionbar_title_about_osc">关于开源中国</string>
 	<string name="actionbar_title_note">便签</string>
+	<string name="actionbar_title_shake">摇一摇</string>
 	<string name="actionbar_title_search">搜索</string>
 	<string name="actionbar_title_find_user">找人</string>
 	<string name="actionbar_title_event">我参与的活动</string>
