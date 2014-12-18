@@ -1,8 +1,13 @@
 package net.oschina.app.fragment;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URLEncoder;
+
+import org.apache.http.Header;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -14,9 +19,13 @@ import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.Entity;
+import net.oschina.app.bean.EventApplyData;
 import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.Post;
 import net.oschina.app.bean.PostDetail;
+import net.oschina.app.bean.Report;
+import net.oschina.app.bean.Result;
+import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.emoji.EmojiFragment;
 import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
@@ -25,12 +34,13 @@ import net.oschina.app.fragment.ToolbarFragment.ToolAction;
 import net.oschina.app.interf.EmojiFragmentControl;
 import net.oschina.app.interf.ToolbarEmojiVisiableControl;
 import net.oschina.app.interf.ToolbarFragmentControl;
+import net.oschina.app.ui.EventApplyDialog;
 import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -39,7 +49,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -69,6 +78,8 @@ public class EventDetailFragment extends BaseDetailFragment implements
 	@InjectView(R.id.rl_event_location) View mLocation;
 	
 	@InjectView(R.id.rl_event_attend) View mAttend;
+	
+	@InjectView(R.id.rl_event_apply) View mEventApply;
 	
 	private int mPostId;
 	private Post mPost;
@@ -139,11 +150,9 @@ public class EventDetailFragment extends BaseDetailFragment implements
 		
 		mLocation.setOnClickListener(this);
 		mAttend.setOnClickListener(this);
-		
+		mEventApply.setOnClickListener(this);
 		UIHelper.initWebView(mWebView);
 	}
-	
-	
 
 	@Override
 	public void onClick(View v) {
@@ -156,6 +165,9 @@ public class EventDetailFragment extends BaseDetailFragment implements
 		case R.id.rl_event_attend:
 			showEventApplies();
 			break;
+		case R.id.rl_event_apply:
+			showEventApply();
+			break;
 		default:
 			break;
 		}
@@ -165,6 +177,61 @@ public class EventDetailFragment extends BaseDetailFragment implements
 		Bundle args = new Bundle();
 		args.putInt(BaseListFragment.BUNDLE_KEY_CATALOG, mPost.getEvent().getId());
 		UIHelper.showSimpleBack(getActivity(), SimpleBackPage.EVENT_APPLY, args);
+	}
+	
+	private AsyncHttpResponseHandler mApplyHandler = new AsyncHttpResponseHandler() {
+		
+		@Override
+		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+			Result rs = XmlUtils.toBean(ResultBean.class, new ByteArrayInputStream(arg2)).getResult();
+			if (rs.OK()) {
+				AppContext.showToast("报名成功");
+			} else {
+				AppContext.showToast(rs.getErrorMessage());
+			}
+		}
+		
+		@Override
+		public void onFailure(int arg0, Header[] arg1, byte[] arg2, Throwable arg3) {
+			AppContext.showToast("报名失败");
+		}
+		
+		@Override
+		public void onFinish() {
+			hideWaitDialog();
+		}
+	};
+	
+	/**
+	 * 显示活动报名对话框
+	 */
+	private void showEventApply() {
+		if (!AppContext.getInstance().isLogin()) {
+			UIHelper.showLoginActivity(getActivity());
+			return;
+		}
+		final EventApplyDialog dialog = new EventApplyDialog(getActivity());
+		dialog.setCanceledOnTouchOutside(true);
+		dialog.setCancelable(true);
+		dialog.setTitle("活动报名");
+		dialog.setCanceledOnTouchOutside(true);
+		dialog.setNegativeButton(R.string.cancle, null);
+		dialog.setPositiveButton(R.string.ok,
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface d, int which) {
+						EventApplyData data = null;
+						if ((data = dialog.getApplyData()) != null) {
+							data.setEvent(mPostId);
+							data.setUser(AppContext.getInstance().getLoginUid());
+							showWaitDialog(R.string.progress_submit);
+							OSChinaApi.eventApply(data, mApplyHandler);
+						}
+						d.dismiss();
+					}
+				});
+		dialog.show();
 	}
 
 	@Override

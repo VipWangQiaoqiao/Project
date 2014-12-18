@@ -9,6 +9,7 @@ import java.util.Map;
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
 import net.oschina.app.api.ApiHttpClient;
+import net.oschina.app.bean.EventApplyData;
 import net.oschina.app.bean.NewsList;
 import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Tweet;
@@ -590,7 +591,23 @@ public class OSChinaApi {
 		} else {
 			params.put("memo", "其他原因");
 		}
-		TLog.log("Test", report.getReportId() + "" + report.getLinkAddress() + report.getReason() + report.getOtherReason());
 		ApiHttpClient.post("action/communityManage/report", params, handler);
+    }
+    
+    /**
+     * 活动报名
+     * @param data
+     * @param handler
+     */
+    public static void eventApply(EventApplyData data, AsyncHttpResponseHandler handler) {
+    	RequestParams params = new RequestParams();
+    	params.put("event", data.getEvent());
+    	params.put("user", data.getUser());
+		params.put("name", data.getName());
+		params.put("gender", data.getGender());
+		params.put("mobile", data.getPhone());
+		params.put("company", data.getCompany());
+		params.put("job", data.getJob());
+		ApiHttpClient.post("action/api/event_apply", params, handler);
     }
 }
