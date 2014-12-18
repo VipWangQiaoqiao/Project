@@ -9,6 +9,8 @@ import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.NotebookData;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.db.NoteDatabase;
+import net.oschina.app.util.DensityUtils;
+import net.oschina.app.util.KJAnimations;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.DragGridView;
 import net.oschina.app.widget.DragGridView.OnDeleteListener;
@@ -50,6 +52,8 @@ public class NoteBookFragment extends BaseFragment implements
     private ArrayList<NotebookData> datas;
     private NotebookAdapter adapter;
 
+    private int screenH;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
@@ -65,6 +69,7 @@ public class NoteBookFragment extends BaseFragment implements
     @Override
     public void initData() {
         noteDb = new NoteDatabase(getActivity());
+        screenH = DensityUtils.getScreenH(getActivity());
         datas = noteDb.query();// 查询操作，忽略耗时
         if (datas != null) {
             adapter = new NotebookAdapter(getActivity(), datas);
@@ -80,18 +85,24 @@ public class NoteBookFragment extends BaseFragment implements
         mList.setOnDeleteListener(new OnDeleteListener() {
             @Override
             public void onDelete(int position) {
-                delete(datas.get(position));
+                delete(position);
             }
         });
         mList.setOnMoveListener(new OnMoveListener() {
             @Override
             public void startMove() {
                 mSwipeRefreshLayout.setEnabled(false);
+                mImgTrash.startAnimation(KJAnimations.getTranslateAnimation(0,
+                        0, mImgTrash.getTop(), 0, 500));
+                mImgTrash.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void endMove() {
                 setListCanPull();
+                mImgTrash.setVisibility(View.INVISIBLE);
+                mImgTrash.startAnimation(KJAnimations.getTranslateAnimation(0,
+                        0, 0, mImgTrash.getTop(), 500));
                 if (adapter.getDataChange()) {
                     new Thread(new Runnable() {
                         @Override
@@ -173,8 +184,9 @@ public class NoteBookFragment extends BaseFragment implements
      * 
      * @param data
      */
-    private void delete(NotebookData data) {
-        noteDb.delete(data.getId());
+    private void delete(int index) {
+        noteDb.delete(datas.get(index).getId());
+        datas.remove(index);
         if (datas != null && adapter != null) {
             adapter.refurbishData(datas);
             mList.setAdapter(adapter);
