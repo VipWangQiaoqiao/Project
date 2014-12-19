@@ -272,9 +272,6 @@ public class UIHelper {
             case Active.CATALOG_BLOG:
                 showBlogDetail(context, id);
                 break;
-            case Active.CATALOG_EVENT:
-            	showEventDetail(context, id);
-            	break;
             default:
             	break;
             }
