@@ -15,6 +15,15 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @XStreamAlias("event")
 public class Event implements Serializable {
 	
+	public final static int EVNET_STATUS_APPLYING = 0x02;
+	public final static int EVNET_STATUS_END = 0x01;
+	
+	public final static int APPLYSTATUS_CHECKING = 0x00;// 审核中
+	public final static int APPLYSTATUS_CHECKED = 0x01;// 已经确认
+	public final static int APPLYSTATUS_ATTEND = 0x02;// 已经出席
+	public final static int APPLYSTATUS_CANCLE = 0x03;// 已取消
+	public final static int APPLYSTATUS_REJECT = 0X04;// 已拒绝
+	
 	@XStreamAlias("id")
 	private int id;
 	
@@ -47,6 +56,12 @@ public class Event implements Serializable {
 	
 	@XStreamAlias("city")
 	private String city;
+	
+	@XStreamAlias("status")
+	private int status;
+	
+	@XStreamAlias("applyStatus")
+	private int applyStatus;
 
 	public String getCity() {
 		return city;
@@ -134,5 +149,21 @@ public class Event implements Serializable {
 
 	public void setLocation(String location) {
 		this.location = location;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public int getApplyStatus() {
+		return applyStatus;
+	}
+
+	public void setApplyStatus(int applyStatus) {
+		this.applyStatus = applyStatus;
 	}
 }

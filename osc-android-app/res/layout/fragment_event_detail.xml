@@ -64,41 +64,37 @@
                     android:id="@+id/tv_event_spot"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="14sp"
                     android:textColor="@color/lightblue" />
             </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/rl_event_attend"
+            
+            <Button 
+                android:id="@+id/bt_event_attend"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/list_item_background"
-                android:clickable="true"
-                android:padding="@dimen/space_10" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="出席人员"
-                    android:textColor="@color/lightblue" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/rl_event_apply"
+                android:layout_height="35dp"
+                android:layout_marginLeft="@dimen/space_10"
+                android:layout_marginRight="@dimen/space_10"
+                android:layout_marginTop="@dimen/space_10"
+                android:text="出席人员"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:background="@drawable/btn_small_green_selector"/>
+            
+            <Button 
+                android:id="@+id/bt_event_apply"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/list_item_background"
-                android:clickable="true"
-                android:padding="@dimen/space_10" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="我要报名"
-                    android:textColor="@color/lightblue" />
-            </RelativeLayout>
-
+                android:layout_height="35dp"
+                android:layout_marginLeft="@dimen/space_10"
+                android:layout_marginRight="@dimen/space_10"
+                android:layout_marginTop="@dimen/space_5"
+                android:text="我要报名"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:background="@drawable/btn_small_green_selector"/>
+            
             <View
                 android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/space_10"
                 android:layout_height="1dp"
                 android:background="@color/list_divider_color" />
 
@@ -127,7 +123,7 @@
     <net.oschina.app.ui.empty.EmptyLayout
         android:id="@+id/error_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:visibility="gone" />
 
 </FrameLayout>
