@@ -166,11 +166,20 @@ public class News extends Entity {
 	@XStreamAlias("newstype")
 	public class NewsType implements Serializable{
 		@XStreamAlias("type")
-		public int type;
+		private int type;
 		@XStreamAlias("attachment")
-		public String attachment;
+		private String attachment;
 		@XStreamAlias("authoruid2")
-		public int authoruid2;
+		private int authoruid2;
+		@XStreamAlias("eventurl")
+		private String eventUrl;
+		
+		public String getEventUrl() {
+			return eventUrl;
+		}
+		public void setEventUrl(String eventUrl) {
+			this.eventUrl = eventUrl;
+		}
 		public int getType() {
 			return type;
 		}

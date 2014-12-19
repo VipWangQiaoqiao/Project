@@ -1,7 +1,5 @@
 package net.oschina.app.util;
 
-import java.util.regex.Pattern;
-
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.AppManager;
@@ -76,10 +74,6 @@ import com.zbar.lib.CaptureActivity;
  * 
  */
 public class UIHelper {
-
-    /** 表情图片匹配 */
-    private static Pattern facePattern = Pattern
-            .compile("\\[{1}([0-9]\\d*)\\]{1}");
 
     /** 全局web样式 */
     // 链接样式文件，代码块高亮的处理
@@ -216,11 +210,18 @@ public class UIHelper {
      */
     public static void showNewsRedirect(Context context, News news) {
         String url = news.getUrl();
+        // 如果是活动则直接跳转活动详情页面
+        String eventUrl = news.getNewType().getEventUrl();
+        if (!StringUtils.isEmpty(eventUrl)) {
+            showEventDetail(context,
+                    StringUtils.toInt(news.getNewType().getAttachment()));
+            return;
+        }
         // url为空-旧方法
         if (StringUtils.isEmpty(url)) {
             int newsId = news.getId();
-            int newsType = news.getNewType().type;
-            String objId = news.getNewType().attachment;
+            int newsType = news.getNewType().getType();
+            String objId = news.getNewType().getAttachment();
             switch (newsType) {
             case News.NEWSTYPE_NEWS:
                 showNewsDetail(context, newsId);
@@ -233,6 +234,8 @@ public class UIHelper {
                 break;
             case News.NEWSTYPE_BLOG:
                 showBlogDetail(context, StringUtils.toInt(objId));
+                break;
+            default:
                 break;
             }
         } else {
@@ -269,6 +272,11 @@ public class UIHelper {
                 break;
             case Active.CATALOG_BLOG:
                 showBlogDetail(context, id);
+                break;
+            // case Active.CATALOG_EVENT:
+            // showEventDetail(context, id);
+            // break;
+            default:
                 break;
             }
         } else {
