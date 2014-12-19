@@ -26,6 +26,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -86,42 +88,56 @@ public class ShakeFragment extends BaseFragment implements SensorEventListener {
     private void onShake() {
         isRequest = true;
 
-        /* 耗时操作 */
-        mImgShake.startAnimation(KJAnimations.shakeAnimation(mImgShake
-                .getLeft()));
-        OSChinaApi.shake(new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-                isRequest = false;
-                final ShakeObject obj = XmlUtils.toBean(ShakeObject.class,
-                        new ByteArrayInputStream(arg2));
-                if (obj != null) {
-                    mLayoutBottom.setVisibility(View.VISIBLE);
-                    mLayoutBottom.setOnClickListener(new OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            UIHelper.showUrlShake(aty, obj);
-                        }
-                    });
-                    ImageLoader.getInstance().displayImage(obj.getImage(),
-                            mImgHead);
-                    mTvTitle.setText(obj.getTitle());
-                    mTvDetail.setText(obj.getDetail());
-                    mTvAuthor.setText("作者:" + obj.getAuthor());
-                    mTvCommentCount.setText("评论:" + obj.getCommentCount());
-                    mTvDate.setText("时间:" + obj.getPubDate());
-                } else {
-                    AppContext.showToast("红薯跟你开了个玩笑");
-                }
-            }
+        Animation anim = KJAnimations.shakeAnimation(mImgShake.getLeft());
+        anim.setAnimationListener(new AnimationListener() {
 
             @Override
-            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                    Throwable arg3) {
-                isRequest = false;
-                AppContext.showToast("红薯跟你开了个玩笑");
+            public void onAnimationStart(Animation animation) {}
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                OSChinaApi.shake(new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+                        isRequest = false;
+                        final ShakeObject obj = XmlUtils.toBean(
+                                ShakeObject.class, new ByteArrayInputStream(
+                                        arg2));
+                        if (obj != null) {
+                            mLayoutBottom.setVisibility(View.VISIBLE);
+                            mLayoutBottom
+                                    .setOnClickListener(new OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            UIHelper.showUrlShake(aty, obj);
+                                        }
+                                    });
+                            ImageLoader.getInstance().displayImage(
+                                    obj.getImage(), mImgHead);
+                            mTvTitle.setText(obj.getTitle());
+                            mTvDetail.setText(obj.getDetail());
+                            mTvAuthor.setText("作者:" + obj.getAuthor());
+                            mTvCommentCount.setText("评论:"
+                                    + obj.getCommentCount());
+                            mTvDate.setText("时间:" + obj.getPubDate());
+                        } else {
+                            AppContext.showToast("红薯跟你开了个玩笑");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+                            Throwable arg3) {
+                        isRequest = false;
+                        AppContext.showToast("红薯跟你开了个玩笑");
+                    }
+                });
             }
         });
+        mImgShake.startAnimation(anim);
     }
 
     @Override
