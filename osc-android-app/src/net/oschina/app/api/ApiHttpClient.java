@@ -20,7 +20,7 @@ public class ApiHttpClient {
 	public static final String POST = "POST";
 	public static final String PUT = "PUT";
 	public static AsyncHttpClient client;
-
+ 
 	public ApiHttpClient() {
 	}
 
