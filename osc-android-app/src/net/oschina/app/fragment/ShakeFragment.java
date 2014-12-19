@@ -1,7 +1,18 @@
 package net.oschina.app.fragment;
 
+import java.io.ByteArrayInputStream;
+
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseFragment;
+import net.oschina.app.bean.ShakeObject;
+import net.oschina.app.util.KJAnimations;
+import net.oschina.app.util.UIHelper;
+import net.oschina.app.util.XmlUtils;
+
+import org.apache.http.Header;
+
 import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
@@ -12,14 +23,39 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import butterknife.ButterKnife;
+import butterknife.InjectView;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class ShakeFragment extends BaseFragment implements SensorEventListener {
+
+    @InjectView(R.id.shake_img)
+    ImageView mImgShake;
+
+    @InjectView(R.id.shake_bottom)
+    LinearLayout mLayoutBottom;
+    @InjectView(R.id.exploreproject_listitem_userface)
+    ImageView mImgHead;
+    @InjectView(R.id.exploreproject_listitem_title)
+    TextView mTvTitle;
+    @InjectView(R.id.exploreproject_listitem_description)
+    TextView mTvDetail;
+    @InjectView(R.id.exploreproject_listitem_language)
+    TextView mTvAuthor;
+    @InjectView(R.id.exploreproject_listitem_star)
+    TextView mTvCommentCount;
+    @InjectView(R.id.exploreproject_listitem_fork)
+    TextView mTvDate;
 
     private SensorManager sensorManager = null;
     private Sensor sensor;
@@ -44,9 +80,7 @@ public class ShakeFragment extends BaseFragment implements SensorEventListener {
     }
 
     @Override
-    public void initView(View view) {
-
-    }
+    public void initView(View view) {}
 
     /**
      * 摇动手机成功后调用
@@ -54,9 +88,56 @@ public class ShakeFragment extends BaseFragment implements SensorEventListener {
     private void onShake() {
         isRequest = true;
 
-        /* 耗时操作 */
+        Animation anim = KJAnimations.shakeAnimation(mImgShake.getLeft());
+        anim.setAnimationListener(new AnimationListener() {
 
-        isRequest = false;
+            @Override
+            public void onAnimationStart(Animation animation) {}
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                OSChinaApi.shake(new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+                        isRequest = false;
+                        final ShakeObject obj = XmlUtils.toBean(
+                                ShakeObject.class, new ByteArrayInputStream(
+                                        arg2));
+                        if (obj != null) {
+                            mLayoutBottom.setVisibility(View.VISIBLE);
+                            mLayoutBottom
+                                    .setOnClickListener(new OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            UIHelper.showUrlShake(aty, obj);
+                                        }
+                                    });
+                            ImageLoader.getInstance().displayImage(
+                                    obj.getImage(), mImgHead);
+                            mTvTitle.setText(obj.getTitle());
+                            mTvDetail.setText(obj.getDetail());
+                            mTvAuthor.setText("作者:" + obj.getAuthor());
+                            mTvCommentCount.setText("评论:"
+                                    + obj.getCommentCount());
+                            mTvDate.setText("时间:" + obj.getPubDate());
+                        } else {
+                            AppContext.showToast("红薯跟你开了个玩笑");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+                            Throwable arg3) {
+                        isRequest = false;
+                        AppContext.showToast("红薯跟你开了个玩笑");
+                    }
+                });
+            }
+        });
+        mImgShake.startAnimation(anim);
     }
 
     @Override
@@ -100,7 +181,8 @@ public class ShakeFragment extends BaseFragment implements SensorEventListener {
 
         double speed = (Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ
                 * deltaZ) / timeInterval) * 100;
-        if (speed >= SPEED_SHRESHOLD) {
+        if (speed >= SPEED_SHRESHOLD && !isRequest) {
+            mLayoutBottom.setVisibility(View.GONE);
             vibrator.vibrate(300);
             onShake();
         }
@@ -118,25 +200,25 @@ public class ShakeFragment extends BaseFragment implements SensorEventListener {
         return rootView;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.pub_tweet_menu, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-        case R.id.public_menu_send:
-            break;
-        }
-        return true;
-    }
+    // @Override
+    // public void onCreate(Bundle savedInstanceState) {
+    // super.onCreate(savedInstanceState);
+    // setHasOptionsMenu(true);
+    // }
+    //
+    // @Override
+    // public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    // inflater.inflate(R.menu.pub_tweet_menu, menu);
+    // }
+    //
+    // @Override
+    // public boolean onOptionsItemSelected(MenuItem item) {
+    // switch (item.getItemId()) {
+    // case R.id.public_menu_send:
+    // break;
+    // }
+    // return true;
+    // }
 
     @Override
     public void onClick(View v) {}

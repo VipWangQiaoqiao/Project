@@ -90,6 +90,44 @@
     <!-- app main menu style end! -->
 
 
+    <!-- project list text style bgein -->
+    <style name="project_list_text_parent">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!-- title -->
+    <style name="project_list_title" parent="project_list_text_parent">
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textColor">@color/project_listitem_title</item>
+        <item name="android:textSize">@dimen/text_size_15</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- description -->
+    <style name="project_list_description" parent="project_list_text_parent">
+        <item name="android:layout_marginTop">8dip</item>
+        <item name="android:textColor">@color/project_listitem_description</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:maxLines">4</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+    
+    <!-- language star fork nums icon -->
+    <style name="project_list_img">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
+    <!-- language starfork nums -->
+    <style name="project_list_someinfo" parent="project_list_text_parent">
+        <item name="android:layout_marginLeft">3dip</item>
+        <item name="android:layout_marginRight">10dip</item>
+        <item name="android:textColor">@color/project_listitem_someinfo</item>
+        <item name="android:textSize">@dimen/text_size_10</item>
+    </style>
+
     <!-- viewpage文本  滑动标签标题 -->
     <style name="viewpage_slidingTabTitle">
         <item name="android:layout_width">wrap_content</item>
@@ -190,6 +228,16 @@
     <style name="dialog_animation" parent="android:Animation">
         <item name="@android:windowEnterAnimation">@anim/dialog_enter</item>
         <item name="@android:windowExitAnimation">@anim/dialog_exit</item>
+    </style>
+
+    <!-- 列表用户头像的样式 -->
+    <style name="UserFaceImageStyle">
+        <item name="android:layout_width">40.0dip</item>
+        <item name="android:layout_height">40.0dip</item>
+        <item name="android:padding">1.0dip</item>
+        <item name="android:clickable">true</item>
+        <item name="android:contentDescription">face</item>
+        <item name="android:src">@drawable/widget_dface_loading</item>
     </style>
 
     <style name="dialog_waiting" parent="@android:style/Theme.Dialog">
@@ -315,7 +363,7 @@
         <item name="android:gravity">center_vertical</item>
         <item name="android:orientation">horizontal</item>
     </style>
-    
+
     <style name="option_item_img">
         <item name="android:layout_width">28dp</item>
         <item name="android:layout_height">28dp</item>
@@ -332,7 +380,7 @@
         <item name="android:layout_centerVertical">true</item>
         <item name="android:textSize">@dimen/text_size_16</item>
     </style>
-    
+
     <style name="option_item_text" parent="@style/option_item_text_parent">
         <item name="android:drawablePadding">@dimen/space_8</item>
         <item name="android:textColor">#666</item>
@@ -386,6 +434,7 @@
         <item name="android:padding">@dimen/space_16</item>
         <item name="android:background">@drawable/list_item_background</item>
     </style>
+
     <style name="quick_option_item_text">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -394,7 +443,7 @@
         <item name="android:textSize">@dimen/text_size_12</item>
     </style>
     <!-- quick option style end -->
-    
+
     <style name="uset_information_ll">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
@@ -405,6 +454,7 @@
         <item name="android:orientation">vertical</item>
         <item name="android:padding">@dimen/space_4</item>
     </style>
+
     <style name="user_formation_text">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -412,19 +462,21 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/text_size_11</item>
     </style>
-    <style name="user_formation_info" parent="@style/user_formation_text" > 
+
+    <style name="user_formation_info" parent="@style/user_formation_text">
         <item name="android:textSize">@dimen/text_size_12</item>
     </style>
-    
+
     <style name="note_detail_menu">
         <item name="android:layout_height">30dp</item>
         <item name="android:layout_width">30dp</item>
     </style>
-    
+
     <style name="note_detail_menu_item" parent="note_detail_menu">
         <item name="android:layout_marginTop">5dp</item>
         <item name="android:layout_marginBottom">5dp</item>
     </style>
+
     <style name="note_detail_menu_setup" parent="note_detail_menu">
         <item name="android:layout_marginLeft">5dp</item>
         <item name="android:layout_marginRight">5dp</item>

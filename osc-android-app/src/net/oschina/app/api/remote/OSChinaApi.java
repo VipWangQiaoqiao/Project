@@ -537,77 +537,109 @@ public class OSChinaApi {
     public static void checkUpdate(AsyncHttpResponseHandler handler) {
         ApiHttpClient.get("MobileAppVersion.xml", handler);
     }
-    
+
     /**
      * 查找用户
+     * 
      * @param username
      * @param handler
      */
-    public static void findUser(String username, AsyncHttpResponseHandler handler) {
-    	RequestParams params = new RequestParams();
+    public static void findUser(String username,
+            AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
         params.put("name", username);
         ApiHttpClient.get("action/api/find_user", params, handler);
     }
-    
+
     /**
      * 获取我的活动列表
+     * 
      * @param pageIndex
      * @param handler
      */
-    public static void getEventList(int pageIndex, int uid, AsyncHttpResponseHandler handler) {
-    	RequestParams params = new RequestParams();
+    public static void getEventList(int pageIndex, int uid,
+            AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
         params.put("pageIndex", pageIndex);
         params.put("uid", uid);
         params.put("pageSize", AppContext.PAGE_SIZE);
         ApiHttpClient.get("action/api/my_event_list", params, handler);
     }
-    
+
     /**
      * 获取某活动已出席的人员列表
+     * 
      * @param eventId
      * @param pageIndex
      * @param handler
      */
-    public static void getEventApplies(int eventId, int pageIndex, AsyncHttpResponseHandler handler) {
-    	RequestParams params = new RequestParams();
+    public static void getEventApplies(int eventId, int pageIndex,
+            AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
         params.put("pageIndex", pageIndex);
         params.put("event_id", eventId);
         params.put("pageSize", AppContext.PAGE_SIZE);
         ApiHttpClient.get("action/api/event_attend_user", params, handler);
     }
-    
+
     /**
      * 举报
+     * 
      * @param report
      * @param handler
      */
     public static void report(Report report, AsyncHttpResponseHandler handler) {
-    	RequestParams params = new RequestParams();
-		params.put("obj_id", report.getReportId());
-		params.put("url", report.getLinkAddress());
-		params.put("obj_type", report.getReason());
-		if (report.getOtherReason() != null && !StringUtils.isEmpty(report.getOtherReason())) {
-			params.put("memo", report.getOtherReason());
-		} else {
-			params.put("memo", "其他原因");
-		}
-		ApiHttpClient.post("action/communityManage/report", params, handler);
+        RequestParams params = new RequestParams();
+        params.put("obj_id", report.getReportId());
+        params.put("url", report.getLinkAddress());
+        params.put("obj_type", report.getReason());
+        if (report.getOtherReason() != null
+                && !StringUtils.isEmpty(report.getOtherReason())) {
+            params.put("memo", report.getOtherReason());
+        } else {
+            params.put("memo", "其他原因");
+        }
+        TLog.log("Test", report.getReportId() + "" + report.getLinkAddress()
+                + report.getReason() + report.getOtherReason());
+        ApiHttpClient.post("action/communityManage/report", params, handler);
     }
-    
+
+    /**
+     * 摇一摇，随机数据
+     * 
+     * @param handler
+     */
+    public static void shake(AsyncHttpResponseHandler handler) {
+        shake(-1, handler);
+    }
+
+    /**
+     * 摇一摇指定请求类型
+     */
+    public static void shake(int type, AsyncHttpResponseHandler handler) {
+        String inter = "action/api/rock_rock";
+        if (type > 0) {
+            inter = (inter + "/?type=" + type);
+        }
+        ApiHttpClient.get(inter, handler);
+    }
+
     /**
      * 活动报名
+     * 
      * @param data
      * @param handler
      */
-    public static void eventApply(EventApplyData data, AsyncHttpResponseHandler handler) {
-    	RequestParams params = new RequestParams();
-    	params.put("event", data.getEvent());
-    	params.put("user", data.getUser());
-		params.put("name", data.getName());
-		params.put("gender", data.getGender());
-		params.put("mobile", data.getPhone());
-		params.put("company", data.getCompany());
-		params.put("job", data.getJob());
-		ApiHttpClient.post("action/api/event_apply", params, handler);
+    public static void eventApply(EventApplyData data,
+            AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("event", data.getEvent());
+        params.put("user", data.getUser());
+        params.put("name", data.getName());
+        params.put("gender", data.getGender());
+        params.put("mobile", data.getPhone());
+        params.put("company", data.getCompany());
+        params.put("job", data.getJob());
+        ApiHttpClient.post("action/api/event_apply", params, handler);
     }
 }

@@ -1,7 +1,5 @@
 package net.oschina.app.util;
 
-import java.util.regex.Pattern;
-
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.AppManager;
@@ -12,6 +10,7 @@ import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.News;
 import net.oschina.app.bean.Notice;
+import net.oschina.app.bean.ShakeObject;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.fragment.CommentFrament;
 import net.oschina.app.fragment.FriendsFragment;
@@ -146,14 +145,15 @@ public class UIHelper {
                 DetailActivity.DISPLAY_POST);
         context.startActivity(intent);
     }
-    
+
     /**
      * 显示活动详情
+     * 
      * @param context
      * @param eventId
      */
     public static void showEventDetail(Context context, int eventId) {
-    	Intent intent = new Intent(context, DetailActivity.class);
+        Intent intent = new Intent(context, DetailActivity.class);
         intent.putExtra("post_id", eventId);
         intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
                 DetailActivity.DISPLAY_EVENT);
@@ -213,8 +213,9 @@ public class UIHelper {
         // 如果是活动则直接跳转活动详情页面
         String eventUrl = news.getNewType().getEventUrl();
         if (!StringUtils.isEmpty(eventUrl)) {
-        	showEventDetail(context, StringUtils.toInt(news.getNewType().getAttachment()));
-        	return;
+            showEventDetail(context,
+                    StringUtils.toInt(news.getNewType().getAttachment()));
+            return;
         }
         // url为空-旧方法
         if (StringUtils.isEmpty(url)) {
@@ -235,7 +236,7 @@ public class UIHelper {
                 showBlogDetail(context, StringUtils.toInt(objId));
                 break;
             default:
-            	break;
+                break;
             }
         } else {
             showUrlRedirect(context, url);
@@ -265,7 +266,7 @@ public class UIHelper {
                 break;
             case Active.CATALOG_POST:
                 showPostDetail(context, id);
-                break; 
+                break;
             case Active.CATALOG_TWEET:
                 showTweetDetail(context, id);
                 break;
@@ -273,7 +274,7 @@ public class UIHelper {
                 showBlogDetail(context, id);
                 break;
             default:
-            	break;
+                break;
             }
         } else {
             showUrlRedirect(context, url);
@@ -349,6 +350,23 @@ public class UIHelper {
             body = body.replaceAll("<\\s*img\\s+([^>]*)\\s*>", "");
         }
         return body;
+    }
+
+    /**
+     * 摇一摇点击跳转
+     * 
+     * @param obj
+     */
+    public static void showUrlShake(Context context, ShakeObject obj) {
+        if (StringUtils.isEmpty(obj.getUrl())) {
+            if (ShakeObject.RANDOMTYPE_NEWS.equals(obj.getRandomtype())) {
+                UIHelper.showNewsDetail(context, StringUtils.toInt(obj.getId()));
+            }
+        } else {
+            if (!StringUtils.isEmpty(obj.getUrl())) {
+                UIHelper.showUrlRedirect(context, obj.getUrl());
+            }
+        }
     }
 
     /**
@@ -878,14 +896,15 @@ public class UIHelper {
         intent.putExtras(args);
         context.sendBroadcast(intent);
     }
-    
+
     /**
      * 显示活动地址地图信息
      * 
      * @param context
      * @param page
      */
-    public static void showEventLocation(Context context, String city, String location) {
+    public static void showEventLocation(Context context, String city,
+            String location) {
         Intent intent = new Intent(context, EventLocationActivity.class);
         intent.putExtra("city", city);
         intent.putExtra("location", location);

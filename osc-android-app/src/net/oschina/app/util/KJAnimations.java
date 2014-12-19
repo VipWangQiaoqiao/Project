@@ -72,6 +72,25 @@ public class KJAnimations {
         return set;
     }
 
+    public static Animation shakeAnimation(int X) {
+        AnimationSet set = new AnimationSet(true);
+        Animation anim1 = getTranslateAnimation(0, -200, 0, 0, 100);
+        anim1.setStartOffset(100);
+        set.addAnimation(anim1);
+        Animation anim2 = getTranslateAnimation(-200, 400, 0, 0, 200);
+        anim2.setStartOffset(300);
+        set.addAnimation(anim2);
+        Animation anim3 = getTranslateAnimation(400, -200, 0, 0, 200);
+        anim3.setStartOffset(500);
+        set.addAnimation(anim3);
+        Animation anim4 = getTranslateAnimation(-200, 0, 0, 0, 100);
+        anim4.setStartOffset(600);
+        set.addAnimation(anim4);
+        set.setFillAfter(true);
+        set.setDuration(640);
+        return set;
+    }
+
     /**
      * 打开的动画
      * 
