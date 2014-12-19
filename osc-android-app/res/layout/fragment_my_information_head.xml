@@ -134,7 +134,7 @@
         android:visibility="gone" >
 
         <net.oschina.app.widget.AvatarView
-            android:id="@id/iv_avatar"
+            android:id="@+id/iv_avatar1"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_centerHorizontal="true"
@@ -147,7 +147,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/iv_avatar"
+                android:layout_below="@id/iv_avatar1"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/space_5"
                 android:text="@string/my_information_unlogin_tips"
