@@ -20,66 +20,68 @@ import android.widget.AdapterView;
 
 /**
  * 新闻资讯
+ * 
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @created 2014年11月12日 下午4:17:45
- *
+ * 
  */
-public class NewsFragment extends BaseListFragment implements OnTabReselectListener {
-	
-	protected static final String TAG = NewsFragment.class.getSimpleName();
-	private static final String CACHE_KEY_PREFIX = "newslist_";
-	
-	@Override
-	protected ListBaseAdapter getListAdapter() {
-		return new NewsAdapter();
-	}
+public class NewsFragment extends BaseListFragment implements
+        OnTabReselectListener {
 
-	@Override
-	protected String getCacheKeyPrefix() {
-		return CACHE_KEY_PREFIX + "_" + mCatalog;
-	}
+    protected static final String TAG = NewsFragment.class.getSimpleName();
+    private static final String CACHE_KEY_PREFIX = "newslist_";
 
-	@Override
-	protected ListEntity parseList(InputStream is) throws Exception {
-		NewsList list = XmlUtils.toBean(NewsList.class, is);
-		return list;
-	}
+    @Override
+    protected ListBaseAdapter getListAdapter() {
+        return new NewsAdapter();
+    }
 
-	@Override
-	protected ListEntity readList(Serializable seri) {
-		return ((NewsList) seri);
-	}
+    @Override
+    protected String getCacheKeyPrefix() {
+        return CACHE_KEY_PREFIX + "_" + mCatalog;
+    }
 
-	@Override
-	protected void sendRequestData() {
-		OSChinaApi.getNewsList(mCatalog, mCurrentPage, mHandler);
-	}
+    @Override
+    protected ListEntity parseList(InputStream is) throws Exception {
+        NewsList list = XmlUtils.toBean(NewsList.class, is);
+        return list;
+    }
 
-	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-		News news = (News) mAdapter.getItem(position);
-		if (news != null)
-			UIHelper.showNewsRedirect(view.getContext(), news);
-	}
-	
+    @Override
+    protected ListEntity readList(Serializable seri) {
+        return ((NewsList) seri);
+    }
 
-	@Override
-	protected void executeOnLoadDataSuccess(List<?> data) {
-		if (mCatalog == NewsList.CATALOG_WEEK || mCatalog == NewsList.CATALOG_MONTH) {
-			mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-			if (mState == STATE_REFRESH)
-				mAdapter.clear();
-			mAdapter.addData(data);
-			mState = STATE_NOMORE;
-			mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
-			return;
-		}
-		super.executeOnLoadDataSuccess(data);
-	}
+    @Override
+    protected void sendRequestData() {
+        OSChinaApi.getNewsList(mCatalog, mCurrentPage, mHandler);
+    }
 
-	@Override
-	public void onTabReselect() {
-		onRefresh();
-	}
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position,
+            long id) {
+        News news = (News) mAdapter.getItem(position);
+        if (news != null)
+            UIHelper.showNewsRedirect(view.getContext(), news);
+    }
+
+    @Override
+    protected void executeOnLoadDataSuccess(List<?> data) {
+        if (mCatalog == NewsList.CATALOG_WEEK
+                || mCatalog == NewsList.CATALOG_MONTH) {
+            mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+            if (mState == STATE_REFRESH)
+                mAdapter.clear();
+            mAdapter.addData(data);
+            mState = STATE_NOMORE;
+            mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
+            return;
+        }
+        super.executeOnLoadDataSuccess(data);
+    }
+
+    @Override
+    public void onTabReselect() {
+        onRefresh();
+    }
 }

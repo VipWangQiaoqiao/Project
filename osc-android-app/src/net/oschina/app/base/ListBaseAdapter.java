@@ -164,7 +164,7 @@ public class ListBaseAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (position == getCount() - 1) {// 最后一条
             if (position < _data.size()) {
-                position = getCount() - 2;// footview
+                position = getCount() - 2; // footview
             }
             if (getState() == STATE_LOAD_MORE || getState() == STATE_NO_MORE
                     || state == STATE_EMPTY_ITEM
@@ -213,6 +213,9 @@ public class ListBaseAdapter extends BaseAdapter {
                 }
                 return mFooterView;
             }
+        }
+        if (position < 0) {
+            position = 0; // 若列表没有数据，是没有footview/headview的
         }
         return getRealView(position, convertView, parent);
     }

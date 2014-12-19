@@ -54,11 +54,17 @@
     <color name="swiperefresh_color3">#ffff4444</color>
     <color name="swiperefresh_color4">#ffaa66cc</color>
     
+    <color name="project_listitem_title">#294fa1</color>
+    <color name="project_listitem_description">#515151</color>
+    <color name="project_listitem_someinfo">#b6b6b6</color>
+    
     <!-- 动弹列表背景颜色 -->
     <color name="tweet_bg">#f9f7f7</color>
 	<color name="tweet_item_bg">#ffffff</color>
 	<color name="tweet_item_border">#c2c3c8</color>
 	<color name="tweet_time_platform">#a0a3a7</color>
+	
+	<color name="project_detail_item">#e2e0e0</color>
 	
 	<color name="my_information_option_pressed">#18be40</color>
 </resources>
