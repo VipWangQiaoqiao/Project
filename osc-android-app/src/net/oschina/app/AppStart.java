@@ -26,7 +26,7 @@ public class AppStart extends Activity {
         
 		//渐变展示启动屏
 		AlphaAnimation aa = new AlphaAnimation(0.5f,1.0f);
-		aa.setDuration(1500);
+		aa.setDuration(1000);
 		view.startAnimation(aa);
 		aa.setAnimationListener(new AnimationListener()
 		{
