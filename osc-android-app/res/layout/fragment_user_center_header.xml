@@ -122,7 +122,6 @@
         android:layout_gravity="center_horizontal"
         android:gravity="center"
         android:padding="@dimen/space_8"
-        android:text="最近登陆：14分钟前"
         android:textColor="@color/main_gray"
         android:textSize="@dimen/text_size_14" />
 
