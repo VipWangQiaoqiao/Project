@@ -6,109 +6,104 @@
     android:background="@color/list_item_background_normal"
     android:orientation="vertical" >
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/ll_user_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="150dp"
+        android:orientation="vertical"
+        android:visibility="visible"
+        android:background="@drawable/user_center_bg" >
 
-        <View
-            android:id="@+id/bg"
+        <RelativeLayout
+            android:id="@+id/rl_user_center"
             android:layout_width="match_parent"
-            android:layout_height="170dp"
-            android:background="@drawable/user_center_bg"
-            android:contentDescription="@null"
-            android:scaleType="centerCrop" />
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clickable="true" >
 
-        <LinearLayout
-            android:id="@+id/bottom"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/bg"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:scaleType="centerCrop" >
+            <net.oschina.app.widget.AvatarView
+                android:id="@+id/iv_avatar"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/space_20"
+                android:contentDescription="@null"
+                android:src="@drawable/widget_dface_loading"
+                app:border_color="@color/white"
+                app:border_width="3dip" />
+
+            <ImageView
+                android:id="@+id/iv_gender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/iv_avatar"
+                android:layout_alignRight="@id/iv_avatar"
+                android:background="@drawable/userinfo_icon_male" />
 
             <TextView
                 android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/space_8"
-                android:ellipsize="end"
-                android:gravity="center_vertical"
-                android:singleLine="true"
-                android:text="火蚁"
+                android:layout_below="@id/iv_avatar"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/space_5"
                 android:textColor="@color/white"
-                android:textSize="@dimen/text_size_19" />
+                android:textSize="@dimen/text_size_18" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="3px"
+            android:background="#18be40" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
 
             <LinearLayout
-                android:id="@+id/ly_follow"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:padding="@dimen/space_5"
-                android:visibility="visible" >
-
-                <TextView
-                    android:id="@+id/tv_following_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="关注32"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_size_16" />
-
-                <View
-                    android:layout_width="1px"
-                    android:layout_height="10dp"
-                    android:layout_marginLeft="@dimen/space_10"
-                    android:layout_marginRight="@dimen/space_10"
-                    android:background="@color/white" />
-
-                <TextView
-                    android:id="@+id/tv_follower_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="粉丝200"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_size_16" />
-
-                <View
-                    android:layout_width="1px"
-                    android:layout_height="10dp"
-                    android:layout_marginLeft="@dimen/space_10"
-                    android:layout_marginRight="@dimen/space_10"
-                    android:background="@color/white" />
+                android:id="@+id/ly_score"
+                style="@style/uset_information_ll"
+                android:clickable="false" >
 
                 <TextView
                     android:id="@+id/tv_score"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="积分200"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_size_16" />
+                    style="@style/user_formation_text" />
+
+                <TextView
+                    style="@style/user_formation_info"
+                    android:text="@string/user_score" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ly_following"
+                style="@style/uset_information_ll" >
+
+                <TextView
+                    android:id="@+id/tv_following_count"
+                    style="@style/user_formation_text" />
+
+                <TextView
+                    style="@style/user_formation_info"
+                    android:text="@string/following" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ly_follower"
+                style="@style/uset_information_ll" >
+
+                <TextView
+                    android:id="@+id/tv_follower_count"
+                    style="@style/user_formation_text" />
+
+                <TextView
+                    style="@style/user_formation_info"
+                    android:text="@string/follower" />
             </LinearLayout>
         </LinearLayout>
-
-        <net.oschina.app.widget.AvatarView
-            android:id="@+id/iv_avatar"
-            android:layout_width="74dp"
-            android:layout_height="74dp"
-            android:layout_above="@id/bottom"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/space_8"
-            android:contentDescription="@null"
-            android:src="@drawable/widget_dface"
-            app:border_color="@color/white"
-            app:border_width="3dip" />
-
-        <ImageView
-            android:id="@+id/iv_gender"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/iv_avatar"
-            android:layout_alignRight="@id/iv_avatar"
-            android:layout_margin="3dip"
-            android:background="@drawable/userinfo_icon_male" />
-    </RelativeLayout>
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"

@@ -138,13 +138,11 @@ public class UserCenterFragment extends BaseFragment implements
 		case R.id.iv_avatar:
 			UIHelper.showUserAvatar(getActivity(), mUser.getPortrait());
 			break;
-		case R.id.tv_following_count:
+		case R.id.ly_following:
 			UIHelper.showFriends(getActivity(), mUser.getUid(), 0);
 			break;
-		case R.id.tv_follower_count:
+		case R.id.ly_follower:
 			UIHelper.showFriends(getActivity(), mUser.getUid(), 1);
-			break;
-		case R.id.tv_score:
 			break;
 		case R.id.tv_follow_user:
 			handleUserRelation();
@@ -173,18 +171,17 @@ public class UserCenterFragment extends BaseFragment implements
 		mListView.setOnScrollListener(this);
 
 		View header = LayoutInflater.from(getActivity()).inflate(
-				R.layout.fragment_user_center_header, null);
+				R.layout.fragment_user_center_header, null, false);
 
 		mIvAvatar = (ImageView) header.findViewById(R.id.iv_avatar);
 		mIvAvatar.setOnClickListener(this);
 		mIvGender = (ImageView) header.findViewById(R.id.iv_gender);
 		mTvName = (TextView) header.findViewById(R.id.tv_name);
 		mTvFollowing = (TextView) header.findViewById(R.id.tv_following_count);
-		mTvFollowing.setOnClickListener(this);
+		header.findViewById(R.id.ly_following).setOnClickListener(this);
 		mTvFollower = (TextView) header.findViewById(R.id.tv_follower_count);
-		mTvFollower.setOnClickListener(this);
+		header.findViewById(R.id.ly_follower).setOnClickListener(this);
 		mTvSore = (TextView) header.findViewById(R.id.tv_score);
-		mTvSore.setOnClickListener(this);
 		mTvLastestLoginTime = (TextView) header
 				.findViewById(R.id.tv_latest_login_time);
 
@@ -243,11 +240,9 @@ public class UserCenterFragment extends BaseFragment implements
 		}
 		mIvGender.setBackgroundResource(genderIcon);
 
-		mTvFollowing.setText(getString(R.string.following_count,
-				mUser.getFollowers()));
-		mTvFollower
-				.setText(getString(R.string.follower_count, mUser.getFans()));
-		mTvSore.setText(getString(R.string.score, mUser.getScore()));
+		mTvFollowing.setText(mUser.getFollowers() + "");
+		mTvFollower.setText(mUser.getFans() + "");
+		mTvSore.setText(mUser.getScore() + "");
 		mTvLastestLoginTime.setText(getString(R.string.latest_login_time,
 				StringUtils.friendly_time(mUser.getLatestonline())));
 		updateUserRelation();
