@@ -156,7 +156,13 @@ public class EventDetailFragment extends BaseDetailFragment implements
 
 		return view;
 	}
-
+	
+	@Override
+	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		requestData(true);
+	}
+	
 	private void initViews(View view) {
 		mEmptyLayout = (EmptyLayout) view.findViewById(R.id.error_layout);
 
