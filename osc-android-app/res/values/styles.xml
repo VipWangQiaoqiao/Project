@@ -501,5 +501,11 @@
         <item name="android:textSize">@dimen/text_size_12</item>
         <item name="android:layout_marginTop">@dimen/space_10</item>
     </style>
+    
+    <style name="Theme.AppStartLoad" parent="android:Theme.Black.NoTitleBar.Fullscreen">  
+	    <item name="android:windowBackground">@drawable/welcome</item>
+	    
+	    <item name="android:windowNoTitle">true</item>  
+	</style>
 
 </resources>
