@@ -201,6 +201,7 @@ public class AppContext extends BaseApplication {
                         String.valueOf(user.getFollowers()));
                 setProperty("user.fans", String.valueOf(user.getFans()));
                 setProperty("user.score", String.valueOf(user.getScore()));
+                setProperty("user.favoritecount", String.valueOf(user.getFavoritecount()));
                 setProperty("user.isRememberMe",
                         String.valueOf(user.isRememberMe()));// 是否记住我的信息
             }
@@ -223,6 +224,7 @@ public class AppContext extends BaseApplication {
         user.setFollowers(StringUtils.toInt(getProperty("user.followers"), 0));
         user.setFans(StringUtils.toInt(getProperty("user.fans"), 0));
         user.setScore(StringUtils.toInt(getProperty("user.score"), 0));
+        user.setFavoritecount(StringUtils.toInt("user.favoritecount", 0));
         user.setRememberMe(StringUtils.toBool(getProperty("user.isRememberMe")));
         return user;
     }

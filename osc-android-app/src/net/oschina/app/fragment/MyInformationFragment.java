@@ -194,11 +194,18 @@ public class MyInformationFragment extends BaseFragment {
                 container, false);
         ButterKnife.inject(this, view);
         initView(view);
-        requestData(false);
         return view;
     }
-
+    
     @Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		requestData(false);
+		mInfo = AppContext.getInstance().getLoginUser();
+		fillUI();
+	}
+
+	@Override
     public void initView(View view) {
         mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
         mIvAvatar.setOnClickListener(this);
