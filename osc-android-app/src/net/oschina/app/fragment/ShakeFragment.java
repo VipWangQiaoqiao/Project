@@ -8,6 +8,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.ShakeObject;
 import net.oschina.app.util.KJAnimations;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
@@ -30,6 +31,7 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -42,6 +44,8 @@ public class ShakeFragment extends BaseFragment implements SensorEventListener {
     @InjectView(R.id.shake_img)
     ImageView mImgShake;
 
+    @InjectView(R.id.progress)
+    ProgressBar mProgress;
     @InjectView(R.id.shake_bottom)
     LinearLayout mLayoutBottom;
     @InjectView(R.id.exploreproject_listitem_userface)
@@ -87,7 +91,7 @@ public class ShakeFragment extends BaseFragment implements SensorEventListener {
      */
     private void onShake() {
         isRequest = true;
-
+        mProgress.setVisibility(View.VISIBLE);
         Animation anim = KJAnimations.shakeAnimation(mImgShake.getLeft());
         anim.setAnimationListener(new AnimationListener() {
 
@@ -107,37 +111,50 @@ public class ShakeFragment extends BaseFragment implements SensorEventListener {
                                 ShakeObject.class, new ByteArrayInputStream(
                                         arg2));
                         if (obj != null) {
-                            mLayoutBottom.setVisibility(View.VISIBLE);
-                            mLayoutBottom
-                                    .setOnClickListener(new OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            UIHelper.showUrlShake(aty, obj);
-                                        }
-                                    });
-                            ImageLoader.getInstance().displayImage(
-                                    obj.getImage(), mImgHead);
-                            mTvTitle.setText(obj.getTitle());
-                            mTvDetail.setText(obj.getDetail());
-                            mTvAuthor.setText("作者:" + obj.getAuthor());
-                            mTvCommentCount.setText("评论:"
-                                    + obj.getCommentCount());
-                            mTvDate.setText("时间:" + obj.getPubDate());
+                            if (StringUtils.isEmpty(obj.getAuthor())
+                                    && StringUtils.isEmpty(obj
+                                            .getCommentCount())
+                                    && StringUtils.isEmpty(obj.getPubDate())) {
+                                jokeToast();
+                            } else {
+                                mLayoutBottom.setVisibility(View.VISIBLE);
+                                mLayoutBottom
+                                        .setOnClickListener(new OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                UIHelper.showUrlShake(aty, obj);
+                                            }
+                                        });
+                                ImageLoader.getInstance().displayImage(
+                                        obj.getImage(), mImgHead);
+                                mTvTitle.setText(obj.getTitle());
+                                mTvDetail.setText(obj.getDetail());
+                                mTvAuthor.setText("作者:" + obj.getAuthor());
+                                mTvCommentCount.setText("评论:"
+                                        + obj.getCommentCount());
+                                mTvDate.setText("时间:" + obj.getPubDate());
+                            }
                         } else {
-                            AppContext.showToast("红薯跟你开了个玩笑");
+                            jokeToast();
                         }
+                        mProgress.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void onFailure(int arg0, Header[] arg1, byte[] arg2,
                             Throwable arg3) {
                         isRequest = false;
-                        AppContext.showToast("红薯跟你开了个玩笑");
+                        mProgress.setVisibility(View.GONE);
+                        jokeToast();
                     }
                 });
             }
         });
         mImgShake.startAnimation(anim);
+    }
+
+    private void jokeToast() {
+        AppContext.showToast("红薯跟你开了个玩笑");
     }
 
     @Override

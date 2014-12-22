@@ -229,7 +229,6 @@ public class ListBaseAdapter extends BaseAdapter {
             @Override
             public void run() {
                 if (result.size() == 0) { // no results
-
                 } else {
                     notifyDataSetChanged();
                 }
