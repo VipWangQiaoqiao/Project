@@ -237,7 +237,7 @@
         <item name="android:padding">1.0dip</item>
         <item name="android:clickable">true</item>
         <item name="android:contentDescription">face</item>
-        <item name="android:src">@drawable/widget_dface_loading</item>
+        <item name="android:src">@drawable/widget_dface</item>
     </style>
 
     <style name="dialog_waiting" parent="@android:style/Theme.Dialog">
@@ -312,7 +312,7 @@
         <item name="android:layout_height">40.0dip</item>
         <item name="android:padding">1.0dip</item>
         <item name="android:clickable">true</item>
-        <item name="android:src">@drawable/widget_dface_loading</item>
+        <item name="android:src">@drawable/widget_dface</item>
     </style>
 
     <style name="toolbar_action">

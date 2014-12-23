@@ -108,10 +108,6 @@ public class TweetDetailFragment extends BaseListFragment implements
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        // IntentFilter filter = new IntentFilter(
-        // Constants.INTENT_ACTION_COMMENT_CHANGED);
-        // mCommentReceiver = new CommentChangeReceiver();
-        // getActivity().registerReceiver(mCommentReceiver, filter);
         Bundle args = getActivity().getIntent().getExtras();
         if (args != null) {
             mTweetId = args.getInt("tweet_id", 0);
@@ -434,8 +430,9 @@ public class TweetDetailFragment extends BaseListFragment implements
 
     private void setTweetCommentCount() {
         mAdapter.notifyDataSetChanged();
-
-        mTweet.setCommentCount(mAdapter.getDataSize());
+        if (mTweet != null) {
+        	mTweet.setCommentCount(mAdapter.getDataSize());
+        }
         mTvCommentCount.setText(getString(R.string.comment_count,
                 mTweet.getCommentCount()));
     }

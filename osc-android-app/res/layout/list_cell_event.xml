@@ -23,8 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/space_10"
-            android:textColor="@color/main_black"
-            android:text="活动标题" />
+            android:textColor="@color/main_black" />
 
         <TextView
             android:id="@+id/tv_event_time"
@@ -32,8 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_event_title"
             android:layout_toRightOf="@id/iv_event_img"
-            android:textColor="@color/main_gray"
-            android:text="活动标题" />
+            android:textColor="@color/main_gray" />
 
         <TextView
             android:id="@+id/tv_event_spot"
@@ -41,8 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_event_time"
             android:layout_toRightOf="@id/iv_event_img"
-            android:textColor="@color/main_gray"
-            android:text="活动标题" />
+            android:textColor="@color/main_gray" />
     </LinearLayout>
 
 </RelativeLayout>

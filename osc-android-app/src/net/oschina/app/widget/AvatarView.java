@@ -54,7 +54,7 @@ public class AvatarView extends CircleImageView {
 
 	public void setAvatarUrl(String url) {
 		setTag(url);
-		setImageResource(R.drawable.widget_dface_loading);
+		setImageResource(R.drawable.widget_dface);
 		if (this.getTag() != null && this.getTag().equals(url)) {
 			if (null == url || url.endsWith(PGIF) || StringUtils.isEmpty(url)) {
 				setImageResource(R.drawable.widget_dface);
