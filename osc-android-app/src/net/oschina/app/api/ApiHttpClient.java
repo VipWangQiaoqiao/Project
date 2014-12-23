@@ -15,7 +15,7 @@ import com.loopj.android.http.RequestParams;
 
 public class ApiHttpClient {
 	public final static String HOST = "www.oschina.net";
-	private static String API_URL = "https://www.oschina.net/%s";
+	private static String API_URL = "http://www.oschina.net/%s";
 	public static final String DELETE = "DELETE";
 	public static final String GET = "GET";
 	public static final String POST = "POST";

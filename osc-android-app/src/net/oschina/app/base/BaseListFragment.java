@@ -309,6 +309,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
         } else {
             mAdapter.setState(ListBaseAdapter.STATE_LOAD_MORE);
         }
+        mAdapter.notifyDataSetChanged();
     }
 
     protected int getPageSize() {
