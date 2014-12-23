@@ -15,7 +15,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/iv_avatar"
-        android:text="火蚁"
         android:textColor="@color/lightblue"
         android:textSize="@dimen/text_size_14" />
 
@@ -24,7 +23,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:text="20"
         android:textColor="@color/main_gray"
         android:textSize="@dimen/text_size_12" />
 
