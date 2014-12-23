@@ -44,11 +44,13 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/list_divider_color" />
+            android:background="@color/list_divider_color"
+            android:visibility="gone" />
 
         <LinearLayout 
             android:id="@+id/rl_city"
-            style="@style/option_item_rl" >
+            style="@style/option_item_rl"
+            android:visibility="gone" >
             
             <ImageView 
                 style="@style/option_item_img"

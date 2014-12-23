@@ -119,15 +119,12 @@ public class QuickOptionDialog extends Dialog implements
             UIHelper.showScanActivity(getContext());
             break;
         case R.id.ly_quick_option_note:
-            Bundle bundle = new Bundle();
-            bundle.putInt(NoteEditFragment.NOTE_FROMWHERE_KEY,
-                    NoteEditFragment.QUICK_DIALOG);
-            UIHelper.showSimpleBack(getContext(), SimpleBackPage.NOTE_EDIT,
-                    bundle);
+        	UIHelper.showSimpleBack(getContext(), SimpleBackPage.FIND_USER);
+        	//onClickNote();
             break;
         default:
             break;
-        }
+        } 
         if (mListener != null) {
             mListener.onQuickOptionClick(id);
         }
@@ -149,5 +146,13 @@ public class QuickOptionDialog extends Dialog implements
         }
         bundle.putInt(TweetPubFragment.ACTION_TYPE, type);
         UIHelper.showSimpleBack(getContext(), SimpleBackPage.TWEET_PUB, bundle);
+    }
+    
+    private void onClickNote() {
+    	Bundle bundle = new Bundle();
+        bundle.putInt(NoteEditFragment.NOTE_FROMWHERE_KEY,
+                NoteEditFragment.QUICK_DIALOG);
+        UIHelper.showSimpleBack(getContext(), SimpleBackPage.NOTE_EDIT,
+                bundle);
     }
 }

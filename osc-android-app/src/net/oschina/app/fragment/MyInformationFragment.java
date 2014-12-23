@@ -200,7 +200,7 @@ public class MyInformationFragment extends BaseFragment {
     @Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		requestData(false);
+		requestData(true);
 		mInfo = AppContext.getInstance().getLoginUser();
 		fillUI();
 	}
