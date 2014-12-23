@@ -90,6 +90,9 @@ public class EventDetailFragment extends BaseDetailFragment implements
 
 	@InjectView(R.id.bt_event_apply)
 	Button mBtEventApply;// 活动报名
+	
+	@InjectView(R.id.tv_event_tip)
+	TextView mEventTip;
 
 	private int mPostId;
 	private Post mPost;
@@ -326,6 +329,8 @@ public class EventDetailFragment extends BaseDetailFragment implements
 				break;
 			case Event.APPLYSTATUS_CHECKED:
 				mBtEventApply.setText("已确认");
+				mBtEventApply.setVisibility(View.GONE);
+				mEventTip.setVisibility(View.VISIBLE);
 				break;
 			case Event.APPLYSTATUS_ATTEND:
 				mBtEventApply.setText("已出席");

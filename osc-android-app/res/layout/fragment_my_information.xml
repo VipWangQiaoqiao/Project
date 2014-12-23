@@ -43,7 +43,8 @@
 
             <LinearLayout
                 android:id="@+id/rl_team"
-                style="@style/option_item_rl" >
+                style="@style/option_item_rl"
+                android:visibility="gone" >
 
                 <ImageView
                     style="@style/option_item_img"
@@ -58,7 +59,8 @@
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="1px"
-                android:background="@color/list_divider_color" />
+                android:background="@color/list_divider_color"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/rl_blog"
@@ -81,7 +83,8 @@
 
             <LinearLayout
                 android:id="@+id/rl_note"
-                style="@style/option_item_rl" >
+                style="@style/option_item_rl"
+                android:visibility="gone" >
 
                 <ImageView
                     style="@style/option_item_img"
@@ -96,7 +99,8 @@
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="1px"
-                android:background="@color/list_divider_color" />
+                android:background="@color/list_divider_color"
+                android:visibility="gone" />
         </LinearLayout>
     </net.oschina.app.widget.CustomerScrollView>
 

@@ -104,7 +104,7 @@
 
                 <TextView
                     style="@style/quick_option_item_text"
-                    android:text="@string/quick_option_note" />
+                    android:text="@string/actionbar_title_find_user" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

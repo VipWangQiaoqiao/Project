@@ -28,9 +28,9 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/space_20"
                 android:contentDescription="@null"
-                android:src="@drawable/widget_dface_loading"
+                android:src="@drawable/widget_dface"
                 app:border_color="@color/white"
-                app:border_width="3dip" />
+                app:border_width="2dip" />
 
             <ImageView
                 android:id="@+id/iv_gender"

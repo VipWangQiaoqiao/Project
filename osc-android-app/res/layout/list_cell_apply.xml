@@ -23,7 +23,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/lightblue"
-            android:text="dfe"
             android:textSize="@dimen/text_size_16" />
 
         <ImageView
@@ -42,7 +41,6 @@
         android:layout_below="@id/top"
         android:layout_marginTop="@dimen/space_2"
         android:layout_toRightOf="@id/iv_avatar"
-        android:text="dfe"
         android:textColor="@color/main_gray"
         android:textSize="@dimen/text_size_12" />
 

@@ -65,7 +65,8 @@
 
     <LinearLayout
         android:id="@+id/menu_item_rss"
-        style="@style/MenuItemLayoutStyle" >
+        style="@style/MenuItemLayoutStyle"
+        android:visibility="gone" >
 
         <ImageView
             style="@style/MenuItemImageViewStyle"
@@ -80,6 +81,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="#d2d2d2" />
+        android:background="#d2d2d2"
+        android:visibility="gone" />
 
 </LinearLayout>

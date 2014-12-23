@@ -97,7 +97,10 @@ public class FriendsFragment extends BaseListFragment {
 
     @Override
     protected void onRefreshNetworkSuccess() {
-        NoticeUtils.clearNotice(Notice.TYPE_NEWFAN);
+        if (mCatalog == FriendsList.TYPE_FANS
+                && mUid == AppContext.getInstance().getLoginUid()) {
+            NoticeUtils.clearNotice(Notice.TYPE_NEWFAN);
+        }
     }
 
     @Override

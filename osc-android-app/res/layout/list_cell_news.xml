@@ -26,7 +26,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:text="如何使用亚马逊的 S3 做为私有 Git 仓库"
             android:textColor="@color/main_black"
             android:textSize="@dimen/text_size_16" />
     </LinearLayout>
@@ -37,7 +36,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/ll_title"
         android:layout_marginTop="5dp"
-        android:text="oschina"
         android:textColor="@color/main_gray"
         android:textSize="@dimen/text_size_12" />
 
@@ -49,7 +47,6 @@
         android:layout_marginLeft="@dimen/space_10"
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@id/tv_source"
-        android:text="2014-10-10"
         android:drawableLeft="@drawable/ic_time"
         android:drawablePadding="@dimen/space_2"
         android:textColor="@color/main_gray"
@@ -65,7 +62,6 @@
         android:layout_toRightOf="@id/tv_time"
         android:drawableLeft="@drawable/ic_comment_count"
         android:drawablePadding="@dimen/space_2"
-        android:text="10"
         android:textColor="@color/main_gray"
         android:textSize="@dimen/text_size_12" />
 
