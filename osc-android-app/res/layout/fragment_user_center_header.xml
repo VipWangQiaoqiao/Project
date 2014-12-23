@@ -10,9 +10,9 @@
         android:id="@+id/ll_user_container"
         android:layout_width="match_parent"
         android:layout_height="150dp"
+        android:background="@drawable/user_center_bg"
         android:orientation="vertical"
-        android:visibility="visible"
-        android:background="@drawable/user_center_bg" >
+        android:visibility="visible" >
 
         <RelativeLayout
             android:id="@+id/rl_user_center"
@@ -37,8 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/iv_avatar"
-                android:layout_alignRight="@id/iv_avatar"
-                android:background="@drawable/userinfo_icon_male" />
+                android:layout_alignRight="@id/iv_avatar" />
 
             <TextView
                 android:id="@+id/tv_name"
@@ -49,7 +48,6 @@
                 android:layout_marginTop="@dimen/space_5"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_18" />
-
         </RelativeLayout>
 
         <View
@@ -163,7 +161,7 @@
             android:textColor="@color/main_black"
             android:textSize="@dimen/text_size_12" />
     </LinearLayout>
-    
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"

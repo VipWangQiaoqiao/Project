@@ -11,42 +11,44 @@ import android.view.animation.Animation.AnimationListener;
 
 /**
  * 应用启动界面
+ * 
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @created 2014年12月22日 上午11:51:56
- *
+ * 
  */
 public class AppStart extends Activity {
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       
+
         final View view = View.inflate(this, R.layout.app_start, null);
-		setContentView(view);
-        
-		//渐变展示启动屏
-		AlphaAnimation aa = new AlphaAnimation(0.5f,1.0f);
-		aa.setDuration(1000);
-		view.startAnimation(aa);
-		aa.setAnimationListener(new AnimationListener()
-		{
-			@Override
-			public void onAnimationEnd(Animation arg0) {
-				redirectTo();
-			}
-			@Override
-			public void onAnimationRepeat(Animation animation) {}
-			@Override
-			public void onAnimationStart(Animation animation) {}
-			
-		});
-		
+        setContentView(view);
+
+        // 渐变展示启动屏
+        AlphaAnimation aa = new AlphaAnimation(0.5f, 1.0f);
+        aa.setDuration(1000);
+        view.startAnimation(aa);
+        aa.setAnimationListener(new AnimationListener() {
+            @Override
+            public void onAnimationEnd(Animation arg0) {
+                redirectTo();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+
+            @Override
+            public void onAnimationStart(Animation animation) {}
+
+        });
+
     }
-    
+
     /**
      * 跳转到...
      */
-    private void redirectTo(){        
+    private void redirectTo() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
