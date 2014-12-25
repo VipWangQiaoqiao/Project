@@ -8,6 +8,7 @@ import net.oschina.app.ui.ShareDialog;
 import net.oschina.app.ui.ShareDialog.OnSharePlatformClick;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.util.TDevice;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -32,7 +33,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
@@ -51,6 +51,7 @@ import com.umeng.socialize.weixin.media.WeiXinShareContent;
  * 
  * @author kymjs(kymjs123@gmail.com)
  */
+@SuppressLint("NewApi")
 public class BrowserFragment extends BaseFragment {
     @InjectView(R.id.webview)
     WebView mWebView;
@@ -355,7 +356,9 @@ public class BrowserFragment extends BaseFragment {
         webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);// 优先使用缓存
         webSettings.setAllowFileAccess(true);// 可以访问文件
         webSettings.setBuiltInZoomControls(true);// 支持缩放
-        webSettings.setDisplayZoomControls(false);// 支持缩放
+        if (android.os.Build.VERSION.SDK_INT >= 11) {
+        	webSettings.setDisplayZoomControls(false);// 支持缩放
+        }
         mWebView.setWebViewClient(new MyWebViewClient());
         mWebView.setWebChromeClient(new MyWebChromeClient());
     }
