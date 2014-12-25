@@ -105,7 +105,7 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
             mViewPager.setCurrentItem(1);
         } else if (notice.getMsgCount() != 0) {
             mViewPager.setCurrentItem(2);
-        } else {
+        } else if (notice.getNewFansCount() != 0) {
             mViewPager.setCurrentItem(3);
         }
     }
