@@ -218,12 +218,12 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
 			public void onDrawerClosed(View view) {
 				super.onDrawerClosed(view);
-//				getActivity().invalidateOptionsMenu();
+				getActivity().invalidateOptionsMenu();
 			}
 
 			public void onDrawerOpened(View drawerView) {
 				super.onDrawerOpened(drawerView);
-//				getActivity().invalidateOptionsMenu();
+				getActivity().invalidateOptionsMenu();
 			}
 		};
 

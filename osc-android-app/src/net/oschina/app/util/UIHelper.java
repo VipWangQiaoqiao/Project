@@ -111,9 +111,10 @@ public class UIHelper {
      * @param context
      * @param newsId
      */
-    public static void showNewsDetail(Context context, int newsId) {
+    public static void showNewsDetail(Context context, int newsId, int commentCount) {
         Intent intent = new Intent(context, DetailActivity.class);
         intent.putExtra("news_id", newsId);
+        intent.putExtra("comment_count", commentCount);
         intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
                 DetailActivity.DISPLAY_NEWS);
         context.startActivity(intent);
@@ -225,7 +226,7 @@ public class UIHelper {
             String objId = news.getNewType().getAttachment();
             switch (newsType) {
             case News.NEWSTYPE_NEWS:
-                showNewsDetail(context, newsId);
+                showNewsDetail(context, newsId, news.getCommentCount());
                 break;
             case News.NEWSTYPE_SOFTWARE:
                 showSoftwareDetail(context, objId);
@@ -263,7 +264,7 @@ public class UIHelper {
                 // 其他-无跳转
                 break;
             case Active.CATALOG_NEWS:
-                showNewsDetail(context, id);
+                showNewsDetail(context, id, active.getCommentCount());
                 break;
             case Active.CATALOG_POST:
                 showPostDetail(context, id);
@@ -361,7 +362,7 @@ public class UIHelper {
     public static void showUrlShake(Context context, ShakeObject obj) {
         if (StringUtils.isEmpty(obj.getUrl())) {
             if (ShakeObject.RANDOMTYPE_NEWS.equals(obj.getRandomtype())) {
-                UIHelper.showNewsDetail(context, StringUtils.toInt(obj.getId()));
+                UIHelper.showNewsDetail(context, StringUtils.toInt(obj.getId()), StringUtils.toInt(obj.getCommentCount()));
             }
         } else {
             if (!StringUtils.isEmpty(obj.getUrl())) {
@@ -402,7 +403,7 @@ public class UIHelper {
             int objId, String objKey) {
         switch (objType) {
         case URLsUtils.URL_OBJ_TYPE_NEWS:
-            showNewsDetail(context, objId);
+            showNewsDetail(context, objId, -1);
             break;
         case URLsUtils.URL_OBJ_TYPE_QUESTION:
             showPostDetail(context, objId);

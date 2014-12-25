@@ -69,7 +69,7 @@
 
         <ImageView
             style="@style/MenuItemImageViewStyle"
-            android:background="@drawable/drawer_menu_icon_blog"
+            android:background="@drawable/drawer_menu_icon_gitapp"
             android:contentDescription="@null" />
 
         <TextView
