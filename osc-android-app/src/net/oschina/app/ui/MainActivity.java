@@ -8,6 +8,7 @@ import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.cache.DataCleanManager;
+import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.interf.BaseViewInterface;
 import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.service.NoticeUtils;
@@ -59,7 +60,7 @@ public class MainActivity extends ActionBarActivity implements
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
     @InjectView(android.R.id.tabhost)
-    MyFragmentTabHost mTabHost;
+    public MyFragmentTabHost mTabHost;
 
     private BadgeView mBvTweet;
 
@@ -81,14 +82,21 @@ public class MainActivity extends ActionBarActivity implements
                 TLog.log("NOTICE", "@me:" + atmeCount + " msg:" + msgCount
                         + " review:" + reviewCount + " newFans:" + newFansCount
                         + " active:" + activeCount);
-
-                if (activeCount > 0) {
-                    mBvTweet.setText(activeCount + "");
-                    mBvTweet.show();
+                
+                Fragment fragment = getCurrentFragment();
+                if (fragment instanceof MyInformationFragment) {
+                	((MyInformationFragment)fragment).setNotice();
+                	
                 } else {
-                    mBvTweet.hide();
-                    mNotice = null;
+                	if (activeCount > 0) {
+                        mBvTweet.setText(activeCount + "");
+                        mBvTweet.show();
+                    } else {
+                        mBvTweet.hide();
+                        mNotice = null;
+                    }
                 }
+                
             } else if (intent.getAction()
                     .equals(Constants.INTENT_ACTION_LOGOUT)) {
                 mBvTweet.hide();
@@ -142,6 +150,7 @@ public class MainActivity extends ActionBarActivity implements
         filter.addAction(Constants.INTENT_ACTION_LOGOUT);
         registerReceiver(mReceiver, filter);
 
+        
         NoticeUtils.bindToService(this);
         UIHelper.sendBroadcastForNotice(this);
 
@@ -310,8 +319,7 @@ public class MainActivity extends ActionBarActivity implements
                 && v.equals(mTabHost.getCurrentTabView())) {
             // use getTabHost().getCurrentView() to get a handle to the view
             // which is displayed in the tab - and to get this views context
-            Fragment currentFragment = getSupportFragmentManager()
-                    .findFragmentByTag(mTabHost.getCurrentTabTag());
+            Fragment currentFragment = getCurrentFragment();
             if (currentFragment != null
                     && currentFragment instanceof OnTabReselectListener) {
                 OnTabReselectListener listener = (OnTabReselectListener) currentFragment;
@@ -320,5 +328,10 @@ public class MainActivity extends ActionBarActivity implements
             }
         }
         return consumed;
+    }
+    
+    private Fragment getCurrentFragment() {
+    	return getSupportFragmentManager()
+                .findFragmentByTag(mTabHost.getCurrentTabTag());
     }
 }

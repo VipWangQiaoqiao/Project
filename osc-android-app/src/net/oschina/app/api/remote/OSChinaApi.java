@@ -550,11 +550,14 @@ public class OSChinaApi {
         params.put("name", username);
         ApiHttpClient.get("action/api/find_user", params, handler);
     }
-
+    
     /**
-     * 获取我的活动列表
+     * 获取活动列表
      * 
      * @param pageIndex
+     * @param uid
+     * 			 	<= 0 近期活动    
+     * 			 	实际的用户ID 则获取用户参与的活动列表，需要已登陆的用户
      * @param handler
      */
     public static void getEventList(int pageIndex, int uid,
@@ -563,7 +566,7 @@ public class OSChinaApi {
         params.put("pageIndex", pageIndex);
         params.put("uid", uid);
         params.put("pageSize", AppContext.PAGE_SIZE);
-        ApiHttpClient.get("action/api/my_event_list", params, handler);
+        ApiHttpClient.get("action/api/event_list", params, handler);
     }
 
     /**

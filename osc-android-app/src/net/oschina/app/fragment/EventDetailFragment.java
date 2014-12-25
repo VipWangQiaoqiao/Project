@@ -281,6 +281,7 @@ public class EventDetailFragment extends BaseDetailFragment implements
         return XmlUtils.toBean(PostDetail.class, is).getPost();
     }
 
+		
     @Override
     protected Entity readData(Serializable seri) {
         return (Post) seri;
@@ -322,34 +323,35 @@ public class EventDetailFragment extends BaseDetailFragment implements
         }
 
         if (eventStatus == Event.EVNET_STATUS_APPLYING) {
-            mBtEventApply.setVisibility(View.VISIBLE);
-            mBtEventApply.setEnabled(false);
-            switch (applyStatus) {
-            case Event.APPLYSTATUS_CHECKING:
-                mBtEventApply.setText("待确认");
-                break;
-            case Event.APPLYSTATUS_CHECKED:
-                mBtEventApply.setText("已确认");
-                mBtEventApply.setVisibility(View.GONE);
-                mEventTip.setVisibility(View.VISIBLE);
-                break;
-            case Event.APPLYSTATUS_ATTEND:
-                mBtEventApply.setText("已出席");
-                break;
-            case Event.APPLYSTATUS_CANCLE:
-                mBtEventApply.setText("已取消");
-                break;
-            case Event.APPLYSTATUS_REJECT:
-                mBtEventApply.setText("已拒绝");
-                break;
-            default:
-                mBtEventApply.setText("我要报名");
-                mBtEventApply.setEnabled(true);
-                break;
-            }
-        } else {
-            mBtEventApply.setVisibility(View.GONE);
-        }
+			mBtEventApply.setVisibility(View.VISIBLE);
+			mBtEventApply.setEnabled(false);
+			switch (applyStatus) {
+			case Event.APPLYSTATUS_CHECKING:
+				mBtEventApply.setText("待确认");
+				break;
+			case Event.APPLYSTATUS_CHECKED:
+				mBtEventApply.setText("已确认");
+				mBtEventApply.setVisibility(View.GONE);
+				mEventTip.setVisibility(View.VISIBLE);
+				break;
+			case Event.APPLYSTATUS_ATTEND:
+				mBtEventApply.setText("已出席");
+				break;
+			case Event.APPLYSTATUS_CANCLE:
+				mBtEventApply.setText("已取消");
+				mBtEventApply.setEnabled(true);
+				break;
+			case Event.APPLYSTATUS_REJECT:
+				mBtEventApply.setText("已拒绝");
+				break;
+			default:
+				mBtEventApply.setText("我要报名");
+				mBtEventApply.setEnabled(true);
+				break;
+			}
+		} else {
+			mBtEventApply.setVisibility(View.GONE);
+		}
     }
 
     private void fillWebViewBody() {

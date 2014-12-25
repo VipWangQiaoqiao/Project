@@ -80,4 +80,9 @@
         <item>女</item>
     </string-array>
     
+    <string-array name="events">
+        <item>近期活动</item>
+        <item>我的活动</item>
+    </string-array>
+    
 </resources>

@@ -31,7 +31,7 @@ import android.widget.Toast;
 @SuppressWarnings("serial")
 public class AppException extends Exception implements UncaughtExceptionHandler{
 
-	private final static boolean Debug = true;//是否保存错误日志
+	private final static boolean Debug = false;//是否保存错误日志
 	
 	/** 定义异常类型 */
 	public final static byte TYPE_NETWORK 	= 0x01;

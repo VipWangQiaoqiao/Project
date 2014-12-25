@@ -19,6 +19,7 @@ import net.oschina.app.ui.MyQrodeDialog;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
+import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
@@ -149,7 +150,6 @@ public class MyInformationFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         IntentFilter filter = new IntentFilter(Constants.INTENT_ACTION_LOGOUT);
         filter.addAction(Constants.INTENT_ACTION_USER_CHANGE);
-        filter.addAction(Constants.INTENT_ACTION_NOTICE);
         getActivity().registerReceiver(mReceiver, filter);
     }
 
@@ -159,7 +159,7 @@ public class MyInformationFragment extends BaseFragment {
         setNotice();
     }
 
-    private void setNotice() {
+    public void setNotice() {
         if (MainActivity.mNotice != null) {
 
             Notice notice = MainActivity.mNotice;
@@ -168,7 +168,6 @@ public class MyInformationFragment extends BaseFragment {
             int reviewCount = notice.getReviewCount();// 评论
             int newFansCount = notice.getNewFansCount();// 新粉丝
             int activeCount = atmeCount + reviewCount + msgCount + newFansCount;// 信息总数
-
             if (activeCount > 0) {
                 mMesCount.setText(activeCount + "");
                 mMesCount.show();

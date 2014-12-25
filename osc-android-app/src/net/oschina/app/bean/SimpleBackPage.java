@@ -22,6 +22,7 @@ import net.oschina.app.fragment.TweetRecordFragment;
 import net.oschina.app.fragment.UserBlogFragment;
 import net.oschina.app.fragment.UserCenterFragment;
 import net.oschina.app.viewpagefragment.BlogViewPagerFragment;
+import net.oschina.app.viewpagefragment.EventViewPagerFragment;
 import net.oschina.app.viewpagefragment.FriendsViewPagerFragment;
 import net.oschina.app.viewpagefragment.NoticeViewPagerFragment;
 import net.oschina.app.viewpagefragment.OpensourceSoftwareFragment;
@@ -82,7 +83,7 @@ public enum SimpleBackPage {
 
     FIND_USER(21, R.string.actionbar_title_find_user, FindUserFragment.class),
 
-    EVENT_LIST(22, R.string.actionbar_title_event, EventFragment.class),
+    EVENT_LIST(22, R.string.actionbar_title_event, EventViewPagerFragment.class),
 
     EVENT_APPLY(23, R.string.actionbar_title_event_apply,
             EventAppliesFragment.class),

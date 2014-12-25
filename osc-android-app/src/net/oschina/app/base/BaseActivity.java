@@ -7,6 +7,7 @@ import net.oschina.app.ui.dialog.CommonToast;
 import net.oschina.app.ui.dialog.DialogControl;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.dialog.WaitDialog;
+import net.oschina.app.util.TDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -49,6 +50,15 @@ public abstract class BaseActivity extends ActionBarActivity implements
         }
     };
 
+	@Override
+	protected void onDestroy() {
+		unregisterReceiver(mExistReceiver);
+		mExistReceiver = null;
+		ButterKnife.reset(this);
+		TDevice.hideSoftKeyboard(getCurrentFocus());
+		super.onDestroy();
+	}
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,14 +86,6 @@ public abstract class BaseActivity extends ActionBarActivity implements
         initView();
         initData();
         _isVisible = true;
-    }
-
-    @Override
-    protected void onDestroy() {
-        unregisterReceiver(mExistReceiver);
-        mExistReceiver = null;
-        ButterKnife.reset(this);
-        super.onDestroy();
     }
 
     protected void onBeforeSetContentLayout() {}
