@@ -45,7 +45,7 @@
     <color name="lightest_gray">#0a000000</color>
     <color name="bg_touch">@color/lightest_gray</color>
     
-    <color name="main_link_text_color">#ff507daf</color>
+    <color name="main_link_text_color">#ffbedfff</color>
     <color name="timeline_clickable_text_highlighted_background">#ffbedfff</color>
     
     <!-- 下拉刷新时，颜色值 -->

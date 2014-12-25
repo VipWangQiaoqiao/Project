@@ -139,7 +139,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/space_20"
             android:contentDescription="@null"
-            android:src="@drawable/widget_dface"
+            android:background="@drawable/widget_dface"
             app:border_color="@color/white"
             app:border_width="3dip" />
 
