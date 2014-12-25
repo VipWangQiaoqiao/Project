@@ -331,7 +331,9 @@ public class BrowserFragment extends BaseFragment {
      *            web页面标题
      */
     protected void onWebTitle(WebView view, String title) {
-        ((BaseActivity) getActivity()).setActionBarTitle(mWebView.getTitle());
+        if (aty != null && mWebView != null) { // 必须做判断，由于webview加载属于耗时操作，可能会本Activity已经关闭了才被调用
+            ((BaseActivity) aty).setActionBarTitle(mWebView.getTitle());
+        }
     }
 
     /**

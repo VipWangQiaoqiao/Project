@@ -254,8 +254,8 @@ public class MyInformationFragment extends BaseFragment {
                 AvatarView.getLargeAvatar(mInfo.getPortrait()), mIvAvatar);
         mTvName.setText(mInfo.getName());
         mIvGender
-                .setImageResource(StringUtils.toInt(mInfo.getGender()) == 1 ? R.drawable.userinfo_icon_male
-                        : R.drawable.userinfo_icon_female);
+                .setImageResource(StringUtils.toInt(mInfo.getGender()) != 1 ? R.drawable.userinfo_icon_female
+                        : R.drawable.userinfo_icon_male);
         mTvScore.setText(String.valueOf(mInfo.getScore()));
         mTvFavorite.setText(String.valueOf(mInfo.getFavoritecount()));
         mTvFollowing.setText(String.valueOf(mInfo.getFollowers()));

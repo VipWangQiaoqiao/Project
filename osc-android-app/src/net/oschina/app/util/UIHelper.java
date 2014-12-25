@@ -44,6 +44,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -428,7 +429,7 @@ public class UIHelper {
     }
 
     /**
-     * 打开浏览器
+     * 打开内置浏览器
      * 
      * @param context
      * @param url
@@ -448,6 +449,23 @@ public class UIHelper {
             Bundle bundle = new Bundle();
             bundle.putString(BrowserFragment.BROWSER_KEY, url);
             showSimpleBack(context, SimpleBackPage.BROWSER, bundle);
+        } catch (Exception e) {
+            e.printStackTrace();
+            AppContext.showToastShort("无法浏览此网页");
+        }
+    }
+    
+    /**
+     * 打开系统中的浏览器
+     * 
+     * @param context
+     * @param url
+     */
+    public static void openSysBrowser(Context context, String url) {
+    	try {
+             Uri uri = Uri.parse(url);
+             Intent it = new Intent(Intent.ACTION_VIEW, uri);
+             context.startActivity(it);
         } catch (Exception e) {
             e.printStackTrace();
             AppContext.showToastShort("无法浏览此网页");

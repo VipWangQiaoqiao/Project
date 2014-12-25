@@ -3,6 +3,7 @@ package net.oschina.app.util;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.UUID;
 
 import net.oschina.app.AppContext;
@@ -13,12 +14,16 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.ClipboardManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.ResolveInfo;
 import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -43,7 +48,7 @@ public class TDevice {
 	public static final int NETTYPE_WIFI = 0x01;
 	public static final int NETTYPE_CMWAP = 0x02;
 	public static final int NETTYPE_CMNET = 0x03;
-	
+
 	public static boolean GTE_HC;
 	public static boolean GTE_ICS;
 	public static boolean PRE_HC;
@@ -51,7 +56,7 @@ public class TDevice {
 	private static Boolean _hasCamera = null;
 	private static Boolean _isTablet = null;
 	private static Integer _loadFactor = null;
-	
+
 	private static int _pageSize = -1;
 	public static float displayDensity = 0.0F;
 
@@ -367,10 +372,24 @@ public class TDevice {
 	}
 
 	public static void gotoMarket(Context context, String pck) {
+		if (!isHaveMarket(context)) {
+			AppContext.showToast("你手机中没有安装应用市场！");
+			return;
+		}
 		Intent intent = new Intent();
 		intent.setAction(Intent.ACTION_VIEW);
 		intent.setData(Uri.parse("market://details?id=" + pck));
 		context.startActivity(intent);
+	}
+
+	public static boolean isHaveMarket(Context context) {
+		Intent intent = new Intent();
+		intent.setAction("android.intent.action.MAIN");
+		intent.addCategory("android.intent.category.APP_MARKET");
+		PackageManager pm = context.getPackageManager();
+		List<ResolveInfo> infos = pm.queryIntentActivities(intent, 0);
+		int size = infos.size();
+		return infos.size() > 0;
 	}
 
 	public static void openAppInMarket(Context context) {
@@ -391,7 +410,7 @@ public class TDevice {
 			}
 		}
 	}
-	
+
 	public static void setFullScreen(Activity activity) {
 		WindowManager.LayoutParams params = activity.getWindow()
 				.getAttributes();
@@ -540,6 +559,20 @@ public class TDevice {
 		context.startActivity(mainIntent);
 	}
 
+	public static boolean openAppActivity(Context context, String packageName,
+			String activityName) {
+		Intent intent = new Intent(Intent.ACTION_MAIN);
+		intent.addCategory(Intent.CATEGORY_LAUNCHER);
+		ComponentName cn = new ComponentName(packageName, activityName);
+		intent.setComponent(cn);
+		try {
+			context.startActivity(intent);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
 	public static boolean isWifiOpen() {
 		boolean isWifiConnect = false;
 		ConnectivityManager cm = (ConnectivityManager) BaseApplication
@@ -577,23 +610,27 @@ public class TDevice {
 		clip.setText(string);
 		AppContext.showToast(R.string.copy_success);
 	}
-	
+
 	/**
 	 * 发送邮件
-	 * @param context 
-	 * @param subject 主题
-	 * @param content 内容
-	 * @param emails 邮件地址
+	 * 
+	 * @param context
+	 * @param subject
+	 *            主题
+	 * @param content
+	 *            内容
+	 * @param emails
+	 *            邮件地址
 	 */
-	public static void sendEmail(Context context, String subject, String content, String... emails) {
+	public static void sendEmail(Context context, String subject,
+			String content, String... emails) {
 		try {
 			Intent intent = new Intent(Intent.ACTION_SEND);
 			// 模拟器
-			//intent.setType("text/plain");
+			// intent.setType("text/plain");
 			intent.setType("message/rfc822"); // 真机
-			intent.putExtra(android.content.Intent.EXTRA_EMAIL,
-					emails);
-			intent.putExtra(Intent.EXTRA_SUBJECT,subject);
+			intent.putExtra(android.content.Intent.EXTRA_EMAIL, emails);
+			intent.putExtra(Intent.EXTRA_SUBJECT, subject);
 			intent.putExtra(Intent.EXTRA_TEXT, content);
 			context.startActivity(intent);
 		} catch (ActivityNotFoundException e) {
@@ -646,7 +683,7 @@ public class TDevice {
 			return true;
 		}
 	}
-	
+
 	/**
 	 * 调用系统安装了的应用分享
 	 * 
@@ -654,30 +691,32 @@ public class TDevice {
 	 * @param title
 	 * @param url
 	 */
-	public static void showSystemShareOption(Activity context, final String title,
-			final String url) {
+	public static void showSystemShareOption(Activity context,
+			final String title, final String url) {
 		Intent intent = new Intent(Intent.ACTION_SEND);
 		intent.setType("text/plain");
 		intent.putExtra(Intent.EXTRA_SUBJECT, "分享：" + title);
 		intent.putExtra(Intent.EXTRA_TEXT, title + " " + url);
 		context.startActivity(Intent.createChooser(intent, "选择分享"));
 	}
-	
+
 	/**
 	 * 获取当前网络类型
-	 * @return 0：没有网络   1：WIFI网络   2：WAP网络    3：NET网络
+	 * 
+	 * @return 0：没有网络 1：WIFI网络 2：WAP网络 3：NET网络
 	 */
 	public static int getNetworkType() {
 		int netType = 0;
-		ConnectivityManager connectivityManager = (ConnectivityManager) AppContext.getInstance().getSystemService(Context.CONNECTIVITY_SERVICE);
+		ConnectivityManager connectivityManager = (ConnectivityManager) AppContext
+				.getInstance().getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 		if (networkInfo == null) {
 			return netType;
-		}		
+		}
 		int nType = networkInfo.getType();
 		if (nType == ConnectivityManager.TYPE_MOBILE) {
 			String extraInfo = networkInfo.getExtraInfo();
-			if(!StringUtils.isEmpty(extraInfo)){
+			if (!StringUtils.isEmpty(extraInfo)) {
 				if (extraInfo.toLowerCase().equals("cmnet")) {
 					netType = NETTYPE_CMNET;
 				} else {

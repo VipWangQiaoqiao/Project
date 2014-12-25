@@ -8,7 +8,6 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class AvatarView extends CircleImageView {
@@ -59,9 +58,11 @@ public class AvatarView extends CircleImageView {
             if (null == url || url.endsWith(PGIF) || StringUtils.isEmpty(url)) {
                 setImageResource(R.drawable.widget_dface);
             } else {
-                DisplayImageOptions option = new DisplayImageOptions.Builder()
-                        .showImageOnLoading(R.drawable.widget_dface).build();
-                ImageLoader.getInstance().displayImage(url, this, option);
+                // DisplayImageOptions option = new
+                // DisplayImageOptions.Builder()
+                // .showImageOnLoading(R.drawable.widget_dface).build();
+                // ImageLoader.getInstance().displayImage(url, this, option);
+                ImageLoader.getInstance().displayImage(url, this);
             }
         }
     }

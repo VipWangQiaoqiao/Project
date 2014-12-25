@@ -215,4 +215,16 @@ public class User implements Serializable {
 	public void setRememberMe(boolean isRememberMe) {
 		this.isRememberMe = isRememberMe;
 	}
+
+	@Override
+	public String toString() {
+		return "User [uid=" + uid + ", location=" + location + ", name=" + name
+				+ ", followers=" + followers + ", fans=" + fans + ", score="
+				+ score + ", portrait=" + portrait + ", jointime=" + jointime
+				+ ", gender=" + gender + ", devplatform=" + devplatform
+				+ ", expertise=" + expertise + ", relation=" + relation
+				+ ", latestonline=" + latestonline + ", from=" + from
+				+ ", favoritecount=" + favoritecount + ", account=" + account
+				+ ", pwd=" + pwd + ", isRememberMe=" + isRememberMe + "]";
+	}
 }
