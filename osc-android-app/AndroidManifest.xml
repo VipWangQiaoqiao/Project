@@ -46,8 +46,8 @@
         android:theme="@style/ActionBarBaseTheme" >
         <activity
             android:name=".AppStart"
-            android:theme="@style/Theme.AppStartLoad"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AppStartLoad" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

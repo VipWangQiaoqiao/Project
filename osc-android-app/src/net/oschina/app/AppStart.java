@@ -21,10 +21,14 @@ public class AppStart extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // 防止第三方跳转时出现双实例
+        Activity aty = AppManager.getActivity(MainActivity.class);
+        if (aty != null && !aty.isFinishing()) {
+            finish();
+        }
 
         final View view = View.inflate(this, R.layout.app_start, null);
         setContentView(view);
-
         // 渐变展示启动屏
         AlphaAnimation aa = new AlphaAnimation(0.5f, 1.0f);
         aa.setDuration(1000);

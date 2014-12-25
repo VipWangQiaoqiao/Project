@@ -3,6 +3,7 @@ package net.oschina.app.bean;
 import net.oschina.app.R;
 import net.oschina.app.fragment.AboutOSCFragment;
 import net.oschina.app.fragment.ActiveFragment;
+import net.oschina.app.fragment.BrowserFragment;
 import net.oschina.app.fragment.CommentFrament;
 import net.oschina.app.fragment.EventAppliesFragment;
 import net.oschina.app.fragment.EventFragment;
@@ -92,7 +93,9 @@ public enum SimpleBackPage {
 
     NOTE_EDIT(26, R.string.actionbar_title_note, NoteEditFragment.class),
 
-    SHAKE(27, R.string.actionbar_title_shake, ShakeFragment.class);
+    SHAKE(27, R.string.actionbar_title_shake, ShakeFragment.class),
+
+    BROWSER(28, R.string.app_name, BrowserFragment.class);
 
     private int title;
     private Class<?> clz;
