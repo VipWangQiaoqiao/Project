@@ -8,6 +8,7 @@ import net.oschina.app.ui.dialog.CommonToast;
 import net.oschina.app.ui.dialog.DialogControl;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.dialog.WaitDialog;
+import net.oschina.app.util.TDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -83,6 +84,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
 		unregisterReceiver(mExistReceiver);
 		mExistReceiver = null;
 		ButterKnife.reset(this);
+		TDevice.hideSoftKeyboard(getCurrentFocus());
 		super.onDestroy();
 	}
 
