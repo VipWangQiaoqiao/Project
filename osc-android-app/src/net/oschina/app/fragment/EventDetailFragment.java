@@ -337,6 +337,7 @@ public class EventDetailFragment extends BaseDetailFragment implements
 				break;
 			case Event.APPLYSTATUS_CANCLE:
 				mBtEventApply.setText("已取消");
+				mBtEventApply.setEnabled(true);
 				break;
 			case Event.APPLYSTATUS_REJECT:
 				mBtEventApply.setText("已拒绝");

@@ -98,10 +98,10 @@ public class ListBaseAdapter extends BaseAdapter {
         return arg0;
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({ "rawtypes"})
     public void setData(ArrayList data) {
         _data = data;
-        onRequestComplete(data);
+        notifyDataSetChanged();
     }
 
     @SuppressWarnings("rawtypes")
@@ -111,39 +111,36 @@ public class ListBaseAdapter extends BaseAdapter {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public void addData(List data) {
-        if (_data == null) {
-            _data = new ArrayList();
+        if (_data != null && !data.isEmpty()) {
+            _data.addAll(data);
+            notifyDataSetChanged();
         }
-        _data.addAll(data);
-        onRequestComplete(data);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({ "unchecked" })
     public void addItem(Object obj) {
-        if (_data == null) {
-            _data = new ArrayList();
+    	if (_data != null) {
+            _data.add(obj);
+            notifyDataSetChanged();
         }
-        _data.add(obj);
-        onRequestComplete(obj);
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"unchecked" })
     public void addItem(int pos, Object obj) {
-        if (_data == null) {
-            _data = new ArrayList();
+        if (_data != null) {
+        	_data.add(pos, obj);
+        	notifyDataSetChanged();
         }
-        _data.add(pos, obj);
-        onRequestComplete(obj);
     }
 
     public void removeItem(Object obj) {
         _data.remove(obj);
-        onRequestComplete(obj);
+        notifyDataSetChanged();
     }
 
     public void clear() {
         _data.clear();
-        onRequestComplete();
+        notifyDataSetChanged();
     }
 
     public void setLoadmoreText(int loadmoreText) {
@@ -222,39 +219,5 @@ public class ListBaseAdapter extends BaseAdapter {
 
     protected View getRealView(int position, View convertView, ViewGroup parent) {
         return null;
-    }
-
-    private void onRequestComplete(final List<Object> result) {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (result.size() == 0) { // no results
-                } else {
-                    notifyDataSetChanged();
-                }
-            }
-        }, 1);
-    }
-
-    private void onRequestComplete(final Object result) {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (result != null) { // no results
-
-                } else {
-                    notifyDataSetChanged();
-                }
-            }
-        }, 1);
-    }
-
-    private void onRequestComplete() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                notifyDataSetChanged();
-            }
-        }, 1);
     }
 }

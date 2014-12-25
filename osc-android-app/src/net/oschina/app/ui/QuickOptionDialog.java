@@ -40,7 +40,7 @@ public class QuickOptionDialog extends Dialog implements
     private QuickOptionDialog(Context context, int defStyle) {
         super(context, defStyle);
         View contentView = getLayoutInflater().inflate(
-                R.layout.quick_option_dialog, null);
+                R.layout.dialog_quick_option, null);
         contentView.findViewById(R.id.ly_quick_option_text).setOnClickListener(
                 this);
         contentView.findViewById(R.id.ly_quick_option_album)

@@ -34,7 +34,8 @@
 
     <EditText
         android:id="@+id/et_phone"
-        style="@style/dialog_event_apply_edittext" />
+        style="@style/dialog_event_apply_edittext"
+        android:inputType="phone" />
     
     <View 
         android:layout_width="match_parent"

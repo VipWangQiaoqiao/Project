@@ -30,15 +30,20 @@ import net.oschina.app.util.XmlUtils;
  * @version 创建时间：2014年12月8日 下午5:17:32 
  * 
  */
-
 public class EventFragment extends BaseListFragment {
+	
+	public static final String BUNDLE_KEY_EVENT_TYPE = "eventlist_type";
 
 	protected static final String TAG = EventFragment.class.getSimpleName();
 	private static final String CACHE_KEY_PREFIX = "eventlist_";
 	
+	private int event_type;
+	
 	@Override
 	protected ListBaseAdapter getListAdapter() {
-		return new EventAdapter();
+		EventAdapter adapter = new EventAdapter();
+		adapter.setEventType(event_type);
+		return adapter;
 	}
 	
 	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -52,12 +57,27 @@ public class EventFragment extends BaseListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		IntentFilter filter = new IntentFilter(
-				Constants.INTENT_ACTION_USER_CHANGE);
-		filter.addAction(Constants.INTENT_ACTION_LOGOUT);
-		getActivity().registerReceiver(mReceiver, filter);
+		Bundle args = getArguments();
+		if (args != null) {
+			event_type = args.getInt(BUNDLE_KEY_EVENT_TYPE);
+		}
+		
+		if (event_type == EventList.EVENT_LIST_TYPE_MY_EVENT) {
+			IntentFilter filter = new IntentFilter(
+					Constants.INTENT_ACTION_USER_CHANGE);
+			filter.addAction(Constants.INTENT_ACTION_LOGOUT);
+			getActivity().registerReceiver(mReceiver, filter);
+		}
 	}
 	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		if (event_type == EventList.EVENT_LIST_TYPE_MY_EVENT) {
+			getActivity().unregisterReceiver(mReceiver);
+		}
+	}
+
 	@Override
 	public void initView(View view) {
 		super.initView(view);
@@ -65,29 +85,43 @@ public class EventFragment extends BaseListFragment {
 			
 			@Override
 			public void onClick(View v) {
-				if (AppContext.getInstance().isLogin()) {
-					requestData(true);
-				} else {
-					UIHelper.showLoginActivity(getActivity());
-				}
+				clickErrorLayout();
 			}
 		});
+	}
+	
+	private void clickErrorLayout() {
+		if (event_type == EventList.EVENT_LIST_TYPE_NEW_EVENT) {
+			requestData(true);
+		} else {
+			if (AppContext.getInstance().isLogin()) {
+				requestData(true);
+			} else {
+				UIHelper.showLoginActivity(getActivity());
+			}
+		}
 	}
 
 	@Override
 	protected void requestData(boolean refresh) {
-			if (AppContext.getInstance().isLogin()) {
-				mCatalog = AppContext.getInstance().getLoginUid();
-				super.requestData(refresh);
-			} else {
-				mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-				mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
-			}
+		
+		if (event_type == EventList.EVENT_LIST_TYPE_NEW_EVENT) {
+			mCatalog = -1;
+			super.requestData(refresh);
+			return;
+		}
+		if (AppContext.getInstance().isLogin()) {
+			mCatalog = AppContext.getInstance().getLoginUid();
+			super.requestData(refresh);
+		} else {
+			mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+			mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
+		}
 	}
 
 	@Override
 	protected String getCacheKeyPrefix() {
-		return CACHE_KEY_PREFIX;
+		return CACHE_KEY_PREFIX + mCatalog;
 	}
 
 	@Override

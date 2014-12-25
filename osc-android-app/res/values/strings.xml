@@ -29,6 +29,7 @@
     <string name="quick_option_voice">语音</string>
     <string name="quick_option_note">便签</string>
     <string name="quick_option_scan">扫一扫</string>
+    <string name="quick_option_find">找人</string>
     
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -147,8 +148,9 @@
 	<string name="actionbar_title_note">便签</string>
 	<string name="actionbar_title_shake">摇一摇</string>
 	<string name="actionbar_title_search">搜索</string>
-	<string name="actionbar_title_find_user">找人</string>
-	<string name="actionbar_title_event">我参与的活动</string>
+	<!-- 找人不显示标题 -->
+	<string name="actionbar_title_find_user"></string>
+	<string name="actionbar_title_event">活动</string>
 	<string name="actionbar_title_event_apply">活动出席人员</string>
 	<string name="actionbar_title_same_city">同城</string>
 	
