@@ -12,6 +12,7 @@ import net.oschina.app.bean.News;
 import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.ShakeObject;
 import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.fragment.BrowserFragment;
 import net.oschina.app.fragment.CommentFrament;
 import net.oschina.app.fragment.FriendsFragment;
 import net.oschina.app.fragment.MessageDetailFragment;
@@ -43,7 +44,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -441,9 +441,13 @@ public class UIHelper {
             return;
         }
         try {
-            Uri uri = Uri.parse(url);
-            Intent it = new Intent(Intent.ACTION_VIEW, uri);
-            context.startActivity(it);
+            // 启用外部浏览器
+            // Uri uri = Uri.parse(url);
+            // Intent it = new Intent(Intent.ACTION_VIEW, uri);
+            // context.startActivity(it);
+            Bundle bundle = new Bundle();
+            bundle.putString(BrowserFragment.BROWSER_KEY, url);
+            showSimpleBack(context, SimpleBackPage.BROWSER, bundle);
         } catch (Exception e) {
             e.printStackTrace();
             AppContext.showToastShort("无法浏览此网页");
