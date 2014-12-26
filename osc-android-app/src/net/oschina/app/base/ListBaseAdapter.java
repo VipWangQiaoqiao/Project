@@ -7,7 +7,6 @@ import net.oschina.app.R;
 import net.oschina.app.util.TDevice;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,7 +97,7 @@ public class ListBaseAdapter extends BaseAdapter {
         return arg0;
     }
 
-    @SuppressWarnings({ "rawtypes"})
+    @SuppressWarnings({ "rawtypes" })
     public void setData(ArrayList data) {
         _data = data;
         notifyDataSetChanged();
@@ -119,17 +118,17 @@ public class ListBaseAdapter extends BaseAdapter {
 
     @SuppressWarnings({ "unchecked" })
     public void addItem(Object obj) {
-    	if (_data != null) {
+        if (_data != null) {
             _data.add(obj);
             notifyDataSetChanged();
         }
     }
 
-    @SuppressWarnings({"unchecked" })
+    @SuppressWarnings({ "unchecked" })
     public void addItem(int pos, Object obj) {
         if (_data != null) {
-        	_data.add(pos, obj);
-        	notifyDataSetChanged();
+            _data.add(pos, obj);
+            notifyDataSetChanged();
         }
     }
 
@@ -160,9 +159,9 @@ public class ListBaseAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (position == getCount() - 1) {// 最后一条
-            if (position < _data.size()) {
-                position = getCount() - 2; // footview
-            }
+            // if (position < _data.size()) {
+            // position = getCount() - 2; // footview
+            // }
             if (getState() == STATE_LOAD_MORE || getState() == STATE_NO_MORE
                     || state == STATE_EMPTY_ITEM
                     || getState() == STATE_NETWORK_ERROR) {

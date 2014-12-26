@@ -82,13 +82,13 @@ public class MainActivity extends ActionBarActivity implements
                 TLog.log("NOTICE", "@me:" + atmeCount + " msg:" + msgCount
                         + " review:" + reviewCount + " newFans:" + newFansCount
                         + " active:" + activeCount);
-                
+
                 Fragment fragment = getCurrentFragment();
                 if (fragment instanceof MyInformationFragment) {
-                	((MyInformationFragment)fragment).setNotice();
-                	
+                    ((MyInformationFragment) fragment).setNotice();
+
                 } else {
-                	if (activeCount > 0) {
+                    if (activeCount > 0) {
                         mBvTweet.setText(activeCount + "");
                         mBvTweet.show();
                     } else {
@@ -96,7 +96,7 @@ public class MainActivity extends ActionBarActivity implements
                         mNotice = null;
                     }
                 }
-                
+
             } else if (intent.getAction()
                     .equals(Constants.INTENT_ACTION_LOGOUT)) {
                 mBvTweet.hide();
@@ -150,7 +150,6 @@ public class MainActivity extends ActionBarActivity implements
         filter.addAction(Constants.INTENT_ACTION_LOGOUT);
         registerReceiver(mReceiver, filter);
 
-        
         NoticeUtils.bindToService(this);
         UIHelper.sendBroadcastForNotice(this);
 
@@ -245,7 +244,7 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-    	getMenuInflater().inflate(R.menu.main_activity_menu, menu);
+        getMenuInflater().inflate(R.menu.main_activity_menu, menu);
         if (!mNavigationDrawerFragment.isDrawerOpen()) {
             restoreActionBar();
             return true;
@@ -257,13 +256,13 @@ public class MainActivity extends ActionBarActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-		case R.id.search:
-			UIHelper.showSimpleBack(this, SimpleBackPage.SEARCH);
-			break;
+        case R.id.search:
+            UIHelper.showSimpleBack(this, SimpleBackPage.SEARCH);
+            break;
 
-		default:
-			break;
-		}
+        default:
+            break;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -279,8 +278,8 @@ public class MainActivity extends ActionBarActivity implements
             }
         }
         if (tabId.equals(getString(MainTab.ME.getResName()))) {
-        	mBvTweet.setText("");
-        	mBvTweet.hide();
+            mBvTweet.setText("");
+            mBvTweet.hide();
         }
         supportInvalidateOptionsMenu();
     }
@@ -329,9 +328,9 @@ public class MainActivity extends ActionBarActivity implements
         }
         return consumed;
     }
-    
+
     private Fragment getCurrentFragment() {
-    	return getSupportFragmentManager()
-                .findFragmentByTag(mTabHost.getCurrentTabTag());
+        return getSupportFragmentManager().findFragmentByTag(
+                mTabHost.getCurrentTabTag());
     }
 }
