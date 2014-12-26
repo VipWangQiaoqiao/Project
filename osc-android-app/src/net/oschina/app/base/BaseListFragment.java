@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.bean.Blog;
 import net.oschina.app.bean.ListEntity;
@@ -196,7 +197,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 
     private String getCacheKey() {
         return new StringBuffer(getCacheKeyPrefix()).append("_")
-                .append(mCurrentPage).append("_").append(TDevice.getPageSize())
+                .append(mCurrentPage).append("_").append(AppContext.PAGE_SIZE)
                 .toString();
     }
 
@@ -313,7 +314,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
     }
 
     protected int getPageSize() {
-    	return TDevice.getPageSize();
+    	return AppContext.PAGE_SIZE;
     }
 
     protected void onRefreshNetworkSuccess() {

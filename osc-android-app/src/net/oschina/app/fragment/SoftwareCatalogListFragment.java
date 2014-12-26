@@ -3,6 +3,7 @@ package net.oschina.app.fragment;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.SoftwareAdapter;
 import net.oschina.app.adapter.SoftwareCatalogListAdapter;
@@ -140,7 +141,7 @@ public class SoftwareCatalogListFragment extends BaseTabFragment implements
 				mEmptyView.setErrorType(EmptyLayout.HIDE_LAYOUT);
 				if (data.size() == 0 && mState == STATE_REFRESH) {
 					mEmptyView.setErrorType(EmptyLayout.NODATA);
-				} else if (data.size() < TDevice.getPageSize()) {
+				} else if (data.size() < AppContext.PAGE_SIZE) {
 					if (mState == STATE_REFRESH)
 						mSoftwareAdapter
 								.setState(ListBaseAdapter.STATE_NO_MORE);

@@ -432,9 +432,9 @@ public class TweetDetailFragment extends BaseListFragment implements
         mAdapter.notifyDataSetChanged();
         if (mTweet != null) {
         	mTweet.setCommentCount(mAdapter.getDataSize());
+            mTvCommentCount.setText(getString(R.string.comment_count,
+                    mTweet.getCommentCount()));
         }
-        mTvCommentCount.setText(getString(R.string.comment_count,
-                mTweet.getCommentCount()));
     }
 
     private final AsyncHttpResponseHandler mDetailHandler = new AsyncHttpResponseHandler() {
@@ -543,7 +543,7 @@ public class TweetDetailFragment extends BaseListFragment implements
         mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
         if (data.size() == 0 && mState == STATE_REFRESH) {
             mAdapter.setState(ListBaseAdapter.STATE_EMPTY_ITEM);
-        } else if (data.size() < TDevice.getPageSize()) {
+        } else if (data.size() < AppContext.PAGE_SIZE) {
             if (mState == STATE_REFRESH)
                 mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
             else

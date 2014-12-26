@@ -88,7 +88,7 @@ public class UserCenterFragment extends BaseFragment implements
                 if (data.size() == 0 && mState == STATE_REFRESH) {
                     mEmptyView.setErrorType(EmptyLayout.NODATA);
                     mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
-                } else if (data.size() < TDevice.getPageSize()) {
+                } else if (data.size() < AppContext.PAGE_SIZE) {
                     if (mState == STATE_REFRESH)
                         mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
                     else

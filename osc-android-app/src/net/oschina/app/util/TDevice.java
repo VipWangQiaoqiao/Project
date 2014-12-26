@@ -157,17 +157,6 @@ public class TDevice {
 		return 0;
 	}
 
-	public static int getPageSize() {
-		if (_pageSize == -1)
-			if (TDevice.isTablet())
-				_pageSize = 50;
-			else if (TDevice.hasBigScreen())
-				_pageSize = 20;
-			else
-				_pageSize = 10;
-		return _pageSize;
-	}
-
 	public static String getUdid() {
 		String udid = BaseApplication.getPreferences().getString("udid", "");
 		if (udid.length() == 0) {
