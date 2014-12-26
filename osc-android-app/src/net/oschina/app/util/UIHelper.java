@@ -44,6 +44,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -110,9 +111,10 @@ public class UIHelper {
      * @param context
      * @param newsId
      */
-    public static void showNewsDetail(Context context, int newsId) {
+    public static void showNewsDetail(Context context, int newsId, int commentCount) {
         Intent intent = new Intent(context, DetailActivity.class);
         intent.putExtra("news_id", newsId);
+        intent.putExtra("comment_count", commentCount);
         intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
                 DetailActivity.DISPLAY_NEWS);
         context.startActivity(intent);
@@ -224,7 +226,7 @@ public class UIHelper {
             String objId = news.getNewType().getAttachment();
             switch (newsType) {
             case News.NEWSTYPE_NEWS:
-                showNewsDetail(context, newsId);
+                showNewsDetail(context, newsId, news.getCommentCount());
                 break;
             case News.NEWSTYPE_SOFTWARE:
                 showSoftwareDetail(context, objId);
@@ -262,7 +264,7 @@ public class UIHelper {
                 // 其他-无跳转
                 break;
             case Active.CATALOG_NEWS:
-                showNewsDetail(context, id);
+                showNewsDetail(context, id, active.getCommentCount());
                 break;
             case Active.CATALOG_POST:
                 showPostDetail(context, id);
@@ -360,7 +362,7 @@ public class UIHelper {
     public static void showUrlShake(Context context, ShakeObject obj) {
         if (StringUtils.isEmpty(obj.getUrl())) {
             if (ShakeObject.RANDOMTYPE_NEWS.equals(obj.getRandomtype())) {
-                UIHelper.showNewsDetail(context, StringUtils.toInt(obj.getId()));
+                UIHelper.showNewsDetail(context, StringUtils.toInt(obj.getId()), StringUtils.toInt(obj.getCommentCount()));
             }
         } else {
             if (!StringUtils.isEmpty(obj.getUrl())) {
@@ -401,7 +403,7 @@ public class UIHelper {
             int objId, String objKey) {
         switch (objType) {
         case URLsUtils.URL_OBJ_TYPE_NEWS:
-            showNewsDetail(context, objId);
+            showNewsDetail(context, objId, -1);
             break;
         case URLsUtils.URL_OBJ_TYPE_QUESTION:
             showPostDetail(context, objId);
@@ -428,7 +430,7 @@ public class UIHelper {
     }
 
     /**
-     * 打开浏览器
+     * 打开内置浏览器
      * 
      * @param context
      * @param url
@@ -448,6 +450,23 @@ public class UIHelper {
             Bundle bundle = new Bundle();
             bundle.putString(BrowserFragment.BROWSER_KEY, url);
             showSimpleBack(context, SimpleBackPage.BROWSER, bundle);
+        } catch (Exception e) {
+            e.printStackTrace();
+            AppContext.showToastShort("无法浏览此网页");
+        }
+    }
+    
+    /**
+     * 打开系统中的浏览器
+     * 
+     * @param context
+     * @param url
+     */
+    public static void openSysBrowser(Context context, String url) {
+    	try {
+             Uri uri = Uri.parse(url);
+             Intent it = new Intent(Intent.ACTION_VIEW, uri);
+             context.startActivity(it);
         } catch (Exception e) {
             e.printStackTrace();
             AppContext.showToastShort("无法浏览此网页");

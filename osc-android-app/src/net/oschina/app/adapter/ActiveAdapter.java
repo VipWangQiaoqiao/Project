@@ -6,6 +6,8 @@ import net.oschina.app.bean.Active;
 import net.oschina.app.bean.Active.ObjectReply;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.ui.ImagePreviewActivity;
+import net.oschina.app.util.DensityUtils;
+import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.AvatarView;
@@ -13,10 +15,15 @@ import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ImageSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -44,6 +51,15 @@ public class ActiveAdapter extends ListBaseAdapter {
 				}).build();
 	}
 	
+    private Bitmap recordBitmap;
+
+    private void initRecordImg(Context cxt) {
+        recordBitmap = BitmapFactory.decodeResource(cxt.getResources(),
+                R.drawable.audio3);
+        recordBitmap = ImageUtils.zoomBitmap(recordBitmap,
+                DensityUtils.dip2px(cxt, 20f), DensityUtils.dip2px(cxt, 20f));
+    }
+	
 	@SuppressLint("InflateParams")
 	@Override
 	protected View getRealView(int position, View convertView,final ViewGroup parent) {
@@ -67,12 +83,27 @@ public class ActiveAdapter extends ListBaseAdapter {
 		if (TextUtils.isEmpty(item.getMessage())) {
 			vh.body.setVisibility(View.GONE);
 		} else {
+			
 			vh.body.setMovementMethod(MyLinkMovementMethod.a());
 			vh.body.setFocusable(false);
 			vh.body.setDispatchToParent(true);
 			vh.body.setLongClickable(false);
 			Spanned span = Html.fromHtml(modifyPath(item.getMessage()));
-			vh.body.setText(span);
+			
+			// 判断是否有语音
+			if (!StringUtils.isEmpty(item.getTweetattach())) {
+				if (recordBitmap == null) {
+	                initRecordImg(parent.getContext());
+	            }
+	            ImageSpan recordImg = new ImageSpan(parent.getContext(),
+	                    recordBitmap);
+	            SpannableString str = new SpannableString("c" + span);
+	            str.setSpan(recordImg, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+	            vh.body.setText(str);
+			} else {
+				vh.body.setText(span);
+			}
+			
 			MyURLSpan.parseLinkText(vh.body, span);
 		}
 		

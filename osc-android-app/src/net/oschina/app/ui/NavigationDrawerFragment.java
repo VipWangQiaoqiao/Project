@@ -4,6 +4,7 @@ import net.oschina.app.AppManager;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.ActionBarDrawerToggle;
 import net.oschina.app.widget.DrawerArrowDrawable;
@@ -66,6 +67,9 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
 	@InjectView(R.id.menu_item_blog)
 	View mMenu_item_blog;
+	
+	@InjectView(R.id.menu_item_gitapp)
+	View mMenu_item_gitapp;
 
 	@InjectView(R.id.menu_item_rss)
 	View mMenu_item_rss;
@@ -121,6 +125,19 @@ public class NavigationDrawerFragment extends BaseFragment implements
 		case R.id.menu_item_blog:
 			UIHelper.showSimpleBack(getActivity(), SimpleBackPage.BLOG);
 			break;
+		case R.id.menu_item_gitapp:
+			
+			boolean res = TDevice.openAppActivity(getActivity(), "net.oschina.gitapp", "net.oschina.gitapp.WelcomePage");
+			
+			if (!res) {
+				if (!TDevice.isHaveMarket(getActivity())) {
+					UIHelper.openSysBrowser(getActivity(), "http://git.oschina.net/appclient");
+				} else {
+					TDevice.gotoMarket(getActivity(), "net.oschina.gitapp");
+				}
+			}
+			
+			break;
 		case R.id.menu_item_rss:
 			break;
 		case R.id.menu_item_setting:
@@ -149,9 +166,11 @@ public class NavigationDrawerFragment extends BaseFragment implements
 		mMenu_item_opensoft.setOnClickListener(this);
 		mMenu_item_blog.setOnClickListener(this);
 		mMenu_item_quests.setOnClickListener(this);
-
+		
 		mMenu_item_setting.setOnClickListener(this);
 		mMenu_item_exit.setOnClickListener(this);
+		
+		mMenu_item_gitapp.setOnClickListener(this);
 	}
 
 	@Override

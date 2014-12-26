@@ -44,7 +44,7 @@ public class AboutOSCFragment extends BaseFragment {
 	}
 
 	public void initData() {
-		mTvVersionName.setText("Beta V " + TDevice.getVersionName());
+		mTvVersionName.setText("V " + TDevice.getVersionName());
 	}
 
 	@Override
@@ -61,7 +61,15 @@ public class AboutOSCFragment extends BaseFragment {
 			TDevice.openAppInMarket(getActivity());
 			break;
 		case R.id.rl_gitapp:
-			TDevice.gotoMarket(getActivity(), "net.oschina.gitapp");
+			boolean res = TDevice.openAppActivity(getActivity(), "net.oschina.gitapp", "net.oschina.gitapp.WelcomePage");
+			
+			if (!res) {
+				if (!TDevice.isHaveMarket(getActivity())) {
+					UIHelper.openSysBrowser(getActivity(), "http://git.oschina.net/appclient");
+				} else {
+					TDevice.gotoMarket(getActivity(), "net.oschina.gitapp");
+				}
+			}
 			break;
 		case R.id.tv_oscsite:
 			UIHelper.openBrowser(getActivity(), "https://www.oschina.net");

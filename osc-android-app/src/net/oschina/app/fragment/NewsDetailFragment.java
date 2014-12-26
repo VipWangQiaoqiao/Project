@@ -52,6 +52,7 @@ public class NewsDetailFragment extends BaseDetailFragment implements
     @InjectView(R.id.tv_time)
     TextView mTvTime;
     private int mNewsId;
+    private int mCommentCount;
     private News mNews;
     private EmojiFragment mEmojiFragment;
     private ToolbarFragment mToolBarFragment;
@@ -109,6 +110,7 @@ public class NewsDetailFragment extends BaseDetailFragment implements
                 false);
 
         mNewsId = getActivity().getIntent().getIntExtra("news_id", 0);
+        mCommentCount = getActivity().getIntent().getIntExtra("comment_count", 0);
         ButterKnife.inject(this, view);
         initViews(view);
         return view;
@@ -167,7 +169,10 @@ public class NewsDetailFragment extends BaseDetailFragment implements
         mTvSource.setText(mNews.getAuthor());
         mTvTime.setText(StringUtils.friendly_time(mNews.getPubDate()));
         if (mToolBarFragment != null) {
-            mToolBarFragment.setCommentCount(mNews.getCommentCount());
+        	if (mCommentCount <= 0) {
+        		mCommentCount = mNews.getCommentCount();
+        	}
+        	mToolBarFragment.setCommentCount(mCommentCount);
         }
         notifyFavorite(mNews.getFavorite() == 1);
     }

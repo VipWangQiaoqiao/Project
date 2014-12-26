@@ -67,6 +67,9 @@ public class Active extends Entity {
 
 	@XStreamAlias("tweetimage")
 	private String tweetimage;
+	
+	@XStreamAlias("tweetattach")
+	private String tweetattach;
 
 	@XStreamAlias("appclient")
 	private int appClient;
@@ -176,6 +179,14 @@ public class Active extends Entity {
 
 	public void setPubDate(String pubDate) {
 		this.pubDate = pubDate;
+	}
+
+	public String getTweetattach() {
+		return tweetattach;
+	}
+
+	public void setTweetattach(String tweetattach) {
+		this.tweetattach = tweetattach;
 	}
 
 	public String getTweetimage() {
