@@ -19,7 +19,6 @@ import net.oschina.app.ui.MyQrodeDialog;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
-import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
@@ -195,16 +194,16 @@ public class MyInformationFragment extends BaseFragment {
         initView(view);
         return view;
     }
-    
-    @Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		requestData(true);
-		mInfo = AppContext.getInstance().getLoginUser();
-		fillUI();
-	}
 
-	@Override
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        requestData(true);
+        mInfo = AppContext.getInstance().getLoginUser();
+        fillUI();
+    }
+
+    @Override
     public void initView(View view) {
         mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
         mIvAvatar.setOnClickListener(this);
@@ -254,8 +253,8 @@ public class MyInformationFragment extends BaseFragment {
                 AvatarView.getLargeAvatar(mInfo.getPortrait()), mIvAvatar);
         mTvName.setText(mInfo.getName());
         mIvGender
-                .setImageResource(StringUtils.toInt(mInfo.getGender()) != 1 ? R.drawable.userinfo_icon_female
-                        : R.drawable.userinfo_icon_male);
+                .setImageResource(StringUtils.toInt(mInfo.getGender()) != 2 ? R.drawable.userinfo_icon_male
+                        : R.drawable.userinfo_icon_female);
         mTvScore.setText(String.valueOf(mInfo.getScore()));
         mTvFavorite.setText(String.valueOf(mInfo.getFavoritecount()));
         mTvFollowing.setText(String.valueOf(mInfo.getFollowers()));
