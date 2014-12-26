@@ -15,7 +15,6 @@ import net.oschina.app.bean.SoftwareCatalogList.SoftwareType;
 import net.oschina.app.bean.SoftwareList;
 import net.oschina.app.bean.SoftwareList.SoftwareDec;
 import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.ScrollLayout;
@@ -190,14 +189,13 @@ public class SoftwareCatalogListFragment extends BaseTabFragment implements
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-			SoftwareType type = (SoftwareType) mCatalogAdapter
+			SoftwareType type = (SoftwareType) mTagAdapter
 					.getItem(position);
 			if (type != null && type.getTag() > 0) {
-				// 加载二级分类
+				// 加载二级分类里面的软件列表
 				curScreen = SCREEN_SOFTWARE;
 				mScrollLayout.scrollToScreen(curScreen);
 				mCurrentTag = type.getTag();
-
 				mState = STATE_REFRESH;
 				mEmptyView.setErrorType(EmptyLayout.NETWORK_LOADING);
 				sendRequestTagData();

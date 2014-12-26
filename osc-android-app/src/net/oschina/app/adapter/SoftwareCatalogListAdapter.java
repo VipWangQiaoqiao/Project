@@ -36,5 +36,4 @@ public class SoftwareCatalogListAdapter extends ListBaseAdapter {
 		return convertView;
 		
 	}
-
 }
