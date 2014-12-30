@@ -111,7 +111,8 @@ public class UIHelper {
      * @param context
      * @param newsId
      */
-    public static void showNewsDetail(Context context, int newsId, int commentCount) {
+    public static void showNewsDetail(Context context, int newsId,
+            int commentCount) {
         Intent intent = new Intent(context, DetailActivity.class);
         intent.putExtra("news_id", newsId);
         intent.putExtra("comment_count", commentCount);
@@ -362,7 +363,9 @@ public class UIHelper {
     public static void showUrlShake(Context context, ShakeObject obj) {
         if (StringUtils.isEmpty(obj.getUrl())) {
             if (ShakeObject.RANDOMTYPE_NEWS.equals(obj.getRandomtype())) {
-                UIHelper.showNewsDetail(context, StringUtils.toInt(obj.getId()), StringUtils.toInt(obj.getCommentCount()));
+                UIHelper.showNewsDetail(context,
+                        StringUtils.toInt(obj.getId()),
+                        StringUtils.toInt(obj.getCommentCount()));
             }
         } else {
             if (!StringUtils.isEmpty(obj.getUrl())) {
@@ -455,7 +458,7 @@ public class UIHelper {
             AppContext.showToastShort("无法浏览此网页");
         }
     }
-    
+
     /**
      * 打开系统中的浏览器
      * 
@@ -463,10 +466,10 @@ public class UIHelper {
      * @param url
      */
     public static void openSysBrowser(Context context, String url) {
-    	try {
-             Uri uri = Uri.parse(url);
-             Intent it = new Intent(Intent.ACTION_VIEW, uri);
-             context.startActivity(it);
+        try {
+            Uri uri = Uri.parse(url);
+            Intent it = new Intent(Intent.ACTION_VIEW, uri);
+            context.startActivity(it);
         } catch (Exception e) {
             e.printStackTrace();
             AppContext.showToastShort("无法浏览此网页");

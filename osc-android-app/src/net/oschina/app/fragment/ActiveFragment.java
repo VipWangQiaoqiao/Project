@@ -103,6 +103,12 @@ public class ActiveFragment extends BaseListFragment implements
     }
 
     @Override
+    public void onRefresh() {
+        super.onRefresh();
+        NoticeViewPagerFragment.sRefreshed[NoticeViewPagerFragment.sCurrentPage] = true;
+    }
+
+    @Override
     protected ListBaseAdapter getListAdapter() {
         return new ActiveAdapter();
     }
@@ -188,7 +194,7 @@ public class ActiveFragment extends BaseListFragment implements
                 currentPage = 1;
             }
             if (type != -100
-                    && currentPage == NoticeViewPagerFragment.sCurrentPage) {
+                    && (NoticeViewPagerFragment.sRefreshed[currentPage] || currentPage == NoticeViewPagerFragment.sCurrentPage)) {
                 NoticeUtils.clearNotice(type);
             }
         }

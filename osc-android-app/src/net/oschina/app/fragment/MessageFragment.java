@@ -151,7 +151,8 @@ public class MessageFragment extends BaseListFragment implements
 
     @Override
     protected void onRefreshNetworkSuccess() {
-        if (2 == NoticeViewPagerFragment.sCurrentPage) { // 在page中第三个位置
+        if (2 == NoticeViewPagerFragment.sCurrentPage
+                || NoticeViewPagerFragment.sRefreshed[2]) { // 在page中第三个位置
             NoticeUtils.clearNotice(Notice.TYPE_MESSAGE);
         }
     }

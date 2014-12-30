@@ -86,7 +86,6 @@ public class MainActivity extends ActionBarActivity implements
                 Fragment fragment = getCurrentFragment();
                 if (fragment instanceof MyInformationFragment) {
                     ((MyInformationFragment) fragment).setNotice();
-
                 } else {
                     if (activeCount > 0) {
                         mBvTweet.setText(activeCount + "");

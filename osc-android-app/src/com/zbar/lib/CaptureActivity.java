@@ -1,6 +1,7 @@
 package com.zbar.lib;
 
 import java.io.IOException;
+
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
 import net.oschina.app.R;
@@ -11,7 +12,9 @@ import net.oschina.app.bean.SingInResult;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
+
 import org.apache.http.Header;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -34,6 +37,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.zbar.lib.camera.CameraManager;
 import com.zbar.lib.decode.CaptureActivityHandler;
@@ -80,16 +84,16 @@ public class CaptureActivity extends BaseActivity implements Callback {
     }
 
     @SuppressLint("NewApi")
-	@Override
+    @Override
     protected boolean hasActionBar() {
-        
+
         if (android.os.Build.VERSION.SDK_INT >= 11) {
-        	getActionBar().hide();
-        	return true;
+            getActionBar().hide();
+            return true;
         } else {
-        	return false;
+            return false;
         }
-        
+
     }
 
     public void setNeedCapture(boolean isNeedCapture) {
@@ -307,7 +311,6 @@ public class CaptureActivity extends BaseActivity implements Callback {
         }
         showWaitDialog("正在签到...");
         AsyncHttpResponseHandler handler = new AsyncHttpResponseHandler() {
-
             @Override
             public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
                 try {
@@ -342,10 +345,9 @@ public class CaptureActivity extends BaseActivity implements Callback {
     private CommonDialog getMesDialog(String mes) {
         CommonDialog dialog = new CommonDialog(CaptureActivity.this);
         dialog.setMessage(mes);
-        dialog.setPositiveButton("", null);
-        dialog.setCanceledOnTouchOutside(true);
+        dialog.setPositiveButton("我知道了", null);
+        dialog.setCanceledOnTouchOutside(false);
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-
             @Override
             public void onDismiss(DialogInterface dialog) {
                 finish();

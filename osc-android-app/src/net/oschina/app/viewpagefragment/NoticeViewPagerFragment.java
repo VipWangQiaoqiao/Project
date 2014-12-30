@@ -25,7 +25,7 @@ import android.view.Gravity;
 import android.view.View;
 
 /**
- * 个人主页页面
+ * 消息中心页面
  * 
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @created 2014年9月25日 下午2:21:52
@@ -34,25 +34,27 @@ import android.view.View;
 public class NoticeViewPagerFragment extends BaseViewPagerFragment {
 
     public BadgeView mBvAtMe, mBvComment, mBvMsg, mBvFans;
+    public static boolean[] sRefreshed = new boolean[] { false, false, false,
+            false };
     public static int sCurrentPage = 0;
     private BroadcastReceiver mNoticeReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            setNotice();
+            setNoticeTip();
         }
     };
 
     @Override
     public void onResume() {
         super.onResume();
-        setNotice();
-        setNoticeStatus();
+        setNoticeTip();
+        changePagers();
     }
 
     /**
      * 设置tip
      */
-    private void setNotice() {
+    private void setNoticeTip() {
         if (MainActivity.mNotice != null) {
             Notice notice = MainActivity.mNotice;
             changeTip(mBvAtMe, notice.getAtmeCount());// @我
@@ -94,7 +96,7 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
     /**
      * 切换到有tip的page
      */
-    private void setNoticeStatus() {
+    private void changePagers() {
         Notice notice = MainActivity.mNotice;
         if (notice == null) {
             return;
@@ -183,6 +185,7 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
         mTabStrip.setOnPagerChange(new OnPagerChangeLis() {
             @Override
             public void onChanged(int page) {
+                sRefreshed[page] = true;
                 sCurrentPage = page;
             }
         });

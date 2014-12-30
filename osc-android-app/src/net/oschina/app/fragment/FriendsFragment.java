@@ -16,6 +16,7 @@ import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.ui.MainActivity;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
+import net.oschina.app.viewpagefragment.NoticeViewPagerFragment;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
@@ -70,6 +71,12 @@ public class FriendsFragment extends BaseListFragment {
     }
 
     @Override
+    public void onRefresh() {
+        super.onRefresh();
+        NoticeViewPagerFragment.sRefreshed[3] = true;
+    }
+
+    @Override
     protected ListBaseAdapter getListAdapter() {
         return new FriendAdapter();
     }
@@ -97,7 +104,8 @@ public class FriendsFragment extends BaseListFragment {
 
     @Override
     protected void onRefreshNetworkSuccess() {
-        if (mCatalog == FriendsList.TYPE_FANS
+        if ((NoticeViewPagerFragment.sCurrentPage == 3 || NoticeViewPagerFragment.sRefreshed[3])
+                && mCatalog == FriendsList.TYPE_FANS
                 && mUid == AppContext.getInstance().getLoginUid()) {
             NoticeUtils.clearNotice(Notice.TYPE_NEWFAN);
         }
