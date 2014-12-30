@@ -123,10 +123,11 @@ public class ImagePreviewActivity extends BaseActivity implements
     }
 
     private String getFileName(String imgUrl) {
-        if (StringUtils.isEmpty(imgUrl)) {
-            return "NotFound";
+        int index = imgUrl.lastIndexOf('/') + 1;
+        if (index == -1) {
+        	return System.currentTimeMillis() + ".jpeg";
         }
-        return imgUrl.substring(imgUrl.lastIndexOf('/'));
+        return imgUrl.substring(index);
     }
 
     @Override
