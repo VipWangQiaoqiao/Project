@@ -639,7 +639,7 @@ public class UIHelper {
                         dialog.dismiss();
                         // 发送异常报告
                         TDevice.sendEmail(context, "OSCAndroid客户端耍脾气 - 症状诊断报告",
-                                crashReport, "apposchina@gmail.com");
+                                crashReport, "apposchina@163.com");
                         // 退出
                         AppManager.getAppManager().AppExit(context);
                     }
