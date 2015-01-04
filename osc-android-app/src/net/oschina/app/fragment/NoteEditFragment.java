@@ -208,7 +208,7 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.pub_tweet_menu, menu);
+        inflater.inflate(R.menu.notebook_edit_menu, menu);
     }
 
     @Override

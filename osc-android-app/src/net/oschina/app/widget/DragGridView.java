@@ -29,12 +29,15 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 
 /**
- * @author xiaanming(http://blog.csdn.net/xiaanming), kymjs(kymjs123@gmail.com)
+ * 感谢这篇博客的作者，http://blog.csdn.net/xiaanming<br>
+ * 在这个基础上解决了原作者的问题:Adapter无法使用ViewHolder优化的问题，优化了手势识别率，并添加了trashView功能，
+ * 优化自定义控件对外扩展性，解决在上下拉环境下手势冲突问题
+ * 
+ * @author kymjs (kymjs123@gmail.com)
  */
 public class DragGridView extends GridView {
 
     private long dragResponseMS = 700; // item长按响应的时间
-
 
     private int mDragPosition;// 正在拖拽的position
 
@@ -55,14 +58,12 @@ public class DragGridView extends GridView {
 
     private View mTrashView; // 删除item的垃圾桶图标
 
-
     private final Vibrator mVibrator; // 震动器
 
     private final int mStatusHeight;// 状态栏的高度
 
     private final WindowManager mWindowManager;
     private WindowManager.LayoutParams mWindowLayoutParams; // item镜像的布局参数
-
 
     private int mPoint2ItemTop; // 按下的点到所在item的上边缘的距离
 
@@ -77,7 +78,6 @@ public class DragGridView extends GridView {
 
     private static final int speed = 20; // DragGridView自动滚动的速度
 
-
     private boolean mAnimationEnd = true;
 
     private DragGridBaseAdapter mDragAdapter;
@@ -87,16 +87,17 @@ public class DragGridView extends GridView {
     private int mHorizontalSpacing;
 
     public static final int HANDLE_START = 0x3587;
-    public static final int HANDLE_END = 0x3588;
+    public static final int HANDLE_CANCLE = 0x3588;
+    public static final int HANDLE_FINISH = 0x3589;
     private static OnMoveListener moveListener; // 拖拽开始与结束监听器
 
     private OnDeleteListener deleteListener; // 移动到垃圾桶时的监听器
-
 
     private static final int MOVE_OFFSET = 25;
     private final TouchRect moveRect = new TouchRect();
     private final TouchRect gridRect = new TouchRect();
     private final TouchRect trashRect = new TouchRect();
+    private boolean moved = false;
 
     public DragGridView(Context context) {
         this(context, null);
@@ -113,7 +114,6 @@ public class DragGridView extends GridView {
         mWindowManager = (WindowManager) context
                 .getSystemService(Context.WINDOW_SERVICE);
         mStatusHeight = getStatusHeight(context); // 获取状态栏的高度
-
 
         if (!mNumColumnsSet) {
             mNumColumns = AUTO_FIT;
@@ -155,8 +155,10 @@ public class DragGridView extends GridView {
             if (moveListener != null) {
                 if (msg.what == HANDLE_START) {
                     moveListener.startMove();
-                } else if (msg.what == HANDLE_END) {
-                    moveListener.endMove();
+                } else if (msg.what == HANDLE_FINISH) {
+                    moveListener.finishMove();
+                } else if (msg.what == HANDLE_CANCLE) {
+                    moveListener.cancleMove();
                 }
             }
         };
@@ -171,7 +173,7 @@ public class DragGridView extends GridView {
                 return;
             }
             isDrag = true; // 设置可以拖拽
-
+            moved = true;
             mHandler.sendEmptyMessage(HANDLE_START);
             mVibrator.vibrate(50); // 震动一下
 
@@ -352,7 +354,12 @@ public class DragGridView extends GridView {
             case MotionEvent.ACTION_UP:
                 mHandler.removeCallbacks(mLongClickRunnable);
                 mHandler.removeCallbacks(mScrollRunnable);
-                mHandler.sendEmptyMessage(HANDLE_END);
+                if (moved && getAdapter().getCount() > 0) {
+                    mHandler.sendEmptyMessage(HANDLE_FINISH);
+                } else {
+                    mHandler.sendEmptyMessage(HANDLE_CANCLE);
+                }
+                moved = false;
                 break;
             }
         }
@@ -371,7 +378,6 @@ public class DragGridView extends GridView {
                 moveY = (int) ev.getY();
 
                 onDragItem(moveX, moveY);// 拖动item
-
 
                 if (mTrashView != null) {
                     if (inTrash(moveX, moveY)) {
@@ -406,23 +412,14 @@ public class DragGridView extends GridView {
      */
     private boolean isTouchInItem(TouchRect moveRect, float x, float y) {
         // int leftOffset = dragView.getLeft();
-
         // int topOffset = dragView.getTop();
-
         // if (x < leftOffset || x > leftOffset + dragView.getWidth()) {
-
         // return false;
-
         // }
-
         // if (y < topOffset || y > topOffset + dragView.getHeight()) {
-
         // return false;
-
         // }
-
         // 防止手抖的处理，原来是只要是在这个item上滑动都无所谓，但是放到可上下拉的GridView就不好了
-
         if (x < moveRect.right && x > moveRect.left && y < moveRect.bottom
                 && y > moveRect.top) {
             return true;
@@ -481,11 +478,8 @@ public class DragGridView extends GridView {
         mWindowLayoutParams.y = moveY - mPoint2ItemTop + mOffset2Top
                 - mStatusHeight;
         mWindowManager.updateViewLayout(mDragImageView, mWindowLayoutParams); // 更新镜像的位置
-
         onSwapItem(moveX, moveY);
-
         // GridView自动滚动
-
         mHandler.post(mScrollRunnable);
     }
 
@@ -678,7 +672,9 @@ public class DragGridView extends GridView {
     public interface OnMoveListener {
         void startMove();
 
-        void endMove();
+        void finishMove();
+
+        void cancleMove();
     }
 
     public interface OnDeleteListener {

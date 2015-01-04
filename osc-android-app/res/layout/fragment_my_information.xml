@@ -12,8 +12,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <include
-                layout="@layout/fragment_my_information_head" />
+            <include layout="@layout/fragment_my_information_head" />
 
             <LinearLayout
                 android:id="@+id/rl_message"
@@ -43,8 +42,7 @@
 
             <LinearLayout
                 android:id="@+id/rl_team"
-                style="@style/option_item_rl"
-                android:visibility="gone" >
+                style="@style/option_item_rl" >
 
                 <ImageView
                     style="@style/option_item_img"
@@ -59,8 +57,7 @@
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="1px"
-                android:background="@color/list_divider_color"
-                android:visibility="gone" />
+                android:background="@color/list_divider_color" />
 
             <LinearLayout
                 android:id="@+id/rl_blog"
@@ -83,8 +80,7 @@
 
             <LinearLayout
                 android:id="@+id/rl_note"
-                style="@style/option_item_rl"
-                android:visibility="gone" >
+                style="@style/option_item_rl" >
 
                 <ImageView
                     style="@style/option_item_img"
