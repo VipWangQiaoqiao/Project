@@ -10,7 +10,9 @@ import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.util.TDevice;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -33,6 +35,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
@@ -61,6 +64,8 @@ public class BrowserFragment extends BaseFragment {
     ImageView mImgForward;
     @InjectView(R.id.browser_refresh)
     ImageView mImgRefresh;
+    @InjectView(R.id.browser_system_browser)
+    ImageView mImgSystemBrowser;
     @InjectView(R.id.browser_bottom)
     LinearLayout mLayoutBottom;
 
@@ -89,6 +94,12 @@ public class BrowserFragment extends BaseFragment {
         case R.id.browser_refresh:
             mWebView.loadUrl(mWebView.getUrl());
             break;
+        case R.id.browser_system_browser:
+            // 启用外部浏览器
+            Uri uri = Uri.parse(mCurrentUrl);
+            Intent it = new Intent(Intent.ACTION_VIEW, uri);
+            aty.startActivity(it);
+            break;
         }
     }
 
@@ -99,6 +110,7 @@ public class BrowserFragment extends BaseFragment {
         mImgBack.setOnClickListener(this);
         mImgForward.setOnClickListener(this);
         mImgRefresh.setOnClickListener(this);
+        mImgSystemBrowser.setOnClickListener(this);
 
         mGestureDetector = new GestureDetector(aty, new MyGestureListener());
         mWebView.loadUrl(mCurrentUrl);
@@ -357,7 +369,7 @@ public class BrowserFragment extends BaseFragment {
         webSettings.setAllowFileAccess(true);// 可以访问文件
         webSettings.setBuiltInZoomControls(true);// 支持缩放
         if (android.os.Build.VERSION.SDK_INT >= 11) {
-        	webSettings.setDisplayZoomControls(false);// 支持缩放
+            webSettings.setDisplayZoomControls(false);// 支持缩放
         }
         mWebView.setWebViewClient(new MyWebViewClient());
         mWebView.setWebChromeClient(new MyWebChromeClient());

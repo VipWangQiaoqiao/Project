@@ -104,7 +104,7 @@
 
                 <TextView
                     style="@style/quick_option_item_text"
-                    android:text="@string/quick_option_find" />
+                    android:text="@string/quick_option_note" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
