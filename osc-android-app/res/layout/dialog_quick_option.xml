@@ -100,11 +100,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@null"
-                    android:src="@drawable/quickoption_icon_note_selector" />
+                    android:src="@drawable/quickoption_icon_find_selector" />
 
                 <TextView
                     style="@style/quick_option_item_text"
-                    android:text="@string/quick_option_note" />
+                    android:text="@string/quick_option_find" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
