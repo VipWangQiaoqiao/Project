@@ -88,6 +88,6 @@ public class AboutOSCFragment extends BaseFragment {
 
 	private void showFeedBack() {
 		TDevice.sendEmail(getActivity(), "用户反馈-OSC Android客户端", "",
-				"apposchina@gmail.com");
+				"apposchina@163.com");
 	}
 }
