@@ -44,13 +44,13 @@ public class SoftwareCatalogListFragment extends BaseTabFragment implements
 	private final static int SCREEN_TAG = 1;
 	private final static int SCREEN_SOFTWARE = 2;
 
-	private ScrollLayout mScrollLayout;
+	private static ScrollLayout mScrollLayout;
 	private ListView mLvCatalog, mLvTag, mLvSoftware;
 	private EmptyLayout mEmptyView;
 	private SoftwareCatalogListAdapter mCatalogAdapter, mTagAdapter;
 	private SoftwareAdapter mSoftwareAdapter;
 	private int mState = STATE_NONE;
-	private int curScreen = SCREEN_CATALOG;// 默认当前屏幕
+	private static int curScreen = SCREEN_CATALOG;// 默认当前屏幕
 	private int mCurrentTag;
 	private int mCurrentPage;
 
