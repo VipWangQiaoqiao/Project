@@ -253,8 +253,9 @@ public class TweetDetailFragment extends BaseListFragment implements
             break;
         }
 
-        mTvCommentCount.setText(getString(R.string.comment_count,
-                mTweet.getCommentCount()));
+        mTvCommentCount.setText("评论("+ mTweet.getCommentCount() +")");
+//        mTvCommentCount.setText(getString(R.string.comment_count,
+//                mTweet.getCommentCount() + ""));
         if (StringUtils.isEmpty(mTweet.getAttach())) {
             mRlRecordSound.setVisibility(View.GONE);
         } else {
