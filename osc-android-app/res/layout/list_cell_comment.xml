@@ -7,8 +7,8 @@
 
     <net.oschina.app.widget.AvatarView
         android:id="@+id/iv_avatar"
-        style="@style/user_face_image"
-        android:layout_marginRight="@dimen/space_8" />
+        style="@style/comment_user_face_image"
+        android:layout_marginRight="@dimen/space_10" />
 
     <TextView
         android:id="@+id/tv_name"
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:textColor="@color/tweet_time_platform"
-        android:textSize="@dimen/text_size_12" />
+        android:textSize="@dimen/text_size_10" />
 
     <LinearLayout
         android:id="@+id/ly_refers"
@@ -33,15 +33,15 @@
         android:layout_marginTop="@dimen/space_4"
         android:layout_below="@id/tv_name"
         android:layout_toRightOf="@id/iv_avatar"
-        android:background="@drawable/comment_refer_container_bg"
-        android:orientation="vertical" />
+        android:orientation="vertical"
+        android:visibility="visible" />
 
     <net.oschina.app.widget.TweetTextView
         android:id="@+id/tv_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/ly_refers"
-        android:layout_marginTop="@dimen/space_4"
+        android:layout_marginTop="@dimen/space_8"
         android:layout_toRightOf="@id/iv_avatar"
         android:textColor="@color/main_black"
         android:textSize="@dimen/text_size_14" />
@@ -53,15 +53,15 @@
         android:layout_below="@id/tv_content"
         android:layout_marginTop="@dimen/space_4"
         android:layout_toRightOf="@id/iv_avatar"
-        android:background="@drawable/comment_reply_container_bg"
-        android:orientation="vertical" />
+        android:orientation="vertical"
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/tv_from"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/ly_relies"
-        android:layout_marginTop="@dimen/space_4"
+        android:layout_marginTop="@dimen/space_8"
         android:layout_toRightOf="@id/iv_avatar"
         android:drawableLeft="@drawable/platform"
         android:drawablePadding="@dimen/space_4"

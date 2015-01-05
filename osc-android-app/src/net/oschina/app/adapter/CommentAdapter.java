@@ -106,14 +106,11 @@ public class CommentAdapter extends ListBaseAdapter {
 			for (Refer reply : refers) {
 				View replyItemView = getLayoutInflater(parent.getContext())
 						.inflate(R.layout.list_cell_reply_name_content, null);
-
-				View countView = getLayoutInflater(parent.getContext())
-						.inflate(R.layout.list_cell_reply_count, null);
-				TextView name = (TextView) countView
-						.findViewById(R.id.tv_comment_reply_count);
+				
+				TextView name = (TextView) replyItemView
+						.findViewById(R.id.tv_reply_name);
 
 				name.setText(reply.refertitle);
-				vh.refers.addView(name);
 
 				TweetTextView refersContent = (TweetTextView) replyItemView
 						.findViewById(R.id.tv_reply_content);
@@ -148,9 +145,10 @@ public class CommentAdapter extends ListBaseAdapter {
 
 			// add reply item
 			for (Reply reply : replies) {
-				View replyItemView = getLayoutInflater(parent.getContext())
+				LinearLayout replyItemView = (LinearLayout) getLayoutInflater(parent.getContext())
 						.inflate(R.layout.list_cell_reply_name_content, null);
 
+				replyItemView.setOrientation(LinearLayout.HORIZONTAL);
 				TextView name = (TextView) replyItemView
 						.findViewById(R.id.tv_reply_name);
 				name.setText(reply.rauthor + ":");

@@ -314,6 +314,14 @@
         <item name="android:clickable">true</item>
         <item name="android:src">@drawable/widget_dface</item>
     </style>
+    
+    <style name="comment_user_face_image">
+        <item name="android:layout_width">24.0dip</item>
+        <item name="android:layout_height">24.0dip</item>
+        <item name="android:padding">1.0dip</item>
+        <item name="android:clickable">true</item>
+        <item name="android:src">@drawable/widget_dface</item>
+    </style>
 
     <style name="toolbar_action">
         <item name="android:gravity">center</item>

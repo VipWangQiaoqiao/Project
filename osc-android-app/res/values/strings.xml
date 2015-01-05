@@ -100,7 +100,7 @@
     <string name="comment_count">评论(%s)</string>
     <string name="answer_count">回复(%s)</string>
     <string name="post_answer">回复</string>
-    <string name="comment_reply_count">共有%s条评论</string>
+    <string name="comment_reply_count">---共有%s条评论---</string>
     <string name="comment_refer_author">引用来自%s的评论</string>
 	<string name="tip_comment_content_empty">评论内容不能为空</string>
 	
