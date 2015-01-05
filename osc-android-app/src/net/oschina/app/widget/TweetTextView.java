@@ -33,7 +33,7 @@ public class TweetTextView extends TextView {
 	}
 
 	private void init(Context context) {
-		setHighlightColor(0);
+		//setHighlightColor(0);
 	}
 
 	public boolean handleTouchEvent(MotionEvent event) {

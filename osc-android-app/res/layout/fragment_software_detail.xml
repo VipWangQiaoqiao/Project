@@ -186,37 +186,19 @@
 
                     <Button
                         android:id="@+id/btn_software_index"
-                        android:layout_width="0dp"
-                        android:layout_height="35dp"
-                        android:layout_marginLeft="@dimen/space_20"
-                        android:layout_weight="1"
-                        android:background="@drawable/btn_blue_selector"
-                        android:text="@string/software_index"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_16" />
+                        style="@style/soft_detail_btn"
+                        android:text="@string/software_index" />
 
                     <Button
                         android:id="@+id/btn_software_download"
-                        android:layout_width="0dp"
-                        android:layout_height="35dp"
-                        android:layout_marginLeft="@dimen/space_20"
-                        android:layout_marginRight="@dimen/space_20"
-                        android:layout_weight="1"
-                        android:background="@drawable/btn_blue_selector"
-                        android:text="@string/software_download"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_16" />
+                        style="@style/soft_detail_btn"
+                        android:text="@string/software_download" />
 
                     <Button
                         android:id="@+id/btn_software_document"
-                        android:layout_width="0dp"
-                        android:layout_height="35dp"
+                        style="@style/soft_detail_btn"
                         android:layout_marginRight="@dimen/space_20"
-                        android:layout_weight="1"
-                        android:background="@drawable/btn_blue_selector"
-                        android:text="@string/software_document"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_16" />
+                        android:text="@string/software_document" />
                 </LinearLayout>
             </LinearLayout>
         </net.oschina.app.widget.CustomerScrollView>
