@@ -14,10 +14,10 @@ import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.DragGridView;
 import net.oschina.app.widget.DragGridView.OnDeleteListener;
 import net.oschina.app.widget.DragGridView.OnMoveListener;
+import net.oschina.app.widget.KJSwipeRefreshLayout;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -45,7 +45,7 @@ public class NoteBookFragment extends BaseFragment implements
     @InjectView(R.id.frag_note_trash)
     ImageView mImgTrash;
     @InjectView(R.id.swiperefreshlayout)
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    KJSwipeRefreshLayout mSwipeRefreshLayout;
 
     private NoteDatabase noteDb;
     private ArrayList<NotebookData> datas;
@@ -133,6 +133,7 @@ public class NoteBookFragment extends BaseFragment implements
             return;
         }
 
+        mList.setDragEnable(false);
         // 设置顶部正在刷新
         mList.setSelection(0);
         setSwipeRefreshLoadingState();

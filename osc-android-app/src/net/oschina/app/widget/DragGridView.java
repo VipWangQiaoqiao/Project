@@ -29,21 +29,20 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 
 /**
- * 感谢这篇博客的作者，http://blog.csdn.net/xiaanming<br>
+ * 感谢这篇博客的作者，http://blog.csdn.net/xiaanming/article/details/17718579<br>
  * 在这个基础上解决了原作者的问题:Adapter无法使用ViewHolder优化的问题，优化了手势识别率，并添加了trashView功能，
- * 优化自定义控件对外扩展性，解决在上下拉环境下手势冲突问题
+ * 优化自定义控件对外扩展性，解决在上下拉环境下手势冲突问题<br>
  * 
  * @author kymjs (kymjs123@gmail.com)
  */
 public class DragGridView extends GridView {
 
     private long dragResponseMS = 700; // item长按响应的时间
-
     private int mDragPosition;// 正在拖拽的position
 
     private boolean isDrag = false; // 是否可以拖拽，用于控件内部逻辑实现
-
     private boolean canDrag = true; // 是否可用拖拽，主要用于外部开放设置
+    private boolean mAnimationEnd = true;
 
     private int mDownX;
     private int mDownY;
@@ -51,34 +50,22 @@ public class DragGridView extends GridView {
     private int moveY;
 
     private View mStartDragItemView = null; // 刚开始拖拽的item对应的View
-
     private ImageView mDragImageView; // 用于拖拽时显示的幻影镜像
-
     private Bitmap mDragBitmap; // 幻影镜像对应的Bitmap
-
     private View mTrashView; // 删除item的垃圾桶图标
 
     private final Vibrator mVibrator; // 震动器
-
     private final int mStatusHeight;// 状态栏的高度
-
     private final WindowManager mWindowManager;
     private WindowManager.LayoutParams mWindowLayoutParams; // item镜像的布局参数
 
     private int mPoint2ItemTop; // 按下的点到所在item的上边缘的距离
-
     private int mPoint2ItemLeft;
     private int mOffset2Top; // DragGridView距离屏幕顶部的偏移量
-
     private int mOffset2Left;
 
     private int mDownScrollBorder; // DragGridView自动向下滚动的边界值
-
     private int mUpScrollBorder; // DragGridView自动向上滚动的边界值
-
-    private static final int speed = 20; // DragGridView自动滚动的速度
-
-    private boolean mAnimationEnd = true;
 
     private DragGridBaseAdapter mDragAdapter;
     private int mNumColumns;
@@ -86,18 +73,19 @@ public class DragGridView extends GridView {
     private boolean mNumColumnsSet;
     private int mHorizontalSpacing;
 
+    private static final int speed = 20; // DragGridView自动滚动的速度
+    private static final int MOVE_OFFSET = 25;
+    private boolean moved = false;
+
     public static final int HANDLE_START = 0x3587;
     public static final int HANDLE_CANCLE = 0x3588;
     public static final int HANDLE_FINISH = 0x3589;
     private static OnMoveListener moveListener; // 拖拽开始与结束监听器
-
     private OnDeleteListener deleteListener; // 移动到垃圾桶时的监听器
 
-    private static final int MOVE_OFFSET = 25;
     private final TouchRect moveRect = new TouchRect();
     private final TouchRect gridRect = new TouchRect();
     private final TouchRect trashRect = new TouchRect();
-    private boolean moved = false;
 
     public DragGridView(Context context) {
         this(context, null);
@@ -180,6 +168,7 @@ public class DragGridView extends GridView {
             mStartDragItemView.setVisibility(View.INVISIBLE);// 隐藏该item
 
             createDragImage(mDragBitmap, mDownX, mDownY);
+            mDragBitmap = null;
         }
     };
 
@@ -287,6 +276,9 @@ public class DragGridView extends GridView {
 
     public void setDragEnable(boolean isDrag) {
         this.canDrag = isDrag;
+        if (canDrag) {
+            mHandler.removeCallbacks(mLongClickRunnable);
+        }
     }
 
     /******************** touch method ********************/
@@ -304,7 +296,6 @@ public class DragGridView extends GridView {
                 moveRect.bottom = mDownY + MOVE_OFFSET;
 
                 // 根据按下的X,Y坐标获取所点击item的position
-
                 mDragPosition = pointToPosition(mDownX, mDownY);
 
                 if (mDragPosition == AdapterView.INVALID_POSITION) {
@@ -312,11 +303,9 @@ public class DragGridView extends GridView {
                 }
 
                 // 使用Handler延迟dragResponseMS执行mLongClickRunnable
-
                 mHandler.postDelayed(mLongClickRunnable, dragResponseMS);
 
                 // 根据position获取该item所对应的View
-
                 mStartDragItemView = getChildAt(mDragPosition
                         - getFirstVisiblePosition());
 
@@ -327,33 +316,27 @@ public class DragGridView extends GridView {
                 mOffset2Left = (int) (ev.getRawX() - mDownX);
 
                 // 获取DragGridView自动向上滚动的偏移量，小于这个值，DragGridView向下滚动
-
                 mDownScrollBorder = getHeight() / 5;
                 // 大于这个值，DragGridView向上滚动
-
                 mUpScrollBorder = getHeight() * 4 / 5;
 
                 // 开启mDragItemView绘图缓存
-
                 mStartDragItemView.setDrawingCacheEnabled(true);
                 // 获取mDragItemView在缓存中的Bitmap对象
-
                 mDragBitmap = Bitmap.createBitmap(mStartDragItemView
                         .getDrawingCache());
                 // 这一步很关键，释放绘图缓存，避免出现重复的镜像
-
                 mStartDragItemView.destroyDrawingCache();
                 break;
             case MotionEvent.ACTION_MOVE:
                 // 如果我们在按下的item上面移动，只要不超过item的边界我们就不移除mRunnable
-
                 if (!isTouchInItem(moveRect, ev.getX(), ev.getY())) {
                     mHandler.removeCallbacks(mLongClickRunnable);
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                mHandler.removeCallbacks(mLongClickRunnable);
                 mHandler.removeCallbacks(mScrollRunnable);
+                mHandler.removeCallbacks(mLongClickRunnable);
                 if (moved && getAdapter().getCount() > 0) {
                     mHandler.sendEmptyMessage(HANDLE_FINISH);
                 } else {
@@ -411,15 +394,8 @@ public class DragGridView extends GridView {
      * @return
      */
     private boolean isTouchInItem(TouchRect moveRect, float x, float y) {
-        // int leftOffset = dragView.getLeft();
-        // int topOffset = dragView.getTop();
-        // if (x < leftOffset || x > leftOffset + dragView.getWidth()) {
-        // return false;
-        // }
-        // if (y < topOffset || y > topOffset + dragView.getHeight()) {
-        // return false;
-        // }
-        // 防止手抖的处理，原来是只要是在这个item上滑动都无所谓，但是放到可上下拉的GridView就不好了
+        // 防止手抖的处理，如果是横向在item上移动是没有影响的，
+        // 但是纵向由于外层上下拉控件还是会有影响，具体解决请看上下拉重写的onTouch()方法
         if (x < moveRect.right && x > moveRect.left && y < moveRect.bottom
                 && y > moveRect.top) {
             return true;
@@ -683,6 +659,18 @@ public class DragGridView extends GridView {
 
     public interface OnDeleteListener {
         void onDelete(int position);
+    }
+
+    public interface DragGridBaseAdapter {
+        /**
+         * 移动时回调
+         */
+        public void reorderItems(int oldPosition, int newPosition);
+
+        /**
+         * 隐藏时回调
+         */
+        public void setHideItem(int hidePosition);
     }
 
     private class TouchRect {
