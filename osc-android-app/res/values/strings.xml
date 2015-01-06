@@ -146,6 +146,7 @@
 	<string name="actionbar_title_setting_notification">新消息提醒</string>
 	<string name="actionbar_title_about_osc">关于开源中国</string>
 	<string name="actionbar_title_note">便签</string>
+	<string name="actionbar_title_noteedit">编辑便签</string>
 	<string name="actionbar_title_shake">摇一摇</string>
 	<string name="actionbar_title_search">搜索</string>
 	<!-- 找人不显示标题 -->
@@ -233,6 +234,9 @@
 	<string name="friends">同城</string>
 	<string name="find_oscer">找人</string>
 	<string name="shake">摇一摇</string>
+	
+	<string name="add_notebook">新建便签</string>
+	<string name="submit_notebook">保存便签</string>
 	
 	<string name="loading_img">加载图片</string>
 	<string name="mes_notice">消息通知</string>

@@ -92,7 +92,7 @@ public enum SimpleBackPage {
 
     NOTE(25, R.string.actionbar_title_note, NoteBookFragment.class),
 
-    NOTE_EDIT(26, R.string.actionbar_title_note, NoteEditFragment.class),
+    NOTE_EDIT(26, R.string.actionbar_title_noteedit, NoteEditFragment.class),
 
     SHAKE(27, R.string.actionbar_title_shake, ShakeFragment.class),
 

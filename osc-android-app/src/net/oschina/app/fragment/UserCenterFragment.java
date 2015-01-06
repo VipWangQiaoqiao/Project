@@ -97,8 +97,8 @@ public class UserCenterFragment extends BaseFragment implements
                     mAdapter.setState(ListBaseAdapter.STATE_LOAD_MORE);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
                 onFailure(arg0, arg1, arg2, e);
+                e.printStackTrace();
             }
         }
 

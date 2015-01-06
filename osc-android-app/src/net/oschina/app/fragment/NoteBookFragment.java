@@ -9,7 +9,6 @@ import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.NotebookData;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.db.NoteDatabase;
-import net.oschina.app.util.DensityUtils;
 import net.oschina.app.util.KJAnimations;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.DragGridView;
@@ -52,8 +51,6 @@ public class NoteBookFragment extends BaseFragment implements
     private ArrayList<NotebookData> datas;
     private NotebookAdapter adapter;
 
-    private int screenH;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
@@ -69,7 +66,6 @@ public class NoteBookFragment extends BaseFragment implements
     @Override
     public void initData() {
         noteDb = new NoteDatabase(getActivity());
-        screenH = DensityUtils.getScreenH(getActivity());
         datas = noteDb.query();// 查询操作，忽略耗时
         if (datas != null) {
             adapter = new NotebookAdapter(getActivity(), datas);
@@ -98,7 +94,7 @@ public class NoteBookFragment extends BaseFragment implements
             }
 
             @Override
-            public void endMove() {
+            public void finishMove() {
                 setListCanPull();
                 mImgTrash.setVisibility(View.INVISIBLE);
                 mImgTrash.startAnimation(KJAnimations.getTranslateAnimation(0,
@@ -112,6 +108,9 @@ public class NoteBookFragment extends BaseFragment implements
                     }).start();
                 }
             }
+
+            @Override
+            public void cancleMove() {}
         });
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorSchemeResources(
@@ -131,6 +130,11 @@ public class NoteBookFragment extends BaseFragment implements
     @Override
     public void onRefresh() {
         if (mState == STATE_REFRESH) {
+            return;
+        }
+
+        if (!AppContext.getInstance().isLogin()) {
+            AppContext.showToast("还未登陆，无法使用同步功能");
             return;
         }
 
@@ -224,7 +228,7 @@ public class NoteBookFragment extends BaseFragment implements
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.pub_tweet_menu, menu);
+        inflater.inflate(R.menu.notebook_menu, menu);
     }
 
     @Override
