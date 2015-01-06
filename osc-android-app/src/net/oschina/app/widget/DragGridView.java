@@ -31,7 +31,7 @@ import android.widget.ListAdapter;
 /**
  * 感谢这篇博客的作者，http://blog.csdn.net/xiaanming<br>
  * 在这个基础上解决了原作者的问题:Adapter无法使用ViewHolder优化的问题，优化了手势识别率，并添加了trashView功能，
- * 优化自定义控件对外扩展性，解决在上下拉环境下手势冲突问题
+ * 优化自定义控件对外扩展性，解决在上下拉环境下手势冲突问题<br>
  * 
  * @author kymjs (kymjs123@gmail.com)
  */
@@ -304,7 +304,6 @@ public class DragGridView extends GridView {
                 moveRect.bottom = mDownY + MOVE_OFFSET;
 
                 // 根据按下的X,Y坐标获取所点击item的position
-
                 mDragPosition = pointToPosition(mDownX, mDownY);
 
                 if (mDragPosition == AdapterView.INVALID_POSITION) {
@@ -312,11 +311,9 @@ public class DragGridView extends GridView {
                 }
 
                 // 使用Handler延迟dragResponseMS执行mLongClickRunnable
-
                 mHandler.postDelayed(mLongClickRunnable, dragResponseMS);
 
                 // 根据position获取该item所对应的View
-
                 mStartDragItemView = getChildAt(mDragPosition
                         - getFirstVisiblePosition());
 
@@ -327,33 +324,27 @@ public class DragGridView extends GridView {
                 mOffset2Left = (int) (ev.getRawX() - mDownX);
 
                 // 获取DragGridView自动向上滚动的偏移量，小于这个值，DragGridView向下滚动
-
                 mDownScrollBorder = getHeight() / 5;
                 // 大于这个值，DragGridView向上滚动
-
                 mUpScrollBorder = getHeight() * 4 / 5;
 
                 // 开启mDragItemView绘图缓存
-
                 mStartDragItemView.setDrawingCacheEnabled(true);
                 // 获取mDragItemView在缓存中的Bitmap对象
-
                 mDragBitmap = Bitmap.createBitmap(mStartDragItemView
                         .getDrawingCache());
                 // 这一步很关键，释放绘图缓存，避免出现重复的镜像
-
                 mStartDragItemView.destroyDrawingCache();
                 break;
             case MotionEvent.ACTION_MOVE:
                 // 如果我们在按下的item上面移动，只要不超过item的边界我们就不移除mRunnable
-
                 if (!isTouchInItem(moveRect, ev.getX(), ev.getY())) {
                     mHandler.removeCallbacks(mLongClickRunnable);
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                mHandler.removeCallbacks(mLongClickRunnable);
                 mHandler.removeCallbacks(mScrollRunnable);
+                mHandler.removeCallbacks(mLongClickRunnable);
                 if (moved && getAdapter().getCount() > 0) {
                     mHandler.sendEmptyMessage(HANDLE_FINISH);
                 } else {
@@ -411,21 +402,21 @@ public class DragGridView extends GridView {
      * @return
      */
     private boolean isTouchInItem(TouchRect moveRect, float x, float y) {
-        // int leftOffset = dragView.getLeft();
-        // int topOffset = dragView.getTop();
-        // if (x < leftOffset || x > leftOffset + dragView.getWidth()) {
-        // return false;
-        // }
-        // if (y < topOffset || y > topOffset + dragView.getHeight()) {
-        // return false;
-        // }
         // 防止手抖的处理，原来是只要是在这个item上滑动都无所谓，但是放到可上下拉的GridView就不好了
-        if (x < moveRect.right && x > moveRect.left && y < moveRect.bottom
-                && y > moveRect.top) {
-            return true;
-        } else {
-            return false;
-        }
+        // if (x < moveRect.right && x > moveRect.left && y < moveRect.bottom
+        // && y > moveRect.top) {
+        // return true;
+        // } else {
+        // return false;
+        // }
+
+        // 在可上下拉viewgroup中的防抖逻辑
+        // if (Math.abs(mDownX - x) > 8 || Math.abs(mDownY - y) > 8) {
+        // return true;
+        // } else {
+        // return false;
+        // }
+        return false;
     }
 
     /**
