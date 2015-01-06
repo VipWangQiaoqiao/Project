@@ -88,4 +88,12 @@ public abstract class BaseFragment extends Fragment implements android.view.View
 		}
 		return null;
 	}
+	
+	protected WaitDialog showWaitDialog(String resid) {
+		FragmentActivity activity = getActivity();
+		if (activity instanceof DialogControl) {
+			return ((DialogControl) activity).showWaitDialog(resid);
+		}
+		return null;
+	}
 }

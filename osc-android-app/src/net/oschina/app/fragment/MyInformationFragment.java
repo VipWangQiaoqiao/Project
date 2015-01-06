@@ -17,6 +17,7 @@ import net.oschina.app.cache.CacheManager;
 import net.oschina.app.ui.MainActivity;
 import net.oschina.app.ui.MyQrodeDialog;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -26,6 +27,7 @@ import net.oschina.app.widget.BadgeView;
 
 import org.apache.http.Header;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -56,363 +58,363 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  */
 
 public class MyInformationFragment extends BaseFragment {
+	
+	@InjectView(R.id.iv_avatar)
+	AvatarView mIvAvatar;
+	@InjectView(R.id.iv_gender)
+	ImageView mIvGender;
+	@InjectView(R.id.tv_name)
+	TextView mTvName;
+	@InjectView(R.id.tv_score)
+	TextView mTvScore;
+	@InjectView(R.id.tv_favorite)
+	TextView mTvFavorite;
+	@InjectView(R.id.tv_following)
+	TextView mTvFollowing;
+	@InjectView(R.id.tv_follower)
+	TextView mTvFans;
+	@InjectView(R.id.tv_mes)
+	View mMesView;
+	@InjectView(R.id.error_layout)
+	EmptyLayout mErrorLayout;
+	@InjectView(R.id.iv_qr_code)
+	ImageView mQrCode;
+	@InjectView(R.id.ll_user_container)
+	View mUserContainer;
+	@InjectView(R.id.rl_user_unlogin)
+	View mUserUnLogin;
 
-    @InjectView(R.id.iv_avatar)
-    AvatarView mIvAvatar;
-    @InjectView(R.id.iv_gender)
-    ImageView mIvGender;
-    @InjectView(R.id.tv_name)
-    TextView mTvName;
-    @InjectView(R.id.tv_score)
-    TextView mTvScore;
-    @InjectView(R.id.tv_favorite)
-    TextView mTvFavorite;
-    @InjectView(R.id.tv_following)
-    TextView mTvFollowing;
-    @InjectView(R.id.tv_follower)
-    TextView mTvFans;
-    @InjectView(R.id.tv_mes)
-    View mMesView;
-    @InjectView(R.id.error_layout)
-    EmptyLayout mErrorLayout;
-    @InjectView(R.id.iv_qr_code)
-    ImageView mQrCode;
-    @InjectView(R.id.ll_user_container)
-    View mUserContainer;
-    @InjectView(R.id.rl_user_unlogin)
-    View mUserUnLogin;
+	private static BadgeView mMesCount;
 
-    private static BadgeView mMesCount;
+	private boolean mIsWatingLogin;
 
-    private boolean mIsWatingLogin;
+	private User mInfo;
+	private AsyncTask<String, Void, User> mCacheTask;
 
-    private User mInfo;
-    private AsyncTask<String, Void, User> mCacheTask;
+	private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+			if (action.equals(Constants.INTENT_ACTION_LOGOUT)) {
+				if (mErrorLayout != null) {
+					mIsWatingLogin = true;
+					steupUser();
+				}
+			} else if (action.equals(Constants.INTENT_ACTION_USER_CHANGE)) {
+				requestData(true);
+			} else if (action.equals(Constants.INTENT_ACTION_NOTICE)) {
+				setNotice();
+			}
+		}
+	};
 
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(Constants.INTENT_ACTION_LOGOUT)) {
-                if (mErrorLayout != null) {
-                    mIsWatingLogin = true;
-                    steupUser();
-                }
-            } else if (action.equals(Constants.INTENT_ACTION_USER_CHANGE)) {
-                requestData(true);
-            } else if (action.equals(Constants.INTENT_ACTION_NOTICE)) {
-                setNotice();
-            }
-        }
-    };
+	private final AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
 
-    private final AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
+		@Override
+		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+			try {
+				mInfo = XmlUtils.toBean(MyInformation.class,
+						new ByteArrayInputStream(arg2)).getUser();
+				if (mInfo != null) {
+					fillUI();
+					AppContext.getInstance().updateUserInfo(mInfo);
+					new SaveCacheTask(getActivity(), mInfo, getCacheKey())
+							.execute();
+				} else {
+					onFailure(arg0, arg1, arg2, new Throwable());
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				onFailure(arg0, arg1, arg2, e);
+			}
+		}
 
-        @Override
-        public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-            try {
-                mInfo = XmlUtils.toBean(MyInformation.class,
-                        new ByteArrayInputStream(arg2)).getUser();
-                if (mInfo != null) {
-                    fillUI();
-                    new SaveCacheTask(getActivity(), mInfo, getCacheKey())
-                            .execute();
-                } else {
-                    onFailure(arg0, arg1, arg2, new Throwable());
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                onFailure(arg0, arg1, arg2, e);
-            }
-        }
+		@Override
+		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+				Throwable arg3) {
 
-        @Override
-        public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                Throwable arg3) {
+		}
+	};
+	
+	private void steupUser() {
+		if (mIsWatingLogin) {
+			mUserContainer.setVisibility(View.GONE);
+			mUserUnLogin.setVisibility(View.VISIBLE);
+		} else {
+			mUserContainer.setVisibility(View.VISIBLE);
+			mUserUnLogin.setVisibility(View.GONE);
+		}
+	}
 
-        }
-    };
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		IntentFilter filter = new IntentFilter(Constants.INTENT_ACTION_LOGOUT);
+		filter.addAction(Constants.INTENT_ACTION_USER_CHANGE);
+		getActivity().registerReceiver(mReceiver, filter);
+	}
 
-    private void steupUser() {
-        if (mIsWatingLogin) {
-            mUserContainer.setVisibility(View.GONE);
-            mUserUnLogin.setVisibility(View.VISIBLE);
-        } else {
-            mUserContainer.setVisibility(View.VISIBLE);
-            mUserUnLogin.setVisibility(View.GONE);
-        }
-    }
+	@Override
+	public void onResume() {
+		super.onResume();
+		setNotice();
+	}
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        IntentFilter filter = new IntentFilter(Constants.INTENT_ACTION_LOGOUT);
-        filter.addAction(Constants.INTENT_ACTION_USER_CHANGE);
-        getActivity().registerReceiver(mReceiver, filter);
-    }
+	public void setNotice() {
+		if (MainActivity.mNotice != null) {
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        setNotice();
-    }
+			Notice notice = MainActivity.mNotice;
+			int atmeCount = notice.getAtmeCount();// @我
+			int msgCount = notice.getMsgCount();// 留言
+			int reviewCount = notice.getReviewCount();// 评论
+			int newFansCount = notice.getNewFansCount();// 新粉丝
+			int activeCount = atmeCount + reviewCount + msgCount + newFansCount;// 信息总数
+			if (activeCount > 0) {
+				mMesCount.setText(activeCount + "");
+				mMesCount.show();
+			} else {
+				mMesCount.hide();
+			}
 
-    public void setNotice() {
-        if (MainActivity.mNotice != null) {
+		} else {
+			mMesCount.hide();
+		}
+	}
 
-            Notice notice = MainActivity.mNotice;
-            int atmeCount = notice.getAtmeCount();// @我
-            int msgCount = notice.getMsgCount();// 留言
-            int reviewCount = notice.getReviewCount();// 评论
-            int newFansCount = notice.getNewFansCount();// 新粉丝
-            int activeCount = atmeCount + reviewCount + msgCount + newFansCount;// 信息总数
-            if (activeCount > 0) {
-                mMesCount.setText(activeCount + "");
-                mMesCount.show();
-            } else {
-                mMesCount.hide();
-            }
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		getActivity().unregisterReceiver(mReceiver);
+	}
 
-        } else {
-            mMesCount.hide();
-        }
-    }
+	@Override
+	public View onCreateView(LayoutInflater inflater,
+			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_my_information,
+				container, false);
+		ButterKnife.inject(this, view);
+		initView(view);
+		return view;
+	}
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        getActivity().unregisterReceiver(mReceiver);
-    }
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		requestData(true);
+		mInfo = AppContext.getInstance().getLoginUser();
+		fillUI();
+	}
 
-    @Override
-    public View onCreateView(LayoutInflater inflater,
-            @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_my_information,
-                container, false);
-        ButterKnife.inject(this, view);
-        initView(view);
-        return view;
-    }
+	@Override
+	public void initView(View view) {
+		mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+		mIvAvatar.setOnClickListener(this);
+		mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        requestData(true);
-        mInfo = AppContext.getInstance().getLoginUser();
-        fillUI();
-    }
+			@Override
+			public void onClick(View v) {
+				if (AppContext.getInstance().isLogin()) {
+					requestData(true);
+				} else {
+					UIHelper.showLoginActivity(getActivity());
+				}
+			}
+		});
+		view.findViewById(R.id.ly_favorite).setOnClickListener(this);
+		view.findViewById(R.id.ly_following).setOnClickListener(this);
+		view.findViewById(R.id.ly_follower).setOnClickListener(this);
+		view.findViewById(R.id.rl_message).setOnClickListener(this);
+		view.findViewById(R.id.rl_team).setOnClickListener(this);
+		view.findViewById(R.id.rl_blog).setOnClickListener(this);
+		view.findViewById(R.id.iv_avatar1).setOnClickListener(this);
+		view.findViewById(R.id.rl_note).setOnClickListener(
+				new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						UIHelper.showSimpleBack(getActivity(),
+								SimpleBackPage.NOTE);
+					}
+				});
+		mUserUnLogin.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				UIHelper.showLoginActivity(getActivity());
+			}
+		});
 
-    @Override
-    public void initView(View view) {
-        mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-        mIvAvatar.setOnClickListener(this);
-        mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
+		mMesCount = new BadgeView(getActivity(), mMesView);
+		mMesCount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+		mMesCount.setBadgePosition(BadgeView.POSITION_CENTER);
+		mMesCount.setGravity(Gravity.CENTER);
+		mMesCount.setBackgroundResource(R.drawable.notification_bg);
+		mQrCode.setOnClickListener(this);
+	}
 
-            @Override
-            public void onClick(View v) {
-                if (AppContext.getInstance().isLogin()) {
-                    requestData(true);
-                } else {
-                    UIHelper.showLoginActivity(getActivity());
-                }
-            }
-        });
-        view.findViewById(R.id.ly_favorite).setOnClickListener(this);
-        view.findViewById(R.id.ly_following).setOnClickListener(this);
-        view.findViewById(R.id.ly_follower).setOnClickListener(this);
-        view.findViewById(R.id.rl_message).setOnClickListener(this);
-        view.findViewById(R.id.rl_team).setOnClickListener(this);
-        view.findViewById(R.id.rl_blog).setOnClickListener(this);
-        view.findViewById(R.id.iv_avatar1).setOnClickListener(this);
-        view.findViewById(R.id.rl_note).setOnClickListener(
-                new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        UIHelper.showSimpleBack(getActivity(),
-                                SimpleBackPage.NOTE);
-                    }
-                });
-        mUserUnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UIHelper.showLoginActivity(getActivity());
-            }
-        });
+	private void fillUI() {
+		ImageLoader.getInstance().displayImage(
+				AvatarView.getLargeAvatar(mInfo.getPortrait()), mIvAvatar);
+		mTvName.setText(mInfo.getName());
+		mIvGender
+				.setImageResource(StringUtils.toInt(mInfo.getGender()) != 2 ? R.drawable.userinfo_icon_male
+						: R.drawable.userinfo_icon_female);
+		mTvScore.setText(String.valueOf(mInfo.getScore()));
+		mTvFavorite.setText(String.valueOf(mInfo.getFavoritecount()));
+		mTvFollowing.setText(String.valueOf(mInfo.getFollowers()));
+		mTvFans.setText(String.valueOf(mInfo.getFans()));
+	}
 
-        mMesCount = new BadgeView(getActivity(), mMesView);
-        mMesCount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
-        mMesCount.setBadgePosition(BadgeView.POSITION_CENTER);
-        mMesCount.setGravity(Gravity.CENTER);
-        mMesCount.setBackgroundResource(R.drawable.notification_bg);
-        mQrCode.setOnClickListener(this);
-    }
+	private void requestData(boolean refresh) {
 
-    private void fillUI() {
-        ImageLoader.getInstance().displayImage(
-                AvatarView.getLargeAvatar(mInfo.getPortrait()), mIvAvatar);
-        mTvName.setText(mInfo.getName());
-        mIvGender
-                .setImageResource(StringUtils.toInt(mInfo.getGender()) != 2 ? R.drawable.userinfo_icon_male
-                        : R.drawable.userinfo_icon_female);
-        mTvScore.setText(String.valueOf(mInfo.getScore()));
-        mTvFavorite.setText(String.valueOf(mInfo.getFavoritecount()));
-        mTvFollowing.setText(String.valueOf(mInfo.getFollowers()));
-        mTvFans.setText(String.valueOf(mInfo.getFans()));
-    }
+		if (AppContext.getInstance().isLogin()) {
+			mIsWatingLogin = false;
+			String key = getCacheKey();
+			if (TDevice.hasInternet()
+					&& (!CacheManager.isExistDataCache(getActivity(), key) || refresh)) {
+				sendRequestData();
+			} else {
+				readCacheData(key);
+			}
+		} else {
+			mIsWatingLogin = true;
+		}
 
-    private void requestData(boolean refresh) {
+		steupUser();
+	}
 
-        if (AppContext.getInstance().isLogin()) {
-            mIsWatingLogin = false;
-            String key = getCacheKey();
-            if (TDevice.hasInternet()
-                    && (!CacheManager.isExistDataCache(getActivity(), key) || refresh)) {
-                sendRequestData();
-            } else {
-                readCacheData(key);
-            }
-        } else {
-            mIsWatingLogin = true;
-        }
+	private void readCacheData(String key) {
+		cancelReadCacheTask();
+		mCacheTask = new CacheTask(getActivity()).execute(key);
+	}
 
-        steupUser();
-    }
+	private void cancelReadCacheTask() {
+		if (mCacheTask != null) {
+			mCacheTask.cancel(true);
+			mCacheTask = null;
+		}
+	}
 
-    private void readCacheData(String key) {
-        cancelReadCacheTask();
-        mCacheTask = new CacheTask(getActivity()).execute(key);
-    }
+	private void sendRequestData() {
+		int uid = AppContext.getInstance().getLoginUid();
+		OSChinaApi.getMyInformation(uid, mHandler);
+	}
 
-    private void cancelReadCacheTask() {
-        if (mCacheTask != null) {
-            mCacheTask.cancel(true);
-            mCacheTask = null;
-        }
-    }
+	private String getCacheKey() {
+		return "my_information" + AppContext.getInstance().getLoginUid();
+	}
 
-    private void sendRequestData() {
-        int uid = AppContext.getInstance().getLoginUid();
-        OSChinaApi.getMyInformation(uid, mHandler);
-    }
+	private class CacheTask extends AsyncTask<String, Void, User> {
+		private final WeakReference<Context> mContext;
 
-    private String getCacheKey() {
-        return "my_information" + AppContext.getInstance().getLoginUid();
-    }
+		private CacheTask(Context context) {
+			mContext = new WeakReference<Context>(context);
+		}
 
-    private class CacheTask extends AsyncTask<String, Void, User> {
-        private final WeakReference<Context> mContext;
+		@Override
+		protected User doInBackground(String... params) {
+			Serializable seri = CacheManager.readObject(mContext.get(),
+					params[0]);
+			if (seri == null) {
+				return null;
+			} else {
+				return (User) seri;
+			}
+		}
 
-        private CacheTask(Context context) {
-            mContext = new WeakReference<Context>(context);
-        }
+		@Override
+		protected void onPostExecute(User info) {
+			super.onPostExecute(info);
+			mInfo = info;
+			if (mInfo != null) {
+				fillUI();
+				mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+			} else {
+				mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+			}
+		}
+	}
 
-        @Override
-        protected User doInBackground(String... params) {
-            Serializable seri = CacheManager.readObject(mContext.get(),
-                    params[0]);
-            if (seri == null) {
-                return null;
-            } else {
-                return (User) seri;
-            }
-        }
+	private class SaveCacheTask extends AsyncTask<Void, Void, Void> {
+		private final WeakReference<Context> mContext;
+		private final Serializable seri;
+		private final String key;
 
-        @Override
-        protected void onPostExecute(User info) {
-            super.onPostExecute(info);
-            mInfo = info;
-            if (mInfo != null) {
-                fillUI();
-                mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-            } else {
-                mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-            }
-        }
-    }
+		private SaveCacheTask(Context context, Serializable seri, String key) {
+			mContext = new WeakReference<Context>(context);
+			this.seri = seri;
+			this.key = key;
+		}
 
-    private class SaveCacheTask extends AsyncTask<Void, Void, Void> {
-        private final WeakReference<Context> mContext;
-        private final Serializable seri;
-        private final String key;
+		@Override
+		protected Void doInBackground(Void... params) {
+			CacheManager.saveObject(mContext.get(), seri, key);
+			return null;
+		}
+	}
 
-        private SaveCacheTask(Context context, Serializable seri, String key) {
-            mContext = new WeakReference<Context>(context);
-            this.seri = seri;
-            this.key = key;
-        }
+	@Override
+	public void onClick(View v) {
+		if (mIsWatingLogin) {
+			AppContext.showToast(R.string.unlogin);
+			UIHelper.showLoginActivity(getActivity());
+			return;
+		}
+		final int id = v.getId();
+		switch (id) {
+		case R.id.iv_avatar:
+			UIHelper.showSimpleBack(getActivity(), SimpleBackPage.MY_INFORMATION_DETAIL);
+			break;
+		case R.id.iv_qr_code:
+			showMyQrCode();
+			break;
+		case R.id.ly_following:
+			UIHelper.showFriends(getActivity(), AppContext.getInstance()
+					.getLoginUid(), 0);
+			break;
+		case R.id.ly_follower:
+			UIHelper.showFriends(getActivity(), AppContext.getInstance()
+					.getLoginUid(), 1);
+			break;
+		case R.id.ly_favorite:
+			UIHelper.showUserFavorite(getActivity(), AppContext.getInstance()
+					.getLoginUid());
+			break;
+		case R.id.rl_message:
+			UIHelper.showMyMes(getActivity());
+			setNoticeReaded();
+			break;
+		case R.id.rl_team:
 
-        @Override
-        protected Void doInBackground(Void... params) {
-            CacheManager.saveObject(mContext.get(), seri, key);
-            return null;
-        }
-    }
+			break;
+		case R.id.rl_blog:
+			UIHelper.showUserBlog(getActivity(), AppContext.getInstance()
+					.getLoginUid());
+			break;
+		case R.id.rl_note:
+			// 内部类独立实现，修改为未登录也可以使用便签功能
+			break;
+		case R.id.rl_user_center:
+			UIHelper.showUserCenter(getActivity(), AppContext.getInstance()
+					.getLoginUid(), AppContext.getInstance().getLoginUser()
+					.getName());
+			break;
+		default:
+			break;
+		}
+	}
 
-    @Override
-    public void onClick(View v) {
-        if (mIsWatingLogin) {
-            AppContext.showToast(R.string.unlogin);
-            UIHelper.showLoginActivity(getActivity());
-            return;
-        }
-        final int id = v.getId();
-        switch (id) {
-        case R.id.iv_avatar:
-            UIHelper.showUserAvatar(getActivity(), AppContext.getInstance()
-                    .getLoginUser().getPortrait());
-            break;
-        case R.id.iv_qr_code:
-            showMyQrCode();
-            break;
-        case R.id.ly_following:
-            UIHelper.showFriends(getActivity(), AppContext.getInstance()
-                    .getLoginUid(), 0);
-            break;
-        case R.id.ly_follower:
-            UIHelper.showFriends(getActivity(), AppContext.getInstance()
-                    .getLoginUid(), 1);
-            break;
-        case R.id.ly_favorite:
-            UIHelper.showUserFavorite(getActivity(), AppContext.getInstance()
-                    .getLoginUid());
-            break;
-        case R.id.rl_message:
-            UIHelper.showMyMes(getActivity());
-            setNoticeReaded();
-            break;
-        case R.id.rl_team:
+	private void showMyQrCode() {
+		MyQrodeDialog dialog = new MyQrodeDialog(getActivity());
+		dialog.show();
+	}
 
-            break;
-        case R.id.rl_blog:
-            UIHelper.showUserBlog(getActivity(), AppContext.getInstance()
-                    .getLoginUid());
-            break;
-        case R.id.rl_note:
-            // 内部类独立实现，修改为未登录也可以使用便签功能
-            break;
-        case R.id.rl_user_center:
-            UIHelper.showUserCenter(getActivity(), AppContext.getInstance()
-                    .getLoginUid(), AppContext.getInstance().getLoginUser()
-                    .getName());
-            break;
-        default:
-            break;
-        }
-    }
+	private void setNoticeReaded() {
+		mMesCount.setText("");
+		mMesCount.hide();
+	}
 
-    private void showMyQrCode() {
-        MyQrodeDialog dialog = new MyQrodeDialog(getActivity());
-        dialog.show();
-    }
+	@Override
+	public void initData() {
 
-    private void setNoticeReaded() {
-        mMesCount.setText("");
-        mMesCount.hide();
-    }
-
-    @Override
-    public void initData() {
-
-    }
+	}
 }
