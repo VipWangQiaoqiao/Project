@@ -33,6 +33,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -52,6 +53,8 @@ public class MainActivity extends ActionBarActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks,
         OnTabChangeListener, BaseViewInterface, View.OnClickListener,
         OnTouchListener {
+	
+	private DoubleClickExitHelper mDoubleClickExit;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the
@@ -124,6 +127,7 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public void initView() {
+    	mDoubleClickExit = new DoubleClickExitHelper(this);
         mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
@@ -332,4 +336,15 @@ public class MainActivity extends ActionBarActivity implements
         return getSupportFragmentManager().findFragmentByTag(
                 mTabHost.getCurrentTabTag());
     }
+    
+	/**
+	 * 监听返回--是否退出程序
+	 */
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK && AppContext.get(AppConfig.KEY_DOUBLE_CLICK_EXIT, true)) {
+			// 退出应用
+			return mDoubleClickExit.onKeyDown(keyCode, event);
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 }

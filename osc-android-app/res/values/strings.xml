@@ -237,6 +237,7 @@
 	<string name="loading_img">加载图片</string>
 	<string name="mes_notice">消息通知</string>
 	<string name="clean_cache">清理缓存</string>
+	<string name="double_click_exit">双击退出</string>
 	<string name="loading_more">自动加载\"更多\"</string>
 	<string name="update">检查新版本</string>
 	<string name="about">关于开源中国</string>
@@ -273,5 +274,7 @@
 	<string name="hint_report_desc">其他原因</string>
 	<string name="tip_report_success">举报成功</string>
 	<string name="tip_report_faile">举报失败</string>
+	
+	<string name="tip_double_click_exit">再次点击退出开源中国</string>
 
 </resources>
