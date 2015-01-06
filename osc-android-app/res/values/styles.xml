@@ -314,6 +314,14 @@
         <item name="android:clickable">true</item>
         <item name="android:src">@drawable/widget_dface</item>
     </style>
+    
+    <style name="comment_user_face_image">
+        <item name="android:layout_width">24.0dip</item>
+        <item name="android:layout_height">24.0dip</item>
+        <item name="android:padding">1.0dip</item>
+        <item name="android:clickable">true</item>
+        <item name="android:src">@drawable/widget_dface</item>
+    </style>
 
     <style name="toolbar_action">
         <item name="android:gravity">center</item>
@@ -507,5 +515,15 @@
 	    
 	    <item name="android:windowNoTitle">true</item>  
 	</style>
+	
+    <style name="soft_detail_btn">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:layout_marginLeft">@dimen/space_20</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/btn_green_selector</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+    </style>
 
 </resources>

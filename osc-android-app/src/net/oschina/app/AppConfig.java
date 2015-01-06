@@ -31,6 +31,7 @@ public class AppConfig {
     public static final String KEY_NOTIFICATION_VIBRATION = "KEY_NOTIFICATION_VIBRATION";
     public static final String KEY_NOTIFICATION_DISABLE_WHEN_EXIT = "KEY_NOTIFICATION_DISABLE_WHEN_EXIT";
     public static final String KEY_CHECK_UPDATE = "KEY_CHECK_UPDATE";
+    public static final String KEY_DOUBLE_CLICK_EXIT = "KEY_DOUBLE_CLICK_EXIT";
 
     public static final String LAST_QUESTION_CATEGORY_IDX = "LAST_QUESTION_CATEGORY_IDX";
     public static final String KEY_DAILY_ENGLISH = "KEY_DAILY_ENGLISH";

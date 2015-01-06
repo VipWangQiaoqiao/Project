@@ -27,6 +27,8 @@
     <color name="transparent">#00000000</color>
     <color name="window_background">#EBEBEB</color>
     
+    <color name="comment_yellow">#FFFFEE</color>
+    
     <color name="list_divider_color">#DADADA</color>
     <color name="list_item_background_normal">#ffffff</color>
     <color name="list_item_background_pressed">#F1F1F1</color>

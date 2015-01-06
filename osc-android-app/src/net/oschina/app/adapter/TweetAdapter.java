@@ -105,7 +105,6 @@ public class TweetAdapter extends ListBaseAdapter {
         } else {
             vh.content.setText(span);
         }
-
         MyURLSpan.parseLinkText(vh.content, span);
 
         vh.commentcount.setText(tweet.getCommentCount() + "");

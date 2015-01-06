@@ -2,22 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="@dimen/space_2" >
+    android:orientation="vertical"
+    android:background="@drawable/comment_background"
+    android:layout_margin="@dimen/space_5"
+    android:padding="@dimen/space_5" >
 
     <TextView
         android:id="@+id/tv_reply_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/space_2"
-        android:textColor="@color/main_purple"
+        android:layout_marginBottom="@dimen/space_4"
+        android:textColor="@color/lightblue"
         android:textSize="@dimen/text_size_12" />
 
     <net.oschina.app.widget.TweetTextView
         android:id="@+id/tv_reply_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/main_black"
+        android:textColor="#666"
         android:textSize="@dimen/text_size_13" />
 
 </LinearLayout>

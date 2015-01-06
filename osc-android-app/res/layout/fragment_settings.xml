@@ -71,6 +71,29 @@
                 android:textSize="@dimen/text_size_14" />
         </RelativeLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="@dimen/space_8"
+            android:layout_marginRight="@dimen/space_8"
+            android:background="@color/list_divider_color" />
+
+        <RelativeLayout
+            android:id="@+id/rl_double_click_exit"
+            style="@style/option_item_rl" >
+
+            <TextView
+                style="@style/option_item_text_parent"
+                android:text="@string/double_click_exit"
+                android:textColor="@color/main_black"
+                android:textSize="@dimen/text_size_16" />
+
+            <net.oschina.app.widget.togglebutton.ToggleButton
+                android:id="@+id/tb_double_click_exit"
+                style="@style/option_item_toggleButton"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/rl_loading_more"
             style="@style/option_item_rl"

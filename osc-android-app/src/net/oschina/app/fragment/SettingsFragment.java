@@ -31,6 +31,8 @@ public class SettingsFragment extends BaseFragment {
 	ToggleButton mTbLoadImg;
 	@InjectView(R.id.tv_cache_size)
 	TextView mTvCacheSize;
+	@InjectView(R.id.tb_double_click_exit)
+	ToggleButton mTbDoubleClickExit;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater,
@@ -52,20 +54,37 @@ public class SettingsFragment extends BaseFragment {
 				AppContext.setLoadImage(on);
 			}
 		});
+		
+		mTbDoubleClickExit.setOnToggleChanged(new OnToggleChanged() {
+			
+			@Override
+			public void onToggle(boolean on) {
+				AppContext.set(AppConfig.KEY_DOUBLE_CLICK_EXIT, on);
+			}
+		});
 
 		view.findViewById(R.id.rl_loading_img).setOnClickListener(this);
 		view.findViewById(R.id.rl_notification_settings).setOnClickListener(
 				this);
 		view.findViewById(R.id.rl_clean_cache).setOnClickListener(this);
+		view.findViewById(R.id.rl_double_click_exit).setOnClickListener(this);
 		view.findViewById(R.id.rl_about).setOnClickListener(this);
 		view.findViewById(R.id.rl_exit).setOnClickListener(this);
 	}
 
 	public void initData() {
-		if (AppContext.get(AppConfig.KEY_LOAD_IMAGE, true))
+		if (AppContext.get(AppConfig.KEY_LOAD_IMAGE, true)) {
 			mTbLoadImg.setToggleOn();
-		else
+		}
+		else {
 			mTbLoadImg.setToggleOff();
+		}
+		
+		if (AppContext.get(AppConfig.KEY_DOUBLE_CLICK_EXIT, true)) {
+			mTbDoubleClickExit.setToggleOn();
+		} else {
+			mTbDoubleClickExit.setToggleOff();
+		}
 
 		caculateCacheSize();
 	}
@@ -104,6 +123,9 @@ public class SettingsFragment extends BaseFragment {
 			break;
 		case R.id.rl_clean_cache:
 			onClickCleanCache();
+			break;
+		case R.id.rl_double_click_exit:
+			mTbDoubleClickExit.toggle();
 			break;
 		case R.id.rl_about:
 			UIHelper.showAboutOSC(getActivity());
