@@ -393,8 +393,7 @@ public class TweetDetailFragment extends BaseListFragment implements
         mAdapter.notifyDataSetChanged();
         if (mTweet != null) {
             mTweet.setCommentCount(mAdapter.getDataSize());
-            mTvCommentCount.setText(getString(R.string.comment_count,
-                    mTweet.getCommentCount() + ""));
+            mTvCommentCount.setText("评论("+ mTweet.getCommentCount() +")");
         }
     }
 
