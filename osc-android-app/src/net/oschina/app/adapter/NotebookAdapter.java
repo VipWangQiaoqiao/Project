@@ -7,7 +7,7 @@ import net.oschina.app.R;
 import net.oschina.app.bean.NotebookData;
 import net.oschina.app.fragment.NoteEditFragment;
 import net.oschina.app.util.DensityUtils;
-import net.oschina.app.widget.DragGridBaseAdapter;
+import net.oschina.app.widget.DragGridView.DragGridBaseAdapter;
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;

@@ -29,7 +29,7 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 
 /**
- * 感谢这篇博客的作者，http://blog.csdn.net/xiaanming<br>
+ * 感谢这篇博客的作者，http://blog.csdn.net/xiaanming/article/details/17718579<br>
  * 在这个基础上解决了原作者的问题:Adapter无法使用ViewHolder优化的问题，优化了手势识别率，并添加了trashView功能，
  * 优化自定义控件对外扩展性，解决在上下拉环境下手势冲突问题<br>
  * 
@@ -66,14 +66,11 @@ public class DragGridView extends GridView {
     private WindowManager.LayoutParams mWindowLayoutParams; // item镜像的布局参数
 
     private int mPoint2ItemTop; // 按下的点到所在item的上边缘的距离
-
     private int mPoint2ItemLeft;
     private int mOffset2Top; // DragGridView距离屏幕顶部的偏移量
-
     private int mOffset2Left;
 
     private int mDownScrollBorder; // DragGridView自动向下滚动的边界值
-
     private int mUpScrollBorder; // DragGridView自动向上滚动的边界值
 
     private static final int speed = 20; // DragGridView自动滚动的速度
@@ -86,18 +83,18 @@ public class DragGridView extends GridView {
     private boolean mNumColumnsSet;
     private int mHorizontalSpacing;
 
+    private static final int MOVE_OFFSET = 25;
+    private boolean moved = false;
+
     public static final int HANDLE_START = 0x3587;
     public static final int HANDLE_CANCLE = 0x3588;
     public static final int HANDLE_FINISH = 0x3589;
     private static OnMoveListener moveListener; // 拖拽开始与结束监听器
-
     private OnDeleteListener deleteListener; // 移动到垃圾桶时的监听器
 
-    private static final int MOVE_OFFSET = 25;
     private final TouchRect moveRect = new TouchRect();
     private final TouchRect gridRect = new TouchRect();
     private final TouchRect trashRect = new TouchRect();
-    private boolean moved = false;
 
     public DragGridView(Context context) {
         this(context, null);
@@ -180,6 +177,7 @@ public class DragGridView extends GridView {
             mStartDragItemView.setVisibility(View.INVISIBLE);// 隐藏该item
 
             createDragImage(mDragBitmap, mDownX, mDownY);
+            mDragBitmap = null;
         }
     };
 
@@ -674,6 +672,18 @@ public class DragGridView extends GridView {
 
     public interface OnDeleteListener {
         void onDelete(int position);
+    }
+
+    public interface DragGridBaseAdapter {
+        /**
+         * 移动时回调
+         */
+        public void reorderItems(int oldPosition, int newPosition);
+
+        /**
+         * 隐藏时回调
+         */
+        public void setHideItem(int hidePosition);
     }
 
     private class TouchRect {
