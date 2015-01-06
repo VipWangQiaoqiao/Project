@@ -12,6 +12,7 @@ import android.view.MotionEvent;
  * 
  */
 public class KJSwipeRefreshLayout extends SwipeRefreshLayout {
+    private float y;
 
     public KJSwipeRefreshLayout(Context context) {
         super(context);
@@ -22,18 +23,20 @@ public class KJSwipeRefreshLayout extends SwipeRefreshLayout {
     }
 
     @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if (!isEnabled()) {
-            return false;
-        }
-        return super.onInterceptTouchEvent(ev);
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent arg0) {
-        if (!isEnabled()) {
-            return false;
-        }
-        return super.onTouchEvent(arg0);
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        // switch (event.getAction()) {
+        // case MotionEvent.ACTION_DOWN:
+        // y = event.getY();
+        // break;
+        // case MotionEvent.ACTION_MOVE:
+        // if (Math.abs(event.getY() - y) < 1) {
+        // super.dispatchTouchEvent(event);
+        // return true;
+        // }
+        // break;
+        // default:
+        // break;
+        // }
+        return super.dispatchTouchEvent(event);
     }
 }

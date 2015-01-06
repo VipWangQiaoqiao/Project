@@ -133,6 +133,7 @@ public class NoteBookFragment extends BaseFragment implements
             return;
         }
 
+        mList.setDragEnable(false);
         // 设置顶部正在刷新
         mList.setSelection(0);
         setSwipeRefreshLoadingState();

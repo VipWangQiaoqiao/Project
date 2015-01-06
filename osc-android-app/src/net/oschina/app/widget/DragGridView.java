@@ -38,12 +38,11 @@ import android.widget.ListAdapter;
 public class DragGridView extends GridView {
 
     private long dragResponseMS = 700; // item长按响应的时间
-
     private int mDragPosition;// 正在拖拽的position
 
     private boolean isDrag = false; // 是否可以拖拽，用于控件内部逻辑实现
-
     private boolean canDrag = true; // 是否可用拖拽，主要用于外部开放设置
+    private boolean mAnimationEnd = true;
 
     private int mDownX;
     private int mDownY;
@@ -51,17 +50,12 @@ public class DragGridView extends GridView {
     private int moveY;
 
     private View mStartDragItemView = null; // 刚开始拖拽的item对应的View
-
     private ImageView mDragImageView; // 用于拖拽时显示的幻影镜像
-
     private Bitmap mDragBitmap; // 幻影镜像对应的Bitmap
-
     private View mTrashView; // 删除item的垃圾桶图标
 
     private final Vibrator mVibrator; // 震动器
-
     private final int mStatusHeight;// 状态栏的高度
-
     private final WindowManager mWindowManager;
     private WindowManager.LayoutParams mWindowLayoutParams; // item镜像的布局参数
 
@@ -73,16 +67,13 @@ public class DragGridView extends GridView {
     private int mDownScrollBorder; // DragGridView自动向下滚动的边界值
     private int mUpScrollBorder; // DragGridView自动向上滚动的边界值
 
-    private static final int speed = 20; // DragGridView自动滚动的速度
-
-    private boolean mAnimationEnd = true;
-
     private DragGridBaseAdapter mDragAdapter;
     private int mNumColumns;
     private int mColumnWidth;
     private boolean mNumColumnsSet;
     private int mHorizontalSpacing;
 
+    private static final int speed = 20; // DragGridView自动滚动的速度
     private static final int MOVE_OFFSET = 25;
     private boolean moved = false;
 
@@ -285,6 +276,9 @@ public class DragGridView extends GridView {
 
     public void setDragEnable(boolean isDrag) {
         this.canDrag = isDrag;
+        if (canDrag) {
+            mHandler.removeCallbacks(mLongClickRunnable);
+        }
     }
 
     /******************** touch method ********************/
@@ -400,21 +394,14 @@ public class DragGridView extends GridView {
      * @return
      */
     private boolean isTouchInItem(TouchRect moveRect, float x, float y) {
-        // 防止手抖的处理，原来是只要是在这个item上滑动都无所谓，但是放到可上下拉的GridView就不好了
-        // if (x < moveRect.right && x > moveRect.left && y < moveRect.bottom
-        // && y > moveRect.top) {
-        // return true;
-        // } else {
-        // return false;
-        // }
-
-        // 在可上下拉viewgroup中的防抖逻辑
-        // if (Math.abs(mDownX - x) > 8 || Math.abs(mDownY - y) > 8) {
-        // return true;
-        // } else {
-        // return false;
-        // }
-        return false;
+        // 防止手抖的处理，如果是横向在item上移动是没有影响的，
+        // 但是纵向由于外层上下拉控件还是会有影响，具体解决请看上下拉重写的onTouch()方法
+        if (x < moveRect.right && x > moveRect.left && y < moveRect.bottom
+                && y > moveRect.top) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
