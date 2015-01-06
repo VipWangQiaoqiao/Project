@@ -549,14 +549,13 @@ public class OSChinaApi {
         params.put("name", username);
         ApiHttpClient.get("action/api/find_user", params, handler);
     }
-    
+
     /**
      * 获取活动列表
      * 
      * @param pageIndex
      * @param uid
-     * 			 	<= 0 近期活动    
-     * 			 	实际的用户ID 则获取用户参与的活动列表，需要已登陆的用户
+     *            <= 0 近期活动 实际的用户ID 则获取用户参与的活动列表，需要已登陆的用户
      * @param handler
      */
     public static void getEventList(int pageIndex, int uid,
@@ -643,5 +642,34 @@ public class OSChinaApi {
         params.put("company", data.getCompany());
         params.put("job", data.getJob());
         ApiHttpClient.post("action/api/event_apply", params, handler);
+    }
+
+    private static void uploadLog(String data, String report,
+            AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("app", "1");
+        params.put("report", report);
+        params.put("msg", data);
+        ApiHttpClient.post("action/api/user_report_to_admin", params, handler);
+    }
+
+    /**
+     * BUG上报
+     * 
+     * @param data
+     * @param handler
+     */
+    public static void uploadLog(String data, AsyncHttpResponseHandler handler) {
+        uploadLog(data, "1", handler);
+    }
+
+    /**
+     * 反馈意见
+     * 
+     * @param data
+     * @param handler
+     */
+    public static void feedback(String data, AsyncHttpResponseHandler handler) {
+        uploadLog(data, "2", handler);
     }
 }

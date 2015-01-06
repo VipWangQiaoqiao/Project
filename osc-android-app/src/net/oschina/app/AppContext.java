@@ -52,8 +52,8 @@ public class AppContext extends BaseApplication {
     public void onCreate() {
         super.onCreate();
         // 注册App异常崩溃处理器
-         Thread.setDefaultUncaughtExceptionHandler(AppException
-         .getAppExceptionHandler(this));
+        Thread.setDefaultUncaughtExceptionHandler(AppException
+                .getAppExceptionHandler(this));
         instance = this;
         init();
         initLogin();
@@ -201,7 +201,8 @@ public class AppContext extends BaseApplication {
                         String.valueOf(user.getFollowers()));
                 setProperty("user.fans", String.valueOf(user.getFans()));
                 setProperty("user.score", String.valueOf(user.getScore()));
-                setProperty("user.favoritecount", String.valueOf(user.getFavoritecount()));
+                setProperty("user.favoritecount",
+                        String.valueOf(user.getFavoritecount()));
                 setProperty("user.gender", String.valueOf(user.getGender()));
                 setProperty("user.isRememberMe",
                         String.valueOf(user.isRememberMe()));// 是否记住我的信息
@@ -244,7 +245,8 @@ public class AppContext extends BaseApplication {
         user.setFollowers(StringUtils.toInt(getProperty("user.followers"), 0));
         user.setFans(StringUtils.toInt(getProperty("user.fans"), 0));
         user.setScore(StringUtils.toInt(getProperty("user.score"), 0));
-        user.setFavoritecount(StringUtils.toInt(getProperty("user.favoritecount"), 0));
+        user.setFavoritecount(StringUtils.toInt(
+                getProperty("user.favoritecount"), 0));
         user.setRememberMe(StringUtils.toBool(getProperty("user.isRememberMe")));
         user.setGender(getProperty("user.gender"));
         return user;
@@ -256,9 +258,9 @@ public class AppContext extends BaseApplication {
     public void cleanLoginInfo() {
         this.loginUid = 0;
         this.login = false;
-        removeProperty("user.uid", "user.name", "user.face", "user.location", 
-        		"user.followers", "user.fans","user.score", "user.isRememberMe", 
-        		"user.gender", "user.favoritecount");
+        removeProperty("user.uid", "user.name", "user.face", "user.location",
+                "user.followers", "user.fans", "user.score",
+                "user.isRememberMe", "user.gender", "user.favoritecount");
     }
 
     public int getLoginUid() {

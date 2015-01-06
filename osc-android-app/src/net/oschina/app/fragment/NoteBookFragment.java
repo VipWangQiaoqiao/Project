@@ -133,11 +133,6 @@ public class NoteBookFragment extends BaseFragment implements
             return;
         }
 
-        if (!AppContext.getInstance().isLogin()) {
-            AppContext.showToast("还未登陆，无法使用同步功能");
-            return;
-        }
-
         // 设置顶部正在刷新
         mList.setSelection(0);
         setSwipeRefreshLoadingState();

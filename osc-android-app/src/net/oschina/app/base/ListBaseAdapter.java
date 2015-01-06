@@ -110,7 +110,7 @@ public class ListBaseAdapter extends BaseAdapter {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public void addData(List data) {
-        if (_data != null && !data.isEmpty()) {
+        if (_data != null && data != null && !data.isEmpty()) {
             _data.addAll(data);
             notifyDataSetChanged();
         }

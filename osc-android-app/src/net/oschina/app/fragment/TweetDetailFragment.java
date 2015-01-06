@@ -40,9 +40,7 @@ import net.oschina.app.widget.RecordButtonUtil.OnPlayListener;
 import org.apache.http.Header;
 
 import android.annotation.SuppressLint;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -73,38 +71,8 @@ public class TweetDetailFragment extends BaseListFragment implements
     private int mTweetId;
     private Tweet mTweet;
     private EmojiFragment mEmojiFragment;
-    private BroadcastReceiver mCommentReceiver;
     private RelativeLayout mRlRecordSound;
     private final RecordButtonUtil util = new RecordButtonUtil();
-
-    class CommentChangeReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int opt = intent.getIntExtra(Comment.BUNDLE_KEY_OPERATION, 0);
-            int id = intent.getIntExtra(Comment.BUNDLE_KEY_ID, 0);
-            int catalog = intent.getIntExtra(Comment.BUNDLE_KEY_CATALOG, 0);
-            boolean isBlog = intent.getBooleanExtra(Comment.BUNDLE_KEY_BLOG,
-                    false);
-            Comment comment = intent
-                    .getParcelableExtra(Comment.BUNDLE_KEY_COMMENT);
-            onCommentChanged(opt, id, catalog, isBlog, comment);
-        }
-    }
-
-    private void onCommentChanged(int opt, int id, int catalog, boolean isBlog,
-            Comment comment) {
-        if (Comment.OPT_ADD == opt && catalog == CommentList.CATALOG_TWEET
-                && id == mTweetId) {
-            if (mTweet != null && mTvCommentCount != null) {
-                mTweet.setCommentCount(mTweet.getCommentCount() + 1);
-
-                mAdapter.addItem(0, comment);
-                mTvCommentCount.setText(getString(R.string.comment_count,
-                        mTweet.getCommentCount()));
-            }
-        }
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -140,14 +108,6 @@ public class TweetDetailFragment extends BaseListFragment implements
     protected void sendRequestData() {
         OSChinaApi.getCommentList(mTweetId, CommentList.CATALOG_TWEET,
                 mCurrentPage, mHandler);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mCommentReceiver != null) {
-            getActivity().unregisterReceiver(mCommentReceiver);
-        }
     }
 
     @Override

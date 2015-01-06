@@ -36,7 +36,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -284,8 +283,7 @@ public class UIHelper {
         }
     }
 
-    @SuppressLint({ "SetJavaScriptEnabled", "JavascriptInterface" })
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @SuppressLint({ "JavascriptInterface", "SetJavaScriptEnabled" })
     public static void initWebView(WebView webView) {
         WebSettings settings = webView.getSettings();
         settings.setDefaultFontSize(15);
@@ -654,6 +652,20 @@ public class UIHelper {
                         dialog.dismiss();
                         // 退出
                         AppManager.getAppManager().AppExit(context);
+                    }
+                });
+        dialog.show();
+    }
+
+    public static void sendAppCrashReport(final Context context) {
+        CommonDialog dialog = new CommonDialog(context);
+        dialog.setTitle(R.string.app_error);
+        dialog.setMessage(R.string.app_error_message);
+        dialog.setNegativeButton(R.string.ok,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        System.exit(-1);
                     }
                 });
         dialog.show();
