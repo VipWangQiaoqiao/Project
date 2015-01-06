@@ -14,16 +14,17 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 public class ApiHttpClient {
-	public final static String HOST = "www.oschina.net";
-	private static String API_URL = "http://www.oschina.net/%s";
-	public static final String DELETE = "DELETE";
-	public static final String GET = "GET";
-	public static final String POST = "POST";
-	public static final String PUT = "PUT";
-	public static AsyncHttpClient client;
- 
-	public ApiHttpClient() {
-	}
+    public final static String HOST = "www.oschina.net";
+    private static String API_URL = "http://www.oschina.net/%s";
+    // public final static String HOST = "192.168.1.60";
+    // private static String API_URL = "http://192.168.1.60/%s";
+    public static final String DELETE = "DELETE";
+    public static final String GET = "GET";
+    public static final String POST = "POST";
+    public static final String PUT = "PUT";
+    public static AsyncHttpClient client;
+
+    public ApiHttpClient() {}
 
     public static AsyncHttpClient getHttpClient() {
         return client;

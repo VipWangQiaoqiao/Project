@@ -7,6 +7,7 @@ import net.oschina.app.fragment.BrowserFragment;
 import net.oschina.app.fragment.CommentFrament;
 import net.oschina.app.fragment.EventAppliesFragment;
 import net.oschina.app.fragment.EventFragment;
+import net.oschina.app.fragment.FeedBackFragment;
 import net.oschina.app.fragment.FindUserFragment;
 import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.MyInformationFragment;
@@ -96,7 +97,9 @@ public enum SimpleBackPage {
 
     SHAKE(27, R.string.actionbar_title_shake, ShakeFragment.class),
 
-    BROWSER(28, R.string.app_name, BrowserFragment.class);
+    BROWSER(28, R.string.app_name, BrowserFragment.class),
+
+    FEED_BACK(29, R.string.str_feedback_title, FeedBackFragment.class);
 
     private int title;
     private Class<?> clz;

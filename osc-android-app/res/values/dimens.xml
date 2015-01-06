@@ -105,5 +105,8 @@
     <dimen name="ldrawer_thickness">2dp</dimen>
     <dimen name="ldrawer_gapBetweenBars">3dp</dimen>
     <dimen name="ldrawer_middleBarArrowSize">16dp</dimen>
+    
+    <!-- 意见反馈 -->
+    <dimen name="text_size_account_info">18.0sp</dimen>
 
 </resources>

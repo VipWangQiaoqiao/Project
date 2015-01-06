@@ -381,8 +381,8 @@ public class DragGridView extends GridView {
 
                 if (mTrashView != null) {
                     if (inTrash(moveX, moveY)) {
-                        mTrashView.setScaleX(1.5f);
-                        mTrashView.setScaleY(1.5f);
+                        mTrashView.setScaleX(1.7f);
+                        mTrashView.setScaleY(1.7f);
                     } else {
                         mTrashView.setScaleX(1f);
                         mTrashView.setScaleY(1f);
@@ -504,6 +504,10 @@ public class DragGridView extends GridView {
             }
             return true;
         } else {
+            if (mDragImageView != null) {
+                mDragImageView.setScaleX(1f);
+                mDragImageView.setScaleY(1f);
+            }
             return false;
         }
     }

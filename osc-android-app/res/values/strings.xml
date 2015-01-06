@@ -11,7 +11,7 @@
     <string name="main_tab_name_explore">发现</string>
     
     <string name="app_error">应用程序错误</string>
-    <string name="app_error_message">很抱歉，小屁孩耍脾气啦。<br/>给它家长提个醒呗！</string>
+    <string name="app_error_message">很抱歉，小屁孩耍脾气啦。<br/>我们会帮你教训一下这个小屁孩！</string>
     <string name="submit_report">打报告去</string>
     
     <!-- slide menu -->
@@ -278,4 +278,13 @@
 	<string name="tip_report_success">举报成功</string>
 	<string name="tip_report_faile">举报失败</string>
 
+	<!-- 反馈 -->
+    <string name="str_feedback_submit">提交</string>
+    <string name="str_feedback_et_hint">我们将为您不断改进</string>
+    <string name="str_feedback_contact">您的手机号或邮箱：（选填）</string>
+    <string name="str_feedback_contact_hint">方便我们给您答复</string>
+    <string name="str_feedback_succeed">谢谢您的反馈，我们会仔细阅读并及时处理</string>
+    <string name="str_feedback_tip">我们会仔细阅读您的反馈，并尽早给您回复。感谢您的理解与支持。</string>
+    <string name="str_feedback_title">用户反馈</string>
+	
 </resources>

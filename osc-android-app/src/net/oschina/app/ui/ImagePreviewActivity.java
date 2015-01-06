@@ -8,7 +8,6 @@ import net.oschina.app.R;
 import net.oschina.app.adapter.RecyclingPagerAdapter;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.util.ImageUtils;
-import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.HackyViewPager;
 import uk.co.senab.photoview.PhotoView;
 import android.annotation.SuppressLint;
@@ -96,14 +95,10 @@ public class ImagePreviewActivity extends BaseActivity implements
     }
 
     @Override
-    public void initView() {
-
-    }
+    public void initView() {}
 
     @Override
-    public void initData() {
-
-    }
+    public void initData() {}
 
     private void saveImg() {
         try {
@@ -125,7 +120,7 @@ public class ImagePreviewActivity extends BaseActivity implements
     private String getFileName(String imgUrl) {
         int index = imgUrl.lastIndexOf('/') + 1;
         if (index == -1) {
-        	return System.currentTimeMillis() + ".jpeg";
+            return System.currentTimeMillis() + ".jpeg";
         }
         return imgUrl.substring(index);
     }
