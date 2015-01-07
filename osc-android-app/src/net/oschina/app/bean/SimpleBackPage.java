@@ -22,6 +22,7 @@ import net.oschina.app.fragment.TweetPubFragment;
 import net.oschina.app.fragment.TweetRecordFragment;
 import net.oschina.app.fragment.UserBlogFragment;
 import net.oschina.app.fragment.UserCenterFragment;
+import net.oschina.app.team.fragment.DynamicFragment;
 import net.oschina.app.viewpagefragment.BlogViewPagerFragment;
 import net.oschina.app.viewpagefragment.EventViewPagerFragment;
 import net.oschina.app.viewpagefragment.FriendsViewPagerFragment;
@@ -99,7 +100,9 @@ public enum SimpleBackPage {
 
     BROWSER(28, R.string.app_name, BrowserFragment.class),
 
-    FEED_BACK(29, R.string.str_feedback_title, FeedBackFragment.class);
+    FEED_BACK(29, R.string.str_feedback_title, FeedBackFragment.class),
+
+    DYNAMIC(30, R.string.team_dynamic, DynamicFragment.class);
 
     private int title;
     private Class<?> clz;

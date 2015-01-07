@@ -382,7 +382,7 @@ public class MyInformationFragment extends BaseFragment {
             setNoticeReaded();
             break;
         case R.id.rl_team:
-
+            UIHelper.showSimpleBack(getActivity(), SimpleBackPage.DYNAMIC);
             break;
         case R.id.rl_blog:
             UIHelper.showUserBlog(getActivity(), AppContext.getInstance()
@@ -412,7 +412,5 @@ public class MyInformationFragment extends BaseFragment {
     }
 
     @Override
-    public void initData() {
-
-    }
+    public void initData() {}
 }

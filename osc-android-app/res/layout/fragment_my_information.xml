@@ -41,25 +41,6 @@
                 android:background="@color/list_divider_color" />
 
             <LinearLayout
-                android:id="@+id/rl_team"
-                style="@style/option_item_rl" >
-
-                <ImageView
-                    style="@style/option_item_img"
-                    android:background="@drawable/icon_my_team"
-                    android:contentDescription="@null" />
-
-                <TextView
-                    style="@style/option_item_text"
-                    android:text="@string/team" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="1px"
-                android:background="@color/list_divider_color" />
-
-            <LinearLayout
                 android:id="@+id/rl_blog"
                 style="@style/option_item_rl" >
 
@@ -90,6 +71,25 @@
                 <TextView
                     style="@style/option_item_text"
                     android:text="@string/note" />
+            </LinearLayout>
+            
+             <View
+                android:layout_width="wrap_content"
+                android:layout_height="1px"
+                android:background="@color/list_divider_color" />
+
+            <LinearLayout
+                android:id="@+id/rl_team"
+                style="@style/option_item_rl" >
+
+                <ImageView
+                    style="@style/option_item_img"
+                    android:background="@drawable/icon_my_team"
+                    android:contentDescription="@null" />
+
+                <TextView
+                    style="@style/option_item_text"
+                    android:text="@string/team" />
             </LinearLayout>
 
             <View

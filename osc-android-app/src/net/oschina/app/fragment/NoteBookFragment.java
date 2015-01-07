@@ -38,13 +38,12 @@ import butterknife.InjectView;
  * 便签列表界面
  * 
  * @author kymjs(kymjs123@gmail.com)
- * 
  */
 public class NoteBookFragment extends BaseFragment implements
         OnItemClickListener, OnRefreshListener {
 
     @InjectView(R.id.frag_note_list)
-    DragGridView mList;
+    DragGridView mGrid;
     @InjectView(R.id.frag_note_trash)
     ImageView mImgTrash;
     @InjectView(R.id.swiperefreshlayout)
@@ -91,17 +90,17 @@ public class NoteBookFragment extends BaseFragment implements
     @Override
     @SuppressLint("ClickableViewAccessibility")
     public void initView(View view) {
-        mList.setAdapter(adapter);
-        mList.setOnItemClickListener(this);
-        mList.setTrashView(mImgTrash);
-        mList.setSelector(new ColorDrawable(Color.TRANSPARENT));
-        mList.setOnDeleteListener(new OnDeleteListener() {
+        mGrid.setAdapter(adapter);
+        mGrid.setOnItemClickListener(this);
+        mGrid.setTrashView(mImgTrash);
+        mGrid.setSelector(new ColorDrawable(Color.TRANSPARENT));
+        mGrid.setOnDeleteListener(new OnDeleteListener() {
             @Override
             public void onDelete(int position) {
                 delete(position);
             }
         });
-        mList.setOnMoveListener(new OnMoveListener() {
+        mGrid.setOnMoveListener(new OnMoveListener() {
             @Override
             public void startMove() {
                 mSwipeRefreshLayout.setEnabled(false);
@@ -134,11 +133,11 @@ public class NoteBookFragment extends BaseFragment implements
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_MOVE) {
                     mState = STATE_PRESSNONE;
-                    mList.setDragEnable(false);
+                    mGrid.setDragEnable(false);
                     // 如果你愿意还可以进一步人性化处理，请看mHandler注释
                     // mHandler.sendMessageDelayed(Message.obtain(), 400);
                 } else {
-                    mList.setDragEnable(true);
+                    mGrid.setDragEnable(true);
                 }
                 return false;
             }
@@ -164,7 +163,7 @@ public class NoteBookFragment extends BaseFragment implements
             return;
         }
         // 设置顶部正在刷新
-        mList.setSelection(0);
+        mGrid.setSelection(0);
         setSwipeRefreshLoadingState();
 
         /* !!! 设置耗时操作 !!! */
@@ -178,7 +177,7 @@ public class NoteBookFragment extends BaseFragment implements
      */
     private void setSwipeRefreshLoadingState() {
         mState = STATE_REFRESH;
-        mList.setDragEnable(false);
+        mGrid.setDragEnable(false);
         if (mSwipeRefreshLayout != null) {
             mSwipeRefreshLayout.setRefreshing(true);
             // 防止多次重复刷新
@@ -195,7 +194,7 @@ public class NoteBookFragment extends BaseFragment implements
             mSwipeRefreshLayout.setRefreshing(false);
             mSwipeRefreshLayout.setEnabled(true);
         }
-        mList.setDragEnable(true);
+        mGrid.setDragEnable(true);
     }
 
     /**
@@ -218,7 +217,7 @@ public class NoteBookFragment extends BaseFragment implements
         datas.remove(index);
         if (datas != null && adapter != null) {
             adapter.refurbishData(datas);
-            mList.setAdapter(adapter);
+            mGrid.setAdapter(adapter);
         }
     }
 
