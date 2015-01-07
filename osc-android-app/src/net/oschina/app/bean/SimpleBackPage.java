@@ -23,6 +23,7 @@ import net.oschina.app.fragment.TweetPubFragment;
 import net.oschina.app.fragment.TweetRecordFragment;
 import net.oschina.app.fragment.UserBlogFragment;
 import net.oschina.app.fragment.UserCenterFragment;
+import net.oschina.app.team.fragment.DynamicFragment;
 import net.oschina.app.viewpagefragment.BlogViewPagerFragment;
 import net.oschina.app.viewpagefragment.EventViewPagerFragment;
 import net.oschina.app.viewpagefragment.FriendsViewPagerFragment;
@@ -99,10 +100,13 @@ public enum SimpleBackPage {
     SHAKE(27, R.string.actionbar_title_shake, ShakeFragment.class),
 
     BROWSER(28, R.string.app_name, BrowserFragment.class),
-    
-    MY_INFORMATION_DETAIL(29, R.string.actionbar_title_my_information, MyInformationFragmentDetail.class),
-    
-    FEED_BACK(30, R.string.str_feedback_title, FeedBackFragment.class);
+
+    DYNAMIC(29, R.string.team_dynamic, DynamicFragment.class),
+
+    MY_INFORMATION_DETAIL(30, R.string.actionbar_title_my_information,
+            MyInformationFragmentDetail.class),
+
+    FEED_BACK(31, R.string.str_feedback_title, FeedBackFragment.class);
 
     private int title;
     private Class<?> clz;

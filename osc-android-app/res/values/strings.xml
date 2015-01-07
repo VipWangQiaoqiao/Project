@@ -280,6 +280,9 @@
 	<string name="tip_report_faile">举报失败</string>
 	
 	<string name="tip_double_click_exit">再次点击退出开源中国</string>
+	
+	
+	<string name="team_dynamic">团队动态</string>
 
 	<!-- 反馈 -->
     <string name="str_feedback_submit">提交</string>

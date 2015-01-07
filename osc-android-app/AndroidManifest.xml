@@ -83,7 +83,8 @@
             android:label="@string/actionbar_title_qr_scan"
             android:screenOrientation="portrait" >
         </activity>
-        <service android:name="net.oschina.app.LogUploadService"/>
+
+        <service android:name="net.oschina.app.LogUploadService" />
 
         <!-- ############ QQ空间和QQ SSO授权的Activity注册 ############ -->
         <activity

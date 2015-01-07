@@ -29,6 +29,7 @@ import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
+import android.webkit.WebSettings.PluginState;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -120,6 +121,24 @@ public class BrowserFragment extends BaseFragment {
                 return mGestureDetector.onTouchEvent(event);
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mWebView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mWebView.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mWebView.destroy();
     }
 
     @Override
@@ -369,6 +388,7 @@ public class BrowserFragment extends BaseFragment {
         webSettings.setAllowFileAccess(true);// 可以访问文件
         webSettings.setBuiltInZoomControls(true);// 支持缩放
         if (android.os.Build.VERSION.SDK_INT >= 11) {
+            webSettings.setPluginState(PluginState.ON);
             webSettings.setDisplayZoomControls(false);// 支持缩放
         }
         mWebView.setWebViewClient(new MyWebViewClient());

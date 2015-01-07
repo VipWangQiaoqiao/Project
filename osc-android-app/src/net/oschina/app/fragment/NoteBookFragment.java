@@ -14,16 +14,19 @@ import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.DragGridView;
 import net.oschina.app.widget.DragGridView.OnDeleteListener;
 import net.oschina.app.widget.DragGridView.OnMoveListener;
-import net.oschina.app.widget.KJSwipeRefreshLayout;
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -35,21 +38,33 @@ import butterknife.InjectView;
  * 便签列表界面
  * 
  * @author kymjs(kymjs123@gmail.com)
- * 
  */
 public class NoteBookFragment extends BaseFragment implements
         OnItemClickListener, OnRefreshListener {
 
     @InjectView(R.id.frag_note_list)
-    DragGridView mList;
+    DragGridView mGrid;
     @InjectView(R.id.frag_note_trash)
     ImageView mImgTrash;
     @InjectView(R.id.swiperefreshlayout)
-    KJSwipeRefreshLayout mSwipeRefreshLayout;
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     private NoteDatabase noteDb;
     private ArrayList<NotebookData> datas;
     private NotebookAdapter adapter;
+
+    /**
+     * 用来做更进一步人性化的防手抖策略时使用<br>
+     * 比如由于手抖动上下拉菜单时拉动一部分，但又没有达到可刷新的时候，暂停一段时间，这个时候用户的逻辑应该是想移动item的。<br>
+     * （这手抽的也太厉害了吧，这里为了效率就算了，没必要那么复杂）<br>
+     * 其实应该还有一种根据setOnFocusChangeListener来改写的方法，我没有尝试。
+     */
+    // private static final Handler mHandler = new Handler() {
+    // @Override
+    // public void handleMessage(android.os.Message msg) {
+    // mList.setDragEnable(true);
+    // };
+    // };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,18 +88,19 @@ public class NoteBookFragment extends BaseFragment implements
     }
 
     @Override
+    @SuppressLint("ClickableViewAccessibility")
     public void initView(View view) {
-        mList.setAdapter(adapter);
-        mList.setOnItemClickListener(this);
-        mList.setTrashView(mImgTrash);
-        mList.setSelector(new ColorDrawable(Color.TRANSPARENT));
-        mList.setOnDeleteListener(new OnDeleteListener() {
+        mGrid.setAdapter(adapter);
+        mGrid.setOnItemClickListener(this);
+        mGrid.setTrashView(mImgTrash);
+        mGrid.setSelector(new ColorDrawable(Color.TRANSPARENT));
+        mGrid.setOnDeleteListener(new OnDeleteListener() {
             @Override
             public void onDelete(int position) {
                 delete(position);
             }
         });
-        mList.setOnMoveListener(new OnMoveListener() {
+        mGrid.setOnMoveListener(new OnMoveListener() {
             @Override
             public void startMove() {
                 mSwipeRefreshLayout.setEnabled(false);
@@ -112,6 +128,20 @@ public class NoteBookFragment extends BaseFragment implements
             @Override
             public void cancleMove() {}
         });
+        mSwipeRefreshLayout.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    mState = STATE_PRESSNONE;
+                    mGrid.setDragEnable(false);
+                    // 如果你愿意还可以进一步人性化处理，请看mHandler注释
+                    // mHandler.sendMessageDelayed(Message.obtain(), 400);
+                } else {
+                    mGrid.setDragEnable(true);
+                }
+                return false;
+            }
+        });
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorSchemeResources(
                 R.color.swiperefresh_color1, R.color.swiperefresh_color2,
@@ -132,10 +162,8 @@ public class NoteBookFragment extends BaseFragment implements
         if (mState == STATE_REFRESH) {
             return;
         }
-
-        mList.setDragEnable(false);
         // 设置顶部正在刷新
-        mList.setSelection(0);
+        mGrid.setSelection(0);
         setSwipeRefreshLoadingState();
 
         /* !!! 设置耗时操作 !!! */
@@ -149,12 +177,12 @@ public class NoteBookFragment extends BaseFragment implements
      */
     private void setSwipeRefreshLoadingState() {
         mState = STATE_REFRESH;
+        mGrid.setDragEnable(false);
         if (mSwipeRefreshLayout != null) {
             mSwipeRefreshLayout.setRefreshing(true);
             // 防止多次重复刷新
             mSwipeRefreshLayout.setEnabled(false);
         }
-        mList.setDragEnable(false);
     }
 
     /**
@@ -166,7 +194,7 @@ public class NoteBookFragment extends BaseFragment implements
             mSwipeRefreshLayout.setRefreshing(false);
             mSwipeRefreshLayout.setEnabled(true);
         }
-        mList.setDragEnable(true);
+        mGrid.setDragEnable(true);
     }
 
     /**
@@ -189,7 +217,7 @@ public class NoteBookFragment extends BaseFragment implements
         datas.remove(index);
         if (datas != null && adapter != null) {
             adapter.refurbishData(datas);
-            mList.setAdapter(adapter);
+            mGrid.setAdapter(adapter);
         }
     }
 
