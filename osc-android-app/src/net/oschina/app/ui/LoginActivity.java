@@ -204,11 +204,12 @@ public class LoginActivity extends BaseActivity {
 			mEtUserName.requestFocus();
 			return false;
 		}
-		if (!StringUtils.isEmail(uName)) {
-			AppContext.showToastShort(R.string.tip_illegal_email);
-			mEtUserName.requestFocus();
-			return false;
-		}
+		// 去除邮箱正确性检测
+//		if (!StringUtils.isEmail(uName)) {
+//			AppContext.showToastShort(R.string.tip_illegal_email);
+//			mEtUserName.requestFocus();
+//			return false;
+//		}
 		String pwd = mEtPassword.getText().toString();
 		if (StringUtils.isEmpty(pwd)) {
 			AppContext.showToastShort(R.string.tip_please_input_password);
