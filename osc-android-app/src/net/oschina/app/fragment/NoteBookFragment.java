@@ -57,7 +57,8 @@ public class NoteBookFragment extends BaseFragment implements
     /**
      * 用来做更进一步人性化的防手抖策略时使用<br>
      * 比如由于手抖动上下拉菜单时拉动一部分，但又没有达到可刷新的时候，暂停一段时间，这个时候用户的逻辑应该是想移动item的。<br>
-     * （这手抽的也太厉害了吧，这里为了效率就算了，没必要那么复杂）
+     * （这手抽的也太厉害了吧，这里为了效率就算了，没必要那么复杂）<br>
+     * 其实应该还有一种根据setOnFocusChangeListener来改写的方法，我没有尝试。
      */
     // private static final Handler mHandler = new Handler() {
     // @Override
