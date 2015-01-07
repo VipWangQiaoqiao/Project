@@ -258,7 +258,7 @@ public class DragGridView extends GridView {
     }
 
     /**
-     * 设置响应拖拽的毫秒数，默认是1000毫秒
+     * 设置响应拖拽的毫秒数，默认是700毫秒
      * 
      * @param dragResponseMS
      */
@@ -395,7 +395,7 @@ public class DragGridView extends GridView {
      */
     private boolean isTouchInItem(TouchRect moveRect, float x, float y) {
         // 防止手抖的处理，如果是横向在item上移动是没有影响的，
-        // 但是纵向由于外层上下拉控件还是会有影响，具体解决请看上下拉重写的onTouch()方法
+        // 但是纵向由于外层上下拉控件还是会有影响，具体解决请看NoteBookFragment类中的mSwipeRefreshLayout.setOnTouchListener方法
         if (x < moveRect.right && x > moveRect.left && y < moveRect.bottom
                 && y > moveRect.top) {
             return true;
