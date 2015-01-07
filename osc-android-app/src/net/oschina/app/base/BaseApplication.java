@@ -1,7 +1,5 @@
 package net.oschina.app.base;
 
-import static net.oschina.app.AppConfig.KEY_FRITST_START;
-import static net.oschina.app.AppConfig.KEY_LOAD_IMAGE;
 import net.oschina.app.R;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -22,7 +20,7 @@ import android.widget.Toast;
 
 @SuppressLint("InflateParams")
 public class BaseApplication extends Application {
-	private static String PREF_NAME = "creativelockerV2.pref";
+	private static String PREF_NAME = "creativelocker.pref";
 	static Context _context;
 	static Resources _resource;
 	private static String lastToast = "";

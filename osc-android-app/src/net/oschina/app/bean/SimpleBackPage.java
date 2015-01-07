@@ -11,6 +11,7 @@ import net.oschina.app.fragment.FeedBackFragment;
 import net.oschina.app.fragment.FindUserFragment;
 import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.MyInformationFragment;
+import net.oschina.app.fragment.MyInformationFragmentDetail;
 import net.oschina.app.fragment.NoteBookFragment;
 import net.oschina.app.fragment.NoteEditFragment;
 import net.oschina.app.fragment.QuestionTagFragment;
@@ -100,9 +101,12 @@ public enum SimpleBackPage {
 
     BROWSER(28, R.string.app_name, BrowserFragment.class),
 
-    FEED_BACK(29, R.string.str_feedback_title, FeedBackFragment.class),
+    DYNAMIC(29, R.string.team_dynamic, DynamicFragment.class),
 
-    DYNAMIC(30, R.string.team_dynamic, DynamicFragment.class);
+    MY_INFORMATION_DETAIL(30, R.string.actionbar_title_my_information,
+            MyInformationFragmentDetail.class),
+
+    FEED_BACK(31, R.string.str_feedback_title, FeedBackFragment.class);
 
     private int title;
     private Class<?> clz;

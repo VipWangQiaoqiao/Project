@@ -185,7 +185,7 @@ public class AppContext extends BaseApplication {
      * @param pwd
      */
     @SuppressWarnings("serial")
-    public void saveLoginInfo(final User user) {
+    public void saveUserInfo(final User user) {
         this.loginUid = user.getUid();
         this.login = true;
         setProperties(new Properties() {
@@ -209,6 +209,26 @@ public class AppContext extends BaseApplication {
             }
         });
     }
+    
+    /**
+     * 更新用户信息
+     * @param user
+     */
+    @SuppressWarnings("serial")
+    public void updateUserInfo(final User user) {
+    	setProperties(new Properties() {
+            {
+                setProperty("user.name", user.getName());
+                setProperty("user.face", user.getPortrait());// 用户头像-文件名
+                setProperty("user.followers",
+                        String.valueOf(user.getFollowers()));
+                setProperty("user.fans", String.valueOf(user.getFans()));
+                setProperty("user.score", String.valueOf(user.getScore()));
+                setProperty("user.favoritecount", String.valueOf(user.getFavoritecount()));
+                setProperty("user.gender", String.valueOf(user.getGender()));
+            }
+        });
+    } 
 
     /**
      * 获得登录用户的信息

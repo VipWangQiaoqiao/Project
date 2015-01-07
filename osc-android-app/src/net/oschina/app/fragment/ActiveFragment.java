@@ -143,6 +143,7 @@ public class ActiveFragment extends BaseListFragment implements
             @Override
             public void onClick(View v) {
                 if (AppContext.getInstance().isLogin()) {
+                	mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
                     requestData(false);
                 } else {
                     UIHelper.showLoginActivity(getActivity());

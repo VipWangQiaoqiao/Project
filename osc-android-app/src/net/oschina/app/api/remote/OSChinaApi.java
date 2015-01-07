@@ -484,11 +484,10 @@ public class OSChinaApi {
     }
 
     public static void updatePortrait(int uid, File portrait,
-            AsyncHttpResponseHandler handler) {
+            AsyncHttpResponseHandler handler) throws FileNotFoundException {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
-        Map<String, File> files = new HashMap<String, File>();
-        files.put("portrait", portrait);
+        params.put("portrait", portrait);
         ApiHttpClient.post("action/api/portrait_update", params, handler);
     }
 

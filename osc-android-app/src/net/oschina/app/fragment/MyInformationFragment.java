@@ -116,6 +116,7 @@ public class MyInformationFragment extends BaseFragment {
                         new ByteArrayInputStream(arg2)).getUser();
                 if (mInfo != null) {
                     fillUI();
+                    AppContext.getInstance().updateUserInfo(mInfo);
                     new SaveCacheTask(getActivity(), mInfo, getCacheKey())
                             .execute();
                 } else {
@@ -359,8 +360,8 @@ public class MyInformationFragment extends BaseFragment {
         final int id = v.getId();
         switch (id) {
         case R.id.iv_avatar:
-            UIHelper.showUserAvatar(getActivity(), AppContext.getInstance()
-                    .getLoginUser().getPortrait());
+            UIHelper.showSimpleBack(getActivity(),
+                    SimpleBackPage.MY_INFORMATION_DETAIL);
             break;
         case R.id.iv_qr_code:
             showMyQrCode();
@@ -406,11 +407,12 @@ public class MyInformationFragment extends BaseFragment {
         dialog.show();
     }
 
+    @Override
+    public void initData() {}
+
     private void setNoticeReaded() {
         mMesCount.setText("");
         mMesCount.hide();
     }
 
-    @Override
-    public void initData() {}
 }

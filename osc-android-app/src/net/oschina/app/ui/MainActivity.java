@@ -341,9 +341,11 @@ public class MainActivity extends ActionBarActivity implements
 	 * 监听返回--是否退出程序
 	 */
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK && AppContext.get(AppConfig.KEY_DOUBLE_CLICK_EXIT, true)) {
-			// 退出应用
-			return mDoubleClickExit.onKeyDown(keyCode, event);
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			// 是否退出应用
+			if (AppContext.get(AppConfig.KEY_DOUBLE_CLICK_EXIT, true)) {
+				return mDoubleClickExit.onKeyDown(keyCode, event);
+			}
 		}
 		return super.onKeyDown(keyCode, event);
 	}
