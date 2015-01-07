@@ -34,7 +34,7 @@ public class Tweet extends Entity implements Parcelable {
     @XStreamAlias("appclient")
     private int appclient;
     @XStreamAlias("commentCount")
-    private int commentCount;
+    private String commentCount;
     @XStreamAlias("pubDate")
     private String pubDate;
     @XStreamAlias("imgSmall")
@@ -104,11 +104,11 @@ public class Tweet extends Entity implements Parcelable {
         this.appclient = appclient;
     }
 
-    public int getCommentCount() {
+    public String getCommentCount() {
         return commentCount;
     }
 
-    public void setCommentCount(int commentCount) {
+    public void setCommentCount(String commentCount) {
         this.commentCount = commentCount;
     }
 
