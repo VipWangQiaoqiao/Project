@@ -34,7 +34,6 @@ public class XmlUtils {
      */
     @SuppressWarnings("unchecked")
     public static <T> T toBean(Class<T> type, InputStream is) {
-        TLog.log(TAG, "开始解析xml");
         XStream xmStream = new XStream(new DomDriver("UTF-8"));
         // 设置可忽略为在javabean类中定义的界面属性
         xmStream.ignoreUnknownElements();
