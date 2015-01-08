@@ -12,6 +12,7 @@ import net.oschina.app.bean.News;
 import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.ShakeObject;
 import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.bean.Tweet;
 import net.oschina.app.fragment.BrowserFragment;
 import net.oschina.app.fragment.CommentFrament;
 import net.oschina.app.fragment.FriendsFragment;
@@ -180,11 +181,16 @@ public class UIHelper {
      * @param context
      * @param id
      */
-    public static void showTweetDetail(Context context, int tweetid) {
+    public static void showTweetDetail(Context context, Tweet tweet, int tweetid) {
         Intent intent = new Intent(context, DetailActivity.class);
-        intent.putExtra("tweet_id", tweetid);
-        intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+        Bundle bundle = new Bundle();
+        bundle.putInt("tweet_id", tweetid);
+        bundle.putInt(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
                 DetailActivity.DISPLAY_TWEET);
+        if (tweet != null) {
+        	bundle.putParcelable("tweet", tweet);
+        }
+        intent.putExtras(bundle);
         context.startActivity(intent);
     }
 
@@ -270,7 +276,7 @@ public class UIHelper {
                 showPostDetail(context, id);
                 break;
             case Active.CATALOG_TWEET:
-                showTweetDetail(context, id);
+                showTweetDetail(context, null, id);
                 break;
             case Active.CATALOG_BLOG:
                 showBlogDetail(context, id);
@@ -419,7 +425,7 @@ public class UIHelper {
             showUserCenter(context, objId, objKey);
             break;
         case URLsUtils.URL_OBJ_TYPE_TWEET:
-            showTweetDetail(context, objId);
+            showTweetDetail(context, null, objId);
             break;
         case URLsUtils.URL_OBJ_TYPE_BLOG:
             showBlogDetail(context, objId);

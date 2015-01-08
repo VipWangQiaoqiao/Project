@@ -26,7 +26,7 @@ public class ListBaseAdapter extends BaseAdapter {
 
     protected int _loadmoreText;
     protected int _loadFinishText;
-    protected int _noreDateText;
+    protected int _noDateText;
     protected int mScreenWidth;
 
     private LayoutInflater mInflater;
@@ -57,7 +57,7 @@ public class ListBaseAdapter extends BaseAdapter {
     public ListBaseAdapter() {
         _loadmoreText = R.string.loading;
         _loadFinishText = R.string.loading_no_more;
-        _noreDateText = R.string.error_view_no_data;
+        _noDateText = R.string.error_view_no_data;
     }
 
     @Override
@@ -149,6 +149,10 @@ public class ListBaseAdapter extends BaseAdapter {
     public void setLoadFinishText(int loadFinishText) {
         _loadFinishText = loadFinishText;
     }
+    
+    public void setNoDataText(int noDataText) {
+    	_noDateText = noDataText;
+    } 
 
     protected boolean loadMoreHasBg() {
         return true;
@@ -189,7 +193,7 @@ public class ListBaseAdapter extends BaseAdapter {
                 case STATE_EMPTY_ITEM:
                     progress.setVisibility(View.GONE);
                     mFooterView.setVisibility(View.VISIBLE);
-                    text.setText(_noreDateText);
+                    text.setText(_noDateText);
                     break;
                 case STATE_NETWORK_ERROR:
                     mFooterView.setVisibility(View.VISIBLE);
