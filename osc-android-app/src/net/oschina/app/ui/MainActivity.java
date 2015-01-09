@@ -82,9 +82,6 @@ public class MainActivity extends ActionBarActivity implements
                         + newFansCount;//
                 // 信息总数
                 mNotice = (Notice) intent.getSerializableExtra("notice_bean");
-                TLog.log("NOTICE", "@me:" + atmeCount + " msg:" + msgCount
-                        + " review:" + reviewCount + " newFans:" + newFansCount
-                        + " active:" + activeCount);
 
                 Fragment fragment = getCurrentFragment();
                 if (fragment instanceof MyInformationFragment) {
