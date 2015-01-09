@@ -2,8 +2,6 @@ package net.oschina.app.adapter;
 
 import java.util.List;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Comment;
@@ -12,16 +10,20 @@ import net.oschina.app.bean.Comment.Reply;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.AvatarView;
+import net.oschina.app.widget.FloorView;
 import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.text.Html;
 import android.text.Spanned;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 public class CommentAdapter extends ListBaseAdapter {
 
@@ -95,39 +97,29 @@ public class CommentAdapter extends ListBaseAdapter {
 		}
 
 		// setup refers
-		List<Refer> refers = item.getRefers();
+		setupRefers(parent.getContext(), vh, item.getRefers());
+		
+		// setup replies
+		setupReplies(parent.getContext(), vh, item.getReplies());
+
+		vh.avatar.setAvatarUrl(item.getPortrait());
+		vh.avatar.setUserInfo(item.getAuthorId(), item.getAuthor());
+
+		return convertView;
+	}
+	
+	private void setupRefers(Context context, ViewHolder vh, List<Refer> refers) {
 		vh.refers.removeAllViews();
 		if (refers == null || refers.size() <= 0) {
 			vh.refers.setVisibility(View.GONE);
 		} else {
 			vh.refers.setVisibility(View.VISIBLE);
-
-			// add refer item
-			for (Refer reply : refers) {
-				View replyItemView = getLayoutInflater(parent.getContext())
-						.inflate(R.layout.list_cell_reply_name_content, null);
-				
-				TextView name = (TextView) replyItemView
-						.findViewById(R.id.tv_reply_name);
-
-				name.setText(reply.refertitle);
-
-				TweetTextView refersContent = (TweetTextView) replyItemView
-						.findViewById(R.id.tv_reply_content);
-				refersContent.setMovementMethod(MyLinkMovementMethod.a());
-				refersContent.setFocusable(false);
-				refersContent.setDispatchToParent(true);
-				refersContent.setLongClickable(false);
-				Spanned rcontent = Html.fromHtml(reply.referbody);
-				refersContent.setText(rcontent);
-				MyURLSpan.parseLinkText(refersContent, rcontent);
-
-				vh.refers.addView(replyItemView);
-			}
+			
+			vh.refers.setComments(refers);
 		}
-
-		// setup replies
-		List<Reply> replies = item.getReplies();
+	}
+	
+	private void setupReplies(Context context, ViewHolder vh, List<Reply> replies) {
 		vh.relies.removeAllViews();
 		if (replies == null || replies.size() <= 0) {
 			vh.relies.setVisibility(View.GONE);
@@ -135,20 +127,23 @@ public class CommentAdapter extends ListBaseAdapter {
 			vh.relies.setVisibility(View.VISIBLE);
 
 			// add count layout
-			View countView = getLayoutInflater(parent.getContext()).inflate(
-					R.layout.list_cell_reply_count, null);
+			View countView = getLayoutInflater(context).inflate(
+					R.layout.list_cell_reply_count, null, false);
 			TextView count = (TextView) countView
 					.findViewById(R.id.tv_comment_reply_count);
-			count.setText(parent.getContext().getResources()
+			count.setText(context.getResources()
 					.getString(R.string.comment_reply_count, replies.size()));
 			vh.relies.addView(countView);
 
 			// add reply item
 			for (Reply reply : replies) {
-				LinearLayout replyItemView = (LinearLayout) getLayoutInflater(parent.getContext())
-						.inflate(R.layout.list_cell_reply_name_content, null);
+				LinearLayout replyItemView = (LinearLayout) getLayoutInflater(context)
+						.inflate(R.layout.list_cell_reply_name_content, null, false);
 
 				replyItemView.setOrientation(LinearLayout.HORIZONTAL);
+				
+				replyItemView.setBackgroundResource(R.drawable.comment_background);
+				
 				TextView name = (TextView) replyItemView
 						.findViewById(R.id.tv_reply_name);
 				name.setText(reply.rauthor + ":");
@@ -166,13 +161,8 @@ public class CommentAdapter extends ListBaseAdapter {
 				vh.relies.addView(replyItemView);
 			}
 		}
-
-		vh.avatar.setAvatarUrl(item.getPortrait());
-		vh.avatar.setUserInfo(item.getAuthorId(), item.getAuthor());
-
-		return convertView;
 	}
-
+	
 	static class ViewHolder {
 		@InjectView(R.id.iv_avatar)
 		AvatarView avatar;
@@ -187,7 +177,7 @@ public class CommentAdapter extends ListBaseAdapter {
 		@InjectView(R.id.ly_relies)
 		LinearLayout relies;
 		@InjectView(R.id.ly_refers)
-		LinearLayout refers;
+		FloorView refers;
 
 		ViewHolder(View view) {
 			ButterKnife.inject(this, view);

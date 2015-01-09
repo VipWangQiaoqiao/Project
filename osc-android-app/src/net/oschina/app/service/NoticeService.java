@@ -15,7 +15,6 @@ import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.broadcast.AlarmReceiver;
 import net.oschina.app.ui.SimpleBackActivity;
-import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
@@ -106,7 +105,6 @@ public class NoticeService extends Service {
     public void onDestroy() {
         cancelRequestAlarm();
         unregisterReceiver(mReceiver);
-        TLog.log("消息通知服务关闭了");
         super.onDestroy();
     }
 
@@ -272,7 +270,6 @@ public class NoticeService extends Service {
      * 请求是否有新通知
      */
     private void requestNotice() {
-        TLog.log("请求是否有新通知");
         OSChinaApi.getNotices(AppContext.getInstance().getLoginUid(),
                 mGetNoticeHandler);
     }

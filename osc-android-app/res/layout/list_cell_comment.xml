@@ -26,7 +26,7 @@
         android:textColor="@color/tweet_time_platform"
         android:textSize="@dimen/text_size_10" />
 
-    <LinearLayout
+    <net.oschina.app.widget.FloorView
         android:id="@+id/ly_refers"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

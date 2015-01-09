@@ -132,8 +132,9 @@ public class TweetsFragment extends BaseListFragment implements OnItemLongClickL
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		Tweet tweet = (Tweet) mAdapter.getItem(position);
-		if (tweet != null)
-			UIHelper.showTweetDetail(view.getContext(), tweet.getId());
+		if (tweet != null) {
+			UIHelper.showTweetDetail(view.getContext(), null, tweet.getId());
+		}
 	}
 
 	private BroadcastReceiver mReceiver = new BroadcastReceiver() {

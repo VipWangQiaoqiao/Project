@@ -4,6 +4,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Comment;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
@@ -69,26 +70,23 @@ public class MessageDetailAdapter extends ListBaseAdapter {
 
 		vh.avatar.setAvatarUrl(item.getPortrait());
 		vh.avatar.setUserInfo(item.getAuthorId(), item.getAuthor());
+		
+		vh.time.setText(StringUtils.friendly_time(item.getPubDate()));
 
 		return convertView;
 	}
 
 	static class ViewHolder {
 		int type;
-		//@InjectView(R.id.iv_avatar)
+		@InjectView(R.id.iv_avatar)
 		AvatarView avatar;
-		//@InjectView(R.id.tv_name)
-		TextView name;
-		//@InjectView(R.id.tv_time)
+		@InjectView(R.id.tv_time)
 		TextView time;
-		//@InjectView(R.id.tv_content)
+		@InjectView(R.id.tv_content)
 		TweetTextView content;
 
 		ViewHolder(View view) {
-			avatar = (AvatarView) view.findViewById(R.id.iv_avatar);
-			name = (TextView) view.findViewById(R.id.tv_name);
-			time = (TextView) view.findViewById(R.id.tv_time);
-			content = (TweetTextView) view.findViewById(R.id.tv_content);
+			ButterKnife.inject(this, view);
 		}
 	}
 }

@@ -322,7 +322,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
     }
 
     protected void executeOnLoadDataError(String error) {
-        if (mCurrentPage == 0) {
+        if (mCurrentPage == 0 && !CacheManager.isExistDataCache(getActivity(), getCacheKey())) {
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
         } else {
             mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);

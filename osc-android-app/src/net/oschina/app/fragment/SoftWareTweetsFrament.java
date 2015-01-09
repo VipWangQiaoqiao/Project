@@ -123,7 +123,7 @@ public class SoftWareTweetsFrament extends BaseListFragment implements
         if (tweet == null) {
             return;
         }
-        UIHelper.showTweetDetail(parent.getContext(), tweet.getId());
+        UIHelper.showTweetDetail(parent.getContext(), tweet, tweet.getId());
     }
 
     private void handleComment(String text) {

@@ -190,7 +190,7 @@ public class Post extends Entity {
 	}
 	
 	@XStreamAlias("answer")
-	public class Answer implements Serializable{
+	public class Answer implements Serializable {
 		
 		@XStreamAlias("name")
 		private String name;
@@ -215,14 +215,14 @@ public class Post extends Entity {
 		}
 	}
 	
-	public static class Tags{
+	public class Tags implements Serializable {
 		@XStreamImplicit(itemFieldName="tag")
 		private List<String> tags;
 
 		public List<String> getTags() {
 			return tags;
 		}
-
+		
 		public void setTags(List<String> tags) {
 			this.tags = tags;
 		}
