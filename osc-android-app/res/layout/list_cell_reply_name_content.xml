@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="@dimen/space_8" >
+    android:padding="@dimen/space_6" >
 
     <TextView
         android:id="@+id/tv_reply_name"
@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         android:singleLine="true"
         android:layout_marginRight="@dimen/space_5"
-        android:text="火蚁"
         android:textColor="@color/lightblue"
         android:textSize="@dimen/text_size_12" />
 
@@ -20,7 +19,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#666"
-        android:text="评论内容"
         android:textSize="@dimen/text_size_13" />
 
 </LinearLayout>

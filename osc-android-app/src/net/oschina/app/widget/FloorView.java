@@ -73,8 +73,8 @@ public class FloorView extends LinearLayout {
 	 *            评论数据列表
 	 */
 	private void initViewWithAll(List<Refer> refers) {
-		for (int i = 0; i < refers.size() - 1; i++) {
-			View commentView = getView(refers.get(i), i, refers.size() - 1,
+		for (int i = 0; i < refers.size(); i++) {
+			View commentView = getView(refers.get(i), i, refers.size(),
 					false);
 			addView(commentView);
 		}

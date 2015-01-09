@@ -13,7 +13,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  */
 @SuppressWarnings("serial")
 @XStreamAlias("event")
-public class Event implements Serializable {
+public class Event extends Entity {
 	
 	public final static int EVNET_STATUS_APPLYING = 0x02;
 	public final static int EVNET_STATUS_END = 0x01;
@@ -23,9 +23,6 @@ public class Event implements Serializable {
 	public final static int APPLYSTATUS_ATTEND = 0x02;// 已经出席
 	public final static int APPLYSTATUS_CANCLE = 0x03;// 已取消
 	public final static int APPLYSTATUS_REJECT = 0X04;// 已拒绝
-	
-	@XStreamAlias("id")
-	private int id;
 	
 	@XStreamAlias("cover")
 	private String cover;
