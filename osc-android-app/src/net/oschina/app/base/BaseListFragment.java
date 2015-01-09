@@ -289,9 +289,9 @@ public abstract class BaseListFragment extends BaseTabFragment implements
         @Override
         public void onFailure(int arg0, Header[] arg1, byte[] arg2,
                 Throwable arg3) {
-            //if (isAdded()) {
+            if (isAdded()) {
                 readCacheData(getCacheKey());
-            //}
+            }
         }
     };
 

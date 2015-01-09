@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <solid
-        android:width="0.2dp"
-        android:color="@color/comment_yellow" />
+    <solid android:color="@color/comment_yellow" />
 
-    <stroke 
-        android:width="0.2dp"
-        android:color="@color/main_black" />
-    
-    <padding android:left="4dp"
-        android:right="4dp"
-        android:bottom="4dp"
-        android:top="4dp"/>
-    
+    <stroke
+        android:width="1px"
+        android:color="#ccc" />
+
 </shape>

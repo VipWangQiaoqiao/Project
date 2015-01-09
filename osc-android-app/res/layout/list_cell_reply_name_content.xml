@@ -3,16 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@drawable/comment_background"
-    android:layout_margin="@dimen/space_5"
-    android:padding="@dimen/space_5" >
+    android:padding="@dimen/space_8" >
 
     <TextView
         android:id="@+id/tv_reply_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/space_2"
-        android:layout_marginBottom="@dimen/space_4"
+        android:singleLine="true"
+        android:layout_marginRight="@dimen/space_5"
+        android:text="火蚁"
         android:textColor="@color/lightblue"
         android:textSize="@dimen/text_size_12" />
 
@@ -21,6 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#666"
+        android:text="评论内容"
         android:textSize="@dimen/text_size_13" />
 
 </LinearLayout>
