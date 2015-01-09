@@ -124,7 +124,8 @@
             </intent-filter>
         </service>
 
-        <receiver android:name="net.oschina.app.broadcast.AlarmReceiver" />
+        <receiver android:name="net.oschina.app.broadcast.AlarmReceiver"
+             />
 
         <service
             android:name="net.oschina.app.service.NoticeService"
