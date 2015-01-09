@@ -3,6 +3,8 @@ package net.oschina.app.fragment;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -73,7 +75,7 @@ public class MessageDetailFragment extends BaseListFragment implements
 				if (res.OK()) {
 					AppContext
 							.showToastShort(R.string.tip_message_public_success);
-					mAdapter.addItem(resb.getComment());
+					mAdapter.addItem(0, resb.getComment());
 					mEmojiFragment.reset();
 				} else {
 					AppContext.showToastShort(res.getErrorMessage());
@@ -153,14 +155,12 @@ public class MessageDetailFragment extends BaseListFragment implements
 	@Override
 	protected ListEntity parseList(InputStream is) throws Exception {
 		CommentList list = XmlUtils.toBean(CommentList.class, is);
-		list.sortList();
 		return list;
 	}
 
 	@Override
 	protected ListEntity readList(Serializable seri) {
 		CommentList list = ((CommentList) seri);
-		list.sortList();
 		return list;
 	}
 
@@ -200,6 +200,22 @@ public class MessageDetailFragment extends BaseListFragment implements
 	protected void sendRequestData() {
 		OSChinaApi.getCommentList(mFid, mCatalog, mCurrentPage, mHandler);
 	}
+	
+	@Override
+	protected void executeOnLoadDataSuccess(List<?> data) {
+        mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+        if (mCurrentPage == 0)
+            mAdapter.clear();
+        mAdapter.addData(data);
+        if (data.size() == 0 && mState == STATE_REFRESH) {
+            mErrorLayout.setErrorType(EmptyLayout.NODATA);
+        } else if (data.size() < getPageSize()) {
+            mAdapter.setState(ListBaseAdapter.STATE_OTHER);
+        } else {
+            mAdapter.setState(ListBaseAdapter.STATE_LOAD_MORE);
+        }
+        mAdapter.notifyDataSetChanged();
+    }
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -207,7 +223,7 @@ public class MessageDetailFragment extends BaseListFragment implements
 		// Message active = (Message) mAdapter.getItem(position - 1);
 		// UIHelper.showMessageDetail(context, friendid, friendname);
 	}
-
+	
 	@Override
 	public void onSendClick(String text) {
 		if (!AppContext.getInstance().isLogin()) {

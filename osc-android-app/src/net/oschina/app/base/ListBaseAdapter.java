@@ -21,6 +21,7 @@ public class ListBaseAdapter extends BaseAdapter {
     public static final int STATE_NO_DATA = 3;
     public static final int STATE_LESS_ONE_PAGE = 4;
     public static final int STATE_NETWORK_ERROR = 5;
+    public static final int STATE_OTHER = 6;
 
     protected int state = STATE_LESS_ONE_PAGE;
 
