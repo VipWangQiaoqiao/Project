@@ -289,9 +289,9 @@ public abstract class BaseListFragment extends BaseTabFragment implements
         @Override
         public void onFailure(int arg0, Header[] arg1, byte[] arg2,
                 Throwable arg3) {
-            if (isAdded()) {
+            //if (isAdded()) {
                 readCacheData(getCacheKey());
-            }
+            //}
         }
     };
 
@@ -322,7 +322,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
     }
 
     protected void executeOnLoadDataError(String error) {
-        if (mCurrentPage == 0) {
+        if (mCurrentPage == 0 && !CacheManager.isExistDataCache(getActivity(), getCacheKey())) {
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
         } else {
             mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
