@@ -45,6 +45,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -130,9 +131,7 @@ public class MyInformationFragment extends BaseFragment {
 
         @Override
         public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                Throwable arg3) {
-
-        }
+                Throwable arg3) {}
     };
 
     private void steupUser() {
@@ -250,8 +249,11 @@ public class MyInformationFragment extends BaseFragment {
     }
 
     private void fillUI() {
+        DisplayImageOptions option = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.drawable.widget_dface).build();
         ImageLoader.getInstance().displayImage(
-                AvatarView.getLargeAvatar(mInfo.getPortrait()), mIvAvatar);
+                AvatarView.getLargeAvatar(mInfo.getPortrait()), mIvAvatar,
+                option);
         mTvName.setText(mInfo.getName());
         mIvGender
                 .setImageResource(StringUtils.toInt(mInfo.getGender()) != 2 ? R.drawable.userinfo_icon_male
@@ -263,7 +265,6 @@ public class MyInformationFragment extends BaseFragment {
     }
 
     private void requestData(boolean refresh) {
-
         if (AppContext.getInstance().isLogin()) {
             mIsWatingLogin = false;
             String key = getCacheKey();
@@ -414,5 +415,4 @@ public class MyInformationFragment extends BaseFragment {
         mMesCount.setText("");
         mMesCount.hide();
     }
-
 }

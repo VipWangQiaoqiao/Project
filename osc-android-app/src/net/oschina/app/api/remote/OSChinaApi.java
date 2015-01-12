@@ -3,8 +3,6 @@ package net.oschina.app.api.remote;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Map;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
@@ -671,5 +669,11 @@ public class OSChinaApi {
      */
     public static void feedback(String data, AsyncHttpResponseHandler handler) {
         uploadLog(data, "2", handler);
+    }
+
+    public static void teamDynamic(AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("app", "1");
+        ApiHttpClient.post("action/api/user_report_to_admin", params, handler);
     }
 }

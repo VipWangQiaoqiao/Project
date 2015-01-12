@@ -51,7 +51,6 @@ public class NoticeService extends Service {
     private Notice mNotice;
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();

@@ -53,8 +53,8 @@ public class MainActivity extends ActionBarActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks,
         OnTabChangeListener, BaseViewInterface, View.OnClickListener,
         OnTouchListener {
-	
-	private DoubleClickExitHelper mDoubleClickExit;
+
+    private DoubleClickExitHelper mDoubleClickExit;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the
@@ -70,7 +70,6 @@ public class MainActivity extends ActionBarActivity implements
     public static Notice mNotice;
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
-
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Constants.INTENT_ACTION_NOTICE)) {
@@ -95,7 +94,6 @@ public class MainActivity extends ActionBarActivity implements
                         mNotice = null;
                     }
                 }
-
             } else if (intent.getAction()
                     .equals(Constants.INTENT_ACTION_LOGOUT)) {
                 mBvTweet.hide();
@@ -124,7 +122,7 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public void initView() {
-    	mDoubleClickExit = new DoubleClickExitHelper(this);
+        mDoubleClickExit = new DoubleClickExitHelper(this);
         mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
@@ -333,17 +331,18 @@ public class MainActivity extends ActionBarActivity implements
         return getSupportFragmentManager().findFragmentByTag(
                 mTabHost.getCurrentTabTag());
     }
-    
-	/**
-	 * 监听返回--是否退出程序
-	 */
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			// 是否退出应用
-			if (AppContext.get(AppConfig.KEY_DOUBLE_CLICK_EXIT, true)) {
-				return mDoubleClickExit.onKeyDown(keyCode, event);
-			}
-		}
-		return super.onKeyDown(keyCode, event);
-	}
+
+    /**
+     * 监听返回--是否退出程序
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            // 是否退出应用
+            if (AppContext.get(AppConfig.KEY_DOUBLE_CLICK_EXIT, true)) {
+                return mDoubleClickExit.onKeyDown(keyCode, event);
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }
