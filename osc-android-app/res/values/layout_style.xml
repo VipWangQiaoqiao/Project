@@ -24,7 +24,7 @@
     
     <style name="list_text_title" parent="@style/wrap_wrap">
         <item name="android:textColor">@color/main_black</item>
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:textStyle">normal</item>
     </style>
     

@@ -1,5 +1,7 @@
 package net.oschina.app.adapter;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.News;
@@ -27,6 +29,13 @@ public class NewsAdapter extends ListBaseAdapter {
 
         News news = (News) _data.get(position);
         vh.title.setText(news.getTitle());
+        String description = news.getBody();
+        vh.description.setVisibility(View.GONE);
+        if (description != null && !StringUtils.isEmpty(description)) {
+        	vh.description.setVisibility(View.VISIBLE);
+        	vh.description.setText(description);
+        }
+        
         vh.source.setText(news.getAuthor());
         vh.time.setText(StringUtils.friendly_time(news.getPubDate()));
         if (StringUtils.isToday(news.getPubDate())) {
@@ -41,15 +50,15 @@ public class NewsAdapter extends ListBaseAdapter {
     }
 
     static class ViewHolder {
-        public TextView title, source, time, comment_count;
-        public ImageView tip;
+        @InjectView(R.id.tv_title)TextView title;
+        @InjectView(R.id.tv_description) TextView description;
+        @InjectView(R.id.tv_source)TextView source;
+        @InjectView(R.id.tv_time)TextView time;
+        @InjectView(R.id.tv_comment_count)TextView comment_count;
+        @InjectView(R.id.iv_tip) ImageView tip;
 
         public ViewHolder(View view) {
-            title = (TextView) view.findViewById(R.id.tv_title);
-            source = (TextView) view.findViewById(R.id.tv_source);
-            time = (TextView) view.findViewById(R.id.tv_time);
-            tip = (ImageView) view.findViewById(R.id.iv_tip);
-            comment_count = (TextView) view.findViewById(R.id.tv_comment_count);
+        	ButterKnife.inject(this, view);
         }
     }
 }
