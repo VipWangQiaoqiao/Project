@@ -19,7 +19,7 @@ import net.oschina.app.ui.MainActivity;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.HTMLSpirit;
+import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
@@ -225,7 +225,7 @@ public class ActiveFragment extends BaseListFragment implements
             public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
                 dialog.dismiss();
-                TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(active
+                TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(active
                         .getMessage()));
             }
         });

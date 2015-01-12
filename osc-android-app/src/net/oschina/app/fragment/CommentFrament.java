@@ -23,7 +23,7 @@ import net.oschina.app.emoji.EmojiFragment;
 import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
-import net.oschina.app.util.HTMLSpirit;
+import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
@@ -331,7 +331,7 @@ public class CommentFrament extends BaseListFragment implements
                     int position, long id) {
                 dialog.dismiss();
                 if (position == 0) {
-                    TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(item
+                    TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(item
                             .getContent()));
                 } else if (position == 1) {
                     handleDeleteComment(item);

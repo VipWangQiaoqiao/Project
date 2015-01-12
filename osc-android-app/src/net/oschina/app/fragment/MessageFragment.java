@@ -23,7 +23,7 @@ import net.oschina.app.ui.MainActivity;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.HTMLSpirit;
+import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
@@ -183,7 +183,7 @@ public class MessageFragment extends BaseListFragment implements
                         dialog.dismiss();
                         switch (position) {
                         case 0:
-                            TDevice.copyTextToBoard(HTMLSpirit
+                            TDevice.copyTextToBoard(HTMLUtil
                                     .delHTMLTag(message.getContent()));
                             break;
                         case 1:
