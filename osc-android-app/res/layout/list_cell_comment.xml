@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/list_item_background"
-    android:padding="@dimen/space_8" >
+    android:padding="@dimen/space_10" >
 
     <net.oschina.app.widget.AvatarView
         android:id="@+id/iv_avatar"
