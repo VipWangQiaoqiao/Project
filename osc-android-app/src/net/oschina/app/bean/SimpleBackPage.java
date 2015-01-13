@@ -24,6 +24,7 @@ import net.oschina.app.fragment.TweetRecordFragment;
 import net.oschina.app.fragment.UserBlogFragment;
 import net.oschina.app.fragment.UserCenterFragment;
 import net.oschina.app.team.fragment.DynamicFragment;
+import net.oschina.app.team.fragment.SelectTeamFragment;
 import net.oschina.app.viewpagefragment.BlogViewPagerFragment;
 import net.oschina.app.viewpagefragment.EventViewPagerFragment;
 import net.oschina.app.viewpagefragment.FriendsViewPagerFragment;
@@ -106,7 +107,9 @@ public enum SimpleBackPage {
     MY_INFORMATION_DETAIL(30, R.string.actionbar_title_my_information,
             MyInformationFragmentDetail.class),
 
-    FEED_BACK(31, R.string.str_feedback_title, FeedBackFragment.class);
+    FEED_BACK(31, R.string.str_feedback_title, FeedBackFragment.class),
+
+    SELECT_TEAM(32, R.string.str_feedback_title, SelectTeamFragment.class);
 
     private int title;
     private Class<?> clz;
