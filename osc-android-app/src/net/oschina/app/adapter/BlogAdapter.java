@@ -21,6 +21,7 @@ public class BlogAdapter extends ListBaseAdapter {
 	static class ViewHolder {
 		
 		@InjectView(R.id.tv_title) TextView title;
+		@InjectView(R.id.tv_description) TextView description;
 		@InjectView(R.id.tv_source)TextView source;
 		@InjectView(R.id.tv_time)TextView time;
 		@InjectView(R.id.tv_comment_count) TextView comment_count;
@@ -53,6 +54,14 @@ public class BlogAdapter extends ListBaseAdapter {
 		}
 
 		vh.title.setText(blog.getTitle());
+		
+		vh.description.setVisibility(View.GONE);
+	    String description = blog.getBody();
+		if (null != description && !StringUtils.isEmpty(description)) {
+			vh.description.setVisibility(View.VISIBLE);
+			vh.description.setText(description);
+		}
+		
 		vh.source.setText(blog.getAuthor());
 		vh.time.setText(StringUtils.friendly_time(blog.getPubDate()));
 		vh.comment_count.setText(blog.getCommentCount() + "");

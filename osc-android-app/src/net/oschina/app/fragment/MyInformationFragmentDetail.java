@@ -106,6 +106,8 @@ public class MyInformationFragmentDetail extends BaseFragment {
 					new ByteArrayInputStream(arg2)).getUser();
 			if (mUser != null) {
 				fillUI();
+			} else {
+				this.onFailure(arg0, arg1, arg2, null);
 			}
 		}
 
@@ -140,6 +142,10 @@ public class MyInformationFragmentDetail extends BaseFragment {
 	}
 
 	public void showClickAvatar() {
+		if (mUser == null) {
+			AppContext.showToast("");
+			return;
+		}
 		final CommonDialog dialog = DialogHelper
 				.getPinterestDialogCancelable(getActivity());
 		dialog.setTitle("选择操作");
@@ -154,6 +160,10 @@ public class MyInformationFragmentDetail extends BaseFragment {
 						if (position == 0) {
 							handleSelectPicture();
 						} else {
+							if (mUser == null) {
+								dialog.dismiss();
+								return;
+							}
 							UIHelper.showUserAvatar(getActivity(),
 									mUser.getPortrait());
 						}

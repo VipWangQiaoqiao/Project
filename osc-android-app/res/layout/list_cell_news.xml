@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
+        android:layout_marginBottom="@dimen/space_5"
         android:orientation="horizontal" >
 
         <ImageView
@@ -23,46 +24,44 @@
 
         <TextView
             android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:textColor="@color/main_black"
-            android:textSize="@dimen/text_size_16" />
+            style="@style/list_text_title"
+            android:singleLine="true" />
     </LinearLayout>
 
     <TextView
-        android:id="@+id/tv_source"
+        android:id="@+id/tv_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/ll_title"
-        android:layout_marginTop="5dp"
-        android:textColor="@color/main_gray"
-        android:textSize="@dimen/text_size_12" />
+        android:layout_marginBottom="@dimen/space_5"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="@color/main_gray" />
+
+    <TextView
+        android:id="@+id/tv_source"
+        style="@style/list_text_info"
+        android:layout_below="@id/tv_description"
+        android:layout_marginTop="5dp" />
 
     <TextView
         android:id="@+id/tv_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ll_title"
+        style="@style/list_text_info"
+        android:layout_below="@id/tv_description"
         android:layout_marginLeft="@dimen/space_10"
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@id/tv_source"
         android:drawableLeft="@drawable/ic_time"
-        android:drawablePadding="@dimen/space_2"
-        android:textColor="@color/main_gray"
-        android:textSize="@dimen/text_size_12" />
+        android:drawablePadding="@dimen/space_2" />
 
     <TextView
         android:id="@+id/tv_comment_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ll_title"
+        style="@style/list_text_info"
+        android:layout_below="@id/tv_description"
         android:layout_marginLeft="@dimen/space_10"
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@id/tv_time"
         android:drawableLeft="@drawable/ic_comment_count"
-        android:drawablePadding="@dimen/space_2"
-        android:textColor="@color/main_gray"
-        android:textSize="@dimen/text_size_12" />
+        android:drawablePadding="@dimen/space_2" />
 
 </RelativeLayout>

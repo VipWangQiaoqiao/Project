@@ -28,7 +28,7 @@ import net.oschina.app.interf.EmojiFragmentControl;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.HTMLSpirit;
+import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -549,7 +549,7 @@ public class TweetDetailFragment extends BaseListFragment implements
 					int position, long id) {
 				dialog.dismiss();
 				if (position == 0) {
-					TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(item
+					TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(item
 							.getContent()));
 				} else if (position == 1) {
 					handleDeleteComment(item);
