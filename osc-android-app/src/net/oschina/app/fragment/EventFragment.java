@@ -92,9 +92,11 @@ public class EventFragment extends BaseListFragment {
 	
 	private void clickErrorLayout() {
 		if (event_type == EventList.EVENT_LIST_TYPE_NEW_EVENT) {
+			mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
 			requestData(true);
 		} else {
 			if (AppContext.getInstance().isLogin()) {
+				mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
 				requestData(true);
 			} else {
 				UIHelper.showLoginActivity(getActivity());
