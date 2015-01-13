@@ -19,14 +19,14 @@ public class NoteDatabase {
     public void save(NotebookData data) {
         SQLiteDatabase sqlite = dbHelper.getWritableDatabase();
         if (data.getId() != 0) {
-            String sql = ("update " + DatabaseHelper.TABLE_NAME + " set time=?, date=?, content=?, star=?,color=? where _id=?");
+            String sql = ("update " + DatabaseHelper.NOTE_TABLE_NAME + " set time=?, date=?, content=?, star=?,color=? where _id=?");
             sqlite.execSQL(
                     sql,
                     new String[] { data.getTime(), data.getDate(),
                             data.getContent(), data.isStar() ? "1" : "0",
                             data.getColor() + "", data.getId() + "" });
         } else {
-            String sql = ("insert into" + DatabaseHelper.TABLE_NAME + "(time, date, content, star, color) values(?, ?, ?, ?, ?)");
+            String sql = ("insert into " + DatabaseHelper.NOTE_TABLE_NAME + "(time, date, content, star, color) values(?, ?, ?, ?, ?)");
             sqlite.execSQL(
                     sql,
                     new String[] { data.getTime(), data.getDate(),
@@ -38,9 +38,9 @@ public class NoteDatabase {
 
     public void reset(List<NotebookData> datas) {
         SQLiteDatabase sqlite = dbHelper.getWritableDatabase();
-        sqlite.execSQL("delete from " + DatabaseHelper.TABLE_NAME);
+        sqlite.execSQL("delete from " + DatabaseHelper.NOTE_TABLE_NAME);
         for (NotebookData data : datas) {
-            String sql = ("insert into" + DatabaseHelper.TABLE_NAME + "(time, date, content, star, color) values(?, ?, ?, ?, ?)");
+            String sql = ("insert into " + DatabaseHelper.NOTE_TABLE_NAME + "(time, date, content, star, color) values(?, ?, ?, ?, ?)");
             sqlite.execSQL(
                     sql,
                     new String[] { data.getTime(), data.getDate(),
@@ -56,7 +56,7 @@ public class NoteDatabase {
         if (sqlite.isOpen()) {
             data = new ArrayList<NotebookData>();
             Cursor cursor = sqlite.rawQuery("select * from "
-                    + DatabaseHelper.TABLE_NAME, null);
+                    + DatabaseHelper.NOTE_TABLE_NAME, null);
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor
                     .moveToNext()) {
                 NotebookData notebookData = new NotebookData();
@@ -80,7 +80,7 @@ public class NoteDatabase {
 
     public void delete(int id) {
         SQLiteDatabase sqlite = dbHelper.getWritableDatabase();
-        String sql = ("delete from" + DatabaseHelper.TABLE_NAME + "where _id=?");
+        String sql = ("delete from " + DatabaseHelper.NOTE_TABLE_NAME + " where _id=?");
         sqlite.execSQL(sql, new Integer[] { id });
         dbHelper.close();
     }

@@ -9,21 +9,40 @@ import android.database.sqlite.SQLiteOpenHelper;
  * 
  * @author kymjs
  * 
+ * update:2014-01-12
+ * updateor: fireant
+ * 内容：修改为全应用数据库
+ * 
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
-    public static String TABLE_NAME = " Notebook ";
-    public static String CREATE_TABLE = "create table "
-            + TABLE_NAME
+	
+	public static String OSC_DATABASE_NAME = "oschina";
+	
+    public static String NOTE_TABLE_NAME = "osc_Notebook";
+    
+    public String CREATE_NOTE_TABLE = "create table "
+            + NOTE_TABLE_NAME
             + " (_id integer primary key autoincrement,"
             + " time varchar(10), date varchar(10), content text, star integer, color integer)";
+    
+    public static String NEWS_LIST = "osc_news_list";
+    
+    public String CREATE_NEWS_LIST_TABLE = 
+    		"create table "
+    		+ NOTE_TABLE_NAME
+    		+ "("
+    		+ "_id integer primary key autoincrement, "
+    		+ "news_id interger, title varchar(10), "
+    		+ ")";
 
     public DatabaseHelper(Context context) {
-        super(context, TABLE_NAME, null, 1);
+        super(context, OSC_DATABASE_NAME, null, 1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_TABLE);
+        db.execSQL(CREATE_NOTE_TABLE);
+        db.execSQL(CREATE_NEWS_LIST_TABLE);
     }
 
     @Override
