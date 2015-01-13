@@ -8,11 +8,11 @@ import java.util.List;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
-import net.oschina.app.bean.Blog;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
+import net.oschina.app.util.TLog;
 
 import org.apache.http.Header;
 
@@ -283,6 +283,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
                     onRefreshNetworkSuccess();
                 }
                 executeParserTask(responseBytes);
+                TLog.log(new String(responseBytes));
             }
         }
 
@@ -292,6 +293,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
             if (isAdded()) {
                 readCacheData(getCacheKey());
             }
+            TLog.log(new String(arg2));
         }
     };
 
@@ -314,7 +316,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
     }
 
     protected int getPageSize() {
-    	return AppContext.PAGE_SIZE;
+        return AppContext.PAGE_SIZE;
     }
 
     protected void onRefreshNetworkSuccess() {
@@ -322,7 +324,8 @@ public abstract class BaseListFragment extends BaseTabFragment implements
     }
 
     protected void executeOnLoadDataError(String error) {
-        if (mCurrentPage == 0 && !CacheManager.isExistDataCache(getActivity(), getCacheKey())) {
+        if (mCurrentPage == 0
+                && !CacheManager.isExistDataCache(getActivity(), getCacheKey())) {
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
         } else {
             mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);

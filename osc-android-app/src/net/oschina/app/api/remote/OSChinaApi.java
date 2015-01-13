@@ -11,6 +11,7 @@ import net.oschina.app.bean.EventApplyData;
 import net.oschina.app.bean.NewsList;
 import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Tweet;
+import net.oschina.app.team.bean.Team;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TLog;
 import android.text.TextUtils;
@@ -671,9 +672,30 @@ public class OSChinaApi {
         uploadLog(data, "2", handler);
     }
 
-    public static void teamDynamic(AsyncHttpResponseHandler handler) {
+    /**
+     * team动态
+     * 
+     * @param team
+     * @param page
+     * @param handler
+     */
+    public static void teamDynamic(Team team, int page,
+            AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
-        params.put("app", "1");
-        ApiHttpClient.post("action/api/user_report_to_admin", params, handler);
+        params.put("teamid", team.getId());
+        params.put("pageIndex", page + "");
+        params.put("pageSize", 10);
+        params.put("type", "all");
+        ApiHttpClient.get("action/api/team_active_list", params, handler);
     }
+
+    /**
+     * 获取team列表
+     * 
+     * @param handler
+     */
+    public static void teamList(AsyncHttpResponseHandler handler) {
+        ApiHttpClient.get("action/api/team_list", handler);
+    }
+
 }

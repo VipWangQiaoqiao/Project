@@ -3,6 +3,7 @@ package net.oschina.app.fragment;
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -14,6 +15,8 @@ import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.bean.User;
 import net.oschina.app.cache.CacheManager;
+import net.oschina.app.team.bean.Team;
+import net.oschina.app.team.bean.TeamList;
 import net.oschina.app.ui.MainActivity;
 import net.oschina.app.ui.MyQrodeDialog;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -23,8 +26,10 @@ import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.BadgeView;
+import net.oschina.app.widget.HolderTextView;
 
 import org.apache.http.Header;
+import org.kymjs.kjframe.utils.PreferenceHelper;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -40,6 +45,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -52,11 +58,14 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  * 登录用户中心页面
  * 
  * @author FireAnt（http://my.oschina.net/LittleDY）
+ * @author kymjs (http://my.oschina.net/kymjs)
  * @version 创建时间：2014年10月30日 下午4:05:47
- * 
  */
-
 public class MyInformationFragment extends BaseFragment {
+
+    public static final String TEAM_LIST_FILE = "team_list_file";
+    public static final String TEAM_LIST_KEY = "team_list_key";
+    public static final int sChildView = 9; // 在没有加入TeamList控件时rootview有多少子布局
 
     @InjectView(R.id.iv_avatar)
     AvatarView mIvAvatar;
@@ -82,6 +91,8 @@ public class MyInformationFragment extends BaseFragment {
     View mUserContainer;
     @InjectView(R.id.rl_user_unlogin)
     View mUserUnLogin;
+    @InjectView(R.id.rootview)
+    LinearLayout rootView;
 
     private static BadgeView mMesCount;
 
@@ -246,6 +257,14 @@ public class MyInformationFragment extends BaseFragment {
         mMesCount.setGravity(Gravity.CENTER);
         mMesCount.setBackgroundResource(R.drawable.notification_bg);
         mQrCode.setOnClickListener(this);
+
+        // 初始化团队列表数据
+        String cache = PreferenceHelper.readString(getActivity(),
+                TEAM_LIST_FILE, TEAM_LIST_KEY);
+        if (!StringUtils.isEmpty(cache)) {
+            List<Team> teams = TeamList.toTeamList(cache);
+            addTeamLayout(teams);
+        }
     }
 
     private void fillUI() {
@@ -384,7 +403,10 @@ public class MyInformationFragment extends BaseFragment {
             setNoticeReaded();
             break;
         case R.id.rl_team:
-            UIHelper.showSimpleBack(getActivity(), SimpleBackPage.DYNAMIC);
+            // if (rootView.getChildCount() == sChildView) {
+            // getTeamList();
+            // }
+            getTeamList();
             break;
         case R.id.rl_blog:
             UIHelper.showUserBlog(getActivity(), AppContext.getInstance()
@@ -403,6 +425,71 @@ public class MyInformationFragment extends BaseFragment {
         }
     }
 
+    /**
+     * 拉取团队列表信息
+     */
+    private void getTeamList() {
+        OSChinaApi.teamList(new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+                TeamList datas = XmlUtils.toBean(TeamList.class,
+                        new ByteArrayInputStream(arg2));
+                if (datas != null && datas.getTeams() != null) {
+                    PreferenceHelper.write(getActivity(), TEAM_LIST_FILE,
+                            TEAM_LIST_KEY, datas.toCacheData());
+                    addTeamLayout(datas.getTeams());
+                }
+            }
+
+            @Override
+            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+                    Throwable arg3) {
+                AppContext.showToast("网络不好，请稍后重试");
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+            }
+        });
+    }
+
+    /**
+     * 添加一个团队布局
+     */
+    private void addTeamLayout(List<Team> datas) {
+        int count = 0;// 计算teams已显示的数量
+        // 从第sChildView个开始为了提升执行效率，已知有sChildView个子控件了
+        for (int i = sChildView; i < rootView.getChildCount(); i++) {
+            View child = rootView.getChildAt(i);
+            if (child instanceof HolderTextView) {
+                HolderTextView holderView = ((HolderTextView) child);
+                if (count < datas.size()) {
+                    holderView.setText(datas.get(count).getIdent());
+                    ++count;
+                } else {
+                    rootView.removeViewAt(i);
+                }
+            }
+        }
+        // 还没有显示完就继续new控件显示
+        for (; count < datas.size(); count++) {
+            HolderTextView teamLayout = new HolderTextView(getActivity());
+            teamLayout.setText(datas.get(count).getIdent());
+            teamLayout.setId(count);
+            rootView.addView(teamLayout);
+            teamLayout.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(TEAM_LIST_KEY, v.getId());
+                    UIHelper.showSimpleBack(getActivity(),
+                            SimpleBackPage.DYNAMIC, bundle);
+                }
+            });
+        }
+    }
+
     private void showMyQrCode() {
         MyQrodeDialog dialog = new MyQrodeDialog(getActivity());
         dialog.show();
@@ -415,4 +502,5 @@ public class MyInformationFragment extends BaseFragment {
         mMesCount.setText("");
         mMesCount.hide();
     }
+
 }
