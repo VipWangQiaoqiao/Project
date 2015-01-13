@@ -10,6 +10,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.bean.Blog;
 import net.oschina.app.bean.ListEntity;
+import net.oschina.app.bean.NewsList;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
@@ -20,12 +21,14 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.TextView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -424,5 +427,28 @@ public abstract class BaseListFragment extends BaseTabFragment implements
                 requestData(true);
             }
         }
+    }
+    
+    /**
+     * 保存已读的文章列表
+     * 
+     * @param view
+     * @param prefFileName
+     * @param key
+     */
+    protected void saveToReadedList(final View view, final String prefFileName, final String key) {
+    	// 放入已读列表
+    	new Handler().postDelayed(new Runnable() {
+			
+			@Override
+			public void run() {
+				AppContext.putReadedPostList(prefFileName, key, "true");
+		    	TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
+		    	if (tvTitle != null) {
+		    		tvTitle.setTextColor(getActivity().getResources().getColor(R.color.main_gray));
+		    	}
+			}
+		}, 500);
+    	
     }
 }

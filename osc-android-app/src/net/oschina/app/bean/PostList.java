@@ -14,6 +14,8 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @SuppressWarnings("serial")
 @XStreamAlias("oschina")
 public class PostList extends Entity implements ListEntity {
+	
+	public final static String PREF_READED_POST_LIST = "readed_post_list.pref";
 
 	@XStreamAlias("pagesize")
 	private int pageSize;

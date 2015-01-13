@@ -4,6 +4,8 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.List;
 
+import net.oschina.app.AppContext;
+import net.oschina.app.R;
 import net.oschina.app.adapter.NewsAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
@@ -17,6 +19,7 @@ import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.TextView;
 
 /**
  * 新闻资讯
@@ -61,8 +64,12 @@ public class NewsFragment extends BaseListFragment implements
     public void onItemClick(AdapterView<?> parent, View view, int position,
             long id) {
         News news = (News) mAdapter.getItem(position);
-        if (news != null)
-            UIHelper.showNewsRedirect(view.getContext(), news);
+        if (news != null) {
+        	UIHelper.showNewsRedirect(view.getContext(), news);
+        	
+        	// 放入已读列表
+        	saveToReadedList(view, NewsList.PREF_READED_NEWS_LIST, news.getId() + "");
+        }
     }
 
     @Override

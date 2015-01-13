@@ -1,12 +1,14 @@
 package net.oschina.app.adapter;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
+import net.oschina.app.bean.NewsList;
 import net.oschina.app.bean.Post;
+import net.oschina.app.bean.PostList;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.AvatarView;
-import net.oschina.app.widget.CircleImageView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -23,13 +25,13 @@ public class PostAdapter extends ListBaseAdapter {
 
 	static class ViewHolder {
 		
-		@InjectView(R.id.tv_post_title) TextView title;
-		@InjectView(R.id.tv_post_description) TextView description;
-		@InjectView(R.id.tv_post_author) TextView author;
-		@InjectView(R.id.tv_post_date) TextView time;
-		@InjectView(R.id.tv_post_count) TextView comment_count;
+		@InjectView(R.id.tv_title) TextView title;
+		@InjectView(R.id.tv_description) TextView description;
+		@InjectView(R.id.tv_author) TextView author;
+		@InjectView(R.id.tv_date) TextView time;
+		@InjectView(R.id.tv_count) TextView comment_count;
 		
-		@InjectView(R.id.iv_post_face)
+		@InjectView(R.id.iv_face)
 		public AvatarView face;
 		
 		public ViewHolder(View view) {
@@ -60,6 +62,12 @@ public class PostAdapter extends ListBaseAdapter {
 			vh.description.setVisibility(View.VISIBLE);
 			vh.description.setText(HTMLUtil.replaceTag(post.getBody()));
 		}
+		
+        if (AppContext.isOnReadedPostList(PostList.PREF_READED_POST_LIST, post.getId() + "")) {
+        	vh.title.setTextColor(parent.getContext().getResources().getColor(R.color.main_gray));
+        } else {
+        	vh.title.setTextColor(parent.getContext().getResources().getColor(R.color.main_black));
+        }
 		
 		vh.author.setText(post.getAuthor());
 		vh.time.setText(StringUtils.friendly_time(post.getPubDate()));

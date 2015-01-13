@@ -2,9 +2,11 @@ package net.oschina.app.adapter;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.News;
+import net.oschina.app.bean.NewsList;
 import net.oschina.app.util.StringUtils;
 import android.annotation.SuppressLint;
 import android.view.View;
@@ -29,6 +31,13 @@ public class NewsAdapter extends ListBaseAdapter {
 
         News news = (News) _data.get(position);
         vh.title.setText(news.getTitle());
+        
+        if (AppContext.isOnReadedPostList(NewsList.PREF_READED_NEWS_LIST, news.getId() + "")) {
+        	vh.title.setTextColor(parent.getContext().getResources().getColor(R.color.main_gray));
+        } else {
+        	vh.title.setTextColor(parent.getContext().getResources().getColor(R.color.main_black));
+        }
+        
         String description = news.getBody();
         vh.description.setVisibility(View.GONE);
         if (description != null && !StringUtils.isEmpty(description)) {

@@ -1,5 +1,6 @@
 package net.oschina.app.base;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -48,9 +49,29 @@ public class BaseApplication extends Application {
 	public static Resources resources() {
 		return _resource;
 	}
-
-	public static SharedPreferences getPersistPreferences() {
-		return context().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+	
+	/**
+	 * 放入已读文章列表中
+	 * @param id
+	 */
+	public static void putReadedPostList(String prefFileName, String key, String value) {
+		SharedPreferences preferences = getPreferences(prefFileName);
+		int size = preferences.getAll().size();
+		Editor editor = preferences.edit();
+		if (size >= 100) {
+			editor.clear();
+		}
+		editor.putString(key, value);
+		apply(editor);
+	}
+	
+	/**
+	 * 读取是否是已读的文章列表
+	 * @param id
+	 * @return
+	 */
+	public static boolean isOnReadedPostList(String prefFileName, String key) {
+		return getPreferences(prefFileName).contains(key);
 	}
 
 	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
@@ -99,6 +120,10 @@ public class BaseApplication extends Application {
 		SharedPreferences pre = context().getSharedPreferences(PREF_NAME,
 				Context.MODE_MULTI_PROCESS);
 		return pre;
+	}
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	public static SharedPreferences getPreferences(String prefName) {
+		return context().getSharedPreferences(prefName, Context.MODE_MULTI_PROCESS);
 	}
 
 	public static int[] getDisplaySize() {

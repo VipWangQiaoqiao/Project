@@ -15,6 +15,8 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @SuppressWarnings("serial")
 @XStreamAlias("oschina")
 public class NewsList extends Entity implements ListEntity {
+	
+	public final static String PREF_READED_NEWS_LIST = "readed_news_list.pref";
 
 	public final static int CATALOG_ALL = 1;
 	public final static int CATALOG_INTEGRATION = 2;

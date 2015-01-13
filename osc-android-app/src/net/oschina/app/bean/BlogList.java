@@ -14,6 +14,8 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @XStreamAlias("oschina")
 public class BlogList extends Entity implements ListEntity {
 	
+	public final static String PREF_READED_BLOG_LIST = "readed_blog_list.pref";
+	
 	@XStreamAlias("pagesize")
 	private int pagesize;
 	

@@ -60,6 +60,8 @@ public class BlogFragment extends BaseListFragment {
         Blog blog = (Blog) mAdapter.getItem(position);
         if (blog != null) {
             UIHelper.showUrlRedirect(view.getContext(), blog.getUrl());
+            // 保存到已读列表
+            saveToReadedList(view, BlogList.PREF_READED_BLOG_LIST, blog.getId() + "");
         }
     }
 }
