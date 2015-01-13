@@ -2,10 +2,18 @@ package net.oschina.app.team.fragment;
 
 import java.io.InputStream;
 
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.ListEntity;
+import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.team.adapter.DynamicAdapter;
+import net.oschina.app.team.bean.Team;
+import net.oschina.app.team.bean.TeamList;
+import net.oschina.app.ui.SimpleBackActivity;
+
+import org.kymjs.kjframe.utils.PreferenceHelper;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,6 +35,21 @@ public class DynamicFragment extends BaseListFragment {
     private static final String CACHE_KEY_PREFIX = "DynamicFragment_list";
 
     private Activity aty;
+    private Team team;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = getActivity().getIntent().getBundleExtra(
+                SimpleBackActivity.BUNDLE_KEY_ARGS);
+        if (bundle != null) {
+            int index = bundle.getInt(MyInformationFragment.TEAM_LIST_KEY, 0);
+            String cache = PreferenceHelper.readString(getActivity(),
+                    MyInformationFragment.TEAM_LIST_FILE,
+                    MyInformationFragment.TEAM_LIST_KEY);
+            team = TeamList.toTeamList(cache).get(index);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -54,6 +77,6 @@ public class DynamicFragment extends BaseListFragment {
 
     @Override
     protected void sendRequestData() {
-        // OSChinaApi.getFriendList(mUid, mCatalog, mCurrentPage, mHandler);
+        OSChinaApi.teamDynamic(team, mCurrentPage, mHandler);
     }
 }
