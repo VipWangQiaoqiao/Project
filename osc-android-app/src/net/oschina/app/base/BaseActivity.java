@@ -41,19 +41,8 @@ public abstract class BaseActivity extends ActionBarActivity implements
     protected ActionBar mActionBar;
     private TextView mTvActionTitle;
 
-    // 退出广播
-    private BroadcastReceiver mExistReceiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            finish();
-        }
-    };
-
 	@Override
 	protected void onDestroy() {
-		unregisterReceiver(mExistReceiver);
-		mExistReceiver = null;
 		ButterKnife.reset(this);
 		TDevice.hideSoftKeyboard(getCurrentFocus());
 		super.onDestroy();
@@ -78,9 +67,6 @@ public abstract class BaseActivity extends ActionBarActivity implements
 
         // 通过注解绑定控件
         ButterKnife.inject(this);
-
-        IntentFilter filter = new IntentFilter(INTENT_ACTION_EXIT_APP);
-        registerReceiver(mExistReceiver, filter);
 
         init(savedInstanceState);
         initView();
@@ -120,7 +106,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
         if (actionBar == null)
             return;
         if (hasBackButton()) {
-            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME);
             int layoutRes = getActionBarCustomView();
             View view = inflateView(layoutRes == 0 ? R.layout.actionbar_custom_backtitle
                     : layoutRes);

@@ -83,6 +83,10 @@
             android:label="@string/actionbar_title_qr_scan"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".team.ui.TeamMainActivity"
+            android:screenOrientation="portrait" >
+        </activity>
 
         <service android:name="net.oschina.app.LogUploadService" />
 
@@ -124,8 +128,7 @@
             </intent-filter>
         </service>
 
-        <receiver android:name="net.oschina.app.broadcast.AlarmReceiver"
-             />
+        <receiver android:name="net.oschina.app.broadcast.AlarmReceiver" />
 
         <service
             android:name="net.oschina.app.service.NoticeService"

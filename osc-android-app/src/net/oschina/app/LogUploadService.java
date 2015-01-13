@@ -37,7 +37,7 @@ public class LogUploadService extends Service {
             OSChinaApi.uploadLog(data, new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-                    //log.delete();
+                    log.delete();
                     LogUploadService.this.stopSelf();
                 }
 
