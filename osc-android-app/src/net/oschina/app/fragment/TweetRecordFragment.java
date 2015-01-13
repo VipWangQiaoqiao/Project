@@ -7,13 +7,15 @@ import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.service.ServerTaskUtils;
-import net.oschina.app.util.DensityUtils;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.RecordButton;
 import net.oschina.app.widget.RecordButton.OnFinishedRecordListener;
 import net.oschina.app.widget.RecordButtonUtil.OnPlayListener;
+
+import org.kymjs.kjframe.utils.DensityUtils;
+
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.text.Editable;

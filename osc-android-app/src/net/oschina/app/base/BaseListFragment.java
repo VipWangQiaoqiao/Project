@@ -12,7 +12,6 @@ import net.oschina.app.bean.ListEntity;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
-import net.oschina.app.util.TLog;
 
 import org.apache.http.Header;
 
@@ -283,7 +282,6 @@ public abstract class BaseListFragment extends BaseTabFragment implements
                     onRefreshNetworkSuccess();
                 }
                 executeParserTask(responseBytes);
-                TLog.log(new String(responseBytes));
             }
         }
 
@@ -293,7 +291,6 @@ public abstract class BaseListFragment extends BaseTabFragment implements
             if (isAdded()) {
                 readCacheData(getCacheKey());
             }
-            TLog.log(new String(arg2));
         }
     };
 
