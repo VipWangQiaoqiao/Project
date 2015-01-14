@@ -24,6 +24,7 @@ import net.oschina.app.interf.OnWebViewImageListener;
 import net.oschina.app.service.DownloadService;
 import net.oschina.app.service.DownloadService.DownloadBinder;
 import net.oschina.app.service.NoticeService;
+import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.EventLocationActivity;
 import net.oschina.app.ui.ImagePreviewActivity;
@@ -102,6 +103,17 @@ public class UIHelper {
      */
     public static void showLoginActivity(Context context) {
         Intent intent = new Intent(context, LoginActivity.class);
+        context.startActivity(intent);
+    }
+
+    /**
+     * 显示登录界面
+     * 
+     * @param context
+     */
+    public static void showTeamMainActivity(Context context, Bundle bundle) {
+        Intent intent = new Intent(context, TeamMainActivity.class);
+        intent.putExtras(bundle);
         context.startActivity(intent);
     }
 
@@ -188,7 +200,7 @@ public class UIHelper {
         bundle.putInt(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
                 DetailActivity.DISPLAY_TWEET);
         if (tweet != null) {
-        	bundle.putParcelable("tweet", tweet);
+            bundle.putParcelable("tweet", tweet);
         }
         intent.putExtras(bundle);
         context.startActivity(intent);

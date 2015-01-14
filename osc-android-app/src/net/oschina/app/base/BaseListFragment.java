@@ -26,11 +26,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.TextView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -427,7 +427,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
             }
         }
     }
-    
+
     /**
      * 保存已读的文章列表
      * 
@@ -435,19 +435,21 @@ public abstract class BaseListFragment extends BaseTabFragment implements
      * @param prefFileName
      * @param key
      */
-    protected void saveToReadedList(final View view, final String prefFileName, final String key) {
-    	// 放入已读列表
-    	new Handler().postDelayed(new Runnable() {
-			
-			@Override
-			public void run() {
-				AppContext.putReadedPostList(prefFileName, key, "true");
-		    	TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
-		    	if (tvTitle != null) {
-		    		tvTitle.setTextColor(getActivity().getResources().getColor(R.color.main_gray));
-		    	}
-			}
-		}, 500);
-    	
+    protected void saveToReadedList(final View view, final String prefFileName,
+            final String key) {
+        // 放入已读列表
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                AppContext.putReadedPostList(prefFileName, key, "true");
+                TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
+                if (tvTitle != null) {
+                    tvTitle.setTextColor(getActivity().getResources().getColor(
+                            R.color.main_gray));
+                }
+            }
+        }, 500);
+
     }
 }
