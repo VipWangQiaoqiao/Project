@@ -11,6 +11,7 @@ import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.team.adapter.SelectTeamAdapter;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamList;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
 import org.apache.http.Header;
@@ -23,18 +24,29 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
+/**
+ * 选择团队列表界面
+ * 
+ * @author kymjs (kymjs123@gmail.com)
+ * 
+ */
 public class SelectTeamFragment extends BaseFragment {
 
     @InjectView(R.id.team_select_list)
     ListView mList;
+    @InjectView(R.id.team_select_title)
+    TextView mTvTitle;
 
     private Activity aty;
     private List<Team> datas;
@@ -66,6 +78,17 @@ public class SelectTeamFragment extends BaseFragment {
             mList.setAdapter(new SelectTeamAdapter(aty, datas));
         }
         getTeamList();
+        mList.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                    int position, long id) {
+                Bundle bundle = new Bundle();
+                // key是个历史遗留问题。。。
+                bundle.putInt(MyInformationFragment.TEAM_LIST_KEY, position);
+                UIHelper.showTeamMainActivity(aty, bundle);
+                // UIHelper.showSimpleBack(aty, SimpleBackPage.DYNAMIC, bundle);
+            }
+        });
     }
 
     @Override

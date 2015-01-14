@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_vertical"
-    android:orientation="horizontal" >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/fill_fill"
+    android:background="@color/actionbar_background" >
 
     <ImageButton
         android:id="@+id/btn_back"
+        style="@style/wrap_fill"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:background="@drawable/socialize_titlebar_item_background_selector"
@@ -16,22 +15,33 @@
         android:src="@drawable/actionbar_back_icon_normal" />
 
     <View
+        android:id="@+id/line"
         android:layout_width="1px"
         android:layout_height="match_parent"
+        android:layout_toRightOf="@id/btn_back"
         android:layout_marginBottom="@dimen/space_12"
         android:layout_marginTop="@dimen/space_12"
         android:background="@color/white40" /> 
 
     <TextView
         android:id="@+id/tv_actionbar_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/line"
+        style="@style/wrap_wrap"
         android:paddingLeft="@dimen/space_8"
         android:paddingRight="@dimen/space_8"
         android:text="@string/app_name"
+        android:layout_centerVertical="true"
         android:singleLine="true"
         android:ellipsize="end"
+        android:maxEms="5"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_18" />
-
-</LinearLayout>
+    
+    <Spinner 
+        android:id="@+id/spinner"
+        style="@style/wrap_fill"
+        android:layout_toRightOf="@id/tv_actionbar_title"
+        android:layout_centerVertical="true"
+        android:visibility="gone" />
+    
+</RelativeLayout>

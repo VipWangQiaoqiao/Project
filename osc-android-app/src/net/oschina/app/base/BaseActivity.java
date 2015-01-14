@@ -8,10 +8,6 @@ import net.oschina.app.ui.dialog.DialogControl;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.dialog.WaitDialog;
 import net.oschina.app.util.TDevice;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.LayoutParams;
@@ -21,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.Spinner;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 
@@ -53,7 +50,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
         super.onCreate(savedInstanceState);
         AppManager.getAppManager().addActivity(this);
         if (!hasActionBar()) {
-            supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+            //supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         }
         onBeforeSetContentLayout();
         if (getLayoutId() != 0) {
@@ -99,14 +96,18 @@ public abstract class BaseActivity extends ActionBarActivity implements
     protected int getActionBarCustomView() {
         return 0;
     }
-
+    
+    protected boolean haveSpinner() {
+    	return false;
+    }
+    
     protected void init(Bundle savedInstanceState) {}
 
     protected void initActionBar(ActionBar actionBar) {
         if (actionBar == null)
             return;
         if (hasBackButton()) {
-            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME);
+    		mActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
             int layoutRes = getActionBarCustomView();
             View view = inflateView(layoutRes == 0 ? R.layout.actionbar_custom_backtitle
                     : layoutRes);
@@ -143,6 +144,16 @@ public abstract class BaseActivity extends ActionBarActivity implements
                 actionBar.setTitle(titleRes);
             }
         }
+        View spinner = actionBar.getCustomView().findViewById(R.id.spinner);
+        if (haveSpinner()) {
+        	spinner.setVisibility(View.VISIBLE);
+        } else {
+        	spinner.setVisibility(View.GONE);
+        }
+    }
+    
+    protected Spinner getSpinner() {
+    	return (Spinner) mActionBar.getCustomView().findViewById(R.id.spinner);
     }
 
     public void setActionBarTitle(int resId) {

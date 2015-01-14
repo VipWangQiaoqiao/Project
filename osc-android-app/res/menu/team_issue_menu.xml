@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:osc="http://schemas.android.com/apk/res-auto" >
+
+    <item
+        android:id="@+id/team_issue_new"
+        android:icon="@drawable/actionbar_send_icon"
+        android:showAsAction="always"
+        android:title="@string/team_issue_new"
+        android:visible="true"
+        osc:showAsAction="always"/>
+    <item
+        android:id="@+id/team_issue_project_list"
+        android:icon="@drawable/actionbar_send_icon"
+        android:showAsAction="always"
+        android:title="@string/team_project_list"
+        android:visible="true"
+        osc:showAsAction="always"/>
+    <item
+        android:id="@+id/team_issue_setting"
+        android:icon="@drawable/actionbar_send_icon"
+        android:showAsAction="always"
+        android:title="@string/team_project_list"
+        android:visible="true"
+        osc:showAsAction="ifRoom"/>
+    <item
+        android:icon="@drawable/actionbar_send_icon"
+        android:showAsAction="always"
+        android:title="@string/team_project_list"
+        android:visible="true"
+        osc:showAsAction="ifRoom"/>
+    <item
+        android:icon="@drawable/actionbar_send_icon"
+        android:showAsAction="always"
+        android:title="@string/team_project_list"
+        android:visible="true"
+        osc:showAsAction="ifRoom"/>
+    <item
+        android:icon="@drawable/actionbar_send_icon"
+        android:showAsAction="always"
+        android:title="@string/team_project_list"
+        android:visible="true"
+        osc:showAsAction="ifRoom"/>
+
+</menu>

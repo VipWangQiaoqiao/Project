@@ -2,6 +2,7 @@ package net.oschina.app.base;
 
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
+import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.widget.PagerSlidingTabStrip;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -21,6 +22,7 @@ public abstract class BaseViewPagerFragment extends BaseFragment {
     protected PagerSlidingTabStrip mTabStrip;
     protected ViewPager mViewPager;
     protected ViewPageFragmentAdapter mTabsAdapter;
+    protected EmptyLayout mErrorLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,7 +36,9 @@ public abstract class BaseViewPagerFragment extends BaseFragment {
                 .findViewById(R.id.pager_tabstrip);
 
         mViewPager = (ViewPager) view.findViewById(R.id.pager);
-
+        
+        mErrorLayout = (EmptyLayout) view.findViewById(R.id.error_layout);
+        
         mTabsAdapter = new ViewPageFragmentAdapter(getChildFragmentManager(),
                 mTabStrip, mViewPager);
         onSetupTabAdapter(mTabsAdapter);
