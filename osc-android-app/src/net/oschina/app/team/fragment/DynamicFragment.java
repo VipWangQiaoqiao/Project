@@ -1,6 +1,7 @@
 package net.oschina.app.team.fragment;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
@@ -9,8 +10,11 @@ import net.oschina.app.bean.ListEntity;
 import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.team.adapter.DynamicAdapter;
 import net.oschina.app.team.bean.Team;
+import net.oschina.app.team.bean.TeamActive;
+import net.oschina.app.team.bean.TeamActives;
 import net.oschina.app.team.bean.TeamList;
 import net.oschina.app.ui.SimpleBackActivity;
+import net.oschina.app.util.XmlUtils;
 
 import org.kymjs.kjframe.utils.PreferenceHelper;
 
@@ -66,13 +70,16 @@ public class DynamicFragment extends BaseListFragment {
 
     @Override
     protected String getCacheKeyPrefix() {
-        return CACHE_KEY_PREFIX + "_" + mCurrentPage;
+        return CACHE_KEY_PREFIX + "_" + team.getId() + "_" + mCurrentPage;
     }
 
     @Override
     protected ListEntity parseList(InputStream is) throws Exception {
-        // FriendsList list = XmlUtils.toBean(FriendsList.class, is);
-        return null;
+        TeamActives list = XmlUtils.toBean(TeamActives.class, is);
+        if (list.getList() == null) {
+            list.setActives(new ArrayList<TeamActive>());
+        }
+        return list;
     }
 
     @Override

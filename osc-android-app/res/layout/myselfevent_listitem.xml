@@ -3,15 +3,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/list_layout_item_selector"
     android:descendantFocusability="blocksDescendants"
     android:orientation="horizontal"
     android:paddingBottom="7dip"
     android:paddingLeft="6dip"
     android:paddingRight="6dip"
-    android:background="@drawable/list_layout_item_selector"
     android:paddingTop="8dip" >
 
-    <net.oschina.app.widget.CircleImageView
+    <net.oschina.app.widget.AvatarView
         android:id="@+id/event_listitem_userface"
         style="@style/UserFaceImageStyle" />
 
@@ -21,20 +21,29 @@
         android:layout_marginLeft="6dip"
         android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/event_listitem_username"
-            android:text="用户名1"
-            style="@style/events_list_title" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/event_listitem_username"
+                style="@style/events_list_title" />
+
+            <TextView
+                android:id="@+id/event_listitem_active"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/event_listitem_username" />
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/event_listitem_content"
-            android:text="用户名2"
             style="@style/events_list_content" />
 
         <LinearLayout
-            android:id="@+id/enent_listitem_commits_list"
-            android:orientation="vertical"
-            style="@style/events_list_commits" />
+            android:id="@+id/event_listitem_commits_list"
+            style="@style/events_list_commits"
+            android:orientation="vertical" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -43,14 +52,13 @@
             android:orientation="horizontal" >
 
             <!-- 来自哪里（android/iphone/windows phone） -->
+
             <TextView
                 android:id="@+id/event_listitem_client"
-                android:text="用户名3"
-				style="@style/events_list_client" />
+                style="@style/events_list_client" />
 
             <TextView
                 android:id="@+id/event_listitem_date"
-                android:text="用户名4"
                 style="@style/events_list_data" />
         </LinearLayout>
     </LinearLayout>

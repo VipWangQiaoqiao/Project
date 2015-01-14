@@ -1,5 +1,6 @@
 package net.oschina.app.fragment;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseFragment;
@@ -96,10 +97,14 @@ public class BrowserFragment extends BaseFragment {
             mWebView.loadUrl(mWebView.getUrl());
             break;
         case R.id.browser_system_browser:
-            // 启用外部浏览器
-            Uri uri = Uri.parse(mCurrentUrl);
-            Intent it = new Intent(Intent.ACTION_VIEW, uri);
-            aty.startActivity(it);
+            try {
+                // 启用外部浏览器
+                Uri uri = Uri.parse(mCurrentUrl);
+                Intent it = new Intent(Intent.ACTION_VIEW, uri);
+                aty.startActivity(it);
+            } catch (Exception e) {
+                AppContext.showToast("网页地址错误");
+            }
             break;
         }
     }
@@ -352,7 +357,9 @@ public class BrowserFragment extends BaseFragment {
      * @param url
      *            链接地址
      */
-    protected void onUrlFinished(WebView view, String url) {}
+    protected void onUrlFinished(WebView view, String url) {
+        mCurrentUrl = url;
+    }
 
     /**
      * 当前WebView显示页面的标题
@@ -424,8 +431,9 @@ public class BrowserFragment extends BaseFragment {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             onUrlLoading(view, url);
+            boolean flag = super.shouldOverrideUrlLoading(view, url);
             mCurrentUrl = url;
-            return super.shouldOverrideUrlLoading(view, url);
+            return flag;
         }
 
         @Override
