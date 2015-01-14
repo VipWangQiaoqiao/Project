@@ -52,8 +52,8 @@ public class AppContext extends BaseApplication {
     public void onCreate() {
         super.onCreate();
         // 注册App异常崩溃处理器
-        Thread.setDefaultUncaughtExceptionHandler(AppException
-                .getAppExceptionHandler(this));
+        // Thread.setDefaultUncaughtExceptionHandler(AppException
+        // .getAppExceptionHandler(this));
         instance = this;
         init();
         initLogin();
@@ -209,14 +209,15 @@ public class AppContext extends BaseApplication {
             }
         });
     }
-    
+
     /**
      * 更新用户信息
+     * 
      * @param user
      */
     @SuppressWarnings("serial")
     public void updateUserInfo(final User user) {
-    	setProperties(new Properties() {
+        setProperties(new Properties() {
             {
                 setProperty("user.name", user.getName());
                 setProperty("user.face", user.getPortrait());// 用户头像-文件名
@@ -224,11 +225,12 @@ public class AppContext extends BaseApplication {
                         String.valueOf(user.getFollowers()));
                 setProperty("user.fans", String.valueOf(user.getFans()));
                 setProperty("user.score", String.valueOf(user.getScore()));
-                setProperty("user.favoritecount", String.valueOf(user.getFavoritecount()));
+                setProperty("user.favoritecount",
+                        String.valueOf(user.getFavoritecount()));
                 setProperty("user.gender", String.valueOf(user.getGender()));
             }
         });
-    } 
+    }
 
     /**
      * 获得登录用户的信息

@@ -7,7 +7,6 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseFragment;
-import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.team.adapter.SelectTeamAdapter;
 import net.oschina.app.team.bean.Team;
@@ -39,7 +38,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 /**
  * 选择团队列表界面
  * 
- * @author kymjs
+ * @author kymjs (kymjs123@gmail.com)
  * 
  */
 public class SelectTeamFragment extends BaseFragment {
@@ -86,8 +85,8 @@ public class SelectTeamFragment extends BaseFragment {
                 Bundle bundle = new Bundle();
                 // key是个历史遗留问题。。。
                 bundle.putInt(MyInformationFragment.TEAM_LIST_KEY, position);
-                // UIHelper.showTeamMainActivity(aty, bundle);
-                UIHelper.showSimpleBack(aty, SimpleBackPage.DYNAMIC, bundle);
+                UIHelper.showTeamMainActivity(aty, bundle);
+                // UIHelper.showSimpleBack(aty, SimpleBackPage.DYNAMIC, bundle);
             }
         });
     }

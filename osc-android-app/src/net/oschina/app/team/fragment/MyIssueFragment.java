@@ -16,7 +16,7 @@ import butterknife.InjectView;
  * @author kymjs (kymjs123@gmail.com)
  * 
  */
-public class IssueFragment extends BaseFragment {
+public class MyIssueFragment extends BaseFragment {
 
     @InjectView(R.id.fragment_team_list)
     ListView mList;
