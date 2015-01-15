@@ -59,6 +59,17 @@ public class Event extends Entity {
 	
 	@XStreamAlias("applyStatus")
 	private int applyStatus;
+	
+	@XStreamAlias("category")
+	private int category;// 活动类型 1源创会 2技术交流 3其他 4站外活动
+
+	public int getCategory() {
+		return category;
+	}
+
+	public void setCategory(int category) {
+		this.category = category;
+	}
 
 	public String getCity() {
 		return city;
