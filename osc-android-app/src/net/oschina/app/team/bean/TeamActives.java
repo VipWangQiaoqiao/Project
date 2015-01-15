@@ -8,6 +8,12 @@ import net.oschina.app.bean.ListEntity;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
+/**
+ * 动态列表
+ * 
+ * @author kymjs
+ * 
+ */
 @XStreamAlias("oschina")
 public class TeamActives extends Entity implements ListEntity {
     private static final long serialVersionUID = 1L;

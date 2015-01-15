@@ -4,6 +4,12 @@ import java.io.Serializable;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
+/**
+ * 团队属性
+ * 
+ * @author kymjs
+ * 
+ */
 @SuppressWarnings("serial")
 @XStreamAlias("team")
 public class Team implements Serializable {

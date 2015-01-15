@@ -697,4 +697,16 @@ public class OSChinaApi {
     public static void teamList(AsyncHttpResponseHandler handler) {
         ApiHttpClient.get("action/api/team_list", handler);
     }
+
+    /**
+     * 获取team成员列表
+     * 
+     * @param handler
+     */
+    public static void getTeamMemberList(String teamid,
+            AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("teamid", teamid);
+        ApiHttpClient.get("action/api/team_member_list", handler);
+    }
 }

@@ -10,6 +10,12 @@ import org.kymjs.kjframe.utils.StringUtils;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
+/**
+ * 团队信息集合
+ * 
+ * @author kymjs
+ * 
+ */
 @XStreamAlias("oschina")
 public class TeamList extends Entity implements ListEntity {
     private static final long serialVersionUID = 1L;
