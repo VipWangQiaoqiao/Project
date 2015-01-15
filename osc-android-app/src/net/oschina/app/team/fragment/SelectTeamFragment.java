@@ -114,10 +114,6 @@ public class SelectTeamFragment extends BaseFragment {
                 TeamList datas = XmlUtils.toBean(TeamList.class,
                         new ByteArrayInputStream(arg2));
                 if (datas != null && datas.getTeams() != null) {
-                    PreferenceHelper.write(getActivity(),
-                            MyInformationFragment.TEAM_LIST_FILE,
-                            MyInformationFragment.TEAM_LIST_KEY,
-                            datas.toCacheData());
                     SelectTeamFragment.this.datas = datas.getTeams();
                     mList.setAdapter(new SelectTeamAdapter(aty, datas
                             .getTeams()));

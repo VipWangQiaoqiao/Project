@@ -85,12 +85,11 @@ public class TeamMemberFragment extends BaseFragment {
 
     @Override
     public void initView(View view) {
-        mGrid.setAdapter(new TeamMemberAdapter(aty, datas));
         mGrid.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
-
+                ((TeamMemberAdapter) parent.getAdapter()).onItemClick(position);
             }
         });
     }

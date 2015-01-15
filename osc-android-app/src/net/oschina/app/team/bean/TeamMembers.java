@@ -14,12 +14,12 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * @author kymjs
  * 
  */
-@XStreamAlias("members")
+@XStreamAlias("oschina")
 public class TeamMembers extends Entity implements ListEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @XStreamAlias("member")
+    @XStreamAlias("members")
     private List<TeamMember> list = new ArrayList<TeamMember>();
 
     public void setList(List<TeamMember> list) {

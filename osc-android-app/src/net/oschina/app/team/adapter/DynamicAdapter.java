@@ -63,7 +63,10 @@ public class DynamicAdapter extends ListBaseAdapter {
         // 接口返回图片地址问题，需要客户端额外处理
         String imgUrl = data.getAuthor().getPortrait();
         int end = imgUrl.indexOf('?');
-        holder.img_head.setAvatarUrl(imgUrl.substring(0, end));
+        if (end > 0) {
+            imgUrl = imgUrl.substring(0, end);
+        }
+        holder.img_head.setAvatarUrl(imgUrl);
         holder.tv_name.setText(data.getAuthor().getName());
         // holder.tv_active.setText(data.getBody().getDetail());
         holder.tv_content.setText(Html.fromHtml(data.getBody().getDetail()));

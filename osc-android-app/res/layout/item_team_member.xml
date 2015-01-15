@@ -10,10 +10,9 @@
         android:layout_height="60dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
-        android:background="#ff00ff00"
+        android:clickable="true"
         android:focusable="false"
-        android:gravity="center"
-        android:src="#ffffff00" />
+        android:gravity="center" />
 
     <net.oschina.app.widget.CircleImageView
         android:id="@+id/item_team_membar_tip"
@@ -21,8 +20,8 @@
         android:layout_height="9dp"
         android:layout_alignParentRight="true"
         android:layout_margin="10dp"
-        android:focusable="false"
-        android:src="#ffff0000" />
+        android:clickable="true"
+        android:focusable="false" />
 
     <TextView
         android:id="@+id/item_team_membar_name"
@@ -32,8 +31,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
         android:layout_marginTop="7dp"
+        android:clickable="true"
         android:focusable="false"
-        android:gravity="center"
-        android:text="hello" />
+        android:gravity="center" />
 
 </RelativeLayout>

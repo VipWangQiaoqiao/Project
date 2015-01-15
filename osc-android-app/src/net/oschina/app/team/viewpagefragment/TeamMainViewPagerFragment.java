@@ -3,6 +3,7 @@ package net.oschina.app.team.viewpagefragment;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.base.BaseViewPagerFragment;
 import net.oschina.app.team.fragment.DynamicFragment;
+import net.oschina.app.team.fragment.MyIssueFragment;
 import net.oschina.app.team.fragment.TeamMemberFragment;
 import android.view.View;
 
@@ -46,7 +47,7 @@ public class TeamMainViewPagerFragment extends BaseViewPagerFragment {
     protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
         adapter.addTab("团队动态", "", DynamicFragment.class, getActivity()
                 .getIntent().getExtras());
-        adapter.addTab("我的任务", "", DynamicFragment.class, getActivity()
+        adapter.addTab("我的任务", "", MyIssueFragment.class, getActivity()
                 .getIntent().getExtras());
         adapter.addTab("团队成员", "", TeamMemberFragment.class, getActivity()
                 .getIntent().getExtras());

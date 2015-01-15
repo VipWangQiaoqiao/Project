@@ -112,7 +112,7 @@
         <item name="android:maxLines">4</item>
         <item name="android:ellipsize">end</item>
     </style>
-    
+
     <!-- language star fork nums icon -->
     <style name="project_list_img">
         <item name="android:layout_width">wrap_content</item>
@@ -314,7 +314,7 @@
         <item name="android:clickable">true</item>
         <item name="android:src">@drawable/widget_dface</item>
     </style>
-    
+
     <style name="comment_user_face_image">
         <item name="android:layout_width">28.0dip</item>
         <item name="android:layout_height">28.0dip</item>
@@ -489,7 +489,7 @@
         <item name="android:layout_marginLeft">5dp</item>
         <item name="android:layout_marginRight">5dp</item>
     </style>
-    
+
     <style name="dialog_event_apply_edittext">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -500,7 +500,7 @@
         <item name="android:padding">@dimen/space_5</item>
         <item name="android:textSize">@dimen/text_size_14</item>
     </style>
-    
+
     <style name="dialog_event_apply_text">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -509,13 +509,12 @@
         <item name="android:textSize">@dimen/text_size_12</item>
         <item name="android:layout_marginTop">@dimen/space_10</item>
     </style>
-    
-    <style name="Theme.AppStartLoad" parent="android:Theme.Black.NoTitleBar.Fullscreen">  
-	    <item name="android:windowBackground">@drawable/welcome</item>
-	    
-	    <item name="android:windowNoTitle">true</item>  
-	</style>
-	
+
+    <style name="Theme.AppStartLoad" parent="android:Theme.Black.NoTitleBar.Fullscreen">
+        <item name="android:windowBackground">@drawable/welcome</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
     <style name="soft_detail_btn">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">32dp</item>
@@ -525,8 +524,9 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/text_size_16</item>
     </style>
-    
+
     <!-- events list style start -->
+
 
     <!-- events title -->
     <style name="events_list_title">
@@ -571,5 +571,16 @@
     </style>
 
     <!-- events list style end -->
+
+    <style name="myissue_text" parent="@style/fill_wrap">
+        <item name="android:textColor">#999999</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:gravity">center|left</item>
+    </style>
+
+    <style name="myissue_text_num" parent="@style/myissue_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_alignParentRight">true</item>
+    </style>
 
 </resources>

@@ -10,7 +10,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * @author kymjs
  * 
  */
-@XStreamAlias("members")
+@XStreamAlias("member")
 public class TeamMember implements Serializable {
     private static final long serialVersionUID = 1L;
 
