@@ -56,7 +56,7 @@ public class SelectTeamFragment extends BaseFragment {
             Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         aty = getActivity();
-        View view = View.inflate(aty, R.layout.team_select_team, null);
+        View view = View.inflate(aty, R.layout.fragment_team_selectteam, null);
         ButterKnife.inject(this, view);
         initData();
         initView(view);

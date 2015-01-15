@@ -697,5 +697,4 @@ public class OSChinaApi {
     public static void teamList(AsyncHttpResponseHandler handler) {
         ApiHttpClient.get("action/api/team_list", handler);
     }
-
 }

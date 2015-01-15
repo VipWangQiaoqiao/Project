@@ -38,9 +38,9 @@ public class DynamicAdapter extends ListBaseAdapter {
     protected View getRealView(int position, View v, ViewGroup parent) {
         super.getRealView(position, v, parent);
         ViewHolder holder = null;
-        TeamActive data = (TeamActive) getData().get(position);
+        TeamActive data = (TeamActive) _data.get(position);
         if (v == null) {
-            v = View.inflate(context, R.layout.myselfevent_listitem, null);
+            v = View.inflate(context, R.layout.item_team_dynamic, null);
             holder = new ViewHolder();
             holder.img_head = (AvatarView) v
                     .findViewById(R.id.event_listitem_userface);
@@ -62,8 +62,8 @@ public class DynamicAdapter extends ListBaseAdapter {
         }
         // 接口返回图片地址问题，需要客户端额外处理
         String imgUrl = data.getAuthor().getPortrait();
-        int end = imgUrl.indexOf('.');
-        holder.img_head.setAvatarUrl(imgUrl.substring(0, end + 3));
+        int end = imgUrl.indexOf('?');
+        holder.img_head.setAvatarUrl(imgUrl.substring(0, end));
         holder.tv_name.setText(data.getAuthor().getName());
         // holder.tv_active.setText(data.getBody().getDetail());
         holder.tv_content.setText(Html.fromHtml(data.getBody().getDetail()));

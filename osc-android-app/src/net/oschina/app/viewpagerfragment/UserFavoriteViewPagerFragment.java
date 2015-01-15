@@ -1,4 +1,4 @@
-package net.oschina.app.viewpagefragment;
+package net.oschina.app.viewpagerfragment;
 
 import android.os.Bundle;
 import android.view.View;
@@ -12,10 +12,10 @@ import net.oschina.app.fragment.BlogFragment;
 import net.oschina.app.fragment.NewsFragment;
 import net.oschina.app.fragment.UserFavoriteFragment;
 
-public class UserFavoriteViewPageFragment extends BaseViewPagerFragment {
+public class UserFavoriteViewPagerFragment extends BaseViewPagerFragment {
 	
-	public static UserFavoriteViewPageFragment newInstance(){
-		return new UserFavoriteViewPageFragment();
+	public static UserFavoriteViewPagerFragment newInstance(){
+		return new UserFavoriteViewPagerFragment();
 	}
 	
 	@Override

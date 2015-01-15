@@ -25,14 +25,14 @@ import net.oschina.app.fragment.UserBlogFragment;
 import net.oschina.app.fragment.UserCenterFragment;
 import net.oschina.app.team.fragment.DynamicFragment;
 import net.oschina.app.team.fragment.SelectTeamFragment;
-import net.oschina.app.viewpagefragment.BlogViewPagerFragment;
-import net.oschina.app.viewpagefragment.EventViewPagerFragment;
-import net.oschina.app.viewpagefragment.FriendsViewPagerFragment;
-import net.oschina.app.viewpagefragment.NoticeViewPagerFragment;
-import net.oschina.app.viewpagefragment.OpensourceSoftwareFragment;
-import net.oschina.app.viewpagefragment.QuestViewPagerFragment;
-import net.oschina.app.viewpagefragment.SearchViewPageFragment;
-import net.oschina.app.viewpagefragment.UserFavoriteViewPageFragment;
+import net.oschina.app.viewpagerfragment.BlogViewPagerFragment;
+import net.oschina.app.viewpagerfragment.EventViewPagerFragment;
+import net.oschina.app.viewpagerfragment.FriendsViewPagerFragment;
+import net.oschina.app.viewpagerfragment.NoticeViewPagerFragment;
+import net.oschina.app.viewpagerfragment.OpensourceSoftwareFragment;
+import net.oschina.app.viewpagerfragment.QuestViewPagerFragment;
+import net.oschina.app.viewpagerfragment.SearchViewPageFragment;
+import net.oschina.app.viewpagerfragment.UserFavoriteViewPagerFragment;
 
 public enum SimpleBackPage {
 
@@ -70,7 +70,7 @@ public enum SimpleBackPage {
             MessageDetailFragment.class),
 
     USER_FAVORITE(14, R.string.actionbar_title_user_favorite,
-            UserFavoriteViewPageFragment.class),
+            UserFavoriteViewPagerFragment.class),
 
     SETTING(15, R.string.actionbar_title_setting, SettingsFragment.class),
 

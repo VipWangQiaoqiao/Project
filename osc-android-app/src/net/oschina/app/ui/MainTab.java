@@ -3,8 +3,8 @@ package net.oschina.app.ui;
 import net.oschina.app.R;
 import net.oschina.app.fragment.ExploreFragment;
 import net.oschina.app.fragment.MyInformationFragment;
-import net.oschina.app.viewpagefragment.NewsViewPagerFragment;
-import net.oschina.app.viewpagefragment.TweetsViewPagerFragment;
+import net.oschina.app.viewpagerfragment.NewsViewPagerFragment;
+import net.oschina.app.viewpagerfragment.TweetsViewPagerFragment;
 
 public enum MainTab {
 

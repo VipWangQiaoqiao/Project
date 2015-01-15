@@ -13,7 +13,6 @@ import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamActive;
 import net.oschina.app.team.bean.TeamActives;
 import net.oschina.app.team.bean.TeamList;
-import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.util.XmlUtils;
 
 import org.kymjs.kjframe.utils.PreferenceHelper;
@@ -44,8 +43,7 @@ public class DynamicFragment extends BaseListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = getActivity().getIntent().getBundleExtra(
-                SimpleBackActivity.BUNDLE_KEY_ARGS);
+        Bundle bundle = getActivity().getIntent().getExtras();
         if (bundle != null) {
             int index = bundle.getInt(MyInformationFragment.TEAM_LIST_KEY, 0);
             String cache = PreferenceHelper.readString(getActivity(),

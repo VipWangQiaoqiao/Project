@@ -34,7 +34,7 @@ public class TeamList extends Entity implements ListEntity {
         StringBuilder str = new StringBuilder();
         if (teams != null) {
             for (Team data : teams) {
-                str.append(toTeamCacheData(data)).append("<-> ");
+                str.append(toTeamCacheData(data)).append(" <->");
             }
         }
         return str.toString();
@@ -42,15 +42,15 @@ public class TeamList extends Entity implements ListEntity {
 
     public String toTeamCacheData(Team team) {
         StringBuilder str = new StringBuilder();
-        str.append(team.getId()).append(">-> ").append(team.getType())
-                .append(">-> ").append(team.getStatus()).append(">-> ")
-                .append(team.getName()).append(">-> ").append(team.getIdent())
-                .append(">-> ").append(team.getCreateTime()).append(">-> ")
-                .append(team.getAbout().getSign()).append(">-> ")
-                .append(team.getAbout().getAddress()).append(">-> ")
-                .append(team.getAbout().getTelephone()).append(">-> ")
-                .append(team.getAbout().getEmail()).append(">-> ")
-                .append(team.getAbout().getQq()).append(">-> ");
+        str.append(team.getId()).append(">->").append(team.getType())
+                .append(">->").append(team.getStatus()).append(">->")
+                .append(team.getName()).append(">->").append(team.getIdent())
+                .append(">->").append(team.getCreateTime()).append(">->")
+                .append(team.getAbout().getSign()).append(">->")
+                .append(team.getAbout().getAddress()).append(">->")
+                .append(team.getAbout().getTelephone()).append(">->")
+                .append(team.getAbout().getEmail()).append(">->")
+                .append(team.getAbout().getQq()).append(">->");
         return str.toString();
     }
 

@@ -16,7 +16,7 @@ import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.ui.MainActivity;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
-import net.oschina.app.viewpagefragment.NoticeViewPagerFragment;
+import net.oschina.app.viewpagerfragment.NoticeViewPagerFragment;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;

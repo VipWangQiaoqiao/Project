@@ -31,7 +31,7 @@ import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.ui.LoginActivity;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.ui.dialog.CommonDialog;
-import net.oschina.app.viewpagefragment.FriendsViewPagerFragment;
+import net.oschina.app.viewpagerfragment.FriendsViewPagerFragment;
 import net.oschina.app.widget.AvatarView;
 
 import org.json.JSONException;
@@ -107,7 +107,7 @@ public class UIHelper {
     }
 
     /**
-     * 显示登录界面
+     * 显示Team界面
      * 
      * @param context
      */

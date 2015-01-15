@@ -8,6 +8,7 @@
         android:id="@+id/fragment_team_grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:numColumns="3" />
+        android:numColumns="3"
+        android:verticalSpacing="4dp" />
 
 </LinearLayout>

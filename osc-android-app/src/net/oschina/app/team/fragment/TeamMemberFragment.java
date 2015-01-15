@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -18,7 +20,7 @@ import butterknife.InjectView;
  * @author kymjs (kymjs123@gmail.com)
  * 
  */
-public class TeamMember extends BaseFragment {
+public class TeamMemberFragment extends BaseFragment {
 
     @InjectView(R.id.fragment_team_grid)
     GridView mGrid;
@@ -44,6 +46,13 @@ public class TeamMember extends BaseFragment {
     @Override
     public void initView(View view) {
         mGrid.setAdapter(new TeamMemberAdapter(aty));
+        mGrid.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                    int position, long id) {
+
+            }
+        });
     }
 
     @Override
