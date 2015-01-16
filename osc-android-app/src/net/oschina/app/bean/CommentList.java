@@ -15,7 +15,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  */
 @SuppressWarnings("serial")
 @XStreamAlias("oschina")
-public class CommentList extends Entity implements ListEntity {
+public class CommentList extends Entity implements ListEntity<Comment> {
 
 	public final static int CATALOG_NEWS = 1;
 	public final static int CATALOG_POST = 2;
@@ -43,7 +43,7 @@ public class CommentList extends Entity implements ListEntity {
 	}
 
 	@Override
-	public List<?> getList() {
+	public List<Comment> getList() {
 		return commentlist;
 	}
 

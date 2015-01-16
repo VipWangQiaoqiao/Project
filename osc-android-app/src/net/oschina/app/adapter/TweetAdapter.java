@@ -82,7 +82,7 @@ public class TweetAdapter extends ListBaseAdapter {
         } else
             vh = (ViewHolder) convertView.getTag();
 
-        final Tweet tweet = (Tweet) _data.get(position);
+        final Tweet tweet = (Tweet) mDatas.get(position);
 
         vh.face.setUserInfo(tweet.getAuthorid(), tweet.getAuthor());
         vh.face.setAvatarUrl(tweet.getPortrait());

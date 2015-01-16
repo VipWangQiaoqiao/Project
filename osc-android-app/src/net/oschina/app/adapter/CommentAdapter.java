@@ -58,7 +58,7 @@ public class CommentAdapter extends ListBaseAdapter {
 			vh = (ViewHolder) convertView.getTag();
 		}
 
-		final Comment item = (Comment) _data.get(position);
+		final Comment item = (Comment) mDatas.get(position);
 
 		// 若Authorid为0，则显示非会员
 		vh.name.setText(item.getAuthor() + (item.getAuthorId() == 0 ? "(非会员)" : ""));

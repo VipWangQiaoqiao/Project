@@ -1,7 +1,5 @@
 package net.oschina.app.bean;
 
-import java.io.Serializable;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
@@ -11,7 +9,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  */
 @SuppressWarnings("serial")
 @XStreamAlias("favorite")
-public class Favorite implements Serializable {
+public class Favorite extends Entity {
 	
 	public static final int CATALOG_ALL = 0;
 	public static final int CATALOG_SOFTWARE = 1;

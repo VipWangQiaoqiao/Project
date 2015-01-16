@@ -73,7 +73,7 @@ public class NewsFragment extends BaseListFragment implements
     }
 
     @Override
-    protected void executeOnLoadDataSuccess(List<?> data) {
+    protected void executeOnLoadDataSuccess(List data) {
         if (mCatalog == NewsList.CATALOG_WEEK
                 || mCatalog == NewsList.CATALOG_MONTH) {
             mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);

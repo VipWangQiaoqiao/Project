@@ -2,7 +2,7 @@ package net.oschina.app.adapter;
 
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.bean.FriendsList.Friend;
+import net.oschina.app.bean.Friend;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.AvatarView;
 import android.annotation.SuppressLint;
@@ -37,7 +37,7 @@ public class FriendAdapter extends ListBaseAdapter {
 			vh = (ViewHolder) convertView.getTag();
 		}
 
-		final Friend item = (Friend) _data.get(position);
+		final Friend item = (Friend) mDatas.get(position);
 
 		vh.name.setText(item.getName());
 		vh.desc.setText(item.getExpertise());

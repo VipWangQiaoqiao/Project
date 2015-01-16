@@ -3,8 +3,8 @@ package net.oschina.app.bean;
 import java.io.Serializable;
 import java.util.List;
 
-public interface ListEntity extends Serializable {
+public interface ListEntity<T> extends Serializable {
 
-	public List<?> getList();
+	public List<T> getList();
 
 }

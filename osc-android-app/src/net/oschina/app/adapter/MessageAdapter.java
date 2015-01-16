@@ -41,7 +41,7 @@ public class MessageAdapter extends ListBaseAdapter {
 			vh = (ViewHolder) convertView.getTag();
 		}
 
-		final Messages item = (Messages) _data.get(position);
+		final Messages item = (Messages) mDatas.get(position);
 
 		if (AppContext.getInstance().getLoginUid() == item.getSenderId()) {
 			vh.sender.setVisibility(View.VISIBLE);

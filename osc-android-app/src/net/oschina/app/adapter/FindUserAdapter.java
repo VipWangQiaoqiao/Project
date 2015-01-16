@@ -2,9 +2,7 @@ package net.oschina.app.adapter;
 
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.bean.FriendsList.Friend;
 import net.oschina.app.bean.User;
-import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.AvatarView;
 import android.annotation.SuppressLint;
 import android.view.View;
@@ -14,7 +12,6 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * 好友列表适配器
@@ -38,7 +35,7 @@ public class FindUserAdapter extends ListBaseAdapter {
 			vh = (ViewHolder) convertView.getTag();
 		}
 
-		final User item = (User) _data.get(position);
+		final User item = (User) mDatas.get(position);
 
 		vh.name.setText(item.getName());
 		vh.desc.setText(item.getFrom());

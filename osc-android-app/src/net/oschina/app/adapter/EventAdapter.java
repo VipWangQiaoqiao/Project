@@ -57,7 +57,7 @@ public class EventAdapter extends ListBaseAdapter {
 			vh = (ViewHolder) convertView.getTag();
 		}
 
-		Event item = (Event) _data.get(position);
+		Event item = (Event) mDatas.get(position);
 		
 		setEventStatus(item, vh);
 		

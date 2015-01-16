@@ -32,7 +32,7 @@ public class UserFavoriteAdapter extends ListBaseAdapter {
 			vh = (ViewHolder) convertView.getTag();
 		}
 
-		Favorite favorite = (Favorite) _data.get(position);
+		Favorite favorite = (Favorite) mDatas.get(position);
 		
 		vh.title.setText(favorite.getTitle());
 		return convertView;

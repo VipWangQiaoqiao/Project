@@ -159,7 +159,7 @@ public class MessageDetailFragment extends BaseListFragment implements
 	}
 
 	@Override
-	protected ListEntity readList(Serializable seri) {
+	protected ListEntity<Comment> readList(Serializable seri) {
 		CommentList list = ((CommentList) seri);
 		return list;
 	}
@@ -202,7 +202,7 @@ public class MessageDetailFragment extends BaseListFragment implements
 	}
 	
 	@Override
-	protected void executeOnLoadDataSuccess(List<?> data) {
+	protected void executeOnLoadDataSuccess(List data) {
         mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
         if (mCurrentPage == 0)
             mAdapter.clear();

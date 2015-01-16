@@ -31,7 +31,7 @@ public class SoftwareCatalogListAdapter extends ListBaseAdapter {
 			vh = (ViewHold)convertView.getTag();
 		}
 		
-		SoftwareType softwareType = (SoftwareType) _data.get(position);
+		SoftwareType softwareType = (SoftwareType) mDatas.get(position);
 		vh.name.setText(softwareType.getName());
 		return convertView;
 		

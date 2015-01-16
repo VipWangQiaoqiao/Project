@@ -1,6 +1,5 @@
 package net.oschina.app.bean;
 
-import java.io.Serializable;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
@@ -11,7 +10,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  */
 @SuppressWarnings("serial")
 @XStreamAlias("user")
-public class User implements Serializable {
+public class User extends Entity {
 	
 	public final static int	RELATION_ACTION_DELETE = 0x00;//取消关注
 	public final static int	RELATION_ACTION_ADD = 0x01;//加关注

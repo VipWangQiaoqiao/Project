@@ -28,7 +28,7 @@ public class MessageDetailAdapter extends ListBaseAdapter {
 	@Override
 	protected View getRealView(int position, View convertView,
 			final ViewGroup parent) {
-		final Comment item = (Comment) _data.get(position);
+		final Comment item = (Comment) mDatas.get(position);
 		int itemType = 0;
 		if (item.getAuthorId() == AppContext.getInstance().getLoginUid()) {
 			itemType = 1;

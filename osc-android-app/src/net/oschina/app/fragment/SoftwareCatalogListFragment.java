@@ -140,7 +140,7 @@ public class SoftwareCatalogListFragment extends BaseTabFragment implements
 				mEmptyView.setErrorType(EmptyLayout.HIDE_LAYOUT);
 				if (data.size() == 0 && mState == STATE_REFRESH) {
 					mEmptyView.setErrorType(EmptyLayout.NODATA);
-				} else if (data.size() < AppContext.PAGE_SIZE) {
+				} else if (data.size() == 0) {
 					if (mState == STATE_REFRESH)
 						mSoftwareAdapter
 								.setState(ListBaseAdapter.STATE_NO_MORE);

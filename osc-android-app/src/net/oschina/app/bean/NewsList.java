@@ -14,7 +14,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  */
 @SuppressWarnings("serial")
 @XStreamAlias("oschina")
-public class NewsList extends Entity implements ListEntity {
+public class NewsList extends Entity implements ListEntity<News> {
 	
 	public final static String PREF_READED_NEWS_LIST = "readed_news_list.pref";
 
@@ -35,7 +35,7 @@ public class NewsList extends Entity implements ListEntity {
 	private int newsCount;
 	
 	@XStreamAlias("newslist")
-	private List<News> newslist = new ArrayList<News>();
+	private List<News> list = new ArrayList<News>();
 
 	public int getCatalog() {
 		return catalog;
@@ -60,17 +60,12 @@ public class NewsList extends Entity implements ListEntity {
 	public void setNewsCount(int newsCount) {
 		this.newsCount = newsCount;
 	}
-	
-	public List<News> getNewslist() {
-		return newslist;
+
+	public List<News> getList() {
+		return list;
 	}
 
-	public void setNewslist(List<News> newslist) {
-		this.newslist = newslist;
-	}
-
-	@Override
-	public List<?> getList() {
-		return newslist;
+	public void setList(List<News> list) {
+		this.list = list;
 	}
 }

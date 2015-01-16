@@ -1,6 +1,6 @@
 package net.oschina.app.team.bean;
 
-import java.io.Serializable;
+import net.oschina.app.bean.Entity;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
@@ -12,9 +12,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  */
 @SuppressWarnings("serial")
 @XStreamAlias("active")
-public class TeamActive implements Serializable {
-    @XStreamAlias("id")
-    private String id;
+public class TeamActive extends Entity {
     @XStreamAlias("body")
     private Body body;
     @XStreamAlias("reply")
@@ -23,14 +21,6 @@ public class TeamActive implements Serializable {
     private String createTime;
     @XStreamAlias("author")
     private Author author;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public Body getBody() {
         return body;
