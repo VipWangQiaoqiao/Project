@@ -318,9 +318,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
         return AppContext.PAGE_SIZE;
     }
 
-    protected void onRefreshNetworkSuccess() {
-
-    }
+    protected void onRefreshNetworkSuccess() {}
 
     protected void executeOnLoadDataError(String error) {
         if (mCurrentPage == 0

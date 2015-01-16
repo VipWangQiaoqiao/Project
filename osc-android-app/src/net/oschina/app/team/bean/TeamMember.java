@@ -18,12 +18,26 @@ public class TeamMember implements Serializable {
     private int id;
     @XStreamAlias("name")
     private String name;
+    @XStreamAlias("oscName")
+    private String oscName;
     @XStreamAlias("portrait")
     private String portrait;
     @XStreamAlias("gender")
     private String gender;
+    @XStreamAlias("teamEmail")
+    private String teamEmail;
+    @XStreamAlias("teamTelephone")
+    private String teamTelephone;
+    @XStreamAlias("teamJob")
+    private String teamJob;
     @XStreamAlias("teamRole")
     private int teamRole;
+    @XStreamAlias("space")
+    private String space;
+    @XStreamAlias("joinTime")
+    private String joinTime;
+    @XStreamAlias("location")
+    private String location;
 
     public int getId() {
         return id;
@@ -63,5 +77,61 @@ public class TeamMember implements Serializable {
 
     public void setTeamRole(int teamRole) {
         this.teamRole = teamRole;
+    }
+
+    public String getOscName() {
+        return oscName;
+    }
+
+    public void setOscName(String oscName) {
+        this.oscName = oscName;
+    }
+
+    public String getTeamEmail() {
+        return teamEmail;
+    }
+
+    public void setTeamEmail(String teamEmail) {
+        this.teamEmail = teamEmail;
+    }
+
+    public String getTeamTelephone() {
+        return teamTelephone;
+    }
+
+    public void setTeamTelephone(String teamTelephone) {
+        this.teamTelephone = teamTelephone;
+    }
+
+    public String getTeamJob() {
+        return teamJob;
+    }
+
+    public void setTeamJob(String teamJob) {
+        this.teamJob = teamJob;
+    }
+
+    public String getSpace() {
+        return space;
+    }
+
+    public void setSpace(String space) {
+        this.space = space;
+    }
+
+    public String getJoinTime() {
+        return joinTime;
+    }
+
+    public void setJoinTime(String joinTime) {
+        this.joinTime = joinTime;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

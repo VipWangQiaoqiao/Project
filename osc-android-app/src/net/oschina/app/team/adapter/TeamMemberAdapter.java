@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.oschina.app.R;
+import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamMember;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.AvatarView;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -24,9 +28,13 @@ import android.widget.TextView;
 public class TeamMemberAdapter extends BaseAdapter {
     private final Context cxt;
     private final List<TeamMember> datas;
+    private final Team team;
+    public static final String TEAM_MEMBER_KEY = "TeamMemberAdapter_teammemberkey";
+    public static final String TEAM_ID_KEY = "TeamMemberAdapter_teaminfokey";
 
-    public TeamMemberAdapter(Context context, List<TeamMember> datas) {
+    public TeamMemberAdapter(Context context, List<TeamMember> datas, Team team) {
         this.cxt = context;
+        this.team = team;
         if (datas == null) {
             datas = new ArrayList<TeamMember>(1);
         }
@@ -96,6 +104,9 @@ public class TeamMemberAdapter extends BaseAdapter {
     }
 
     public void onItemClick(int position) {
-
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(TEAM_MEMBER_KEY, datas.get(position));
+        bundle.putString(TEAM_ID_KEY, team.getId());
+        UIHelper.showSimpleBack(cxt, SimpleBackPage.TEAM_USER_INFO, bundle);
     }
 }

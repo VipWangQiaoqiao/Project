@@ -713,4 +713,19 @@ public class OSChinaApi {
         params.put("teamid", teamid);
         ApiHttpClient.get("action/api/team_member_list", params, handler);
     }
+
+    /**
+     * 获取team成员个人信息
+     * 
+     * @param handler
+     */
+    public static void getTeamUserInfo(String teamid, String uid,
+            int pageIndex, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("teamid", teamid);
+        params.put("uid", uid);
+        params.put("pageIndex", pageIndex);
+        params.put("pageSize", 20);
+        ApiHttpClient.get("action/api/team_user_information", params, handler);
+    }
 }
