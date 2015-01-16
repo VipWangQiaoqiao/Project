@@ -38,7 +38,7 @@ public class DynamicAdapter extends ListBaseAdapter {
     protected View getRealView(int position, View v, ViewGroup parent) {
         super.getRealView(position, v, parent);
         ViewHolder holder = null;
-        TeamActive data = (TeamActive) _data.get(position);
+        TeamActive data = (TeamActive) mDatas.get(position);
         if (v == null) {
             v = View.inflate(context, R.layout.item_team_dynamic, null);
             holder = new ViewHolder();

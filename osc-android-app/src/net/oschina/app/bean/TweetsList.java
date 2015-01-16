@@ -12,7 +12,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  */
 @SuppressWarnings("serial")
 @XStreamAlias("oschina")
-public class TweetsList extends Entity implements ListEntity {
+public class TweetsList extends Entity implements ListEntity<Tweet> {
 	
     public final static int CATALOG_LATEST = 0;
     public final static int CATALOG_HOT = -1;
@@ -50,7 +50,7 @@ public class TweetsList extends Entity implements ListEntity {
 	}
 
 	@Override
-	public List<?> getList() {
+	public List<Tweet> getList() {
 		return tweetslist;
 	}
 

@@ -29,7 +29,7 @@ public class NewsAdapter extends ListBaseAdapter {
             vh = (ViewHolder) convertView.getTag();
         }
 
-        News news = (News) _data.get(position);
+        News news = (News) mDatas.get(position);
         vh.title.setText(news.getTitle());
         
         if (AppContext.isOnReadedPostList(NewsList.PREF_READED_NEWS_LIST, news.getId() + "")) {

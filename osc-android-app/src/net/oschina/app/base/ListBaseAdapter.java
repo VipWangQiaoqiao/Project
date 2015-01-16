@@ -1,9 +1,14 @@
 package net.oschina.app.base;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import net.oschina.app.R;
+import net.oschina.app.bean.Entity;
 import net.oschina.app.util.TDevice;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -51,9 +56,8 @@ public class ListBaseAdapter extends BaseAdapter {
     public int getState() {
         return this.state;
     }
-
-    @SuppressWarnings("rawtypes")
-    protected ArrayList _data = new ArrayList();
+    
+    protected ArrayList<Entity> mDatas = new ArrayList<Entity>();
 
     public ListBaseAdapter() {
         _loadmoreText = R.string.loading;
@@ -82,13 +86,13 @@ public class ListBaseAdapter extends BaseAdapter {
     }
 
     public int getDataSize() {
-        return _data.size();
+        return mDatas.size();
     }
 
     @Override
     public Object getItem(int arg0) {
-        if (_data.size() > arg0) {
-            return _data.get(arg0);
+        if (mDatas.size() > arg0) {
+            return mDatas.get(arg0);
         }
         return null;
     }
@@ -98,48 +102,43 @@ public class ListBaseAdapter extends BaseAdapter {
         return arg0;
     }
 
-    @SuppressWarnings({ "rawtypes" })
-    public void setData(ArrayList data) {
-        _data = data;
+    public void setData(ArrayList<Entity> data) {
+        mDatas = data;
         notifyDataSetChanged();
     }
 
-    @SuppressWarnings("rawtypes")
-    public ArrayList getData() {
-        return _data == null ? (_data = new ArrayList()) : _data;
+    public ArrayList<Entity> getData() {
+        return mDatas == null ? (mDatas = new ArrayList<Entity>()) : mDatas;
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void addData(List data) {
-        if (_data != null && data != null && !data.isEmpty()) {
-            _data.addAll(data);
+    public void addData(List<? extends Entity> data) {
+        if (mDatas != null && data != null && !data.isEmpty()) {
+            mDatas.addAll(data);
+            notifyDataSetChanged();
+        }
+    }
+    
+    public void addItem(Entity obj) {
+        if (mDatas != null) {
+            mDatas.add(obj);
             notifyDataSetChanged();
         }
     }
 
-    @SuppressWarnings({ "unchecked" })
-    public void addItem(Object obj) {
-        if (_data != null) {
-            _data.add(obj);
-            notifyDataSetChanged();
-        }
-    }
-
-    @SuppressWarnings({ "unchecked" })
-    public void addItem(int pos, Object obj) {
-        if (_data != null) {
-            _data.add(pos, obj);
+    public void addItem(int pos, Entity obj) {
+        if (mDatas != null) {
+            mDatas.add(pos, obj);
             notifyDataSetChanged();
         }
     }
 
     public void removeItem(Object obj) {
-        _data.remove(obj);
+        mDatas.remove(obj);
         notifyDataSetChanged();
     }
 
     public void clear() {
-        _data.clear();
+        mDatas.clear();
         notifyDataSetChanged();
     }
 

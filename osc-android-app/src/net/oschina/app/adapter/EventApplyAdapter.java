@@ -2,8 +2,7 @@ package net.oschina.app.adapter;
 
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.bean.EventAppliesList.Apply;
-import net.oschina.app.bean.FriendsList.Friend;
+import net.oschina.app.bean.Apply;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.AvatarView;
 import android.annotation.SuppressLint;
@@ -39,7 +38,7 @@ public class EventApplyAdapter extends ListBaseAdapter {
 			vh = (ViewHolder) convertView.getTag();
 		}
 
-		final Apply item = (Apply) _data.get(position);
+		final Apply item = (Apply) mDatas.get(position);
 
 		vh.name.setText(item.getName());
 		vh.avatar.setUserInfo(item.getUserid(), item.getName());

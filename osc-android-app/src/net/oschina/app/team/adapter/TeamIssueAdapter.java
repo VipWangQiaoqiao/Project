@@ -30,7 +30,7 @@ public class TeamIssueAdapter extends ListBaseAdapter {
 			vh = (ViewHolder) convertView.getTag();
 		}
 
-		TeamIssue item = (TeamIssue) _data.get(position);
+		TeamIssue item = (TeamIssue) mDatas.get(position);
 		
 		vh.title.setText(item.getTitle());
 		

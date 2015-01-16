@@ -494,7 +494,7 @@ public class TweetDetailFragment extends BaseListFragment implements
 	}
 
 	@Override
-	protected void executeOnLoadDataSuccess(List<?> data) {
+	protected void executeOnLoadDataSuccess(List data) {
 		if (mState == STATE_REFRESH)
 			mAdapter.clear();
 		mAdapter.addData(data);
@@ -502,7 +502,7 @@ public class TweetDetailFragment extends BaseListFragment implements
 		mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
 		if (data.size() == 0 && mState == STATE_REFRESH) {
 			mAdapter.setState(ListBaseAdapter.STATE_EMPTY_ITEM);
-		} else if (data.size() < AppContext.PAGE_SIZE) {
+		} else if (data.size() == 0) {
 			if (mState == STATE_REFRESH)
 				mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
 			else

@@ -11,10 +11,10 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  */
 @SuppressWarnings("serial")
 public abstract class Entity extends Base {
-	
+
 	@XStreamAlias("id")
 	protected int id;
-	
+
 	protected String cacheKey;
 
 	public int getId() {

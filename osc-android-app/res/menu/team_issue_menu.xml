@@ -23,23 +23,5 @@
         android:title="@string/team_project_list"
         android:visible="true"
         osc:showAsAction="ifRoom"/>
-    <item
-        android:icon="@drawable/actionbar_send_icon"
-        android:showAsAction="always"
-        android:title="@string/team_project_list"
-        android:visible="true"
-        osc:showAsAction="ifRoom"/>
-    <item
-        android:icon="@drawable/actionbar_send_icon"
-        android:showAsAction="always"
-        android:title="@string/team_project_list"
-        android:visible="true"
-        osc:showAsAction="ifRoom"/>
-    <item
-        android:icon="@drawable/actionbar_send_icon"
-        android:showAsAction="always"
-        android:title="@string/team_project_list"
-        android:visible="true"
-        osc:showAsAction="ifRoom"/>
 
 </menu>

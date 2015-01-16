@@ -43,7 +43,7 @@ public class SoftwareCatalogList extends Entity implements ListEntity {
 	}
 	
 	@XStreamAlias("softwareType")
-	public class SoftwareType implements Serializable {
+	public class SoftwareType extends Entity {
 
 		@XStreamAlias("name")
 		private String name;

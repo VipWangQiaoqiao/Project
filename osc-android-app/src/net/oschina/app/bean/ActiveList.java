@@ -13,7 +13,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  */
 @SuppressWarnings("serial")
 @XStreamAlias("oschina")
-public class ActiveList extends Entity implements ListEntity {
+public class ActiveList extends Entity implements ListEntity<Active> {
 
 	public final static int CATALOG_LASTEST = 1;// 最新
 	public final static int CATALOG_ATME = 2;// @我
@@ -42,7 +42,7 @@ public class ActiveList extends Entity implements ListEntity {
 	}
 
 	@Override
-	public List<?> getList() {
+	public List<Active> getList() {
 		return activelist;
 	}
 }

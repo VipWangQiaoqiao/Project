@@ -3,20 +3,17 @@ package net.oschina.app.fragment;
 import java.io.InputStream;
 import java.io.Serializable;
 
-import net.oschina.app.R;
 import net.oschina.app.adapter.SearchAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.SearchList;
-import net.oschina.app.bean.SearchList.SearchResult;
+import net.oschina.app.bean.SearchResult;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -85,7 +82,7 @@ public class SearchFragment extends BaseListFragment {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		SearchList.SearchResult res = (SearchResult) mAdapter.getItem(position);
+		SearchResult res = (SearchResult) mAdapter.getItem(position);
 		if (res != null)
 			UIHelper.showUrlRedirect(view.getContext(), res.getUrl());
 	}

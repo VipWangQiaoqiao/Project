@@ -58,7 +58,7 @@ public class FindUserFragment extends BaseFragment implements OnItemClickListene
 		@Override
 		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 			mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-			ListEntity list = XmlUtils.toBean(FindUserList.class, new ByteArrayInputStream(arg2));
+			ListEntity<User> list = XmlUtils.toBean(FindUserList.class, new ByteArrayInputStream(arg2));
 			executeOnLoadDataSuccess(list.getList());
 		}
 		
@@ -149,7 +149,7 @@ public class FindUserFragment extends BaseFragment implements OnItemClickListene
 			UIHelper.showUserCenter(getActivity(), user.getUid(), user.getName());
 	}
 	
-	private void executeOnLoadDataSuccess(List<?> data) {
+	private void executeOnLoadDataSuccess(List<User> data) {
 		mAdapter.clear();
 		mAdapter.addData(data);
 		mListView.setVisibility(View.VISIBLE);

@@ -25,8 +25,31 @@ public class OSChinaTeamApi {
 		ApiHttpClient.get("action/api/team_project_list", params, handler);
 	}
 	
+	
 	/**
-	 * 获取任务列表
+	 * 获取某项目的任务列表
+	 * 
+	 * @param uId
+	 * 		用户id
+	 * @param teamId
+	 * 		团队id
+	 * @param projectId
+	 * 		项目id（当<=0或不设置时，查询非项目的任务列表）
+	 * @param source
+	 * 		"Git@OSC","GitHub"(只有设置了projectid值，这里才需要设置该值)
+	 */
+	public static void getTeamCatalogIssueList(int uId, int teamId, int projectId, String source,
+			AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("uid", uId);
+		params.put("teamid", teamId);
+		params.put("projectid", projectId);
+		params.put("source", source);
+		ApiHttpClient.get("action/api/team_project_catalog_list", params, handler);
+	}
+	
+	/**
+	 * 获取指定任务列表的任务列表
 	 * 
 	 * @param teamId
 	 * @param projectId
@@ -49,9 +72,9 @@ public class OSChinaTeamApi {
 		RequestParams params = new RequestParams();
 		params.put("teamid", teamId);
 		params.put("projectId", projectId);
-//		params.put("uid", uid);
-//		params.put("state", state);
-//		params.put("scope", scope);
+		params.put("uid", uid);
+		params.put("state", state);
+		params.put("scope", scope);
 		params.put("pageIndex", pageIndex);
 		params.put("pageSize", pageSize);
 		ApiHttpClient.get("action/api/team_issue_list", params, handler);

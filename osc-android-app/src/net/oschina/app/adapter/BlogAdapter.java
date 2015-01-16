@@ -44,7 +44,7 @@ public class BlogAdapter extends ListBaseAdapter {
 			vh = (ViewHolder) convertView.getTag();
 		}
 
-		Blog blog = (Blog) _data.get(position);
+		Blog blog = (Blog) mDatas.get(position);
 		
 		vh.tip.setVisibility(View.VISIBLE);
 		if (blog.getDocumenttype() == Blog.DOC_TYPE_ORIGINAL) {

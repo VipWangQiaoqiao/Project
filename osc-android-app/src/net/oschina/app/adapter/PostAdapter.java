@@ -51,7 +51,7 @@ public class PostAdapter extends ListBaseAdapter {
 			vh = (ViewHolder) convertView.getTag();
 		}
 
-		Post post = (Post) _data.get(position);
+		Post post = (Post) mDatas.get(position);
 		
 		vh.face.setUserInfo(post.getAuthorId(), post.getAuthor());
 		vh.face.setAvatarUrl(post.getPortrait());

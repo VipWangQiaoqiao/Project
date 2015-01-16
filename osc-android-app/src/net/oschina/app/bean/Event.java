@@ -1,7 +1,5 @@
 package net.oschina.app.bean;
 
-import java.io.Serializable;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**

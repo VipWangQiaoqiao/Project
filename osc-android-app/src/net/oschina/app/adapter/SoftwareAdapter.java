@@ -31,7 +31,7 @@ public class SoftwareAdapter extends ListBaseAdapter {
 			vh = (ViewHold)convertView.getTag();
 		}
 		
-		SoftwareDec softwareDes = (SoftwareDec) _data.get(position);
+		SoftwareDec softwareDes = (SoftwareDec) mDatas.get(position);
 		vh.name.setText(softwareDes.getName());
 		vh.des.setText(softwareDes.getDescription());
 		

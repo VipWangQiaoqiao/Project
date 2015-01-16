@@ -12,7 +12,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  */
 @SuppressWarnings("serial")
 @XStreamAlias("oschina")
-public class FavoriteList extends Entity implements ListEntity {
+public class FavoriteList extends Entity implements ListEntity<Favorite> {
 
 	public final static int TYPE_ALL = 0x00;
 	public final static int TYPE_SOFTWARE = 0x01;
@@ -43,7 +43,7 @@ public class FavoriteList extends Entity implements ListEntity {
 	}
 
 	@Override
-	public List<?> getList() {
+	public List<Favorite> getList() {
 		return favoritelist;
 	}
 }

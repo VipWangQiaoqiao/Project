@@ -4,33 +4,19 @@ import java.io.InputStream;
 import java.io.Serializable;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.R;
 import net.oschina.app.adapter.EventApplyAdapter;
-import net.oschina.app.adapter.FriendAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
+import net.oschina.app.bean.Apply;
 import net.oschina.app.bean.EventAppliesList;
-import net.oschina.app.bean.EventAppliesList.Apply;
-import net.oschina.app.bean.FriendsList;
-import net.oschina.app.bean.FriendsList.Friend;
 import net.oschina.app.bean.ListEntity;
-import net.oschina.app.bean.Notice;
-import net.oschina.app.service.NoticeUtils;
-import net.oschina.app.ui.MainActivity;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import android.annotation.TargetApi;
 import android.os.Build;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.v7.view.ActionMode;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
-import android.widget.ListView;
 
 /**
  * 活动出席人员列表

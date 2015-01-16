@@ -3,7 +3,7 @@ package net.oschina.app.team.ui;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.fragment.TweetsFragment;
-import net.oschina.app.team.viewpagefragment.IssueViewPageFragment;
+import net.oschina.app.team.viewpagefragment.TeamIssueViewPageFragment;
 import net.oschina.app.team.viewpagefragment.TeamMainViewPagerFragment;
 import net.oschina.app.viewpagerfragment.NewsViewPagerFragment;
 import android.support.v4.app.Fragment;
@@ -36,11 +36,11 @@ public class TeamMainActivity extends BaseActivity implements
 
     static final String CONTENTS[] = { "main", "issue", "discuss", "diary" };
 
-    static final String fragments[] = {
-            TeamMainViewPagerFragment.class.getName(),
-            IssueViewPageFragment.class.getName(),
-            NewsViewPagerFragment.class.getName(),
-            TweetsFragment.class.getName() };
+	static final String fragments[] = { 
+			TeamMainViewPagerFragment.class.getName(),
+	        TeamIssueViewPageFragment.class.getName(),
+			NewsViewPagerFragment.class.getName(),
+			TweetsFragment.class.getName() };
 
     private int mCurrentContentIndex = -1;
 

@@ -76,7 +76,7 @@ public class ActiveAdapter extends ListBaseAdapter {
             vh = (ViewHolder) convertView.getTag();
         }
 
-        final Active item = (Active) _data.get(position);
+        final Active item = (Active) mDatas.get(position);
 
         vh.name.setText(item.getAuthor());
 

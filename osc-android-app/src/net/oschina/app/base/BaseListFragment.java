@@ -4,10 +4,12 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
+import java.util.Arrays;
 import java.util.List;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
+import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -67,7 +69,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
     protected String softwareType = "recommend";
     protected int userfavoriteType = 1;
 
-    private AsyncTask<String, Void, ListEntity> mCacheTask;
+    private AsyncTask<String, Void, ListEntity<? extends Entity>> mCacheTask;
     private ParserTask mParserTask;
 
     @Override
@@ -184,11 +186,11 @@ public abstract class BaseListFragment extends BaseTabFragment implements
         return null;
     }
 
-    protected ListEntity parseList(InputStream is) throws Exception {
+    protected ListEntity<Entity> parseList(InputStream is) throws Exception {
         return null;
     }
 
-    protected ListEntity readList(Serializable seri) {
+    protected ListEntity<? extends Entity> readList(Serializable seri) {
         return null;
     }
 
@@ -226,7 +228,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
         }
     }
 
-    private class CacheTask extends AsyncTask<String, Void, ListEntity> {
+    private class CacheTask extends AsyncTask<String, Void, ListEntity<? extends Entity>> {
         private final WeakReference<Context> mContext;
 
         private CacheTask(Context context) {
@@ -234,7 +236,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
         }
 
         @Override
-        protected ListEntity doInBackground(String... params) {
+        protected ListEntity<? extends Entity> doInBackground(String... params) {
             Serializable seri = CacheManager.readObject(mContext.get(),
                     params[0]);
             if (seri == null) {
@@ -245,7 +247,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
         }
 
         @Override
-        protected void onPostExecute(ListEntity list) {
+        protected void onPostExecute(ListEntity<? extends Entity> list) {
             super.onPostExecute(list);
             if (list != null) {
                 executeOnLoadDataSuccess(list.getList());
@@ -296,10 +298,17 @@ public abstract class BaseListFragment extends BaseTabFragment implements
         }
     };
 
-    protected void executeOnLoadDataSuccess(List<?> data) {
+    protected void executeOnLoadDataSuccess(List<? extends Entity> data) {
         mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
         if (mCurrentPage == 0)
             mAdapter.clear();
+        
+        for (int i = 0; i < data.size(); i++) {
+        	if (compareTo(mAdapter.getData(), data.get(i))) {
+        		data.remove(i);
+        	}
+		}
+        
         mAdapter.addData(data);
         if (data.size() == 0 && mState == STATE_REFRESH) {
             mErrorLayout.setErrorType(EmptyLayout.NODATA);
@@ -312,6 +321,18 @@ public abstract class BaseListFragment extends BaseTabFragment implements
             mAdapter.setState(ListBaseAdapter.STATE_LOAD_MORE);
         }
         mAdapter.notifyDataSetChanged();
+    }
+    
+    private boolean compareTo(List<? extends Entity> data, Entity enity) {
+        int s = data.size();
+        if (enity != null) {
+            for (int i = 0; i < s; i++) {
+                if (enity.getId() == data.get(i).getId()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     protected int getPageSize() {
@@ -371,7 +392,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
 
         private final byte[] reponseData;
         private boolean parserError;
-        private List<?> list;
+        private List<Entity> list;
 
         public ParserTask(byte[] data) {
             this.reponseData = data;
@@ -380,7 +401,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
         @Override
         protected String doInBackground(Void... params) {
             try {
-                ListEntity data = parseList(new ByteArrayInputStream(
+                ListEntity<Entity> data = parseList(new ByteArrayInputStream(
                         reponseData));
                 new SaveCacheTask(getActivity(), data, getCacheKey()).execute();
                 list = data.getList();
