@@ -293,5 +293,8 @@
     <string name="str_feedback_succeed">谢谢您的反馈，我们会仔细阅读并及时处理</string>
     <string name="str_feedback_tip">我们会仔细阅读您的反馈，并尽早给您回复。感谢您的理解与支持。</string>
     <string name="str_feedback_title">用户反馈</string>
+    
+    <string name="str_team_userinfo">用户主页</string>
+    <string name="str_team_select_team">选择团队</string>
 	
 </resources>

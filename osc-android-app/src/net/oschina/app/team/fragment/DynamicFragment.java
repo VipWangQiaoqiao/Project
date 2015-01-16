@@ -2,6 +2,7 @@ package net.oschina.app.team.fragment;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
@@ -50,8 +51,12 @@ public class DynamicFragment extends BaseListFragment {
             String cache = PreferenceHelper.readString(getActivity(),
                     MyInformationFragment.TEAM_LIST_FILE,
                     MyInformationFragment.TEAM_LIST_KEY);
-            team = TeamList.toTeamList(cache).get(index);
-        } else {
+            List<Team> teams = TeamList.toTeamList(cache);
+            if (teams.size() > index) {
+                team = teams.get(index);
+            }
+        }
+        if (team == null) {
             team = new Team();
             TLog.log(getClass().getSimpleName(), "team对象初始化异常");
         }

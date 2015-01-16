@@ -103,7 +103,7 @@ public class TeamMemberFragment extends BaseFragment {
                         InputStream is = new ByteArrayInputStream(arg2);
                         datas = XmlUtils.toBean(TeamMembers.class, is)
                                 .getList();
-                        mGrid.setAdapter(new TeamMemberAdapter(aty, datas));
+                        mGrid.setAdapter(new TeamMemberAdapter(aty, datas, team));
                     }
 
                     @Override
