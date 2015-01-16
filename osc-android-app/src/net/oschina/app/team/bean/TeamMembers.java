@@ -8,11 +8,18 @@ import net.oschina.app.bean.ListEntity;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
-@XStreamAlias("members")
+/**
+ * Team成员列表
+ * 
+ * @author kymjs
+ * 
+ */
+@XStreamAlias("oschina")
 public class TeamMembers extends Entity implements ListEntity {
 
     private static final long serialVersionUID = 1L;
 
+    @XStreamAlias("members")
     private List<TeamMember> list = new ArrayList<TeamMember>();
 
     public void setList(List<TeamMember> list) {

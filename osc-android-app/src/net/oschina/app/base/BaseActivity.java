@@ -16,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.Spinner;
 import android.widget.TextView;
 import butterknife.ButterKnife;
@@ -38,19 +37,19 @@ public abstract class BaseActivity extends ActionBarActivity implements
     protected ActionBar mActionBar;
     private TextView mTvActionTitle;
 
-	@Override
-	protected void onDestroy() {
-		ButterKnife.reset(this);
-		TDevice.hideSoftKeyboard(getCurrentFocus());
-		super.onDestroy();
-	}
-	
+    @Override
+    protected void onDestroy() {
+        ButterKnife.reset(this);
+        TDevice.hideSoftKeyboard(getCurrentFocus());
+        super.onDestroy();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AppManager.getAppManager().addActivity(this);
         if (!hasActionBar()) {
-            //supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+            // supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         }
         onBeforeSetContentLayout();
         if (getLayoutId() != 0) {
@@ -96,18 +95,18 @@ public abstract class BaseActivity extends ActionBarActivity implements
     protected int getActionBarCustomView() {
         return 0;
     }
-    
+
     protected boolean haveSpinner() {
-    	return false;
+        return false;
     }
-    
+
     protected void init(Bundle savedInstanceState) {}
 
     protected void initActionBar(ActionBar actionBar) {
         if (actionBar == null)
             return;
         if (hasBackButton()) {
-    		mActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+            mActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
             int layoutRes = getActionBarCustomView();
             View view = inflateView(layoutRes == 0 ? R.layout.actionbar_custom_backtitle
                     : layoutRes);
@@ -136,6 +135,12 @@ public abstract class BaseActivity extends ActionBarActivity implements
             LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT,
                     LayoutParams.MATCH_PARENT);
             actionBar.setCustomView(view, params);
+            View spinner = actionBar.getCustomView().findViewById(R.id.spinner);
+            if (haveSpinner()) {
+                spinner.setVisibility(View.VISIBLE);
+            } else {
+                spinner.setVisibility(View.GONE);
+            }
         } else {
             actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
             actionBar.setDisplayUseLogoEnabled(false);
@@ -144,16 +149,10 @@ public abstract class BaseActivity extends ActionBarActivity implements
                 actionBar.setTitle(titleRes);
             }
         }
-        View spinner = actionBar.getCustomView().findViewById(R.id.spinner);
-        if (haveSpinner()) {
-        	spinner.setVisibility(View.VISIBLE);
-        } else {
-        	spinner.setVisibility(View.GONE);
-        }
     }
-    
+
     protected Spinner getSpinner() {
-    	return (Spinner) mActionBar.getCustomView().findViewById(R.id.spinner);
+        return (Spinner) mActionBar.getCustomView().findViewById(R.id.spinner);
     }
 
     public void setActionBarTitle(int resId) {

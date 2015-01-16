@@ -1,4 +1,4 @@
-package net.oschina.app.viewpagefragment;
+package net.oschina.app.viewpagerfragment;
 
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;

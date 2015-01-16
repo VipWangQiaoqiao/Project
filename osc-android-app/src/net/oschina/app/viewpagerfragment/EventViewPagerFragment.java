@@ -1,4 +1,4 @@
-package net.oschina.app.viewpagefragment;
+package net.oschina.app.viewpagerfragment;
 
 import android.os.Bundle;
 import android.view.View;

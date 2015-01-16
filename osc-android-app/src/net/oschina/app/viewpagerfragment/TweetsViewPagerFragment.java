@@ -1,51 +1,50 @@
-package net.oschina.app.viewpagefragment;
+package net.oschina.app.viewpagerfragment;
 
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.BaseViewPagerFragment;
-import net.oschina.app.bean.NewsList;
-import net.oschina.app.fragment.NewsFragment;
+import net.oschina.app.bean.Tweet;
+import net.oschina.app.bean.TweetsList;
+import net.oschina.app.fragment.TweetsFragment;
 import net.oschina.app.interf.OnTabReselectListener;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
 /**
- * 资讯viewpager页面
+ * 动弹界面（包括最新动弹、热门动弹、我的动弹）
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @created 2014年9月25日 下午2:21:52
  *
  */
-public class NewsViewPagerFragment extends BaseViewPagerFragment implements OnTabReselectListener {
+public class TweetsViewPagerFragment extends BaseViewPagerFragment implements OnTabReselectListener {
 	
 	@Override
 	protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
-		String[] title = getResources().getStringArray(R.array.news_viewpage_arrays);
-		adapter.addTab(title[0], "news", NewsFragment.class, getBundle(NewsList.CATALOG_ALL));
-		adapter.addTab(title[1], "news_week", NewsFragment.class, getBundle(NewsList.CATALOG_WEEK));
-		adapter.addTab(title[2], "news_month", NewsFragment.class, getBundle(NewsList.CATALOG_MONTH));
+
+		String[] title = getResources().getStringArray(R.array.tweets_viewpage_arrays);
+		adapter.addTab(title[0], "new_tweets", TweetsFragment.class, getBundle(TweetsList.CATALOG_LATEST));
+		adapter.addTab(title[1], "hot_tweets", TweetsFragment.class, getBundle(TweetsList.CATALOG_HOT));
+		adapter.addTab(title[2], "my_tweets", TweetsFragment.class, getBundle(TweetsList.CATALOG_ME));
 	}
 	
-	private Bundle getBundle(int newType) {
+	private Bundle getBundle(int catalog) {
 		Bundle bundle = new Bundle();
-		bundle.putInt(BaseListFragment.BUNDLE_KEY_CATALOG, newType);
+		bundle.putInt(BaseListFragment.BUNDLE_KEY_CATALOG, catalog);
 		return bundle;
 	}
 
 	@Override
 	public void onClick(View v) {
-		
 	}
 
 	@Override
 	public void initView(View view) {
-		
 	}
 
 	@Override
 	public void initData() {
-		
 	}
 
 	@Override

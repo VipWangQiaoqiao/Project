@@ -4,7 +4,13 @@ import java.io.Serializable;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
-@XStreamAlias("members")
+/**
+ * Team成员
+ * 
+ * @author kymjs
+ * 
+ */
+@XStreamAlias("member")
 public class TeamMember implements Serializable {
     private static final long serialVersionUID = 1L;
 
