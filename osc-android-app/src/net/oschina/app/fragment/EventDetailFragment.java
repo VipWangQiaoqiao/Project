@@ -234,6 +234,12 @@ public class EventDetailFragment extends BaseDetailFragment implements
      * 显示活动报名对话框
      */
     private void showEventApply() {
+    	
+    	if (mPost.getEvent().getCategory() == 4) {
+    		UIHelper.openSysBrowser(getActivity(), mPost.getEvent().getUrl());
+    		return;
+    	}
+    	
         if (!AppContext.getInstance().isLogin()) {
             UIHelper.showLoginActivity(getActivity());
             return;
@@ -308,7 +314,15 @@ public class EventDetailFragment extends BaseDetailFragment implements
             mToolBarFragment.setCommentCount(mPost.getAnswerCount());
         }
         notifyFavorite(mPost.getFavorite() == 1);
-        notifyEventStatus();
+        
+        // 站外活动
+        if (mPost.getEvent().getCategory() == 4) {
+        	mBtEventApply.setVisibility(View.VISIBLE);
+        	mBtAttend.setVisibility(View.GONE);
+        	mBtEventApply.setText("报名链接");
+        } else {
+        	notifyEventStatus();
+        }
     }
 
     // 显示活动 以及报名的状态
