@@ -1,6 +1,11 @@
 package net.oschina.app;
 
 import net.oschina.app.ui.MainActivity;
+import net.oschina.app.util.TLog;
+
+import org.kymjs.kjframe.utils.KJLoger;
+import org.kymjs.kjframe.utils.SystemTool;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,9 +31,13 @@ public class AppStart extends Activity {
         if (aty != null && !aty.isFinishing()) {
             finish();
         }
+        // Log控制器
+        KJLoger.openDebutLog(BuildConfig.DEBUG);
+        TLog.DEBUG = BuildConfig.DEBUG;
 
         final View view = View.inflate(this, R.layout.app_start, null);
         setContentView(view);
+        SystemTool.gc(this);
         // 渐变展示启动屏
         AlphaAnimation aa = new AlphaAnimation(0.5f, 1.0f);
         aa.setDuration(1000);
