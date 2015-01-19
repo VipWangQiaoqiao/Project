@@ -333,7 +333,7 @@ public class BaseDetailFragment extends BaseFragment implements
 	}
 
 	protected UMImage getShareImg() {
-		UMImage img = new UMImage(getActivity(), R.drawable.ic_launcher);
+		UMImage img = new UMImage(getActivity(), R.drawable.ic_share);
 		return img;
 	}
 

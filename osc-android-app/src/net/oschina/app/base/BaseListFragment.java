@@ -468,7 +468,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
                             R.color.main_gray));
                 }
             }
-        }, 500);
+        }, 800);
 
     }
 }

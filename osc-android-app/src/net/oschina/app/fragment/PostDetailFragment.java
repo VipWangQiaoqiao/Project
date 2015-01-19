@@ -27,6 +27,7 @@ import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
+import net.oschina.app.util.URLsUtils;
 import net.oschina.app.util.XmlUtils;
 import android.app.Activity;
 import android.os.Bundle;
@@ -276,8 +277,7 @@ public class PostDetailFragment extends BaseDetailFragment implements
 
 	@Override
 	protected String getShareUrl() {
-		return mPost != null ? mPost.getUrl().replace("http://www", "http://m")
-				: null;
+		return mPost != null ? URLsUtils.URL_MOBILE + "qusetion/" + mPost.getId() : null;
 	}
 	
 	@Override

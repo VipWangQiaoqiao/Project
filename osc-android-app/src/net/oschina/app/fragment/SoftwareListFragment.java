@@ -50,8 +50,11 @@ public class SoftwareListFragment extends BaseListFragment {
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		SoftwareDec softwaredec = (SoftwareDec) mAdapter.getItem(position);
-		if(softwaredec!=null)
-			UIHelper.showUrlRedirect(getActivity(), softwaredec.getUrl());
+		if(softwaredec!=null) {
+			UIHelper.showSoftwareDetail(getActivity(), softwaredec.getName());
+			// 放入已读列表
+        	saveToReadedList(view, SoftwareList.PREF_READED_SOFTWARE_LIST, softwaredec.getName());
+		}
 	}
 	
 }
