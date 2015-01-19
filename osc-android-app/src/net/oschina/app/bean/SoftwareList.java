@@ -1,6 +1,5 @@
 package net.oschina.app.bean;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +8,8 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @SuppressWarnings("serial")
 @XStreamAlias("oschina")
 public class SoftwareList extends Entity implements ListEntity {
+	
+	public final static String PREF_READED_SOFTWARE_LIST = "readed_software_list.pref";
 	
 	public final static String CATALOG_RECOMMEND = "recommend";
 	public final static String CATALOG_TIME = "time";

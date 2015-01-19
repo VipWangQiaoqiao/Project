@@ -23,8 +23,8 @@ import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
+import net.oschina.app.util.URLsUtils;
 import net.oschina.app.util.XmlUtils;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -268,7 +268,7 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 
 	@Override
 	protected String getShareUrl() {
-		return mBlog != null ? mBlog.getUrl() : null;
+		return mBlog != null ? URLsUtils.URL_MOBILE + "blog/" + mBlog.getId() : null;
 	}
 	
 	@Override

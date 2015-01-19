@@ -1,7 +1,9 @@
 package net.oschina.app.adapter;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
+import net.oschina.app.bean.SoftwareList;
 import net.oschina.app.bean.SoftwareList.SoftwareDec;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +14,7 @@ import butterknife.InjectView;
 public class SoftwareAdapter extends ListBaseAdapter {
 	
 	static class ViewHold{
-		@InjectView(R.id.tv_software_name)TextView name;
+		@InjectView(R.id.tv_title)TextView name;
 		@InjectView(R.id.tv_software_des)TextView des;
 		public ViewHold(View view) {
 			ButterKnife.inject(this,view);
@@ -33,6 +35,13 @@ public class SoftwareAdapter extends ListBaseAdapter {
 		
 		SoftwareDec softwareDes = (SoftwareDec) mDatas.get(position);
 		vh.name.setText(softwareDes.getName());
+		
+        if (AppContext.isOnReadedPostList(SoftwareList.PREF_READED_SOFTWARE_LIST, softwareDes.getName())) {
+        	vh.name.setTextColor(parent.getContext().getResources().getColor(R.color.main_gray));
+        } else {
+        	vh.name.setTextColor(parent.getContext().getResources().getColor(R.color.main_black));
+        }
+		
 		vh.des.setText(softwareDes.getDescription());
 		
 		return convertView;

@@ -25,6 +25,7 @@ import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
+import net.oschina.app.util.URLsUtils;
 import net.oschina.app.util.XmlUtils;
 import android.app.Activity;
 import android.os.Bundle;
@@ -291,7 +292,6 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 
     @Override
     protected String getShareUrl() {
-        return mNews != null ? mNews.getUrl().replace("http://www", "http://m")
-                : null;
+        return mNews != null ? URLsUtils.URL_MOBILE + "news/" + mNews.getId() : null;
     }
 }
