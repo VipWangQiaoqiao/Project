@@ -2,9 +2,10 @@
 <resources>
 
     <string-array name="news_viewpage_arrays">
-        <item>最新资讯</item>
-        <item>本周热点</item>
-        <item>本月热点</item>
+        <item>资讯</item>
+        <item>热点</item>
+        <item>博客</item>
+        <item>推荐</item>
     </string-array>
     <string-array name="tweets_viewpage_arrays">
         <item>最新动弹</item>

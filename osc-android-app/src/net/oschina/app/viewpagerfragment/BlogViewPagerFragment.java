@@ -3,7 +3,7 @@ package net.oschina.app.viewpagerfragment;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.base.BaseViewPagerFragment;
-import net.oschina.app.bean.Blog;
+import net.oschina.app.bean.BlogList;
 import net.oschina.app.fragment.BlogFragment;
 import android.os.Bundle;
 import android.view.View;
@@ -30,10 +30,10 @@ public class BlogViewPagerFragment extends BaseViewPagerFragment {
                 R.array.blogs_viewpage_arrays);
         // 最新博客
         adapter.addTab(title[0], "latest_blog", BlogFragment.class,
-                getBundle(Blog.CATALOG_LATEST));
+                getBundle(BlogList.CATALOG_LATEST));
         // 推荐博客
         adapter.addTab(title[1], "recommend_blog", BlogFragment.class,
-                getBundle(Blog.CATALOG_RECOMMEND));
+                getBundle(BlogList.CATALOG_RECOMMEND));
     }
 
     /**

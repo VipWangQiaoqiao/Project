@@ -316,7 +316,7 @@ public abstract class BaseListFragment extends BaseFragment implements
         mAdapter.addData(data);
     }
 
-    private boolean compareTo(List<? extends Entity> data, Entity enity) {
+    protected boolean compareTo(List<? extends Entity> data, Entity enity) {
         int s = data.size();
         if (enity != null) {
             for (int i = 0; i < s; i++) {
