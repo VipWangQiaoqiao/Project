@@ -2,11 +2,13 @@ package net.oschina.app.fragment;
 
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.List;
 
 import net.oschina.app.adapter.SoftwareAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
+import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.SoftwareDec;
 import net.oschina.app.bean.SoftwareList;
@@ -70,5 +72,18 @@ public class SoftwareListFragment extends BaseListFragment {
         	saveToReadedList(view, SoftwareList.PREF_READED_SOFTWARE_LIST, softwaredec.getName());
 		}
 	}
+	
+	@Override
+    protected boolean compareTo(List<? extends Entity> data, Entity enity) {
+        int s = data.size();
+        if (enity != null) {
+            for (int i = 0; i < s; i++) {
+                if (((SoftwareDec)enity).getName().equals(((SoftwareDec)data.get(i)).getName())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 	
 }
