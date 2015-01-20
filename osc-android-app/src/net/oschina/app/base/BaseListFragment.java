@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
-import java.util.Arrays;
 import java.util.List;
 
 import net.oschina.app.AppContext;
@@ -14,6 +13,7 @@ import net.oschina.app.bean.ListEntity;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
+import net.oschina.app.util.TLog;
 
 import org.apache.http.Header;
 
@@ -22,7 +22,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,9 +43,6 @@ public abstract class BaseListFragment extends BaseFragment implements
         OnScrollListener {
 
     public static final String BUNDLE_KEY_CATALOG = "BUNDLE_KEY_CATALOG";
-    public static final String BUNDLE_BLOG_TYPE = "BUNDLE_BLOG_TYPE";
-    public static final String BUNDLE_SOFTWARE = "BUNDLE_SOFTWARE";
-    public static final String BUNDLE_FAVORITE = "BUNDLE_FAVORITE";
 
     @InjectView(R.id.swiperefreshlayout)
     protected SwipeRefreshLayout mSwipeRefreshLayout;
@@ -65,9 +61,7 @@ public abstract class BaseListFragment extends BaseFragment implements
 
     protected int mCatalog = 1;
 
-    protected String blogType;
     protected String softwareType = "recommend";
-    protected int userfavoriteType = 1;
 
     private AsyncTask<String, Void, ListEntity<? extends Entity>> mCacheTask;
     private ParserTask mParserTask;
@@ -79,7 +73,7 @@ public abstract class BaseListFragment extends BaseFragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater,
-            @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(getLayoutId(), container, false);
         return view;
     }
@@ -98,10 +92,6 @@ public abstract class BaseListFragment extends BaseFragment implements
         Bundle args = getArguments();
         if (args != null) {
             mCatalog = args.getInt(BUNDLE_KEY_CATALOG, 0);
-            blogType = args.getString(BUNDLE_BLOG_TYPE, blogType);
-            softwareType = args.getString(BUNDLE_SOFTWARE, softwareType);
-            userfavoriteType = args
-                    .getInt(BUNDLE_KEY_CATALOG, userfavoriteType);
         }
     }
 
@@ -200,8 +190,7 @@ public abstract class BaseListFragment extends BaseFragment implements
 
     private String getCacheKey() {
         return new StringBuffer(getCacheKeyPrefix()).append("_")
-                .append(mCurrentPage).append("_").append(AppContext.PAGE_SIZE)
-                .toString();
+                .append(mCurrentPage).toString();
     }
 
     protected void requestData(boolean refresh) {
@@ -300,27 +289,25 @@ public abstract class BaseListFragment extends BaseFragment implements
 
     protected void executeOnLoadDataSuccess(List<? extends Entity> data) {
         mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-        if (mCurrentPage == 0)
-            mAdapter.clear();
-        
+        if (mCurrentPage == 0) {
+        	mAdapter.clear();
+        }
         for (int i = 0; i < data.size(); i++) {
         	if (compareTo(mAdapter.getData(), data.get(i))) {
         		data.remove(i);
+        		i--;
         	}
 		}
-        
-        mAdapter.addData(data);
-        if (data.size() == 0 && mState == STATE_REFRESH) {
-            mErrorLayout.setErrorType(EmptyLayout.NODATA);
-        } else if (data.size() < getPageSize()) {
-            if (mState == STATE_REFRESH)
-                mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
-            else
-                mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
+        int adapterState = ListBaseAdapter.STATE_EMPTY_ITEM;
+        if (mAdapter.getCount() == 0 && mState == STATE_NONE) {
+        	mErrorLayout.setErrorType(EmptyLayout.NODATA);
+        } else if (data.size() == 0) {
+        	adapterState = ListBaseAdapter.STATE_NO_MORE;
         } else {
-            mAdapter.setState(ListBaseAdapter.STATE_LOAD_MORE);
+        	adapterState = ListBaseAdapter.STATE_LOAD_MORE;
         }
-        mAdapter.notifyDataSetChanged();
+        mAdapter.setState(adapterState);
+        mAdapter.addData(data);
     }
     
     private boolean compareTo(List<? extends Entity> data, Entity enity) {

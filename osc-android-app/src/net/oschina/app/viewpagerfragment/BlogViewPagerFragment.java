@@ -2,7 +2,6 @@ package net.oschina.app.viewpagerfragment;
 
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
-import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.BaseViewPagerFragment;
 import net.oschina.app.bean.Blog;
 import net.oschina.app.fragment.BlogFragment;
@@ -46,7 +45,7 @@ public class BlogViewPagerFragment extends BaseViewPagerFragment {
      */
     private Bundle getBundle(String catalog) {
         Bundle bundle = new Bundle();
-        bundle.putString(BaseListFragment.BUNDLE_BLOG_TYPE, catalog);
+        bundle.putString(BlogFragment.BUNDLE_BLOG_TYPE, catalog);
         return bundle;
     }
 
