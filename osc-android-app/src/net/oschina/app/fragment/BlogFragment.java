@@ -12,6 +12,7 @@ import net.oschina.app.bean.BlogList;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -21,16 +22,29 @@ import android.widget.AdapterView;
  * @author kymjs(kymjs123@gmail.com)
  */
 public class BlogFragment extends BaseListFragment {
+	
+	public static final String BUNDLE_BLOG_TYPE = "BUNDLE_BLOG_TYPE";
 
     protected static final String TAG = BlogFragment.class.getSimpleName();
     private static final String CACHE_KEY_PREFIX = "bloglist_";
 
+    private String blogType;
+    
     @Override
     protected ListBaseAdapter getListAdapter() {
         return new BlogAdapter();
     }
 
-    /**
+    @Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		Bundle args = getArguments();
+		if (args != null) {
+			blogType = args.getString(BUNDLE_BLOG_TYPE);
+		}
+	}
+
+	/**
      * 获取当前展示页面的缓存数据
      */
     @Override

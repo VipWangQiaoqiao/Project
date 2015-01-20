@@ -19,7 +19,7 @@ import android.view.ViewGroup;
  * @created 2014年9月25日 上午11:18:46
  * 
  */
-public abstract class BaseFragment extends Fragment implements
+public class BaseFragment extends Fragment implements
         android.view.View.OnClickListener, BaseFragmentInterface {
     protected static final int STATE_NONE = 0;
     protected static final int STATE_REFRESH = 1;
@@ -99,4 +99,19 @@ public abstract class BaseFragment extends Fragment implements
         }
         return null;
     }
+
+	@Override
+	public void initView(View view) {
+		
+	}
+
+	@Override
+	public void initData() {
+		
+	}
+
+	@Override
+	public void onClick(View v) {
+		
+	}
 }

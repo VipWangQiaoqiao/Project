@@ -59,7 +59,7 @@ public class BlogAdapter extends ListBaseAdapter {
 	    String description = blog.getBody();
 		if (null != description && !StringUtils.isEmpty(description)) {
 			vh.description.setVisibility(View.VISIBLE);
-			vh.description.setText(description);
+			vh.description.setText(description.trim());
 		}
 		
 		vh.source.setText(blog.getAuthor());
