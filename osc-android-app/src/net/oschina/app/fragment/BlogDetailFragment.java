@@ -23,6 +23,7 @@ import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
+import net.oschina.app.util.URLsUtils;
 import net.oschina.app.util.XmlUtils;
 import android.app.Activity;
 import android.os.Bundle;
@@ -267,6 +268,15 @@ public class BlogDetailFragment extends BaseDetailFragment implements
         return mBlog != null ? FavoriteList.TYPE_BLOG : -1;
     }
 
+	@Override
+	protected String getShareUrl() {
+		return mBlog != null ? URLsUtils.URL_MOBILE + "blog/" + mBlog.getId() : null;
+	}
+	
+	@Override
+	protected String getRepotrUrl() {
+		return mBlog != null ? mBlog.getUrl() : "";
+	}
     @Override
     protected String getShareTitle() {
         return getString(R.string.share_title_blog);
@@ -275,16 +285,6 @@ public class BlogDetailFragment extends BaseDetailFragment implements
     @Override
     protected String getShareContent() {
         return mBlog != null ? mBlog.getTitle() : null;
-    }
-
-    @Override
-    protected String getShareUrl() {
-        return mBlog != null ? mBlog.getUrl() : null;
-    }
-
-    @Override
-    protected String getRepotrUrl() {
-        return mBlog != null ? mBlog.getUrl() : "";
     }
 
     @Override
