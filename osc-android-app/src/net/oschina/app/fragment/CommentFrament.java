@@ -107,7 +107,12 @@ public class CommentFrament extends BaseListFragment implements
         mEmojiFragment.setEmojiTextListener(this);
         trans.replace(R.id.emoji_container, mEmojiFragment);
         trans.commit();
-        activity.findViewById(R.id.emoji_container).setVisibility(View.VISIBLE);
+        if (activity != null) {
+            View view = activity.findViewById(R.id.emoji_container);
+            if (view != null) {
+                view.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     protected int getLayoutRes() {
