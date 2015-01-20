@@ -14,17 +14,22 @@ import android.view.View;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.api.remote.OSChinaTeamApi;
+import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseViewPagerFragment;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamCatalog;
 import net.oschina.app.team.bean.TeamCatalogList;
-import net.oschina.app.team.fragment.IssueListFragment;
+import net.oschina.app.team.bean.TeamProject;
+import net.oschina.app.team.fragment.TeamIssueListFragment;
+import net.oschina.app.team.fragment.TeamProjectSelectPopupWindow;
+import net.oschina.app.team.fragment.TeamProjectSelectPopupWindow.TeamProjectPopupWindowCallBack;
+import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.TLog;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.XmlUtils;
 
 /** 
- * 
+ * Team 任务列表viewpager
  * 
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @version 创建时间：2015年1月14日 下午2:18:25 
@@ -37,7 +42,11 @@ public class TeamIssueViewPageFragment extends BaseViewPagerFragment {
 	
 	private TeamCatalogList mCatalogList;
 	
-	private int mProjectId = 442;
+	private int mTeamId;
+	
+	private int mProjectId;
+	
+	private TeamProjectSelectPopupWindow mProjectsDialog;
 	
 	private AsyncHttpResponseHandler handler = new AsyncHttpResponseHandler() {
 		
@@ -87,8 +96,7 @@ public class TeamIssueViewPageFragment extends BaseViewPagerFragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.team_issue_project_list:
-			mProjectId = 0;
-			sendRequestCatalogList();
+			showProjectsSelectDialog();
 			break;
 
 		default:
@@ -96,13 +104,67 @@ public class TeamIssueViewPageFragment extends BaseViewPagerFragment {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	private TeamProjectPopupWindowCallBack mCallBack = new TeamProjectPopupWindowCallBack() {
+		
+		@Override
+		public void callBack(TeamProject teamProject) {
+			mProjectId = teamProject.getGit().getId();
+			sendRequestCatalogList();
+		}
+	};
+	
+	private void showProjectsSelectDialog() {
+		if (mProjectsDialog == null) {
+			mProjectsDialog = new TeamProjectSelectPopupWindow(getActivity(), mTeam, mCallBack);
+		}
+		mProjectsDialog.showAsDropDown(((BaseActivity)getActivity()).getActionBar().getCustomView());
+	}
+	
+	@Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = getActivity().getIntent().getExtras();
+        if (bundle != null) {
+        	Team team = (Team) bundle.getSerializable(TeamMainActivity.BUNDLE_KEY_TEAM);
+        	if (team != null) {
+        		mTeam = team;
+        		mTeamId = StringUtils.toInt(mTeam.getId());
+        	}
+        }
+        setHasOptionsMenu(true);
+    }
 
 	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		setHasOptionsMenu(true);
+	protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
+		sendRequestCatalogList();
 	}
-
+	
+	private void sendRequestCatalogList() {
+		OSChinaTeamApi.getTeamCatalogIssueList(253900, mTeamId, mProjectId, "", handler);
+	}
+	
+	private void addCatalogList() {
+		// 加入一个为指定列表
+		if (mCatalogList != null) {
+			mCatalogList.getList().add(0, getUnCatalog());
+		}
+		
+		if (mCatalogList != null && !mCatalogList.getList().isEmpty()
+				&& mTabsAdapter != null) {
+			for (TeamCatalog catalog : mCatalogList.getList()) {
+				mTabsAdapter.addTab(catalog.getTitle(), catalog.getTitle(), TeamIssueListFragment.class, null);
+			}
+			mTabsAdapter.notifyDataSetChanged();
+		}
+	}
+	
+	private TeamCatalog getUnCatalog() {
+		TeamCatalog catalog = new TeamCatalog();
+		catalog.setTitle("未指定列表");
+		return catalog;
+	}
+	
 	@Override
 	public void onClick(View v) {
 
@@ -116,25 +178,5 @@ public class TeamIssueViewPageFragment extends BaseViewPagerFragment {
 	@Override
 	public void initData() {
 
-	}
-
-	@Override
-	protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
-		//adapter.addTab("未指定列表", "", IssueListFragment.class, null);
-		sendRequestCatalogList();
-	}
-	
-	private void sendRequestCatalogList() {
-		OSChinaTeamApi.getTeamCatalogIssueList(253900, 12481, mProjectId, "", handler);
-	}
-	
-	private void addCatalogList() {
-		if (mCatalogList != null && !mCatalogList.getList().isEmpty()
-				&& mTabsAdapter != null) {
-			for (TeamCatalog catalog : mCatalogList.getList()) {
-				mTabsAdapter.addTab(catalog.getTitle(), catalog.getTitle(), IssueListFragment.class, null);
-			}
-			mTabsAdapter.notifyDataSetChanged();
-		}
 	}
 }

@@ -11,6 +11,7 @@ import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.team.adapter.SelectTeamAdapter;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamList;
+import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
@@ -85,6 +86,8 @@ public class SelectTeamFragment extends BaseFragment {
                 Bundle bundle = new Bundle();
                 // key是个历史遗留问题。。。
                 bundle.putInt(MyInformationFragment.TEAM_LIST_KEY, position);
+                // 将team对象传递到teamMainActivity
+                bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_TEAM, datas.get(position));
                 UIHelper.showTeamMainActivity(aty, bundle);
                 // UIHelper.showSimpleBack(aty, SimpleBackPage.DYNAMIC, bundle);
             }

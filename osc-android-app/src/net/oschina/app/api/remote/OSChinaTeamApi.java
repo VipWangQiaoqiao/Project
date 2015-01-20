@@ -25,7 +25,6 @@ public class OSChinaTeamApi {
 		ApiHttpClient.get("action/api/team_project_list", params, handler);
 	}
 	
-	
 	/**
 	 * 获取某项目的任务列表
 	 * 
