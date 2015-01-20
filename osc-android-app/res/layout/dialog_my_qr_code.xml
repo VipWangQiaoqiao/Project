@@ -2,21 +2,41 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:layout_gravity="center"
+    android:background="@color/white"
     android:gravity="center"
-    android:background="@color/white" >
-    
+    android:orientation="vertical" >
+
     <ImageView
         android:id="@+id/iv_qr_code"
         android:layout_width="250dp"
         android:layout_height="250dp"
-        android:contentDescription="@null"/>
-    
-    <TextView 
-        android:layout_width="wrap_content"
+        android:contentDescription="@null" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/qr_code_tip"
-        android:padding="@dimen/space_10"
-        android:textColor="@color/main_gray"/>
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingTop="@dimen/space_10"
+            android:text="@string/qr_code_tip"
+            android:textColor="@color/main_gray" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingBottom="@dimen/space_10"
+            android:text="@string/qr_code_tip2"
+            android:textColor="@color/main_gray" />
+    </LinearLayout>
+
 </LinearLayout>
