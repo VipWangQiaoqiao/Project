@@ -62,8 +62,6 @@ public abstract class BaseListFragment extends BaseFragment implements
 
     protected int mCatalog = 1;
 
-    protected String softwareType = "recommend";
-
     private AsyncTask<String, Void, ListEntity<? extends Entity>> mCacheTask;
     private ParserTask mParserTask;
 
