@@ -2,8 +2,8 @@ package net.oschina.app.ui;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.SimpleBackPage;
-import net.oschina.app.fragment.NoteEditFragment;
 import net.oschina.app.fragment.TweetPubFragment;
+import net.oschina.app.team.fragment.NoteEditFragment;
 import net.oschina.app.util.UIHelper;
 import android.annotation.SuppressLint;
 import android.app.Dialog;

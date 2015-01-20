@@ -1,4 +1,4 @@
-package net.oschina.app.fragment;
+package net.oschina.app.team.fragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -38,7 +38,7 @@ import butterknife.InjectView;
 /**
  * 便签编辑界面
  * 
- * @author kymjs(kymjs123@gmail.com)
+ * @author kymjs (https://github.com/kymjs)
  * 
  */
 public class NoteEditFragment extends BaseFragment implements OnTouchListener {

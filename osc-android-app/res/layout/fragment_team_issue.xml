@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="10dp" >
+    android:layout_height="match_parent" >
 
     <LinearLayout
         android:id="@+id/myissue_title"
@@ -10,7 +9,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="10dp" >
+        android:padding="10dp"
+        android:visibility="gone" >
 
         <TextView
             android:id="@+id/team_myissue_name"
@@ -30,7 +30,7 @@
     <LinearLayout
         style="@style/fill_wrap"
         android:layout_below="@+id/myissue_title"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="35dp"
         android:orientation="vertical" >
 
         <RelativeLayout
@@ -48,20 +48,6 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/team_myissue_will"
-            style="@style/option_item_rl"
-            android:layout_margin="2dp" >
-
-            <TextView
-                style="@style/myissue_text"
-                android:text="未完成任务" />
-
-            <TextView
-                android:id="@+id/team_myissue_will_num"
-                style="@style/myissue_text_num" />
-        </RelativeLayout>
-
-        <RelativeLayout
             android:id="@+id/team_myissue_ed"
             style="@style/option_item_rl"
             android:layout_margin="2dp" >
@@ -72,6 +58,20 @@
 
             <TextView
                 android:id="@+id/team_myissue_ed_num"
+                style="@style/myissue_text_num" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/team_myissue_outdate"
+            style="@style/option_item_rl"
+            android:layout_margin="2dp" >
+
+            <TextView
+                style="@style/myissue_text"
+                android:text="已过期任务" />
+
+            <TextView
+                android:id="@+id/team_myissue_outdate_num"
                 style="@style/myissue_text_num" />
         </RelativeLayout>
 

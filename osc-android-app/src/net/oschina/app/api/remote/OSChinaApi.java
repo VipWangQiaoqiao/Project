@@ -14,6 +14,9 @@ import net.oschina.app.bean.Tweet;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TLog;
+
+import org.kymjs.kjframe.utils.KJLoger;
+
 import android.text.TextUtils;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -682,8 +685,9 @@ public class OSChinaApi {
     public static void teamDynamic(Team team, int page,
             AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
-        // int uid = AppContext.getInstance().getLoginUid();
-        // params.put("uid", uid);
+        int uid = AppContext.getInstance().getLoginUid();
+        KJLoger.debug("API_688===" + uid + "==" + team.getId());
+        params.put("uid", uid);
         params.put("teamid", team.getId());
         params.put("pageIndex", page + "");
         params.put("pageSize", 10);
@@ -719,6 +723,31 @@ public class OSChinaApi {
      */
     public static void getTeamUserInfo(String teamid, String uid,
             int pageIndex, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("teamid", teamid);
+        params.put("uid", uid);
+        params.put("pageIndex", pageIndex);
+        params.put("pageSize", 20);
+        ApiHttpClient.get("action/api/team_user_information", params, handler);
+    }
+
+    /**
+     * 获取我的任务中进行中、未完成、已完成等状态的数量
+     */
+    public static void getMyIssueState(String teamid, String uid,
+            AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("teamid", teamid);
+        params.put("uid", uid);
+        ApiHttpClient.get("action/api/team_user_issue_information", params,
+                handler);
+    }
+
+    /**
+     * 获取指定用户的动态
+     */
+    public static void getUserDynamic(String teamid, String uid, int pageIndex,
+            AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("teamid", teamid);
         params.put("uid", uid);

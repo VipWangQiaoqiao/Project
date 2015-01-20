@@ -1,11 +1,11 @@
-package net.oschina.app.adapter;
+package net.oschina.app.team.adapter;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.NotebookData;
-import net.oschina.app.fragment.NoteEditFragment;
+import net.oschina.app.team.fragment.NoteEditFragment;
 import net.oschina.app.widget.DragGridView.DragGridBaseAdapter;
 
 import org.kymjs.kjframe.utils.DensityUtils;
@@ -22,7 +22,7 @@ import android.widget.TextView;
 /**
  * 便签列表适配器
  * 
- * @author kymjs
+ * @author kymjs (https://github.com/kymjs)
  * 
  */
 public class NotebookAdapter extends BaseAdapter implements DragGridBaseAdapter {

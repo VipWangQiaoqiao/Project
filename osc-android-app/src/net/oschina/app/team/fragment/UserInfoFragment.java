@@ -2,10 +2,13 @@ package net.oschina.app.team.fragment;
 
 import java.io.InputStream;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.ListEntity;
+import net.oschina.app.team.adapter.DynamicAdapter;
 import net.oschina.app.team.adapter.TeamMemberAdapter;
 import net.oschina.app.team.bean.TeamMember;
 import net.oschina.app.ui.SimpleBackActivity;
@@ -75,7 +78,7 @@ public class UserInfoFragment extends BaseListFragment {
 
     @Override
     protected ListBaseAdapter getListAdapter() {
-        return null;
+        return new DynamicAdapter(aty);
     }
 
     @Override
@@ -89,5 +92,8 @@ public class UserInfoFragment extends BaseListFragment {
     }
 
     @Override
-    protected void sendRequestData() {}
+    protected void sendRequestData() {
+        OSChinaApi.getUserDynamic(teamId, AppContext.getInstance()
+                .getLoginUid() + "", mCurrentPage, mHandler);
+    }
 }

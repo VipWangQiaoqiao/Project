@@ -61,7 +61,7 @@ public class SelectTeamAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) v.getTag();
         }
-        holder.tv_name.setText(datas.get(position).getIdent());
+        holder.tv_name.setText(datas.get(position).getName());
         return v;
     }
 }

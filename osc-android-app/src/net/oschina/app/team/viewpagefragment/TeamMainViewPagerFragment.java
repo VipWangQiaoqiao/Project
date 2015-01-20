@@ -5,12 +5,13 @@ import net.oschina.app.base.BaseViewPagerFragment;
 import net.oschina.app.team.fragment.DynamicFragment;
 import net.oschina.app.team.fragment.MyIssueFragment;
 import net.oschina.app.team.fragment.TeamMemberFragment;
+import android.os.Bundle;
 import android.view.View;
 
 /**
  * Team主界面
  * 
- * @author kymjs
+ * @author kymjs (https://github.com/kymjs)
  * 
  */
 public class TeamMainViewPagerFragment extends BaseViewPagerFragment {
@@ -22,11 +23,12 @@ public class TeamMainViewPagerFragment extends BaseViewPagerFragment {
     // super.onCreateOptionsMenu(menu, inflater);
     // }
     //
-    // @Override
-    // public void onViewCreated(View view, Bundle savedInstanceState) {
-    // super.onViewCreated(view, savedInstanceState);
-    // setHasOptionsMenu(true);
-    // }
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        // setHasOptionsMenu(true);
+        mViewPager.setOffscreenPageLimit(2);
+    }
 
     @Override
     public void onClick(View v) {
