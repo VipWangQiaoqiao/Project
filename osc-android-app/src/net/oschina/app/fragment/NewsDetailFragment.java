@@ -58,7 +58,6 @@ public class NewsDetailFragment extends BaseDetailFragment implements
     private ToolbarFragment mToolBarFragment;
 
     private final OnClickListener mMoreListener = new View.OnClickListener() {
-
         @Override
         public void onClick(View v) {
             Activity act = getActivity();
@@ -110,7 +109,8 @@ public class NewsDetailFragment extends BaseDetailFragment implements
                 false);
 
         mNewsId = getActivity().getIntent().getIntExtra("news_id", 0);
-        mCommentCount = getActivity().getIntent().getIntExtra("comment_count", 0);
+        mCommentCount = getActivity().getIntent().getIntExtra("comment_count",
+                0);
         ButterKnife.inject(this, view);
         initViews(view);
         return view;
@@ -167,12 +167,19 @@ public class NewsDetailFragment extends BaseDetailFragment implements
     private void fillUI() {
         mTvTitle.setText(mNews.getTitle());
         mTvSource.setText(mNews.getAuthor());
+        mTvSource.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UIHelper.showUserCenter(getActivity(), mNews.getAuthorId(),
+                        mNews.getAuthor());
+            }
+        });
         mTvTime.setText(StringUtils.friendly_time(mNews.getPubDate()));
         if (mToolBarFragment != null) {
-        	if (mCommentCount <= 0) {
-        		mCommentCount = mNews.getCommentCount();
-        	}
-        	mToolBarFragment.setCommentCount(mCommentCount);
+            if (mCommentCount <= 0) {
+                mCommentCount = mNews.getCommentCount();
+            }
+            mToolBarFragment.setCommentCount(mCommentCount);
         }
         notifyFavorite(mNews.getFavorite() == 1);
     }
