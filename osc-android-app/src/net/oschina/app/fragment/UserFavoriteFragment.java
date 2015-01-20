@@ -28,7 +28,7 @@ public class UserFavoriteFragment extends BaseListFragment {
 
 	@Override
 	protected String getCacheKeyPrefix() {
-		return CACHE_KEY_PREFIX + userfavoriteType;
+		return CACHE_KEY_PREFIX + mCatalog;
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class UserFavoriteFragment extends BaseListFragment {
 
 	@Override
 	protected void sendRequestData() {
-		OSChinaApi.getFavoriteList(AppContext.getInstance().getLoginUid(), userfavoriteType, mCurrentPage, mHandler);
+		OSChinaApi.getFavoriteList(AppContext.getInstance().getLoginUid(), mCatalog, mCurrentPage, mHandler);
 	}
 
 	@Override

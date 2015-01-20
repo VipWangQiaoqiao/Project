@@ -36,7 +36,7 @@ public class OpensourceSoftwareFragment extends BaseViewPagerFragment {
 
 	private Bundle getBundle(String catalog) {
 		Bundle bundle = new Bundle();
-		bundle.putString(BaseListFragment.BUNDLE_SOFTWARE, catalog);
+		bundle.putString(SoftwareListFragment.BUNDLE_SOFTWARE, catalog);
 		return bundle;
 	}
 
