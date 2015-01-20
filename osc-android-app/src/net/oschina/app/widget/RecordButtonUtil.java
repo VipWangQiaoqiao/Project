@@ -69,10 +69,10 @@ public class RecordButtonUtil {
         initRecorder();
         try {
             mRecorder.prepare();
+            mRecorder.start();
         } catch (IOException e) {
-            e.printStackTrace();
+            AppContext.showToast("小屁孩不听你说话了,请返回重试");
         }
-        mRecorder.start();
     }
 
     /**

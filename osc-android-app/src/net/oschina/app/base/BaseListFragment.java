@@ -4,7 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.oschina.app.AppContext;
@@ -228,7 +228,8 @@ public abstract class BaseListFragment extends BaseTabFragment implements
         }
     }
 
-    private class CacheTask extends AsyncTask<String, Void, ListEntity<? extends Entity>> {
+    private class CacheTask extends
+            AsyncTask<String, Void, ListEntity<? extends Entity>> {
         private final WeakReference<Context> mContext;
 
         private CacheTask(Context context) {
@@ -299,16 +300,20 @@ public abstract class BaseListFragment extends BaseTabFragment implements
     };
 
     protected void executeOnLoadDataSuccess(List<? extends Entity> data) {
+        if (data == null) {
+            data = new ArrayList<Entity>();
+        }
+
         mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
         if (mCurrentPage == 0)
             mAdapter.clear();
-        
+
         for (int i = 0; i < data.size(); i++) {
-        	if (compareTo(mAdapter.getData(), data.get(i))) {
-        		data.remove(i);
-        	}
-		}
-        
+            if (compareTo(mAdapter.getData(), data.get(i))) {
+                data.remove(i);
+            }
+        }
+
         mAdapter.addData(data);
         if (data.size() == 0 && mState == STATE_REFRESH) {
             mErrorLayout.setErrorType(EmptyLayout.NODATA);
@@ -322,7 +327,7 @@ public abstract class BaseListFragment extends BaseTabFragment implements
         }
         mAdapter.notifyDataSetChanged();
     }
-    
+
     private boolean compareTo(List<? extends Entity> data, Entity enity) {
         int s = data.size();
         if (enity != null) {
