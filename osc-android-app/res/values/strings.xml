@@ -3,7 +3,7 @@
 
     <string name="app_name">开源中国</string>
     
-    <string name="main_tab_name_news">资讯</string>
+    <string name="main_tab_name_news">综合</string>
     <string name="main_tab_name_tweet">动弹</string>
     <string name="main_tab_name_quick">快速</string>
     <string name="main_tab_name_question">问答</string>
@@ -206,6 +206,7 @@
 	<string name="message_delete_tweet">是否删除该动弹?</string>
 	
 	<!-- software detail -->
+	<string name="software_author">软件作者:</string>
     <string name="software_license">开源协议 :</string>
     <string name="software_language">开发语言 :</string>
     <string name="software_os">操作系统 :</string>
