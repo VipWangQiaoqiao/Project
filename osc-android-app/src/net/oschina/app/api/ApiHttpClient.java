@@ -14,6 +14,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 public class ApiHttpClient {
+	
     public final static String HOST = "www.oschina.net";
     private static String API_URL = "http://www.oschina.net/%s";
     // public final static String HOST = "192.168.1.113";

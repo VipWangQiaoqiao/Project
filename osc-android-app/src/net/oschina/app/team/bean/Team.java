@@ -85,7 +85,7 @@ public class Team implements Serializable {
     }
 
     @XStreamAlias("about")
-    public class About {
+    public class About implements Serializable {
         @XStreamAlias("createTime")
         String sign;
         @XStreamAlias("address")

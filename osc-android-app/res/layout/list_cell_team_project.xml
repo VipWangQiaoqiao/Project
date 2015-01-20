@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/fill_wrap"
-    android:padding="@dimen/space_10"
     android:orientation="vertical"
+    android:padding="@dimen/space_10"
     android:background="@drawable/list_item_background" >
     
     <TextView 
-        android:id="@+id/tv_title"
-        style="@style/list_text_title"
-        android:text="任务"/>
+        android:id="@+id/tv_project_name"
+        style="@style/wrap_wrap"
+        android:text="项目名" />
 
 </LinearLayout>

@@ -17,6 +17,7 @@ import net.oschina.app.bean.Entity;
 @SuppressWarnings("serial")
 @XStreamAlias("project")
 public class TeamProject extends Entity {
+	
 	@XStreamAlias("source")
 	private String source;
 	
@@ -24,7 +25,7 @@ public class TeamProject extends Entity {
 	private String team;
 	
 	@XStreamAlias("git")
-	private Git git;
+	private TeamGit git;
 	
 	public String getSource() {
 		return source;
@@ -42,70 +43,11 @@ public class TeamProject extends Entity {
 		this.team = team;
 	}
 
-	public Git getGit() {
+	public TeamGit getGit() {
 		return git;
 	}
 
-	public void setGit(Git git) {
+	public void setGit(TeamGit git) {
 		this.git = git;
-	}
-
-	@XStreamAlias("git")
-	class Git implements Serializable {
-		
-		@XStreamAlias("id")
-		private int id;
-		
-		@XStreamAlias("name")
-		private String name;
-		
-		@XStreamAlias("path")
-		private String path;
-		
-		@XStreamAlias("ownerName")
-		private String ownerName;
-		
-		@XStreamAlias("ownerUserName")
-		private String ownerUserName;
-
-		public int getId() {
-			return id;
-		}
-
-		public void setId(int id) {
-			this.id = id;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		public String getPath() {
-			return path;
-		}
-
-		public void setPath(String path) {
-			this.path = path;
-		}
-
-		public String getOwnerName() {
-			return ownerName;
-		}
-
-		public void setOwnerName(String ownerName) {
-			this.ownerName = ownerName;
-		}
-
-		public String getOwnerUserName() {
-			return ownerUserName;
-		}
-
-		public void setOwnerUserName(String ownerUserName) {
-			this.ownerUserName = ownerUserName;
-		}
 	}
 }
