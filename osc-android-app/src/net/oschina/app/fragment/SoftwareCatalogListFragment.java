@@ -3,12 +3,11 @@ package net.oschina.app.fragment;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.SoftwareAdapter;
 import net.oschina.app.adapter.SoftwareCatalogListAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.base.BaseTabFragment;
+import net.oschina.app.base.BaseFragment;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.SoftwareCatalogList;
 import net.oschina.app.bean.SoftwareCatalogList.SoftwareType;
@@ -34,7 +33,7 @@ import android.widget.ListView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
-public class SoftwareCatalogListFragment extends BaseTabFragment implements
+public class SoftwareCatalogListFragment extends BaseFragment implements
 		OnItemClickListener, OnScrollListener {
 	protected static final int STATE_NONE = 0;
 	protected static final int STATE_REFRESH = 1;
@@ -45,14 +44,14 @@ public class SoftwareCatalogListFragment extends BaseTabFragment implements
 	private final static int SCREEN_SOFTWARE = 2;
 
 	private static ScrollLayout mScrollLayout;
-	private ListView mLvCatalog, mLvTag, mLvSoftware;
-	private EmptyLayout mEmptyView;
-	private SoftwareCatalogListAdapter mCatalogAdapter, mTagAdapter;
-	private SoftwareAdapter mSoftwareAdapter;
-	private int mState = STATE_NONE;
+	private static ListView mLvCatalog, mLvTag, mLvSoftware;
+	private static EmptyLayout mEmptyView;
+	private static SoftwareCatalogListAdapter mCatalogAdapter, mTagAdapter;
+	private static SoftwareAdapter mSoftwareAdapter;
+	private static int mState = STATE_NONE;
 	private static int curScreen = SCREEN_CATALOG;// 默认当前屏幕
-	private int mCurrentTag;
-	private int mCurrentPage;
+	private static int mCurrentTag;
+	private static int mCurrentPage;
 
 	private AsyncHttpResponseHandler mCatalogHandler = new AsyncHttpResponseHandler() {
 
@@ -252,6 +251,8 @@ public class SoftwareCatalogListFragment extends BaseTabFragment implements
 
 	@Override
 	public boolean onBackPressed() {
+		mEmptyView.setErrorType(EmptyLayout.HIDE_LAYOUT);
+		mCurrentPage = 0;
 		switch (curScreen) {
 		case SCREEN_SOFTWARE:
 			curScreen = SCREEN_TAG;

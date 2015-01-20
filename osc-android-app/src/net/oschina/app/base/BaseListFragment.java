@@ -39,7 +39,7 @@ import butterknife.InjectView;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 @SuppressLint("NewApi")
-public abstract class BaseListFragment extends BaseTabFragment implements
+public abstract class BaseListFragment extends BaseFragment implements
         SwipeRefreshLayout.OnRefreshListener, OnItemClickListener,
         OnScrollListener {
 
