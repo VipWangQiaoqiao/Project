@@ -29,7 +29,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -39,6 +38,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
  * 动态fragment
  * 
  * @author FireAnt（http://my.oschina.net/LittleDY）
+ * @author kymjs (https://github.com/kymjs)
  * @created 2014年10月22日 下午3:35:43
  * 
  */
@@ -47,7 +47,7 @@ public class ActiveFragment extends BaseListFragment implements
 
     protected static final String TAG = ActiveFragment.class.getSimpleName();
     private static final String CACHE_KEY_PREFIX = "active_list";
-    private boolean mIsWatingLogin;
+    private boolean mIsWatingLogin; // 还没登陆
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -80,15 +80,13 @@ public class ActiveFragment extends BaseListFragment implements
             mState = STATE_REFRESH;
             requestData(false);
         }
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                refreshNotice();
-            }
-        }, 800);
+        refreshNotice();
         super.onResume();
     }
 
+    /**
+     * 开始刷新请求
+     */
     private void refreshNotice() {
         Notice notice = MainActivity.mNotice;
         if (notice == null) {
@@ -100,12 +98,6 @@ public class ActiveFragment extends BaseListFragment implements
                 && mCatalog == ActiveList.CATALOG_COMMENT) {
             onRefresh();
         }
-    }
-
-    @Override
-    public void onRefresh() {
-        super.onRefresh();
-        NoticeViewPagerFragment.sRefreshed[NoticeViewPagerFragment.sCurrentPage] = true;
     }
 
     @Override
@@ -139,11 +131,10 @@ public class ActiveFragment extends BaseListFragment implements
         mListView.setOnItemLongClickListener(this);
         mListView.setOnItemClickListener(this);
         mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 if (AppContext.getInstance().isLogin()) {
-                	mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+                    mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
                     requestData(false);
                 } else {
                     UIHelper.showLoginActivity(getActivity());
@@ -185,18 +176,11 @@ public class ActiveFragment extends BaseListFragment implements
     @Override
     protected void onRefreshNetworkSuccess() {
         if (AppContext.getInstance().isLogin()) {
-            int type = -100;
-            int currentPage = 0;
-            if (mCatalog == ActiveList.CATALOG_ATME) {
-                type = Notice.TYPE_ATME;
-                currentPage = 0;
-            } else if (mCatalog == ActiveList.CATALOG_COMMENT) {
-                type = Notice.TYPE_COMMENT;
-                currentPage = 1;
-            }
-            if (type != -100
-                    && (NoticeViewPagerFragment.sRefreshed[currentPage] || currentPage == NoticeViewPagerFragment.sCurrentPage)) {
-                NoticeUtils.clearNotice(type);
+            if (1 == NoticeViewPagerFragment.sCurrentPage
+                    || NoticeViewPagerFragment.sShowCount[1] > 0) { // 如果当前显示的是评论页，则发送评论页已被查看的Http请求
+                NoticeUtils.clearNotice(Notice.TYPE_COMMENT);
+            } else {
+                NoticeUtils.clearNotice(Notice.TYPE_ATME);
             }
         }
     }
@@ -225,8 +209,7 @@ public class ActiveFragment extends BaseListFragment implements
             public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
                 dialog.dismiss();
-                TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(active
-                        .getMessage()));
+                TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(active.getMessage()));
             }
         });
         dialog.show();
