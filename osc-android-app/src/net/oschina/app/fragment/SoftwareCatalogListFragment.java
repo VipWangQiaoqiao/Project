@@ -281,7 +281,7 @@ public class SoftwareCatalogListFragment extends BaseFragment implements
 		int adapterState = ListBaseAdapter.STATE_EMPTY_ITEM;
         if (mSoftwareAdapter.getCount() == 0 && mState == STATE_NONE) {
         	mEmptyView.setErrorType(EmptyLayout.NODATA);
-        } else if (data.size() == 0) {
+        } else if (data.size() == 0 || (data.size() < 20 && mCurrentPage == 0)) {
         	adapterState = ListBaseAdapter.STATE_NO_MORE;
         } else {
         	adapterState = ListBaseAdapter.STATE_LOAD_MORE;
