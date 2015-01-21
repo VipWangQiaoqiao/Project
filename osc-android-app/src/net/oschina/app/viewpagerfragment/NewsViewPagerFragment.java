@@ -38,7 +38,7 @@ public class NewsViewPagerFragment extends BaseViewPagerFragment implements OnTa
 	
     @Override
 	protected void setScreenPageLimit() {
-		mViewPager.setOffscreenPageLimit(4);
+		mViewPager.setOffscreenPageLimit(3);
 	}
 	
     /**

@@ -151,7 +151,7 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
     
     @Override
 	protected void setScreenPageLimit() {
-		mViewPager.setOffscreenPageLimit(4);
+		mViewPager.setOffscreenPageLimit(3);
 	}
 
 	@Override
