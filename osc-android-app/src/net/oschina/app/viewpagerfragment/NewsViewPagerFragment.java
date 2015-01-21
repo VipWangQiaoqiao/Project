@@ -36,6 +36,11 @@ public class NewsViewPagerFragment extends BaseViewPagerFragment implements OnTa
 		return bundle;
 	}
 	
+    @Override
+	protected void setScreenPageLimit() {
+		mViewPager.setOffscreenPageLimit(4);
+	}
+	
     /**
      * 基类会根据不同的catalog展示相应的数据
      * 
