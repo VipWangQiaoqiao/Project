@@ -183,8 +183,13 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
         initData();
         initView(view);
     }
-
+    
     @Override
+	protected void setScreenPageLimit() {
+		mViewPager.setOffscreenPageLimit(4);
+	}
+
+	@Override
     public void onDestroy() {
         super.onDestroy();
         getActivity().unregisterReceiver(mNoticeReceiver);

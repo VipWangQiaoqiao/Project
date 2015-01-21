@@ -62,8 +62,6 @@ public abstract class BaseListFragment extends BaseFragment implements
 
     protected int mCatalog = 1;
 
-    protected String softwareType = "recommend";
-
     private AsyncTask<String, Void, ListEntity<? extends Entity>> mCacheTask;
     private ParserTask mParserTask;
 
@@ -295,8 +293,9 @@ public abstract class BaseListFragment extends BaseFragment implements
         }
 
         mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-        if (mCurrentPage == 0)
-            mAdapter.clear();
+        if (mCurrentPage == 0) {
+        	mAdapter.clear(); 
+        }
 
         for (int i = 0; i < data.size(); i++) {
         	if (compareTo(mAdapter.getData(), data.get(i))) {
@@ -307,8 +306,9 @@ public abstract class BaseListFragment extends BaseFragment implements
         int adapterState = ListBaseAdapter.STATE_EMPTY_ITEM;
         if (mAdapter.getCount() == 0 && mState == STATE_NONE) {
         	mErrorLayout.setErrorType(EmptyLayout.NODATA);
-        } else if (data.size() == 0) {
+        } else if (data.size() == 0 || (data.size() < getPageSize() && mCurrentPage == 0)) {
         	adapterState = ListBaseAdapter.STATE_NO_MORE;
+        	mAdapter.notifyDataSetChanged();
         } else {
         	adapterState = ListBaseAdapter.STATE_LOAD_MORE;
         }
