@@ -35,6 +35,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -70,6 +71,8 @@ public class BrowserFragment extends BaseFragment {
     ImageView mImgSystemBrowser;
     @InjectView(R.id.browser_bottom)
     LinearLayout mLayoutBottom;
+    @InjectView(R.id.progress)
+    ProgressBar mProgress;
 
     public static final String BROWSER_KEY = "browser_url";
     public static final String DEFAULT = "http://www.oschina.net/";
@@ -347,7 +350,9 @@ public class BrowserFragment extends BaseFragment {
      * @param url
      *            链接地址
      */
-    protected void onUrlLoading(WebView view, String url) {}
+    protected void onUrlLoading(WebView view, String url) {
+        mProgress.setVisibility(View.VISIBLE);
+    }
 
     /**
      * 链接载入成功后会被调用
@@ -359,6 +364,7 @@ public class BrowserFragment extends BaseFragment {
      */
     protected void onUrlFinished(WebView view, String url) {
         mCurrentUrl = url;
+        mProgress.setVisibility(View.GONE);
     }
 
     /**
@@ -419,11 +425,14 @@ public class BrowserFragment extends BaseFragment {
         public void onProgressChanged(WebView view, int newProgress) { // 进度
             super.onProgressChanged(view, newProgress);
             // if (newProgress == 100) {
-            // mProgressBar.setVisibility(View.GONE);
+            // mProgress.setVisibility(View.GONE);
             // } else {
-            // mProgressBar.setVisibility(View.VISIBLE);
-            // mProgressBar.setProgress(newProgress);
+            // mProgress.setVisibility(View.VISIBLE);
+            // mProgress.setProgress(newProgress);
             // }
+            if (newProgress > 90) {
+                mProgress.setVisibility(View.GONE);
+            }
         }
     }
 
