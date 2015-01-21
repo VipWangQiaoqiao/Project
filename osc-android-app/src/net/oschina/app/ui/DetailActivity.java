@@ -124,7 +124,7 @@ public class DetailActivity extends BaseActivity implements
 			mViewToolBarContaienr.setVisibility(View.VISIBLE);
 		}
 
-		trans.commit();
+		trans.commitAllowingStateLoss();
 	}
 
 	@Override

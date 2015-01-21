@@ -12,14 +12,22 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @SuppressWarnings("serial")
 @XStreamAlias("friend")
 public class Friend extends Entity {
+	
     @XStreamAlias("userid")
     private int userid;
+    
     @XStreamAlias("name")
     private String name;
+    
+    @XStreamAlias("from")
+    private String from;
+    
     @XStreamAlias("portrait")
     private String portrait;
+    
     @XStreamAlias("expertise")
     private String expertise;
+    
     @XStreamAlias("gender")
     private int gender;
 
@@ -39,7 +47,15 @@ public class Friend extends Entity {
         this.name = name;
     }
 
-    public String getPortrait() {
+    public String getFrom() {
+		return from;
+	}
+
+	public void setFrom(String from) {
+		this.from = from;
+	}
+
+	public String getPortrait() {
         return portrait;
     }
 

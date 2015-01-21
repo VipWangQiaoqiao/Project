@@ -58,7 +58,7 @@ public class SimpleBackActivity extends BaseActivity {
             FragmentTransaction trans = getSupportFragmentManager()
                     .beginTransaction();
             trans.replace(R.id.container, fragment, TAG);
-            trans.commit();
+            trans.commitAllowingStateLoss();
 
             mFragment = new WeakReference<Fragment>(fragment);
         } catch (Exception e) {
