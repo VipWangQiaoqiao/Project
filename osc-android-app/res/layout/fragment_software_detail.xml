@@ -22,7 +22,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical" >
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/list_item_background_normal"
@@ -40,13 +40,24 @@
 
                     <TextView
                         android:id="@+id/tv_title"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        style="@style/wrap_wrap"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@id/iv_logo"
                         android:textColor="@color/main_black"
                         android:textSize="@dimen/text_size_18"
                         android:textStyle="bold" />
-                </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/iv_recommended"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/space_8"
+                        android:background="@drawable/ic_soft_recommend"
+                        android:visibility="gone"
+                        android:contentDescription="@null" />
+                </RelativeLayout>
 
                 <WebView
                     android:id="@+id/webview"
@@ -64,6 +75,36 @@
                     android:layout_height="wrap_content"
                     android:background="@color/list_item_background_normal"
                     android:orientation="vertical" >
+
+                    <LinearLayout
+                        android:id="@+id/ll_author"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/space_8" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/space_8"
+                            android:text="@string/software_author"
+                            android:textColor="@color/main_gray"
+                            android:textSize="@dimen/text_size_16" />
+
+                        <TextView
+                            android:id="@+id/tv_software_author"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/lightblue"
+                            android:textSize="@dimen/text_size_16" />
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/line_author"
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/list_divider_color" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -171,6 +212,7 @@
                             android:textColor="@color/main_black"
                             android:textSize="@dimen/text_size_16" />
                     </LinearLayout>
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1px"

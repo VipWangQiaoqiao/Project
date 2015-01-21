@@ -60,7 +60,7 @@ public class PostAdapter extends ListBaseAdapter {
 		vh.description.setVisibility(View.GONE);
 		if (null != body || !StringUtils.isEmpty(body)) {
 			vh.description.setVisibility(View.VISIBLE);
-			vh.description.setText(HTMLUtil.replaceTag(post.getBody()));
+			vh.description.setText(HTMLUtil.replaceTag(post.getBody()).trim());
 		}
 		
         if (AppContext.isOnReadedPostList(PostList.PREF_READED_POST_LIST, post.getId() + "")) {

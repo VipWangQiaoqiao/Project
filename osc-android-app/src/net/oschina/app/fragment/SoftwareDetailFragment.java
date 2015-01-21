@@ -21,6 +21,7 @@ import net.oschina.app.interf.EmojiFragmentControl;
 import net.oschina.app.interf.ToolbarEmojiVisiableControl;
 import net.oschina.app.interf.ToolbarFragmentControl;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
@@ -68,8 +69,20 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
 	@InjectView(R.id.tv_software_recordtime)
 	TextView mTvRecordTime;
 	
+	@InjectView(R.id.iv_recommended)
+	ImageView mIvRecommended;
+	
 	@InjectView(R.id.tv_title)
 	TextView mTvTitle;
+	
+	@InjectView(R.id.tv_software_author)
+	TextView mTvAuthor;
+	
+	@InjectView(R.id.ll_author)
+	View llAuthor;
+	
+	@InjectView(R.id.line_author)
+	View lineAuthor;
 	
 	@InjectView(R.id.webview)
 	WebView mWebView;
@@ -147,6 +160,7 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
 		view.findViewById(R.id.btn_software_index).setOnClickListener(this);
 		view.findViewById(R.id.btn_software_download).setOnClickListener(this);
 		view.findViewById(R.id.btn_software_document).setOnClickListener(this);
+		mTvAuthor.setOnClickListener(this);
 	}
 
 	@Override
@@ -184,6 +198,18 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
 	}
 
 	private void fillUI() {
+		
+		if (mSoftware.getAuthor() != null && !StringUtils.isEmpty(mSoftware.getAuthor())) {
+			mTvAuthor.setText(mSoftware.getAuthor());
+		} else {
+			llAuthor.setVisibility(View.GONE);
+			lineAuthor.setVisibility(View.GONE);
+		}
+		
+		if (mSoftware.getRecommended() > 0) {
+			mIvRecommended.setVisibility(View.VISIBLE);
+		}
+		
 		mTvTitle.setText(mSoftware.getTitle());
 		mTvLicense.setText(mSoftware.getLicense());
 		mTvLanguage.setText(mSoftware.getLanguage());
@@ -215,13 +241,21 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
 
 	@Override
 	public void onClick(View v) {
-		final int id = v.getId();
-		if (id == R.id.btn_software_index) {
+		switch (v.getId()) {
+		case R.id.btn_software_index:
 			UIHelper.openBrowser(v.getContext(), mSoftware.getHomepage());
-		} else if (id == R.id.btn_software_download) {
+			break;
+		case R.id.btn_software_download:
 			UIHelper.openBrowser(v.getContext(), mSoftware.getDownload());
-		} else if (id == R.id.btn_software_document) {
+			break;
+		case R.id.btn_software_document:
 			UIHelper.openBrowser(v.getContext(), mSoftware.getDocument());
+			break;
+		case R.id.tv_software_author:
+			UIHelper.showUserCenter(getActivity(), mSoftware.getAuthorId(), mSoftware.getAuthor());
+			break;
+		default:
+			break;
 		}
 	}
 

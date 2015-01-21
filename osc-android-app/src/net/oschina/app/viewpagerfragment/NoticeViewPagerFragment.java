@@ -28,15 +28,15 @@ import android.view.View;
  * 消息中心页面
  * 
  * @author FireAnt（http://my.oschina.net/LittleDY）
+ * @author kymjs (https://github.com/kymjs)
  * @created 2014年9月25日 下午2:21:52
  * 
  */
 public class NoticeViewPagerFragment extends BaseViewPagerFragment {
 
     public BadgeView mBvAtMe, mBvComment, mBvMsg, mBvFans;
-    public static boolean[] sRefreshed = new boolean[] { false, false, false,
-            false };
     public static int sCurrentPage = 0;
+    public static int[] sShowCount = new int[] { 0, 0, 0, 0 }; // 当前界面显示了多少次
     private BroadcastReceiver mNoticeReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -44,6 +44,9 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
         }
     };
 
+    /**
+     * 界面每次显示，去重置tip的显示
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -55,8 +58,8 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
      * 设置tip
      */
     private void setNoticeTip() {
-        if (MainActivity.mNotice != null) {
-            Notice notice = MainActivity.mNotice;
+        Notice notice = MainActivity.mNotice;
+        if (notice != null) {
             changeTip(mBvAtMe, notice.getAtmeCount());// @我
             changeTip(mBvComment, notice.getReviewCount());// 评论
             changeTip(mBvMsg, notice.getMsgCount());// 留言
@@ -94,7 +97,29 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
     }
 
     /**
-     * 切换到有tip的page
+     * 当前tip是否在显示
+     * 
+     * @param which
+     *            哪个界面的tip
+     * @return
+     */
+    private boolean tipIsShow(int which) {
+        switch (which) {
+        case 0:
+            return mBvAtMe.isShown();
+        case 1:
+            return mBvComment.isShown();
+        case 2:
+            return mBvMsg.isShown();
+        case 3:
+            return mBvFans.isShown();
+        default:
+            return false;
+        }
+    }
+
+    /**
+     * 首次进入，切换到有tip的page
      */
     private void changePagers() {
         Notice notice = MainActivity.mNotice;
@@ -103,20 +128,30 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
         }
         if (notice.getAtmeCount() != 0) {
             mViewPager.setCurrentItem(0);
+            sCurrentPage = 0;
+            refreshPage(0);
         } else if (notice.getReviewCount() != 0) {
             mViewPager.setCurrentItem(1);
+            sCurrentPage = 1;
+            refreshPage(1);
         } else if (notice.getMsgCount() != 0) {
             mViewPager.setCurrentItem(2);
+            sCurrentPage = 2;
+            refreshPage(2);
         } else if (notice.getNewFansCount() != 0) {
             mViewPager.setCurrentItem(3);
+            sCurrentPage = 3;
+            refreshPage(3);
         }
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        // 注册接收者接受tip广播
         IntentFilter filter = new IntentFilter(Constants.INTENT_ACTION_NOTICE);
         getActivity().registerReceiver(mNoticeReceiver, filter);
+
         mBvAtMe = new BadgeView(getActivity(), mTabStrip.getBadgeView(0));
         mBvAtMe.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
         mBvAtMe.setBadgePosition(BadgeView.POSITION_CENTER);
@@ -141,15 +176,20 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
         mBvFans.setGravity(Gravity.CENTER);
         mBvFans.setBackgroundResource(R.drawable.notification_bg);
 
-        mTabStrip.getBadgeView(0).setVisibility(View.VISIBLE);
+        mTabStrip.getBadgeView(0).setVisibility(View.GONE);
         mTabStrip.getBadgeView(1).setVisibility(View.VISIBLE);
         mTabStrip.getBadgeView(2).setVisibility(View.VISIBLE);
         mTabStrip.getBadgeView(3).setVisibility(View.VISIBLE);
         initData();
         initView(view);
     }
-
+    
     @Override
+	protected void setScreenPageLimit() {
+		mViewPager.setOffscreenPageLimit(3);
+	}
+
+	@Override
     public void onDestroy() {
         super.onDestroy();
         getActivity().unregisterReceiver(mNoticeReceiver);
@@ -182,13 +222,27 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
 
     @Override
     public void initView(View view) {
+        changePagers();
+        mViewPager.setOffscreenPageLimit(3);
         mTabStrip.setOnPagerChange(new OnPagerChangeLis() {
             @Override
             public void onChanged(int page) {
-                sRefreshed[page] = true;
+                refreshPage(page);
+                sShowCount[page]++;
                 sCurrentPage = page;
             }
         });
+    }
+
+    private void refreshPage(int index) {
+        if (tipIsShow(index)) {
+            try {
+                ((BaseListFragment) getChildFragmentManager().getFragments()
+                        .get(index)).onRefresh();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

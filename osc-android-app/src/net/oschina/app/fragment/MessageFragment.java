@@ -116,11 +116,10 @@ public class MessageFragment extends BaseListFragment implements
         mListView.setDividerHeight(0);
         mListView.setOnItemLongClickListener(this);
         mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 if (AppContext.getInstance().isLogin()) {
-                	mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+                    mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
                     requestData(false);
                 } else {
                     UIHelper.showLoginActivity(getActivity());
@@ -153,7 +152,7 @@ public class MessageFragment extends BaseListFragment implements
     @Override
     protected void onRefreshNetworkSuccess() {
         if (2 == NoticeViewPagerFragment.sCurrentPage
-                || NoticeViewPagerFragment.sRefreshed[2]) { // 在page中第三个位置
+                || NoticeViewPagerFragment.sShowCount[2] > 0) { // 在page中第三个位置
             NoticeUtils.clearNotice(Notice.TYPE_MESSAGE);
         }
     }
@@ -183,8 +182,8 @@ public class MessageFragment extends BaseListFragment implements
                         dialog.dismiss();
                         switch (position) {
                         case 0:
-                            TDevice.copyTextToBoard(HTMLUtil
-                                    .delHTMLTag(message.getContent()));
+                            TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(message
+                                    .getContent()));
                             break;
                         case 1:
                             handleDeleteMessage(message);

@@ -30,17 +30,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/space_4"
-            android:src="@drawable/userinfo_icon_male"
-            android:contentDescription="@null" />
+            android:contentDescription="@null"
+            android:src="@drawable/userinfo_icon_male" />
     </LinearLayout>
 
     <TextView
-        android:id="@+id/tv_desc"
+        android:id="@+id/tv_from"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/top"
         android:layout_marginTop="@dimen/space_2"
         android:layout_toRightOf="@id/iv_avatar"
+        android:textColor="@color/main_gray"
+        android:text="from"
+        android:textSize="@dimen/text_size_12" />
+
+    <TextView
+        android:id="@+id/tv_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_from"
+        android:layout_marginTop="@dimen/space_2"
+        android:layout_toRightOf="@id/iv_avatar"
+        android:text="miaoshui "
         android:textColor="@color/main_gray"
         android:textSize="@dimen/text_size_12" />
 

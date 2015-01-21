@@ -114,22 +114,22 @@ public class ListBaseAdapter extends BaseAdapter {
     public void addData(List<? extends Entity> data) {
         if (mDatas != null && data != null && !data.isEmpty()) {
             mDatas.addAll(data);
-            notifyDataSetChanged();
         }
+        notifyDataSetChanged();
     }
     
     public void addItem(Entity obj) {
         if (mDatas != null) {
             mDatas.add(obj);
-            notifyDataSetChanged();
         }
+        notifyDataSetChanged();
     }
 
     public void addItem(int pos, Entity obj) {
         if (mDatas != null) {
             mDatas.add(pos, obj);
-            notifyDataSetChanged();
         }
+        notifyDataSetChanged();
     }
 
     public void removeItem(Object obj) {

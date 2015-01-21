@@ -2,23 +2,39 @@ package net.oschina.app.fragment;
 
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.List;
 
-import android.view.View;
-import android.widget.AdapterView;
 import net.oschina.app.adapter.SoftwareAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
+import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.ListEntity;
+import net.oschina.app.bean.SoftwareDec;
 import net.oschina.app.bean.SoftwareList;
-import net.oschina.app.bean.SoftwareList.SoftwareDec;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 
 public class SoftwareListFragment extends BaseListFragment {
 	
+	public static final String BUNDLE_SOFTWARE = "BUNDLE_SOFTWARE";
+	
 	protected static final String TAG = SoftwareListFragment.class.getSimpleName();
 	private static final String CACHE_KEY_PREFIX = "softwarelist_";
+	
+	private String softwareType = "recommend";
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		Bundle args = getArguments();
+        if (args != null) {
+        	softwareType = args.getString(BUNDLE_SOFTWARE);
+        }
+	}
 
 	@Override
 	protected ListBaseAdapter getListAdapter() {
@@ -50,8 +66,24 @@ public class SoftwareListFragment extends BaseListFragment {
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		SoftwareDec softwaredec = (SoftwareDec) mAdapter.getItem(position);
-		if(softwaredec!=null)
-			UIHelper.showUrlRedirect(getActivity(), softwaredec.getUrl());
+		if(softwaredec!=null) {
+			UIHelper.showSoftwareDetail(getActivity(), softwaredec.getName());
+			// 放入已读列表
+        	saveToReadedList(view, SoftwareList.PREF_READED_SOFTWARE_LIST, softwaredec.getName());
+		}
 	}
+	
+	@Override
+    protected boolean compareTo(List<? extends Entity> data, Entity enity) {
+        int s = data.size();
+        if (enity != null) {
+            for (int i = 0; i < s; i++) {
+                if (((SoftwareDec)enity).getName().equals(((SoftwareDec)data.get(i)).getName())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 	
 }

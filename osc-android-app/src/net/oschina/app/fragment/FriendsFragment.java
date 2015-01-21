@@ -2,12 +2,14 @@ package net.oschina.app.fragment;
 
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.List;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.adapter.FriendAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
+import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.Friend;
 import net.oschina.app.bean.FriendsList;
 import net.oschina.app.bean.ListEntity;
@@ -71,12 +73,6 @@ public class FriendsFragment extends BaseListFragment {
     }
 
     @Override
-    public void onRefresh() {
-        super.onRefresh();
-        NoticeViewPagerFragment.sRefreshed[3] = true;
-    }
-
-    @Override
     protected ListBaseAdapter getListAdapter() {
         return new FriendAdapter();
     }
@@ -96,6 +92,19 @@ public class FriendsFragment extends BaseListFragment {
     protected ListEntity readList(Serializable seri) {
         return ((FriendsList) seri);
     }
+    
+    @Override
+    protected boolean compareTo(List<? extends Entity> data, Entity enity) {
+        int s = data.size();
+        if (enity != null) {
+            for (int i = 0; i < s; i++) {
+                if (((Friend)enity).getUserid() == ((Friend)data.get(i)).getUserid()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     @Override
     protected void sendRequestData() {
@@ -104,7 +113,7 @@ public class FriendsFragment extends BaseListFragment {
 
     @Override
     protected void onRefreshNetworkSuccess() {
-        if ((NoticeViewPagerFragment.sCurrentPage == 3 || NoticeViewPagerFragment.sRefreshed[3])
+        if ((NoticeViewPagerFragment.sCurrentPage == 3 || NoticeViewPagerFragment.sShowCount[3] > 0)
                 && mCatalog == FriendsList.TYPE_FANS
                 && mUid == AppContext.getInstance().getLoginUid()) {
             NoticeUtils.clearNotice(Notice.TYPE_NEWFAN);
@@ -124,6 +133,5 @@ public class FriendsFragment extends BaseListFragment {
             UIHelper.showUserCenter(getActivity(), item.getUserid(),
                     item.getName());
         }
-
     }
 }

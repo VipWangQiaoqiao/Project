@@ -36,17 +36,20 @@ public abstract class BaseViewPagerFragment extends BaseFragment {
                 .findViewById(R.id.pager_tabstrip);
 
         mViewPager = (ViewPager) view.findViewById(R.id.pager);
-        
+
         mErrorLayout = (EmptyLayout) view.findViewById(R.id.error_layout);
-        
+
         mTabsAdapter = new ViewPageFragmentAdapter(getChildFragmentManager(),
                 mTabStrip, mViewPager);
+        setScreenPageLimit();
         onSetupTabAdapter(mTabsAdapter);
-        mViewPager.setOffscreenPageLimit(1);
         // if (savedInstanceState != null) {
         // int pos = savedInstanceState.getInt("position");
         // mViewPager.setCurrentItem(pos, true);
         // }
+    }
+    
+    protected void setScreenPageLimit() {
     }
 
     // @Override

@@ -3,6 +3,7 @@ package net.oschina.app.adapter;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Friend;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.AvatarView;
 import android.annotation.SuppressLint;
@@ -40,7 +41,19 @@ public class FriendAdapter extends ListBaseAdapter {
 		final Friend item = (Friend) mDatas.get(position);
 
 		vh.name.setText(item.getName());
-		vh.desc.setText(item.getExpertise());
+		String from = item.getFrom();
+		if (from != null || !StringUtils.isEmpty(from)) {
+			vh.from.setText(from);
+		} else {
+			vh.from.setVisibility(View.GONE);
+		}
+		String desc = item.getExpertise();
+		if (desc != null || !StringUtils.isEmpty(from) || !desc.equals("<无>")) {
+			vh.desc.setText(item.getExpertise());
+		} else {
+			vh.desc.setVisibility(View.GONE);
+		}
+		
 		vh.gender.setImageResource(item.getGender() == 1 ? R.drawable.userinfo_icon_male
 				: R.drawable.userinfo_icon_female);
 		
@@ -53,6 +66,7 @@ public class FriendAdapter extends ListBaseAdapter {
 	static class ViewHolder {
 		
 		@InjectView(R.id.tv_name) TextView name;
+		@InjectView(R.id.tv_from) TextView from;
 		@InjectView(R.id.tv_desc) TextView desc;
 		@InjectView(R.id.iv_gender) ImageView gender;
 		@InjectView(R.id.iv_avatar) AvatarView avatar;
