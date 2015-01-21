@@ -46,7 +46,7 @@
     <string name="tip_network_error">没有可用的网络</string>
     
     <string name="unlogin">未登录，请先登录</string>
-    <string name="unlogin_tip">您还未登录\r\n点击屏幕登录</string>
+    <string name="unlogin_tip">您还未登录\r\n或网络延迟</string>
     <string name="my_information_unlogin_tips">未登录</string>
     
     <string name="hint_username">输入账号/邮箱</string>

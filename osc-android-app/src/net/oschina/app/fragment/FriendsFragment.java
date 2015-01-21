@@ -73,12 +73,6 @@ public class FriendsFragment extends BaseListFragment {
     }
 
     @Override
-    public void onRefresh() {
-        super.onRefresh();
-        NoticeViewPagerFragment.sRefreshed[3] = true;
-    }
-
-    @Override
     protected ListBaseAdapter getListAdapter() {
         return new FriendAdapter();
     }
@@ -119,7 +113,7 @@ public class FriendsFragment extends BaseListFragment {
 
     @Override
     protected void onRefreshNetworkSuccess() {
-        if ((NoticeViewPagerFragment.sCurrentPage == 3 || NoticeViewPagerFragment.sRefreshed[3])
+        if ((NoticeViewPagerFragment.sCurrentPage == 3 || NoticeViewPagerFragment.sShowCount[3] > 0)
                 && mCatalog == FriendsList.TYPE_FANS
                 && mUid == AppContext.getInstance().getLoginUid()) {
             NoticeUtils.clearNotice(Notice.TYPE_NEWFAN);
@@ -139,6 +133,5 @@ public class FriendsFragment extends BaseListFragment {
             UIHelper.showUserCenter(getActivity(), item.getUserid(),
                     item.getName());
         }
-
     }
 }
