@@ -14,9 +14,6 @@ public class Blog extends Entity {
 	public final static int DOC_TYPE_REPASTE = 0;//转帖
 	public final static int DOC_TYPE_ORIGINAL = 1;//原创
 	
-	public static final String CATALOG_LATEST = "latest";
-	public static final String  CATALOG_RECOMMEND = "recommend";
-	
 	@XStreamAlias("title")
 	private String title;
 

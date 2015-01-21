@@ -3,17 +3,17 @@ package net.oschina.app.fragment;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.SoftwareAdapter;
 import net.oschina.app.adapter.SoftwareCatalogListAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.base.BaseTabFragment;
+import net.oschina.app.base.BaseFragment;
 import net.oschina.app.base.ListBaseAdapter;
+import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.SoftwareCatalogList;
 import net.oschina.app.bean.SoftwareCatalogList.SoftwareType;
+import net.oschina.app.bean.SoftwareDec;
 import net.oschina.app.bean.SoftwareList;
-import net.oschina.app.bean.SoftwareList.SoftwareDec;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
@@ -34,7 +34,7 @@ import android.widget.ListView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
-public class SoftwareCatalogListFragment extends BaseTabFragment implements
+public class SoftwareCatalogListFragment extends BaseFragment implements
 		OnItemClickListener, OnScrollListener {
 	protected static final int STATE_NONE = 0;
 	protected static final int STATE_REFRESH = 1;
@@ -45,14 +45,14 @@ public class SoftwareCatalogListFragment extends BaseTabFragment implements
 	private final static int SCREEN_SOFTWARE = 2;
 
 	private static ScrollLayout mScrollLayout;
-	private ListView mLvCatalog, mLvTag, mLvSoftware;
-	private EmptyLayout mEmptyView;
-	private SoftwareCatalogListAdapter mCatalogAdapter, mTagAdapter;
-	private SoftwareAdapter mSoftwareAdapter;
-	private int mState = STATE_NONE;
+	private static ListView mLvCatalog, mLvTag, mLvSoftware;
+	private static EmptyLayout mEmptyView;
+	private static SoftwareCatalogListAdapter mCatalogAdapter, mTagAdapter;
+	private static SoftwareAdapter mSoftwareAdapter;
+	private static int mState = STATE_NONE;
 	private static int curScreen = SCREEN_CATALOG;// 默认当前屏幕
-	private int mCurrentTag;
-	private int mCurrentPage;
+	private static int mCurrentTag;
+	private static int mCurrentPage;
 
 	private AsyncHttpResponseHandler mCatalogHandler = new AsyncHttpResponseHandler() {
 
@@ -133,23 +133,8 @@ public class SoftwareCatalogListFragment extends BaseTabFragment implements
 			try {
 				SoftwareList list = XmlUtils.toBean(SoftwareList.class,
 						new ByteArrayInputStream(responseBytes));
-				if (mState == STATE_REFRESH)
-					mSoftwareAdapter.clear();
-				List<SoftwareDec> data = list.getSoftwarelist();
-				mSoftwareAdapter.addData(data);
-				mEmptyView.setErrorType(EmptyLayout.HIDE_LAYOUT);
-				if (data.size() == 0 && mState == STATE_REFRESH) {
-					mEmptyView.setErrorType(EmptyLayout.NODATA);
-				} else if (data.size() == 0) {
-					if (mState == STATE_REFRESH)
-						mSoftwareAdapter
-								.setState(ListBaseAdapter.STATE_NO_MORE);
-					else
-						mSoftwareAdapter
-								.setState(ListBaseAdapter.STATE_NO_MORE);
-				} else {
-					mSoftwareAdapter.setState(ListBaseAdapter.STATE_LOAD_MORE);
-				}
+				executeOnLoadDataSuccess(list.getSoftwarelist());
+
 			} catch (Exception e) {
 				e.printStackTrace();
 				onFailure(statusCode, headers, responseBytes, null);
@@ -189,15 +174,13 @@ public class SoftwareCatalogListFragment extends BaseTabFragment implements
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-			SoftwareType type = (SoftwareType) mTagAdapter
-					.getItem(position);
+			SoftwareType type = (SoftwareType) mTagAdapter.getItem(position);
 			if (type != null && type.getTag() > 0) {
 				// 加载二级分类里面的软件列表
 				curScreen = SCREEN_SOFTWARE;
 				mScrollLayout.scrollToScreen(curScreen);
 				mCurrentTag = type.getTag();
 				mState = STATE_REFRESH;
-				mEmptyView.setErrorType(EmptyLayout.NETWORK_LOADING);
 				sendRequestTagData();
 			}
 		}
@@ -252,6 +235,8 @@ public class SoftwareCatalogListFragment extends BaseTabFragment implements
 
 	@Override
 	public boolean onBackPressed() {
+		mEmptyView.setErrorType(EmptyLayout.HIDE_LAYOUT);
+		mCurrentPage = 0;
 		switch (curScreen) {
 		case SCREEN_SOFTWARE:
 			curScreen = SCREEN_TAG;
@@ -277,27 +262,69 @@ public class SoftwareCatalogListFragment extends BaseTabFragment implements
 		OSChinaApi.getSoftwareTagList(mCurrentTag, mCurrentPage,
 				mSoftwareHandler);
 	}
-	
-	@Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {}
 
-    @Override
-    public void onScroll(AbsListView view, int firstVisibleItem,
-            int visibleItemCount, int totalItemCount) {
-        // 数据已经全部加载，或数据为空时，或正在加载，不处理滚动事件
-        if (mState == STATE_NOMORE || mState == STATE_LOADMORE
-                || mState == STATE_REFRESH) {
-            return;
+	private void executeOnLoadDataSuccess(List<SoftwareDec> data) {
+		if (data == null) {
+			return;
+		}
+		mEmptyView.setErrorType(EmptyLayout.HIDE_LAYOUT);
+		
+		if (mCurrentPage == 0) {
+			mSoftwareAdapter.clear();
+		}
+
+		for (int i = 0; i < data.size(); i++) {
+			if (compareTo(mSoftwareAdapter.getData(), data.get(i))) {
+				data.remove(i);
+			}
+		}
+		int adapterState = ListBaseAdapter.STATE_EMPTY_ITEM;
+        if (mSoftwareAdapter.getCount() == 0 && mState == STATE_NONE) {
+        	mEmptyView.setErrorType(EmptyLayout.NODATA);
+        } else if (data.size() == 0 || (data.size() < 20 && mCurrentPage == 0)) {
+        	adapterState = ListBaseAdapter.STATE_NO_MORE;
+        } else {
+        	adapterState = ListBaseAdapter.STATE_LOAD_MORE;
         }
-        if (mSoftwareAdapter != null
-                && mSoftwareAdapter.getDataSize() > 0
-                && mLvSoftware.getLastVisiblePosition() == (mLvSoftware.getCount() - 1)) {
-            if (mState == STATE_NONE
-                    && mSoftwareAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
-                mState = STATE_LOADMORE;
-                mCurrentPage++;
-                sendRequestTagData();
-            }
-        }
-    }
+        mSoftwareAdapter.setState(adapterState);
+        mSoftwareAdapter.addData(data);
+	}
+
+	private boolean compareTo(List<? extends Entity> data, SoftwareDec enity) {
+		int s = data.size();
+		if (enity != null) {
+			for (int i = 0; i < s; i++) {
+				if (enity.getName().equals(
+						((SoftwareDec) data.get(i)).getName())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+	}
+
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem,
+			int visibleItemCount, int totalItemCount) {
+		// 数据已经全部加载，或数据为空时，或正在加载，不处理滚动事件
+		if (mState == STATE_NOMORE || mState == STATE_LOADMORE
+				|| mState == STATE_REFRESH) {
+			return;
+		}
+		if (mSoftwareAdapter != null
+				&& mSoftwareAdapter.getDataSize() > 0
+				&& mLvSoftware.getLastVisiblePosition() == (mLvSoftware
+						.getCount() - 1)) {
+			if (mState == STATE_NONE
+					&& mSoftwareAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
+				mState = STATE_LOADMORE;
+				mCurrentPage++;
+				sendRequestTagData();
+			}
+		}
+	}
 }

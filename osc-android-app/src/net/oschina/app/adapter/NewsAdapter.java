@@ -42,7 +42,7 @@ public class NewsAdapter extends ListBaseAdapter {
         vh.description.setVisibility(View.GONE);
         if (description != null && !StringUtils.isEmpty(description)) {
         	vh.description.setVisibility(View.VISIBLE);
-        	vh.description.setText(description);
+        	vh.description.setText(description.trim());
         }
         
         vh.source.setText(news.getAuthor());

@@ -15,7 +15,16 @@ public class Software extends Entity {
 	
 	@XStreamAlias("title")
 	private String title;
-
+	
+	@XStreamAlias("author")
+	private String author;
+	
+	@XStreamAlias("authorid")
+	private int authorId;
+	
+	@XStreamAlias("recommended")
+	private int recommended;
+	
 	@XStreamAlias("extensiontitle")
 	private String extensionTitle;
 
@@ -61,6 +70,30 @@ public class Software extends Entity {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	public int getAuthorId() {
+		return authorId;
+	}
+
+	public void setAuthorId(int authorId) {
+		this.authorId = authorId;
+	}
+
+	public int getRecommended() {
+		return recommended;
+	}
+
+	public void setRecommended(int recommended) {
+		this.recommended = recommended;
 	}
 
 	public String getExtensionTitle() {

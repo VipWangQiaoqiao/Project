@@ -3,7 +3,7 @@
 
     <string name="app_name">开源中国</string>
     
-    <string name="main_tab_name_news">资讯</string>
+    <string name="main_tab_name_news">综合</string>
     <string name="main_tab_name_tweet">动弹</string>
     <string name="main_tab_name_quick">快速</string>
     <string name="main_tab_name_question">问答</string>
@@ -46,7 +46,7 @@
     <string name="tip_network_error">没有可用的网络</string>
     
     <string name="unlogin">未登录，请先登录</string>
-    <string name="unlogin_tip">您还未登录\r\n点击屏幕登录</string>
+    <string name="unlogin_tip">您还未登录\r\n或网络延迟</string>
     <string name="my_information_unlogin_tips">未登录</string>
     
     <string name="hint_username">输入账号/邮箱</string>
@@ -206,6 +206,7 @@
 	<string name="message_delete_tweet">是否删除该动弹?</string>
 	
 	<!-- software detail -->
+	<string name="software_author">软件作者:</string>
     <string name="software_license">开源协议 :</string>
     <string name="software_language">开发语言 :</string>
     <string name="software_os">操作系统 :</string>
@@ -269,6 +270,7 @@
 	<string name="down_state">正在下载：%s</string>
 	
 	<string name="qr_code_tip">扫一扫上面的二维码，加我为好友</string>
+	<string name="qr_code_tip2">(长按保存到本地)</string>
 	
 	<string name="event_start_time">开始：%s</string>
 	<string name="event_end_time">结束：%s</string>
