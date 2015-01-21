@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.oschina.app"
     android:versionCode="35"
-    android:versionName="2.0.2.1" >
+    android:versionName="2.0.3" >
 
     <uses-sdk
         android:minSdkVersion="11"
