@@ -54,7 +54,7 @@
                         android:layout_centerVertical="true"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="@dimen/space_8"
-                        android:background="@drawable/ic_launcher"
+                        android:background="@drawable/ic_soft_recommend"
                         android:visibility="gone"
                         android:contentDescription="@null" />
                 </RelativeLayout>
