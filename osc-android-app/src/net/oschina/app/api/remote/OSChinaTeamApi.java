@@ -1,5 +1,6 @@
 package net.oschina.app.api.remote;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.api.ApiHttpClient;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -77,5 +78,23 @@ public class OSChinaTeamApi {
 		params.put("pageIndex", pageIndex);
 		params.put("pageSize", pageSize);
 		ApiHttpClient.get("action/api/team_issue_list", params, handler);
+	}
+	
+	/***
+	 * 获取团队的讨论区列表
+	 * @param type
+	 * @param teamId
+	 * @param uid
+	 * @param pageIndex
+	 * @param handler
+	 */
+	public static void getTeamDiscussList(String type, int teamId, int uid, int pageIndex, AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("type", type);
+		params.put("teamid", teamId);
+		params.put("uid", uid);
+		params.put("pageIndex", pageIndex);
+		params.put("pageSize", AppContext.PAGE_SIZE);
+		ApiHttpClient.get("action/api/team_discuss_list", params, handler);
 	}
 }
