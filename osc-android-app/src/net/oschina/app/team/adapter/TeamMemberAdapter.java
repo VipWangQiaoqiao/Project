@@ -106,7 +106,7 @@ public class TeamMemberAdapter extends BaseAdapter {
     public void onItemClick(int position) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(TEAM_MEMBER_KEY, datas.get(position));
-        bundle.putString(TEAM_ID_KEY, team.getId());
+        bundle.putString(TEAM_ID_KEY, team.getId() + "");
         UIHelper.showSimpleBack(cxt, SimpleBackPage.TEAM_USER_INFO, bundle);
     }
 }

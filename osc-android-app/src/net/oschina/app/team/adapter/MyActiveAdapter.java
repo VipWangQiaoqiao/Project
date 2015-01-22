@@ -17,10 +17,10 @@ import android.widget.TextView;
  * @author kymjs
  * 
  */
-public class DynamicAdapter extends ListBaseAdapter {
+public class MyActiveAdapter extends ListBaseAdapter {
     private final Context context;
 
-    public DynamicAdapter(Context cxt) {
+    public MyActiveAdapter(Context cxt) {
         this.context = cxt;
     }
 

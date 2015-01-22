@@ -14,9 +14,6 @@ import net.oschina.app.bean.Tweet;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TLog;
-
-import org.kymjs.kjframe.utils.KJLoger;
-
 import android.text.TextUtils;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -686,7 +683,6 @@ public class OSChinaApi {
             AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         int uid = AppContext.getInstance().getLoginUid();
-        KJLoger.debug("API_688===" + uid + "==" + team.getId());
         params.put("uid", uid);
         params.put("teamid", team.getId());
         params.put("pageIndex", page + "");
@@ -753,6 +749,7 @@ public class OSChinaApi {
         params.put("uid", uid);
         params.put("pageIndex", pageIndex);
         params.put("pageSize", 20);
-        ApiHttpClient.get("action/api/team_user_information", params, handler);
+        params.put("type", "all");
+        ApiHttpClient.get("action/api/team_active_list", params, handler);
     }
 }

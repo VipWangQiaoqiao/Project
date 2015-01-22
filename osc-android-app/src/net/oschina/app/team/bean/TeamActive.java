@@ -13,6 +13,9 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @SuppressWarnings("serial")
 @XStreamAlias("active")
 public class TeamActive extends Entity {
+
+    @XStreamAlias("id")
+    private int id;
     @XStreamAlias("body")
     private Body body;
     @XStreamAlias("reply")
@@ -24,6 +27,16 @@ public class TeamActive extends Entity {
 
     public Body getBody() {
         return body;
+    }
+
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setBody(Body body) {
@@ -55,7 +68,7 @@ public class TeamActive extends Entity {
     }
 
     @XStreamAlias("body")
-    public class Body {
+    public class Body extends Entity {
         @XStreamAlias("detail")
         private String detail;
         @XStreamAlias("code")
@@ -109,21 +122,11 @@ public class TeamActive extends Entity {
     }
 
     @XStreamAlias("author")
-    public class Author {
-        @XStreamAlias("id")
-        private String id;
+    public class Author extends Entity {
         @XStreamAlias("name")
         private String name;
         @XStreamAlias("portrait")
         private String portrait;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
 
         public String getName() {
             return name;

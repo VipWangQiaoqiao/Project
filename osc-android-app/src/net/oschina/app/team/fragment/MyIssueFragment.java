@@ -125,7 +125,7 @@ public class MyIssueFragment extends BaseFragment {
 
     @Override
     public void initData() {
-        OSChinaApi.getMyIssueState(team.getId(), AppContext.getInstance()
+        OSChinaApi.getMyIssueState(team.getId() + "", AppContext.getInstance()
                 .getLoginUid() + "", new AsyncHttpResponseHandler() {
 
             @Override

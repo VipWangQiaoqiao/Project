@@ -1,18 +1,21 @@
 package net.oschina.app.team.fragment;
 
 import java.io.InputStream;
+import java.io.Serializable;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
+import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.team.adapter.DynamicAdapter;
 import net.oschina.app.team.adapter.TeamMemberAdapter;
+import net.oschina.app.team.bean.TeamActives;
 import net.oschina.app.team.bean.TeamMember;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.util.TLog;
+import net.oschina.app.util.XmlUtils;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -74,6 +77,7 @@ public class UserInfoFragment extends BaseListFragment {
         mTvEmail.setText(teamMember.getTeamEmail());
         mTvJoinDate.setText(teamMember.getJoinTime());
         mTvAddress.setText(teamMember.getLocation());
+        super.initView(view);
     }
 
     @Override
@@ -83,17 +87,39 @@ public class UserInfoFragment extends BaseListFragment {
 
     @Override
     protected String getCacheKeyPrefix() {
-        return CACHE_KEY_PREFIX + "_" + mCurrentPage;
+        return CACHE_KEY_PREFIX + "_" + teamMember.getId() + mCurrentPage;
     }
+
+    //
+    // @Override
+    // protected ListEntity parseList(InputStream is) throws Exception {
+    // TeamMyActives list = XmlUtils.toBean(TeamMyActives.class, is);
+    // if (list == null) {
+    // list = new TeamMyActives();
+    // list.setList(new ArrayList<TeamMyActive>(1));
+    // }
+    // return list;
+    // }
+    //
+    // @Override
+    // protected ListEntity<? extends Entity> readList(Serializable seri) {
+    // return (TeamMyActives) seri;
+    // }
 
     @Override
     protected ListEntity parseList(InputStream is) throws Exception {
-        return null;
+        TeamActives list = XmlUtils.toBean(TeamActives.class, is);
+        return list;
+    }
+
+    @Override
+    protected ListEntity<? extends Entity> readList(Serializable seri) {
+        return (TeamActives) seri;
     }
 
     @Override
     protected void sendRequestData() {
-        OSChinaApi.getUserDynamic(teamId, AppContext.getInstance()
-                .getLoginUid() + "", mCurrentPage, mHandler);
+        OSChinaApi.getUserDynamic(teamId, teamMember.getId() + "",
+                mCurrentPage, mHandler);
     }
 }

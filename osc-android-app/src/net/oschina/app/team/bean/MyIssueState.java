@@ -1,5 +1,7 @@
 package net.oschina.app.team.bean;
 
+import net.oschina.app.bean.Entity;
+
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
@@ -9,7 +11,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * 
  */
 @XStreamAlias("oschina")
-public class MyIssueState {
+public class MyIssueState extends Entity {
     @XStreamAlias("opened")
     private String opened;
     @XStreamAlias("outdate")

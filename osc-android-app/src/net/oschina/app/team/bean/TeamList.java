@@ -65,7 +65,7 @@ public class TeamList extends Entity implements ListEntity {
         if (!StringUtils.isEmpty(cacheData)) {
             String[] fields = cacheData.split(">->");
             if (fields.length >= 11 && fields[0] != null) { // 如果id都没有，表示是一个非法数据
-                team.setId(fields[0]);
+                team.setId(StringUtils.toInt(fields[0]));
                 team.setType(fields[1]);
                 team.setStatus(fields[2]);
                 team.setName(fields[3]);

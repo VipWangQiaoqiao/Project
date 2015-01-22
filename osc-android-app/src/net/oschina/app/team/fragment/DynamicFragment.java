@@ -1,12 +1,14 @@
 package net.oschina.app.team.fragment;
 
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
+import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.team.adapter.DynamicAdapter;
@@ -77,7 +79,8 @@ public class DynamicFragment extends BaseListFragment {
 
     @Override
     protected String getCacheKeyPrefix() {
-        return CACHE_KEY_PREFIX + "_" + team.getId() + "_" + mCurrentPage;
+        String str = CACHE_KEY_PREFIX + "_" + team.getId() + "_" + mCurrentPage;
+        return str;
     }
 
     @Override
@@ -87,6 +90,11 @@ public class DynamicFragment extends BaseListFragment {
             list.setActives(new ArrayList<TeamActive>());
         }
         return list;
+    }
+
+    @Override
+    protected ListEntity<? extends Entity> readList(Serializable seri) {
+        return (TeamActives) seri;
     }
 
     @Override

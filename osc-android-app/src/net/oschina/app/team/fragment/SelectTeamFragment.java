@@ -71,7 +71,7 @@ public class SelectTeamFragment extends BaseFragment {
     public void initView(View view) {
         screenAdapter();
         // 初始化团队列表数据
-        String cache = PreferenceHelper.readString(getActivity(),
+        String cache = PreferenceHelper.readString(aty,
                 MyInformationFragment.TEAM_LIST_FILE,
                 MyInformationFragment.TEAM_LIST_KEY);
         if (!StringUtils.isEmpty(cache)) {
@@ -87,7 +87,8 @@ public class SelectTeamFragment extends BaseFragment {
                 // key是个历史遗留问题。。。
                 bundle.putInt(MyInformationFragment.TEAM_LIST_KEY, position);
                 // 将team对象传递到teamMainActivity
-                bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_TEAM, datas.get(position));
+                bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_TEAM,
+                        datas.get(position));
                 UIHelper.showTeamMainActivity(aty, bundle);
                 // UIHelper.showSimpleBack(aty, SimpleBackPage.DYNAMIC, bundle);
             }
@@ -117,7 +118,7 @@ public class SelectTeamFragment extends BaseFragment {
                 TeamList datas = XmlUtils.toBean(TeamList.class,
                         new ByteArrayInputStream(arg2));
                 if (datas != null && datas.getTeams() != null) {
-                    PreferenceHelper.write(getActivity(),
+                    PreferenceHelper.write(aty,
                             MyInformationFragment.TEAM_LIST_FILE,
                             MyInformationFragment.TEAM_LIST_KEY,
                             datas.toCacheData());
