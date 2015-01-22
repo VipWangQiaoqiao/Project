@@ -31,6 +31,8 @@ public class TeamMainActivity extends BaseActivity implements
         OnNavigationListener, OnItemSelectedListener {
 	
 	public final static String BUNDLE_KEY_TEAM = "bundle_key_team";
+	
+	public final static String BUNDLE_KEY_PROJECT = "bundle_key_project";
 
     private FragmentManager mFragmentManager;
 

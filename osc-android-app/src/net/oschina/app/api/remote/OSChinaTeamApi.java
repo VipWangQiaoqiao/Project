@@ -70,7 +70,7 @@ public class OSChinaTeamApi {
 			AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams();
 		params.put("teamid", teamId);
-		params.put("projectId", projectId);
+		params.put("projectid", projectId);
 		params.put("uid", uid);
 		params.put("state", state);
 		params.put("scope", scope);

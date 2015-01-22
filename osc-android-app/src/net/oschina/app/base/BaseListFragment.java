@@ -14,7 +14,6 @@ import net.oschina.app.bean.ListEntity;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
-import net.oschina.app.util.TLog;
 
 import org.apache.http.Header;
 
@@ -175,7 +174,7 @@ public abstract class BaseListFragment extends BaseFragment implements
         return null;
     }
 
-    protected ListEntity<Entity> parseList(InputStream is) throws Exception {
+    protected ListEntity<? extends Entity> parseList(InputStream is) throws Exception {
         return null;
     }
 
@@ -385,7 +384,7 @@ public abstract class BaseListFragment extends BaseFragment implements
 
         private final byte[] reponseData;
         private boolean parserError;
-        private List<Entity> list;
+        private List<? extends Entity> list;
 
         public ParserTask(byte[] data) {
             this.reponseData = data;
@@ -394,7 +393,7 @@ public abstract class BaseListFragment extends BaseFragment implements
         @Override
         protected String doInBackground(Void... params) {
             try {
-                ListEntity<Entity> data = parseList(new ByteArrayInputStream(
+                ListEntity<? extends Entity> data = parseList(new ByteArrayInputStream(
                         reponseData));
                 new SaveCacheTask(getActivity(), data, getCacheKey()).execute();
                 list = data.getList();
