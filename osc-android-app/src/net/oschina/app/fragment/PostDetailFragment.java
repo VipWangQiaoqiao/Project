@@ -277,16 +277,10 @@ public class PostDetailFragment extends BaseDetailFragment implements
         return getString(R.string.share_title_post);
     }
 
-<<<<<<< HEAD
-    @Override
-    protected String getShareContent() {
-        return mPost != null ? mPost.getTitle() : null;
-    }
-
     @Override
     protected String getShareUrl() {
-        return mPost != null ? mPost.getUrl().replace("http://www", "http://m")
-                : null;
+        return mPost != null ? URLsUtils.URL_MOBILE + "qusetion/"
+                + mPost.getId() : null;
     }
 
     @Override
@@ -298,20 +292,4 @@ public class PostDetailFragment extends BaseDetailFragment implements
     protected int getRepotrId() {
         return mPost != null ? mPostId : 0;
     }
-=======
-	@Override
-	protected String getShareUrl() {
-		return mPost != null ? URLsUtils.URL_MOBILE + "qusetion/" + mPost.getId() : null;
-	}
-	
-	@Override
-	protected String getRepotrUrl() {
-		return mPost != null ? mPost.getUrl() : "";
-	}
-	
-	@Override
-	protected int getRepotrId() {
-		return mPost != null ? mPostId : 0;
-	}
->>>>>>> refs/heads/dev
 }
