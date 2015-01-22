@@ -12,7 +12,6 @@ import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.interf.BaseViewInterface;
 import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.service.NoticeUtils;
-import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.UpdateManager;
 import net.oschina.app.widget.BadgeView;
@@ -118,6 +117,17 @@ public class MainActivity extends ActionBarActivity implements
         ButterKnife.inject(this);
         initView();
         AppManager.getAppManager().addActivity(this);
+
+        Intent fromWhich = getIntent();
+        if (fromWhich != null) {
+            boolean fromNoticeBar = fromWhich.getBooleanExtra("NOTICE", false);
+            if (fromNoticeBar) {
+                Intent toMyInfor = new Intent(this, SimpleBackActivity.class);
+                toMyInfor.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE,
+                        SimpleBackPage.MY_MES.getValue());
+                startActivity(toMyInfor);
+            }
+        }
     }
 
     @Override

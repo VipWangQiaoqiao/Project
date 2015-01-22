@@ -14,7 +14,6 @@ import net.oschina.app.bean.ListEntity;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
-import net.oschina.app.util.TLog;
 
 import org.apache.http.Header;
 
@@ -71,8 +70,8 @@ public abstract class BaseListFragment extends BaseFragment implements
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater,
-            ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
         View view = inflater.inflate(getLayoutId(), container, false);
         return view;
     }
@@ -294,23 +293,24 @@ public abstract class BaseListFragment extends BaseFragment implements
 
         mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
         if (mCurrentPage == 0) {
-        	mAdapter.clear(); 
+            mAdapter.clear();
         }
 
         for (int i = 0; i < data.size(); i++) {
-        	if (compareTo(mAdapter.getData(), data.get(i))) {
-        		data.remove(i);
-        		i--;
-        	}
-		}
+            if (compareTo(mAdapter.getData(), data.get(i))) {
+                data.remove(i);
+                i--;
+            }
+        }
         int adapterState = ListBaseAdapter.STATE_EMPTY_ITEM;
         if (mAdapter.getCount() == 0 && mState == STATE_NONE) {
-        	mErrorLayout.setErrorType(EmptyLayout.NODATA);
-        } else if (data.size() == 0 || (data.size() < getPageSize() && mCurrentPage == 0)) {
-        	adapterState = ListBaseAdapter.STATE_NO_MORE;
-        	mAdapter.notifyDataSetChanged();
+            mErrorLayout.setErrorType(EmptyLayout.NODATA);
+        } else if (data.size() == 0
+                || (data.size() < getPageSize() && mCurrentPage == 0)) {
+            adapterState = ListBaseAdapter.STATE_NO_MORE;
+            mAdapter.notifyDataSetChanged();
         } else {
-        	adapterState = ListBaseAdapter.STATE_LOAD_MORE;
+            adapterState = ListBaseAdapter.STATE_LOAD_MORE;
         }
         mAdapter.setState(adapterState);
         mAdapter.addData(data);
@@ -451,17 +451,15 @@ public abstract class BaseListFragment extends BaseFragment implements
             final String key) {
         // 放入已读列表
         new Handler().postDelayed(new Runnable() {
-
             @Override
             public void run() {
                 AppContext.putReadedPostList(prefFileName, key, "true");
                 TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
                 if (tvTitle != null) {
-                    tvTitle.setTextColor(getActivity().getResources().getColor(
-                            R.color.main_gray));
+                    tvTitle.setTextColor(0x9a9a9a);
+                    // 0x9a9a9a = getColor(R.color.main_gray);
                 }
             }
         }, 800);
-
     }
 }
