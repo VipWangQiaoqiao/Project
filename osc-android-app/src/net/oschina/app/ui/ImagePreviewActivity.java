@@ -9,11 +9,14 @@ import net.oschina.app.adapter.RecyclingPagerAdapter;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.widget.HackyViewPager;
+
+import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.bitmap.BitmapCallBack;
+
 import uk.co.senab.photoview.PhotoView;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
@@ -22,12 +25,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
-import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 
 public class ImagePreviewActivity extends BaseActivity implements
         OnPageChangeListener {
@@ -40,6 +37,8 @@ public class ImagePreviewActivity extends BaseActivity implements
     private ImageView mIvMore;
     private int mCurrentPostion = 0;
     private String[] mImageUrls;
+
+    private KJBitmap kjb;
 
     public static void showImagePrivew(Context context, int index,
             String[] images) {
@@ -64,6 +63,8 @@ public class ImagePreviewActivity extends BaseActivity implements
     @Override
     protected void init(Bundle savedInstanceState) {
         super.init(savedInstanceState);
+        kjb = KJBitmap.create();
+
         mViewPager = (HackyViewPager) findViewById(R.id.view_pager);
 
         mImageUrls = getIntent().getStringArrayExtra(BUNDLE_KEY_IMAGES);
@@ -106,8 +107,8 @@ public class ImagePreviewActivity extends BaseActivity implements
                 String imgUrl = mAdapter.getItem(mCurrentPostion);
                 String filePath = AppConfig.DEFAULT_SAVE_IMAGE_PATH
                         + getFileName(imgUrl);
-                ImageUtils.saveImageToSD(this, filePath, ImageLoader
-                        .getInstance().loadImageSync(imgUrl), 100);
+                ImageUtils.saveImageToSD(this, filePath,
+                        kjb.getBitmapFromNet(imgUrl, 800, 800), 100);
                 AppContext.showToastShort(getString(
                         R.string.tip_save_image_suc, filePath));
             }
@@ -146,18 +147,8 @@ public class ImagePreviewActivity extends BaseActivity implements
 
         private String[] images = new String[] {};
 
-        private DisplayImageOptions options;
-
         SamplePagerAdapter(String[] images) {
             this.images = images;
-            options = new DisplayImageOptions.Builder().cacheInMemory(true)
-                    .postProcessor(new BitmapProcessor() {
-
-                        @Override
-                        public Bitmap process(Bitmap arg0) {
-                            return arg0;
-                        }
-                    }).cacheOnDisk(true).build();
         }
 
         public String getItem(int position) {
@@ -182,29 +173,26 @@ public class ImagePreviewActivity extends BaseActivity implements
                 vh = (ViewHolder) convertView.getTag();
             }
             final ProgressBar bar = vh.progress;
-            bar.setVisibility(View.GONE);
-            ImageLoader.getInstance().displayImage(images[position], vh.image,
-                    options, new SimpleImageLoadingListener() {
-                        @Override
-                        public void onLoadingStarted(String imageUri, View view) {
-                            // bar.show();
-                            bar.setVisibility(View.VISIBLE);
-                        }
+            KJBitmap kjbitmap = KJBitmap.create();
+            kjbitmap.setCallback(new BitmapCallBack() {
+                @Override
+                public void onSuccess(View arg0) {
+                    bar.setVisibility(View.GONE);
+                }
 
-                        @Override
-                        public void onLoadingComplete(String imageUri,
-                                View view, Bitmap loadedImage) {
-                            // bar.hide();
-                            bar.setVisibility(View.GONE);
-                        }
+                @Override
+                public void onLoading(View arg0) {
+                    bar.setVisibility(View.GONE);
+                }
 
-                        @Override
-                        public void onLoadingFailed(String imageUri, View view,
-                                FailReason failReason) {
-                            bar.setVisibility(View.GONE);
-                            AppContext.showToast(R.string.tip_load_image_faile);
-                        }
-                    });
+                @Override
+                public void onFailure(Exception arg0) {
+                    bar.setVisibility(View.GONE);
+                    AppContext.showToast(R.string.tip_load_image_faile);
+                }
+            });
+            bar.setVisibility(View.VISIBLE);
+            kjbitmap.display(vh.image, images[position]);
             return convertView;
         }
 

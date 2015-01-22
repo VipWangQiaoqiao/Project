@@ -25,319 +25,313 @@ import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
+
+import org.kymjs.kjframe.KJBitmap;
+
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.process.BitmapProcessor;
-
 /**
  * 软件详情页面
+ * 
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @created 2014年11月21日 上午10:41:45
- *
+ * 
  */
 public class SoftwareDetailFragment extends BaseDetailFragment implements
-	ToolbarFragmentControl, EmojiTextListener, EmojiFragmentControl {
+        ToolbarFragmentControl, EmojiTextListener, EmojiFragmentControl {
 
-	protected static final String TAG = SoftwareDetailFragment.class
-			.getSimpleName();
-	private static final String SOFTWARE_CACHE_KEY = "software_";
-	
-	@InjectView(R.id.tv_software_license)
-	TextView mTvLicense;
-	
-	@InjectView(R.id.tv_software_language)
-	TextView mTvLanguage;
-	
-	@InjectView(R.id.tv_software_os)
-	TextView mTvOs;
-	
-	@InjectView(R.id.tv_software_recordtime)
-	TextView mTvRecordTime;
-	
-	@InjectView(R.id.iv_recommended)
-	ImageView mIvRecommended;
-	
-	@InjectView(R.id.tv_title)
-	TextView mTvTitle;
-	
-	@InjectView(R.id.tv_software_author)
-	TextView mTvAuthor;
-	
-	@InjectView(R.id.ll_author)
-	View llAuthor;
-	
-	@InjectView(R.id.line_author)
-	View lineAuthor;
-	
-	@InjectView(R.id.webview)
-	WebView mWebView;
-	
-	@InjectView(R.id.iv_logo)
-	ImageView mIvLogo;
-	private String mIdent;
-	private Software mSoftware;
-	private EmojiFragment mEmojiFragment;
-	private ToolbarFragment mToolBarFragment;
+    protected static final String TAG = SoftwareDetailFragment.class
+            .getSimpleName();
+    private static final String SOFTWARE_CACHE_KEY = "software_";
 
-	private OnClickListener mMoreListener = new View.OnClickListener() {
+    @InjectView(R.id.tv_software_license)
+    TextView mTvLicense;
 
-		@Override
-		public void onClick(View v) {
-			Activity act = getActivity();
-			if (act != null && act instanceof ToolbarEmojiVisiableControl) {
-				((ToolbarEmojiVisiableControl) act).toggleToolbarEmoji();
-			}
-		}
-	};
+    @InjectView(R.id.tv_software_language)
+    TextView mTvLanguage;
 
-	private OnActionClickListener mActionListener = new OnActionClickListener() {
+    @InjectView(R.id.tv_software_os)
+    TextView mTvOs;
 
-		@Override
-		public void onActionClick(ToolAction action) {
-			switch (action) {
-			case ACTION_CHANGE:
-				Activity act = getActivity();
-				if (act != null && act instanceof ToolbarEmojiVisiableControl) {
-					((ToolbarEmojiVisiableControl) act).toggleToolbarEmoji();
-				}
-				break;
-			case ACTION_WRITE_COMMENT:
-				act = getActivity();
-				if (act != null && act instanceof ToolbarEmojiVisiableControl) {
-					((ToolbarEmojiVisiableControl) act).toggleToolbarEmoji();
-				}
-				mEmojiFragment.showKeyboardIfNoEmojiGrid();
-				break;
-			case ACTION_VIEW_COMMENT:
-				if (mSoftware != null)
-					UIHelper.showSoftWareTweets(getActivity(), mSoftware.getId());
-				break;
-			case ACTION_FAVORITE:
-				handleFavoriteOrNot();
-				break;
-			case ACTION_SHARE:
-				handleShare();
-				break;
-			default:
-				break;
-			}
-		}
-	};
+    @InjectView(R.id.tv_software_recordtime)
+    TextView mTvRecordTime;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater,
-			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_software_detail,
-				container, false);
+    @InjectView(R.id.iv_recommended)
+    ImageView mIvRecommended;
 
-		mIdent = getActivity().getIntent().getStringExtra("ident");
-		ButterKnife.inject(this, view);
-		initViews(view);
+    @InjectView(R.id.tv_title)
+    TextView mTvTitle;
 
-		return view;
-	}
+    @InjectView(R.id.tv_software_author)
+    TextView mTvAuthor;
 
-	private void initViews(View view) {
-		mEmptyLayout = (EmptyLayout) view.findViewById(R.id.error_layout);
+    @InjectView(R.id.ll_author)
+    View llAuthor;
 
-		UIHelper.initWebView(mWebView);
+    @InjectView(R.id.line_author)
+    View lineAuthor;
 
-		view.findViewById(R.id.btn_software_index).setOnClickListener(this);
-		view.findViewById(R.id.btn_software_download).setOnClickListener(this);
-		view.findViewById(R.id.btn_software_document).setOnClickListener(this);
-		mTvAuthor.setOnClickListener(this);
-	}
+    @InjectView(R.id.webview)
+    WebView mWebView;
 
-	@Override
-	protected String getCacheKey() {
-		return new StringBuilder(SOFTWARE_CACHE_KEY).append(mIdent).toString();
-	}
+    @InjectView(R.id.iv_logo)
+    ImageView mIvLogo;
+    private String mIdent;
+    private Software mSoftware;
+    private EmojiFragment mEmojiFragment;
+    private ToolbarFragment mToolBarFragment;
 
-	@Override
-	protected void sendRequestData() {
-		mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-		OSChinaApi.getSoftwareDetail(mIdent, mHandler);
-	}
+    private final OnClickListener mMoreListener = new View.OnClickListener() {
 
-	@Override
-	protected Entity parseData(InputStream is) throws Exception {
-		return XmlUtils.toBean(SoftwareDetail.class, is).getSoftware();
-	}
+        @Override
+        public void onClick(View v) {
+            Activity act = getActivity();
+            if (act != null && act instanceof ToolbarEmojiVisiableControl) {
+                ((ToolbarEmojiVisiableControl) act).toggleToolbarEmoji();
+            }
+        }
+    };
 
-	@Override
-	protected Entity readData(Serializable seri) {
-		return (Software) seri;
-	}
+    private final OnActionClickListener mActionListener = new OnActionClickListener() {
 
-	@Override
-	protected boolean shouldRegisterCommentChangedReceiver() {
-		// software has no comment so we do not need it
-		return false;
-	}
+        @Override
+        public void onActionClick(ToolAction action) {
+            switch (action) {
+            case ACTION_CHANGE:
+                Activity act = getActivity();
+                if (act != null && act instanceof ToolbarEmojiVisiableControl) {
+                    ((ToolbarEmojiVisiableControl) act).toggleToolbarEmoji();
+                }
+                break;
+            case ACTION_WRITE_COMMENT:
+                act = getActivity();
+                if (act != null && act instanceof ToolbarEmojiVisiableControl) {
+                    ((ToolbarEmojiVisiableControl) act).toggleToolbarEmoji();
+                }
+                mEmojiFragment.showKeyboardIfNoEmojiGrid();
+                break;
+            case ACTION_VIEW_COMMENT:
+                if (mSoftware != null)
+                    UIHelper.showSoftWareTweets(getActivity(),
+                            mSoftware.getId());
+                break;
+            case ACTION_FAVORITE:
+                handleFavoriteOrNot();
+                break;
+            case ACTION_SHARE:
+                handleShare();
+                break;
+            default:
+                break;
+            }
+        }
+    };
 
-	@Override
-	protected void executeOnLoadDataSuccess(Entity entity) {
-		mSoftware = (Software) entity;
-		fillUI();
-		fillWebViewBody();
-	}
+    @Override
+    public View onCreateView(LayoutInflater inflater,
+            @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_software_detail,
+                container, false);
 
-	private void fillUI() {
-		
-		if (mSoftware.getAuthor() != null && !StringUtils.isEmpty(mSoftware.getAuthor())) {
-			mTvAuthor.setText(mSoftware.getAuthor());
-		} else {
-			llAuthor.setVisibility(View.GONE);
-			lineAuthor.setVisibility(View.GONE);
-		}
-		
-		if (mSoftware.getRecommended() > 0) {
-			mIvRecommended.setVisibility(View.VISIBLE);
-		}
-		
-		mTvTitle.setText(mSoftware.getTitle());
-		mTvLicense.setText(mSoftware.getLicense());
-		mTvLanguage.setText(mSoftware.getLanguage());
-		mTvOs.setText(mSoftware.getOs());
-		mTvRecordTime.setText(mSoftware.getRecordtime());
-		if (mToolBarFragment != null) {
-			mToolBarFragment.setCommentCount(mSoftware.getTweetCount());
-		}
-		DisplayImageOptions options = new DisplayImageOptions.Builder()
-				.cacheInMemory(true).cacheOnDisk(true)
-				.postProcessor(new BitmapProcessor() {
+        mIdent = getActivity().getIntent().getStringExtra("ident");
+        ButterKnife.inject(this, view);
+        initViews(view);
 
-					@Override
-					public Bitmap process(Bitmap arg0) {
-						return arg0;
-					}
-				}).build();
-		ImageLoader.getInstance().displayImage(mSoftware.getLogo(), mIvLogo,
-				options);
+        return view;
+    }
 
-		notifyFavorite(mSoftware.getFavorite() == 1);
-	}
+    private void initViews(View view) {
+        mEmptyLayout = (EmptyLayout) view.findViewById(R.id.error_layout);
 
-	private void fillWebViewBody() {
-		StringBuffer body = new StringBuffer(UIHelper.setHtmlCotentSupportImagePreview(mSoftware.getBody()));
-		body.append(UIHelper.WEB_STYLE).append(UIHelper.WEB_LOAD_IMAGES);
-		mWebView.loadDataWithBaseURL(null, body.toString(), "text/html", "utf-8", null);
-	}
+        UIHelper.initWebView(mWebView);
 
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.btn_software_index:
-			UIHelper.openBrowser(v.getContext(), mSoftware.getHomepage());
-			break;
-		case R.id.btn_software_download:
-			UIHelper.openBrowser(v.getContext(), mSoftware.getDownload());
-			break;
-		case R.id.btn_software_document:
-			UIHelper.openBrowser(v.getContext(), mSoftware.getDocument());
-			break;
-		case R.id.tv_software_author:
-			UIHelper.showUserCenter(getActivity(), mSoftware.getAuthorId(), mSoftware.getAuthor());
-			break;
-		default:
-			break;
-		}
-	}
+        view.findViewById(R.id.btn_software_index).setOnClickListener(this);
+        view.findViewById(R.id.btn_software_download).setOnClickListener(this);
+        view.findViewById(R.id.btn_software_document).setOnClickListener(this);
+        mTvAuthor.setOnClickListener(this);
+    }
 
-	@Override
-	public void setToolBarFragment(ToolbarFragment fragment) {
-		mToolBarFragment = fragment;
-		mToolBarFragment.setOnActionClickListener(mActionListener);
-		mToolBarFragment.setActionVisiable(ToolAction.ACTION_CHANGE, true);
-		mToolBarFragment.setActionVisiable(ToolAction.ACTION_FAVORITE, true);
-		mToolBarFragment.setActionVisiable(ToolAction.ACTION_WRITE_COMMENT,
-				true);
-		mToolBarFragment
-				.setActionVisiable(ToolAction.ACTION_VIEW_COMMENT, true);
-		mToolBarFragment.setActionVisiable(ToolAction.ACTION_SHARE, true);
-	}
-	
-	@Override
-	public void setEmojiFragment(EmojiFragment fragment) {
-		mEmojiFragment = fragment;
-		mEmojiFragment.setEmojiTextListener(this);
-		mEmojiFragment.setButtonMoreVisibility(View.VISIBLE);
-		mEmojiFragment.setButtonMoreClickListener(mMoreListener);
-	}
+    @Override
+    protected String getCacheKey() {
+        return new StringBuilder(SOFTWARE_CACHE_KEY).append(mIdent).toString();
+    }
 
-	@Override
-	protected void onFavoriteChanged(boolean flag) {
-		mSoftware.setFavorite(flag ? 1 : 0);
-		if (mToolBarFragment != null) {
-			mToolBarFragment.setFavorite(flag);
-		}
-	}
+    @Override
+    protected void sendRequestData() {
+        mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+        OSChinaApi.getSoftwareDetail(mIdent, mHandler);
+    }
 
-	@Override
-	protected int getFavoriteTargetId() {
-		return mSoftware != null ? mSoftware.getId() : -1;
-	}
+    @Override
+    protected Entity parseData(InputStream is) throws Exception {
+        return XmlUtils.toBean(SoftwareDetail.class, is).getSoftware();
+    }
 
-	@Override
-	protected int getFavoriteTargetType() {
-		return mSoftware != null ? FavoriteList.TYPE_SOFTWARE : -1;
-	}
-	
-	@Override
-	protected String getShareTitle() {
-		return getString(R.string.share_title_soft);
-	}
+    @Override
+    protected Entity readData(Serializable seri) {
+        return (Software) seri;
+    }
 
-	@Override
-	protected String getShareContent() {
-		return mSoftware != null ? mSoftware.getTitle() : "";
-	}
+    @Override
+    protected boolean shouldRegisterCommentChangedReceiver() {
+        // software has no comment so we do not need it
+        return false;
+    }
 
-	@Override
-	protected String getShareUrl() {
-		return mSoftware != null ? mSoftware.getUrl().replace("http://www", "http://m") : "";
-	}
+    @Override
+    protected void executeOnLoadDataSuccess(Entity entity) {
+        mSoftware = (Software) entity;
+        fillUI();
+        fillWebViewBody();
+    }
 
-	@Override
-	public void onSendClick(String text) {
-		if (!TDevice.hasInternet()) {
-			AppContext.showToastShort(R.string.tip_network_error);
-			return;
-		}
-		if (!AppContext.getInstance().isLogin()) {
-			UIHelper.showLoginActivity(getActivity());
-			return;
-		}
-		if (TextUtils.isEmpty(text)) {
-			AppContext.showToastShort(R.string.tip_comment_content_empty);
-			mEmojiFragment.requestFocusInput();
-			return;
-		}
-		Tweet tweet = new Tweet();
-		tweet.setAuthorid(AppContext.getInstance().getLoginUid());
-		tweet.setBody(text);
-		showWaitDialog(R.string.progress_submit);
-		OSChinaApi.pubSoftWareTweet(tweet, mSoftware.getId(), mCommentHandler);
-	}
+    private void fillUI() {
 
-	@Override
-	protected void commentPubSuccess(Comment comment) {
-		super.commentPubSuccess(comment);
-		mEmojiFragment.reset();
-	}
+        if (mSoftware.getAuthor() != null
+                && !StringUtils.isEmpty(mSoftware.getAuthor())) {
+            mTvAuthor.setText(mSoftware.getAuthor());
+        } else {
+            llAuthor.setVisibility(View.GONE);
+            lineAuthor.setVisibility(View.GONE);
+        }
+
+        if (mSoftware.getRecommended() > 0) {
+            mIvRecommended.setVisibility(View.VISIBLE);
+        }
+
+        mTvTitle.setText(mSoftware.getTitle());
+        mTvLicense.setText(mSoftware.getLicense());
+        mTvLanguage.setText(mSoftware.getLanguage());
+        mTvOs.setText(mSoftware.getOs());
+        mTvRecordTime.setText(mSoftware.getRecordtime());
+        if (mToolBarFragment != null) {
+            mToolBarFragment.setCommentCount(mSoftware.getTweetCount());
+        }
+        KJBitmap.create().display(mIvLogo, mSoftware.getLogo());
+        notifyFavorite(mSoftware.getFavorite() == 1);
+    }
+
+    private void fillWebViewBody() {
+        StringBuffer body = new StringBuffer(
+                UIHelper.setHtmlCotentSupportImagePreview(mSoftware.getBody()));
+        body.append(UIHelper.WEB_STYLE).append(UIHelper.WEB_LOAD_IMAGES);
+        mWebView.loadDataWithBaseURL(null, body.toString(), "text/html",
+                "utf-8", null);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+        case R.id.btn_software_index:
+            UIHelper.openBrowser(v.getContext(), mSoftware.getHomepage());
+            break;
+        case R.id.btn_software_download:
+            UIHelper.openBrowser(v.getContext(), mSoftware.getDownload());
+            break;
+        case R.id.btn_software_document:
+            UIHelper.openBrowser(v.getContext(), mSoftware.getDocument());
+            break;
+        case R.id.tv_software_author:
+            UIHelper.showUserCenter(getActivity(), mSoftware.getAuthorId(),
+                    mSoftware.getAuthor());
+            break;
+        default:
+            break;
+        }
+    }
+
+    @Override
+    public void setToolBarFragment(ToolbarFragment fragment) {
+        mToolBarFragment = fragment;
+        mToolBarFragment.setOnActionClickListener(mActionListener);
+        mToolBarFragment.setActionVisiable(ToolAction.ACTION_CHANGE, true);
+        mToolBarFragment.setActionVisiable(ToolAction.ACTION_FAVORITE, true);
+        mToolBarFragment.setActionVisiable(ToolAction.ACTION_WRITE_COMMENT,
+                true);
+        mToolBarFragment
+                .setActionVisiable(ToolAction.ACTION_VIEW_COMMENT, true);
+        mToolBarFragment.setActionVisiable(ToolAction.ACTION_SHARE, true);
+    }
+
+    @Override
+    public void setEmojiFragment(EmojiFragment fragment) {
+        mEmojiFragment = fragment;
+        mEmojiFragment.setEmojiTextListener(this);
+        mEmojiFragment.setButtonMoreVisibility(View.VISIBLE);
+        mEmojiFragment.setButtonMoreClickListener(mMoreListener);
+    }
+
+    @Override
+    protected void onFavoriteChanged(boolean flag) {
+        mSoftware.setFavorite(flag ? 1 : 0);
+        if (mToolBarFragment != null) {
+            mToolBarFragment.setFavorite(flag);
+        }
+    }
+
+    @Override
+    protected int getFavoriteTargetId() {
+        return mSoftware != null ? mSoftware.getId() : -1;
+    }
+
+    @Override
+    protected int getFavoriteTargetType() {
+        return mSoftware != null ? FavoriteList.TYPE_SOFTWARE : -1;
+    }
+
+    @Override
+    protected String getShareTitle() {
+        return getString(R.string.share_title_soft);
+    }
+
+    @Override
+    protected String getShareContent() {
+        return mSoftware != null ? mSoftware.getTitle() : "";
+    }
+
+    @Override
+    protected String getShareUrl() {
+        return mSoftware != null ? mSoftware.getUrl().replace("http://www",
+                "http://m") : "";
+    }
+
+    @Override
+    public void onSendClick(String text) {
+        if (!TDevice.hasInternet()) {
+            AppContext.showToastShort(R.string.tip_network_error);
+            return;
+        }
+        if (!AppContext.getInstance().isLogin()) {
+            UIHelper.showLoginActivity(getActivity());
+            return;
+        }
+        if (TextUtils.isEmpty(text)) {
+            AppContext.showToastShort(R.string.tip_comment_content_empty);
+            mEmojiFragment.requestFocusInput();
+            return;
+        }
+        Tweet tweet = new Tweet();
+        tweet.setAuthorid(AppContext.getInstance().getLoginUid());
+        tweet.setBody(text);
+        showWaitDialog(R.string.progress_submit);
+        OSChinaApi.pubSoftWareTweet(tweet, mSoftware.getId(), mCommentHandler);
+    }
+
+    @Override
+    protected void commentPubSuccess(Comment comment) {
+        super.commentPubSuccess(comment);
+        mEmojiFragment.reset();
+    }
 }

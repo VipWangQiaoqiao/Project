@@ -11,6 +11,7 @@ import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
 
+import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.utils.DensityUtils;
 
 import android.content.Context;
@@ -28,8 +29,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * @author HuangWenwei
@@ -62,6 +61,7 @@ public class TweetAdapter extends ListBaseAdapter {
     }
 
     private Bitmap recordBitmap;
+    private final KJBitmap kjb = KJBitmap.create();
 
     private void initRecordImg(Context cxt) {
         recordBitmap = BitmapFactory.decodeResource(cxt.getResources(),
@@ -145,7 +145,7 @@ public class TweetAdapter extends ListBaseAdapter {
         if (imgSmall != null && !TextUtils.isEmpty(imgSmall)) {
             vh.image.setImageResource(R.drawable.pic_bg);
             if (vh.image.getTag() != null && vh.image.getTag().equals(imgSmall)) {
-                ImageLoader.getInstance().displayImage(imgSmall, vh.image);
+                kjb.display(vh.image, imgSmall);
                 vh.image.setOnClickListener(new View.OnClickListener() {
 
                     @Override

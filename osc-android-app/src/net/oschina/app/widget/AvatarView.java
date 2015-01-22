@@ -3,12 +3,13 @@ package net.oschina.app.widget;
 import net.oschina.app.R;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
+
+import org.kymjs.kjframe.KJBitmap;
+
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
-
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class AvatarView extends CircleImageView {
     public static final String AVATAR_SIZE_REG = "_[0-9]{1,3}";
@@ -58,11 +59,7 @@ public class AvatarView extends CircleImageView {
             if (null == url || url.endsWith(PGIF) || StringUtils.isEmpty(url)) {
                 setImageResource(R.drawable.widget_dface);
             } else {
-                // DisplayImageOptions option = new
-                // DisplayImageOptions.Builder()
-                // .showImageOnLoading(R.drawable.widget_dface).build();
-                // ImageLoader.getInstance().displayImage(url, this, option);
-                ImageLoader.getInstance().displayImage(url, this);
+                KJBitmap.create().display(this, url);
             }
         }
     }

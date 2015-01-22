@@ -25,6 +25,8 @@ import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.BadgeView;
 
 import org.apache.http.Header;
+import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.bitmap.helper.BitmapCreate;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -46,8 +48,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * 登录用户中心页面
@@ -263,11 +263,10 @@ public class MyInformationFragment extends BaseFragment {
     }
 
     private void fillUI() {
-        DisplayImageOptions option = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.drawable.widget_dface).build();
-        ImageLoader.getInstance().displayImage(
-                AvatarView.getLargeAvatar(mInfo.getPortrait()), mIvAvatar,
-                option);
+        KJBitmap kjb = KJBitmap.create();
+        kjb.display(mIvAvatar, mInfo.getPortrait(), BitmapCreate
+                .bitmapFromResource(getResources(), R.drawable.widget_dface, 0,
+                        0));
         mTvName.setText(mInfo.getName());
         mIvGender
                 .setImageResource(StringUtils.toInt(mInfo.getGender()) != 2 ? R.drawable.userinfo_icon_male
