@@ -173,7 +173,7 @@ public class FloorView extends LinearLayout {
 
 		// 计算margin指数，这个指数的意义在于将第一个的margin值设置为最大的，然后依次递减体现层叠效果
 		int marginIndex = count - index;
-		int margin = marginIndex * 5;
+		int margin = marginIndex * 8;
 
 		params.setMargins(margin, margin, margin, 0);
 		commentView.setLayoutParams(params);

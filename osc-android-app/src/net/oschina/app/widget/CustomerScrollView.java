@@ -69,10 +69,8 @@ public class CustomerScrollView extends ScrollView {
 			// scrollBy(0, deltaY);
 
 			y = nowY;
-			// 当滚动到�?��或�?�?��时就不会再滚动，这时移动布局
 			if (isNeedMove()) {
 				if (normal.isEmpty()) {
-					// 保存正常的布�?���?
 					normal.set(inner.getLeft(), inner.getTop(),
 							inner.getRight(), inner.getBottom());
 					return;
@@ -89,25 +87,19 @@ public class CustomerScrollView extends ScrollView {
 		}
 	}
 
-	// �?��动画移动
-
 	public void animation() {
-		// �?��移动动画
 		TranslateAnimation ta = new TranslateAnimation(0, 0, inner.getTop(),
 				normal.top);
 		ta.setDuration(200);
 		inner.startAnimation(ta);
-		// 设置回到正常的布�?���?
 		inner.layout(normal.left, normal.top, normal.right, normal.bottom);
 		normal.setEmpty();
 	}
 
-	// 是否�?���?��动画
 	public boolean isNeedAnimation() {
 		return !normal.isEmpty();
 	}
 
-	// 是否�?��移动布局
 	public boolean isNeedMove() {
 		int offset = inner.getMeasuredHeight() - getHeight();
 		int scrollY = getScrollY();
@@ -118,20 +110,3 @@ public class CustomerScrollView extends ScrollView {
 	}
 
 }
-// ┏┓�??�?���?
-// ┏┛┻━━━┛┻�?
-// ┃�?�??�??�??�?�?
-// ┃�?�??━�?�??�?
-// ┃�?┳┛�?��┳�?�?
-// ┃�?�??�??�??�?
-// ┃�?�??┻�?�??�?
-// ┃�?�??�??�??�?
-// ┗━┓�?�??┏━�?
-// ┃�?�??�?神兽保佑�??�??�??�??
-// ┃�?�??�?代码无BUG�?
-// ┃�?�??┗━━━�?
-// ┃�?�??�??�??┣┓
-// ┃�?�??�??�??┏┛
-// ┗┓┓┏━┳┓┏�?
-// ┃┫┫�?┃┫�?
-// ┗┻┛�?┗┻�?
