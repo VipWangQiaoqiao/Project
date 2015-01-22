@@ -206,7 +206,7 @@
 	<string name="message_delete_tweet">是否删除该动弹?</string>
 	
 	<!-- software detail -->
-	<string name="software_author">软件作者:</string>
+	<string name="software_author">软件作者 :</string>
     <string name="software_license">开源协议 :</string>
     <string name="software_language">开发语言 :</string>
     <string name="software_os">操作系统 :</string>
