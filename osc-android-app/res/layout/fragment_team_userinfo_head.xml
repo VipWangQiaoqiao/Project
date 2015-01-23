@@ -12,31 +12,28 @@
 
     <LinearLayout
         style="@style/wrap_wrap"
+        android:layout_margin="5dp"
         android:orientation="vertical" >
 
         <TextView
             android:id="@+id/fragment_team_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            style="@style/team_user_infor" />
 
         <TextView
             android:id="@+id/fragment_team_username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            style="@style/team_user_infor" />
 
         <TextView
             android:id="@+id/fragment_team_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            style="@style/team_user_infor" />
 
         <TextView
             android:id="@+id/fragment_team_joindate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            style="@style/team_user_infor" />
 
         <TextView
             android:id="@+id/fragment_team_address"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            style="@style/team_user_infor" />
     </LinearLayout>
+
 </LinearLayout>

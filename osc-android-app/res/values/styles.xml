@@ -582,5 +582,11 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_alignParentRight">true</item>
     </style>
+    
+    <!-- events list style end -->
+    
+    <style name="team_user_infor" parent="@style/wrap_wrap">
+        <item name="android:padding">5dp</item>
+    </style>
 
 </resources>

@@ -752,4 +752,19 @@ public class OSChinaApi {
         params.put("type", "all");
         ApiHttpClient.get("action/api/team_active_list", params, handler);
     }
+
+    /**
+     * 获取指定用户的动态
+     */
+    public static void getMyIssue(String teamid, String uid, int pageIndex,
+            String type, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("teamid", teamid);
+        params.put("uid", uid);
+        params.put("pageIndex", pageIndex);
+        params.put("pageSize", 20);
+        params.put("type", type);
+        params.put("projectid", "-1");
+        ApiHttpClient.get("action/api/team_issue_list", params, handler);
+    }
 }
