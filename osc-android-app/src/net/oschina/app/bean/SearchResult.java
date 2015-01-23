@@ -10,7 +10,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 public class SearchResult extends Entity {
 	
 	@XStreamAlias("objid")
-	private int objid;
+	private int id;
 	
 	@XStreamAlias("type")
 	private int type;
@@ -30,12 +30,12 @@ public class SearchResult extends Entity {
 	@XStreamAlias("author")
 	private String author;
 
-	public int getObjid() {
-		return objid;
+	public int getId() {
+		return id;
 	}
 
-	public void setObjid(int objid) {
-		this.objid = objid;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public int getType() {

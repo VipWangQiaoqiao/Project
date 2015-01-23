@@ -21,7 +21,6 @@ public class SearchList extends Entity implements ListEntity<SearchResult> {
 	public final static String CATALOG_POST = "post";
 	public final static String CATALOG_SOFTWARE = "software";
 	public final static String CATALOG_BLOG = "blog";
-	public final static String CATALOG_CODE = "code";
 
 	@XStreamAlias("pagesize")
 	private int pageSize;
