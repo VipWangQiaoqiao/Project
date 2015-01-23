@@ -3,9 +3,9 @@ package net.oschina.app.team.ui;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.fragment.TweetsFragment;
+import net.oschina.app.team.fragment.TeamDiscussFragment;
 import net.oschina.app.team.viewpagefragment.TeamIssueViewPageFragment;
 import net.oschina.app.team.viewpagefragment.TeamMainViewPagerFragment;
-import net.oschina.app.viewpagerfragment.NewsViewPagerFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -31,6 +31,8 @@ public class TeamMainActivity extends BaseActivity implements
         OnNavigationListener, OnItemSelectedListener {
 	
 	public final static String BUNDLE_KEY_TEAM = "bundle_key_team";
+	
+	public final static String BUNDLE_KEY_PROJECT = "bundle_key_project";
 
     private FragmentManager mFragmentManager;
 
@@ -41,7 +43,7 @@ public class TeamMainActivity extends BaseActivity implements
 	static final String fragments[] = { 
 			TeamMainViewPagerFragment.class.getName(),
 	        TeamIssueViewPageFragment.class.getName(),
-			NewsViewPagerFragment.class.getName(),
+	        TeamDiscussFragment.class.getName(),
 			TweetsFragment.class.getName() };
 
     private int mCurrentContentIndex = -1;

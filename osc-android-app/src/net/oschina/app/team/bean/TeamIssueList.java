@@ -1,7 +1,6 @@
 package net.oschina.app.team.bean;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
@@ -15,9 +14,9 @@ import net.oschina.app.bean.ListEntity;
  * @version 创建时间：2015年1月14日 下午5:09:11 
  * 
  */
-@SuppressWarnings("serial")
+@SuppressWarnings({ "serial"})
 @XStreamAlias("oschina")
-public class TeamIssueList extends Entity implements ListEntity {
+public class TeamIssueList<T extends Entity> extends Entity implements ListEntity<TeamIssue> {
 
 	@XStreamAlias("pagesize")
 	private int pageSize;

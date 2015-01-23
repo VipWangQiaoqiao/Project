@@ -174,7 +174,8 @@ public abstract class BaseListFragment extends BaseFragment implements
         return null;
     }
 
-    protected ListEntity<Entity> parseList(InputStream is) throws Exception {
+    protected ListEntity<? extends Entity> parseList(InputStream is)
+            throws Exception {
         return null;
     }
 
@@ -265,6 +266,7 @@ public abstract class BaseListFragment extends BaseFragment implements
     }
 
     protected AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
+
         @Override
         public void onSuccess(int statusCode, Header[] headers,
                 byte[] responseBytes) {
@@ -384,7 +386,7 @@ public abstract class BaseListFragment extends BaseFragment implements
 
         private final byte[] reponseData;
         private boolean parserError;
-        private List<Entity> list;
+        private List<? extends Entity> list;
 
         public ParserTask(byte[] data) {
             this.reponseData = data;
@@ -393,7 +395,7 @@ public abstract class BaseListFragment extends BaseFragment implements
         @Override
         protected String doInBackground(Void... params) {
             try {
-                ListEntity<Entity> data = parseList(new ByteArrayInputStream(
+                ListEntity<? extends Entity> data = parseList(new ByteArrayInputStream(
                         reponseData));
                 new SaveCacheTask(getActivity(), data, getCacheKey()).execute();
                 list = data.getList();

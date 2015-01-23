@@ -144,7 +144,7 @@ public class TeamProjectSelectPopupWindow extends PopupWindow implements
 
         TeamProject unProjectIssue = new TeamProject();
         TeamGit unGit = new TeamGit();
-        unGit.setId(-1);
+        unGit.setId(0);// 0表示非项目任务
         unGit.setName("非项目任务");
         unProjectIssue.setGit(unGit);
 
@@ -152,7 +152,7 @@ public class TeamProjectSelectPopupWindow extends PopupWindow implements
 
         TeamProject allIssue = new TeamProject();
         TeamGit allGit = new TeamGit();
-        allGit.setId(0);
+        allGit.setId(-1);// -1表示
         allGit.setName("所有任务");
         allIssue.setGit(allGit);
 

@@ -137,43 +137,6 @@ public class TeamIssue extends Entity {
 	public void setToUser(ToUser toUser) {
 		this.toUser = toUser;
 	}
-
-	@XStreamAlias("author")
-	class Author implements Serializable {
-		
-		@XStreamAlias("id")
-		private int id;
-		
-		@XStreamAlias("name")
-		private String name;
-		
-		@XStreamAlias("portrait")
-		private String portrait;
-
-		public int getId() {
-			return id;
-		}
-
-		public void setId(int id) {
-			this.id = id;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		public String getPortrait() {
-			return portrait;
-		}
-
-		public void setPortrait(String portrait) {
-			this.portrait = portrait;
-		}
-	}
 	
 	@XStreamAlias("toUser")
 	class ToUser implements Serializable {
