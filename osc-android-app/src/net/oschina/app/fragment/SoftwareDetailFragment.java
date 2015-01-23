@@ -300,12 +300,12 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
 	
 	@Override
 	protected String getShareTitle() {
-		return getString(R.string.share_title_soft);
+		return mSoftware != null ? mSoftware.getTitle() : getString(R.string.share_title_soft);
 	}
 
 	@Override
 	protected String getShareContent() {
-		return mSoftware != null ? mSoftware.getTitle() : "";
+		return mSoftware != null ? StringUtils.getSubString(0, 55, getFilterHtmlBody(mSoftware.getBody())) : "";
 	}
 
 	@Override

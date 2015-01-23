@@ -452,17 +452,14 @@ public abstract class BaseListFragment extends BaseFragment implements
             final String key) {
         // 放入已读列表
         new Handler().postDelayed(new Runnable() {
-
             @Override
             public void run() {
                 AppContext.putReadedPostList(prefFileName, key, "true");
                 TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
                 if (tvTitle != null) {
-                    tvTitle.setTextColor(getActivity().getResources().getColor(
-                            R.color.main_gray));
+                    tvTitle.setTextColor(0xff9a9a9a);
                 }
             }
         }, 800);
-
     }
 }
