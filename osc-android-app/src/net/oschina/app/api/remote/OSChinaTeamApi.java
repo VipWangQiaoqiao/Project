@@ -97,4 +97,27 @@ public class OSChinaTeamApi {
 		params.put("pageSize", AppContext.PAGE_SIZE);
 		ApiHttpClient.get("action/api/team_discuss_list", params, handler);
 	}
+	
+	/***
+	 * 获取团地的周报列表
+	 * 
+	 * @param uid
+	 * @param teamId
+	 * @param year
+	 * @param week
+	 * @param pageIndex
+	 * @param handler
+	 */
+	public static void getTeamDiaryList(int uid, int teamId, int year, int week, int pageIndex,
+			AsyncHttpResponseHandler handler) {
+		RequestParams params = new RequestParams();
+		params.put("uid", uid);
+		params.put("teamid", teamId);
+		params.put("year", year);
+		params.put("week", week);
+		params.put("pageIndex", pageIndex);
+		params.put("pageSize", AppContext.PAGE_SIZE);
+		ApiHttpClient.get("action/api/team_diary_list", params, handler);
+	}
+
 }
