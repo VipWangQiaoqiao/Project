@@ -267,12 +267,12 @@ public class PostDetailFragment extends BaseDetailFragment implements
 
 	@Override
 	protected String getShareTitle() {
-		return getString(R.string.share_title_post);
+		return mPost != null ? mPost.getTitle() : getString(R.string.share_title_post);
 	}
 
 	@Override
 	protected String getShareContent() {
-		return mPost != null ? mPost.getTitle() : null;
+		return mPost != null ? StringUtils.getSubString(0, 55, getFilterHtmlBody(mPost.getBody())) : "";
 	}
 
 	@Override

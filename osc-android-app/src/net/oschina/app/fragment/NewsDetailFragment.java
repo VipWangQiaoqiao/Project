@@ -22,6 +22,7 @@ import net.oschina.app.interf.EmojiFragmentControl;
 import net.oschina.app.interf.ToolbarEmojiVisiableControl;
 import net.oschina.app.interf.ToolbarFragmentControl;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -289,14 +290,14 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 
     @Override
     protected String getShareTitle() {
-        return getString(R.string.share_title_news);
+        return mNews != null ? mNews.getTitle() : getString(R.string.share_title_news);
     }
 
     @Override
     protected String getShareContent() {
-        return mNews != null ? mNews.getTitle() : null;
+        return mNews != null ? StringUtils.getSubString(0, 55, getFilterHtmlBody(mNews.getBody())) : "";
     }
-
+    
     @Override
     protected String getShareUrl() {
         return mNews != null ? URLsUtils.URL_MOBILE + "news/" + mNews.getId() : null;
