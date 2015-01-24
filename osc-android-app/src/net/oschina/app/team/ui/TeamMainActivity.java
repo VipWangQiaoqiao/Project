@@ -2,7 +2,7 @@ package net.oschina.app.team.ui;
 
 import net.oschina.app.R;
 import net.oschina.app.base.BaseActivity;
-import net.oschina.app.fragment.TweetsFragment;
+import net.oschina.app.team.fragment.TeamDiaryFragment;
 import net.oschina.app.team.fragment.TeamDiscussFragment;
 import net.oschina.app.team.viewpagefragment.TeamIssueViewPageFragment;
 import net.oschina.app.team.viewpagefragment.TeamMainViewPagerFragment;
@@ -44,7 +44,7 @@ public class TeamMainActivity extends BaseActivity implements
 			TeamMainViewPagerFragment.class.getName(),
 	        TeamIssueViewPageFragment.class.getName(),
 	        TeamDiscussFragment.class.getName(),
-			TweetsFragment.class.getName() };
+			TeamDiaryFragment.class.getName() };
 
     private int mCurrentContentIndex = -1;
 

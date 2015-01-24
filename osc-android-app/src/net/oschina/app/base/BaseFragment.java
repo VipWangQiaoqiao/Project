@@ -5,6 +5,7 @@ import net.oschina.app.R;
 import net.oschina.app.interf.BaseFragmentInterface;
 import net.oschina.app.ui.dialog.DialogControl;
 import net.oschina.app.ui.dialog.WaitDialog;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -30,6 +31,8 @@ public class BaseFragment extends Fragment implements
 
     protected LayoutInflater mInflater;
 
+    protected Activity aty;
+
     public AppContext getApplication() {
         return (AppContext) getActivity().getApplication();
     }
@@ -43,7 +46,9 @@ public class BaseFragment extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         this.mInflater = inflater;
-        return super.onCreateView(inflater, container, savedInstanceState);
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+        aty = getActivity();
+        return view;
     }
 
     @Override
@@ -100,18 +105,18 @@ public class BaseFragment extends Fragment implements
         return null;
     }
 
-	@Override
-	public void initView(View view) {
-		
-	}
+    @Override
+    public void initView(View view) {
 
-	@Override
-	public void initData() {
-		
-	}
+    }
 
-	@Override
-	public void onClick(View v) {
-		
-	}
+    @Override
+    public void initData() {
+
+    }
+
+    @Override
+    public void onClick(View v) {
+
+    }
 }

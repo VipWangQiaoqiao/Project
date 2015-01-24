@@ -8,6 +8,9 @@ import net.oschina.app.ui.dialog.DialogControl;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.dialog.WaitDialog;
 import net.oschina.app.util.TDevice;
+
+import org.kymjs.kjframe.utils.StringUtils;
+
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.LayoutParams;
@@ -162,6 +165,9 @@ public abstract class BaseActivity extends ActionBarActivity implements
     }
 
     public void setActionBarTitle(String title) {
+        if (StringUtils.isEmpty(title)) {
+            title = getString(R.string.app_name);
+        }
         if (hasActionBar()) {
             if (mTvActionTitle != null) {
                 mTvActionTitle.setText(title);

@@ -1,10 +1,7 @@
 package net.oschina.app.team.adapter;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.bean.Post;
-import net.oschina.app.bean.PostList;
 import net.oschina.app.team.bean.TeamDiscuss;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
@@ -30,6 +27,7 @@ public class TeamDiscussAdapter extends ListBaseAdapter {
 		@InjectView(R.id.tv_author) TextView author;
 		@InjectView(R.id.tv_date) TextView time;
 		@InjectView(R.id.tv_count) TextView comment_count;
+		@InjectView(R.id.tv_vote_up)TextView vote_up;
 		
 		@InjectView(R.id.iv_face)
 		public AvatarView face;
@@ -56,7 +54,7 @@ public class TeamDiscussAdapter extends ListBaseAdapter {
 		vh.face.setUserInfo(item.getAuthor().getId(), item.getAuthor().getName());
 		vh.face.setAvatarUrl(item.getAuthor().getPortrait());
 		vh.title.setText(item.getTitle());
-		String body = item.getBody();
+		String body = item.getBody().trim();
 		vh.description.setVisibility(View.GONE);
 		if (null != body || !StringUtils.isEmpty(body)) {
 			vh.description.setVisibility(View.VISIBLE);
@@ -65,6 +63,7 @@ public class TeamDiscussAdapter extends ListBaseAdapter {
 		
 		vh.author.setText(item.getAuthor().getName());
 		vh.time.setText(StringUtils.friendly_time(item.getCreateTime()));
+		vh.vote_up.setText(item.getVoteUp() + "");
 		vh.comment_count.setText(item.getAnswerCount() + "");
 		return convertView;
 	}

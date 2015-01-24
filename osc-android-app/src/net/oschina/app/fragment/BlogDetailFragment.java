@@ -279,12 +279,12 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 	}
     @Override
     protected String getShareTitle() {
-        return getString(R.string.share_title_blog);
+        return mBlog != null ? mBlog.getTitle() : getString(R.string.share_title_blog);
     }
 
     @Override
     protected String getShareContent() {
-        return mBlog != null ? mBlog.getTitle() : null;
+    	return mBlog != null ? StringUtils.getSubString(0, 55, getFilterHtmlBody(mBlog.getBody())) : "";
     }
 
     @Override
