@@ -248,7 +248,7 @@
 	<string name="update">检查新版本</string>
 	<string name="about">关于开源中国</string>
 	<string name="feedback">意见反馈</string>
-	<string name="exit">退出</string>
+	<string name="exit">注销</string>
 	<string name="grade">去评分</string>
 	
 	<string name="notice_accept">接收新通知</string>
