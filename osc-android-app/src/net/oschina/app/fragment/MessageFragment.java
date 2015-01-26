@@ -154,6 +154,7 @@ public class MessageFragment extends BaseListFragment implements
         if (2 == NoticeViewPagerFragment.sCurrentPage
                 || NoticeViewPagerFragment.sShowCount[2] > 0) { // 在page中第三个位置
             NoticeUtils.clearNotice(Notice.TYPE_MESSAGE);
+            UIHelper.sendBroadcastForNotice(getActivity());
         }
     }
 
