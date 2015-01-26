@@ -1,14 +1,16 @@
 package net.oschina.app.widget;
 
 import net.oschina.app.R;
-import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
+
+import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.bitmap.BitmapCallBack;
+import org.kymjs.kjframe.utils.KJLoger;
+
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
-
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class AvatarView extends CircleImageView {
     public static final String AVATAR_SIZE_REG = "_[0-9]{1,3}";
@@ -51,20 +53,25 @@ public class AvatarView extends CircleImageView {
         this.name = name;
     }
 
-    public void setAvatarUrl(String url) {
-        setTag(url);
-        setImageResource(R.drawable.widget_dface);
-        if (this.getTag() != null && this.getTag().equals(url)) {
-            if (null == url || url.endsWith(PGIF) || StringUtils.isEmpty(url)) {
-                setImageResource(R.drawable.widget_dface);
-            } else {
-                // DisplayImageOptions option = new
-                // DisplayImageOptions.Builder()
-                // .showImageOnLoading(R.drawable.widget_dface).build();
-                // ImageLoader.getInstance().displayImage(url, this, option);
-                ImageLoader.getInstance().displayImage(url, this);
+    public void setAvatarUrl(final String url) {
+        // setTag(url);
+        // if (this.getTag() != null && this.getTag().equals(url)) {
+        // if (null == url || url.endsWith(PGIF) || StringUtils.isEmpty(url)) {
+        // setImageResource(R.drawable.widget_dface);
+        // } else {
+        // KJBitmap.create().displayNotTwink(this, url);
+        // }
+        // }
+        KJBitmap kjb = KJBitmap.create();
+        kjb.setCallback(new BitmapCallBack() {
+            @Override
+            public void onFailure(Exception e) {
+                super.onFailure(e);
+                AvatarView.this.setImageResource(R.drawable.widget_dface);
+                KJLoger.debug(getClass().getName() + "头像地址出错:" + url);
             }
-        }
+        });
+        kjb.display(this, url);
     }
 
     public static String getSmallAvatar(String source) {

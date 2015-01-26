@@ -92,13 +92,14 @@ public class FriendsFragment extends BaseListFragment {
     protected ListEntity readList(Serializable seri) {
         return ((FriendsList) seri);
     }
-    
+
     @Override
     protected boolean compareTo(List<? extends Entity> data, Entity enity) {
         int s = data.size();
         if (enity != null) {
             for (int i = 0; i < s; i++) {
-                if (((Friend)enity).getUserid() == ((Friend)data.get(i)).getUserid()) {
+                if (((Friend) enity).getUserid() == ((Friend) data.get(i))
+                        .getUserid()) {
                     return true;
                 }
             }
@@ -117,6 +118,7 @@ public class FriendsFragment extends BaseListFragment {
                 && mCatalog == FriendsList.TYPE_FANS
                 && mUid == AppContext.getInstance().getLoginUid()) {
             NoticeUtils.clearNotice(Notice.TYPE_NEWFAN);
+            UIHelper.sendBroadcastForNotice(getActivity());
         }
     }
 

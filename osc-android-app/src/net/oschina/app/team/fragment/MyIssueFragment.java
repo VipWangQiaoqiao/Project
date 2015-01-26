@@ -7,11 +7,13 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseFragment;
+import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.team.bean.MyIssueState;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamList;
 import net.oschina.app.util.TLog;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
 import org.apache.http.Header;
@@ -64,11 +66,12 @@ public class MyIssueFragment extends BaseFragment {
     TextView mTvDate;
 
     private Team team;
+    private Bundle bundle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = getActivity().getIntent().getExtras();
+        bundle = getActivity().getIntent().getExtras();
         if (bundle != null) {
             int index = bundle.getInt(MyInformationFragment.TEAM_LIST_KEY, 0);
             String cache = PreferenceHelper.readString(getActivity(),
@@ -113,12 +116,24 @@ public class MyIssueFragment extends BaseFragment {
     public void onClick(View v) {
         switch (v.getId()) {
         case R.id.team_myissue_ing:
+            bundle.putString(MyIssueDetail.MY_ISSUEDETAIL_KEY, "opened");
+            UIHelper.showSimpleBack(getActivity(),
+                    SimpleBackPage.MY_ISSUE_PAGER, bundle);
             break;
         case R.id.team_myissue_ed:
+            bundle.putString(MyIssueDetail.MY_ISSUEDETAIL_KEY, "closed");
+            UIHelper.showSimpleBack(getActivity(),
+                    SimpleBackPage.MY_ISSUE_PAGER, bundle);
             break;
         case R.id.team_myissue_outdate:
+            bundle.putString(MyIssueDetail.MY_ISSUEDETAIL_KEY, "outdate");
+            UIHelper.showSimpleBack(getActivity(),
+                    SimpleBackPage.MY_ISSUE_PAGER, bundle);
             break;
         case R.id.team_myissue_all:
+            bundle.putString(MyIssueDetail.MY_ISSUEDETAIL_KEY, "all");
+            UIHelper.showSimpleBack(getActivity(),
+                    SimpleBackPage.MY_ISSUE_PAGER, bundle);
             break;
         }
     }

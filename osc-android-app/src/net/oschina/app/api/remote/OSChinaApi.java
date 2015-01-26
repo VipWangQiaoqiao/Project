@@ -682,11 +682,11 @@ public class OSChinaApi {
     public static void teamDynamic(Team team, int page,
             AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
-        int uid = AppContext.getInstance().getLoginUid();
-        params.put("uid", uid);
+        // int uid = AppContext.getInstance().getLoginUid();
+        // params.put("uid", uid);
         params.put("teamid", team.getId());
         params.put("pageIndex", page + "");
-        params.put("pageSize", 10);
+        params.put("pageSize", 20);
         params.put("type", "all");
         ApiHttpClient.get("action/api/team_active_list", params, handler);
     }
@@ -751,5 +751,20 @@ public class OSChinaApi {
         params.put("pageSize", 20);
         params.put("type", "all");
         ApiHttpClient.get("action/api/team_active_list", params, handler);
+    }
+
+    /**
+     * 获取指定用户的动态
+     */
+    public static void getMyIssue(String teamid, String uid, int pageIndex,
+            String type, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("teamid", teamid);
+        params.put("uid", uid);
+        params.put("pageIndex", pageIndex);
+        params.put("pageSize", 20);
+        params.put("type", type);
+        params.put("projectid", "-1");
+        ApiHttpClient.get("action/api/team_issue_list", params, handler);
     }
 }

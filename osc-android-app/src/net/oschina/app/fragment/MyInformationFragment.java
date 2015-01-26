@@ -46,8 +46,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * 登录用户中心页面
@@ -214,7 +212,6 @@ public class MyInformationFragment extends BaseFragment {
         mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
         mIvAvatar.setOnClickListener(this);
         mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 if (AppContext.getInstance().isLogin()) {
@@ -252,7 +249,6 @@ public class MyInformationFragment extends BaseFragment {
         mMesCount.setGravity(Gravity.CENTER);
         mMesCount.setBackgroundResource(R.drawable.notification_bg);
         mQrCode.setOnClickListener(this);
-
         // // 初始化团队列表数据
         // String cache = PreferenceHelper.readString(getActivity(),
         // TEAM_LIST_FILE, TEAM_LIST_KEY);
@@ -263,11 +259,7 @@ public class MyInformationFragment extends BaseFragment {
     }
 
     private void fillUI() {
-        DisplayImageOptions option = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.drawable.widget_dface).build();
-        ImageLoader.getInstance().displayImage(
-                AvatarView.getLargeAvatar(mInfo.getPortrait()), mIvAvatar,
-                option);
+        mIvAvatar.setAvatarUrl(mInfo.getPortrait());
         mTvName.setText(mInfo.getName());
         mIvGender
                 .setImageResource(StringUtils.toInt(mInfo.getGender()) != 2 ? R.drawable.userinfo_icon_male
@@ -282,8 +274,8 @@ public class MyInformationFragment extends BaseFragment {
         if (AppContext.getInstance().isLogin()) {
             mIsWatingLogin = false;
             String key = getCacheKey();
-            if (TDevice.hasInternet()
-                    && (!CacheManager.isExistDataCache(getActivity(), key) || refresh)) {
+            if (refresh || TDevice.hasInternet()
+                    && (!CacheManager.isExistDataCache(getActivity(), key))) {
                 sendRequestData();
             } else {
                 readCacheData(key);
@@ -291,7 +283,6 @@ public class MyInformationFragment extends BaseFragment {
         } else {
             mIsWatingLogin = true;
         }
-
         steupUser();
     }
 
@@ -337,12 +328,12 @@ public class MyInformationFragment extends BaseFragment {
         @Override
         protected void onPostExecute(User info) {
             super.onPostExecute(info);
-            mInfo = info;
-            if (mInfo != null) {
+            if (info != null) {
+                mInfo = info;
+                // mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+                // } else {
+                // mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
                 fillUI();
-                mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-            } else {
-                mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
             }
         }
     }

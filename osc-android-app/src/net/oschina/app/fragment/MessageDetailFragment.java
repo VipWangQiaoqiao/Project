@@ -205,17 +205,19 @@ public class MessageDetailFragment extends BaseListFragment implements
         if (data == null) {
             data = new ArrayList<Entity>(1);
         }
-        if (mCurrentPage == 0)
-            mAdapter.clear();
-        mAdapter.addData(data);
-        if (data.size() == 0 && mState == STATE_REFRESH) {
-            mErrorLayout.setErrorType(EmptyLayout.NODATA);
-        } else if (data.size() < getPageSize()) {
-            mAdapter.setState(ListBaseAdapter.STATE_OTHER);
-        } else {
-            mAdapter.setState(ListBaseAdapter.STATE_LOAD_MORE);
+        if (mAdapter != null) {
+            if (mCurrentPage == 0)
+                mAdapter.clear();
+            mAdapter.addData(data);
+            if (data.size() == 0 && mState == STATE_REFRESH) {
+                mErrorLayout.setErrorType(EmptyLayout.NODATA);
+            } else if (data.size() < getPageSize()) {
+                mAdapter.setState(ListBaseAdapter.STATE_OTHER);
+            } else {
+                mAdapter.setState(ListBaseAdapter.STATE_LOAD_MORE);
+            }
+            mAdapter.notifyDataSetChanged();
         }
-        mAdapter.notifyDataSetChanged();
     }
 
     @Override

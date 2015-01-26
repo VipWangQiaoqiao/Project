@@ -26,6 +26,7 @@ import net.oschina.app.team.fragment.NoteBookFragment;
 import net.oschina.app.team.fragment.NoteEditFragment;
 import net.oschina.app.team.fragment.SelectTeamFragment;
 import net.oschina.app.team.fragment.UserInfoFragment;
+import net.oschina.app.team.viewpagefragment.MyIssuePagerfragment;
 import net.oschina.app.viewpagerfragment.BlogViewPagerFragment;
 import net.oschina.app.viewpagerfragment.EventViewPagerFragment;
 import net.oschina.app.viewpagerfragment.FriendsViewPagerFragment;
@@ -112,7 +113,9 @@ public enum SimpleBackPage {
 
     TEAM_USER_INFO(32, R.string.str_team_userinfo, UserInfoFragment.class),
 
-    SELECT_TEAM(33, R.string.str_team_select_team, SelectTeamFragment.class);
+    SELECT_TEAM(33, R.string.str_team_select_team, SelectTeamFragment.class),
+
+    MY_ISSUE_PAGER(34, R.string.str_team_my_issue, MyIssuePagerfragment.class);
 
     private int title;
     private Class<?> clz;
