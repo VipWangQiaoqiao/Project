@@ -41,14 +41,13 @@ public class ActiveAdapter extends ListBaseAdapter {
     public ActiveAdapter() {}
 
     private Bitmap recordBitmap;
-    private KJBitmap kjb;
+    private final KJBitmap kjb = KJBitmap.create();
 
     private void initRecordImg(Context cxt) {
         recordBitmap = BitmapFactory.decodeResource(cxt.getResources(),
                 R.drawable.audio3);
         recordBitmap = ImageUtils.zoomBitmap(recordBitmap,
                 DensityUtils.dip2px(cxt, 20f), DensityUtils.dip2px(cxt, 20f));
-        kjb = KJBitmap.create();
     }
 
     @SuppressLint("InflateParams")
