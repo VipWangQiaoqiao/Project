@@ -26,7 +26,6 @@ import net.oschina.app.widget.BadgeView;
 
 import org.apache.http.Header;
 import org.kymjs.kjframe.KJBitmap;
-import org.kymjs.kjframe.bitmap.helper.BitmapCreate;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -206,7 +205,6 @@ public class MyInformationFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         requestData(true);
         mInfo = AppContext.getInstance().getLoginUser();
-        fillUI();
     }
 
     @Override
@@ -264,9 +262,7 @@ public class MyInformationFragment extends BaseFragment {
 
     private void fillUI() {
         KJBitmap kjb = KJBitmap.create();
-        kjb.display(mIvAvatar, mInfo.getPortrait(), BitmapCreate
-                .bitmapFromResource(getResources(), R.drawable.widget_dface, 0,
-                        0));
+        kjb.display(mIvAvatar, mInfo.getPortrait());
         mTvName.setText(mInfo.getName());
         mIvGender
                 .setImageResource(StringUtils.toInt(mInfo.getGender()) != 2 ? R.drawable.userinfo_icon_male
@@ -281,11 +277,10 @@ public class MyInformationFragment extends BaseFragment {
         if (AppContext.getInstance().isLogin()) {
             mIsWatingLogin = false;
             String key = getCacheKey();
+            readCacheData(key);
             if (TDevice.hasInternet()
                     && (!CacheManager.isExistDataCache(getActivity(), key) || refresh)) {
                 sendRequestData();
-            } else {
-                readCacheData(key);
             }
         } else {
             mIsWatingLogin = true;
