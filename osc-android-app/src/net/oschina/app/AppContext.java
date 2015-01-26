@@ -15,6 +15,11 @@ import net.oschina.app.cache.DataCleanManager;
 import net.oschina.app.util.CyptoUtils;
 import net.oschina.app.util.MethodsCompat;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TLog;
+
+import org.kymjs.kjframe.bitmap.BitmapConfig;
+import org.kymjs.kjframe.utils.KJLoger;
+
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -57,6 +62,14 @@ public class AppContext extends BaseApplication {
         client.setCookieStore(myCookieStore);
         ApiHttpClient.setHttpClient(client);
         ApiHttpClient.setCookie(ApiHttpClient.getCookie(this));
+
+        // Log控制器
+        KJLoger.openDebutLog(BuildConfig.DEBUG);
+        TLog.DEBUG = BuildConfig.DEBUG;
+
+        // Bitmap缓存地址
+        BitmapConfig.CACHEPATH = "OSChina/imagecache";
+        BitmapConfig.CACHE_FILENAME_PREFIX = "OSChina_";
     }
 
     private void initLogin() {
