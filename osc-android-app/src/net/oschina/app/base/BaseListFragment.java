@@ -456,8 +456,7 @@ public abstract class BaseListFragment extends BaseFragment implements
                 AppContext.putReadedPostList(prefFileName, key, "true");
                 TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
                 if (tvTitle != null) {
-                    tvTitle.setTextColor(0x9a9a9a);
-                    // 0x9a9a9a = getColor(R.color.main_gray);
+                    tvTitle.setTextColor(0xff9a9a9a);
                 }
             }
         }, 800);

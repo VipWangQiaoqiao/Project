@@ -206,7 +206,7 @@
 	<string name="message_delete_tweet">是否删除该动弹?</string>
 	
 	<!-- software detail -->
-	<string name="software_author">软件作者:</string>
+	<string name="software_author">软件作者 :</string>
     <string name="software_license">开源协议 :</string>
     <string name="software_language">开发语言 :</string>
     <string name="software_os">操作系统 :</string>
@@ -248,7 +248,7 @@
 	<string name="update">检查新版本</string>
 	<string name="about">关于开源中国</string>
 	<string name="feedback">意见反馈</string>
-	<string name="exit">退出</string>
+	<string name="exit">注销</string>
 	<string name="grade">去评分</string>
 	
 	<string name="notice_accept">接收新通知</string>

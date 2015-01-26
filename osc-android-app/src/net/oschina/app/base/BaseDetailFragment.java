@@ -19,6 +19,7 @@ import net.oschina.app.ui.ReportDialog;
 import net.oschina.app.ui.ShareDialog;
 import net.oschina.app.ui.ShareDialog.OnSharePlatformClick;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
@@ -326,6 +327,15 @@ public class BaseDetailFragment extends BaseFragment implements
 
     protected String getShareContent() {
         return "";
+    }
+    
+    /***
+     * 获取去除html标签的body
+     * @param body
+     * @return
+     */
+    protected String getFilterHtmlBody(String body) {
+    	return HTMLUtil.delHTMLTag(body.trim());
     }
 
     protected UMImage getShareImg() {
