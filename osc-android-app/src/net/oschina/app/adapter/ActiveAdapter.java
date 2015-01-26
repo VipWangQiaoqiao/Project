@@ -14,6 +14,7 @@ import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
 
+import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.utils.DensityUtils;
 
 import android.annotation.SuppressLint;
@@ -33,27 +34,14 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.process.BitmapProcessor;
-
 public class ActiveAdapter extends ListBaseAdapter {
     private final static String AT_HOST_PRE = "http://my.oschina.net";
     private final static String MAIN_HOST = "http://www.oschina.net";
-    private DisplayImageOptions options;
 
-    public ActiveAdapter() {
-        options = new DisplayImageOptions.Builder().cacheInMemory(true)
-                .cacheOnDisk(true).postProcessor(new BitmapProcessor() {
-
-                    @Override
-                    public Bitmap process(Bitmap arg0) {
-                        return arg0;
-                    }
-                }).build();
-    }
+    public ActiveAdapter() {}
 
     private Bitmap recordBitmap;
+    private final KJBitmap kjb = KJBitmap.create();
 
     private void initRecordImg(Context cxt) {
         recordBitmap = BitmapFactory.decodeResource(cxt.getResources(),
@@ -168,8 +156,7 @@ public class ActiveAdapter extends ListBaseAdapter {
 
         if (!TextUtils.isEmpty(item.getTweetimage())) {
             vh.pic.setVisibility(View.VISIBLE);
-            ImageLoader.getInstance().displayImage(item.getTweetimage(),
-                    vh.pic, options);
+            kjb.display(vh.pic, item.getTweetimage());
             vh.pic.setOnClickListener(new View.OnClickListener() {
 
                 @Override

@@ -13,6 +13,7 @@ import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
 import org.apache.http.Header;
+import org.kymjs.kjframe.KJBitmap;
 
 import android.app.Activity;
 import android.app.Service;
@@ -37,7 +38,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class ShakeFragment extends BaseFragment implements SensorEventListener {
 
@@ -125,8 +125,8 @@ public class ShakeFragment extends BaseFragment implements SensorEventListener {
                                                 UIHelper.showUrlShake(aty, obj);
                                             }
                                         });
-                                ImageLoader.getInstance().displayImage(
-                                        obj.getImage(), mImgHead);
+                                KJBitmap.create().display(mImgHead,
+                                        obj.getImage());
                                 mTvTitle.setText(obj.getTitle());
                                 mTvDetail.setText(obj.getDetail());
                                 mTvAuthor.setText("作者:" + obj.getAuthor());

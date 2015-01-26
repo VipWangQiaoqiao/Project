@@ -682,11 +682,11 @@ public class OSChinaApi {
     public static void teamDynamic(Team team, int page,
             AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
-        int uid = AppContext.getInstance().getLoginUid();
-        params.put("uid", uid);
+        // int uid = AppContext.getInstance().getLoginUid();
+        // params.put("uid", uid);
         params.put("teamid", team.getId());
         params.put("pageIndex", page + "");
-        params.put("pageSize", 10);
+        params.put("pageSize", 20);
         params.put("type", "all");
         ApiHttpClient.get("action/api/team_active_list", params, handler);
     }
