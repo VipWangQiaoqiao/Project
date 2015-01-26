@@ -181,7 +181,8 @@ public class ImagePreviewActivity extends BaseActivity implements
                 }
 
                 @Override
-                public void onLoading(View arg0) {
+                public void onPreLoad(View view) {
+                    super.onPreLoad(view);
                     bar.setVisibility(View.GONE);
                 }
 

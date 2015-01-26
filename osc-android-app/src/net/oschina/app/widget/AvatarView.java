@@ -1,10 +1,10 @@
 package net.oschina.app.widget;
 
 import net.oschina.app.R;
-import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 
 import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.bitmap.BitmapCallBack;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -53,15 +53,23 @@ public class AvatarView extends CircleImageView {
     }
 
     public void setAvatarUrl(String url) {
-        setTag(url);
-        setImageResource(R.drawable.widget_dface);
-        if (this.getTag() != null && this.getTag().equals(url)) {
-            if (null == url || url.endsWith(PGIF) || StringUtils.isEmpty(url)) {
-                setImageResource(R.drawable.widget_dface);
-            } else {
-                KJBitmap.create().display(this, url);
+        // setTag(url);
+        // if (this.getTag() != null && this.getTag().equals(url)) {
+        // if (null == url || url.endsWith(PGIF) || StringUtils.isEmpty(url)) {
+        // setImageResource(R.drawable.widget_dface);
+        // } else {
+        // KJBitmap.create().displayNotTwink(this, url);
+        // }
+        // }
+        KJBitmap kjb = KJBitmap.create();
+        kjb.setCallback(new BitmapCallBack() {
+            @Override
+            public void onFailure(Exception e) {
+                super.onFailure(e);
+                AvatarView.this.setImageResource(R.drawable.widget_dface);
             }
-        }
+        });
+        kjb.display(this, url);
     }
 
     public static String getSmallAvatar(String source) {
