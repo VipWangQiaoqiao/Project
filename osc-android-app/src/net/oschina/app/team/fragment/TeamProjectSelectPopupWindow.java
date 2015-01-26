@@ -39,6 +39,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
  */
 public class TeamProjectSelectPopupWindow extends PopupWindow implements
         OnItemClickListener {
+	
 
     public interface TeamProjectPopupWindowCallBack {
         public void callBack(TeamProject teamProject);
@@ -55,6 +56,8 @@ public class TeamProjectSelectPopupWindow extends PopupWindow implements
     private TeamProjectListAdapter mAdapter;
 
     private final TeamProjectPopupWindowCallBack mCallBack;
+
+    private TeamProject mCurrentProject;
 
     private final AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
 
@@ -139,7 +142,7 @@ public class TeamProjectSelectPopupWindow extends PopupWindow implements
     private void getProjectsList() {
         OSChinaTeamApi.getTeamProjectList(mTeam.getId(), mHandler);
     }
-
+    
     private void addAllIssueOption(List<TeamProject> list) {
 
         TeamProject unProjectIssue = new TeamProject();

@@ -139,7 +139,7 @@ public class TeamIssue extends Entity {
 	}
 	
 	@XStreamAlias("toUser")
-	class ToUser implements Serializable {
+	public class ToUser implements Serializable {
 		
 		@XStreamAlias("id")
 		private int id;

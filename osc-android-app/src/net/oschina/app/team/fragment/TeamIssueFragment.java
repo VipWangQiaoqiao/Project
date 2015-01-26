@@ -88,7 +88,6 @@ public class TeamIssueFragment extends BaseListFragment {
     @Override
     protected void sendRequestData() {
         String source = mProject == null ? "" : mProject.getSource();
-        AppContext.showToast(source);
         OSChinaTeamApi.getTeamIssueList(mTeamId, mProjectId, source, 0, "all",
                 "", mCurrentPage, AppContext.PAGE_SIZE, mHandler);
     }

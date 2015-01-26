@@ -223,4 +223,5 @@ public class ListBaseAdapter extends BaseAdapter {
     protected View getRealView(int position, View convertView, ViewGroup parent) {
         return null;
     }
+    
 }

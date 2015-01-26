@@ -99,7 +99,7 @@ public class OSChinaTeamApi {
 	}
 	
 	/***
-	 * 获取团地的周报列表
+	 * 获取团队的周报列表
 	 * 
 	 * @param uid
 	 * @param teamId

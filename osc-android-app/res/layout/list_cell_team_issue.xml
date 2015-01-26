@@ -1,13 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/fill_wrap"
-    android:padding="@dimen/space_10"
+    android:background="@drawable/list_item_background"
     android:orientation="vertical"
-    android:background="@drawable/list_item_background" >
-    
-    <TextView 
+    android:padding="@dimen/space_10" >
+
+    <TextView
         android:id="@+id/tv_title"
         style="@style/list_text_title"
-        android:text="任务"/>
+        android:layout_marginBottom="@dimen/space_10"
+        android:singleLine="true" />
+    
+    <TextView
+        android:id="@+id/tv_author"
+        style="@style/list_text_info"
+        android:layout_below="@id/tv_title"
+        android:layout_marginRight="@dimen/space_5" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/tv_to"
+        style="@style/list_text_info"
+        android:layout_below="@id/tv_title"
+        android:layout_marginRight="@dimen/space_5"
+        android:layout_toRightOf="@id/tv_author" />
+
+    <TextView
+        android:id="@+id/tv_touser"
+        style="@style/list_text_info"
+        android:layout_below="@id/tv_title"
+        android:layout_toRightOf="@id/tv_to" />
+
+    <TextView
+        android:id="@+id/tv_time"
+        style="@style/list_text_info"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/tv_title"
+        android:drawableLeft="@drawable/ic_time" />
+
+    <TextView
+        android:id="@+id/tv_comment_count"
+        style="@style/list_text_info"
+        android:layout_toLeftOf="@id/tv_time"
+        android:layout_below="@id/tv_title"
+        android:layout_marginRight="@dimen/space_10"
+        android:drawableLeft="@drawable/ic_comment_count" />
+
+</RelativeLayout>
