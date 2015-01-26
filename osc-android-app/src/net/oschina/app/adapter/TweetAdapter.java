@@ -141,22 +141,15 @@ public class TweetAdapter extends ListBaseAdapter {
 
     private void showTweetImage(ViewHolder vh, String imgSmall,
             final String imgBig, final Context context) {
-        vh.image.setTag(imgSmall);
         if (imgSmall != null && !TextUtils.isEmpty(imgSmall)) {
-            vh.image.setImageResource(R.drawable.pic_bg);
-            if (vh.image.getTag() != null && vh.image.getTag().equals(imgSmall)) {
-                kjb.display(vh.image, imgSmall);
-                vh.image.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-
-                        ImagePreviewActivity.showImagePrivew(context, 0,
-                                new String[] { imgBig });
-                    }
-                });
-
-            }
+            kjb.display(vh.image, imgSmall, R.drawable.pic_bg);
+            vh.image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ImagePreviewActivity.showImagePrivew(context, 0,
+                            new String[] { imgBig });
+                }
+            });
             vh.image.setVisibility(AvatarView.VISIBLE);
         } else {
             vh.image.setVisibility(AvatarView.GONE);

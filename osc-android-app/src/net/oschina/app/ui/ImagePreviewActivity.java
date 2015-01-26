@@ -1,13 +1,10 @@
 package net.oschina.app.ui;
 
-import java.io.IOException;
-
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.RecyclingPagerAdapter;
 import net.oschina.app.base.BaseActivity;
-import net.oschina.app.util.ImageUtils;
 import net.oschina.app.widget.HackyViewPager;
 
 import org.kymjs.kjframe.KJBitmap;
@@ -64,7 +61,6 @@ public class ImagePreviewActivity extends BaseActivity implements
     protected void init(Bundle savedInstanceState) {
         super.init(savedInstanceState);
         kjb = KJBitmap.create();
-
         mViewPager = (HackyViewPager) findViewById(R.id.view_pager);
 
         mImageUrls = getIntent().getStringArrayExtra(BUNDLE_KEY_IMAGES);
@@ -102,18 +98,14 @@ public class ImagePreviewActivity extends BaseActivity implements
     public void initData() {}
 
     private void saveImg() {
-        try {
-            if (mAdapter != null && mAdapter.getCount() > 0) {
-                String imgUrl = mAdapter.getItem(mCurrentPostion);
-                String filePath = AppConfig.DEFAULT_SAVE_IMAGE_PATH
-                        + getFileName(imgUrl);
-                ImageUtils.saveImageToSD(this, filePath,
-                        kjb.getBitmapFromNet(imgUrl, 800, 800), 100);
-                AppContext.showToastShort(getString(
-                        R.string.tip_save_image_suc, filePath));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (mAdapter != null && mAdapter.getCount() > 0) {
+            String imgUrl = mAdapter.getItem(mCurrentPostion);
+            String filePath = AppConfig.DEFAULT_SAVE_IMAGE_PATH
+                    + getFileName(imgUrl);
+            kjb.saveImage(imgUrl, filePath);
+            AppContext.showToastShort(getString(R.string.tip_save_image_suc,
+                    filePath));
+        } else {
             AppContext.showToastShort(R.string.tip_save_image_faile);
         }
     }
@@ -176,23 +168,22 @@ public class ImagePreviewActivity extends BaseActivity implements
             KJBitmap kjbitmap = KJBitmap.create();
             kjbitmap.setCallback(new BitmapCallBack() {
                 @Override
-                public void onSuccess(View arg0) {
-                    bar.setVisibility(View.GONE);
+                public void onPreLoad(View view) {
+                    super.onPreLoad(view);
+                    bar.setVisibility(View.VISIBLE);
                 }
 
                 @Override
-                public void onPreLoad(View view) {
-                    super.onPreLoad(view);
+                public void onFinish(View view) {
+                    super.onFinish(view);
                     bar.setVisibility(View.GONE);
                 }
 
                 @Override
                 public void onFailure(Exception arg0) {
-                    bar.setVisibility(View.GONE);
                     AppContext.showToast(R.string.tip_load_image_faile);
                 }
             });
-            bar.setVisibility(View.VISIBLE);
             kjbitmap.display(vh.image, images[position]);
             return convertView;
         }

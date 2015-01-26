@@ -5,6 +5,7 @@ import net.oschina.app.util.UIHelper;
 
 import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
+import org.kymjs.kjframe.utils.KJLoger;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -52,7 +53,7 @@ public class AvatarView extends CircleImageView {
         this.name = name;
     }
 
-    public void setAvatarUrl(String url) {
+    public void setAvatarUrl(final String url) {
         // setTag(url);
         // if (this.getTag() != null && this.getTag().equals(url)) {
         // if (null == url || url.endsWith(PGIF) || StringUtils.isEmpty(url)) {
@@ -67,6 +68,7 @@ public class AvatarView extends CircleImageView {
             public void onFailure(Exception e) {
                 super.onFailure(e);
                 AvatarView.this.setImageResource(R.drawable.widget_dface);
+                KJLoger.debug(getClass().getName() + "头像地址出错:" + url);
             }
         });
         kjb.display(this, url);
