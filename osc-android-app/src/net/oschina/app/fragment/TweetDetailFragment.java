@@ -269,6 +269,7 @@ public class TweetDetailFragment extends
 		if (res.OK()) {
 		    hideWaitDialog();
 		    AppContext.showToastShort(R.string.comment_publish_success);
+		    mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
 		    mAdapter.addItem(0, rsb.getComment());
 		    mEmojiFragment.reset();
 		    setTweetCommentCount();
