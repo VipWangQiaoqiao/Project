@@ -39,8 +39,8 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 
 @SuppressLint("NewApi")
 public abstract class BaseListFragment extends BaseFragment implements
-        SwipeRefreshLayout.OnRefreshListener, OnItemClickListener,
-        OnScrollListener {
+	SwipeRefreshLayout.OnRefreshListener, OnItemClickListener,
+	OnScrollListener {
 
     public static final String BUNDLE_KEY_CATALOG = "BUNDLE_KEY_CATALOG";
 
@@ -66,88 +66,88 @@ public abstract class BaseListFragment extends BaseFragment implements
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_pull_refresh_listview;
+	return R.layout.fragment_pull_refresh_listview;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        View view = inflater.inflate(getLayoutId(), container, false);
-        return view;
+	    Bundle savedInstanceState) {
+	View view = inflater.inflate(getLayoutId(), container, false);
+	return view;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        // 通过注解绑定控件
-        ButterKnife.inject(this, view);
-        initView(view);
+	super.onViewCreated(view, savedInstanceState);
+	// 通过注解绑定控件
+	ButterKnife.inject(this, view);
+	initView(view);
     }
 
     @Override
     public void onCreate(android.os.Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Bundle args = getArguments();
-        if (args != null) {
-            mCatalog = args.getInt(BUNDLE_KEY_CATALOG, 0);
-        }
+	super.onCreate(savedInstanceState);
+	Bundle args = getArguments();
+	if (args != null) {
+	    mCatalog = args.getInt(BUNDLE_KEY_CATALOG, 0);
+	}
     }
 
     @Override
     public void initView(View view) {
 
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-        mSwipeRefreshLayout.setColorSchemeResources(
-                R.color.swiperefresh_color1, R.color.swiperefresh_color2,
-                R.color.swiperefresh_color3, R.color.swiperefresh_color4);
+	mSwipeRefreshLayout.setOnRefreshListener(this);
+	mSwipeRefreshLayout.setColorSchemeResources(
+		R.color.swiperefresh_color1, R.color.swiperefresh_color2,
+		R.color.swiperefresh_color3, R.color.swiperefresh_color4);
 
-        mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
+	mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                mCurrentPage = 0;
-                mState = STATE_REFRESH;
-                mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-                requestData(true);
-            }
-        });
+	    @Override
+	    public void onClick(View v) {
+		mCurrentPage = 0;
+		mState = STATE_REFRESH;
+		mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+		requestData(true);
+	    }
+	});
 
-        mListView.setOnItemClickListener(this);
-        mListView.setOnScrollListener(this);
+	mListView.setOnItemClickListener(this);
+	mListView.setOnScrollListener(this);
 
-        if (mAdapter != null) {
-            mListView.setAdapter(mAdapter);
-            mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-        } else {
-            mAdapter = getListAdapter();
-            mListView.setAdapter(mAdapter);
+	if (mAdapter != null) {
+	    mListView.setAdapter(mAdapter);
+	    mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+	} else {
+	    mAdapter = getListAdapter();
+	    mListView.setAdapter(mAdapter);
 
-            if (requestDataIfViewCreated()) {
-                mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-                mCurrentPage = 0;
-                mState = STATE_REFRESH;
-                requestData(false);
-            } else {
-                mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-            }
+	    if (requestDataIfViewCreated()) {
+		mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+		mCurrentPage = 0;
+		mState = STATE_REFRESH;
+		requestData(false);
+	    } else {
+		mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+	    }
 
-        }
-        if (mStoreEmptyState != -1) {
-            mErrorLayout.setErrorType(mStoreEmptyState);
-        }
+	}
+	if (mStoreEmptyState != -1) {
+	    mErrorLayout.setErrorType(mStoreEmptyState);
+	}
     }
 
     @Override
     public void onDestroyView() {
-        mStoreEmptyState = mErrorLayout.getErrorState();
-        super.onDestroyView();
+	mStoreEmptyState = mErrorLayout.getErrorState();
+	super.onDestroyView();
     }
 
     @Override
     public void onDestroy() {
-        cancelReadCacheTask();
-        cancelParserTask();
-        super.onDestroy();
+	cancelReadCacheTask();
+	cancelParserTask();
+	super.onDestroy();
     }
 
     protected abstract ListBaseAdapter getListAdapter();
@@ -155,290 +155,310 @@ public abstract class BaseListFragment extends BaseFragment implements
     // 下拉刷新数据
     @Override
     public void onRefresh() {
-        if (mState == STATE_REFRESH) {
-            return;
-        }
-        // 设置顶部正在刷新
-        mListView.setSelection(0);
-        setSwipeRefreshLoadingState();
-        mCurrentPage = 0;
-        mState = STATE_REFRESH;
-        requestData(true);
+	if (mState == STATE_REFRESH) {
+	    return;
+	}
+	// 设置顶部正在刷新
+	mListView.setSelection(0);
+	setSwipeRefreshLoadingState();
+	mCurrentPage = 0;
+	mState = STATE_REFRESH;
+	requestData(true);
     }
 
     protected boolean requestDataIfViewCreated() {
-        return true;
+	return true;
     }
 
     protected String getCacheKeyPrefix() {
-        return null;
+	return null;
     }
 
     protected ListEntity<? extends Entity> parseList(InputStream is)
-            throws Exception {
-        return null;
+	    throws Exception {
+	return null;
     }
 
     protected ListEntity<? extends Entity> readList(Serializable seri) {
-        return null;
+	return null;
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {}
+	    long id) {
+    }
 
     private String getCacheKey() {
-        return new StringBuffer(getCacheKeyPrefix()).append("_")
-                .append(mCurrentPage).toString();
+	return new StringBuffer(getCacheKeyPrefix()).append("_")
+		.append(mCurrentPage).toString();
     }
 
     protected void requestData(boolean refresh) {
-        String key = getCacheKey();
-        if (TDevice.hasInternet()
-                && (!CacheManager.isExistDataCache(getActivity(), key) || refresh)) {
-            sendRequestData();
-        } else {
-            readCacheData(key);
-        }
+	String key = getCacheKey();
+	if (TDevice.hasInternet()
+		&& (!CacheManager.isExistDataCache(getActivity(), key) || refresh)) {
+	    sendRequestData();
+	} else {
+	    readCacheData(key);
+	}
     }
 
-    protected void sendRequestData() {}
+    protected void sendRequestData() {
+    }
 
     private void readCacheData(String cacheKey) {
-        cancelReadCacheTask();
-        mCacheTask = new CacheTask(getActivity()).execute(cacheKey);
+	cancelReadCacheTask();
+	mCacheTask = new CacheTask(getActivity()).execute(cacheKey);
     }
 
     private void cancelReadCacheTask() {
-        if (mCacheTask != null) {
-            mCacheTask.cancel(true);
-            mCacheTask = null;
-        }
+	if (mCacheTask != null) {
+	    mCacheTask.cancel(true);
+	    mCacheTask = null;
+	}
     }
 
     private class CacheTask extends
-            AsyncTask<String, Void, ListEntity<? extends Entity>> {
-        private final WeakReference<Context> mContext;
+	    AsyncTask<String, Void, ListEntity<? extends Entity>> {
+	private final WeakReference<Context> mContext;
 
-        private CacheTask(Context context) {
-            mContext = new WeakReference<Context>(context);
-        }
+	private CacheTask(Context context) {
+	    mContext = new WeakReference<Context>(context);
+	}
 
-        @Override
-        protected ListEntity<? extends Entity> doInBackground(String... params) {
-            Serializable seri = CacheManager.readObject(mContext.get(),
-                    params[0]);
-            if (seri == null) {
-                return null;
-            } else {
-                return readList(seri);
-            }
-        }
+	@Override
+	protected ListEntity<? extends Entity> doInBackground(String... params) {
+	    Serializable seri = CacheManager.readObject(mContext.get(),
+		    params[0]);
+	    if (seri == null) {
+		return null;
+	    } else {
+		return readList(seri);
+	    }
+	}
 
-        @Override
-        protected void onPostExecute(ListEntity<? extends Entity> list) {
-            super.onPostExecute(list);
-            if (list != null) {
-                executeOnLoadDataSuccess(list.getList());
-            } else {
-                executeOnLoadDataError(null);
-            }
-            executeOnLoadFinish();
-        }
+	@Override
+	protected void onPostExecute(ListEntity<? extends Entity> list) {
+	    super.onPostExecute(list);
+	    if (list != null) {
+		executeOnLoadDataSuccess(list.getList());
+	    } else {
+		executeOnLoadDataError(null);
+	    }
+	    executeOnLoadFinish();
+	}
     }
 
     private class SaveCacheTask extends AsyncTask<Void, Void, Void> {
-        private final WeakReference<Context> mContext;
-        private final Serializable seri;
-        private final String key;
+	private final WeakReference<Context> mContext;
+	private final Serializable seri;
+	private final String key;
 
-        private SaveCacheTask(Context context, Serializable seri, String key) {
-            mContext = new WeakReference<Context>(context);
-            this.seri = seri;
-            this.key = key;
-        }
+	private SaveCacheTask(Context context, Serializable seri, String key) {
+	    mContext = new WeakReference<Context>(context);
+	    this.seri = seri;
+	    this.key = key;
+	}
 
-        @Override
-        protected Void doInBackground(Void... params) {
-            CacheManager.saveObject(mContext.get(), seri, key);
-            return null;
-        }
+	@Override
+	protected Void doInBackground(Void... params) {
+	    CacheManager.saveObject(mContext.get(), seri, key);
+	    return null;
+	}
     }
 
     protected AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
 
-        @Override
-        public void onSuccess(int statusCode, Header[] headers,
-                byte[] responseBytes) {
-            if (isAdded()) {
-                if (mState == STATE_REFRESH) {
-                    onRefreshNetworkSuccess();
-                }
-                executeParserTask(responseBytes);
-            }
-        }
+	@Override
+	public void onSuccess(int statusCode, Header[] headers,
+		byte[] responseBytes) {
+	    if (isAdded()) {
+		if (mState == STATE_REFRESH) {
+		    onRefreshNetworkSuccess();
+		}
+		executeParserTask(responseBytes);
+	    }
+	}
 
-        @Override
-        public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                Throwable arg3) {
-            if (isAdded()) {
-                readCacheData(getCacheKey());
-            }
-        }
+	@Override
+	public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+		Throwable arg3) {
+	    if (isAdded()) {
+		readCacheData(getCacheKey());
+	    }
+	}
     };
 
     protected void executeOnLoadDataSuccess(List<? extends Entity> data) {
-        if (data == null) {
-            data = new ArrayList<Entity>();
-        }
+	if (data == null) {
+	    data = new ArrayList<Entity>();
+	}
 
-        mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-        if (mCurrentPage == 0) {
-            mAdapter.clear();
-        }
+	mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+	if (mCurrentPage == 0) {
+	    mAdapter.clear();
+	}
 
-        for (int i = 0; i < data.size(); i++) {
-            if (compareTo(mAdapter.getData(), data.get(i))) {
-                data.remove(i);
-                i--;
-            }
-        }
-        int adapterState = ListBaseAdapter.STATE_EMPTY_ITEM;
-        if (mAdapter.getCount() == 0 && mState == STATE_NONE) {
-            mErrorLayout.setErrorType(EmptyLayout.NODATA);
-        } else if (data.size() == 0
-                || (data.size() < getPageSize() && mCurrentPage == 0)) {
-            adapterState = ListBaseAdapter.STATE_NO_MORE;
-            mAdapter.notifyDataSetChanged();
-        } else {
-            adapterState = ListBaseAdapter.STATE_LOAD_MORE;
-        }
-        mAdapter.setState(adapterState);
-        mAdapter.addData(data);
+	for (int i = 0; i < data.size(); i++) {
+	    if (compareTo(mAdapter.getData(), data.get(i))) {
+		data.remove(i);
+		i--;
+	    }
+	}
+	int adapterState = ListBaseAdapter.STATE_EMPTY_ITEM;
+	if ((mAdapter.getCount() + data.size()) == 0) {
+	    adapterState = ListBaseAdapter.STATE_EMPTY_ITEM;
+	} else if (data.size() == 0
+		|| (data.size() < getPageSize() && mCurrentPage == 0)) {
+	    adapterState = ListBaseAdapter.STATE_NO_MORE;
+	    mAdapter.notifyDataSetChanged();
+	} else {
+	    adapterState = ListBaseAdapter.STATE_LOAD_MORE;
+	}
+	mAdapter.setState(adapterState);
+	mAdapter.addData(data);
+	if (mAdapter.getCount() == 1) {
+	    
+	    if (needShowEmptyNoData()) {
+		mErrorLayout.setErrorType(EmptyLayout.NODATA);
+	    }
+	} 
+    }
+
+    /**
+     * 是否需要隐藏listview，显示无数据状态
+     * 
+     * @author 火蚁 2015-1-27 下午6:18:59
+     * 
+     */
+    protected boolean needShowEmptyNoData() {
+	return true;
     }
 
     protected boolean compareTo(List<? extends Entity> data, Entity enity) {
-        int s = data.size();
-        if (enity != null) {
-            for (int i = 0; i < s; i++) {
-                if (enity.getId() == data.get(i).getId()) {
-                    return true;
-                }
-            }
-        }
-        return false;
+	int s = data.size();
+	if (enity != null) {
+	    for (int i = 0; i < s; i++) {
+		if (enity.getId() == data.get(i).getId()) {
+		    return true;
+		}
+	    }
+	}
+	return false;
     }
 
     protected int getPageSize() {
-        return AppContext.PAGE_SIZE;
+	return AppContext.PAGE_SIZE;
     }
 
-    protected void onRefreshNetworkSuccess() {}
+    protected void onRefreshNetworkSuccess() {
+    }
 
     protected void executeOnLoadDataError(String error) {
-        if (mCurrentPage == 0
-                && !CacheManager.isExistDataCache(getActivity(), getCacheKey())) {
-            mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-        } else {
-            mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-            mAdapter.setState(ListBaseAdapter.STATE_NETWORK_ERROR);
-            mAdapter.notifyDataSetChanged();
-        }
+	if (mCurrentPage == 0
+		&& !CacheManager.isExistDataCache(getActivity(), getCacheKey())) {
+	    mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+	} else {
+	    mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+	    mAdapter.setState(ListBaseAdapter.STATE_NETWORK_ERROR);
+	    mAdapter.notifyDataSetChanged();
+	}
     }
 
     // 完成刷新
     protected void executeOnLoadFinish() {
-        setSwipeRefreshLoadedState();
-        mState = STATE_NONE;
+	setSwipeRefreshLoadedState();
+	mState = STATE_NONE;
     }
 
     /** 设置顶部正在加载的状态 */
     private void setSwipeRefreshLoadingState() {
-        if (mSwipeRefreshLayout != null) {
-            mSwipeRefreshLayout.setRefreshing(true);
-            // 防止多次重复刷新
-            mSwipeRefreshLayout.setEnabled(false);
-        }
+	if (mSwipeRefreshLayout != null) {
+	    mSwipeRefreshLayout.setRefreshing(true);
+	    // 防止多次重复刷新
+	    mSwipeRefreshLayout.setEnabled(false);
+	}
     }
 
     /** 设置顶部加载完毕的状态 */
     private void setSwipeRefreshLoadedState() {
-        if (mSwipeRefreshLayout != null) {
-            mSwipeRefreshLayout.setRefreshing(false);
-            mSwipeRefreshLayout.setEnabled(true);
-        }
+	if (mSwipeRefreshLayout != null) {
+	    mSwipeRefreshLayout.setRefreshing(false);
+	    mSwipeRefreshLayout.setEnabled(true);
+	}
     }
 
     private void executeParserTask(byte[] data) {
-        cancelParserTask();
-        mParserTask = new ParserTask(data);
-        mParserTask.execute();
+	cancelParserTask();
+	mParserTask = new ParserTask(data);
+	mParserTask.execute();
     }
 
     private void cancelParserTask() {
-        if (mParserTask != null) {
-            mParserTask.cancel(true);
-            mParserTask = null;
-        }
+	if (mParserTask != null) {
+	    mParserTask.cancel(true);
+	    mParserTask = null;
+	}
     }
 
     class ParserTask extends AsyncTask<Void, Void, String> {
 
-        private final byte[] reponseData;
-        private boolean parserError;
-        private List<? extends Entity> list;
+	private final byte[] reponseData;
+	private boolean parserError;
+	private List<? extends Entity> list;
 
-        public ParserTask(byte[] data) {
-            this.reponseData = data;
-        }
+	public ParserTask(byte[] data) {
+	    this.reponseData = data;
+	}
 
-        @Override
-        protected String doInBackground(Void... params) {
-            try {
-                ListEntity<? extends Entity> data = parseList(new ByteArrayInputStream(
-                        reponseData));
-                new SaveCacheTask(getActivity(), data, getCacheKey()).execute();
-                list = data.getList();
-            } catch (Exception e) {
-                e.printStackTrace();
-                parserError = true;
-            }
-            return null;
-        }
+	@Override
+	protected String doInBackground(Void... params) {
+	    try {
+		ListEntity<? extends Entity> data = parseList(new ByteArrayInputStream(
+			reponseData));
+		new SaveCacheTask(getActivity(), data, getCacheKey()).execute();
+		list = data.getList();
+	    } catch (Exception e) {
+		e.printStackTrace();
+		parserError = true;
+	    }
+	    return null;
+	}
 
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            if (parserError) {
-                readCacheData(getCacheKey());
-            } else {
-                executeOnLoadDataSuccess(list);
-                executeOnLoadFinish();
-            }
-        }
+	@Override
+	protected void onPostExecute(String result) {
+	    super.onPostExecute(result);
+	    if (parserError) {
+		readCacheData(getCacheKey());
+	    } else {
+		executeOnLoadDataSuccess(list);
+		executeOnLoadFinish();
+	    }
+	}
     }
 
     @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {}
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+    }
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem,
-            int visibleItemCount, int totalItemCount) {
-        // 数据已经全部加载，或数据为空时，或正在加载，不处理滚动事件
-        if (mState == STATE_NOMORE || mState == STATE_LOADMORE
-                || mState == STATE_REFRESH) {
-            return;
-        }
-        if (mAdapter != null
-                && mAdapter.getDataSize() > 0
-                && mListView.getLastVisiblePosition() == (mListView.getCount() - 1)) {
-            if (mState == STATE_NONE
-                    && mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
-                mState = STATE_LOADMORE;
-                mCurrentPage++;
-                requestData(true);
-            }
-        }
+	    int visibleItemCount, int totalItemCount) {
+	// 数据已经全部加载，或数据为空时，或正在加载，不处理滚动事件
+	if (mState == STATE_NOMORE || mState == STATE_LOADMORE
+		|| mState == STATE_REFRESH) {
+	    return;
+	}
+	if (mAdapter != null
+		&& mAdapter.getDataSize() > 0
+		&& mListView.getLastVisiblePosition() == (mListView.getCount() - 1)) {
+	    if (mState == STATE_NONE
+		    && mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
+		mState = STATE_LOADMORE;
+		mCurrentPage++;
+		requestData(true);
+	    }
+	}
     }
 
     /**
@@ -449,17 +469,17 @@ public abstract class BaseListFragment extends BaseFragment implements
      * @param key
      */
     protected void saveToReadedList(final View view, final String prefFileName,
-            final String key) {
-        // 放入已读列表
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                AppContext.putReadedPostList(prefFileName, key, "true");
-                TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
-                if (tvTitle != null) {
-                    tvTitle.setTextColor(0xff9a9a9a);
-                }
-            }
-        }, 800);
+	    final String key) {
+	// 放入已读列表
+	new Handler().postDelayed(new Runnable() {
+	    @Override
+	    public void run() {
+		AppContext.putReadedPostList(prefFileName, key, "true");
+		TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
+		if (tvTitle != null) {
+		    tvTitle.setTextColor(0xff9a9a9a);
+		}
+	    }
+	}, 800);
     }
 }
