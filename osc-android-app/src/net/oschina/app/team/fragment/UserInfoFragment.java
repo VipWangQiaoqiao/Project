@@ -16,6 +16,7 @@ import net.oschina.app.team.bean.TeamMember;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.util.TLog;
 import net.oschina.app.util.XmlUtils;
+import net.oschina.app.widget.AvatarView;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -29,11 +30,12 @@ import android.widget.TextView;
  */
 public class UserInfoFragment extends BaseListFragment {
 
-    TextView mTvName;
-    TextView mTvUserName;
-    TextView mTvEmail;
-    TextView mTvJoinDate;
-    TextView mTvAddress;
+    private TextView mTvName;
+    private TextView mTvUserName;
+    private TextView mTvEmail;
+    private TextView mTvJoinDate;
+    private TextView mTvAddress;
+    private AvatarView mImgHead;
 
     private Activity aty;
     private TeamMember teamMember;
@@ -62,6 +64,7 @@ public class UserInfoFragment extends BaseListFragment {
     public void initView(View view) {
         View headview = View.inflate(aty, R.layout.fragment_team_userinfo_head,
                 null);
+        mImgHead = (AvatarView) headview.findViewById(R.id.fragment_team_head);
         mTvName = (TextView) headview.findViewById(R.id.fragment_team_name);
         mTvUserName = (TextView) headview
                 .findViewById(R.id.fragment_team_username);
@@ -77,6 +80,7 @@ public class UserInfoFragment extends BaseListFragment {
         mTvEmail.setText(teamMember.getTeamEmail());
         mTvJoinDate.setText(teamMember.getJoinTime());
         mTvAddress.setText(teamMember.getLocation());
+        mImgHead.setAvatarUrl(teamMember.getPortrait());
         super.initView(view);
     }
 

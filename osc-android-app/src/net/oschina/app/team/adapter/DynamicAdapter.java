@@ -68,6 +68,7 @@ public class DynamicAdapter extends ListBaseAdapter {
         }
         holder.img_head.setAvatarUrl(imgUrl);
         holder.tv_name.setText(data.getAuthor().getName());
+        holder.ll_event_list.setVisibility(View.GONE);
         // holder.tv_active.setText(data.getBody().getDetail());
         holder.tv_content.setText(Html.fromHtml(data.getBody().getDetail()));
         holder.tv_date.setText(data.getCreateTime());
