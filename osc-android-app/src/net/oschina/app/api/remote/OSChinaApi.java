@@ -685,7 +685,7 @@ public class OSChinaApi {
     public static void teamDynamic(Team team, int page,
             AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
-        KJLoger.debug("]]]]" + team.getId());
+        KJLoger.debug("teamid=" + team.getId());
         params.put("teamid", team.getId());
         params.put("pageIndex", page + "");
         params.put("pageSize", 10);

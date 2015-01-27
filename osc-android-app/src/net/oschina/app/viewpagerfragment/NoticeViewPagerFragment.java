@@ -130,18 +130,22 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
             mViewPager.setCurrentItem(0);
             sCurrentPage = 0;
             refreshPage(0);
+            sShowCount[0] = 1;
         } else if (notice.getReviewCount() != 0) {
             mViewPager.setCurrentItem(1);
             sCurrentPage = 1;
             refreshPage(1);
+            sShowCount[1] = 1;
         } else if (notice.getMsgCount() != 0) {
             mViewPager.setCurrentItem(2);
             sCurrentPage = 2;
             refreshPage(2);
+            sShowCount[2] = 1;
         } else if (notice.getNewFansCount() != 0) {
             mViewPager.setCurrentItem(3);
             sCurrentPage = 3;
             refreshPage(3);
+            sShowCount[3] = 1;
         }
     }
 
