@@ -16,9 +16,6 @@ import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.UpdateManager;
 import net.oschina.app.widget.BadgeView;
 import net.oschina.app.widget.MyFragmentTabHost;
-
-import org.kymjs.kjframe.utils.KJLoger;
-
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
@@ -122,14 +119,12 @@ public class MainActivity extends ActionBarActivity implements
         AppManager.getAppManager().addActivity(this);
 
         notifitcationBarClick(getIntent());
-        KJLoger.debug("1===");
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         notifitcationBarClick(intent);
-        KJLoger.debug("=2==");
     }
 
     /**
