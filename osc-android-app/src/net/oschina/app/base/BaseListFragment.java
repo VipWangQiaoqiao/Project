@@ -314,12 +314,16 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment im
 	}
 	mAdapter.setState(adapterState);
 	mAdapter.addData(data);
+	// 判断等于是因为最后有一项是listview的状态
 	if (mAdapter.getCount() == 1) {
 	    
 	    if (needShowEmptyNoData()) {
 		mErrorLayout.setErrorType(EmptyLayout.NODATA);
+	    } else {
+		mAdapter.setState(ListBaseAdapter.STATE_EMPTY_ITEM);
+		mAdapter.notifyDataSetChanged();
 	    }
-	} 
+	}
     }
 
     /**

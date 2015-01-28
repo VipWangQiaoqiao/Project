@@ -69,7 +69,7 @@ public class ListBaseAdapter<T extends Entity> extends BaseAdapter {
         case STATE_LOAD_MORE:
             return getDataSize() + 1;
         case STATE_NO_DATA:
-            return 0;
+            return 1;
         case STATE_NO_MORE:
             return getDataSize() + 1;
         case STATE_LESS_ONE_PAGE:
