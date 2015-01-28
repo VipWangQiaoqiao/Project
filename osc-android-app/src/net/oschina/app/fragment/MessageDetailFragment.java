@@ -17,8 +17,6 @@ import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.Constants;
-import net.oschina.app.bean.Entity;
-import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.emoji.EmojiFragment;
@@ -50,7 +48,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
-public class MessageDetailFragment extends BaseListFragment implements
+public class MessageDetailFragment extends BaseListFragment<Comment> implements
         EmojiTextListener, OnItemLongClickListener {
     protected static final String TAG = ActiveFragment.class.getSimpleName();
     public static final String BUNDLE_KEY_FID = "BUNDLE_KEY_FID";
@@ -141,7 +139,7 @@ public class MessageDetailFragment extends BaseListFragment implements
     }
 
     @Override
-    protected ListBaseAdapter getListAdapter() {
+    protected MessageDetailAdapter getListAdapter() {
         return new MessageDetailAdapter();
     }
 
@@ -151,13 +149,13 @@ public class MessageDetailFragment extends BaseListFragment implements
     }
 
     @Override
-    protected ListEntity parseList(InputStream is) throws Exception {
+    protected CommentList parseList(InputStream is) throws Exception {
         CommentList list = XmlUtils.toBean(CommentList.class, is);
         return list;
     }
 
     @Override
-    protected ListEntity<Comment> readList(Serializable seri) {
+    protected CommentList readList(Serializable seri) {
         CommentList list = ((CommentList) seri);
         return list;
     }
@@ -200,10 +198,10 @@ public class MessageDetailFragment extends BaseListFragment implements
     }
 
     @Override
-    protected void executeOnLoadDataSuccess(List data) {
+    protected void executeOnLoadDataSuccess(List<Comment> data) {
         mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
         if (data == null) {
-            data = new ArrayList<Entity>(1);
+            data = new ArrayList<Comment>(1);
         }
         if (mAdapter != null) {
             if (mCurrentPage == 0)

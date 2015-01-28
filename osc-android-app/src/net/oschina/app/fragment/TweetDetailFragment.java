@@ -16,7 +16,6 @@ import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.CommentList;
-import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.Tweet;
@@ -60,7 +59,7 @@ import butterknife.ButterKnife;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
-public class TweetDetailFragment extends BaseListFragment implements
+public class TweetDetailFragment extends BaseListFragment<Comment> implements
         EmojiTextListener, EmojiFragmentControl, OnOperationListener,
         OnItemClickListener, OnItemLongClickListener {
 
@@ -76,7 +75,7 @@ public class TweetDetailFragment extends BaseListFragment implements
     private final RecordButtonUtil util = new RecordButtonUtil();
 
     @Override
-    protected ListBaseAdapter getListAdapter() {
+    protected CommentAdapter getListAdapter() {
         return new CommentAdapter(this, true);
     }
 
@@ -86,13 +85,13 @@ public class TweetDetailFragment extends BaseListFragment implements
     }
 
     @Override
-    protected ListEntity parseList(InputStream is) throws Exception {
+    protected CommentList parseList(InputStream is) throws Exception {
         CommentList list = XmlUtils.toBean(CommentList.class, is);
         return list;
     }
 
     @Override
-    protected ListEntity readList(Serializable seri) {
+    protected CommentList readList(Serializable seri) {
         return ((CommentList) seri);
     }
 

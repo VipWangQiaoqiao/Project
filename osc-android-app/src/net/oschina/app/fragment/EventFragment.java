@@ -30,7 +30,7 @@ import net.oschina.app.util.XmlUtils;
  * @version 创建时间：2014年12月8日 下午5:17:32 
  * 
  */
-public class EventFragment extends BaseListFragment {
+public class EventFragment extends BaseListFragment<Event> {
 	
 	public static final String BUNDLE_KEY_EVENT_TYPE = "eventlist_type";
 
@@ -40,7 +40,7 @@ public class EventFragment extends BaseListFragment {
 	private int event_type;
 	
 	@Override
-	protected ListBaseAdapter getListAdapter() {
+	protected EventAdapter getListAdapter() {
 		EventAdapter adapter = new EventAdapter();
 		adapter.setEventType(event_type);
 		return adapter;
@@ -127,13 +127,13 @@ public class EventFragment extends BaseListFragment {
 	}
 
 	@Override
-	protected ListEntity parseList(InputStream is) throws Exception {
+	protected EventList parseList(InputStream is) throws Exception {
 		EventList list = XmlUtils.toBean(EventList.class, is);
 		return list;
 	}
 
 	@Override
-	protected ListEntity readList(Serializable seri) {
+	protected EventList readList(Serializable seri) {
 		return ((EventList) seri);
 	}
 

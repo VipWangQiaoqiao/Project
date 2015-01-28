@@ -6,9 +6,6 @@ import java.io.Serializable;
 import net.oschina.app.adapter.PostAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.bean.ListEntity;
-import net.oschina.app.bean.NewsList;
 import net.oschina.app.bean.Post;
 import net.oschina.app.bean.PostList;
 import net.oschina.app.util.UIHelper;
@@ -21,13 +18,13 @@ import android.widget.AdapterView;
  * 
  * @author william_sim
  */
-public class PostsFragment extends BaseListFragment {
+public class PostsFragment extends BaseListFragment<Post> {
 
 	protected static final String TAG = PostsFragment.class.getSimpleName();
 	private static final String CACHE_KEY_PREFIX = "postslist_";
 
 	@Override
-	protected ListBaseAdapter getListAdapter() {
+	protected PostAdapter getListAdapter() {
 		return new PostAdapter();
 	}
 
@@ -37,13 +34,13 @@ public class PostsFragment extends BaseListFragment {
 	}
 
 	@Override
-	protected ListEntity parseList(InputStream is) throws Exception {
+	protected PostList parseList(InputStream is) throws Exception {
 		PostList list = XmlUtils.toBean(PostList.class, is);
 		return list;
 	}
 
 	@Override
-	protected ListEntity readList(Serializable seri) {
+	protected PostList readList(Serializable seri) {
 		return ((PostList) seri);
 	}
 

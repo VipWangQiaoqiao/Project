@@ -2,6 +2,7 @@ package net.oschina.app.adapter;
 
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
+import net.oschina.app.bean.Friend;
 import net.oschina.app.bean.User;
 import net.oschina.app.widget.AvatarView;
 import android.annotation.SuppressLint;
@@ -19,7 +20,7 @@ import butterknife.InjectView;
  * @created 2014年11月6日 上午11:22:27
  *
  */
-public class FindUserAdapter extends ListBaseAdapter {
+public class FindUserAdapter extends ListBaseAdapter<User> {
 
 	@SuppressLint("InflateParams")
 	@Override

@@ -1,12 +1,7 @@
 package net.oschina.app.base;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
 import net.oschina.app.R;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.util.TDevice;
@@ -19,7 +14,7 @@ import android.widget.BaseAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class ListBaseAdapter extends BaseAdapter {
+public class ListBaseAdapter<T extends Entity> extends BaseAdapter {
     public static final int STATE_EMPTY_ITEM = 0;
     public static final int STATE_LOAD_MORE = 1;
     public static final int STATE_NO_MORE = 2;
@@ -57,7 +52,7 @@ public class ListBaseAdapter extends BaseAdapter {
         return this.state;
     }
     
-    protected ArrayList<Entity> mDatas = new ArrayList<Entity>();
+    protected ArrayList<T> mDatas = new ArrayList<T>();
 
     public ListBaseAdapter() {
         _loadmoreText = R.string.loading;
@@ -102,30 +97,30 @@ public class ListBaseAdapter extends BaseAdapter {
         return arg0;
     }
 
-    public void setData(ArrayList<Entity> data) {
+    public void setData(ArrayList<T> data) {
         mDatas = data;
         notifyDataSetChanged();
     }
 
-    public ArrayList<Entity> getData() {
-        return mDatas == null ? (mDatas = new ArrayList<Entity>()) : mDatas;
+    public ArrayList<T> getData() {
+        return mDatas == null ? (mDatas = new ArrayList<T>()) : mDatas;
     }
 
-    public void addData(List<? extends Entity> data) {
+    public void addData(List<T> data) {
         if (mDatas != null && data != null && !data.isEmpty()) {
             mDatas.addAll(data);
         }
         notifyDataSetChanged();
     }
     
-    public void addItem(Entity obj) {
+    public void addItem(T obj) {
         if (mDatas != null) {
             mDatas.add(obj);
         }
         notifyDataSetChanged();
     }
 
-    public void addItem(int pos, Entity obj) {
+    public void addItem(int pos, T obj) {
         if (mDatas != null) {
             mDatas.add(pos, obj);
         }
