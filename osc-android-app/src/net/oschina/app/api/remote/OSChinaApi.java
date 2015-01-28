@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URLEncoder;
 
+import org.kymjs.kjframe.utils.KJLoger;
+
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
 import net.oschina.app.api.ApiHttpClient;
@@ -684,6 +686,7 @@ public class OSChinaApi {
         RequestParams params = new RequestParams();
         // int uid = AppContext.getInstance().getLoginUid();
         // params.put("uid", uid);
+        KJLoger.debug("teamid=" + team.getId());
         params.put("teamid", team.getId());
         params.put("pageIndex", page + "");
         params.put("pageSize", 20);
