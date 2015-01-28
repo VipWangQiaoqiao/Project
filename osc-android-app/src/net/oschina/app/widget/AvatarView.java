@@ -71,7 +71,7 @@ public class AvatarView extends CircleImageView {
                 KJLoger.debug(getClass().getName() + "头像地址出错:" + url);
             }
         });
-        kjb.display(this, url);
+        kjb.display(this, url, R.drawable.widget_dface);
     }
 
     public static String getSmallAvatar(String source) {
