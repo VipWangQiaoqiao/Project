@@ -6,11 +6,8 @@ import java.io.Serializable;
 import net.oschina.app.adapter.BlogAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Blog;
 import net.oschina.app.bean.BlogList;
-import net.oschina.app.bean.ListEntity;
-import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import android.view.View;
@@ -23,13 +20,13 @@ import android.widget.AdapterView;
  * @created 2014年10月29日 下午5:09:13
  *
  */
-public class UserBlogFragment extends BaseListFragment {
+public class UserBlogFragment extends BaseListFragment<Blog> {
 	
 	protected static final String TAG = UserBlogFragment.class.getSimpleName();
 	private static final String CACHE_KEY_PREFIX = "user_bloglist_";
 	
 	@Override
-	protected ListBaseAdapter getListAdapter() {
+	protected BlogAdapter getListAdapter() {
 		return new BlogAdapter();
 	}
 
@@ -39,13 +36,13 @@ public class UserBlogFragment extends BaseListFragment {
 	}
 
 	@Override
-	protected ListEntity parseList(InputStream is) throws Exception {
+	protected BlogList parseList(InputStream is) throws Exception {
 		BlogList list = XmlUtils.toBean(BlogList.class, is);
 		return list;
 	}
 
 	@Override
-	protected ListEntity readList(Serializable seri) {
+	protected BlogList readList(Serializable seri) {
 		return ((BlogList) seri);
 	}
 

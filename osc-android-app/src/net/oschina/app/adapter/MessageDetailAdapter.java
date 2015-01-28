@@ -18,7 +18,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class MessageDetailAdapter extends ListBaseAdapter {
+public class MessageDetailAdapter extends ListBaseAdapter<Comment> {
 
 	@Override
 	protected boolean loadMoreHasBg() {

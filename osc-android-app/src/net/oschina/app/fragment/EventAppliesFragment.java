@@ -26,7 +26,7 @@ import android.widget.AdapterView;
  *
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class EventAppliesFragment extends BaseListFragment {
+public class EventAppliesFragment extends BaseListFragment<Apply> {
 
 	protected static final String TAG = EventAppliesFragment.class.getSimpleName();
 	private static final String CACHE_KEY_PREFIX = "event_apply_user_list";
@@ -37,7 +37,7 @@ public class EventAppliesFragment extends BaseListFragment {
 	}
 
 	@Override
-	protected ListBaseAdapter getListAdapter() {
+	protected EventApplyAdapter getListAdapter() {
 		return new EventApplyAdapter();
 	}
 
@@ -47,13 +47,13 @@ public class EventAppliesFragment extends BaseListFragment {
 	}
 
 	@Override
-	protected ListEntity parseList(InputStream is) throws Exception {
+	protected EventAppliesList parseList(InputStream is) throws Exception {
 		EventAppliesList list = XmlUtils.toBean(EventAppliesList.class, is);
 		return list;
 	}
 
 	@Override
-	protected ListEntity readList(Serializable seri) {
+	protected EventAppliesList readList(Serializable seri) {
 		return ((EventAppliesList) seri);
 	}
 

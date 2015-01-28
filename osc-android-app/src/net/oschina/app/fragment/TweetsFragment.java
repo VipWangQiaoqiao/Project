@@ -12,15 +12,12 @@ import net.oschina.app.adapter.TweetAdapter;
 import net.oschina.app.api.OperationResponseHandler;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Constants;
-import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetsList;
 import net.oschina.app.interf.OnTabReselectListener;
-import net.oschina.app.ui.NavigationDrawerFragment;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -44,7 +41,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
  * 
  * @date 2014年10月10日
  */
-public class TweetsFragment extends BaseListFragment implements OnItemLongClickListener, OnTabReselectListener {
+public class TweetsFragment extends BaseListFragment<Tweet> implements OnItemLongClickListener, OnTabReselectListener {
 
 	protected static final String TAG = TweetsFragment.class.getSimpleName();
 	private static final String CACHE_KEY_PREFIX = "tweetslist_";
@@ -103,7 +100,7 @@ public class TweetsFragment extends BaseListFragment implements OnItemLongClickL
 	}
 
 	@Override
-	protected ListBaseAdapter getListAdapter() {
+	protected TweetAdapter getListAdapter() {
 		return new TweetAdapter();
 	}
 
@@ -113,13 +110,13 @@ public class TweetsFragment extends BaseListFragment implements OnItemLongClickL
 	}
 
 	@Override
-	protected ListEntity parseList(InputStream is) throws Exception {
+	protected TweetsList parseList(InputStream is) throws Exception {
 		TweetsList list = XmlUtils.toBean(TweetsList.class, is);
 		return list;
 	}
 
 	@Override
-	protected ListEntity readList(Serializable seri) {
+	protected TweetsList readList(Serializable seri) {
 		return ((TweetsList) seri);
 	}
 

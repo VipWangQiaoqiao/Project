@@ -42,7 +42,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
  * @created 2014年10月22日 下午3:35:43
  * 
  */
-public class ActiveFragment extends BaseListFragment implements
+public class ActiveFragment extends BaseListFragment<Active> implements
         OnItemLongClickListener {
 
     protected static final String TAG = ActiveFragment.class.getSimpleName();
@@ -101,7 +101,7 @@ public class ActiveFragment extends BaseListFragment implements
     }
 
     @Override
-    protected ListBaseAdapter getListAdapter() {
+    protected ActiveAdapter getListAdapter() {
         return new ActiveAdapter();
     }
 
@@ -112,13 +112,13 @@ public class ActiveFragment extends BaseListFragment implements
     }
 
     @Override
-    protected ListEntity parseList(InputStream is) throws Exception {
+    protected ActiveList parseList(InputStream is) throws Exception {
         ActiveList list = XmlUtils.toBean(ActiveList.class, is);
         return list;
     }
 
     @Override
-    protected ListEntity readList(Serializable seri) {
+    protected ActiveList readList(Serializable seri) {
         return ((ActiveList) seri);
     }
 

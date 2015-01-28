@@ -118,13 +118,34 @@ public class MainActivity extends ActionBarActivity implements
         initView();
         AppManager.getAppManager().addActivity(this);
 
-        notifitcationBarClick(getIntent());
+        handleIntent(getIntent());
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        notifitcationBarClick(intent);
+        handleIntent(intent);
+    }
+
+    /**
+     * 处理传进来的intent
+     * 
+     * @author 火蚁 2015-1-28 下午3:48:44
+     * 
+     * @return void
+     * @param intent
+     */
+    private void handleIntent(Intent intent) {
+        if (intent == null)
+            return;
+        String action = intent.getAction();
+        if (action != null && action.equals(Intent.ACTION_VIEW)) {
+
+            UIHelper.showUrlRedirect(this, intent.getDataString());
+
+        } else if (intent.getBooleanExtra("NOTICE", false)) {
+            notifitcationBarClick(intent);
+        }
     }
 
     /**

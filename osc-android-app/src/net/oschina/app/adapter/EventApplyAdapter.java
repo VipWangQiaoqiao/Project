@@ -19,7 +19,7 @@ import butterknife.InjectView;
  * @created 2014年12月12日 下午8:10:43
  * 
  */
-public class EventApplyAdapter extends ListBaseAdapter {
+public class EventApplyAdapter extends ListBaseAdapter<Apply> {
 
     @SuppressLint("InflateParams")
     @Override

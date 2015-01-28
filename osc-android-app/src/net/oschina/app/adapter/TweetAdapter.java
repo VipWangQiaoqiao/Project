@@ -35,7 +35,7 @@ import butterknife.InjectView;
  * 
  * @date 2014年10月10日
  */
-public class TweetAdapter extends ListBaseAdapter {
+public class TweetAdapter extends ListBaseAdapter<Tweet> {
 
     static class ViewHolder {
         @InjectView(R.id.tv_tweet_name)

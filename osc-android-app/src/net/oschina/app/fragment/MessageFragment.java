@@ -39,7 +39,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 
-public class MessageFragment extends BaseListFragment implements
+public class MessageFragment extends BaseListFragment<Messages> implements
         OnItemLongClickListener {
     protected static final String TAG = ActiveFragment.class.getSimpleName();
     private static final String CACHE_KEY_PREFIX = "message_list";
@@ -89,7 +89,7 @@ public class MessageFragment extends BaseListFragment implements
     }
 
     @Override
-    protected ListBaseAdapter getListAdapter() {
+    protected MessageAdapter getListAdapter() {
         return new MessageAdapter();
     }
 
@@ -99,13 +99,13 @@ public class MessageFragment extends BaseListFragment implements
     }
 
     @Override
-    protected ListEntity parseList(InputStream is) throws Exception {
+    protected MessageList parseList(InputStream is) throws Exception {
         MessageList list = XmlUtils.toBean(MessageList.class, is);
         return list;
     }
 
     @Override
-    protected ListEntity readList(Serializable seri) {
+    protected MessageList readList(Serializable seri) {
         return ((MessageList) seri);
     }
 

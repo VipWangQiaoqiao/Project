@@ -12,9 +12,7 @@ import net.oschina.app.api.OperationResponseHandler;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Comment;
-import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.Tweet;
@@ -34,7 +32,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 
-public class SoftWareTweetsFrament extends BaseListFragment implements
+public class SoftWareTweetsFrament extends BaseListFragment<Tweet> implements
         OnOperationListener, EmojiTextListener, OnItemLongClickListener {
 
     public static final String BUNDLE_KEY_ID = "BUNDLE_KEY_ID";
@@ -83,7 +81,7 @@ public class SoftWareTweetsFrament extends BaseListFragment implements
     }
 
     @Override
-    protected ListBaseAdapter getListAdapter() {
+    protected TweetAdapter getListAdapter() {
         return new TweetAdapter();
     }
 
@@ -94,12 +92,12 @@ public class SoftWareTweetsFrament extends BaseListFragment implements
     }
 
     @Override
-    protected ListEntity parseList(InputStream is) throws Exception {
+    protected TweetsList parseList(InputStream is) throws Exception {
         return XmlUtils.toBean(TweetsList.class, is);
     }
 
     @Override
-    protected ListEntity readList(Serializable seri) {
+    protected TweetsList readList(Serializable seri) {
         return ((TweetsList) seri);
     }
 
@@ -132,23 +130,6 @@ public class SoftWareTweetsFrament extends BaseListFragment implements
         tweet.setBody(text);
         ServerTaskUtils.pubSoftWareTweet(getActivity(), tweet, mId);
         mEmojiFragment.reset();
-    }
-
-    private void handleDeleteComment(Comment comment) {
-        // if (!AppContext.getInstance().isLogin()) {
-        // UIHelper.showLoginActivity(getActivity());
-        // return;
-        // }
-        // AppContext.showToastShort(R.string.deleting);
-        // if (mIsBlogComment) {
-        // OSChinaApi.deleteBlogComment(AppContext.getInstance().getLoginUid(),
-        // mId,
-        // comment.getId(), comment.getAuthorId(), mOwnerId,
-        // new DeleteOperationResponseHandler(comment));
-        // } else {
-        // OSChinaApi.deleteComment(mId, mCatalog, comment.getId(), comment
-        // .getAuthorId(), new DeleteOperationResponseHandler(comment));
-        // }
     }
 
     // @Override

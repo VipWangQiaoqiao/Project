@@ -9,7 +9,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class SoftwareCatalogListAdapter extends ListBaseAdapter {
+public class SoftwareCatalogListAdapter extends ListBaseAdapter<SoftwareType> {
 	
 	static class ViewHold{
 		@InjectView(R.id.tv_software_catalog_name)TextView name;
