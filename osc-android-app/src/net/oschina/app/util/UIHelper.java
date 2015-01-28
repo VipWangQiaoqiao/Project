@@ -397,6 +397,7 @@ public class UIHelper {
      * @param url
      */
     public static void showUrlRedirect(Context context, String url) {
+	if (url == null) return;
         if (url.startsWith(SHOWIMAGE)) {
             String realUrl = url.substring(SHOWIMAGE.length());
             try {

@@ -79,7 +79,6 @@ public class OSChinaApi {
         params.put("catalog", catalog);
         params.put("pageIndex", page);
         params.put("pageSize", AppContext.PAGE_SIZE);
-        params.put("dataType", "json");
         ApiHttpClient.get("action/api/post_list", params, handler);
     }
 
