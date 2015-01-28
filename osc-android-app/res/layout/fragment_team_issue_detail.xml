@@ -54,11 +54,44 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="火蚁" />
-
     </LinearLayout>
-    
+
     <TextView
+        android:id="@+id/tv_issue_time"
+        style="@style/list_text_info"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:padding="@dimen/space_10"
+        android:text="完成时间：" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="@dimen/space_10"
+        android:layout_marginRight="@dimen/space_10"
+        android:background="@color/list_divider_color" />
+
+    <LinearLayout
+        style="@style/fill_wrap"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/space_10" >
+
+        <TextView
+            style="@style/list_text_info"
+            android:layout_marginRight="@dimen/space_10"
+            android:text="任务状态" />
+
+        <net.oschina.app.widget.togglebutton.ToggleButton
+            android:id="@+id/tb_team_issue_status"
+            android:layout_width="35dp"
+            android:layout_height="18dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_team_issue_tags"
+        style="@style/fill_wrap"
+        android:orientation="horizontal" >
+    </LinearLayout>
 
 </LinearLayout>
