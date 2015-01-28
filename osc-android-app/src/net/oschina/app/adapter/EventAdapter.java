@@ -21,81 +21,81 @@ import butterknife.InjectView;
  * @created 2014年10月9日 下午6:22:54
  * 
  */
-public class EventAdapter extends ListBaseAdapter {
+public class EventAdapter extends ListBaseAdapter<Event> {
 
     private int eventType = EventList.EVENT_LIST_TYPE_NEW_EVENT;
     private final KJBitmap kjb = KJBitmap.create();
 
     static class ViewHolder {
 
-        @InjectView(R.id.iv_event_status)
-        ImageView status;
-        @InjectView(R.id.iv_event_img)
-        ImageView img;
-        @InjectView(R.id.tv_event_title)
-        TextView title;
-        @InjectView(R.id.tv_event_time)
-        TextView time;
-        @InjectView(R.id.tv_event_spot)
-        TextView spot;
+	@InjectView(R.id.iv_event_status)
+	ImageView status;
+	@InjectView(R.id.iv_event_img)
+	ImageView img;
+	@InjectView(R.id.tv_event_title)
+	TextView title;
+	@InjectView(R.id.tv_event_time)
+	TextView time;
+	@InjectView(R.id.tv_event_spot)
+	TextView spot;
 
-        public ViewHolder(View view) {
-            ButterKnife.inject(this, view);
-        }
+	public ViewHolder(View view) {
+	    ButterKnife.inject(this, view);
+	}
     }
 
     public void setEventType(int eventType) {
-        this.eventType = eventType;
+	this.eventType = eventType;
     }
 
     @Override
     protected View getRealView(int position, View convertView, ViewGroup parent) {
-        ViewHolder vh = null;
-        if (convertView == null || convertView.getTag() == null) {
-            convertView = getLayoutInflater(parent.getContext()).inflate(
-                    R.layout.list_cell_event, null);
-            vh = new ViewHolder(convertView);
-            convertView.setTag(vh);
-        } else {
-            vh = (ViewHolder) convertView.getTag();
-        }
+	ViewHolder vh = null;
+	if (convertView == null || convertView.getTag() == null) {
+	    convertView = getLayoutInflater(parent.getContext()).inflate(
+		    R.layout.list_cell_event, null);
+	    vh = new ViewHolder(convertView);
+	    convertView.setTag(vh);
+	} else {
+	    vh = (ViewHolder) convertView.getTag();
+	}
 
-        Event item = (Event) mDatas.get(position);
+	Event item = (Event) mDatas.get(position);
 
-        setEventStatus(item, vh);
+	setEventStatus(item, vh);
 
-        kjb.display(vh.img, item.getCover());
-        vh.title.setText(item.getTitle());
-        vh.time.setText(item.getStartTime());
-        vh.spot.setText(item.getSpot());
+	kjb.display(vh.img, item.getCover());
+	vh.title.setText(item.getTitle());
+	vh.time.setText(item.getStartTime());
+	vh.spot.setText(item.getSpot());
 
-        return convertView;
+	return convertView;
     }
 
     private void setEventStatus(Event event, ViewHolder vh) {
 
-        switch (this.eventType) {
-        case EventList.EVENT_LIST_TYPE_NEW_EVENT:
-            if (event.getApplyStatus() == Event.APPLYSTATUS_CHECKING
-                    || event.getApplyStatus() == Event.APPLYSTATUS_CHECKED) {
-                vh.status
-                        .setImageResource(R.drawable.icon_event_status_checked);
-                vh.status.setVisibility(View.VISIBLE);
-            }
-            break;
-        case EventList.EVENT_LIST_TYPE_MY_EVENT:
-            if (event.getApplyStatus() == Event.APPLYSTATUS_ATTEND) {
-                vh.status.setImageResource(R.drawable.icon_event_status_attend);
-            } else if (event.getStatus() == Event.EVNET_STATUS_APPLYING) {
-                vh.status
-                        .setImageResource(R.drawable.icon_event_status_checked);
-            } else {
-                vh.status.setImageResource(R.drawable.icon_event_status_over);
-            }
-            vh.status.setVisibility(View.VISIBLE);
-            break;
-        default:
-            break;
-        }
+	switch (this.eventType) {
+	case EventList.EVENT_LIST_TYPE_NEW_EVENT:
+	    if (event.getApplyStatus() == Event.APPLYSTATUS_CHECKING
+		    || event.getApplyStatus() == Event.APPLYSTATUS_CHECKED) {
+		vh.status
+			.setImageResource(R.drawable.icon_event_status_checked);
+		vh.status.setVisibility(View.VISIBLE);
+	    }
+	    break;
+	case EventList.EVENT_LIST_TYPE_MY_EVENT:
+	    if (event.getApplyStatus() == Event.APPLYSTATUS_ATTEND) {
+		vh.status.setImageResource(R.drawable.icon_event_status_attend);
+	    } else if (event.getStatus() == Event.EVNET_STATUS_APPLYING) {
+		vh.status
+			.setImageResource(R.drawable.icon_event_status_checked);
+	    } else {
+		vh.status.setImageResource(R.drawable.icon_event_status_over);
+	    }
+	    vh.status.setVisibility(View.VISIBLE);
+	    break;
+	default:
+	    break;
+	}
     }
 }

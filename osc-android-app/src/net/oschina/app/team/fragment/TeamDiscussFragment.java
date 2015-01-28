@@ -5,7 +5,6 @@ import java.io.Serializable;
 
 import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.team.adapter.TeamDiscussAdapter;
 import net.oschina.app.team.bean.Team;
@@ -24,7 +23,7 @@ import android.widget.AdapterView;
  * @author fireant(http://my.oschina.net/u/253900)
  * 
  */
-public class TeamDiscussFragment extends BaseListFragment {
+public class TeamDiscussFragment extends BaseListFragment<TeamDiscuss> {
 
     protected static final String TAG = TeamDiscussFragment.class
             .getSimpleName();
@@ -49,7 +48,7 @@ public class TeamDiscussFragment extends BaseListFragment {
     }
 
     @Override
-    protected ListBaseAdapter getListAdapter() {
+    protected TeamDiscussAdapter getListAdapter() {
         return new TeamDiscussAdapter();
     }
 
@@ -62,9 +61,9 @@ public class TeamDiscussFragment extends BaseListFragment {
     }
 
     @Override
-    protected ListEntity<TeamDiscuss> parseList(InputStream is)
+    protected TeamDiscussList parseList(InputStream is)
             throws Exception {
-        TeamDiscussList<TeamDiscuss> list = XmlUtils.toBean(
+        TeamDiscussList list = XmlUtils.toBean(
                 TeamDiscussList.class, is);
         return list;
     }

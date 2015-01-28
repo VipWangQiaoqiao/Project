@@ -17,7 +17,7 @@ import net.oschina.app.bean.ListEntity;
  */
 @SuppressWarnings("serial")
 @XStreamAlias("oschina")
-public class TeamProjectList extends Entity implements ListEntity {
+public class TeamProjectList extends Entity implements ListEntity<TeamProject> {
 	
 	@XStreamAlias("pagesize")
 	private int pageSize;

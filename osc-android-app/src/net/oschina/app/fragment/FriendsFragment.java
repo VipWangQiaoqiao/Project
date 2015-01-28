@@ -8,11 +8,9 @@ import net.oschina.app.AppContext;
 import net.oschina.app.adapter.FriendAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.Friend;
 import net.oschina.app.bean.FriendsList;
-import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.Notice;
 import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.ui.MainActivity;
@@ -33,7 +31,7 @@ import android.widget.AdapterView;
  * 
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class FriendsFragment extends BaseListFragment {
+public class FriendsFragment extends BaseListFragment<Friend> {
 
     public final static String BUNDLE_KEY_UID = "UID";
 
@@ -73,7 +71,7 @@ public class FriendsFragment extends BaseListFragment {
     }
 
     @Override
-    protected ListBaseAdapter getListAdapter() {
+    protected FriendAdapter getListAdapter() {
         return new FriendAdapter();
     }
 
@@ -83,13 +81,13 @@ public class FriendsFragment extends BaseListFragment {
     }
 
     @Override
-    protected ListEntity parseList(InputStream is) throws Exception {
+    protected FriendsList parseList(InputStream is) throws Exception {
         FriendsList list = XmlUtils.toBean(FriendsList.class, is);
         return list;
     }
 
     @Override
-    protected ListEntity readList(Serializable seri) {
+    protected FriendsList readList(Serializable seri) {
         return ((FriendsList) seri);
     }
 

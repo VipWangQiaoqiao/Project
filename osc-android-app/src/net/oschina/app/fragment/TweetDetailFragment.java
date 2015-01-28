@@ -3,7 +3,6 @@ package net.oschina.app.fragment;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.util.List;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -15,7 +14,6 @@ import net.oschina.app.base.BeseHaveHeaderListFragment;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.CommentList;
-import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.Tweet;
@@ -54,8 +52,17 @@ import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
+/***
+ * 动弹详情，实际每个item显示的数据类型是Comment
+ * 
+ * TweetDetailFragment.java
+ * 
+ * @author 火蚁(http://my.oschina.net/u/253900)
+ *
+ * @data 2015-1-28 上午11:48:41
+ */
 public class TweetDetailFragment extends
-	BeseHaveHeaderListFragment<TweetDetail> implements EmojiTextListener,
+	BeseHaveHeaderListFragment<Comment, TweetDetail> implements EmojiTextListener,
 	EmojiFragmentControl, OnOperationListener, OnItemClickListener,
 	OnItemLongClickListener {
 
@@ -70,8 +77,7 @@ public class TweetDetailFragment extends
     private RelativeLayout mRlRecordSound;
     private final RecordButtonUtil util = new RecordButtonUtil();
 
-    @Override
-    protected ListBaseAdapter getListAdapter() {
+    protected CommentAdapter getListAdapter() {
 	return new CommentAdapter(this, true);
     }
 
@@ -80,14 +86,12 @@ public class TweetDetailFragment extends
 	return CACHE_KEY_TWEET_COMMENT + mTweetId + "_" + mCurrentPage;
     }
 
-    @Override
-    protected ListEntity parseList(InputStream is) throws Exception {
+    protected CommentList parseList(InputStream is) throws Exception {
 	CommentList list = XmlUtils.toBean(CommentList.class, is);
 	return list;
     }
 
-    @Override
-    protected ListEntity readList(Serializable seri) {
+    protected CommentList readList(Serializable seri) {
 	return ((CommentList) seri);
     }
 

@@ -10,6 +10,7 @@ import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.ListEntity;
+import net.oschina.app.bean.Software;
 import net.oschina.app.bean.SoftwareDec;
 import net.oschina.app.bean.SoftwareList;
 import net.oschina.app.util.UIHelper;
@@ -18,7 +19,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 
-public class SoftwareListFragment extends BaseListFragment {
+public class SoftwareListFragment extends BaseListFragment<SoftwareDec> {
 	
 	public static final String BUNDLE_SOFTWARE = "BUNDLE_SOFTWARE";
 	
@@ -37,7 +38,7 @@ public class SoftwareListFragment extends BaseListFragment {
 	}
 
 	@Override
-	protected ListBaseAdapter getListAdapter() {
+	protected SoftwareAdapter getListAdapter() {
 		return new SoftwareAdapter();
 	}
 
@@ -47,7 +48,7 @@ public class SoftwareListFragment extends BaseListFragment {
 	}
 
 	@Override
-	protected ListEntity parseList(InputStream is) throws Exception {
+	protected SoftwareList parseList(InputStream is) throws Exception {
 		SoftwareList list = XmlUtils.toBean(SoftwareList.class, is);
 		return list;
 	}

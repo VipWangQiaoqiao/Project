@@ -30,7 +30,7 @@ import android.widget.AdapterView;
  * @author fireant(http://my.oschina.net/u/253900)
  * 
  */
-public class TeamIssueFragment extends BaseListFragment {
+public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
 
     protected static final String TAG = TeamIssueFragment.class.getSimpleName();
     private static final String CACHE_KEY_PREFIX = "team_issue_list_";
@@ -64,7 +64,7 @@ public class TeamIssueFragment extends BaseListFragment {
     }
 
     @Override
-    protected ListBaseAdapter getListAdapter() {
+    protected TeamIssueAdapter getListAdapter() {
 	return new TeamIssueAdapter();
     }
 
@@ -78,8 +78,8 @@ public class TeamIssueFragment extends BaseListFragment {
     }
 
     @Override
-    protected ListEntity<TeamIssue> parseList(InputStream is) throws Exception {
-	TeamIssueList<TeamIssue> list = XmlUtils
+    protected TeamIssueList parseList(InputStream is) throws Exception {
+	TeamIssueList list = XmlUtils
 		.toBean(TeamIssueList.class, is);
 	return list;
     }
@@ -90,7 +90,7 @@ public class TeamIssueFragment extends BaseListFragment {
     }
 
     @Override
-    protected void executeOnLoadDataSuccess(List<? extends Entity> data) {
+    protected void executeOnLoadDataSuccess(List<TeamIssue> data) {
 	super.executeOnLoadDataSuccess(data);
 	if (mAdapter.getCount() == 1) {
 	    setNoTeamIssue();

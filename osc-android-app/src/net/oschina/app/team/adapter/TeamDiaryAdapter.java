@@ -12,7 +12,7 @@ import net.oschina.app.team.bean.TeamDiary;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.AvatarView;
 
-public class TeamDiaryAdapter extends ListBaseAdapter {
+public class TeamDiaryAdapter extends ListBaseAdapter<TeamDiary> {
 
 	@Override
 	protected View getRealView(int position, View convertView, ViewGroup parent) {

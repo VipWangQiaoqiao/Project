@@ -47,6 +47,8 @@ public class LogUploadService extends Service {
                     LogUploadService.this.stopSelf();
                 }
             });
+        } else {
+            LogUploadService.this.stopSelf();
         }
         return super.onStartCommand(intent, flags, startId);
     }

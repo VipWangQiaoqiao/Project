@@ -7,8 +7,6 @@ import java.util.List;
 import net.oschina.app.AppContext;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.bean.ListEntity;
 import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.team.adapter.TeamIssueAdapter;
 import net.oschina.app.team.bean.Team;
@@ -23,7 +21,7 @@ import org.kymjs.kjframe.utils.PreferenceHelper;
 
 import android.os.Bundle;
 
-public class MyIssueDetail extends BaseListFragment {
+public class MyIssueDetail extends BaseListFragment<TeamIssue> {
 
     protected static final String TAG = TeamIssueFragment.class.getSimpleName();
     private static final String CACHE_KEY_PREFIX = "my_issue_";
@@ -56,7 +54,7 @@ public class MyIssueDetail extends BaseListFragment {
     }
 
     @Override
-    protected ListBaseAdapter getListAdapter() {
+    protected TeamIssueAdapter getListAdapter() {
         return new TeamIssueAdapter();
     }
 
@@ -70,14 +68,14 @@ public class MyIssueDetail extends BaseListFragment {
     }
 
     @Override
-    protected ListEntity<TeamIssue> parseList(InputStream is) throws Exception {
-        TeamIssueList<TeamIssue> list = XmlUtils
+    protected TeamIssueList parseList(InputStream is) throws Exception {
+        TeamIssueList list = XmlUtils
                 .toBean(TeamIssueList.class, is);
         return list;
     }
 
     @Override
-    protected ListEntity<TeamIssue> readList(Serializable seri) {
+    protected TeamIssueList readList(Serializable seri) {
         return ((TeamIssueList) seri);
     }
 

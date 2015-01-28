@@ -5,8 +5,6 @@ import java.io.Serializable;
 
 import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.bean.ListEntity;
 import net.oschina.app.team.adapter.TeamDiaryAdapter;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamDiary;
@@ -24,7 +22,7 @@ import android.widget.AdapterView;
  * @author fireant(http://my.oschina.net/u/253900)
  * 
  */
-public class TeamDiaryFragment extends BaseListFragment {
+public class TeamDiaryFragment extends BaseListFragment<TeamDiary> {
 
     protected static final String TAG = TeamDiaryFragment.class
             .getSimpleName();
@@ -53,7 +51,7 @@ public class TeamDiaryFragment extends BaseListFragment {
     }
 
     @Override
-    protected ListBaseAdapter getListAdapter() {
+    protected TeamDiaryAdapter getListAdapter() {
         return new TeamDiaryAdapter();
     }
 
@@ -66,15 +64,15 @@ public class TeamDiaryFragment extends BaseListFragment {
     }
 
     @Override
-    protected ListEntity<TeamDiary> parseList(InputStream is)
+    protected TeamDiaryList parseList(InputStream is)
             throws Exception {
-        TeamDiaryList<TeamDiary> list = XmlUtils.toBean(
+        TeamDiaryList list = XmlUtils.toBean(
         		TeamDiaryList.class, is);
         return list;
     }
 
     @Override
-    protected ListEntity<TeamDiary> readList(Serializable seri) {
+    protected TeamDiaryList readList(Serializable seri) {
         return ((TeamDiaryList) seri);
     }
 

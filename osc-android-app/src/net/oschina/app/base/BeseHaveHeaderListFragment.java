@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
 
+import net.oschina.app.bean.Entity;
 import net.oschina.app.cache.CacheManager;
 
 import org.apache.http.Header;
@@ -27,10 +28,10 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
  * 
  * @data 2015-1-27 下午3:02:42
  */
-public abstract class BeseHaveHeaderListFragment<T extends Serializable>
-	extends BaseListFragment {
+public abstract class BeseHaveHeaderListFragment<T1 extends Entity, T2 extends Serializable>
+	extends BaseListFragment<T1> {
 
-    protected T detailBean;// list 头部的详情实体类
+    protected T2 detailBean;// list 头部的详情实体类
 
     protected final AsyncHttpResponseHandler mDetailHandler = new AsyncHttpResponseHandler() {
 
@@ -38,7 +39,7 @@ public abstract class BeseHaveHeaderListFragment<T extends Serializable>
 	public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 	    try {
 		if (arg2 != null) {
-		    T detail = getDetailBean(new ByteArrayInputStream(arg2));
+		    T2 detail = getDetailBean(new ByteArrayInputStream(arg2));
 		    if (detail != null) {
 			requstListData();
 			executeOnLoadDetailSuccess(detail);
@@ -82,9 +83,9 @@ public abstract class BeseHaveHeaderListFragment<T extends Serializable>
 
     protected abstract String getDetailCacheKey();
 
-    protected abstract void executeOnLoadDetailSuccess(T detailBean);
+    protected abstract void executeOnLoadDetailSuccess(T2 detailBean);
 
-    protected abstract T getDetailBean(ByteArrayInputStream is);
+    protected abstract T2 getDetailBean(ByteArrayInputStream is);
 
     @Override
     protected boolean requestDataIfViewCreated() {
@@ -93,6 +94,7 @@ public abstract class BeseHaveHeaderListFragment<T extends Serializable>
     
     private void requstListData() {
 	mState = STATE_REFRESH;
+	mAdapter.setState(ListBaseAdapter.STATE_LOAD_MORE);
 	sendRequestData();
     }
     
@@ -125,7 +127,7 @@ public abstract class BeseHaveHeaderListFragment<T extends Serializable>
 	}
     }
     
-    private class ReadCacheTask extends AsyncTask<String, Void, T> {
+    private class ReadCacheTask extends AsyncTask<String, Void, T2> {
         private final WeakReference<Context> mContext;
 
         private ReadCacheTask(Context context) {
@@ -133,21 +135,21 @@ public abstract class BeseHaveHeaderListFragment<T extends Serializable>
         }
 
         @Override
-        protected T doInBackground(String... params) {
+        protected T2 doInBackground(String... params) {
             if (mContext.get() != null) {
                 Serializable seri = CacheManager.readObject(mContext.get(),
                         params[0]);
                 if (seri == null) {
                     return null;
                 } else {
-                    return (T) seri;
+                    return (T2) seri;
                 }
             }
             return null;
         }
 
         @Override
-        protected void onPostExecute(T t) {
+        protected void onPostExecute(T2 t) {
             super.onPostExecute(t);
             if (t != null) {
         	requstListData();

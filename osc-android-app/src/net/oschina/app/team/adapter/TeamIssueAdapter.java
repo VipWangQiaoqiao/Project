@@ -19,7 +19,7 @@ import butterknife.InjectView;
  * @version 创建时间：2015年1月14日 下午5:28:51
  * 
  */
-public class TeamIssueAdapter extends ListBaseAdapter {
+public class TeamIssueAdapter extends ListBaseAdapter<TeamIssue> {
 
     @Override
     protected View getRealView(int position, View convertView, ViewGroup parent) {

@@ -17,7 +17,7 @@ import android.widget.TextView;
  * @author kymjs
  * 
  */
-public class MyActiveAdapter extends ListBaseAdapter {
+public class MyActiveAdapter extends ListBaseAdapter<TeamActive> {
     private final Context context;
 
     public MyActiveAdapter(Context cxt) {

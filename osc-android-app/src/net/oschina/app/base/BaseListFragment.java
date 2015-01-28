@@ -37,10 +37,9 @@ import butterknife.InjectView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
-@SuppressLint("NewApi")
-public abstract class BaseListFragment extends BaseFragment implements
-	SwipeRefreshLayout.OnRefreshListener, OnItemClickListener,
-	OnScrollListener {
+public abstract class BaseListFragment<T extends Entity> extends BaseFragment implements
+        SwipeRefreshLayout.OnRefreshListener, OnItemClickListener,
+        OnScrollListener {
 
     public static final String BUNDLE_KEY_CATALOG = "BUNDLE_KEY_CATALOG";
 
@@ -50,7 +49,7 @@ public abstract class BaseListFragment extends BaseFragment implements
     @InjectView(R.id.listview)
     protected ListView mListView;
 
-    protected ListBaseAdapter mAdapter;
+    protected ListBaseAdapter<T> mAdapter;
 
     @InjectView(R.id.error_layout)
     protected EmptyLayout mErrorLayout;
@@ -61,7 +60,7 @@ public abstract class BaseListFragment extends BaseFragment implements
 
     protected int mCatalog = 1;
 
-    private AsyncTask<String, Void, ListEntity<? extends Entity>> mCacheTask;
+    private AsyncTask<String, Void, ListEntity<T>> mCacheTask;
     private ParserTask mParserTask;
 
     @Override
@@ -150,7 +149,7 @@ public abstract class BaseListFragment extends BaseFragment implements
 	super.onDestroy();
     }
 
-    protected abstract ListBaseAdapter getListAdapter();
+    protected abstract ListBaseAdapter<T> getListAdapter();
 
     // 下拉刷新数据
     @Override
@@ -174,13 +173,12 @@ public abstract class BaseListFragment extends BaseFragment implements
 	return null;
     }
 
-    protected ListEntity<? extends Entity> parseList(InputStream is)
-	    throws Exception {
-	return null;
+    protected ListEntity<T> parseList(InputStream is) throws Exception {
+        return null;
     }
 
-    protected ListEntity<? extends Entity> readList(Serializable seri) {
-	return null;
+    protected ListEntity<T> readList(Serializable seri) {
+        return null;
     }
 
     @Override
@@ -219,34 +217,34 @@ public abstract class BaseListFragment extends BaseFragment implements
     }
 
     private class CacheTask extends
-	    AsyncTask<String, Void, ListEntity<? extends Entity>> {
-	private final WeakReference<Context> mContext;
+            AsyncTask<String, Void, ListEntity<T>> {
+        private final WeakReference<Context> mContext;
 
 	private CacheTask(Context context) {
 	    mContext = new WeakReference<Context>(context);
 	}
 
-	@Override
-	protected ListEntity<? extends Entity> doInBackground(String... params) {
-	    Serializable seri = CacheManager.readObject(mContext.get(),
-		    params[0]);
-	    if (seri == null) {
-		return null;
-	    } else {
-		return readList(seri);
-	    }
-	}
+        @Override
+        protected ListEntity<T> doInBackground(String... params) {
+            Serializable seri = CacheManager.readObject(mContext.get(),
+                    params[0]);
+            if (seri == null) {
+                return null;
+            } else {
+                return readList(seri);
+            }
+        }
 
-	@Override
-	protected void onPostExecute(ListEntity<? extends Entity> list) {
-	    super.onPostExecute(list);
-	    if (list != null) {
-		executeOnLoadDataSuccess(list.getList());
-	    } else {
-		executeOnLoadDataError(null);
-	    }
-	    executeOnLoadFinish();
-	}
+        @Override
+        protected void onPostExecute(ListEntity<T> list) {
+            super.onPostExecute(list);
+            if (list != null) {
+                executeOnLoadDataSuccess(list.getList());
+            } else {
+                executeOnLoadDataError(null);
+            }
+            executeOnLoadFinish();
+        }
     }
 
     private class SaveCacheTask extends AsyncTask<Void, Void, Void> {
@@ -289,9 +287,9 @@ public abstract class BaseListFragment extends BaseFragment implements
 	}
     };
 
-    protected void executeOnLoadDataSuccess(List<? extends Entity> data) {
+    protected void executeOnLoadDataSuccess(List<T> data) {
 	if (data == null) {
-	    data = new ArrayList<Entity>();
+	    data = new ArrayList<T>();
 	}
 
 	mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
@@ -317,12 +315,16 @@ public abstract class BaseListFragment extends BaseFragment implements
 	}
 	mAdapter.setState(adapterState);
 	mAdapter.addData(data);
+	// 判断等于是因为最后有一项是listview的状态
 	if (mAdapter.getCount() == 1) {
 	    
 	    if (needShowEmptyNoData()) {
 		mErrorLayout.setErrorType(EmptyLayout.NODATA);
+	    } else {
+		mAdapter.setState(ListBaseAdapter.STATE_EMPTY_ITEM);
+		mAdapter.notifyDataSetChanged();
 	    }
-	} 
+	}
     }
 
     /**
@@ -334,6 +336,7 @@ public abstract class BaseListFragment extends BaseFragment implements
     protected boolean needShowEmptyNoData() {
 	return true;
     }
+
 
     protected boolean compareTo(List<? extends Entity> data, Entity enity) {
 	int s = data.size();
@@ -403,27 +406,27 @@ public abstract class BaseListFragment extends BaseFragment implements
 
     class ParserTask extends AsyncTask<Void, Void, String> {
 
-	private final byte[] reponseData;
-	private boolean parserError;
-	private List<? extends Entity> list;
+        private final byte[] reponseData;
+        private boolean parserError;
+        private List<T> list;
 
 	public ParserTask(byte[] data) {
 	    this.reponseData = data;
 	}
 
-	@Override
-	protected String doInBackground(Void... params) {
-	    try {
-		ListEntity<? extends Entity> data = parseList(new ByteArrayInputStream(
-			reponseData));
-		new SaveCacheTask(getActivity(), data, getCacheKey()).execute();
-		list = data.getList();
-	    } catch (Exception e) {
-		e.printStackTrace();
-		parserError = true;
-	    }
-	    return null;
-	}
+        @Override
+        protected String doInBackground(Void... params) {
+            try {
+                ListEntity<T> data = parseList(new ByteArrayInputStream(
+                        reponseData));
+                new SaveCacheTask(getActivity(), data, getCacheKey()).execute();
+                list = data.getList();
+            } catch (Exception e) {
+                e.printStackTrace();
+                parserError = true;
+            }
+            return null;
+        }
 
 	@Override
 	protected void onPostExecute(String result) {

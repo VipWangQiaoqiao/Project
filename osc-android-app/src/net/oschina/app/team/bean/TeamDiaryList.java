@@ -10,7 +10,7 @@ import net.oschina.app.bean.ListEntity;
 
 @SuppressWarnings("serial")
 @XStreamAlias("oschina")
-public class TeamDiaryList<T extends Entity> extends Entity implements ListEntity<TeamDiary> {
+public class TeamDiaryList extends Entity implements ListEntity<TeamDiary> {
 	
 	@XStreamAlias("pagesize")
 	private int pageSize;

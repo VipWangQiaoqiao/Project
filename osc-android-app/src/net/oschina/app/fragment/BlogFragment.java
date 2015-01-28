@@ -22,7 +22,7 @@ import android.widget.AdapterView;
  * 
  * @author kymjs(kymjs123@gmail.com)
  */
-public class BlogFragment extends BaseListFragment implements
+public class BlogFragment extends BaseListFragment<Blog> implements
 	OnTabReselectListener{
 	
 	public static final String BUNDLE_BLOG_TYPE = "BUNDLE_BLOG_TYPE";
@@ -33,7 +33,7 @@ public class BlogFragment extends BaseListFragment implements
     private String blogType;
     
     @Override
-    protected ListBaseAdapter getListAdapter() {
+    protected BlogAdapter getListAdapter() {
         return new BlogAdapter();
     }
 
@@ -55,13 +55,13 @@ public class BlogFragment extends BaseListFragment implements
     }
 
     @Override
-    protected ListEntity parseList(InputStream is) throws Exception {
+    protected BlogList parseList(InputStream is) throws Exception {
         BlogList list = XmlUtils.toBean(BlogList.class, is);
         return list;
     }
 
     @Override
-    protected ListEntity readList(Serializable seri) {
+    protected BlogList readList(Serializable seri) {
         return ((BlogList) seri);
     }
 

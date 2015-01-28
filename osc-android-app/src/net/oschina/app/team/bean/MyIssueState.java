@@ -10,6 +10,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * @author kymjs (https://github.com/kymjs)
  * 
  */
+@SuppressWarnings("serial")
 @XStreamAlias("oschina")
 public class MyIssueState extends Entity {
     @XStreamAlias("opened")

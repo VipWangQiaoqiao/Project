@@ -12,67 +12,69 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-/** 
+/**
  * 团队项目适配器
  * 
  * @author FireAnt（http://my.oschina.net/LittleDY）
- * @version 创建时间：2015年1月19日 下午6:00:33 
+ * @version 创建时间：2015年1月19日 下午6:00:33
  * 
  */
 
 public class TeamProjectListAdapter extends BaseAdapter {
-	
-	private ArrayList<TeamProject> datas = new ArrayList<TeamProject>();
-	
-	public void add(TeamProject project) {
-		this.datas.add(project);
-		notifyDataSetChanged();
-	}
-	
-	public void add(List<TeamProject> datas) {
-		this.datas.addAll(datas);
-		notifyDataSetChanged();
+
+    private ArrayList<TeamProject> datas = new ArrayList<TeamProject>();
+
+    public void add(TeamProject project) {
+	this.datas.add(project);
+	notifyDataSetChanged();
+    }
+
+    public void add(List<TeamProject> datas) {
+	this.datas.addAll(datas);
+	notifyDataSetChanged();
+    }
+
+    @Override
+    public int getCount() {
+	return datas.size();
+    }
+
+    @Override
+    public TeamProject getItem(int position) {
+	return datas.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+	return 0;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+	ViewHolder vh;
+	if (convertView == null || convertView.getTag() == null) {
+	    convertView = View.inflate(parent.getContext(),
+		    R.layout.list_cell_team_project, null);
+	    vh = new ViewHolder(convertView);
+	    convertView.setTag(vh);
+	} else {
+	    vh = (ViewHolder) convertView.getTag();
 	}
 
-	@Override
-	public int getCount() {
-		return datas.size();
-	}
+	TeamProject item = datas.get(position);
 
-	@Override
-	public TeamProject getItem(int position) {
-		return datas.get(position);
-	}
+	vh.name.setText(item.getGit().getName());
 
-	@Override
-	public long getItemId(int position) {
-		return 0;
-	}
+	return convertView;
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		ViewHolder vh;
-		if (convertView == null || convertView.getTag() == null) {
-			convertView = View.inflate(parent.getContext(), R.layout.list_cell_team_project, null);
-			vh = new ViewHolder(convertView);
-			convertView.setTag(vh);
-        } else {
-        	vh = (ViewHolder) convertView.getTag();
-        }
-		
-		TeamProject item = datas.get(position);
-		
-		vh.name.setText(item.getGit().getName());
-		
-		return convertView;
-	}
-	
     public static class ViewHolder {
-		@InjectView(R.id.tv_project_name)TextView name;
-		
-		public ViewHolder(View view) {
-			ButterKnife.inject(this, view);
-		}
+	@InjectView(R.id.tv_project_name)
+	TextView name;
+
+	public ViewHolder(View view) {
+	    ButterKnife.inject(this, view);
 	}
+    }
 
 }

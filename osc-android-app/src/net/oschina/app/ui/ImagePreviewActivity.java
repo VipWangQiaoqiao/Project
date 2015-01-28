@@ -85,7 +85,6 @@ public class ImagePreviewActivity extends BaseActivity implements
         case R.id.iv_more:
             saveImg();
             break;
-
         default:
             break;
         }
@@ -97,6 +96,21 @@ public class ImagePreviewActivity extends BaseActivity implements
     @Override
     public void initData() {}
 
+    private void sendTweet() {
+        if (mAdapter != null && mAdapter.getCount() > 0) {
+            String imgUrl = mAdapter.getItem(mCurrentPostion);
+            String filePath = AppConfig.DEFAULT_SAVE_IMAGE_PATH
+                    + getFileName(imgUrl);
+            kjb.saveImage(imgUrl, filePath);
+            // Bundle bundle = new Bundle();
+            // bundle.putString(TweetPubFragment.IMAGEPAGER_KEY, filePath);
+            // UIHelper.showSimpleBack(this, SimpleBackPage.TWEET_PUB, bundle);
+        }
+    }
+
+    /**
+     * 保存图片
+     */
     private void saveImg() {
         if (mAdapter != null && mAdapter.getCount() > 0) {
             String imgUrl = mAdapter.getItem(mCurrentPostion);

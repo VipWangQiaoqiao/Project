@@ -18,7 +18,7 @@ import butterknife.InjectView;
  * @created 2014年10月9日 下午6:22:54
  *
  */
-public class TeamDiscussAdapter extends ListBaseAdapter {
+public class TeamDiscussAdapter extends ListBaseAdapter<TeamDiscuss> {
 
 	static class ViewHolder {
 		

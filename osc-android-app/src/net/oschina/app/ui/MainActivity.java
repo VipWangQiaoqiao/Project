@@ -16,9 +16,6 @@ import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.UpdateManager;
 import net.oschina.app.widget.BadgeView;
 import net.oschina.app.widget.MyFragmentTabHost;
-
-import org.kymjs.kjframe.utils.KJLoger;
-
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
@@ -121,15 +118,34 @@ public class MainActivity extends ActionBarActivity implements
         initView();
         AppManager.getAppManager().addActivity(this);
 
-        notifitcationBarClick(getIntent());
-        KJLoger.debug("1===");
+        handleIntent(getIntent());
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        notifitcationBarClick(intent);
-        KJLoger.debug("=2==");
+        handleIntent(intent);
+    }
+
+    /**
+     * 处理传进来的intent
+     * 
+     * @author 火蚁 2015-1-28 下午3:48:44
+     * 
+     * @return void
+     * @param intent
+     */
+    private void handleIntent(Intent intent) {
+        if (intent == null)
+            return;
+        String action = intent.getAction();
+        if (action != null && action.equals(Intent.ACTION_VIEW)) {
+
+            UIHelper.showUrlRedirect(this, intent.getDataString());
+
+        } else if (intent.getBooleanExtra("NOTICE", false)) {
+            notifitcationBarClick(intent);
+        }
     }
 
     /**

@@ -6,8 +6,6 @@ import java.io.Serializable;
 import net.oschina.app.adapter.SearchAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.SearchList;
 import net.oschina.app.bean.SearchResult;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -18,7 +16,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 
-public class SearchFragment extends BaseListFragment {
+public class SearchFragment extends BaseListFragment<SearchResult> {
 	protected static final String TAG = SearchFragment.class.getSimpleName();
 	private static final String CACHE_KEY_PREFIX = "search_list_";
 	private String mCatalog;
@@ -54,7 +52,7 @@ public class SearchFragment extends BaseListFragment {
 	}
 
 	@Override
-	protected ListBaseAdapter getListAdapter() {
+	protected SearchAdapter getListAdapter() {
 		return new SearchAdapter();
 	}
 
@@ -64,13 +62,13 @@ public class SearchFragment extends BaseListFragment {
 	}
 
 	@Override
-	protected ListEntity parseList(InputStream is) throws Exception {
+	protected SearchList parseList(InputStream is) throws Exception {
 		SearchList list = XmlUtils.toBean(SearchList.class, is);
 		return list;
 	}
 
 	@Override
-	protected ListEntity readList(Serializable seri) {
+	protected SearchList readList(Serializable seri) {
 		return ((SearchList) seri);
 	}
 	

@@ -17,7 +17,7 @@ import android.widget.TextView;
  * @author kymjs
  * 
  */
-public class DynamicAdapter extends ListBaseAdapter {
+public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
     private final Context context;
 
     public DynamicAdapter(Context cxt) {

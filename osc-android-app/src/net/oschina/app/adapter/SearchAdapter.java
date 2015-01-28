@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class SearchAdapter extends ListBaseAdapter {
+public class SearchAdapter extends ListBaseAdapter<SearchResult> {
 
 	@SuppressLint("InflateParams")
 	@Override

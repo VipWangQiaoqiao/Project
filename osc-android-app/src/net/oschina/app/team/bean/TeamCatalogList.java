@@ -18,7 +18,7 @@ import net.oschina.app.team.bean.TeamCatalog;
  */
 @SuppressWarnings("serial")
 @XStreamAlias("oschina")
-public class TeamCatalogList extends Entity implements ListEntity {
+public class TeamCatalogList extends Entity implements ListEntity<TeamCatalog> {
 
 	@XStreamAlias("totalCount")
 	private int totalCount;
