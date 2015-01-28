@@ -319,33 +319,51 @@ public class StringUtils {
         }
         return res.toString();
     }
-    
+
     /***
-	 * 截取字符串
-	 * 
-	 * @param start 从那里开始，0算起
-	 * @param num 截取多少个
-	 * @param str 截取的字符串
-	 * @return
-	 */
+     * 截取字符串
+     * 
+     * @param start
+     *            从那里开始，0算起
+     * @param num
+     *            截取多少个
+     * @param str
+     *            截取的字符串
+     * @return
+     */
     public static String getSubString(int start, int num, String str) {
-    	if (str == null) {
-    		return "";
-    	}
-    	int leng = str.length();
-    	if (start < 0) {
-    		start = 0;
-    	}
-    	if (start > leng) {
-    		start = leng;
-    	}
-    	if (num < 0) {
-    		num = 1;
-    	}
-    	int end = start + num;
-    	if (end > leng) {
-    		end = leng;
-    	}
-    	return str.substring(start, end);
+        if (str == null) {
+            return "";
+        }
+        int leng = str.length();
+        if (start < 0) {
+            start = 0;
+        }
+        if (start > leng) {
+            start = leng;
+        }
+        if (num < 0) {
+            num = 1;
+        }
+        int end = start + num;
+        if (end > leng) {
+            end = leng;
+        }
+        return str.substring(start, end);
+    }
+
+    /**
+     * 获取当前时间为每年第几周
+     * 
+     * @param date
+     * @return
+     */
+    public static int getWeekOfYear() {
+        Calendar c = Calendar.getInstance();
+        c.setFirstDayOfWeek(Calendar.MONDAY);
+        c.setTime(new Date());
+        int week = c.get(Calendar.WEEK_OF_YEAR) - 1;
+        week = week == 0 ? 52 : week;
+        return week > 0 ? week : 1;
     }
 }
