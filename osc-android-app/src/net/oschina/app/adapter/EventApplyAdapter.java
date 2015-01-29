@@ -38,7 +38,7 @@ public class EventApplyAdapter extends ListBaseAdapter<Apply> {
         final Apply item = (Apply) mDatas.get(position);
 
         vh.name.setText(item.getName());
-        vh.avatar.setUserInfo(item.getUserid(), item.getName());
+        vh.avatar.setUserInfo(item.getId(), item.getName());
         vh.avatar.setAvatarUrl(item.getPortrait());
         vh.desc.setText(item.getCompany() + " " + item.getJob());
 
