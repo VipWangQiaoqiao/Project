@@ -24,12 +24,17 @@ import net.oschina.app.emoji.SoftKeyboardStateHelper.SoftKeyboardStateListener;
 import net.oschina.app.service.ServerTaskUtils;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
-import net.oschina.app.util.FileUtils;
+import net.oschina.app.util.FileUtil;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.SimpleTextWatcher;
-import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.StringUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
+
+import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.http.core.KJAsyncTask;
+import org.kymjs.kjframe.utils.FileUtils;
+
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -70,6 +75,7 @@ public class TweetPubFragment extends BaseFragment implements
     public static final int ACTION_TYPE_ALBUM = 0;
     public static final int ACTION_TYPE_PHOTO = 1;
     public static final int ACTION_TYPE_RECORD = 2; // 录音
+    public static final String FROM_IMAGEPAGE_KEY = "from_image_page";
 
     public static final String ACTION_TYPE = "action_type";
 
@@ -118,6 +124,7 @@ public class TweetPubFragment extends BaseFragment implements
 
     private String theLarge, theThumbnail;
     private File imgFile;
+    private final KJBitmap kjb = KJBitmap.create();
 
     private final Handler handler = new Handler() {
         @Override
@@ -207,8 +214,32 @@ public class TweetPubFragment extends BaseFragment implements
         super.onViewCreated(view, savedInstanceState);
         Bundle bundle = getArguments();
         if (bundle != null) {
-            int action_type = bundle.getInt(ACTION_TYPE, 0);
+            int action_type = bundle.getInt(ACTION_TYPE, -1);
             goToSelectPicture(action_type);
+            final String imgUrl = bundle.getString(FROM_IMAGEPAGE_KEY);
+            handleImageFile(imgUrl);
+        }
+    }
+
+    /**
+     * 处理从图片浏览界面跳转来的图片
+     * 
+     * @param imgUrl
+     */
+    private void handleImageFile(final String imgUrl) {
+        if (!StringUtil.isEmpty(imgUrl)) {
+            KJAsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    final Message msg = Message.obtain();
+                    msg.what = 1;
+                    msg.obj = kjb.loadBmpMustInThread(imgUrl, 0, 0);
+                    handler.sendMessage(msg);
+                    kjb.saveImage(imgUrl, "tempfile.jpg");
+                    imgFile = new File(FileUtils.getSDCardPath()
+                            + "/tempfile.jpg");
+                }
+            });
         }
     }
 
@@ -366,18 +397,18 @@ public class TweetPubFragment extends BaseFragment implements
 
                     if (AppContext
                             .isMethodsCompat(android.os.Build.VERSION_CODES.ECLAIR_MR1)) {
-                        String imaName = FileUtils.getFileName(theLarge);
+                        String imaName = FileUtil.getFileName(theLarge);
                         if (imaName != null)
                             bitmap = ImageUtils.loadImgThumbnail(getActivity(),
                                     imaName,
                                     MediaStore.Images.Thumbnails.MICRO_KIND);
                     }
-                    if (bitmap == null && !StringUtils.isEmpty(theLarge))
+                    if (bitmap == null && !StringUtil.isEmpty(theLarge))
                         bitmap = ImageUtils
                                 .loadImgThumbnail(theLarge, 100, 100);
                 } else if (requestCode == ImageUtils.REQUEST_CODE_GETIMAGE_BYCAMERA) {
                     // 拍摄图片
-                    if (bitmap == null && !StringUtils.isEmpty(theLarge)) {
+                    if (bitmap == null && !StringUtil.isEmpty(theLarge)) {
                         bitmap = ImageUtils
                                 .loadImgThumbnail(theLarge, 100, 100);
                     }
@@ -391,7 +422,7 @@ public class TweetPubFragment extends BaseFragment implements
                         savedir.mkdirs();
                     }
 
-                    String largeFileName = FileUtils.getFileName(theLarge);
+                    String largeFileName = FileUtil.getFileName(theLarge);
                     String largeFilePath = savePath + largeFileName;
                     // 判断是否已存在缩略图
                     if (largeFileName.startsWith("thumb_")
@@ -501,7 +532,7 @@ public class TweetPubFragment extends BaseFragment implements
             }
 
             // 没有挂载SD卡，无法保存文件
-            if (StringUtils.isEmpty(savePath)) {
+            if (StringUtil.isEmpty(savePath)) {
                 AppContext.showToastShort("无法保存照片，请检查SD卡是否挂载");
                 return;
             }

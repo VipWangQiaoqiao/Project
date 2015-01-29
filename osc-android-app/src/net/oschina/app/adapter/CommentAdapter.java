@@ -8,7 +8,7 @@ import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Comment.Refer;
 import net.oschina.app.bean.Comment.Reply;
 import net.oschina.app.bean.Tweet;
-import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.StringUtil;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.FloorView;
 import net.oschina.app.widget.MyLinkMovementMethod;
@@ -73,7 +73,7 @@ public class CommentAdapter extends ListBaseAdapter<Comment> {
 	vh.content.setText(span);
 	MyURLSpan.parseLinkText(vh.content, span);
 
-	vh.time.setText(StringUtils.friendly_time(item.getPubDate()));
+	vh.time.setText(StringUtil.friendly_time(item.getPubDate()));
 
 	vh.from.setVisibility(View.VISIBLE);
 	switch (item.getAppClient()) {

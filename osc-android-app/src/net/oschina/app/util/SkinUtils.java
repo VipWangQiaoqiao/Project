@@ -36,7 +36,7 @@ import android.widget.ImageView;
 /**
  * 提供应用换肤功能
  * 
- * @author kymjs(kymjs123@gmail.com)
+ * @author kymjs (https://github.com/kymjs)
  * 
  */
 public class SkinUtils {
@@ -115,7 +115,7 @@ public class SkinUtils {
         Drawable drawable = null;
         Context cxt = view.getContext();
         String skinPath = PreferenceHelper.readString(cxt, SKIN_FILE, SKIN_KEY);
-        if (!StringUtils.isEmpty(skinPath)) {
+        if (!StringUtil.isEmpty(skinPath)) {
             view.measure(0, 0);
             int w = view.getMeasuredWidth();
             int h = view.getMeasuredHeight();

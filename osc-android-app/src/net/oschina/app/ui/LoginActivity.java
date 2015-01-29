@@ -29,7 +29,7 @@ import net.oschina.app.bean.LoginUserBean;
 import net.oschina.app.bean.Result;
 import net.oschina.app.util.CyptoUtils;
 import net.oschina.app.util.SimpleTextWatcher;
-import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.StringUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.TLog;
 import net.oschina.app.util.XmlUtils;
@@ -199,7 +199,7 @@ public class LoginActivity extends BaseActivity {
 			return false;
 		}
 		String uName = mEtUserName.getText().toString();
-		if (StringUtils.isEmpty(uName)) {
+		if (StringUtil.isEmpty(uName)) {
 			AppContext.showToastShort(R.string.tip_please_input_username);
 			mEtUserName.requestFocus();
 			return false;
@@ -211,7 +211,7 @@ public class LoginActivity extends BaseActivity {
 //			return false;
 //		}
 		String pwd = mEtPassword.getText().toString();
-		if (StringUtils.isEmpty(pwd)) {
+		if (StringUtil.isEmpty(pwd)) {
 			AppContext.showToastShort(R.string.tip_please_input_password);
 			mEtPassword.requestFocus();
 			return false;

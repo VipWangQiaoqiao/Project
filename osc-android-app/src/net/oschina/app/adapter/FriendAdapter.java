@@ -3,7 +3,7 @@ package net.oschina.app.adapter;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Friend;
-import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.StringUtil;
 import net.oschina.app.widget.AvatarView;
 import android.annotation.SuppressLint;
 import android.view.View;
@@ -40,13 +40,13 @@ public class FriendAdapter extends ListBaseAdapter<Friend> {
 
 	vh.name.setText(item.getName());
 	String from = item.getFrom();
-	if (from != null || !StringUtils.isEmpty(from)) {
+	if (from != null || !StringUtil.isEmpty(from)) {
 	    vh.from.setText(from);
 	} else {
 	    vh.from.setVisibility(View.GONE);
 	}
 	String desc = item.getExpertise();
-	if (desc != null || !StringUtils.isEmpty(from) || !desc.equals("<无>")) {
+	if (desc != null || !StringUtil.isEmpty(from) || !desc.equals("<无>")) {
 	    vh.desc.setText(item.getExpertise());
 	} else {
 	    vh.desc.setVisibility(View.GONE);

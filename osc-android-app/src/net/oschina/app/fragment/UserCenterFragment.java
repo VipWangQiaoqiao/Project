@@ -17,7 +17,7 @@ import net.oschina.app.bean.UserInformation;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.StringUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
@@ -245,7 +245,7 @@ public class UserCenterFragment extends BaseFragment implements
         mTvFollower.setText(mUser.getFans() + "");
         mTvSore.setText(mUser.getScore() + "");
         mTvLastestLoginTime.setText(getString(R.string.latest_login_time,
-                StringUtils.friendly_time(mUser.getLatestonline())));
+                StringUtil.friendly_time(mUser.getLatestonline())));
         updateUserRelation();
     }
 
@@ -297,13 +297,13 @@ public class UserCenterFragment extends BaseFragment implements
             View view = LayoutInflater.from(getActivity()).inflate(
                     R.layout.fragment_user_center_information, null);
             ((TextView) view.findViewById(R.id.tv_join_time))
-                    .setText(StringUtils.friendly_time(mUser.getJointime()));
+                    .setText(StringUtil.friendly_time(mUser.getJointime()));
             ((TextView) view.findViewById(R.id.tv_location))
-                    .setText(StringUtils.getString(mUser.getFrom()));
+                    .setText(StringUtil.getString(mUser.getFrom()));
             ((TextView) view.findViewById(R.id.tv_development_platform))
-                    .setText(StringUtils.getString(mUser.getDevplatform()));
+                    .setText(StringUtil.getString(mUser.getDevplatform()));
             ((TextView) view.findViewById(R.id.tv_academic_focus))
-                    .setText(StringUtils.getString(mUser.getExpertise()));
+                    .setText(StringUtil.getString(mUser.getExpertise()));
             mInformationDialog.setContent(view);
         }
         mInformationDialog.show();

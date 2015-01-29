@@ -17,7 +17,7 @@ import net.oschina.app.cache.CacheManager;
 import net.oschina.app.ui.MainActivity;
 import net.oschina.app.ui.MyQrodeDialog;
 import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.StringUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
@@ -262,7 +262,7 @@ public class MyInformationFragment extends BaseFragment {
         mIvAvatar.setAvatarUrl(mInfo.getPortrait());
         mTvName.setText(mInfo.getName());
         mIvGender
-                .setImageResource(StringUtils.toInt(mInfo.getGender()) != 2 ? R.drawable.userinfo_icon_male
+                .setImageResource(StringUtil.toInt(mInfo.getGender()) != 2 ? R.drawable.userinfo_icon_male
                         : R.drawable.userinfo_icon_female);
         mTvScore.setText(String.valueOf(mInfo.getScore()));
         mTvFavorite.setText(String.valueOf(mInfo.getFavoritecount()));

@@ -1,6 +1,7 @@
 package net.oschina.app.service;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -174,13 +175,16 @@ public class ServerTaskService extends IntentService {
                         getString(R.string.tweet_public),
                         getString(R.string.tweet_publish_success), false, true);
                 new Handler().postDelayed(new Runnable() {
-
                     @Override
                     public void run() {
                         cancellNotification(id);
                     }
                 }, 3000);
                 removePenddingTask(key + id);
+                File imgFile = new File(tweet.getImageFilePath());
+                if (imgFile.exists()) {
+                    imgFile.delete();
+                }
             } else {
                 onFailure(100, res.getErrorMessage(), args);
             }

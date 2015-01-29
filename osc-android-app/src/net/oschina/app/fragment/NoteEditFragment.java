@@ -13,7 +13,7 @@ import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.util.KJAnimations;
-import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.StringUtil;
 import net.oschina.app.util.UIHelper;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -152,7 +152,7 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
             editData.setContent(AppContext.getNoteDraft());
             isNewNote = true;
         }
-        if (StringUtils.isEmpty(editData.getDate())) {
+        if (StringUtil.isEmpty(editData.getDate())) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
             editData.setDate(dateFormat.format(new Date()));
         }
@@ -215,7 +215,7 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.public_menu_send:
-            if (!StringUtils.isEmpty(mEtContent.getText().toString())) {
+            if (!StringUtil.isEmpty(mEtContent.getText().toString())) {
                 save();
                 if (whereFrom == QUICK_DIALOG) {
                     UIHelper.showSimpleBack(getActivity(), SimpleBackPage.NOTE);

@@ -120,7 +120,7 @@ public class QuickOptionDialog extends Dialog implements
             break;
         case R.id.ly_quick_option_note:
             UIHelper.showSimpleBack(getContext(), SimpleBackPage.FIND_USER);
-            //onClickNote();
+            // onClickNote();
             break;
         default:
             break;
