@@ -3,7 +3,7 @@ package net.oschina.app.adapter;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Blog;
-import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.StringUtil;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -63,13 +63,13 @@ public class BlogAdapter extends ListBaseAdapter<Blog> {
 
 	vh.description.setVisibility(View.GONE);
 	String description = blog.getBody();
-	if (null != description && !StringUtils.isEmpty(description)) {
+	if (null != description && !StringUtil.isEmpty(description)) {
 	    vh.description.setVisibility(View.VISIBLE);
 	    vh.description.setText(description.trim());
 	}
 
 	vh.source.setText(blog.getAuthor());
-	vh.time.setText(StringUtils.friendly_time(blog.getPubDate()));
+	vh.time.setText(StringUtil.friendly_time(blog.getPubDate()));
 	vh.comment_count.setText(blog.getCommentCount() + "");
 	return convertView;
     }

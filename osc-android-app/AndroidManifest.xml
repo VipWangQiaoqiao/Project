@@ -99,6 +99,31 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="net.oschina.app.ui.TweetActivity"
+            android:label="@string/actionbar_title_tweetpub" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="image/*" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="image/*" />
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.EventLocationActivity" />
         <activity
             android:name=".ui.LoginActivity"

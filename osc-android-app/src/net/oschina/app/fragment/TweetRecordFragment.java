@@ -7,7 +7,7 @@ import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.service.ServerTaskUtils;
-import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.StringUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.RecordButton;
@@ -189,7 +189,7 @@ public class TweetRecordFragment extends BaseFragment {
             UIHelper.showLoginActivity(getActivity());
             return;
         }
-        if (StringUtils.isEmpty(audioPath)) {
+        if (StringUtil.isEmpty(audioPath)) {
             AppContext.showToastShort(R.string.record_sound_notfound);
             return;
         }
@@ -200,7 +200,7 @@ public class TweetRecordFragment extends BaseFragment {
         }
 
         String body = mEtSpeech.getText().toString();
-        if (!StringUtils.isEmpty(body)) {
+        if (!StringUtil.isEmpty(body)) {
             strSpeech = body;
         }
         Tweet tweet = new Tweet();

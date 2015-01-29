@@ -22,7 +22,7 @@ import net.oschina.app.interf.EmojiFragmentControl;
 import net.oschina.app.interf.ToolbarEmojiVisiableControl;
 import net.oschina.app.interf.ToolbarFragmentControl;
 import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.StringUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.URLsUtils;
@@ -175,7 +175,7 @@ public class NewsDetailFragment extends BaseDetailFragment implements
                         mNews.getAuthor());
             }
         });
-        mTvTime.setText(StringUtils.friendly_time(mNews.getPubDate()));
+        mTvTime.setText(StringUtil.friendly_time(mNews.getPubDate()));
         if (mToolBarFragment != null) {
             if (mCommentCount <= 0) {
                 mCommentCount = mNews.getCommentCount();
@@ -195,8 +195,8 @@ public class NewsDetailFragment extends BaseDetailFragment implements
         // 更多关于***软件的信息
         String softwareName = mNews.getSoftwareName();
         String softwareLink = mNews.getSoftwareLink();
-        if (!StringUtils.isEmpty(softwareName)
-                && !StringUtils.isEmpty(softwareLink))
+        if (!StringUtil.isEmpty(softwareName)
+                && !StringUtil.isEmpty(softwareLink))
             body.append(String
                     .format("<div id='oschina_software' style='margin-top:8px;color:#FF0000;font-weight:bold'>更多关于:&nbsp;<a href='%s'>%s</a>&nbsp;的详细信息</div>",
                             softwareLink, softwareName));
@@ -294,7 +294,7 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 
     @Override
     protected String getShareContent() {
-        return mNews != null ? StringUtils.getSubString(0, 55, getFilterHtmlBody(mNews.getBody())) : "";
+        return mNews != null ? StringUtil.getSubString(0, 55, getFilterHtmlBody(mNews.getBody())) : "";
     }
     
     @Override

@@ -5,7 +5,7 @@ import butterknife.InjectView;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.SearchResult;
-import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.StringUtil;
 import android.annotation.SuppressLint;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,21 +31,21 @@ public class SearchAdapter extends ListBaseAdapter<SearchResult> {
 
 		vh.title.setText(item.getTitle());
 		 
-		if (item.getDescription() == null || StringUtils.isEmpty(item.getDescription())) {
+		if (item.getDescription() == null || StringUtil.isEmpty(item.getDescription())) {
 			vh.description.setVisibility(View.GONE);
 		} else {
 			vh.description.setVisibility(View.VISIBLE);
 			vh.description.setText(item.getDescription());
 		}
 		
-		if (!StringUtils.isEmpty(item.getAuthor())) {
+		if (!StringUtil.isEmpty(item.getAuthor())) {
 			vh.source.setText(item.getAuthor());
 		} else {
 			vh.source.setVisibility(View.GONE);
 		}
 		
-		if (!StringUtils.isEmpty(item.getPubDate())) {
-			vh.time.setText(StringUtils.friendly_time(item.getPubDate()));
+		if (!StringUtil.isEmpty(item.getPubDate())) {
+			vh.time.setText(StringUtil.friendly_time(item.getPubDate()));
 		} else {
 			vh.time.setVisibility(View.GONE);
 		}

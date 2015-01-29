@@ -14,7 +14,7 @@ import net.oschina.app.bean.NewsList;
 import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.team.bean.Team;
-import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.StringUtil;
 import net.oschina.app.util.TLog;
 import android.text.TextUtils;
 
@@ -595,7 +595,7 @@ public class OSChinaApi {
         params.put("url", report.getLinkAddress());
         params.put("obj_type", report.getReason());
         if (report.getOtherReason() != null
-                && !StringUtils.isEmpty(report.getOtherReason())) {
+                && !StringUtil.isEmpty(report.getOtherReason())) {
             params.put("memo", report.getOtherReason());
         } else {
             params.put("memo", "其他原因");

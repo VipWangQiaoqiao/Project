@@ -30,7 +30,7 @@ import net.oschina.app.bean.FindUserList;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.User;
 import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.StringUtil;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
@@ -115,7 +115,7 @@ public class FindUserFragment extends BaseFragment implements
     }
 
     private void search(String nickName) {
-	if (nickName == null || StringUtils.isEmpty(nickName)) {
+	if (nickName == null || StringUtil.isEmpty(nickName)) {
 	    return;
 	}
 	mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);

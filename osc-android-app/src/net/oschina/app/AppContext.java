@@ -14,9 +14,10 @@ import net.oschina.app.bean.User;
 import net.oschina.app.cache.DataCleanManager;
 import net.oschina.app.util.CyptoUtils;
 import net.oschina.app.util.MethodsCompat;
-import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.StringUtil;
 import net.oschina.app.util.TLog;
 
+import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.bitmap.BitmapConfig;
 import org.kymjs.kjframe.utils.KJLoger;
 
@@ -124,7 +125,7 @@ public class AppContext extends BaseApplication {
      */
     public String getAppId() {
         String uniqueID = getProperty(AppConfig.CONF_APP_UNIQUEID);
-        if (StringUtils.isEmpty(uniqueID)) {
+        if (StringUtil.isEmpty(uniqueID)) {
             uniqueID = UUID.randomUUID().toString();
             setProperty(AppConfig.CONF_APP_UNIQUEID, uniqueID);
         }
@@ -209,17 +210,17 @@ public class AppContext extends BaseApplication {
      */
     public User getLoginUser() {
         User user = new User();
-        user.setUid(StringUtils.toInt(getProperty("user.uid"), 0));
+        user.setUid(StringUtil.toInt(getProperty("user.uid"), 0));
         user.setName(getProperty("user.name"));
         user.setPortrait(getProperty("user.face"));
         user.setAccount(getProperty("user.account"));
         user.setLocation(getProperty("user.location"));
-        user.setFollowers(StringUtils.toInt(getProperty("user.followers"), 0));
-        user.setFans(StringUtils.toInt(getProperty("user.fans"), 0));
-        user.setScore(StringUtils.toInt(getProperty("user.score"), 0));
-        user.setFavoritecount(StringUtils.toInt(
+        user.setFollowers(StringUtil.toInt(getProperty("user.followers"), 0));
+        user.setFans(StringUtil.toInt(getProperty("user.fans"), 0));
+        user.setScore(StringUtil.toInt(getProperty("user.score"), 0));
+        user.setFavoritecount(StringUtil.toInt(
                 getProperty("user.favoritecount"), 0));
-        user.setRememberMe(StringUtils.toBool(getProperty("user.isRememberMe")));
+        user.setRememberMe(StringUtil.toBool(getProperty("user.isRememberMe")));
         user.setGender(getProperty("user.gender"));
         return user;
     }
@@ -283,6 +284,7 @@ public class AppContext extends BaseApplication {
             if (_key.startsWith("temp"))
                 removeProperty(_key);
         }
+        KJBitmap.create().removeCacheAll();
     }
 
     public static void setLoadImage(boolean flag) {

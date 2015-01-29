@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.StringUtil;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
@@ -104,7 +104,7 @@ public class News extends Entity {
 	}
 
 	public void setAuthorId(String authorId) {
-		this.authorId = StringUtils.toInt(authorId, 0);
+		this.authorId = StringUtil.toInt(authorId, 0);
 	}
 
 	public int getCommentCount() {

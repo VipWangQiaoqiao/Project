@@ -18,7 +18,8 @@ public class SimpleBackActivity extends BaseActivity {
     public final static String BUNDLE_KEY_PAGE = "BUNDLE_KEY_PAGE";
     public final static String BUNDLE_KEY_ARGS = "BUNDLE_KEY_ARGS";
     private static final String TAG = "FLAG_TAG";
-    private WeakReference<Fragment> mFragment;
+    protected WeakReference<Fragment> mFragment;
+    protected int mPageValue = -1;
 
     @Override
     protected int getLayoutId() {
@@ -33,12 +34,17 @@ public class SimpleBackActivity extends BaseActivity {
     @Override
     protected void init(Bundle savedInstanceState) {
         super.init(savedInstanceState);
-        Intent data = getIntent();
+        if (mPageValue == -1) {
+            mPageValue = getIntent().getIntExtra(BUNDLE_KEY_PAGE, 0);
+        }
+        initFromIntent(mPageValue, getIntent());
+    }
+
+    protected void initFromIntent(int pageValue, Intent data) {
         if (data == null) {
             throw new RuntimeException(
                     "you must provide a page info to display");
         }
-        int pageValue = data.getIntExtra(BUNDLE_KEY_PAGE, 0);
         SimpleBackPage page = SimpleBackPage.getPageByValue(pageValue);
         if (page == null) {
             throw new IllegalArgumentException("can not find page by value:"

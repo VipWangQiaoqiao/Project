@@ -22,7 +22,7 @@ import android.util.Log;
  * @version 1.0
  * @created 2012-3-21
  */
-public class FileUtils {
+public class FileUtil {
     /**
 	 * 写文本文件 在Android系统中，文件保存在 /data/data/PACKAGE_NAME/files 目录下
 	 * 
@@ -141,7 +141,7 @@ public class FileUtils {
 	 * @return
 	 */
 	public static String getFileName(String filePath) {
-		if (StringUtils.isEmpty(filePath))
+		if (StringUtil.isEmpty(filePath))
 			return "";
 		return filePath.substring(filePath.lastIndexOf(File.separator) + 1);
 	}
@@ -153,7 +153,7 @@ public class FileUtils {
 	 * @return
 	 */
 	public static String getFileNameNoFormat(String filePath) {
-		if (StringUtils.isEmpty(filePath)) {
+		if (StringUtil.isEmpty(filePath)) {
 			return "";
 		}
 		int point = filePath.lastIndexOf('.');
@@ -168,7 +168,7 @@ public class FileUtils {
 	 * @return
 	 */
 	public static String getFileFormat(String fileName) {
-		if (StringUtils.isEmpty(fileName))
+		if (StringUtil.isEmpty(fileName))
 			return "";
 
 		int point = fileName.lastIndexOf('.');
@@ -507,7 +507,7 @@ public class FileUtils {
 	 * @param files
 	 */
 	public static void clearFileWithPath(String filePath) {
-		List<File> files = FileUtils.listPathFiles(filePath);
+		List<File> files = FileUtil.listPathFiles(filePath);
 		if (files.isEmpty()) {
 			return;
 		}

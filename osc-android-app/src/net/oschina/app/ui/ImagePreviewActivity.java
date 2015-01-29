@@ -5,10 +5,16 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.RecyclingPagerAdapter;
 import net.oschina.app.base.BaseActivity;
+import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.fragment.TweetPubFragment;
+import net.oschina.app.ui.dialog.ImageMenuDialog;
+import net.oschina.app.ui.dialog.ImageMenuDialog.OnMenuClickListener;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.HackyViewPager;
 
 import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
+import org.kymjs.kjframe.http.core.KJAsyncTask;
 
 import uk.co.senab.photoview.PhotoView;
 import android.annotation.SuppressLint;
@@ -83,7 +89,7 @@ public class ImagePreviewActivity extends BaseActivity implements
         int id = v.getId();
         switch (id) {
         case R.id.iv_more:
-            saveImg();
+            showOptionMenu();
             break;
         default:
             break;
@@ -96,15 +102,39 @@ public class ImagePreviewActivity extends BaseActivity implements
     @Override
     public void initData() {}
 
+    private void showOptionMenu() {
+        final ImageMenuDialog dialog = new ImageMenuDialog(this);
+        dialog.show();
+        dialog.setCancelable(true);
+        dialog.setOnMenuClickListener(new OnMenuClickListener() {
+            @Override
+            public void onClick(TextView menuItem) {
+                if (menuItem.getId() == R.id.menu1) {
+                    saveImg();
+                } else if (menuItem.getId() == R.id.menu2) {
+                    sendTweet();
+                } else if (menuItem.getId() == R.id.menu3) {
+                    copyUrl();
+                }
+                dialog.dismiss();
+            }
+        });
+    }
+
+    private void copyUrl() {
+
+    }
+
+    /**
+     * 发送到动弹
+     */
     private void sendTweet() {
         if (mAdapter != null && mAdapter.getCount() > 0) {
             String imgUrl = mAdapter.getItem(mCurrentPostion);
-            String filePath = AppConfig.DEFAULT_SAVE_IMAGE_PATH
-                    + getFileName(imgUrl);
-            kjb.saveImage(imgUrl, filePath);
-            // Bundle bundle = new Bundle();
-            // bundle.putString(TweetPubFragment.IMAGEPAGER_KEY, filePath);
-            // UIHelper.showSimpleBack(this, SimpleBackPage.TWEET_PUB, bundle);
+            Bundle bundle = new Bundle();
+            bundle.putString(TweetPubFragment.FROM_IMAGEPAGE_KEY, imgUrl);
+            UIHelper.showSimpleBack(this, SimpleBackPage.TWEET_PUB, bundle);
+            finish();
         }
     }
 
@@ -113,10 +143,15 @@ public class ImagePreviewActivity extends BaseActivity implements
      */
     private void saveImg() {
         if (mAdapter != null && mAdapter.getCount() > 0) {
-            String imgUrl = mAdapter.getItem(mCurrentPostion);
-            String filePath = AppConfig.DEFAULT_SAVE_IMAGE_PATH
+            final String imgUrl = mAdapter.getItem(mCurrentPostion);
+            final String filePath = AppConfig.DEFAULT_SAVE_IMAGE_PATH
                     + getFileName(imgUrl);
-            kjb.saveImage(imgUrl, filePath);
+            KJAsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    kjb.saveImage(imgUrl, filePath);
+                }
+            });
             AppContext.showToastShort(getString(R.string.tip_save_image_suc,
                     filePath));
         } else {

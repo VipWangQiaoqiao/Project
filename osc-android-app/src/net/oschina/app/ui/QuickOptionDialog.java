@@ -121,6 +121,8 @@ public class QuickOptionDialog extends Dialog implements
         case R.id.ly_quick_option_note:
             // UIHelper.showSimpleBack(getContext(), SimpleBackPage.FIND_USER);
             onClickNote();
+            //UIHelper.showSimpleBack(getContext(), SimpleBackPage.FIND_USER);
+            // onClickNote();
             break;
         default:
             break;
@@ -145,7 +147,8 @@ public class QuickOptionDialog extends Dialog implements
             break;
         }
         bundle.putInt(TweetPubFragment.ACTION_TYPE, type);
-        UIHelper.showSimpleBack(getContext(), SimpleBackPage.TWEET_PUB, bundle);
+        UIHelper.showTweetActivity(getContext(), SimpleBackPage.TWEET_PUB,
+                bundle);
     }
 
     private void onClickNote() {

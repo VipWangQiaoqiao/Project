@@ -1,14 +1,14 @@
-package net.oschina.app.team.fragment;
+package net.oschina.app.fragment;
 
 import java.util.ArrayList;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
+import net.oschina.app.adapter.NotebookAdapter;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.NotebookData;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.db.NoteDatabase;
-import net.oschina.app.team.adapter.NotebookAdapter;
 import net.oschina.app.util.KJAnimations;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.KJDragGridView;
@@ -37,7 +37,7 @@ import butterknife.InjectView;
 /**
  * 便签列表界面
  * 
- * @author kymjs (https://github.com/kymjs)
+ * @author kymjs(kymjs123@gmail.com)
  */
 public class NoteBookFragment extends BaseFragment implements
         OnItemClickListener, OnRefreshListener {

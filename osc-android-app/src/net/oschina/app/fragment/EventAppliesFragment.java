@@ -68,10 +68,10 @@ public class EventAppliesFragment extends BaseListFragment<Apply> {
 		Apply item = (Apply) mAdapter.getItem(position);
 		if (item != null) {
 			if (AppContext.getInstance().isLogin()) {
-				UIHelper.showMessageDetail(getActivity(), item.getUserid(), item.getName());
+				UIHelper.showMessageDetail(getActivity(), item.getId(), item.getName());
 				return;
 			}
-			UIHelper.showUserCenter(getActivity(), item.getUserid(),item.getName());
+			UIHelper.showUserCenter(getActivity(), item.getId(),item.getName());
 		}
 			
 	}
