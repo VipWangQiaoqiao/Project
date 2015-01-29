@@ -1,6 +1,8 @@
 package net.oschina.app.fragment;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,6 +34,7 @@ import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
 import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.bitmap.helper.BitmapCreate;
 import org.kymjs.kjframe.http.core.KJAsyncTask;
 import org.kymjs.kjframe.utils.FileUtils;
 
@@ -247,11 +250,16 @@ public class TweetPubFragment extends BaseFragment implements
                 public void run() {
                     final Message msg = Message.obtain();
                     msg.what = 1;
-                    msg.obj = kjb.loadBmpMustInThread(imgUrl, 0, 0);
+                    try {
+                        msg.obj = BitmapCreate.bitmapFromStream(
+                                new FileInputStream(imgUrl), 300, 300);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    String path = FileUtils.getSDCardPath() + "/tempfile.jpg";
+                    FileUtils.bitmapToFile((Bitmap) msg.obj, path);
+                    imgFile = new File(path);
                     handler.sendMessage(msg);
-                    kjb.saveImage(imgUrl, "tempfile.jpg");
-                    imgFile = new File(FileUtils.getSDCardPath()
-                            + "/tempfile.jpg");
                 }
             });
         }
