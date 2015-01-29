@@ -38,8 +38,9 @@ public class EventApplyAdapter extends ListBaseAdapter<Apply> {
         final Apply item = (Apply) mDatas.get(position);
 
         vh.name.setText(item.getName());
-        vh.avatar.setUserInfo(item.getUserid(), item.getName());
+        vh.avatar.setUserInfo(item.getId(), item.getName());
         vh.avatar.setAvatarUrl(item.getPortrait());
+        vh.from.setVisibility(View.GONE);
         vh.desc.setText(item.getCompany() + " " + item.getJob());
 
         return convertView;
@@ -51,6 +52,7 @@ public class EventApplyAdapter extends ListBaseAdapter<Apply> {
         TextView name;
         @InjectView(R.id.tv_desc)
         TextView desc;
+        @InjectView(R.id.tv_from) TextView from;
         @InjectView(R.id.iv_gender)
         ImageView gender;
         @InjectView(R.id.iv_avatar)
