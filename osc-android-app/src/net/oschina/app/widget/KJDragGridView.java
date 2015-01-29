@@ -33,9 +33,9 @@ import android.widget.ListAdapter;
  * 在这个基础上解决了原作者的问题:Adapter无法使用ViewHolder优化的问题，优化了手势识别率，并添加了trashView功能，
  * 优化自定义控件对外扩展性，解决在上下拉环境下手势冲突问题<br>
  * 
- * @author kymjs (kymjs123@gmail.com)
+ * @author kymjs (https://github.com/kymjs)
  */
-public class DragGridView extends GridView {
+public class KJDragGridView extends GridView {
 
     private long dragResponseMS = 700; // item长按响应的时间
     private int mDragPosition;// 正在拖拽的position
@@ -87,15 +87,15 @@ public class DragGridView extends GridView {
     private final TouchRect gridRect = new TouchRect();
     private final TouchRect trashRect = new TouchRect();
 
-    public DragGridView(Context context) {
+    public KJDragGridView(Context context) {
         this(context, null);
     }
 
-    public DragGridView(Context context, AttributeSet attrs) {
+    public KJDragGridView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public DragGridView(Context context, AttributeSet attrs, int defStyle) {
+    public KJDragGridView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         mVibrator = (Vibrator) context
                 .getSystemService(Context.VIBRATOR_SERVICE);

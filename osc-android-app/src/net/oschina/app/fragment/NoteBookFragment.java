@@ -11,9 +11,9 @@ import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.db.NoteDatabase;
 import net.oschina.app.util.KJAnimations;
 import net.oschina.app.util.UIHelper;
-import net.oschina.app.widget.DragGridView;
-import net.oschina.app.widget.DragGridView.OnDeleteListener;
-import net.oschina.app.widget.DragGridView.OnMoveListener;
+import net.oschina.app.widget.KJDragGridView;
+import net.oschina.app.widget.KJDragGridView.OnDeleteListener;
+import net.oschina.app.widget.KJDragGridView.OnMoveListener;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -43,7 +43,7 @@ public class NoteBookFragment extends BaseFragment implements
         OnItemClickListener, OnRefreshListener {
 
     @InjectView(R.id.frag_note_list)
-    DragGridView mGrid;
+    KJDragGridView mGrid;
     @InjectView(R.id.frag_note_trash)
     ImageView mImgTrash;
     @InjectView(R.id.swiperefreshlayout)
