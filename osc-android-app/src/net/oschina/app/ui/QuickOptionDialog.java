@@ -145,7 +145,8 @@ public class QuickOptionDialog extends Dialog implements
             break;
         }
         bundle.putInt(TweetPubFragment.ACTION_TYPE, type);
-        UIHelper.showSimpleBack(getContext(), SimpleBackPage.TWEET_PUB, bundle);
+        UIHelper.showTweetActivity(getContext(), SimpleBackPage.TWEET_PUB,
+                bundle);
     }
 
     private void onClickNote() {

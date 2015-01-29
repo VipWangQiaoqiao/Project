@@ -163,6 +163,20 @@ public class TweetPubFragment extends BaseFragment implements
         return true;
     }
 
+    /**
+     * 方便外部Activity调用
+     */
+    public void setContentText(String content) {
+        mEtInput.setText(content);
+    }
+
+    /**
+     * 方便外部Activity调用
+     */
+    public void setContentImage(String uri) {
+        handleImageFile(uri);
+    }
+
     private void handleSubmit() {
         if (!TDevice.hasInternet()) {
             AppContext.showToastShort(R.string.tip_network_error);

@@ -30,6 +30,7 @@ import net.oschina.app.ui.EventLocationActivity;
 import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.ui.LoginActivity;
 import net.oschina.app.ui.SimpleBackActivity;
+import net.oschina.app.ui.TweetActivity;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.viewpagerfragment.FriendsViewPagerFragment;
 import net.oschina.app.widget.AvatarView;
@@ -379,8 +380,7 @@ public class UIHelper {
     public static void showUrlShake(Context context, ShakeObject obj) {
         if (StringUtil.isEmpty(obj.getUrl())) {
             if (ShakeObject.RANDOMTYPE_NEWS.equals(obj.getRandomtype())) {
-                UIHelper.showNewsDetail(context,
-                        StringUtil.toInt(obj.getId()),
+                UIHelper.showNewsDetail(context, StringUtil.toInt(obj.getId()),
                         StringUtil.toInt(obj.getCommentCount()));
             }
         } else {
@@ -397,7 +397,8 @@ public class UIHelper {
      * @param url
      */
     public static void showUrlRedirect(Context context, String url) {
-	if (url == null) return;
+        if (url == null)
+            return;
         if (url.startsWith(SHOWIMAGE)) {
             String realUrl = url.substring(SHOWIMAGE.length());
             try {
@@ -537,6 +538,15 @@ public class UIHelper {
     public static void showSimpleBack(Context context, SimpleBackPage page,
             Bundle args) {
         Intent intent = new Intent(context, SimpleBackActivity.class);
+        intent.putExtra(SimpleBackActivity.BUNDLE_KEY_ARGS, args);
+        intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, page.getValue());
+        context.startActivity(intent);
+    }
+
+    public static void showTweetActivity(Context context, SimpleBackPage page,
+            Bundle args) {
+        Intent intent = new Intent(context, TweetActivity.class);
+        intent.putExtra(TweetActivity.FROM_KEY, 1);
         intent.putExtra(SimpleBackActivity.BUNDLE_KEY_ARGS, args);
         intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, page.getValue());
         context.startActivity(intent);
