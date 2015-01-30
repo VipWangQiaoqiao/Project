@@ -8,8 +8,6 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.team.adapter.TeamIssueAdapter;
 import net.oschina.app.team.bean.Team;
@@ -19,6 +17,7 @@ import net.oschina.app.team.bean.TeamProject;
 import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import android.os.Bundle;
 import android.view.View;
@@ -113,7 +112,10 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
 	    long id) {
-
+	TeamIssue issue = (TeamIssue) mAdapter.getItem(position);
+	if (issue != null) {
+	    UIHelper.showTeamIssueDetail(getActivity(), mTeam, issue);
+	}
     }
 
 }

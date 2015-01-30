@@ -4,7 +4,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Messages;
-import net.oschina.app.util.StringUtil;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
@@ -55,7 +55,7 @@ public class MessageAdapter extends ListBaseAdapter<Messages> {
         vh.content.setText(span);
         MyURLSpan.parseLinkText(vh.content, span);
 
-        vh.time.setText(StringUtil.friendly_time(item.getPubDate()));
+        vh.time.setText(StringUtils.friendly_time(item.getPubDate()));
         vh.count.setText(parent.getResources().getString(
                 R.string.message_count, item.getMessageCount()));
 

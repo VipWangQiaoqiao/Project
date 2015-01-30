@@ -30,7 +30,7 @@ import net.oschina.app.interf.ToolbarEmojiVisiableControl;
 import net.oschina.app.interf.ToolbarFragmentControl;
 import net.oschina.app.ui.EventApplyDialog;
 import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.StringUtil;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
@@ -465,7 +465,7 @@ public class EventDetailFragment extends BaseDetailFragment implements
 
 	@Override
 	protected String getShareContent() {
-		return mPost != null ? StringUtil.getSubString(0, 55, getFilterHtmlBody(mPost.getBody())) : "";
+		return mPost != null ? StringUtils.getSubString(0, 55, getFilterHtmlBody(mPost.getBody())) : "";
 	}
 
     @Override

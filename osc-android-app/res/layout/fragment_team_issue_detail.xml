@@ -4,7 +4,7 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/tv_title"
+        android:id="@+id/tv_issue_title"
         style="@style/list_text_title"
         android:padding="@dimen/space_15"
         android:text="#17  任务标题" />
@@ -33,7 +33,7 @@
         android:padding="@dimen/space_10" >
 
         <TextView
-            android:id="@+id/tv_author"
+            android:id="@+id/tv_issue_author"
             style="@style/list_text_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
             android:text="指派给" />
 
         <TextView
-            android:id="@+id/tv_touser"
+            android:id="@+id/tv_issue_touser"
             style="@style/list_text_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

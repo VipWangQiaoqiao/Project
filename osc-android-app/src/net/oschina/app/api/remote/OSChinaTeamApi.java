@@ -1,6 +1,7 @@
 package net.oschina.app.api.remote;
 
 import net.oschina.app.AppContext;
+import net.oschina.app.api.ApiClientHelper;
 import net.oschina.app.api.ApiHttpClient;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -139,4 +140,13 @@ public class OSChinaTeamApi {
 	ApiHttpClient.get("action/api/team_diary_list", params, handler);
     }
     
+    
+    public static void getTeamReplyList(int teamId, int id, int type, int pageIndex, AsyncHttpResponseHandler handler) {
+	RequestParams params = new RequestParams();
+	params.put("teamid", teamId);
+	params.put("issueid", id);
+	params.put("pageIndex", pageIndex);
+	ApiHttpClient.get("action/api/team_issue_reply_list", params, handler);
+	
+    }
 }

@@ -150,7 +150,13 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
     }
 
     protected abstract ListBaseAdapter<T> getListAdapter();
+    
+    protected abstract ListEntity<T> parseList(InputStream is) throws Exception;
 
+    protected abstract ListEntity<T> readList(Serializable seri);
+    
+    protected abstract String getCacheKeyPrefix();
+    
     // 下拉刷新数据
     @Override
     public void onRefresh() {
@@ -167,18 +173,6 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
     protected boolean requestDataIfViewCreated() {
 	return true;
-    }
-
-    protected String getCacheKeyPrefix() {
-	return null;
-    }
-
-    protected ListEntity<T> parseList(InputStream is) throws Exception {
-        return null;
-    }
-
-    protected ListEntity<T> readList(Serializable seri) {
-        return null;
     }
 
     @Override

@@ -2,11 +2,17 @@ package net.oschina.app.base;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import net.oschina.app.R;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.util.TDevice;
+import net.oschina.app.widget.MyLinkMovementMethod;
+import net.oschina.app.widget.MyURLSpan;
+import net.oschina.app.widget.TweetTextView;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -219,4 +225,14 @@ public class ListBaseAdapter<T extends Entity> extends BaseAdapter {
         return null;
     }
     
+    protected void setContent(TextView contentView, String content) {
+	contentView.setMovementMethod(MyLinkMovementMethod.a());
+	contentView.setFocusable(false);
+	//contentView.setDispatchToParent(true);
+	contentView.setLongClickable(false);
+	Spanned span = Html
+		.fromHtml(TweetTextView.modifyPath(content));
+	contentView.setText(span);
+	MyURLSpan.parseLinkText(contentView, span);
+    }
 }

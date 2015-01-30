@@ -6,6 +6,9 @@ import java.lang.ref.WeakReference;
 
 import net.oschina.app.bean.Entity;
 import net.oschina.app.cache.CacheManager;
+import net.oschina.app.emoji.EmojiFragment;
+import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
+import net.oschina.app.interf.EmojiFragmentControl;
 
 import org.apache.http.Header;
 
@@ -29,9 +32,11 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
  * @data 2015-1-27 下午3:02:42
  */
 public abstract class BeseHaveHeaderListFragment<T1 extends Entity, T2 extends Serializable>
-	extends BaseListFragment<T1> {
+	extends BaseListFragment<T1> implements EmojiTextListener, EmojiFragmentControl {
 
     protected T2 detailBean;// list 头部的详情实体类
+    
+    private EmojiFragment mEmojiFragment;
 
     protected final AsyncHttpResponseHandler mDetailHandler = new AsyncHttpResponseHandler() {
 
@@ -156,5 +161,17 @@ public abstract class BeseHaveHeaderListFragment<T1 extends Entity, T2 extends S
                 executeOnLoadDetailSuccess(t);
             }
         }
+    }
+    
+    @Override
+    public void setEmojiFragment(EmojiFragment fragment) {
+	mEmojiFragment = fragment;
+	mEmojiFragment.setEmojiTextListener(this);
+
+    }
+    
+    @SuppressWarnings("unchecked")
+    protected <T extends View> T findHeaderView(View headerView, int viewId) {
+	return (T)headerView.findViewById(viewId);
     }
 }

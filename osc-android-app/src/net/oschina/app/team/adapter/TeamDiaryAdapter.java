@@ -1,16 +1,16 @@
 package net.oschina.app.team.adapter;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import android.text.Html;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.team.bean.TeamDiary;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.AvatarView;
+import android.text.Html;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 public class TeamDiaryAdapter extends ListBaseAdapter<TeamDiary> {
 
