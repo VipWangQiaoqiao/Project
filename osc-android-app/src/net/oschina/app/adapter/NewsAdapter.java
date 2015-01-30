@@ -92,6 +92,12 @@ public class NewsAdapter extends ListBaseAdapter<News> {
         }
     }
 
+    /**
+     * URL解析判断链接是否为站内链接
+     * 
+     * @param data
+     * @return
+     */
     private boolean hasExternalLink(News data) {
         // if (!StringUtils.isEmpty(data.getNewType().getEventUrl())) {
         // return false;

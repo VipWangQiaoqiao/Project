@@ -12,12 +12,13 @@ import net.oschina.app.ui.dialog.ImageMenuDialog.OnMenuClickListener;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.HackyViewPager;
+import net.oschina.app.widget.PhotoImageView;
 
 import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
 import org.kymjs.kjframe.http.core.KJAsyncTask;
 
-import uk.co.senab.photoview.PhotoView;
+import uk.co.senab.photoview.PhotoViewAttacher.OnFinishListener;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +31,11 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+/**
+ * 图片预览界面
+ * 
+ * @author kymjs
+ */
 public class ImagePreviewActivity extends BaseActivity implements
         OnPageChangeListener {
 
@@ -193,7 +199,7 @@ public class ImagePreviewActivity extends BaseActivity implements
         }
     }
 
-    static class SamplePagerAdapter extends RecyclingPagerAdapter {
+    class SamplePagerAdapter extends RecyclingPagerAdapter {
 
         private String[] images = new String[] {};
 
@@ -222,6 +228,12 @@ public class ImagePreviewActivity extends BaseActivity implements
             } else {
                 vh = (ViewHolder) convertView.getTag();
             }
+            vh.image.setOnFinishListener(new OnFinishListener() {
+                @Override
+                public void onClick() {
+                    ImagePreviewActivity.this.finish();
+                }
+            });
             final ProgressBar bar = vh.progress;
             KJBitmap kjbitmap = KJBitmap.create();
             kjbitmap.setCallback(new BitmapCallBack() {
@@ -245,15 +257,15 @@ public class ImagePreviewActivity extends BaseActivity implements
             kjbitmap.display(vh.image, images[position]);
             return convertView;
         }
+    }
 
-        static class ViewHolder {
-            PhotoView image;
-            ProgressBar progress;
+    static class ViewHolder {
+        PhotoImageView image;
+        ProgressBar progress;
 
-            ViewHolder(View view) {
-                image = (PhotoView) view.findViewById(R.id.photoview);
-                progress = (ProgressBar) view.findViewById(R.id.progress);
-            }
+        ViewHolder(View view) {
+            image = (PhotoImageView) view.findViewById(R.id.photoview);
+            progress = (ProgressBar) view.findViewById(R.id.progress);
         }
     }
 }
