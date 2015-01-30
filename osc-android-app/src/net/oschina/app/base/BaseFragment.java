@@ -5,7 +5,6 @@ import net.oschina.app.R;
 import net.oschina.app.interf.BaseFragmentInterface;
 import net.oschina.app.ui.dialog.DialogControl;
 import net.oschina.app.ui.dialog.WaitDialog;
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -31,8 +30,6 @@ public class BaseFragment extends Fragment implements
 
     protected LayoutInflater mInflater;
 
-    protected Activity aty;
-
     public AppContext getApplication() {
         return (AppContext) getActivity().getApplication();
     }
@@ -47,7 +44,6 @@ public class BaseFragment extends Fragment implements
             Bundle savedInstanceState) {
         this.mInflater = inflater;
         View view = super.onCreateView(inflater, container, savedInstanceState);
-        aty = getActivity();
         return view;
     }
 

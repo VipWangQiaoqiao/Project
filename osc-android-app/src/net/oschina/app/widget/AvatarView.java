@@ -4,8 +4,6 @@ import net.oschina.app.R;
 import net.oschina.app.util.UIHelper;
 
 import org.kymjs.kjframe.KJBitmap;
-import org.kymjs.kjframe.bitmap.BitmapCallBack;
-import org.kymjs.kjframe.utils.KJLoger;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -53,25 +51,17 @@ public class AvatarView extends CircleImageView {
         this.name = name;
     }
 
-    public void setAvatarUrl(final String url) {
-        // setTag(url);
-        // if (this.getTag() != null && this.getTag().equals(url)) {
-        // if (null == url || url.endsWith(PGIF) || StringUtils.isEmpty(url)) {
-        // setImageResource(R.drawable.widget_dface);
-        // } else {
-        // KJBitmap.create().displayNotTwink(this, url);
-        // }
-        // }
+    public void setAvatarUrl(String url) {
+        // 由于头像地址默认加了一段参数需要去掉
+        int end = url.indexOf('?');
+        final String headUrl;
+        if (end > 0) {
+            headUrl = url.substring(0, end);
+        } else {
+            headUrl = url;
+        }
         KJBitmap kjb = KJBitmap.create();
-        kjb.setCallback(new BitmapCallBack() {
-            @Override
-            public void onFailure(Exception e) {
-                super.onFailure(e);
-                AvatarView.this.setImageResource(R.drawable.widget_dface);
-                KJLoger.debug(getClass().getName() + "头像地址出错:" + url);
-            }
-        });
-        kjb.display(this, url, R.drawable.widget_dface);
+        kjb.display(this, headUrl, R.drawable.widget_dface);
     }
 
     public static String getSmallAvatar(String source) {
