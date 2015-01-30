@@ -3,6 +3,7 @@ package net.oschina.app.fragment;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.List;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -444,6 +445,7 @@ public class TweetDetailFragment extends
 
     @Override
     protected void executeOnLoadDetailSuccess(TweetDetail detailBean) {
+	mListView.setHeaderDividersEnabled(false);
 	mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
 	this.mTweet = detailBean.getTweet();
 	fillUI();
@@ -453,5 +455,11 @@ public class TweetDetailFragment extends
     @Override
     protected TweetDetail getDetailBean(ByteArrayInputStream is) {
 	return XmlUtils.toBean(TweetDetail.class, is);
+    }
+
+    @Override
+    protected void executeOnLoadDataSuccess(List<Comment> data) {
+	super.executeOnLoadDataSuccess(data);
+	mTvCommentCount.setText("评论(" + (mAdapter.getCount() - 1) + ")");
     }
 }
