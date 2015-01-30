@@ -42,9 +42,9 @@ public abstract class BaseActivity extends ActionBarActivity implements
 
     @Override
     protected void onDestroy() {
-        ButterKnife.reset(this);
-        TDevice.hideSoftKeyboard(getCurrentFocus());
         super.onDestroy();
+        TDevice.hideSoftKeyboard(getCurrentFocus());
+        ButterKnife.reset(this);
     }
 
     @Override
@@ -122,6 +122,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
 
                 @Override
                 public void onClick(View v) {
+                    TDevice.hideSoftKeyboard(getCurrentFocus());
                     onBackPressed();
                 }
             });
