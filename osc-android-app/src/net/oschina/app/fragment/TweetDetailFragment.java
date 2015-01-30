@@ -460,6 +460,10 @@ public class TweetDetailFragment extends
     @Override
     protected void executeOnLoadDataSuccess(List<Comment> data) {
 	super.executeOnLoadDataSuccess(data);
-	mTvCommentCount.setText("评论(" + (mAdapter.getCount() - 1) + ")");
+	int commentCount = StringUtil.toInt(this.mTweet.getCommentCount());
+	if (commentCount < (mAdapter.getCount() - 1)) {
+	    commentCount = mAdapter.getCount() - 1;
+	}
+	mTvCommentCount.setText("评论(" + commentCount + ")");
     }
 }
