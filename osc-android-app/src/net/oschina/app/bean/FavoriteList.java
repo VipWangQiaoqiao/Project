@@ -2,6 +2,7 @@ package net.oschina.app.bean;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**

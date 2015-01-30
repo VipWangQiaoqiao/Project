@@ -3,6 +3,17 @@ package net.oschina.app.fragment;
 import java.io.InputStream;
 import java.io.Serializable;
 
+import net.oschina.app.AppContext;
+import net.oschina.app.R;
+import net.oschina.app.adapter.EventAdapter;
+import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.base.BaseListFragment;
+import net.oschina.app.bean.Constants;
+import net.oschina.app.bean.Event;
+import net.oschina.app.bean.EventList;
+import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.UIHelper;
+import net.oschina.app.util.XmlUtils;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,19 +21,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import net.oschina.app.AppContext;
-import net.oschina.app.R;
-import net.oschina.app.adapter.EventAdapter;
-import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.bean.Constants;
-import net.oschina.app.bean.EventList;
-import net.oschina.app.bean.Event;
-import net.oschina.app.bean.ListEntity;
-import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.UIHelper;
-import net.oschina.app.util.XmlUtils;
 
 /** 
  * 活动列表fragment

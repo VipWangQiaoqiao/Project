@@ -9,8 +9,9 @@
         android:id="@+id/ll_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
         android:layout_marginBottom="@dimen/space_5"
+        android:layout_marginRight="3dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal" >
 
         <ImageView
@@ -63,5 +64,15 @@
         android:layout_toRightOf="@id/tv_time"
         android:drawableLeft="@drawable/ic_comment_count"
         android:drawablePadding="@dimen/space_2" />
+
+    <ImageView
+        android:id="@+id/iv_link"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="2dip"
+        android:contentDescription="@null"
+        android:src="@drawable/icon_link"
+        android:visibility="gone" />
 
 </RelativeLayout>

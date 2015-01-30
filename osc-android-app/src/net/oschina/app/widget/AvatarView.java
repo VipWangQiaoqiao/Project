@@ -4,7 +4,9 @@ import net.oschina.app.R;
 import net.oschina.app.util.UIHelper;
 
 import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.bitmap.BitmapCallBack;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -18,6 +20,7 @@ public class AvatarView extends CircleImageView {
     private static final String PGIF = "portrait.gif";
     private int id;
     private String name;
+    private Activity aty;
 
     public AvatarView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -35,8 +38,8 @@ public class AvatarView extends CircleImageView {
     }
 
     private void init(Context context) {
+        aty = (Activity) context;
         setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 if (!TextUtils.isEmpty(name)) {
@@ -61,6 +64,18 @@ public class AvatarView extends CircleImageView {
             headUrl = url;
         }
         KJBitmap kjb = KJBitmap.create();
+        kjb.setCallback(new BitmapCallBack() {
+            @Override
+            public void onFailure(Exception e) {
+                super.onFailure(e);
+                aty.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setImageResource(R.drawable.widget_dface);
+                    }
+                });
+            }
+        });
         kjb.display(this, headUrl, R.drawable.widget_dface);
     }
 

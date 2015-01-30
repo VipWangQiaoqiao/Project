@@ -3,7 +3,6 @@ package net.oschina.app.viewpagerfragment;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.base.BaseFragment;
-import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.BaseViewPagerFragment;
 import net.oschina.app.bean.SoftwareList;
 import net.oschina.app.fragment.SoftwareCatalogListFragment;

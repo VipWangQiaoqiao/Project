@@ -1,11 +1,8 @@
 package net.oschina.app.bean;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
-import com.thoughtworks.xstream.annotations.XStreamConverter;
 
 /**
  * 更新实体类

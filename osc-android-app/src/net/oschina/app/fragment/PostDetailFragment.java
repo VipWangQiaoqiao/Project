@@ -4,8 +4,6 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URLEncoder;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
@@ -39,6 +37,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.TextView;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 public class PostDetailFragment extends BaseDetailFragment implements
 		EmojiTextListener, EmojiFragmentControl, ToolbarFragmentControl {

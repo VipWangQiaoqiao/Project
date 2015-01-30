@@ -1,10 +1,9 @@
 package net.oschina.app.bean;
 
+import net.oschina.app.AppException;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import android.util.Log;
-import net.oschina.app.AppException;
 
 /**
  * 签到返回结果实体类

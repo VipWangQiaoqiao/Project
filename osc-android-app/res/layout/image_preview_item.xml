@@ -7,7 +7,7 @@
 
     <!-- android.support.v4.widget.ContentLoadingProgressBar -->
 
-    <uk.co.senab.photoview.PhotoView
+    <net.oschina.app.widget.PhotoImageView
         android:id="@+id/photoview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
