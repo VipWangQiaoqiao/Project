@@ -1,16 +1,13 @@
 package net.oschina.app.viewpagerfragment;
 
-import android.os.Bundle;
-import android.view.View;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.BaseViewPagerFragment;
-import net.oschina.app.bean.Blog;
 import net.oschina.app.bean.Favorite;
-import net.oschina.app.fragment.BlogFragment;
-import net.oschina.app.fragment.NewsFragment;
 import net.oschina.app.fragment.UserFavoriteFragment;
+import android.os.Bundle;
+import android.view.View;
 
 public class UserFavoriteViewPagerFragment extends BaseViewPagerFragment {
 	

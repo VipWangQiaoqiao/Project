@@ -1,8 +1,8 @@
 package net.oschina.app.team.bean;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-
 import net.oschina.app.bean.Entity;
+
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /** 
  * 项目任务列表实体类

@@ -8,8 +8,6 @@ import net.oschina.app.adapter.PostAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.Post;
 import net.oschina.app.bean.PostList;
 import net.oschina.app.util.UIHelper;

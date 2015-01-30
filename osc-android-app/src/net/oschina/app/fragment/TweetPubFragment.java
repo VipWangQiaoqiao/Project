@@ -127,6 +127,7 @@ public class TweetPubFragment extends BaseFragment implements
 
     private String theLarge, theThumbnail;
     private File imgFile;
+
     private final KJBitmap kjb = KJBitmap.create();
 
     private final Handler handler = new Handler() {
@@ -176,8 +177,8 @@ public class TweetPubFragment extends BaseFragment implements
     /**
      * 方便外部Activity调用
      */
-    public void setContentImage(String uri) {
-        handleImageFile(uri);
+    public void setContentImage(String url) {
+        handleImageFile(url);
     }
 
     private void handleSubmit() {
@@ -234,17 +235,17 @@ public class TweetPubFragment extends BaseFragment implements
             int action_type = bundle.getInt(ACTION_TYPE, -1);
             goToSelectPicture(action_type);
             final String imgUrl = bundle.getString(FROM_IMAGEPAGE_KEY);
-            handleImageFile(imgUrl);
+            handleImageUrl(imgUrl);
         }
     }
 
     /**
-     * 处理从图片浏览界面跳转来的图片
+     * 处理从第三方分享跳转来的图片
      * 
-     * @param imgUrl
+     * @param filePath
      */
-    private void handleImageFile(final String imgUrl) {
-        if (!StringUtil.isEmpty(imgUrl)) {
+    private void handleImageFile(final String filePath) {
+        if (!StringUtil.isEmpty(filePath)) {
             KJAsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -252,11 +253,38 @@ public class TweetPubFragment extends BaseFragment implements
                     msg.what = 1;
                     try {
                         msg.obj = BitmapCreate.bitmapFromStream(
-                                new FileInputStream(imgUrl), 300, 300);
+                                new FileInputStream(filePath), 300, 300);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                    String path = FileUtils.getSDCardPath() + "/tempfile.jpg";
+                    String path = FileUtils.getSDCardPath()
+                            + "/OSChina/tempfile.jpg";
+                    FileUtils.bitmapToFile((Bitmap) msg.obj, path);
+                    imgFile = new File(path);
+                    handler.sendMessage(msg);
+                }
+            });
+        }
+    }
+
+    /**
+     * 处理从图片浏览跳转来的图片
+     * 
+     * @param url
+     */
+    private void handleImageUrl(final String url) {
+        if (!StringUtil.isEmpty(url)) {
+            KJAsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    final Message msg = Message.obtain();
+                    msg.what = 1;
+                    msg.obj = kjb.getBitmapFromCache(url);
+                    if (msg.obj == null) {
+                        msg.obj = kjb.loadBmpMustInThread(url, 300, 300);
+                    }
+                    String path = FileUtils.getSDCardPath()
+                            + "/OSChina/tempfile.jpg";
                     FileUtils.bitmapToFile((Bitmap) msg.obj, path);
                     imgFile = new File(path);
                     handler.sendMessage(msg);

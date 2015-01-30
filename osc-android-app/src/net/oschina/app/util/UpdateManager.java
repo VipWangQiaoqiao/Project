@@ -15,8 +15,6 @@ import org.apache.http.Header;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.drawable.Drawable;
-import android.view.View;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 

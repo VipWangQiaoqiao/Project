@@ -9,6 +9,7 @@ import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.fragment.TweetPubFragment;
 import net.oschina.app.ui.dialog.ImageMenuDialog;
 import net.oschina.app.ui.dialog.ImageMenuDialog.OnMenuClickListener;
+import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.HackyViewPager;
 
@@ -121,8 +122,16 @@ public class ImagePreviewActivity extends BaseActivity implements
         });
     }
 
+    /**
+     * 复制链接
+     */
     private void copyUrl() {
-
+        String content = null;
+        if (mAdapter != null && mAdapter.getCount() > 0) {
+            content = mAdapter.getItem(mCurrentPostion);
+            TDevice.copyTextToBoard(content);
+            AppContext.showToastShort("已复制到剪贴板");
+        }
     }
 
     /**

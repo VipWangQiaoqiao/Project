@@ -5,7 +5,6 @@ import java.util.Map;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
-import net.oschina.app.util.TLog;
 import android.content.res.Resources;
 
 public class EmojiHelper {

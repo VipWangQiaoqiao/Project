@@ -3,11 +3,10 @@ package net.oschina.app.team.bean;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.ListEntity;
-import net.oschina.app.team.bean.TeamCatalog;
+
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /** 
  * 指定项目任务列表

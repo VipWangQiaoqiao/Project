@@ -4,8 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
 
-import org.apache.http.Header;
-
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.TweetAdapter;
@@ -25,6 +23,9 @@ import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
+
+import org.apache.http.Header;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;

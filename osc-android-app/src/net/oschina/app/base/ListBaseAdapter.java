@@ -2,6 +2,7 @@ package net.oschina.app.base;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import net.oschina.app.R;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.util.TDevice;

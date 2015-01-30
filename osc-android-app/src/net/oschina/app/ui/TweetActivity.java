@@ -19,7 +19,7 @@ import android.provider.MediaStore;
 public class TweetActivity extends SimpleBackActivity {
     private TweetPubFragment currentFragment;
 
-    public static String FROM_KEY = "tweetkey";
+    public static String FROM_KEY = "image_shared_key";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +28,15 @@ public class TweetActivity extends SimpleBackActivity {
             mPageValue = SimpleBackPage.TWEET_PUB.getValue();
         }
         super.onCreate(savedInstanceState);
+        respondExternal(intent);
+    }
+
+    /**
+     * 响应从图片分享进入的事件
+     * 
+     * @param intent
+     */
+    private void respondExternal(Intent intent) {
         currentFragment = (TweetPubFragment) mFragment.get();
 
         String action = intent.getAction();
@@ -87,7 +96,6 @@ public class TweetActivity extends SimpleBackActivity {
 
             return cursor.getString(column_index);
         } else {
-
             // 如果游标为空说明获取的已经是绝对路径了
             return uri.getPath();
         }
