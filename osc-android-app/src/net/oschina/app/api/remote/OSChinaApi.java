@@ -12,7 +12,7 @@ import net.oschina.app.bean.NewsList;
 import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.team.bean.Team;
-import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.StringUtil;
 import net.oschina.app.util.TLog;
 
 import org.kymjs.kjframe.utils.KJLoger;
@@ -79,7 +79,6 @@ public class OSChinaApi {
         params.put("catalog", catalog);
         params.put("pageIndex", page);
         params.put("pageSize", AppContext.PAGE_SIZE);
-        params.put("dataType", "json");
         ApiHttpClient.get("action/api/post_list", params, handler);
     }
 
@@ -597,7 +596,7 @@ public class OSChinaApi {
         params.put("url", report.getLinkAddress());
         params.put("obj_type", report.getReason());
         if (report.getOtherReason() != null
-                && !StringUtils.isEmpty(report.getOtherReason())) {
+                && !StringUtil.isEmpty(report.getOtherReason())) {
             params.put("memo", report.getOtherReason());
         } else {
             params.put("memo", "其他原因");
@@ -685,7 +684,7 @@ public class OSChinaApi {
     public static void teamDynamic(Team team, int page,
             AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
-        KJLoger.debug("]]]]" + team.getId());
+        KJLoger.debug("teamid=" + team.getId());
         params.put("teamid", team.getId());
         params.put("pageIndex", page + "");
         params.put("pageSize", 10);

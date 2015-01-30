@@ -19,18 +19,18 @@ public class Favorite extends Entity {
 	public static final int CATALOG_CODE = 5;
 	
 	@XStreamAlias("objid")
-	public int objid;
+	public int id;
 	@XStreamAlias("type")
 	public int type;
 	@XStreamAlias("title")
 	public String title;
 	@XStreamAlias("url")
 	public String url;
-	public int getObjid() {
-		return objid;
+	public int getId() {
+		return id;
 	}
-	public void setObjid(int objid) {
-		this.objid = objid;
+	public void setId(int id) {
+		this.id = id;
 	}
 	public int getType() {
 		return type;

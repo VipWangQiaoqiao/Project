@@ -6,10 +6,8 @@ import java.io.Serializable;
 import net.oschina.app.adapter.BlogAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Blog;
 import net.oschina.app.bean.BlogList;
-import net.oschina.app.bean.ListEntity;
 import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
@@ -22,7 +20,7 @@ import android.widget.AdapterView;
  * 
  * @author kymjs(kymjs123@gmail.com)
  */
-public class BlogFragment extends BaseListFragment implements
+public class BlogFragment extends BaseListFragment<Blog> implements
 	OnTabReselectListener{
 	
 	public static final String BUNDLE_BLOG_TYPE = "BUNDLE_BLOG_TYPE";
@@ -33,7 +31,7 @@ public class BlogFragment extends BaseListFragment implements
     private String blogType;
     
     @Override
-    protected ListBaseAdapter getListAdapter() {
+    protected BlogAdapter getListAdapter() {
         return new BlogAdapter();
     }
 
@@ -55,13 +53,13 @@ public class BlogFragment extends BaseListFragment implements
     }
 
     @Override
-    protected ListEntity parseList(InputStream is) throws Exception {
+    protected BlogList parseList(InputStream is) throws Exception {
         BlogList list = XmlUtils.toBean(BlogList.class, is);
         return list;
     }
 
     @Override
-    protected ListEntity readList(Serializable seri) {
+    protected BlogList readList(Serializable seri) {
         return ((BlogList) seri);
     }
 

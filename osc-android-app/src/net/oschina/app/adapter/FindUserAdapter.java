@@ -19,7 +19,7 @@ import butterknife.InjectView;
  * @created 2014年11月6日 上午11:22:27
  *
  */
-public class FindUserAdapter extends ListBaseAdapter {
+public class FindUserAdapter extends ListBaseAdapter<User> {
 
 	@SuppressLint("InflateParams")
 	@Override
@@ -38,7 +38,9 @@ public class FindUserAdapter extends ListBaseAdapter {
 		final User item = (User) mDatas.get(position);
 
 		vh.name.setText(item.getName());
-		vh.desc.setText(item.getFrom());
+		
+		vh.from.setText(item.getFrom());
+		vh.desc.setVisibility(View.GONE);
 		int genderIcon = R.drawable.userinfo_icon_male;
 		if ("女".equals(item.getGender())) {
 			genderIcon = R.drawable.userinfo_icon_female;
@@ -55,6 +57,7 @@ public class FindUserAdapter extends ListBaseAdapter {
 	static class ViewHolder {
 		
 		@InjectView(R.id.tv_name) TextView name;
+		@InjectView(R.id.tv_from) TextView from;
 		@InjectView(R.id.tv_desc) TextView desc;
 		@InjectView(R.id.iv_gender) ImageView gender;
 		@InjectView(R.id.iv_avatar) AvatarView avatar;

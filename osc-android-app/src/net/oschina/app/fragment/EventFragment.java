@@ -3,6 +3,17 @@ package net.oschina.app.fragment;
 import java.io.InputStream;
 import java.io.Serializable;
 
+import net.oschina.app.AppContext;
+import net.oschina.app.R;
+import net.oschina.app.adapter.EventAdapter;
+import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.base.BaseListFragment;
+import net.oschina.app.bean.Constants;
+import net.oschina.app.bean.Event;
+import net.oschina.app.bean.EventList;
+import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.UIHelper;
+import net.oschina.app.util.XmlUtils;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,19 +21,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import net.oschina.app.AppContext;
-import net.oschina.app.R;
-import net.oschina.app.adapter.EventAdapter;
-import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.bean.Constants;
-import net.oschina.app.bean.EventList;
-import net.oschina.app.bean.Event;
-import net.oschina.app.bean.ListEntity;
-import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.UIHelper;
-import net.oschina.app.util.XmlUtils;
 
 /** 
  * 活动列表fragment
@@ -30,7 +28,7 @@ import net.oschina.app.util.XmlUtils;
  * @version 创建时间：2014年12月8日 下午5:17:32 
  * 
  */
-public class EventFragment extends BaseListFragment {
+public class EventFragment extends BaseListFragment<Event> {
 	
 	public static final String BUNDLE_KEY_EVENT_TYPE = "eventlist_type";
 
@@ -40,7 +38,7 @@ public class EventFragment extends BaseListFragment {
 	private int event_type;
 	
 	@Override
-	protected ListBaseAdapter getListAdapter() {
+	protected EventAdapter getListAdapter() {
 		EventAdapter adapter = new EventAdapter();
 		adapter.setEventType(event_type);
 		return adapter;
@@ -127,13 +125,13 @@ public class EventFragment extends BaseListFragment {
 	}
 
 	@Override
-	protected ListEntity parseList(InputStream is) throws Exception {
+	protected EventList parseList(InputStream is) throws Exception {
 		EventList list = XmlUtils.toBean(EventList.class, is);
 		return list;
 	}
 
 	@Override
-	protected ListEntity readList(Serializable seri) {
+	protected EventList readList(Serializable seri) {
 		return ((EventList) seri);
 	}
 

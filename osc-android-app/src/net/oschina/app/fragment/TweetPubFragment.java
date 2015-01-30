@@ -1,6 +1,8 @@
 package net.oschina.app.fragment;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,12 +26,18 @@ import net.oschina.app.emoji.SoftKeyboardStateHelper.SoftKeyboardStateListener;
 import net.oschina.app.service.ServerTaskUtils;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
-import net.oschina.app.util.FileUtils;
+import net.oschina.app.util.FileUtil;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.SimpleTextWatcher;
-import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.StringUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
+
+import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.bitmap.helper.BitmapCreate;
+import org.kymjs.kjframe.http.core.KJAsyncTask;
+import org.kymjs.kjframe.utils.FileUtils;
+
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -70,6 +78,7 @@ public class TweetPubFragment extends BaseFragment implements
     public static final int ACTION_TYPE_ALBUM = 0;
     public static final int ACTION_TYPE_PHOTO = 1;
     public static final int ACTION_TYPE_RECORD = 2; // 录音
+    public static final String FROM_IMAGEPAGE_KEY = "from_image_page";
 
     public static final String ACTION_TYPE = "action_type";
 
@@ -119,6 +128,8 @@ public class TweetPubFragment extends BaseFragment implements
     private String theLarge, theThumbnail;
     private File imgFile;
 
+    private final KJBitmap kjb = KJBitmap.create();
+
     private final Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -154,6 +165,20 @@ public class TweetPubFragment extends BaseFragment implements
             break;
         }
         return true;
+    }
+
+    /**
+     * 方便外部Activity调用
+     */
+    public void setContentText(String content) {
+        mEtInput.setText(content);
+    }
+
+    /**
+     * 方便外部Activity调用
+     */
+    public void setContentImage(String url) {
+        handleImageFile(url);
     }
 
     private void handleSubmit() {
@@ -207,8 +232,64 @@ public class TweetPubFragment extends BaseFragment implements
         super.onViewCreated(view, savedInstanceState);
         Bundle bundle = getArguments();
         if (bundle != null) {
-            int action_type = bundle.getInt(ACTION_TYPE, 0);
+            int action_type = bundle.getInt(ACTION_TYPE, -1);
             goToSelectPicture(action_type);
+            final String imgUrl = bundle.getString(FROM_IMAGEPAGE_KEY);
+            handleImageUrl(imgUrl);
+        }
+    }
+
+    /**
+     * 处理从第三方分享跳转来的图片
+     * 
+     * @param filePath
+     */
+    private void handleImageFile(final String filePath) {
+        if (!StringUtil.isEmpty(filePath)) {
+            KJAsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    final Message msg = Message.obtain();
+                    msg.what = 1;
+                    try {
+                        msg.obj = BitmapCreate.bitmapFromStream(
+                                new FileInputStream(filePath), 300, 300);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    String path = FileUtils.getSDCardPath()
+                            + "/OSChina/tempfile.jpg";
+                    FileUtils.bitmapToFile((Bitmap) msg.obj, path);
+                    imgFile = new File(path);
+                    handler.sendMessage(msg);
+                }
+            });
+        }
+    }
+
+    /**
+     * 处理从图片浏览跳转来的图片
+     * 
+     * @param url
+     */
+    private void handleImageUrl(final String url) {
+        if (!StringUtil.isEmpty(url)) {
+            KJAsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    final Message msg = Message.obtain();
+                    msg.what = 1;
+                    msg.obj = kjb.getBitmapFromCache(url);
+                    if (msg.obj == null) {
+                        msg.obj = kjb.loadBmpMustInThread(url, 300, 300);
+                    }
+                    String path = FileUtils.getSDCardPath()
+                            + "/OSChina/tempfile.jpg";
+                    FileUtils.bitmapToFile((Bitmap) msg.obj, path);
+                    imgFile = new File(path);
+                    handler.sendMessage(msg);
+                }
+            });
         }
     }
 
@@ -366,18 +447,18 @@ public class TweetPubFragment extends BaseFragment implements
 
                     if (AppContext
                             .isMethodsCompat(android.os.Build.VERSION_CODES.ECLAIR_MR1)) {
-                        String imaName = FileUtils.getFileName(theLarge);
+                        String imaName = FileUtil.getFileName(theLarge);
                         if (imaName != null)
                             bitmap = ImageUtils.loadImgThumbnail(getActivity(),
                                     imaName,
                                     MediaStore.Images.Thumbnails.MICRO_KIND);
                     }
-                    if (bitmap == null && !StringUtils.isEmpty(theLarge))
+                    if (bitmap == null && !StringUtil.isEmpty(theLarge))
                         bitmap = ImageUtils
                                 .loadImgThumbnail(theLarge, 100, 100);
                 } else if (requestCode == ImageUtils.REQUEST_CODE_GETIMAGE_BYCAMERA) {
                     // 拍摄图片
-                    if (bitmap == null && !StringUtils.isEmpty(theLarge)) {
+                    if (bitmap == null && !StringUtil.isEmpty(theLarge)) {
                         bitmap = ImageUtils
                                 .loadImgThumbnail(theLarge, 100, 100);
                     }
@@ -391,7 +472,7 @@ public class TweetPubFragment extends BaseFragment implements
                         savedir.mkdirs();
                     }
 
-                    String largeFileName = FileUtils.getFileName(theLarge);
+                    String largeFileName = FileUtil.getFileName(theLarge);
                     String largeFilePath = savePath + largeFileName;
                     // 判断是否已存在缩略图
                     if (largeFileName.startsWith("thumb_")
@@ -501,7 +582,7 @@ public class TweetPubFragment extends BaseFragment implements
             }
 
             // 没有挂载SD卡，无法保存文件
-            if (StringUtils.isEmpty(savePath)) {
+            if (StringUtil.isEmpty(savePath)) {
                 AppContext.showToastShort("无法保存照片，请检查SD卡是否挂载");
                 return;
             }

@@ -3,12 +3,10 @@ package net.oschina.app.team.fragment;
 import java.io.InputStream;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.ListEntity;
-import net.oschina.app.team.adapter.DynamicAdapter;
 import net.oschina.app.team.adapter.TeamIssueAdapter;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamIssueList;

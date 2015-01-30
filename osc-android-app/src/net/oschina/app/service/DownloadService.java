@@ -10,9 +10,8 @@ import net.oschina.app.AppConfig;
 import net.oschina.app.R;
 import net.oschina.app.interf.ICallbackResult;
 import net.oschina.app.ui.MainActivity;
-import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.StringUtil;
 import net.oschina.app.util.TDevice;
-import net.oschina.app.util.TLog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -20,7 +19,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -118,7 +116,7 @@ public class DownloadService extends Service {
 	}
 	
 	private String getSaveFileName(String downloadUrl) {
-		if (downloadUrl == null || StringUtils.isEmpty(downloadUrl)) {
+		if (downloadUrl == null || StringUtil.isEmpty(downloadUrl)) {
 			return "";
 		}
 		return downloadUrl.substring(downloadUrl.lastIndexOf("/"));

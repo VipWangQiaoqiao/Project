@@ -9,7 +9,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class UserFavoriteAdapter extends ListBaseAdapter {
+public class UserFavoriteAdapter extends ListBaseAdapter<Favorite> {
 	
 	static class ViewHolder {
 		

@@ -6,7 +6,7 @@ import java.util.Collections;
 import net.oschina.app.R;
 import net.oschina.app.bean.NotebookData;
 import net.oschina.app.fragment.NoteEditFragment;
-import net.oschina.app.widget.DragGridView.DragGridBaseAdapter;
+import net.oschina.app.widget.KJDragGridView.DragGridBaseAdapter;
 
 import org.kymjs.kjframe.utils.DensityUtils;
 

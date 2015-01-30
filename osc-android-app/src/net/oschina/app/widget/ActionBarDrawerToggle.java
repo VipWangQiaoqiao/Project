@@ -1,5 +1,8 @@
 package net.oschina.app.widget;
 
+import java.lang.reflect.Method;
+
+import net.oschina.app.R;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.res.Configuration;
@@ -12,10 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
-import java.lang.reflect.Method;
-
-import net.oschina.app.R;
 
 public class ActionBarDrawerToggle extends android.support.v4.app.ActionBarDrawerToggle {
 

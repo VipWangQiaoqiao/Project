@@ -2,15 +2,6 @@ package net.oschina.app.team.viewpagefragment;
 
 import java.io.ByteArrayInputStream;
 
-import org.apache.http.Header;
-
-import com.loopj.android.http.AsyncHttpResponseHandler;
-
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.api.remote.OSChinaTeamApi;
@@ -20,8 +11,17 @@ import net.oschina.app.team.bean.TeamCatalog;
 import net.oschina.app.team.bean.TeamCatalogList;
 import net.oschina.app.team.fragment.IssueListFragment;
 import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.TLog;
 import net.oschina.app.util.XmlUtils;
+
+import org.apache.http.Header;
+
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 /** 
  * 

@@ -12,7 +12,6 @@ import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.interf.BaseViewInterface;
 import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.service.NoticeUtils;
-import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.UpdateManager;
 import net.oschina.app.widget.BadgeView;
@@ -118,6 +117,52 @@ public class MainActivity extends ActionBarActivity implements
         ButterKnife.inject(this);
         initView();
         AppManager.getAppManager().addActivity(this);
+
+        handleIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleIntent(intent);
+    }
+
+    /**
+     * 处理传进来的intent
+     * 
+     * @author 火蚁 2015-1-28 下午3:48:44
+     * 
+     * @return void
+     * @param intent
+     */
+    private void handleIntent(Intent intent) {
+        if (intent == null)
+            return;
+        String action = intent.getAction();
+        if (action != null && action.equals(Intent.ACTION_VIEW)) {
+
+            UIHelper.showUrlRedirect(this, intent.getDataString());
+
+        } else if (intent.getBooleanExtra("NOTICE", false)) {
+            notifitcationBarClick(intent);
+        }
+    }
+
+    /**
+     * 从通知栏点击的时候相应
+     * 
+     * @param fromWhich
+     */
+    private void notifitcationBarClick(Intent fromWhich) {
+        if (fromWhich != null) {
+            boolean fromNoticeBar = fromWhich.getBooleanExtra("NOTICE", false);
+            if (fromNoticeBar) {
+                Intent toMyInfor = new Intent(this, SimpleBackActivity.class);
+                toMyInfor.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE,
+                        SimpleBackPage.MY_MES.getValue());
+                startActivity(toMyInfor);
+            }
+        }
     }
 
     @Override

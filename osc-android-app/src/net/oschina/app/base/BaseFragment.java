@@ -43,7 +43,8 @@ public class BaseFragment extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         this.mInflater = inflater;
-        return super.onCreateView(inflater, container, savedInstanceState);
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+        return view;
     }
 
     @Override
@@ -100,18 +101,18 @@ public class BaseFragment extends Fragment implements
         return null;
     }
 
-	@Override
-	public void initView(View view) {
-		
-	}
+    @Override
+    public void initView(View view) {
 
-	@Override
-	public void initData() {
-		
-	}
+    }
 
-	@Override
-	public void onClick(View v) {
-		
-	}
+    @Override
+    public void initData() {
+
+    }
+
+    @Override
+    public void onClick(View v) {
+
+    }
 }

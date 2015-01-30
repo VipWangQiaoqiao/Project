@@ -14,7 +14,6 @@ import net.oschina.app.bean.ListEntity;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TDevice;
-import net.oschina.app.util.TLog;
 
 import org.apache.http.Header;
 
@@ -22,7 +21,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,8 +37,8 @@ import butterknife.InjectView;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 @SuppressLint("NewApi")
-public abstract class BaseListFragment extends BaseFragment implements
-        SwipeRefreshLayout.OnRefreshListener, OnItemClickListener,
+public abstract class BaseListFragment<T extends Entity> extends BaseFragment
+        implements SwipeRefreshLayout.OnRefreshListener, OnItemClickListener,
         OnScrollListener {
 
     public static final String BUNDLE_KEY_CATALOG = "BUNDLE_KEY_CATALOG";
@@ -51,7 +49,7 @@ public abstract class BaseListFragment extends BaseFragment implements
     @InjectView(R.id.listview)
     protected ListView mListView;
 
-    protected ListBaseAdapter mAdapter;
+    protected ListBaseAdapter<T> mAdapter;
 
     @InjectView(R.id.error_layout)
     protected EmptyLayout mErrorLayout;
@@ -62,7 +60,7 @@ public abstract class BaseListFragment extends BaseFragment implements
 
     protected int mCatalog = 1;
 
-    private AsyncTask<String, Void, ListEntity<? extends Entity>> mCacheTask;
+    private AsyncTask<String, Void, ListEntity<T>> mCacheTask;
     private ParserTask mParserTask;
 
     @Override
@@ -71,8 +69,8 @@ public abstract class BaseListFragment extends BaseFragment implements
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater,
-            ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
         View view = inflater.inflate(getLayoutId(), container, false);
         return view;
     }
@@ -151,7 +149,7 @@ public abstract class BaseListFragment extends BaseFragment implements
         super.onDestroy();
     }
 
-    protected abstract ListBaseAdapter getListAdapter();
+    protected abstract ListBaseAdapter<T> getListAdapter();
 
     // 下拉刷新数据
     @Override
@@ -175,11 +173,11 @@ public abstract class BaseListFragment extends BaseFragment implements
         return null;
     }
 
-    protected ListEntity<Entity> parseList(InputStream is) throws Exception {
+    protected ListEntity<T> parseList(InputStream is) throws Exception {
         return null;
     }
 
-    protected ListEntity<? extends Entity> readList(Serializable seri) {
+    protected ListEntity<T> readList(Serializable seri) {
         return null;
     }
 
@@ -216,8 +214,7 @@ public abstract class BaseListFragment extends BaseFragment implements
         }
     }
 
-    private class CacheTask extends
-            AsyncTask<String, Void, ListEntity<? extends Entity>> {
+    private class CacheTask extends AsyncTask<String, Void, ListEntity<T>> {
         private final WeakReference<Context> mContext;
 
         private CacheTask(Context context) {
@@ -225,7 +222,7 @@ public abstract class BaseListFragment extends BaseFragment implements
         }
 
         @Override
-        protected ListEntity<? extends Entity> doInBackground(String... params) {
+        protected ListEntity<T> doInBackground(String... params) {
             Serializable seri = CacheManager.readObject(mContext.get(),
                     params[0]);
             if (seri == null) {
@@ -236,7 +233,7 @@ public abstract class BaseListFragment extends BaseFragment implements
         }
 
         @Override
-        protected void onPostExecute(ListEntity<? extends Entity> list) {
+        protected void onPostExecute(ListEntity<T> list) {
             super.onPostExecute(list);
             if (list != null) {
                 executeOnLoadDataSuccess(list.getList());
@@ -287,33 +284,54 @@ public abstract class BaseListFragment extends BaseFragment implements
         }
     };
 
-    protected void executeOnLoadDataSuccess(List<? extends Entity> data) {
+    protected void executeOnLoadDataSuccess(List<T> data) {
         if (data == null) {
-            data = new ArrayList<Entity>();
+            data = new ArrayList<T>();
         }
 
         mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
         if (mCurrentPage == 0) {
-        	mAdapter.clear(); 
+            mAdapter.clear();
         }
 
         for (int i = 0; i < data.size(); i++) {
-        	if (compareTo(mAdapter.getData(), data.get(i))) {
-        		data.remove(i);
-        		i--;
-        	}
-		}
+            if (compareTo(mAdapter.getData(), data.get(i))) {
+                data.remove(i);
+                i--;
+            }
+        }
         int adapterState = ListBaseAdapter.STATE_EMPTY_ITEM;
-        if (mAdapter.getCount() == 0 && mState == STATE_NONE) {
-        	mErrorLayout.setErrorType(EmptyLayout.NODATA);
-        } else if (data.size() == 0 || (data.size() < getPageSize() && mCurrentPage == 0)) {
-        	adapterState = ListBaseAdapter.STATE_NO_MORE;
-        	mAdapter.notifyDataSetChanged();
+        if ((mAdapter.getCount() + data.size()) == 0) {
+            adapterState = ListBaseAdapter.STATE_EMPTY_ITEM;
+        } else if (data.size() == 0
+                || (data.size() < getPageSize() && mCurrentPage == 0)) {
+            adapterState = ListBaseAdapter.STATE_NO_MORE;
+            mAdapter.notifyDataSetChanged();
         } else {
-        	adapterState = ListBaseAdapter.STATE_LOAD_MORE;
+            adapterState = ListBaseAdapter.STATE_LOAD_MORE;
         }
         mAdapter.setState(adapterState);
         mAdapter.addData(data);
+        // 判断等于是因为最后有一项是listview的状态
+        if (mAdapter.getCount() == 1) {
+
+            if (needShowEmptyNoData()) {
+                mErrorLayout.setErrorType(EmptyLayout.NODATA);
+            } else {
+                mAdapter.setState(ListBaseAdapter.STATE_EMPTY_ITEM);
+                mAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+    /**
+     * 是否需要隐藏listview，显示无数据状态
+     * 
+     * @author 火蚁 2015-1-27 下午6:18:59
+     * 
+     */
+    protected boolean needShowEmptyNoData() {
+        return true;
     }
 
     protected boolean compareTo(List<? extends Entity> data, Entity enity) {
@@ -385,7 +403,7 @@ public abstract class BaseListFragment extends BaseFragment implements
 
         private final byte[] reponseData;
         private boolean parserError;
-        private List<Entity> list;
+        private List<T> list;
 
         public ParserTask(byte[] data) {
             this.reponseData = data;
@@ -394,7 +412,7 @@ public abstract class BaseListFragment extends BaseFragment implements
         @Override
         protected String doInBackground(Void... params) {
             try {
-                ListEntity<Entity> data = parseList(new ByteArrayInputStream(
+                ListEntity<T> data = parseList(new ByteArrayInputStream(
                         reponseData));
                 new SaveCacheTask(getActivity(), data, getCacheKey()).execute();
                 list = data.getList();
@@ -449,19 +467,21 @@ public abstract class BaseListFragment extends BaseFragment implements
      */
     protected void saveToReadedList(final View view, final String prefFileName,
             final String key) {
-        // 放入已读列表
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                AppContext.putReadedPostList(prefFileName, key, "true");
-                TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
-                if (tvTitle != null) {
-                    tvTitle.setTextColor(getActivity().getResources().getColor(
-                            R.color.main_gray));
-                }
-            }
-        }, 800);
-
+        // // 放入已读列表
+        // new Handler().postDelayed(new Runnable() {
+        // @Override
+        // public void run() {
+        // AppContext.putReadedPostList(prefFileName, key, "true");
+        // TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
+        // if (tvTitle != null) {
+        // tvTitle.setTextColor(0xff9a9a9a);
+        // }
+        // }
+        // }, 800);
+        AppContext.putReadedPostList(prefFileName, key, "true");
+        TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
+        if (tvTitle != null) {
+            tvTitle.setTextColor(0xff9a9a9a);
+        }
     }
 }

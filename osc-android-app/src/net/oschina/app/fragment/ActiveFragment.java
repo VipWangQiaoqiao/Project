@@ -8,11 +8,9 @@ import net.oschina.app.R;
 import net.oschina.app.adapter.ActiveAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Active;
 import net.oschina.app.bean.ActiveList;
 import net.oschina.app.bean.Constants;
-import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.Notice;
 import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.ui.MainActivity;
@@ -42,7 +40,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
  * @created 2014年10月22日 下午3:35:43
  * 
  */
-public class ActiveFragment extends BaseListFragment implements
+public class ActiveFragment extends BaseListFragment<Active> implements
         OnItemLongClickListener {
 
     protected static final String TAG = ActiveFragment.class.getSimpleName();
@@ -101,7 +99,7 @@ public class ActiveFragment extends BaseListFragment implements
     }
 
     @Override
-    protected ListBaseAdapter getListAdapter() {
+    protected ActiveAdapter getListAdapter() {
         return new ActiveAdapter();
     }
 
@@ -112,13 +110,13 @@ public class ActiveFragment extends BaseListFragment implements
     }
 
     @Override
-    protected ListEntity parseList(InputStream is) throws Exception {
+    protected ActiveList parseList(InputStream is) throws Exception {
         ActiveList list = XmlUtils.toBean(ActiveList.class, is);
         return list;
     }
 
     @Override
-    protected ListEntity readList(Serializable seri) {
+    protected ActiveList readList(Serializable seri) {
         return ((ActiveList) seri);
     }
 
@@ -142,16 +140,7 @@ public class ActiveFragment extends BaseListFragment implements
             }
         });
         if (AppContext.getInstance().isLogin()) {
-            int type = -100;
-            if (mCatalog == ActiveList.CATALOG_ATME)
-                type = Notice.TYPE_ATME;
-            else if (mCatalog == ActiveList.CATALOG_COMMENT)
-                type = Notice.TYPE_COMMENT;
-            else if (mCatalog == -1)
-                type = Notice.TYPE_MESSAGE;
-            if (type != -100) {
-                UIHelper.sendBroadcastForNotice(getActivity());
-            }
+            UIHelper.sendBroadcastForNotice(getActivity());
         }
     }
 
@@ -176,12 +165,15 @@ public class ActiveFragment extends BaseListFragment implements
     @Override
     protected void onRefreshNetworkSuccess() {
         if (AppContext.getInstance().isLogin()) {
-            if (1 == NoticeViewPagerFragment.sCurrentPage
+            if (0 == NoticeViewPagerFragment.sCurrentPage) {
+                NoticeUtils.clearNotice(Notice.TYPE_ATME);
+            } else if (1 == NoticeViewPagerFragment.sCurrentPage
                     || NoticeViewPagerFragment.sShowCount[1] > 0) { // 如果当前显示的是评论页，则发送评论页已被查看的Http请求
                 NoticeUtils.clearNotice(Notice.TYPE_COMMENT);
             } else {
                 NoticeUtils.clearNotice(Notice.TYPE_ATME);
             }
+            UIHelper.sendBroadcastForNotice(getActivity());
         }
     }
 

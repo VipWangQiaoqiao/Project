@@ -15,6 +15,10 @@
  *******************************************************************************/
 package uk.co.senab.photoview;
 
+import uk.co.senab.photoview.PhotoViewAttacher.OnFinishListener;
+import uk.co.senab.photoview.PhotoViewAttacher.OnMatrixChangedListener;
+import uk.co.senab.photoview.PhotoViewAttacher.OnPhotoTapListener;
+import uk.co.senab.photoview.PhotoViewAttacher.OnViewTapListener;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -24,10 +28,6 @@ import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.widget.ImageView;
-
-import uk.co.senab.photoview.PhotoViewAttacher.OnMatrixChangedListener;
-import uk.co.senab.photoview.PhotoViewAttacher.OnPhotoTapListener;
-import uk.co.senab.photoview.PhotoViewAttacher.OnViewTapListener;
 
 public class PhotoView extends ImageView implements IPhotoView {
 
@@ -57,11 +57,12 @@ public class PhotoView extends ImageView implements IPhotoView {
     /**
      * @deprecated use {@link #setRotationTo(float)}
      */
+    @Deprecated
     @Override
     public void setPhotoViewRotation(float rotationDegree) {
         mAttacher.setRotationTo(rotationDegree);
     }
-    
+
     @Override
     public void setRotationTo(float rotationDegree) {
         mAttacher.setRotationTo(rotationDegree);
@@ -239,7 +240,8 @@ public class PhotoView extends ImageView implements IPhotoView {
     }
 
     @Override
-    public void setScale(float scale, float focalX, float focalY, boolean animate) {
+    public void setScale(float scale, float focalX, float focalY,
+            boolean animate) {
         mAttacher.setScale(scale, focalX, focalY, animate);
     }
 
@@ -273,7 +275,8 @@ public class PhotoView extends ImageView implements IPhotoView {
     }
 
     @Override
-    public void setOnDoubleTapListener(GestureDetector.OnDoubleTapListener newOnDoubleTapListener) {
+    public void setOnDoubleTapListener(
+            GestureDetector.OnDoubleTapListener newOnDoubleTapListener) {
         mAttacher.setOnDoubleTapListener(newOnDoubleTapListener);
     }
 
@@ -283,4 +286,7 @@ public class PhotoView extends ImageView implements IPhotoView {
         super.onDetachedFromWindow();
     }
 
+    public void setOnFinishListener(OnFinishListener l) {
+        mAttacher.setOnFinishListener(l);
+    }
 }

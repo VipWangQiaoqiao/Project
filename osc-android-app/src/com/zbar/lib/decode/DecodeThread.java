@@ -2,10 +2,10 @@ package com.zbar.lib.decode;
 
 import java.util.concurrent.CountDownLatch;
 
-import com.zbar.lib.CaptureActivity;
-
 import android.os.Handler;
 import android.os.Looper;
+
+import com.zbar.lib.CaptureActivity;
 
 /**
  * 作者: 陈涛(1076559197@qq.com)

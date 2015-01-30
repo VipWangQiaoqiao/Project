@@ -5,7 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.StringUtil;
 
 import org.apache.http.Header;
 import org.kymjs.kjframe.utils.FileUtils;
@@ -29,11 +29,11 @@ public class LogUploadService extends Service {
         String data = null;
         try {
             FileInputStream inputStream = new FileInputStream(log);
-            data = StringUtils.toConvertString(inputStream);
+            data = StringUtil.toConvertString(inputStream);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        if (!StringUtils.isEmpty(data)) {
+        if (!StringUtil.isEmpty(data)) {
             OSChinaApi.uploadLog(data, new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
@@ -47,6 +47,8 @@ public class LogUploadService extends Service {
                     LogUploadService.this.stopSelf();
                 }
             });
+        } else {
+            LogUploadService.this.stopSelf();
         }
         return super.onStartCommand(intent, flags, startId);
     }

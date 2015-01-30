@@ -1,6 +1,5 @@
 package net.oschina.app.base;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;

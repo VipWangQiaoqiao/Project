@@ -4,7 +4,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Comment;
-import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.StringUtil;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
@@ -13,12 +13,11 @@ import android.text.Html;
 import android.text.Spanned;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class MessageDetailAdapter extends ListBaseAdapter {
+public class MessageDetailAdapter extends ListBaseAdapter<Comment> {
 
 	@Override
 	protected boolean loadMoreHasBg() {
@@ -71,7 +70,7 @@ public class MessageDetailAdapter extends ListBaseAdapter {
 		vh.avatar.setAvatarUrl(item.getPortrait());
 		vh.avatar.setUserInfo(item.getAuthorId(), item.getAuthor());
 		
-		vh.time.setText(StringUtils.friendly_time(item.getPubDate()));
+		vh.time.setText(StringUtil.friendly_time(item.getPubDate()));
 
 		return convertView;
 	}

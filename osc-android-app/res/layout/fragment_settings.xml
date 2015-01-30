@@ -135,6 +135,7 @@
             style="@style/option_item_rl" >
 
             <TextView
+                android:id="@+id/setting_logout"
                 style="@style/option_item_text_parent"
                 android:text="@string/exit"
                 android:textColor="@color/main_black"

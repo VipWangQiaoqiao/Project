@@ -2,22 +2,6 @@ package net.oschina.app.ui;
 
 import java.io.ByteArrayInputStream;
 
-import org.apache.http.Header;
-import org.apache.http.client.CookieStore;
-import org.apache.http.client.protocol.ClientContext;
-import org.apache.http.cookie.Cookie;
-import org.apache.http.protocol.HttpContext;
-
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-
-import butterknife.InjectView;
-import android.content.Intent;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -29,10 +13,27 @@ import net.oschina.app.bean.LoginUserBean;
 import net.oschina.app.bean.Result;
 import net.oschina.app.util.CyptoUtils;
 import net.oschina.app.util.SimpleTextWatcher;
-import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.StringUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.TLog;
 import net.oschina.app.util.XmlUtils;
+
+import org.apache.http.Header;
+import org.apache.http.client.CookieStore;
+import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.cookie.Cookie;
+import org.apache.http.protocol.HttpContext;
+
+import android.content.Intent;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import butterknife.InjectView;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 /**
  * 用户登录界面
@@ -199,7 +200,7 @@ public class LoginActivity extends BaseActivity {
 			return false;
 		}
 		String uName = mEtUserName.getText().toString();
-		if (StringUtils.isEmpty(uName)) {
+		if (StringUtil.isEmpty(uName)) {
 			AppContext.showToastShort(R.string.tip_please_input_username);
 			mEtUserName.requestFocus();
 			return false;
@@ -211,7 +212,7 @@ public class LoginActivity extends BaseActivity {
 //			return false;
 //		}
 		String pwd = mEtPassword.getText().toString();
-		if (StringUtils.isEmpty(pwd)) {
+		if (StringUtil.isEmpty(pwd)) {
 			AppContext.showToastShort(R.string.tip_please_input_password);
 			mEtPassword.requestFocus();
 			return false;

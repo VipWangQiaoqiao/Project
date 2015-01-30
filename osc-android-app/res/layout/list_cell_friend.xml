@@ -42,7 +42,6 @@
         android:layout_marginTop="@dimen/space_2"
         android:layout_toRightOf="@id/iv_avatar"
         android:textColor="@color/main_gray"
-        android:text="from"
         android:textSize="@dimen/text_size_12" />
 
     <TextView
@@ -52,7 +51,6 @@
         android:layout_below="@id/tv_from"
         android:layout_marginTop="@dimen/space_2"
         android:layout_toRightOf="@id/iv_avatar"
-        android:text="miaoshui "
         android:textColor="@color/main_gray"
         android:textSize="@dimen/text_size_12" />
 

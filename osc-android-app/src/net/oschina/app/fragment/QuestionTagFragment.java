@@ -8,8 +8,6 @@ import net.oschina.app.adapter.PostAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.Post;
 import net.oschina.app.bean.PostList;
 import net.oschina.app.util.UIHelper;
@@ -24,7 +22,7 @@ import android.widget.AdapterView;
  * @created 2014年11月6日 下午3:39:07
  *
  */
-public class QuestionTagFragment extends BaseListFragment {
+public class QuestionTagFragment extends BaseListFragment<Post> {
 
 	public static final String BUNDLE_KEY_TAG = "BUNDLE_KEY_TAG";
 	protected static final String TAG = QuestionTagFragment.class
@@ -43,7 +41,7 @@ public class QuestionTagFragment extends BaseListFragment {
 	}
 
 	@Override
-	protected ListBaseAdapter getListAdapter() {
+	protected PostAdapter getListAdapter() {
 		return new PostAdapter();
 	}
 
@@ -53,13 +51,13 @@ public class QuestionTagFragment extends BaseListFragment {
 	}
 
 	@Override
-	protected ListEntity parseList(InputStream is) throws Exception {
+	protected PostList parseList(InputStream is) throws Exception {
 		PostList list = XmlUtils.toBean(PostList.class, is);
 		return list;
 	}
 
 	@Override
-	protected ListEntity readList(Serializable seri) {
+	protected PostList readList(Serializable seri) {
 		return ((PostList) seri);
 	}
 

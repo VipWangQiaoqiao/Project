@@ -6,6 +6,7 @@ import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.BaseViewPagerFragment;
 import net.oschina.app.bean.SearchList;
 import net.oschina.app.fragment.SearchFragment;
+import net.oschina.app.util.TDevice;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
@@ -31,7 +32,6 @@ public class SearchViewPageFragment extends BaseViewPagerFragment {
 		adapter.addTab(title[1], "search_quest", SearchFragment.class, getBundle(SearchList.CATALOG_POST));
 		adapter.addTab(title[2], "search_blog", SearchFragment.class, getBundle(SearchList.CATALOG_BLOG));
 		adapter.addTab(title[3], "search_news", SearchFragment.class, getBundle(SearchList.CATALOG_NEWS));
-		adapter.addTab(title[4], "search_code", SearchFragment.class, getBundle(SearchList.CATALOG_CODE));
 	}
 	
 	private Bundle getBundle(String catalog) {
@@ -40,6 +40,11 @@ public class SearchViewPageFragment extends BaseViewPagerFragment {
 		return bundle;
 	}
 	
+
+	@Override
+	protected void setScreenPageLimit() {
+		mViewPager.setOffscreenPageLimit(3);
+	}
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -66,6 +71,7 @@ public class SearchViewPageFragment extends BaseViewPagerFragment {
 			
 			@Override
 			public boolean onQueryTextSubmit(String arg0) {
+				TDevice.hideSoftKeyboard(mSearchView);
 				search(arg0);
 				return false;
 			}
@@ -75,6 +81,7 @@ public class SearchViewPageFragment extends BaseViewPagerFragment {
 				return false;
 			}
 		});
+		mSearchView.requestFocus();
 	}
 	
 	private void search(String content) {

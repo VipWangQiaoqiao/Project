@@ -27,10 +27,10 @@ public class Apply extends Entity {
 	@XStreamAlias("job")
 	private String job;
 	
-	public int getUserid() {
+	public int getId() {
 		return userid;
 	}
-	public void setUserid(int userid) {
+	public void setId(int userid) {
 		this.userid = userid;
 	}
 	public String getName() {

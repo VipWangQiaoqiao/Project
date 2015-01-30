@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  * @version 1.0
  * @created 2012-3-21
  */
-public class StringUtils {
+public class StringUtil {
     private final static Pattern emailer = Pattern
             .compile("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*");
 
@@ -318,5 +318,34 @@ public class StringUtils {
             }
         }
         return res.toString();
+    }
+    
+    /***
+	 * 截取字符串
+	 * 
+	 * @param start 从那里开始，0算起
+	 * @param num 截取多少个
+	 * @param str 截取的字符串
+	 * @return
+	 */
+    public static String getSubString(int start, int num, String str) {
+    	if (str == null) {
+    		return "";
+    	}
+    	int leng = str.length();
+    	if (start < 0) {
+    		start = 0;
+    	}
+    	if (start > leng) {
+    		start = leng;
+    	}
+    	if (num < 0) {
+    		num = 1;
+    	}
+    	int end = start + num;
+    	if (end > leng) {
+    		end = leng;
+    	}
+    	return str.substring(start, end);
     }
 }

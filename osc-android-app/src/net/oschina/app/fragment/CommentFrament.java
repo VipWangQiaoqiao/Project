@@ -12,7 +12,6 @@ import net.oschina.app.api.OperationResponseHandler;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.BlogCommentList;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.CommentList;
@@ -43,7 +42,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
-public class CommentFrament extends BaseListFragment implements
+public class CommentFrament extends BaseListFragment<Comment> implements
         OnOperationListener, EmojiTextListener, OnItemLongClickListener {
 
     public static final String BUNDLE_KEY_CATALOG = "BUNDLE_KEY_CATALOG";
@@ -159,7 +158,7 @@ public class CommentFrament extends BaseListFragment implements
     }
 
     @Override
-    protected ListBaseAdapter getListAdapter() {
+    protected CommentAdapter getListAdapter() {
         return new CommentAdapter(this);
     }
 
@@ -171,7 +170,7 @@ public class CommentFrament extends BaseListFragment implements
     }
 
     @Override
-    protected ListEntity parseList(InputStream is) throws Exception {
+    protected ListEntity<Comment> parseList(InputStream is) throws Exception {
         if (mIsBlogComment) {
             return XmlUtils.toBean(BlogCommentList.class, is);
         } else {
@@ -180,7 +179,7 @@ public class CommentFrament extends BaseListFragment implements
     }
 
     @Override
-    protected ListEntity readList(Serializable seri) {
+    protected ListEntity<Comment> readList(Serializable seri) {
         if (mIsBlogComment)
             return ((BlogCommentList) seri);
         return ((CommentList) seri);

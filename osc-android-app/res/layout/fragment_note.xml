@@ -12,7 +12,7 @@
         android:layout_height="fill_parent"
         android:visibility="visible" >
 
-        <net.oschina.app.widget.DragGridView
+        <net.oschina.app.widget.KJDragGridView
             android:id="@+id/frag_note_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

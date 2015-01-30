@@ -10,9 +10,7 @@ import net.oschina.app.adapter.MessageAdapter;
 import net.oschina.app.api.OperationResponseHandler;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Constants;
-import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.MessageList;
 import net.oschina.app.bean.Messages;
 import net.oschina.app.bean.Notice;
@@ -39,7 +37,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 
-public class MessageFragment extends BaseListFragment implements
+public class MessageFragment extends BaseListFragment<Messages> implements
         OnItemLongClickListener {
     protected static final String TAG = ActiveFragment.class.getSimpleName();
     private static final String CACHE_KEY_PREFIX = "message_list";
@@ -89,7 +87,7 @@ public class MessageFragment extends BaseListFragment implements
     }
 
     @Override
-    protected ListBaseAdapter getListAdapter() {
+    protected MessageAdapter getListAdapter() {
         return new MessageAdapter();
     }
 
@@ -99,13 +97,13 @@ public class MessageFragment extends BaseListFragment implements
     }
 
     @Override
-    protected ListEntity parseList(InputStream is) throws Exception {
+    protected MessageList parseList(InputStream is) throws Exception {
         MessageList list = XmlUtils.toBean(MessageList.class, is);
         return list;
     }
 
     @Override
-    protected ListEntity readList(Serializable seri) {
+    protected MessageList readList(Serializable seri) {
         return ((MessageList) seri);
     }
 
@@ -154,6 +152,7 @@ public class MessageFragment extends BaseListFragment implements
         if (2 == NoticeViewPagerFragment.sCurrentPage
                 || NoticeViewPagerFragment.sShowCount[2] > 0) { // 在page中第三个位置
             NoticeUtils.clearNotice(Notice.TYPE_MESSAGE);
+            UIHelper.sendBroadcastForNotice(getActivity());
         }
     }
 

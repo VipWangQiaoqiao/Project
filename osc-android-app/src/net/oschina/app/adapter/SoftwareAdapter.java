@@ -11,7 +11,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class SoftwareAdapter extends ListBaseAdapter {
+public class SoftwareAdapter extends ListBaseAdapter<SoftwareDec> {
 	
 	static class ViewHold{
 		@InjectView(R.id.tv_title)TextView name;

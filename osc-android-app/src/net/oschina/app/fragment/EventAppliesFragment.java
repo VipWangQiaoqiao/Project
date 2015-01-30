@@ -7,10 +7,8 @@ import net.oschina.app.AppContext;
 import net.oschina.app.adapter.EventApplyAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Apply;
 import net.oschina.app.bean.EventAppliesList;
-import net.oschina.app.bean.ListEntity;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import android.annotation.TargetApi;
@@ -26,7 +24,7 @@ import android.widget.AdapterView;
  *
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class EventAppliesFragment extends BaseListFragment {
+public class EventAppliesFragment extends BaseListFragment<Apply> {
 
 	protected static final String TAG = EventAppliesFragment.class.getSimpleName();
 	private static final String CACHE_KEY_PREFIX = "event_apply_user_list";
@@ -37,7 +35,7 @@ public class EventAppliesFragment extends BaseListFragment {
 	}
 
 	@Override
-	protected ListBaseAdapter getListAdapter() {
+	protected EventApplyAdapter getListAdapter() {
 		return new EventApplyAdapter();
 	}
 
@@ -47,13 +45,13 @@ public class EventAppliesFragment extends BaseListFragment {
 	}
 
 	@Override
-	protected ListEntity parseList(InputStream is) throws Exception {
+	protected EventAppliesList parseList(InputStream is) throws Exception {
 		EventAppliesList list = XmlUtils.toBean(EventAppliesList.class, is);
 		return list;
 	}
 
 	@Override
-	protected ListEntity readList(Serializable seri) {
+	protected EventAppliesList readList(Serializable seri) {
 		return ((EventAppliesList) seri);
 	}
 
@@ -68,10 +66,10 @@ public class EventAppliesFragment extends BaseListFragment {
 		Apply item = (Apply) mAdapter.getItem(position);
 		if (item != null) {
 			if (AppContext.getInstance().isLogin()) {
-				UIHelper.showMessageDetail(getActivity(), item.getUserid(), item.getName());
+				UIHelper.showMessageDetail(getActivity(), item.getId(), item.getName());
 				return;
 			}
-			UIHelper.showUserCenter(getActivity(), item.getUserid(),item.getName());
+			UIHelper.showUserCenter(getActivity(), item.getId(),item.getName());
 		}
 			
 	}

@@ -19,18 +19,19 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
+        android:padding="@dimen/space_15"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_20"
-        android:padding="@dimen/space_15"
         android:textStyle="bold" />
 
     <ImageView
         android:id="@+id/iv_more"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
         android:layout_margin="@dimen/space_10"
-        android:src="@drawable/icon_download" />
+        android:padding="3dp"
+        android:src="@drawable/icon_pic_menu" />
 
 </RelativeLayout>
