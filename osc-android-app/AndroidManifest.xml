@@ -101,7 +101,7 @@
         </activity>
         <activity
             android:name="net.oschina.app.ui.TweetActivity"
-            android:label="@string/actionbar_title_tweetpub" >
+            android:label="发送到动弹" >
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
