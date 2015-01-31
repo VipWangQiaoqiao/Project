@@ -112,8 +112,7 @@ public class ShakeFragment extends BaseFragment implements SensorEventListener {
                                         arg2));
                         if (obj != null) {
                             if (StringUtil.isEmpty(obj.getAuthor())
-                                    && StringUtil.isEmpty(obj
-                                            .getCommentCount())
+                                    && StringUtil.isEmpty(obj.getCommentCount())
                                     && StringUtil.isEmpty(obj.getPubDate())) {
                                 jokeToast();
                             } else {
@@ -125,8 +124,9 @@ public class ShakeFragment extends BaseFragment implements SensorEventListener {
                                                 UIHelper.showUrlShake(aty, obj);
                                             }
                                         });
-                                KJBitmap.create().display(mImgHead,
-                                        obj.getImage());
+                                KJBitmap.create()
+                                        .display(mImgHead, obj.getImage(),
+                                                R.drawable.widget_dface);
                                 mTvTitle.setText(obj.getTitle());
                                 mTvDetail.setText(obj.getDetail());
                                 mTvAuthor.setText("作者:" + obj.getAuthor());
