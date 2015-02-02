@@ -2,7 +2,6 @@ package net.oschina.app.ui.empty;
 
 import net.oschina.app.R;
 import net.oschina.app.util.TDevice;
-import net.oschina.app.util.UIHelper;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;

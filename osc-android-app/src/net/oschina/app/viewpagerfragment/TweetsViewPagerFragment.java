@@ -4,7 +4,6 @@ import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.BaseViewPagerFragment;
-import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetsList;
 import net.oschina.app.fragment.TweetsFragment;
 import net.oschina.app.interf.OnTabReselectListener;

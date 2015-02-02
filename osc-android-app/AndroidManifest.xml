@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.oschina.app"
-    android:versionCode="35"
-    android:versionName="2.0.3" >
+    android:versionCode="37"
+    android:versionName="2.0.4.1" >
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -101,7 +101,7 @@
         </activity>
         <activity
             android:name="net.oschina.app.ui.TweetActivity"
-            android:label="@string/actionbar_title_tweetpub" >
+            android:label="发送到动弹" >
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 

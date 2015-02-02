@@ -2,7 +2,6 @@ package net.oschina.app.adapter;
 
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.bean.Friend;
 import net.oschina.app.bean.User;
 import net.oschina.app.widget.AvatarView;
 import android.annotation.SuppressLint;

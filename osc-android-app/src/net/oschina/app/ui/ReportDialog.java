@@ -7,7 +7,6 @@ import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.util.TDevice;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;

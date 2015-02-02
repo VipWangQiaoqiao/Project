@@ -7,6 +7,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.ListEntity;
 
+
 /** 
  * 团队任务列表实体类
  * 

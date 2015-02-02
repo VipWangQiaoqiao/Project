@@ -4,6 +4,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 import net.oschina.app.bean.Entity;
 
+
 /** 
  * 团队项目实体类
  * 

@@ -1,7 +1,6 @@
 package net.oschina.app.ui.dialog;
 
 import net.oschina.app.R;
-import net.oschina.app.base.BaseApplication;
 import net.oschina.app.util.TDevice;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -15,7 +14,6 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnLayoutChangeListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
@@ -23,7 +21,6 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;

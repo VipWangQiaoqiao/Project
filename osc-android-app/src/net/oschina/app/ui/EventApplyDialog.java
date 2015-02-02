@@ -1,7 +1,5 @@
 package net.oschina.app.ui;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.bean.EventApplyData;
@@ -12,9 +10,11 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 public class EventApplyDialog extends CommonDialog implements
 		android.view.View.OnClickListener {

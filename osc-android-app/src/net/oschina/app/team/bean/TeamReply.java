@@ -14,6 +14,10 @@ import net.oschina.app.bean.Entity;
 @SuppressWarnings("serial")
 @XStreamAlias("reply")
 public class TeamReply extends Entity {
+    
+    public final static String REPLY_TYPE_ISSUE = "issue";
+    public final static String REPLY_TYPE_DIARY = "diary";
+    public final static String REPLY_TYPE_DISSUCC = "disscuss";
 
     public final static int CLIENT_MOBILE = 2;
     public final static int CLIENT_ANDROID = 3;

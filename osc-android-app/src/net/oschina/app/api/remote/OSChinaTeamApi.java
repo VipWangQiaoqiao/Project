@@ -1,7 +1,6 @@
 package net.oschina.app.api.remote;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.api.ApiClientHelper;
 import net.oschina.app.api.ApiHttpClient;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -140,13 +139,25 @@ public class OSChinaTeamApi {
 	ApiHttpClient.get("action/api/team_diary_list", params, handler);
     }
     
-    
-    public static void getTeamReplyList(int teamId, int id, int type, int pageIndex, AsyncHttpResponseHandler handler) {
+    /***
+     * 任务、周报、讨论的回复列表
+     * @author 火蚁
+     * 2015-2-2 上午11:39:04
+     *
+     * @return void
+     * @param teamId
+     * @param id
+     * @param type 评论列表的类型（周报diary,讨论discuss,任务issue）
+     * @param pageIndex
+     * @param handler
+     */
+    public static void getTeamReplyList(int teamId, int id, String type, int pageIndex, AsyncHttpResponseHandler handler) {
 	RequestParams params = new RequestParams();
 	params.put("teamid", teamId);
-	params.put("issueid", id);
+	params.put("id", id);
+	params.put("type", type);
 	params.put("pageIndex", pageIndex);
-	ApiHttpClient.get("action/api/team_issue_reply_list", params, handler);
+	ApiHttpClient.get("action/api/team_reply_list_by_type", params, handler);
 	
     }
 }

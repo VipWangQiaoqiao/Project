@@ -3,7 +3,6 @@ package net.oschina.app.adapter;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.bean.NewsList;
 import net.oschina.app.bean.Post;
 import net.oschina.app.bean.PostList;
 import net.oschina.app.util.HTMLUtil;

@@ -2,7 +2,6 @@ package net.oschina.app.cache;
 
 import java.io.File;
 
-import net.oschina.app.util.TLog;
 import android.content.Context;
 import android.os.Environment;
 

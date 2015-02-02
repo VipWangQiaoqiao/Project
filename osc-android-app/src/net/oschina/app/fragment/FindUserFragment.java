@@ -3,12 +3,20 @@ package net.oschina.app.fragment;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
+import net.oschina.app.R;
+import net.oschina.app.adapter.FindUserAdapter;
+import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.base.BaseFragment;
+import net.oschina.app.bean.FindUserList;
+import net.oschina.app.bean.ListEntity;
+import net.oschina.app.bean.User;
+import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.UIHelper;
+import net.oschina.app.util.XmlUtils;
+
 import org.apache.http.Header;
 
-import com.loopj.android.http.AsyncHttpResponseHandler;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
@@ -22,17 +30,10 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
-import net.oschina.app.R;
-import net.oschina.app.adapter.FindUserAdapter;
-import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.base.BaseFragment;
-import net.oschina.app.bean.FindUserList;
-import net.oschina.app.bean.ListEntity;
-import net.oschina.app.bean.User;
-import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.UIHelper;
-import net.oschina.app.util.XmlUtils;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 /**
  * 查找用户界面

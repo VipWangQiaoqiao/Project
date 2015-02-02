@@ -1,7 +1,5 @@
 package net.oschina.app.adapter;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.SearchResult;
@@ -11,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 public class SearchAdapter extends ListBaseAdapter<SearchResult> {
 

@@ -33,7 +33,7 @@ import android.widget.TextView;
  * @data 2015-1-30 下午2:16:36
  */
 public class TeamIssueDetailFragment extends
-	BeseHaveHeaderListFragment<TeamReply, TeamIssueDetail> {
+	BeseHaveHeaderListFragment<TeamReply, TeamIssue> {
 
     private final String DETAIL_CACHE_KEY_PREFIX = "teamissuedetail_";
 
@@ -59,7 +59,7 @@ public class TeamIssueDetailFragment extends
 
     @Override
     protected void sendRequestData() {
-	OSChinaTeamApi.getTeamReplyList(mTeam.getId(), mTeamIssue.getId(), 0,
+	OSChinaTeamApi.getTeamReplyList(mTeam.getId(), mTeamIssue.getId(), TeamReply.REPLY_TYPE_ISSUE,
 		mCurrentPage, mHandler);
     }
 
@@ -122,9 +122,9 @@ public class TeamIssueDetailFragment extends
     }
 
     @Override
-    protected TeamIssueDetail getDetailBean(ByteArrayInputStream is) {
+    protected TeamIssue getDetailBean(ByteArrayInputStream is) {
 	// TODO Auto-generated method stub
-	return XmlUtils.toBean(TeamIssueDetail.class, is);
+	return XmlUtils.toBean(TeamIssueDetail.class, is).getTeamIssue();
     }
 
     @Override
@@ -134,7 +134,7 @@ public class TeamIssueDetailFragment extends
     }
 
     @Override
-    protected void executeOnLoadDetailSuccess(TeamIssueDetail detail) {
+    protected void executeOnLoadDetailSuccess(TeamIssue detail) {
 	// TODO Auto-generated method stub
 	mTvTitle.setText(detail.getTitle());
 	mTvTime.setText(detail.getAcceptTime());
