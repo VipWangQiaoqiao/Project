@@ -210,7 +210,6 @@ public class MyInformationFragmentDetail extends BaseFragment {
     public void initView(View view) {
         ButterKnife.inject(this, view);
         mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 sendRequiredData();
@@ -341,6 +340,7 @@ public class MyInformationFragmentDetail extends BaseFragment {
         String fileName = "osc_" + timeStamp + ".jpg";// 照片命名
         File out = new File(savePath, fileName);
         Uri uri = Uri.fromFile(out);
+        origUri = uri;
 
         theLarge = savePath + fileName;// 该照片的绝对路径
 

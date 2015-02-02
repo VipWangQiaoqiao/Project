@@ -54,7 +54,11 @@ public class SoftWareTweetsFrament extends BaseListFragment<Tweet> implements
         mEmojiFragment.setEmojiTextListener(this);
         trans.replace(R.id.emoji_container, mEmojiFragment);
         trans.commit();
-        activity.findViewById(R.id.emoji_container).setVisibility(View.VISIBLE);
+        try {
+            activity.findViewById(R.id.emoji_container).setVisibility(
+                    View.VISIBLE);
+        } catch (NullPointerException e) {
+        }
     }
 
     protected int getLayoutRes() {

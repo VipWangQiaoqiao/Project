@@ -171,7 +171,9 @@ public class TweetPubFragment extends BaseFragment implements
      * 方便外部Activity调用
      */
     public void setContentText(String content) {
-        mEtInput.setText(content);
+        if (mEtInput != null) {
+            mEtInput.setText(content);
+        }
     }
 
     /**
