@@ -1,6 +1,14 @@
 package net.oschina.app;
 
+import java.io.File;
+
 import net.oschina.app.ui.MainActivity;
+import net.oschina.app.util.TDevice;
+
+import org.kymjs.kjframe.http.core.KJAsyncTask;
+import org.kymjs.kjframe.utils.FileUtils;
+import org.kymjs.kjframe.utils.PreferenceHelper;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -45,6 +53,31 @@ public class AppStart extends Activity {
 
             @Override
             public void onAnimationStart(Animation animation) {}
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        int cacheVersion = PreferenceHelper.readInt(this, "first_install",
+                "first_install", -1);
+        int currentVersion = TDevice.getVersionCode();
+        if (cacheVersion < currentVersion) {
+            PreferenceHelper.write(this, "first_install", "first_install",
+                    currentVersion);
+            cleanImageCache();
+        }
+    }
+
+    private void cleanImageCache() {
+        final File folder = FileUtils.getSaveFolder("OSChina/imagecache");
+        KJAsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                for (File file : folder.listFiles()) {
+                    file.delete();
+                }
+            }
         });
     }
 
