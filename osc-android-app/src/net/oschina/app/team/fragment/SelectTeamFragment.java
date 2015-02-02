@@ -133,12 +133,9 @@ public class SelectTeamFragment extends BaseFragment {
                     Throwable arg3) {
                 AppContext.showToast("网络不好，请稍后重试");
             }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
-            }
         });
     }
+    // getActivity().overridePendingTransition(R.anim.in_from_top,
+    // R.anim.out_to_bottom);
 
 }
