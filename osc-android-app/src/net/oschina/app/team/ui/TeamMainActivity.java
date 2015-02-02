@@ -33,6 +33,8 @@ public class TeamMainActivity extends BaseActivity implements
     public final static String BUNDLE_KEY_TEAM = "bundle_key_team";
 
     public final static String BUNDLE_KEY_PROJECT = "bundle_key_project";
+    
+    public final static String BUNDLE_KEY_ISSUE_CATALOG = "bundle_key_catalog_list";
 
     private FragmentManager mFragmentManager;
 

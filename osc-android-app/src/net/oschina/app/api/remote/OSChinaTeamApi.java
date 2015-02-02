@@ -57,6 +57,8 @@ public class OSChinaTeamApi {
      * @param teamId
      * @param projectId
      *            项目id(-1获取非项目任务列表, 0获取所有任务列表)
+     * @param catalogId 
+     * 	          任务列表的的目录id
      * @param source
      *            "Team@OSC"(default),"Git@OSC","GitHub",如果指定了projectid的值，
      *            这个值就是必须的
@@ -70,12 +72,14 @@ public class OSChinaTeamApi {
      * @param pageSize
      * @param handler
      */
-    public static void getTeamIssueList(int teamId, int projectId,
+    public static void getTeamIssueList(int teamId, int projectId, int catalogId, 
 	    String source, int uid, String state, String scope, int pageIndex,
 	    int pageSize, AsyncHttpResponseHandler handler) {
 	RequestParams params = new RequestParams();
 	params.put("teamid", teamId);
 	params.put("projectid", projectId);
+	params.put("catalogid", catalogId);
+	params.put("source", source);
 	params.put("uid", uid);
 	params.put("state", state);
 	params.put("scope", scope);

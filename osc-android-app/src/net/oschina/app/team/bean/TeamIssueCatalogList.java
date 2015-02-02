@@ -17,16 +17,16 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  */
 @SuppressWarnings("serial")
 @XStreamAlias("oschina")
-public class TeamCatalogList extends Entity implements ListEntity<TeamCatalog> {
+public class TeamIssueCatalogList extends Entity implements ListEntity<TeamIssueCatalog> {
 
 	@XStreamAlias("totalCount")
 	private int totalCount;
 	
 	@XStreamAlias("catalogs")
-	private ArrayList<TeamCatalog> list = new ArrayList<TeamCatalog>();
+	private ArrayList<TeamIssueCatalog> list = new ArrayList<TeamIssueCatalog>();
 	
 	@Override
-	public List<TeamCatalog> getList() {
+	public List<TeamIssueCatalog> getList() {
 		return list;
 	}
 
@@ -38,7 +38,7 @@ public class TeamCatalogList extends Entity implements ListEntity<TeamCatalog> {
 		this.totalCount = totalCount;
 	}
 
-	public void setList(ArrayList<TeamCatalog> list) {
+	public void setList(ArrayList<TeamIssueCatalog> list) {
 		this.list = list;
 	}
 

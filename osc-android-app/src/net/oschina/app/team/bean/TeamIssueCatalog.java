@@ -15,7 +15,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 @SuppressWarnings("serial")
 @XStreamAlias("catalog")
-public class TeamCatalog extends Entity {
+public class TeamIssueCatalog extends Entity {
 	
 	@XStreamAlias("title")
 	private String title;

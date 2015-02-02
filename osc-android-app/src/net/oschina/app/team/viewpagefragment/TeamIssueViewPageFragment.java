@@ -8,8 +8,8 @@ import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseViewPagerFragment;
 import net.oschina.app.team.bean.Team;
-import net.oschina.app.team.bean.TeamCatalog;
-import net.oschina.app.team.bean.TeamCatalogList;
+import net.oschina.app.team.bean.TeamIssueCatalog;
+import net.oschina.app.team.bean.TeamIssueCatalogList;
 import net.oschina.app.team.bean.TeamGit;
 import net.oschina.app.team.bean.TeamProject;
 import net.oschina.app.team.fragment.TeamIssueFragment;
@@ -39,161 +39,162 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 
 public class TeamIssueViewPageFragment extends BaseViewPagerFragment {
 
-	private Team mTeam;
+    private Team mTeam;
 
-	private TeamCatalogList mCatalogList;
+    private TeamIssueCatalogList mCatalogList;
 
-	private int mTeamId;
+    private int mTeamId;
 
-	private TeamProject mTeamProject;
-	
-	// 默认进来显示的是所有任务列表
-	private int mProjectId = -1;
+    private TeamProject mTeamProject;
 
-	private TeamProjectSelectPopupWindow mProjectsDialog;
+    // 默认进来显示的是所有任务列表
+    private int mProjectId = -1;
 
-	private AsyncHttpResponseHandler handler = new AsyncHttpResponseHandler() {
+    private TeamProjectSelectPopupWindow mProjectsDialog;
 
-		@Override
-		public void onCancel() {
-			super.onCancel();
-		}
-
-		@Override
-		public void onFinish() {
-			super.onFinish();
-			mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-		}
-
-		@Override
-		public void onStart() {
-			super.onStart();
-			mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-		}
-
-		@Override
-		public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-			TeamCatalogList catalogList = XmlUtils.toBean(
-					TeamCatalogList.class, new ByteArrayInputStream(arg2));
-			if (catalogList != null) {
-				mCatalogList = catalogList;
-				mTabsAdapter.removeAll();
-				addCatalogList();
-			} else {
-				onFailure(arg0, arg1, arg2, null);
-			}
-		}
-
-		@Override
-		public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-				Throwable arg3) {
-			mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-		}
-	};
+    private AsyncHttpResponseHandler handler = new AsyncHttpResponseHandler() {
 
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.team_issue_menu, menu);
-		super.onCreateOptionsMenu(menu, inflater);
+	public void onCancel() {
+	    super.onCancel();
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.team_issue_project_list:
-			showProjectsSelectDialog();
-			break;
-
-		default:
-			break;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
-	private TeamProjectPopupWindowCallBack mCallBack = new TeamProjectPopupWindowCallBack() {
-
-		@Override
-		public void callBack(TeamProject teamProject) {
-			if (teamProject.getGit().getId() == mProjectId) {
-				return;
-			}
-			mProjectId = teamProject.getGit().getId();
-			mTeamProject = teamProject;
-			sendRequestCatalogList();
-		}
-	};
-
-	private void showProjectsSelectDialog() {
-		if (mProjectsDialog == null) {
-			mProjectsDialog = new TeamProjectSelectPopupWindow(getActivity(),
-					mTeam, mCallBack);
-		}
-		mProjectsDialog.showAsDropDown(((BaseActivity) getActivity())
-				.getActionBar().getCustomView());
+	public void onFinish() {
+	    super.onFinish();
+	    mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		Bundle bundle = getActivity().getIntent().getExtras();
-		if (bundle != null) {
-			Team team = (Team) bundle
-					.getSerializable(TeamMainActivity.BUNDLE_KEY_TEAM);
-			if (team != null) {
-				mTeam = team;
-				mTeamId = StringUtils.toInt(mTeam.getId());
-			}
-		}
-		mTeamProject = getDefaultProject();
-		setHasOptionsMenu(true);
+	public void onStart() {
+	    super.onStart();
+	    mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
 	}
 
 	@Override
-	protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
-		sendRequestCatalogList();
+	public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+	    TeamIssueCatalogList catalogList = XmlUtils.toBean(
+		    TeamIssueCatalogList.class, new ByteArrayInputStream(arg2));
+	    if (catalogList != null) {
+		mCatalogList = catalogList;
+		mTabsAdapter.removeAll();
+		addCatalogList();
+	    } else {
+		onFailure(arg0, arg1, arg2, null);
+	    }
 	}
 
-	private void sendRequestCatalogList() {
-		OSChinaTeamApi.getTeamCatalogIssueList(253900, mTeamId, mProjectId, "",
-				handler);
+	@Override
+	public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+		Throwable arg3) {
+	    mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
 	}
+    };
 
-	private void addCatalogList() {
-		// 加入一个为指定列表
-		if (mCatalogList != null) {
-			mCatalogList.getList().add(0, getUnCatalog());
-		}
-		Bundle bundle = getBundle(mTeam, mTeamProject);
-		if (mCatalogList != null && !mCatalogList.getList().isEmpty()
-				&& mTabsAdapter != null) {
-			for (TeamCatalog catalog : mCatalogList.getList()) {
-				mTabsAdapter.addTab(catalog.getTitle(), catalog.getTitle(),
-						TeamIssueFragment.class, bundle);
-			}
-			mTabsAdapter.notifyDataSetChanged();
-		}
-	}
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	inflater.inflate(R.menu.team_issue_menu, menu);
+	super.onCreateOptionsMenu(menu, inflater);
+    }
 
-	private Bundle getBundle(Team team, TeamProject teamProject) {
-		Bundle bundle = new Bundle();
-		bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_TEAM, team);
-		bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_PROJECT, teamProject);
-		return bundle;
-	}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+	switch (item.getItemId()) {
+	case R.id.team_issue_project_list:
+	    showProjectsSelectDialog();
+	    break;
 
-	private TeamCatalog getUnCatalog() {
-		TeamCatalog catalog = new TeamCatalog();
-		catalog.setTitle("未指定列表");
-		return catalog;
+	default:
+	    break;
 	}
-	
-	private TeamProject getDefaultProject() {
-		TeamProject project = new TeamProject();
-		project.setSource("");
-		TeamGit git = new TeamGit();
-		git.setId(-1);
-		git.setName("所有任务");
-		project.setGit(git);
-		return project;
+	return super.onOptionsItemSelected(item);
+    }
+
+    private TeamProjectPopupWindowCallBack mCallBack = new TeamProjectPopupWindowCallBack() {
+
+	@Override
+	public void callBack(TeamProject teamProject) {
+	    if (teamProject.getGit().getId() == mProjectId) {
+		return;
+	    }
+	    mProjectId = teamProject.getGit().getId();
+	    mTeamProject = teamProject;
+	    sendRequestCatalogList();
 	}
+    };
+
+    private void showProjectsSelectDialog() {
+	if (mProjectsDialog == null) {
+	    mProjectsDialog = new TeamProjectSelectPopupWindow(getActivity(),
+		    mTeam, mCallBack);
+	}
+	mProjectsDialog.showAsDropDown(((BaseActivity) getActivity())
+		.getActionBar().getCustomView());
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
+	Bundle bundle = getActivity().getIntent().getExtras();
+	if (bundle != null) {
+	    Team team = (Team) bundle
+		    .getSerializable(TeamMainActivity.BUNDLE_KEY_TEAM);
+	    if (team != null) {
+		mTeam = team;
+		mTeamId = StringUtils.toInt(mTeam.getId());
+	    }
+	}
+	mTeamProject = getDefaultProject();
+	setHasOptionsMenu(true);
+    }
+
+    @Override
+    protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
+	sendRequestCatalogList();
+    }
+
+    private void sendRequestCatalogList() {
+	OSChinaTeamApi.getTeamCatalogIssueList(253900, mTeamId, mProjectId, "",
+		handler);
+    }
+
+    private void addCatalogList() {
+	// 加入一个为指定列表
+	if (mCatalogList != null) {
+	    mCatalogList.getList().add(0, getUnCatalog());
+	}
+	if (mCatalogList != null && !mCatalogList.getList().isEmpty()
+		&& mTabsAdapter != null) {
+	    for (TeamIssueCatalog catalog : mCatalogList.getList()) {
+		Bundle bundle = getBundle(mTeam, mTeamProject, catalog);
+		mTabsAdapter.addTab(catalog.getTitle(), catalog.getTitle(),
+			TeamIssueFragment.class, bundle);
+	    }
+	    mTabsAdapter.notifyDataSetChanged();
+	}
+    }
+
+    private Bundle getBundle(Team team, TeamProject teamProject, TeamIssueCatalog issueCatalog) {
+	Bundle bundle = new Bundle();
+	bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_TEAM, team);
+	bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_PROJECT, teamProject);
+	bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_ISSUE_CATALOG, issueCatalog);
+	return bundle;
+    }
+
+    private TeamIssueCatalog getUnCatalog() {
+	TeamIssueCatalog catalog = new TeamIssueCatalog();
+	catalog.setTitle("未指定列表");
+	return catalog;
+    }
+
+    private TeamProject getDefaultProject() {
+	TeamProject project = new TeamProject();
+	project.setSource("");
+	TeamGit git = new TeamGit();
+	git.setId(-1);
+	git.setName("所有任务");
+	project.setGit(git);
+	return project;
+    }
 }

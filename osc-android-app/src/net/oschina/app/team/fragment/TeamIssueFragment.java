@@ -11,6 +11,7 @@ import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.team.adapter.TeamIssueAdapter;
 import net.oschina.app.team.bean.Team;
+import net.oschina.app.team.bean.TeamIssueCatalog;
 import net.oschina.app.team.bean.TeamIssue;
 import net.oschina.app.team.bean.TeamIssueList;
 import net.oschina.app.team.bean.TeamProject;
@@ -38,9 +39,13 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
 
     private TeamProject mProject;
 
+    private TeamIssueCatalog mCatalog;
+
     private int mTeamId;
 
     private int mProjectId;
+    
+    private int mCatalogId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +64,11 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
 		this.mProject = project;
 		this.mProjectId = project.getGit().getId();
 	    }
+	    TeamIssueCatalog catalog = (TeamIssueCatalog) bundle.getSerializable(TeamMainActivity.BUNDLE_KEY_ISSUE_CATALOG);
+	    if (catalog != null) {
+		this.mCatalog = catalog;
+		this.mCatalogId = catalog.getId();
+	    }
 	}
     }
 
@@ -73,13 +83,12 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
     @Override
     protected String getCacheKeyPrefix() {
 	return CACHE_KEY_PREFIX + mTeamId + "_" + mProjectId + "_"
-		+ mCurrentPage;
+		+ mCatalogId + "_" + mCurrentPage;
     }
 
     @Override
     protected TeamIssueList parseList(InputStream is) throws Exception {
-	TeamIssueList list = XmlUtils
-		.toBean(TeamIssueList.class, is);
+	TeamIssueList list = XmlUtils.toBean(TeamIssueList.class, is);
 	return list;
     }
 
@@ -104,9 +113,15 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
 
     @Override
     protected void sendRequestData() {
+	int teamId = this.mTeamId;
+	int projectId = this.mProjectId;
+	int catalogId = mCatalogId;
 	String source = mProject == null ? "" : mProject.getSource();
-	OSChinaTeamApi.getTeamIssueList(mTeamId, mProjectId, source, 0, "all",
-		"", mCurrentPage, AppContext.PAGE_SIZE, mHandler);
+	int uid = mCatalogId == 0 ? 0 : AppContext.getInstance().getLoginUid();
+	String state = "opened";
+	String scope = "";
+	OSChinaTeamApi.getTeamIssueList(teamId, projectId, catalogId, source, uid, state,
+		scope, mCurrentPage, AppContext.PAGE_SIZE, mHandler);
     }
 
     @Override
