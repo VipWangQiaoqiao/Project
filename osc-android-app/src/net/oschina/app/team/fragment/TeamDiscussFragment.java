@@ -10,8 +10,10 @@ import net.oschina.app.team.adapter.TeamDiscussAdapter;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamDiscuss;
 import net.oschina.app.team.bean.TeamDiscussList;
+import net.oschina.app.team.bean.TeamIssue;
 import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import android.os.Bundle;
 import android.view.View;
@@ -82,6 +84,10 @@ public class TeamDiscussFragment extends BaseListFragment<TeamDiscuss> {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
             long id) {
+	TeamDiscuss item = (TeamDiscuss) mAdapter.getItem(position);
+	if (item != null) {
+	    UIHelper.showTeamDiscussDetail(getActivity(), mTeam, item);
+	}
 
     }
 

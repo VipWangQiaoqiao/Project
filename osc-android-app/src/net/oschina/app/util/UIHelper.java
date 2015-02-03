@@ -25,6 +25,7 @@ import net.oschina.app.service.DownloadService;
 import net.oschina.app.service.DownloadService.DownloadBinder;
 import net.oschina.app.service.NoticeService;
 import net.oschina.app.team.bean.Team;
+import net.oschina.app.team.bean.TeamDiscuss;
 import net.oschina.app.team.bean.TeamIssue;
 import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.ui.DetailActivity;
@@ -1004,5 +1005,27 @@ public class UIHelper {
 		DetailActivity.DISPLAY_TEAM_ISSUE_DETAIL);
 	intent.putExtras(bundle);
 	context.startActivity(intent);
+    }
+    
+    /**
+     * 显示讨论贴详情
+     * @author 火蚁
+     * 2015-2-2 下午6:37:53
+     *
+     * @return void
+     * @param context
+     * @param team
+     * @param discuss
+     */
+    public static void showTeamDiscussDetail(Context context, Team team, TeamDiscuss discuss) {
+	Intent intent = new Intent(context, DetailActivity.class);
+	Bundle bundle = new Bundle();
+	bundle.putInt("teamid", team.getId());
+	bundle.putInt("discussid", discuss.getId());
+	bundle.putInt(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+		DetailActivity.DISPLAY_TEAM_DISCUSS_DETAIL);
+	intent.putExtras(bundle);
+	context.startActivity(intent);
+
     }
 }

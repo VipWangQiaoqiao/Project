@@ -17,7 +17,7 @@ public class TeamReply extends Entity {
     
     public final static String REPLY_TYPE_ISSUE = "issue";
     public final static String REPLY_TYPE_DIARY = "diary";
-    public final static String REPLY_TYPE_DISSUCC = "disscuss";
+    public final static String REPLY_TYPE_DISCUSS = "discuss";
 
     public final static int CLIENT_MOBILE = 2;
     public final static int CLIENT_ANDROID = 3;

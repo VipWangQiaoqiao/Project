@@ -2,6 +2,7 @@ package net.oschina.app.team.viewpagefragment;
 
 import java.io.ByteArrayInputStream;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.api.remote.OSChinaTeamApi;
@@ -154,7 +155,8 @@ public class TeamIssueViewPageFragment extends BaseViewPagerFragment {
     }
 
     private void sendRequestCatalogList() {
-	OSChinaTeamApi.getTeamCatalogIssueList(253900, mTeamId, mProjectId, "",
+	int uid = AppContext.getInstance().getLoginUid();
+	OSChinaTeamApi.getTeamCatalogIssueList(uid, mTeamId, mProjectId, "",
 		handler);
     }
 

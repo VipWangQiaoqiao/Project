@@ -16,6 +16,7 @@ import net.oschina.app.fragment.TweetDetailFragment;
 import net.oschina.app.interf.EmojiFragmentControl;
 import net.oschina.app.interf.ToolbarEmojiVisiableControl;
 import net.oschina.app.interf.ToolbarFragmentControl;
+import net.oschina.app.team.fragment.TeamDiscussDetailFragment;
 import net.oschina.app.team.fragment.TeamIssueDetailFragment;
 import net.oschina.app.util.TDevice;
 import android.os.Bundle;
@@ -44,6 +45,7 @@ public class DetailActivity extends BaseActivity implements
     public static final int DISPLAY_EVENT = 5;
 
     public static final int DISPLAY_TEAM_ISSUE_DETAIL = 6;
+    public static final int DISPLAY_TEAM_DISCUSS_DETAIL = 7;
 
     public static final String BUNDLE_KEY_DISPLAY_TYPE = "BUNDLE_KEY_DISPLAY_TYPE";
 
@@ -105,6 +107,10 @@ public class DetailActivity extends BaseActivity implements
 	case DISPLAY_TEAM_ISSUE_DETAIL:
 	    actionBarTitle = R.string.actionbar_title_event_detail;
 	    fragment = new TeamIssueDetailFragment();
+	    break;
+	case DISPLAY_TEAM_DISCUSS_DETAIL:
+	    actionBarTitle = R.string.actionbar_title_event_detail;
+	    fragment = new TeamDiscussDetailFragment();
 	    break;
 	default:
 	    break;

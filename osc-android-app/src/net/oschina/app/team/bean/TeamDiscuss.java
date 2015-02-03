@@ -8,80 +8,80 @@ import net.oschina.app.bean.Entity;
 @XStreamAlias("discuss")
 public class TeamDiscuss extends Entity {
 
-	@XStreamAlias("type")
-	private String type;
-	
-	@XStreamAlias("title")
-	private String title;
-	
-	@XStreamAlias("body")
-	private String body;
-	
-	@XStreamAlias("createTime")
-	private String createTime;
-	
-	@XStreamAlias("answerCount")
-	private int answerCount;//回复数量
-	
-	@XStreamAlias("voteUp")
-	private int voteUp;// 点赞数
-	
-	@XStreamAlias("author")
-	private Author author;
+    @XStreamAlias("type")
+    private String type;
 
-	public String getType() {
-		return type;
-	}
+    @XStreamAlias("title")
+    private String title;
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    @XStreamAlias("body")
+    private String body;
 
-	public String getTitle() {
-		return title;
-	}
+    @XStreamAlias("createTime")
+    private String createTime;
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    @XStreamAlias("answerCount")
+    private int answerCount;// 回复数量
 
-	public String getBody() {
-		return body;
-	}
+    @XStreamAlias("voteUp")
+    private int voteUp;// 点赞数
 
-	public void setBody(String body) {
-		this.body = body;
-	}
+    @XStreamAlias("author")
+    private Author author;
 
-	public String getCreateTime() {
-		return createTime;
-	}
+    public String getType() {
+	return type;
+    }
 
-	public void setCreateTime(String createTime) {
-		this.createTime = createTime;
-	}
+    public void setType(String type) {
+	this.type = type;
+    }
 
-	public int getAnswerCount() {
-		return answerCount;
-	}
+    public String getTitle() {
+	return title;
+    }
 
-	public void setAnswerCount(int answerCount) {
-		this.answerCount = answerCount;
-	}
+    public void setTitle(String title) {
+	this.title = title;
+    }
 
-	public int getVoteUp() {
-		return voteUp;
-	}
+    public String getBody() {
+	return body;
+    }
 
-	public void setVoteUp(int voteUp) {
-		this.voteUp = voteUp;
-	}
+    public void setBody(String body) {
+	this.body = body;
+    }
 
-	public Author getAuthor() {
-		return author;
-	}
+    public String getCreateTime() {
+	return createTime;
+    }
 
-	public void setAuthor(Author author) {
-		this.author = author;
-	}
+    public void setCreateTime(String createTime) {
+	this.createTime = createTime;
+    }
+
+    public int getAnswerCount() {
+	return answerCount;
+    }
+
+    public void setAnswerCount(int answerCount) {
+	this.answerCount = answerCount;
+    }
+
+    public int getVoteUp() {
+	return voteUp;
+    }
+
+    public void setVoteUp(int voteUp) {
+	this.voteUp = voteUp;
+    }
+
+    public Author getAuthor() {
+	return author;
+    }
+
+    public void setAuthor(Author author) {
+	this.author = author;
+    }
 }

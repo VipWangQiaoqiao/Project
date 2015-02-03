@@ -109,6 +109,23 @@ public class OSChinaTeamApi {
     }
     
     /***
+     * 获取讨论贴详情
+     * @author 火蚁
+     * 2015-2-2 下午6:19:54
+     *
+     * @return void
+     * @param teamId
+     * @param discussId
+     * @param handler
+     */
+    public static void getTeamDiscussDetail(int teamId, int discussId, AsyncHttpResponseHandler handler) {
+	RequestParams params = new RequestParams();
+	params.put("teamid", teamId);
+	params.put("discussid", discussId);
+	ApiHttpClient.get("action/api/team_discuss_detail", params, handler);
+    }
+    
+    /***
      * 获取团队任务详情
      * @author 火蚁
      * 2015-1-27 下午7:47:17

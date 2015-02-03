@@ -35,9 +35,9 @@ import android.widget.TextView;
 public class TeamIssueDetailFragment extends
 	BeseHaveHeaderListFragment<TeamReply, TeamIssue> {
 
-    private final String DETAIL_CACHE_KEY_PREFIX = "teamissuedetail_";
+    private final String DETAIL_CACHE_KEY_PREFIX = "team_issue_detail_";
 
-    private final String CACHE_KEY_PREFIX_COMMENT = "teamissuecommonlist_";
+    private final String CACHE_KEY_PREFIX_COMMENT = "team_issue_reply_list_";
 
     private Team mTeam;
 
