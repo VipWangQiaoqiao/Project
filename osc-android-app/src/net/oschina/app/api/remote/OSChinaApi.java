@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URLEncoder;
 
-import org.kymjs.kjframe.utils.KJLoger;
-
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
 import net.oschina.app.api.ApiHttpClient;
@@ -16,6 +14,9 @@ import net.oschina.app.bean.Tweet;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TLog;
+
+import org.kymjs.kjframe.utils.KJLoger;
+
 import android.text.TextUtils;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -768,5 +769,22 @@ public class OSChinaApi {
         params.put("type", type);
         params.put("projectid", "-1");
         ApiHttpClient.get("action/api/team_issue_list", params, handler);
+    }
+
+    /**
+     * 获取指定周周报
+     * 
+     * @param teamid
+     * @param year
+     * @param week
+     * @param handler
+     */
+    public static void getDiaryFromWhichWeek(String teamid, String year,
+            String week, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("teamid", teamid);
+        params.put("year", year);
+        params.put("week", week);
+        ApiHttpClient.get("action/api/team_diary_list", params, handler);
     }
 }
