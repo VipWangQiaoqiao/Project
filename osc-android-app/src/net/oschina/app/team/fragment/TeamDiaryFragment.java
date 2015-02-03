@@ -24,16 +24,15 @@ import android.widget.AdapterView;
  */
 public class TeamDiaryFragment extends BaseListFragment<TeamDiary> {
 
-    protected static final String TAG = TeamDiaryFragment.class
-            .getSimpleName();
+    protected static final String TAG = TeamDiaryFragment.class.getSimpleName();
     private static final String CACHE_KEY_PREFIX = "team_diary_list_";
 
     private Team mTeam;
 
     private int mTeamId;
-    
+
     private int year;
-    
+
     private int week;
 
     @Override
@@ -64,10 +63,8 @@ public class TeamDiaryFragment extends BaseListFragment<TeamDiary> {
     }
 
     @Override
-    protected TeamDiaryList parseList(InputStream is)
-            throws Exception {
-        TeamDiaryList list = XmlUtils.toBean(
-        		TeamDiaryList.class, is);
+    protected TeamDiaryList parseList(InputStream is) throws Exception {
+        TeamDiaryList list = XmlUtils.toBean(TeamDiaryList.class, is);
         return list;
     }
 
@@ -78,7 +75,8 @@ public class TeamDiaryFragment extends BaseListFragment<TeamDiary> {
 
     @Override
     protected void sendRequestData() {
-        OSChinaTeamApi.getTeamDiaryList(0, mTeamId, 2015, 2, mCurrentPage, mHandler);
+        OSChinaTeamApi.getTeamDiaryList(0, mTeamId, 2015, 2, mCurrentPage,
+                mHandler);
     }
 
     @Override

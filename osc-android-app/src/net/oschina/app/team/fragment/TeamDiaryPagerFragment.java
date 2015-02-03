@@ -4,6 +4,9 @@ import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.team.adapter.TeamDiaryListAdapter;
 import net.oschina.app.util.StringUtils;
+
+import org.kymjs.kjframe.KJHttp;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
@@ -59,12 +62,14 @@ public class TeamDiaryPagerFragment extends BaseFragment {
     @Override
     public void initView(View view) {
         super.initView(view);
+        mPager.setCurrentItem(StringUtils.getWeekOfYear());
+        mPager.setAdapter(new DiaryPagerAdapter());
     }
 
     public class DiaryPagerAdapter extends PagerAdapter {
         @Override
         public int getCount() {
-            return 0;
+            return StringUtils.getWeekOfYear();
         }
 
         @Override
@@ -83,6 +88,14 @@ public class TeamDiaryPagerFragment extends BaseFragment {
             ListView listview = (ListView) pagerView
                     .findViewById(R.id.diary_listview);
             initListPager(listview, position);
+            switch (position % 2) {
+            case 0:
+                pagerView.setBackgroundColor(0xff00ff00);
+                break;
+            case 1:
+                pagerView.setBackgroundColor(0xff00ffff);
+                break;
+            }
             (container).addView(pagerView);
             return pagerView;
         }
@@ -94,8 +107,9 @@ public class TeamDiaryPagerFragment extends BaseFragment {
          * @param position
          */
         private void initListPager(ListView view, int position) {
-            StringUtils.getWeekOfYear();
             view.setAdapter(new TeamDiaryListAdapter(aty));
+
+            KJHttp kjh = new KJHttp();
         }
     }
 }
