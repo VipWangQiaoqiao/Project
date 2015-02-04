@@ -31,6 +31,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
@@ -117,6 +118,32 @@ public class TeamDiaryPagerFragment extends BaseFragment {
         super.initView(view);
         mPager.setAdapter(new DiaryPagerAdapter());
         mPager.setCurrentItem(currentWeek); // 首先显示当前周，然后左翻页查看历史
+        mImgCalendar.setOnClickListener(this);
+        mImgLeft.setOnClickListener(this);
+        mImgRight.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+        switch (v.getId()) {
+        case R.id.team_diary_pager_right:
+            int currentPage1 = mPager.getCurrentItem();
+            if (currentPage1 < currentWeek - 1) {
+                mPager.setCurrentItem(currentPage1 + 1);
+            }
+            break;
+        case R.id.team_diary_pager_left:
+            int currentPage2 = mPager.getCurrentItem();
+            if (currentPage2 > 0) {
+                mPager.setCurrentItem(currentPage2 - 1);
+            }
+            break;
+        case R.id.team_diary_pager_calendar:
+            break;
+        default:
+            break;
+        }
     }
 
     /************************* pager adapter *******************************/
@@ -227,8 +254,15 @@ public class TeamDiaryPagerFragment extends BaseFragment {
                                 }
                             });
 
-                            view.setAdapter(new TeamDiaryListAdapter(aty,
-                                    bundle.getList()));
+                            ListAdapter adapter = view.getAdapter();
+                            if (adapter != null
+                                    && adapter instanceof TeamDiaryListAdapter) {
+                                ((TeamDiaryListAdapter) adapter).refresh(bundle
+                                        .getList());
+                            } else {
+                                view.setAdapter(new TeamDiaryListAdapter(aty,
+                                        bundle.getList()));
+                            }
                         }
                     });
         }
