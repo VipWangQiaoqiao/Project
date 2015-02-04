@@ -25,6 +25,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -117,6 +119,8 @@ public class TeamDiaryPagerFragment extends BaseFragment {
         mPager.setCurrentItem(currentWeek); // 首先显示当前周，然后左翻页查看历史
     }
 
+    /************************* pager adapter *******************************/
+
     public class DiaryPagerAdapter extends PagerAdapter {
 
         @Override
@@ -137,11 +141,34 @@ public class TeamDiaryPagerFragment extends BaseFragment {
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             View pagerView = View.inflate(aty, R.layout.pager_item_diary, null);
-            ListView listview = (ListView) pagerView
-                    .findViewById(R.id.diary_listview);
-            initListPager(listview, position + 1); // +1是因为没有第0周，从1开始数
+            initPagerContent(pagerView, position + 1); // +1是因为没有第0周，从1开始数
             (container).addView(pagerView);
             return pagerView;
+        }
+
+        private void initPagerContent(View pagerView, final int whichWeek) {
+            final ListView listview = (ListView) pagerView
+                    .findViewById(R.id.diary_listview);
+            final SwipeRefreshLayout pullHeadView = (SwipeRefreshLayout) pagerView
+                    .findViewById(R.id.swiperefreshlayout);
+            initListContent(listview, whichWeek);
+
+            pullHeadView.setOnRefreshListener(new OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    if (mState == STATE_REFRESH) {
+                        return;
+                    } else {
+                        // 设置顶部正在刷新
+                        setSwipeRefreshLoadingState(pullHeadView);
+                        /* !!! 设置耗时操作 !!! */
+                        setContentFromNet(pullHeadView, listview, whichWeek);
+                    }
+                }
+            });
+            pullHeadView.setColorSchemeResources(R.color.swiperefresh_color1,
+                    R.color.swiperefresh_color2, R.color.swiperefresh_color3,
+                    R.color.swiperefresh_color4);
         }
 
         /**
@@ -150,19 +177,29 @@ public class TeamDiaryPagerFragment extends BaseFragment {
          * @param view
          * @param position
          */
-        private void initListPager(final ListView view, final int whichWeek) {
+        private void initListContent(final ListView view, final int whichWeek) {
             TeamDiaryList dataBundle = dataBundleList.get(whichWeek);
             if (dataBundle == null) {
-                setContentFromNet(view, whichWeek);
+                setContentFromNet(null, view, whichWeek);
             } else {
                 setContentFromCache(view, dataBundle);
             }
         }
 
         /* self annotation */
-        private void setContentFromNet(final ListView view, final int whichWeek) {
+        private void setContentFromNet(final SwipeRefreshLayout pullHeadView,
+                final ListView view, final int whichWeek) {
             OSChinaApi.getDiaryFromWhichWeek(team.getId() + "", "2015",
                     whichWeek + "", new AsyncHttpResponseHandler() {
+
+                        @Override
+                        public void onFinish() {
+                            super.onFinish();
+                            if (pullHeadView != null) {
+                                setSwipeRefreshLoadedState(pullHeadView);
+                            }
+                        }
+
                         @Override
                         public void onFailure(int arg0, Header[] arg1,
                                 byte[] arg2, Throwable arg3) {
@@ -199,6 +236,31 @@ public class TeamDiaryPagerFragment extends BaseFragment {
         /* self annotation */
         private void setContentFromCache(ListView view, TeamDiaryList dataBundle) {
             view.setAdapter(new TeamDiaryListAdapter(aty, dataBundle.getList()));
+        }
+
+        /**
+         * 设置顶部正在加载的状态
+         */
+        private void setSwipeRefreshLoadingState(
+                SwipeRefreshLayout mSwipeRefreshLayout) {
+            mState = STATE_REFRESH;
+            if (mSwipeRefreshLayout != null) {
+                mSwipeRefreshLayout.setRefreshing(true);
+                // 防止多次重复刷新
+                mSwipeRefreshLayout.setEnabled(false);
+            }
+        }
+
+        /**
+         * 设置顶部加载完毕的状态
+         */
+        private void setSwipeRefreshLoadedState(
+                SwipeRefreshLayout mSwipeRefreshLayout) {
+            mState = STATE_NOMORE;
+            if (mSwipeRefreshLayout != null) {
+                mSwipeRefreshLayout.setRefreshing(false);
+                mSwipeRefreshLayout.setEnabled(true);
+            }
         }
     }
 }
