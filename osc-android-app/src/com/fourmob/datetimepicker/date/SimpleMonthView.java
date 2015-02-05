@@ -22,6 +22,12 @@ import android.view.View;
 
 import com.fourmob.datetimepicker.Utils;
 
+/**
+ * 摘取自https://github.com/flavienlaurent/datetimepicker
+ * 
+ * @author kymjs
+ * 
+ */
 public class SimpleMonthView extends View {
 
     public static final String VIEW_PARAMS_HEIGHT = "height";

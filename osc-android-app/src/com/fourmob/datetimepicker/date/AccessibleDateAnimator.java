@@ -6,6 +6,12 @@ import android.util.AttributeSet;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.ViewAnimator;
 
+/**
+ * 摘取自https://github.com/flavienlaurent/datetimepicker
+ * 
+ * @author kymjs
+ * 
+ */
 public class AccessibleDateAnimator extends ViewAnimator {
     private long mDateMillis;
 
@@ -23,12 +29,14 @@ public class AccessibleDateAnimator extends ViewAnimator {
     @Override
     public boolean dispatchPopulateAccessibilityEvent(AccessibilityEvent event) {
         if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
-            // Clear the event's current text so that only the current date will be spoken.
+            // Clear the event's current text so that only the current date will
+            // be spoken.
             event.getText().clear();
-            int flags = DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR |
-                    DateUtils.FORMAT_SHOW_WEEKDAY;
+            int flags = DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR
+                    | DateUtils.FORMAT_SHOW_WEEKDAY;
 
-            String dateString = DateUtils.formatDateTime(getContext(), mDateMillis, flags);
+            String dateString = DateUtils.formatDateTime(getContext(),
+                    mDateMillis, flags);
             event.getText().add(dateString);
             return true;
         }

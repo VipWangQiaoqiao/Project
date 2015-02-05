@@ -27,6 +27,12 @@ import android.widget.TextView;
 import com.fourmob.datetimepicker.Utils;
 import com.nineoldandroids.animation.ObjectAnimator;
 
+/**
+ * 摘取自https://github.com/flavienlaurent/datetimepicker
+ * 
+ * @author kymjs
+ * 
+ */
 public class DatePickerDialog extends DialogFragment implements
         View.OnClickListener, DatePickerController {
 

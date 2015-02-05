@@ -60,8 +60,8 @@ public class TeamMemberFragment extends BaseFragment implements
     private long preRefreshTime;
 
     public static final String TEAM_MEMBER_FILE = "TeamMemberFragment_cache_file";
-    public static final String TEAM_MEMBER_KEY = "TeamMemberFragment_key";
-    public static final String TEAM_MEMBER_DATA = "TeamMemberFragment_key";
+    public static String TEAM_MEMBER_KEY = "TeamMemberFragment_key";
+    public static String TEAM_MEMBER_DATA = "TeamMemberFragment_key";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,6 +77,9 @@ public class TeamMemberFragment extends BaseFragment implements
             team = new Team();
             TLog.log(getClass().getSimpleName(), "team对象初始化异常");
         }
+
+        TEAM_MEMBER_KEY += team.getId();
+        TEAM_MEMBER_DATA += team.getId();
     }
 
     @Override

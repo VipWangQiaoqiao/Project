@@ -14,6 +14,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+/**
+ * 摘取自https://github.com/flavienlaurent/datetimepicker
+ * 
+ * @author kymjs
+ * 
+ */
 public class YearPickerView extends ListView implements
         AdapterView.OnItemClickListener, DatePickerDialog.OnDateChangedListener {
 

@@ -2,7 +2,9 @@ package net.oschina.app.team.fragment;
 
 import java.io.ByteArrayInputStream;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.oschina.app.AppContext;
@@ -13,8 +15,10 @@ import net.oschina.app.cache.CacheManager;
 import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.team.adapter.TeamDiaryListAdapter;
 import net.oschina.app.team.bean.Team;
+import net.oschina.app.team.bean.TeamDiary;
 import net.oschina.app.team.bean.TeamDiaryList;
 import net.oschina.app.team.bean.TeamList;
+import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TLog;
 import net.oschina.app.util.XmlUtils;
@@ -27,6 +31,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.LayoutInflater;
@@ -51,7 +56,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
  */
 public class TeamDiaryPagerFragment extends BaseFragment implements
         OnDateSetListener {
-    private static final String TAG = "TeamDiaryPagerFragment";
+    private static String TAG = "TeamDiaryPagerFragment";
 
     @InjectView(R.id.team_diary_pager)
     ViewPager mPager;
@@ -67,6 +72,7 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
     private Activity aty;
     private Team team;
     private int currentWeek;
+    private int currentYear = 2015;
     private Map<Integer, TeamDiaryList> dataBundleList; // 用于实现二级缓存
     private final Calendar calendar = Calendar.getInstance();
 
@@ -98,7 +104,7 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
             TLog.log(getClass().getSimpleName(), "team对象初始化异常");
 
         }
-
+        TAG += team.getId();
         currentWeek = StringUtils.getWeekOfYear();
         dataBundleList = new HashMap<Integer, TeamDiaryList>(currentWeek);
         // 由于数据量比较大，做二级缓存
@@ -124,9 +130,22 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
         super.initView(view);
         mPager.setAdapter(new DiaryPagerAdapter());
         mPager.setCurrentItem(currentWeek); // 首先显示当前周，然后左翻页查看历史
+        mTvTitle.setText("第" + (mPager.getCurrentItem() + 1) + "周周报总览");
         mImgCalendar.setOnClickListener(this);
         mImgLeft.setOnClickListener(this);
         mImgRight.setOnClickListener(this);
+        mPager.setOnPageChangeListener(new OnPageChangeListener() {
+            @Override
+            public void onPageSelected(int arg0) {}
+
+            @Override
+            public void onPageScrolled(int arg0, float arg1, int arg2) {}
+
+            @Override
+            public void onPageScrollStateChanged(int arg0) {
+                mTvTitle.setText("第" + (mPager.getCurrentItem() + 1) + "周周报总览");
+            }
+        });
     }
 
     @Override
@@ -135,7 +154,7 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
         switch (v.getId()) {
         case R.id.team_diary_pager_right:
             int currentPage1 = mPager.getCurrentItem();
-            if (currentPage1 < currentWeek - 1) {
+            if (currentPage1 < mPager.getAdapter().getCount()) {
                 mPager.setCurrentItem(currentPage1 + 1);
             }
             break;
@@ -162,7 +181,16 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
     @Override
     public void onDateSet(DatePickerDialog datePickerDialog, int year,
             int month, int day) {
-        AppContext.showToast("选择了" + year + "年" + (month + 1) + "月" + day);
+        int[] dateBundle = StringUtils.getCurrentDate();
+        if ((dateBundle[0] == year && dateBundle[1] <= month)
+                || (dateBundle[0] == year && dateBundle[1] == month + 1 && dateBundle[2] < day)) {
+            AppContext.showToast("日期不正确");
+        } else {
+            currentYear = year;
+            currentWeek = StringUtils.getWeekOfYear(new Date(year, month, day));
+            mPager.setAdapter(new DiaryPagerAdapter());
+            mPager.setCurrentItem(currentWeek);
+        }
     }
 
     /************************* pager adapter *******************************/
@@ -171,7 +199,7 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
 
         @Override
         public int getCount() {
-            return currentWeek;
+            return currentYear == 2015 ? StringUtils.getWeekOfYear() : 52;
         }
 
         @Override
@@ -197,7 +225,9 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
                     .findViewById(R.id.diary_listview);
             final SwipeRefreshLayout pullHeadView = (SwipeRefreshLayout) pagerView
                     .findViewById(R.id.swiperefreshlayout);
-            initListContent(listview, whichWeek);
+            final EmptyLayout errorLayout = (EmptyLayout) pagerView
+                    .findViewById(R.id.error_layout);
+            initListContent(errorLayout, listview, whichWeek);
 
             pullHeadView.setOnRefreshListener(new OnRefreshListener() {
                 @Override
@@ -208,87 +238,15 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
                         // 设置顶部正在刷新
                         setSwipeRefreshLoadingState(pullHeadView);
                         /* !!! 设置耗时操作 !!! */
-                        setContentFromNet(pullHeadView, listview, whichWeek);
+                        setContentFromNet(errorLayout, pullHeadView, listview,
+                                whichWeek);
+                        errorLayout.setErrorMessage("本周无人提交周报");
                     }
                 }
             });
             pullHeadView.setColorSchemeResources(R.color.swiperefresh_color1,
                     R.color.swiperefresh_color2, R.color.swiperefresh_color3,
                     R.color.swiperefresh_color4);
-        }
-
-        /**
-         * 不同的pager显示不同的数据，根据pager动态加载数据
-         * 
-         * @param view
-         * @param position
-         */
-        private void initListContent(final ListView view, final int whichWeek) {
-            TeamDiaryList dataBundle = dataBundleList.get(whichWeek);
-            if (dataBundle == null) {
-                setContentFromNet(null, view, whichWeek);
-            } else {
-                setContentFromCache(view, dataBundle);
-            }
-        }
-
-        /* self annotation */
-        private void setContentFromNet(final SwipeRefreshLayout pullHeadView,
-                final ListView view, final int whichWeek) {
-            OSChinaApi.getDiaryFromWhichWeek(team.getId() + "", "2015",
-                    whichWeek + "", new AsyncHttpResponseHandler() {
-
-                        @Override
-                        public void onFinish() {
-                            super.onFinish();
-                            if (pullHeadView != null) {
-                                setSwipeRefreshLoadedState(pullHeadView);
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(int arg0, Header[] arg1,
-                                byte[] arg2, Throwable arg3) {
-                            /* 网络异常 */
-                        }
-
-                        @Override
-                        public void onSuccess(int arg0, Header[] arg1,
-                                byte[] arg2) {
-                            final TeamDiaryList bundle = XmlUtils.toBean(
-                                    TeamDiaryList.class,
-                                    new ByteArrayInputStream(arg2));
-
-                            KJAsyncTask.execute(new Runnable() {
-                                // dataBundleList没有加入线程安全，由于whichWeek对应的value只在此处会修改，
-                                // 线程冲突概率非常小，为了ListView流畅性，忽略线程安全性
-                                @Override
-                                public void run() {
-                                    if (dataBundleList.get(whichWeek) != null) {
-                                        dataBundleList.remove(whichWeek);
-                                    }
-                                    dataBundleList.put(whichWeek, bundle);
-                                    CacheManager.saveObject(aty, bundle, TAG
-                                            + whichWeek);
-                                }
-                            });
-
-                            ListAdapter adapter = view.getAdapter();
-                            if (adapter != null
-                                    && adapter instanceof TeamDiaryListAdapter) {
-                                ((TeamDiaryListAdapter) adapter).refresh(bundle
-                                        .getList());
-                            } else {
-                                view.setAdapter(new TeamDiaryListAdapter(aty,
-                                        bundle.getList()));
-                            }
-                        }
-                    });
-        }
-
-        /* self annotation */
-        private void setContentFromCache(ListView view, TeamDiaryList dataBundle) {
-            view.setAdapter(new TeamDiaryListAdapter(aty, dataBundle.getList()));
         }
 
         /**
@@ -314,6 +272,115 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
                 mSwipeRefreshLayout.setRefreshing(false);
                 mSwipeRefreshLayout.setEnabled(true);
             }
+        }
+
+        /************************* list content *******************************/
+
+        /**
+         * 不同的pager显示不同的数据，根据pager动态加载数据
+         * 
+         * @param view
+         * @param position
+         */
+        private void initListContent(EmptyLayout errorLayout, ListView view,
+                int whichWeek) {
+            TeamDiaryList dataBundle = dataBundleList.get(whichWeek);
+            if (dataBundle == null) {
+                setContentFromNet(errorLayout, null, view, whichWeek);
+            } else {
+                setContentFromCache(errorLayout, view, dataBundle);
+            }
+        }
+
+        /* self annotation */
+        private void setContentFromNet(final EmptyLayout errorLayout,
+                final SwipeRefreshLayout pullHeadView, final ListView view,
+                final int whichWeek) {
+            OSChinaApi.getDiaryFromWhichWeek(team.getId() + "", currentYear
+                    + "", whichWeek + "", new AsyncHttpResponseHandler() {
+                @Override
+                public void onStart() {
+                    super.onStart();
+                    ListAdapter adapter = view.getAdapter();
+                    if (adapter == null && errorLayout != null) {
+                        errorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+                        errorLayout.setVisibility(View.VISIBLE);
+                    }
+                }
+
+                @Override
+                public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+                        Throwable arg3) {
+                    /* 网络异常 */
+                    if (errorLayout != null) {
+                        errorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+                        errorLayout.setVisibility(View.VISIBLE);
+                    }
+                }
+
+                @Override
+                public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+                    final TeamDiaryList bundle = XmlUtils
+                            .toBean(TeamDiaryList.class,
+                                    new ByteArrayInputStream(arg2));
+
+                    KJAsyncTask.execute(new Runnable() {
+                        // dataBundleList没有加入线程安全，由于whichWeek对应的value只在此处会修改，
+                        // 线程冲突概率非常小，为了ListView流畅性，忽略线程安全性
+                        @Override
+                        public void run() {
+                            if (dataBundleList.get(whichWeek) != null) {
+                                dataBundleList.remove(whichWeek);
+                            }
+                            dataBundleList.put(whichWeek, bundle);
+                            CacheManager.saveObject(aty, bundle, TAG
+                                    + whichWeek);
+                        }
+                    });
+
+                    List<TeamDiary> tempData = bundle.getList();
+                    if ((tempData == null || tempData.isEmpty())
+                            && errorLayout != null) {
+                        errorLayout.setNoDataContent("本周无人提交周报");
+                        errorLayout.setErrorType(EmptyLayout.NODATA);
+                        errorLayout.setVisibility(View.VISIBLE);
+                    } else {
+                        if (errorLayout != null) {
+                            errorLayout.setVisibility(View.GONE);
+                        }
+
+                        ListAdapter adapter = view.getAdapter();
+                        if (adapter != null
+                                && adapter instanceof TeamDiaryListAdapter) {
+                            ((TeamDiaryListAdapter) adapter).refresh(tempData);
+                        } else {
+                            view.setAdapter(new TeamDiaryListAdapter(aty,
+                                    tempData));
+                        }
+                    }
+                }
+
+                @Override
+                public void onFinish() {
+                    super.onFinish();
+                    if (pullHeadView != null) {
+                        setSwipeRefreshLoadedState(pullHeadView);
+                    }
+                }
+            });
+        }
+
+        /* self annotation */
+        private void setContentFromCache(EmptyLayout errorLayout,
+                ListView view, TeamDiaryList dataBundle) {
+            List<TeamDiary> tempData = dataBundle.getList();
+            if ((tempData == null || tempData.isEmpty()) && errorLayout != null) {
+                errorLayout.setNoDataContent("本周还没有人提交周报");
+                errorLayout.setErrorType(EmptyLayout.NODATA);
+                errorLayout.setVisibility(View.VISIBLE);
+            }
+
+            view.setAdapter(new TeamDiaryListAdapter(aty, dataBundle.getList()));
         }
     }
 }

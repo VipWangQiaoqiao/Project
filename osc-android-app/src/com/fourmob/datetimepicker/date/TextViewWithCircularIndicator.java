@@ -8,6 +8,12 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
+/**
+ * 摘取自https://github.com/flavienlaurent/datetimepicker
+ * 
+ * @author kymjs
+ * 
+ */
 public class TextViewWithCircularIndicator extends TextView {
 
     private final int mCircleColor;
