@@ -42,7 +42,12 @@ public class NewsFragment extends BaseListFragment<News> implements
 
     @Override
     protected NewsList parseList(InputStream is) throws Exception {
-        NewsList list = XmlUtils.toBean(NewsList.class, is);
+        NewsList list = null;
+        try {
+            list = XmlUtils.toBean(NewsList.class, is);
+        } catch (NullPointerException e) {
+            list = new NewsList();
+        }
         return list;
     }
 
@@ -61,10 +66,11 @@ public class NewsFragment extends BaseListFragment<News> implements
             long id) {
         News news = (News) mAdapter.getItem(position);
         if (news != null) {
-        	UIHelper.showNewsRedirect(view.getContext(), news);
-        	
-        	// 放入已读列表
-        	saveToReadedList(view, NewsList.PREF_READED_NEWS_LIST, news.getId() + "");
+            UIHelper.showNewsRedirect(view.getContext(), news);
+
+            // 放入已读列表
+            saveToReadedList(view, NewsList.PREF_READED_NEWS_LIST, news.getId()
+                    + "");
         }
     }
 

@@ -169,7 +169,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
         if (StringUtils.isEmpty(title)) {
             title = getString(R.string.app_name);
         }
-        if (hasActionBar()) {
+        if (hasActionBar() && mActionBar != null) {
             if (mTvActionTitle != null) {
                 mTvActionTitle.setText(title);
             }

@@ -125,8 +125,9 @@ public class ShakeFragment extends BaseFragment implements SensorEventListener {
                                                 UIHelper.showUrlShake(aty, obj);
                                             }
                                         });
-                                KJBitmap.create().display(mImgHead,
-                                        obj.getImage());
+                                KJBitmap.create()
+                                        .display(mImgHead, obj.getImage(),
+                                                R.drawable.widget_dface);
                                 mTvTitle.setText(obj.getTitle());
                                 mTvDetail.setText(obj.getDetail());
                                 mTvAuthor.setText("作者:" + obj.getAuthor());

@@ -171,14 +171,16 @@ public class TweetPubFragment extends BaseFragment implements
      * 方便外部Activity调用
      */
     public void setContentText(String content) {
-	mEtInput.setText(content);
+        if (mEtInput != null) {
+            mEtInput.setText(content);
+        }
     }
 
     /**
      * 方便外部Activity调用
      */
     public void setContentImage(String url) {
-	handleImageFile(url);
+        handleImageFile(url);
     }
 
     private void handleSubmit() {
@@ -229,14 +231,14 @@ public class TweetPubFragment extends BaseFragment implements
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-	super.onViewCreated(view, savedInstanceState);
-	Bundle bundle = getArguments();
-	if (bundle != null) {
-	    int action_type = bundle.getInt(ACTION_TYPE, -1);
-	    goToSelectPicture(action_type);
-	    final String imgUrl = bundle.getString(FROM_IMAGEPAGE_KEY);
-	    handleImageUrl(imgUrl);
-	}
+        super.onViewCreated(view, savedInstanceState);
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            int action_type = bundle.getInt(ACTION_TYPE, -1);
+            goToSelectPicture(action_type);
+            final String imgUrl = bundle.getString(FROM_IMAGEPAGE_KEY);
+            handleImageUrl(imgUrl);
+        }
     }
 
     /**
@@ -273,24 +275,24 @@ public class TweetPubFragment extends BaseFragment implements
      * @param url
      */
     private void handleImageUrl(final String url) {
-	if (!StringUtils.isEmpty(url)) {
-	    KJAsyncTask.execute(new Runnable() {
-		@Override
-		public void run() {
-		    final Message msg = Message.obtain();
-		    msg.what = 1;
-		    msg.obj = kjb.getBitmapFromCache(url);
-		    if (msg.obj == null) {
-			msg.obj = kjb.loadBmpMustInThread(url, 300, 300);
-		    }
-		    String path = FileUtils.getSDCardPath()
-			    + "/OSChina/tempfile.jpg";
-		    FileUtils.bitmapToFile((Bitmap) msg.obj, path);
-		    imgFile = new File(path);
-		    handler.sendMessage(msg);
-		}
-	    });
-	}
+        if (!StringUtils.isEmpty(url)) {
+            KJAsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    final Message msg = Message.obtain();
+                    msg.what = 1;
+                    msg.obj = kjb.getBitmapFromCache(url);
+                    if (msg.obj == null) {
+                        msg.obj = kjb.loadBmpMustInThread(url, 300, 300);
+                    }
+                    String path = FileUtils.getSDCardPath()
+                            + "/OSChina/tempfile.jpg";
+                    FileUtils.bitmapToFile((Bitmap) msg.obj, path);
+                    imgFile = new File(path);
+                    handler.sendMessage(msg);
+                }
+            });
+        }
     }
 
     @Override

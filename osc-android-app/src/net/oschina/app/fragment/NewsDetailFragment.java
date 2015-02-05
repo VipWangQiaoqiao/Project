@@ -215,8 +215,10 @@ public class NewsDetailFragment extends BaseDetailFragment implements
                             strRelative));
         }
         body.append("<br/>");
-        mWebView.loadDataWithBaseURL(null, body.toString(), "text/html",
-                "utf-8", null);
+        if (mWebView != null) {
+            mWebView.loadDataWithBaseURL(null, body.toString(), "text/html",
+                    "utf-8", null);
+        }
     }
 
     @Override
@@ -289,16 +291,18 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 
     @Override
     protected String getShareTitle() {
-        return mNews != null ? mNews.getTitle() : getString(R.string.share_title_news);
+        return mNews != null ? mNews.getTitle()
+                : getString(R.string.share_title_news);
     }
 
     @Override
     protected String getShareContent() {
         return mNews != null ? StringUtils.getSubString(0, 55, getFilterHtmlBody(mNews.getBody())) : "";
     }
-    
+
     @Override
     protected String getShareUrl() {
-        return mNews != null ? URLsUtils.URL_MOBILE + "news/" + mNews.getId() : null;
+        return mNews != null ? URLsUtils.URL_MOBILE + "news/" + mNews.getId()
+                : null;
     }
 }

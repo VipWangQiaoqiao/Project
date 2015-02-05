@@ -219,7 +219,8 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
         if (mToolBarFragment != null) {
             mToolBarFragment.setCommentCount(mSoftware.getTweetCount());
         }
-        KJBitmap.create().display(mIvLogo, mSoftware.getLogo());
+        KJBitmap.create().display(mIvLogo, mSoftware.getLogo(),
+                R.drawable.widget_dface);
         notifyFavorite(mSoftware.getFavorite() == 1);
     }
 

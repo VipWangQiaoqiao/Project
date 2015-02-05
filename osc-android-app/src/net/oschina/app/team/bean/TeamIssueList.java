@@ -7,49 +7,48 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.ListEntity;
 
-
-/** 
+/**
  * 团队任务列表实体类
  * 
  * @author FireAnt（http://my.oschina.net/LittleDY）
- * @version 创建时间：2015年1月14日 下午5:09:11 
+ * @version 创建时间：2015年1月14日 下午5:09:11
  * 
  */
-@SuppressWarnings({ "serial"})
+@SuppressWarnings({ "serial" })
 @XStreamAlias("oschina")
 public class TeamIssueList extends Entity implements ListEntity<TeamIssue> {
 
-	@XStreamAlias("pagesize")
-	private int pageSize;
-	
-	@XStreamAlias("totalCount")
-	private int totalCount;
-	
-	@XStreamAlias("issues")
-	private ArrayList<TeamIssue> list = new ArrayList<TeamIssue>();
+    @XStreamAlias("pagesize")
+    private int pageSize;
 
-	public int getPageSize() {
-		return pageSize;
-	}
+    @XStreamAlias("totalCount")
+    private int totalCount;
 
-	public void setPageSize(int pageSize) {
-		this.pageSize = pageSize;
-	}
+    @XStreamAlias("issues")
+    private ArrayList<TeamIssue> list = new ArrayList<TeamIssue>();
 
-	public int getTotalCount() {
-		return totalCount;
-	}
+    public int getPageSize() {
+	return pageSize;
+    }
 
-	public void setTotalCount(int totalCount) {
-		this.totalCount = totalCount;
-	}
+    public void setPageSize(int pageSize) {
+	this.pageSize = pageSize;
+    }
 
-	@Override
-	public ArrayList<TeamIssue> getList() {
-		return list;
-	}
+    public int getTotalCount() {
+	return totalCount;
+    }
 
-	public void setList(ArrayList<TeamIssue> list) {
-		this.list = list;
-	}
+    public void setTotalCount(int totalCount) {
+	this.totalCount = totalCount;
+    }
+
+    @Override
+    public ArrayList<TeamIssue> getList() {
+	return list;
+    }
+
+    public void setList(ArrayList<TeamIssue> list) {
+	this.list = list;
+    }
 }

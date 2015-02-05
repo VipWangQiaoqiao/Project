@@ -57,6 +57,8 @@ public class AvatarView extends CircleImageView {
 
     public void setAvatarUrl(String url) {
 	if (StringUtils.isEmpty(url)) return;
+        if (url == null)
+            return;
         // 由于头像地址默认加了一段参数需要去掉
         int end = url.indexOf('?');
         final String headUrl;
@@ -76,6 +78,7 @@ public class AvatarView extends CircleImageView {
                         setImageResource(R.drawable.widget_dface);
                     }
                 });
+                setImageResource(R.drawable.widget_dface);
             }
         });
         kjb.display(this, headUrl, R.drawable.widget_dface);

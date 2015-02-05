@@ -156,7 +156,7 @@ public class ActiveAdapter extends ListBaseAdapter {
 
         if (!TextUtils.isEmpty(item.getTweetimage())) {
             vh.pic.setVisibility(View.VISIBLE);
-            kjb.display(vh.pic, item.getTweetimage());
+            kjb.display(vh.pic, item.getTweetimage(), R.drawable.widget_dface);
             vh.pic.setOnClickListener(new View.OnClickListener() {
 
                 @Override

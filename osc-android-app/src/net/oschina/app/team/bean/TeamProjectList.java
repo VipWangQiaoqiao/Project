@@ -8,6 +8,8 @@ import net.oschina.app.bean.ListEntity;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 /** 
  * 团队项目实体类
  * 

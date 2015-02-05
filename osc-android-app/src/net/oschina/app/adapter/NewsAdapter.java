@@ -7,7 +7,6 @@ import net.oschina.app.bean.News;
 import net.oschina.app.bean.NewsList;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.URLsUtils;
-
 import android.annotation.SuppressLint;
 import android.view.View;
 import android.view.ViewGroup;
