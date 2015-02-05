@@ -1,9 +1,11 @@
 package net.oschina.app.team.fragment;
 
 import java.io.ByteArrayInputStream;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseFragment;
@@ -37,6 +39,8 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+import com.fourmob.datetimepicker.date.DatePickerDialog;
+import com.fourmob.datetimepicker.date.DatePickerDialog.OnDateSetListener;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 /**
@@ -45,7 +49,8 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
  * @author kymjs (https://github.com/kymjs)
  * 
  */
-public class TeamDiaryPagerFragment extends BaseFragment {
+public class TeamDiaryPagerFragment extends BaseFragment implements
+        OnDateSetListener {
     private static final String TAG = "TeamDiaryPagerFragment";
 
     @InjectView(R.id.team_diary_pager)
@@ -63,6 +68,7 @@ public class TeamDiaryPagerFragment extends BaseFragment {
     private Team team;
     private int currentWeek;
     private Map<Integer, TeamDiaryList> dataBundleList; // 用于实现二级缓存
+    private final Calendar calendar = Calendar.getInstance();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -140,10 +146,23 @@ public class TeamDiaryPagerFragment extends BaseFragment {
             }
             break;
         case R.id.team_diary_pager_calendar:
+            final DatePickerDialog datePickerDialog = DatePickerDialog
+                    .newInstance(this, calendar.get(Calendar.YEAR),
+                            calendar.get(Calendar.MONTH),
+                            calendar.get(Calendar.DAY_OF_MONTH), false);
+            datePickerDialog.setVibrate(false);
+            datePickerDialog.setYearRange(2014, 2015);
+            datePickerDialog.show(getFragmentManager(), "datepicker");
             break;
         default:
             break;
         }
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog datePickerDialog, int year,
+            int month, int day) {
+        AppContext.showToast("选择了" + year + "年" + (month + 1) + "月" + day);
     }
 
     /************************* pager adapter *******************************/
