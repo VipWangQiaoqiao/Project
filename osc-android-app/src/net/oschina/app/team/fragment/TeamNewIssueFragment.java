@@ -1,0 +1,442 @@
+package net.oschina.app.team.fragment;
+
+import java.util.Calendar;
+import java.util.List;
+
+import net.oschina.app.AppContext;
+import net.oschina.app.R;
+import net.oschina.app.api.remote.OSChinaTeamApi;
+import net.oschina.app.base.BaseFragment;
+import net.oschina.app.bean.Result;
+import net.oschina.app.bean.ResultBean;
+import net.oschina.app.team.bean.Author;
+import net.oschina.app.team.bean.Team;
+import net.oschina.app.team.bean.TeamGit;
+import net.oschina.app.team.bean.TeamIssueCatalog;
+import net.oschina.app.team.bean.TeamIssueCatalogList;
+import net.oschina.app.team.bean.TeamProject;
+import net.oschina.app.team.bean.TeamProjectList;
+import net.oschina.app.ui.dialog.CommonDialog;
+import net.oschina.app.ui.dialog.DialogHelper;
+import net.oschina.app.util.XmlUtils;
+
+import org.apache.http.Header;
+
+import android.app.DatePickerDialog;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.TextView;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+/**
+ * 创建新任务界面 TeamNewIssueFragment.java
+ * 
+ * @author 火蚁(http://my.oschina.net/u/253900)
+ * 
+ * @data 2015-2-4 下午3:36:14
+ */
+public class TeamNewIssueFragment extends BaseFragment {
+
+    @InjectView(R.id.et_issue_title)
+    EditText mEtTitle;
+
+    @InjectView(R.id.tv_issue_project)
+    TextView mTvProject;
+
+    @InjectView(R.id.tv_issue_catalog)
+    TextView mTvCatalog;
+
+    @InjectView(R.id.tv_issue_touser)
+    TextView mTvToUser;
+
+    @InjectView(R.id.tv_issue_time)
+    TextView mTvTime;
+
+    private Team mTeam;
+
+    private TeamProject mTeamProject;
+
+    private TeamIssueCatalog mTeamCatalog;
+
+    private Author mToUser;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+	    Bundle savedInstanceState) {
+	View view = inflater.inflate(R.layout.fragment_new_issue, container,
+		false);
+	initView(view);
+	initData();
+	return view;
+    }
+
+    @Override
+    public void initView(View view) {
+	super.initView(view);
+	setHasOptionsMenu(true);
+	ButterKnife.inject(this, view);
+	view.findViewById(R.id.rl_issue_project).setOnClickListener(this);
+	view.findViewById(R.id.rl_issue_catalog).setOnClickListener(this);
+	view.findViewById(R.id.rl_issue_touser).setOnClickListener(this);
+	view.findViewById(R.id.rl_issue_time).setOnClickListener(this);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	// TODO Auto-generated method stub
+	super.onCreateOptionsMenu(menu, inflater);
+	inflater.inflate(R.menu.team_new_issue_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+	// TODO Auto-generated method stub
+	sendPubNewIssue();
+	return super.onOptionsItemSelected(item);
+    }
+
+    private AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
+
+	@Override
+	public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+	    // TODO Auto-generated method stub
+	    Result res = XmlUtils.toBean(ResultBean.class, arg2).getResult();
+	    if (res.OK()) {
+		AppContext.showToast(res.getErrorMessage());
+	    } else {
+		AppContext.showToast(res.getErrorMessage());
+	    }
+	}
+
+	@Override
+	public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+		Throwable arg3) {
+	    // TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onFinish() {
+	    hideWaitDialog();
+	};
+
+	@Override
+	public void onStart() {
+	    showWaitDialog("发布中...");
+	};
+    };
+
+    private void sendPubNewIssue() {
+	String title = mEtTitle.getText().toString();
+	if (TextUtils.isEmpty(title)) {
+	    AppContext.showToast("请填写任务标题");
+	    return;
+	}
+
+	RequestParams params = new RequestParams();
+	params.put("team", mTeam.getId());
+	params.put("uid", AppContext.getInstance().getLoginUid());
+	params.put("title", title);
+	if (mTeamProject.getGit().getId() > 0) {
+
+	    params.put("project", mTeamProject.getGit().getId());
+	    params.put("source", mTeamProject.getSource());
+	}
+	
+	if (!TextUtils.isEmpty(issueTime)) {
+	    params.put("deadline_time", issueTime);
+	}
+	
+	if (catalogIndex != 0 && catalogs != null && !catalogs.isEmpty()) {
+	    params.put("catalogid", catalogs.get(catalogIndex).getId());
+	}
+	
+	if (true) {
+	    params.put("to_user", 253900);
+	}
+
+	OSChinaTeamApi.pubTeamNewIssue(params, mHandler);
+    }
+
+    @Override
+    public void initData() {
+	// TODO Auto-generated method stub
+	super.initData();
+	Bundle args = getArguments();
+	if (args != null) {
+	    mTeam = (Team) args.getSerializable("team");
+	    mTeamProject = (TeamProject) args.getSerializable("project");
+	}
+
+	if (mTeamProject != null && mTeamProject.getGit().getId() != 0
+		&& mTeamProject.getGit().getId() != -1) {
+	    mTvProject.setText(mTeamProject.getGit().getName());
+	    mTvProject.setTag(mTeamProject);
+	}
+
+	initDate();
+    }
+
+    // 初始化为今天
+    private void initDate() {
+	Calendar cal = Calendar.getInstance();
+	this.mYear = cal.get(Calendar.YEAR);
+	this.mMonth = cal.get(Calendar.MONTH);
+	this.mDay = cal.get(Calendar.DATE);
+    }
+
+    private CommonDialog projectDialog;
+    private CommonDialog catalogDialog;
+    private CommonDialog toUserDialog;
+
+    private List<TeamProject> projects;
+    private int projectIndex = 0;
+
+    private List<TeamIssueCatalog> catalogs;
+    private int catalogIndex = 0;
+    
+    private List<Author> toUsers;
+    private int toUserIndex = 0;
+
+    private int mYear, mMonth, mDay;
+
+    private String issueTime;
+
+    private void showTeamProjectSelected(final List<TeamProject> projects) {
+	if (this.projects == null) {
+	    TeamProject unProject = new TeamProject();
+	    TeamGit git = new TeamGit();
+	    git.setId(-1);
+	    git.setName("不指定项目");
+	    unProject.setGit(git);
+	    projects.add(0, unProject);
+	    this.projects = projects;
+	}
+	if (projectDialog == null) {
+	    projectDialog = DialogHelper
+		    .getPinterestDialogCancelable(getActivity());
+	    projectDialog.setTitle("指定项目");
+	}
+
+	final CharSequence[] arrays = new CharSequence[projects.size()];
+	for (int i = 0; i < projects.size(); i++) {
+	    arrays[i] = projects.get(i).getGit().getName();
+	}
+	projectDialog.setItems(arrays, projectIndex, new OnItemClickListener() {
+
+	    @Override
+	    public void onItemClick(AdapterView<?> parent, View view,
+		    int position, long id) {
+		// TODO Auto-generated method stub
+		if (position == projectIndex) {
+		    projectDialog.dismiss();
+		    return;
+		}
+		projectIndex = position;
+		mTvProject.setText(arrays[position]);
+		mTeamProject = projects.get(position);
+		clearCatalogAndToUser();
+		projectDialog.dismiss();
+	    }
+	});
+
+	projectDialog.show();
+    }
+    
+    // 重新选定项目之后清空任务列表和指派成员
+    private void clearCatalogAndToUser() {
+	// 清除任务列表
+	catalogIndex = 0;
+	catalogs = null;
+	mTvCatalog.setText("未指定列表");
+	
+	// 清楚指派列表
+	toUserIndex = 0;
+	toUsers = null;
+	mTvToUser.setText("未指派");
+    }
+
+    private void showTeamCatalogSelected(List<TeamIssueCatalog> list) {
+	TeamIssueCatalog catalog = new TeamIssueCatalog();
+	catalog.setTitle("未指定列表");
+	list.add(0, catalog);
+	this.catalogs = list;
+	if (catalogDialog == null) {
+	    catalogDialog = DialogHelper
+		    .getPinterestDialogCancelable(getActivity());
+	    catalogDialog.setTitle("指定任务列表");
+
+	}
+	final CharSequence[] catalogs = new CharSequence[list.size()];
+	for (int i = 0; i < list.size(); i++) {
+	    catalogs[i] = list.get(i).getTitle();
+	}
+	catalogDialog.setItems(catalogs, catalogIndex,
+		new OnItemClickListener() {
+
+		    @Override
+		    public void onItemClick(AdapterView<?> parent, View view,
+			    int position, long id) {
+			// TODO Auto-generated method stub
+			catalogIndex = position;
+			mTvCatalog.setText(catalogs[position]);
+			catalogDialog.dismiss();
+		    }
+		});
+	catalogDialog.show();
+    }
+
+    @Override
+    public void onClick(View v) {
+	// TODO Auto-generated method stub
+	super.onClick(v);
+	switch (v.getId()) {
+	case R.id.rl_issue_project:
+	case R.id.rl_issue_catalog:
+	case R.id.rl_issue_touser:
+	    showSelectSomeInfo(v.getId());
+	    break;
+	case R.id.rl_issue_time:
+	    showIssueDeadlineTime();
+	    break;
+
+	default:
+	    break;
+	}
+    }
+
+    private void showIssueDeadlineTime() {
+	final DatePickerDialog dateDialog = new DatePickerDialog(getActivity(),
+		new DatePickerDialog.OnDateSetListener() {
+
+		    @Override
+		    public void onDateSet(DatePicker view, int year,
+			    int monthOfYear, int dayOfMonth) {
+			// TODO Auto-generated method stub
+			mYear = year;
+			mMonth = monthOfYear;
+			mDay = dayOfMonth;
+			issueTime = mYear + "-" + (mMonth + 1) + "-" + mDay;
+			mTvTime.setText(issueTime);
+		    }
+		}, mYear, mMonth, mDay);
+	dateDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "清除",
+		new DialogInterface.OnClickListener() {
+
+		    @Override
+		    public void onClick(DialogInterface dialog, int which) {
+			// TODO Auto-generated method stub
+			issueTime = "";
+			mTvTime.setText("");
+			dateDialog.dismiss();
+		    }
+		});
+	dateDialog.show();
+    }
+
+    private final int show_project = R.id.rl_issue_project;
+    private final int show_issue_catalog = R.id.rl_issue_catalog;
+    private final int show_issue_touser = R.id.rl_issue_touser;
+
+    private void showSelectSomeInfo(int showType) {
+	switch (showType) {
+	case show_project:
+	    tryToShowProjectDialog();
+	    break;
+	case show_issue_catalog:
+	    tryToShowCatalogDialog();
+	    break;
+	case show_issue_touser:
+
+	    break;
+	default:
+	    break;
+	}
+    }
+
+    private void tryToShowProjectDialog() {
+	if (projectDialog != null && projects != null) {
+	    showTeamProjectSelected(projects);
+	} else {
+	    OSChinaTeamApi.getTeamProjectList(mTeam.getId(),
+		    new MySomeInfoHandler(show_project));
+
+	}
+    }
+
+    private void tryToShowCatalogDialog() {
+	OSChinaTeamApi.getTeamCatalogIssueList(AppContext.getInstance()
+		.getLoginUid(), mTeam.getId(), mTeamProject.getGit().getId(),
+		mTeamProject.getSource(), new MySomeInfoHandler(
+			show_issue_catalog));
+
+    }
+
+    public class MySomeInfoHandler extends AsyncHttpResponseHandler {
+
+	private int showType = show_project;
+
+	public MySomeInfoHandler(int showType) {
+	    this.showType = showType;
+	}
+
+	@Override
+	public void onFinish() {
+	    // TODO Auto-generated method stub
+	    super.onFinish();
+	}
+
+	@Override
+	public void onStart() {
+	    // TODO Auto-generated method stub
+	    super.onStart();
+	}
+
+	@Override
+	public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+		Throwable arg3) {
+	    // TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+	    // TODO Auto-generated method stub
+	    switch (showType) {
+	    // 显示项目选择对话框
+	    case show_project:
+		TeamProjectList plist = XmlUtils.toBean(TeamProjectList.class,
+			arg2);
+		showTeamProjectSelected(plist.getList());
+		break;
+	    // 显示任务列表选择对话框
+	    case show_issue_catalog:
+		TeamIssueCatalogList clist = XmlUtils.toBean(
+			TeamIssueCatalogList.class, arg2);
+		showTeamCatalogSelected(clist.getList());
+		break;
+	    // 显示指派用户对话框
+	    case show_issue_touser:
+
+		break;
+	    default:
+		break;
+	    }
+	}
+    }
+}

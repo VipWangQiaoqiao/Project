@@ -8,6 +8,7 @@ import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseViewPagerFragment;
+import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamIssueCatalog;
 import net.oschina.app.team.bean.TeamIssueCatalogList;
@@ -19,6 +20,7 @@ import net.oschina.app.team.fragment.TeamProjectSelectPopupWindow.TeamProjectPop
 import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
 import org.apache.http.Header;
@@ -104,11 +106,20 @@ public class TeamIssueViewPageFragment extends BaseViewPagerFragment {
 	case R.id.team_issue_project_list:
 	    showProjectsSelectDialog();
 	    break;
-
+	case R.id.team_issue_new:
+	    onCreateNewIssue();
+	    break;
 	default:
 	    break;
 	}
 	return super.onOptionsItemSelected(item);
+    }
+    
+    private void onCreateNewIssue() {
+	Bundle bundle = new Bundle();
+	bundle.putSerializable("team", mTeam);
+	bundle.putSerializable("project", mTeamProject);
+	UIHelper.showSimpleBack(getActivity(), SimpleBackPage.TEAM_NEW_ISSUE, bundle);
     }
 
     private TeamProjectPopupWindowCallBack mCallBack = new TeamProjectPopupWindowCallBack() {

@@ -36,7 +36,7 @@ public abstract class BeseHaveHeaderListFragment<T1 extends Entity, T2 extends S
 
     protected T2 detailBean;// list 头部的详情实体类
     
-    private EmojiFragment mEmojiFragment;
+    protected EmojiFragment mEmojiFragment;
 
     protected final AsyncHttpResponseHandler mDetailHandler = new AsyncHttpResponseHandler() {
 

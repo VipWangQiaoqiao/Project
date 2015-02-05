@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/team_issue_detail_change_state"
+        android:icon="@drawable/actionbar_send_icon"
+        android:showAsAction="ifRoom"
+        android:title="关闭任务">
+        <menu>
+            <group android:checkableBehavior="single" >
+                <item
+                    android:id="@+id/team_issue_detail_state_closed"
+                    android:title="已关闭">
+                </item>
+                <item
+                    android:id="@+id/team_issue_detail_state_opened"
+                    android:title="重新打开">
+                </item>
+            </group>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/team_issue_detail_appoint"
+        android:icon="@drawable/actionbar_send_icon"
+        android:showAsAction="ifRoom"/>
+
+</menu>

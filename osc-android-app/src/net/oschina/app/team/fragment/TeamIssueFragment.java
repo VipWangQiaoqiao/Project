@@ -76,6 +76,10 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
     protected TeamIssueAdapter getListAdapter() {
 	return new TeamIssueAdapter();
     }
+    
+    public TeamIssueCatalog getTeamIssueCatalog() {
+	return this.mCatalog;
+    }
 
     /**
      * 获取当前展示页面的缓存数据
@@ -118,7 +122,7 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
 	int catalogId = mCatalogId;
 	String source = mProject == null ? "" : mProject.getSource();
 	int uid = mCatalogId == 0 ? 0 : AppContext.getInstance().getLoginUid();
-	String state = "opened";
+	String state = "all";
 	String scope = "";
 	OSChinaTeamApi.getTeamIssueList(teamId, projectId, catalogId, source, uid, state,
 		scope, mCurrentPage, AppContext.PAGE_SIZE, mHandler);
@@ -129,7 +133,7 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
 	    long id) {
 	TeamIssue issue = (TeamIssue) mAdapter.getItem(position);
 	if (issue != null) {
-	    UIHelper.showTeamIssueDetail(getActivity(), mTeam, issue);
+	    UIHelper.showTeamIssueDetail(getActivity(), mTeam, issue, mCatalog);
 	}
     }
 

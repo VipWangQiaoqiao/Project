@@ -27,6 +27,7 @@ import net.oschina.app.service.NoticeService;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamDiscuss;
 import net.oschina.app.team.bean.TeamIssue;
+import net.oschina.app.team.bean.TeamIssueCatalog;
 import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.EventLocationActivity;
@@ -994,13 +995,14 @@ public class UIHelper {
      * @param issue
      */
     public static void showTeamIssueDetail(Context context, Team team,
-	    TeamIssue issue) {
+	    TeamIssue issue, TeamIssueCatalog catalog) {
 	Intent intent = new Intent(context, DetailActivity.class);
 	Bundle bundle = new Bundle();
 	bundle.putInt("teamid", team.getId());
 	bundle.putInt("issueid", issue.getId());
 	bundle.putSerializable("team", team);
 	bundle.putSerializable("issue", issue);
+	bundle.putSerializable("issue_catalog", catalog);
 	bundle.putInt(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
 		DetailActivity.DISPLAY_TEAM_ISSUE_DETAIL);
 	intent.putExtras(bundle);

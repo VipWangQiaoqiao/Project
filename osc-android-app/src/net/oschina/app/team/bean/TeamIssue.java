@@ -1,6 +1,7 @@
 package net.oschina.app.team.bean;
 
 import java.io.Serializable;
+import java.util.List;
 
 import net.oschina.app.bean.Entity;
 
@@ -50,6 +51,12 @@ public class TeamIssue extends Entity {
 
     @XStreamAlias("toUser")
     private ToUser toUser;
+    
+    @XStreamAlias("replyCount")
+    private int replyCount;
+    
+    @XStreamAlias("labels")
+    private List<Label> labels;
 
     public String getState() {
 	return state;
@@ -137,6 +144,49 @@ public class TeamIssue extends Entity {
 
     public void setToUser(ToUser toUser) {
 	this.toUser = toUser;
+    }
+    
+    public List<Label> getLabels() {
+        return labels;
+    }
+
+    public void setLabels(List<Label> labels) {
+        this.labels = labels;
+    }
+
+    public int getReplyCount() {
+        return replyCount;
+    }
+
+    public void setReplyCount(int replyCount) {
+        this.replyCount = replyCount;
+    }
+
+    @XStreamAlias("label")
+    public class Label implements Serializable {
+	
+	@XStreamAlias("name")
+	private String name;
+	
+	@XStreamAlias("color")
+	private String color;
+
+	public String getName() {
+	    return name;
+	}
+
+	public void setName(String name) {
+	    this.name = name;
+	}
+
+	public String getColor() {
+	    return color;
+	}
+
+	public void setColor(String color) {
+	    this.color = color;
+	}
+	
     }
 
     @XStreamAlias("toUser")

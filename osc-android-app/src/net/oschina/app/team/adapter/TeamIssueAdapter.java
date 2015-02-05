@@ -34,6 +34,8 @@ public class TeamIssueAdapter extends ListBaseAdapter<TeamIssue> {
 	}
 
 	TeamIssue item = (TeamIssue) mDatas.get(position);
+	
+	vh.comment.setText(item.getReplyCount() + "");
 
 	vh.title.setText(item.getTitle());
 	if (item.getState().equals("closed")) {
@@ -51,7 +53,6 @@ public class TeamIssueAdapter extends ListBaseAdapter<TeamIssue> {
 	    vh.touser.setText(item.getToUser().getName());
 	}
 	vh.time.setText(StringUtils.friendly_time(item.getCreateTime()));
-	vh.comment.setText("0");
 
 	return convertView;
     }

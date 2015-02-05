@@ -31,7 +31,7 @@ public class StringUtils {
     private final static ThreadLocal<SimpleDateFormat> dateFormater = new ThreadLocal<SimpleDateFormat>() {
         @Override
         protected SimpleDateFormat initialValue() {
-            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm");
         }
     };
 
@@ -119,7 +119,7 @@ public class StringUtils {
         } else if (days > 3 * 31 && days <= 4 * 31) {
             ftime = "3个月前";
         } else {
-            ftime = dateFormater2.get().format(time);
+            ftime = dateFormater.get().format(time);
         }
         return ftime;
     }
