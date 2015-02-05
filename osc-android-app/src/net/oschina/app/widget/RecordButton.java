@@ -109,7 +109,7 @@ public class RecordButton extends RelativeLayout {
             }
             break;
         case MotionEvent.ACTION_UP:
-            if (mIsCancel && event.getY() < -50) {
+            if (mIsCancel || event.getY() < -50) {
                 cancelRecord();
             } else if (event.getX() < mLeftButtonX) {// 试听
                 playRecord();
