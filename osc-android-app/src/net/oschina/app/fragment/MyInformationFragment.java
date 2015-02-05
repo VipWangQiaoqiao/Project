@@ -259,7 +259,8 @@ public class MyInformationFragment extends BaseFragment {
     }
 
     private void fillUI() {
-	if (mInfo == null) return;
+        if (mInfo == null)
+            return;
         mIvAvatar.setAvatarUrl(mInfo.getPortrait());
         mTvName.setText(mInfo.getName());
         mIvGender
@@ -394,6 +395,8 @@ public class MyInformationFragment extends BaseFragment {
             // getTeamList();
             // }
             UIHelper.showSimpleBack(getActivity(), SimpleBackPage.SELECT_TEAM);
+            getActivity().overridePendingTransition(R.anim.in_from_bottom,
+                    R.anim.out_to_top);
             break;
         case R.id.rl_blog:
             UIHelper.showUserBlog(getActivity(), AppContext.getInstance()

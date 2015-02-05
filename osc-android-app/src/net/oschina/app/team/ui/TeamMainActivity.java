@@ -2,7 +2,7 @@ package net.oschina.app.team.ui;
 
 import net.oschina.app.R;
 import net.oschina.app.base.BaseActivity;
-import net.oschina.app.team.fragment.TeamDiaryFragment;
+import net.oschina.app.team.fragment.TeamDiaryPagerFragment;
 import net.oschina.app.team.fragment.TeamDiscussFragment;
 import net.oschina.app.team.viewpagefragment.TeamIssueViewPageFragment;
 import net.oschina.app.team.viewpagefragment.TeamMainViewPagerFragment;
@@ -28,12 +28,12 @@ import android.widget.SpinnerAdapter;
  */
 
 public class TeamMainActivity extends BaseActivity implements
-	OnNavigationListener, OnItemSelectedListener {
+        OnNavigationListener, OnItemSelectedListener {
 
     public final static String BUNDLE_KEY_TEAM = "bundle_key_team";
 
     public final static String BUNDLE_KEY_PROJECT = "bundle_key_project";
-    
+
     public final static String BUNDLE_KEY_ISSUE_CATALOG = "bundle_key_catalog_list";
 
     private FragmentManager mFragmentManager;
@@ -43,21 +43,21 @@ public class TeamMainActivity extends BaseActivity implements
     static final String CONTENTS[] = { "main", "issue", "discuss", "diary" };
 
     static final String fragments[] = {
-	    TeamMainViewPagerFragment.class.getName(),
-	    TeamIssueViewPageFragment.class.getName(),
-	    TeamDiscussFragment.class.getName(),
-	    TeamDiaryFragment.class.getName() };
+            TeamMainViewPagerFragment.class.getName(),
+            TeamIssueViewPageFragment.class.getName(),
+            TeamDiscussFragment.class.getName(),
+            TeamDiaryPagerFragment.class.getName() };
 
     private int mCurrentContentIndex = -1;
 
     @Override
     protected boolean hasBackButton() {
-	return true;
+        return true;
     }
 
     @Override
     protected int getLayoutId() {
-	return R.layout.activity_team_main;
+        return R.layout.activity_team_main;
     }
 
     @Override
@@ -67,65 +67,63 @@ public class TeamMainActivity extends BaseActivity implements
 
     @Override
     protected boolean haveSpinner() {
-	return true;
+        return true;
     }
 
     @Override
     public void initView() {
-	mFragmentManager = getSupportFragmentManager();
-	switchContent(0);
-	SpinnerAdapter adapter = ArrayAdapter.createFromResource(this,
-		R.array.team_main_menu,
-		android.R.layout.simple_spinner_dropdown_item);
-	mSpinner = getSpinner();
-	if (mSpinner != null) {
-	    mSpinner.setAdapter(adapter);
-	    mSpinner.setOnItemSelectedListener(this);
-	}
+        mFragmentManager = getSupportFragmentManager();
+        switchContent(0);
+        SpinnerAdapter adapter = ArrayAdapter.createFromResource(this,
+                R.array.team_main_menu,
+                android.R.layout.simple_spinner_dropdown_item);
+        mSpinner = getSpinner();
+        if (mSpinner != null) {
+            mSpinner.setAdapter(adapter);
+            mSpinner.setOnItemSelectedListener(this);
+        }
     }
 
     @Override
-    public void initData() {
-    }
+    public void initData() {}
 
     /**
      * 
      * @param pos
      */
     private void switchContent(int pos) {
-	String tag = CONTENTS[pos];
-	String mCurrentContentTag = CONTENTS[pos];
-	if (pos == mCurrentContentIndex)
-	    return;
+        String tag = CONTENTS[pos];
+        String mCurrentContentTag = CONTENTS[pos];
+        if (pos == mCurrentContentIndex)
+            return;
 
-	FragmentTransaction ft = mFragmentManager.beginTransaction();
-	if (mCurrentContentTag != null) {
-	    Fragment fragment = mFragmentManager
-		    .findFragmentByTag(mCurrentContentTag);
-	    if (fragment != null) {
-		ft.remove(fragment);
-	    }
-	}
-	ft.replace(R.id.main_content,
-		Fragment.instantiate(this, fragments[pos]), tag);
-	ft.commit();
+        FragmentTransaction ft = mFragmentManager.beginTransaction();
+        if (mCurrentContentTag != null) {
+            Fragment fragment = mFragmentManager
+                    .findFragmentByTag(mCurrentContentTag);
+            if (fragment != null) {
+                ft.remove(fragment);
+            }
+        }
+        ft.replace(R.id.main_content,
+                Fragment.instantiate(this, fragments[pos]), tag);
+        ft.commit();
 
-	mCurrentContentIndex = pos;
+        mCurrentContentIndex = pos;
     }
 
     @Override
     public boolean onNavigationItemSelected(int arg0, long arg1) {
-	switchContent(arg0);
-	return false;
+        switchContent(arg0);
+        return false;
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position,
-	    long id) {
-	switchContent(position);
+            long id) {
+        switchContent(position);
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-    }
+    public void onNothingSelected(AdapterView<?> parent) {}
 }
