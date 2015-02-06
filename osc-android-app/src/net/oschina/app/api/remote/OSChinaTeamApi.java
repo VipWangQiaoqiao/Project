@@ -4,6 +4,8 @@ import net.oschina.app.AppContext;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.team.bean.TeamProject;
 
+import android.text.TextUtils;
+
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -39,13 +41,18 @@ public class OSChinaTeamApi {
      * @param teamProject
      * @param handler
      */
-    public static void getTeamProjectMemberList(int teamId, TeamProject teamProject,
+    public static void getTeamProjectMemberList(int teamId, int uid, TeamProject teamProject,
 	    AsyncHttpResponseHandler handler) {
 	RequestParams params = new RequestParams();
 	params.put("teamid", teamId);
+	params.put("uid", uid);
 	params.put("projectid", teamProject.getGit().getId());
-	params.put("source", teamProject.getSource());
-	ApiHttpClient.get("action/api/team_project_member_list", handler);
+	String source = teamProject.getSource();
+	if (source != null && !TextUtils.isEmpty(source)) {
+	    
+	    params.put("source", teamProject.getSource());
+	}
+	ApiHttpClient.get("action/api/team_project_member_list", params, handler);
     }
 
     /**
