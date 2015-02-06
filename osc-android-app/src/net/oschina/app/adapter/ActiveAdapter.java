@@ -42,6 +42,7 @@ public class ActiveAdapter extends ListBaseAdapter {
 
     private Bitmap recordBitmap;
     private final KJBitmap kjb = KJBitmap.create();
+    private int rectSize;
 
     private void initRecordImg(Context cxt) {
         recordBitmap = BitmapFactory.decodeResource(cxt.getResources(),
@@ -50,11 +51,20 @@ public class ActiveAdapter extends ListBaseAdapter {
                 DensityUtils.dip2px(cxt, 20f), DensityUtils.dip2px(cxt, 20f));
     }
 
+    private void initImageSize(Context cxt) {
+        if (cxt != null && rectSize == 0) {
+            rectSize = (int) cxt.getResources().getDimension(R.dimen.space_100);
+        } else {
+            rectSize = 300;
+        }
+    }
+
     @SuppressLint("InflateParams")
     @Override
     protected View getRealView(int position, View convertView,
             final ViewGroup parent) {
         ViewHolder vh = null;
+        initImageSize(parent.getContext());
         if (convertView == null || convertView.getTag() == null) {
             convertView = getLayoutInflater(parent.getContext()).inflate(
                     R.layout.list_cell_active, null);
@@ -119,7 +129,7 @@ public class ActiveAdapter extends ListBaseAdapter {
         vh.from.setVisibility(View.VISIBLE);
         switch (item.getAppClient()) {
         default:
-            vh.from.setText("");
+            vh.from.setText(R.string.from_web); // 不显示
             vh.from.setVisibility(View.GONE);
             break;
         case Tweet.CLIENT_MOBILE:
@@ -156,9 +166,9 @@ public class ActiveAdapter extends ListBaseAdapter {
 
         if (!TextUtils.isEmpty(item.getTweetimage())) {
             vh.pic.setVisibility(View.VISIBLE);
-            kjb.display(vh.pic, item.getTweetimage(), R.drawable.widget_dface);
+            kjb.display(vh.pic, item.getTweetimage(), R.drawable.widget_dface,
+                    rectSize, rectSize);
             vh.pic.setOnClickListener(new View.OnClickListener() {
-
                 @Override
                 public void onClick(View v) {
                     ImagePreviewActivity.showImagePrivew(
