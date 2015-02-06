@@ -10,6 +10,7 @@ import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.ListEntity;
+import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.team.adapter.DynamicAdapter;
 import net.oschina.app.team.bean.Team;
@@ -17,6 +18,7 @@ import net.oschina.app.team.bean.TeamActive;
 import net.oschina.app.team.bean.TeamActives;
 import net.oschina.app.team.bean.TeamList;
 import net.oschina.app.util.TLog;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
 import org.kymjs.kjframe.utils.PreferenceHelper;
@@ -27,6 +29,9 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 
 /**
  * Team动态界面
@@ -62,6 +67,21 @@ public class DynamicFragment extends BaseListFragment {
             team = new Team();
             TLog.log(getClass().getSimpleName(), "team对象初始化异常");
         }
+
+        mListView.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                    int position, long id) {
+                Adapter adapter = parent.getAdapter();
+                if (adapter != null && adapter instanceof DynamicAdapter) {
+                    TeamActive data = ((DynamicAdapter) parent.getAdapter())
+                            .getItem(position);
+                    Bundle bundle = new Bundle();
+                    UIHelper.showSimpleBack(aty, SimpleBackPage.ABOUT_OSC,
+                            bundle);
+                }
+            }
+        });
     }
 
     @Override

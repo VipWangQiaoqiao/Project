@@ -38,7 +38,7 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
     protected View getRealView(int position, View v, ViewGroup parent) {
         super.getRealView(position, v, parent);
         ViewHolder holder = null;
-        TeamActive data = (TeamActive) mDatas.get(position);
+        TeamActive data = mDatas.get(position);
         if (v == null || v.getTag() == null) {
             v = View.inflate(context, R.layout.item_team_dynamic, null);
             holder = new ViewHolder();
@@ -74,5 +74,11 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
         holder.tv_date.setText(data.getCreateTime());
         // holder.tv_client.setText("");
         return v;
+    }
+
+    @Override
+    public TeamActive getItem(int arg0) {
+        super.getItem(arg0);
+        return mDatas.get(arg0);
     }
 }
