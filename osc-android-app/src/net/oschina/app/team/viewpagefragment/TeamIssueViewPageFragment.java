@@ -34,20 +34,6 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 
 /**
  * Team 任务列表viewpager
-=======
-import org.apache.http.Header;
-
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-
-import com.loopj.android.http.AsyncHttpResponseHandler;
-
-/** 
- * 
->>>>>>> refs/heads/dev
  * 
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @version 创建时间：2015年1月14日 下午2:18:25
