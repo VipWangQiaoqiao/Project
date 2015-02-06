@@ -30,7 +30,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
-import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -46,8 +45,6 @@ public class SelectTeamFragment extends BaseFragment {
 
     @InjectView(R.id.team_select_list)
     ListView mList;
-    @InjectView(R.id.team_select_title)
-    TextView mTvTitle;
 
     private Activity aty;
     private List<Team> datas;

@@ -16,6 +16,8 @@ import net.oschina.app.team.bean.TeamIssueCatalog;
 import net.oschina.app.team.bean.TeamIssueCatalogList;
 import net.oschina.app.team.bean.TeamProject;
 import net.oschina.app.team.bean.TeamProjectList;
+import net.oschina.app.team.bean.TeamProjectMember;
+import net.oschina.app.team.bean.TeamProjectMemberList;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.util.XmlUtils;
@@ -73,8 +75,6 @@ public class TeamNewIssueFragment extends BaseFragment {
 
     private TeamIssueCatalog mTeamCatalog;
 
-    private Author mToUser;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	    Bundle savedInstanceState) {
@@ -118,6 +118,7 @@ public class TeamNewIssueFragment extends BaseFragment {
 	    Result res = XmlUtils.toBean(ResultBean.class, arg2).getResult();
 	    if (res.OK()) {
 		AppContext.showToast(res.getErrorMessage());
+		getActivity().finish();
 	    } else {
 		AppContext.showToast(res.getErrorMessage());
 	    }
@@ -157,17 +158,17 @@ public class TeamNewIssueFragment extends BaseFragment {
 	    params.put("project", mTeamProject.getGit().getId());
 	    params.put("source", mTeamProject.getSource());
 	}
-	
+
 	if (!TextUtils.isEmpty(issueTime)) {
 	    params.put("deadline_time", issueTime);
 	}
-	
+
 	if (catalogIndex != 0 && catalogs != null && !catalogs.isEmpty()) {
 	    params.put("catalogid", catalogs.get(catalogIndex).getId());
 	}
-	
-	if (true) {
-	    params.put("to_user", 253900);
+
+	if (toUserIndex != 0 && toUsers != null && !toUsers.isEmpty()) {
+	    params.put("to_user", toUsers.get(toUserIndex).getId());
 	}
 
 	OSChinaTeamApi.pubTeamNewIssue(params, mHandler);
@@ -209,8 +210,8 @@ public class TeamNewIssueFragment extends BaseFragment {
 
     private List<TeamIssueCatalog> catalogs;
     private int catalogIndex = 0;
-    
-    private List<Author> toUsers;
+
+    private List<TeamProjectMember> toUsers;
     private int toUserIndex = 0;
 
     private int mYear, mMonth, mDay;
@@ -257,14 +258,14 @@ public class TeamNewIssueFragment extends BaseFragment {
 
 	projectDialog.show();
     }
-    
+
     // 重新选定项目之后清空任务列表和指派成员
     private void clearCatalogAndToUser() {
 	// 清除任务列表
 	catalogIndex = 0;
 	catalogs = null;
 	mTvCatalog.setText("未指定列表");
-	
+
 	// 清楚指派列表
 	toUserIndex = 0;
 	toUsers = null;
@@ -301,6 +302,36 @@ public class TeamNewIssueFragment extends BaseFragment {
 	catalogDialog.show();
     }
 
+    private void showIssueToUser(List<TeamProjectMember> list) {
+	TeamProjectMember member = new TeamProjectMember();
+	member.setId(-1);
+	member.setName("未指派");
+	list.add(0, member);
+	this.toUsers = list;
+	if (toUserDialog == null) {
+	    toUserDialog = DialogHelper
+		    .getPinterestDialogCancelable(getActivity());
+	    toUserDialog.setTitle("指派成员");
+
+	}
+	final CharSequence[] toUsers = new CharSequence[list.size()];
+	for (int i = 0; i < list.size(); i++) {
+	    toUsers[i] = list.get(i).getName();
+	}
+	toUserDialog.setItems(toUsers, toUserIndex, new OnItemClickListener() {
+
+	    @Override
+	    public void onItemClick(AdapterView<?> parent, View view,
+		    int position, long id) {
+		// TODO Auto-generated method stub
+		toUserIndex = position;
+		mTvToUser.setText(toUsers[position]);
+		toUserDialog.dismiss();
+	    }
+	});
+	toUserDialog.show();
+    }
+
     @Override
     public void onClick(View v) {
 	// TODO Auto-generated method stub
@@ -314,7 +345,6 @@ public class TeamNewIssueFragment extends BaseFragment {
 	case R.id.rl_issue_time:
 	    showIssueDeadlineTime();
 	    break;
-
 	default:
 	    break;
 	}
@@ -335,17 +365,6 @@ public class TeamNewIssueFragment extends BaseFragment {
 			mTvTime.setText(issueTime);
 		    }
 		}, mYear, mMonth, mDay);
-	dateDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "清除",
-		new DialogInterface.OnClickListener() {
-
-		    @Override
-		    public void onClick(DialogInterface dialog, int which) {
-			// TODO Auto-generated method stub
-			issueTime = "";
-			mTvTime.setText("");
-			dateDialog.dismiss();
-		    }
-		});
 	dateDialog.show();
     }
 
@@ -362,7 +381,7 @@ public class TeamNewIssueFragment extends BaseFragment {
 	    tryToShowCatalogDialog();
 	    break;
 	case show_issue_touser:
-
+	    tryToShowToUserDilaog();
 	    break;
 	default:
 	    break;
@@ -387,6 +406,12 @@ public class TeamNewIssueFragment extends BaseFragment {
 
     }
 
+    private void tryToShowToUserDilaog() {
+	OSChinaTeamApi.getTeamProjectMemberList(mTeam.getId(), AppContext
+		.getInstance().getLoginUid(), mTeamProject,
+		new MySomeInfoHandler(show_issue_touser));
+    }
+
     public class MySomeInfoHandler extends AsyncHttpResponseHandler {
 
 	private int showType = show_project;
@@ -399,12 +424,14 @@ public class TeamNewIssueFragment extends BaseFragment {
 	public void onFinish() {
 	    // TODO Auto-generated method stub
 	    super.onFinish();
+	    hideWaitDialog();
 	}
 
 	@Override
 	public void onStart() {
 	    // TODO Auto-generated method stub
 	    super.onStart();
+	    showWaitDialog("获取中...");
 	}
 
 	@Override
@@ -432,7 +459,9 @@ public class TeamNewIssueFragment extends BaseFragment {
 		break;
 	    // 显示指派用户对话框
 	    case show_issue_touser:
-
+		 TeamProjectMemberList tpmList = XmlUtils.toBean(
+		 TeamProjectMemberList.class, arg2);
+		 showIssueToUser(tpmList.getList());
 		break;
 	    default:
 		break;
