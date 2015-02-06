@@ -61,6 +61,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
     }
 
     private Bitmap recordBitmap;
+    private int rectSize;
     private final KJBitmap kjb = KJBitmap.create();
 
     private void initRecordImg(Context cxt) {
@@ -82,7 +83,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         } else
             vh = (ViewHolder) convertView.getTag();
 
-        final Tweet tweet = (Tweet) mDatas.get(position);
+        final Tweet tweet = mDatas.get(position);
 
         vh.face.setUserInfo(tweet.getAuthorid(), tweet.getAuthor());
         vh.face.setAvatarUrl(tweet.getPortrait());
@@ -142,7 +143,9 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
     private void showTweetImage(ViewHolder vh, String imgSmall,
             final String imgBig, final Context context) {
         if (imgSmall != null && !TextUtils.isEmpty(imgSmall)) {
-            kjb.display(vh.image, imgSmall, R.drawable.pic_bg);
+            initImageSize(context);
+            kjb.display(vh.image, imgSmall, R.drawable.pic_bg, rectSize,
+                    rectSize);
             vh.image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -153,6 +156,14 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             vh.image.setVisibility(AvatarView.VISIBLE);
         } else {
             vh.image.setVisibility(AvatarView.GONE);
+        }
+    }
+
+    private void initImageSize(Context cxt) {
+        if (cxt != null && rectSize == 0) {
+            rectSize = (int) cxt.getResources().getDimension(R.dimen.space_100);
+        } else {
+            rectSize = 300;
         }
     }
 }
