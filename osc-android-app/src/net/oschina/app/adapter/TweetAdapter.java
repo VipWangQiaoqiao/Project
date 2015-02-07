@@ -12,6 +12,8 @@ import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
 
 import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.bitmap.BitmapCallBack;
+import org.kymjs.kjframe.bitmap.helper.BitmapHelper;
 import org.kymjs.kjframe.utils.DensityUtils;
 
 import android.content.Context;
@@ -26,13 +28,16 @@ import android.text.style.ImageSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
  * @author HuangWenwei
- * 
+ * @author kymjs
  * @date 2014年10月10日
  */
 public class TweetAdapter extends ListBaseAdapter<Tweet> {
@@ -140,10 +145,34 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         return convertView;
     }
 
-    private void showTweetImage(ViewHolder vh, String imgSmall,
+    /**
+     * 动态设置动弹列表图片显示规则
+     * 
+     * @author kymjs
+     */
+    private void showTweetImage(final ViewHolder vh, String imgSmall,
             final String imgBig, final Context context) {
         if (imgSmall != null && !TextUtils.isEmpty(imgSmall)) {
             initImageSize(context);
+            final RelativeLayout.LayoutParams params = (LayoutParams) vh.image
+                    .getLayoutParams();
+            kjb.setCallback(new BitmapCallBack() {
+                @Override
+                public void onSuccess(View view, Bitmap bitmap) {
+                    super.onSuccess(view, bitmap);
+                    if (bitmap.getWidth() < bitmap.getHeight()) {
+                        params.width = rectSize;
+                        bitmap = BitmapHelper.scaleWithXY(bitmap, rectSize
+                                / bitmap.getHeight());
+                        ((ImageView) view).setScaleType(ScaleType.CENTER_CROP);
+                        ((ImageView) view).setImageBitmap(bitmap);
+                    } else {
+                        params.width = RelativeLayout.LayoutParams.MATCH_PARENT;
+                        ((ImageView) view).setScaleType(ScaleType.FIT_START);
+                    }
+                    vh.image.setLayoutParams(params);
+                }
+            });
             kjb.display(vh.image, imgSmall, R.drawable.pic_bg, rectSize,
                     rectSize);
             vh.image.setOnClickListener(new View.OnClickListener() {
@@ -157,6 +186,8 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         } else {
             vh.image.setVisibility(AvatarView.GONE);
         }
+
+        kjb.setCallback(null); // reset
     }
 
     private void initImageSize(Context cxt) {
