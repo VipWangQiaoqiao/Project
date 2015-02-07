@@ -1,7 +1,6 @@
 package net.oschina.app.widget;
 
 import net.oschina.app.R;
-import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 
 import org.kymjs.kjframe.KJBitmap;
@@ -56,7 +55,6 @@ public class AvatarView extends CircleImageView {
     }
 
     public void setAvatarUrl(String url) {
-	if (StringUtils.isEmpty(url)) return;
         if (url == null)
             return;
         // 由于头像地址默认加了一段参数需要去掉
