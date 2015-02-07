@@ -12,8 +12,6 @@ import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
 
 import org.kymjs.kjframe.KJBitmap;
-import org.kymjs.kjframe.bitmap.BitmapCallBack;
-import org.kymjs.kjframe.bitmap.helper.BitmapHelper;
 import org.kymjs.kjframe.utils.DensityUtils;
 
 import android.content.Context;
@@ -28,9 +26,6 @@ import android.text.style.ImageSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
-import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -85,8 +80,9 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
                     R.layout.list_cell_tweets, null);
             vh = new ViewHolder(convertView);
             convertView.setTag(vh);
-        } else
+        } else {
             vh = (ViewHolder) convertView.getTag();
+        }
 
         final Tweet tweet = mDatas.get(position);
 
@@ -154,25 +150,16 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             final String imgBig, final Context context) {
         if (imgSmall != null && !TextUtils.isEmpty(imgSmall)) {
             initImageSize(context);
-            final RelativeLayout.LayoutParams params = (LayoutParams) vh.image
-                    .getLayoutParams();
-            kjb.setCallback(new BitmapCallBack() {
-                @Override
-                public void onSuccess(View view, Bitmap bitmap) {
-                    super.onSuccess(view, bitmap);
-                    if (bitmap.getWidth() < bitmap.getHeight()) {
-                        params.width = rectSize;
-                        bitmap = BitmapHelper.scaleWithXY(bitmap, rectSize
-                                / bitmap.getHeight());
-                        ((ImageView) view).setScaleType(ScaleType.CENTER_CROP);
-                        ((ImageView) view).setImageBitmap(bitmap);
-                    } else {
-                        params.width = RelativeLayout.LayoutParams.MATCH_PARENT;
-                        ((ImageView) view).setScaleType(ScaleType.FIT_START);
-                    }
-                    vh.image.setLayoutParams(params);
-                }
-            });
+            // final RelativeLayout.LayoutParams params = (LayoutParams)
+            // vh.image
+            // .getLayoutParams();
+            // kjb.setCallback(new BitmapCallBack() {
+            // @Override
+            // public void onSuccess(View view, Bitmap bitmap) {
+            // super.onSuccess(view, bitmap);
+            // initBitmapInList(vh, params, view, bitmap);
+            // }
+            // });
             kjb.display(vh.image, imgSmall, R.drawable.pic_bg, rectSize,
                     rectSize);
             vh.image.setOnClickListener(new View.OnClickListener() {
@@ -186,8 +173,6 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         } else {
             vh.image.setVisibility(AvatarView.GONE);
         }
-
-        kjb.setCallback(null); // reset
     }
 
     private void initImageSize(Context cxt) {
@@ -197,4 +182,27 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             rectSize = 300;
         }
     }
+
+    // /**
+    // * 初始化在ListView中的ImageView
+    // *
+    // * @param vh
+    // * @param params
+    // * @param view
+    // * @param bitmap
+    // */
+    // private void initBitmapInList(final ViewHolder vh,
+    // final RelativeLayout.LayoutParams params, View view, Bitmap bitmap) {
+    // if (bitmap.getWidth() < bitmap.getHeight()) {
+    // params.width = rectSize;
+    // bitmap = BitmapHelper.scaleWithXY(bitmap,
+    // rectSize / bitmap.getHeight());
+    // ((ImageView) view).setImageBitmap(bitmap);
+    // ((ImageView) view).setScaleType(ScaleType.CENTER_CROP);
+    // } else {
+    // params.width = RelativeLayout.LayoutParams.MATCH_PARENT;
+    // ((ImageView) view).setScaleType(ScaleType.FIT_START);
+    // }
+    // vh.image.setLayoutParams(params);
+    // }
 }
