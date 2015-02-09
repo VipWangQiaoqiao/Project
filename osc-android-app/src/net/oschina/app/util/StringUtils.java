@@ -20,26 +20,26 @@ import java.util.regex.Pattern;
  */
 public class StringUtils {
     private final static Pattern emailer = Pattern
-            .compile("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*");
+	    .compile("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*");
 
     private final static Pattern IMG_URL = Pattern
-            .compile(".*?(gif|jpeg|png|jpg|bmp)");
+	    .compile(".*?(gif|jpeg|png|jpg|bmp)");
 
     private final static Pattern URL = Pattern
-            .compile("^(https|http)://.*?$(net|com|.com.cn|org|me|)");
+	    .compile("^(https|http)://.*?$(net|com|.com.cn|org|me|)");
 
     private final static ThreadLocal<SimpleDateFormat> dateFormater = new ThreadLocal<SimpleDateFormat>() {
-        @Override
-        protected SimpleDateFormat initialValue() {
-            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        }
+	@Override
+	protected SimpleDateFormat initialValue() {
+	    return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	}
     };
 
     private final static ThreadLocal<SimpleDateFormat> dateFormater2 = new ThreadLocal<SimpleDateFormat>() {
-        @Override
-        protected SimpleDateFormat initialValue() {
-            return new SimpleDateFormat("yyyy-MM-dd");
-        }
+	@Override
+	protected SimpleDateFormat initialValue() {
+	    return new SimpleDateFormat("yyyy-MM-dd");
+	}
     };
 
     /**
@@ -49,15 +49,15 @@ public class StringUtils {
      * @return
      */
     public static Date toDate(String sdate) {
-        try {
-            return dateFormater.get().parse(sdate);
-        } catch (ParseException e) {
-            return null;
-        }
+	try {
+	    return dateFormater.get().parse(sdate);
+	} catch (ParseException e) {
+	    return null;
+	}
     }
 
     public static String getDateString(Date date) {
-        return dateFormater.get().format(date);
+	return dateFormater.get().format(date);
     }
 
     /**
@@ -67,72 +67,61 @@ public class StringUtils {
      * @return
      */
     public static String friendly_time(String sdate) {
-        Date time = null;
+	Date time = null;
 
-        if (TimeZoneUtil.isInEasternEightZones())
-            time = toDate(sdate);
-        else
-            time = TimeZoneUtil.transformTime(toDate(sdate),
-                    TimeZone.getTimeZone("GMT+08"), TimeZone.getDefault());
+	if (TimeZoneUtil.isInEasternEightZones())
+	    time = toDate(sdate);
+	else
+	    time = TimeZoneUtil.transformTime(toDate(sdate),
+		    TimeZone.getTimeZone("GMT+08"), TimeZone.getDefault());
 
-        if (time == null) {
-            return "Unknown";
-        }
-        String ftime = "";
-        Calendar cal = Calendar.getInstance();
+	if (time == null) {
+	    return "Unknown";
+	}
+	String ftime = "";
+	Calendar cal = Calendar.getInstance();
 
-        // 判断是否是同一天
-        String curDate = dateFormater2.get().format(cal.getTime());
-        String paramDate = dateFormater2.get().format(time);
-        if (curDate.equals(paramDate)) {
-            int hour = (int) ((cal.getTimeInMillis() - time.getTime()) / 3600000);
-            if (hour == 0)
-                ftime = Math.max(
-                        (cal.getTimeInMillis() - time.getTime()) / 60000, 1)
-                        + "分钟前";
-            else
-                ftime = hour + "小时前";
-            return ftime;
-        }
+	// 判断是否是同一天
+	String curDate = dateFormater2.get().format(cal.getTime());
+	String paramDate = dateFormater2.get().format(time);
+	if (curDate.equals(paramDate)) {
+	    int hour = (int) ((cal.getTimeInMillis() - time.getTime()) / 3600000);
+	    if (hour == 0)
+		ftime = Math.max(
+			(cal.getTimeInMillis() - time.getTime()) / 60000, 1)
+			+ "分钟前";
+	    else
+		ftime = hour + "小时前";
+	    return ftime;
+	}
 
-        long lt = time.getTime() / 86400000;
-        long ct = cal.getTimeInMillis() / 86400000;
-        int days = (int) (ct - lt);
-        if (days == 0) {
-            int hour = (int) ((cal.getTimeInMillis() - time.getTime()) / 3600000);
-            if (hour == 0)
-                ftime = Math.max(
-                        (cal.getTimeInMillis() - time.getTime()) / 60000, 1)
-                        + "分钟前";
-            else
-                ftime = hour + "小时前";
-        } else if (days == 1) {
-            ftime = "昨天";
-        } else if (days == 2) {
-            ftime = "前天 ";
-        } else if (days > 2 && days < 31) {
-            ftime = days + "天前";
-        } else if (days >= 31 && days <= 2 * 31) {
-            ftime = "一个月前";
-        } else if (days > 2 * 31 && days <= 3 * 31) {
-            ftime = "2个月前";
-        } else if (days > 3 * 31 && days <= 4 * 31) {
-            ftime = "3个月前";
-        } else {
-            ftime = dateFormater2.get().format(time);
-        }
-        return ftime;
-    }
-
-    /**
-     * 以友好的方式显示时间
-     * 
-     * @param date
-     * @return
-     */
-    public static String friendly_time(Date date) {
-        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return friendly_time(f.format(date));
+	long lt = time.getTime() / 86400000;
+	long ct = cal.getTimeInMillis() / 86400000;
+	int days = (int) (ct - lt);
+	if (days == 0) {
+	    int hour = (int) ((cal.getTimeInMillis() - time.getTime()) / 3600000);
+	    if (hour == 0)
+		ftime = Math.max(
+			(cal.getTimeInMillis() - time.getTime()) / 60000, 1)
+			+ "分钟前";
+	    else
+		ftime = hour + "小时前";
+	} else if (days == 1) {
+	    ftime = "昨天";
+	} else if (days == 2) {
+	    ftime = "前天 ";
+	} else if (days > 2 && days < 31) {
+	    ftime = days + "天前";
+	} else if (days >= 31 && days <= 2 * 31) {
+	    ftime = "一个月前";
+	} else if (days > 2 * 31 && days <= 3 * 31) {
+	    ftime = "2个月前";
+	} else if (days > 3 * 31 && days <= 4 * 31) {
+	    ftime = "3个月前";
+	} else {
+	    ftime = dateFormater2.get().format(time);
+	}
+	return ftime;
     }
 
     /**
@@ -142,17 +131,17 @@ public class StringUtils {
      * @return boolean
      */
     public static boolean isToday(String sdate) {
-        boolean b = false;
-        Date time = toDate(sdate);
-        Date today = new Date();
-        if (time != null) {
-            String nowDate = dateFormater2.get().format(today);
-            String timeDate = dateFormater2.get().format(time);
-            if (nowDate.equals(timeDate)) {
-                b = true;
-            }
-        }
-        return b;
+	boolean b = false;
+	Date time = toDate(sdate);
+	Date today = new Date();
+	if (time != null) {
+	    String nowDate = dateFormater2.get().format(today);
+	    String timeDate = dateFormater2.get().format(time);
+	    if (nowDate.equals(timeDate)) {
+		b = true;
+	    }
+	}
+	return b;
     }
 
     /**
@@ -161,10 +150,47 @@ public class StringUtils {
      * @return
      */
     public static long getToday() {
-        Calendar cal = Calendar.getInstance();
-        String curDate = dateFormater2.get().format(cal.getTime());
-        curDate = curDate.replace("-", "");
-        return Long.parseLong(curDate);
+	Calendar cal = Calendar.getInstance();
+	String curDate = dateFormater2.get().format(cal.getTime());
+	curDate = curDate.replace("-", "");
+	return Long.parseLong(curDate);
+    }
+
+    public static String getCurTimeStr() {
+	Calendar cal = Calendar.getInstance();
+	String curDate = dateFormater.get().format(cal.getTime());
+	return curDate;
+    }
+
+    /***
+     * 计算两个时间差，返回的是的秒s
+     * @author 火蚁
+     * 2015-2-9 下午4:50:06
+     *
+     * @return long
+     * @param dete1
+     * @param date2
+     * @return
+     */
+    public static long calDateDifferent(String dete1, String date2) {
+
+	long diff = 0;
+
+	Date d1 = null;
+	Date d2 = null;
+
+	try {
+	    d1 = dateFormater.get().parse(dete1);
+	    d2 = dateFormater.get().parse(date2);
+
+	    // 毫秒ms
+	    diff = d2.getTime() - d1.getTime();
+
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
+
+	return diff / 1000;
     }
 
     /**
@@ -174,16 +200,16 @@ public class StringUtils {
      * @return boolean
      */
     public static boolean isEmpty(String input) {
-        if (input == null || "".equals(input))
-            return true;
+	if (input == null || "".equals(input))
+	    return true;
 
-        for (int i = 0; i < input.length(); i++) {
-            char c = input.charAt(i);
-            if (c != ' ' && c != '\t' && c != '\r' && c != '\n') {
-                return false;
-            }
-        }
-        return true;
+	for (int i = 0; i < input.length(); i++) {
+	    char c = input.charAt(i);
+	    if (c != ' ' && c != '\t' && c != '\r' && c != '\n') {
+		return false;
+	    }
+	}
+	return true;
     }
 
     /**
@@ -193,9 +219,9 @@ public class StringUtils {
      * @return
      */
     public static boolean isEmail(String email) {
-        if (email == null || email.trim().length() == 0)
-            return false;
-        return emailer.matcher(email).matches();
+	if (email == null || email.trim().length() == 0)
+	    return false;
+	return emailer.matcher(email).matches();
     }
 
     /**
@@ -205,9 +231,9 @@ public class StringUtils {
      * @return
      */
     public static boolean isImgUrl(String url) {
-        if (url == null || url.trim().length() == 0)
-            return false;
-        return IMG_URL.matcher(url).matches();
+	if (url == null || url.trim().length() == 0)
+	    return false;
+	return IMG_URL.matcher(url).matches();
     }
 
     /**
@@ -217,9 +243,9 @@ public class StringUtils {
      * @return
      */
     public static boolean isUrl(String str) {
-        if (str == null || str.trim().length() == 0)
-            return false;
-        return URL.matcher(str).matches();
+	if (str == null || str.trim().length() == 0)
+	    return false;
+	return URL.matcher(str).matches();
     }
 
     /**
@@ -230,11 +256,11 @@ public class StringUtils {
      * @return
      */
     public static int toInt(String str, int defValue) {
-        try {
-            return Integer.parseInt(str);
-        } catch (Exception e) {
-        }
-        return defValue;
+	try {
+	    return Integer.parseInt(str);
+	} catch (Exception e) {
+	}
+	return defValue;
     }
 
     /**
@@ -244,9 +270,9 @@ public class StringUtils {
      * @return 转换异常返回 0
      */
     public static int toInt(Object obj) {
-        if (obj == null)
-            return 0;
-        return toInt(obj.toString(), 0);
+	if (obj == null)
+	    return 0;
+	return toInt(obj.toString(), 0);
     }
 
     /**
@@ -256,11 +282,11 @@ public class StringUtils {
      * @return 转换异常返回 0
      */
     public static long toLong(String obj) {
-        try {
-            return Long.parseLong(obj);
-        } catch (Exception e) {
-        }
-        return 0;
+	try {
+	    return Long.parseLong(obj);
+	} catch (Exception e) {
+	}
+	return 0;
     }
 
     /**
@@ -270,15 +296,15 @@ public class StringUtils {
      * @return 转换异常返回 false
      */
     public static boolean toBool(String b) {
-        try {
-            return Boolean.parseBoolean(b);
-        } catch (Exception e) {
-        }
-        return false;
+	try {
+	    return Boolean.parseBoolean(b);
+	} catch (Exception e) {
+	}
+	return false;
     }
 
     public static String getString(String s) {
-        return s == null ? "" : s;
+	return s == null ? "" : s;
     }
 
     /**
@@ -288,64 +314,67 @@ public class StringUtils {
      * @return
      */
     public static String toConvertString(InputStream is) {
-        StringBuffer res = new StringBuffer();
-        InputStreamReader isr = new InputStreamReader(is);
-        BufferedReader read = new BufferedReader(isr);
-        try {
-            String line;
-            line = read.readLine();
-            while (line != null) {
-                res.append(line + "<br>");
-                line = read.readLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (null != isr) {
-                    isr.close();
-                    isr.close();
-                }
-                if (null != read) {
-                    read.close();
-                    read = null;
-                }
-                if (null != is) {
-                    is.close();
-                    is = null;
-                }
-            } catch (IOException e) {
-            }
-        }
-        return res.toString();
+	StringBuffer res = new StringBuffer();
+	InputStreamReader isr = new InputStreamReader(is);
+	BufferedReader read = new BufferedReader(isr);
+	try {
+	    String line;
+	    line = read.readLine();
+	    while (line != null) {
+		res.append(line + "<br>");
+		line = read.readLine();
+	    }
+	} catch (IOException e) {
+	    e.printStackTrace();
+	} finally {
+	    try {
+		if (null != isr) {
+		    isr.close();
+		    isr.close();
+		}
+		if (null != read) {
+		    read.close();
+		    read = null;
+		}
+		if (null != is) {
+		    is.close();
+		    is = null;
+		}
+	    } catch (IOException e) {
+	    }
+	}
+	return res.toString();
     }
-    
+
     /***
-	 * 截取字符串
-	 * 
-	 * @param start 从那里开始，0算起
-	 * @param num 截取多少个
-	 * @param str 截取的字符串
-	 * @return
-	 */
+     * 截取字符串
+     * 
+     * @param start
+     *            从那里开始，0算起
+     * @param num
+     *            截取多少个
+     * @param str
+     *            截取的字符串
+     * @return
+     */
     public static String getSubString(int start, int num, String str) {
-    	if (str == null) {
-    		return "";
-    	}
-    	int leng = str.length();
-    	if (start < 0) {
-    		start = 0;
-    	}
-    	if (start > leng) {
-    		start = leng;
-    	}
-    	if (num < 0) {
-    		num = 1;
-    	}
-    	int end = start + num;
-    	if (end > leng) {
-    		end = leng;
-    	}
-    	return str.substring(start, end);
+	if (str == null) {
+	    return "";
+	}
+	int leng = str.length();
+	if (start < 0) {
+	    start = 0;
+	}
+	if (start > leng) {
+	    start = leng;
+	}
+	if (num < 0) {
+	    num = 1;
+	}
+	int end = start + num;
+	if (end > leng) {
+	    end = leng;
+	}
+	return str.substring(start, end);
     }
 }

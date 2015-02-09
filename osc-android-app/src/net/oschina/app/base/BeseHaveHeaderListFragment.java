@@ -6,6 +6,7 @@ import java.lang.ref.WeakReference;
 
 import net.oschina.app.bean.Entity;
 import net.oschina.app.cache.CacheManager;
+import net.oschina.app.ui.empty.EmptyLayout;
 
 import org.apache.http.Header;
 
@@ -72,7 +73,7 @@ public abstract class BeseHaveHeaderListFragment<T1 extends Entity, T2 extends S
 	super.initView(view);
 	requestDetailData(isRefresh());
     }
-    
+
     protected boolean isRefresh() {
 	return false;
     }
@@ -91,22 +92,22 @@ public abstract class BeseHaveHeaderListFragment<T1 extends Entity, T2 extends S
     protected boolean requestDataIfViewCreated() {
 	return false;
     }
-    
+
     private void requstListData() {
 	mState = STATE_REFRESH;
 	mAdapter.setState(ListBaseAdapter.STATE_LOAD_MORE);
 	sendRequestData();
     }
-    
+
     /***
      * 带有header view的listfragment不需要显示是否数据为空
      */
     protected boolean needShowEmptyNoData() {
 	return false;
     }
-    
+
     protected void readDetailCacheData(String cacheKey) {
-        new ReadCacheTask(getActivity()).execute(cacheKey);
+	new ReadCacheTask(getActivity()).execute(cacheKey);
     }
 
     private class SaveCacheTask extends AsyncTask<Void, Void, Void> {
@@ -126,35 +127,42 @@ public abstract class BeseHaveHeaderListFragment<T1 extends Entity, T2 extends S
 	    return null;
 	}
     }
-    
+
     private class ReadCacheTask extends AsyncTask<String, Void, T2> {
-        private final WeakReference<Context> mContext;
+	private final WeakReference<Context> mContext;
 
-        private ReadCacheTask(Context context) {
-            mContext = new WeakReference<Context>(context);
-        }
+	private ReadCacheTask(Context context) {
+	    mContext = new WeakReference<Context>(context);
+	}
 
-        @Override
-        protected T2 doInBackground(String... params) {
-            if (mContext.get() != null) {
-                Serializable seri = CacheManager.readObject(mContext.get(),
-                        params[0]);
-                if (seri == null) {
-                    return null;
-                } else {
-                    return (T2) seri;
-                }
-            }
-            return null;
-        }
+	@Override
+	protected T2 doInBackground(String... params) {
+	    if (mContext.get() != null) {
+		Serializable seri = CacheManager.readObject(mContext.get(),
+			params[0]);
+		if (seri == null) {
+		    return null;
+		} else {
+		    return (T2) seri;
+		}
+	    }
+	    return null;
+	}
 
-        @Override
-        protected void onPostExecute(T2 t) {
-            super.onPostExecute(t);
-            if (t != null) {
-        	requstListData();
-                executeOnLoadDetailSuccess(t);
-            }
-        }
+	@Override
+	protected void onPostExecute(T2 t) {
+	    super.onPostExecute(t);
+	    if (t != null) {
+		requstListData();
+		executeOnLoadDetailSuccess(t);
+	    }
+	}
+    }
+
+    @Override
+    protected void executeOnLoadDataError(String error) {
+	mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+	mAdapter.setState(ListBaseAdapter.STATE_NETWORK_ERROR);
+	mAdapter.notifyDataSetChanged();
     }
 }

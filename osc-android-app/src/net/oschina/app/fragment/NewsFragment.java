@@ -25,72 +25,79 @@ import android.widget.AdapterView;
  * 
  */
 public class NewsFragment extends BaseListFragment<News> implements
-        OnTabReselectListener {
+	OnTabReselectListener {
 
     protected static final String TAG = NewsFragment.class.getSimpleName();
     private static final String CACHE_KEY_PREFIX = "newslist_";
 
     @Override
     protected NewsAdapter getListAdapter() {
-        return new NewsAdapter();
+	return new NewsAdapter();
     }
 
     @Override
     protected String getCacheKeyPrefix() {
-        return CACHE_KEY_PREFIX + "_" + mCatalog;
+	return CACHE_KEY_PREFIX + "_" + mCatalog;
     }
 
     @Override
     protected NewsList parseList(InputStream is) throws Exception {
-        NewsList list = null;
-        try {
-            list = XmlUtils.toBean(NewsList.class, is);
-        } catch (NullPointerException e) {
-            list = new NewsList();
-        }
-        return list;
+	NewsList list = null;
+	try {
+	    list = XmlUtils.toBean(NewsList.class, is);
+	} catch (NullPointerException e) {
+	    list = new NewsList();
+	}
+	return list;
     }
 
     @Override
     protected NewsList readList(Serializable seri) {
-        return ((NewsList) seri);
+	return ((NewsList) seri);
     }
 
     @Override
     protected void sendRequestData() {
-        OSChinaApi.getNewsList(mCatalog, mCurrentPage, mHandler);
+	OSChinaApi.getNewsList(mCatalog, mCurrentPage, mHandler);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
-        News news = (News) mAdapter.getItem(position);
-        if (news != null) {
-            UIHelper.showNewsRedirect(view.getContext(), news);
+	    long id) {
+	News news = (News) mAdapter.getItem(position);
+	if (news != null) {
+	    UIHelper.showNewsRedirect(view.getContext(), news);
 
-            // 放入已读列表
-            saveToReadedList(view, NewsList.PREF_READED_NEWS_LIST, news.getId()
-                    + "");
-        }
+	    // 放入已读列表
+	    saveToReadedList(view, NewsList.PREF_READED_NEWS_LIST, news.getId()
+		    + "");
+	}
     }
 
     @Override
     protected void executeOnLoadDataSuccess(List<News> data) {
-        if (mCatalog == NewsList.CATALOG_WEEK
-                || mCatalog == NewsList.CATALOG_MONTH) {
-            mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-            if (mState == STATE_REFRESH)
-                mAdapter.clear();
-            mAdapter.addData(data);
-            mState = STATE_NOMORE;
-            mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
-            return;
-        }
-        super.executeOnLoadDataSuccess(data);
+	if (mCatalog == NewsList.CATALOG_WEEK
+		|| mCatalog == NewsList.CATALOG_MONTH) {
+	    mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+	    if (mState == STATE_REFRESH)
+		mAdapter.clear();
+	    mAdapter.addData(data);
+	    mState = STATE_NOMORE;
+	    mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
+	    return;
+	}
+	super.executeOnLoadDataSuccess(data);
     }
 
     @Override
     public void onTabReselect() {
-        onRefresh();
+	onRefresh();
+    }
+    
+    // 两小时刷新一次
+    @Override
+    protected long getAutoRefreshTime() {
+	// TODO Auto-generated method stub
+	return 2 * 60 * 60;
     }
 }
