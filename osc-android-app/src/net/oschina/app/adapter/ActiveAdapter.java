@@ -15,6 +15,8 @@ import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
 
 import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.bitmap.BitmapCallBack;
+import org.kymjs.kjframe.bitmap.helper.BitmapHelper;
 import org.kymjs.kjframe.utils.DensityUtils;
 
 import android.annotation.SuppressLint;
@@ -176,25 +178,15 @@ public class ActiveAdapter extends ListBaseAdapter {
     private void setTweetImage(final ViewGroup parent, final ViewHolder vh,
             final Active item) {
         vh.pic.setVisibility(View.VISIBLE);
-        // final RelativeLayout.LayoutParams params = (LayoutParams) vh.pic
-        // .getLayoutParams();
-        // kjb.setCallback(new BitmapCallBack() {
-        // @Override
-        // public void onSuccess(View view, Bitmap bitmap) {
-        // super.onSuccess(view, bitmap);
-        // if (bitmap.getWidth() < bitmap.getHeight()) {
-        // params.width = rectSize;
-        // bitmap = BitmapHelper.scaleWithXY(bitmap,
-        // rectSize / bitmap.getHeight());
-        // ((ImageView) view).setScaleType(ScaleType.CENTER_CROP);
-        // ((ImageView) view).setImageBitmap(bitmap);
-        // } else {
-        // params.width = RelativeLayout.LayoutParams.MATCH_PARENT;
-        // ((ImageView) view).setScaleType(ScaleType.FIT_START);
-        // }
-        // vh.pic.setLayoutParams(params);
-        // }
-        // });
+        kjb.setCallback(new BitmapCallBack() {
+            @Override
+            public void onSuccess(View view, Bitmap bitmap) {
+                super.onSuccess(view, bitmap);
+                bitmap = BitmapHelper.scaleWithXY(bitmap,
+                        rectSize / bitmap.getHeight());
+                ((ImageView) view).setImageBitmap(bitmap);
+            }
+        });
 
         kjb.display(vh.pic, item.getTweetimage(), R.drawable.widget_dface,
                 rectSize, rectSize);

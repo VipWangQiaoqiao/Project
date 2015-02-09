@@ -12,6 +12,8 @@ import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
 
 import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.bitmap.BitmapCallBack;
+import org.kymjs.kjframe.bitmap.helper.BitmapHelper;
 import org.kymjs.kjframe.utils.DensityUtils;
 
 import android.content.Context;
@@ -150,16 +152,13 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             final String imgBig, final Context context) {
         if (imgSmall != null && !TextUtils.isEmpty(imgSmall)) {
             initImageSize(context);
-            // final RelativeLayout.LayoutParams params = (LayoutParams)
-            // vh.image
-            // .getLayoutParams();
-            // kjb.setCallback(new BitmapCallBack() {
-            // @Override
-            // public void onSuccess(View view, Bitmap bitmap) {
-            // super.onSuccess(view, bitmap);
-            // initBitmapInList(vh, params, view, bitmap);
-            // }
-            // });
+            kjb.setCallback(new BitmapCallBack() {
+                @Override
+                public void onSuccess(View view, Bitmap bitmap) {
+                    super.onSuccess(view, bitmap);
+                    initBitmapInList(vh, view, bitmap);
+                }
+            });
             kjb.display(vh.image, imgSmall, R.drawable.pic_bg, rectSize,
                     rectSize);
             vh.image.setOnClickListener(new View.OnClickListener() {
@@ -175,6 +174,11 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         }
     }
 
+    /**
+     * 初始化图片控件高度值
+     * 
+     * @param cxt
+     */
     private void initImageSize(Context cxt) {
         if (cxt != null && rectSize == 0) {
             rectSize = (int) cxt.getResources().getDimension(R.dimen.space_100);
@@ -183,26 +187,17 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         }
     }
 
-    // /**
-    // * 初始化在ListView中的ImageView
-    // *
-    // * @param vh
-    // * @param params
-    // * @param view
-    // * @param bitmap
-    // */
-    // private void initBitmapInList(final ViewHolder vh,
-    // final RelativeLayout.LayoutParams params, View view, Bitmap bitmap) {
-    // if (bitmap.getWidth() < bitmap.getHeight()) {
-    // params.width = rectSize;
-    // bitmap = BitmapHelper.scaleWithXY(bitmap,
-    // rectSize / bitmap.getHeight());
-    // ((ImageView) view).setImageBitmap(bitmap);
-    // ((ImageView) view).setScaleType(ScaleType.CENTER_CROP);
-    // } else {
-    // params.width = RelativeLayout.LayoutParams.MATCH_PARENT;
-    // ((ImageView) view).setScaleType(ScaleType.FIT_START);
-    // }
-    // vh.image.setLayoutParams(params);
-    // }
+    /**
+     * 初始化在ListView中的ImageView
+     * 
+     * @param vh
+     * @param params
+     * @param view
+     * @param bitmap
+     */
+    private void initBitmapInList(final ViewHolder vh, View view, Bitmap bitmap) {
+        bitmap = BitmapHelper
+                .scaleWithXY(bitmap, rectSize / bitmap.getHeight());
+        ((ImageView) view).setImageBitmap(bitmap);
+    }
 }
