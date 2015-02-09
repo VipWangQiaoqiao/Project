@@ -233,13 +233,13 @@ public class UIHelper {
         String url = news.getUrl();
         // 如果是活动则直接跳转活动详情页面
         String eventUrl = news.getNewType().getEventUrl();
-        if (!StringUtil.isEmpty(eventUrl)) {
+        if (!StringUtils.isEmpty(eventUrl)) {
             showEventDetail(context,
-                    StringUtil.toInt(news.getNewType().getAttachment()));
+                    StringUtils.toInt(news.getNewType().getAttachment()));
             return;
         }
         // url为空-旧方法
-        if (StringUtil.isEmpty(url)) {
+        if (StringUtils.isEmpty(url)) {
             int newsId = news.getId();
             int newsType = news.getNewType().getType();
             String objId = news.getNewType().getAttachment();
@@ -251,10 +251,10 @@ public class UIHelper {
                 showSoftwareDetail(context, objId);
                 break;
             case News.NEWSTYPE_POST:
-                showPostDetail(context, StringUtil.toInt(objId));
+                showPostDetail(context, StringUtils.toInt(objId));
                 break;
             case News.NEWSTYPE_BLOG:
-                showBlogDetail(context, StringUtil.toInt(objId));
+                showBlogDetail(context, StringUtils.toInt(objId));
                 break;
             default:
                 break;
@@ -275,7 +275,7 @@ public class UIHelper {
     public static void showActiveRedirect(Context context, Active active) {
         String url = active.getUrl();
         // url为空-旧方法
-        if (StringUtil.isEmpty(url)) {
+        if (StringUtils.isEmpty(url)) {
             int id = active.getObjectId();
             int catalog = active.getCatalog();
             switch (catalog) {
@@ -331,7 +331,7 @@ public class UIHelper {
             @Override
             @JavascriptInterface
             public void showImagePreview(String bigImageUrl) {
-                if (bigImageUrl != null && !StringUtil.isEmpty(bigImageUrl)) {
+                if (bigImageUrl != null && !StringUtils.isEmpty(bigImageUrl)) {
                     UIHelper.showImagePreview(cxt, new String[] { bigImageUrl });
                 }
             }
@@ -378,13 +378,13 @@ public class UIHelper {
      * @param obj
      */
     public static void showUrlShake(Context context, ShakeObject obj) {
-        if (StringUtil.isEmpty(obj.getUrl())) {
+        if (StringUtils.isEmpty(obj.getUrl())) {
             if (ShakeObject.RANDOMTYPE_NEWS.equals(obj.getRandomtype())) {
-                UIHelper.showNewsDetail(context, StringUtil.toInt(obj.getId()),
-                        StringUtil.toInt(obj.getCommentCount()));
+                UIHelper.showNewsDetail(context, StringUtils.toInt(obj.getId()),
+                        StringUtils.toInt(obj.getCommentCount()));
             }
         } else {
-            if (!StringUtil.isEmpty(obj.getUrl())) {
+            if (!StringUtils.isEmpty(obj.getUrl())) {
                 UIHelper.showUrlRedirect(context, obj.getUrl());
             }
         }
@@ -458,7 +458,7 @@ public class UIHelper {
      */
     public static void openBrowser(Context context, String url) {
 
-        if (StringUtil.isImgUrl(url)) {
+        if (StringUtils.isImgUrl(url)) {
             ImagePreviewActivity.showImagePrivew(context, 0,
                     new String[] { url });
             return;
@@ -615,7 +615,7 @@ public class UIHelper {
         }
         SpannableString sp = new SpannableString(title);
         // 设置标题字体大小、高亮
-        if (!StringUtil.isEmpty(objecttitle)) {
+        if (!StringUtils.isEmpty(objecttitle)) {
             start = title.indexOf(objecttitle);
             if (objecttitle.length() > 0 && start > 0) {
                 end = start + objecttitle.length();
@@ -771,7 +771,7 @@ public class UIHelper {
      * @param avatarUrl
      */
     public static void showUserAvatar(Context context, String avatarUrl) {
-        if (StringUtil.isEmpty(avatarUrl)) {
+        if (StringUtils.isEmpty(avatarUrl)) {
             return;
         }
         String url = AvatarView.getLargeAvatar(avatarUrl);

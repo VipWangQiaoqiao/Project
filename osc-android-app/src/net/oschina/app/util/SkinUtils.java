@@ -115,7 +115,7 @@ public class SkinUtils {
         Drawable drawable = null;
         Context cxt = view.getContext();
         String skinPath = PreferenceHelper.readString(cxt, SKIN_FILE, SKIN_KEY);
-        if (!StringUtil.isEmpty(skinPath)) {
+        if (!StringUtils.isEmpty(skinPath)) {
             view.measure(0, 0);
             int w = view.getMeasuredWidth();
             int h = view.getMeasuredHeight();

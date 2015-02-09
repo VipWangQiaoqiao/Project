@@ -27,7 +27,7 @@ import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.HTMLUtil;
-import net.oschina.app.util.StringUtil;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
@@ -164,7 +164,7 @@ public class TweetDetailFragment extends
 	mIvAvatar.setAvatarUrl(mTweet.getPortrait());
 	mIvAvatar.setUserInfo(mTweet.getAuthorid(), mTweet.getAuthor());
 	mTvName.setText(mTweet.getAuthor());
-	mTvTime.setText(StringUtil.friendly_time(mTweet.getPubDate()));
+	mTvTime.setText(StringUtils.friendly_time(mTweet.getPubDate()));
 	switch (mTweet.getAppclient()) {
 	default:
 	    mTvFrom.setVisibility(View.GONE);
@@ -187,7 +187,7 @@ public class TweetDetailFragment extends
 	}
 
 	mTvCommentCount.setText("评论(" + mTweet.getCommentCount() + ")");
-	if (StringUtil.isEmpty(mTweet.getAttach())) {
+	if (StringUtils.isEmpty(mTweet.getAttach())) {
 	    mRlRecordSound.setVisibility(View.GONE);
 	} else {
 	    mRlRecordSound.setVisibility(View.VISIBLE);
@@ -460,7 +460,7 @@ public class TweetDetailFragment extends
     @Override
     protected void executeOnLoadDataSuccess(List<Comment> data) {
 	super.executeOnLoadDataSuccess(data);
-	int commentCount = StringUtil.toInt(mTweet == null ? 0 : this.mTweet.getCommentCount());
+	int commentCount = StringUtils.toInt(mTweet == null ? 0 : this.mTweet.getCommentCount());
 	if (commentCount < (mAdapter.getCount() - 1)) {
 	    commentCount = mAdapter.getCount() - 1;
 	}

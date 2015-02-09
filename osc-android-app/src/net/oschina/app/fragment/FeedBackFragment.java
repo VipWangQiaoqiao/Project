@@ -4,7 +4,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseFragment;
-import net.oschina.app.util.StringUtil;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 
 import org.apache.http.Header;
@@ -54,7 +54,7 @@ public class FeedBackFragment extends BaseFragment {
         switch (item.getItemId()) {
         case R.id.public_menu_send:
             String data = mEtContent.getText().toString();
-            if (StringUtil.isEmpty(data)) {
+            if (StringUtils.isEmpty(data)) {
                 AppContext.showToast("你忘记写建议咯");
             } else {
                 data += "<br>";

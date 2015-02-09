@@ -19,7 +19,7 @@ import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.FileUtil;
 import net.oschina.app.util.ImageUtils;
-import net.oschina.app.util.StringUtil;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
@@ -228,7 +228,7 @@ public class MyInformationFragmentDetail extends BaseFragment {
         KJBitmap.create().display(mUserFace, mUser.getPortrait(),
                 R.drawable.widget_dface);
         mName.setText(mUser.getName());
-        mJoinTime.setText(StringUtil.friendly_time(mUser.getJointime()));
+        mJoinTime.setText(StringUtils.friendly_time(mUser.getJointime()));
         mFrom.setText(mUser.getFrom());
         mPlatFrom.setText(mUser.getDevplatform());
         mFocus.setText(mUser.getExpertise());
@@ -247,7 +247,7 @@ public class MyInformationFragmentDetail extends BaseFragment {
         showWaitDialog("正在上传头像...");
 
         // 获取头像缩略图
-        if (!StringUtil.isEmpty(protraitPath) && protraitFile.exists()) {
+        if (!StringUtils.isEmpty(protraitPath) && protraitFile.exists()) {
             protraitBitmap = ImageUtils
                     .loadImgThumbnail(protraitPath, 200, 200);
         } else {
@@ -330,7 +330,7 @@ public class MyInformationFragmentDetail extends BaseFragment {
         }
 
         // 没有挂载SD卡，无法保存文件
-        if (StringUtil.isEmpty(savePath)) {
+        if (StringUtils.isEmpty(savePath)) {
             AppContext.showToastShort("无法保存照片，请检查SD卡是否挂载");
             return;
         }
@@ -367,11 +367,11 @@ public class MyInformationFragmentDetail extends BaseFragment {
         String thePath = ImageUtils.getAbsolutePathFromNoStandardUri(uri);
 
         // 如果是标准Uri
-        if (StringUtil.isEmpty(thePath)) {
+        if (StringUtils.isEmpty(thePath)) {
             thePath = ImageUtils.getAbsoluteImagePath(getActivity(), uri);
         }
         String ext = FileUtil.getFileFormat(thePath);
-        ext = StringUtil.isEmpty(ext) ? "jpg" : ext;
+        ext = StringUtils.isEmpty(ext) ? "jpg" : ext;
         // 照片命名
         String cropFileName = "osc_crop_" + timeStamp + "." + ext;
         // 裁剪头像的绝对路径

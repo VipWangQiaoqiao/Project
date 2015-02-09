@@ -141,7 +141,7 @@ public class FileUtil {
 	 * @return
 	 */
 	public static String getFileName(String filePath) {
-		if (StringUtil.isEmpty(filePath))
+		if (StringUtils.isEmpty(filePath))
 			return "";
 		return filePath.substring(filePath.lastIndexOf(File.separator) + 1);
 	}
@@ -153,7 +153,7 @@ public class FileUtil {
 	 * @return
 	 */
 	public static String getFileNameNoFormat(String filePath) {
-		if (StringUtil.isEmpty(filePath)) {
+		if (StringUtils.isEmpty(filePath)) {
 			return "";
 		}
 		int point = filePath.lastIndexOf('.');
@@ -168,7 +168,7 @@ public class FileUtil {
 	 * @return
 	 */
 	public static String getFileFormat(String fileName) {
-		if (StringUtil.isEmpty(fileName))
+		if (StringUtils.isEmpty(fileName))
 			return "";
 
 		int point = fileName.lastIndexOf('.');

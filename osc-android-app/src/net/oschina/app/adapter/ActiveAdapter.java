@@ -7,7 +7,7 @@ import net.oschina.app.bean.Active.ObjectReply;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.util.ImageUtils;
-import net.oschina.app.util.StringUtil;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.MyLinkMovementMethod;
@@ -82,7 +82,7 @@ public class ActiveAdapter extends ListBaseAdapter {
             Spanned span = Html.fromHtml(modifyPath(item.getMessage()));
 
             // 判断是否有语音
-            if (!StringUtil.isEmpty(item.getTweetattach())) {
+            if (!StringUtils.isEmpty(item.getTweetattach())) {
                 if (recordBitmap == null) {
                     initRecordImg(parent.getContext());
                 }
@@ -114,7 +114,7 @@ public class ActiveAdapter extends ListBaseAdapter {
             vh.lyReply.setVisibility(TextView.GONE);
         }
 
-        vh.time.setText(StringUtil.friendly_time(item.getPubDate()));
+        vh.time.setText(StringUtils.friendly_time(item.getPubDate()));
 
         vh.from.setVisibility(View.VISIBLE);
         switch (item.getAppClient()) {
