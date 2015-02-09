@@ -32,7 +32,7 @@ import butterknife.InjectView;
 
 /**
  * @author HuangWenwei
- * 
+ * @author kymjs
  * @date 2014年10月10日
  */
 public class TweetAdapter extends ListBaseAdapter<Tweet> {
@@ -61,6 +61,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
     }
 
     private Bitmap recordBitmap;
+    private int rectSize;
     private final KJBitmap kjb = KJBitmap.create();
 
     private void initRecordImg(Context cxt) {
@@ -79,10 +80,11 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
                     R.layout.list_cell_tweets, null);
             vh = new ViewHolder(convertView);
             convertView.setTag(vh);
-        } else
+        } else {
             vh = (ViewHolder) convertView.getTag();
+        }
 
-        final Tweet tweet = (Tweet) mDatas.get(position);
+        final Tweet tweet = mDatas.get(position);
 
         vh.face.setUserInfo(tweet.getAuthorid(), tweet.getAuthor());
         vh.face.setAvatarUrl(tweet.getPortrait());
@@ -139,10 +141,27 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         return convertView;
     }
 
-    private void showTweetImage(ViewHolder vh, String imgSmall,
+    /**
+     * 动态设置动弹列表图片显示规则
+     * 
+     * @author kymjs
+     */
+    private void showTweetImage(final ViewHolder vh, String imgSmall,
             final String imgBig, final Context context) {
         if (imgSmall != null && !TextUtils.isEmpty(imgSmall)) {
-            kjb.display(vh.image, imgSmall, R.drawable.pic_bg);
+            initImageSize(context);
+            // final RelativeLayout.LayoutParams params = (LayoutParams)
+            // vh.image
+            // .getLayoutParams();
+            // kjb.setCallback(new BitmapCallBack() {
+            // @Override
+            // public void onSuccess(View view, Bitmap bitmap) {
+            // super.onSuccess(view, bitmap);
+            // initBitmapInList(vh, params, view, bitmap);
+            // }
+            // });
+            kjb.display(vh.image, imgSmall, R.drawable.pic_bg, rectSize,
+                    rectSize);
             vh.image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -155,4 +174,35 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             vh.image.setVisibility(AvatarView.GONE);
         }
     }
+
+    private void initImageSize(Context cxt) {
+        if (cxt != null && rectSize == 0) {
+            rectSize = (int) cxt.getResources().getDimension(R.dimen.space_100);
+        } else {
+            rectSize = 300;
+        }
+    }
+
+    // /**
+    // * 初始化在ListView中的ImageView
+    // *
+    // * @param vh
+    // * @param params
+    // * @param view
+    // * @param bitmap
+    // */
+    // private void initBitmapInList(final ViewHolder vh,
+    // final RelativeLayout.LayoutParams params, View view, Bitmap bitmap) {
+    // if (bitmap.getWidth() < bitmap.getHeight()) {
+    // params.width = rectSize;
+    // bitmap = BitmapHelper.scaleWithXY(bitmap,
+    // rectSize / bitmap.getHeight());
+    // ((ImageView) view).setImageBitmap(bitmap);
+    // ((ImageView) view).setScaleType(ScaleType.CENTER_CROP);
+    // } else {
+    // params.width = RelativeLayout.LayoutParams.MATCH_PARENT;
+    // ((ImageView) view).setScaleType(ScaleType.FIT_START);
+    // }
+    // vh.image.setLayoutParams(params);
+    // }
 }

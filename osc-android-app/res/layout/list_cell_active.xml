@@ -8,12 +8,14 @@
     <net.oschina.app.widget.AvatarView
         android:id="@+id/iv_avatar"
         style="@style/user_face_image"
-        android:layout_marginRight="@dimen/space_8" />
+        android:layout_marginRight="@dimen/space_8"
+        android:layout_marginTop="@dimen/space_3" />
 
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/space_2"
         android:layout_toRightOf="@id/iv_avatar"
         android:textColor="@color/lightblue"
         android:textSize="@dimen/text_size_14" />
@@ -40,7 +42,8 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/space_10"
             android:textColor="@color/main_gray"
-            android:textSize="@dimen/text_size_12" />
+            android:textSize="@dimen/text_size_12"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_action_name"
@@ -54,13 +57,14 @@
         android:id="@+id/tv_body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ly_action"
+        android:layout_below="@id/tv_name"
+        android:layout_marginBottom="@dimen/space_4"
         android:layout_marginTop="@dimen/space_4"
         android:layout_toRightOf="@id/iv_avatar"
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:textColor="@color/main_black"
-        android:textSize="@dimen/text_size_13" />
+        android:textSize="@dimen/text_size_15" />
 
     <LinearLayout
         android:id="@+id/ly_reply"
@@ -86,14 +90,15 @@
 
     <ImageView
         android:id="@+id/iv_pic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_100"
         android:layout_below="@id/ly_reply"
+        android:layout_marginRight="50dp"
         android:layout_marginTop="@dimen/space_4"
         android:layout_toRightOf="@id/iv_avatar"
         android:contentDescription="@null"
-        android:maxHeight="150dp"
-        android:maxWidth="150dp"
+        android:minWidth="@dimen/space_100"
+        android:scaleType="fitStart"
         android:src="@drawable/pic_bg"
         android:visibility="gone" />
 
@@ -101,6 +106,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/iv_pic"
+        android:layout_marginBottom="@dimen/space_4"
         android:layout_marginTop="@dimen/space_4"
         android:layout_toRightOf="@id/iv_avatar"
         android:gravity="center_vertical" >
@@ -109,10 +115,10 @@
             android:id="@+id/tv_from"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
             android:layout_marginRight="@dimen/space_10"
             android:drawableLeft="@drawable/platform"
             android:drawablePadding="@dimen/space_5"
-            android:layout_alignParentLeft="true"
             android:gravity="center_vertical"
             android:text="Android"
             android:textColor="@color/main_gray"
@@ -122,15 +128,14 @@
             android:id="@+id/tv_comment_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
             android:layout_alignParentRight="true"
+            android:layout_gravity="center_vertical"
             android:drawableLeft="@drawable/ic_comment_count"
             android:drawablePadding="@dimen/space_2"
             android:gravity="center_vertical"
             android:textColor="@color/main_gray"
             android:textSize="@dimen/text_size_12"
             android:visibility="gone" />
-
     </RelativeLayout>
 
 </RelativeLayout>

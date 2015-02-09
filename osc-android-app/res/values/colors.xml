@@ -29,9 +29,10 @@
     
     <color name="comment_yellow">#FFFFEE</color>
     
+    <color name="main_background">#ffebedf0</color>
     <color name="list_divider_color">#DADADA</color>
-    <color name="list_item_background_normal">#ffffff</color>
-    <color name="list_item_background_pressed">#F1F1F1</color>
+    <color name="list_item_background_normal">#f9f9f9</color>
+    <color name="list_item_background_pressed">#efefef</color>
     
  	<color name="drawer_menu_item_background_normal">#e2e2e2</color>
     <color name="drawer_menu_item_background_pressed">#ebeceb</color>

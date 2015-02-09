@@ -42,6 +42,7 @@ public class ActiveAdapter extends ListBaseAdapter {
 
     private Bitmap recordBitmap;
     private final KJBitmap kjb = KJBitmap.create();
+    private int rectSize;
 
     private void initRecordImg(Context cxt) {
         recordBitmap = BitmapFactory.decodeResource(cxt.getResources(),
@@ -50,11 +51,20 @@ public class ActiveAdapter extends ListBaseAdapter {
                 DensityUtils.dip2px(cxt, 20f), DensityUtils.dip2px(cxt, 20f));
     }
 
+    private void initImageSize(Context cxt) {
+        if (cxt != null && rectSize == 0) {
+            rectSize = (int) cxt.getResources().getDimension(R.dimen.space_100);
+        } else {
+            rectSize = 300;
+        }
+    }
+
     @SuppressLint("InflateParams")
     @Override
     protected View getRealView(int position, View convertView,
             final ViewGroup parent) {
         ViewHolder vh = null;
+        initImageSize(parent.getContext());
         if (convertView == null || convertView.getTag() == null) {
             convertView = getLayoutInflater(parent.getContext()).inflate(
                     R.layout.list_cell_active, null);
@@ -74,7 +84,6 @@ public class ActiveAdapter extends ListBaseAdapter {
         if (TextUtils.isEmpty(item.getMessage())) {
             vh.body.setVisibility(View.GONE);
         } else {
-
             vh.body.setMovementMethod(MyLinkMovementMethod.a());
             vh.body.setFocusable(false);
             vh.body.setDispatchToParent(true);
@@ -119,7 +128,7 @@ public class ActiveAdapter extends ListBaseAdapter {
         vh.from.setVisibility(View.VISIBLE);
         switch (item.getAppClient()) {
         default:
-            vh.from.setText("");
+            vh.from.setText(R.string.from_web); // 不显示
             vh.from.setVisibility(View.GONE);
             break;
         case Tweet.CLIENT_MOBILE:
@@ -145,34 +154,58 @@ public class ActiveAdapter extends ListBaseAdapter {
         } else {
             vh.commentCount.setVisibility(View.GONE);
         }
-        // if (item.getActiveType() == Active.CATALOG_OTHER) {
-        // vh.retweetCount.setVisibility(View.VISIBLE);
-        // } else {
-        // vh.retweetCount.setVisibility(View.GONE);
-        // }
 
         vh.avatar.setUserInfo(item.getAuthorId(), item.getAuthor());
         vh.avatar.setAvatarUrl(item.getPortrait());
 
         if (!TextUtils.isEmpty(item.getTweetimage())) {
-            vh.pic.setVisibility(View.VISIBLE);
-            kjb.display(vh.pic, item.getTweetimage(), R.drawable.widget_dface);
-            vh.pic.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    ImagePreviewActivity.showImagePrivew(
-                            parent.getContext(),
-                            0,
-                            new String[] { getOriginalUrl(item.getTweetimage()) });
-                }
-            });
+            setTweetImage(parent, vh, item);
         } else {
             vh.pic.setVisibility(View.GONE);
             vh.pic.setImageBitmap(null);
         }
 
         return convertView;
+    }
+
+    /**
+     * 动态设置图片显示样式
+     * 
+     * @author kymjs
+     */
+    private void setTweetImage(final ViewGroup parent, final ViewHolder vh,
+            final Active item) {
+        vh.pic.setVisibility(View.VISIBLE);
+        // final RelativeLayout.LayoutParams params = (LayoutParams) vh.pic
+        // .getLayoutParams();
+        // kjb.setCallback(new BitmapCallBack() {
+        // @Override
+        // public void onSuccess(View view, Bitmap bitmap) {
+        // super.onSuccess(view, bitmap);
+        // if (bitmap.getWidth() < bitmap.getHeight()) {
+        // params.width = rectSize;
+        // bitmap = BitmapHelper.scaleWithXY(bitmap,
+        // rectSize / bitmap.getHeight());
+        // ((ImageView) view).setScaleType(ScaleType.CENTER_CROP);
+        // ((ImageView) view).setImageBitmap(bitmap);
+        // } else {
+        // params.width = RelativeLayout.LayoutParams.MATCH_PARENT;
+        // ((ImageView) view).setScaleType(ScaleType.FIT_START);
+        // }
+        // vh.pic.setLayoutParams(params);
+        // }
+        // });
+
+        kjb.display(vh.pic, item.getTweetimage(), R.drawable.widget_dface,
+                rectSize, rectSize);
+
+        vh.pic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImagePreviewActivity.showImagePrivew(parent.getContext(), 0,
+                        new String[] { getOriginalUrl(item.getTweetimage()) });
+            }
+        });
     }
 
     private String modifyPath(String message) {

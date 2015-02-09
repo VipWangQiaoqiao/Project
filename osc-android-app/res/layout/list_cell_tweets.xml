@@ -8,12 +8,14 @@
     <net.oschina.app.widget.AvatarView
         android:id="@+id/iv_tweet_face"
         style="@style/user_face_image"
-        android:layout_marginRight="@dimen/space_8" />
+        android:layout_marginRight="@dimen/space_10"
+        android:layout_marginTop="@dimen/space_3" />
 
     <TextView
         android:id="@+id/tv_tweet_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/space_2"
         android:layout_toRightOf="@id/iv_tweet_face"
         android:textColor="@color/lightblue"
         android:textSize="@dimen/text_size_13" />
@@ -32,14 +34,15 @@
 
     <ImageView
         android:id="@+id/iv_tweet_image"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/space_100"
         android:layout_below="@id/tweet_item"
         android:layout_marginBottom="@dimen/space_5"
+        android:layout_marginRight="50dp"
         android:layout_marginTop="@dimen/space_4"
         android:layout_toRightOf="@id/iv_tweet_face"
         android:clickable="true"
-        android:scaleType="centerCrop"
+        android:scaleType="fitStart"
         android:src="@drawable/pic_bg"
         android:visibility="gone" />
 
@@ -47,7 +50,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/iv_tweet_image"
-        android:layout_marginTop="@dimen/space_4"
+        android:layout_marginBottom="@dimen/space_2"
+        android:layout_marginTop="@dimen/space_6"
         android:layout_toRightOf="@id/iv_tweet_face"
         android:gravity="center" >
 
@@ -55,10 +59,10 @@
             android:id="@+id/tv_tweet_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/tweet_time_platform"
+            android:layout_marginRight="@dimen/space_10"
             android:drawableLeft="@drawable/ic_time"
             android:drawablePadding="@dimen/space_5"
-            android:layout_marginRight="@dimen/space_10"
+            android:textColor="@color/tweet_time_platform"
             android:textSize="@dimen/text_size_11" />
 
         <TextView
@@ -66,9 +70,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/tv_tweet_time"
-            android:gravity="center"
             android:drawableLeft="@drawable/platform"
             android:drawablePadding="@dimen/space_5"
+            android:gravity="center"
             android:textColor="@color/main_gray"
             android:textSize="@dimen/text_size_11" />
 
