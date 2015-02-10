@@ -188,7 +188,7 @@ public class ActiveAdapter extends ListBaseAdapter {
             }
         });
 
-        kjb.display(vh.pic, item.getTweetimage(), R.drawable.widget_dface,
+        kjb.display(vh.pic, item.getTweetimage(), R.drawable.pic_bg,
                 rectSize, rectSize);
 
         vh.pic.setOnClickListener(new View.OnClickListener() {

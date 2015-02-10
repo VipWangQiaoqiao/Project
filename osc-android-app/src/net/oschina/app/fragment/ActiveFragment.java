@@ -207,4 +207,14 @@ public class ActiveFragment extends BaseListFragment<Active> implements
         dialog.show();
         return true;
     }
+    
+    @Override
+    protected long getAutoRefreshTime() {
+        // TODO Auto-generated method stub
+	// 最新动态，即是好友圈
+	if (mCatalog == ActiveList.CATALOG_LASTEST) {
+	    return 5 * 60;
+	}
+        return super.getAutoRefreshTime();
+    }
 }

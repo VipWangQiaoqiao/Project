@@ -261,6 +261,10 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
     
     @Override
     protected long getAutoRefreshTime() {
-        return 2 * 60;
+	// 最新动弹3分钟刷新一次
+	if (mCatalog == TweetsList.CATALOG_LATEST) {
+	    return 3 * 60;
+	}
+	return super.getAutoRefreshTime();
     }
 }

@@ -124,7 +124,6 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
 	    if (requestDataIfViewCreated()) {
 		mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-		mCurrentPage = 0;
 		mState = STATE_NONE;
 		requestData(false);
 	    } else {
@@ -208,52 +207,72 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
      */
     protected void requestData(boolean refresh) {
 	String key = getCacheKey();
-	if (TDevice.hasInternet() && refresh) {
-	    sendRequestData();
-	} else if (!TDevice.hasInternet()
-		|| (CacheManager.isExistDataCache(getActivity(), key) && !refresh)) {
-	    readCacheData(key);
-	} else if (CacheManager.isExistDataCache(getActivity(), key)
-		&& !CacheManager.isCacheDataFailure(getActivity(), key) && mCurrentPage != 0) {
+	if (isReadCacheData(refresh)) {
 	    readCacheData(key);
 	} else {
+	    // 取新的数据
 	    sendRequestData();
 	}
     }
-    
+
+    /***
+     * 判断是否需要读取缓存的数据
+     * 
+     * @author 火蚁 2015-2-10 下午2:41:02
+     * 
+     * @return boolean
+     * @param refresh
+     * @return
+     */
+    private boolean isReadCacheData(boolean refresh) {
+	String key = getCacheKey();
+	if (!TDevice.hasInternet()) {
+	    return true;
+	}
+	// 第一页若不是主动刷新，缓存存在，优先取缓存的
+	if (CacheManager.isExistDataCache(getActivity(), key) && !refresh
+		&& mCurrentPage == 0) {
+	    return true;
+	}
+	// 其他页数的，缓存存在以及还没有失效，优先取缓存的
+	if (CacheManager.isExistDataCache(getActivity(), key)
+		&& !CacheManager.isCacheDataFailure(getActivity(), key)
+		&& mCurrentPage != 0) {
+	    return true;
+	}
+
+	return false;
+    }
+
     // 是否到时间去刷新数据了
     private boolean onTimeRefresh() {
 	String lastRefreshTime = AppContext.getLastRefreshTime(getCacheKey());
 	String currTime = StringUtils.getCurTimeStr();
 	long diff = StringUtils.calDateDifferent(lastRefreshTime, currTime);
-	return needAutoRefresh() && mCurrentPage == 0 && diff > getAutoRefreshTime();
+	return needAutoRefresh() && diff > getAutoRefreshTime();
     }
 
     /***
      * 自动刷新的时间
-     * 	
+     * 
      * 默认：自动刷新的时间为半天时间
      * 
-     * @author 火蚁
-     * 2015-2-9 下午5:55:11
-     *
+     * @author 火蚁 2015-2-9 下午5:55:11
+     * 
      * @return long
      * @return
      */
     protected long getAutoRefreshTime() {
 	return 12 * 60 * 60;
     }
-    
+
     @Override
     public void onResume() {
-        // TODO Auto-generated method stub
-        super.onResume();
-        if (needAutoRefresh()) {
-            mCurrentPage = 0;
-        }
-        if (onTimeRefresh()) {
-            onRefresh();
-        }
+	// TODO Auto-generated method stub
+	super.onResume();
+	if (onTimeRefresh()) {
+	    onRefresh();
+	}
     }
 
     protected void sendRequestData() {
@@ -324,8 +343,9 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 	@Override
 	public void onSuccess(int statusCode, Header[] headers,
 		byte[] responseBytes) {
-	    if (mCurrentPage == 0) {
-		AppContext.putToLastRefreshTime(getCacheKey(), StringUtils.getCurTimeStr());
+	    if (mCurrentPage == 0 && needAutoRefresh()) {
+		AppContext.putToLastRefreshTime(getCacheKey(),
+			StringUtils.getCurTimeStr());
 	    }
 	    if (isAdded()) {
 		if (mState == STATE_REFRESH) {
@@ -498,26 +518,51 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
+	if (mAdapter == null || mAdapter.getCount() == 0) {
+
+	    return;
+	}
+	// 数据已经全部加载，或数据为空时，或正在加载，不处理滚动事件
+	if (mState == STATE_LOADMORE || mState == STATE_REFRESH) {
+	    return;
+	}
+	// 判断是否滚动到底部
+	boolean scrollEnd = false;
+	try {
+	    if (view.getPositionForView(mAdapter.getFooterView()) == view
+		    .getLastVisiblePosition())
+		scrollEnd = true;
+	} catch (Exception e) {
+	    scrollEnd = false;
+	}
+
+	if (mState == STATE_NONE && scrollEnd) {
+	    if (mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
+		mCurrentPage++;
+		mState = STATE_LOADMORE;
+		requestData(false);
+	    }
+	}
     }
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem,
 	    int visibleItemCount, int totalItemCount) {
 	// 数据已经全部加载，或数据为空时，或正在加载，不处理滚动事件
-	if (mState == STATE_NOMORE || mState == STATE_LOADMORE
-		|| mState == STATE_REFRESH) {
-	    return;
-	}
-	if (mAdapter != null
-		&& mAdapter.getDataSize() > 0
-		&& mListView.getLastVisiblePosition() == (mListView.getCount() - 1)) {
-	    if (mState == STATE_NONE
-		    && mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
-		mState = STATE_LOADMORE;
-		mCurrentPage++;
-		requestData(true);
-	    }
-	}
+//	if (mState == STATE_NOMORE || mState == STATE_LOADMORE
+//		|| mState == STATE_REFRESH) {
+//	    return;
+//	}
+//	if (mAdapter != null
+//		&& mAdapter.getDataSize() > 0
+//		&& mListView.getLastVisiblePosition() == (mListView.getCount() - 1)) {
+//	    if (mState == STATE_NONE
+//		    && mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
+//		mState = STATE_LOADMORE;
+//		mCurrentPage++;
+//		requestData(true);
+//	    }
+//	}
     }
 
     /**

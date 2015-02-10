@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.List;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.adapter.NewsAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
@@ -15,6 +16,7 @@ import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 
 /**
@@ -37,7 +39,7 @@ public class NewsFragment extends BaseListFragment<News> implements
 
     @Override
     protected String getCacheKeyPrefix() {
-	return CACHE_KEY_PREFIX + "_" + mCatalog;
+	return CACHE_KEY_PREFIX + mCatalog;
     }
 
     @Override
@@ -93,11 +95,15 @@ public class NewsFragment extends BaseListFragment<News> implements
     public void onTabReselect() {
 	onRefresh();
     }
-    
-    // 两小时刷新一次
+
     @Override
     protected long getAutoRefreshTime() {
 	// TODO Auto-generated method stub
-	return 2 * 60 * 60;
+	// 最新资讯两小时刷新一次
+	if (mCatalog == NewsList.CATALOG_ALL) {
+
+	    return 2 * 60 * 60;
+	}
+	return super.getAutoRefreshTime();
     }
 }
