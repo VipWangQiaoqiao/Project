@@ -98,7 +98,7 @@
         android:layout_toRightOf="@id/iv_avatar"
         android:contentDescription="@null"
         android:minWidth="@dimen/space_100"
-        android:scaleType="fitStart"
+        android:scaleType="centerCrop"
         android:src="#cfcfcf"
         android:visibility="gone" />
 
