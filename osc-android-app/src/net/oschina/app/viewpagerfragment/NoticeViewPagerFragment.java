@@ -41,6 +41,7 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             setNoticeTip();
+            changePagers();
         }
     };
 
