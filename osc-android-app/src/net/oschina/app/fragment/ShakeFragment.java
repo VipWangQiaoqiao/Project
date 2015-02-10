@@ -8,7 +8,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.ShakeObject;
 import net.oschina.app.util.KJAnimations;
-import net.oschina.app.util.StringUtil;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
@@ -111,9 +111,9 @@ public class ShakeFragment extends BaseFragment implements SensorEventListener {
                                 ShakeObject.class, new ByteArrayInputStream(
                                         arg2));
                         if (obj != null) {
-                            if (StringUtil.isEmpty(obj.getAuthor())
-                                    && StringUtil.isEmpty(obj.getCommentCount())
-                                    && StringUtil.isEmpty(obj.getPubDate())) {
+                            if (StringUtils.isEmpty(obj.getAuthor())
+                                    && StringUtils.isEmpty(obj.getCommentCount())
+                                    && StringUtils.isEmpty(obj.getPubDate())) {
                                 jokeToast();
                             } else {
                                 mLayoutBottom.setVisibility(View.VISIBLE);

@@ -22,7 +22,7 @@ import net.oschina.app.interf.EmojiFragmentControl;
 import net.oschina.app.interf.ToolbarEmojiVisiableControl;
 import net.oschina.app.interf.ToolbarFragmentControl;
 import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.StringUtil;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.URLsUtils;
@@ -162,7 +162,7 @@ public class PostDetailFragment extends BaseDetailFragment implements
     private void fillUI() {
         mTvTitle.setText(mPost.getTitle());
         mTvSource.setText(mPost.getAuthor());
-        mTvTime.setText(StringUtil.friendly_time(mPost.getPubDate()));
+        mTvTime.setText(StringUtils.friendly_time(mPost.getPubDate()));
         if (mToolBarFragment != null) {
             mToolBarFragment.setCommentCount(mPost.getAnswerCount());
         }
@@ -276,7 +276,7 @@ public class PostDetailFragment extends BaseDetailFragment implements
 
     @Override
     protected String getShareContent() {
-        return mPost != null ? StringUtil.getSubString(0, 55,
+        return mPost != null ? StringUtils.getSubString(0, 55,
                 getFilterHtmlBody(mPost.getBody())) : "";
     }
 

@@ -64,6 +64,7 @@ public class MessageDetailFragment extends BaseListFragment<Comment> implements
 
         @Override
         public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+            hideWaitDialog();
             try {
                 ResultBean resb = XmlUtils.toBean(ResultBean.class,
                         new ByteArrayInputStream(arg2));
@@ -85,6 +86,7 @@ public class MessageDetailFragment extends BaseListFragment<Comment> implements
         @Override
         public void onFailure(int arg0, Header[] arg1, byte[] arg2,
                 Throwable arg3) {
+            hideWaitDialog();
             AppContext.showToastShort(R.string.tip_message_public_faile);
         }
     };
@@ -236,6 +238,7 @@ public class MessageDetailFragment extends BaseListFragment<Comment> implements
             AppContext.showToastShort(R.string.tip_content_empty);
             return;
         }
+        showWaitDialog("提交中...");
         OSChinaApi.publicMessage(AppContext.getInstance().getLoginUid(), mFid,
                 text, mPublicHandler);
     }

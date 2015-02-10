@@ -29,7 +29,7 @@ import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.util.FileUtil;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.SimpleTextWatcher;
-import net.oschina.app.util.StringUtil;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
@@ -247,7 +247,7 @@ public class TweetPubFragment extends BaseFragment implements
      * @param filePath
      */
     private void handleImageFile(final String filePath) {
-        if (!StringUtil.isEmpty(filePath)) {
+        if (!StringUtils.isEmpty(filePath)) {
             KJAsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -275,7 +275,7 @@ public class TweetPubFragment extends BaseFragment implements
      * @param url
      */
     private void handleImageUrl(final String url) {
-        if (!StringUtil.isEmpty(url)) {
+        if (!StringUtils.isEmpty(url)) {
             KJAsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -455,12 +455,12 @@ public class TweetPubFragment extends BaseFragment implements
                                     imaName,
                                     MediaStore.Images.Thumbnails.MICRO_KIND);
                     }
-                    if (bitmap == null && !StringUtil.isEmpty(theLarge))
+                    if (bitmap == null && !StringUtils.isEmpty(theLarge))
                         bitmap = ImageUtils
                                 .loadImgThumbnail(theLarge, 100, 100);
                 } else if (requestCode == ImageUtils.REQUEST_CODE_GETIMAGE_BYCAMERA) {
                     // 拍摄图片
-                    if (bitmap == null && !StringUtil.isEmpty(theLarge)) {
+                    if (bitmap == null && !StringUtils.isEmpty(theLarge)) {
                         bitmap = ImageUtils
                                 .loadImgThumbnail(theLarge, 100, 100);
                     }
@@ -584,7 +584,7 @@ public class TweetPubFragment extends BaseFragment implements
             }
 
             // 没有挂载SD卡，无法保存文件
-            if (StringUtil.isEmpty(savePath)) {
+            if (StringUtils.isEmpty(savePath)) {
                 AppContext.showToastShort("无法保存照片，请检查SD卡是否挂载");
                 return;
             }

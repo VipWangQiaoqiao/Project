@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
-import net.oschina.app.util.StringUtil;
+import net.oschina.app.util.StringUtils;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Environment;
@@ -117,7 +117,7 @@ public class RecordButtonUtil {
 
     public void startPlay(String audioPath, TextView timeView) {
         if (!mIsPlaying) {
-            if (!StringUtil.isEmpty(audioPath)) {
+            if (!StringUtils.isEmpty(audioPath)) {
                 mPlayer = new MediaPlayer();
                 try {
                     mPlayer.setDataSource(audioPath);

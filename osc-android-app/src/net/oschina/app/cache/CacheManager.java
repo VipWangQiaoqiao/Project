@@ -28,28 +28,28 @@ public class CacheManager {
      * @throws IOException
      */
     public static boolean saveObject(Context context, Serializable ser,
-            String file) {
-        FileOutputStream fos = null;
-        ObjectOutputStream oos = null;
-        try {
-            fos = context.openFileOutput(file, Context.MODE_PRIVATE);
-            oos = new ObjectOutputStream(fos);
-            oos.writeObject(ser);
-            oos.flush();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            try {
-                oos.close();
-            } catch (Exception e) {
-            }
-            try {
-                fos.close();
-            } catch (Exception e) {
-            }
-        }
+	    String file) {
+	FileOutputStream fos = null;
+	ObjectOutputStream oos = null;
+	try {
+	    fos = context.openFileOutput(file, Context.MODE_PRIVATE);
+	    oos = new ObjectOutputStream(fos);
+	    oos.writeObject(ser);
+	    oos.flush();
+	    return true;
+	} catch (Exception e) {
+	    e.printStackTrace();
+	    return false;
+	} finally {
+	    try {
+		oos.close();
+	    } catch (Exception e) {
+	    }
+	    try {
+		fos.close();
+	    } catch (Exception e) {
+	    }
+	}
     }
 
     /**
@@ -60,33 +60,33 @@ public class CacheManager {
      * @throws IOException
      */
     public static Serializable readObject(Context context, String file) {
-        if (!isExistDataCache(context, file))
-            return null;
-        FileInputStream fis = null;
-        ObjectInputStream ois = null;
-        try {
-            fis = context.openFileInput(file);
-            ois = new ObjectInputStream(fis);
-            return (Serializable) ois.readObject();
-        } catch (FileNotFoundException e) {
-        } catch (Exception e) {
-            e.printStackTrace();
-            // 反序列化失败 - 删除缓存文件
-            if (e instanceof InvalidClassException) {
-                File data = context.getFileStreamPath(file);
-                data.delete();
-            }
-        } finally {
-            try {
-                ois.close();
-            } catch (Exception e) {
-            }
-            try {
-                fis.close();
-            } catch (Exception e) {
-            }
-        }
-        return null;
+	if (!isExistDataCache(context, file))
+	    return null;
+	FileInputStream fis = null;
+	ObjectInputStream ois = null;
+	try {
+	    fis = context.openFileInput(file);
+	    ois = new ObjectInputStream(fis);
+	    return (Serializable) ois.readObject();
+	} catch (FileNotFoundException e) {
+	} catch (Exception e) {
+	    e.printStackTrace();
+	    // 反序列化失败 - 删除缓存文件
+	    if (e instanceof InvalidClassException) {
+		File data = context.getFileStreamPath(file);
+		data.delete();
+	    }
+	} finally {
+	    try {
+		ois.close();
+	    } catch (Exception e) {
+	    }
+	    try {
+		fis.close();
+	    } catch (Exception e) {
+	    }
+	}
+	return null;
     }
 
     /**
@@ -96,30 +96,31 @@ public class CacheManager {
      * @return
      */
     public static boolean isExistDataCache(Context context, String cachefile) {
-        if (context == null)
-            return false;
-        boolean exist = false;
-        File data = context.getFileStreamPath(cachefile);
-        if (data.exists() && !isCacheDataFailure(data))
-            exist = true;
-        return exist;
+	if (context == null)
+	    return false;
+	boolean exist = false;
+	File data = context.getFileStreamPath(cachefile);
+	if (data.exists())
+	    exist = true;
+	return exist;
     }
 
     /**
      * 判断缓存是否已经失效
      */
-    private static boolean isCacheDataFailure(File date) {
-        long existTime = System.currentTimeMillis() - date.lastModified();
-        boolean failure = false;
-        // 没有网络则直接返回否
-        if (!TDevice.hasInternet()) {
-            return false;
-        }
-        if (TDevice.getNetworkType() == TDevice.NETTYPE_WIFI) {
-            failure = existTime > wifi_cache_time ? true : false;
-        } else {
-            failure = existTime > other_cache_time ? true : false;
-        }
-        return failure;
+    public static boolean isCacheDataFailure(Context context, String cachefile) {
+	File data = context.getFileStreamPath(cachefile);
+	if (!data.exists()) {
+
+	    return false;
+	}
+	long existTime = System.currentTimeMillis() - data.lastModified();
+	boolean failure = false;
+	if (TDevice.getNetworkType() == TDevice.NETTYPE_WIFI) {
+	    failure = existTime > wifi_cache_time ? true : false;
+	} else {
+	    failure = existTime > other_cache_time ? true : false;
+	}
+	return failure;
     }
 }

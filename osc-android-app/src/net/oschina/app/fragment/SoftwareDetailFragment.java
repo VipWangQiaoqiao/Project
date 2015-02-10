@@ -21,7 +21,7 @@ import net.oschina.app.interf.EmojiFragmentControl;
 import net.oschina.app.interf.ToolbarEmojiVisiableControl;
 import net.oschina.app.interf.ToolbarFragmentControl;
 import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.StringUtil;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
@@ -200,7 +200,7 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
     private void fillUI() {
 
         if (mSoftware.getAuthor() != null
-                && !StringUtil.isEmpty(mSoftware.getAuthor())) {
+                && !StringUtils.isEmpty(mSoftware.getAuthor())) {
             mTvAuthor.setText(mSoftware.getAuthor());
         } else {
             llAuthor.setVisibility(View.GONE);

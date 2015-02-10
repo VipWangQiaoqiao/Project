@@ -6,7 +6,7 @@ import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Post;
 import net.oschina.app.bean.PostList;
 import net.oschina.app.util.HTMLUtil;
-import net.oschina.app.util.StringUtil;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.AvatarView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +63,7 @@ public class PostAdapter extends ListBaseAdapter<Post> {
 	vh.title.setText(post.getTitle());
 	String body = post.getBody();
 	vh.description.setVisibility(View.GONE);
-	if (null != body || !StringUtil.isEmpty(body)) {
+	if (null != body || !StringUtils.isEmpty(body)) {
 	    vh.description.setVisibility(View.VISIBLE);
 	    vh.description.setText(HTMLUtil.replaceTag(post.getBody()).trim());
 	}
@@ -78,7 +78,7 @@ public class PostAdapter extends ListBaseAdapter<Post> {
 	}
 
 	vh.author.setText(post.getAuthor());
-	vh.time.setText(StringUtil.friendly_time(post.getPubDate()));
+	vh.time.setText(StringUtils.friendly_time(post.getPubDate()));
 	vh.comment_count.setText(post.getAnswerCount() + "回/"
 		+ post.getViewCount() + "阅");
 	return convertView;

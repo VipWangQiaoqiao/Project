@@ -4,7 +4,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Comment;
-import net.oschina.app.util.StringUtil;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
@@ -70,7 +70,7 @@ public class MessageDetailAdapter extends ListBaseAdapter<Comment> {
 		vh.avatar.setAvatarUrl(item.getPortrait());
 		vh.avatar.setUserInfo(item.getAuthorId(), item.getAuthor());
 		
-		vh.time.setText(StringUtil.friendly_time(item.getPubDate()));
+		vh.time.setText(StringUtils.friendly_time(item.getPubDate()));
 
 		return convertView;
 	}

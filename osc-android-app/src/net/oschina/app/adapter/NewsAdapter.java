@@ -5,10 +5,8 @@ import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.News;
 import net.oschina.app.bean.NewsList;
-import net.oschina.app.util.StringUtil;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.URLsUtils;
-
-import org.kymjs.kjframe.utils.StringUtils;
 
 import android.annotation.SuppressLint;
 import android.view.View;
@@ -47,14 +45,14 @@ public class NewsAdapter extends ListBaseAdapter<News> {
 
         String description = news.getBody();
         vh.description.setVisibility(View.GONE);
-        if (description != null && !StringUtil.isEmpty(description)) {
+        if (description != null && !StringUtils.isEmpty(description)) {
             vh.description.setVisibility(View.VISIBLE);
             vh.description.setText(description.trim());
         }
 
         vh.source.setText(news.getAuthor());
-        vh.time.setText(StringUtil.friendly_time(news.getPubDate()));
-        if (StringUtil.isToday(news.getPubDate())) {
+        vh.time.setText(StringUtils.friendly_time(news.getPubDate()));
+        if (StringUtils.isToday(news.getPubDate())) {
             vh.tip.setVisibility(View.VISIBLE);
         } else {
             vh.tip.setVisibility(View.GONE);

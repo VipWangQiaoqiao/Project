@@ -5,7 +5,7 @@ import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.util.ImageUtils;
-import net.oschina.app.util.StringUtil;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
@@ -91,7 +91,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         vh.face.setUserInfo(tweet.getAuthorid(), tweet.getAuthor());
         vh.face.setAvatarUrl(tweet.getPortrait());
         vh.author.setText(tweet.getAuthor());
-        vh.time.setText(StringUtil.friendly_time(tweet.getPubDate()));
+        vh.time.setText(StringUtils.friendly_time(tweet.getPubDate()));
 
         vh.content.setMovementMethod(MyLinkMovementMethod.a());
         vh.content.setFocusable(false);
@@ -99,7 +99,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         vh.content.setLongClickable(false);
 
         Spanned span = Html.fromHtml(TweetTextView.modifyPath(tweet.getBody()));
-        if (!StringUtil.isEmpty(tweet.getAttach())) {
+        if (!StringUtils.isEmpty(tweet.getAttach())) {
             if (recordBitmap == null) {
                 initRecordImg(parent.getContext());
             }

@@ -10,7 +10,7 @@ import net.oschina.app.base.BaseActivity;
 import net.oschina.app.bean.BarCode;
 import net.oschina.app.bean.SingInResult;
 import net.oschina.app.ui.dialog.CommonDialog;
-import net.oschina.app.util.StringUtil;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 
 import org.apache.http.Header;
@@ -248,7 +248,7 @@ public class CaptureActivity extends BaseActivity implements Callback {
     }
 
     private void handleText(String text) {
-        if (StringUtil.isUrl(text)) {
+        if (StringUtils.isUrl(text)) {
             showUrlOption(text);
         } else {
             handleOtherText(text);
