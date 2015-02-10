@@ -15,6 +15,8 @@ import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
 
 import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.bitmap.BitmapCallBack;
+import org.kymjs.kjframe.bitmap.helper.BitmapHelper;
 import org.kymjs.kjframe.utils.DensityUtils;
 
 import android.annotation.SuppressLint;
@@ -84,7 +86,6 @@ public class ActiveAdapter extends ListBaseAdapter {
         if (TextUtils.isEmpty(item.getMessage())) {
             vh.body.setVisibility(View.GONE);
         } else {
-
             vh.body.setMovementMethod(MyLinkMovementMethod.a());
             vh.body.setFocusable(false);
             vh.body.setDispatchToParent(true);
@@ -155,34 +156,48 @@ public class ActiveAdapter extends ListBaseAdapter {
         } else {
             vh.commentCount.setVisibility(View.GONE);
         }
-        // if (item.getActiveType() == Active.CATALOG_OTHER) {
-        // vh.retweetCount.setVisibility(View.VISIBLE);
-        // } else {
-        // vh.retweetCount.setVisibility(View.GONE);
-        // }
 
         vh.avatar.setUserInfo(item.getAuthorId(), item.getAuthor());
         vh.avatar.setAvatarUrl(item.getPortrait());
 
         if (!TextUtils.isEmpty(item.getTweetimage())) {
-            vh.pic.setVisibility(View.VISIBLE);
-            kjb.display(vh.pic, item.getTweetimage(), R.drawable.widget_dface,
-                    rectSize, rectSize);
-            vh.pic.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ImagePreviewActivity.showImagePrivew(
-                            parent.getContext(),
-                            0,
-                            new String[] { getOriginalUrl(item.getTweetimage()) });
-                }
-            });
+            setTweetImage(parent, vh, item);
         } else {
             vh.pic.setVisibility(View.GONE);
             vh.pic.setImageBitmap(null);
         }
 
         return convertView;
+    }
+
+    /**
+     * 动态设置图片显示样式
+     * 
+     * @author kymjs
+     */
+    private void setTweetImage(final ViewGroup parent, final ViewHolder vh,
+            final Active item) {
+        vh.pic.setVisibility(View.VISIBLE);
+        kjb.setCallback(new BitmapCallBack() {
+            @Override
+            public void onSuccess(View view, Bitmap bitmap) {
+                super.onSuccess(view, bitmap);
+                bitmap = BitmapHelper.scaleWithXY(bitmap,
+                        rectSize / bitmap.getHeight());
+                ((ImageView) view).setImageBitmap(bitmap);
+            }
+        });
+
+        kjb.display(vh.pic, item.getTweetimage(), R.drawable.pic_bg,
+                rectSize, rectSize);
+
+        vh.pic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImagePreviewActivity.showImagePrivew(parent.getContext(), 0,
+                        new String[] { getOriginalUrl(item.getTweetimage()) });
+            }
+        });
     }
 
     private String modifyPath(String message) {

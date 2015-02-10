@@ -7,9 +7,6 @@ import java.util.List;
 
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.bean.Entity;
-import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.team.adapter.DynamicAdapter;
@@ -39,7 +36,7 @@ import android.widget.AdapterView.OnItemClickListener;
  * @author kymjs (kymjs123@gmail.com)
  * 
  */
-public class DynamicFragment extends BaseListFragment {
+public class DynamicFragment extends BaseListFragment<TeamActive> {
 
     public final static String BUNDLE_KEY_UID = "UID";
 
@@ -67,21 +64,6 @@ public class DynamicFragment extends BaseListFragment {
             team = new Team();
             TLog.log(getClass().getSimpleName(), "team对象初始化异常");
         }
-
-        mListView.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                    int position, long id) {
-                Adapter adapter = parent.getAdapter();
-                if (adapter != null && adapter instanceof DynamicAdapter) {
-                    TeamActive data = ((DynamicAdapter) parent.getAdapter())
-                            .getItem(position);
-                    Bundle bundle = new Bundle();
-                    UIHelper.showSimpleBack(aty, SimpleBackPage.ABOUT_OSC,
-                            bundle);
-                }
-            }
-        });
     }
 
     @Override
@@ -93,7 +75,7 @@ public class DynamicFragment extends BaseListFragment {
     }
 
     @Override
-    protected ListBaseAdapter getListAdapter() {
+    protected DynamicAdapter getListAdapter() {
         return new DynamicAdapter(aty);
     }
 
@@ -104,7 +86,7 @@ public class DynamicFragment extends BaseListFragment {
     }
 
     @Override
-    protected ListEntity parseList(InputStream is) throws Exception {
+    protected TeamActives parseList(InputStream is) throws Exception {
         TeamActives list = XmlUtils.toBean(TeamActives.class, is);
         if (list.getList() == null) {
             list.setActives(new ArrayList<TeamActive>());
@@ -113,12 +95,27 @@ public class DynamicFragment extends BaseListFragment {
     }
 
     @Override
-    protected ListEntity<? extends Entity> readList(Serializable seri) {
+    protected TeamActives readList(Serializable seri) {
         return (TeamActives) seri;
     }
 
     @Override
     protected void sendRequestData() {
         OSChinaApi.teamDynamic(team, mCurrentPage, mHandler);
+    }
+    
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position,
+            long id) {
+        // TODO Auto-generated method stub
+	Adapter adapter = parent.getAdapter();
+        if (adapter != null && adapter instanceof DynamicAdapter) {
+            TeamActive data = ((DynamicAdapter) parent.getAdapter())
+                    .getItem(position);
+            Bundle bundle = new Bundle();
+            UIHelper.showSimpleBack(aty, SimpleBackPage.ABOUT_OSC,
+                    bundle);
+        }
+
     }
 }

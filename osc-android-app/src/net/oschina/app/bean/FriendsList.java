@@ -22,18 +22,16 @@ public class FriendsList extends Entity implements ListEntity<Friend> {
     @XStreamAlias("friends")
     private List<Friend> friendlist = new ArrayList<Friend>();
 
-
-
     public List<Friend> getFriendlist() {
-        return friendlist;
+	return friendlist;
     }
 
     public void setFriendlist(List<Friend> resultlist) {
-        this.friendlist = resultlist;
+	this.friendlist = resultlist;
     }
 
     @Override
     public List<Friend> getList() {
-        return friendlist;
+	return friendlist;
     }
 }

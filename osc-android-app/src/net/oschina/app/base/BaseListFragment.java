@@ -1,5 +1,4 @@
 package net.oschina.app.base;
-
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -13,6 +12,7 @@ import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 
 import org.apache.http.Header;
@@ -38,8 +38,8 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 
 @SuppressLint("NewApi")
 public abstract class BaseListFragment<T extends Entity> extends BaseFragment
-        implements SwipeRefreshLayout.OnRefreshListener, OnItemClickListener,
-        OnScrollListener {
+	implements SwipeRefreshLayout.OnRefreshListener, OnItemClickListener,
+	OnScrollListener {
 
     public static final String BUNDLE_KEY_CATALOG = "BUNDLE_KEY_CATALOG";
 
@@ -123,8 +123,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
 	    if (requestDataIfViewCreated()) {
 		mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-		mCurrentPage = 0;
-		mState = STATE_REFRESH;
+		mState = STATE_NONE;
 		requestData(false);
 	    } else {
 		mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
@@ -150,13 +149,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
     }
 
     protected abstract ListBaseAdapter<T> getListAdapter();
-    
-    protected abstract ListEntity<T> parseList(InputStream is) throws Exception;
 
-    protected abstract ListEntity<T> readList(Serializable seri);
-    
-    protected abstract String getCacheKeyPrefix();
-    
     // 下拉刷新数据
     @Override
     public void onRefresh() {
@@ -175,6 +168,18 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 	return true;
     }
 
+    protected String getCacheKeyPrefix() {
+	return null;
+    }
+
+    protected ListEntity<T> parseList(InputStream is) throws Exception {
+	return null;
+    }
+
+    protected ListEntity<T> readList(Serializable seri) {
+	return null;
+    }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
 	    long id) {
@@ -185,13 +190,87 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 		.append(mCurrentPage).toString();
     }
 
+    // 是否需要自动刷新
+    protected boolean needAutoRefresh() {
+	return true;
+    }
+
+    /***
+     * 获取列表数据
+     * 
+     * 
+     * @author 火蚁 2015-2-9 下午3:16:12
+     * 
+     * @return void
+     * @param refresh
+     */
     protected void requestData(boolean refresh) {
 	String key = getCacheKey();
-	if (TDevice.hasInternet()
-		&& (!CacheManager.isExistDataCache(getActivity(), key) || refresh)) {
-	    sendRequestData();
-	} else {
+	if (isReadCacheData(refresh)) {
 	    readCacheData(key);
+	} else {
+	    // 取新的数据
+	    sendRequestData();
+	}
+    }
+
+    /***
+     * 判断是否需要读取缓存的数据
+     * 
+     * @author 火蚁 2015-2-10 下午2:41:02
+     * 
+     * @return boolean
+     * @param refresh
+     * @return
+     */
+    private boolean isReadCacheData(boolean refresh) {
+	String key = getCacheKey();
+	if (!TDevice.hasInternet()) {
+	    return true;
+	}
+	// 第一页若不是主动刷新，缓存存在，优先取缓存的
+	if (CacheManager.isExistDataCache(getActivity(), key) && !refresh
+		&& mCurrentPage == 0) {
+	    return true;
+	}
+	// 其他页数的，缓存存在以及还没有失效，优先取缓存的
+	if (CacheManager.isExistDataCache(getActivity(), key)
+		&& !CacheManager.isCacheDataFailure(getActivity(), key)
+		&& mCurrentPage != 0) {
+	    return true;
+	}
+
+	return false;
+    }
+
+    // 是否到时间去刷新数据了
+    private boolean onTimeRefresh() {
+	String lastRefreshTime = AppContext.getLastRefreshTime(getCacheKey());
+	String currTime = StringUtils.getCurTimeStr();
+	long diff = StringUtils.calDateDifferent(lastRefreshTime, currTime);
+	return needAutoRefresh() && diff > getAutoRefreshTime();
+    }
+
+    /***
+     * 自动刷新的时间
+     * 
+     * 默认：自动刷新的时间为半天时间
+     * 
+     * @author 火蚁 2015-2-9 下午5:55:11
+     * 
+     * @return long
+     * @return
+     */
+    protected long getAutoRefreshTime() {
+	return 12 * 60 * 60;
+    }
+
+    @Override
+    public void onResume() {
+	// TODO Auto-generated method stub
+	super.onResume();
+	if (onTimeRefresh()) {
+	    onRefresh();
 	}
     }
 
@@ -211,33 +290,33 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
     }
 
     private class CacheTask extends AsyncTask<String, Void, ListEntity<T>> {
-        private final WeakReference<Context> mContext;
+	private final WeakReference<Context> mContext;
 
 	private CacheTask(Context context) {
 	    mContext = new WeakReference<Context>(context);
 	}
 
-        @Override
-        protected ListEntity<T> doInBackground(String... params) {
-            Serializable seri = CacheManager.readObject(mContext.get(),
-                    params[0]);
-            if (seri == null) {
-                return null;
-            } else {
-                return readList(seri);
-            }
-        }
+	@Override
+	protected ListEntity<T> doInBackground(String... params) {
+	    Serializable seri = CacheManager.readObject(mContext.get(),
+		    params[0]);
+	    if (seri == null) {
+		return null;
+	    } else {
+		return readList(seri);
+	    }
+	}
 
-        @Override
-        protected void onPostExecute(ListEntity<T> list) {
-            super.onPostExecute(list);
-            if (list != null) {
-                executeOnLoadDataSuccess(list.getList());
-            } else {
-                executeOnLoadDataError(null);
-            }
-            executeOnLoadFinish();
-        }
+	@Override
+	protected void onPostExecute(ListEntity<T> list) {
+	    super.onPostExecute(list);
+	    if (list != null) {
+		executeOnLoadDataSuccess(list.getList());
+	    } else {
+		executeOnLoadDataError(null);
+	    }
+	    executeOnLoadFinish();
+	}
     }
 
     private class SaveCacheTask extends AsyncTask<Void, Void, Void> {
@@ -263,6 +342,10 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 	@Override
 	public void onSuccess(int statusCode, Header[] headers,
 		byte[] responseBytes) {
+	    if (mCurrentPage == 0 && needAutoRefresh()) {
+		AppContext.putToLastRefreshTime(getCacheKey(),
+			StringUtils.getCurTimeStr());
+	    }
 	    if (isAdded()) {
 		if (mState == STATE_REFRESH) {
 		    onRefreshNetworkSuccess();
@@ -281,43 +364,43 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
     };
 
     protected void executeOnLoadDataSuccess(List<T> data) {
-        if (data == null) {
-            data = new ArrayList<T>();
-        }
+	if (data == null) {
+	    data = new ArrayList<T>();
+	}
 
-        mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-        if (mCurrentPage == 0) {
-            mAdapter.clear();
-        }
+	mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+	if (mCurrentPage == 0) {
+	    mAdapter.clear();
+	}
 
-        for (int i = 0; i < data.size(); i++) {
-            if (compareTo(mAdapter.getData(), data.get(i))) {
-                data.remove(i);
-                i--;
-            }
-        }
-        int adapterState = ListBaseAdapter.STATE_EMPTY_ITEM;
-        if ((mAdapter.getCount() + data.size()) == 0) {
-            adapterState = ListBaseAdapter.STATE_EMPTY_ITEM;
-        } else if (data.size() == 0
-                || (data.size() < getPageSize() && mCurrentPage == 0)) {
-            adapterState = ListBaseAdapter.STATE_NO_MORE;
-            mAdapter.notifyDataSetChanged();
-        } else {
-            adapterState = ListBaseAdapter.STATE_LOAD_MORE;
-        }
-        mAdapter.setState(adapterState);
-        mAdapter.addData(data);
-        // 判断等于是因为最后有一项是listview的状态
-        if (mAdapter.getCount() == 1) {
+	for (int i = 0; i < data.size(); i++) {
+	    if (compareTo(mAdapter.getData(), data.get(i))) {
+		data.remove(i);
+		i--;
+	    }
+	}
+	int adapterState = ListBaseAdapter.STATE_EMPTY_ITEM;
+	if ((mAdapter.getCount() + data.size()) == 0) {
+	    adapterState = ListBaseAdapter.STATE_EMPTY_ITEM;
+	} else if (data.size() == 0
+		|| (data.size() < getPageSize() && mCurrentPage == 0)) {
+	    adapterState = ListBaseAdapter.STATE_NO_MORE;
+	    mAdapter.notifyDataSetChanged();
+	} else {
+	    adapterState = ListBaseAdapter.STATE_LOAD_MORE;
+	}
+	mAdapter.setState(adapterState);
+	mAdapter.addData(data);
+	// 判断等于是因为最后有一项是listview的状态
+	if (mAdapter.getCount() == 1) {
 
-            if (needShowEmptyNoData()) {
-                mErrorLayout.setErrorType(EmptyLayout.NODATA);
-            } else {
-                mAdapter.setState(ListBaseAdapter.STATE_EMPTY_ITEM);
-                mAdapter.notifyDataSetChanged();
-            }
-        }
+	    if (needShowEmptyNoData()) {
+		mErrorLayout.setErrorType(EmptyLayout.NODATA);
+	    } else {
+		mAdapter.setState(ListBaseAdapter.STATE_EMPTY_ITEM);
+		mAdapter.notifyDataSetChanged();
+	    }
+	}
     }
 
     /**
@@ -327,7 +410,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
      * 
      */
     protected boolean needShowEmptyNoData() {
-        return true;
+	return true;
     }
 
     protected boolean compareTo(List<? extends Entity> data, Entity enity) {
@@ -398,27 +481,27 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
     class ParserTask extends AsyncTask<Void, Void, String> {
 
-        private final byte[] reponseData;
-        private boolean parserError;
-        private List<T> list;
+	private final byte[] reponseData;
+	private boolean parserError;
+	private List<T> list;
 
 	public ParserTask(byte[] data) {
 	    this.reponseData = data;
 	}
 
-        @Override
-        protected String doInBackground(Void... params) {
-            try {
-                ListEntity<T> data = parseList(new ByteArrayInputStream(
-                        reponseData));
-                new SaveCacheTask(getActivity(), data, getCacheKey()).execute();
-                list = data.getList();
-            } catch (Exception e) {
-                e.printStackTrace();
-                parserError = true;
-            }
-            return null;
-        }
+	@Override
+	protected String doInBackground(Void... params) {
+	    try {
+		ListEntity<T> data = parseList(new ByteArrayInputStream(
+			reponseData));
+		new SaveCacheTask(getActivity(), data, getCacheKey()).execute();
+		list = data.getList();
+	    } catch (Exception e) {
+		e.printStackTrace();
+		parserError = true;
+	    }
+	    return null;
+	}
 
 	@Override
 	protected void onPostExecute(String result) {
@@ -434,26 +517,51 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
+	if (mAdapter == null || mAdapter.getCount() == 0) {
+
+	    return;
+	}
+	// 数据已经全部加载，或数据为空时，或正在加载，不处理滚动事件
+	if (mState == STATE_LOADMORE || mState == STATE_REFRESH) {
+	    return;
+	}
+	// 判断是否滚动到底部
+	boolean scrollEnd = false;
+	try {
+	    if (view.getPositionForView(mAdapter.getFooterView()) == view
+		    .getLastVisiblePosition())
+		scrollEnd = true;
+	} catch (Exception e) {
+	    scrollEnd = false;
+	}
+
+	if (mState == STATE_NONE && scrollEnd) {
+	    if (mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
+		mCurrentPage++;
+		mState = STATE_LOADMORE;
+		requestData(false);
+	    }
+	}
     }
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem,
 	    int visibleItemCount, int totalItemCount) {
 	// 数据已经全部加载，或数据为空时，或正在加载，不处理滚动事件
-	if (mState == STATE_NOMORE || mState == STATE_LOADMORE
-		|| mState == STATE_REFRESH) {
-	    return;
-	}
-	if (mAdapter != null
-		&& mAdapter.getDataSize() > 0
-		&& mListView.getLastVisiblePosition() == (mListView.getCount() - 1)) {
-	    if (mState == STATE_NONE
-		    && mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
-		mState = STATE_LOADMORE;
-		mCurrentPage++;
-		requestData(true);
-	    }
-	}
+//	if (mState == STATE_NOMORE || mState == STATE_LOADMORE
+//		|| mState == STATE_REFRESH) {
+//	    return;
+//	}
+//	if (mAdapter != null
+//		&& mAdapter.getDataSize() > 0
+//		&& mListView.getLastVisiblePosition() == (mListView.getCount() - 1)) {
+//	    if (mState == STATE_NONE
+//		    && mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
+//		mState = STATE_LOADMORE;
+//		mCurrentPage++;
+//		requestData(true);
+//	    }
+//	}
     }
 
     /**
@@ -465,11 +573,11 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
      */
     protected void saveToReadedList(final View view, final String prefFileName,
 	    final String key) {
-        // 放入已读列表
-        AppContext.putReadedPostList(prefFileName, key, "true");
-        TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
-        if (tvTitle != null) {
-            tvTitle.setTextColor(0xff9a9a9a);
-        }
+	// 放入已读列表
+	AppContext.putReadedPostList(prefFileName, key, "true");
+	TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
+	if (tvTitle != null) {
+	    tvTitle.setTextColor(0xff9a9a9a);
+	}
     }
 }

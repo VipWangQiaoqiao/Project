@@ -53,7 +53,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
     private long previousTouch = 0;
     private long downTime = 0;
     static boolean effect; // 有效
-    static boolean isDoubleClick = false; // 计时中
+    static boolean notFinish = false; // 是否 不finish界面
 
     public void setOnFinishListener(OnFinishListener l) {
         listener = l;
@@ -534,10 +534,13 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
 
                 if (downTime - previousTouch < 400) {
                     cancleTime();
-                    isDoubleClick = true;
+                    notFinish = true;
                 }
                 break;
 
+            case MotionEvent.ACTION_MOVE:
+                notFinish = true; // 如果有move事件就不执行finish()事件
+                break;
             case ACTION_CANCEL:
             case ACTION_UP:
                 // If the user has zoomed less than min scale, zoom back
@@ -554,10 +557,10 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
                 if (upTime - downTime < 200) {
                     effect = true;
                 }
-                if (!isDoubleClick) {
+                if (!notFinish) {
                     doTime();
                 } else {
-                    isDoubleClick = false;
+                    notFinish = false;
                 }
                 previousTouch = upTime;
                 break;

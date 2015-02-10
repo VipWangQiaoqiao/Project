@@ -112,8 +112,7 @@ public class ShakeFragment extends BaseFragment implements SensorEventListener {
                                         arg2));
                         if (obj != null) {
                             if (StringUtils.isEmpty(obj.getAuthor())
-                                    && StringUtils.isEmpty(obj
-                                            .getCommentCount())
+                                    && StringUtils.isEmpty(obj.getCommentCount())
                                     && StringUtils.isEmpty(obj.getPubDate())) {
                                 jokeToast();
                             } else {

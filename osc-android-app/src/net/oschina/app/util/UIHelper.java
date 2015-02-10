@@ -384,7 +384,8 @@ public class UIHelper {
     public static void showUrlShake(Context context, ShakeObject obj) {
 	if (StringUtils.isEmpty(obj.getUrl())) {
 	    if (ShakeObject.RANDOMTYPE_NEWS.equals(obj.getRandomtype())) {
-		UIHelper.showNewsDetail(context, StringUtils.toInt(obj.getId()),
+		UIHelper.showNewsDetail(context,
+			StringUtils.toInt(obj.getId()),
 			StringUtils.toInt(obj.getCommentCount()));
 	    }
 	} else {
@@ -1008,18 +1009,19 @@ public class UIHelper {
 	intent.putExtras(bundle);
 	context.startActivity(intent);
     }
-    
+
     /**
      * 显示讨论贴详情
-     * @author 火蚁
-     * 2015-2-2 下午6:37:53
-     *
+     * 
+     * @author 火蚁 2015-2-2 下午6:37:53
+     * 
      * @return void
      * @param context
      * @param team
      * @param discuss
      */
-    public static void showTeamDiscussDetail(Context context, Team team, TeamDiscuss discuss) {
+    public static void showTeamDiscussDetail(Context context, Team team,
+	    TeamDiscuss discuss) {
 	Intent intent = new Intent(context, DetailActivity.class);
 	Bundle bundle = new Bundle();
 	bundle.putInt("teamid", team.getId());
