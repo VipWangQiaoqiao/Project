@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="team_detail_dynamic">动态详情</string>
     <string name="team_issue_new">新建任务</string>
     <string name="team_issue_setting">项目设置</string>
     <string name="team_project_list">项目列表</string>

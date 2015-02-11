@@ -81,8 +81,6 @@ public class TeamDiaryFragment extends BaseListFragment<TeamDiary> {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
-
-    }
+            long id) {}
 
 }

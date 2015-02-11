@@ -28,7 +28,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 
 /**
  * Team动态界面
@@ -40,6 +39,7 @@ public class DynamicFragment extends BaseListFragment<TeamActive> {
 
     public final static String BUNDLE_KEY_UID = "UID";
 
+    public static final String DYNAMIC_FRAGMENT_KEY = "DynamicFragment";
     protected static final String TAG = DynamicFragment.class.getSimpleName();
     private static final String CACHE_KEY_PREFIX = "DynamicFragment_list";
 
@@ -103,19 +103,17 @@ public class DynamicFragment extends BaseListFragment<TeamActive> {
     protected void sendRequestData() {
         OSChinaApi.teamDynamic(team, mCurrentPage, mHandler);
     }
-    
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
             long id) {
-        // TODO Auto-generated method stub
-	Adapter adapter = parent.getAdapter();
+        Adapter adapter = parent.getAdapter();
         if (adapter != null && adapter instanceof DynamicAdapter) {
             TeamActive data = ((DynamicAdapter) parent.getAdapter())
                     .getItem(position);
             Bundle bundle = new Bundle();
-            UIHelper.showSimpleBack(aty, SimpleBackPage.ABOUT_OSC,
-                    bundle);
+            bundle.putSerializable(DYNAMIC_FRAGMENT_KEY, data);
+            UIHelper.showSimpleBack(aty, SimpleBackPage.DYNAMIC_DETAIL, bundle);
         }
-
     }
 }

@@ -60,17 +60,18 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
         } else {
             holder = (ViewHolder) v.getTag();
         }
-        // 接口返回图片地址问题，需要客户端额外处理
-        String imgUrl = data.getAuthor().getPortrait();
-        int end = imgUrl.indexOf('?');
-        if (end > 0) {
-            imgUrl = imgUrl.substring(0, end);
-        }
-        holder.img_head.setAvatarUrl(imgUrl);
+        // // 接口返回图片地址问题，需要客户端额外处理
+        // String imgUrl = data.getAuthor().getPortrait();
+        // int end = imgUrl.indexOf('?');
+        // if (end > 0) {
+        // imgUrl = imgUrl.substring(0, end);
+        // }
+        holder.img_head.setAvatarUrl(data.getAuthor().getPortrait());
         holder.tv_name.setText(data.getAuthor().getName());
         holder.ll_event_list.setVisibility(View.GONE);
         // holder.tv_active.setText(data.getBody().getDetail());
         holder.tv_content.setText(Html.fromHtml(data.getBody().getDetail()));
+        holder.tv_content.setMaxLines(3);
         holder.tv_date.setText(data.getCreateTime());
         // holder.tv_client.setText("");
         return v;
