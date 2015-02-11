@@ -121,7 +121,8 @@ public enum SimpleBackPage {
 
     TEAM_NEW_ISSUE(35, R.string.team_issue_new, TeamNewIssueFragment.class),
 
-    DYNAMIC_DETAIL(36, R.string.team_dynamic, DynamicDetailFragment.class);
+    DYNAMIC_DETAIL(36, R.string.team_detail_dynamic,
+            DynamicDetailFragment.class);
 
     private int title;
     private Class<?> clz;
