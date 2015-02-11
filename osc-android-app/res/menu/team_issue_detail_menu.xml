@@ -1,27 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:osc="http://schemas.android.com/apk/res-auto" >
 
     <item
         android:id="@+id/team_issue_detail_change_state"
         android:icon="@drawable/actionbar_send_icon"
-        android:showAsAction="ifRoom"
-        android:title="关闭任务">
-        <menu>
-            <group android:checkableBehavior="single" >
-                <item
-                    android:id="@+id/team_issue_detail_state_closed"
-                    android:title="已关闭">
-                </item>
-                <item
-                    android:id="@+id/team_issue_detail_state_opened"
-                    android:title="重新打开">
-                </item>
-            </group>
-        </menu>
+        android:title="任务状态"
+        osc:showAsAction="ifRoom">
     </item>
     <item
         android:id="@+id/team_issue_detail_appoint"
         android:icon="@drawable/actionbar_send_icon"
-        android:showAsAction="ifRoom"/>
+        android:showAsAction="ifRoom"
+        android:title="指派人"/>
+    <item
+        android:id="@+id/team_issue_detail_time"
+        android:icon="@drawable/actionbar_send_icon"
+        android:showAsAction="ifRoom"
+        android:title="完成时间"/>
 
 </menu>

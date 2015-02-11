@@ -15,6 +15,9 @@ import net.oschina.app.bean.Entity;
 @SuppressWarnings("serial")
 @XStreamAlias("project")
 public class TeamProject extends Entity {
+    
+    public final static String GITOSC = "Git@OSC";
+    public final static String GITHUB = "GitHub";
 
     @XStreamAlias("source")
     private String source;
