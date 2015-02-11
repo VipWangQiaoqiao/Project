@@ -94,24 +94,8 @@ public class UserInfoFragment extends BaseListFragment {
         return CACHE_KEY_PREFIX + "_" + teamMember.getId() + mCurrentPage;
     }
 
-    //
-    // @Override
-    // protected ListEntity parseList(InputStream is) throws Exception {
-    // TeamMyActives list = XmlUtils.toBean(TeamMyActives.class, is);
-    // if (list == null) {
-    // list = new TeamMyActives();
-    // list.setList(new ArrayList<TeamMyActive>(1));
-    // }
-    // return list;
-    // }
-    //
-    // @Override
-    // protected ListEntity<? extends Entity> readList(Serializable seri) {
-    // return (TeamMyActives) seri;
-    // }
-
     @Override
-    protected ListEntity parseList(InputStream is) throws Exception {
+    protected TeamActives parseList(InputStream is) throws Exception {
         TeamActives list = XmlUtils.toBean(TeamActives.class, is);
         return list;
     }

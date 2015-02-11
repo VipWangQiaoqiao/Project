@@ -9,12 +9,12 @@
         android:id="@+id/fragment_team_head"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp" />
 
     <LinearLayout
         style="@style/wrap_wrap"
-        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/fragment_team_head"
         android:orientation="vertical" >
 
         <TextView

@@ -745,15 +745,15 @@ public class OSChinaApi {
             AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("teamid", teamid);
-        params.put("uid", uid);
         params.put("pageIndex", pageIndex);
         params.put("pageSize", 20);
-        params.put("type", "all");
+        params.put("type", "git");
+        params.put("uid", uid);
         ApiHttpClient.get("action/api/team_active_list", params, handler);
     }
 
     /**
-     * 获取指定用户的动态
+     * 获取指定用户的任务
      */
     public static void getMyIssue(String teamid, String uid, int pageIndex,
             String type, AsyncHttpResponseHandler handler) {
