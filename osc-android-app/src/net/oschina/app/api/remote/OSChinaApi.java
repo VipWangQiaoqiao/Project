@@ -783,4 +783,10 @@ public class OSChinaApi {
         params.put("week", week);
         ApiHttpClient.get("action/api/team_diary_list", params, handler);
     }
+
+    public static void getNoteBook(int uid, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("uid", uid);
+        ApiHttpClient.get("action/api/team_sticky_list", params, handler);
+    }
 }

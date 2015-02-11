@@ -4,16 +4,22 @@ import java.util.ArrayList;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.NotebookData;
 import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.bean.User;
 import net.oschina.app.db.NoteDatabase;
 import net.oschina.app.team.adapter.NotebookAdapter;
+import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.KJAnimations;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.KJDragGridView;
 import net.oschina.app.widget.KJDragGridView.OnDeleteListener;
 import net.oschina.app.widget.KJDragGridView.OnMoveListener;
+
+import org.apache.http.Header;
+
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -34,6 +40,8 @@ import android.widget.ImageView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+import com.loopj.android.http.AsyncHttpResponseHandler;
+
 /**
  * 便签列表界面
  * 
@@ -48,10 +56,13 @@ public class NoteBookFragment extends BaseFragment implements
     ImageView mImgTrash;
     @InjectView(R.id.swiperefreshlayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
+    @InjectView(R.id.error_layout)
+    EmptyLayout mEmptyLayout;
 
     private NoteDatabase noteDb;
     private ArrayList<NotebookData> datas;
     private NotebookAdapter adapter;
+    private User user;
 
     /**
      * 用来做更进一步人性化的防手抖策略时使用<br>
@@ -80,6 +91,7 @@ public class NoteBookFragment extends BaseFragment implements
 
     @Override
     public void initData() {
+        user = AppContext.getInstance().getLoginUser();
         noteDb = new NoteDatabase(getActivity());
         datas = noteDb.query();// 查询操作，忽略耗时
         if (datas != null) {
@@ -205,6 +217,19 @@ public class NoteBookFragment extends BaseFragment implements
         if (datas != null && adapter != null) {
             adapter.refurbishData(datas);
         }
+
+        OSChinaApi.getNoteBook(user.getId(), new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+
+            }
+
+            @Override
+            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+                    Throwable arg3) {
+
+            }
+        });
     }
 
     /**

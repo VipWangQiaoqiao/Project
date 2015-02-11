@@ -21,11 +21,11 @@ import net.oschina.app.fragment.TweetPubFragment;
 import net.oschina.app.fragment.TweetRecordFragment;
 import net.oschina.app.fragment.UserBlogFragment;
 import net.oschina.app.fragment.UserCenterFragment;
+import net.oschina.app.team.fragment.DynamicDetailFragment;
 import net.oschina.app.team.fragment.DynamicFragment;
 import net.oschina.app.team.fragment.NoteBookFragment;
 import net.oschina.app.team.fragment.NoteEditFragment;
 import net.oschina.app.team.fragment.SelectTeamFragment;
-import net.oschina.app.team.fragment.TeamIssueDetailFragment;
 import net.oschina.app.team.fragment.TeamNewIssueFragment;
 import net.oschina.app.team.fragment.UserInfoFragment;
 import net.oschina.app.team.viewpagefragment.MyIssuePagerfragment;
@@ -118,8 +118,10 @@ public enum SimpleBackPage {
     SELECT_TEAM(33, R.string.str_team_select_team, SelectTeamFragment.class),
 
     MY_ISSUE_PAGER(34, R.string.str_team_my_issue, MyIssuePagerfragment.class),
-    
-    TEAM_NEW_ISSUE(35, R.string.team_issue_new, TeamNewIssueFragment.class);
+
+    TEAM_NEW_ISSUE(35, R.string.team_issue_new, TeamNewIssueFragment.class),
+
+    DYNAMIC_DETAIL(36, R.string.team_dynamic, DynamicDetailFragment.class);
 
     private int title;
     private Class<?> clz;
