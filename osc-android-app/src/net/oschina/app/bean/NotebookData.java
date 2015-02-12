@@ -2,7 +2,7 @@ package net.oschina.app.bean;
 
 import java.io.Serializable;
 
-public class NotebookData implements Serializable {
+public class NotebookData extends Entity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private int id;
@@ -22,10 +22,12 @@ public class NotebookData implements Serializable {
         this.checked = checked;
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }

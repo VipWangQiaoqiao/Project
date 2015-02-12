@@ -7,6 +7,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.NotebookData;
+import net.oschina.app.bean.NotebookDataList;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.bean.User;
 import net.oschina.app.db.NoteDatabase;
@@ -14,6 +15,7 @@ import net.oschina.app.team.adapter.NotebookAdapter;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.KJAnimations;
 import net.oschina.app.util.UIHelper;
+import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.KJDragGridView;
 import net.oschina.app.widget.KJDragGridView.OnDeleteListener;
 import net.oschina.app.widget.KJDragGridView.OnMoveListener;
@@ -96,6 +98,14 @@ public class NoteBookFragment extends BaseFragment implements
         datas = noteDb.query();// 查询操作，忽略耗时
         if (datas != null) {
             adapter = new NotebookAdapter(getActivity(), datas);
+        }
+
+        if (datas != null && !datas.isEmpty()) {
+            mEmptyLayout.setVisibility(View.GONE);
+        } else {
+            mEmptyLayout.setVisibility(View.VISIBLE);
+            mEmptyLayout.setErrorType(EmptyLayout.NODATA);
+            mEmptyLayout.setNoDataContent("暂无便签，请添加或下拉同步");
         }
     }
 
@@ -221,7 +231,9 @@ public class NoteBookFragment extends BaseFragment implements
         OSChinaApi.getNoteBook(user.getId(), new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-
+                NotebookDataList dataList = XmlUtils.toBean(
+                        NotebookDataList.class, arg2);
+                dataList.getList();
             }
 
             @Override
@@ -230,6 +242,15 @@ public class NoteBookFragment extends BaseFragment implements
 
             }
         });
+
+        if (datas != null && !datas.isEmpty()) {
+            mEmptyLayout.setVisibility(View.GONE);
+        } else {
+            mEmptyLayout.setVisibility(View.VISIBLE);
+            mEmptyLayout.setErrorType(EmptyLayout.NODATA);
+            mEmptyLayout.setNoDataContent("暂无便签，请添加或下拉同步");
+
+        }
     }
 
     /**
