@@ -762,7 +762,7 @@ public class OSChinaApi {
         params.put("uid", uid);
         params.put("pageIndex", pageIndex);
         params.put("pageSize", 20);
-        params.put("type", type);
+        params.put("state", type);
         params.put("projectid", "-1");
         ApiHttpClient.get("action/api/team_issue_list", params, handler);
     }

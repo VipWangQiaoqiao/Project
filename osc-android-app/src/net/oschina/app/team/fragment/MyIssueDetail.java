@@ -13,6 +13,7 @@ import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamIssue;
 import net.oschina.app.team.bean.TeamIssueList;
 import net.oschina.app.team.bean.TeamList;
+import net.oschina.app.team.viewpagefragment.MyIssuePagerfragment;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.util.TLog;
 import net.oschina.app.util.XmlUtils;
@@ -26,18 +27,19 @@ public class MyIssueDetail extends BaseListFragment<TeamIssue> {
     protected static final String TAG = TeamIssueFragment.class.getSimpleName();
     private static final String CACHE_KEY_PREFIX = "my_issue_";
 
-    public static final String MY_ISSUEDETAIL_KEY = "MyIssueDetail";
-
     private Team mTeam;
     private String type = "all";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = getActivity().getIntent().getBundleExtra(
-                SimpleBackActivity.BUNDLE_KEY_ARGS);
+        Bundle bundle = getArguments();
         if (bundle != null) {
-            type = bundle.getString(MY_ISSUEDETAIL_KEY);
+            type = bundle.getString(MyIssuePagerfragment.MY_ISSUEDETAIL_KEY,
+                    "all");
+            bundle = bundle.getBundle(SimpleBackActivity.BUNDLE_KEY_ARGS);
+        }
+        if (bundle != null) {
             int index = bundle.getInt(MyInformationFragment.TEAM_LIST_KEY, 0);
             String cache = PreferenceHelper.readString(getActivity(),
                     MyInformationFragment.TEAM_LIST_FILE,
@@ -64,13 +66,12 @@ public class MyIssueDetail extends BaseListFragment<TeamIssue> {
     @Override
     protected String getCacheKeyPrefix() {
         return CACHE_KEY_PREFIX + AppContext.getInstance().getLoginUid() + "_"
-                + mTeam.getId() + mCurrentPage;
+                + mTeam.getId() + mCurrentPage + type;
     }
 
     @Override
     protected TeamIssueList parseList(InputStream is) throws Exception {
-        TeamIssueList list = XmlUtils
-                .toBean(TeamIssueList.class, is);
+        TeamIssueList list = XmlUtils.toBean(TeamIssueList.class, is);
         return list;
     }
 
