@@ -6,9 +6,10 @@ public class NotebookData extends Entity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private int id;
-    private String time;
+    private long unixTime;
     private String date;
     private String content;
+
     private boolean star;
     private int color;
 
@@ -56,12 +57,12 @@ public class NotebookData extends Entity implements Serializable {
         this.date = date;
     }
 
-    public String getTime() {
-        return time;
+    public long getUnixTime() {
+        return unixTime;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setUnixTime(long time) {
+        this.unixTime = time;
     }
 
     public int getColor() {

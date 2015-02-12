@@ -21,6 +21,8 @@ import net.oschina.app.widget.KJDragGridView.OnDeleteListener;
 import net.oschina.app.widget.KJDragGridView.OnMoveListener;
 
 import org.apache.http.Header;
+import org.kymjs.kjframe.http.core.KJAsyncTask;
+import org.kymjs.kjframe.http.core.KJAsyncTask.OnFinishedListener;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
@@ -230,17 +232,34 @@ public class NoteBookFragment extends BaseFragment implements
 
         OSChinaApi.getNoteBook(user.getId(), new AsyncHttpResponseHandler() {
             @Override
-            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-                NotebookDataList dataList = XmlUtils.toBean(
-                        NotebookDataList.class, arg2);
-                dataList.getList();
+            public void onSuccess(int arg0, Header[] arg1, final byte[] arg2) {
+                KJAsyncTask.setOnFinishedListener(new OnFinishedListener() {
+                    @Override
+                    public void onPostExecute() {
+                        super.onPostExecute();
+                        if (datas != null && adapter != null) {
+                            adapter.refurbishData(datas);
+                        }
+                    }
+                });
+                KJAsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        NotebookDataList dataList = XmlUtils.toBean(
+                                NotebookDataList.class, arg2);
+                        for (NotebookData data : dataList.getList()) {
+                            if (data != null) {
+                                noteDb.merge(data);
+                            }
+                        }
+                        datas = noteDb.query();
+                    }
+                });
             }
 
             @Override
             public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                    Throwable arg3) {
-
-            }
+                    Throwable arg3) {}
         });
 
         if (datas != null && !datas.isEmpty()) {
