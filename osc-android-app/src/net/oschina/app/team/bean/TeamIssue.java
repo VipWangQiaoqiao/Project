@@ -7,7 +7,7 @@ import net.oschina.app.bean.Entity;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
-/** 
+/**
  * 任务实体类
  * 
  * @author FireAnt（http://my.oschina.net/LittleDY）
@@ -18,6 +18,11 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @SuppressWarnings("serial")
 @XStreamAlias("issue")
 public class TeamIssue extends Entity {
+
+    public final static String TEAM_ISSUE_STATE_OPENED = "opened";
+    public final static String TEAM_ISSUE_STATE_UNDERWAY = "underway";
+    public final static String TEAM_ISSUE_STATE_ACCEPTED = "accepted";
+    public final static String TEAM_ISSUE_STATE_CLOSED = "closed";
 
     @XStreamAlias("state")
     private String state;
@@ -51,12 +56,15 @@ public class TeamIssue extends Entity {
 
     @XStreamAlias("toUser")
     private ToUser toUser;
-    
+
     @XStreamAlias("replyCount")
     private int replyCount;
-    
+
     @XStreamAlias("labels")
     private List<Label> labels;
+
+    @XStreamAlias("authority")
+    private Authority authority;
 
     public String getState() {
 	return state;
@@ -145,29 +153,37 @@ public class TeamIssue extends Entity {
     public void setToUser(ToUser toUser) {
 	this.toUser = toUser;
     }
-    
+
     public List<Label> getLabels() {
-        return labels;
+	return labels;
     }
 
     public void setLabels(List<Label> labels) {
-        this.labels = labels;
+	this.labels = labels;
     }
 
     public int getReplyCount() {
-        return replyCount;
+	return replyCount;
     }
 
     public void setReplyCount(int replyCount) {
-        this.replyCount = replyCount;
+	this.replyCount = replyCount;
+    }
+
+    public Authority getAuthority() {
+	return authority;
+    }
+
+    public void setAuthority(Authority authority) {
+	this.authority = authority;
     }
 
     @XStreamAlias("label")
     public class Label implements Serializable {
-	
+
 	@XStreamAlias("name")
 	private String name;
-	
+
 	@XStreamAlias("color")
 	private String color;
 
@@ -186,7 +202,7 @@ public class TeamIssue extends Entity {
 	public void setColor(String color) {
 	    this.color = color;
 	}
-	
+
     }
 
     @XStreamAlias("toUser")
@@ -224,5 +240,91 @@ public class TeamIssue extends Entity {
 	public void setPortrait(String portrait) {
 	    this.portrait = portrait;
 	}
+    }
+
+    // 任务的操作权限
+    class Authority implements Serializable {
+
+	@XStreamAlias("delete")
+	private boolean delete;
+
+	@XStreamAlias("updateState")
+	private boolean updateState;
+
+	@XStreamAlias("updateAssignee")
+	private boolean updateAssignee;
+
+	@XStreamAlias("updateDeadlineTime")
+	private boolean updateDeadlineTime;
+
+	@XStreamAlias("updatePriority")
+	private boolean updatePriority;
+
+	@XStreamAlias("updateLabels")
+	private boolean updateLabels;
+
+	public boolean isDelete() {
+	    return delete;
+	}
+
+	public void setDelete(boolean delete) {
+	    this.delete = delete;
+	}
+
+	public boolean isUpdateState() {
+	    return updateState;
+	}
+
+	public void setUpdateState(boolean updateState) {
+	    this.updateState = updateState;
+	}
+
+	public boolean isUpdateAssignee() {
+	    return updateAssignee;
+	}
+
+	public void setUpdateAssignee(boolean updateAssignee) {
+	    this.updateAssignee = updateAssignee;
+	}
+
+	public boolean isUpdateDeadlineTime() {
+	    return updateDeadlineTime;
+	}
+
+	public void setUpdateDeadlineTime(boolean updateDeadlineTime) {
+	    this.updateDeadlineTime = updateDeadlineTime;
+	}
+
+	public boolean isUpdatePriority() {
+	    return updatePriority;
+	}
+
+	public void setUpdatePriority(boolean updatePriority) {
+	    this.updatePriority = updatePriority;
+	}
+
+	public boolean isUpdateLabels() {
+	    return updateLabels;
+	}
+
+	public void setUpdateLabels(boolean updateLabels) {
+	    this.updateLabels = updateLabels;
+	}
+
+    }
+    
+    public String getIssueStateText() {
+	String res = "待办中";
+	if (this.state.equals(TEAM_ISSUE_STATE_OPENED)) {
+	    res = "待办中";
+	} else if (this.state.equals(TEAM_ISSUE_STATE_UNDERWAY)) {
+	    res = "进行中";
+	} else if (this.state.equals(TEAM_ISSUE_STATE_CLOSED)) {
+	    res = "已完成";
+	} else {
+	    res = "已验收";
+	}
+	
+	return res;
     }
 }

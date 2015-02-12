@@ -1,203 +1,143 @@
 package net.oschina.app.team.fragment;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.Serializable;
+import org.apache.http.Header;
 
-import net.oschina.app.AppContext;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
+
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BaseActivity;
-import net.oschina.app.base.BeseHaveHeaderListFragment;
-import net.oschina.app.team.adapter.TeamReplyAdapter;
+import net.oschina.app.base.BaseFragment;
+import net.oschina.app.emoji.EmojiFragment;
+import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
+import net.oschina.app.interf.EmojiFragmentControl;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamIssue;
 import net.oschina.app.team.bean.TeamIssueCatalog;
 import net.oschina.app.team.bean.TeamIssueDetail;
-import net.oschina.app.team.bean.TeamRepliesList;
-import net.oschina.app.team.bean.TeamReply;
-import net.oschina.app.util.TLog;
+import net.oschina.app.team.bean.TeamProject;
 import net.oschina.app.util.XmlUtils;
-import net.oschina.app.widget.togglebutton.ToggleButton;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebView;
-import android.widget.AdapterView;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
- * TeamIssueDetailFragment.java
+ * TeamIssueDetailFragmentNew.java
  * 
  * @author 火蚁(http://my.oschina.net/u/253900)
  * 
- * @data 2015-1-30 下午2:16:36
+ * @data 2015-2-12 下午3:44:47
  */
-public class TeamIssueDetailFragment extends
-	BeseHaveHeaderListFragment<TeamReply, TeamIssue> {
-
-    private final String DETAIL_CACHE_KEY_PREFIX = "team_issue_detail_";
-
-    private final String CACHE_KEY_PREFIX_COMMENT = "team_issue_reply_list_";
+public class TeamIssueDetailFragment extends BaseFragment implements
+	EmojiTextListener, EmojiFragmentControl {
 
     private Team mTeam;
 
     private TeamIssue mTeamIssue;
-    
+
     private TeamIssueCatalog mCatalog;
-
-    private TextView mTvTitle;
-
-    private WebView mWebView;
-
-    private TextView mTvAuthor;
-
-    private TextView mTvTo;
-
-    private TextView mTvToUser;
-
-    private TextView mTvTime;
     
-    private Menu mMenu;
-    
-    private MenuInflater mMenuInflater;
-
-    private LinearLayout mLLLabels;// 任务的标签
-
-    @Override
-    protected void sendRequestData() {
-	OSChinaTeamApi.getTeamReplyList(mTeam.getId(), mTeamIssue.getId(),
-		TeamReply.REPLY_TYPE_ISSUE, mCurrentPage, mHandler);
-    }
+    @InjectView(R.id.tv_issue_title) TextView mTvTitle;
+    @InjectView(R.id.tv_issue_touser) TextView mTvToUser;
+    @InjectView(R.id.tv_issue_cooperate_user) TextView mTvCooperateUser;
+    @InjectView(R.id.tv_issue_die_time) TextView mTvDieTime;
+    @InjectView(R.id.tv_issue_state) TextView mTvState;
+    @InjectView(R.id.ll_issue_labels) LinearLayout mLLlabels;
 
     @Override
-    protected String getCacheKeyPrefix() {
-	// TODO Auto-generated method stub
-	return CACHE_KEY_PREFIX_COMMENT + mTeamIssue.getId();
-    }
-
-    @Override
-    protected TeamRepliesList parseList(InputStream is) throws Exception {
-	TeamRepliesList list = XmlUtils.toBean(TeamRepliesList.class, is);
-	return list;
-    }
-
-    @Override
-    protected TeamRepliesList readList(Serializable seri) {
-	return ((TeamRepliesList) seri);
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position,
-	    long id) {
-	// TODO Auto-generated method stub
-
-    }
-
-    @Override
-    protected void requestDetailData(boolean isRefresh) {
-	// TODO Auto-generated method stub
-	OSChinaTeamApi.getTeamIssueDetail(mTeam.getId(), mTeamIssue.getId(),
-		mDetailHandler);
-    }
-
-    @Override
-    protected View initHeaderView() {
-	// TODO Auto-generated method stub
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+	    Bundle savedInstanceState) {
+	super.onCreateView(inflater, container, savedInstanceState);
+	View root = inflater.inflate(R.layout.fragment_team_issue_detail,
+		container, false);
 	Intent args = getActivity().getIntent();
 	if (args != null) {
 	    mTeam = (Team) args.getSerializableExtra("team");
 	    mTeamIssue = (TeamIssue) args.getSerializableExtra("issue");
-	    mCatalog = (TeamIssueCatalog) args.getSerializableExtra("issue_catalog");
+	    mCatalog = (TeamIssueCatalog) args
+		    .getSerializableExtra("issue_catalog");
 	}
 	if (mCatalog != null) {
-	    
-	    ((BaseActivity)getActivity()).setActionBarTitle(mCatalog.getTitle());
+
+	    ((BaseActivity) getActivity()).setActionBarTitle(mCatalog
+		    .getTitle());
 	}
-	View headerView = LayoutInflater.from(getActivity()).inflate(
-		R.layout.fragment_team_issue_detail, null);
-	mTvTitle = findHeaderView(headerView, R.id.tv_issue_title);
-	mWebView = findHeaderView(headerView, R.id.webview);
-	mTvAuthor = findHeaderView(headerView, R.id.tv_issue_author);
-	mTvTo = findHeaderView(headerView, R.id.tv_to);
-	mTvToUser = findHeaderView(headerView, R.id.tv_issue_touser);
-	mTvTime = findHeaderView(headerView, R.id.tv_issue_time);
-	mLLLabels = findHeaderView(headerView, R.id.ll_team_issue_labels);
-	setHasOptionsMenu(true);
-	return headerView;
+	initView(root);
+	initData();
+	return root;
+    }
+
+    @Override
+    public void initView(View view) {
+	ButterKnife.inject(this, view);
+    }
+
+    @Override
+    public void initData() {
+	// TODO Auto-generated method stub
+	super.initData();
+	requestDetail();
+    }
+
+    private AsyncHttpResponseHandler mDetailHandler = new AsyncHttpResponseHandler() {
+
+	@Override
+	public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+	    // TODO Auto-generated method stub
+	    TeamIssueDetail teamIssueDetail = XmlUtils.toBean(TeamIssueDetail.class, arg2);
+	    if (teamIssueDetail != null) {
+		fillUI(teamIssueDetail.getTeamIssue());
+	    }
+	}
+
+	@Override
+	public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+		Throwable arg3) {
+	    // TODO Auto-generated method stub
+
+	}
+	
+	public void onStart() {
+	    showWaitDialog("");
+	};
+	public void onFinish() {
+	    hideWaitDialog();
+	};
+    };
+
+    private void requestDetail() {
+	OSChinaTeamApi.getTeamIssueDetail(mTeam.getId(), mTeamIssue.getId(),
+		mDetailHandler);
     }
     
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-	// TODO Auto-generated method stub
-	inflater.inflate(R.menu.team_issue_detail_menu, menu);
-	mMenu = menu;
-	mMenuInflater = inflater;
-	super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-	switch (item.getItemId()) {
-	case R.id.team_issue_project_list:
-	    break;
-
-	default:
-	    break;
-	}
-	return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected String getDetailCacheKey() {
-	// TODO Auto-generated method stub
-	return DETAIL_CACHE_KEY_PREFIX + mTeamIssue.getId();
-    }
-
-    @Override
-    protected TeamIssue getDetailBean(ByteArrayInputStream is) {
-	// TODO Auto-generated method stub
-	return XmlUtils.toBean(TeamIssueDetail.class, is).getTeamIssue();
-    }
-
-    @Override
-    protected TeamReplyAdapter getListAdapter() {
-	// TODO Auto-generated method stub
-	return new TeamReplyAdapter();
-    }
-
-    @Override
-    protected void executeOnLoadDetailSuccess(TeamIssue detail) {
+    private void fillUI(TeamIssue teamIssue) {
+	if (teamIssue == null) return;
+	this.mTeamIssue = teamIssue;
+	mTvTitle.setText(mTeamIssue.getTitle());
 	
-	// TODO Auto-generated method stub
-	mTvTitle.setText(detail.getTitle());
-	mTvTime.setText(detail.getAcceptTime());
-	mTvAuthor.setText(detail.getAuthor().getName());
-	if (detail.getToUser() != null
-		&& !TextUtils.isEmpty(detail.getToUser().getName())) {
-	    mTvToUser.setText(detail.getToUser().getName());
+	if (mTeamIssue.getToUser() != null
+		&& !TextUtils.isEmpty(mTeamIssue.getToUser().getName())) {
+	    mTvToUser.setText(mTeamIssue.getToUser().getName());
 	} else {
-	    mTvTo.setText("未指派");
-	    mTvToUser.setVisibility(View.GONE);
+	    mTvToUser.setText("未指派");
 	}
-	if (detail.getState().equals("opened")) {
-	} else {
-	}
-	mTvTime.setText(detail.getCreateTime());
-	setLabels(detail);
-	mWebView.loadDataWithBaseURL(null, detail.getDescription(),
-		"text/html", "utf-8", null);
+	mTvState.setText(mTeamIssue.getIssueStateText());
+	setLabels(mTeamIssue);
     }
-
+    
     private void setLabels(TeamIssue issue) {
 	if (issue.getLabels() == null || issue.getLabels().isEmpty()) {
-	    mLLLabels.setVisibility(View.GONE);
+	    mLLlabels.setVisibility(View.GONE);
 	} else {
 	    for (TeamIssue.Label label : issue.getLabels()) {
 		TextView text = (TextView) LayoutInflater.from(getActivity())
@@ -205,14 +145,32 @@ public class TeamIssueDetailFragment extends
 		text.setText(label.getName());
 		int color = Color.parseColor(label.getColor());
 		text.setBackgroundColor(color);
-		mLLLabels.addView(text);
+		mLLlabels.addView(text);
 	    }
 	}
     }
 
+
+    private EmojiFragment emojiFragment;
+
+    @Override
+    public void setEmojiFragment(EmojiFragment fragment) {
+	// TODO Auto-generated method stub
+	this.emojiFragment = fragment;
+	emojiFragment.setEmojiTextListener(this);
+    }
+
     @Override
     public void onSendClick(String text) {
+	// TODO Auto-generated method stub
 
     }
 
+    @Override
+    @OnClick({R.id.rl_issue_touser, R.id.rl_issue_cooperate_user, R.id.rl_issue_die_time,
+	R.id.rl_issue_state, R.id.rl_issue_child})
+    public void onClick(View v) {
+	// TODO Auto-generated method stub
+	super.onClick(v);
+    }
 }

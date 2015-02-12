@@ -227,7 +227,6 @@ public class MyInformationFragment extends BaseFragment {
         view.findViewById(R.id.rl_message).setOnClickListener(this);
         view.findViewById(R.id.rl_team).setOnClickListener(this);
         view.findViewById(R.id.rl_blog).setOnClickListener(this);
-        view.findViewById(R.id.iv_avatar1).setOnClickListener(this);
         view.findViewById(R.id.rl_note).setOnClickListener(
                 new OnClickListener() {
                     @Override

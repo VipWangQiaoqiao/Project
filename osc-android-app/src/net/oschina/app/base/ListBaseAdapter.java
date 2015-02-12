@@ -13,6 +13,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.Html;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -241,5 +242,19 @@ public class ListBaseAdapter<T extends Entity> extends BaseAdapter {
 		.fromHtml(TweetTextView.modifyPath(content));
 	contentView.setText(span);
 	MyURLSpan.parseLinkText(contentView, span);
+    }
+    
+    protected void setText(TextView textView, String text, boolean needGone) {
+	if (text == null || TextUtils.isEmpty(text)) {
+	    if (needGone) {
+		textView.setVisibility(View.GONE);
+	    }
+	} else {
+	    textView.setText(text);
+	}
+    }
+    
+    protected void setText(TextView textView, String text) {
+	setText(textView, text, false);
     }
 }
