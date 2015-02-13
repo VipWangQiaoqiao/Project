@@ -25,14 +25,14 @@
     <!-- 横向线条 -->
     <style name="h_line">
         <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">0.1dip</item>
-        <item name="android:background">@color/gray</item>
+        <item name="android:layout_height">1dip</item>
+        <item name="android:background">@color/list_divider_color</item>
     </style>
     <!-- 纵向线条 -->
     <style name="v_line">
-        <item name="android:layout_width">0.1dip</item>
+        <item name="android:layout_width">1dip</item>
         <item name="android:layout_height">fill_parent</item>
-        <item name="android:background">@color/gray</item>
+        <item name="android:background">@color/list_divider_color</item>
     </style>
     
     <style name="list_text_title" parent="@style/wrap_wrap">
@@ -58,14 +58,14 @@
         <item name="android:background">@drawable/list_item_background</item>
     </style>
     
-    <!-- 菜单ImageView的样式 -->
+    <!-- Team菜单ImageView的样式 -->
     <style name="TeamMenuItemImageViewStyle">
         <item name="android:layout_width">32dip</item>
         <item name="android:layout_height">32dip</item>
         <item name="android:layout_marginRight">15dip</item>
     </style>
 
-    <!-- 菜单TextView的样式 -->
+    <!-- Team菜单TextView的样式 -->
     <style name="TeamMenuItemTextViewStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -73,5 +73,25 @@
         <item name="android:textColor">#333</item>
         <item name="android:textSize">18sp</item>
     </style>
+    
+    <style name="team_issue_detail_line" parent="@style/h_line">
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+    </style>
+    
+    <style name="team_issue_detail_layout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">15dp</item>
+        <item name="android:background">@drawable/list_item_background</item>
+    </style>
+    
+    <style name="team_issue_detail_tip" parent="@style/wrap_wrap">
+    </style>
+    
+    <style name="team_issue_detail_text" parent="@style/wrap_wrap">
+        <item name="android:layout_alignParentRight">true</item>
+    </style>
+    
     
 </resources>

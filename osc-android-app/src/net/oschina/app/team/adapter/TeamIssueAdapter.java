@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -43,6 +44,9 @@ public class TeamIssueAdapter extends ListBaseAdapter<TeamIssue> {
 	} else {
 	    vh.title.getPaint().setFlags(0);
 	}
+	
+	setText(vh.accept_time, item.getAcceptTime(), true);
+	
 	vh.author.setText(item.getAuthor().getName());
 	if (item.getToUser() == null
 		|| TextUtils.isEmpty(item.getToUser().getName())) {
@@ -61,6 +65,10 @@ public class TeamIssueAdapter extends ListBaseAdapter<TeamIssue> {
 
 	@InjectView(R.id.tv_title)
 	TextView title;
+	@InjectView(R.id.iv_issue_state)
+	ImageView state;
+	@InjectView(R.id.tv_accept_time)
+	TextView accept_time;
 	@InjectView(R.id.tv_author)
 	TextView author;
 	@InjectView(R.id.tv_to)

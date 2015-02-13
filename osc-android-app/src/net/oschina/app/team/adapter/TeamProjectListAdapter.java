@@ -10,6 +10,7 @@ import net.oschina.app.team.bean.TeamProject;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -63,12 +64,23 @@ public class TeamProjectListAdapter extends BaseAdapter {
 
 	TeamProject item = datas.get(position);
 
+	String source = item.getSource();
+	if (source == null) {
+
+	} else if (source.equalsIgnoreCase(TeamProject.GITOSC)) {
+	    vh.source.setBackgroundResource(R.drawable.ic_comment_count);
+	} else if (source.equalsIgnoreCase(TeamProject.GITHUB)) {
+	    vh.source.setBackgroundResource(R.drawable.ic_action_comment);
+	}
+
 	vh.name.setText(item.getGit().getName());
 
 	return convertView;
     }
 
     public static class ViewHolder {
+	@InjectView(R.id.iv_source)
+	ImageView source;
 	@InjectView(R.id.tv_project_name)
 	TextView name;
 

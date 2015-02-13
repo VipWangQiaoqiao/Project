@@ -1,67 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/fill_wrap"
-    android:orientation="vertical" >
-
-    <TextView
-        android:id="@+id/tv_issue_title"
-        style="@style/list_text_title"
-        android:padding="@dimen/space_8"
-        android:text="#17  任务标题"
-        android:textSize="18sp" />
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/white"
+    style="@style/fill_fill" >
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="@dimen/space_8" >
-
-        <TextView
-            android:id="@+id/tv_issue_author"
-            style="@style/list_text_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:text="火蚁"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/tv_to"
-            style="@style/list_text_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:text="指派给" />
-
-        <TextView
-            android:id="@+id/tv_issue_touser"
-            style="@style/list_text_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="火蚁"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/tv_issue_time"
-            style="@style/list_text_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:textSize="12sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_team_issue_labels"
         style="@style/fill_wrap"
-        android:orientation="horizontal"
-        android:padding="@dimen/space_8" >
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/list_item_background"
+            android:padding="10dp" >
+
+            <TextView
+                style="@style/list_text_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="team_issue-未同步" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10dp" >
+
+            <ImageView
+                android:id="@+id/iv_issue_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="3dp"
+                android:background="@drawable/ic_comment_count" />
+
+            <TextView
+                android:id="@+id/tv_issue_title"
+                style="@style/list_text_title"
+                android:text="任务标题" />
+        </LinearLayout>
+
+        <View
+            style="@style/team_issue_detail_line"
+            android:layout_marginTop="15dp" />
+
+        <RelativeLayout
+            android:id="@+id/rl_issue_touser"
+            style="@style/team_issue_detail_layout" >
+
+            <TextView
+                style="@style/team_issue_detail_tip"
+                android:text="指派给" />
+
+            <TextView
+                android:id="@+id/tv_issue_touser"
+                style="@style/team_issue_detail_text" />
+        </RelativeLayout>
+
+        <View style="@style/team_issue_detail_line" />
+
+        <RelativeLayout
+            android:id="@+id/rl_issue_cooperate_user"
+            style="@style/team_issue_detail_layout" >
+
+            <TextView
+                style="@style/team_issue_detail_tip"
+                android:text="协作者" />
+
+            <TextView
+                android:id="@+id/tv_issue_cooperate_user"
+                style="@style/team_issue_detail_text" />
+        </RelativeLayout>
+
+        <View style="@style/team_issue_detail_line" />
+
+        <RelativeLayout
+            android:id="@+id/rl_issue_die_time"
+            style="@style/team_issue_detail_layout" >
+
+            <TextView
+                style="@style/team_issue_detail_tip"
+                android:text="完成时间" />
+
+            <TextView
+                android:id="@+id/tv_issue_die_time"
+                style="@style/team_issue_detail_text" />
+        </RelativeLayout>
+
+        <View style="@style/team_issue_detail_line" />
+
+        <RelativeLayout
+            android:id="@+id/rl_issue_state"
+            style="@style/team_issue_detail_layout" >
+
+            <TextView
+                style="@style/team_issue_detail_tip"
+                android:text="阶段" />
+
+            <TextView
+                android:id="@+id/tv_issue_state"
+                style="@style/team_issue_detail_text" />
+        </RelativeLayout>
+
+        <View style="@style/team_issue_detail_line" />
+
+        <RelativeLayout 
+            android:id="@+id/rl_issue_labels"
+            style="@style/team_issue_detail_layout" >
+
+            <TextView
+                style="@style/team_issue_detail_tip"
+                android:text="标签" />
+
+            <LinearLayout
+                android:id="@+id/ll_issue_labels"
+                android:layout_width="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+        </RelativeLayout>
+
+        <View style="@style/team_issue_detail_line" />
+
+        <RelativeLayout
+            android:id="@+id/rl_issue_child"
+            style="@style/team_issue_detail_layout" >
+
+            <TextView
+                style="@style/team_issue_detail_tip"
+                android:text="子任务" />
+
+            <TextView
+                android:id="@+id/tv_issue_child"
+                style="@style/team_issue_detail_text"/>
+        </RelativeLayout>
+
+        <View style="@style/team_issue_detail_line" />
     </LinearLayout>
 
-    <WebView
-        android:id="@+id/webview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white" />
-
-</LinearLayout>
+</ScrollView>

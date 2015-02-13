@@ -132,7 +132,7 @@
         android:orientation="vertical"
         android:visibility="gone" >
 
-        <net.oschina.app.widget.AvatarView
+        <net.oschina.app.widget.CircleImageView
             android:id="@+id/iv_avatar1"
             android:layout_width="48dp"
             android:layout_height="48dp"
