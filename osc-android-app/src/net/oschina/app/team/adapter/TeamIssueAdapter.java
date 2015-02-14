@@ -45,7 +45,7 @@ public class TeamIssueAdapter extends ListBaseAdapter<TeamIssue> {
 	    vh.title.getPaint().setFlags(0);
 	}
 	
-	setText(vh.accept_time, item.getAcceptTime(), true);
+	setText(vh.accept_time, item.getUpdateTime(), true);
 	
 	vh.author.setText(item.getAuthor().getName());
 	if (item.getToUser() == null

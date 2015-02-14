@@ -50,6 +50,9 @@ public class TeamIssue extends Entity {
 
     @XStreamAlias("acceptTime")
     private String acceptTime;
+    
+    //@XStreamAlias("deadlineTime")
+    private String deadlineTime;
 
     @XStreamAlias("author")
     private Author author;
@@ -136,6 +139,15 @@ public class TeamIssue extends Entity {
 
     public void setAcceptTime(String acceptTime) {
 	this.acceptTime = acceptTime;
+    }
+    
+
+    public String getDeadlineTime() {
+        return deadlineTime;
+    }
+
+    public void setDeadlineTime(String deadlineTime) {
+        this.deadlineTime = deadlineTime;
     }
 
     public Author getAuthor() {

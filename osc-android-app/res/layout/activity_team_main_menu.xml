@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/list_item_background_normal"
     android:orientation="vertical" >
     <LinearLayout
         android:id="@+id/team_menu_item_main"
@@ -11,7 +11,7 @@
         <ImageView
             style="@style/TeamMenuItemImageViewStyle"
             android:contentDescription="@null"
-            android:background="@drawable/tab_icon_new" />
+            android:background="@drawable/widget_bar_news_nor" />
 
         <TextView
             style="@style/TeamMenuItemTextViewStyle"
@@ -24,7 +24,7 @@
         <ImageView
             style="@style/TeamMenuItemImageViewStyle"
             android:contentDescription="@null"
-            android:background="@drawable/tab_icon_new" />
+            android:background="@drawable/widget_bar_news_nor" />
 
         <TextView
             style="@style/TeamMenuItemTextViewStyle"
@@ -36,7 +36,7 @@
         <ImageView
             style="@style/TeamMenuItemImageViewStyle"
             android:contentDescription="@null"
-            android:background="@drawable/tab_icon_new" />
+            android:background="@drawable/widget_bar_news_nor" />
 
         <TextView
             style="@style/TeamMenuItemTextViewStyle"
@@ -48,7 +48,7 @@
         <ImageView
             style="@style/TeamMenuItemImageViewStyle"
             android:contentDescription="@null"
-            android:background="@drawable/tab_icon_new" />
+            android:background="@drawable/widget_bar_news_nor" />
 
         <TextView
             style="@style/TeamMenuItemTextViewStyle"

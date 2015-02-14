@@ -19,11 +19,13 @@ import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamIssue;
 import net.oschina.app.team.bean.TeamIssueCatalog;
 import net.oschina.app.team.bean.TeamIssueDetail;
-import net.oschina.app.team.bean.TeamProject;
 import net.oschina.app.util.XmlUtils;
+import net.oschina.app.viewpagerfragment.NewsViewPagerFragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,10 +78,17 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 	initData();
 	return root;
     }
+    
+    private FragmentManager mFragmentManager;
 
     @Override
     public void initView(View view) {
 	ButterKnife.inject(this, view);
+	
+	mFragmentManager = getFragmentManager();
+	
+	mFragmentManager.beginTransaction().replace(R.id.fl_issue_comment, Fragment.instantiate(getActivity(), NewsViewPagerFragment.class.getName()));
+	mFragmentManager.beginTransaction().commitAllowingStateLoss();
     }
 
     @Override
@@ -131,6 +140,7 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 	} else {
 	    mTvToUser.setText("未指派");
 	}
+	
 	mTvState.setText(mTeamIssue.getIssueStateText());
 	setLabels(mTeamIssue);
     }
@@ -149,7 +159,6 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 	    }
 	}
     }
-
 
     private EmojiFragment emojiFragment;
 

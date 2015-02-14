@@ -4,14 +4,14 @@
 
     <item
         android:id="@+id/team_issue_new"
-        android:icon="@drawable/actionbar_send_icon"
+        android:icon="@drawable/actionbar_icon_add"
         android:showAsAction="always"
         android:title="@string/team_issue_new"
         android:visible="true"
         osc:showAsAction="always"/>
     <item
         android:id="@+id/team_issue_project_list"
-        android:icon="@drawable/actionbar_send_icon"
+        android:icon="@drawable/actionbar_icon_project"
         android:showAsAction="always"
         android:title="@string/team_project_list"
         android:visible="true"
@@ -19,9 +19,28 @@
     <item
         android:id="@+id/team_issue_setting"
         android:icon="@drawable/actionbar_send_icon"
-        android:showAsAction="always"
-        android:title="@string/team_project_list"
-        android:visible="true"
-        osc:showAsAction="ifRoom"/>
+        android:showAsAction="ifRoom"
+        android:title="刷选任务"
+        android:visible="true"/>
+    <item
+        android:icon="@drawable/actionbar_send_icon"
+        android:showAsAction="ifRoom"
+        android:title="我的任务"
+        android:visible="true">
+        <menu>
+            <item
+                android:showAsAction="ifRoom"
+                android:title="指派给我的"
+                android:visible="true"/>
+            <item
+                android:showAsAction="ifRoom"
+                android:title="我发布的任务"
+                android:visible="true"/>
+            <item
+                android:showAsAction="ifRoom"
+                android:title="我参与的任务"
+                android:visible="true"/>
+        </menu>
+    </item>
 
 </menu>
