@@ -68,6 +68,8 @@ public class MyIssueFragment extends BaseFragment {
     private Team team;
     private Bundle bundle;
 
+    public static final String WHICH_PAGER_KEY = "MyIssueFragment_wihch_pager";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,22 +118,22 @@ public class MyIssueFragment extends BaseFragment {
     public void onClick(View v) {
         switch (v.getId()) {
         case R.id.team_myissue_ing:
-            bundle.putString(MyIssueDetail.MY_ISSUEDETAIL_KEY, "opened");
+            bundle.putInt(WHICH_PAGER_KEY, 0);
             UIHelper.showSimpleBack(getActivity(),
                     SimpleBackPage.MY_ISSUE_PAGER, bundle);
             break;
         case R.id.team_myissue_ed:
-            bundle.putString(MyIssueDetail.MY_ISSUEDETAIL_KEY, "closed");
+            bundle.putInt(WHICH_PAGER_KEY, 1);
             UIHelper.showSimpleBack(getActivity(),
                     SimpleBackPage.MY_ISSUE_PAGER, bundle);
             break;
         case R.id.team_myissue_outdate:
-            bundle.putString(MyIssueDetail.MY_ISSUEDETAIL_KEY, "outdate");
+            bundle.putInt(WHICH_PAGER_KEY, 2);
             UIHelper.showSimpleBack(getActivity(),
                     SimpleBackPage.MY_ISSUE_PAGER, bundle);
             break;
         case R.id.team_myissue_all:
-            bundle.putString(MyIssueDetail.MY_ISSUEDETAIL_KEY, "all");
+            bundle.putInt(WHICH_PAGER_KEY, 0);
             UIHelper.showSimpleBack(getActivity(),
                     SimpleBackPage.MY_ISSUE_PAGER, bundle);
             break;

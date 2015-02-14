@@ -2,13 +2,14 @@ package net.oschina.app.bean;
 
 import java.io.Serializable;
 
-public class NotebookData implements Serializable {
+public class NotebookData extends Entity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private int id;
-    private String time;
+    private long unixTime;
     private String date;
     private String content;
+
     private boolean star;
     private int color;
 
@@ -22,10 +23,12 @@ public class NotebookData implements Serializable {
         this.checked = checked;
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }
@@ -54,12 +57,12 @@ public class NotebookData implements Serializable {
         this.date = date;
     }
 
-    public String getTime() {
-        return time;
+    public long getUnixTime() {
+        return unixTime;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setUnixTime(long time) {
+        this.unixTime = time;
     }
 
     public int getColor() {

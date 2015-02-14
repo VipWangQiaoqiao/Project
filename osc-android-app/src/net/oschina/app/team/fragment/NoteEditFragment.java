@@ -231,8 +231,7 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
      * 保存已编辑内容到数据库
      */
     private void save() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
-        editData.setTime(dateFormat.format(new Date()));
+        editData.setUnixTime(System.currentTimeMillis() / 1000);
         editData.setStar(false);
         editData.setContent(mEtContent.getText().toString());
         noteDb.save(editData);

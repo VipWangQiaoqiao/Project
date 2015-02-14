@@ -4,6 +4,12 @@
     android:layout_height="match_parent"
     android:background="@android:color/white" >
 
+    <net.oschina.app.ui.empty.EmptyLayout
+        android:id="@+id/error_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible" />
+
     <!-- google 官方下拉刷新 -->
 
     <android.support.v4.widget.SwipeRefreshLayout
@@ -28,11 +34,5 @@
         android:layout_margin="20dp"
         android:src="@drawable/ic_launcher"
         android:visibility="invisible" />
-
-    <net.oschina.app.ui.empty.EmptyLayout
-        android:id="@+id/error_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible" />
 
 </RelativeLayout>
