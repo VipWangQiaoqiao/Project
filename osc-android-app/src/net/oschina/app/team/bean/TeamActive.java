@@ -71,6 +71,8 @@ public class TeamActive extends Entity {
     public class Body extends Entity {
         @XStreamAlias("detail")
         private String detail;
+        @XStreamAlias("title")
+        private String title;
         @XStreamAlias("code")
         private String code;
         @XStreamAlias("codeType")
@@ -79,6 +81,14 @@ public class TeamActive extends Entity {
         private String image;
         @XStreamAlias("imageOrigin")
         private String imageOrigin;
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
 
         public String getDetail() {
             return detail;

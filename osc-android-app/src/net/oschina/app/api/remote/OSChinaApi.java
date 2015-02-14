@@ -753,6 +753,24 @@ public class OSChinaApi {
     }
 
     /**
+     * 动态详情
+     * 
+     * @param activeid
+     * @param teamid
+     * @param uid
+     * @param handler
+     */
+    public static void getDynamicDetail(int activeid, int teamid, int uid,
+            AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("teamid", teamid);
+        params.put("uid", uid);
+        params.put("uid", uid);
+        params.put("activeid", activeid);
+        ApiHttpClient.get("action/api/team_active_detail", params, handler);
+    }
+
+    /**
      * 获取指定用户的任务
      */
     public static void getMyIssue(String teamid, String uid, int pageIndex,
@@ -789,4 +807,5 @@ public class OSChinaApi {
         params.put("uid", uid);
         ApiHttpClient.get("action/api/team_sticky_list", params, handler);
     }
+
 }

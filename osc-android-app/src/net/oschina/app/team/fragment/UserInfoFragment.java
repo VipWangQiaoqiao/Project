@@ -9,17 +9,26 @@ import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.ListEntity;
+import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.team.adapter.DynamicAdapter;
 import net.oschina.app.team.adapter.TeamMemberAdapter;
+import net.oschina.app.team.bean.TeamActive;
 import net.oschina.app.team.bean.TeamActives;
 import net.oschina.app.team.bean.TeamMember;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.util.TLog;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
+
+import org.kymjs.kjframe.utils.StringUtils;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
 /**
@@ -82,6 +91,28 @@ public class UserInfoFragment extends BaseListFragment {
         mTvAddress.setText(teamMember.getLocation());
         mImgHead.setAvatarUrl(teamMember.getPortrait());
         super.initView(view);
+
+        mListView.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                    int position, long id) {
+                Adapter adapter = parent.getAdapter();
+                if (adapter != null) {
+                    Object obj = adapter.getItem(position);
+                    TeamActive data = null;
+                    if (obj instanceof TeamActive) {
+                        data = (TeamActive) obj;
+                    }
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(
+                            DynamicFragment.DYNAMIC_FRAGMENT_KEY, data);
+                    bundle.putInt(DynamicFragment.DYNAMIC_FRAGMENT_TEAM_KEY,
+                            StringUtils.toInt(teamId, 0));
+                    UIHelper.showSimpleBack(aty, SimpleBackPage.DYNAMIC_DETAIL,
+                            bundle);
+                }
+            }
+        });
     }
 
     @Override

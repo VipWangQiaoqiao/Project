@@ -1,10 +1,17 @@
 package net.oschina.app.team.fragment;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.team.bean.TeamActive;
+import net.oschina.app.team.bean.TeamActiveDetail;
 import net.oschina.app.ui.SimpleBackActivity;
+import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
+
+import org.apache.http.Header;
+
 import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -12,6 +19,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 public class DynamicDetailFragment extends BaseFragment {
 
@@ -23,7 +32,9 @@ public class DynamicDetailFragment extends BaseFragment {
     private TextView tv_client;
     private TextView tv_date;
 
-    private TeamActive data;
+    private TeamActiveDetail data;
+    private TeamActive active;
+    private int teamId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,8 +51,9 @@ public class DynamicDetailFragment extends BaseFragment {
         super.initData();
         Bundle bundle = getActivity().getIntent().getBundleExtra(
                 SimpleBackActivity.BUNDLE_KEY_ARGS);
-        data = (TeamActive) bundle
+        active = (TeamActive) bundle
                 .getSerializable(DynamicFragment.DYNAMIC_FRAGMENT_KEY);
+        teamId = bundle.getInt(DynamicFragment.DYNAMIC_FRAGMENT_TEAM_KEY, 0);
     }
 
     @Override
@@ -56,13 +68,33 @@ public class DynamicDetailFragment extends BaseFragment {
         tv_client = (TextView) v.findViewById(R.id.event_listitem_client);
         tv_date = (TextView) v.findViewById(R.id.event_listitem_date);
 
-        img_head.setAvatarUrl(data.getAuthor().getPortrait());
-        tv_name.setText(data.getAuthor().getName());
+        img_head.setAvatarUrl(active.getAuthor().getPortrait());
+        tv_name.setText(active.getAuthor().getName());
         ll_event_list.setVisibility(View.GONE);
         // tv_active.setText(data.getBody().getDetail());
-        tv_content.setText(Html.fromHtml(data.getBody().getDetail()));
-        tv_content.setMaxLines(3);
-        tv_date.setText(data.getCreateTime());
+        tv_content.setText(Html.fromHtml(active.getBody().getDetail()));
+        tv_date.setText(active.getCreateTime());
         // tv_client.setText("");
+
+        initNetContent();
+    }
+
+    private void initNetContent() {
+        OSChinaApi.getDynamicDetail(active.getId(), teamId, AppContext
+                .getInstance().getLoginUid(), new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+                data = XmlUtils.toBean(TeamActiveDetail.class, arg2);
+
+                tv_content.setText(Html.fromHtml(data.getTeamActive().getBody()
+                        .getTitle()));
+            }
+
+            @Override
+            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+                    Throwable arg3) {
+
+            }
+        });
     }
 }

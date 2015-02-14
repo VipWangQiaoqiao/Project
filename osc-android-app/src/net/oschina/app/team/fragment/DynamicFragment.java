@@ -40,6 +40,7 @@ public class DynamicFragment extends BaseListFragment<TeamActive> {
     public final static String BUNDLE_KEY_UID = "UID";
 
     public static final String DYNAMIC_FRAGMENT_KEY = "DynamicFragment";
+    public static final String DYNAMIC_FRAGMENT_TEAM_KEY = "DynamicFragment_teamid";
     protected static final String TAG = DynamicFragment.class.getSimpleName();
     private static final String CACHE_KEY_PREFIX = "DynamicFragment_list";
 
@@ -113,6 +114,7 @@ public class DynamicFragment extends BaseListFragment<TeamActive> {
                     .getItem(position);
             Bundle bundle = new Bundle();
             bundle.putSerializable(DYNAMIC_FRAGMENT_KEY, data);
+            bundle.putInt(DYNAMIC_FRAGMENT_TEAM_KEY, team.getId());
             UIHelper.showSimpleBack(aty, SimpleBackPage.DYNAMIC_DETAIL, bundle);
         }
     }
