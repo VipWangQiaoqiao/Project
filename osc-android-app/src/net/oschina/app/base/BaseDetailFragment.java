@@ -118,14 +118,9 @@ public class BaseDetailFragment extends BaseFragment implements
         }
     }
 
-    protected boolean shouldRegisterCommentChangedReceiver() {
-        return true;
-    }
-
     protected void onCommentChanged(int opt, int id, int catalog,
             boolean isBlog, Comment comment) {}
 
-    private CommentChangeReceiver mReceiver;
     private AsyncTask<String, Void, Entity> mCacheTask;
 
     @Override
@@ -133,13 +128,6 @@ public class BaseDetailFragment extends BaseFragment implements
         super.onCreate(savedInstanceState);
         mMenuAdapter = new MenuAdapter(hasReportMenu());
         setHasOptionsMenu(true);
-
-        if (shouldRegisterCommentChangedReceiver()) {
-            mReceiver = new CommentChangeReceiver();
-            IntentFilter filter = new IntentFilter(
-                    INTENT_ACTION_COMMENT_CHANGED);
-            getActivity().registerReceiver(mReceiver, filter);
-        }
 
         mController.getConfig().closeToast();
     }
@@ -158,9 +146,6 @@ public class BaseDetailFragment extends BaseFragment implements
     public void onDestroy() {
         cancelReadCache();
         recycleWebView();
-        if (mReceiver != null) {
-            getActivity().unregisterReceiver(mReceiver);
-        }
         super.onDestroy();
     }
 
@@ -192,6 +177,11 @@ public class BaseDetailFragment extends BaseFragment implements
         } else {
             readCacheData(key);
         }
+    }
+    
+    // 刷新数据
+    protected void sendRefresh() {
+	sendRequestData();
     }
 
     private void readCacheData(String cacheKey) {
@@ -710,21 +700,6 @@ public class BaseDetailFragment extends BaseFragment implements
             AppContext.showToastShort(R.string.del_favorite_faile);
         }
     };
-
-    class CommentChangeReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int opt = intent.getIntExtra(Comment.BUNDLE_KEY_OPERATION, 0);
-            int id = intent.getIntExtra(Comment.BUNDLE_KEY_ID, 0);
-            int catalog = intent.getIntExtra(Comment.BUNDLE_KEY_CATALOG, 0);
-            boolean isBlog = intent.getBooleanExtra(Comment.BUNDLE_KEY_BLOG,
-                    false);
-            Comment comment = intent
-                    .getParcelableExtra(Comment.BUNDLE_KEY_COMMENT);
-            onCommentChanged(opt, id, catalog, isBlog, comment);
-        }
-    }
 
     @Override
     public void onClick(View v) {
