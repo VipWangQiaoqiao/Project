@@ -86,6 +86,8 @@ public class TweetPubFragment extends BaseFragment implements
     private static final String TEXT_ATME = "@请输入用户名 ";
     private static final String TEXT_SOFTWARE = "#请输入软件名#";
 
+    private String fromSharedTextContent = "";
+
     @InjectView(R.id.view_pager)
     ViewPager mViewPager;
 
@@ -171,9 +173,7 @@ public class TweetPubFragment extends BaseFragment implements
      * 方便外部Activity调用
      */
     public void setContentText(String content) {
-        if (mEtInput != null) {
-            mEtInput.setText(content);
-        }
+        fromSharedTextContent = content;
     }
 
     /**
@@ -314,7 +314,11 @@ public class TweetPubFragment extends BaseFragment implements
             }
         });
         // 获取保存的tweet草稿
-        mEtInput.setText(AppContext.getTweetDraft());
+        String content = fromSharedTextContent;
+        if (StringUtils.isEmpty(fromSharedTextContent)) {
+            content = AppContext.getTweetDraft();
+        }
+        mEtInput.setText(content);
         mEtInput.setSelection(mEtInput.getText().toString().length());
 
         Map<String, Emoji> emojis = EmojiHelper.qq_emojis_nos;
