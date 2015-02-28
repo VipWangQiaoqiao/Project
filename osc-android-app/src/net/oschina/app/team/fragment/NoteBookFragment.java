@@ -229,38 +229,48 @@ public class NoteBookFragment extends BaseFragment implements
         if (datas != null && adapter != null) {
             adapter.refurbishData(datas);
         }
+        if (user.getUid() != 0) { // 未登录时不请求网络
+            OSChinaApi.getNoteBook(user.getUid(),
+                    new AsyncHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int arg0, Header[] arg1,
+                                final byte[] arg2) {
+                            KJAsyncTask
+                                    .setOnFinishedListener(new OnFinishedListener() {
+                                        @Override
+                                        public void onPostExecute() {
+                                            super.onPostExecute();
+                                            if (datas != null
+                                                    && adapter != null) {
+                                                adapter.refurbishData(datas);
+                                            }
+                                        }
+                                    });
 
-        OSChinaApi.getNoteBook(user.getId(), new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int arg0, Header[] arg1, final byte[] arg2) {
-                KJAsyncTask.setOnFinishedListener(new OnFinishedListener() {
-                    @Override
-                    public void onPostExecute() {
-                        super.onPostExecute();
-                        if (datas != null && adapter != null) {
-                            adapter.refurbishData(datas);
+                            KJAsyncTask.execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    NotebookDataList dataList = XmlUtils
+                                            .toBean(NotebookDataList.class,
+                                                    arg2);
+                                    if (dataList != null) {
+                                        for (NotebookData data : dataList
+                                                .getList()) {
+                                            if (data != null) {
+                                                noteDb.merge(data);
+                                            }
+                                        }
+                                        datas = noteDb.query();
+                                    }
+                                }
+                            });
                         }
-                    }
-                });
-                KJAsyncTask.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        NotebookDataList dataList = XmlUtils.toBean(
-                                NotebookDataList.class, arg2);
-                        for (NotebookData data : dataList.getList()) {
-                            if (data != null) {
-                                noteDb.merge(data);
-                            }
-                        }
-                        datas = noteDb.query();
-                    }
-                });
-            }
 
-            @Override
-            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                    Throwable arg3) {}
-        });
+                        @Override
+                        public void onFailure(int arg0, Header[] arg1,
+                                byte[] arg2, Throwable arg3) {}
+                    });
+        }
 
         if (datas != null && !datas.isEmpty()) {
             mEmptyLayout.setVisibility(View.GONE);
@@ -284,6 +294,7 @@ public class NoteBookFragment extends BaseFragment implements
             adapter.refurbishData(datas);
             mGrid.setAdapter(adapter);
         }
+
     }
 
     /**
@@ -332,6 +343,12 @@ public class NoteBookFragment extends BaseFragment implements
             break;
         }
         return true;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        noteDb.destroy();
     }
 
     @Override

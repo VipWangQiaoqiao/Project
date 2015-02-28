@@ -2,13 +2,22 @@ package net.oschina.app.bean;
 
 import java.io.Serializable;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
+@XStreamAlias("sticky")
 public class NotebookData extends Entity implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @XStreamAlias("id")
     private int id;
+    @XStreamAlias("timestamp")
     private long unixTime;
+    @XStreamAlias("updateTime")
     private String date;
+    @XStreamAlias("content")
     private String content;
+    @XStreamAlias("color")
+    private String colorText;
 
     private boolean star;
     private int color;
@@ -65,12 +74,32 @@ public class NotebookData extends Entity implements Serializable {
         this.unixTime = time;
     }
 
+    public String getColorText() {
+        return colorText;
+    }
+
+    public void setColorText(String color) {
+        this.colorText = color;
+    }
+
     public int getColor() {
+        if (this.color == 0) { // 客户端始终以当前手机上的颜色为准
+            if ("blue".equals(colorText)) {
+                this.color = 3;
+            } else if ("red".equals(colorText)) {
+                this.color = 2;
+            } else if ("yellow".equals(colorText)) {
+                this.color = 1;
+            } else if ("purple".equals(colorText)) {
+                this.color = 4;
+            } else if ("green".equals(colorText)) {
+                this.color = 0;
+            }
+        }
         return color;
     }
 
     public void setColor(int color) {
         this.color = color;
     }
-
 }

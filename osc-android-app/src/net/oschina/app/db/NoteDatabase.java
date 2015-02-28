@@ -10,10 +10,12 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class NoteDatabase {
     private final DatabaseHelper dbHelper;
+    private final SQLiteDatabase sqlite;
 
     public NoteDatabase(Context context) {
         super();
         dbHelper = new DatabaseHelper(context);
+        sqlite = dbHelper.getWritableDatabase();
     }
 
     /**
@@ -22,11 +24,9 @@ public class NoteDatabase {
      * @param data
      */
     public void merge(NotebookData data) {
-        SQLiteDatabase sqlite = dbHelper.getWritableDatabase();
-
-        Cursor cursor = sqlite.rawQuery("select * from "
-                + DatabaseHelper.NOTE_TABLE_NAME + " where id=" + data.getId(),
-                null);
+        Cursor cursor = sqlite.rawQuery(
+                "select * from " + DatabaseHelper.NOTE_TABLE_NAME
+                        + " where _id=" + data.getId(), null);
         NotebookData localData = new NotebookData();
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
             localData.setId(cursor.getInt(0));
@@ -38,7 +38,6 @@ public class NoteDatabase {
         }
         data = localData.getUnixTime() > data.getUnixTime() ? localData : data;
         save(data);
-        sqlite.close();
     }
 
     /**
@@ -47,28 +46,47 @@ public class NoteDatabase {
      * @param data
      */
     public void save(NotebookData data) {
-        SQLiteDatabase sqlite = dbHelper.getWritableDatabase();
         if (data.getId() != 0) {
-            String sql = ("update " + DatabaseHelper.NOTE_TABLE_NAME + " set time=?, date=?, content=?, star=?,color=? where _id=?");
-            sqlite.execSQL(
-                    sql,
-                    new String[] { data.getUnixTime() + "", data.getDate(),
-                            data.getContent(), data.isStar() ? "1" : "0",
-                            data.getColor() + "", data.getId() + "" });
+            ArrayList<NotebookData> datas = query(" where _id=" + data.getId());
+            if (datas != null && !datas.isEmpty()) {
+                update(data);
+            } else {
+                insert(data);
+            }
         } else {
-            String sql = ("insert into " + DatabaseHelper.NOTE_TABLE_NAME + "(time, date, content, star, color) values(?, ?, ?, ?, ?)");
+            insert(data);
+        }
+    }
+
+    public void insert(NotebookData data) {
+        String sql = "insert into " + DatabaseHelper.NOTE_TABLE_NAME;
+
+        if (data.getId() == 0) {
+            sql += "(time, date, content, star, color) values(?, ?, ?, ?, ?)";
             sqlite.execSQL(
                     sql,
                     new String[] { data.getUnixTime() + "", data.getDate(),
                             data.getContent(), data.isStar() ? "1" : "0",
                             data.getColor() + "" });
+        } else {
+            sql += "(_id, time, date, content, star, color) values(?, ?, ?, ?, ?, ?)";
+            sqlite.execSQL(sql,
+                    new String[] { data.getId() + "", data.getUnixTime() + "",
+                            data.getDate(), data.getContent(),
+                            data.isStar() ? "1" : "0", data.getColor() + "" });
         }
-        dbHelper.close();
-        sqlite.close();
+    }
+
+    public void update(NotebookData data) {
+        String sql = ("update " + DatabaseHelper.NOTE_TABLE_NAME + " set time=?, date=?, content=?, star=?,color=? where _id=?");
+        sqlite.execSQL(
+                sql,
+                new String[] { data.getUnixTime() + "", data.getDate(),
+                        data.getContent(), data.isStar() ? "1" : "0",
+                        data.getColor() + "", data.getId() + "" });
     }
 
     public void reset(List<NotebookData> datas) {
-        SQLiteDatabase sqlite = dbHelper.getWritableDatabase();
         sqlite.execSQL("delete from " + DatabaseHelper.NOTE_TABLE_NAME);
         for (NotebookData data : datas) {
             String sql = ("insert into " + DatabaseHelper.NOTE_TABLE_NAME + "(time, date, content, star, color) values(?, ?, ?, ?, ?)");
@@ -80,14 +98,13 @@ public class NoteDatabase {
         }
     }
 
-    public ArrayList<NotebookData> query() {
+    public ArrayList<NotebookData> query(String where) {
         ArrayList<NotebookData> data = null;
-        SQLiteDatabase sqlite = dbHelper.getReadableDatabase();
 
         if (sqlite.isOpen()) {
             data = new ArrayList<NotebookData>();
             Cursor cursor = sqlite.rawQuery("select * from "
-                    + DatabaseHelper.NOTE_TABLE_NAME, null);
+                    + DatabaseHelper.NOTE_TABLE_NAME + where, null);
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor
                     .moveToNext()) {
                 NotebookData notebookData = new NotebookData();
@@ -103,17 +120,21 @@ public class NoteDatabase {
             if (!cursor.isClosed()) {
                 cursor.close();
             }
-            dbHelper.close();
-            sqlite.close();
         }
 
         return data;
     }
 
+    public ArrayList<NotebookData> query() {
+        return query(" ");
+    }
+
     public void delete(int id) {
-        SQLiteDatabase sqlite = dbHelper.getWritableDatabase();
         String sql = ("delete from " + DatabaseHelper.NOTE_TABLE_NAME + " where _id=?");
         sqlite.execSQL(sql, new Integer[] { id });
+    }
+
+    public void destroy() {
         dbHelper.close();
         sqlite.close();
     }

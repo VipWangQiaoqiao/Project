@@ -11,6 +11,7 @@ import net.oschina.app.widget.KJDragGridView.DragGridBaseAdapter;
 import org.kymjs.kjframe.utils.DensityUtils;
 
 import android.app.Activity;
+import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -112,7 +113,8 @@ public class NotebookAdapter extends BaseAdapter implements DragGridBaseAdapter 
         // holder.state.setImageResource(resId);
         holder.thumbtack.setImageResource(NoteEditFragment.sThumbtackImgs[datas
                 .get(position).getColor()]);
-        holder.content.setText(datas.get(position).getContent());
+        holder.content.setText(Html.fromHtml(datas.get(position).getContent())
+                .toString());
         holder.content.setBackgroundColor(NoteEditFragment.sBackGrounds[datas
                 .get(position).getColor()]);
         if (position == currentHidePosition) {
