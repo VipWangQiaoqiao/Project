@@ -33,272 +33,274 @@ import butterknife.InjectView;
  * 
  */
 public class NavigationDrawerFragment extends BaseFragment implements
-		OnClickListener {
+	OnClickListener {
 
-	/**
-	 * Remember the position of the selected item.
-	 */
-	private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
+    /**
+     * Remember the position of the selected item.
+     */
+    private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
 
-	/**
-	 * A pointer to the current callbacks instance (the Activity).
-	 */
-	private NavigationDrawerCallbacks mCallbacks;
+    /**
+     * A pointer to the current callbacks instance (the Activity).
+     */
+    private NavigationDrawerCallbacks mCallbacks;
 
-	/**
-	 * Helper component that ties the action bar to the navigation drawer.
-	 */
-	private ActionBarDrawerToggle mDrawerToggle;
+    /**
+     * Helper component that ties the action bar to the navigation drawer.
+     */
+    private ActionBarDrawerToggle mDrawerToggle;
 
-	private DrawerArrowDrawable drawerArrow;
+    private DrawerArrowDrawable drawerArrow;
 
-	private DrawerLayout mDrawerLayout;
-	private View mDrawerListView;
-	private View mFragmentContainerView;
+    private DrawerLayout mDrawerLayout;
+    private View mDrawerListView;
+    private View mFragmentContainerView;
 
-	private int mCurrentSelectedPosition = 0;
-	private boolean mFromSavedInstanceState;
+    private int mCurrentSelectedPosition = 0;
+    private boolean mFromSavedInstanceState;
 
-	@InjectView(R.id.menu_item_quests)
-	View mMenu_item_quests;
+    @InjectView(R.id.menu_item_quests)
+    View mMenu_item_quests;
 
-	@InjectView(R.id.menu_item_opensoft)
-	View mMenu_item_opensoft;
+    @InjectView(R.id.menu_item_opensoft)
+    View mMenu_item_opensoft;
 
-	@InjectView(R.id.menu_item_blog)
-	View mMenu_item_blog;
-	
-	@InjectView(R.id.menu_item_gitapp)
-	View mMenu_item_gitapp;
+    @InjectView(R.id.menu_item_blog)
+    View mMenu_item_blog;
 
-	@InjectView(R.id.menu_item_rss)
-	View mMenu_item_rss;
+    @InjectView(R.id.menu_item_gitapp)
+    View mMenu_item_gitapp;
 
-	@InjectView(R.id.menu_item_setting)
-	View mMenu_item_setting;
+    @InjectView(R.id.menu_item_rss)
+    View mMenu_item_rss;
 
-	@InjectView(R.id.menu_item_exit)
-	View mMenu_item_exit;
+    @InjectView(R.id.menu_item_setting)
+    View mMenu_item_setting;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @InjectView(R.id.menu_item_exit)
+    View mMenu_item_exit;
 
-		if (savedInstanceState != null) {
-			mCurrentSelectedPosition = savedInstanceState
-					.getInt(STATE_SELECTED_POSITION);
-			mFromSavedInstanceState = true;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
+
+	if (savedInstanceState != null) {
+	    mCurrentSelectedPosition = savedInstanceState
+		    .getInt(STATE_SELECTED_POSITION);
+	    mFromSavedInstanceState = true;
+	}
+
+	selectItem(mCurrentSelectedPosition);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+	super.onActivityCreated(savedInstanceState);
+	setHasOptionsMenu(true);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+	    Bundle savedInstanceState) {
+	mDrawerListView = inflater.inflate(R.layout.fragment_navigation_drawer,
+		container, false);
+	mDrawerListView.setOnClickListener(this);
+	ButterKnife.inject(this, mDrawerListView);
+	initView(mDrawerListView);
+	initData();
+	return mDrawerListView;
+    }
+
+    @Override
+    public void onClick(View v) {
+	int id = v.getId();
+	switch (id) {
+	case R.id.menu_item_quests:
+	    UIHelper.showSimpleBack(getActivity(), SimpleBackPage.QUEST);
+	    break;
+	case R.id.menu_item_opensoft:
+	    UIHelper.showSimpleBack(getActivity(),
+		    SimpleBackPage.OPENSOURCE_SOFTWARE);
+	    break;
+	case R.id.menu_item_blog:
+	    UIHelper.showSimpleBack(getActivity(), SimpleBackPage.BLOG);
+	    break;
+	case R.id.menu_item_gitapp:
+
+	    boolean res = TDevice.openAppActivity(getActivity(),
+		    "net.oschina.gitapp", "net.oschina.gitapp.WelcomePage");
+
+	    if (!res) {
+		if (!TDevice.isHaveMarket(getActivity())) {
+		    UIHelper.openSysBrowser(getActivity(),
+			    "http://git.oschina.net/appclient");
+		} else {
+		    TDevice.gotoMarket(getActivity(), "net.oschina.gitapp");
 		}
+	    }
 
-		selectItem(mCurrentSelectedPosition);
+	    break;
+	case R.id.menu_item_rss:
+	    break;
+	case R.id.menu_item_setting:
+	    UIHelper.showSetting(getActivity());
+	    break;
+	case R.id.menu_item_exit:
+	    AppManager.getAppManager().AppExit(getActivity());
+	    break;
+	default:
+	    break;
+
+	}
+	mDrawerLayout.postDelayed(new Runnable() {
+
+	    @Override
+	    public void run() {
+		mDrawerLayout.closeDrawers();
+	    }
+	}, 800);
+    }
+
+    @Override
+    public void initView(View view) {
+
+	mMenu_item_rss.setOnClickListener(this);
+	mMenu_item_opensoft.setOnClickListener(this);
+	mMenu_item_blog.setOnClickListener(this);
+	mMenu_item_quests.setOnClickListener(this);
+
+	mMenu_item_setting.setOnClickListener(this);
+	mMenu_item_exit.setOnClickListener(this);
+
+	mMenu_item_gitapp.setOnClickListener(this);
+    }
+
+    @Override
+    public void initData() {
+    }
+
+    public boolean isDrawerOpen() {
+	return mDrawerLayout != null
+		&& mDrawerLayout.isDrawerOpen(mFragmentContainerView);
+    }
+
+    /**
+     * Users of this fragment must call this method to set up the navigation
+     * drawer interactions.
+     * 
+     * @param fragmentId
+     *            The android:id of this fragment in its activity's layout.
+     * @param drawerLayout
+     *            The DrawerLayout containing this fragment's UI.
+     */
+    public void setUp(int fragmentId, DrawerLayout drawerLayout) {
+	mFragmentContainerView = getActivity().findViewById(fragmentId);
+	mDrawerLayout = drawerLayout;
+
+	// set a custom shadow that overlays the main content when the drawer
+	// opens
+	mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
+		GravityCompat.START);
+	// set up the drawer's list view with items and click listener
+
+	ActionBar actionBar = getActionBar();
+	actionBar.setDisplayHomeAsUpEnabled(true);
+	actionBar.setHomeButtonEnabled(true);
+
+	drawerArrow = new DrawerArrowDrawable(getActivity()) {
+	    @Override
+	    public boolean isLayoutRtl() {
+		return false;
+	    }
+	};
+
+	mDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout,
+		drawerArrow, R.string.navigation_drawer_open,
+		R.string.navigation_drawer_close) {
+
+	    public void onDrawerClosed(View view) {
+		super.onDrawerClosed(view);
+		getActivity().invalidateOptionsMenu();
+	    }
+
+	    public void onDrawerOpened(View drawerView) {
+		super.onDrawerOpened(drawerView);
+		getActivity().invalidateOptionsMenu();
+	    }
+	};
+
+	mDrawerLayout.post(new Runnable() {
+	    @Override
+	    public void run() {
+		mDrawerToggle.syncState();
+	    }
+	});
+
+	mDrawerLayout.setDrawerListener(mDrawerToggle);
+    }
+
+    public void openDrawerMenu() {
+	mDrawerLayout.openDrawer(mFragmentContainerView);
+    }
+
+    private void selectItem(int position) {
+	mCurrentSelectedPosition = position;
+	if (mDrawerLayout != null) {
+	    mDrawerLayout.closeDrawer(mFragmentContainerView);
+	}
+	if (mCallbacks != null) {
+	    mCallbacks.onNavigationDrawerItemSelected(position);
+	}
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+	super.onAttach(activity);
+	try {
+	    mCallbacks = (NavigationDrawerCallbacks) activity;
+	} catch (ClassCastException e) {
+	    throw new ClassCastException(
+		    "Activity must implement NavigationDrawerCallbacks.");
+	}
+    }
+
+    @Override
+    public void onDetach() {
+	super.onDetach();
+	mCallbacks = null;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+	super.onSaveInstanceState(outState);
+	outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+	super.onConfigurationChanged(newConfig);
+	mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+	if (mDrawerToggle.onOptionsItemSelected(item)) {
+	    return true;
 	}
 
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-		setHasOptionsMenu(true);
-	}
+	return super.onOptionsItemSelected(item);
+    }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		mDrawerListView = inflater.inflate(R.layout.fragment_navigation_drawer,
-				container, false);
-		mDrawerListView.setOnClickListener(this);
-		ButterKnife.inject(this, mDrawerListView);
-		initView(mDrawerListView);
-		initData();
-		return mDrawerListView;
-	}
+    private ActionBar getActionBar() {
+	return ((ActionBarActivity) getActivity()).getSupportActionBar();
+    }
 
-	@Override
-	public void onClick(View v) {
-		int id = v.getId();
-		switch (id) {
-		case R.id.menu_item_quests:
-			UIHelper.showSimpleBack(getActivity(), SimpleBackPage.QUEST);
-			break;
-		case R.id.menu_item_opensoft:
-			UIHelper.showSimpleBack(getActivity(),
-					SimpleBackPage.OPENSOURCE_SOFTWARE);
-			break;
-		case R.id.menu_item_blog:
-			UIHelper.showSimpleBack(getActivity(), SimpleBackPage.BLOG);
-			break;
-		case R.id.menu_item_gitapp:
-			
-			boolean res = TDevice.openAppActivity(getActivity(), "net.oschina.gitapp", "net.oschina.gitapp.WelcomePage");
-			
-			if (!res) {
-				if (!TDevice.isHaveMarket(getActivity())) {
-					UIHelper.openSysBrowser(getActivity(), "http://git.oschina.net/appclient");
-				} else {
-					TDevice.gotoMarket(getActivity(), "net.oschina.gitapp");
-				}
-			}
-			
-			break;
-		case R.id.menu_item_rss:
-			break;
-		case R.id.menu_item_setting:
-			UIHelper.showSetting(getActivity());
-			break;
-		case R.id.menu_item_exit:
-			AppManager.getAppManager().AppExit(getActivity());
-			break;
-		default:
-			break;
-
-		}
-		mDrawerLayout.postDelayed(new Runnable() {
-
-			@Override
-			public void run() {
-				mDrawerLayout.closeDrawers();
-			}
-		}, 800);
-	}
-
-	@Override
-	public void initView(View view) {
-
-		mMenu_item_rss.setOnClickListener(this);
-		mMenu_item_opensoft.setOnClickListener(this);
-		mMenu_item_blog.setOnClickListener(this);
-		mMenu_item_quests.setOnClickListener(this);
-		
-		mMenu_item_setting.setOnClickListener(this);
-		mMenu_item_exit.setOnClickListener(this);
-		
-		mMenu_item_gitapp.setOnClickListener(this);
-	}
-
-	@Override
-	public void initData() {
-	}
-
-	public boolean isDrawerOpen() {
-		return mDrawerLayout != null
-				&& mDrawerLayout.isDrawerOpen(mFragmentContainerView);
-	}
-
-	/**
-	 * Users of this fragment must call this method to set up the navigation
-	 * drawer interactions.
-	 * 
-	 * @param fragmentId
-	 *            The android:id of this fragment in its activity's layout.
-	 * @param drawerLayout
-	 *            The DrawerLayout containing this fragment's UI.
-	 */
-	public void setUp(int fragmentId, DrawerLayout drawerLayout) {
-		mFragmentContainerView = getActivity().findViewById(fragmentId);
-		mDrawerLayout = drawerLayout;
-
-		// set a custom shadow that overlays the main content when the drawer
-		// opens
-		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
-				GravityCompat.START);
-		// set up the drawer's list view with items and click listener
-
-		ActionBar actionBar = getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setHomeButtonEnabled(true);
-
-		drawerArrow = new DrawerArrowDrawable(getActivity()) {
-			@Override
-			public boolean isLayoutRtl() {
-				return false;
-			}
-		};
-
-		mDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout,
-				drawerArrow, R.string.navigation_drawer_open,
-				R.string.navigation_drawer_close) {
-
-			public void onDrawerClosed(View view) {
-				super.onDrawerClosed(view);
-				getActivity().invalidateOptionsMenu();
-			}
-
-			public void onDrawerOpened(View drawerView) {
-				super.onDrawerOpened(drawerView);
-				getActivity().invalidateOptionsMenu();
-			}
-		};
-
-		mDrawerLayout.post(new Runnable() {
-			@Override
-			public void run() {
-				mDrawerToggle.syncState();
-			}
-		});
-		
-		mDrawerLayout.setDrawerListener(mDrawerToggle);
-	}
-
-	public void openDrawerMenu() {
-		mDrawerLayout.openDrawer(mFragmentContainerView);
-	}
-
-	private void selectItem(int position) {
-		mCurrentSelectedPosition = position;
-		if (mDrawerLayout != null) {
-			mDrawerLayout.closeDrawer(mFragmentContainerView);
-		}
-		if (mCallbacks != null) {
-			mCallbacks.onNavigationDrawerItemSelected(position);
-		}
-	}
-
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		try {
-			mCallbacks = (NavigationDrawerCallbacks) activity;
-		} catch (ClassCastException e) {
-			throw new ClassCastException(
-					"Activity must implement NavigationDrawerCallbacks.");
-		}
-	}
-
-	@Override
-	public void onDetach() {
-		super.onDetach();
-		mCallbacks = null;
-	}
-
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
-	}
-
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		super.onConfigurationChanged(newConfig);
-		mDrawerToggle.onConfigurationChanged(newConfig);
-	}
-
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if (mDrawerToggle.onOptionsItemSelected(item)) {
-			return true;
-		}
-
-		return super.onOptionsItemSelected(item);
-	}
-
-	private ActionBar getActionBar() {
-		return ((ActionBarActivity) getActivity()).getSupportActionBar();
-	}
-
-	public static interface NavigationDrawerCallbacks {
-		void onNavigationDrawerItemSelected(int position);
-	}
+    public static interface NavigationDrawerCallbacks {
+	void onNavigationDrawerItemSelected(int position);
+    }
 }
