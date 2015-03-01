@@ -2,6 +2,7 @@ package net.oschina.app.team.fragment;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.Serializable;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -59,6 +60,7 @@ public class TeamTweetDetailFragment extends
     private AvatarView img_head;
     private TextView tv_name;
     private TextView tv_active;
+    private TextView mTvCommentCount;
     private TextView tv_content;
     private LinearLayout ll_event_list;
     private TextView tv_client;
@@ -90,6 +92,8 @@ public class TeamTweetDetailFragment extends
                 .findViewById(R.id.event_listitem_username);
         tv_active = (TextView) headView
                 .findViewById(R.id.event_listitem_active);
+        mTvCommentCount = (TextView) headView
+                .findViewById(R.id.tv_comment_count);
         tv_content = (TextView) headView
                 .findViewById(R.id.event_listitem_content);
         ll_event_list = (LinearLayout) headView
@@ -171,6 +175,12 @@ public class TeamTweetDetailFragment extends
     @Override
     protected String getCacheKeyPrefix() {
         return CACHE_KEY_PREFIX + active.getId() + mCurrentPage;
+    }
+
+    @Override
+    protected CommentList readList(Serializable seri) {
+        super.readList(seri);
+        return (CommentList) seri;
     }
 
     @Override
@@ -312,6 +322,14 @@ public class TeamTweetDetailFragment extends
                 Throwable arg3) {
             hideWaitDialog();
             AppContext.showToastShort(R.string.comment_publish_faile);
+        }
+    };
+
+    @Override
+    protected void executeOnLoadDataSuccess(java.util.List<Comment> data) {
+        super.executeOnLoadDataSuccess(data);
+        if (mTvCommentCount != null && data != null) {
+            mTvCommentCount.setText("评论(" + (mAdapter.getCount() - 1) + ")");
         }
     };
 

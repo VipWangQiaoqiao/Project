@@ -315,7 +315,6 @@ public class TweetDetailFragment extends
                     AppContext.getInstance().getLoginUid(), text, 0,
                     mCommentHandler);
         }
-
     }
 
     class DeleteOperationResponseHandler extends OperationResponseHandler {
@@ -386,7 +385,6 @@ public class TweetDetailFragment extends
                 .getPinterestDialogCancelable(getActivity());
         dialog.setNegativeButton(R.string.cancle, null);
         dialog.setItemsWithoutChk(items, new OnItemClickListener() {
-
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
