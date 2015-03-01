@@ -5,6 +5,8 @@ import butterknife.InjectView;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.team.bean.TeamProject;
+import net.oschina.app.team.bean.TeamProjectMember;
+import net.oschina.app.widget.AvatarView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -18,7 +20,7 @@ import android.widget.TextView;
  * 
  */
 
-public class TeamProjectListAdapterNew extends ListBaseAdapter<TeamProject> {
+public class TeamProjectMemberAdapter extends ListBaseAdapter<TeamProjectMember> {
     
     @Override
     protected View getRealView(int position, View convertView, ViewGroup parent) {
@@ -26,33 +28,25 @@ public class TeamProjectListAdapterNew extends ListBaseAdapter<TeamProject> {
 	ViewHolder vh;
 	if (convertView == null || convertView.getTag() == null) {
 	    convertView = View.inflate(parent.getContext(),
-		    R.layout.list_cell_team_project, null);
+		    R.layout.list_cell_team_project_member, null);
 	    vh = new ViewHolder(convertView);
 	    convertView.setTag(vh);
 	} else {
 	    vh = (ViewHolder) convertView.getTag();
 	}
 
-	TeamProject item = mDatas.get(position);
-
-	String source = item.getSource();
-	if (source == null) {
-
-	} else if (source.equalsIgnoreCase(TeamProject.GITOSC)) {
-	    vh.source.setBackgroundResource(R.drawable.ic_comment_count);
-	} else if (source.equalsIgnoreCase(TeamProject.GITHUB)) {
-	    vh.source.setBackgroundResource(R.drawable.ic_action_comment);
-	}
-
-	vh.name.setText(item.getGit().getOwnerName() + " / " + item.getGit().getName());
+	TeamProjectMember item = mDatas.get(position);
 	
+	vh.avatar.setAvatarUrl(item.getPortrait());
+	vh.name.setText(item.getName());
+
 	return convertView;
     }
 
     public static class ViewHolder {
-	@InjectView(R.id.iv_source)
-	ImageView source;
-	@InjectView(R.id.tv_project_name)
+	@InjectView(R.id.iv_avatar)
+	AvatarView avatar;
+	@InjectView(R.id.tv_name)
 	TextView name;
 
 	public ViewHolder(View view) {
