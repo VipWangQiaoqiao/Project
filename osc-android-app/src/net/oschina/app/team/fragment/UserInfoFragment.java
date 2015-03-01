@@ -9,21 +9,19 @@ import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.ListEntity;
-import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.team.adapter.DynamicAdapter;
 import net.oschina.app.team.adapter.TeamMemberAdapter;
 import net.oschina.app.team.bean.TeamActive;
 import net.oschina.app.team.bean.TeamActives;
 import net.oschina.app.team.bean.TeamMember;
+import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.SimpleBackActivity;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TLog;
-import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
-
-import org.kymjs.kjframe.utils.StringUtils;
-
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Adapter;
@@ -103,13 +101,16 @@ public class UserInfoFragment extends BaseListFragment {
                     if (obj instanceof TeamActive) {
                         data = (TeamActive) obj;
                     }
+                    Intent intent = new Intent(aty, DetailActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable(
                             DynamicFragment.DYNAMIC_FRAGMENT_KEY, data);
                     bundle.putInt(DynamicFragment.DYNAMIC_FRAGMENT_TEAM_KEY,
                             StringUtils.toInt(teamId, 0));
-                    UIHelper.showSimpleBack(aty, SimpleBackPage.DYNAMIC_DETAIL,
-                            bundle);
+                    bundle.putInt(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+                            DetailActivity.DISPLAY_TEAM_TWEET_DETAIL);
+                    intent.putExtras(bundle);
+                    aty.startActivity(intent);
                 }
             }
         });
