@@ -1,15 +1,12 @@
 package net.oschina.app.team.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import net.oschina.app.R;
+import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.team.bean.TeamProject;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,37 +18,11 @@ import android.widget.TextView;
  * 
  */
 
-public class TeamProjectListAdapter extends BaseAdapter {
-
-    private ArrayList<TeamProject> datas = new ArrayList<TeamProject>();
-
-    public void add(TeamProject project) {
-	this.datas.add(project);
-	notifyDataSetChanged();
-    }
-
-    public void add(List<TeamProject> datas) {
-	this.datas.addAll(datas);
-	notifyDataSetChanged();
-    }
-
+public class TeamProjectListAdapterNew extends ListBaseAdapter<TeamProject> {
+    
     @Override
-    public int getCount() {
-	return datas.size();
-    }
-
-    @Override
-    public TeamProject getItem(int position) {
-	return datas.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-	return 0;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    protected View getRealView(int position, View convertView, ViewGroup parent) {
+	// TODO Auto-generated method stub
 	ViewHolder vh;
 	if (convertView == null || convertView.getTag() == null) {
 	    convertView = View.inflate(parent.getContext(),
@@ -62,7 +33,7 @@ public class TeamProjectListAdapter extends BaseAdapter {
 	    vh = (ViewHolder) convertView.getTag();
 	}
 
-	TeamProject item = datas.get(position);
+	TeamProject item = mDatas.get(position);
 
 	String source = item.getSource();
 	if (source == null) {
@@ -77,7 +48,7 @@ public class TeamProjectListAdapter extends BaseAdapter {
 
 	return convertView;
     }
-    
+
     public static class ViewHolder {
 	@InjectView(R.id.iv_source)
 	ImageView source;

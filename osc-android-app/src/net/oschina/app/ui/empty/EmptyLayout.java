@@ -202,10 +202,6 @@ public class EmptyLayout extends LinearLayout implements
             tv.setText(R.string.error_view_no_data);
     }
 
-    private void setTvNoLoginContent() {
-        tv.setText(R.string.unlogin_tip);
-    }
-
     @Override
     public void setVisibility(int visibility) {
         if (visibility == View.GONE)

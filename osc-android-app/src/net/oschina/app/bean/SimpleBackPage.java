@@ -29,6 +29,7 @@ import net.oschina.app.team.fragment.SelectTeamFragment;
 import net.oschina.app.team.fragment.TeamNewIssueFragment;
 import net.oschina.app.team.fragment.UserInfoFragment;
 import net.oschina.app.team.viewpagefragment.MyIssuePagerfragment;
+import net.oschina.app.team.viewpagefragment.TeamProjectViewPagerFragment;
 import net.oschina.app.viewpagerfragment.BlogViewPagerFragment;
 import net.oschina.app.viewpagerfragment.EventViewPagerFragment;
 import net.oschina.app.viewpagerfragment.FriendsViewPagerFragment;
@@ -122,7 +123,9 @@ public enum SimpleBackPage {
     TEAM_NEW_ISSUE(35, R.string.team_issue_new, TeamNewIssueFragment.class),
 
     DYNAMIC_DETAIL(36, R.string.team_detail_dynamic,
-            DynamicDetailFragment.class);
+            DynamicDetailFragment.class),
+            
+    TEAM_PROJECT_MAIN(37, 0, TeamProjectViewPagerFragment.class);
 
     private int title;
     private Class<?> clz;

@@ -9,7 +9,6 @@
         style="@style/wrap_wrap"
         android:layout_marginBottom="8dp"
         android:layout_toRightOf="@id/iv_avatar"
-        android:text="Team客户端页面图（修改＋补充）"
         android:layout_margin="@dimen/space_10"
         android:textSize="18sp" />
 
@@ -19,16 +18,13 @@
         android:layout_below="@id/tv_title"
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
-        android:text="火蚁"
-        android:textColor="@color/lightblue"
-        android:textSize="12sp" />
+        android:textColor="@color/lightblue"/>
 
     <TextView
         android:id="@+id/tv_time"
         style="@style/wrap_wrap"
         android:layout_below="@id/tv_title"
         android:layout_toRightOf="@id/tv_author"
-        android:text="2015-02-10"
         android:layout_marginRight="10dp"
         android:textSize="12sp" />
     <!-- 回/赞 -->
@@ -37,7 +33,6 @@
         style="@style/wrap_wrap"
         android:layout_below="@id/tv_title"
         android:layout_toRightOf="@id/tv_time"
-        android:text="10回/5赞"
         android:textSize="12sp" />
 
     <WebView
@@ -45,7 +40,6 @@
         android:layout_below="@id/tv_author"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@color/white" />
+        android:layout_marginTop="10dp" />
 
 </RelativeLayout>

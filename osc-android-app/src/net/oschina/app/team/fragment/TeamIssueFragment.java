@@ -112,7 +112,8 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
     private void setNoTeamIssue() {
 	mErrorLayout.setErrorType(EmptyLayout.NODATA);
 	mErrorLayout.setErrorImag(R.drawable.page_icon_empty);
-	mErrorLayout.setErrorMessage("这里暂无任务，先歇歇");
+	String msg = getResources().getString(R.string.team_empty_issue);
+	mErrorLayout.setErrorMessage(msg);
     }
 
     @Override

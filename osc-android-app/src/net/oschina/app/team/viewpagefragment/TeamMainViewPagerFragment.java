@@ -3,9 +3,9 @@ package net.oschina.app.team.viewpagefragment;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.base.BaseViewPagerFragment;
-import net.oschina.app.team.fragment.DynamicFragment;
 import net.oschina.app.team.fragment.MyIssueFragment;
 import net.oschina.app.team.fragment.TeamMemberFragment;
+import net.oschina.app.team.fragment.TeamProjectFragment;
 import android.os.Bundle;
 import android.view.View;
 
@@ -26,9 +26,9 @@ public class TeamMainViewPagerFragment extends BaseViewPagerFragment {
     //
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        // setHasOptionsMenu(true);
-        mViewPager.setOffscreenPageLimit(2);
+	super.onViewCreated(view, savedInstanceState);
+	// setHasOptionsMenu(true);
+	mViewPager.setOffscreenPageLimit(2);
     }
 
     @Override
@@ -48,13 +48,14 @@ public class TeamMainViewPagerFragment extends BaseViewPagerFragment {
 
     @Override
     protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
-	String[] arraStrings = getResources().getStringArray(R.array.team_main_viewpager);
-	
-        adapter.addTab(arraStrings[0], "", DynamicFragment.class, getActivity()
-                .getIntent().getExtras());
-        adapter.addTab(arraStrings[1], "", MyIssueFragment.class, getActivity()
-                .getIntent().getExtras());
-        adapter.addTab(arraStrings[2], "", TeamMemberFragment.class, getActivity()
-                .getIntent().getExtras());
+	String[] arraStrings = getResources().getStringArray(
+		R.array.team_main_viewpager);
+
+	adapter.addTab(arraStrings[0], "", TeamProjectFragment.class,
+		getActivity().getIntent().getExtras());
+	adapter.addTab(arraStrings[1], "", MyIssueFragment.class, getActivity()
+		.getIntent().getExtras());
+	adapter.addTab(arraStrings[2], "", TeamMemberFragment.class,
+		getActivity().getIntent().getExtras());
     }
 }

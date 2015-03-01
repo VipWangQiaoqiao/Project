@@ -93,7 +93,7 @@ public class ListBaseAdapter<T extends Entity> extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int arg0) {
+    public T getItem(int arg0) {
 	if (mDatas.size() > arg0) {
 	    return mDatas.get(arg0);
 	}
@@ -156,7 +156,7 @@ public class ListBaseAdapter<T extends Entity> extends BaseAdapter {
     public void setNoDataText(int noDataText) {
 	_noDateText = noDataText;
     }
-
+    
     protected boolean loadMoreHasBg() {
 	return true;
     }

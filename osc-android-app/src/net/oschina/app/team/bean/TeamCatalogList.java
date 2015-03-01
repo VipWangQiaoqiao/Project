@@ -8,38 +8,38 @@ import net.oschina.app.bean.ListEntity;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
-/** 
- * 指定项目任务列表
- * 		包括所有任务列表以及为指定任务列表
+/**
+ * 指定项目任务列表 包括所有任务列表以及为指定任务列表
+ * 
  * @author FireAnt（http://my.oschina.net/LittleDY）
- * @version 创建时间：2015年1月15日 上午10:58:47 
+ * @version 创建时间：2015年1月15日 上午10:58:47
  * 
  */
 @SuppressWarnings("serial")
 @XStreamAlias("oschina")
-public class TeamCatalogList extends Entity implements ListEntity {
+public class TeamCatalogList extends Entity implements ListEntity<TeamIssueCatalog> {
 
-	@XStreamAlias("totalCount")
-	private int totalCount;
-	
-	@XStreamAlias("catalogs")
-	private ArrayList<TeamCatalog> list = new ArrayList<TeamCatalog>();
-	
-	@Override
-	public List<TeamCatalog> getList() {
-		return list;
-	}
+    @XStreamAlias("totalCount")
+    private int totalCount;
 
-	public int getTotalCount() {
-		return totalCount;
-	}
+    @XStreamAlias("catalogs")
+    private ArrayList<TeamIssueCatalog> list = new ArrayList<TeamIssueCatalog>();
 
-	public void setTotalCount(int totalCount) {
-		this.totalCount = totalCount;
-	}
+    @Override
+    public List<TeamIssueCatalog> getList() {
+	return list;
+    }
 
-	public void setList(ArrayList<TeamCatalog> list) {
-		this.list = list;
-	}
+    public int getTotalCount() {
+	return totalCount;
+    }
+
+    public void setTotalCount(int totalCount) {
+	this.totalCount = totalCount;
+    }
+
+    public void setList(ArrayList<TeamIssueCatalog> list) {
+	this.list = list;
+    }
 
 }
