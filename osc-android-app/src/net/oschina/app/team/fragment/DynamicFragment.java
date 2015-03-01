@@ -7,20 +7,20 @@ import java.util.List;
 
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.team.adapter.DynamicAdapter;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamActive;
 import net.oschina.app.team.bean.TeamActives;
 import net.oschina.app.team.bean.TeamList;
+import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.util.TLog;
-import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
 import org.kymjs.kjframe.utils.PreferenceHelper;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -110,12 +110,18 @@ public class DynamicFragment extends BaseListFragment<TeamActive> {
             long id) {
         Adapter adapter = parent.getAdapter();
         if (adapter != null && adapter instanceof DynamicAdapter) {
+            Intent intent = new Intent(aty, DetailActivity.class);
             TeamActive data = ((DynamicAdapter) parent.getAdapter())
                     .getItem(position);
             Bundle bundle = new Bundle();
             bundle.putSerializable(DYNAMIC_FRAGMENT_KEY, data);
             bundle.putInt(DYNAMIC_FRAGMENT_TEAM_KEY, team.getId());
-            UIHelper.showSimpleBack(aty, SimpleBackPage.DYNAMIC_DETAIL, bundle);
+            // UIHelper.showSimpleBack(aty, SimpleBackPage.DYNAMIC_DETAIL,
+            // bundle);
+            bundle.putInt(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+                    DetailActivity.DISPLAY_TEAM_TWEET_DETAIL);
+            intent.putExtras(bundle);
+            aty.startActivity(intent);
         }
     }
 }

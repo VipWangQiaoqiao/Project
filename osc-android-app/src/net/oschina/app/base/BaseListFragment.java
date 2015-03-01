@@ -186,7 +186,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
             long id) {}
 
     private String getCacheKey() {
-        return new StringBuffer(getCacheKeyPrefix()).append("_")
+        return new StringBuilder(getCacheKeyPrefix()).append("_")
                 .append(mCurrentPage).toString();
     }
 

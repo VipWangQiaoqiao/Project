@@ -27,6 +27,7 @@ import net.oschina.app.team.fragment.NoteBookFragment;
 import net.oschina.app.team.fragment.NoteEditFragment;
 import net.oschina.app.team.fragment.SelectTeamFragment;
 import net.oschina.app.team.fragment.TeamNewIssueFragment;
+import net.oschina.app.team.fragment.TeamTweetDetailFragment;
 import net.oschina.app.team.fragment.UserInfoFragment;
 import net.oschina.app.team.viewpagefragment.MyIssuePagerfragment;
 import net.oschina.app.team.viewpagefragment.TeamProjectViewPagerFragment;

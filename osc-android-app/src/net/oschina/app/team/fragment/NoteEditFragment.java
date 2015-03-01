@@ -18,6 +18,7 @@ import net.oschina.app.util.UIHelper;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -169,7 +170,7 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
         mEtContent.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         mEtContent.setSingleLine(false);
         mEtContent.setHorizontallyScrolling(false);
-        mEtContent.setText(editData.getContent());
+        mEtContent.setText(Html.fromHtml(editData.getContent()).toString());
         mTvDate.setText(editData.getDate());
 
         mEtContent.setBackgroundColor(sBackGrounds[editData.getColor()]);
