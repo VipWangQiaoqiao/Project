@@ -265,8 +265,7 @@ public class NoticeService extends Service {
      * 请求是否有新通知
      */
     private void requestNotice() {
-        OSChinaApi.getNotices(AppContext.getInstance().getLoginUid(),
-                mGetNoticeHandler);
+        OSChinaApi.getNotices(mGetNoticeHandler);
     }
 
     private static class ServiceStub extends INoticeService.Stub {

@@ -489,10 +489,8 @@ public class OSChinaApi {
         ApiHttpClient.post("action/api/portrait_update", params, handler);
     }
 
-    public static void getNotices(int uid, AsyncHttpResponseHandler handler) {
-        RequestParams params = new RequestParams();
-        params.put("uid1", uid);
-        ApiHttpClient.post("action/api/user_notice", params, handler);
+    public static void getNotices(AsyncHttpResponseHandler handler) {
+        ApiHttpClient.get("action/api/user_notice", handler);
     }
 
     /**
