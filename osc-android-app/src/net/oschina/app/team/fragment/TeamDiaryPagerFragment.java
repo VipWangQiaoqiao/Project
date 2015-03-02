@@ -49,10 +49,11 @@ import com.fourmob.datetimepicker.date.DatePickerDialog.OnDateSetListener;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 /**
- * 周报模块（外部无关模式,可独立于其他模块）
+ * 周报模块（外部无关模式,可独立于其他模块）<br>
+ * 首次进入，跳转至最后一周的周报信息，并读取文件缓存中的数据到内存缓存。<br>
+ * 当滑动ViewPager时，切换并加载下一周或上一周的周报数据，并存入内存缓存中
  * 
  * @author kymjs (https://github.com/kymjs)
- * 
  */
 public class TeamDiaryPagerFragment extends BaseFragment implements
         OnDateSetListener {

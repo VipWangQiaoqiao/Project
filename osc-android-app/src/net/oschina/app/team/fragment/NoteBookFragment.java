@@ -1,10 +1,12 @@
 package net.oschina.app.team.fragment;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
-import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.NotebookData;
 import net.oschina.app.bean.NotebookDataList;
@@ -20,11 +22,15 @@ import net.oschina.app.widget.KJDragGridView;
 import net.oschina.app.widget.KJDragGridView.OnDeleteListener;
 import net.oschina.app.widget.KJDragGridView.OnMoveListener;
 
-import org.apache.http.Header;
+import org.kymjs.kjframe.KJHttp;
+import org.kymjs.kjframe.http.HttpCallBack;
+import org.kymjs.kjframe.http.HttpConfig;
+import org.kymjs.kjframe.http.HttpParams;
 import org.kymjs.kjframe.http.core.KJAsyncTask;
 import org.kymjs.kjframe.http.core.KJAsyncTask.OnFinishedListener;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -43,8 +49,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-
-import com.loopj.android.http.AsyncHttpResponseHandler;
 
 /**
  * 便签列表界面
@@ -67,6 +71,7 @@ public class NoteBookFragment extends BaseFragment implements
     private ArrayList<NotebookData> datas;
     private NotebookAdapter adapter;
     private User user;
+    private Activity aty;
 
     /**
      * 用来做更进一步人性化的防手抖策略时使用<br>
@@ -87,6 +92,7 @@ public class NoteBookFragment extends BaseFragment implements
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_note, container,
                 false);
+        aty = getActivity();
         ButterKnife.inject(this, rootView);
         initData();
         initView(rootView);
@@ -99,7 +105,7 @@ public class NoteBookFragment extends BaseFragment implements
         noteDb = new NoteDatabase(getActivity());
         datas = noteDb.query();// 查询操作，忽略耗时
         if (datas != null) {
-            adapter = new NotebookAdapter(getActivity(), datas);
+            adapter = new NotebookAdapter(aty, datas);
         }
 
         if (datas != null && !datas.isEmpty()) {
@@ -222,7 +228,9 @@ public class NoteBookFragment extends BaseFragment implements
     }
 
     /**
-     * 刷新列表数据
+     * 使用自带缓存功能的网络请求，防止多次刷新造成的流量损耗以及服务器压力
+     * 
+     * @param i
      */
     private void refurbish() {
         datas = noteDb.query();
@@ -230,45 +238,25 @@ public class NoteBookFragment extends BaseFragment implements
             adapter.refurbishData(datas);
         }
         if (user.getUid() != 0) { // 未登录时不请求网络
-            OSChinaApi.getNoteBook(user.getUid(),
-                    new AsyncHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int arg0, Header[] arg1,
-                                final byte[] arg2) {
-                            KJAsyncTask
-                                    .setOnFinishedListener(new OnFinishedListener() {
-                                        @Override
-                                        public void onPostExecute() {
-                                            super.onPostExecute();
-                                            if (datas != null
-                                                    && adapter != null) {
-                                                adapter.refurbishData(datas);
-                                            }
-                                        }
-                                    });
+            HttpConfig config = new HttpConfig();
+            config.setCookieString(AppContext.getInstance().getProperty(
+                    AppConfig.CONF_COOKIE));
+            KJHttp kjh = new KJHttp(config);
 
-                            KJAsyncTask.execute(new Runnable() {
-                                @Override
-                                public void run() {
-                                    NotebookDataList dataList = XmlUtils
-                                            .toBean(NotebookDataList.class,
-                                                    arg2);
-                                    if (dataList != null) {
-                                        for (NotebookData data : dataList
-                                                .getList()) {
-                                            if (data != null) {
-                                                noteDb.merge(data);
-                                            }
-                                        }
-                                        datas = noteDb.query();
-                                    }
-                                }
-                            });
+            HttpParams params = new HttpParams();
+            params.put("uid", user.getUid() + "");
+            kjh.get("http://" + ApiHttpClient.HOST
+                    + "/action/api/team_sticky_list", params,
+                    new HttpCallBack() {
+                        @Override
+                        public void onSuccess(final String t) {
+                            super.onSuccess(t);
+                            NotebookDataList dataList = XmlUtils.toBean(
+                                    NotebookDataList.class, t.getBytes());
+                            if (dataList != null) {
+                                doSynchronize(dataList.getList());
+                            }
                         }
-
-                        @Override
-                        public void onFailure(int arg0, Header[] arg1,
-                                byte[] arg2, Throwable arg3) {}
                     });
         }
 
@@ -278,7 +266,6 @@ public class NoteBookFragment extends BaseFragment implements
             mEmptyLayout.setVisibility(View.VISIBLE);
             mEmptyLayout.setErrorType(EmptyLayout.NODATA);
             mEmptyLayout.setNoDataContent("暂无便签，请添加或下拉同步");
-
         }
     }
 
@@ -294,7 +281,6 @@ public class NoteBookFragment extends BaseFragment implements
             adapter.refurbishData(datas);
             mGrid.setAdapter(adapter);
         }
-
     }
 
     /**
@@ -306,6 +292,38 @@ public class NoteBookFragment extends BaseFragment implements
         } else {
             mSwipeRefreshLayout.setEnabled(true);
         }
+    }
+
+    /**
+     * 处理云端数据与本地数据的同步逻辑
+     * 
+     * @param cloudDatas
+     *            云端的数据列表
+     */
+    private void doSynchronize(final List<NotebookData> cloudDatas) {
+        // 设置线程完成时的相应方法
+        KJAsyncTask.setOnFinishedListener(new OnFinishedListener() {
+            @Override
+            public void onPostExecute() {
+                // 在UI线程更新视图
+                super.onPostExecute();
+                if (datas != null && adapter != null) {
+                    adapter.refurbishData(datas);
+                }
+            }
+        });
+        // 使用并发的方式启动线程
+        KJAsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                for (NotebookData data : cloudDatas) {
+                    if (data != null) {
+                        noteDb.merge(data); // 首先将云端数据合并到本地
+                    }
+                }
+                datas = noteDb.query(); // 合并完成后更新适配器数据缓存
+            }
+        });
     }
 
     /*************** function method *********************/
