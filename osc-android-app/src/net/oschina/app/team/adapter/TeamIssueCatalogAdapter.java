@@ -3,6 +3,7 @@ package net.oschina.app.team.adapter;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.team.bean.TeamIssueCatalog;
+import net.oschina.app.util.StringUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -13,11 +14,11 @@ import butterknife.InjectView;
  * TeamIssueCatalogAdapter.java
  * 
  * @author 火蚁(http://my.oschina.net/u/253900)
- *
+ * 
  * @data 2015-3-1 下午3:37:03
  */
 public class TeamIssueCatalogAdapter extends ListBaseAdapter<TeamIssueCatalog> {
-    
+
     @Override
     protected View getRealView(int position, View convertView, ViewGroup parent) {
 	ViewHolder vh = null;
@@ -29,15 +30,23 @@ public class TeamIssueCatalogAdapter extends ListBaseAdapter<TeamIssueCatalog> {
 	} else {
 	    vh = (ViewHolder) convertView.getTag();
 	}
-	
+
 	TeamIssueCatalog item = mDatas.get(position);
-	
+
 	vh.title.setText(item.getTitle());
-	vh.state.setText(item.getOpenedIssueCount() + "/" + item.getClosedIssueCount());
+	vh.state.setText(item.getOpenedIssueCount() + "/"
+		+ item.getClosedIssueCount());
 	
+	String description = item.getDescription();
+	if (description != null && !StringUtils.isEmpty(description)) {
+	    vh.description.setText(description);
+	} else {
+	    vh.description.setText("暂无描述");
+	}
+
 	return convertView;
     }
-    
+
     static class ViewHolder {
 
 	@InjectView(R.id.tv_team_issue_catalog_title)
@@ -52,4 +61,3 @@ public class TeamIssueCatalogAdapter extends ListBaseAdapter<TeamIssueCatalog> {
 	}
     }
 }
-

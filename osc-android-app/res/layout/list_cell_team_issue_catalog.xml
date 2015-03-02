@@ -25,6 +25,8 @@
         android:layout_below="@id/tv_team_issue_catalog_title"
         android:textColor="@color/main_gray"
         android:layout_marginTop="2dp"
+        android:maxLines="2"
+        android:ellipsize="end"
         android:text="暂无描述"
         android:textSize="11sp"/>
     
