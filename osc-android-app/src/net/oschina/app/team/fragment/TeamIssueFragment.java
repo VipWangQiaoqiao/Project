@@ -7,6 +7,7 @@ import java.util.List;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaTeamApi;
+import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.team.adapter.TeamIssueAdapter;
@@ -68,6 +69,8 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
 	    if (catalog != null) {
 		this.mCatalog = catalog;
 		this.mCatalogId = catalog.getId();
+		String title = catalog.getTitle() + "(" + catalog.getOpenedIssueCount() + "/" + catalog.getClosedIssueCount() + ")";
+		((BaseActivity)getActivity()).setActionBarTitle(title);
 	    }
 	}
     }
@@ -87,7 +90,7 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
     @Override
     protected String getCacheKeyPrefix() {
 	return CACHE_KEY_PREFIX + mTeamId + "_" + mProjectId + "_"
-		+ mCatalogId + "_" + mCurrentPage;
+		+ mCatalogId;
     }
 
     @Override
@@ -123,7 +126,7 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
 	int catalogId = mCatalogId;
 	String source = mProject == null ? "" : mProject.getSource();
 	int uid = mCatalogId == 0 ? 0 : AppContext.getInstance().getLoginUid();
-	String state = "opened";
+	String state = "all";
 	String scope = "";
 	OSChinaTeamApi.getTeamIssueList(teamId, projectId, catalogId, source, uid, state,
 		scope, mCurrentPage, AppContext.PAGE_SIZE, mHandler);

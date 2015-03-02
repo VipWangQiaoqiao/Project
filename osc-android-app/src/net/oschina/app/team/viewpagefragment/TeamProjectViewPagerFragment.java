@@ -7,6 +7,7 @@ import net.oschina.app.fragment.NewsFragment;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamProject;
 import net.oschina.app.team.fragment.TeamIssueCatalogFragment;
+import net.oschina.app.team.fragment.TeamProjectActiveFragment;
 import net.oschina.app.team.fragment.TeamProjectMemberFragment;
 import net.oschina.app.team.ui.TeamMainActivity;
 import android.os.Bundle;
@@ -39,7 +40,7 @@ public class TeamProjectViewPagerFragment extends BaseViewPagerFragment {
     @Override
     protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
 	adapter.addTab("任务分组", "issue", TeamIssueCatalogFragment.class, getBundle());
-	adapter.addTab("动态", "active", TeamProjectMemberFragment.class, getBundle());
+	adapter.addTab("动态", "active", TeamProjectActiveFragment.class, getBundle());
 	adapter.addTab("成员", "member", TeamProjectMemberFragment.class, getBundle());
     }
     

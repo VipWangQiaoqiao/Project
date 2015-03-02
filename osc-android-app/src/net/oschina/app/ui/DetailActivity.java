@@ -110,7 +110,7 @@ public class DetailActivity extends BaseActivity implements
             fragment = new TeamIssueDetailFragment();
             break;
         case DISPLAY_TEAM_DISCUSS_DETAIL:
-            actionBarTitle = R.string.actionbar_title_event_detail;
+            actionBarTitle = R.string.actionbar_title_question;
             fragment = new TeamDiscussDetailFragment();
             break;
         case DISPLAY_TEAM_TWEET_DETAIL:

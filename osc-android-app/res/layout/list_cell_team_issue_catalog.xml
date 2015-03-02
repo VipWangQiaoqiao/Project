@@ -18,13 +18,15 @@
         android:layout_alignParentRight="true"
         android:textSize="13sp"/>
     
-    <TextView 
+    <TextView
         android:id="@+id/tv_team_issue_catalog_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_team_issue_catalog_title"
         android:textColor="@color/main_gray"
         android:layout_marginTop="2dp"
+        android:maxLines="2"
+        android:ellipsize="end"
         android:text="暂无描述"
         android:textSize="11sp"/>
     

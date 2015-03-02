@@ -54,6 +54,30 @@ public class OSChinaTeamApi {
 	}
 	ApiHttpClient.get("action/api/team_project_member_list", params, handler);
     }
+    
+    /***
+     * 获取项目的动态列表
+     * @author 火蚁
+     * 2015-3-2 下午5:18:54
+     *
+     * @return void
+     * @param teamId
+     * @param project
+     * @param type "all"(default),"issue","code","other"
+     * @param page
+     * @param handler
+     */
+    public static void getTeamProjectActiveList(int teamId, TeamProject project, String type, int page, AsyncHttpResponseHandler handler) {
+	RequestParams params = new RequestParams();
+	params.put("teamid",  teamId);
+	params.put("projectid",  project.getGit().getId());
+	if (!TextUtils.isEmpty(project.getSource())) {
+	    params.put("source", project.getSource());
+	}
+	params.put("type",  type);
+	params.put("pageIndex",  page);
+	ApiHttpClient.get("action/api/team_project_active_list", params, handler);
+    }
 
     /**
      * 获取某项目的任务列表
