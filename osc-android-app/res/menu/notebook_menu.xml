@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/public_menu_send"
-        android:icon="@drawable/actionbar_send_icon"
+        android:icon="@drawable/icon_actionbar_add"
         android:showAsAction="always"
         android:title="@string/add_notebook"
         android:visible="true"

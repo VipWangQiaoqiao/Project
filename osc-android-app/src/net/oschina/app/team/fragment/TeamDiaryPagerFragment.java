@@ -130,7 +130,20 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
         super.initView(view);
         mPager.setAdapter(new DiaryPagerAdapter());
         mPager.setCurrentItem(currentWeek); // 首先显示当前周，然后左翻页查看历史
-        mTvTitle.setText("第" + (mPager.getCurrentItem() + 1) + "周周报总览");
+
+        final int currentPage = mPager.getCurrentItem();
+        if (currentPage == 0) {
+            mImgLeft.setImageResource(R.drawable.ic_diary_back);
+        } else {
+            mImgLeft.setImageResource(R.drawable.ic_diary_canback);
+        }
+        if (currentPage == currentWeek - 1) {
+            mImgRight.setImageResource(R.drawable.ic_diary_forward);
+        } else {
+            mImgRight.setImageResource(R.drawable.ic_diary_canforward);
+        }
+
+        mTvTitle.setText("第" + currentWeek + "周周报总览");
         mImgCalendar.setOnClickListener(this);
         mImgLeft.setOnClickListener(this);
         mImgRight.setOnClickListener(this);
@@ -143,7 +156,18 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
 
             @Override
             public void onPageScrollStateChanged(int arg0) {
-                mTvTitle.setText("第" + (mPager.getCurrentItem() + 1) + "周周报总览");
+                int currentPage = mPager.getCurrentItem();
+                if (currentPage == 0) {
+                    mImgLeft.setImageResource(R.drawable.ic_diary_back);
+                } else {
+                    mImgLeft.setImageResource(R.drawable.ic_diary_canback);
+                }
+                if (currentPage == currentWeek - 1) {
+                    mImgRight.setImageResource(R.drawable.ic_diary_forward);
+                } else {
+                    mImgRight.setImageResource(R.drawable.ic_diary_canforward);
+                }
+                mTvTitle.setText("第" + (currentPage + 1) + "周周报总览");
             }
         });
     }

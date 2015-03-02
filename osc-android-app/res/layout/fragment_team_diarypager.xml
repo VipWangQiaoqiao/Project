@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"  >
+        android:padding="10dp" >
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -20,25 +20,25 @@
                 android:id="@+id/team_diary_pager_left"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:src="@drawable/ic_brows_back" />
+                android:src="@drawable/ic_diary_canback" />
 
             <TextView
                 android:id="@+id/team_diary_pager_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
+                android:gravity="center"
+                android:text="标题"
                 android:textColor="@color/main_gray"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                android:text="标题" />
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/team_diary_pager_right"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:src="@drawable/ic_brows_forward" />
+                android:src="@drawable/ic_diary_forward" />
         </LinearLayout>
 
         <ImageView
@@ -46,9 +46,10 @@
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_alignParentRight="true"
-            android:src="@drawable/ic_brows_forward" />
+            android:padding="5dp"
+            android:src="@drawable/ic_diary_calendar" />
     </RelativeLayout>
-    
+
     <android.support.v4.view.ViewPager
         android:id="@+id/team_diary_pager"
         android:layout_width="match_parent"

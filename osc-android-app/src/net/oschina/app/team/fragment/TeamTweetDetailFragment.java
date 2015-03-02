@@ -293,7 +293,6 @@ public class TeamTweetDetailFragment extends
     }
 
     private final AsyncHttpResponseHandler mCommentHandler = new AsyncHttpResponseHandler() {
-
         @Override
         public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
             try {
