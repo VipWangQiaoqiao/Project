@@ -49,8 +49,12 @@ public class StringUtils {
      * @return
      */
     public static Date toDate(String sdate) {
+	return toDate(sdate, dateFormater.get());
+    }
+    
+    public static Date toDate(String sdate, SimpleDateFormat dateFormater) {
 	try {
-	    return dateFormater.get().parse(sdate);
+	    return dateFormater.parse(sdate);
 	} catch (ParseException e) {
 	    return null;
 	}

@@ -172,10 +172,6 @@ public class TeamIssueViewPageFragment extends BaseViewPagerFragment {
     }
 
     private void addCatalogList() {
-	// 加入一个为指定列表
-	if (mCatalogList != null) {
-	    mCatalogList.getList().add(0, getUnCatalog());
-	}
 	if (mCatalogList != null && !mCatalogList.getList().isEmpty()
 		&& mTabsAdapter != null) {
 	    for (TeamIssueCatalog catalog : mCatalogList.getList()) {
@@ -193,12 +189,6 @@ public class TeamIssueViewPageFragment extends BaseViewPagerFragment {
 	bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_PROJECT, teamProject);
 	bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_ISSUE_CATALOG, issueCatalog);
 	return bundle;
-    }
-
-    private TeamIssueCatalog getUnCatalog() {
-	TeamIssueCatalog catalog = new TeamIssueCatalog();
-	catalog.setTitle("未指定列表");
-	return catalog;
     }
 
     private TeamProject getDefaultProject() {

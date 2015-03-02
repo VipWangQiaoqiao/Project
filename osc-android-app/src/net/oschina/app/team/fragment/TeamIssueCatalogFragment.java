@@ -6,18 +6,22 @@ import java.io.Serializable;
 import net.oschina.app.AppContext;
 import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BaseListFragment;
+import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.team.adapter.TeamIssueCatalogAdapter;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamIssueCatalog;
 import net.oschina.app.team.bean.TeamIssueCatalogList;
 import net.oschina.app.team.bean.TeamProject;
 import net.oschina.app.team.ui.TeamMainActivity;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 
 /**
+ * 任务分组列表
+ * 
  * TeamIssueCatalogFragment.java
  * 
  * @author 火蚁(http://my.oschina.net/u/253900)
@@ -72,7 +76,14 @@ public class TeamIssueCatalogFragment extends
     public void onItemClick(AdapterView<?> parent, View view, int position,
             long id) {
         // TODO Auto-generated method stub
-        super.onItemClick(parent, view, position, id);
+	TeamIssueCatalog teamIssueCatalog = mAdapter.getItem(position);
+	if (teamIssueCatalog != null) {
+	    Bundle bundle = new Bundle();
+	    bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_TEAM, mTeam);
+	    bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_PROJECT, mTeamProject);
+	    bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_ISSUE_CATALOG, teamIssueCatalog);
+	    UIHelper.showSimpleBack(getActivity(), SimpleBackPage.TEAM_ISSUECATALOG_ISSUE_LIST, bundle);
+	}
     }
     
     @Override

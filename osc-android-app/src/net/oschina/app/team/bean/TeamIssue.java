@@ -23,6 +23,8 @@ public class TeamIssue extends Entity {
     public final static String TEAM_ISSUE_STATE_UNDERWAY = "underway";
     public final static String TEAM_ISSUE_STATE_ACCEPTED = "accepted";
     public final static String TEAM_ISSUE_STATE_CLOSED = "closed";
+    
+    public final static int TEAM_ISSUE_GITPUSHED = 1;// 已同步到git
 
     @XStreamAlias("state")
     private String state;
@@ -68,6 +70,21 @@ public class TeamIssue extends Entity {
 
     @XStreamAlias("authority")
     private Authority authority;
+    
+    @XStreamAlias("gitpush")
+    private int gitpush;// 是否已经同步到git
+    
+    @XStreamAlias("project")
+    private TeamProject project;
+    
+    @XStreamAlias("childIssues")
+    private TeamIssueChild childIssues;// 子任务数
+    
+    @XStreamAlias("relations")
+    private int relations;// 关联任务数
+    
+    @XStreamAlias("attachments")
+    private int attachments;// 附件数量
 
     public String getState() {
 	return state;
@@ -91,6 +108,46 @@ public class TeamIssue extends Entity {
 
     public void setPriority(String priority) {
 	this.priority = priority;
+    }
+
+    public int getGitpush() {
+        return gitpush;
+    }
+
+    public void setGitpush(int gitpush) {
+        this.gitpush = gitpush;
+    }
+
+    public TeamProject getProject() {
+        return project;
+    }
+
+    public void setProject(TeamProject project) {
+        this.project = project;
+    }
+
+    public TeamIssueChild getChildIssues() {
+        return childIssues;
+    }
+
+    public void setChildIssues(TeamIssueChild childIssues) {
+        this.childIssues = childIssues;
+    }
+
+    public int getRelations() {
+        return relations;
+    }
+
+    public void setRelations(int relations) {
+        this.relations = relations;
+    }
+
+    public int getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(int attachments) {
+        this.attachments = attachments;
     }
 
     public String getSource() {
@@ -255,7 +312,7 @@ public class TeamIssue extends Entity {
     }
 
     // 任务的操作权限
-    class Authority implements Serializable {
+    public class Authority implements Serializable {
 
 	@XStreamAlias("delete")
 	private boolean delete;
@@ -323,6 +380,22 @@ public class TeamIssue extends Entity {
 	    this.updateLabels = updateLabels;
 	}
 
+    }
+    
+    @XStreamAlias("childIssues")
+    public class TeamIssueChild implements Serializable {
+	
+	@XStreamAlias("totalCount")
+	private int totalCount;
+
+	public int getTotalCount() {
+	    return totalCount;
+	}
+
+	public void setTotalCount(int totalCount) {
+	    this.totalCount = totalCount;
+	}
+	
     }
     
     public String getIssueStateText() {
