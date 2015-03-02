@@ -27,10 +27,9 @@ public class TeamDiaryAdapter extends ListBaseAdapter<TeamDiary> {
         }
 
         TeamDiary item = mDatas.get(position);
-
         vh.face.setAvatarUrl(item.getAuthor().getPortrait());
         vh.author.setText(item.getAuthor().getName());
-        vh.title.setText(Html.fromHtml(item.getTitle().trim()));
+        vh.title.setText(Html.fromHtml(item.getTitle()).toString());
         vh.time.setText(StringUtils.friendly_time(item.getCreateTime()));
         vh.comment_count.setText(item.getReply() + "");
 

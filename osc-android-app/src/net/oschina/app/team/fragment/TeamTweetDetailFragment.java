@@ -221,7 +221,7 @@ public class TeamTweetDetailFragment extends
         if (position - 1 == -1) {
             return false;
         }
-        final Comment item = (Comment) mAdapter.getItem(position - 1);
+        final Comment item = mAdapter.getItem(position - 1);
         if (item == null)
             return false;
         int itemsLen = item.getAuthorId() == AppContext.getInstance()
