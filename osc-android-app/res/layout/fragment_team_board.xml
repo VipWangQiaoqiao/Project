@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="15dp" >
+
+            <TextView
+                android:id="@+id/team_myissue_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="火蚁，上午好"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/team_myissue_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="今天是 星期二，2015年03月12日"
+                android:textColor="#999"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                style="@style/fill_wrap"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <LinearLayout
+                        android:id="@+id/team_myissue_ing"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:padding="10dp"
+                        android:orientation="vertical" >
+
+                        <TextView
+                            android:id="@+id/team_myissue_ing_num"
+                            style="@style/myissue_text_num" />
+
+                        <TextView
+                            style="@style/myissue_text"
+                            android:text="待完成" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/list_divider_color" />
+
+                    <LinearLayout
+                        android:id="@+id/team_myissue_outdate"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal"
+                        android:padding="10dp" >
+
+                        <TextView
+                            android:id="@+id/team_myissue_outdate_num"
+                            style="@style/myissue_text_num" />
+
+                        <TextView
+                            style="@style/myissue_text"
+                            android:text="过期的" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/list_divider_color" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <LinearLayout
+                        android:id="@+id/team_myissue_ed"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal"
+                        android:padding="10dp" >
+
+                        <TextView
+                            android:id="@+id/team_myissue_ed_num"
+                            style="@style/myissue_text_num" />
+
+                        <TextView
+                            style="@style/myissue_text"
+                            android:text="进行中" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/list_divider_color" />
+
+                    <LinearLayout
+                        android:id="@+id/team_myissue_all"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal"
+                        android:padding="10dp" >
+
+                        <TextView
+                            android:id="@+id/team_myissue_all_num"
+                            style="@style/myissue_text_num" />
+
+                        <TextView
+                            style="@style/myissue_text"
+                            android:text="已完成" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_team_active"
+            style="@style/option_item_rl" >
+
+            <ImageView
+                style="@style/option_item_img"
+                android:background="@drawable/icon_my_team"
+                android:contentDescription="@null" />
+
+            <TextView
+                style="@style/option_item_text"
+                android:text="@string/team_actvie" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1px"
+            android:background="@color/list_divider_color" />
+
+        <LinearLayout
+            android:id="@+id/ll_team_issue"
+            style="@style/option_item_rl" >
+
+            <ImageView
+                style="@style/option_item_img"
+                android:background="@drawable/icon_my_team"
+                android:contentDescription="@null" />
+
+            <TextView
+                style="@style/option_item_text"
+                android:text="@string/team_issue" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1px"
+            android:background="@color/list_divider_color" />
+
+        <LinearLayout
+            android:id="@+id/ll_team_discuss"
+            style="@style/option_item_rl" >
+
+            <ImageView
+                style="@style/option_item_img"
+                android:background="@drawable/icon_my_team"
+                android:contentDescription="@null" />
+
+            <TextView
+                style="@style/option_item_text"
+                android:text="@string/team_discuss" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1px"
+            android:background="@color/list_divider_color" />
+
+        <LinearLayout
+            android:id="@+id/ll_team_diary"
+            style="@style/option_item_rl" >
+
+            <ImageView
+                style="@style/option_item_img"
+                android:background="@drawable/icon_my_team"
+                android:contentDescription="@null" />
+
+            <TextView
+                style="@style/option_item_text"
+                android:text="@string/team_diary" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1px"
+            android:background="@color/list_divider_color" />
+    </LinearLayout>
+
+</ScrollView>

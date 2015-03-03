@@ -23,7 +23,6 @@ import butterknife.OnClick;
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @version 创建时间：2015年1月13日 下午3:36:56
  * 
- *          功能需求：动态切换团队的主页、任务、讨论、周报
  * 
  */
 
@@ -40,84 +39,68 @@ public class TeamMainActivity extends BaseActivity {
     static final String CONTENTS[] = { "main", "issue", "discuss", "diary" };
 
     static final String fragments[] = {
-            TeamMainViewPagerFragment.class.getName(),
-            TeamIssueViewPageFragment.class.getName(),
-            TeamDiscussFragment.class.getName(),
-            TeamDiaryPagerFragment.class.getName() };
+	    TeamMainViewPagerFragment.class.getName(),
+	    TeamIssueViewPageFragment.class.getName(),
+	    TeamDiscussFragment.class.getName(),
+	    TeamDiaryPagerFragment.class.getName() };
 
     private int mCurrentContentIndex = -1;
 
-    @InjectView(R.id.drawer_layout)
-    DrawerLayout mDrawerLayout;
-
-    @InjectView(R.id.team_menu_item_main)
-    View mMenuMain;
-    @InjectView(R.id.team_menu_item_issue)
-    View mMenuIssue;
-    @InjectView(R.id.team_menu_item_discuss)
-    View mMenuDiscuss;
-    @InjectView(R.id.team_menu_item_diary)
-    View mMenuDiary;
-
     @Override
     protected boolean hasBackButton() {
-        return true;
+	return true;
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_team_main;
+	return R.layout.activity_team_main;
     }
 
     @Override
-    @OnClick({ R.id.team_menu_item_main, R.id.team_menu_item_issue,
-            R.id.team_menu_item_discuss, R.id.team_menu_item_diary,
-            R.id.team_main_menu })
     public void onClick(View v) {
-        mDrawerLayout.closeDrawers();
-        switch (v.getId()) {
-        case R.id.team_menu_item_main:
-            switchContent(0);
-            break;
-        case R.id.team_menu_item_issue:
-            switchContent(1);
-            break;
-        case R.id.team_menu_item_discuss:
-            switchContent(2);
-            break;
-        case R.id.team_menu_item_diary:
-            switchContent(3);
-            break;
-        default:
-            break;
-        }
+	switch (v.getId()) {
+	case R.id.team_menu_item_main:
+	    switchContent(0);
+	    break;
+	case R.id.team_menu_item_issue:
+	    switchContent(1);
+	    break;
+	case R.id.team_menu_item_discuss:
+	    switchContent(2);
+	    break;
+	case R.id.team_menu_item_diary:
+	    switchContent(3);
+	    break;
+	default:
+	    break;
+	}
     }
 
     @Override
     protected boolean haveSpinner() {
-        return false;
+	return false;
     }
 
     @Override
     public void initView() {
-        ButterKnife.inject(this);
+	ButterKnife.inject(this);
 
-        mFragmentManager = getSupportFragmentManager();
-        switchContent(0);
+	mFragmentManager = getSupportFragmentManager();
+	switchContent(0);
     }
 
     private Team mTeam;
 
     @Override
     public void initData() {
-        Intent intent = getIntent();
-        if (intent != null) {
-            mTeam = (Team) intent.getSerializableExtra(BUNDLE_KEY_TEAM);
-            if (mTeam != null) {
+	Intent intent = getIntent();
+	if (intent != null) {
+	    mTeam = (Team) intent.getSerializableExtra(BUNDLE_KEY_TEAM);
+	    if (mTeam != null) {
 
-                setActionBarTitle(mTeam.getName());
-            }
-        }
+		setActionBarTitle(mTeam.getName());
+	    }
+	}
     }
 
     /**
@@ -125,23 +108,23 @@ public class TeamMainActivity extends BaseActivity {
      * @param pos
      */
     private void switchContent(int pos) {
-        String tag = CONTENTS[pos];
-        String mCurrentContentTag = CONTENTS[pos];
-        if (pos == mCurrentContentIndex)
-            return;
+	String tag = CONTENTS[pos];
+	String mCurrentContentTag = CONTENTS[pos];
+	if (pos == mCurrentContentIndex)
+	    return;
 
-        FragmentTransaction ft = mFragmentManager.beginTransaction();
-        if (mCurrentContentTag != null) {
-            Fragment fragment = mFragmentManager
-                    .findFragmentByTag(mCurrentContentTag);
-            if (fragment != null) {
-                ft.remove(fragment);
-            }
-        }
-        ft.replace(R.id.main_content,
-                Fragment.instantiate(this, fragments[pos]), tag);
-        ft.commit();
+	FragmentTransaction ft = mFragmentManager.beginTransaction();
+	if (mCurrentContentTag != null) {
+	    Fragment fragment = mFragmentManager
+		    .findFragmentByTag(mCurrentContentTag);
+	    if (fragment != null) {
+		ft.remove(fragment);
+	    }
+	}
+	ft.replace(R.id.main_content,
+		Fragment.instantiate(this, fragments[pos]), tag);
+	ft.commit();
 
-        mCurrentContentIndex = pos;
+	mCurrentContentIndex = pos;
     }
 }

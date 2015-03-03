@@ -147,7 +147,7 @@ public class TeamIssueViewPageFragment extends BaseViewPagerFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
-	Bundle bundle = getActivity().getIntent().getExtras();
+	Bundle bundle = getArguments();
 	if (bundle != null) {
 	    Team team = (Team) bundle
 		    .getSerializable(TeamMainActivity.BUNDLE_KEY_TEAM);
