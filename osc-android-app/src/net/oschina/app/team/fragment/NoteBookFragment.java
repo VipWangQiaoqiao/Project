@@ -1,6 +1,5 @@
 package net.oschina.app.team.fragment;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +14,6 @@ import net.oschina.app.bean.NotebookDataList;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.bean.User;
 import net.oschina.app.db.NoteDatabase;
-import net.oschina.app.service.CloudSynchronizeService;
 import net.oschina.app.team.adapter.NotebookAdapter;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.KJAnimations;
@@ -35,7 +33,6 @@ import org.kymjs.kjframe.http.core.KJAsyncTask.OnFinishedListener;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -116,7 +113,6 @@ public class NoteBookFragment extends BaseFragment implements
         if (datas != null) {
             adapter = new NotebookAdapter(aty, datas);
         }
-        updateEmptyView();
     }
 
     @Override
@@ -178,6 +174,7 @@ public class NoteBookFragment extends BaseFragment implements
         mSwipeRefreshLayout.setColorSchemeResources(
                 R.color.swiperefresh_color1, R.color.swiperefresh_color2,
                 R.color.swiperefresh_color3, R.color.swiperefresh_color4);
+        mEmptyLayout.setVisibility(View.GONE);
     }
 
     /********************************* view method ******************************/
@@ -258,6 +255,7 @@ public class NoteBookFragment extends BaseFragment implements
         }
         if (user.getUid() != 0) { // 未登录时不请求网络
             HttpConfig config = new HttpConfig();
+            config.cacheTime = 0;
             config.setCookieString(AppContext.getInstance().getProperty(
                     AppConfig.CONF_COOKIE));
             KJHttp kjh = new KJHttp(config);
@@ -274,11 +272,58 @@ public class NoteBookFragment extends BaseFragment implements
                                     NotebookDataList.class, t.getBytes());
                             if (dataList != null) {
                                 doSynchronize(dataList.getList());
+                            } else {
+                                updateEmptyView();
                             }
-                            updateEmptyView();
                         }
                     });
         }
+    }
+
+    /**
+     * 处理云端数据与本地数据的同步逻辑
+     * 
+     * @author kymjs
+     * @param cloudDatas
+     *            云端的数据列表
+     */
+    private void doSynchronize(final List<NotebookData> cloudDatas) {
+        // 设置线程完成时的相应方法
+        KJAsyncTask.setOnFinishedListener(new OnFinishedListener() {
+            @Override
+            public void onPostExecute() {
+                // 在UI线程更新视图
+                super.onPostExecute();
+                if (datas != null && adapter != null) {
+                    adapter.refurbishData(datas);
+                    updateEmptyView();
+                    // adapter = new NotebookAdapter(aty, datas);
+                    // mGrid.setAdapter(adapter);
+                }
+            }
+        });
+        // 使用并发的方式启动线程
+        KJAsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                boolean isMerge = false;
+                for (NotebookData data : cloudDatas) {
+                    if (data != null) {
+                        // 如果有将云端数据合并到本地的事件发生，则标识发生了数据更新
+                        isMerge = isMerge || noteDb.merge(data);
+                    }
+                }
+                // 如果发生了数据更新，则处理同步逻辑
+                if (isMerge) {
+                    datas = noteDb.query(); // 合并完成后更新适配器数据缓存
+                    // Intent synchronizeService = new Intent(aty,
+                    // CloudSynchronizeService.class);
+                    // synchronizeService.putExtra("cloudDatas",
+                    // (Serializable) cloudDatas);
+                    // aty.startService(synchronizeService);
+                }
+            }
+        });
     }
 
     /**
@@ -315,51 +360,6 @@ public class NoteBookFragment extends BaseFragment implements
         }
 
         updateEmptyView();
-    }
-
-    /**
-     * 处理云端数据与本地数据的同步逻辑
-     * 
-     * @author kymjs
-     * @param cloudDatas
-     *            云端的数据列表
-     */
-    private void doSynchronize(final List<NotebookData> cloudDatas) {
-        // 设置线程完成时的相应方法
-        KJAsyncTask.setOnFinishedListener(new OnFinishedListener() {
-            @Override
-            public void onPostExecute() {
-                // 在UI线程更新视图
-                super.onPostExecute();
-                if (datas != null && adapter != null) {
-                    // adapter.refurbishData(datas);
-                    adapter = new NotebookAdapter(aty, datas);
-                    mGrid.setAdapter(adapter);
-                }
-            }
-        });
-        // 使用并发的方式启动线程
-        KJAsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                boolean isMerge = false;
-                for (NotebookData data : cloudDatas) {
-                    if (data != null) {
-                        // 如果有将云端数据合并到本地的事件发生，则标识发生了数据更新
-                        isMerge = isMerge || noteDb.merge(data);
-                    }
-                }
-                // 如果发生了数据更新，则处理同步逻辑
-                if (isMerge) {
-                    datas = noteDb.query(); // 合并完成后更新适配器数据缓存
-                    Intent synchronizeService = new Intent(aty,
-                            CloudSynchronizeService.class);
-                    synchronizeService.putExtra("cloudDatas",
-                            (Serializable) cloudDatas);
-                    aty.startService(synchronizeService);
-                }
-            }
-        });
     }
 
     /********************************* function method ******************************/

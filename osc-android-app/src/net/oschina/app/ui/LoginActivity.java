@@ -229,7 +229,6 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public void initView() {
-
         mIvClearUserName.setOnClickListener(this);
         mIvClearPassword.setOnClickListener(this);
         mBtnLogin.setOnClickListener(this);
