@@ -4,6 +4,12 @@ import java.io.Serializable;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
+/**
+ * 便签数据bean（有重载equals()方法）
+ * 
+ * @author kymjs (https://github.com/kymjs)
+ * 
+ */
 @XStreamAlias("sticky")
 public class NotebookData extends Entity implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -23,6 +29,28 @@ public class NotebookData extends Entity implements Serializable {
     private int color;
 
     private boolean checked; // view需要，非交互数据需要
+
+    @Override
+    public boolean equals(Object o) {
+        if (super.equals(o)) {
+            return true;
+        } else {
+            if (o instanceof NotebookData) {
+                NotebookData data = (NotebookData) o;
+                try {
+                    return (this.id == data.getId())
+                            && (this.unixTime == data.getUnixTime())
+                            && (this.date.equals(data.getDate()))
+                            && (this.content == data.getContent())
+                            && (this.color == data.getColor());
+                } catch (NullPointerException e) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+    }
 
     public boolean isChecked() {
         return checked;

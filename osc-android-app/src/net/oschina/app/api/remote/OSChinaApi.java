@@ -800,6 +800,23 @@ public class OSChinaApi {
         ApiHttpClient.get("action/api/team_diary_list", params, handler);
     }
 
+    /**
+     * 删除一个便签
+     * 
+     * @param id
+     *            便签id
+     * @param uid
+     *            用户id
+     */
+    public static void deleteNoteBook(int id, int uid,
+            AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("uid", uid);
+        params.put("id", id); // 便签id
+        ApiHttpClient
+                .get("action/api/team_stickynote_recycle", params, handler);
+    }
+
     public static void getNoteBook(int uid, AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("uid", uid);

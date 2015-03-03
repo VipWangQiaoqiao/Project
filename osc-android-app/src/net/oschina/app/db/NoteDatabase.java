@@ -22,12 +22,14 @@ public class NoteDatabase {
      * 合并一条数据到本地(通过更新时间判断仅保留最新)
      * 
      * @param data
+     * @return 数据是否被合并了
      */
-    public void merge(NotebookData data) {
+    public boolean merge(NotebookData data) {
         Cursor cursor = sqlite.rawQuery(
                 "select * from " + DatabaseHelper.NOTE_TABLE_NAME
                         + " where _id=" + data.getId(), null);
         NotebookData localData = new NotebookData();
+        // 本循环其实只执行一次
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
             localData.setId(cursor.getInt(0));
             localData.setUnixTime(cursor.getLong(1));
@@ -36,8 +38,12 @@ public class NoteDatabase {
             localData.setStar(0 != cursor.getInt(4)); // C判断法：非0即真
             localData.setColor(cursor.getInt(5));
         }
-        data = localData.getUnixTime() > data.getUnixTime() ? localData : data;
-        save(data);
+        // 是否需要合这条数据
+        boolean isMerge = localData.getUnixTime() < data.getUnixTime();
+        if (isMerge) {
+            save(data);
+        }
+        return isMerge;
     }
 
     /**

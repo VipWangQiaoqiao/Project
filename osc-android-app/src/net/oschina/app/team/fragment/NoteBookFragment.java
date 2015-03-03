@@ -1,5 +1,6 @@
 package net.oschina.app.team.fragment;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,12 +8,14 @@ import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.ApiHttpClient;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.NotebookData;
 import net.oschina.app.bean.NotebookDataList;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.bean.User;
 import net.oschina.app.db.NoteDatabase;
+import net.oschina.app.service.CloudSynchronizeService;
 import net.oschina.app.team.adapter.NotebookAdapter;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.KJAnimations;
@@ -22,6 +25,7 @@ import net.oschina.app.widget.KJDragGridView;
 import net.oschina.app.widget.KJDragGridView.OnDeleteListener;
 import net.oschina.app.widget.KJDragGridView.OnMoveListener;
 
+import org.apache.http.Header;
 import org.kymjs.kjframe.KJHttp;
 import org.kymjs.kjframe.http.HttpCallBack;
 import org.kymjs.kjframe.http.HttpConfig;
@@ -31,6 +35,7 @@ import org.kymjs.kjframe.http.core.KJAsyncTask.OnFinishedListener;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -49,6 +54,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 /**
  * 便签列表界面
@@ -99,6 +106,8 @@ public class NoteBookFragment extends BaseFragment implements
         return rootView;
     }
 
+    /***************************** initialization method ***************************/
+
     @Override
     public void initData() {
         user = AppContext.getInstance().getLoginUser();
@@ -107,14 +116,7 @@ public class NoteBookFragment extends BaseFragment implements
         if (datas != null) {
             adapter = new NotebookAdapter(aty, datas);
         }
-
-        if (datas != null && !datas.isEmpty()) {
-            mEmptyLayout.setVisibility(View.GONE);
-        } else {
-            mEmptyLayout.setVisibility(View.VISIBLE);
-            mEmptyLayout.setErrorType(EmptyLayout.NODATA);
-            mEmptyLayout.setNoDataContent("暂无便签，请添加或下拉同步");
-        }
+        updateEmptyView();
     }
 
     @Override
@@ -178,14 +180,7 @@ public class NoteBookFragment extends BaseFragment implements
                 R.color.swiperefresh_color3, R.color.swiperefresh_color4);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        refurbish();
-        setListCanPull();
-    }
-
-    /*************** private method *********************/
+    /********************************* view method ******************************/
 
     @Override
     public void onRefresh() {
@@ -228,9 +223,33 @@ public class NoteBookFragment extends BaseFragment implements
     }
 
     /**
+     * 未登陆用户不能下拉同步，只能使用本地存储
+     */
+    private void setListCanPull() {
+        if (!AppContext.getInstance().isLogin()) {
+            mSwipeRefreshLayout.setEnabled(false);
+        } else {
+            mSwipeRefreshLayout.setEnabled(true);
+        }
+    }
+
+    /**
+     * 更新空视图时的tip显示
+     */
+    private void updateEmptyView() {
+        if (datas != null && !datas.isEmpty()) {
+            mEmptyLayout.setVisibility(View.GONE);
+        } else {
+            mEmptyLayout.setVisibility(View.VISIBLE);
+            mEmptyLayout.setErrorType(EmptyLayout.NODATA);
+            mEmptyLayout.setNoDataContent("暂无便签，请添加或下拉同步");
+        }
+    }
+
+    /********************************* synchronize method ******************************/
+
+    /**
      * 使用自带缓存功能的网络请求，防止多次刷新造成的流量损耗以及服务器压力
-     * 
-     * @param i
      */
     private void refurbish() {
         datas = noteDb.query();
@@ -256,16 +275,9 @@ public class NoteBookFragment extends BaseFragment implements
                             if (dataList != null) {
                                 doSynchronize(dataList.getList());
                             }
+                            updateEmptyView();
                         }
                     });
-        }
-
-        if (datas != null && !datas.isEmpty()) {
-            mEmptyLayout.setVisibility(View.GONE);
-        } else {
-            mEmptyLayout.setVisibility(View.VISIBLE);
-            mEmptyLayout.setErrorType(EmptyLayout.NODATA);
-            mEmptyLayout.setNoDataContent("暂无便签，请添加或下拉同步");
         }
     }
 
@@ -275,28 +287,40 @@ public class NoteBookFragment extends BaseFragment implements
      * @param data
      */
     private void delete(int index) {
-        noteDb.delete(datas.get(index).getId());
+        final int noteId = datas.get(index).getId();
+
+        OSChinaApi.deleteNoteBook(noteId, user.getUid(),
+                new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+                        KJHttp kjh = new KJHttp();
+                        HttpParams params = new HttpParams();
+                        params.put("uid", user.getUid() + "");
+                        kjh.removeDiskCache("http://" + ApiHttpClient.HOST
+                                + "/action/api/team_sticky_list", params);
+                    }
+
+                    @Override
+                    public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+                            Throwable arg3) {
+                        AppContext.showToast("网络异常,云端文件暂未删除");
+                    }
+                });
+
+        noteDb.delete(noteId);
         datas.remove(index);
         if (datas != null && adapter != null) {
             adapter.refurbishData(datas);
             mGrid.setAdapter(adapter);
         }
-    }
 
-    /**
-     * 未登陆用户不能下拉同步，只能使用本地存储
-     */
-    private void setListCanPull() {
-        if (!AppContext.getInstance().isLogin()) {
-            mSwipeRefreshLayout.setEnabled(false);
-        } else {
-            mSwipeRefreshLayout.setEnabled(true);
-        }
+        updateEmptyView();
     }
 
     /**
      * 处理云端数据与本地数据的同步逻辑
      * 
+     * @author kymjs
      * @param cloudDatas
      *            云端的数据列表
      */
@@ -308,7 +332,9 @@ public class NoteBookFragment extends BaseFragment implements
                 // 在UI线程更新视图
                 super.onPostExecute();
                 if (datas != null && adapter != null) {
-                    adapter.refurbishData(datas);
+                    // adapter.refurbishData(datas);
+                    adapter = new NotebookAdapter(aty, datas);
+                    mGrid.setAdapter(adapter);
                 }
             }
         });
@@ -316,17 +342,27 @@ public class NoteBookFragment extends BaseFragment implements
         KJAsyncTask.execute(new Runnable() {
             @Override
             public void run() {
+                boolean isMerge = false;
                 for (NotebookData data : cloudDatas) {
                     if (data != null) {
-                        noteDb.merge(data); // 首先将云端数据合并到本地
+                        // 如果有将云端数据合并到本地的事件发生，则标识发生了数据更新
+                        isMerge = isMerge || noteDb.merge(data);
                     }
                 }
-                datas = noteDb.query(); // 合并完成后更新适配器数据缓存
+                // 如果发生了数据更新，则处理同步逻辑
+                if (isMerge) {
+                    datas = noteDb.query(); // 合并完成后更新适配器数据缓存
+                    Intent synchronizeService = new Intent(aty,
+                            CloudSynchronizeService.class);
+                    synchronizeService.putExtra("cloudDatas",
+                            (Serializable) cloudDatas);
+                    aty.startService(synchronizeService);
+                }
             }
         });
     }
 
-    /*************** function method *********************/
+    /********************************* function method ******************************/
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -365,8 +401,15 @@ public class NoteBookFragment extends BaseFragment implements
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         noteDb.destroy();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refurbish();
+        setListCanPull();
     }
 
     @Override
