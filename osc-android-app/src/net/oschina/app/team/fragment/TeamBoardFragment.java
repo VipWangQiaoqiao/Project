@@ -119,13 +119,19 @@ public class TeamBoardFragment extends BaseFragment {
     private String getGreetings() {
 	Calendar calendar = Calendar.getInstance();
 	int hour = calendar.get(Calendar.HOUR_OF_DAY);
-	if (hour < 11 && hour > 7) {
+	if (hour < 6) {
+	    return "凌晨好!";
+	} else if (hour < 9) {
 	    return "早上好!";
-	} else if (hour < 14) {
+	}else if (hour < 12) {
 	    return "上午好!";
-	} else if (hour < 18) {
+	} else if (hour < 14) {
+	    return "中午好!";
+	} else if (hour < 17) {
 	    return "下午好!";
-	} else if (hour < 24) {
+	} else if (hour < 19) {
+	    return "傍晚好!";
+	} else if(hour < 22) {
 	    return "晚上好!";
 	} else {
 	    return "夜里好!";
