@@ -233,7 +233,6 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
      */
     private void save() {
         editData.setUnixTime(System.currentTimeMillis() / 1000);
-        editData.setStar(false);
         editData.setContent(mEtContent.getText().toString());
         noteDb.save(editData);
     }

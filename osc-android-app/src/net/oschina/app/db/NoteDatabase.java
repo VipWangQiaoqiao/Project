@@ -26,12 +26,10 @@ public class NoteDatabase {
     public void insert(NotebookData data) {
         String sql = "insert into " + DatabaseHelper.NOTE_TABLE_NAME;
 
-        sql += "(_id, time, date, content, star, color) values(?, ?, ?, ?, ?, ?)";
-        sqlite.execSQL(
-                sql,
-                new String[] { data.getId() + "", data.getUnixTime() + "",
-                        data.getDate(), data.getContent(),
-                        data.isStar() ? "1" : "0", data.getColor() + "" });
+        sql += "(_id, iid, time, date, content, color) values(?, ?, ?, ?, ?, ?)";
+        sqlite.execSQL(sql, new String[] { data.getId() + "",
+                data.getIid() + "", data.getUnixTime() + "", data.getDate(),
+                data.getContent(), data.getColor() + "" });
     }
 
     /**
@@ -50,11 +48,10 @@ public class NoteDatabase {
      * @param data
      */
     public void update(NotebookData data) {
-        String sql = ("update " + DatabaseHelper.NOTE_TABLE_NAME + " set time=?, date=?, content=?, star=?,color=? where _id=?");
-        sqlite.execSQL(
-                sql,
-                new String[] { data.getUnixTime() + "", data.getDate(),
-                        data.getContent(), data.isStar() ? "1" : "0",
+        String sql = ("update " + DatabaseHelper.NOTE_TABLE_NAME + " set iid=?, time=?, date=?, content=?, color=? where _id=?");
+        sqlite.execSQL(sql,
+                new String[] { data.getIid() + "", data.getUnixTime() + "",
+                        data.getDate(), data.getContent(),
                         data.getColor() + "", data.getId() + "" });
     }
 
@@ -79,11 +76,10 @@ public class NoteDatabase {
                     .moveToNext()) {
                 NotebookData notebookData = new NotebookData();
                 notebookData.setId(cursor.getInt(0));
-                notebookData.setUnixTime(cursor.getLong(1));
-                notebookData.setDate(cursor.getString(2));
-                notebookData.setContent(cursor.getString(3));
-                notebookData.setStar(0 != cursor.getInt(4)); // C判断法：非0即真
-
+                notebookData.setIid(cursor.getInt(1));
+                notebookData.setUnixTime(cursor.getLong(2));
+                notebookData.setDate(cursor.getString(3));
+                notebookData.setContent(cursor.getString(4));
                 notebookData.setColor(cursor.getInt(5));
                 data.add(notebookData);
             }
@@ -137,10 +133,10 @@ public class NoteDatabase {
         // 本循环其实只执行一次
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
             localData.setId(cursor.getInt(0));
-            localData.setUnixTime(cursor.getLong(1));
-            localData.setDate(cursor.getString(2));
-            localData.setContent(cursor.getString(3));
-            localData.setStar(0 != cursor.getInt(4)); // C判断法：非0即真
+            localData.setIid(cursor.getInt(1));
+            localData.setUnixTime(cursor.getLong(2));
+            localData.setDate(cursor.getString(3));
+            localData.setContent(cursor.getString(4));
             localData.setColor(cursor.getInt(5));
         }
         // 是否需要合这条数据

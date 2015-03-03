@@ -16,6 +16,8 @@ public class NotebookData extends Entity implements Serializable {
 
     @XStreamAlias("id")
     private int id;
+    @XStreamAlias("iid")
+    private int iid;
     @XStreamAlias("timestamp")
     private long unixTime;
     @XStreamAlias("updateTime")
@@ -25,10 +27,7 @@ public class NotebookData extends Entity implements Serializable {
     @XStreamAlias("color")
     private String colorText;
 
-    private boolean star;
     private int color;
-
-    private boolean checked; // view需要，非交互数据需要
 
     @Override
     public boolean equals(Object o) {
@@ -39,6 +38,7 @@ public class NotebookData extends Entity implements Serializable {
                 NotebookData data = (NotebookData) o;
                 try {
                     return (this.id == data.getId())
+                            && (this.iid == data.getIid())
                             && (this.unixTime == data.getUnixTime())
                             && (this.date.equals(data.getDate()))
                             && (this.content == data.getContent())
@@ -52,14 +52,6 @@ public class NotebookData extends Entity implements Serializable {
         }
     }
 
-    public boolean isChecked() {
-        return checked;
-    }
-
-    public void setChecked(boolean checked) {
-        this.checked = checked;
-    }
-
     @Override
     public int getId() {
         return id;
@@ -70,12 +62,12 @@ public class NotebookData extends Entity implements Serializable {
         this.id = id;
     }
 
-    public boolean isStar() {
-        return star;
+    public int getIid() {
+        return iid;
     }
 
-    public void setStar(boolean star) {
-        this.star = star;
+    public void setIid(int iid) {
+        this.iid = iid;
     }
 
     public String getContent() {
