@@ -1,12 +1,9 @@
 package net.oschina.app.team.fragment;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
-import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.NotebookData;
@@ -17,6 +14,8 @@ import net.oschina.app.db.NoteDatabase;
 import net.oschina.app.team.adapter.NotebookAdapter;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.KJAnimations;
+import net.oschina.app.util.SynchronizeController;
+import net.oschina.app.util.SynchronizeController.SynchronizeListener;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.KJDragGridView;
@@ -24,12 +23,6 @@ import net.oschina.app.widget.KJDragGridView.OnDeleteListener;
 import net.oschina.app.widget.KJDragGridView.OnMoveListener;
 
 import org.apache.http.Header;
-import org.kymjs.kjframe.KJHttp;
-import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpConfig;
-import org.kymjs.kjframe.http.HttpParams;
-import org.kymjs.kjframe.http.core.KJAsyncTask;
-import org.kymjs.kjframe.http.core.KJAsyncTask.OnFinishedListener;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -72,7 +65,8 @@ public class NoteBookFragment extends BaseFragment implements
     EmptyLayout mEmptyLayout;
 
     private NoteDatabase noteDb;
-    private ArrayList<NotebookData> datas;
+    private SynchronizeController controller;
+    private List<NotebookData> datas;
     private NotebookAdapter adapter;
     private User user;
     private Activity aty;
@@ -90,6 +84,14 @@ public class NoteBookFragment extends BaseFragment implements
     // };
     // };
 
+    /********************************* function method ******************************/
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
@@ -103,12 +105,55 @@ public class NoteBookFragment extends BaseFragment implements
         return rootView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        refurbish();
+        setListCanPull();
+    }
+
+    @Override
+    public void onDestroy() {
+        noteDb.destroy();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.notebook_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.public_menu_send:
+            Bundle bundle = new Bundle();
+            bundle.putInt(NoteEditFragment.NOTE_FROMWHERE_KEY,
+                    NoteEditFragment.NOTEBOOK_FRAGMENT);
+            UIHelper.showSimpleBack(getActivity(), SimpleBackPage.NOTE_EDIT,
+                    bundle);
+            break;
+        }
+        return true;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position,
+            long id) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(NoteEditFragment.NOTE_FROMWHERE_KEY,
+                NoteEditFragment.NOTEBOOK_ITEM);
+        bundle.putSerializable(NoteEditFragment.NOTE_KEY, datas.get(position));
+        UIHelper.showSimpleBack(getActivity(), SimpleBackPage.NOTE_EDIT, bundle);
+    }
+
     /***************************** initialization method ***************************/
 
     @Override
     public void initData() {
         user = AppContext.getInstance().getLoginUser();
-        noteDb = new NoteDatabase(getActivity());
+        controller = new SynchronizeController();
+        noteDb = new NoteDatabase(aty);
         datas = noteDb.query();// 查询操作，忽略耗时
         if (datas != null) {
             adapter = new NotebookAdapter(aty, datas);
@@ -177,7 +222,7 @@ public class NoteBookFragment extends BaseFragment implements
         mEmptyLayout.setVisibility(View.GONE);
     }
 
-    /********************************* view method ******************************/
+    /********************************* GridView method ******************************/
 
     @Override
     public void onRefresh() {
@@ -187,8 +232,6 @@ public class NoteBookFragment extends BaseFragment implements
         // 设置顶部正在刷新
         mGrid.setSelection(0);
         setSwipeRefreshLoadingState();
-
-        /* !!! 设置耗时操作 !!! */
 
         refurbish();
         setSwipeRefreshLoadedState();
@@ -250,78 +293,31 @@ public class NoteBookFragment extends BaseFragment implements
      */
     private void refurbish() {
         datas = noteDb.query();
-        if (datas != null && adapter != null) {
-            adapter.refurbishData(datas);
+        if (datas != null) {
+            if (adapter != null) {
+                adapter.refurbishData(datas);
+            } else {
+                adapter = new NotebookAdapter(aty, datas);
+                mGrid.setAdapter(adapter);
+            }
         }
-        if (user.getUid() != 0) { // 未登录时不请求网络
-            HttpConfig config = new HttpConfig();
-            config.cacheTime = 0;
-            config.setCookieString(AppContext.getInstance().getProperty(
-                    AppConfig.CONF_COOKIE));
-            KJHttp kjh = new KJHttp(config);
-
-            HttpParams params = new HttpParams();
-            params.put("uid", user.getUid() + "");
-            kjh.get("http://" + ApiHttpClient.HOST
-                    + "/action/api/team_sticky_list", params,
-                    new HttpCallBack() {
-                        @Override
-                        public void onSuccess(final String t) {
-                            super.onSuccess(t);
-                            NotebookDataList dataList = XmlUtils.toBean(
-                                    NotebookDataList.class, t.getBytes());
-                            if (dataList != null) {
-                                doSynchronize(dataList.getList());
-                            } else {
-                                updateEmptyView();
-                            }
-                        }
-                    });
+        if (user.getUid() == 0) { // 未登录时不请求网络
+            return;
         }
-    }
-
-    /**
-     * 处理云端数据与本地数据的同步逻辑
-     * 
-     * @author kymjs
-     * @param cloudDatas
-     *            云端的数据列表
-     */
-    private void doSynchronize(final List<NotebookData> cloudDatas) {
-        // 设置线程完成时的相应方法
-        KJAsyncTask.setOnFinishedListener(new OnFinishedListener() {
+        controller.doSynchronize(aty, new SynchronizeListener() {
             @Override
-            public void onPostExecute() {
-                // 在UI线程更新视图
-                super.onPostExecute();
-                if (datas != null && adapter != null) {
-                    adapter.refurbishData(datas);
-                    updateEmptyView();
-                    // adapter = new NotebookAdapter(aty, datas);
-                    // mGrid.setAdapter(adapter);
+            public void onSuccess(byte[] arg2) {
+                NotebookDataList dataList = XmlUtils.toBean(
+                        NotebookDataList.class, arg2);
+                if (dataList != null) {
+                    noteDb.reset(dataList.getList());
+                    adapter.refurbishData(dataList.getList());
                 }
             }
-        });
-        // 使用并发的方式启动线程
-        KJAsyncTask.execute(new Runnable() {
+
             @Override
-            public void run() {
-                boolean isMerge = false;
-                for (NotebookData data : cloudDatas) {
-                    if (data != null) {
-                        // 如果有将云端数据合并到本地的事件发生，则标识发生了数据更新
-                        isMerge = isMerge || noteDb.merge(data);
-                    }
-                }
-                // 如果发生了数据更新，则处理同步逻辑
-                if (isMerge) {
-                    datas = noteDb.query(); // 合并完成后更新适配器数据缓存
-                    // Intent synchronizeService = new Intent(aty,
-                    // CloudSynchronizeService.class);
-                    // synchronizeService.putExtra("cloudDatas",
-                    // (Serializable) cloudDatas);
-                    // aty.startService(synchronizeService);
-                }
+            public void onFailure() {
+                AppContext.showToast("网络不好，请稍后执行同步");
             }
         });
     }
@@ -333,24 +329,21 @@ public class NoteBookFragment extends BaseFragment implements
      */
     private void delete(int index) {
         final int noteId = datas.get(index).getId();
+        // 只有是登录用户才执行网络请求
+        if (user.getUid() > 0) {
+            OSChinaApi.deleteNoteBook(noteId, user.getUid(),
+                    new AsyncHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int arg0, Header[] arg1,
+                                byte[] arg2) {}
 
-        OSChinaApi.deleteNoteBook(noteId, user.getUid(),
-                new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-                        KJHttp kjh = new KJHttp();
-                        HttpParams params = new HttpParams();
-                        params.put("uid", user.getUid() + "");
-                        kjh.removeDiskCache("http://" + ApiHttpClient.HOST
-                                + "/action/api/team_sticky_list", params);
-                    }
-
-                    @Override
-                    public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                            Throwable arg3) {
-                        AppContext.showToast("网络异常,云端文件暂未删除");
-                    }
-                });
+                        @Override
+                        public void onFailure(int arg0, Header[] arg1,
+                                byte[] arg2, Throwable arg3) {
+                            AppContext.showToast("网络异常,云端文件暂未删除");
+                        }
+                    });
+        }
 
         noteDb.delete(noteId);
         datas.remove(index);
@@ -361,57 +354,4 @@ public class NoteBookFragment extends BaseFragment implements
 
         updateEmptyView();
     }
-
-    /********************************* function method ******************************/
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
-        Bundle bundle = new Bundle();
-        bundle.putInt(NoteEditFragment.NOTE_FROMWHERE_KEY,
-                NoteEditFragment.NOTEBOOK_ITEM);
-        bundle.putSerializable(NoteEditFragment.NOTE_KEY, datas.get(position));
-        UIHelper.showSimpleBack(getActivity(), SimpleBackPage.NOTE_EDIT, bundle);
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.notebook_menu, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-        case R.id.public_menu_send:
-            Bundle bundle = new Bundle();
-            bundle.putInt(NoteEditFragment.NOTE_FROMWHERE_KEY,
-                    NoteEditFragment.NOTEBOOK_FRAGMENT);
-            UIHelper.showSimpleBack(getActivity(), SimpleBackPage.NOTE_EDIT,
-                    bundle);
-            break;
-        }
-        return true;
-    }
-
-    @Override
-    public void onDestroy() {
-        noteDb.destroy();
-        super.onDestroy();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        refurbish();
-        setListCanPull();
-    }
-
-    @Override
-    public void onClick(View v) {}
 }

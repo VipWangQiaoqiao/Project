@@ -155,7 +155,6 @@
         </activity>
 
         <service android:name="net.oschina.app.LogUploadService" />
-        <service android:name="net.oschina.app.service.CloudSynchronizeService"/>
 
         <!-- ############ QQ空间和QQ SSO授权的Activity注册 ############ -->
         <activity

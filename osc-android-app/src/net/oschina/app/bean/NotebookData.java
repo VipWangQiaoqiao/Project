@@ -27,6 +27,7 @@ public class NotebookData extends Entity implements Serializable {
     @XStreamAlias("color")
     private String colorText;
 
+    private String serverUpdateTime; // 服务器端需要，客户端无用
     private int color;
 
     @Override
@@ -119,7 +120,34 @@ public class NotebookData extends Entity implements Serializable {
         return color;
     }
 
+    public String getServerUpdateTime() {
+        return serverUpdateTime;
+    }
+
+    public void setServerUpdateTime(String serverUpdateTime) {
+        this.serverUpdateTime = serverUpdateTime;
+    }
+
     public void setColor(int color) {
-        this.color = color;
+        switch (color) {
+        case 0:
+            colorText = "green";
+            break;
+        case 1:
+            colorText = "yellow";
+            break;
+        case 2:
+            colorText = "red";
+            break;
+        case 3:
+            colorText = "blue";
+            break;
+        case 4:
+            colorText = "purple";
+            break;
+        default:
+            this.color = color;
+            break;
+        }
     }
 }
