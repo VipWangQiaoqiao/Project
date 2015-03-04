@@ -15,6 +15,7 @@ import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamList;
 import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.util.TLog;
+import net.oschina.app.util.TypefaceUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
@@ -114,6 +115,11 @@ public class TeamBoardFragment extends BaseFragment {
 		+ getGreetings());
 	mTvDate.setText("今天是 " + getWeekDay() + "，"
 		+ SystemTool.getDataTime("yyyy年MM月dd日"));
+	
+	TypefaceUtils.setTypeface((TextView)view.findViewById(R.id.tv_team_active));
+	TypefaceUtils.setTypeface((TextView)view.findViewById(R.id.tv_team_issue));
+	TypefaceUtils.setTypeface((TextView)view.findViewById(R.id.tv_team_discuss));
+	TypefaceUtils.setTypeface((TextView)view.findViewById(R.id.tv_team_diary));
     }
 
     private String getGreetings() {

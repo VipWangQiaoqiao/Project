@@ -141,10 +141,14 @@
             android:id="@+id/ll_team_active"
             style="@style/option_item_rl" >
 
-            <ImageView
-                style="@style/option_item_img"
-                android:background="@drawable/icon_my_team"
-                android:contentDescription="@null" />
+            <TextView 
+                android:id="@+id/tv_team_active"
+                android:textColor="@color/main_green"
+                android:textSize="25sp"
+                android:layout_marginRight="10dp"
+                android:text="@string/fa_tasks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
             <TextView
                 style="@style/option_item_text"
@@ -160,10 +164,14 @@
             android:id="@+id/ll_team_issue"
             style="@style/option_item_rl" >
 
-            <ImageView
-                style="@style/option_item_img"
-                android:background="@drawable/icon_my_team"
-                android:contentDescription="@null" />
+            <TextView 
+                android:id="@+id/tv_team_issue"
+                android:textColor="@color/main_green"
+                android:textSize="25sp"
+                android:layout_marginRight="10dp"
+                android:text="@string/fa_tasks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
             <TextView
                 style="@style/option_item_text"
@@ -179,10 +187,14 @@
             android:id="@+id/ll_team_discuss"
             style="@style/option_item_rl" >
 
-            <ImageView
-                style="@style/option_item_img"
-                android:background="@drawable/icon_my_team"
-                android:contentDescription="@null" />
+            <TextView 
+                android:id="@+id/tv_team_discuss"
+                android:textColor="@color/main_green"
+                android:textSize="25sp"
+                android:layout_marginRight="10dp"
+                android:text="@string/fa_comments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
             <TextView
                 style="@style/option_item_text"
@@ -198,10 +210,14 @@
             android:id="@+id/ll_team_diary"
             style="@style/option_item_rl" >
 
-            <ImageView
-                style="@style/option_item_img"
-                android:background="@drawable/icon_my_team"
-                android:contentDescription="@null" />
+            <TextView 
+                android:id="@+id/tv_team_diary"
+                android:textColor="@color/main_green"
+                android:textSize="25sp"
+                android:layout_marginRight="10dp"
+                android:text="@string/fa_file_text_o"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
             <TextView
                 style="@style/option_item_text"

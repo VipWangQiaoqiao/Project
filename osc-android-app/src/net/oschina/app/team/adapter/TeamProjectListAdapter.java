@@ -7,6 +7,8 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import net.oschina.app.R;
 import net.oschina.app.team.bean.TeamProject;
+import net.oschina.app.util.TypefaceUtils;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -65,14 +67,18 @@ public class TeamProjectListAdapter extends BaseAdapter {
 	TeamProject item = datas.get(position);
 
 	String source = item.getSource();
-	if (source == null) {
-
+	TextView tvSource = vh.source;
+	if (TextUtils.isEmpty(source)) {
+	    if (item.getGit().getId() == -1) {
+		TypefaceUtils.setTypeface(tvSource, R.string.fa_tasks);
+	    } else {
+		TypefaceUtils.setTypeface(tvSource, R.string.fa_inbox);
+	    }
 	} else if (source.equalsIgnoreCase(TeamProject.GITOSC)) {
-	    vh.source.setBackgroundResource(R.drawable.ic_comment_count);
+	    TypefaceUtils.setTypeface(tvSource, R.string.fa_gitosc);
 	} else if (source.equalsIgnoreCase(TeamProject.GITHUB)) {
-	    vh.source.setBackgroundResource(R.drawable.ic_action_comment);
+	    TypefaceUtils.setTypeface(tvSource, R.string.fa_github);
 	}
-
 	vh.name.setText(item.getGit().getName());
 
 	return convertView;
@@ -80,7 +86,7 @@ public class TeamProjectListAdapter extends BaseAdapter {
     
     public static class ViewHolder {
 	@InjectView(R.id.iv_source)
-	ImageView source;
+	TextView source;
 	@InjectView(R.id.tv_project_name)
 	TextView name;
 

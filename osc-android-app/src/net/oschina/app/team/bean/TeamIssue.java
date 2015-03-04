@@ -24,6 +24,10 @@ public class TeamIssue extends Entity {
     public final static String TEAM_ISSUE_STATE_ACCEPTED = "accepted";
     public final static String TEAM_ISSUE_STATE_CLOSED = "closed";
     
+    public final static String TEAM_ISSUE_SOURCE_GITOSC = "Git@OSC";
+    public final static String TEAM_ISSUE_SOURCE_GITHUB = "GitHub";
+    public final static String TEAM_ISSUE_SOURCE_TEAMOSC = "Team@OSC";
+    
     public final static int TEAM_ISSUE_GITPUSHED = 1;// 已同步到git
 
     @XStreamAlias("state")
@@ -53,7 +57,7 @@ public class TeamIssue extends Entity {
     @XStreamAlias("acceptTime")
     private String acceptTime;
     
-    //@XStreamAlias("deadlineTime")
+    @XStreamAlias("deadlineTime")
     private String deadlineTime;
 
     @XStreamAlias("author")
@@ -81,10 +85,10 @@ public class TeamIssue extends Entity {
     private TeamIssueChild childIssues;// 子任务数
     
     @XStreamAlias("relations")
-    private int relations;// 关联任务数
+    private Relations relations;// 关联任务数
     
     @XStreamAlias("attachments")
-    private int attachments;// 附件数量
+    private Attachments attachments;// 附件数量
 
     public String getState() {
 	return state;
@@ -134,19 +138,19 @@ public class TeamIssue extends Entity {
         this.childIssues = childIssues;
     }
 
-    public int getRelations() {
+    public Relations getRelations() {
         return relations;
     }
 
-    public void setRelations(int relations) {
+    public void setRelations(Relations relations) {
         this.relations = relations;
     }
 
-    public int getAttachments() {
+    public Attachments getAttachments() {
         return attachments;
     }
 
-    public void setAttachments(int attachments) {
+    public void setAttachments(Attachments attachments) {
         this.attachments = attachments;
     }
 
@@ -382,9 +386,36 @@ public class TeamIssue extends Entity {
 
     }
     
+    // 子任务
     @XStreamAlias("childIssues")
     public class TeamIssueChild implements Serializable {
 	
+	@XStreamAlias("totalCount")
+	private int totalCount;
+	
+	@XStreamAlias("closedCount")
+	private int closedCount;
+
+	public int getTotalCount() {
+	    return totalCount;
+	}
+
+	public void setTotalCount(int totalCount) {
+	    this.totalCount = totalCount;
+	}
+
+	public int getClosedCount() {
+	    return closedCount;
+	}
+
+	public void setClosedCount(int closedCount) {
+	    this.closedCount = closedCount;
+	}
+    }
+    
+    // 关联任务
+    @XStreamAlias("relations")
+    public class Relations implements Serializable {
 	@XStreamAlias("totalCount")
 	private int totalCount;
 
@@ -395,7 +426,21 @@ public class TeamIssue extends Entity {
 	public void setTotalCount(int totalCount) {
 	    this.totalCount = totalCount;
 	}
-	
+    }
+    
+    // 任务附件
+    @XStreamAlias("attachments")
+    public class Attachments implements Serializable {
+	@XStreamAlias("totalCount")
+	private int totalCount;
+
+	public int getTotalCount() {
+	    return totalCount;
+	}
+
+	public void setTotalCount(int totalCount) {
+	    this.totalCount = totalCount;
+	}
     }
     
     public String getIssueStateText() {
