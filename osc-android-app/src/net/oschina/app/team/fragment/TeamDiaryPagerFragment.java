@@ -18,6 +18,7 @@ import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamDiary;
 import net.oschina.app.team.bean.TeamDiaryList;
 import net.oschina.app.team.bean.TeamList;
+import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TLog;
@@ -93,17 +94,9 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
     @Override
     public void initData() {
         super.initData();
-        Bundle bundle = getActivity().getIntent().getExtras();
+        Bundle bundle = getArguments();
         if (bundle != null) {
-            int index = bundle.getInt(MyInformationFragment.TEAM_LIST_KEY, 0);
-            String cache = PreferenceHelper.readString(getActivity(),
-                    MyInformationFragment.TEAM_LIST_FILE,
-                    MyInformationFragment.TEAM_LIST_KEY);
-            team = TeamList.toTeamList(cache).get(index);
-        } else {
-            team = new Team();
-            TLog.log(getClass().getSimpleName(), "team对象初始化异常");
-
+            team = (Team) bundle.getSerializable(TeamMainActivity.BUNDLE_KEY_TEAM);
         }
         TAG += team.getId();
         currentWeek = StringUtils.getWeekOfYear();

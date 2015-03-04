@@ -3,7 +3,7 @@ package net.oschina.app.team.viewpagefragment;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.base.BaseViewPagerFragment;
 import net.oschina.app.team.fragment.MyIssueDetail;
-import net.oschina.app.team.fragment.MyIssueFragment;
+import net.oschina.app.team.fragment.TeamBoardFragment;
 import net.oschina.app.ui.SimpleBackActivity;
 
 import org.kymjs.kjframe.utils.KJLoger;
@@ -37,7 +37,7 @@ public class MyIssuePagerfragment extends BaseViewPagerFragment {
         try {
             currentPage = getActivity().getIntent()
                     .getBundleExtra(SimpleBackActivity.BUNDLE_KEY_ARGS)
-                    .getInt(MyIssueFragment.WHICH_PAGER_KEY, 0);
+                    .getInt(TeamBoardFragment.WHICH_PAGER_KEY, 0);
         } catch (NullPointerException e) {
         }
         mViewPager.setCurrentItem(currentPage);

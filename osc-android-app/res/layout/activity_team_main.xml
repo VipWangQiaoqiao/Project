@@ -10,15 +10,4 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <!-- 菜单 -->
-    <include 
-        android:id="@+id/team_main_menu"
-        layout="@layout/activity_team_main_menu"
-        android:layout_width="@dimen/navigation_drawer_width"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:clickable="true"
-        android:background="@color/list_item_background_normal"
-        android:orientation="vertical" />
-    
 </android.support.v4.widget.DrawerLayout>

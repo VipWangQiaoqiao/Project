@@ -205,6 +205,6 @@ public class Tweet extends Entity implements Parcelable {
 				+ appclient + ", commentCount=" + commentCount + ", pubDate="
 				+ pubDate + ", imgSmall=" + imgSmall + ", imgBig=" + imgBig
 				+ ", attach=" + attach + ", imageFilePath=" + imageFilePath
-				+ ", audioPath=" + audioPath + "]";
-	}
+		+ ", audioPath=" + audioPath + "]";
+    }
 }

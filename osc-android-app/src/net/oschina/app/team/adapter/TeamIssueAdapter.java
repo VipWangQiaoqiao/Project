@@ -69,7 +69,7 @@ public class TeamIssueAdapter extends ListBaseAdapter<TeamIssue> {
 	    vh.project.setVisibility(View.GONE);
 	}
 	
-	String deadlineTime = item.getAcceptTime();
+	String deadlineTime = item.getDeadlineTime();
 	if (!StringUtils.isEmpty(deadlineTime)) {
 	    vh.accept_time.setVisibility(View.VISIBLE);
 	    setText(vh.accept_time, getDeadlineTime(item), true);

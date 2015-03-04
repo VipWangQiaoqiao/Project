@@ -574,16 +574,14 @@
 
     <style name="myissue_text" parent="@style/fill_wrap">
         <item name="android:textColor">#999999</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:gravity">center|left</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="myissue_text_num" parent="@style/myissue_text">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_alignParentRight">true</item>
     </style>
-    
-    <!-- events list style end -->
     
     <style name="team_user_infor" parent="@style/wrap_wrap">
         <item name="android:padding">5dp</item>

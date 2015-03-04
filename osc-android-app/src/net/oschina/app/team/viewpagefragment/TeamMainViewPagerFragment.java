@@ -3,7 +3,7 @@ package net.oschina.app.team.viewpagefragment;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.base.BaseViewPagerFragment;
-import net.oschina.app.team.fragment.MyIssueFragment;
+import net.oschina.app.team.fragment.TeamBoardFragment;
 import net.oschina.app.team.fragment.TeamMemberFragment;
 import net.oschina.app.team.fragment.TeamProjectFragment;
 import android.os.Bundle;
@@ -53,7 +53,7 @@ public class TeamMainViewPagerFragment extends BaseViewPagerFragment {
 
 	adapter.addTab(arraStrings[0], "", TeamProjectFragment.class,
 		getActivity().getIntent().getExtras());
-	adapter.addTab(arraStrings[1], "", MyIssueFragment.class, getActivity()
+	adapter.addTab(arraStrings[1], "", TeamBoardFragment.class, getActivity()
 		.getIntent().getExtras());
 	adapter.addTab(arraStrings[2], "", TeamMemberFragment.class,
 		getActivity().getIntent().getExtras());

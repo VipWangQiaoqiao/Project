@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 
 import net.oschina.app.api.remote.OSChinaTeamApi;
+import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.team.adapter.TeamDiscussAdapter;
@@ -38,7 +39,7 @@ public class TeamDiscussFragment extends BaseListFragment<TeamDiscuss> {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = getActivity().getIntent().getExtras();
+        Bundle bundle = getArguments();
         if (bundle != null) {
             Team team = (Team) bundle
                     .getSerializable(TeamMainActivity.BUNDLE_KEY_TEAM);
