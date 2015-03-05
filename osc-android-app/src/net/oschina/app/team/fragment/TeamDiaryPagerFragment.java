@@ -12,21 +12,17 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.cache.CacheManager;
-import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.team.adapter.TeamDiaryListAdapter;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamDiary;
 import net.oschina.app.team.bean.TeamDiaryList;
-import net.oschina.app.team.bean.TeamList;
 import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.TLog;
 import net.oschina.app.util.XmlUtils;
 
 import org.apache.http.Header;
 import org.kymjs.kjframe.http.core.KJAsyncTask;
-import org.kymjs.kjframe.utils.PreferenceHelper;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -96,7 +92,8 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
         super.initData();
         Bundle bundle = getArguments();
         if (bundle != null) {
-            team = (Team) bundle.getSerializable(TeamMainActivity.BUNDLE_KEY_TEAM);
+            team = (Team) bundle
+                    .getSerializable(TeamMainActivity.BUNDLE_KEY_TEAM);
         }
         TAG += team.getId();
         currentWeek = StringUtils.getWeekOfYear();

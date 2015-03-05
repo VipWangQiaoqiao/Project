@@ -51,7 +51,7 @@
         style="@style/list_text_info"
         android:layout_alignParentRight="true"
         android:layout_below="@id/tv_title"
-        android:layout_marginLeft="@dimen/space_10"
+        android:layout_marginRight="@dimen/space_10"
         android:drawableLeft="@drawable/ic_comment_count"
         android:text="10" />
 
