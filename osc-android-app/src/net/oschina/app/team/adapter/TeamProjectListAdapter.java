@@ -3,15 +3,16 @@ package net.oschina.app.team.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 import net.oschina.app.R;
 import net.oschina.app.team.bean.TeamProject;
+import net.oschina.app.util.TypefaceUtils;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * 团队项目适配器
@@ -23,70 +24,74 @@ import android.widget.TextView;
 
 public class TeamProjectListAdapter extends BaseAdapter {
 
-    private ArrayList<TeamProject> datas = new ArrayList<TeamProject>();
+    private final ArrayList<TeamProject> datas = new ArrayList<TeamProject>();
 
     public void add(TeamProject project) {
-	this.datas.add(project);
-	notifyDataSetChanged();
+        this.datas.add(project);
+        notifyDataSetChanged();
     }
 
     public void add(List<TeamProject> datas) {
-	this.datas.addAll(datas);
-	notifyDataSetChanged();
+        this.datas.addAll(datas);
+        notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-	return datas.size();
+        return datas.size();
     }
 
     @Override
     public TeamProject getItem(int position) {
-	return datas.get(position);
+        return datas.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-	return 0;
+        return 0;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-	ViewHolder vh;
-	if (convertView == null || convertView.getTag() == null) {
-	    convertView = View.inflate(parent.getContext(),
-		    R.layout.list_cell_team_project, null);
-	    vh = new ViewHolder(convertView);
-	    convertView.setTag(vh);
-	} else {
-	    vh = (ViewHolder) convertView.getTag();
-	}
+        ViewHolder vh;
+        if (convertView == null || convertView.getTag() == null) {
+            convertView = View.inflate(parent.getContext(),
+                    R.layout.list_cell_team_project, null);
+            vh = new ViewHolder(convertView);
+            convertView.setTag(vh);
+        } else {
+            vh = (ViewHolder) convertView.getTag();
+        }
 
-	TeamProject item = datas.get(position);
+        TeamProject item = datas.get(position);
 
-	String source = item.getSource();
-	if (source == null) {
+        String source = item.getSource();
+        TextView tvSource = vh.source;
+        if (TextUtils.isEmpty(source)) {
+            if (item.getGit().getId() == -1) {
+                TypefaceUtils.setTypeface(tvSource, R.string.fa_tasks);
+            } else {
+                TypefaceUtils.setTypeface(tvSource, R.string.fa_inbox);
+            }
+        } else if (source.equalsIgnoreCase(TeamProject.GITOSC)) {
+            TypefaceUtils.setTypeface(tvSource, R.string.fa_gitosc);
+        } else if (source.equalsIgnoreCase(TeamProject.GITHUB)) {
+            TypefaceUtils.setTypeface(tvSource, R.string.fa_github);
+        }
+        vh.name.setText(item.getGit().getName());
 
-	} else if (source.equalsIgnoreCase(TeamProject.GITOSC)) {
-	    vh.source.setBackgroundResource(R.drawable.ic_comment_count);
-	} else if (source.equalsIgnoreCase(TeamProject.GITHUB)) {
-	    vh.source.setBackgroundResource(R.drawable.ic_action_comment);
-	}
-
-	vh.name.setText(item.getGit().getName());
-
-	return convertView;
+        return convertView;
     }
-    
-    public static class ViewHolder {
-	@InjectView(R.id.iv_source)
-	ImageView source;
-	@InjectView(R.id.tv_project_name)
-	TextView name;
 
-	public ViewHolder(View view) {
-	    ButterKnife.inject(this, view);
-	}
+    public static class ViewHolder {
+        @InjectView(R.id.iv_source)
+        TextView source;
+        @InjectView(R.id.tv_project_name)
+        TextView name;
+
+        public ViewHolder(View view) {
+            ButterKnife.inject(this, view);
+        }
     }
 
 }

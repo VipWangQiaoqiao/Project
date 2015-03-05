@@ -5,6 +5,7 @@ import butterknife.InjectView;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.team.bean.TeamProject;
+import net.oschina.app.util.TypefaceUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -36,12 +37,13 @@ public class TeamProjectListAdapterNew extends ListBaseAdapter<TeamProject> {
 	TeamProject item = mDatas.get(position);
 
 	String source = item.getSource();
+	TextView tvSource = vh.source;
 	if (source == null) {
-
+	    
 	} else if (source.equalsIgnoreCase(TeamProject.GITOSC)) {
-	    vh.source.setBackgroundResource(R.drawable.ic_comment_count);
+	    TypefaceUtils.setTypeface(tvSource, R.string.fa_gitosc);
 	} else if (source.equalsIgnoreCase(TeamProject.GITHUB)) {
-	    vh.source.setBackgroundResource(R.drawable.ic_action_comment);
+	    TypefaceUtils.setTypeface(tvSource, R.string.fa_github);
 	}
 
 	vh.name.setText(item.getGit().getOwnerName() + " / " + item.getGit().getName());
@@ -51,7 +53,7 @@ public class TeamProjectListAdapterNew extends ListBaseAdapter<TeamProject> {
 
     public static class ViewHolder {
 	@InjectView(R.id.iv_source)
-	ImageView source;
+	TextView source;
 	@InjectView(R.id.tv_project_name)
 	TextView name;
 

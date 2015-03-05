@@ -11,13 +11,21 @@
         android:gravity="center_vertical"
         android:orientation="horizontal" >
 
-        <ImageView
+        <TextView
             android:id="@+id/iv_issue_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:text="@string/fa_circle_o"
+            android:textSize="20sp"
+            android:visibility="visible" />
+        
+        <TextView 
+            android:id="@+id/iv_issue_source"
+            android:text="@string/fa_team"
             android:layout_marginRight="3dp"
-            android:visibility="gone"
-            android:background="@drawable/ic_comment_count" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
         <TextView
             android:id="@+id/tv_title"
