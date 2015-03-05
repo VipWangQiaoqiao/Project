@@ -55,7 +55,7 @@ public class NoteDatabase {
                         data.getColor() + "", data.getId() + "" });
     }
 
-    public ArrayList<NotebookData> query() {
+    public List<NotebookData> query() {
         return query(" ");
     }
 
@@ -65,7 +65,7 @@ public class NoteDatabase {
      * @param where
      * @return
      */
-    public ArrayList<NotebookData> query(String where) {
+    public List<NotebookData> query(String where) {
         ArrayList<NotebookData> data = null;
 
         if (sqlite.isOpen()) {
@@ -111,7 +111,7 @@ public class NoteDatabase {
      * @param data
      */
     public void save(NotebookData data) {
-        ArrayList<NotebookData> datas = query(" where _id=" + data.getId());
+        List<NotebookData> datas = query(" where _id=" + data.getId());
         if (datas != null && !datas.isEmpty()) {
             update(data);
         } else {

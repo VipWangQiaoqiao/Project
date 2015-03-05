@@ -1,7 +1,7 @@
 package net.oschina.app.team.adapter;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.NotebookData;
@@ -27,14 +27,14 @@ import android.widget.TextView;
  * 
  */
 public class NotebookAdapter extends BaseAdapter implements DragGridBaseAdapter {
-    private ArrayList<NotebookData> datas;
+    private List<NotebookData> datas;
     private final Activity aty;
     private int currentHidePosition = -1;
     private final int width;
     private final int height;
     private boolean dataChange = false;
 
-    public NotebookAdapter(Activity aty, ArrayList<NotebookData> datas) {
+    public NotebookAdapter(Activity aty, List<NotebookData> datas) {
         super();
         this.datas = datas;
         this.aty = aty;
@@ -42,7 +42,7 @@ public class NotebookAdapter extends BaseAdapter implements DragGridBaseAdapter 
         height = (int) aty.getResources().getDimension(R.dimen.space_35);
     }
 
-    public void refurbishData(ArrayList<NotebookData> datas) {
+    public void refurbishData(List<NotebookData> datas) {
         this.datas = datas;
         notifyDataSetChanged();
     }
@@ -62,7 +62,7 @@ public class NotebookAdapter extends BaseAdapter implements DragGridBaseAdapter 
         return 0;
     }
 
-    public ArrayList<NotebookData> getDatas() {
+    public List<NotebookData> getDatas() {
         return datas;
     }
 

@@ -20,7 +20,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String CREATE_NOTE_TABLE = "create table "
             + NOTE_TABLE_NAME
-            + " (_id integer primary key autoincrement, iid integer primary key autoincrement,"
+            + " (_id integer primary key autoincrement, iid integer,"
             + " time varchar(10), date varchar(10), content text, color integer)";
 
     public static final String NEWS_LIST = "osc_news_list";
