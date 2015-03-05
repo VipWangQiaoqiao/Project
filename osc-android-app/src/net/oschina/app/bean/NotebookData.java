@@ -80,11 +80,18 @@ public class NotebookData extends Entity implements Serializable {
     }
 
     public String getDate() {
-        return date;
+        // 服务器处理造成必须要完整的年月日时分秒
+        if (date != null) {
+            return date.substring(0, 10);
+        } else {
+            return date;
+        }
     }
 
     public void setDate(String date) {
+        // 服务器处理造成必须要完整的年月日时分秒
         this.date = date;
+        this.serverUpdateTime = date;
     }
 
     public long getUnixTime() {

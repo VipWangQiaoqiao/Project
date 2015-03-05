@@ -1,5 +1,6 @@
 package net.oschina.app.team.adapter;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -43,6 +44,9 @@ public class NotebookAdapter extends BaseAdapter implements DragGridBaseAdapter 
     }
 
     public void refurbishData(List<NotebookData> datas) {
+        if (datas == null) {
+            datas = new ArrayList<NotebookData>(1);
+        }
         this.datas = datas;
         notifyDataSetChanged();
     }

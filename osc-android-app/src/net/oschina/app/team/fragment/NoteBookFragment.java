@@ -309,7 +309,7 @@ public class NoteBookFragment extends BaseFragment implements
             public void onSuccess(byte[] arg2) {
                 NotebookDataList dataList = XmlUtils.toBean(
                         NotebookDataList.class, arg2);
-                if (dataList != null) {
+                if (dataList != null && dataList.getList() != null) {
                     noteDb.reset(dataList.getList());
                     adapter.refurbishData(dataList.getList());
                 }
