@@ -86,9 +86,10 @@ public class SynchronizeController {
                     .append(",");
             jsonData.append("\"color\":").append(data.getColorText())
                     .append(",");
-            jsonData.append("\"createtime\":").append(data.getDate())
-                    .append(",");
-            jsonData.append("\"updatetime\":").append(data.getDate());
+            jsonData.append("\"createtime\":")
+                    .append(data.getServerUpdateTime()).append(",");
+            jsonData.append("\"updatetime\":").append(
+                    data.getServerUpdateTime());
             jsonData.append("},");
         }
         jsonData.append("]}");

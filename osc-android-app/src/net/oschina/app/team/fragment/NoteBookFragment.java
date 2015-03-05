@@ -312,6 +312,7 @@ public class NoteBookFragment extends BaseFragment implements
                 if (dataList != null && dataList.getList() != null) {
                     noteDb.reset(dataList.getList());
                     adapter.refurbishData(dataList.getList());
+                    updateEmptyView();
                 }
             }
 
@@ -320,6 +321,7 @@ public class NoteBookFragment extends BaseFragment implements
                 AppContext.showToast("网络不好，请稍后执行同步");
             }
         });
+        updateEmptyView();
     }
 
     /**

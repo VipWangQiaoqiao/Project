@@ -231,9 +231,11 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
      * 保存已编辑内容到数据库
      */
     private void save() {
-        editData.setId(-1
-                * org.kymjs.kjframe.utils.StringUtils.toInt(
-                        StringUtils.getDataTime("dddHHmmss"), 0));
+        if (editData.getId() == 0) {
+            editData.setId(-1
+                    * org.kymjs.kjframe.utils.StringUtils.toInt(
+                            StringUtils.getDataTime("dddHHmmss"), 0));
+        }
         editData.setUnixTime(System.currentTimeMillis() / 1000);
         editData.setContent(mEtContent.getText().toString());
         noteDb.save(editData);

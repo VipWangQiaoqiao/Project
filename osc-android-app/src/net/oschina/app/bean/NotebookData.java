@@ -111,18 +111,17 @@ public class NotebookData extends Entity implements Serializable {
     }
 
     public int getColor() {
-        if (this.color == 0) { // 客户端始终以当前手机上的颜色为准
-            if ("blue".equals(colorText)) {
-                this.color = 3;
-            } else if ("red".equals(colorText)) {
-                this.color = 2;
-            } else if ("yellow".equals(colorText)) {
-                this.color = 1;
-            } else if ("purple".equals(colorText)) {
-                this.color = 4;
-            } else if ("green".equals(colorText)) {
-                this.color = 0;
-            }
+        // 客户端始终以当前手机上的颜色为准
+        if ("blue".equals(colorText)) {
+            this.color = 3;
+        } else if ("red".equals(colorText)) {
+            this.color = 2;
+        } else if ("yellow".equals(colorText)) {
+            this.color = 1;
+        } else if ("purple".equals(colorText)) {
+            this.color = 4;
+        } else if ("green".equals(colorText)) {
+            this.color = 0;
         }
         return color;
     }
