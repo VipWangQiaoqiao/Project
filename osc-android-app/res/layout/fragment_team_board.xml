@@ -42,16 +42,16 @@
                     android:orientation="horizontal" >
 
                     <LinearLayout
-                        android:id="@+id/team_myissue_ing"
+                        android:id="@+id/team_myissue_waitdo"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center_horizontal"
-                        android:padding="10dp"
-                        android:orientation="vertical" >
+                        android:orientation="vertical"
+                        android:padding="10dp" >
 
                         <TextView
-                            android:id="@+id/team_myissue_ing_num"
+                            android:id="@+id/team_myissue_wait_num"
                             style="@style/myissue_text_num" />
 
                         <TextView
@@ -69,8 +69,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical"
                         android:gravity="center_horizontal"
+                        android:orientation="vertical"
                         android:padding="10dp" >
 
                         <TextView
@@ -94,16 +94,16 @@
                     android:orientation="horizontal" >
 
                     <LinearLayout
-                        android:id="@+id/team_myissue_ed"
+                        android:id="@+id/team_myissue_ing"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical"
                         android:gravity="center_horizontal"
+                        android:orientation="vertical"
                         android:padding="10dp" >
 
                         <TextView
-                            android:id="@+id/team_myissue_ed_num"
+                            android:id="@+id/team_myissue_ing_num"
                             style="@style/myissue_text_num" />
 
                         <TextView
@@ -121,8 +121,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical"
                         android:gravity="center_horizontal"
+                        android:orientation="vertical"
                         android:padding="10dp" >
 
                         <TextView
@@ -141,14 +141,14 @@
             android:id="@+id/ll_team_active"
             style="@style/option_item_rl" >
 
-            <TextView 
+            <TextView
                 android:id="@+id/tv_team_active"
-                android:textColor="@color/main_green"
-                android:textSize="25sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:text="@string/fa_tasks"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:textColor="@color/main_green"
+                android:textSize="25sp" />
 
             <TextView
                 style="@style/option_item_text"
@@ -164,14 +164,14 @@
             android:id="@+id/ll_team_issue"
             style="@style/option_item_rl" >
 
-            <TextView 
+            <TextView
                 android:id="@+id/tv_team_issue"
-                android:textColor="@color/main_green"
-                android:textSize="25sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:text="@string/fa_tasks"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:textColor="@color/main_green"
+                android:textSize="25sp" />
 
             <TextView
                 style="@style/option_item_text"
@@ -187,14 +187,14 @@
             android:id="@+id/ll_team_discuss"
             style="@style/option_item_rl" >
 
-            <TextView 
+            <TextView
                 android:id="@+id/tv_team_discuss"
-                android:textColor="@color/main_green"
-                android:textSize="25sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:text="@string/fa_comments"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:textColor="@color/main_green"
+                android:textSize="25sp" />
 
             <TextView
                 style="@style/option_item_text"
@@ -210,14 +210,14 @@
             android:id="@+id/ll_team_diary"
             style="@style/option_item_rl" >
 
-            <TextView 
+            <TextView
                 android:id="@+id/tv_team_diary"
-                android:textColor="@color/main_green"
-                android:textSize="25sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:text="@string/fa_file_text_o"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:textColor="@color/main_green"
+                android:textSize="25sp" />
 
             <TextView
                 style="@style/option_item_text"

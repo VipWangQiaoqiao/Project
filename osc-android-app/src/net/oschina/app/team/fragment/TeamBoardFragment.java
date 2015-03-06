@@ -42,21 +42,21 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
  */
 public class TeamBoardFragment extends BaseFragment {
 
-    @InjectView(R.id.team_myissue_ing)
-    View mRlIng;
+    @InjectView(R.id.team_myissue_waitdo)
+    View mRlWaitDo;
     @InjectView(R.id.team_myissue_outdate)
     View mRlWill;
-    @InjectView(R.id.team_myissue_ed)
-    View mRlEd;
+    @InjectView(R.id.team_myissue_ing)
+    View mRlIng;
     @InjectView(R.id.team_myissue_all)
     View mRlAll;
 
-    @InjectView(R.id.team_myissue_ing_num)
-    TextView mTvIng;
+    @InjectView(R.id.team_myissue_wait_num)
+    TextView mTvWaitDo;
     @InjectView(R.id.team_myissue_outdate_num)
     TextView mTvOutdate;
-    @InjectView(R.id.team_myissue_ed_num)
-    TextView mTvEd;
+    @InjectView(R.id.team_myissue_ing_num)
+    TextView mTvIng;
     @InjectView(R.id.team_myissue_all_num)
     TextView mTvAll;
 
@@ -104,9 +104,9 @@ public class TeamBoardFragment extends BaseFragment {
 
     @Override
     public void initView(View view) {
-        mRlIng.setOnClickListener(this);
+        mRlWaitDo.setOnClickListener(this);
         mRlWill.setOnClickListener(this);
-        mRlEd.setOnClickListener(this);
+        mRlIng.setOnClickListener(this);
         mRlAll.setOnClickListener(this);
 
         mTvName.setText(AppContext.getInstance().getLoginUser().getName() + "，"
@@ -182,12 +182,12 @@ public class TeamBoardFragment extends BaseFragment {
             R.id.ll_team_diary })
     public void onClick(View v) {
         switch (v.getId()) {
-        case R.id.team_myissue_ing:
+        case R.id.team_myissue_waitdo:
             bundle.putInt(WHICH_PAGER_KEY, 0);
             UIHelper.showSimpleBack(getActivity(),
                     SimpleBackPage.MY_ISSUE_PAGER, bundle);
             break;
-        case R.id.team_myissue_ed:
+        case R.id.team_myissue_ing:
             bundle.putInt(WHICH_PAGER_KEY, 1);
             UIHelper.showSimpleBack(getActivity(),
                     SimpleBackPage.MY_ISSUE_PAGER, bundle);
@@ -198,7 +198,7 @@ public class TeamBoardFragment extends BaseFragment {
                     SimpleBackPage.MY_ISSUE_PAGER, bundle);
             break;
         case R.id.team_myissue_all:
-            bundle.putInt(WHICH_PAGER_KEY, 0);
+            bundle.putInt(WHICH_PAGER_KEY, 3);
             UIHelper.showSimpleBack(getActivity(),
                     SimpleBackPage.MY_ISSUE_PAGER, bundle);
             break;
@@ -239,10 +239,10 @@ public class TeamBoardFragment extends BaseFragment {
             public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
                 MyIssueState data = XmlUtils.toBean(MyIssueState.class,
                         new ByteArrayInputStream(arg2));
-                mTvIng.setText(data.getOpened());
+                mTvWaitDo.setText(data.getOpened());
                 mTvOutdate.setText(data.getOutdate());
-                mTvEd.setText(data.getClosed());
-                mTvAll.setText(data.getAll());
+                mTvIng.setText(data.getUnderway());
+                mTvAll.setText(data.getFinished());
             }
 
             @Override

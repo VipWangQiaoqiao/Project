@@ -151,10 +151,7 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
             isNewNote = true;
         }
         if (StringUtils.isEmpty(editData.getDate())) {
-            // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-            // editData.setDate(dateFormat.format(new Date()));
-            // 服务器端格式要求年月日时分秒
-            editData.setDate(StringUtils.getDataTime("yyyy-MM-dd HH:mm:ss"));
+            editData.setDate(StringUtils.getDataTime("yyyy/MM/dd"));
         }
     }
 
@@ -237,6 +234,8 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
                             StringUtils.getDataTime("dddHHmmss"), 0));
         }
         editData.setUnixTime(System.currentTimeMillis() / 1000);
+        editData.setServerUpdateTime(StringUtils
+                .getDataTime("yyyy-MM-dd HH:mm:ss"));
         editData.setContent(mEtContent.getText().toString());
         noteDb.save(editData);
     }

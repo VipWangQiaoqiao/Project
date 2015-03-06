@@ -41,9 +41,7 @@ public class TeamDiaryDetail extends
     }
 
     @Override
-    protected void executeOnLoadDetailSuccess(TeamActiveDetail detailBean) {
-
-    }
+    protected void executeOnLoadDetailSuccess(TeamActiveDetail detailBean) {}
 
     @Override
     protected TeamActiveDetail getDetailBean(ByteArrayInputStream is) {
@@ -62,17 +60,11 @@ public class TeamDiaryDetail extends
     }
 
     @Override
-    public void onMoreClick(Comment comment) {
-
-    }
+    public void onMoreClick(Comment comment) {}
 
     @Override
-    public void onSendClick(String text) {
-
-    }
+    public void onSendClick(String text) {}
 
     @Override
-    protected void requestDetailData(boolean isRefresh) {
-
-    }
+    protected void requestDetailData(boolean isRefresh) {}
 }

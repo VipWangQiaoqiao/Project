@@ -11,7 +11,8 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * 
  */
 @XStreamAlias("sticky")
-public class NotebookData extends Entity implements Serializable {
+public class NotebookData extends Entity implements Serializable,
+        Comparable<NotebookData> {
     private static final long serialVersionUID = 1L;
 
     @XStreamAlias("id")
@@ -80,18 +81,11 @@ public class NotebookData extends Entity implements Serializable {
     }
 
     public String getDate() {
-        // 服务器处理造成必须要完整的年月日时分秒
-        if (date != null) {
-            return date.substring(0, 10);
-        } else {
-            return date;
-        }
+        return date;
     }
 
     public void setDate(String date) {
-        // 服务器处理造成必须要完整的年月日时分秒
         this.date = date;
-        this.serverUpdateTime = date;
     }
 
     public long getUnixTime() {
@@ -155,5 +149,10 @@ public class NotebookData extends Entity implements Serializable {
             this.color = color;
             break;
         }
+    }
+
+    @Override
+    public int compareTo(NotebookData another) {
+        return this.iid - another.getIid();
     }
 }

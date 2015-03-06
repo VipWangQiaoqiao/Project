@@ -10,6 +10,7 @@ import net.oschina.app.db.NoteDatabase;
 
 import org.apache.http.Header;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.protocol.HTTP;
 import org.kymjs.kjframe.utils.SystemTool;
 
 import android.app.Activity;
@@ -68,40 +69,49 @@ public class SynchronizeController {
      */
     private void doSynchronizeWithWIFI(final SynchronizeListener cb) {
         long currentTime = System.currentTimeMillis();
+        // 为流量和服务器考虑，限制请求频率，一分钟刷新一次
         if (currentTime - sPreviousRefreshTime < 60000) {
-            // 为流量和服务器考虑，限制请求频率，一分钟刷新一次
             return;
+        } else {
+            // sPreviousRefreshTime = currentTime;
         }
 
         int uid = AppContext.getInstance().getLoginUid();
         StringBuilder jsonData = new StringBuilder();
         int size = localDatas.size();
         jsonData.append("{\"uid\":").append(uid).append(",\"stickys\":[");
-        for (int i = size; i < size; i++) {
+        boolean isFirst = true;
+        for (int i = 0; i < size; i++) {
             NotebookData data = localDatas.get(i);
+            if (isFirst) {
+                isFirst = false;
+            } else {
+                jsonData.append(",");
+            }
             jsonData.append("{");
             jsonData.append("\"id\":").append(data.getId()).append(",");
             jsonData.append("\"iid\":").append(data.getIid()).append(",");
-            jsonData.append("\"content\":").append(data.getContent())
-                    .append(",");
-            jsonData.append("\"color\":").append(data.getColorText())
-                    .append(",");
-            jsonData.append("\"createtime\":")
-                    .append(data.getServerUpdateTime()).append(",");
-            jsonData.append("\"updatetime\":").append(
+            jsonData.append("\"content\":\"").append(data.getContent())
+                    .append("\",");
+            jsonData.append("\"color\":\"").append(data.getColorText())
+                    .append("\",");
+            jsonData.append("\"createtime\":\"")
+                    .append(data.getServerUpdateTime()).append("\",");
+            jsonData.append("\"updatetime\":\"").append(
                     data.getServerUpdateTime());
-            jsonData.append("},");
+            jsonData.append("\"}");
         }
         jsonData.append("]}");
 
         AsyncHttpClient client = ApiHttpClient.getHttpClient();
-        client.addHeader("Content-Type", "application/json");
+        client.addHeader("Content-Type", "application/json; charset=UTF-8");
         try {
             client.post(
                     aty,
                     ApiHttpClient
                             .getAbsoluteApiUrl("action/api/team_stickynote_batch_update"),
-                    new StringEntity(jsonData.toString()), "application/json",
+                    new StringEntity(jsonData.toString(), HTTP.UTF_8),
+                    "application/json; charset=UTF-8",
                     new AsyncHttpResponseHandler() {
                         @Override
                         public void onSuccess(int arg0, Header[] arg1,

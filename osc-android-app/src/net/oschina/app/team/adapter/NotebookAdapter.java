@@ -37,6 +37,7 @@ public class NotebookAdapter extends BaseAdapter implements DragGridBaseAdapter 
 
     public NotebookAdapter(Activity aty, List<NotebookData> datas) {
         super();
+        Collections.sort(datas);
         this.datas = datas;
         this.aty = aty;
         width = DensityUtils.getScreenW(aty) / 2;
@@ -47,6 +48,7 @@ public class NotebookAdapter extends BaseAdapter implements DragGridBaseAdapter 
         if (datas == null) {
             datas = new ArrayList<NotebookData>(1);
         }
+        Collections.sort(datas);
         this.datas = datas;
         notifyDataSetChanged();
     }
@@ -89,6 +91,9 @@ public class NotebookAdapter extends BaseAdapter implements DragGridBaseAdapter 
 
     @Override
     public View getView(int position, View v, ViewGroup parent) {
+        datas.get(position).setIid(position);
+        NotebookData data = datas.get(position);
+
         ViewHolder holder = null;
         if (v == null) {
             holder = new ViewHolder();
@@ -111,16 +116,19 @@ public class NotebookAdapter extends BaseAdapter implements DragGridBaseAdapter 
         holder.content.setLayoutParams(params);
 
         holder.titleBar
-                .setBackgroundColor(NoteEditFragment.sTitleBackGrounds[datas
-                        .get(position).getColor()]);
-        holder.date.setText(datas.get(position).getDate());
-        // holder.state.setImageResource(resId);
-        holder.thumbtack.setImageResource(NoteEditFragment.sThumbtackImgs[datas
-                .get(position).getColor()]);
-        holder.content.setText(Html.fromHtml(datas.get(position).getContent())
-                .toString());
-        holder.content.setBackgroundColor(NoteEditFragment.sBackGrounds[datas
-                .get(position).getColor()]);
+                .setBackgroundColor(NoteEditFragment.sTitleBackGrounds[data
+                        .getColor()]);
+        holder.date.setText(data.getDate());
+        if (data.getId() > 0) {
+            holder.state.setVisibility(View.GONE);
+        } else {
+            holder.state.setVisibility(View.VISIBLE);
+        }
+        holder.thumbtack.setImageResource(NoteEditFragment.sThumbtackImgs[data
+                .getColor()]);
+        holder.content.setText(Html.fromHtml(data.getContent()).toString());
+        holder.content.setBackgroundColor(NoteEditFragment.sBackGrounds[data
+                .getColor()]);
         if (position == currentHidePosition) {
             v.setVisibility(View.GONE);
         } else {
