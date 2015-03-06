@@ -146,7 +146,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
-                android:text="@string/fa_tasks"
+                android:text="@string/fa_home"
                 android:textColor="@color/main_green"
                 android:textSize="25sp" />
 

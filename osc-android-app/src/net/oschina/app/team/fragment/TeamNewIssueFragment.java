@@ -182,12 +182,17 @@ public class TeamNewIssueFragment extends BaseFragment {
 	if (args != null) {
 	    mTeam = (Team) args.getSerializable("team");
 	    mTeamProject = (TeamProject) args.getSerializable("project");
+	    mTeamCatalog = (TeamIssueCatalog) args.getSerializable("catalog");
 	}
 
 	if (mTeamProject != null && mTeamProject.getGit().getId() != 0
 		&& mTeamProject.getGit().getId() != -1) {
 	    mTvProject.setText(mTeamProject.getGit().getName());
 	    mTvProject.setTag(mTeamProject);
+	}
+	if (mTeamCatalog != null) {
+	    mTvCatalog.setText(mTeamCatalog.getTitle());
+	    mTvCatalog.setTag(mTeamCatalog);
 	}
 
 	initDate();

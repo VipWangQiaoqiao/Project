@@ -1,11 +1,18 @@
 package net.oschina.app.team.bean;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
+import net.oschina.app.R;
 import net.oschina.app.bean.Entity;
+import net.oschina.app.util.StringUtils;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
 /**
  * 任务实体类
@@ -395,6 +402,9 @@ public class TeamIssue extends Entity {
 	
 	@XStreamAlias("closedCount")
 	private int closedCount;
+	
+	@XStreamImplicit(itemFieldName="issue")
+	private List<TeamIssue> childIssues;
 
 	public int getTotalCount() {
 	    return totalCount;
@@ -410,6 +420,14 @@ public class TeamIssue extends Entity {
 
 	public void setClosedCount(int closedCount) {
 	    this.closedCount = closedCount;
+	}
+
+	public List<TeamIssue> getChildIssues() {
+	    return childIssues;
+	}
+
+	public void setChildIssues(List<TeamIssue> childIssues) {
+	    this.childIssues = childIssues;
 	}
     }
     
@@ -457,4 +475,27 @@ public class TeamIssue extends Entity {
 	
 	return res;
     }
+    
+    public int getIssueStateFaTextId() {
+	int res = R.string.fa_circle_o;
+	if (this.state.equals(TEAM_ISSUE_STATE_OPENED)) {
+	    res = R.string.fa_circle_o;
+	} else if (this.state.equals(TEAM_ISSUE_STATE_UNDERWAY)) {
+	    res = R.string.fa_dot_circle_o;
+	} else if (this.state.equals(TEAM_ISSUE_STATE_CLOSED)) {
+	    res = R.string.fa_check_circle_o;
+	} else {
+	    res = R.string.fa_lock_use;
+	}
+	return res;
+    }
+    
+    public String getDeadlineTimeText() {
+	SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy-MM-dd");
+	Date date = StringUtils.toDate(getDeadlineTime(), dataFormat);
+	Calendar calendar = Calendar.getInstance();
+	calendar.setTime(date);
+	return DateFormat.getDateInstance(DateFormat.SHORT).format(date);
+    }
+    
 }

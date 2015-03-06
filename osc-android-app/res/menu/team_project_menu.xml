@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:osc="http://schemas.android.com/apk/res-auto" >
-
     <item
         android:id="@+id/team_new_issue"
         android:icon="@drawable/icon_actionbar_add"
         android:showAsAction="always"
         android:title="@string/team_issue_new"
-        android:visible="true"
-        osc:showAsAction="always"/>
-    <item
-        android:id="@+id/team_issue_project_list"
-        android:icon="@drawable/actionbar_icon_project"
-        android:showAsAction="always"
-        android:title="@string/team_project_list"
         android:visible="true"
         osc:showAsAction="always"/>
 

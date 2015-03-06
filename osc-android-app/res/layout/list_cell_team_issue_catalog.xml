@@ -9,7 +9,7 @@
         android:id="@+id/tv_team_issue_catalog_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp"/>
+        android:textSize="16sp"/>
     
     <TextView 
         android:id="@+id/tv_team_issue_catalog_state"

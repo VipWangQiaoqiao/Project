@@ -3,10 +3,16 @@ package net.oschina.app.team.viewpagefragment;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.base.BaseViewPagerFragment;
+import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.fragment.TeamBoardFragment;
 import net.oschina.app.team.fragment.TeamMemberFragment;
 import net.oschina.app.team.fragment.TeamProjectFragment;
+import net.oschina.app.team.ui.TeamMainActivity;
+import net.oschina.app.util.UIHelper;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 /**
@@ -17,18 +23,39 @@ import android.view.View;
  */
 public class TeamMainViewPagerFragment extends BaseViewPagerFragment {
 
-    //
-    // @Override
-    // public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-    // inflater.inflate(R.menu.team_issue_menu, menu);
-    // super.onCreateOptionsMenu(menu, inflater);
-    // }
-    //
+    private Team mTeam;
+    
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	inflater.inflate(R.menu.team_main_menu, menu);
+	super.onCreateOptionsMenu(menu, inflater);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // TODO Auto-generated method stub
+	switch (item.getItemId()) {
+	case R.id.team_new_active:
+	    
+	    break;
+	case R.id.team_new_issue:
+	    UIHelper.showCreateNewIssue(getActivity(), mTeam, null, null);
+	    break;
+	default:
+	    break;
+	}
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 	super.onViewCreated(view, savedInstanceState);
-	// setHasOptionsMenu(true);
+	setHasOptionsMenu(true);
 	mViewPager.setOffscreenPageLimit(2);
+	Bundle bundle = getActivity().getIntent().getExtras();
+	if (bundle != null) {
+	    mTeam = (Team) bundle.getSerializable(TeamMainActivity.BUNDLE_KEY_TEAM);
+	}
     }
 
     @Override
@@ -53,8 +80,8 @@ public class TeamMainViewPagerFragment extends BaseViewPagerFragment {
 
 	adapter.addTab(arraStrings[0], "", TeamProjectFragment.class,
 		getActivity().getIntent().getExtras());
-	adapter.addTab(arraStrings[1], "", TeamBoardFragment.class, getActivity()
-		.getIntent().getExtras());
+	adapter.addTab(arraStrings[1], "", TeamBoardFragment.class,
+		getActivity().getIntent().getExtras());
 	adapter.addTab(arraStrings[2], "", TeamMemberFragment.class,
 		getActivity().getIntent().getExtras());
     }
