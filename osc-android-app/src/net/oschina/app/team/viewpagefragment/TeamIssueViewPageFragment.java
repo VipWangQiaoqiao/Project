@@ -106,8 +106,8 @@ public class TeamIssueViewPageFragment extends BaseViewPagerFragment {
 	case R.id.team_issue_project_list:
 	    showProjectsSelectDialog();
 	    break;
-	case R.id.team_issue_new:
-	    onCreateNewIssue();
+	case R.id.team_new_issue:
+	    UIHelper.showCreateNewIssue(getActivity(), mTeam, mTeamProject, null);
 	    break;
 	default:
 	    break;
@@ -115,13 +115,6 @@ public class TeamIssueViewPageFragment extends BaseViewPagerFragment {
 	return super.onOptionsItemSelected(item);
     }
     
-    private void onCreateNewIssue() {
-	Bundle bundle = new Bundle();
-	bundle.putSerializable("team", mTeam);
-	bundle.putSerializable("project", mTeamProject);
-	UIHelper.showSimpleBack(getActivity(), SimpleBackPage.TEAM_NEW_ISSUE, bundle);
-    }
-
     private TeamProjectPopupWindowCallBack mCallBack = new TeamProjectPopupWindowCallBack() {
 
 	@Override

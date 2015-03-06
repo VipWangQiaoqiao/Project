@@ -1,5 +1,6 @@
 package net.oschina.app.team.viewpagefragment;
 
+import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseViewPagerFragment;
@@ -10,7 +11,11 @@ import net.oschina.app.team.fragment.TeamIssueCatalogFragment;
 import net.oschina.app.team.fragment.TeamProjectActiveFragment;
 import net.oschina.app.team.fragment.TeamProjectMemberFragment;
 import net.oschina.app.team.ui.TeamMainActivity;
+import net.oschina.app.util.UIHelper;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 /**
  * TeamProjectViewPagerFragment.java
@@ -35,6 +40,29 @@ public class TeamProjectViewPagerFragment extends BaseViewPagerFragment {
             mTeamProject = (TeamProject) args.getSerializable(TeamMainActivity.BUNDLE_KEY_PROJECT);
             ((BaseActivity)getActivity()).setActionBarTitle(mTeamProject.getGit().getName());
         }
+        setHasOptionsMenu(true);
+    }
+    
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // TODO Auto-generated method stub
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.team_project_menu, menu);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // TODO Auto-generated method stub
+	int menuId = item.getItemId();
+	switch (menuId) {
+	case R.id.team_new_issue:
+	    UIHelper.showCreateNewIssue(getActivity(), mTeam, mTeamProject, null);
+	    break;
+
+	default:
+	    break;
+	}
+        return super.onOptionsItemSelected(item);
     }
     
     @Override

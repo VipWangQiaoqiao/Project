@@ -12,4 +12,15 @@
     <string name="fa_inbox">&#xf01c;</string>
     <string name="fa_file_text_o">&#xf0f6;</string>
     <string name="fa_comments">&#xf086;</string>
+    <string name="fa_home">&#xf015;</string>
+    <string name="fa_user">&#xf007;</string>
+    <string name="fa_users">&#xf0c0;</string>
+    <string name="fa_clock_o">&#xf017;</string>
+    <string name="fa_tags">&#xf02c;</string>
+    <string name="fa_plus">&#xf067;</string>
+    <string name="fa_calendar">&#xf073;</string>
+    <string name="fa_link">&#xf0c1;</string>
+    <string name="fa_paperclip">&#xf0c6;</string>
+   	<string name="fa_trello">&#xf181;</string>
+    
 </resources>

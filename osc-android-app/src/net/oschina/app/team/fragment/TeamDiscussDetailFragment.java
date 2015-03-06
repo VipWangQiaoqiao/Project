@@ -31,6 +31,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 /**
@@ -184,6 +185,16 @@ public class TeamDiscussDetailFragment extends
     protected String getCacheKeyPrefix() {
 	// TODO Auto-generated method stub
 	return "team_discuss_reply" + mTeamId + "_" + mDiscussId;
+    }
+    
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position,
+            long id) {
+        // TODO Auto-generated method stub
+	TeamReply reply = mAdapter.getItem(position - 1);
+	if (reply == null) return;
+	mEmojiFragment.reset();
+	mEmojiFragment.appendInputText("回复 @" + reply.getAuthor().getName() + ": ");
     }
 
 }

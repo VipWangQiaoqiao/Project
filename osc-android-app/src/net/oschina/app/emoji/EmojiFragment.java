@@ -14,6 +14,7 @@ import net.oschina.app.util.TDevice;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,286 +25,292 @@ import android.widget.LinearLayout;
 import com.viewpagerindicator.CirclePageIndicator;
 
 public class EmojiFragment extends BaseFragment implements
-		SoftKeyboardStateListener, OnClickEmojiListener {
+	SoftKeyboardStateListener, OnClickEmojiListener {
 
-	private ViewPager mViewPager;
-	private CirclePageIndicator mIndicator;
-	private ImageButton mBtnEmoji, mBtnSend, mBtnMore;
-	private EmojiEditText mEtInput;
-	private View mLyEmoji;
-	private EmojiViewPagerAdapter mPagerAdapter;
-	private SoftKeyboardStateHelper mKeyboardHelper;
-	private boolean mIsKeyboardVisible;
-	private boolean mNeedHideEmoji;
-	private int mCurrentKeyboardHeigh;
+    private ViewPager mViewPager;
+    private CirclePageIndicator mIndicator;
+    private ImageButton mBtnEmoji, mBtnSend, mBtnMore;
+    private EmojiEditText mEtInput;
+    private View mLyEmoji;
+    private EmojiViewPagerAdapter mPagerAdapter;
+    private SoftKeyboardStateHelper mKeyboardHelper;
+    private boolean mIsKeyboardVisible;
+    private boolean mNeedHideEmoji;
+    private int mCurrentKeyboardHeigh;
 
-	private EmojiTextListener mListener;
+    private EmojiTextListener mListener;
 
-	private int mMoreVisisable = View.GONE;
+    private int mMoreVisisable = View.GONE;
 
-	private OnClickListener mMoreClickListener;
+    private OnClickListener mMoreClickListener;
 
-	public interface EmojiTextListener {
-		public void onSendClick(String text);
+    public interface EmojiTextListener {
+	public void onSendClick(String text);
+    }
+
+    public void setEmojiTextListener(EmojiTextListener lis) {
+	mListener = lis;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater,
+	    @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+	View view = inflater.inflate(R.layout.fragment_emoji, container, false);
+
+	initViews(view);
+	mKeyboardHelper = new SoftKeyboardStateHelper(getActivity().getWindow()
+		.getDecorView());
+	mKeyboardHelper.addSoftKeyboardStateListener(this);
+	return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+	mKeyboardHelper.removeSoftKeyboardStateListener(this);
+	super.onDestroyView();
+    }
+
+    private void initViews(View view) {
+	mLyEmoji = view.findViewById(R.id.ly_emoji);
+	mViewPager = (ViewPager) view.findViewById(R.id.view_pager);
+	mIndicator = (CirclePageIndicator) view.findViewById(R.id.indicator);
+
+	mBtnMore = (ImageButton) view.findViewById(R.id.btn_more);
+	mBtnMore.setVisibility(mMoreVisisable);
+	mBtnMore.setOnClickListener(mMoreClickListener);
+
+	mBtnEmoji = (ImageButton) view.findViewById(R.id.btn_emoji);
+	mBtnSend = (ImageButton) view.findViewById(R.id.btn_send);
+	mBtnSend.setOnClickListener(this);
+	mEtInput = (EmojiEditText) view.findViewById(R.id.et_input);
+
+	mBtnEmoji.setOnClickListener(this);
+
+	EmojiHelper.initEmojis();
+	Map<String, Emoji> emojis = EmojiHelper.qq_emojis_nos;
+	// int pagerSize = emojis.size() / 20;
+
+	List<Emoji> allEmojis = new ArrayList<Emoji>();
+	Iterator<String> itr1 = emojis.keySet().iterator();
+	while (itr1.hasNext()) {
+	    Emoji ej = emojis.get(itr1.next());
+	    allEmojis.add(new Emoji(ej.getResId(), ej.getValue(), ej
+		    .getValueNo(), ej.getIndex()));
+	}
+	Collections.sort(allEmojis);
+
+	List<List<Emoji>> pagers = new ArrayList<List<Emoji>>();
+	List<Emoji> es = null;
+	int size = 0;
+	boolean justAdd = false;
+	for (Emoji ej : allEmojis) {
+	    if (size == 0) {
+		es = new ArrayList<Emoji>();
+	    }
+	    es.add(new Emoji(ej.getResId(), ej.getValue(), ej.getValueNo()));
+	    size++;
+	    if (size == 20) {
+		pagers.add(es);
+		size = 0;
+		justAdd = true;
+	    } else {
+		justAdd = false;
+	    }
+	}
+	if (!justAdd && es != null) {
+	    pagers.add(es);
 	}
 
-	public void setEmojiTextListener(EmojiTextListener lis) {
-		mListener = lis;
+	int emojiHeight = caculateEmojiPanelHeight();
+
+	mPagerAdapter = new EmojiViewPagerAdapter(getActivity(), pagers,
+		emojiHeight, this);
+	mViewPager.setAdapter(mPagerAdapter);
+	mIndicator.setViewPager(mViewPager);
+    }
+
+    private int caculateEmojiPanelHeight() {
+	mCurrentKeyboardHeigh = (int) TDevice.dpToPixel(180);
+	int emojiPanelHeight = (int) (mCurrentKeyboardHeigh - TDevice
+		.dpToPixel(20));
+	int emojiHeight = (int) (emojiPanelHeight / 3);
+
+	LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+		LinearLayout.LayoutParams.MATCH_PARENT, emojiPanelHeight);
+	mViewPager.setLayoutParams(lp);
+	if (mPagerAdapter != null) {
+	    mPagerAdapter.setEmojiHeight(emojiHeight);
 	}
+	return emojiHeight;
+    }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater,
-			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_emoji, container,
-				false);
-
-		initViews(view);
-		mKeyboardHelper = new SoftKeyboardStateHelper(getActivity().getWindow()
-				.getDecorView());
-		mKeyboardHelper.addSoftKeyboardStateListener(this);
-		return view;
+    @Override
+    public boolean onBackPressed() {
+	if (mLyEmoji.getVisibility() == View.VISIBLE) {
+	    hideEmojiPanel();
+	    return true;
 	}
-
-	@Override
-	public void onDestroyView() {
-		mKeyboardHelper.removeSoftKeyboardStateListener(this);
-		super.onDestroyView();
+	if (mEtInput.isFocused() && mEtInput.getTag() != null) {
+	    reset();
+	    return true;
 	}
+	return super.onBackPressed();
+    }
 
-	private void initViews(View view) {
-		mLyEmoji = view.findViewById(R.id.ly_emoji);
-		mViewPager = (ViewPager) view.findViewById(R.id.view_pager);
-		mIndicator = (CirclePageIndicator) view.findViewById(R.id.indicator);
+    public void setTag(Object object) {
+	this.mEtInput.setTag(object);
+    }
 
-		mBtnMore = (ImageButton) view.findViewById(R.id.btn_more);
-		mBtnMore.setVisibility(mMoreVisisable);
-		mBtnMore.setOnClickListener(mMoreClickListener);
+    public Object getInputTag() {
+	return this.mEtInput.getTag();
+    }
 
-		mBtnEmoji = (ImageButton) view.findViewById(R.id.btn_emoji);
-		mBtnSend = (ImageButton) view.findViewById(R.id.btn_send);
-		mBtnSend.setOnClickListener(this);
-		mEtInput = (EmojiEditText) view.findViewById(R.id.et_input);
-
-		mBtnEmoji.setOnClickListener(this);
-		
-		EmojiHelper.initEmojis();
-		Map<String, Emoji> emojis = EmojiHelper.qq_emojis_nos;
-		// int pagerSize = emojis.size() / 20;
-
-		List<Emoji> allEmojis = new ArrayList<Emoji>();
-		Iterator<String> itr1 = emojis.keySet().iterator();
-		while (itr1.hasNext()) {
-			Emoji ej = emojis.get(itr1.next());
-			allEmojis.add(new Emoji(ej.getResId(), ej.getValue(),
-					ej.getValueNo(), ej.getIndex()));
-		}
-		Collections.sort(allEmojis);
-
-		List<List<Emoji>> pagers = new ArrayList<List<Emoji>>();
-		List<Emoji> es = null;
-		int size = 0;
-		boolean justAdd = false;
-		for (Emoji ej : allEmojis) {
-			if (size == 0) {
-				es = new ArrayList<Emoji>();
-			}
-			es.add(new Emoji(ej.getResId(), ej.getValue(), ej.getValueNo()));
-			size++;
-			if (size == 20) {
-				pagers.add(es);
-				size = 0;
-				justAdd = true;
-			} else {
-				justAdd = false;
-			}
-		}
-		if (!justAdd && es != null) {
-			pagers.add(es);
-		}
-
-		int emojiHeight = caculateEmojiPanelHeight();
-
-		mPagerAdapter = new EmojiViewPagerAdapter(getActivity(), pagers,
-				emojiHeight, this);
-		mViewPager.setAdapter(mPagerAdapter);
-		mIndicator.setViewPager(mViewPager);
+    @Override
+    public void onClick(View v) {
+	final int id = v.getId();
+	if (id == R.id.btn_emoji) {
+	    if (mLyEmoji.getVisibility() == View.GONE) {
+		mNeedHideEmoji = true;
+		tryShowEmojiPanel();
+	    } else {
+		tryHideEmojiPanel();
+	    }
+	} else if (id == R.id.btn_send) {
+	    if (mListener != null) {
+		mListener.onSendClick(mEtInput.getText().toString());
+	    }
 	}
+    }
 
-	private int caculateEmojiPanelHeight() {
-		mCurrentKeyboardHeigh = (int) TDevice.dpToPixel(180);
-		int emojiPanelHeight = (int) (mCurrentKeyboardHeigh - TDevice
-				.dpToPixel(20));
-		int emojiHeight = (int) (emojiPanelHeight / 3);
+    private void tryShowEmojiPanel() {
+	if (mIsKeyboardVisible) {
+	    TDevice.hideSoftKeyboard(getActivity().getCurrentFocus());
+	} else {
+	    showEmojiPanel();
+	}
+    }
 
-		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.MATCH_PARENT, emojiPanelHeight);
-		mViewPager.setLayoutParams(lp);
-		if (mPagerAdapter != null) {
-			mPagerAdapter.setEmojiHeight(emojiHeight);
-		}
-		return emojiHeight;
-	}
+    private void showEmojiPanel() {
+	mNeedHideEmoji = false;
+	mLyEmoji.setVisibility(View.VISIBLE);
+	mBtnEmoji.setBackgroundResource(R.drawable.btn_emoji_pressed);
+    }
 
-	@Override
-	public boolean onBackPressed() {
-		if (mLyEmoji.getVisibility() == View.VISIBLE) {
-			hideEmojiPanel();
-			return true;
-		}
-		if (mEtInput.isFocused() && mEtInput.getTag() != null) {
-			reset();
-			return true;
-		}
-		return super.onBackPressed();
+    private void tryHideEmojiPanel() {
+	if (!mIsKeyboardVisible) {
+	    mEtInput.requestFocus();
+	    TDevice.showSoftKeyboard(mEtInput);
+	} else {
+	    hideEmojiPanel();
 	}
-	
-	public void setTag(Object object) {
-		this.mEtInput.setTag(object);
-	}
-	
-	public Object getInputTag() {
-		return this.mEtInput.getTag();
-	}
+    }
 
-	@Override
-	public void onClick(View v) {
-		final int id = v.getId();
-		if (id == R.id.btn_emoji) {
-			if (mLyEmoji.getVisibility() == View.GONE) {
-				mNeedHideEmoji = true;
-				tryShowEmojiPanel();
-			} else {
-				tryHideEmojiPanel();
-			}
-		} else if (id == R.id.btn_send) {
-			if (mListener != null) {
-				mListener.onSendClick(mEtInput.getText().toString());
-			}
-		}
+    private void hideEmojiPanel() {
+	if (mLyEmoji.getVisibility() == View.VISIBLE) {
+	    mLyEmoji.setVisibility(View.GONE);
+	    mBtnEmoji.setBackgroundResource(R.drawable.btn_emoji_selector);
 	}
+    }
 
-	private void tryShowEmojiPanel() {
-		if (mIsKeyboardVisible) {
-			TDevice.hideSoftKeyboard(getActivity().getCurrentFocus());
-		} else {
-			showEmojiPanel();
-		}
-	}
+    @Override
+    public void onSoftKeyboardOpened(int keyboardHeightInPx) {
 
-	private void showEmojiPanel() {
-		mNeedHideEmoji = false;
-		mLyEmoji.setVisibility(View.VISIBLE);
-		mBtnEmoji.setBackgroundResource(R.drawable.btn_emoji_pressed);
-	}
+	mIsKeyboardVisible = true;
+	hideEmojiPanel();
+    }
 
-	private void tryHideEmojiPanel() {
-		if (!mIsKeyboardVisible) {
-			mEtInput.requestFocus();
-			TDevice.showSoftKeyboard(mEtInput);
-		} else {
-			hideEmojiPanel();
-		}
+    @Override
+    public void onSoftKeyboardClosed() {
+	mIsKeyboardVisible = false;
+	if (mNeedHideEmoji) {
+	    showEmojiPanel();
 	}
+    }
 
-	private void hideEmojiPanel() {
-		if (mLyEmoji.getVisibility() == View.VISIBLE) {
-			mLyEmoji.setVisibility(View.GONE);
-			mBtnEmoji.setBackgroundResource(R.drawable.btn_emoji_selector);
-		}
-	}
-	
-	@Override
-	public void onSoftKeyboardOpened(int keyboardHeightInPx) {
+    @Override
+    public void onEmojiClick(Emoji emoji) {
+	mEtInput.insertEmoji(emoji);
+    }
 
-		mIsKeyboardVisible = true;
-		hideEmojiPanel();
-	}
+    @Override
+    public void onDelete() {
+	mEtInput.delete();
+    }
 
-	@Override
-	public void onSoftKeyboardClosed() {
-		mIsKeyboardVisible = false;
-		if (mNeedHideEmoji) {
-			showEmojiPanel();
-		}
+    public void requestFocusInput() {
+	if (mEtInput != null) {
+	    mEtInput.requestFocus();
+	    if (!mIsKeyboardVisible) {
+		TDevice.toogleSoftKeyboard(getActivity().getCurrentFocus());
+		// TDevice.showSoftKeyboard(getActivity().getCurrentFocus());
+	    }
 	}
+    }
 
-	@Override
-	public void onEmojiClick(Emoji emoji) {
-		mEtInput.insertEmoji(emoji);
+    public void hideKeyboard() {
+	if (mIsKeyboardVisible) {
+	    TDevice.toogleSoftKeyboard(getActivity().getCurrentFocus());
 	}
+    }
 
-	@Override
-	public void onDelete() {
-		mEtInput.delete();
+    public void setInputHint(String hint) {
+	if (mEtInput != null) {
+	    mEtInput.setHint(hint);
 	}
+    }
 
-	public void requestFocusInput() {
-		if (mEtInput != null) {
-			mEtInput.requestFocus();
-			if (!mIsKeyboardVisible) {
-				TDevice.toogleSoftKeyboard(getActivity().getCurrentFocus());
-				// TDevice.showSoftKeyboard(getActivity().getCurrentFocus());
-			}
-		}
-	}
+    public void appendInputText(String text) {
+	if (TextUtils.isEmpty(text)) return;
+	mEtInput.getText().insert(mEtInput.getSelectionEnd(), text);
+	mEtInput.setSelection(mEtInput.getText().length());
+	requestFocusInput();
+    }
 
-	public void hideKeyboard() {
-		if (mIsKeyboardVisible) {
-			TDevice.toogleSoftKeyboard(getActivity().getCurrentFocus());
-		}
-	}
+    public void setButtonMoreVisibility(int visibility) {
+	if (mBtnMore != null)
+	    mBtnMore.setVisibility(visibility);
+	else
+	    mMoreVisisable = visibility;
+    }
 
-	public void setInputHint(String hint) {
-		if (mEtInput != null) {
-			mEtInput.setHint(hint);
-		}
-	}
+    public void setButtonMoreClickListener(View.OnClickListener lis) {
+	if (mBtnMore != null)
+	    mBtnMore.setOnClickListener(lis);
+	else
+	    mMoreClickListener = lis;
+    }
 
-	public void setButtonMoreVisibility(int visibility) {
-		if (mBtnMore != null)
-			mBtnMore.setVisibility(visibility);
-		else
-			mMoreVisisable = visibility;
+    public void reset() {
+	if (mIsKeyboardVisible) {
+	    TDevice.hideSoftKeyboard(mEtInput);
 	}
+	if (mLyEmoji.getVisibility() == View.VISIBLE) {
+	    hideEmojiPanel();
+	}
+	if (mEtInput != null) {
+	    this.setTag(null);
+	    mEtInput.getText().clear();
+	    mEtInput.clearFocus();
+	    mEtInput.setHint("说点什么");
+	}
+    }
 
-	public void setButtonMoreClickListener(View.OnClickListener lis) {
-		if (mBtnMore != null)
-			mBtnMore.setOnClickListener(lis);
-		else
-			mMoreClickListener = lis;
+    public void showKeyboardIfNoEmojiGrid() {
+	if (!mIsKeyboardVisible && mLyEmoji.getVisibility() != View.VISIBLE) {
+	    mEtInput.requestFocus();
+	    TDevice.showSoftKeyboard(mEtInput);
 	}
+    }
 
-	public void reset() {
-		if (mIsKeyboardVisible) {
-			TDevice.hideSoftKeyboard(mEtInput);
-		}
-		if (mLyEmoji.getVisibility() == View.VISIBLE) {
-			hideEmojiPanel();
-		}
-		if (mEtInput != null) {
-			this.setTag(null);
-			mEtInput.getText().clear();
-			mEtInput.clearFocus();
-			mEtInput.setHint("说点什么");
-		}
-	}
+    @Override
+    public void initView(View view) {
+	// TODO Auto-generated method stub
 
-	public void showKeyboardIfNoEmojiGrid() {
-		if (!mIsKeyboardVisible && mLyEmoji.getVisibility() != View.VISIBLE) {
-			mEtInput.requestFocus();
-			TDevice.showSoftKeyboard(mEtInput);
-		}
-	}
+    }
 
-	@Override
-	public void initView(View view) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void initData() {
+	// TODO Auto-generated method stub
 
-	@Override
-	public void initData() {
-		// TODO Auto-generated method stub
-		
-	}
+    }
 }

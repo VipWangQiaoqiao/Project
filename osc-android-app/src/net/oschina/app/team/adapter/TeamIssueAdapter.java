@@ -2,6 +2,7 @@ package net.oschina.app.team.adapter;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import net.oschina.app.R;
@@ -148,7 +149,9 @@ public class TeamIssueAdapter extends ListBaseAdapter<TeamIssue> {
 
     private String getDeadlineTime(TeamIssue teamIssue) {
 	SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy-MM-dd");
-	Date date = StringUtils.toDate(teamIssue.getUpdateTime(), dataFormat);
+	Date date = StringUtils.toDate(teamIssue.getDeadlineTime(), dataFormat);
+	Calendar calendar = Calendar.getInstance();
+	calendar.setTime(date);
 	return DateFormat.getDateInstance(DateFormat.SHORT).format(date);
     }
 

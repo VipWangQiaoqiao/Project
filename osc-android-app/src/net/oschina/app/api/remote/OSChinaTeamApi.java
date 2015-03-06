@@ -1,7 +1,9 @@
 package net.oschina.app.api.remote;
 
 import net.oschina.app.AppContext;
+import net.oschina.app.api.ApiClientHelper;
 import net.oschina.app.api.ApiHttpClient;
+import net.oschina.app.team.bean.TeamIssue;
 import net.oschina.app.team.bean.TeamProject;
 
 import android.text.TextUtils;
@@ -142,21 +144,31 @@ public class OSChinaTeamApi {
     /***
      * 改变一个任务的状态
      * 
-     * @author 火蚁 2015-2-3 下午2:18:33
-     * 
+     * @author 火蚁
+     * 2015-3-6 上午11:44:01
+     *
      * @return void
      * @param teamId
-     * @param projectId
-     * @param issueId
+     * @param issue
+     * @param target 修改的属性（"state" : 状态, "assignee" 指派人, "deadline" : 截止日期）
      * @param handler
      */
-    public static void changeIssueState(int teamId, int projectId, int issueId,
+    public static void changeIssueState(int teamId, TeamIssue issue, String target, 
 	    AsyncHttpResponseHandler handler) {
+	if (issue == null) return;
 	RequestParams params = new RequestParams();
+	params.put("uid", AppContext.getInstance().getLoginUid());
 	params.put("teamid", teamId);
-	params.put("projectid", projectId);
-	params.put("issue_id", issueId);
-	ApiHttpClient.post("action/api/team_issue_state", params, handler);
+	params.put("target", target);
+	params.put("issueid", issue.getId());
+	if (target.equals("state")) {
+	    params.put("state", issue.getState());
+	} else if (target.equals("assignee")) {
+	    params.put("assignee", issue.getToUser().getId());
+	} else if (target.equals("deadline")) {
+	    params.put("deadline", issue.getDeadlineTime());
+	}
+	ApiHttpClient.post("action/api/team_issue_update", params, handler);
     }
 
     public static void pubTeamNewIssue(RequestParams params,
@@ -222,6 +234,29 @@ public class OSChinaTeamApi {
 	params.put("discussid", discussId);
 	params.put("content", content);
 	ApiHttpClient.post("action/api/team_discuss_reply", params, handler);
+    }
+    
+    /***
+     * 发表一条综合评论
+     *    动态、任务、分享内容、周报
+     * 
+     * @author 火蚁
+     * 2015-3-6 下午3:31:07
+     *
+     * @return void
+     * @param teamId
+     * @param type 普通动态-110， Git任务-112，分享内容-114， 周报-118
+     * @param tweetId
+     * @param content
+     * @param handler
+     */
+    public static void pubTeamTweetReply(int teamId, byte type, long tweetId, String content, AsyncHttpResponseHandler handler) {
+	RequestParams params = new RequestParams();
+	params.put("uid", AppContext.getInstance().getLoginUid());
+	params.put("type", type);
+	params.put("tweetid", tweetId);
+	params.put("content", content);
+	ApiHttpClient.post("action/api/team_tweet_reply", params, handler);
     }
 
     /***

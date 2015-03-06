@@ -18,11 +18,16 @@ public class TeamReply extends Entity {
     public final static String REPLY_TYPE_ISSUE = "issue";
     public final static String REPLY_TYPE_DIARY = "diary";
     public final static String REPLY_TYPE_DISCUSS = "discuss";
-
+    
     public final static int CLIENT_MOBILE = 2;
     public final static int CLIENT_ANDROID = 3;
     public final static int CLIENT_IPHONE = 4;
     public final static int CLIENT_WINDOWS_PHONE = 5;
+    
+    public final static byte REPLY_PUB_TYPE_ACTIVE = 110;
+    public final static byte REPLY_PUB_TYPE_ISSUE = 112;
+    public final static byte REPLY_PUB_TYPE_DIARY = 118;
+    public final static byte REPLY_PUB_TYPE_SHARE = 114;
 
     @XStreamAlias("content")
     private String content;

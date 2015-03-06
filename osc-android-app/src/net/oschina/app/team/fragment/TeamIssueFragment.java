@@ -22,6 +22,9 @@ import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -73,6 +76,28 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
 		((BaseActivity)getActivity()).setActionBarTitle(title);
 	    }
 	}
+	setHasOptionsMenu(true);
+    }
+    
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // TODO Auto-generated method stub
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.team_issue_catalog_menu, menu);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // TODO Auto-generated method stub
+	switch (item.getItemId()) {
+	case R.id.team_new_issue:
+	    UIHelper.showCreateNewIssue(getActivity(), mTeam, mProject, mCatalog);
+	    break;
+
+	default:
+	    break;
+	}
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
