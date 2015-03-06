@@ -4,6 +4,7 @@ import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.team.bean.TeamIssueCatalog;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TypefaceUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;

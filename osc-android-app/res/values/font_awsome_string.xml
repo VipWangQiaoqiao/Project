@@ -22,5 +22,6 @@
     <string name="fa_link">&#xf0c1;</string>
     <string name="fa_paperclip">&#xf0c6;</string>
    	<string name="fa_trello">&#xf181;</string>
+   	<string name="fa_bookmark">&#xf02e;</string>
     
 </resources>

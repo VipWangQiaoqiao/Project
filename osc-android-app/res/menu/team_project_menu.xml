@@ -5,7 +5,7 @@
         android:id="@+id/team_new_issue"
         android:icon="@drawable/icon_actionbar_add"
         android:showAsAction="always"
-        android:title="@string/team_issue_new"
+        android:title="@string/team_new_issue"
         android:visible="true"
         osc:showAsAction="always"/>
 

@@ -1,11 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:osc="http://schemas.android.com/apk/res-auto" >
+
     <item
-        android:id="@+id/team_new_issue"
-        android:icon="@drawable/icon_actionbar_add"
+        android:id="@+id/public_menu_send"
+        android:icon="@drawable/actionbar_send_icon"
         android:showAsAction="always"
-        android:title="@string/team_new_issue"
+        android:title="@string/tweet_public"
         android:visible="true"
         osc:showAsAction="always"/>
 
