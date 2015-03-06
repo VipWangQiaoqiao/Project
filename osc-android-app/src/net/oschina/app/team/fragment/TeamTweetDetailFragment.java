@@ -34,6 +34,7 @@ import org.apache.http.Header;
 
 import android.os.Bundle;
 import android.text.Html;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -106,7 +107,7 @@ public class TeamTweetDetailFragment extends
         tv_name.setText(active.getAuthor().getName());
         ll_event_list.setVisibility(View.GONE);
         // tv_active.setText(data.getBody().getDetail());
-        tv_content.setText(Html.fromHtml(active.getBody().getDetail()));
+        tv_content.setText(stripTags(active.getBody().getDetail()));
         tv_date.setText(active.getCreateTime());
         // tv_client.setText("");
         return headView;
@@ -188,7 +189,7 @@ public class TeamTweetDetailFragment extends
         mListView.setHeaderDividersEnabled(false);
         mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
         this.active = detailBean.getTeamActive();
-        tv_content.setText(Html.fromHtml(this.active.getBody().getTitle()));
+        tv_content.setText(stripTags(this.active.getBody().getTitle()));
         mAdapter.setNoDataText(R.string.comment_empty);
     }
 
@@ -334,4 +335,18 @@ public class TeamTweetDetailFragment extends
 
     @Override
     public void onMoreClick(Comment comment) {}
+
+    /**
+     * 移除字符串中的Html标签
+     * 
+     * @author kymjs (https://github.com/kymjs)
+     * @param pHTMLString
+     * @return
+     */
+    public static Spanned stripTags(final String pHTMLString) {
+        // String str = pHTMLString.replaceAll("\\<.*?>", "");
+        String str = pHTMLString.replaceAll("\\t*", "");
+        str = str.replaceAll("<\\s*img\\s+([^>]*)\\s*>", "  ");
+        return Html.fromHtml(str);
+    }
 }

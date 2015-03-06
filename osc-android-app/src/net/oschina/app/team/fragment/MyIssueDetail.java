@@ -22,6 +22,12 @@ import org.kymjs.kjframe.utils.PreferenceHelper;
 
 import android.os.Bundle;
 
+/**
+ * 我的任务列表界面
+ * 
+ * @author kymjs (https://github.com/kymjs)
+ * 
+ */
 public class MyIssueDetail extends BaseListFragment<TeamIssue> {
 
     protected static final String TAG = TeamIssueFragment.class.getSimpleName();

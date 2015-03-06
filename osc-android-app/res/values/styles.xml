@@ -581,6 +581,7 @@
     <style name="myissue_text_num" parent="@style/myissue_text">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_alignParentRight">true</item>
+        <item name="android:text">0</item>
     </style>
     
     <style name="team_user_infor" parent="@style/wrap_wrap">

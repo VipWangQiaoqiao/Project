@@ -11,7 +11,8 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * 
  */
 @XStreamAlias("sticky")
-public class NotebookData extends Entity implements Serializable {
+public class NotebookData extends Entity implements Serializable,
+        Comparable<NotebookData> {
     private static final long serialVersionUID = 1L;
 
     @XStreamAlias("id")
@@ -104,18 +105,17 @@ public class NotebookData extends Entity implements Serializable {
     }
 
     public int getColor() {
-        if (this.color == 0) { // 客户端始终以当前手机上的颜色为准
-            if ("blue".equals(colorText)) {
-                this.color = 3;
-            } else if ("red".equals(colorText)) {
-                this.color = 2;
-            } else if ("yellow".equals(colorText)) {
-                this.color = 1;
-            } else if ("purple".equals(colorText)) {
-                this.color = 4;
-            } else if ("green".equals(colorText)) {
-                this.color = 0;
-            }
+        // 客户端始终以当前手机上的颜色为准
+        if ("blue".equals(colorText)) {
+            this.color = 3;
+        } else if ("red".equals(colorText)) {
+            this.color = 2;
+        } else if ("yellow".equals(colorText)) {
+            this.color = 1;
+        } else if ("purple".equals(colorText)) {
+            this.color = 4;
+        } else if ("green".equals(colorText)) {
+            this.color = 0;
         }
         return color;
     }
@@ -149,5 +149,10 @@ public class NotebookData extends Entity implements Serializable {
             this.color = color;
             break;
         }
+    }
+
+    @Override
+    public int compareTo(NotebookData another) {
+        return this.iid - another.getIid();
     }
 }

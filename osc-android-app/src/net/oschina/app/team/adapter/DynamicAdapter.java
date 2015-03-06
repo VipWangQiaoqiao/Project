@@ -6,6 +6,7 @@ import net.oschina.app.team.bean.TeamActive;
 import net.oschina.app.widget.AvatarView;
 import android.content.Context;
 import android.text.Html;
+import android.text.Spanned;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -14,7 +15,7 @@ import android.widget.TextView;
 /**
  * Team动态界面ListView适配器 (kymjs123@gmail.com)
  * 
- * @author kymjs
+ * @author kymjs (https://github.com/kymjs)
  * 
  */
 public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
@@ -70,11 +71,25 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
         holder.tv_name.setText(data.getAuthor().getName());
         holder.ll_event_list.setVisibility(View.GONE);
         // holder.tv_active.setText(data.getBody().getDetail());
-        holder.tv_content.setText(Html.fromHtml(data.getBody().getDetail()));
+        holder.tv_content.setText(stripTags(data.getBody().getTitle()));
         holder.tv_content.setMaxLines(3);
         holder.tv_date.setText(data.getCreateTime());
         // holder.tv_client.setText("");
         return v;
+    }
+
+    /**
+     * 移除字符串中的Html标签
+     * 
+     * @author kymjs (https://github.com/kymjs)
+     * @param pHTMLString
+     * @return
+     */
+    public static Spanned stripTags(final String pHTMLString) {
+        // String str = pHTMLString.replaceAll("\\<.*?>", "");
+        String str = pHTMLString.replaceAll("\\t*", "");
+        str = str.replaceAll("<\\s*img\\s+([^>]*)\\s*>", "[表情]");
+        return Html.fromHtml(str);
     }
 
     @Override

@@ -14,13 +14,43 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @XStreamAlias("oschina")
 public class MyIssueState extends Entity {
     @XStreamAlias("opened")
-    private String opened;
+    private String opened; // 待办中
     @XStreamAlias("outdate")
-    private String outdate;
+    private String outdate; // 已过期
     @XStreamAlias("closed")
-    private String closed;
+    private String closed; // 已完成
+    @XStreamAlias("finished")
+    private String finished; // 已完成 + 已验收
+    @XStreamAlias("underway")
+    private String underway; // 进行中
+    @XStreamAlias("accepted")
+    private String accepted; // 已验收
     @XStreamAlias("all")
     private String all;
+
+    public String getFinished() {
+        return finished;
+    }
+
+    public void setFinished(String finished) {
+        this.finished = finished;
+    }
+
+    public String getUnderway() {
+        return underway;
+    }
+
+    public void setUnderway(String underway) {
+        this.underway = underway;
+    }
+
+    public String getAccepted() {
+        return accepted;
+    }
+
+    public void setAccepted(String accepted) {
+        this.accepted = accepted;
+    }
 
     public String getOpened() {
         return opened;

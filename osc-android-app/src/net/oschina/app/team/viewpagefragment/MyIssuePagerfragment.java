@@ -5,12 +5,15 @@ import net.oschina.app.base.BaseViewPagerFragment;
 import net.oschina.app.team.fragment.MyIssueDetail;
 import net.oschina.app.team.fragment.TeamBoardFragment;
 import net.oschina.app.ui.SimpleBackActivity;
-
-import org.kymjs.kjframe.utils.KJLoger;
-
 import android.os.Bundle;
 import android.view.View;
 
+/**
+ * 我的任务状态列表
+ * 
+ * @author kymjs (https://github.com/kymjs)
+ * 
+ */
 public class MyIssuePagerfragment extends BaseViewPagerFragment {
     public static final String MY_ISSUEDETAIL_KEY = "MyIssuePagerfragment_key";
 
@@ -41,7 +44,6 @@ public class MyIssuePagerfragment extends BaseViewPagerFragment {
         } catch (NullPointerException e) {
         }
         mViewPager.setCurrentItem(currentPage);
-        KJLoger.debug("" + currentPage);
     }
 
     @Override
@@ -49,16 +51,21 @@ public class MyIssuePagerfragment extends BaseViewPagerFragment {
         Bundle bundle0 = getActivity().getIntent().getExtras();
         bundle0.remove(MyIssuePagerfragment.MY_ISSUEDETAIL_KEY);
         bundle0.putString(MyIssuePagerfragment.MY_ISSUEDETAIL_KEY, "opened");
-        adapter.addTab("进行中", "", MyIssueDetail.class, bundle0);
+        adapter.addTab("待办中", "", MyIssueDetail.class, bundle0);
 
         Bundle bundle1 = getActivity().getIntent().getExtras();
         bundle1.remove(MyIssuePagerfragment.MY_ISSUEDETAIL_KEY);
-        bundle1.putString(MyIssuePagerfragment.MY_ISSUEDETAIL_KEY, "closed");
-        adapter.addTab("已完成", "", MyIssueDetail.class, bundle1);
+        bundle1.putString(MyIssuePagerfragment.MY_ISSUEDETAIL_KEY, "underway");
+        adapter.addTab("进行中", "", MyIssueDetail.class, bundle1);
 
         Bundle bundle2 = getActivity().getIntent().getExtras();
         bundle2.remove(MyIssuePagerfragment.MY_ISSUEDETAIL_KEY);
-        bundle2.putString(MyIssuePagerfragment.MY_ISSUEDETAIL_KEY, "outdate");
-        adapter.addTab("已过期", "", MyIssueDetail.class, bundle2);
+        bundle2.putString(MyIssuePagerfragment.MY_ISSUEDETAIL_KEY, "closed");
+        adapter.addTab("已完成", "", MyIssueDetail.class, bundle2);
+
+        Bundle bundle3 = getActivity().getIntent().getExtras();
+        bundle3.remove(MyIssuePagerfragment.MY_ISSUEDETAIL_KEY);
+        bundle3.putString(MyIssuePagerfragment.MY_ISSUEDETAIL_KEY, "accepted");
+        adapter.addTab("已验收", "", MyIssueDetail.class, bundle3);
     }
 }

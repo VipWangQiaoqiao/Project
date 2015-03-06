@@ -1,8 +1,5 @@
 package net.oschina.app.team.fragment;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
@@ -154,8 +151,7 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
             isNewNote = true;
         }
         if (StringUtils.isEmpty(editData.getDate())) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-            editData.setDate(dateFormat.format(new Date()));
+            editData.setDate(StringUtils.getDataTime("yyyy/MM/dd"));
         }
     }
 
@@ -232,13 +228,15 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
      * 保存已编辑内容到数据库
      */
     private void save() {
-        editData.setId(-1
-                * org.kymjs.kjframe.utils.StringUtils.toInt(
-                        StringUtils.getDataTime("dddHHmmss"), 0));
+        if (editData.getId() == 0) {
+            editData.setId(-1
+                    * org.kymjs.kjframe.utils.StringUtils.toInt(
+                            StringUtils.getDataTime("dddHHmmss"), 0));
+        }
         editData.setUnixTime(System.currentTimeMillis() / 1000);
-        editData.setContent(mEtContent.getText().toString());
         editData.setServerUpdateTime(StringUtils
                 .getDataTime("yyyy-MM-dd HH:mm:ss"));
+        editData.setContent(mEtContent.getText().toString());
         noteDb.save(editData);
     }
 

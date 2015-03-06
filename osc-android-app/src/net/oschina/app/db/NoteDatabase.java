@@ -97,11 +97,13 @@ public class NoteDatabase {
      * @param datas
      */
     public void reset(List<NotebookData> datas) {
-        // 删除全部
-        sqlite.execSQL("delete from " + DatabaseHelper.NOTE_TABLE_NAME);
-        // 重新添加
-        for (NotebookData data : datas) {
-            insert(data);
+        if (datas != null) {
+            // 删除全部
+            sqlite.execSQL("delete from " + DatabaseHelper.NOTE_TABLE_NAME);
+            // 重新添加
+            for (NotebookData data : datas) {
+                insert(data);
+            }
         }
     }
 
