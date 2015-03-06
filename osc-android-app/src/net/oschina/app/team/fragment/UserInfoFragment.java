@@ -22,6 +22,7 @@ import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Adapter;
@@ -32,7 +33,7 @@ import android.widget.TextView;
 /**
  * 用户个人信息界面
  * 
- * @author kymjs
+ * @author kymjs (https://github.com/kymjs)
  * 
  */
 public class UserInfoFragment extends BaseListFragment {
@@ -94,23 +95,31 @@ public class UserInfoFragment extends BaseListFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
-                Adapter adapter = parent.getAdapter();
-                if (adapter != null) {
-                    Object obj = adapter.getItem(position);
-                    TeamActive data = null;
-                    if (obj instanceof TeamActive) {
-                        data = (TeamActive) obj;
+                if (position == 0) {// 第一项是头部
+                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri
+                            .parse("tel:" + teamMember.getTeamTelephone()));
+
+                    startActivity(intent);
+                } else {
+                    Adapter adapter = parent.getAdapter();
+                    if (adapter != null) {
+                        Object obj = adapter.getItem(position);
+                        TeamActive data = null;
+                        if (obj instanceof TeamActive) {
+                            data = (TeamActive) obj;
+                        }
+                        Intent intent = new Intent(aty, DetailActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable(
+                                DynamicFragment.DYNAMIC_FRAGMENT_KEY, data);
+                        bundle.putInt(
+                                DynamicFragment.DYNAMIC_FRAGMENT_TEAM_KEY,
+                                StringUtils.toInt(teamId, 0));
+                        bundle.putInt(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+                                DetailActivity.DISPLAY_TEAM_TWEET_DETAIL);
+                        intent.putExtras(bundle);
+                        aty.startActivity(intent);
                     }
-                    Intent intent = new Intent(aty, DetailActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(
-                            DynamicFragment.DYNAMIC_FRAGMENT_KEY, data);
-                    bundle.putInt(DynamicFragment.DYNAMIC_FRAGMENT_TEAM_KEY,
-                            StringUtils.toInt(teamId, 0));
-                    bundle.putInt(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
-                            DetailActivity.DISPLAY_TEAM_TWEET_DETAIL);
-                    intent.putExtras(bundle);
-                    aty.startActivity(intent);
                 }
             }
         });

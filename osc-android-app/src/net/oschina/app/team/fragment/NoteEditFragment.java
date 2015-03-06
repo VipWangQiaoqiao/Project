@@ -250,7 +250,6 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
                 dialog.setMessage(R.string.draft_tweet_message);
                 dialog.setNegativeButton(R.string.cancle,
                         new OnClickListener() {
-
                             @Override
                             public void onClick(DialogInterface dialog,
                                     int which) {
