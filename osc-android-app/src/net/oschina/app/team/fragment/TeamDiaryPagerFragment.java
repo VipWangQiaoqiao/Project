@@ -1,6 +1,7 @@
 package net.oschina.app.team.fragment;
 
 import java.io.ByteArrayInputStream;
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseFragment;
+import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.team.adapter.TeamDiaryListAdapter;
 import net.oschina.app.team.bean.Team;
@@ -19,6 +21,7 @@ import net.oschina.app.team.bean.TeamDiaryList;
 import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
 import org.apache.http.Header;
@@ -34,6 +37,8 @@ import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -55,6 +60,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 public class TeamDiaryPagerFragment extends BaseFragment implements
         OnDateSetListener {
     private static String TAG = "TeamDiaryPagerFragment";
+    public static String DIARYDETAIL_KEY = "team_diary_detail_key";
 
     @InjectView(R.id.team_diary_pager)
     ViewPager mPager;
@@ -305,6 +311,17 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
             } else {
                 setContentFromCache(errorLayout, view, dataBundle);
             }
+            view.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view,
+                        int position, long id) {
+                    Bundle args = new Bundle();
+                    args.putSerializable(DIARYDETAIL_KEY, (Serializable) parent
+                            .getAdapter().getItem(position));
+                    UIHelper.showSimpleBack(aty,
+                            SimpleBackPage.TEAM_DIRAY_DETAIL, args);
+                }
+            });
         }
 
         /* self annotation */

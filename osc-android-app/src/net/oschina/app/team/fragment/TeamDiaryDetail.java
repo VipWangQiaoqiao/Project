@@ -1,19 +1,15 @@
 package net.oschina.app.team.fragment;
 
-import java.io.ByteArrayInputStream;
-
 import net.oschina.app.R;
-import net.oschina.app.adapter.CommentAdapter.OnOperationListener;
-import net.oschina.app.base.BeseHaveHeaderListFragment;
-import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.bean.Comment;
-import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
-import net.oschina.app.interf.EmojiFragmentControl;
-import net.oschina.app.team.bean.TeamActiveDetail;
+import net.oschina.app.base.BaseFragment;
+import net.oschina.app.team.bean.TeamDiary;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
+import android.view.ViewGroup;
+import android.widget.ListView;
+import butterknife.InjectView;
 
 /**
  * 周报详情<br>
@@ -22,49 +18,46 @@ import android.widget.AdapterView.OnItemLongClickListener;
  * 
  * @author kymjs (https://github.com/kymjs)
  */
-public class TeamDiaryDetail extends
-        BeseHaveHeaderListFragment<Comment, TeamActiveDetail> implements
-        EmojiTextListener, EmojiFragmentControl, OnOperationListener,
-        OnItemClickListener, OnItemLongClickListener {
+public class TeamDiaryDetail extends BaseFragment {
 
     private static final String CACHE_KEY_PREFIX = "team_diary_detail_";
 
+    @InjectView(R.id.listview)
+    ListView mList;
+
+    private TeamDiary diaryData;
+
     @Override
-    protected View initHeaderView() {
-        View headView = View.inflate(aty, R.layout.frag_dynamic_detail, null);
-        return headView;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        View rootView = View.inflate(getActivity(),
+                R.layout.fragment_pull_refresh_listview, null);
+        initData();
+        initView(rootView);
+        return rootView;
     }
 
     @Override
-    protected String getDetailCacheKey() {
-        return null;
+    public void initData() {
+        super.initData();
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            diaryData = (TeamDiary) bundle
+                    .getSerializable(TeamDiaryPagerFragment.DIARYDETAIL_KEY);
+        } else {
+            Log.e("debug", getClass().getSimpleName() + "diaryData初始化异常");
+        }
     }
 
     @Override
-    protected void executeOnLoadDetailSuccess(TeamActiveDetail detailBean) {}
-
-    @Override
-    protected TeamActiveDetail getDetailBean(ByteArrayInputStream is) {
-        return null;
+    public void initView(View view) {
+        super.initView(view);
+        initHeaderView();
     }
 
-    @Override
-    protected ListBaseAdapter<Comment> getListAdapter() {
-        return null;
+    private View initHeaderView() {
+        View headerView = inflateView(R.layout.frag_dynamic_detail);
+        return headerView;
     }
-
-    @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view,
-            int position, long id) {
-        return false;
-    }
-
-    @Override
-    public void onMoreClick(Comment comment) {}
-
-    @Override
-    public void onSendClick(String text) {}
-
-    @Override
-    protected void requestDetailData(boolean isRefresh) {}
 }
