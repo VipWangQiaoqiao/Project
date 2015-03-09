@@ -124,7 +124,7 @@ public enum SimpleBackPage {
 
     MY_ISSUE_PAGER(34, R.string.str_team_my_issue, MyIssuePagerfragment.class),
 
-    TEAM_NEW_ISSUE(35, R.string.team_issue_new, TeamNewIssueFragment.class),
+    TEAM_NEW_ISSUE(35, R.string.team_new_issue, TeamNewIssueFragment.class),
 
     TEAM_PROJECT_MAIN(36, 0, TeamProjectViewPagerFragment.class),
 

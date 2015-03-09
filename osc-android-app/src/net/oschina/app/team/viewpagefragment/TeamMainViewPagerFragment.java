@@ -8,7 +8,9 @@ import net.oschina.app.team.fragment.TeamBoardFragment;
 import net.oschina.app.team.fragment.TeamMemberFragment;
 import net.oschina.app.team.fragment.TeamProjectFragment;
 import net.oschina.app.team.ui.TeamMainActivity;
+import net.oschina.app.team.ui.TeamNewActiveActivity;
 import net.oschina.app.util.UIHelper;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,7 +38,7 @@ public class TeamMainViewPagerFragment extends BaseViewPagerFragment {
         // TODO Auto-generated method stub
 	switch (item.getItemId()) {
 	case R.id.team_new_active:
-	    
+	    showCreateNewActive();
 	    break;
 	case R.id.team_new_issue:
 	    UIHelper.showCreateNewIssue(getActivity(), mTeam, null, null);
@@ -45,6 +47,14 @@ public class TeamMainViewPagerFragment extends BaseViewPagerFragment {
 	    break;
 	}
         return super.onOptionsItemSelected(item);
+    }
+    
+    private void showCreateNewActive() {
+	Intent intent = new Intent(getActivity(), TeamNewActiveActivity.class);
+	Bundle bundle = new Bundle();
+	bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_TEAM, mTeam);
+	intent.putExtras(bundle);
+	getActivity().startActivity(intent);
     }
 
     @Override
