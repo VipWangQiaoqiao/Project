@@ -16,4 +16,5 @@
     <string name="team_issue">团队任务</string>
     <string name="team_discuss">团队讨论</string>
     <string name="team_diary">团队周报</string>
+    <string name="team_diary_detail">周报内容</string>
 </resources>

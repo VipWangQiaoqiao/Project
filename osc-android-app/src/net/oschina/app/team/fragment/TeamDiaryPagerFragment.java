@@ -11,6 +11,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseFragment;
+import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.team.adapter.TeamDiaryListAdapter;
 import net.oschina.app.team.bean.Team;
@@ -19,6 +20,7 @@ import net.oschina.app.team.bean.TeamDiaryList;
 import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
 import org.apache.http.Header;
@@ -34,6 +36,8 @@ import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -55,6 +59,8 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 public class TeamDiaryPagerFragment extends BaseFragment implements
         OnDateSetListener {
     private static String TAG = "TeamDiaryPagerFragment";
+    public static String DIARYDETAIL_KEY = "team_diary_detail_key";
+    public static String TEAMID_KEY = "team_diary_teamid_key";
 
     @InjectView(R.id.team_diary_pager)
     ViewPager mPager;
@@ -298,13 +304,27 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
          * @param position
          */
         private void initListContent(EmptyLayout errorLayout, ListView view,
-                int whichWeek) {
-            TeamDiaryList dataBundle = dataBundleList.get(whichWeek);
+                final int whichWeek) {
+            final TeamDiaryList dataBundle = dataBundleList.get(whichWeek);
             if (dataBundle == null) {
                 setContentFromNet(errorLayout, null, view, whichWeek);
             } else {
                 setContentFromCache(errorLayout, view, dataBundle);
             }
+            view.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view,
+                        int position, long id) {
+                    Bundle args = new Bundle();
+                    args.putInt(TEAMID_KEY, team.getId());
+                    args.putSerializable(
+                            TeamDiaryPagerFragment.DIARYDETAIL_KEY,
+                            dataBundleList.get(whichWeek).getList()
+                                    .get(position));
+                    UIHelper.showSimpleBack(aty,
+                            SimpleBackPage.TEAM_DIRAY_DETAIL, args);
+                }
+            });
         }
 
         /* self annotation */

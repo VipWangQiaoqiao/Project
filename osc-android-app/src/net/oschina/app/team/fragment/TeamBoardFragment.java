@@ -193,12 +193,12 @@ public class TeamBoardFragment extends BaseFragment {
                     SimpleBackPage.MY_ISSUE_PAGER, bundle);
             break;
         case R.id.team_myissue_outdate:
-            bundle.putInt(WHICH_PAGER_KEY, 2);
+            bundle.putInt(WHICH_PAGER_KEY, 0);
             UIHelper.showSimpleBack(getActivity(),
                     SimpleBackPage.MY_ISSUE_PAGER, bundle);
             break;
         case R.id.team_myissue_all:
-            bundle.putInt(WHICH_PAGER_KEY, 3);
+            bundle.putInt(WHICH_PAGER_KEY, 2);
             UIHelper.showSimpleBack(getActivity(),
                     SimpleBackPage.MY_ISSUE_PAGER, bundle);
             break;
