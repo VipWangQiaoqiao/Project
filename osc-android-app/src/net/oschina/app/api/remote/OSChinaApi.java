@@ -702,7 +702,7 @@ public class OSChinaApi {
      * 
      * @param handler
      */
-    public static void getTeamMemberList(String teamid,
+    public static void getTeamMemberList(int teamid,
             AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("teamid", teamid);
