@@ -823,4 +823,19 @@ public class OSChinaApi {
         ApiHttpClient.get("action/api/team_sticky_list", params, handler);
     }
 
+    /**
+     * 获取指定周报的详细信息
+     * 
+     * @param teamid
+     * @param diaryid
+     * @param handler
+     */
+    public static void getDiaryDetail(int teamid, int diaryid,
+            AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("teamid", teamid);
+        params.put("diaryid", diaryid);
+        ApiHttpClient.get("action/api/team_diary_detail", params, handler);
+    }
+
 }

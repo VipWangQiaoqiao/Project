@@ -1,7 +1,6 @@
 package net.oschina.app.team.fragment;
 
 import java.io.ByteArrayInputStream;
-import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -61,6 +60,7 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
         OnDateSetListener {
     private static String TAG = "TeamDiaryPagerFragment";
     public static String DIARYDETAIL_KEY = "team_diary_detail_key";
+    public static String TEAMID_KEY = "team_diary_teamid_key";
 
     @InjectView(R.id.team_diary_pager)
     ViewPager mPager;
@@ -304,8 +304,8 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
          * @param position
          */
         private void initListContent(EmptyLayout errorLayout, ListView view,
-                int whichWeek) {
-            TeamDiaryList dataBundle = dataBundleList.get(whichWeek);
+                final int whichWeek) {
+            final TeamDiaryList dataBundle = dataBundleList.get(whichWeek);
             if (dataBundle == null) {
                 setContentFromNet(errorLayout, null, view, whichWeek);
             } else {
@@ -316,8 +316,11 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
                 public void onItemClick(AdapterView<?> parent, View view,
                         int position, long id) {
                     Bundle args = new Bundle();
-                    args.putSerializable(DIARYDETAIL_KEY, (Serializable) parent
-                            .getAdapter().getItem(position));
+                    args.putInt(TEAMID_KEY, team.getId());
+                    args.putSerializable(
+                            TeamDiaryPagerFragment.DIARYDETAIL_KEY,
+                            dataBundleList.get(whichWeek).getList()
+                                    .get(position));
                     UIHelper.showSimpleBack(aty,
                             SimpleBackPage.TEAM_DIRAY_DETAIL, args);
                 }
