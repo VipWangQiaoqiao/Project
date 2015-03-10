@@ -127,7 +127,7 @@ public class TeamMemberFragment extends BaseFragment implements
 
     @Override
     public void initData() {
-        OSChinaApi.getTeamMemberList(team.getId() + "",
+        OSChinaApi.getTeamMemberList(team.getId(),
                 new AsyncHttpResponseHandler() {
                     @Override
                     public void onStart() {
@@ -162,7 +162,7 @@ public class TeamMemberFragment extends BaseFragment implements
     private void refurbish() {
         final long currentTime = System.currentTimeMillis();
         if (currentTime - preRefreshTime > 100000) {
-            OSChinaApi.getTeamMemberList(team.getId() + "",
+            OSChinaApi.getTeamMemberList(team.getId(),
                     new AsyncHttpResponseHandler() {
                         @Override
                         public void onSuccess(int arg0, Header[] arg1,

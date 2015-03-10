@@ -98,7 +98,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         vh.content.setDispatchToParent(true);
         vh.content.setLongClickable(false);
 
-        Spanned span = Html.fromHtml(TweetTextView.modifyPath(tweet.getBody()));
+        Spanned span = Html.fromHtml(TweetTextView.modifyPath(tweet.getBody().trim()));
         if (!StringUtils.isEmpty(tweet.getAttach())) {
             if (recordBitmap == null) {
                 initRecordImg(parent.getContext());

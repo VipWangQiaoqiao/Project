@@ -1,11 +1,12 @@
 package net.oschina.app.api.remote;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+
 import net.oschina.app.AppContext;
-import net.oschina.app.api.ApiClientHelper;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.team.bean.TeamIssue;
 import net.oschina.app.team.bean.TeamProject;
-
 import android.text.TextUtils;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -35,50 +36,55 @@ public class OSChinaTeamApi {
 
     /***
      * 获取团队绑定项目的成员列表（包括管理员以及开发者）
-     * @author 火蚁
-     * 2015-2-5 下午6:45:41
-     *
+     * 
+     * @author 火蚁 2015-2-5 下午6:45:41
+     * 
      * @return void
      * @param teamId
      * @param teamProject
      * @param handler
      */
-    public static void getTeamProjectMemberList(int teamId, int uid, TeamProject teamProject,
-	    AsyncHttpResponseHandler handler) {
+    public static void getTeamProjectMemberList(int teamId, int uid,
+	    TeamProject teamProject, AsyncHttpResponseHandler handler) {
 	RequestParams params = new RequestParams();
 	params.put("teamid", teamId);
 	params.put("uid", uid);
 	params.put("projectid", teamProject.getGit().getId());
 	String source = teamProject.getSource();
 	if (source != null && !TextUtils.isEmpty(source)) {
-	    
+
 	    params.put("source", teamProject.getSource());
 	}
-	ApiHttpClient.get("action/api/team_project_member_list", params, handler);
+	ApiHttpClient.get("action/api/team_project_member_list", params,
+		handler);
     }
-    
+
     /***
      * 获取项目的动态列表
-     * @author 火蚁
-     * 2015-3-2 下午5:18:54
-     *
+     * 
+     * @author 火蚁 2015-3-2 下午5:18:54
+     * 
      * @return void
      * @param teamId
      * @param project
-     * @param type "all"(default),"issue","code","other"
+     * @param type
+     *            "all"(default),"issue","code","other"
      * @param page
      * @param handler
      */
-    public static void getTeamProjectActiveList(int teamId, TeamProject project, String type, int page, AsyncHttpResponseHandler handler) {
+    public static void getTeamProjectActiveList(int teamId,
+	    TeamProject project, String type, int page,
+	    AsyncHttpResponseHandler handler) {
 	RequestParams params = new RequestParams();
-	params.put("teamid",  teamId);
-	params.put("projectid",  project.getGit().getId());
+	params.put("teamid", teamId);
+	params.put("projectid", project.getGit().getId());
 	if (!TextUtils.isEmpty(project.getSource())) {
 	    params.put("source", project.getSource());
 	}
-	params.put("type",  type);
-	params.put("pageIndex",  page);
-	ApiHttpClient.get("action/api/team_project_active_list", params, handler);
+	params.put("type", type);
+	params.put("pageIndex", page);
+	ApiHttpClient.get("action/api/team_project_active_list", params,
+		handler);
     }
 
     /**
@@ -144,18 +150,19 @@ public class OSChinaTeamApi {
     /***
      * 改变一个任务的状态
      * 
-     * @author 火蚁
-     * 2015-3-6 上午11:44:01
-     *
+     * @author 火蚁 2015-3-6 上午11:44:01
+     * 
      * @return void
      * @param teamId
      * @param issue
-     * @param target 修改的属性（"state" : 状态, "assignee" 指派人, "deadline" : 截止日期）
+     * @param target
+     *            修改的属性（"state" : 状态, "assignee" 指派人, "deadline" : 截止日期）
      * @param handler
      */
-    public static void changeIssueState(int teamId, TeamIssue issue, String target, 
-	    AsyncHttpResponseHandler handler) {
-	if (issue == null) return;
+    public static void changeIssueState(int teamId, TeamIssue issue,
+	    String target, AsyncHttpResponseHandler handler) {
+	if (issue == null)
+	    return;
 	RequestParams params = new RequestParams();
 	params.put("uid", AppContext.getInstance().getLoginUid());
 	params.put("teamid", teamId);
@@ -235,22 +242,22 @@ public class OSChinaTeamApi {
 	params.put("content", content);
 	ApiHttpClient.post("action/api/team_discuss_reply", params, handler);
     }
-    
+
     /***
-     * 发表一条综合评论
-     *    动态、任务、分享内容、周报
+     * 发表一条综合评论 动态、任务、分享内容、周报
      * 
-     * @author 火蚁
-     * 2015-3-6 下午3:31:07
-     *
+     * @author 火蚁 2015-3-6 下午3:31:07
+     * 
      * @return void
      * @param teamId
-     * @param type 普通动态-110， Git任务-112，分享内容-114， 周报-118
+     * @param type
+     *            普通动态-110， Git任务-112，分享内容-114， 周报-118
      * @param tweetId
      * @param content
      * @param handler
      */
-    public static void pubTeamTweetReply(int teamId, byte type, long tweetId, String content, AsyncHttpResponseHandler handler) {
+    public static void pubTeamTweetReply(int teamId, byte type, long tweetId,
+	    String content, AsyncHttpResponseHandler handler) {
 	RequestParams params = new RequestParams();
 	params.put("uid", AppContext.getInstance().getLoginUid());
 	params.put("type", type);
@@ -318,5 +325,35 @@ public class OSChinaTeamApi {
 	ApiHttpClient
 		.get("action/api/team_reply_list_by_type", params, handler);
 
+    }
+
+    /***
+     * 发表一个新的团队动态
+     * 
+     * @author 火蚁
+     * 2015-3-9 下午2:46:13
+     *
+     * @return void
+     * @param teamId
+     * @param content
+     * @param img
+     * @param handler
+     */
+    public static void pubTeamNewActive(int teamId, String content, File img,
+	    AsyncHttpResponseHandler handler) {
+	RequestParams params = new RequestParams();
+	params.put("teamid", teamId);
+	params.put("uid", AppContext.getInstance().getLoginUid());
+	params.put("msg", content);
+	params.put("appid", 3);
+	if (img != null) {
+
+	    try {
+		params.put("img", img);
+	    } catch (FileNotFoundException e) {
+		e.printStackTrace();
+	    }
+	}
+	ApiHttpClient.post("action/api/team_tweet_pub", params, handler);
     }
 }

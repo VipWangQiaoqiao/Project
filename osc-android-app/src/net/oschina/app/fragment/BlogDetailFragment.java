@@ -39,10 +39,10 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class BlogDetailFragment extends BaseDetailFragment implements
-        EmojiTextListener, EmojiFragmentControl, ToolbarFragmentControl {
+	EmojiTextListener, EmojiFragmentControl, ToolbarFragmentControl {
 
     protected static final String TAG = BlogDetailFragment.class
-            .getSimpleName();
+	    .getSimpleName();
     private static final String BLOG_CACHE_KEY = "blog_";
     @InjectView(R.id.tv_title)
     TextView mTvTitle;
@@ -58,98 +58,98 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 
     private final OnClickListener mMoreListener = new View.OnClickListener() {
 
-        @Override
-        public void onClick(View v) {
-            Activity act = getActivity();
-            if (act != null && act instanceof ToolbarEmojiVisiableControl) {
-                ((ToolbarEmojiVisiableControl) act).toggleToolbarEmoji();
-            }
-        }
+	@Override
+	public void onClick(View v) {
+	    Activity act = getActivity();
+	    if (act != null && act instanceof ToolbarEmojiVisiableControl) {
+		((ToolbarEmojiVisiableControl) act).toggleToolbarEmoji();
+	    }
+	}
     };
 
     private final OnActionClickListener mActionListener = new OnActionClickListener() {
 
-        @Override
-        public void onActionClick(ToolAction action) {
-            switch (action) {
-            case ACTION_CHANGE:
-                Activity act = getActivity();
-                if (act != null && act instanceof ToolbarEmojiVisiableControl) {
-                    ((ToolbarEmojiVisiableControl) act).toggleToolbarEmoji();
-                }
-                break;
-            case ACTION_WRITE_COMMENT:
-                act = getActivity();
-                if (act != null && act instanceof ToolbarEmojiVisiableControl) {
-                    ((ToolbarEmojiVisiableControl) act).toggleToolbarEmoji();
-                }
-                mEmojiFragment.showKeyboardIfNoEmojiGrid();
-                break;
-            case ACTION_VIEW_COMMENT:
-                if (mBlog != null)
-                    UIHelper.showBlogComment(getActivity(), mBlogId,
-                            mBlog.getAuthorId());
-                break;
-            case ACTION_FAVORITE:
-                handleFavoriteOrNot();
-                break;
-            case ACTION_SHARE:
-                handleShare();
-                break;
-            case ACTION_REPORT:
-                onReportMenuClick();
-                break;
-            default:
-                break;
-            }
-        }
+	@Override
+	public void onActionClick(ToolAction action) {
+	    switch (action) {
+	    case ACTION_CHANGE:
+		Activity act = getActivity();
+		if (act != null && act instanceof ToolbarEmojiVisiableControl) {
+		    ((ToolbarEmojiVisiableControl) act).toggleToolbarEmoji();
+		}
+		break;
+	    case ACTION_WRITE_COMMENT:
+		act = getActivity();
+		if (act != null && act instanceof ToolbarEmojiVisiableControl) {
+		    ((ToolbarEmojiVisiableControl) act).toggleToolbarEmoji();
+		}
+		mEmojiFragment.showKeyboardIfNoEmojiGrid();
+		break;
+	    case ACTION_VIEW_COMMENT:
+		if (mBlog != null)
+		    UIHelper.showBlogComment(getActivity(), mBlogId,
+			    mBlog.getAuthorId());
+		break;
+	    case ACTION_FAVORITE:
+		handleFavoriteOrNot();
+		break;
+	    case ACTION_SHARE:
+		handleShare();
+		break;
+	    case ACTION_REPORT:
+		onReportMenuClick();
+		break;
+	    default:
+		break;
+	    }
+	}
     };
 
     @Override
     public View onCreateView(LayoutInflater inflater,
-            @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_news_detail, container,
-                false);
+	    @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+	View view = inflater.inflate(R.layout.fragment_news_detail, container,
+		false);
 
-        mBlogId = getActivity().getIntent().getIntExtra("blog_id", 0);
-        ButterKnife.inject(this, view);
-        initViews(view);
+	mBlogId = getActivity().getIntent().getIntExtra("blog_id", 0);
+	ButterKnife.inject(this, view);
+	initViews(view);
 
-        return view;
+	return view;
     }
 
     private void initViews(View view) {
-        mEmptyLayout = (EmptyLayout) view.findViewById(R.id.error_layout);
+	mEmptyLayout = (EmptyLayout) view.findViewById(R.id.error_layout);
 
-        mWebView = (WebView) view.findViewById(R.id.webview);
+	mWebView = (WebView) view.findViewById(R.id.webview);
 
-        UIHelper.initWebView(mWebView);
+	UIHelper.initWebView(mWebView);
     }
 
     @Override
     protected boolean hasReportMenu() {
-        return true;
+	return true;
     }
 
     @Override
     protected String getCacheKey() {
-        return new StringBuilder(BLOG_CACHE_KEY).append(mBlogId).toString();
+	return new StringBuilder(BLOG_CACHE_KEY).append(mBlogId).toString();
     }
 
     @Override
     protected void sendRequestData() {
-        mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-        OSChinaApi.getBlogDetail(mBlogId, mHandler);
+	mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+	OSChinaApi.getBlogDetail(mBlogId, mHandler);
     }
 
     @Override
     protected Entity parseData(InputStream is) throws Exception {
-        return XmlUtils.toBean(BlogDetail.class, is).getBlog();
+	return XmlUtils.toBean(BlogDetail.class, is).getBlog();
     }
 
     @Override
     protected Entity readData(Serializable seri) {
-        return (Blog) seri;
+	return (Blog) seri;
     }
 
     // @Override
@@ -172,123 +172,127 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 
     @Override
     protected void executeOnLoadDataSuccess(Entity entity) {
-        mBlog = (Blog) entity;
-        fillUI();
-        fillWebViewBody();
+	mBlog = (Blog) entity;
+	fillUI();
+	fillWebViewBody();
     }
 
     private void fillUI() {
-        mTvTitle.setText(mBlog.getTitle());
-        mTvSource.setText(mBlog.getAuthor());
-        mTvSource.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UIHelper.showUserCenter(getActivity(), mBlog.getAuthorId(),
-                        mBlog.getAuthor());
-            }
-        });
-        mTvTime.setText(StringUtils.friendly_time(mBlog.getPubDate()));
-        if (mToolBarFragment != null) {
-            mToolBarFragment.setCommentCount(mBlog.getCommentCount());
-        }
-        notifyFavorite(mBlog.getFavorite() == 1);
+	mTvTitle.setText(mBlog.getTitle());
+	mTvSource.setText(mBlog.getAuthor());
+	mTvSource.setOnClickListener(new OnClickListener() {
+	    @Override
+	    public void onClick(View v) {
+		UIHelper.showUserCenter(getActivity(), mBlog.getAuthorId(),
+			mBlog.getAuthor());
+	    }
+	});
+	mTvTime.setText(StringUtils.friendly_time(mBlog.getPubDate()));
+	if (mToolBarFragment != null) {
+	    mToolBarFragment.setCommentCount(mBlog.getCommentCount());
+	}
+	notifyFavorite(mBlog.getFavorite() == 1);
     }
 
     private void fillWebViewBody() {
-        StringBuffer body = new StringBuffer();
-        body.append(UIHelper.setHtmlCotentSupportImagePreview(mBlog.getBody()));
-        body.append(UIHelper.WEB_STYLE).append(UIHelper.WEB_LOAD_IMAGES);
-        mWebView.loadDataWithBaseURL(null, body.toString(), "text/html",
-                "utf-8", null);
+	StringBuffer body = new StringBuffer();
+	body.append(UIHelper.setHtmlCotentSupportImagePreview(mBlog.getBody()));
+	body.append(UIHelper.WEB_STYLE).append(UIHelper.WEB_LOAD_IMAGES);
+	mWebView.loadDataWithBaseURL(null, body.toString(), "text/html",
+		"utf-8", null);
     }
 
     @Override
     public void setEmojiFragment(EmojiFragment fragment) {
-        mEmojiFragment = fragment;
-        mEmojiFragment.setEmojiTextListener(this);
-        mEmojiFragment.setButtonMoreVisibility(View.VISIBLE);
-        mEmojiFragment.setButtonMoreClickListener(mMoreListener);
+	mEmojiFragment = fragment;
+	mEmojiFragment.setEmojiTextListener(this);
+	mEmojiFragment.setButtonMoreVisibility(View.VISIBLE);
+	mEmojiFragment.setButtonMoreClickListener(mMoreListener);
     }
 
     @Override
     public void setToolBarFragment(ToolbarFragment fragment) {
-        mToolBarFragment = fragment;
-        mToolBarFragment.setOnActionClickListener(mActionListener);
-        mToolBarFragment.setActionVisiable(ToolAction.ACTION_CHANGE, true);
-        mToolBarFragment.setActionVisiable(ToolAction.ACTION_FAVORITE, true);
-        mToolBarFragment.setActionVisiable(ToolAction.ACTION_WRITE_COMMENT,
-                true);
-        mToolBarFragment
-                .setActionVisiable(ToolAction.ACTION_VIEW_COMMENT, true);
-        mToolBarFragment.setActionVisiable(ToolAction.ACTION_SHARE, true);
-        mToolBarFragment.setActionVisiable(ToolAction.ACTION_REPORT, true);
+	mToolBarFragment = fragment;
+	mToolBarFragment.setOnActionClickListener(mActionListener);
+	mToolBarFragment.setActionVisiable(ToolAction.ACTION_CHANGE, true);
+	mToolBarFragment.setActionVisiable(ToolAction.ACTION_FAVORITE, true);
+	mToolBarFragment.setActionVisiable(ToolAction.ACTION_WRITE_COMMENT,
+		true);
+	mToolBarFragment
+		.setActionVisiable(ToolAction.ACTION_VIEW_COMMENT, true);
+	mToolBarFragment.setActionVisiable(ToolAction.ACTION_SHARE, true);
+	mToolBarFragment.setActionVisiable(ToolAction.ACTION_REPORT, true);
     }
 
     @Override
     public void onSendClick(String text) {
-        if (!TDevice.hasInternet()) {
-            AppContext.showToastShort(R.string.tip_network_error);
-            return;
-        }
-        if (!AppContext.getInstance().isLogin()) {
-            UIHelper.showLoginActivity(getActivity());
-            return;
-        }
-        if (TextUtils.isEmpty(text)) {
-            AppContext.showToastShort(R.string.tip_comment_content_empty);
-            mEmojiFragment.requestFocusInput();
-            return;
-        }
-        showWaitDialog(R.string.progress_submit);
-        OSChinaApi.publicBlogComment(mBlogId, AppContext.getInstance()
-                .getLoginUid(), text, mCommentHandler);
+	if (!TDevice.hasInternet()) {
+	    AppContext.showToastShort(R.string.tip_network_error);
+	    return;
+	}
+	if (!AppContext.getInstance().isLogin()) {
+	    UIHelper.showLoginActivity(getActivity());
+	    return;
+	}
+	if (TextUtils.isEmpty(text)) {
+	    AppContext.showToastShort(R.string.tip_comment_content_empty);
+	    mEmojiFragment.requestFocusInput();
+	    return;
+	}
+	showWaitDialog(R.string.progress_submit);
+	OSChinaApi.publicBlogComment(mBlogId, AppContext.getInstance()
+		.getLoginUid(), text, mCommentHandler);
     }
 
     @Override
     protected void commentPubSuccess(Comment comment) {
-        super.commentPubSuccess(comment);
-        mEmojiFragment.reset();
+	super.commentPubSuccess(comment);
+	mEmojiFragment.reset();
     }
 
     @Override
     protected void onFavoriteChanged(boolean flag) {
-        super.onFavoriteChanged(flag);
-        if (mToolBarFragment != null) {
-            mToolBarFragment.setFavorite(flag);
-        }
+	super.onFavoriteChanged(flag);
+	if (mToolBarFragment != null) {
+	    mToolBarFragment.setFavorite(flag);
+	}
     }
 
     @Override
     protected int getFavoriteTargetId() {
-        return mBlog != null ? mBlog.getId() : -1;
+	return mBlog != null ? mBlog.getId() : -1;
     }
 
     @Override
     protected int getFavoriteTargetType() {
-        return mBlog != null ? FavoriteList.TYPE_BLOG : -1;
+	return mBlog != null ? FavoriteList.TYPE_BLOG : -1;
     }
 
-	@Override
-	protected String getShareUrl() {
-		return mBlog != null ? URLsUtils.URL_MOBILE + "blog/" + mBlog.getId() : null;
-	}
-	
-	@Override
-	protected String getRepotrUrl() {
-		return mBlog != null ? mBlog.getUrl() : "";
-	}
+    @Override
+    protected String getShareUrl() {
+	return mBlog != null ? URLsUtils.URL_MOBILE + "blog/" + mBlog.getId()
+		: null;
+    }
+
+    @Override
+    protected String getRepotrUrl() {
+	return mBlog != null ? mBlog.getUrl() : "";
+    }
+
     @Override
     protected String getShareTitle() {
-        return mBlog != null ? mBlog.getTitle() : getString(R.string.share_title_blog);
+	return mBlog != null ? mBlog.getTitle()
+		: getString(R.string.share_title_blog);
     }
 
     @Override
     protected String getShareContent() {
-    	return mBlog != null ? StringUtils.getSubString(0, 55, getFilterHtmlBody(mBlog.getBody())) : "";
+	return mBlog != null ? StringUtils.getSubString(0, 55,
+		getFilterHtmlBody(mBlog.getBody())) : "";
     }
 
     @Override
     protected int getRepotrId() {
-        return mBlog != null ? mBlogId : 0;
+	return mBlog != null ? mBlogId : 0;
     }
 }

@@ -264,6 +264,12 @@ public class PostDetailFragment extends BaseDetailFragment implements
     protected int getFavoriteTargetType() {
 	return mPost != null ? FavoriteList.TYPE_POST : -1;
     }
+    
+    @Override
+    protected String getShareTitle() {
+        // TODO Auto-generated method stub
+        return mPost != null ? mPost.getTitle() : getString(R.string.share_title_post);
+    }
 
     @Override
     protected String getShareContent() {

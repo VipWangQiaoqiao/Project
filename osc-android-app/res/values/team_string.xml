@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="team_detail_dynamic">动态详情</string>
-    <string name="team_new_issue">新任务</string>
-    <string name="team_new_active">新动态</string>
+    <string name="team_new_issue">新建任务</string>
+    <string name="team_new_active">新建动态</string>
     <string name="team_active_hint">通过@可以发信息给团队成员</string>
     <string name="team_issue_setting">项目设置</string>
     <string name="team_project_list">项目列表</string>
