@@ -220,7 +220,6 @@ public class TeamBoardFragment extends BaseFragment {
             break;
         default:
             break;
-
         }
     }
 

@@ -8,9 +8,11 @@ import net.oschina.app.team.bean.Detail;
 import net.oschina.app.team.bean.Detail.DayData;
 import android.content.Context;
 import android.text.Html;
+import android.text.Spanned;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class DiaryDetailAdapter extends BaseAdapter {
@@ -18,6 +20,7 @@ public class DiaryDetailAdapter extends BaseAdapter {
     private final Detail data;
     private final Context cxt;
     private final List<String> datas;
+    private final int[] weekIndex = new int[7];
 
     public DiaryDetailAdapter(Context cxt, Detail datas) {
         this.cxt = cxt;
@@ -31,14 +34,49 @@ public class DiaryDetailAdapter extends BaseAdapter {
             return 0;
         }
         int count = 0;
+        weekIndex[0] = count;
         count += isNull(data.getSun());
+        weekIndex[1] = count;
         count += isNull(data.getMon());
+        weekIndex[2] = count;
         count += isNull(data.getTue());
+        weekIndex[3] = count;
         count += isNull(data.getWed());
+        weekIndex[4] = count;
         count += isNull(data.getThu());
+        weekIndex[5] = count;
         count += isNull(data.getFri());
+        weekIndex[6] = count;
         count += isNull(data.getSat());
         return count;
+    }
+
+    private String getWeek(int position, View hide) {
+        String week = "";
+        hide.setVisibility(View.GONE);
+        if (position == weekIndex[0]) {
+            hide.setVisibility(View.VISIBLE);
+            week = "星期日";
+        } else if (position == weekIndex[1]) {
+            hide.setVisibility(View.VISIBLE);
+            week = "星期一";
+        } else if (position == weekIndex[2]) {
+            hide.setVisibility(View.VISIBLE);
+            week = "星期二";
+        } else if (position == weekIndex[3]) {
+            hide.setVisibility(View.VISIBLE);
+            week = "星期三";
+        } else if (position == weekIndex[4]) {
+            hide.setVisibility(View.VISIBLE);
+            week = "星期四";
+        } else if (position == weekIndex[5]) {
+            hide.setVisibility(View.VISIBLE);
+            week = "星期五";
+        } else if (position == weekIndex[6]) {
+            hide.setVisibility(View.VISIBLE);
+            week = "星期六";
+        }
+        return week;
     }
 
     private int isNull(DayData data) {
@@ -62,6 +100,7 @@ public class DiaryDetailAdapter extends BaseAdapter {
     static class ViewHolder {
         TextView week;
         TextView content;
+        ImageView imageWeek;
     }
 
     @Override
@@ -75,11 +114,27 @@ public class DiaryDetailAdapter extends BaseAdapter {
                     .findViewById(R.id.item_diary_detail_content);
             holder.week = (TextView) convertView
                     .findViewById(R.id.item_diary_detail_week);
+            holder.imageWeek = (ImageView) convertView
+                    .findViewById(R.id.item_diary_detail_img);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.content.setText(Html.fromHtml(datas.get(position).toString()));
+        holder.week.setText(getWeek(position, holder.imageWeek));
+        holder.content.setText(stripTags(datas.get(position).toString()));
         return convertView;
+    }
+
+    /**
+     * 移除字符串中的Html标签
+     * 
+     * @author kymjs (https://github.com/kymjs)
+     * @param pHTMLString
+     * @return
+     */
+    public static Spanned stripTags(final String pHTMLString) {
+        // String str = pHTMLString.replaceAll("\\<.*?>", "");
+        String str = pHTMLString.replaceAll("</li>", "</li><br>");
+        return Html.fromHtml(str);
     }
 }

@@ -12,13 +12,17 @@ import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
 
 import org.apache.http.Header;
+import org.kymjs.kjframe.utils.KJLoger;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import butterknife.ButterKnife;
@@ -39,6 +43,8 @@ public class TeamDiaryDetail extends BaseFragment {
 
     @InjectView(R.id.listview)
     ListView mList;
+    @InjectView(R.id.swiperefreshlayout)
+    SwipeRefreshLayout mSwiperefreshlayout;
     @InjectView(R.id.error_layout)
     EmptyLayout mErrorLayout;
 
@@ -72,13 +78,60 @@ public class TeamDiaryDetail extends BaseFragment {
             diaryData = new TeamDiary();
             Log.e("debug", getClass().getSimpleName() + "diaryData初始化异常");
         }
+        KJLoger.debug("TeamDiaryDetail=81===id=：" + diaryData.getId());
     }
 
     @Override
     public void initView(View view) {
         super.initView(view);
+        mList.setDivider(null);
         mList.addHeaderView(initHeaderView());
+        mList.addFooterView(initFooterView());
+
+        mSwiperefreshlayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (mState == STATE_REFRESH) {
+                    return;
+                } else {
+                    // 设置顶部正在刷新
+                    setSwipeRefreshLoadingState(mSwiperefreshlayout);
+                    /* !!! 设置耗时操作 !!! */
+                    initCommitLayout();
+                }
+            }
+        });
+        mSwiperefreshlayout.setColorSchemeResources(
+                R.color.swiperefresh_color1, R.color.swiperefresh_color2,
+                R.color.swiperefresh_color3, R.color.swiperefresh_color4);
+
         initListData();
+        initCommitLayout();
+    }
+
+    /**
+     * 设置顶部正在加载的状态
+     */
+    private void setSwipeRefreshLoadingState(
+            SwipeRefreshLayout mSwipeRefreshLayout) {
+        mState = STATE_REFRESH;
+        if (mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setRefreshing(true);
+            // 防止多次重复刷新
+            mSwipeRefreshLayout.setEnabled(false);
+        }
+    }
+
+    /**
+     * 设置顶部加载完毕的状态
+     */
+    private void setSwipeRefreshLoadedState(
+            SwipeRefreshLayout mSwipeRefreshLayout) {
+        mState = STATE_NOMORE;
+        if (mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setRefreshing(false);
+            mSwipeRefreshLayout.setEnabled(true);
+        }
     }
 
     /**
@@ -103,13 +156,18 @@ public class TeamDiaryDetail extends BaseFragment {
         return headerView;
     }
 
+    private View initFooterView() {
+        LinearLayout layout = new LinearLayout(aty);
+        return layout;
+    }
+
     private void initListData() {
         OSChinaApi.getDiaryDetail(teamid, diaryData.getId(),
                 new AsyncHttpResponseHandler() {
                     @Override
                     public void onStart() {
                         super.onStart();
-                        mErrorLayout.setVisibility(View.GONE);
+                        mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
                     }
 
                     @Override
@@ -118,16 +176,19 @@ public class TeamDiaryDetail extends BaseFragment {
                                 TeamDiaryDetailBean.class, arg2);
                         mList.setAdapter(new DiaryDetailAdapter(aty, data
                                 .getTeamDiary().getDetail()));
+                        mErrorLayout.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                            Throwable arg3) {}
-
-                    @Override
-                    public void onFinish() {
-                        super.onFinish();
+                            Throwable arg3) {
+                        mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+                        mErrorLayout.setErrorMessage("网络不好，请稍后重试");
                     }
                 });
+    }
+
+    private void initCommitLayout() {
+
     }
 }
