@@ -1,13 +1,18 @@
 package net.oschina.app.team.fragment;
 
+import java.util.List;
+
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.team.adapter.DiaryDetailAdapter;
 import net.oschina.app.team.bean.TeamDiary;
 import net.oschina.app.team.bean.TeamDiaryDetailBean;
+import net.oschina.app.team.bean.TeamRepliesList;
+import net.oschina.app.team.bean.TeamReply;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
 
@@ -18,6 +23,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +57,9 @@ public class TeamDiaryDetail extends BaseFragment {
     private TeamDiary diaryData;
     private int teamid;
     private Activity aty;
+    private DiaryDetailAdapter adapter;
+
+    private LinearLayout footerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -151,14 +160,15 @@ public class TeamDiaryDetail extends BaseFragment {
                 .findViewById(R.id.event_listitem_date);
         headImg.setAvatarUrl(diaryData.getAuthor().getPortrait());
         userName.setText(diaryData.getAuthor().getName());
-        content.setText(diaryData.getTitle());
+        content.setText(Html.fromHtml(diaryData.getTitle()));
         time.setText(diaryData.getCreateTime());
         return headerView;
     }
 
     private View initFooterView() {
-        LinearLayout layout = new LinearLayout(aty);
-        return layout;
+        footerView = new LinearLayout(aty);
+        footerView.setPadding(20, 0, 20, 20);
+        return footerView;
     }
 
     private void initListData() {
@@ -174,8 +184,9 @@ public class TeamDiaryDetail extends BaseFragment {
                     public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
                         TeamDiaryDetailBean data = XmlUtils.toBean(
                                 TeamDiaryDetailBean.class, arg2);
-                        mList.setAdapter(new DiaryDetailAdapter(aty, data
-                                .getTeamDiary().getDetail()));
+                        adapter = new DiaryDetailAdapter(aty, data
+                                .getTeamDiary().getDetail());
+                        mList.setAdapter(adapter);
                         mErrorLayout.setVisibility(View.GONE);
                     }
 
@@ -185,10 +196,50 @@ public class TeamDiaryDetail extends BaseFragment {
                         mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
                         mErrorLayout.setErrorMessage("网络不好，请稍后重试");
                     }
+
                 });
     }
 
     private void initCommitLayout() {
+        OSChinaApi.getDiaryComment(teamid, diaryData.getId(),
+                new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+                        List<TeamReply> datas = XmlUtils.toBean(
+                                TeamRepliesList.class, arg2).getList();
+                        for (TeamReply data : datas) {
+                            View layout = View.inflate(aty,
+                                    R.layout.list_cell_comment, null);
+                            AvatarView head = (AvatarView) layout
+                                    .findViewById(R.id.iv_avatar);
+                            head.setAvatarUrl(data.getAuthor().getPortrait());
+                            TextView name = (TextView) layout
+                                    .findViewById(R.id.tv_name);
+                            name.setText(data.getAuthor().getName());
+                            TextView time = (TextView) layout
+                                    .findViewById(R.id.tv_time);
+                            time.setText(StringUtils.friendly_time(data
+                                    .getCreateTime()));
+                            TextView content = (TextView) layout
+                                    .findViewById(R.id.tv_content);
+                            content.setText(data.getContent());
+                            footerView.addView(layout);
+                        }
+                        footerView.invalidate();
+                        if (adapter != null) {
+                            adapter.notifyDataSetInvalidated();
+                        }
+                    }
 
+                    @Override
+                    public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+                            Throwable arg3) {}
+
+                    @Override
+                    public void onFinish() {
+                        super.onFinish();
+                        setSwipeRefreshLoadedState(mSwiperefreshlayout);
+                    }
+                });
     }
 }
