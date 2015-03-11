@@ -838,4 +838,23 @@ public class OSChinaApi {
         ApiHttpClient.get("action/api/team_diary_detail", params, handler);
     }
 
+    /**
+     * diary评论列表
+     * 
+     * @param teamid
+     * @param diaryid
+     * @param handler
+     */
+    public static void getDiaryComment(int teamid, int diaryid,
+            AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("teamid", teamid);
+        params.put("id", diaryid);
+        params.put("type", "diary");
+        params.put("pageIndex", 0);
+        params.put("pageSize", "20");
+        ApiHttpClient
+                .get("action/api/team_reply_list_by_type", params, handler);
+    }
+
 }
