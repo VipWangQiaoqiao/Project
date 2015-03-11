@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -168,6 +169,9 @@ public class TeamDiaryDetail extends BaseFragment {
     private View initFooterView() {
         footerView = new LinearLayout(aty);
         footerView.setPadding(20, 0, 20, 20);
+        footerView.setOrientation(LinearLayout.VERTICAL);
+        View line = View.inflate(aty, R.layout.list_head_commnt_line, null);
+        footerView.addView(line);
         return footerView;
     }
 
@@ -222,7 +226,7 @@ public class TeamDiaryDetail extends BaseFragment {
                                     .getCreateTime()));
                             TextView content = (TextView) layout
                                     .findViewById(R.id.tv_content);
-                            content.setText(data.getContent());
+                            content.setText(stripTags(data.getContent()));
                             footerView.addView(layout);
                         }
                         footerView.invalidate();
@@ -241,5 +245,17 @@ public class TeamDiaryDetail extends BaseFragment {
                         setSwipeRefreshLoadedState(mSwiperefreshlayout);
                     }
                 });
+    }
+
+    /**
+     * 移除字符串中的Html标签
+     * 
+     * @author kymjs (https://github.com/kymjs)
+     * @param pHTMLString
+     * @return
+     */
+    public static Spanned stripTags(final String pHTMLString) {
+        String str = pHTMLString.replaceAll("<\\s*>", "");
+        return Html.fromHtml(str);
     }
 }

@@ -21,7 +21,6 @@
         android:layout_marginBottom="@dimen/space_5"
         android:layout_toRightOf="@id/iv_face"
         android:ellipsize="end"
-        
         android:maxLines="2"
         android:text="hello,woshi title" />
 
