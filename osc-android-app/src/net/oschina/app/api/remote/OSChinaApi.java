@@ -763,7 +763,6 @@ public class OSChinaApi {
         RequestParams params = new RequestParams();
         params.put("teamid", teamid);
         params.put("uid", uid);
-        params.put("uid", uid);
         params.put("activeid", activeid);
         ApiHttpClient.get("action/api/team_active_detail", params, handler);
     }
