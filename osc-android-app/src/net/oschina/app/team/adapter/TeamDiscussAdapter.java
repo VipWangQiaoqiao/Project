@@ -1,10 +1,12 @@
 package net.oschina.app.team.adapter;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.team.bean.TeamDiscuss;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TypefaceUtils;
 import net.oschina.app.widget.AvatarView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,11 +70,13 @@ public class TeamDiscussAdapter extends ListBaseAdapter<TeamDiscuss> {
 	    vh.description.setVisibility(View.VISIBLE);
 	    vh.description.setText(HTMLUtil.replaceTag(item.getBody()).trim());
 	}
-
-	vh.author.setText(item.getAuthor().getName());
-	vh.time.setText(StringUtils.friendly_time(item.getCreateTime()));
-	vh.vote_up.setText(item.getVoteUp() + "");
-	vh.comment_count.setText(item.getAnswerCount() + "");
+	TypefaceUtils.setTypeface(vh.author, item.getAuthor().getName());
+	String faTime = AppContext.getInstance().getResources().getString(R.string.fa_clock_o);
+	TypefaceUtils.setTypeface(vh.time, faTime + " " + StringUtils.friendly_time(item.getCreateTime()));
+	String faVoteUp = AppContext.getInstance().getResources().getString(R.string.fa_thumbs_o_up);
+	TypefaceUtils.setTypeface(vh.vote_up, faVoteUp + " " + item.getVoteUp());
+	String commentCount = AppContext.getInstance().getResources().getString(R.string.fa_comment);
+	TypefaceUtils.setTypeface(vh.comment_count, commentCount + " " + item.getAnswerCount());
 	return convertView;
     }
 }

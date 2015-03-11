@@ -33,7 +33,7 @@
 
             <LinearLayout
                 style="@style/fill_wrap"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:orientation="vertical" >
 
                 <LinearLayout
@@ -143,12 +143,8 @@
 
             <TextView
                 android:id="@+id/tv_team_active"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:text="@string/fa_home"
-                android:textColor="@color/main_green"
-                android:textSize="25sp" />
+                style="@style/option_item_text_fa"
+                android:text="@string/fa_home" />
 
             <TextView
                 style="@style/option_item_text"
@@ -159,19 +155,35 @@
             android:layout_width="wrap_content"
             android:layout_height="1px"
             android:background="@color/list_divider_color" />
-
+        
         <LinearLayout
-            android:id="@+id/ll_team_issue"
+            android:id="@+id/ll_team_project"
             style="@style/option_item_rl" >
 
             <TextView
+                android:id="@+id/tv_team_project"
+                style="@style/option_item_text_fa"
+                android:text="@string/fa_inbox" />
+
+            <TextView
+                style="@style/option_item_text"
+                android:text="@string/team_project" />
+        </LinearLayout>
+        
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1px"
+            android:background="@color/list_divider_color" />
+
+        <LinearLayout
+            android:id="@+id/ll_team_issue"
+            style="@style/option_item_rl"
+            android:visibility="gone" >
+
+            <TextView
                 android:id="@+id/tv_team_issue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:text="@string/fa_tasks"
-                android:textColor="@color/main_green"
-                android:textSize="25sp" />
+                style="@style/option_item_text_fa"
+                android:text="@string/fa_tasks" />
 
             <TextView
                 style="@style/option_item_text"
@@ -181,7 +193,8 @@
         <View
             android:layout_width="wrap_content"
             android:layout_height="1px"
-            android:background="@color/list_divider_color" />
+            android:background="@color/list_divider_color"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/ll_team_discuss"
@@ -189,12 +202,8 @@
 
             <TextView
                 android:id="@+id/tv_team_discuss"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:text="@string/fa_comments"
-                android:textColor="@color/main_green"
-                android:textSize="25sp" />
+                style="@style/option_item_text_fa"
+                android:text="@string/fa_comments" />
 
             <TextView
                 style="@style/option_item_text"
@@ -212,12 +221,8 @@
 
             <TextView
                 android:id="@+id/tv_team_diary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:text="@string/fa_file_text_o"
-                android:textColor="@color/main_green"
-                android:textSize="25sp" />
+                style="@style/option_item_text_fa"
+                android:text="@string/fa_file_text_o" />
 
             <TextView
                 style="@style/option_item_text"

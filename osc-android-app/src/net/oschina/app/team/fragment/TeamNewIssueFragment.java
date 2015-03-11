@@ -78,8 +78,8 @@ public class TeamNewIssueFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	    Bundle savedInstanceState) {
-	View view = inflater.inflate(R.layout.fragment_team_new_issue, container,
-		false);
+	View view = inflater.inflate(R.layout.fragment_team_new_issue,
+		container, false);
 	initView(view);
 	initData();
 	return view;
@@ -189,6 +189,14 @@ public class TeamNewIssueFragment extends BaseFragment {
 		&& mTeamProject.getGit().getId() != -1) {
 	    mTvProject.setText(mTeamProject.getGit().getName());
 	    mTvProject.setTag(mTeamProject);
+	} else {
+	    TeamProject project = new TeamProject();
+	    TeamGit git = new TeamGit();
+	    project.setSource("");
+	    git.setId(-1);// -1表示
+	    git.setName("不指定项目");
+	    project.setGit(git);
+	    mTeamProject = project;
 	}
 	if (mTeamCatalog != null) {
 	    mTvCatalog.setText(mTeamCatalog.getTitle());
@@ -278,9 +286,6 @@ public class TeamNewIssueFragment extends BaseFragment {
     }
 
     private void showTeamCatalogSelected(List<TeamIssueCatalog> list) {
-	TeamIssueCatalog catalog = new TeamIssueCatalog();
-	catalog.setTitle("未指定列表");
-	list.add(0, catalog);
 	this.catalogs = list;
 	if (catalogDialog == null) {
 	    catalogDialog = DialogHelper
@@ -412,8 +417,7 @@ public class TeamNewIssueFragment extends BaseFragment {
     }
 
     private void tryToShowToUserDilaog() {
-	OSChinaTeamApi.getTeamProjectMemberList(mTeam.getId(), AppContext
-		.getInstance().getLoginUid(), mTeamProject,
+	OSChinaTeamApi.getTeamProjectMemberList(mTeam.getId(), mTeamProject,
 		new MySomeInfoHandler(show_issue_touser));
     }
 
@@ -464,9 +468,9 @@ public class TeamNewIssueFragment extends BaseFragment {
 		break;
 	    // 显示指派用户对话框
 	    case show_issue_touser:
-		 TeamProjectMemberList tpmList = XmlUtils.toBean(
-		 TeamProjectMemberList.class, arg2);
-		 showIssueToUser(tpmList.getList());
+		TeamProjectMemberList tpmList = XmlUtils.toBean(
+			TeamProjectMemberList.class, arg2);
+		showIssueToUser(tpmList.getList());
 		break;
 	    default:
 		break;

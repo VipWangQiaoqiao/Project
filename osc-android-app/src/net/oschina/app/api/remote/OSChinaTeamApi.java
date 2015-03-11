@@ -44,11 +44,10 @@ public class OSChinaTeamApi {
      * @param teamProject
      * @param handler
      */
-    public static void getTeamProjectMemberList(int teamId, int uid,
-	    TeamProject teamProject, AsyncHttpResponseHandler handler) {
+    public static void getTeamProjectMemberList(int teamId, TeamProject teamProject, AsyncHttpResponseHandler handler) {
 	RequestParams params = new RequestParams();
 	params.put("teamid", teamId);
-	params.put("uid", uid);
+	params.put("uid", AppContext.getInstance().getLoginUid());
 	params.put("projectid", teamProject.getGit().getId());
 	String source = teamProject.getSource();
 	if (source != null && !TextUtils.isEmpty(source)) {
@@ -261,6 +260,7 @@ public class OSChinaTeamApi {
 	RequestParams params = new RequestParams();
 	params.put("uid", AppContext.getInstance().getLoginUid());
 	params.put("type", type);
+	params.put("teamid", teamId);
 	params.put("tweetid", tweetId);
 	params.put("content", content);
 	ApiHttpClient.post("action/api/team_tweet_reply", params, handler);
@@ -355,5 +355,30 @@ public class OSChinaTeamApi {
 	    }
 	}
 	ApiHttpClient.post("action/api/team_tweet_pub", params, handler);
+    }
+    
+    /***
+     * 更新子任务属性
+     * @author 火蚁
+     * 2015-3-10 下午4:53:49
+     *
+     * @return void
+     * @param teamId
+     * @param target
+     * @param childIssue
+     * @param handler
+     */
+    public static void updateChildIssue(int teamId, String target, TeamIssue childIssue, AsyncHttpResponseHandler handler) {
+	RequestParams params = new RequestParams();
+	params.put("uid", AppContext.getInstance().getLoginUid());
+	params.put("teamid", teamId);
+	params.put("child_issue_id", childIssue.getId());
+	params.put("target", target);
+	if (target.equals("state")) {
+	    params.put("state", childIssue.getState());
+	} else {
+	    params.put("title", childIssue.getTitle());
+	}
+	ApiHttpClient.post("action/api/team_issue_update_child_issue", params, handler);
     }
 }

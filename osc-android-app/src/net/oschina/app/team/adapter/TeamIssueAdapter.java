@@ -10,6 +10,7 @@ import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.team.bean.TeamIssue;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TypefaceUtils;
+import net.oschina.app.util.ViewUtils;
 import android.graphics.Paint;
 import android.text.TextUtils;
 import android.view.View;
@@ -44,11 +45,6 @@ public class TeamIssueAdapter extends ListBaseAdapter<TeamIssue> {
         vh.comment.setText(item.getReplyCount() + "");
 
         vh.title.setText(item.getTitle());
-        if (item.getState().equals("closed")) {
-            vh.title.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); // 中划线
-        } else {
-            vh.title.getPaint().setFlags(0);
-        }
 
         setIssueState(vh, item);
 
@@ -116,15 +112,12 @@ public class TeamIssueAdapter extends ListBaseAdapter<TeamIssue> {
         String state = teamIssue.getState();
         if (TextUtils.isEmpty(state))
             return;
-        TextView tv = vh.state;
-        if (state.equalsIgnoreCase(TeamIssue.TEAM_ISSUE_STATE_OPENED)) {
-            TypefaceUtils.setTypeface(tv, R.string.fa_circle_o);
-        } else if (state.equalsIgnoreCase(TeamIssue.TEAM_ISSUE_STATE_CLOSED)) {
-            TypefaceUtils.setTypeface(tv, R.string.fa_check_circle_o);
-        } else if (state.equalsIgnoreCase(TeamIssue.TEAM_ISSUE_STATE_UNDERWAY)) {
-            TypefaceUtils.setTypeface(tv, R.string.fa_dot_circle_o);
+        TypefaceUtils.setTypeface(vh.state, teamIssue.getIssueStateFaTextId());
+        
+        if (teamIssue.getState().equals("closed") || teamIssue.getState().equals("accepted")) {
+            ViewUtils.setTextViewLineFlag(vh.title, Paint.STRIKE_THRU_TEXT_FLAG);
         } else {
-            TypefaceUtils.setTypeface(tv, R.string.fa_lock_use);
+            ViewUtils.setTextViewLineFlag(vh.title, 0);
         }
     }
 

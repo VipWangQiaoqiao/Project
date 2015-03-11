@@ -186,7 +186,7 @@ public class TeamIssueViewPageFragment extends BaseViewPagerFragment {
 
     private TeamProject getDefaultProject() {
 	TeamProject project = new TeamProject();
-	project.setSource("");
+	project.setSource("Team@OSC");
 	TeamGit git = new TeamGit();
 	git.setId(-1);
 	git.setName("所有任务");

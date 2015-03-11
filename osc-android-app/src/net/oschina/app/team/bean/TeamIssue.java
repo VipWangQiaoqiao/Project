@@ -88,6 +88,9 @@ public class TeamIssue extends Entity {
     @XStreamAlias("project")
     private TeamProject project;
     
+    @XStreamAlias("collaborator")
+    private List<TeamIssueCollaborator> collaborators;
+    
     @XStreamAlias("childIssues")
     private TeamIssueChild childIssues;// 子任务数
     
@@ -258,6 +261,14 @@ public class TeamIssue extends Entity {
 	this.authority = authority;
     }
 
+    public List<TeamIssueCollaborator> getCollaborators() {
+        return collaborators;
+    }
+
+    public void setCollaborators(List<TeamIssueCollaborator> collaborators) {
+        this.collaborators = collaborators;
+    }
+
     @XStreamAlias("label")
     public class Label implements Serializable {
 
@@ -393,6 +404,36 @@ public class TeamIssue extends Entity {
 
     }
     
+    @XStreamAlias("collaborator")
+    public class TeamIssueCollaborator implements Serializable {
+	
+	@XStreamAlias("id")
+	private int id;
+	@XStreamAlias("name")
+	private String name;
+	@XStreamAlias("portrait")
+	private String portrait;
+	public int getId() {
+	    return id;
+	}
+	public void setId(int id) {
+	    this.id = id;
+	}
+	public String getName() {
+	    return name;
+	}
+	public void setName(String name) {
+	    this.name = name;
+	}
+	public String getPortrait() {
+	    return portrait;
+	}
+	public void setPortrait(String portrait) {
+	    this.portrait = portrait;
+	}
+	
+    }
+    
     // 子任务
     @XStreamAlias("childIssues")
     public class TeamIssueChild implements Serializable {
@@ -464,9 +505,9 @@ public class TeamIssue extends Entity {
     public String getIssueStateText() {
 	String res = "待办中";
 	if (this.state.equals(TEAM_ISSUE_STATE_OPENED)) {
-	    res = "待办中";
-	} else if (this.state.equals(TEAM_ISSUE_STATE_UNDERWAY)) {
 	    res = "进行中";
+	} else if (this.state.equals(TEAM_ISSUE_STATE_UNDERWAY)) {
+	    res = "待办中";
 	} else if (this.state.equals(TEAM_ISSUE_STATE_CLOSED)) {
 	    res = "已完成";
 	} else {
@@ -478,9 +519,9 @@ public class TeamIssue extends Entity {
     
     public int getIssueStateFaTextId() {
 	int res = R.string.fa_circle_o;
-	if (this.state.equals(TEAM_ISSUE_STATE_OPENED)) {
+	if (this.state.equals(TEAM_ISSUE_STATE_UNDERWAY)) {
 	    res = R.string.fa_circle_o;
-	} else if (this.state.equals(TEAM_ISSUE_STATE_UNDERWAY)) {
+	} else if (this.state.equals(TEAM_ISSUE_STATE_OPENED)) {
 	    res = R.string.fa_dot_circle_o;
 	} else if (this.state.equals(TEAM_ISSUE_STATE_CLOSED)) {
 	    res = R.string.fa_check_circle_o;
