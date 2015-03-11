@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/white"
     android:orientation="vertical" >
 
     <TextView
@@ -26,6 +27,7 @@
         android:layout_below="@id/tv_title"
         android:layout_toRightOf="@id/tv_author"
         android:layout_marginRight="10dp"
+        android:textColor="@color/main_gray"
         android:textSize="12sp" />
     <!-- 回/赞 -->
     <TextView
@@ -33,6 +35,7 @@
         style="@style/wrap_wrap"
         android:layout_below="@id/tv_title"
         android:layout_toRightOf="@id/tv_time"
+        android:textColor="@color/main_gray"
         android:textSize="12sp" />
 
     <WebView

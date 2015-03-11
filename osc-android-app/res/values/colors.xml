@@ -31,7 +31,7 @@
     
     <color name="main_background">#ffebedf0</color>
     <color name="list_divider_color">#DADADA</color>
-    <color name="list_item_background_normal">#f9f9f9</color>
+    <color name="list_item_background_normal">@color/white</color>
     <color name="teamlist_item_background_normal">#ffffff</color>
     <color name="list_item_background_pressed">#efefef</color>
     
