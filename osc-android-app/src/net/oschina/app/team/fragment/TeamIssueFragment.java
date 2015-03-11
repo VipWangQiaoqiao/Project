@@ -12,6 +12,7 @@ import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.team.adapter.TeamIssueAdapter;
 import net.oschina.app.team.bean.Team;
+import net.oschina.app.team.bean.TeamGit;
 import net.oschina.app.team.bean.TeamIssueCatalog;
 import net.oschina.app.team.bean.TeamIssue;
 import net.oschina.app.team.bean.TeamIssueList;
@@ -39,6 +40,8 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
     protected static final String TAG = TeamIssueFragment.class.getSimpleName();
     private static final String CACHE_KEY_PREFIX = "team_issue_list_";
 
+    private String issueState = TeamIssue.TEAM_ISSUE_STATE_UNDERWAY;
+    
     private Team mTeam;
 
     private TeamProject mProject;
@@ -67,6 +70,8 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
 	    if (project != null) {
 		this.mProject = project;
 		this.mProjectId = project.getGit().getId();
+	    } else {
+		this.mProjectId = -1;
 	    }
 	    TeamIssueCatalog catalog = (TeamIssueCatalog) bundle.getSerializable(TeamMainActivity.BUNDLE_KEY_ISSUE_CATALOG);
 	    if (catalog != null) {
@@ -151,9 +156,8 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
 	int catalogId = mCatalogId;
 	String source = mProject == null ? "" : mProject.getSource();
 	int uid = mCatalogId == 0 ? 0 : AppContext.getInstance().getLoginUid();
-	String state = "all";
 	String scope = "";
-	OSChinaTeamApi.getTeamIssueList(teamId, projectId, catalogId, source, uid, state,
+	OSChinaTeamApi.getTeamIssueList(teamId, projectId, catalogId, source, uid, issueState,
 		scope, mCurrentPage, AppContext.PAGE_SIZE, mHandler);
     }
 
@@ -165,5 +169,5 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
 	    UIHelper.showTeamIssueDetail(getActivity(), mTeam, issue, mCatalog);
 	}
     }
-
+    
 }

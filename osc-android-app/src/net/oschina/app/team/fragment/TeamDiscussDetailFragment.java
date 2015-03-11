@@ -19,6 +19,7 @@ import net.oschina.app.team.bean.TeamDiscuss;
 import net.oschina.app.team.bean.TeamDiscussDetail;
 import net.oschina.app.team.bean.TeamRepliesList;
 import net.oschina.app.team.bean.TeamReply;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
@@ -150,10 +151,12 @@ public class TeamDiscussDetailFragment extends
 	// TODO Auto-generated method stub
 	mTvTitle.setText(detailBean.getTitle());
 	mTvAuthor.setText(detailBean.getAuthor().getName());
-	mTvTime.setText(detailBean.getCreateTime());
+	mTvTime.setText(StringUtils.friendly_time(detailBean.getCreateTime()));
 	mTvAnswerVote.setText(detailBean.getVoteUp() + "赞/"
 		+ detailBean.getAnswerCount() + "回");
-	mWebView.loadDataWithBaseURL(null, detailBean.getBody(), "text/html",
+	UIHelper.initWebView(mWebView);
+	UIHelper.addWebImageShow(getActivity(), mWebView);
+	mWebView.loadDataWithBaseURL(null, UIHelper.WEB_STYLE + detailBean.getBody(), "text/html",
 		"utf-8", null);
     }
 

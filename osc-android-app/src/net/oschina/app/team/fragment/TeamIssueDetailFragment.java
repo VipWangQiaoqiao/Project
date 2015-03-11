@@ -7,6 +7,8 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseFragment;
+import net.oschina.app.bean.Result;
+import net.oschina.app.bean.ResultBean;
 import net.oschina.app.emoji.EmojiFragment;
 import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
 import net.oschina.app.interf.EmojiFragmentControl;
@@ -17,11 +19,13 @@ import net.oschina.app.team.bean.TeamIssueCatalog;
 import net.oschina.app.team.bean.TeamIssueDetail;
 import net.oschina.app.team.bean.TeamRepliesList;
 import net.oschina.app.team.bean.TeamReply;
+import net.oschina.app.ui.dialog.CommonDialog;
+import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TypefaceUtils;
+import net.oschina.app.util.ViewUtils;
 import net.oschina.app.util.XmlUtils;
-import net.oschina.app.viewpagerfragment.NewsViewPagerFragment;
 import net.oschina.app.widget.AvatarView;
 
 import org.apache.http.Header;
@@ -30,13 +34,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
@@ -187,14 +190,9 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 	    mProjectView.setVisibility(View.GONE);
 	}
 
-	TypefaceUtils.setTypeface(mTvStateTitle,
-		mTeamIssue.getIssueStateFaTextId());
-
-	if (mTeamIssue.getState().equals("closed")) {
-	    mTvTitle.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); // 中划线
-	}
-
 	mTvTitle.setText(mTeamIssue.getTitle());
+	
+	setIssueState();
 
 	if (mTeamIssue.getToUser() != null
 		&& !TextUtils.isEmpty(mTeamIssue.getToUser().getName())) {
@@ -205,6 +203,8 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 
 	if (!TextUtils.isEmpty(mTeamIssue.getDeadlineTime())) {
 	    mTvDieTime.setText(mTeamIssue.getDeadlineTimeText());
+	} else {
+	    mTvDieTime.setText("未指定截止日期");
 	}
 
 	if (mTeamIssue.getAttachments().getTotalCount() != 0) {
@@ -232,10 +232,38 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 	}
 
 	setChildIssues(mTeamIssue.getChildIssues().getChildIssues());
-
-	mTvState.setText(mTeamIssue.getIssueStateText());
+	
 	setLabels(mTeamIssue);
+	setIssueCollaborator();
+    }
+    
+    private void setIssueCollaborator() {
+	StringBuffer cooperateUserStr = new StringBuffer();
+	if (mTeamIssue.getCollaborators().size() > 0) {
+	    for (int i = 0; i < mTeamIssue.getCollaborators().size(); i++) {
+		if (i == mTeamIssue.getCollaborators().size() -1) {
+		    cooperateUserStr.append(mTeamIssue.getCollaborators().get(i).getName());
+		} else {
+		    cooperateUserStr.append(mTeamIssue.getCollaborators().get(i).getName() + "，");
+		}
+	    }
+	    mTvCooperateUser.setText(cooperateUserStr.toString());
+	} else {
+	    mTvCooperateUser.setText("暂无协作者");
+	}
+    }
+    
+    private void setIssueState() {
+	TypefaceUtils.setTypeface(mTvStateTitle,
+		mTeamIssue.getIssueStateFaTextId());
 
+	if (mTeamIssue.getState().equals("closed") || mTeamIssue.getState().equals("accepted")) {
+	    ViewUtils.setTextViewLineFlag(mTvTitle, Paint.STRIKE_THRU_TEXT_FLAG);
+	} else {
+	    ViewUtils.setTextViewLineFlag(mTvTitle, 0);
+	}
+	
+	mTvState.setText(mTeamIssue.getIssueStateText());
     }
 
     private void setLabels(TeamIssue issue) {
@@ -263,7 +291,7 @@ public class TeamIssueDetailFragment extends BaseFragment implements
     }
 
     @Override
-    public void onSendClick(String text) {
+    public void onSendClick(final String text) {
 	// TODO Auto-generated method stub
 	showWaitDialog("提交评论中...");
 	OSChinaTeamApi.pubTeamTweetReply(mTeam.getId(),
@@ -273,13 +301,25 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 		    @Override
 		    public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 			// TODO Auto-generated method stub
-			TeamReply reply = new TeamReply();
-			Author author = new Author();
-			author.setId(AppContext.getInstance().getLoginUid());
-			author.setName(AppContext.getInstance().getLoginUser()
-				.getName());
-			reply.setAuthor(author);
-			addComment(reply);
+			Result result = XmlUtils.toBean(ResultBean.class, arg2)
+				.getResult();
+			if (result.OK()) {
+			    TeamReply reply = new TeamReply();
+			    Author author = new Author();
+			    author.setId(AppContext.getInstance().getLoginUid());
+			    author.setName(AppContext.getInstance()
+				    .getLoginUser().getName());
+			    author.setPortrait(AppContext.getInstance()
+				    .getLoginUser().getPortrait());
+			    reply.setAuthor(author);
+			    reply.setCreateTime(StringUtils.getCurTimeStr());
+			    reply.setContent(text);
+			    addComment(reply);
+			    emojiFragment.reset();
+			    emojiFragment.hideKeyboard();
+			} else {
+			    AppContext.showToast(result.getErrorMessage());
+			}
 		    }
 
 		    @Override
@@ -287,7 +327,6 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 			    Throwable arg3) {
 			// TODO Auto-generated method stub
 			AppContext.showToast(new String(arg2));
-
 		    }
 
 		    @Override
@@ -300,19 +339,30 @@ public class TeamIssueDetailFragment extends BaseFragment implements
     }
 
     private AsyncHttpResponseHandler mChangeIssueHandler = new AsyncHttpResponseHandler() {
-
+	
 	@Override
 	public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 	    // TODO Auto-generated method stub
-	    AppContext.showToast(new String(arg2));
+	    Result result = XmlUtils.toBean(ResultBean.class, arg2).getResult();
+	    if (result.OK()) {
+		setIssueState();
+	    }	    
+	    AppContext.showToast(result.getErrorMessage());
 	}
 
 	@Override
 	public void onFailure(int arg0, Header[] arg1, byte[] arg2,
 		Throwable arg3) {
 	    // TODO Auto-generated method stub
-	    AppContext.showToast(new String(arg2));
+	    AppContext.showToast("更新失败");
 	}
+	public void onStart() {
+	    showWaitDialog("正在修改...");
+	};
+	
+	public void onFinish() {
+	    hideWaitDialog();
+	};
     };
 
     @Override
@@ -327,7 +377,11 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 	    changeIssueState();
 	    break;
 	case R.id.ll_issue_touser:
-
+	    // 暂时屏蔽修改任务指派
+//	    Bundle bundle = new Bundle();
+//	    bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_TEAM, mTeam);
+//	    bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_PROJECT, mTeamIssue.getProject());
+//	    UIHelper.showSimpleBack(getActivity(), SimpleBackPage.TEAM_PROJECT_MEMBER_SELECT, bundle);
 	    break;
 	case R.id.ll_issue_cooperate_user:
 
@@ -349,11 +403,37 @@ public class TeamIssueDetailFragment extends BaseFragment implements
     }
 
     private void changeIssueState() {
-	mTeamIssue.setState("opened");
-	OSChinaTeamApi.changeIssueState(mTeam.getId(), mTeamIssue, "state",
-		mChangeIssueHandler);
-    }
+	final CommonDialog dialog = DialogHelper.getPinterestDialogCancelable(getActivity());
+	dialog.setTitle("修改任务状态");
+	final CharSequence[] items = getResources().getTextArray(R.array.team_issue_state);
+	final CharSequence[] itemsEn = getResources().getTextArray(R.array.team_issue_state_en);
+	int index = 0;
+	for (int i = 0; i < itemsEn.length; i++) {
+	    if (itemsEn[i].equals(mTeamIssue.getState())) {
+		index = i;
+	    }
+	}
+	final int selIndex = index;
+	dialog.setItems(items, index, new AdapterView.OnItemClickListener() {
 
+	    @Override
+	    public void onItemClick(AdapterView<?> parent, View view,
+		    int position, long id) {
+		// TODO Auto-generated method stub
+		if (position == selIndex) {
+		    dialog.dismiss();
+		    return;
+		}
+		mTeamIssue.setState(itemsEn[position].toString());
+		OSChinaTeamApi.changeIssueState(mTeam.getId(), mTeamIssue, "state",
+			mChangeIssueHandler);
+		dialog.dismiss();
+	    }
+	});
+	dialog.setPositiveButton(R.string.cancle, null);
+	dialog.show();
+    }
+    
     @InjectView(R.id.ll_issue_childs)
     LinearLayout mLLChildIssues;
 
@@ -366,26 +446,83 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 	}
     }
 
-    private void addChildIssue(TeamIssue teamIssue) {
+    private void addChildIssue(final TeamIssue teamIssue) {
 	if (teamIssue == null)
 	    return;
-	View cell = LayoutInflater.from(getActivity()).inflate(
+	final View cell = LayoutInflater.from(getActivity()).inflate(
 		R.layout.list_cell_team_child_issue, null, false);
 	AvatarView avatarView = (AvatarView) cell.findViewById(R.id.iv_avatar);
 	avatarView.setAvatarUrl(teamIssue.getToUser().getPortrait());
-	TextView content = (TextView) cell.findViewById(R.id.tv_content);
+	final TextView content = (TextView) cell.findViewById(R.id.tv_content);
 	content.setText(teamIssue.getTitle());
-	if (teamIssue.getState().equalsIgnoreCase("closed")) {
-	    content.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-	    TypefaceUtils.setTypeface(
-		    (TextView) cell.findViewById(R.id.tv_state),
-		    R.string.fa_check_circle_o);
-	} else {
-	    TypefaceUtils.setTypeface(
-		    (TextView) cell.findViewById(R.id.tv_state),
-		    R.string.fa_circle_o);
-	}
+	setChildIssueState(cell, teamIssue);
+	cell.setOnClickListener(new View.OnClickListener() {
+	    
+	    @Override
+	    public void onClick(View v) {
+		// TODO Auto-generated method stub
+		updateChildIssueState(cell, teamIssue);
+	    }
+	});
 	mLLChildIssues.addView(cell);
+    }
+    
+    private void setChildIssueState(View cell, TeamIssue childIssue) {
+	TextView content = (TextView) cell.findViewById(R.id.tv_content);
+	TextView state = (TextView) cell.findViewById(R.id.tv_state);
+	
+	if (childIssue.getState().equalsIgnoreCase("closed")) {
+	    ViewUtils.setTextViewLineFlag(content, Paint.STRIKE_THRU_TEXT_FLAG);
+	    TypefaceUtils.setTypeface(state, R.string.fa_check_circle_o);
+	} else {
+	    ViewUtils.setTextViewLineFlag(content, 0);
+	    TypefaceUtils.setTypeface(state, R.string.fa_circle_o);
+	}
+    }
+    
+    private void updateChildIssueState(final View cell, final TeamIssue childIssue) {
+	switchChildIssueState(childIssue);
+	OSChinaTeamApi.updateChildIssue(mTeam.getId(), "state", childIssue, new AsyncHttpResponseHandler() {
+	    
+	    @Override
+	    public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+		// TODO Auto-generated method stub
+		Result result = XmlUtils.toBean(ResultBean.class, arg2).getResult();
+		if (result.OK()) {
+		    setChildIssueState(cell, childIssue);
+		} else {
+		    switchChildIssueState(childIssue);
+		}
+		AppContext.showToast(result.getErrorMessage());
+	    }
+	    
+	    @Override
+	    public void onFailure(int arg0, Header[] arg1, byte[] arg2, Throwable arg3) {
+		// TODO Auto-generated method stub
+		AppContext.showToast("更新失败");
+		switchChildIssueState(childIssue);
+	    }
+	    @Override
+	    public void onStart() {
+	        // TODO Auto-generated method stub
+	        super.onStart();
+	        showWaitDialog("正在更新状态...");
+	    }
+	    @Override
+	    public void onFinish() {
+	        // TODO Auto-generated method stub
+	        super.onFinish();
+	        hideWaitDialog();
+	    }
+	});
+    }
+    
+    private void switchChildIssueState(TeamIssue childIssue) {
+	if (childIssue.getState().equals("opened")) {
+	    childIssue.setState("closed");
+	} else {
+	    childIssue.setState("opened");
+	}
     }
 
     @InjectView(R.id.ll_issue_comments)

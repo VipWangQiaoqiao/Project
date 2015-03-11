@@ -83,8 +83,7 @@ public class TeamProjectMemberFragment extends
     @Override
     protected void sendRequestData() {
 	// TODO Auto-generated method stub
-	int uid = AppContext.getInstance().getLoginUid();
-	OSChinaTeamApi.getTeamProjectMemberList(mTeamId, uid, mTeamProject,
+	OSChinaTeamApi.getTeamProjectMemberList(mTeamId, mTeamProject,
 		mHandler);
     }
 

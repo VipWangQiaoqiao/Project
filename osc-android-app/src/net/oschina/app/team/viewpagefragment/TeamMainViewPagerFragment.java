@@ -5,6 +5,7 @@ import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.base.BaseViewPagerFragment;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.fragment.TeamBoardFragment;
+import net.oschina.app.team.fragment.TeamIssueFragment;
 import net.oschina.app.team.fragment.TeamMemberFragment;
 import net.oschina.app.team.fragment.TeamProjectFragment;
 import net.oschina.app.team.ui.TeamMainActivity;
@@ -88,9 +89,9 @@ public class TeamMainViewPagerFragment extends BaseViewPagerFragment {
 	String[] arraStrings = getResources().getStringArray(
 		R.array.team_main_viewpager);
 
-	adapter.addTab(arraStrings[0], "", TeamProjectFragment.class,
+	adapter.addTab(arraStrings[0], "", TeamBoardFragment.class,
 		getActivity().getIntent().getExtras());
-	adapter.addTab(arraStrings[1], "", TeamBoardFragment.class,
+	adapter.addTab(arraStrings[1], "", TeamIssueFragment.class,
 		getActivity().getIntent().getExtras());
 	adapter.addTab(arraStrings[2], "", TeamMemberFragment.class,
 		getActivity().getIntent().getExtras());

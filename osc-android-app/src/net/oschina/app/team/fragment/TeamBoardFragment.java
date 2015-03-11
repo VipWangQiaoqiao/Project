@@ -117,6 +117,8 @@ public class TeamBoardFragment extends BaseFragment {
         TypefaceUtils.setTypeface((TextView) view
                 .findViewById(R.id.tv_team_active));
         TypefaceUtils.setTypeface((TextView) view
+                .findViewById(R.id.tv_team_project));
+        TypefaceUtils.setTypeface((TextView) view
                 .findViewById(R.id.tv_team_issue));
         TypefaceUtils.setTypeface((TextView) view
                 .findViewById(R.id.tv_team_discuss));
@@ -178,7 +180,7 @@ public class TeamBoardFragment extends BaseFragment {
     }
 
     @Override
-    @OnClick({ R.id.ll_team_active, R.id.ll_team_issue, R.id.ll_team_discuss,
+    @OnClick({ R.id.ll_team_active, R.id.ll_team_project, R.id.ll_team_issue, R.id.ll_team_discuss,
             R.id.ll_team_diary })
     public void onClick(View v) {
         switch (v.getId()) {
@@ -205,6 +207,9 @@ public class TeamBoardFragment extends BaseFragment {
         case R.id.ll_team_active:
             UIHelper.showSimpleBack(getActivity(), SimpleBackPage.TEAM_ACTIVE,
                     getArguments());
+            break;
+        case R.id.ll_team_project:
+            UIHelper.showSimpleBack(getActivity(), SimpleBackPage.TEAM_PROJECT, getArguments());
             break;
         case R.id.ll_team_issue:
             UIHelper.showSimpleBack(getActivity(), SimpleBackPage.TEAM_ISSUE,

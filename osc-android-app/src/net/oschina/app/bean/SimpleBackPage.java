@@ -29,6 +29,8 @@ import net.oschina.app.team.fragment.TeamDiaryDetail;
 import net.oschina.app.team.fragment.TeamDiaryPagerFragment;
 import net.oschina.app.team.fragment.TeamDiscussFragment;
 import net.oschina.app.team.fragment.TeamIssueFragment;
+import net.oschina.app.team.fragment.TeamProjectFragment;
+import net.oschina.app.team.fragment.TeamProjectMemberSelectFragment;
 import net.oschina.app.team.fragment.TeamNewIssueFragment;
 import net.oschina.app.team.fragment.UserInfoFragment;
 import net.oschina.app.team.viewpagefragment.MyIssuePagerfragment;
@@ -138,7 +140,11 @@ public enum SimpleBackPage {
 
     TEAM_DIRAY(41, R.string.team_diary, TeamDiaryPagerFragment.class),
 
-    TEAM_DIRAY_DETAIL(42, R.string.team_diary_detail, TeamDiaryDetail.class);
+    TEAM_DIRAY_DETAIL(42, R.string.team_diary_detail, TeamDiaryDetail.class),
+    
+    TEAM_PROJECT_MEMBER_SELECT(43, 0, TeamProjectMemberSelectFragment.class),
+    
+    TEAM_PROJECT(44, R.string.team_project, TeamProjectFragment.class);
 
     private int title;
     private Class<?> clz;
