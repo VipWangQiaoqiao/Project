@@ -144,11 +144,7 @@
         <activity
             android:name=".ui.SimpleBackActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait" >
-            <intent-filter>
-                <category android:name="android.intent.category.BROWSABLE" />
-            </intent-filter>
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.zbar.lib.CaptureActivity"
             android:label="@string/actionbar_title_qr_scan"
@@ -156,12 +152,12 @@
         </activity>
         <activity
             android:name=".team.ui.TeamMainActivity"
-            android:label="@string/team_new_active"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:label="@string/team_new_active" >
         </activity>
-        <activity
+        <activity 
             android:name=".team.ui.TeamNewActiveActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
 
         <service android:name="net.oschina.app.LogUploadService" />
 
