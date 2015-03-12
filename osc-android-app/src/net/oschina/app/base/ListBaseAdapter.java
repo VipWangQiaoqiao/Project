@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.Entity;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
@@ -182,10 +183,7 @@ public class ListBaseAdapter<T extends Entity> extends BaseAdapter {
 		TextView text = (TextView) mFooterView.findViewById(R.id.text);
 		switch (getState()) {
 		case STATE_LOAD_MORE:
-		    mFooterView.setVisibility(View.VISIBLE);
-		    progress.setVisibility(View.VISIBLE);
-		    text.setVisibility(View.VISIBLE);
-		    text.setText(_loadmoreText);
+		    setFooterViewLoading();
 		    break;
 		case STATE_NO_MORE:
 		    mFooterView.setVisibility(View.VISIBLE);
@@ -231,6 +229,34 @@ public class ListBaseAdapter<T extends Entity> extends BaseAdapter {
 
     public View getFooterView() {
 	return this.mFooterView;
+    }
+    
+    public void setFooterViewLoading(String loadMsg) {
+	ProgressBar progress = (ProgressBar) mFooterView
+		.findViewById(R.id.progressbar);
+	TextView text = (TextView) mFooterView.findViewById(R.id.text);
+	mFooterView.setVisibility(View.VISIBLE);
+	progress.setVisibility(View.VISIBLE);
+	text.setVisibility(View.VISIBLE);
+	if (StringUtils.isEmpty(loadMsg)) {
+	    text.setText(_loadmoreText);
+	} else {
+	    text.setText(loadMsg);
+	}
+    }
+    
+    public void setFooterViewLoading() {
+	setFooterViewLoading("");
+    }
+    
+    public void setFooterViewText(String msg) {
+	ProgressBar progress = (ProgressBar) mFooterView
+		.findViewById(R.id.progressbar);
+	TextView text = (TextView) mFooterView.findViewById(R.id.text);
+	mFooterView.setVisibility(View.VISIBLE);
+	progress.setVisibility(View.GONE);
+	text.setVisibility(View.VISIBLE);
+	text.setText(msg);
     }
     
     protected void setContent(TextView contentView, String content) {

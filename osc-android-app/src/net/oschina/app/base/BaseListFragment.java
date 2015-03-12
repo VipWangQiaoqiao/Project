@@ -189,7 +189,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
         return new StringBuilder(getCacheKeyPrefix()).append("_")
                 .append(mCurrentPage).toString();
     }
-
+    
     // 是否需要自动刷新
     protected boolean needAutoRefresh() {
         return true;
@@ -516,7 +516,6 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         if (mAdapter == null || mAdapter.getCount() == 0) {
-
             return;
         }
         // 数据已经全部加载，或数据为空时，或正在加载，不处理滚动事件
@@ -534,10 +533,12 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
         }
 
         if (mState == STATE_NONE && scrollEnd) {
-            if (mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE) {
+            if (mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE
+        	    || mAdapter.getState() == ListBaseAdapter.STATE_NETWORK_ERROR) {
                 mCurrentPage++;
                 mState = STATE_LOADMORE;
                 requestData(false);
+                mAdapter.setFooterViewLoading();
             }
         }
     }
