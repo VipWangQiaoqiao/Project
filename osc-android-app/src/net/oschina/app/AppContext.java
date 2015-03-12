@@ -72,7 +72,7 @@ public class AppContext extends BaseApplication {
         BitmapConfig.CACHEPATH = "OSChina/imagecache";
         BitmapConfig.CACHE_FILENAME_PREFIX = "OSChina_";
     }
-
+    
     private void initLogin() {
         User user = getLoginUser();
         if (null != user && user.getUid() > 0) {

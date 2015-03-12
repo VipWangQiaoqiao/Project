@@ -89,11 +89,12 @@ public class TeamMainViewPagerFragment extends BaseViewPagerFragment {
 	String[] arraStrings = getResources().getStringArray(
 		R.array.team_main_viewpager);
 
-	adapter.addTab(arraStrings[0], "", TeamBoardFragment.class,
+	adapter.addTab(arraStrings[0], "team_board", TeamBoardFragment.class,
 		getActivity().getIntent().getExtras());
-	adapter.addTab(arraStrings[1], "", TeamIssueFragment.class,
-		getActivity().getIntent().getExtras());
-	adapter.addTab(arraStrings[2], "", TeamMemberFragment.class,
+	Bundle issueFragmentBundle = getActivity().getIntent().getExtras();
+	issueFragmentBundle.putBoolean("needmenu", false);
+	adapter.addTab(arraStrings[1], "team_issue", TeamIssueFragment.class, issueFragmentBundle);
+	adapter.addTab(arraStrings[2], "team_member", TeamMemberFragment.class,
 		getActivity().getIntent().getExtras());
     }
 }

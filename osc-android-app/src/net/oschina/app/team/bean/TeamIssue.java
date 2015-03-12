@@ -505,9 +505,9 @@ public class TeamIssue extends Entity {
     public String getIssueStateText() {
 	String res = "待办中";
 	if (this.state.equals(TEAM_ISSUE_STATE_OPENED)) {
-	    res = "进行中";
-	} else if (this.state.equals(TEAM_ISSUE_STATE_UNDERWAY)) {
 	    res = "待办中";
+	} else if (this.state.equals(TEAM_ISSUE_STATE_UNDERWAY)) {
+	    res = "进行中";
 	} else if (this.state.equals(TEAM_ISSUE_STATE_CLOSED)) {
 	    res = "已完成";
 	} else {
@@ -519,9 +519,9 @@ public class TeamIssue extends Entity {
     
     public int getIssueStateFaTextId() {
 	int res = R.string.fa_circle_o;
-	if (this.state.equals(TEAM_ISSUE_STATE_UNDERWAY)) {
+	if (this.state.equals(TEAM_ISSUE_STATE_OPENED)) {
 	    res = R.string.fa_circle_o;
-	} else if (this.state.equals(TEAM_ISSUE_STATE_OPENED)) {
+	} else if (this.state.equals(TEAM_ISSUE_STATE_UNDERWAY)) {
 	    res = R.string.fa_dot_circle_o;
 	} else if (this.state.equals(TEAM_ISSUE_STATE_CLOSED)) {
 	    res = R.string.fa_check_circle_o;

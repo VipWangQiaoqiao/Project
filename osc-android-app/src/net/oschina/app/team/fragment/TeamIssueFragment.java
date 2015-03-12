@@ -12,7 +12,6 @@ import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.team.adapter.TeamIssueAdapter;
 import net.oschina.app.team.bean.Team;
-import net.oschina.app.team.bean.TeamGit;
 import net.oschina.app.team.bean.TeamIssueCatalog;
 import net.oschina.app.team.bean.TeamIssue;
 import net.oschina.app.team.bean.TeamIssueList;
@@ -40,7 +39,7 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
     protected static final String TAG = TeamIssueFragment.class.getSimpleName();
     private static final String CACHE_KEY_PREFIX = "team_issue_list_";
 
-    private String issueState = TeamIssue.TEAM_ISSUE_STATE_UNDERWAY;
+    private String issueState = TeamIssue.TEAM_ISSUE_STATE_OPENED;
     
     private Team mTeam;
 
@@ -53,6 +52,8 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
     private int mProjectId;
     
     private int mCatalogId;
+    
+    private boolean isNeedMenu;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,8 +81,9 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
 		String title = catalog.getTitle() + "(" + catalog.getOpenedIssueCount() + "/" + catalog.getClosedIssueCount() + ")";
 		((BaseActivity)getActivity()).setActionBarTitle(title);
 	    }
+	    isNeedMenu = bundle.getBoolean("needmenu", true);
 	}
-	setHasOptionsMenu(true);
+	setHasOptionsMenu(isNeedMenu);
     }
     
     @Override

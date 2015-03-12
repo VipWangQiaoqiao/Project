@@ -57,6 +57,7 @@ public class TeamIssueAdapter extends ListBaseAdapter<TeamIssue> {
             vh.touser.setVisibility(View.GONE);
         } else {
             vh.to.setText("指派给");
+            vh.touser.setVisibility(View.VISIBLE);
             vh.touser.setText(item.getToUser().getName());
         }
 
