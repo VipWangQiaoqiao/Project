@@ -7,11 +7,6 @@
 
     <include layout="@layout/item_team_tweet_detail" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/space_10"
-        android:background="@color/list_divider_color" />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

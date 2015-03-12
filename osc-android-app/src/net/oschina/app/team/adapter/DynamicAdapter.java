@@ -3,13 +3,13 @@ package net.oschina.app.team.adapter;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.team.bean.TeamActive;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.AvatarView;
 import android.content.Context;
 import android.text.Html;
 import android.text.Spanned;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
@@ -28,9 +28,7 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
     static class ViewHolder {
         AvatarView img_head;
         TextView tv_name;
-        TextView tv_active;
         TextView tv_content;
-        LinearLayout ll_event_list;
         TextView tv_client;
         TextView tv_date;
     }
@@ -47,12 +45,8 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
                     .findViewById(R.id.event_listitem_userface);
             holder.tv_name = (TextView) v
                     .findViewById(R.id.event_listitem_username);
-            holder.tv_active = (TextView) v
-                    .findViewById(R.id.event_listitem_active);
             holder.tv_content = (TextView) v
                     .findViewById(R.id.event_listitem_content);
-            holder.ll_event_list = (LinearLayout) v
-                    .findViewById(R.id.event_listitem_commits_list);
             holder.tv_client = (TextView) v
                     .findViewById(R.id.event_listitem_client);
             holder.tv_date = (TextView) v
@@ -61,19 +55,11 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
         } else {
             holder = (ViewHolder) v.getTag();
         }
-        // // 接口返回图片地址问题，需要客户端额外处理
-        // String imgUrl = data.getAuthor().getPortrait();
-        // int end = imgUrl.indexOf('?');
-        // if (end > 0) {
-        // imgUrl = imgUrl.substring(0, end);
-        // }
         holder.img_head.setAvatarUrl(data.getAuthor().getPortrait());
         holder.tv_name.setText(data.getAuthor().getName());
-        holder.ll_event_list.setVisibility(View.GONE);
-        // holder.tv_active.setText(data.getBody().getDetail());
         holder.tv_content.setText(stripTags(data.getBody().getTitle()));
         holder.tv_content.setMaxLines(3);
-        holder.tv_date.setText(data.getCreateTime());
+        holder.tv_date.setText(StringUtils.friendly_time(data.getCreateTime()));
         // holder.tv_client.setText("");
         return v;
     }

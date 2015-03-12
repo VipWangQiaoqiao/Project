@@ -97,20 +97,23 @@ public class DynamicFragment extends BaseListFragment<TeamActive> {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
             long id) {
-        Adapter adapter = parent.getAdapter();
-        if (adapter != null && adapter instanceof DynamicAdapter) {
-            Intent intent = new Intent(aty, DetailActivity.class);
-            TeamActive data = ((DynamicAdapter) parent.getAdapter())
-                    .getItem(position);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(DYNAMIC_FRAGMENT_KEY, data);
-            bundle.putInt(DYNAMIC_FRAGMENT_TEAM_KEY, team.getId());
-            // UIHelper.showSimpleBack(aty, SimpleBackPage.DYNAMIC_DETAIL,
-            // bundle);
-            bundle.putInt(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
-                    DetailActivity.DISPLAY_TEAM_TWEET_DETAIL);
-            intent.putExtras(bundle);
-            aty.startActivity(intent);
+        try {
+            Adapter adapter = parent.getAdapter();
+            if (adapter != null && adapter instanceof DynamicAdapter) {
+                Intent intent = new Intent(aty, DetailActivity.class);
+                TeamActive data = ((DynamicAdapter) parent.getAdapter())
+                        .getItem(position);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(DYNAMIC_FRAGMENT_KEY, data);
+                bundle.putInt(DYNAMIC_FRAGMENT_TEAM_KEY, team.getId());
+                // UIHelper.showSimpleBack(aty, SimpleBackPage.DYNAMIC_DETAIL,
+                // bundle);
+                bundle.putInt(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+                        DetailActivity.DISPLAY_TEAM_TWEET_DETAIL);
+                intent.putExtras(bundle);
+                aty.startActivity(intent);
+            }
+        } catch (Exception e) {
         }
     }
 }
