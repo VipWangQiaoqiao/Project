@@ -25,10 +25,14 @@ import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.HTMLUtil;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
+import net.oschina.app.widget.MyLinkMovementMethod;
+import net.oschina.app.widget.MyURLSpan;
+import net.oschina.app.widget.TweetTextView;
 
 import org.apache.http.Header;
 
@@ -40,7 +44,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -60,10 +63,8 @@ public class TeamTweetDetailFragment extends
 
     private AvatarView img_head;
     private TextView tv_name;
-    private TextView tv_active;
     private TextView mTvCommentCount;
-    private TextView tv_content;
-    private LinearLayout ll_event_list;
+    private TweetTextView tv_content;
     private TextView tv_client;
     private TextView tv_date;
 
@@ -87,29 +88,26 @@ public class TeamTweetDetailFragment extends
         View headView = View.inflate(getActivity(),
                 R.layout.frag_dynamic_detail, null);
 
-        img_head = (AvatarView) headView
-                .findViewById(R.id.event_listitem_userface);
-        tv_name = (TextView) headView
-                .findViewById(R.id.event_listitem_username);
-        tv_active = (TextView) headView
-                .findViewById(R.id.event_listitem_active);
+        img_head = (AvatarView) headView.findViewById(R.id.iv_avatar);
+        tv_name = (TextView) headView.findViewById(R.id.tv_name);
         mTvCommentCount = (TextView) headView
                 .findViewById(R.id.tv_comment_count);
-        tv_content = (TextView) headView
-                .findViewById(R.id.event_listitem_content);
-        ll_event_list = (LinearLayout) headView
-                .findViewById(R.id.event_listitem_commits_list);
-        tv_client = (TextView) headView
-                .findViewById(R.id.event_listitem_client);
-        tv_date = (TextView) headView.findViewById(R.id.event_listitem_date);
+        tv_content = (TweetTextView) headView.findViewById(R.id.tv_content);
+        tv_client = (TextView) headView.findViewById(R.id.tv_from);
+        tv_date = (TextView) headView.findViewById(R.id.tv_time);
+
+        tv_content.setMovementMethod(MyLinkMovementMethod.a());
+        tv_content.setFocusable(false);
+        tv_content.setDispatchToParent(true);
+        tv_content.setLongClickable(false);
+        Spanned span = Html.fromHtml(active.getBody().getDetail());
+        MyURLSpan.parseLinkText(tv_content, span);
 
         img_head.setAvatarUrl(active.getAuthor().getPortrait());
         tv_name.setText(active.getAuthor().getName());
-        ll_event_list.setVisibility(View.GONE);
-        // tv_active.setText(data.getBody().getDetail());
-        tv_content.setText(stripTags(active.getBody().getDetail()));
-        tv_date.setText(active.getCreateTime());
-        // tv_client.setText("");
+        tv_date.setText(StringUtils.friendly_time(active.getCreateTime()));
+        tv_client.setText("Android");
+        tv_client.setVisibility(View.GONE);
         return headView;
     }
 
@@ -190,6 +188,8 @@ public class TeamTweetDetailFragment extends
         mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
         this.active = detailBean.getTeamActive();
         tv_content.setText(stripTags(this.active.getBody().getTitle()));
+        Spanned span = Html.fromHtml(active.getBody().getDetail());
+        MyURLSpan.parseLinkText(tv_content, span);
         mAdapter.setNoDataText(R.string.comment_empty);
     }
 

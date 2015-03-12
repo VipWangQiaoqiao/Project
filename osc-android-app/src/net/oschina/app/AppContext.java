@@ -109,6 +109,12 @@ public class AppContext extends BaseApplication {
         AppConfig.getAppConfig(this).set(key, value);
     }
 
+    /**
+     * 获取cookie时传AppConfig.CONF_COOKIE
+     * 
+     * @param key
+     * @return
+     */
     public String getProperty(String key) {
         String res = AppConfig.getAppConfig(this).get(key);
         return res;
