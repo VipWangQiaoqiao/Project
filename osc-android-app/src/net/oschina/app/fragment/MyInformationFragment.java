@@ -113,7 +113,6 @@ public class MyInformationFragment extends BaseFragment {
     };
 
     private final AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
-
         @Override
         public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
             try {
@@ -258,7 +257,8 @@ public class MyInformationFragment extends BaseFragment {
     }
 
     private void fillUI() {
-	if (mInfo == null) return;
+        if (mInfo == null)
+            return;
         mIvAvatar.setAvatarUrl(mInfo.getPortrait());
         mTvName.setText(mInfo.getName());
         mIvGender

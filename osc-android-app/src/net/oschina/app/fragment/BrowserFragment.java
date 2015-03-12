@@ -1,5 +1,6 @@
 package net.oschina.app.fragment;
 
+import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseActivity;
@@ -28,6 +29,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
+import android.webkit.CookieManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebSettings.PluginState;
@@ -86,6 +88,7 @@ public class BrowserFragment extends BaseFragment {
 
     private Animation animBottomIn, animBottomOut;
     private GestureDetector mGestureDetector;
+    private CookieManager cookie;
 
     @Override
     public void onClick(View v) {
@@ -352,6 +355,8 @@ public class BrowserFragment extends BaseFragment {
      */
     protected void onUrlLoading(WebView view, String url) {
         mProgress.setVisibility(View.VISIBLE);
+        cookie.setCookie(url,
+                AppContext.getInstance().getProperty(AppConfig.CONF_COOKIE));
     }
 
     /**
@@ -395,6 +400,7 @@ public class BrowserFragment extends BaseFragment {
      * 初始化浏览器设置信息
      */
     private void initWebView() {
+        cookie = CookieManager.getInstance();
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true); // 启用支持javascript
         webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);// 优先使用缓存
