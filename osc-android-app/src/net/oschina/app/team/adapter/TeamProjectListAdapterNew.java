@@ -8,7 +8,6 @@ import net.oschina.app.team.bean.TeamProject;
 import net.oschina.app.util.TypefaceUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -47,6 +46,7 @@ public class TeamProjectListAdapterNew extends ListBaseAdapter<TeamProject> {
 	}
 
 	vh.name.setText(item.getGit().getOwnerName() + " / " + item.getGit().getName());
+	vh.issue.setText(item.getClosedCount() + "/" + item.getTotalCount());
 	
 	return convertView;
     }
@@ -56,6 +56,8 @@ public class TeamProjectListAdapterNew extends ListBaseAdapter<TeamProject> {
 	TextView source;
 	@InjectView(R.id.tv_project_name)
 	TextView name;
+	@InjectView(R.id.tv_project_issue)
+	TextView issue;
 
 	public ViewHolder(View view) {
 	    ButterKnife.inject(this, view);

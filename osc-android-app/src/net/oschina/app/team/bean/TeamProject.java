@@ -27,6 +27,12 @@ public class TeamProject extends Entity {
 
     @XStreamAlias("git")
     private TeamGit git;
+    
+    @XStreamAlias("totalCount")
+    private int totalCount;
+	
+    @XStreamAlias("closedCount")
+    private int closedCount;
 
     public String getSource() {
 	return source;
@@ -51,4 +57,21 @@ public class TeamProject extends Entity {
     public void setGit(TeamGit git) {
 	this.git = git;
     }
+
+    public int getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(int totalCount) {
+        this.totalCount = totalCount;
+    }
+
+    public int getClosedCount() {
+        return closedCount;
+    }
+
+    public void setClosedCount(int closedCount) {
+        this.closedCount = closedCount;
+    }
+    
 }
