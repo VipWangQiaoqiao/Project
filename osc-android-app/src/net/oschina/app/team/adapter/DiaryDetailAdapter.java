@@ -11,6 +11,7 @@ import android.text.Html;
 import android.text.Spanned;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -101,6 +102,7 @@ public class DiaryDetailAdapter extends BaseAdapter {
         TextView week;
         TextView content;
         ImageView imageWeek;
+        WebView webView;
     }
 
     @Override
@@ -110,10 +112,10 @@ public class DiaryDetailAdapter extends BaseAdapter {
             holder = new ViewHolder();
             convertView = View.inflate(cxt, R.layout.list_cell_diary_detail,
                     null);
-            holder.content = (TextView) convertView
-                    .findViewById(R.id.item_diary_detail_content);
             holder.week = (TextView) convertView
                     .findViewById(R.id.item_diary_detail_week);
+            holder.content = (TextView) convertView
+                    .findViewById(R.id.item_diary_detail_content);
             holder.imageWeek = (ImageView) convertView
                     .findViewById(R.id.item_diary_detail_img);
             convertView.setTag(holder);

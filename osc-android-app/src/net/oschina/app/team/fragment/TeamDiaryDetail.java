@@ -2,9 +2,13 @@ package net.oschina.app.team.fragment;
 
 import java.util.List;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseFragment;
+import net.oschina.app.emoji.EmojiFragment;
+import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
+import net.oschina.app.interf.EmojiFragmentControl;
 import net.oschina.app.team.adapter.DiaryDetailAdapter;
 import net.oschina.app.team.bean.TeamDiary;
 import net.oschina.app.team.bean.TeamDiaryDetailBean;
@@ -13,6 +17,8 @@ import net.oschina.app.team.bean.TeamReply;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TDevice;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
 
@@ -25,10 +31,12 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.text.Html;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -44,7 +52,8 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
  * 
  * @author kymjs (https://github.com/kymjs)
  */
-public class TeamDiaryDetail extends BaseFragment {
+public class TeamDiaryDetail extends BaseFragment implements EmojiTextListener,
+        EmojiFragmentControl {
 
     private static final String CACHE_KEY_PREFIX = "team_diary_detail_";
 
@@ -59,6 +68,8 @@ public class TeamDiaryDetail extends BaseFragment {
     private int teamid;
     private Activity aty;
     private DiaryDetailAdapter adapter;
+
+    protected EmojiFragment mEmojiFragment;
 
     private LinearLayout footerView;
 
@@ -150,20 +161,35 @@ public class TeamDiaryDetail extends BaseFragment {
      * @return
      */
     private View initHeaderView() {
-        View headerView = inflateView(R.layout.item_team_dynamic);
+        View headerView = inflateView(R.layout.item_team_diarydetail_head);
         AvatarView headImg = (AvatarView) headerView
                 .findViewById(R.id.event_listitem_userface);
         TextView userName = (TextView) headerView
                 .findViewById(R.id.event_listitem_username);
-        TextView content = (TextView) headerView
-                .findViewById(R.id.event_listitem_content);
+        WebView content = (WebView) headerView
+                .findViewById(R.id.team_diary_webview);
         TextView time = (TextView) headerView
                 .findViewById(R.id.event_listitem_date);
         headImg.setAvatarUrl(diaryData.getAuthor().getPortrait());
         userName.setText(diaryData.getAuthor().getName());
-        content.setText(Html.fromHtml(diaryData.getTitle()));
+
+        UIHelper.initWebView(content);
+        fillWebViewBody(content);
+        // content.setText(Html.fromHtml(diaryData.getTitle()));
         time.setText(diaryData.getCreateTime());
         return headerView;
+    }
+
+    /**
+     * 填充webview内容
+     */
+    private void fillWebViewBody(WebView mContent) {
+        StringBuffer body = new StringBuffer();
+        body.append(UIHelper.WEB_STYLE + UIHelper.WEB_LOAD_IMAGES);
+        body.append(diaryData.getTitle());
+        UIHelper.addWebImageShow(getActivity(), mContent);
+        mContent.loadDataWithBaseURL(null, body.toString(), "text/html",
+                "utf-8", null);
     }
 
     private View initFooterView() {
@@ -257,5 +283,29 @@ public class TeamDiaryDetail extends BaseFragment {
     public static Spanned stripTags(final String pHTMLString) {
         String str = pHTMLString.replaceAll("<\\s*>", "");
         return Html.fromHtml(str);
+    }
+
+    @Override
+    public void setEmojiFragment(EmojiFragment fragment) {
+        mEmojiFragment = fragment;
+        mEmojiFragment.setEmojiTextListener(this);
+    }
+
+    @Override
+    public void onSendClick(String text) {
+        if (!TDevice.hasInternet()) {
+            AppContext.showToastShort(R.string.tip_network_error);
+            return;
+        }
+        if (!AppContext.getInstance().isLogin()) {
+            UIHelper.showLoginActivity(getActivity());
+            mEmojiFragment.hideKeyboard();
+            return;
+        }
+        if (TextUtils.isEmpty(text)) {
+            AppContext.showToastShort(R.string.tip_comment_content_empty);
+            mEmojiFragment.requestFocusInput();
+            return;
+        }
     }
 }

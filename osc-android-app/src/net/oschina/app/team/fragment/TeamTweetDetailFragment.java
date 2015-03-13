@@ -21,6 +21,7 @@ import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
 import net.oschina.app.interf.EmojiFragmentControl;
 import net.oschina.app.team.bean.TeamActive;
 import net.oschina.app.team.bean.TeamActiveDetail;
+import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -35,7 +36,12 @@ import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
 
 import org.apache.http.Header;
+import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.bitmap.BitmapCallBack;
+import org.kymjs.kjframe.bitmap.helper.BitmapHelper;
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
@@ -44,6 +50,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -66,10 +73,13 @@ public class TeamTweetDetailFragment extends
     private TextView mTvCommentCount;
     private TweetTextView tv_content;
     private TextView tv_client;
+    private ImageView iv_pic;
     private TextView tv_date;
 
     private TeamActive active;
     private int teamId;
+    private static int rectSize;
+    private final KJBitmap kjb = KJBitmap.create();
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -80,6 +90,7 @@ public class TeamTweetDetailFragment extends
         active = (TeamActive) bundle
                 .getSerializable(DynamicFragment.DYNAMIC_FRAGMENT_KEY);
         teamId = bundle.getInt(DynamicFragment.DYNAMIC_FRAGMENT_TEAM_KEY, 0);
+
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -87,6 +98,7 @@ public class TeamTweetDetailFragment extends
     protected View initHeaderView() {
         View headView = View.inflate(getActivity(),
                 R.layout.frag_dynamic_detail, null);
+        initImageSize(aty);
 
         img_head = (AvatarView) headView.findViewById(R.id.iv_avatar);
         tv_name = (TextView) headView.findViewById(R.id.tv_name);
@@ -95,6 +107,7 @@ public class TeamTweetDetailFragment extends
         tv_content = (TweetTextView) headView.findViewById(R.id.tv_content);
         tv_client = (TextView) headView.findViewById(R.id.tv_from);
         tv_date = (TextView) headView.findViewById(R.id.tv_time);
+        iv_pic = (ImageView) headView.findViewById(R.id.iv_pic);
 
         tv_content.setMovementMethod(MyLinkMovementMethod.a());
         tv_content.setFocusable(false);
@@ -108,6 +121,13 @@ public class TeamTweetDetailFragment extends
         tv_date.setText(StringUtils.friendly_time(active.getCreateTime()));
         tv_client.setText("Android");
         tv_client.setVisibility(View.GONE);
+        String imgPath = active.getBody().getImage();
+        if (!StringUtils.isEmpty(imgPath)) {
+            iv_pic.setVisibility(View.VISIBLE);
+            setTweetImage(iv_pic, imgPath);
+        } else {
+            iv_pic.setVisibility(View.GONE);
+        }
         return headView;
     }
 
@@ -156,6 +176,42 @@ public class TeamTweetDetailFragment extends
                     AppContext.getInstance().getLoginUid(), text, 0,
                     mCommentHandler);
         }
+    }
+
+    private void initImageSize(Context cxt) {
+        if (cxt != null && rectSize == 0) {
+            rectSize = (int) cxt.getResources().getDimension(R.dimen.space_100);
+        } else {
+            rectSize = 300;
+        }
+    }
+
+    /**
+     * 动态设置图片显示样式
+     * 
+     * @author kymjs
+     */
+    private void setTweetImage(final ImageView pic, final String url) {
+        pic.setVisibility(View.VISIBLE);
+        kjb.setCallback(new BitmapCallBack() {
+            @Override
+            public void onSuccess(View view, Bitmap bitmap) {
+                super.onSuccess(view, bitmap);
+                bitmap = BitmapHelper.scaleWithXY(bitmap,
+                        rectSize / bitmap.getHeight());
+                ((ImageView) view).setImageBitmap(bitmap);
+            }
+        });
+
+        kjb.display(pic, url, R.drawable.pic_bg, rectSize, rectSize);
+
+        pic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImagePreviewActivity.showImagePrivew(aty, 0,
+                        new String[] { url });
+            }
+        });
     }
 
     /*********************************************************/
@@ -348,5 +404,16 @@ public class TeamTweetDetailFragment extends
         String str = pHTMLString.replaceAll("\\t*", "");
         str = str.replaceAll("<\\s*img\\s+([^>]*)\\s*>", "  ");
         return Html.fromHtml(str);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position,
+            long id) {
+        final Comment comment = mAdapter.getItem(position - 1);
+        if (comment == null)
+            return;
+        mEmojiFragment.setTag(comment);
+        mEmojiFragment.setInputHint("回复" + comment.getAuthor() + ":");
+        mEmojiFragment.requestFocusInput();
     }
 }

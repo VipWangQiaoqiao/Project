@@ -7,7 +7,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/space_10"
-        android:background="@color/list_divider_color" />
+        android:background="@color/white" />
 
     <RelativeLayout
         android:layout_width="match_parent"
