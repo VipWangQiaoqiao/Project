@@ -9,15 +9,14 @@ import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
-import net.oschina.app.team.bean.Author;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamGit;
 import net.oschina.app.team.bean.TeamIssueCatalog;
 import net.oschina.app.team.bean.TeamIssueCatalogList;
+import net.oschina.app.team.bean.TeamMember;
+import net.oschina.app.team.bean.TeamMemberList;
 import net.oschina.app.team.bean.TeamProject;
 import net.oschina.app.team.bean.TeamProjectList;
-import net.oschina.app.team.bean.TeamProjectMember;
-import net.oschina.app.team.bean.TeamProjectMemberList;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.util.XmlUtils;
@@ -25,7 +24,6 @@ import net.oschina.app.util.XmlUtils;
 import org.apache.http.Header;
 
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -224,7 +222,7 @@ public class TeamNewIssueFragment extends BaseFragment {
     private List<TeamIssueCatalog> catalogs;
     private int catalogIndex = 0;
 
-    private List<TeamProjectMember> toUsers;
+    private List<TeamMember> toUsers;
     private int toUserIndex = 0;
 
     private int mYear, mMonth, mDay;
@@ -312,8 +310,8 @@ public class TeamNewIssueFragment extends BaseFragment {
 	catalogDialog.show();
     }
 
-    private void showIssueToUser(List<TeamProjectMember> list) {
-	TeamProjectMember member = new TeamProjectMember();
+    private void showIssueToUser(List<TeamMember> list) {
+	TeamMember member = new TeamMember();
 	member.setId(-1);
 	member.setName("未指派");
 	list.add(0, member);
@@ -468,8 +466,8 @@ public class TeamNewIssueFragment extends BaseFragment {
 		break;
 	    // 显示指派用户对话框
 	    case show_issue_touser:
-		TeamProjectMemberList tpmList = XmlUtils.toBean(
-			TeamProjectMemberList.class, arg2);
+		TeamMemberList tpmList = XmlUtils.toBean(
+			TeamMemberList.class, arg2);
 		showIssueToUser(tpmList.getList());
 		break;
 	    default:

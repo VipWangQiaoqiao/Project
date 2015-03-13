@@ -17,7 +17,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * 
  */
 @XStreamAlias("oschina")
-public class TeamList extends Entity implements ListEntity {
+public class TeamList extends Entity implements ListEntity<Team> {
     private static final long serialVersionUID = 1L;
 
     @XStreamAlias("teams")
@@ -32,7 +32,7 @@ public class TeamList extends Entity implements ListEntity {
     }
 
     @Override
-    public List<?> getList() {
+    public List<Team> getList() {
         return teams;
     }
 

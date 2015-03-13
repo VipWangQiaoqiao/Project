@@ -1,16 +1,14 @@
 package net.oschina.app.team.adapter;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.team.bean.TeamProject;
-import net.oschina.app.team.bean.TeamProjectMember;
+import net.oschina.app.team.bean.TeamMember;
 import net.oschina.app.widget.AvatarView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * 团队项目适配器
@@ -20,7 +18,7 @@ import android.widget.TextView;
  * 
  */
 
-public class TeamProjectMemberAdapter extends ListBaseAdapter<TeamProjectMember> {
+public class TeamProjectMemberAdapter extends ListBaseAdapter<TeamMember> {
     
     @Override
     protected View getRealView(int position, View convertView, ViewGroup parent) {
@@ -35,7 +33,7 @@ public class TeamProjectMemberAdapter extends ListBaseAdapter<TeamProjectMember>
 	    vh = (ViewHolder) convertView.getTag();
 	}
 
-	TeamProjectMember item = mDatas.get(position);
+	TeamMember item = mDatas.get(position);
 	
 	vh.avatar.setAvatarUrl(item.getPortrait());
 	vh.name.setText(item.getName());

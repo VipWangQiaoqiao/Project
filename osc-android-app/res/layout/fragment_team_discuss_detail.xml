@@ -19,7 +19,8 @@
         android:layout_below="@id/tv_title"
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
-        android:textColor="@color/lightblue"/>
+        android:textSize="12sp"
+        android:textColor="@color/main_gray"/>
 
     <TextView
         android:id="@+id/tv_time"

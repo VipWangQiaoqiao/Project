@@ -35,7 +35,7 @@ import net.oschina.app.emoji.EmojiViewPagerAdapter.OnClickEmojiListener;
 import net.oschina.app.emoji.SoftKeyboardStateHelper.SoftKeyboardStateListener;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamMember;
-import net.oschina.app.team.bean.TeamMembers;
+import net.oschina.app.team.bean.TeamMemberList;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.util.FileUtil;
@@ -687,7 +687,7 @@ public class TeamNewActiveActivity extends BaseActivity implements
 				byte[] arg2) {
 			    // TODO Auto-generated method stub
 			    mTeamMemberList = XmlUtils.toBean(
-				    TeamMembers.class, arg2).getList();
+				    TeamMemberList.class, arg2).getList();
 			    if (mTeamMemberList != null
 				    && !mTeamMemberList.isEmpty()) {
 				showMetionUser();

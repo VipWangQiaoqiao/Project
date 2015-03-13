@@ -259,10 +259,10 @@ public class ListBaseAdapter<T extends Entity> extends BaseAdapter {
 	text.setText(msg);
     }
     
-    protected void setContent(TextView contentView, String content) {
+    protected void setContent(TweetTextView contentView, String content) {
 	contentView.setMovementMethod(MyLinkMovementMethod.a());
 	contentView.setFocusable(false);
-	//contentView.setDispatchToParent(true);
+	contentView.setDispatchToParent(true);
 	contentView.setLongClickable(false);
 	Spanned span = Html
 		.fromHtml(TweetTextView.modifyPath(content));

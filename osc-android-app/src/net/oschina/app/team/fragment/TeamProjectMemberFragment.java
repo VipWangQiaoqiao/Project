@@ -4,27 +4,21 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.List;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.bean.SimpleBackPage;
-import net.oschina.app.team.adapter.TeamProjectListAdapterNew;
 import net.oschina.app.team.adapter.TeamProjectMemberAdapter;
 import net.oschina.app.team.bean.Team;
+import net.oschina.app.team.bean.TeamMember;
+import net.oschina.app.team.bean.TeamMemberList;
 import net.oschina.app.team.bean.TeamProject;
-import net.oschina.app.team.bean.TeamProjectList;
-import net.oschina.app.team.bean.TeamProjectMember;
-import net.oschina.app.team.bean.TeamProjectMemberList;
 import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 
 /**
@@ -35,7 +29,7 @@ import android.widget.AdapterView;
  * @data 2015-2-28 下午4:08:58
  */
 public class TeamProjectMemberFragment extends
-	BaseListFragment<TeamProjectMember> {
+	BaseListFragment<TeamMember> {
 
     private Team mTeam;
 
@@ -69,15 +63,15 @@ public class TeamProjectMemberFragment extends
     }
 
     @Override
-    protected TeamProjectMemberList parseList(InputStream is) throws Exception {
-	TeamProjectMemberList list = XmlUtils.toBean(
-		TeamProjectMemberList.class, is);
+    protected TeamMemberList parseList(InputStream is) throws Exception {
+	TeamMemberList list = XmlUtils.toBean(
+		TeamMemberList.class, is);
 	return list;
     }
 
     @Override
-    protected TeamProjectMemberList readList(Serializable seri) {
-	return ((TeamProjectMemberList) seri);
+    protected TeamMemberList readList(Serializable seri) {
+	return ((TeamMemberList) seri);
     }
 
     @Override
@@ -88,7 +82,7 @@ public class TeamProjectMemberFragment extends
     }
 
     @Override
-    protected void executeOnLoadDataSuccess(List<TeamProjectMember> data) {
+    protected void executeOnLoadDataSuccess(List<TeamMember> data) {
 	// TODO Auto-generated method stub
 	super.executeOnLoadDataSuccess(data);
 	if (mAdapter.getData().isEmpty()) {
@@ -103,5 +97,15 @@ public class TeamProjectMemberFragment extends
 	String str = getResources().getString(
 		R.string.team_empty_project_member);
 	mErrorLayout.setErrorMessage(str);
+    }
+    
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position,
+            long id) {
+        // TODO Auto-generated method stub
+	TeamMember teamMember = mAdapter.getItem(position);
+	if (teamMember != null) {
+	    UIHelper.showTeamMemberInfo(getActivity(), mTeamId, teamMember);
+	}
     }
 }

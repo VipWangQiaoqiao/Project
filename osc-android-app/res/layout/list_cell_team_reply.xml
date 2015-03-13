@@ -12,6 +12,7 @@
 
     <TextView
         android:id="@+id/tv_name"
+        android:text="火蚁"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/iv_avatar"
@@ -31,9 +32,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_name"
-        android:layout_marginTop="@dimen/space_8"
+        android:layout_marginTop="@dimen/space_4"
         android:layout_toRightOf="@id/iv_avatar"
         android:textColor="@color/main_black"
+        android:text="评论内容"
         android:textSize="@dimen/text_size_14" />
 
     <TextView
@@ -41,7 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_content"
-        android:layout_marginTop="@dimen/space_8"
+        android:layout_marginTop="@dimen/space_4"
         android:layout_toRightOf="@id/iv_avatar"
         android:drawableLeft="@drawable/platform"
         android:drawablePadding="@dimen/space_4"
