@@ -105,7 +105,7 @@ public class TeamProjectActiveFragment extends
         // TODO Auto-generated method stub
 	TeamActive active = mAdapter.getItem(position);
 	if (active != null) {
-	    
+	    UIHelper.showTeamActiveDetail(getActivity(), mTeam.getId(), active);
 	}
     }
 }

@@ -107,9 +107,9 @@ public class UserInfoFragment extends BaseListFragment<TeamActive> {
                         Intent intent = new Intent(aty, DetailActivity.class);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable(
-                                DynamicFragment.DYNAMIC_FRAGMENT_KEY, data);
+                                TeamActiveFragment.DYNAMIC_FRAGMENT_KEY, data);
                         bundle.putInt(
-                                DynamicFragment.DYNAMIC_FRAGMENT_TEAM_KEY, teamId);
+                                TeamActiveFragment.DYNAMIC_FRAGMENT_TEAM_KEY, teamId);
                         bundle.putInt(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
                                 DetailActivity.DISPLAY_TEAM_TWEET_DETAIL);
                         intent.putExtras(bundle);

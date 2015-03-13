@@ -88,8 +88,8 @@ public class TeamTweetDetailFragment extends
         // SimpleBackActivity.BUNDLE_KEY_ARGS);
         Bundle bundle = getActivity().getIntent().getExtras();
         active = (TeamActive) bundle
-                .getSerializable(DynamicFragment.DYNAMIC_FRAGMENT_KEY);
-        teamId = bundle.getInt(DynamicFragment.DYNAMIC_FRAGMENT_TEAM_KEY, 0);
+                .getSerializable(TeamActiveFragment.DYNAMIC_FRAGMENT_KEY);
+        teamId = bundle.getInt(TeamActiveFragment.DYNAMIC_FRAGMENT_TEAM_KEY, 0);
 
         super.onViewCreated(view, savedInstanceState);
     }

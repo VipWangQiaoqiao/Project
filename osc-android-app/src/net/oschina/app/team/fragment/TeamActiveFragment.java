@@ -13,6 +13,7 @@ import net.oschina.app.team.bean.TeamActives;
 import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.util.TLog;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import android.app.Activity;
 import android.content.Intent;
@@ -30,13 +31,13 @@ import android.widget.AdapterView;
  * @author kymjs (kymjs123@gmail.com)
  * 
  */
-public class DynamicFragment extends BaseListFragment<TeamActive> {
+public class TeamActiveFragment extends BaseListFragment<TeamActive> {
 
     public final static String BUNDLE_KEY_UID = "UID";
 
     public static final String DYNAMIC_FRAGMENT_KEY = "DynamicFragment";
     public static final String DYNAMIC_FRAGMENT_TEAM_KEY = "DynamicFragment_teamid";
-    protected static final String TAG = DynamicFragment.class.getSimpleName();
+    protected static final String TAG = TeamActiveFragment.class.getSimpleName();
     private static final String CACHE_KEY_PREFIX = "DynamicFragment_list";
 
     private Activity aty;
@@ -97,23 +98,9 @@ public class DynamicFragment extends BaseListFragment<TeamActive> {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
             long id) {
-        try {
-            Adapter adapter = parent.getAdapter();
-            if (adapter != null && adapter instanceof DynamicAdapter) {
-                Intent intent = new Intent(aty, DetailActivity.class);
-                TeamActive data = ((DynamicAdapter) parent.getAdapter())
-                        .getItem(position);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(DYNAMIC_FRAGMENT_KEY, data);
-                bundle.putInt(DYNAMIC_FRAGMENT_TEAM_KEY, team.getId());
-                // UIHelper.showSimpleBack(aty, SimpleBackPage.DYNAMIC_DETAIL,
-                // bundle);
-                bundle.putInt(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
-                        DetailActivity.DISPLAY_TEAM_TWEET_DETAIL);
-                intent.putExtras(bundle);
-                aty.startActivity(intent);
-            }
-        } catch (Exception e) {
-        }
+	TeamActive active = mAdapter.getItem(position);
+	if (active != null) {
+	    UIHelper.showTeamActiveDetail(aty, team.getId(), active);
+	}
     }
 }

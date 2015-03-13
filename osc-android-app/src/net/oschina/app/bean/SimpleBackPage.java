@@ -21,7 +21,7 @@ import net.oschina.app.fragment.TweetPubFragment;
 import net.oschina.app.fragment.TweetRecordFragment;
 import net.oschina.app.fragment.UserBlogFragment;
 import net.oschina.app.fragment.UserCenterFragment;
-import net.oschina.app.team.fragment.DynamicFragment;
+import net.oschina.app.team.fragment.TeamActiveFragment;
 import net.oschina.app.team.fragment.NoteBookFragment;
 import net.oschina.app.team.fragment.NoteEditFragment;
 import net.oschina.app.team.fragment.TeamDiaryDetail;
@@ -112,7 +112,7 @@ public enum SimpleBackPage {
 
     BROWSER(28, R.string.app_name, BrowserFragment.class),
 
-    DYNAMIC(29, R.string.team_dynamic, DynamicFragment.class),
+    DYNAMIC(29, R.string.team_dynamic, TeamActiveFragment.class),
 
     MY_INFORMATION_DETAIL(30, R.string.actionbar_title_my_information,
             MyInformationFragmentDetail.class),
@@ -129,7 +129,7 @@ public enum SimpleBackPage {
 
     TEAM_ISSUECATALOG_ISSUE_LIST(36, 0, TeamIssueFragment.class),
 
-    TEAM_ACTIVE(37, R.string.team_actvie, DynamicFragment.class),
+    TEAM_ACTIVE(37, R.string.team_actvie, TeamActiveFragment.class),
 
     TEAM_ISSUE(38, R.string.team_issue, TeamIssueViewPageFragment.class),
 

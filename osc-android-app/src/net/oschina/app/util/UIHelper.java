@@ -26,11 +26,13 @@ import net.oschina.app.service.DownloadService.DownloadBinder;
 import net.oschina.app.service.NoticeService;
 import net.oschina.app.team.adapter.TeamMemberAdapter;
 import net.oschina.app.team.bean.Team;
+import net.oschina.app.team.bean.TeamActive;
 import net.oschina.app.team.bean.TeamDiscuss;
 import net.oschina.app.team.bean.TeamIssue;
 import net.oschina.app.team.bean.TeamIssueCatalog;
 import net.oschina.app.team.bean.TeamMember;
 import net.oschina.app.team.bean.TeamProject;
+import net.oschina.app.team.fragment.TeamActiveFragment;
 import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.EventLocationActivity;
@@ -1071,5 +1073,27 @@ public class UIHelper {
         bundle.putSerializable(TeamMemberAdapter.TEAM_MEMBER_KEY, teamMember);
         bundle.putInt(TeamMemberAdapter.TEAM_ID_KEY, teamId);
         UIHelper.showSimpleBack(context, SimpleBackPage.TEAM_USER_INFO, bundle);
+    }
+    
+    /***
+     * 显示团队动态详情
+     * @author 火蚁
+     * 2015-3-13 下午5:34:50
+     *
+     * @return void
+     * @param contex
+     * @param teamId
+     * @param active
+     */
+    public static void showTeamActiveDetail(Context contex, int teamId, TeamActive active) {
+	Intent intent = new Intent(contex, DetailActivity.class);
+        
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(TeamActiveFragment.DYNAMIC_FRAGMENT_KEY, active);
+        bundle.putInt(TeamActiveFragment.DYNAMIC_FRAGMENT_TEAM_KEY, teamId);
+        bundle.putInt(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+                DetailActivity.DISPLAY_TEAM_TWEET_DETAIL);
+        intent.putExtras(bundle);
+        contex.startActivity(intent);
     }
 }
