@@ -219,6 +219,7 @@ public class NoteBookFragment extends BaseFragment implements
         mSwipeRefreshLayout.setColorSchemeResources(
                 R.color.swiperefresh_color1, R.color.swiperefresh_color2,
                 R.color.swiperefresh_color3, R.color.swiperefresh_color4);
+        mEmptyLayout.setErrorType(EmptyLayout.NODATA);
         if (!datas.isEmpty()) {
             mEmptyLayout.setVisibility(View.GONE);
         }
