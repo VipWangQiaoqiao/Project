@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.oschina.app.R;
 import net.oschina.app.team.bean.TeamDiary;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.AvatarView;
 import android.content.Context;
 import android.text.Html;
@@ -74,7 +75,7 @@ public class TeamDiaryListAdapter extends BaseAdapter {
         holder.iv_face.setAvatarUrl(data.getAuthor().getPortrait());
         holder.tv_author.setText(data.getAuthor().getName());
         holder.tv_count.setText(data.getReply() + "");
-        holder.tv_date.setText(data.getCreateTime());
+        holder.tv_date.setText(StringUtils.friendly_time(data.getCreateTime()));
         // holder.tv_title.setText(Html.fromHtml(data.getTitle()).toString());
         holder.tv_title.setText(stripTags(data.getTitle()));
         return v;

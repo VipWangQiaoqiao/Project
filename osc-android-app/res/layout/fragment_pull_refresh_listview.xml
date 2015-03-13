@@ -19,6 +19,7 @@
             android:background="@color/list_item_background_normal"
             android:divider="@color/list_divider_color"
             android:dividerHeight="1px"
+            android:scrollbars="none"
             android:scrollingCache="true" />
     </android.support.v4.widget.SwipeRefreshLayout>
 

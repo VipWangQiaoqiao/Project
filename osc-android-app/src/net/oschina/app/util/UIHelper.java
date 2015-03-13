@@ -1050,9 +1050,24 @@ public class UIHelper {
         intent.putExtras(bundle);
         context.startActivity(intent);
     }
-    
-    public static void showTeamMemberInfo(Context context, int teamId, TeamMember teamMember) {
-	Bundle bundle = new Bundle();
+
+    /**
+     * 显示周报详情
+     * 
+     * @param context
+     * @param data
+     */
+    public static void showDiaryDetail(Context context, Bundle data) {
+        Intent intent = new Intent(context, DetailActivity.class);
+        intent.putExtra("diary", data);
+        intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+                DetailActivity.DISPLAY_TEAM_DIARY);
+        context.startActivity(intent);
+    }
+
+    public static void showTeamMemberInfo(Context context, int teamId,
+            TeamMember teamMember) {
+        Bundle bundle = new Bundle();
         bundle.putSerializable(TeamMemberAdapter.TEAM_MEMBER_KEY, teamMember);
         bundle.putInt(TeamMemberAdapter.TEAM_ID_KEY, teamId);
         UIHelper.showSimpleBack(context, SimpleBackPage.TEAM_USER_INFO, bundle);

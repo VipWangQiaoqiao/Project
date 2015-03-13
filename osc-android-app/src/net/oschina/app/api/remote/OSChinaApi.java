@@ -855,20 +855,43 @@ public class OSChinaApi {
         ApiHttpClient
                 .get("action/api/team_reply_list_by_type", params, handler);
     }
-    
+
+    /**
+     * 周报评论（以后可改为全局评论）
+     * 
+     * @param uid
+     * @param teamid
+     * @param diaryId
+     * @param content
+     * @param handler
+     */
+    public static void sendComment(int uid, int teamid, int diaryId,
+            String content, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("uid", uid);
+        params.put("teamid", teamid);
+        params.put("type", "118");
+        params.put("tweetid", diaryId);
+        params.put("content", content);
+        ApiHttpClient.post("action/api/team_tweet_reply", params, handler);
+    }
+
     /***
      * 客户端扫描二维码登陆
-     * @author 火蚁
-     * 2015-3-13 上午11:45:47
-     *
+     * 
+     * @author 火蚁 2015-3-13 上午11:45:47
+     * 
      * @return void
      * @param url
      * @param handler
      */
-    public static void scanQrCodeLogin(String url, AsyncHttpResponseHandler handler) {
-	RequestParams params = new RequestParams();
-	String uuid = url.substring(url.lastIndexOf("=") + 1);
-	params.put("uuid", uuid);
-	ApiHttpClient.getDirect("http://192.168.1.147/action/user/scanQrCode?uuid=" + uuid, handler);
+    public static void scanQrCodeLogin(String url,
+            AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        String uuid = url.substring(url.lastIndexOf("=") + 1);
+        params.put("uuid", uuid);
+        ApiHttpClient.getDirect(
+                "http://192.168.1.147/action/user/scanQrCode?uuid=" + uuid,
+                handler);
     }
 }

@@ -11,7 +11,6 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseFragment;
-import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.team.adapter.TeamDiaryListAdapter;
 import net.oschina.app.team.bean.Team;
@@ -321,8 +320,7 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
                             TeamDiaryPagerFragment.DIARYDETAIL_KEY,
                             dataBundleList.get(whichWeek).getList()
                                     .get(position));
-                    UIHelper.showSimpleBack(aty,
-                            SimpleBackPage.TEAM_DIRAY_DETAIL, args);
+                    UIHelper.showDiaryDetail(aty, args);
                 }
             });
         }

@@ -14,7 +14,6 @@ import net.oschina.app.team.bean.TeamDiary;
 import net.oschina.app.team.bean.TeamDiaryDetailBean;
 import net.oschina.app.team.bean.TeamRepliesList;
 import net.oschina.app.team.bean.TeamReply;
-import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -35,6 +34,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
@@ -89,8 +89,7 @@ public class TeamDiaryDetail extends BaseFragment implements EmojiTextListener,
     @Override
     public void initData() {
         super.initData();
-        Bundle bundle = aty.getIntent().getBundleExtra(
-                SimpleBackActivity.BUNDLE_KEY_ARGS);
+        Bundle bundle = aty.getIntent().getBundleExtra("diary");
         if (bundle != null) {
             teamid = bundle.getInt(TeamDiaryPagerFragment.TEAMID_KEY);
             diaryData = (TeamDiary) bundle
@@ -234,9 +233,14 @@ public class TeamDiaryDetail extends BaseFragment implements EmojiTextListener,
         OSChinaApi.getDiaryComment(teamid, diaryData.getId(),
                 new AsyncHttpResponseHandler() {
                     @Override
-                    public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+                    public void onSuccess(int arg0, Header[] arg1,
+                            final byte[] arg2) {
                         List<TeamReply> datas = XmlUtils.toBean(
                                 TeamRepliesList.class, arg2).getList();
+                        footerView.removeAllViews();
+                        View line = View.inflate(aty,
+                                R.layout.list_head_commnt_line, null);
+                        footerView.addView(line);
                         for (TeamReply data : datas) {
                             View layout = View.inflate(aty,
                                     R.layout.list_cell_comment, null);
@@ -253,6 +257,19 @@ public class TeamDiaryDetail extends BaseFragment implements EmojiTextListener,
                             TextView content = (TextView) layout
                                     .findViewById(R.id.tv_content);
                             content.setText(stripTags(data.getContent()));
+
+                            layout.setOnClickListener(new OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    mEmojiFragment.setTag(v);
+                                    mEmojiFragment.setInputHint("回复"
+                                            + ((TextView) v
+                                                    .findViewById(R.id.tv_name))
+                                                    .getText() + ":");
+                                    mEmojiFragment.requestFocusInput();
+                                }
+                            });
+
                             footerView.addView(layout);
                         }
                         footerView.invalidate();
@@ -307,5 +324,17 @@ public class TeamDiaryDetail extends BaseFragment implements EmojiTextListener,
             mEmojiFragment.requestFocusInput();
             return;
         }
+        OSChinaApi.sendComment(AppContext.getInstance().getLoginUid(), teamid,
+                diaryData.getId(), text, new AsyncHttpResponseHandler() {
+
+                    @Override
+                    public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+                        initCommitLayout();
+                    }
+
+                    @Override
+                    public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+                            Throwable arg3) {}
+                });
     }
 }
