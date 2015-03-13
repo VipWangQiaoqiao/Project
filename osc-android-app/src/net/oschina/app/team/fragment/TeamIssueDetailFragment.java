@@ -12,13 +12,13 @@ import net.oschina.app.bean.ResultBean;
 import net.oschina.app.emoji.EmojiFragment;
 import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
 import net.oschina.app.interf.EmojiFragmentControl;
-import net.oschina.app.team.bean.Author;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamIssue;
 import net.oschina.app.team.bean.TeamIssueCatalog;
 import net.oschina.app.team.bean.TeamIssueDetail;
 import net.oschina.app.team.bean.TeamRepliesList;
 import net.oschina.app.team.bean.TeamReply;
+import net.oschina.app.team.bean.TeamReplyBean;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.util.HTMLUtil;
@@ -37,7 +37,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
@@ -294,31 +293,19 @@ public class TeamIssueDetailFragment extends BaseFragment implements
     public void onSendClick(final String text) {
 	// TODO Auto-generated method stub
 	showWaitDialog("提交评论中...");
-	OSChinaTeamApi.pubTeamTweetReply(mTeam.getId(),
-		TeamReply.REPLY_PUB_TYPE_ISSUE, mTeamIssue.getId(), text,
+	OSChinaTeamApi.pubTeamIssueReply(mTeam.getId(), mTeamIssue.getId(), text,
 		new AsyncHttpResponseHandler() {
 
 		    @Override
 		    public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 			// TODO Auto-generated method stub
-			Result result = XmlUtils.toBean(ResultBean.class, arg2)
-				.getResult();
-			if (result.OK()) {
-			    TeamReply reply = new TeamReply();
-			    Author author = new Author();
-			    author.setId(AppContext.getInstance().getLoginUid());
-			    author.setName(AppContext.getInstance()
-				    .getLoginUser().getName());
-			    author.setPortrait(AppContext.getInstance()
-				    .getLoginUser().getPortrait());
-			    reply.setAuthor(author);
-			    reply.setCreateTime(StringUtils.getCurTimeStr());
-			    reply.setContent(text);
+			TeamReply reply = XmlUtils.toBean(TeamReplyBean.class, arg2).getTeamReply();
+			if (reply != null) {
 			    addComment(reply);
 			    emojiFragment.reset();
 			    emojiFragment.hideKeyboard();
 			} else {
-			    AppContext.showToast(result.getErrorMessage());
+			    AppContext.showToast("评论失败");
 			}
 		    }
 
@@ -326,7 +313,8 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 		    public void onFailure(int arg0, Header[] arg1, byte[] arg2,
 			    Throwable arg3) {
 			// TODO Auto-generated method stub
-			AppContext.showToast(new String(arg2));
+			Result result = XmlUtils.toBean(ResultBean.class, arg2).getResult();
+			AppContext.showToast(result.getErrorMessage());
 		    }
 
 		    @Override

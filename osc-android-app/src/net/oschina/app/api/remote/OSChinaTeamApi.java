@@ -243,14 +243,14 @@ public class OSChinaTeamApi {
     }
 
     /***
-     * 发表一条综合评论 动态、任务、分享内容、周报
+     * 发表一条综合评论 动态、分享内容、周报
      * 
      * @author 火蚁 2015-3-6 下午3:31:07
      * 
      * @return void
      * @param teamId
      * @param type
-     *            普通动态-110， Git任务-112，分享内容-114， 周报-118
+     *            普通动态-110，分享内容-114， 周报-118
      * @param tweetId
      * @param content
      * @param handler
@@ -380,5 +380,25 @@ public class OSChinaTeamApi {
 	    params.put("title", childIssue.getTitle());
 	}
 	ApiHttpClient.post("action/api/team_issue_update_child_issue", params, handler);
+    }
+    
+    /***
+     * 发表任务评论
+     * @author 火蚁
+     * 2015-3-13 下午6:22:41
+     *
+     * @return void
+     * @param teamId
+     * @param issueId
+     * @param content
+     * @param handler
+     */
+    public static void pubTeamIssueReply(int teamId, int issueId, String content, AsyncHttpResponseHandler handler) {
+	RequestParams params = new RequestParams();
+	params.put("uid", AppContext.getInstance().getLoginUid());
+	params.put("teamid", teamId);
+	params.put("content", content);
+	params.put("issueid", issueId);
+	ApiHttpClient.post("action/api/team_issue_reply", params, handler);
     }
 }
