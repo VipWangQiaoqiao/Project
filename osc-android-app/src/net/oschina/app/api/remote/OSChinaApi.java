@@ -856,4 +856,24 @@ public class OSChinaApi {
                 .get("action/api/team_reply_list_by_type", params, handler);
     }
 
+    /**
+     * 周报评论（以后可改为全局评论）
+     * 
+     * @param uid
+     * @param teamid
+     * @param diaryId
+     * @param content
+     * @param handler
+     */
+    public static void sendComment(int uid, int teamid, int diaryId,
+            String content, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("uid", uid);
+        params.put("teamid", teamid);
+        params.put("type", "118");
+        params.put("tweetid", diaryId);
+        params.put("content", content);
+        ApiHttpClient.post("action/api/team_tweet_reply", params, handler);
+    }
+
 }
