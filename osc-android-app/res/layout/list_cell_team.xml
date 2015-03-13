@@ -12,6 +12,8 @@
         android:minHeight="?android:attr/listPreferredItemHeightSmall"
         android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
         android:text="开源中国"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_18"
         android:paddingStart="?android:attr/listPreferredItemPaddingStart"/>
 
 </LinearLayout>
