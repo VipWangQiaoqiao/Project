@@ -14,7 +14,7 @@ import net.oschina.app.team.adapter.TeamMemberAdapter;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamList;
 import net.oschina.app.team.bean.TeamMember;
-import net.oschina.app.team.bean.TeamMembers;
+import net.oschina.app.team.bean.TeamMemberList;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.TLog;
 import net.oschina.app.util.XmlUtils;
@@ -91,7 +91,7 @@ public class TeamMemberFragment extends BaseFragment implements
         aty = getActivity();
         ButterKnife.inject(this, rootView);
 
-        TeamMembers list = (TeamMembers) CacheManager.readObject(aty,
+        TeamMemberList list = (TeamMemberList) CacheManager.readObject(aty,
                 TEAM_MEMBER_DATA);
 
         if (list == null) {
@@ -138,7 +138,7 @@ public class TeamMemberFragment extends BaseFragment implements
                     @Override
                     public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
                         InputStream is = new ByteArrayInputStream(arg2);
-                        TeamMembers list = XmlUtils.toBean(TeamMembers.class,
+                        TeamMemberList list = XmlUtils.toBean(TeamMemberList.class,
                                 is);
                         datas = list.getList();
                         mGrid.setAdapter(new TeamMemberAdapter(aty, datas, team));
@@ -168,8 +168,8 @@ public class TeamMemberFragment extends BaseFragment implements
                         public void onSuccess(int arg0, Header[] arg1,
                                 byte[] arg2) {
                             InputStream is = new ByteArrayInputStream(arg2);
-                            final TeamMembers list = XmlUtils.toBean(
-                                    TeamMembers.class, is);
+                            final TeamMemberList list = XmlUtils.toBean(
+                                    TeamMemberList.class, is);
                             datas = list.getList();
                             mGrid.setAdapter(new TeamMemberAdapter(aty, datas,
                                     team));

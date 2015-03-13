@@ -132,7 +132,4 @@ public class SelectTeamFragment extends BaseFragment {
             }
         });
     }
-    // getActivity().overridePendingTransition(R.anim.in_from_top,
-    // R.anim.out_to_bottom);
-
 }

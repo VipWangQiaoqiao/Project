@@ -4,25 +4,22 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.List;
 
-import com.tencent.weibo.sdk.android.component.sso.tools.MD5Tools;
-
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.team.adapter.DynamicAdapter;
-import net.oschina.app.team.adapter.TeamProjectMemberAdapter;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamActive;
 import net.oschina.app.team.bean.TeamActives;
 import net.oschina.app.team.bean.TeamProject;
-import net.oschina.app.team.bean.TeamProjectMember;
-import net.oschina.app.team.bean.TeamProjectMemberList;
 import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 
 /**
  * 团队动态列表
@@ -89,16 +86,26 @@ public class TeamProjectActiveFragment extends
 	// TODO Auto-generated method stub
 	super.executeOnLoadDataSuccess(data);
 	if (mAdapter.getData().isEmpty()) {
-	    setNoProjectMember();
+	    setNoProjectActive();
 	}
 	mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
     }
 
-    private void setNoProjectMember() {
+    private void setNoProjectActive() {
 	mErrorLayout.setErrorType(EmptyLayout.NODATA);
 	mErrorLayout.setErrorImag(R.drawable.page_icon_empty);
 	String str = getResources().getString(
 		R.string.team_empty_project_active);
 	mErrorLayout.setErrorMessage(str);
+    }
+    
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position,
+            long id) {
+        // TODO Auto-generated method stub
+	TeamActive active = mAdapter.getItem(position);
+	if (active != null) {
+	    
+	}
     }
 }

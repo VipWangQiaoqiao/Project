@@ -8,10 +8,13 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.bean.BarCode;
+import net.oschina.app.bean.Result;
+import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.SingInResult;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
+import net.oschina.app.util.XmlUtils;
 
 import org.apache.http.Header;
 
@@ -256,6 +259,10 @@ public class CaptureActivity extends BaseActivity implements Callback {
     }
 
     private void showUrlOption(final String url) {
+	if (url.contains("scanQrCode")) {
+	    handleScanLogin(url);
+	    return;
+	}
         if (url.contains("oschina.net")) {
             UIHelper.showUrlRedirect(CaptureActivity.this, url);
             finish();
@@ -281,6 +288,51 @@ public class CaptureActivity extends BaseActivity implements Callback {
             }
         });
         dialog.show();
+    }
+    
+    private void handleScanLogin(final String url) {
+	if (!AppContext.getInstance().isLogin()) {
+	    showLogin();
+	    return;
+	}
+	OSChinaApi.scanQrCodeLogin(url, new AsyncHttpResponseHandler() {
+	    
+	    @Override
+	    public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+		// TODO Auto-generated method stub
+		AppContext.showToast(new String(arg2));
+		Result result = XmlUtils.toBean(ResultBean.class, arg2).getResult();
+		
+		if (result != null && result.OK()) {
+		    AppContext.showToast(result.getErrorMessage());
+		    finish();
+		} else {
+		    AppContext.showToast(result.getErrorMessage());
+		}
+	    }
+	    
+	    @Override
+	    public void onFailure(int arg0, Header[] arg1, byte[] arg2, Throwable arg3) {
+		// TODO Auto-generated method stub
+		if (arg2 != null) {
+		    AppContext.showToast(new String(arg2));
+		} else {
+		    AppContext.showToast("网页登陆失败");
+		}
+	    }
+	    @Override
+	    public void onStart() {
+	        // TODO Auto-generated method stub
+	        super.onStart();
+	        showWaitDialog("已扫描，请稍候...");
+	    }
+	    @Override
+	    public void onFinish() {
+	        // TODO Auto-generated method stub
+	        super.onFinish();
+	        hideWaitDialog();
+	    }
+	});
     }
 
     private void handleOtherText(final String text) {

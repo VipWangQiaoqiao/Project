@@ -6,9 +6,6 @@ import java.io.Serializable;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.bean.Entity;
-import net.oschina.app.bean.ListEntity;
 import net.oschina.app.team.adapter.DynamicAdapter;
 import net.oschina.app.team.adapter.TeamMemberAdapter;
 import net.oschina.app.team.bean.TeamActive;
@@ -16,7 +13,6 @@ import net.oschina.app.team.bean.TeamActives;
 import net.oschina.app.team.bean.TeamMember;
 import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.SimpleBackActivity;
-import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TLog;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
@@ -36,7 +32,7 @@ import android.widget.TextView;
  * @author kymjs (https://github.com/kymjs)
  * 
  */
-public class UserInfoFragment extends BaseListFragment {
+public class UserInfoFragment extends BaseListFragment<TeamActive> {
 
     private TextView mTvName;
     private TextView mTvUserName;
@@ -47,7 +43,7 @@ public class UserInfoFragment extends BaseListFragment {
 
     private Activity aty;
     private TeamMember teamMember;
-    private String teamId = "0";
+    private int teamId;
 
     protected static final String TAG = UserInfoFragment.class.getSimpleName();
     private static final String CACHE_KEY_PREFIX = "DynamicFragment_list";
@@ -60,7 +56,7 @@ public class UserInfoFragment extends BaseListFragment {
         if (bundle != null) {
             teamMember = (TeamMember) bundle
                     .getSerializable(TeamMemberAdapter.TEAM_MEMBER_KEY);
-            teamId = bundle.getString(TeamMemberAdapter.TEAM_ID_KEY);
+            teamId = bundle.getInt(TeamMemberAdapter.TEAM_ID_KEY);
         } else {
             teamMember = new TeamMember();
             TLog.log(TAG, "数据初始化异常");
@@ -113,8 +109,7 @@ public class UserInfoFragment extends BaseListFragment {
                         bundle.putSerializable(
                                 DynamicFragment.DYNAMIC_FRAGMENT_KEY, data);
                         bundle.putInt(
-                                DynamicFragment.DYNAMIC_FRAGMENT_TEAM_KEY,
-                                StringUtils.toInt(teamId, 0));
+                                DynamicFragment.DYNAMIC_FRAGMENT_TEAM_KEY, teamId);
                         bundle.putInt(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
                                 DetailActivity.DISPLAY_TEAM_TWEET_DETAIL);
                         intent.putExtras(bundle);
@@ -126,7 +121,7 @@ public class UserInfoFragment extends BaseListFragment {
     }
 
     @Override
-    protected ListBaseAdapter getListAdapter() {
+    protected DynamicAdapter getListAdapter() {
         return new DynamicAdapter(aty);
     }
 
@@ -142,7 +137,7 @@ public class UserInfoFragment extends BaseListFragment {
     }
 
     @Override
-    protected ListEntity<? extends Entity> readList(Serializable seri) {
+    protected TeamActives readList(Serializable seri) {
         return (TeamActives) seri;
     }
 

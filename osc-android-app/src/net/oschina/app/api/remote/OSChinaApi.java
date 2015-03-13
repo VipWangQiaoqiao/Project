@@ -739,7 +739,7 @@ public class OSChinaApi {
     /**
      * 获取指定用户的动态
      */
-    public static void getUserDynamic(String teamid, String uid, int pageIndex,
+    public static void getUserDynamic(int teamid, String uid, int pageIndex,
             AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("teamid", teamid);
@@ -876,4 +876,22 @@ public class OSChinaApi {
         ApiHttpClient.post("action/api/team_tweet_reply", params, handler);
     }
 
+    /***
+     * 客户端扫描二维码登陆
+     * 
+     * @author 火蚁 2015-3-13 上午11:45:47
+     * 
+     * @return void
+     * @param url
+     * @param handler
+     */
+    public static void scanQrCodeLogin(String url,
+            AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        String uuid = url.substring(url.lastIndexOf("=") + 1);
+        params.put("uuid", uuid);
+        ApiHttpClient.getDirect(
+                "http://192.168.1.147/action/user/scanQrCode?uuid=" + uuid,
+                handler);
+    }
 }

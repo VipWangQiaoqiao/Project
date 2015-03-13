@@ -15,7 +15,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * 
  */
 @XStreamAlias("oschina")
-public class TeamMembers extends Entity implements ListEntity<TeamMember> {
+public class TeamMemberList extends Entity implements ListEntity<TeamMember> {
 
     private static final long serialVersionUID = 1L;
 

@@ -6,6 +6,7 @@ import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.team.bean.TeamReply;
+import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.TweetTextView;
@@ -37,7 +38,7 @@ public class TeamReplyAdapter extends ListBaseAdapter<TeamReply> {
 	TeamReply item = (TeamReply) mDatas.get(position);
 	vh.name.setText(item.getAuthor().getName());
 	vh.avatar.setAvatarUrl(item.getAuthor().getPortrait());
-	setContent(vh.content, item.getContent());
+	setContent(vh.content, HTMLUtil.delHTMLTag(item.getContent()));
 	vh.time.setText(StringUtils.friendly_time(item.getCreateTime()));
 
 	vh.from.setVisibility(View.VISIBLE);

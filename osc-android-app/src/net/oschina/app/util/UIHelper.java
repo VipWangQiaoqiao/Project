@@ -24,10 +24,12 @@ import net.oschina.app.interf.OnWebViewImageListener;
 import net.oschina.app.service.DownloadService;
 import net.oschina.app.service.DownloadService.DownloadBinder;
 import net.oschina.app.service.NoticeService;
+import net.oschina.app.team.adapter.TeamMemberAdapter;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamDiscuss;
 import net.oschina.app.team.bean.TeamIssue;
 import net.oschina.app.team.bean.TeamIssueCatalog;
+import net.oschina.app.team.bean.TeamMember;
 import net.oschina.app.team.bean.TeamProject;
 import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.ui.DetailActivity;
@@ -1062,5 +1064,13 @@ public class UIHelper {
         intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
                 DetailActivity.DISPLAY_TEAM_DIARY);
         context.startActivity(intent);
+    }
+
+    public static void showTeamMemberInfo(Context context, int teamId,
+            TeamMember teamMember) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(TeamMemberAdapter.TEAM_MEMBER_KEY, teamMember);
+        bundle.putInt(TeamMemberAdapter.TEAM_ID_KEY, teamId);
+        UIHelper.showSimpleBack(context, SimpleBackPage.TEAM_USER_INFO, bundle);
     }
 }
