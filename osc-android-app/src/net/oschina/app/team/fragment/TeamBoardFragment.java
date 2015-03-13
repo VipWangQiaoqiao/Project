@@ -18,6 +18,7 @@ import net.oschina.app.util.TLog;
 import net.oschina.app.util.TypefaceUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
+import net.oschina.app.widget.AvatarView;
 
 import org.apache.http.Header;
 import org.kymjs.kjframe.utils.PreferenceHelper;
@@ -60,6 +61,8 @@ public class TeamBoardFragment extends BaseFragment {
     @InjectView(R.id.team_myissue_all_num)
     TextView mTvAll;
 
+    @InjectView(R.id.iv_avatar)
+    AvatarView mIvAvatarView;
     @InjectView(R.id.team_myissue_name)
     TextView mTvName;
     @InjectView(R.id.team_myissue_date)
@@ -111,6 +114,7 @@ public class TeamBoardFragment extends BaseFragment {
 
         mTvName.setText(AppContext.getInstance().getLoginUser().getName() + "，"
                 + getGreetings());
+        mIvAvatarView.setAvatarUrl(AppContext.getInstance().getLoginUser().getPortrait());
         mTvDate.setText("今天是 " + getWeekDay() + "，"
                 + SystemTool.getDataTime("yyyy年MM月dd日"));
 

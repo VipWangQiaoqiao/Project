@@ -20,6 +20,7 @@ import org.kymjs.kjframe.utils.StringUtils;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -60,6 +61,8 @@ public class TeamMainActivity extends BaseActivity {
     
     @InjectView(R.id.error_layout)
     EmptyLayout mErrorLayout;
+    @InjectView(R.id.main_content)
+    View container;
     
     @Override
     protected boolean hasBackButton() {
@@ -162,7 +165,7 @@ public class TeamMainActivity extends BaseActivity {
 	    bundle.putSerializable(BUNDLE_KEY_TEAM, teamDatas.get(pos));
 	    fragment.setArguments(bundle);
 	    ft.replace(R.id.main_content, fragment, tag);
-	    ft.commit();
+	    ft.commitAllowingStateLoss();
 	    mCurrentContentIndex = pos;
 	} catch (InstantiationException e) {
 	    // TODO Auto-generated catch block
@@ -180,7 +183,7 @@ public class TeamMainActivity extends BaseActivity {
                 MyInformationFragment.TEAM_LIST_FILE,
                 MyInformationFragment.TEAM_LIST_KEY);
         if (!StringUtils.isEmpty(cache)) {
-            mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+            //mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             teamDatas = TeamList.toTeamList(cache);
             setTeamDataState();
         } else {
@@ -216,8 +219,16 @@ public class TeamMainActivity extends BaseActivity {
 	    String msg = getResources().getString(R.string.team_empty);
 	    mErrorLayout.setErrorMessage(msg);
 	} else {
-	    mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+	    new Handler().postDelayed(new Runnable() {
+	        
+	        @Override
+	        public void run() {
+	    	// TODO Auto-generated method stub
+	            mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+	        }
+	    }, 800);
 	    mSpinner.setVisibility(View.VISIBLE);
+	    container.setVisibility(View.VISIBLE);
 	}
 	for (Team team : this.teamDatas) {
 	    teamName.add(team.getName());

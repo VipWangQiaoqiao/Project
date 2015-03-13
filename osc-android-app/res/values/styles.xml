@@ -373,7 +373,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/list_item_background</item>
         <item name="android:clickable">true</item>
-        <item name="android:padding">@dimen/space_12</item>
+        <item name="android:padding">@dimen/space_13</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:orientation">horizontal</item>
     </style>
@@ -403,7 +403,7 @@
     <style name="option_item_text_fa" parent="@style/option_item_text_parent">
         <item name="android:layout_marginRight">10dp</item>
 		<item name="android:textColor">@color/main_green</item>  
-		<item name="android:textSize">20sp</item>      
+		<item name="android:textSize">22sp</item>      
     </style>
 
     <style name="option_item_goto_right">
