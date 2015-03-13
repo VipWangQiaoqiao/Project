@@ -119,9 +119,8 @@ public class UIHelper {
      * 
      * @param context
      */
-    public static void showTeamMainActivity(Context context, Bundle bundle) {
+    public static void showTeamMainActivity(Context context) {
         Intent intent = new Intent(context, TeamMainActivity.class);
-        intent.putExtras(bundle);
         context.startActivity(intent);
     }
 

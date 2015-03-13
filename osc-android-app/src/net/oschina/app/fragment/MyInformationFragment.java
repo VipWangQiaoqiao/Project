@@ -389,19 +389,11 @@ public class MyInformationFragment extends BaseFragment {
             setNoticeReaded();
             break;
         case R.id.rl_team:
-            // if (rootView.getChildCount() == sChildView) {
-            // getTeamList();
-            // }
-            UIHelper.showSimpleBack(getActivity(), SimpleBackPage.SELECT_TEAM);
-            getActivity().overridePendingTransition(R.anim.in_from_bottom,
-                    R.anim.out_to_top);
+            UIHelper.showTeamMainActivity(getActivity());
             break;
         case R.id.rl_blog:
             UIHelper.showUserBlog(getActivity(), AppContext.getInstance()
                     .getLoginUid());
-            break;
-        case R.id.rl_note:
-            // 内部类独立实现，修改为未登录也可以使用便签功能
             break;
         case R.id.rl_user_center:
             UIHelper.showUserCenter(getActivity(), AppContext.getInstance()
@@ -412,72 +404,7 @@ public class MyInformationFragment extends BaseFragment {
             break;
         }
     }
-
-    // /**
-    // * 拉取团队列表信息
-    // */
-    // private void getTeamList() {
-    // OSChinaApi.teamList(new AsyncHttpResponseHandler() {
-    // @Override
-    // public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-    // TeamList datas = XmlUtils.toBean(TeamList.class,
-    // new ByteArrayInputStream(arg2));
-    // if (datas != null && datas.getTeams() != null) {
-    // PreferenceHelper.write(getActivity(), TEAM_LIST_FILE,
-    // TEAM_LIST_KEY, datas.toCacheData());
-    // addTeamLayout(datas.getTeams());
-    // }
-    // }
-    //
-    // @Override
-    // public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-    // Throwable arg3) {
-    // AppContext.showToast("网络不好，请稍后重试");
-    // }
-    //
-    // @Override
-    // public void onFinish() {
-    // super.onFinish();
-    // }
-    // });
-    // }
-    //
-    // /**
-    // * 添加一个团队布局
-    // */
-    // private void addTeamLayout(List<Team> datas) {
-    // int count = 0;// 计算teams已显示的数量
-    // // 从第sChildView个开始为了提升执行效率，已知有sChildView个子控件了
-    // for (int i = sChildView; i < rootView.getChildCount(); i++) {
-    // View child = rootView.getChildAt(i);
-    // if (child instanceof HolderTextView) {
-    // HolderTextView holderView = ((HolderTextView) child);
-    // if (count < datas.size()) {
-    // holderView.setText(datas.get(count).getIdent());
-    // ++count;
-    // } else {
-    // rootView.removeViewAt(i);
-    // }
-    // }
-    // }
-    // // 还没有显示完就继续new控件显示
-    // for (; count < datas.size(); count++) {
-    // HolderTextView teamLayout = new HolderTextView(getActivity());
-    // teamLayout.setText(datas.get(count).getIdent());
-    // teamLayout.setId(count);
-    // rootView.addView(teamLayout);
-    // teamLayout.setOnClickListener(new OnClickListener() {
-    // @Override
-    // public void onClick(View v) {
-    // Bundle bundle = new Bundle();
-    // bundle.putInt(TEAM_LIST_KEY, v.getId());
-    // UIHelper.showSimpleBack(getActivity(),
-    // SimpleBackPage.DYNAMIC, bundle);
-    // }
-    // });
-    // }
-    // }
-
+    
     private void showMyQrCode() {
         MyQrodeDialog dialog = new MyQrodeDialog(getActivity());
         dialog.show();

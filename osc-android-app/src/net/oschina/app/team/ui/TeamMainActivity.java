@@ -10,9 +10,6 @@ import net.oschina.app.base.BaseActivity;
 import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamList;
-import net.oschina.app.team.fragment.TeamDiaryPagerFragment;
-import net.oschina.app.team.fragment.TeamDiscussFragment;
-import net.oschina.app.team.viewpagefragment.TeamIssueViewPageFragment;
 import net.oschina.app.team.viewpagefragment.TeamMainViewPagerFragment;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.XmlUtils;
@@ -22,13 +19,14 @@ import org.kymjs.kjframe.utils.PreferenceHelper;
 import org.kymjs.kjframe.utils.StringUtils;
 
 import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -38,7 +36,7 @@ import butterknife.InjectView;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 /**
- * 某个团队主界面
+ * 团队主界面
  * 
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @version 创建时间：2015年1月13日 下午3:36:56
@@ -54,15 +52,9 @@ public class TeamMainActivity extends BaseActivity {
 
     public final static String BUNDLE_KEY_ISSUE_CATALOG = "bundle_key_catalog_list";
 
+    private final String tag = "team_view";
+    
     private FragmentManager mFragmentManager;
-
-    static final String CONTENTS[] = { "main", "issue", "discuss", "diary" };
-
-    static final String fragments[] = {
-	    TeamMainViewPagerFragment.class.getName(),
-	    TeamIssueViewPageFragment.class.getName(),
-	    TeamDiscussFragment.class.getName(),
-	    TeamDiaryPagerFragment.class.getName() };
 
     private int mCurrentContentIndex = -1;
     
@@ -81,22 +73,6 @@ public class TeamMainActivity extends BaseActivity {
 
     @Override
     public void onClick(View v) {
-	switch (v.getId()) {
-	case R.id.team_menu_item_main:
-	    switchContent(0);
-	    break;
-	case R.id.team_menu_item_issue:
-	    switchContent(1);
-	    break;
-	case R.id.team_menu_item_discuss:
-	    switchContent(2);
-	    break;
-	case R.id.team_menu_item_diary:
-	    switchContent(3);
-	    break;
-	default:
-	    break;
-	}
     }
 
     @Override
@@ -107,6 +83,10 @@ public class TeamMainActivity extends BaseActivity {
     @Override
     public void initView() {
 	ButterKnife.inject(this);
+	// 隐藏actionbar的标题
+	mActionBar.getCustomView().findViewById(R.id.tv_actionbar_title).setVisibility(View.GONE);
+//	ImageView back = (ImageView) mActionBar.getCustomView().findViewById(R.id.btn_back);
+//	back.setImageResource(R.drawable.abc_ab_bottom_solid_dark_holo);
 	mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
 	mErrorLayout.setErrorMessage("获取团队中...");
 	mErrorLayout.setOnClickListener(new View.OnClickListener() {
@@ -114,28 +94,18 @@ public class TeamMainActivity extends BaseActivity {
 	    @Override
 	    public void onClick(View v) {
 		// TODO Auto-generated method stub
-		
+		mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+		requestTeamList();
 	    }
 	});
 	initSpinner();
 	requestTeamList();
 	
 	mFragmentManager = getSupportFragmentManager();
-	switchContent(0);
     }
-
-    private Team mTeam;
 
     @Override
     public void initData() {
-	Intent intent = getIntent();
-	if (intent != null) {
-	    mTeam = (Team) intent.getSerializableExtra(BUNDLE_KEY_TEAM);
-	    if (mTeam != null) {
-
-		setActionBarTitle(mTeam.getName());
-	    }
-	}
     }
     
     private Spinner mSpinner;
@@ -149,31 +119,59 @@ public class TeamMainActivity extends BaseActivity {
 	adapter = new SpinnerAdapter(this, teamName);
 	mSpinner.setAdapter(adapter);
 	mSpinner.setVisibility(View.GONE);
+	
+	mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+	    @Override
+	    public void onItemSelected(AdapterView<?> parent, View view,
+		    int position, long id) {
+		// TODO Auto-generated method stub
+		Team team = teamDatas.get(position);
+		if (team != null) {
+		    switchTeam(position);
+		}
+	    }
+
+	    @Override
+	    public void onNothingSelected(AdapterView<?> parent) {
+		// TODO Auto-generated method stub
+		
+	    }
+	});
     }
     
     /**
      * 
      * @param pos
      */
-    private void switchContent(int pos) {
-	String tag = CONTENTS[pos];
-	String mCurrentContentTag = CONTENTS[pos];
+    private void switchTeam(int pos) {
 	if (pos == mCurrentContentIndex)
 	    return;
-
+	showWaitDialog("正在切换...");
 	FragmentTransaction ft = mFragmentManager.beginTransaction();
-	if (mCurrentContentTag != null) {
+	if (tag != null) {
 	    Fragment fragment = mFragmentManager
-		    .findFragmentByTag(mCurrentContentTag);
+		    .findFragmentByTag(tag);
 	    if (fragment != null) {
 		ft.remove(fragment);
 	    }
 	}
-	ft.replace(R.id.main_content,
-		Fragment.instantiate(this, fragments[pos]), tag);
-	ft.commit();
-
-	mCurrentContentIndex = pos;
+	try {
+	    TeamMainViewPagerFragment fragment = TeamMainViewPagerFragment.class.newInstance();
+	    Bundle bundle = new Bundle();
+	    bundle.putSerializable(BUNDLE_KEY_TEAM, teamDatas.get(pos));
+	    fragment.setArguments(bundle);
+	    ft.replace(R.id.main_content, fragment, tag);
+	    ft.commit();
+	    mCurrentContentIndex = pos;
+	} catch (InstantiationException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	} catch (IllegalAccessException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	hideWaitDialog();
     }
     
     private void requestTeamList() {
@@ -195,6 +193,11 @@ public class TeamMainActivity extends BaseActivity {
                     teamDatas.clear();
                     teamDatas.addAll(datas.getList());
                     setTeamDataState();
+                    
+                    PreferenceHelper.write(TeamMainActivity.this,
+                            MyInformationFragment.TEAM_LIST_FILE,
+                            MyInformationFragment.TEAM_LIST_KEY,
+                            datas.toCacheData());
                 }
 
                 @Override
@@ -266,7 +269,6 @@ public class TeamMainActivity extends BaseActivity {
 	    if (team != null) {
 		tv.setText(team);
 	    }
-	    tv.setTextColor(R.color.white);
 	    return cell;
 	}
 	

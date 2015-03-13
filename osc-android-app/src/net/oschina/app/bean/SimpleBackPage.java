@@ -24,7 +24,6 @@ import net.oschina.app.fragment.UserCenterFragment;
 import net.oschina.app.team.fragment.DynamicFragment;
 import net.oschina.app.team.fragment.NoteBookFragment;
 import net.oschina.app.team.fragment.NoteEditFragment;
-import net.oschina.app.team.fragment.SelectTeamFragment;
 import net.oschina.app.team.fragment.TeamDiaryDetail;
 import net.oschina.app.team.fragment.TeamDiaryPagerFragment;
 import net.oschina.app.team.fragment.TeamDiscussFragment;
@@ -122,29 +121,27 @@ public enum SimpleBackPage {
 
     TEAM_USER_INFO(32, R.string.str_team_userinfo, UserInfoFragment.class),
 
-    SELECT_TEAM(33, R.string.str_team_select_team, SelectTeamFragment.class),
+    MY_ISSUE_PAGER(33, R.string.str_team_my_issue, MyIssuePagerfragment.class),
 
-    MY_ISSUE_PAGER(34, R.string.str_team_my_issue, MyIssuePagerfragment.class),
+    TEAM_NEW_ISSUE(34, R.string.team_new_issue, TeamNewIssueFragment.class),
 
-    TEAM_NEW_ISSUE(35, R.string.team_new_issue, TeamNewIssueFragment.class),
+    TEAM_PROJECT_MAIN(35, 0, TeamProjectViewPagerFragment.class),
 
-    TEAM_PROJECT_MAIN(36, 0, TeamProjectViewPagerFragment.class),
+    TEAM_ISSUECATALOG_ISSUE_LIST(36, 0, TeamIssueFragment.class),
 
-    TEAM_ISSUECATALOG_ISSUE_LIST(37, 0, TeamIssueFragment.class),
+    TEAM_ACTIVE(37, R.string.team_actvie, DynamicFragment.class),
 
-    TEAM_ACTIVE(38, R.string.team_actvie, DynamicFragment.class),
+    TEAM_ISSUE(38, R.string.team_issue, TeamIssueViewPageFragment.class),
 
-    TEAM_ISSUE(39, R.string.team_issue, TeamIssueViewPageFragment.class),
+    TEAM_DISCUSS(39, R.string.team_discuss, TeamDiscussFragment.class),
 
-    TEAM_DISCUSS(40, R.string.team_discuss, TeamDiscussFragment.class),
+    TEAM_DIRAY(40, R.string.team_diary, TeamDiaryPagerFragment.class),
 
-    TEAM_DIRAY(41, R.string.team_diary, TeamDiaryPagerFragment.class),
-
-    TEAM_DIRAY_DETAIL(42, R.string.team_diary_detail, TeamDiaryDetail.class),
+    TEAM_DIRAY_DETAIL(41, R.string.team_diary_detail, TeamDiaryDetail.class),
     
-    TEAM_PROJECT_MEMBER_SELECT(43, 0, TeamProjectMemberSelectFragment.class),
+    TEAM_PROJECT_MEMBER_SELECT(42, 0, TeamProjectMemberSelectFragment.class),
     
-    TEAM_PROJECT(44, R.string.team_project, TeamProjectFragment.class);
+    TEAM_PROJECT(43, R.string.team_project, TeamProjectFragment.class);
 
     private int title;
     private Class<?> clz;

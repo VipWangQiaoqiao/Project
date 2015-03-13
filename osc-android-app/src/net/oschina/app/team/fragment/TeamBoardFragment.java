@@ -73,7 +73,7 @@ public class TeamBoardFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        bundle = getActivity().getIntent().getExtras();
+        bundle = getArguments();
         if (bundle != null) {
             int index = bundle.getInt(MyInformationFragment.TEAM_LIST_KEY, 0);
             String cache = PreferenceHelper.readString(getActivity(),
