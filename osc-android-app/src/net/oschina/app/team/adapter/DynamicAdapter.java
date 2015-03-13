@@ -3,13 +3,21 @@ package net.oschina.app.team.adapter;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.team.bean.TeamActive;
+import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.AvatarView;
+
+import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.bitmap.BitmapCallBack;
+import org.kymjs.kjframe.bitmap.helper.BitmapHelper;
+
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.text.Html;
 import android.text.Spanned;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -20,6 +28,8 @@ import android.widget.TextView;
  */
 public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
     private final Context context;
+    private static int rectSize;
+    private final KJBitmap kjb = KJBitmap.create();
 
     public DynamicAdapter(Context cxt) {
         this.context = cxt;
@@ -31,6 +41,8 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
         TextView tv_content;
         TextView tv_client;
         TextView tv_date;
+        TextView tv_commit;
+        ImageView iv_pic;
     }
 
     @Override
@@ -49,8 +61,10 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
                     .findViewById(R.id.event_listitem_content);
             holder.tv_client = (TextView) v
                     .findViewById(R.id.event_listitem_client);
+            holder.iv_pic = (ImageView) v.findViewById(R.id.iv_pic);
             holder.tv_date = (TextView) v
                     .findViewById(R.id.event_listitem_date);
+            holder.tv_commit = (TextView) v.findViewById(R.id.tv_comment_count);
             v.setTag(holder);
         } else {
             holder = (ViewHolder) v.getTag();
@@ -60,6 +74,14 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
         holder.tv_content.setText(stripTags(data.getBody().getTitle()));
         holder.tv_content.setMaxLines(3);
         holder.tv_date.setText(StringUtils.friendly_time(data.getCreateTime()));
+        holder.tv_commit.setText(data.getReply());
+        String imgPath = data.getBody().getImage();
+        if (!StringUtils.isEmpty(imgPath)) {
+            holder.iv_pic.setVisibility(View.VISIBLE);
+            setTweetImage(holder.iv_pic, imgPath);
+        } else {
+            holder.iv_pic.setVisibility(View.GONE);
+        }
         // holder.tv_client.setText("");
         return v;
     }
@@ -83,4 +105,41 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
         super.getItem(arg0);
         return mDatas.get(arg0);
     }
+
+    /**
+     * 动态设置图片显示样式
+     * 
+     * @author kymjs
+     */
+    private void setTweetImage(final ImageView pic, final String url) {
+        pic.setVisibility(View.VISIBLE);
+        kjb.setCallback(new BitmapCallBack() {
+            @Override
+            public void onSuccess(View view, Bitmap bitmap) {
+                super.onSuccess(view, bitmap);
+                bitmap = BitmapHelper.scaleWithXY(bitmap,
+                        rectSize / bitmap.getHeight());
+                ((ImageView) view).setImageBitmap(bitmap);
+            }
+        });
+
+        kjb.display(pic, url, R.drawable.pic_bg, rectSize, rectSize);
+
+        pic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImagePreviewActivity.showImagePrivew(context, 0,
+                        new String[] { url });
+            }
+        });
+    }
+
+    private static void initImageSize(Context cxt) {
+        if (cxt != null && rectSize == 0) {
+            rectSize = (int) cxt.getResources().getDimension(R.dimen.space_100);
+        } else {
+            rectSize = 300;
+        }
+    }
+
 }
