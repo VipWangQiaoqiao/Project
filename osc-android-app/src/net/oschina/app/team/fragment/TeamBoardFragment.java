@@ -69,27 +69,15 @@ public class TeamBoardFragment extends BaseFragment {
     TextView mTvDate;
 
     private Team team;
-    private Bundle bundle;
 
     public static final String WHICH_PAGER_KEY = "MyIssueFragment_wihch_pager";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        bundle = getArguments();
+        Bundle bundle = getArguments();
         if (bundle != null) {
-            int index = bundle.getInt(MyInformationFragment.TEAM_LIST_KEY, 0);
-            String cache = PreferenceHelper.readString(getActivity(),
-                    MyInformationFragment.TEAM_LIST_FILE,
-                    MyInformationFragment.TEAM_LIST_KEY);
-            List<Team> teams = TeamList.toTeamList(cache);
-            if (teams.size() > index) {
-                team = teams.get(index);
-            }
-        }
-        if (team == null) {
-            team = new Team();
-            TLog.log(getClass().getSimpleName(), "team对象初始化异常");
+            team = (Team) bundle.getSerializable(TeamMainActivity.BUNDLE_KEY_TEAM);
         }
     }
 
@@ -189,24 +177,20 @@ public class TeamBoardFragment extends BaseFragment {
     public void onClick(View v) {
         switch (v.getId()) {
         case R.id.team_myissue_waitdo:
-            bundle.putInt(WHICH_PAGER_KEY, 0);
             UIHelper.showSimpleBack(getActivity(),
-                    SimpleBackPage.MY_ISSUE_PAGER, bundle);
+                    SimpleBackPage.MY_ISSUE_PAGER, getMyIssueStateBundle(0));
             break;
         case R.id.team_myissue_ing:
-            bundle.putInt(WHICH_PAGER_KEY, 1);
             UIHelper.showSimpleBack(getActivity(),
-                    SimpleBackPage.MY_ISSUE_PAGER, bundle);
+                    SimpleBackPage.MY_ISSUE_PAGER, getMyIssueStateBundle(1));
             break;
         case R.id.team_myissue_outdate:
-            bundle.putInt(WHICH_PAGER_KEY, 0);
             UIHelper.showSimpleBack(getActivity(),
-                    SimpleBackPage.MY_ISSUE_PAGER, bundle);
+                    SimpleBackPage.MY_ISSUE_PAGER, getMyIssueStateBundle(0));
             break;
         case R.id.team_myissue_all:
-            bundle.putInt(WHICH_PAGER_KEY, 2);
             UIHelper.showSimpleBack(getActivity(),
-                    SimpleBackPage.MY_ISSUE_PAGER, bundle);
+                    SimpleBackPage.MY_ISSUE_PAGER, getMyIssueStateBundle(2));
             break;
         case R.id.ll_team_active:
             UIHelper.showSimpleBack(getActivity(), SimpleBackPage.TEAM_ACTIVE,
@@ -230,6 +214,12 @@ public class TeamBoardFragment extends BaseFragment {
         default:
             break;
         }
+    }
+    
+    private Bundle getMyIssueStateBundle(int index) {
+	Bundle bundle = getBundle();
+	bundle.putInt(WHICH_PAGER_KEY, index);
+	return bundle;
     }
 
     private Bundle getBundle() {

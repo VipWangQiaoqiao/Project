@@ -63,7 +63,7 @@ public class TeamMainViewPagerFragment extends BaseViewPagerFragment {
 	super.onViewCreated(view, savedInstanceState);
 	setHasOptionsMenu(true);
 	mViewPager.setOffscreenPageLimit(2);
-	Bundle bundle = getActivity().getIntent().getExtras();
+	Bundle bundle = getArguments();
 	if (bundle != null) {
 	    mTeam = (Team) bundle.getSerializable(TeamMainActivity.BUNDLE_KEY_TEAM);
 	}
