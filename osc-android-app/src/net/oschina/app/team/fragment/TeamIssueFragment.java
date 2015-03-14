@@ -78,7 +78,7 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
 	    if (catalog != null) {
 		this.mCatalog = catalog;
 		this.mCatalogId = catalog.getId();
-		String title = catalog.getTitle() + "(" + catalog.getOpenedIssueCount() + "/" + catalog.getClosedIssueCount() + ")";
+		String title = catalog.getTitle() + "(" + catalog.getOpenedIssueCount() + "/" + catalog.getAllIssueCount() + ")";
 		((BaseActivity)getActivity()).setActionBarTitle(title);
 	    }
 	    isNeedMenu = bundle.getBoolean("needmenu", true);

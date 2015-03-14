@@ -13,14 +13,18 @@ import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamIssue;
 import net.oschina.app.team.bean.TeamIssueList;
 import net.oschina.app.team.bean.TeamList;
+import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.team.viewpagefragment.MyIssuePagerfragment;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.util.TLog;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
 import org.kymjs.kjframe.utils.PreferenceHelper;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 
 /**
  * 我的任务列表界面
@@ -28,7 +32,7 @@ import android.os.Bundle;
  * @author kymjs (https://github.com/kymjs)
  * 
  */
-public class MyIssueDetail extends BaseListFragment<TeamIssue> {
+public class MyIssueFragment extends BaseListFragment<TeamIssue> {
 
     protected static final String TAG = TeamIssueFragment.class.getSimpleName();
     private static final String CACHE_KEY_PREFIX = "my_issue_";
@@ -41,23 +45,9 @@ public class MyIssueDetail extends BaseListFragment<TeamIssue> {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         if (bundle != null) {
+            mTeam = (Team) bundle.getSerializable(TeamMainActivity.BUNDLE_KEY_TEAM);
             type = bundle.getString(MyIssuePagerfragment.MY_ISSUEDETAIL_KEY,
                     "all");
-            bundle = bundle.getBundle(SimpleBackActivity.BUNDLE_KEY_ARGS);
-        }
-        if (bundle != null) {
-            int index = bundle.getInt(MyInformationFragment.TEAM_LIST_KEY, 0);
-            String cache = PreferenceHelper.readString(getActivity(),
-                    MyInformationFragment.TEAM_LIST_FILE,
-                    MyInformationFragment.TEAM_LIST_KEY);
-            List<Team> teams = TeamList.toTeamList(cache);
-            if (teams.size() > index) {
-                mTeam = teams.get(index);
-            }
-        }
-        if (mTeam == null) {
-            mTeam = new Team();
-            TLog.log(getClass().getSimpleName(), "team对象初始化异常");
         }
     }
 
@@ -90,5 +80,15 @@ public class MyIssueDetail extends BaseListFragment<TeamIssue> {
     protected void sendRequestData() {
         OSChinaApi.getMyIssue(mTeam.getId() + "", AppContext.getInstance()
                 .getLoginUid() + "", mCurrentPage, type, mHandler);
+    }
+    
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position,
+            long id) {
+        // TODO Auto-generated method stub
+	TeamIssue issue = mAdapter.getItem(position);
+	if (issue != null) {
+	    UIHelper.showTeamIssueDetail(getActivity(), mTeam, issue, null);
+	}
     }
 }

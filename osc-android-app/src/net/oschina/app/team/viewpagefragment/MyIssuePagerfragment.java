@@ -2,8 +2,10 @@ package net.oschina.app.team.viewpagefragment;
 
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.base.BaseViewPagerFragment;
-import net.oschina.app.team.fragment.MyIssueDetail;
+import net.oschina.app.team.bean.TeamIssue;
+import net.oschina.app.team.fragment.MyIssueFragment;
 import net.oschina.app.team.fragment.TeamBoardFragment;
+import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.ui.SimpleBackActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -38,9 +40,7 @@ public class MyIssuePagerfragment extends BaseViewPagerFragment {
 
         int currentPage = 0;
         try {
-            currentPage = getActivity().getIntent()
-                    .getBundleExtra(SimpleBackActivity.BUNDLE_KEY_ARGS)
-                    .getInt(TeamBoardFragment.WHICH_PAGER_KEY, 0);
+            currentPage = getArguments().getInt(TeamBoardFragment.WHICH_PAGER_KEY, 0);
         } catch (NullPointerException e) {
         }
         mViewPager.setCurrentItem(currentPage);
@@ -48,24 +48,19 @@ public class MyIssuePagerfragment extends BaseViewPagerFragment {
 
     @Override
     protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
-        Bundle bundle0 = getActivity().getIntent().getExtras();
-        bundle0.remove(MyIssuePagerfragment.MY_ISSUEDETAIL_KEY);
-        bundle0.putString(MyIssuePagerfragment.MY_ISSUEDETAIL_KEY, "opened");
-        adapter.addTab("待办中", "", MyIssueDetail.class, bundle0);
+        adapter.addTab("待办中", TeamIssue.TEAM_ISSUE_STATE_OPENED, MyIssueFragment.class, getBundle(TeamIssue.TEAM_ISSUE_STATE_OPENED));
 
-        Bundle bundle1 = getActivity().getIntent().getExtras();
-        bundle1.remove(MyIssuePagerfragment.MY_ISSUEDETAIL_KEY);
-        bundle1.putString(MyIssuePagerfragment.MY_ISSUEDETAIL_KEY, "underway");
-        adapter.addTab("进行中", "", MyIssueDetail.class, bundle1);
+        adapter.addTab("进行中", TeamIssue.TEAM_ISSUE_STATE_UNDERWAY, MyIssueFragment.class, getBundle(TeamIssue.TEAM_ISSUE_STATE_UNDERWAY));
 
-        Bundle bundle2 = getActivity().getIntent().getExtras();
-        bundle2.remove(MyIssuePagerfragment.MY_ISSUEDETAIL_KEY);
-        bundle2.putString(MyIssuePagerfragment.MY_ISSUEDETAIL_KEY, "closed");
-        adapter.addTab("已完成", "", MyIssueDetail.class, bundle2);
+        adapter.addTab("已完成", TeamIssue.TEAM_ISSUE_STATE_CLOSED, MyIssueFragment.class, getBundle(TeamIssue.TEAM_ISSUE_STATE_CLOSED));
 
-        Bundle bundle3 = getActivity().getIntent().getExtras();
-        bundle3.remove(MyIssuePagerfragment.MY_ISSUEDETAIL_KEY);
-        bundle3.putString(MyIssuePagerfragment.MY_ISSUEDETAIL_KEY, "accepted");
-        adapter.addTab("已验收", "", MyIssueDetail.class, bundle3);
+        adapter.addTab("已验收", TeamIssue.TEAM_ISSUE_STATE_ACCEPTED, MyIssueFragment.class, getBundle(TeamIssue.TEAM_ISSUE_STATE_ACCEPTED));
+    }
+    
+    private Bundle getBundle(String state) {
+	Bundle bundle = new Bundle();
+	bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_TEAM, getArguments().getSerializable(TeamMainActivity.BUNDLE_KEY_TEAM));
+	bundle.putString(MyIssuePagerfragment.MY_ISSUEDETAIL_KEY, state);
+	return bundle;
     }
 }
