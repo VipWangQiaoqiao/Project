@@ -4,7 +4,6 @@ import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.team.bean.TeamIssueCatalog;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.TypefaceUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -36,7 +35,7 @@ public class TeamIssueCatalogAdapter extends ListBaseAdapter<TeamIssueCatalog> {
 
 	vh.title.setText(item.getTitle());
 	vh.state.setText(item.getOpenedIssueCount() + "/"
-		+ item.getClosedIssueCount());
+		+ item.getAllIssueCount());
 	
 	String description = item.getDescription();
 	if (description != null && !StringUtils.isEmpty(description)) {
