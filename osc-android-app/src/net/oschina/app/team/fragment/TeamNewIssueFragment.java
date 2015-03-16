@@ -25,7 +25,9 @@ import org.apache.http.Header;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -72,6 +74,8 @@ public class TeamNewIssueFragment extends BaseFragment {
     private TeamProject mTeamProject;
 
     private TeamIssueCatalog mTeamCatalog;
+    
+    private MenuItem mSendMenu;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,6 +96,38 @@ public class TeamNewIssueFragment extends BaseFragment {
 	view.findViewById(R.id.rl_issue_catalog).setOnClickListener(this);
 	view.findViewById(R.id.rl_issue_touser).setOnClickListener(this);
 	view.findViewById(R.id.rl_issue_time).setOnClickListener(this);
+	
+	mEtTitle.addTextChangedListener(new TextWatcher() {
+	    
+	    @Override
+	    public void onTextChanged(CharSequence s, int start, int before, int count) {
+		// TODO Auto-generated method stub
+		
+	    }
+	    
+	    @Override
+	    public void beforeTextChanged(CharSequence s, int start, int count,
+		    int after) {
+		// TODO Auto-generated method stub
+		
+	    }
+	    
+	    @Override
+	    public void afterTextChanged(Editable s) {
+		// TODO Auto-generated method stub
+		updateMenuState();
+	    }
+	});
+    }
+    
+    private void updateMenuState() {
+	if (mEtTitle.getText().length() == 0) {
+	    mSendMenu.setEnabled(false);
+	    mSendMenu.setIcon(R.drawable.actionbar_unsend_icon);
+	} else {
+	    mSendMenu.setEnabled(true);
+	    mSendMenu.setIcon(R.drawable.actionbar_send_icon);
+	}
     }
 
     @Override
@@ -99,6 +135,8 @@ public class TeamNewIssueFragment extends BaseFragment {
 	// TODO Auto-generated method stub
 	super.onCreateOptionsMenu(menu, inflater);
 	inflater.inflate(R.menu.team_new_issue_menu, menu);
+	mSendMenu = menu.findItem(R.id.team_issue_new_pub);
+	updateMenuState();
     }
 
     @Override

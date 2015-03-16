@@ -217,9 +217,10 @@ public class TeamMainActivity extends BaseActivity {
 
     private void setTeamDataState() {
         if (teamDatas.isEmpty()) {
-            mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+            mErrorLayout.setErrorType(EmptyLayout.NODATA);
             String msg = getResources().getString(R.string.team_empty);
             mErrorLayout.setErrorMessage(msg);
+            mErrorLayout.setErrorImag(R.drawable.page_icon_empty);
         } else {
             new Handler().postDelayed(new Runnable() {
 
