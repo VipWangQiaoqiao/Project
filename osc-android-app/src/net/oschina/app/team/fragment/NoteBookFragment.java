@@ -314,7 +314,8 @@ public class NoteBookFragment extends BaseFragment implements
                         NotebookDataList.class, arg2);
                 if (dataList != null && dataList.getList() != null) {
                     noteDb.reset(dataList.getList());
-                    adapter.refurbishData(dataList.getList());
+                    datas = noteDb.query();
+                    adapter.refurbishData(datas);
                     updateEmptyView();
                 }
             }

@@ -11,6 +11,7 @@ import net.oschina.app.db.NoteDatabase;
 import org.apache.http.Header;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.protocol.HTTP;
+import org.kymjs.kjframe.utils.KJLoger;
 import org.kymjs.kjframe.utils.SystemTool;
 
 import android.app.Activity;
@@ -95,6 +96,12 @@ public class SynchronizeController {
                     .append("\",");
             jsonData.append("\"color\":\"").append(data.getColorText())
                     .append("\",");
+
+            if (StringUtils.isEmpty(data.getServerUpdateTime())) {
+                data.setServerUpdateTime(StringUtils
+                        .getDataTime("yyyy-MM-dd HH:mm:ss"));
+            }
+
             jsonData.append("\"createtime\":\"")
                     .append(data.getServerUpdateTime()).append("\",");
             jsonData.append("\"updatetime\":\"").append(
@@ -102,6 +109,8 @@ public class SynchronizeController {
             jsonData.append("\"}");
         }
         jsonData.append("]}");
+
+        KJLoger.debug("==" + jsonData.toString());
 
         AsyncHttpClient client = ApiHttpClient.getHttpClient();
         client.addHeader("Content-Type", "application/json; charset=UTF-8");
@@ -116,12 +125,14 @@ public class SynchronizeController {
                         @Override
                         public void onSuccess(int arg0, Header[] arg1,
                                 byte[] arg2) {
+                            KJLoger.debug("获取便签:" + new String(arg2));
                             cb.onSuccess(arg2);
                         }
 
                         @Override
                         public void onFailure(int arg0, Header[] arg1,
                                 byte[] arg2, Throwable arg3) {
+                            KJLoger.debug(arg0 + new String(arg2));
                             cb.onFailure();
                         }
 
