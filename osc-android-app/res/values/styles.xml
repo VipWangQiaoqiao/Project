@@ -15,12 +15,7 @@
     </style>
 
     <style name="OverflowButton" parent="@style/Widget.AppCompat.ActionButton.Overflow">
-        <item name="android:src">@drawable/actionbar_more_icon</item>
-    </style>
-
-    <style name="DrapDownListView" parent="@style/Widget.AppCompat.Light.ListView.DropDown">
-        <item name="android:dividerHeight">1px</item>
-        <item name="android:divider">@color/list_divider_color</item>
+        <item name="android:src">@drawable/actionbar_more_icon_normal</item>
     </style>
     
     <style name="PopupMenu.ListPopupWindow" parent="@style/Widget.AppCompat.Light.Base.ListPopupWindow">
@@ -46,7 +41,8 @@
         <item name="actionBarStyle">@style/ActionBarBaseStyle</item>
         <item name="actionOverflowButtonStyle">@style/OverflowButton</item>
         <item name="actionBarItemBackground">@drawable/socialize_titlebar_item_background_selector</item>
-        <item name="dropDownListViewStyle">@style/DrapDownListView</item>
+        <item name="android:actionMenuTextColor">@color/white</item>
+        <item name="android:dropDownListViewStyle">@style/SpinnerDropDownListView</item>
     </style>
 
     <style name="ActionBarBaseTheme.Preview" parent="@style/ActionBarBaseTheme">
@@ -598,6 +594,11 @@
     
     <style name="team_user_infor" parent="@style/wrap_wrap">
         <item name="android:padding">5dp</item>
+    </style>
+    
+    <style name="SpinnerDropDownListView" parent="android:style/Widget.ListView.DropDown">
+        <item name="android:divider">#3f3f3f</item>
+        <item name="android:dividerHeight">1dp</item>
     </style>
 
 </resources>

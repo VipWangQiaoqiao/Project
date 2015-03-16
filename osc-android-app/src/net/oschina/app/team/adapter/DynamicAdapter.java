@@ -51,7 +51,7 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
         ViewHolder holder = null;
         TeamActive data = mDatas.get(position);
         if (v == null || v.getTag() == null) {
-            v = View.inflate(context, R.layout.item_team_dynamic, null);
+            v = View.inflate(context, R.layout.list_cell_team_active, null);
             holder = new ViewHolder();
             holder.img_head = (AvatarView) v
                     .findViewById(R.id.event_listitem_userface);
