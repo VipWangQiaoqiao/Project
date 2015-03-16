@@ -48,11 +48,13 @@ public class NoteDatabase {
      * @param data
      */
     public void update(NotebookData data) {
-        String sql = ("update " + DatabaseHelper.NOTE_TABLE_NAME + " set iid=?, time=?, date=?, content=?, color=? where _id=?");
-        sqlite.execSQL(sql,
-                new String[] { data.getIid() + "", data.getUnixTime() + "",
-                        data.getDate(), data.getContent(),
-                        data.getColor() + "", data.getId() + "" });
+        if (sqlite.isOpen()) {
+            String sql = ("update " + DatabaseHelper.NOTE_TABLE_NAME + " set iid=?, time=?, date=?, content=?, color=? where _id=?");
+            sqlite.execSQL(sql,
+                    new String[] { data.getIid() + "", data.getUnixTime() + "",
+                            data.getDate(), data.getContent(),
+                            data.getColor() + "", data.getId() + "" });
+        }
     }
 
     public List<NotebookData> query() {
@@ -77,7 +79,7 @@ public class NoteDatabase {
                 NotebookData notebookData = new NotebookData();
                 notebookData.setId(cursor.getInt(0));
                 notebookData.setIid(cursor.getInt(1));
-                notebookData.setUnixTime(cursor.getLong(2));
+                notebookData.setUnixTime(cursor.getString(2));
                 notebookData.setDate(cursor.getString(3));
                 notebookData.setContent(cursor.getString(4));
                 notebookData.setColor(cursor.getInt(5));
@@ -121,33 +123,34 @@ public class NoteDatabase {
         }
     }
 
-    /**
-     * 合并一条数据到本地(通过更新时间判断仅保留最新)
-     * 
-     * @param data
-     * @return 数据是否被合并了
-     */
-    public boolean merge(NotebookData data) {
-        Cursor cursor = sqlite.rawQuery(
-                "select * from " + DatabaseHelper.NOTE_TABLE_NAME
-                        + " where _id=" + data.getId(), null);
-        NotebookData localData = new NotebookData();
-        // 本循环其实只执行一次
-        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-            localData.setId(cursor.getInt(0));
-            localData.setIid(cursor.getInt(1));
-            localData.setUnixTime(cursor.getLong(2));
-            localData.setDate(cursor.getString(3));
-            localData.setContent(cursor.getString(4));
-            localData.setColor(cursor.getInt(5));
-        }
-        // 是否需要合这条数据
-        boolean isMerge = localData.getUnixTime() < data.getUnixTime();
-        if (isMerge) {
-            save(data);
-        }
-        return isMerge;
-    }
+    //
+    // /**
+    // * 合并一条数据到本地(通过更新时间判断仅保留最新)
+    // *
+    // * @param data
+    // * @return 数据是否被合并了
+    // */
+    // public boolean merge(NotebookData data) {
+    // Cursor cursor = sqlite.rawQuery(
+    // "select * from " + DatabaseHelper.NOTE_TABLE_NAME
+    // + " where _id=" + data.getId(), null);
+    // NotebookData localData = new NotebookData();
+    // // 本循环其实只执行一次
+    // for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+    // localData.setId(cursor.getInt(0));
+    // localData.setIid(cursor.getInt(1));
+    // localData.setUnixTime(cursor.getString(2));
+    // localData.setDate(cursor.getString(3));
+    // localData.setContent(cursor.getString(4));
+    // localData.setColor(cursor.getInt(5));
+    // }
+    // // 是否需要合这条数据
+    // boolean isMerge = localData.getUnixTime() < data.getUnixTime();
+    // if (isMerge) {
+    // save(data);
+    // }
+    // return isMerge;
+    // }
 
     public void destroy() {
         dbHelper.close();

@@ -20,7 +20,7 @@ public class NotebookData extends Entity implements Serializable,
     @XStreamAlias("iid")
     private int iid;
     @XStreamAlias("timestamp")
-    private long unixTime;
+    private String unixTime;
     @XStreamAlias("updateTime")
     private String date;
     @XStreamAlias("content")
@@ -88,12 +88,13 @@ public class NotebookData extends Entity implements Serializable,
         this.date = date;
     }
 
-    public long getUnixTime() {
+    public String getUnixTime() {
         return unixTime;
     }
 
-    public void setUnixTime(long time) {
+    public void setUnixTime(String time) {
         this.unixTime = time;
+        setServerUpdateTime(time);
     }
 
     public String getColorText() {
