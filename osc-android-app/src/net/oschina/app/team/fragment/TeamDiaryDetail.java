@@ -176,7 +176,7 @@ public class TeamDiaryDetail extends BaseFragment implements EmojiTextListener,
         UIHelper.initWebView(content);
         fillWebViewBody(content);
         // content.setText(Html.fromHtml(diaryData.getTitle()));
-        time.setText(diaryData.getCreateTime());
+        time.setText(StringUtils.friendly_time(diaryData.getCreateTime()));
         return headerView;
     }
 
