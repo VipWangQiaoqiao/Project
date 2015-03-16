@@ -34,6 +34,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -249,6 +250,13 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
             final EmptyLayout errorLayout = (EmptyLayout) pagerView
                     .findViewById(R.id.error_layout);
             initListContent(errorLayout, listview, whichWeek);
+            errorLayout.setOnLayoutClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setContentFromNet(errorLayout, pullHeadView, listview,
+                            whichWeek);
+                }
+            });
 
             pullHeadView.setOnRefreshListener(new OnRefreshListener() {
                 @Override
@@ -336,8 +344,8 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
                 public void onStart() {
                     super.onStart();
                     ListAdapter adapter = view.getAdapter();
+                    errorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
                     if (adapter == null && errorLayout != null) {
-                        errorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
                         errorLayout.setVisibility(View.VISIBLE);
                     }
                 }
