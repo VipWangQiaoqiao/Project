@@ -1,10 +1,12 @@
 package net.oschina.app.team.bean;
 
+import java.io.Serializable;
+
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 import net.oschina.app.bean.Entity;
 
-/** 
+/**
  * 团队项目实体类
  * 
  * @author FireAnt（http://my.oschina.net/LittleDY）
@@ -15,7 +17,7 @@ import net.oschina.app.bean.Entity;
 @SuppressWarnings("serial")
 @XStreamAlias("project")
 public class TeamProject extends Entity {
-    
+
     public final static String GITOSC = "Git@OSC";
     public final static String GITHUB = "GitHub";
 
@@ -27,12 +29,9 @@ public class TeamProject extends Entity {
 
     @XStreamAlias("git")
     private TeamGit git;
-    
-    @XStreamAlias("totalCount")
-    private int totalCount;
-	
-    @XStreamAlias("closedCount")
-    private int closedCount;
+
+    @XStreamAlias("issue")
+    private Issue issue;
 
     public String getSource() {
 	return source;
@@ -58,20 +57,36 @@ public class TeamProject extends Entity {
 	this.git = git;
     }
 
-    public int getTotalCount() {
-        return totalCount;
+    public Issue getIssue() {
+        return issue;
     }
 
-    public void setTotalCount(int totalCount) {
-        this.totalCount = totalCount;
+    public void setIssue(Issue issue) {
+        this.issue = issue;
     }
 
-    public int getClosedCount() {
-        return closedCount;
+    @XStreamAlias("issue")
+    public class Issue implements Serializable {
+	@XStreamAlias("opened")
+	private int opened;
+	@XStreamAlias("all")
+	private int all;
+
+	public int getOpened() {
+	    return opened;
+	}
+
+	public void setOpened(int opened) {
+	    this.opened = opened;
+	}
+
+	public int getAll() {
+	    return all;
+	}
+
+	public void setAll(int all) {
+	    this.all = all;
+	}
     }
 
-    public void setClosedCount(int closedCount) {
-        this.closedCount = closedCount;
-    }
-    
 }

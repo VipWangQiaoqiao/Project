@@ -46,7 +46,7 @@ public class TeamProjectListAdapterNew extends ListBaseAdapter<TeamProject> {
 	}
 
 	vh.name.setText(item.getGit().getOwnerName() + " / " + item.getGit().getName());
-	vh.issue.setText(item.getClosedCount() + "/" + item.getTotalCount());
+	vh.issue.setText(item.getIssue().getOpened() + "/" + item.getIssue().getAll());
 	
 	return convertView;
     }
