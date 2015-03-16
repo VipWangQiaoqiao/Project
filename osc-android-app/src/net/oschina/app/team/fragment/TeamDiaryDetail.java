@@ -105,6 +105,7 @@ public class TeamDiaryDetail extends BaseFragment implements EmojiTextListener,
     public void initView(View view) {
         super.initView(view);
         mList.setDivider(null);
+        mList.setSelector(android.R.color.transparent);
         mList.addHeaderView(initHeaderView());
         mList.addFooterView(initFooterView());
 
@@ -175,7 +176,7 @@ public class TeamDiaryDetail extends BaseFragment implements EmojiTextListener,
         UIHelper.initWebView(content);
         fillWebViewBody(content);
         // content.setText(Html.fromHtml(diaryData.getTitle()));
-        time.setText(diaryData.getCreateTime());
+        time.setText(StringUtils.friendly_time(diaryData.getCreateTime()));
         return headerView;
     }
 

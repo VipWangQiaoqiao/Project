@@ -7,7 +7,6 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseActivity;
-import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamList;
 import net.oschina.app.team.viewpagefragment.TeamMainViewPagerFragment;
@@ -48,6 +47,10 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 
 public class TeamMainActivity extends BaseActivity {
 
+    private final String TEAM_LIST_FILE = "team_list_file";
+    private final String TEAM_LIST_KEY = "team_list_key"
+            + AppContext.getInstance().getLoginUid();
+
     public final static String BUNDLE_KEY_TEAM = "bundle_key_team";
 
     public final static String BUNDLE_KEY_PROJECT = "bundle_key_project";
@@ -55,142 +58,141 @@ public class TeamMainActivity extends BaseActivity {
     public final static String BUNDLE_KEY_ISSUE_CATALOG = "bundle_key_catalog_list";
 
     private final String tag = "team_view";
-    
+
     private FragmentManager mFragmentManager;
 
     private int mCurrentContentIndex = -1;
-    
+
     @InjectView(R.id.error_layout)
     EmptyLayout mErrorLayout;
     @InjectView(R.id.main_content)
     View container;
-    
+
     @Override
     protected boolean hasBackButton() {
-	return true;
+        return true;
     }
 
     @Override
     protected int getLayoutId() {
-	return R.layout.activity_team_main;
+        return R.layout.activity_team_main;
     }
 
     @Override
-    public void onClick(View v) {
-    }
+    public void onClick(View v) {}
 
     @Override
     protected boolean haveSpinner() {
-	return true;
+        return true;
     }
 
     @Override
     public void initView() {
-	ButterKnife.inject(this);
-	// 隐藏actionbar的标题
-	mActionBar.getCustomView().findViewById(R.id.tv_actionbar_title).setVisibility(View.GONE);
-//	ImageView back = (ImageView) mActionBar.getCustomView().findViewById(R.id.btn_back);
-//	back.setImageResource(R.drawable.abc_ab_bottom_solid_dark_holo);
-	mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-	mErrorLayout.setErrorMessage("获取团队中...");
-	mErrorLayout.setOnClickListener(new View.OnClickListener() {
-	    
-	    @Override
-	    public void onClick(View v) {
-		// TODO Auto-generated method stub
-		mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-		requestTeamList();
-	    }
-	});
-	initSpinner();
-	requestTeamList();
-	
-	mFragmentManager = getSupportFragmentManager();
+        ButterKnife.inject(this);
+        // 隐藏actionbar的标题
+        mActionBar.getCustomView().findViewById(R.id.tv_actionbar_title)
+                .setVisibility(View.GONE);
+        // ImageView back = (ImageView)
+        // mActionBar.getCustomView().findViewById(R.id.btn_back);
+        // back.setImageResource(R.drawable.abc_ab_bottom_solid_dark_holo);
+        mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+        mErrorLayout.setErrorMessage("获取团队中...");
+        mErrorLayout.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+                requestTeamList();
+            }
+        });
+        initSpinner();
+        requestTeamList();
+
+        mFragmentManager = getSupportFragmentManager();
     }
 
     @Override
-    public void initData() {
-    }
-    
+    public void initData() {}
+
     private Spinner mSpinner;
     private SpinnerAdapter adapter;
-    
-    private List<String> teamName = new ArrayList<String>();
+
+    private final List<String> teamName = new ArrayList<String>();
     private List<Team> teamDatas = new ArrayList<Team>();
-    
+
     private void initSpinner() {
-	mSpinner = getSpinner();
-	adapter = new SpinnerAdapter(this, teamName);
-	mSpinner.setAdapter(adapter);
-	mSpinner.setVisibility(View.GONE);
-	
-	mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mSpinner = getSpinner();
+        adapter = new SpinnerAdapter(this, teamName);
+        mSpinner.setAdapter(adapter);
+        mSpinner.setVisibility(View.GONE);
 
-	    @Override
-	    public void onItemSelected(AdapterView<?> parent, View view,
-		    int position, long id) {
-		// TODO Auto-generated method stub
-		Team team = teamDatas.get(position);
-		if (team != null) {
-		    switchTeam(position);
+        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                    int position, long id) {
+                // TODO Auto-generated method stub
+                Team team = teamDatas.get(position);
+                if (team != null) {
+                    switchTeam(position);
 		    adapter.setSelectIndex(position);
-		}
-	    }
+                }
+            }
 
-	    @Override
-	    public void onNothingSelected(AdapterView<?> parent) {
-		// TODO Auto-generated method stub
-		
-	    }
-	});
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO Auto-generated method stub
+
+            }
+        });
     }
-    
+
     /**
      * 
      * @param pos
      */
     private void switchTeam(int pos) {
-	if (pos == mCurrentContentIndex)
-	    return;
-	showWaitDialog("正在切换...");
-	FragmentTransaction ft = mFragmentManager.beginTransaction();
-	if (tag != null) {
-	    Fragment fragment = mFragmentManager
-		    .findFragmentByTag(tag);
-	    if (fragment != null) {
-		ft.remove(fragment);
-	    }
-	}
-	try {
-	    TeamMainViewPagerFragment fragment = TeamMainViewPagerFragment.class.newInstance();
-	    Bundle bundle = new Bundle();
-	    bundle.putSerializable(BUNDLE_KEY_TEAM, teamDatas.get(pos));
-	    fragment.setArguments(bundle);
-	    ft.replace(R.id.main_content, fragment, tag);
-	    ft.commitAllowingStateLoss();
-	    mCurrentContentIndex = pos;
-	} catch (InstantiationException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	} catch (IllegalAccessException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
-	hideWaitDialog();
+        if (pos == mCurrentContentIndex)
+            return;
+        showWaitDialog("正在切换...");
+        FragmentTransaction ft = mFragmentManager.beginTransaction();
+        if (tag != null) {
+            Fragment fragment = mFragmentManager.findFragmentByTag(tag);
+            if (fragment != null) {
+                ft.remove(fragment);
+            }
+        }
+        try {
+            TeamMainViewPagerFragment fragment = TeamMainViewPagerFragment.class
+                    .newInstance();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(BUNDLE_KEY_TEAM, teamDatas.get(pos));
+            fragment.setArguments(bundle);
+            ft.replace(R.id.main_content, fragment, tag);
+            ft.commitAllowingStateLoss();
+            mCurrentContentIndex = pos;
+        } catch (InstantiationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        hideWaitDialog();
     }
-    
+
     private void requestTeamList() {
-	// 初始化团队列表数据
-        String cache = PreferenceHelper.readString(this,
-                MyInformationFragment.TEAM_LIST_FILE,
-                MyInformationFragment.TEAM_LIST_KEY);
+        // 初始化团队列表数据
+        String cache = PreferenceHelper.readString(this, TEAM_LIST_FILE,
+                TEAM_LIST_KEY, "");
         if (!StringUtils.isEmpty(cache)) {
-            //mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+            // mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             teamDatas = TeamList.toTeamList(cache);
             setTeamDataState();
         } else {
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-            
+
             OSChinaApi.teamList(new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
@@ -198,11 +200,9 @@ public class TeamMainActivity extends BaseActivity {
                     teamDatas.clear();
                     teamDatas.addAll(datas.getList());
                     setTeamDataState();
-                    
+
                     PreferenceHelper.write(TeamMainActivity.this,
-                            MyInformationFragment.TEAM_LIST_FILE,
-                            MyInformationFragment.TEAM_LIST_KEY,
-                            datas.toCacheData());
+                            TEAM_LIST_FILE, TEAM_LIST_KEY, datas.toCacheData());
                 }
 
                 @Override
@@ -212,32 +212,32 @@ public class TeamMainActivity extends BaseActivity {
                 }
             });
         }
-        
+
     }
-    
+
     private void setTeamDataState() {
-	if (teamDatas.isEmpty()) {
-	    mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-	    String msg = getResources().getString(R.string.team_empty);
-	    mErrorLayout.setErrorMessage(msg);
-	} else {
-	    new Handler().postDelayed(new Runnable() {
-	        
-	        @Override
-	        public void run() {
-	    	// TODO Auto-generated method stub
-	            mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-	        }
-	    }, 800);
-	    mSpinner.setVisibility(View.VISIBLE);
-	    container.setVisibility(View.VISIBLE);
-	}
-	for (Team team : this.teamDatas) {
-	    teamName.add(team.getName());
-	}
-	adapter.notifyDataSetChanged();
+        if (teamDatas.isEmpty()) {
+            mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+            String msg = getResources().getString(R.string.team_empty);
+            mErrorLayout.setErrorMessage(msg);
+        } else {
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    // TODO Auto-generated method stub
+                    mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+                }
+            }, 800);
+            mSpinner.setVisibility(View.VISIBLE);
+            container.setVisibility(View.VISIBLE);
+        }
+        for (Team team : this.teamDatas) {
+            teamName.add(team.getName());
+        }
+        adapter.notifyDataSetChanged();
     }
-    
+
     public class SpinnerAdapter extends BaseAdapter {
 	
 	private List<String> teams;
@@ -254,31 +254,7 @@ public class TeamMainActivity extends BaseActivity {
 	    this.teams = teams;
 	    this.context = context;
 	}
-
-	@Override
-	public int getCount() {
-	    // TODO Auto-generated method stub
-	    return teams.size();
-	}
 	
-	@Override
-	public void notifyDataSetChanged() {
-	    // TODO Auto-generated method stub
-	    super.notifyDataSetChanged();
-	}
-
-	@Override
-	public String getItem(int position) {
-	    // TODO Auto-generated method stub
-	    return teams.get(position);
-	}
-
-	@Override
-	public long getItemId(int position) {
-	    // TODO Auto-generated method stub
-	    return position;
-	}
-
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 	    // TODO Auto-generated method stub
@@ -310,5 +286,29 @@ public class TeamMainActivity extends BaseActivity {
 	    return convertView;
 	}
 	
+        @Override
+        public int getCount() {
+            // TODO Auto-generated method stub
+            return teams.size();
+        }
+
+        @Override
+        public void notifyDataSetChanged() {
+            // TODO Auto-generated method stub
+            super.notifyDataSetChanged();
+        }
+
+        @Override
+        public String getItem(int position) {
+            // TODO Auto-generated method stub
+            return teams.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            // TODO Auto-generated method stub
+            return position;
+        }
+
     }
 }

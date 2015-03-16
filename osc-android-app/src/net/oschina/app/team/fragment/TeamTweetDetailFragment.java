@@ -113,7 +113,7 @@ public class TeamTweetDetailFragment extends
         tv_content.setFocusable(false);
         tv_content.setDispatchToParent(true);
         tv_content.setLongClickable(false);
-        Spanned span = Html.fromHtml(active.getBody().getDetail());
+        Spanned span = Html.fromHtml(active.getBody().getDetail().trim());
         MyURLSpan.parseLinkText(tv_content, span);
 
         img_head.setAvatarUrl(active.getAuthor().getPortrait());
@@ -409,9 +409,13 @@ public class TeamTweetDetailFragment extends
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
             long id) {
-        final Comment comment = mAdapter.getItem(position - 1);
-        if (comment == null)
+        if (position < 1) { // header view
             return;
+        }
+        final Comment comment = mAdapter.getItem(position - 1);
+        if (comment == null) {
+            return;
+        }
         mEmojiFragment.setTag(comment);
         mEmojiFragment.setInputHint("回复" + comment.getAuthor() + ":");
         mEmojiFragment.requestFocusInput();

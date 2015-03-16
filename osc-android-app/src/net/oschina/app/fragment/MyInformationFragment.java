@@ -56,8 +56,6 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
  */
 public class MyInformationFragment extends BaseFragment {
 
-    public static final String TEAM_LIST_FILE = "team_list_file";
-    public static final String TEAM_LIST_KEY = "team_list_key";
     public static final int sChildView = 9; // 在没有加入TeamList控件时rootview有多少子布局
 
     @InjectView(R.id.iv_avatar)
@@ -404,7 +402,7 @@ public class MyInformationFragment extends BaseFragment {
             break;
         }
     }
-    
+
     private void showMyQrCode() {
         MyQrodeDialog dialog = new MyQrodeDialog(getActivity());
         dialog.show();
