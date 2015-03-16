@@ -1,6 +1,5 @@
 package net.oschina.app.team.bean;
 
-import java.io.Serializable;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
@@ -66,7 +65,7 @@ public class TeamProject extends Entity {
     }
 
     @XStreamAlias("issue")
-    public class Issue implements Serializable {
+    public class Issue extends Entity {
 	@XStreamAlias("opened")
 	private int opened;
 	@XStreamAlias("all")

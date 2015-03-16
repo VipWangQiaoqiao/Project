@@ -30,11 +30,11 @@ public class TeamIssue extends Entity {
     public final static String TEAM_ISSUE_STATE_UNDERWAY = "underway";
     public final static String TEAM_ISSUE_STATE_ACCEPTED = "accepted";
     public final static String TEAM_ISSUE_STATE_CLOSED = "closed";
-    
+
     public final static String TEAM_ISSUE_SOURCE_GITOSC = "Git@OSC";
     public final static String TEAM_ISSUE_SOURCE_GITHUB = "GitHub";
     public final static String TEAM_ISSUE_SOURCE_TEAMOSC = "Team@OSC";
-    
+
     public final static int TEAM_ISSUE_GITPUSHED = 1;// 已同步到git
 
     @XStreamAlias("state")
@@ -63,7 +63,7 @@ public class TeamIssue extends Entity {
 
     @XStreamAlias("acceptTime")
     private String acceptTime;
-    
+
     @XStreamAlias("deadlineTime")
     private String deadlineTime;
 
@@ -81,22 +81,22 @@ public class TeamIssue extends Entity {
 
     @XStreamAlias("authority")
     private Authority authority;
-    
+
     @XStreamAlias("gitpush")
     private int gitpush;// 是否已经同步到git
-    
+
     @XStreamAlias("project")
     private TeamProject project;
-    
+
     @XStreamAlias("collaborator")
     private List<TeamIssueCollaborator> collaborators;
-    
+
     @XStreamAlias("childIssues")
     private TeamIssueChild childIssues;// 子任务数
-    
+
     @XStreamAlias("relations")
     private Relations relations;// 关联任务数
-    
+
     @XStreamAlias("attachments")
     private Attachments attachments;// 附件数量
 
@@ -125,43 +125,43 @@ public class TeamIssue extends Entity {
     }
 
     public int getGitpush() {
-        return gitpush;
+	return gitpush;
     }
 
     public void setGitpush(int gitpush) {
-        this.gitpush = gitpush;
+	this.gitpush = gitpush;
     }
 
     public TeamProject getProject() {
-        return project;
+	return project;
     }
 
     public void setProject(TeamProject project) {
-        this.project = project;
+	this.project = project;
     }
 
     public TeamIssueChild getChildIssues() {
-        return childIssues;
+	return childIssues;
     }
 
     public void setChildIssues(TeamIssueChild childIssues) {
-        this.childIssues = childIssues;
+	this.childIssues = childIssues;
     }
 
     public Relations getRelations() {
-        return relations;
+	return relations;
     }
 
     public void setRelations(Relations relations) {
-        this.relations = relations;
+	this.relations = relations;
     }
 
     public Attachments getAttachments() {
-        return attachments;
+	return attachments;
     }
 
     public void setAttachments(Attachments attachments) {
-        this.attachments = attachments;
+	this.attachments = attachments;
     }
 
     public String getSource() {
@@ -211,14 +211,13 @@ public class TeamIssue extends Entity {
     public void setAcceptTime(String acceptTime) {
 	this.acceptTime = acceptTime;
     }
-    
 
     public String getDeadlineTime() {
-        return deadlineTime;
+	return deadlineTime;
     }
 
     public void setDeadlineTime(String deadlineTime) {
-        this.deadlineTime = deadlineTime;
+	this.deadlineTime = deadlineTime;
     }
 
     public Author getAuthor() {
@@ -262,11 +261,11 @@ public class TeamIssue extends Entity {
     }
 
     public List<TeamIssueCollaborator> getCollaborators() {
-        return collaborators;
+	return collaborators;
     }
 
     public void setCollaborators(List<TeamIssueCollaborator> collaborators) {
-        this.collaborators = collaborators;
+	this.collaborators = collaborators;
     }
 
     @XStreamAlias("label")
@@ -403,48 +402,90 @@ public class TeamIssue extends Entity {
 	}
 
     }
-    
+
     @XStreamAlias("collaborator")
     public class TeamIssueCollaborator implements Serializable {
-	
+
 	@XStreamAlias("id")
 	private int id;
 	@XStreamAlias("name")
 	private String name;
 	@XStreamAlias("portrait")
 	private String portrait;
+
 	public int getId() {
 	    return id;
 	}
+
 	public void setId(int id) {
 	    this.id = id;
 	}
+
 	public String getName() {
 	    return name;
 	}
+
 	public void setName(String name) {
 	    this.name = name;
 	}
+
 	public String getPortrait() {
 	    return portrait;
 	}
+
 	public void setPortrait(String portrait) {
 	    this.portrait = portrait;
 	}
-	
+
     }
-    
+
+    @XStreamAlias("project")
+    public class TeamProject implements Serializable {
+	@XStreamAlias("source")
+	private String source;
+
+	@XStreamAlias("team")
+	private String team;
+
+	@XStreamAlias("git")
+	private TeamGit git;
+
+	public String getSource() {
+	    return source;
+	}
+
+	public void setSource(String source) {
+	    this.source = source;
+	}
+
+	public String getTeam() {
+	    return team;
+	}
+
+	public void setTeam(String team) {
+	    this.team = team;
+	}
+
+	public TeamGit getGit() {
+	    return git;
+	}
+
+	public void setGit(TeamGit git) {
+	    this.git = git;
+	}
+    }
+
     // 子任务
     @XStreamAlias("childIssues")
     public class TeamIssueChild implements Serializable {
-	
+
 	@XStreamAlias("totalCount")
 	private int totalCount;
-	
+
 	@XStreamAlias("closedCount")
 	private int closedCount;
-	
-	@XStreamImplicit(itemFieldName="issue")
+
+	@XStreamImplicit(itemFieldName = "issue")
 	private List<TeamIssue> childIssues;
 
 	public int getTotalCount() {
@@ -471,7 +512,7 @@ public class TeamIssue extends Entity {
 	    this.childIssues = childIssues;
 	}
     }
-    
+
     // 关联任务
     @XStreamAlias("relations")
     public class Relations implements Serializable {
@@ -486,7 +527,7 @@ public class TeamIssue extends Entity {
 	    this.totalCount = totalCount;
 	}
     }
-    
+
     // 任务附件
     @XStreamAlias("attachments")
     public class Attachments implements Serializable {
@@ -501,7 +542,7 @@ public class TeamIssue extends Entity {
 	    this.totalCount = totalCount;
 	}
     }
-    
+
     public String getIssueStateText() {
 	String res = "待办中";
 	if (this.state.equals(TEAM_ISSUE_STATE_OPENED)) {
@@ -513,10 +554,10 @@ public class TeamIssue extends Entity {
 	} else {
 	    res = "已验收";
 	}
-	
+
 	return res;
     }
-    
+
     public int getIssueStateFaTextId() {
 	int res = R.string.fa_circle_o;
 	if (this.state.equals(TEAM_ISSUE_STATE_OPENED)) {
@@ -530,7 +571,7 @@ public class TeamIssue extends Entity {
 	}
 	return res;
     }
-    
+
     public String getDeadlineTimeText() {
 	SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy-MM-dd");
 	Date date = StringUtils.toDate(getDeadlineTime(), dataFormat);
@@ -538,5 +579,5 @@ public class TeamIssue extends Entity {
 	calendar.setTime(date);
 	return DateFormat.getDateInstance(DateFormat.SHORT).format(date);
     }
-    
+
 }

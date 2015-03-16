@@ -30,6 +30,6 @@
         style="@style/wrap_wrap"
         android:textSize="14sp"
         android:textColor="@color/main_gray"
-        android:text="10/20" />
+        android:text="0/0" />
 
 </RelativeLayout>
