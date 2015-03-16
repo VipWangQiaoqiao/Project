@@ -91,7 +91,7 @@ public class TeamDiaryListAdapter extends BaseAdapter {
     public static Spanned stripTags(final String pHTMLString) {
         // String str = pHTMLString.replaceAll("\\<.*?>", "");
         String str = pHTMLString.replaceAll("\\t*", "");
-        str = str.replaceAll("<\\s*img\\s+([^>]*)\\s*>", "  ");
+        str = str.replaceAll("<\\s*img\\s+([^>]*)\\s*>", "").trim();
         return Html.fromHtml(str);
     }
 

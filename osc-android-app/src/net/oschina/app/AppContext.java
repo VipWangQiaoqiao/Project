@@ -49,8 +49,8 @@ public class AppContext extends BaseApplication {
     public void onCreate() {
         super.onCreate();
         // 注册App异常崩溃处理器
-         Thread.setDefaultUncaughtExceptionHandler(AppException
-         .getAppExceptionHandler(this));
+        // Thread.setDefaultUncaughtExceptionHandler(AppException
+        // .getAppExceptionHandler(this));
         instance = this;
         init();
         initLogin();
@@ -72,7 +72,7 @@ public class AppContext extends BaseApplication {
         BitmapConfig.CACHEPATH = "OSChina/imagecache";
         BitmapConfig.CACHE_FILENAME_PREFIX = "OSChina_";
     }
-    
+
     private void initLogin() {
         User user = getLoginUser();
         if (null != user && user.getUid() > 0) {

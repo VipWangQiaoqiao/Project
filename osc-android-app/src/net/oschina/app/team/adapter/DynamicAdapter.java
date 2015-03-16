@@ -95,8 +95,8 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
      */
     public static Spanned stripTags(final String pHTMLString) {
         // String str = pHTMLString.replaceAll("\\<.*?>", "");
-        String str = pHTMLString.replaceAll("\\t*", "");
-        str = str.replaceAll("<\\s*img\\s+([^>]*)\\s*>", "[表情]");
+        String str = pHTMLString.replaceAll("\\t", "");
+        str = str.replaceAll("<\\s*img\\s+([^>]*)\\s*>", "[表情]").trim();
         return Html.fromHtml(str);
     }
 

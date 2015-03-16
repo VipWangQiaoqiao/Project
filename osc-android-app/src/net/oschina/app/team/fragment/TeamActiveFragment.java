@@ -11,18 +11,15 @@ import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamActive;
 import net.oschina.app.team.bean.TeamActives;
 import net.oschina.app.team.ui.TeamMainActivity;
-import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 
 /**
@@ -37,7 +34,8 @@ public class TeamActiveFragment extends BaseListFragment<TeamActive> {
 
     public static final String DYNAMIC_FRAGMENT_KEY = "DynamicFragment";
     public static final String DYNAMIC_FRAGMENT_TEAM_KEY = "DynamicFragment_teamid";
-    protected static final String TAG = TeamActiveFragment.class.getSimpleName();
+    protected static final String TAG = TeamActiveFragment.class
+            .getSimpleName();
     private static final String CACHE_KEY_PREFIX = "DynamicFragment_list";
 
     private Activity aty;
@@ -98,9 +96,9 @@ public class TeamActiveFragment extends BaseListFragment<TeamActive> {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
             long id) {
-	TeamActive active = mAdapter.getItem(position);
-	if (active != null) {
-	    UIHelper.showTeamActiveDetail(aty, team.getId(), active);
-	}
+        TeamActive active = mAdapter.getItem(position);
+        if (active != null) {
+            UIHelper.showTeamActiveDetail(aty, team.getId(), active);
+        }
     }
 }

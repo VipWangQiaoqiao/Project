@@ -105,6 +105,7 @@ public class TeamDiaryDetail extends BaseFragment implements EmojiTextListener,
     public void initView(View view) {
         super.initView(view);
         mList.setDivider(null);
+        mList.setSelector(android.R.color.transparent);
         mList.addHeaderView(initHeaderView());
         mList.addFooterView(initFooterView());
 
