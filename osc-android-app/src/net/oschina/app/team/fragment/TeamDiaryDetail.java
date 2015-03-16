@@ -255,9 +255,13 @@ public class TeamDiaryDetail extends BaseFragment implements EmojiTextListener,
                                     .findViewById(R.id.tv_time);
                             time.setText(StringUtils.friendly_time(data
                                     .getCreateTime()));
+                            LinearLayout relies = (LinearLayout) layout
+                                    .findViewById(R.id.ly_relies);
+                            relies.setVisibility(View.GONE);
                             TextView content = (TextView) layout
                                     .findViewById(R.id.tv_content);
-                            content.setText(stripTags(data.getContent()));
+                            content.setText(Html.fromHtml(data.getContent())
+                                    .toString().trim());
 
                             layout.setOnClickListener(new OnClickListener() {
                                 @Override
