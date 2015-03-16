@@ -210,6 +210,7 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
             currentWeek = StringUtils.getWeekOfYear(new Date(year, month, day));
             mPager.setAdapter(new DiaryPagerAdapter());
             mPager.setCurrentItem(currentWeek);
+            mTvTitle.setText("第" + (currentWeek + 1) + "周周报总览");
         }
     }
 
