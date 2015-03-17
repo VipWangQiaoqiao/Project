@@ -560,6 +560,7 @@ public class TeamIssue extends Entity {
 
     public int getIssueStateFaTextId() {
 	int res = R.string.fa_circle_o;
+	
 	if (this.state.equals(TEAM_ISSUE_STATE_OPENED)) {
 	    res = R.string.fa_circle_o;
 	} else if (this.state.equals(TEAM_ISSUE_STATE_UNDERWAY)) {

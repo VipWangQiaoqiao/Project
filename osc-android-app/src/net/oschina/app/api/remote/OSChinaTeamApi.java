@@ -276,7 +276,7 @@ public class OSChinaTeamApi {
 	    AsyncHttpResponseHandler handler) {
 	RequestParams params = new RequestParams();
 	params.put("teamid", teamId);
-	params.put("issue_id", issueId);
+	params.put("issueid", issueId);
 	ApiHttpClient.get("action/api/team_issue_detail", params, handler);
     }
 
@@ -372,7 +372,7 @@ public class OSChinaTeamApi {
 	RequestParams params = new RequestParams();
 	params.put("uid", AppContext.getInstance().getLoginUid());
 	params.put("teamid", teamId);
-	params.put("child_issue_id", childIssue.getId());
+	params.put("childissueid", childIssue.getId());
 	params.put("target", target);
 	if (target.equals("state")) {
 	    params.put("state", childIssue.getState());
