@@ -43,6 +43,7 @@
         <item name="actionBarItemBackground">@drawable/socialize_titlebar_item_background_selector</item>
         <item name="android:actionMenuTextColor">@color/white</item>
         <item name="android:dropDownListViewStyle">@style/SpinnerDropDownListView</item>
+        <item name="popupMenuStyle">@style/mylistPopupWindowStyle</item>
     </style>
 
     <style name="ActionBarBaseTheme.Preview" parent="@style/ActionBarBaseTheme">
@@ -596,9 +597,14 @@
         <item name="android:padding">5dp</item>
     </style>
     
-    <style name="SpinnerDropDownListView" parent="android:style/Widget.ListView.DropDown">
+    <style name="SpinnerDropDownListView" parent="@style/Widget.AppCompat.Light.ListView.DropDown">
         <item name="android:divider">#3f3f3f</item>
         <item name="android:dividerHeight">1dp</item>
+    </style>
+    
+    <style name="mylistPopupWindowStyle" parent="@style/Widget.AppCompat.Light.PopupMenu">
+        <item name="android:dropDownSelector">@color/red</item>
+        <item name="android:popupBackground">@color/red</item>
     </style>
 
 </resources>

@@ -118,6 +118,8 @@ public class TweetPubFragment extends BaseFragment implements
 
     @InjectView(R.id.et_content)
     EmojiEditText mEtInput;
+    
+    private MenuItem mSendMenu;
 
     private EmojiViewPagerAdapter mPagerAdapter;
     private SoftKeyboardStateHelper mKeyboardHelper;
@@ -144,7 +146,6 @@ public class TweetPubFragment extends BaseFragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
-	setHasOptionsMenu(true);
 	int mode = WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
 		| WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
 	getActivity().getWindow().setSoftInputMode(mode);
@@ -152,7 +153,23 @@ public class TweetPubFragment extends BaseFragment implements
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	super.onCreateOptionsMenu(menu, inflater);
 	inflater.inflate(R.menu.pub_tweet_menu, menu);
+	mSendMenu = menu.findItem(R.id.public_menu_send);
+	updateMenuState();
+    }
+    
+    public void updateMenuState() {
+	if (mSendMenu == null) {
+	    return;
+	}
+	if (mEtInput.getText().length() == 0) {
+	    mSendMenu.setEnabled(false);
+	    mSendMenu.setIcon(R.drawable.actionbar_unsend_icon);
+	} else {
+	    mSendMenu.setEnabled(true);
+	    mSendMenu.setIcon(R.drawable.actionbar_send_icon);
+	}
     }
 
     @Override
@@ -221,7 +238,7 @@ public class TweetPubFragment extends BaseFragment implements
 	    @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 	View view = inflater.inflate(R.layout.fragment_tweet_pub, container,
 		false);
-	ButterKnife.inject(this, view);
+	
 	initView(view);
 	mKeyboardHelper = new SoftKeyboardStateHelper(getActivity()
 		.findViewById(R.id.container));
@@ -297,7 +314,9 @@ public class TweetPubFragment extends BaseFragment implements
 
     @Override
     public void initView(View view) {
-
+	super.initView(view);
+	ButterKnife.inject(this, view);
+	setHasOptionsMenu(true);
 	mIbEmoji.setOnClickListener(this);
 	mIbPicture.setOnClickListener(this);
 	mIbMention.setOnClickListener(this);
@@ -311,6 +330,7 @@ public class TweetPubFragment extends BaseFragment implements
 	    public void onTextChanged(CharSequence s, int start, int before,
 		    int count) {
 		mTvClear.setText((MAX_TEXT_LENGTH - s.length()) + "");
+		updateMenuState();
 	    }
 	});
 	// 获取保存的tweet草稿

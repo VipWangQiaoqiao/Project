@@ -14,9 +14,9 @@
         <item name="android:popupMenuStyle">@style/PopupMenu.ListPopupWindow</item>
         <item name="android:actionOverflowButtonStyle">@style/OverflowButton</item>
         <item name="android:actionBarItemBackground">@drawable/socialize_titlebar_item_background_selector</item>
-        <item name="android:dropDownListViewStyle">@style/DrapDownListView</item>
         <item name="android:actionMenuTextColor">@color/white</item>
         <item name="android:dropDownListViewStyle">@style/SpinnerDropDownListView</item>
+        <item name="popupMenuStyle">@style/mylistPopupWindowStyle</item>
     </style>
     
     <style name="DialogBaseTheme" parent="@style/Theme.AppCompat.DialogWhenLarge">
