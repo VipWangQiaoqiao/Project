@@ -16,6 +16,9 @@ import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.util.TLog;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
+
+import org.kymjs.kjframe.utils.StringUtils;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -37,7 +40,7 @@ public class UserInfoFragment extends BaseListFragment<TeamActive> {
     private TextView mTvName;
     private TextView mTvUserName;
     private TextView mTvEmail;
-    private TextView mTvJoinDate;
+    private TextView mTvTel;
     private TextView mTvAddress;
     private AvatarView mImgHead;
 
@@ -73,16 +76,24 @@ public class UserInfoFragment extends BaseListFragment<TeamActive> {
         mTvUserName = (TextView) headview
                 .findViewById(R.id.fragment_team_username);
         mTvEmail = (TextView) headview.findViewById(R.id.fragment_team_email);
-        mTvJoinDate = (TextView) headview
-                .findViewById(R.id.fragment_team_joindate);
+        mTvTel = (TextView) headview.findViewById(R.id.fragment_team_tel);
         mTvAddress = (TextView) headview
                 .findViewById(R.id.fragment_team_address);
         mListView.addHeaderView(headview);
 
         mTvName.setText(teamMember.getName());
         mTvUserName.setText(teamMember.getOscName());
-        mTvEmail.setText(teamMember.getTeamEmail());
-        mTvJoinDate.setText(teamMember.getJoinTime());
+
+        String email = teamMember.getTeamEmail();
+        if (StringUtils.isEmpty(email)) {
+            email = "未填写邮箱";
+        }
+        mTvEmail.setText(email);
+        String tel = teamMember.getTeamTelephone();
+        if (StringUtils.isEmpty(tel)) {
+            tel = "未填写手机号";
+        }
+        mTvTel.setText(tel);
         mTvAddress.setText(teamMember.getLocation());
         mImgHead.setAvatarUrl(teamMember.getPortrait());
         super.initView(view);
@@ -109,7 +120,8 @@ public class UserInfoFragment extends BaseListFragment<TeamActive> {
                         bundle.putSerializable(
                                 TeamActiveFragment.DYNAMIC_FRAGMENT_KEY, data);
                         bundle.putInt(
-                                TeamActiveFragment.DYNAMIC_FRAGMENT_TEAM_KEY, teamId);
+                                TeamActiveFragment.DYNAMIC_FRAGMENT_TEAM_KEY,
+                                teamId);
                         bundle.putInt(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
                                 DetailActivity.DISPLAY_TEAM_TWEET_DETAIL);
                         intent.putExtras(bundle);

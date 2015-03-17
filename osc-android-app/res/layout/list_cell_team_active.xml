@@ -29,6 +29,7 @@
             android:textSize="14sp" />
 
         <TextView
+            android:text="hello"
             android:id="@+id/event_listitem_content"
             style="@style/events_list_content" />
 
@@ -36,7 +37,6 @@
             android:id="@+id/iv_pic"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/space_100"
-            android:layout_marginLeft="10dp"
             android:layout_marginTop="@dimen/space_4"
             android:contentDescription="@null"
             android:minWidth="@dimen/space_100"
