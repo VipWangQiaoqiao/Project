@@ -890,7 +890,6 @@ public class OSChinaApi {
         RequestParams params = new RequestParams();
         String uuid = url.substring(url.lastIndexOf("=") + 1);
         params.put("uuid", uuid);
-        ApiHttpClient.getDirect(url,
-                handler);
+        ApiHttpClient.getDirect(url, handler);
     }
 }
