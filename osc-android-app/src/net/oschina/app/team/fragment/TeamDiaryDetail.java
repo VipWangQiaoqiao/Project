@@ -244,20 +244,17 @@ public class TeamDiaryDetail extends BaseFragment implements EmojiTextListener,
                         footerView.addView(line);
                         for (TeamReply data : datas) {
                             View layout = View.inflate(aty,
-                                    R.layout.list_cell_comment, null);
+                                    R.layout.team_list_cell_comment, null);
                             AvatarView head = (AvatarView) layout
                                     .findViewById(R.id.iv_avatar);
                             head.setAvatarUrl(data.getAuthor().getPortrait());
-                            TextView name = (TextView) layout
+                            final TextView name = (TextView) layout
                                     .findViewById(R.id.tv_name);
                             name.setText(data.getAuthor().getName());
                             TextView time = (TextView) layout
                                     .findViewById(R.id.tv_time);
                             time.setText(StringUtils.friendly_time(data
                                     .getCreateTime()));
-                            LinearLayout relies = (LinearLayout) layout
-                                    .findViewById(R.id.ly_relies);
-                            relies.setVisibility(View.GONE);
                             TextView content = (TextView) layout
                                     .findViewById(R.id.tv_content);
                             content.setText(Html.fromHtml(data.getContent())
@@ -267,10 +264,8 @@ public class TeamDiaryDetail extends BaseFragment implements EmojiTextListener,
                                 @Override
                                 public void onClick(View v) {
                                     mEmojiFragment.setTag(v);
-                                    mEmojiFragment.setInputHint("回复"
-                                            + ((TextView) v
-                                                    .findViewById(R.id.tv_name))
-                                                    .getText() + ":");
+                                    mEmojiFragment.setInputHint("回复" + name
+                                            + ":");
                                     mEmojiFragment.requestFocusInput();
                                 }
                             });

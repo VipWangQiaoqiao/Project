@@ -136,7 +136,7 @@ public class TeamMainActivity extends BaseActivity {
                 Team team = teamDatas.get(position);
                 if (team != null) {
                     switchTeam(position);
-		    adapter.setSelectIndex(position);
+                    adapter.setSelectIndex(position);
                 }
             }
 
@@ -187,32 +187,31 @@ public class TeamMainActivity extends BaseActivity {
         String cache = PreferenceHelper.readString(this, TEAM_LIST_FILE,
                 TEAM_LIST_KEY, "");
         if (!StringUtils.isEmpty(cache)) {
-            // mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+            mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             teamDatas = TeamList.toTeamList(cache);
             setTeamDataState();
         } else {
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-
-            OSChinaApi.teamList(new AsyncHttpResponseHandler() {
-                @Override
-                public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-                    TeamList datas = XmlUtils.toBean(TeamList.class, arg2);
-                    teamDatas.clear();
-                    teamDatas.addAll(datas.getList());
-                    setTeamDataState();
-
-                    PreferenceHelper.write(TeamMainActivity.this,
-                            TEAM_LIST_FILE, TEAM_LIST_KEY, datas.toCacheData());
-                }
-
-                @Override
-                public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                        Throwable arg3) {
-                    AppContext.showToast("网络不好，请稍后重试");
-                }
-            });
         }
 
+        OSChinaApi.teamList(new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+                TeamList datas = XmlUtils.toBean(TeamList.class, arg2);
+                teamDatas.clear();
+                teamDatas.addAll(datas.getList());
+                setTeamDataState();
+
+                PreferenceHelper.write(TeamMainActivity.this, TEAM_LIST_FILE,
+                        TEAM_LIST_KEY, datas.toCacheData());
+            }
+
+            @Override
+            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+                    Throwable arg3) {
+                AppContext.showToast("网络不好，请稍后重试");
+            }
+        });
     }
 
     private void setTeamDataState() {
@@ -240,53 +239,55 @@ public class TeamMainActivity extends BaseActivity {
     }
 
     public class SpinnerAdapter extends BaseAdapter {
-	
-	private List<String> teams;
-	
-	private Context context;
-	
-	private int selectIndex = 0;
-	
-	public void setSelectIndex(int index) {
-	    this.selectIndex = index;
-	}
-	
-	public SpinnerAdapter(Context context, List<String> teams) {
-	    this.teams = teams;
-	    this.context = context;
-	}
-	
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-	    // TODO Auto-generated method stub
-	    if (convertView == null) {
-		convertView = LayoutInflater.from(context).inflate(R.layout.spinner_layout_head, null);
-	    }
-	    ((TextView)convertView).setText(getItem(position));
-	   
-	    return convertView;
-	}
-	
-	@Override
-	public View getDropDownView(int position, View convertView,
-		ViewGroup parent) {
-	    // TODO Auto-generated method stub
-	    if (convertView == null) {
-		convertView = LayoutInflater.from(context).inflate(R.layout.list_cell_team, null, false);
-	    }
-	    String team = getItem(position);
-	    TextView tv = (TextView) convertView.findViewById(R.id.tv_name);
-	    if (team != null) {
-		tv.setText(team);
-	    }
-	    if (selectIndex != position) {
-		tv.setTextColor(Color.parseColor("#acd4b3"));
-	    } else {
-		tv.setTextColor(Color.parseColor("#6baf77"));
-	    }
-	    return convertView;
-	}
-	
+
+        private final List<String> teams;
+
+        private final Context context;
+
+        private int selectIndex = 0;
+
+        public void setSelectIndex(int index) {
+            this.selectIndex = index;
+        }
+
+        public SpinnerAdapter(Context context, List<String> teams) {
+            this.teams = teams;
+            this.context = context;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            // TODO Auto-generated method stub
+            if (convertView == null) {
+                convertView = LayoutInflater.from(context).inflate(
+                        R.layout.spinner_layout_head, null);
+            }
+            ((TextView) convertView).setText(getItem(position));
+
+            return convertView;
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView,
+                ViewGroup parent) {
+            // TODO Auto-generated method stub
+            if (convertView == null) {
+                convertView = LayoutInflater.from(context).inflate(
+                        R.layout.list_cell_team, null, false);
+            }
+            String team = getItem(position);
+            TextView tv = (TextView) convertView.findViewById(R.id.tv_name);
+            if (team != null) {
+                tv.setText(team);
+            }
+            if (selectIndex != position) {
+                tv.setTextColor(Color.parseColor("#acd4b3"));
+            } else {
+                tv.setTextColor(Color.parseColor("#6baf77"));
+            }
+            return convertView;
+        }
+
         @Override
         public int getCount() {
             // TODO Auto-generated method stub
