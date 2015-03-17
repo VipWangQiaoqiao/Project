@@ -35,6 +35,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.tencent.weibo.sdk.android.component.sso.tools.MD5Tools;
 
 /**
  * 团队主界面
@@ -187,21 +188,21 @@ public class TeamMainActivity extends BaseActivity {
         String cache = PreferenceHelper.readString(this, TEAM_LIST_FILE,
                 TEAM_LIST_KEY, "");
         if (!StringUtils.isEmpty(cache)) {
-            mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+           // mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             teamDatas = TeamList.toTeamList(cache);
             setTeamDataState();
         } else {
-            mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+            //mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
         }
 
         OSChinaApi.teamList(new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
                 TeamList datas = XmlUtils.toBean(TeamList.class, arg2);
-                teamDatas.clear();
-                teamDatas.addAll(datas.getList());
-                setTeamDataState();
-
+                if ((teamDatas == null || teamDatas.isEmpty()) && !datas.getList().isEmpty()) {
+                    teamDatas.addAll(datas.getList());
+                    setTeamDataState();
+                }
                 PreferenceHelper.write(TeamMainActivity.this, TEAM_LIST_FILE,
                         TEAM_LIST_KEY, datas.toCacheData());
             }
@@ -209,7 +210,7 @@ public class TeamMainActivity extends BaseActivity {
             @Override
             public void onFailure(int arg0, Header[] arg1, byte[] arg2,
                     Throwable arg3) {
-                AppContext.showToast("网络不好，请稍后重试");
+               //AppContext.showToast("网络不好，请稍后重试");
             }
         });
     }
