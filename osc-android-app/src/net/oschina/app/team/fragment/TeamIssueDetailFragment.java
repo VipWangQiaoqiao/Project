@@ -21,6 +21,7 @@ import net.oschina.app.team.bean.TeamReply;
 import net.oschina.app.team.bean.TeamReplyBean;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
+import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TypefaceUtils;
@@ -62,6 +63,11 @@ public class TeamIssueDetailFragment extends BaseFragment implements
     private TeamIssue mTeamIssue;
 
     private TeamIssueCatalog mCatalog;
+    
+    @InjectView(R.id.content)
+    View mContent;
+    @InjectView(R.id.error_layout)
+    EmptyLayout mErrorLayout;
 
     @InjectView(R.id.ll_issue_project)
     View mProjectView;
@@ -131,6 +137,15 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 		.findViewById(R.id.tv_issue_fa_relations));
 	TypefaceUtils.setTypeface((TextView) view
 		.findViewById(R.id.tv_issue_fa_attachments));
+	
+	mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
+	    
+	    @Override
+	    public void onClick(View v) {
+		// TODO Auto-generated method stub
+		requestDetail();
+	    }
+	});
     }
 
     @Override
@@ -145,11 +160,18 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 	@Override
 	public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 	    // TODO Auto-generated method stub
+	   
 	    TeamIssueDetail teamIssueDetail = XmlUtils.toBean(
 		    TeamIssueDetail.class, arg2);
 	    if (teamIssueDetail != null) {
+		mContent.setVisibility(View.VISIBLE);
+		mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
 		fillUI(teamIssueDetail.getTeamIssue());
 		requestIssueComments();
+	    } else {
+		mContent.setVisibility(View.INVISIBLE);
+		mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+		mErrorLayout.setErrorMessage("该任务可能已被删除");
 	    }
 	}
 
@@ -157,16 +179,13 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 	public void onFailure(int arg0, Header[] arg1, byte[] arg2,
 		Throwable arg3) {
 	    // TODO Auto-generated method stub
-
+	    mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
 	}
 
 	public void onStart() {
-	    showWaitDialog("加载中...");
+	    mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
 	};
 
-	public void onFinish() {
-	    hideWaitDialog();
-	};
     };
 
     private void requestDetail() {
@@ -292,6 +311,9 @@ public class TeamIssueDetailFragment extends BaseFragment implements
     @Override
     public void onSendClick(final String text) {
 	// TODO Auto-generated method stub
+	if (mTeamIssue == null) {
+	    return;
+	}
 	showWaitDialog("提交评论中...");
 	OSChinaTeamApi.pubTeamIssueReply(mTeam.getId(), mTeamIssue.getId(), text,
 		new AsyncHttpResponseHandler() {
@@ -354,9 +376,10 @@ public class TeamIssueDetailFragment extends BaseFragment implements
     };
 
     @Override
-    @OnClick({ R.id.ll_issue_state_title, R.id.ll_issue_touser,
-	    R.id.ll_issue_cooperate_user, R.id.ll_issue_die_time,
-	    R.id.ll_issue_state, R.id.ll_issue_child })
+//    @OnClick({ R.id.ll_issue_state_title, R.id.ll_issue_touser,
+//	    R.id.ll_issue_cooperate_user, R.id.ll_issue_die_time,
+//	    R.id.ll_issue_state, R.id.ll_issue_child })
+    @OnClick({ R.id.ll_issue_state_title, R.id.ll_issue_state })
     public void onClick(View v) {
 	// TODO Auto-generated method stub
 	switch (v.getId()) {
@@ -391,6 +414,10 @@ public class TeamIssueDetailFragment extends BaseFragment implements
     }
 
     private void changeIssueState() {
+	if (!mTeamIssue.getAuthority().isUpdateState()) {
+	    AppContext.showToast("抱歉，无更改权限");
+	    return;
+	}
 	final CommonDialog dialog = DialogHelper.getPinterestDialogCancelable(getActivity());
 	dialog.setTitle("修改任务状态");
 	final CharSequence[] items = getResources().getTextArray(R.array.team_issue_state);
