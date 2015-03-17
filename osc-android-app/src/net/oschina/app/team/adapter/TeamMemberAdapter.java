@@ -4,14 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.oschina.app.R;
-import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamMember;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.AvatarView;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -27,7 +25,7 @@ import android.widget.TextView;
  */
 public class TeamMemberAdapter extends BaseAdapter {
     private final Context cxt;
-    private final List<TeamMember> datas;
+    private List<TeamMember> datas;
     private final Team team;
     public static final String TEAM_MEMBER_KEY = "TeamMemberAdapter_teammemberkey";
     public static final String TEAM_ID_KEY = "TeamMemberAdapter_teaminfokey";
@@ -39,6 +37,15 @@ public class TeamMemberAdapter extends BaseAdapter {
             datas = new ArrayList<TeamMember>(1);
         }
         this.datas = datas;
+    }
+
+    public void refresh(List<TeamMember> datas) {
+        if (datas == null) {
+            datas = new ArrayList<TeamMember>(1);
+        }
+        this.datas = datas;
+        notifyDataSetChanged();
+        notifyDataSetInvalidated();
     }
 
     @Override
@@ -104,6 +111,6 @@ public class TeamMemberAdapter extends BaseAdapter {
     }
 
     public void onItemClick(int position) {
-	UIHelper.showTeamMemberInfo(cxt, team.getId(), datas.get(position));
+        UIHelper.showTeamMemberInfo(cxt, team.getId(), datas.get(position));
     }
 }
