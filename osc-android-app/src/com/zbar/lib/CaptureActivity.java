@@ -8,7 +8,6 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.bean.BarCode;
-import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.SingInResult;
 import net.oschina.app.ui.dialog.CommonDialog;
@@ -233,6 +232,7 @@ public class CaptureActivity extends BaseActivity implements Callback {
     @Override
     protected void onDestroy() {
         inactivityTimer.shutdown();
+        mediaPlayer.release();
         super.onDestroy();
     }
 
@@ -259,7 +259,7 @@ public class CaptureActivity extends BaseActivity implements Callback {
     }
 
     private void showUrlOption(final String url) {
-	if (url.contains("scanQrCode")) {
+	if (url.contains("scanLogin")) {
 	    handleScanLogin(url);
 	    return;
 	}
@@ -300,20 +300,20 @@ public class CaptureActivity extends BaseActivity implements Callback {
 	    @Override
 	    public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 		// TODO Auto-generated method stub
-		AppContext.showToast(new String(arg2));
-		Result result = XmlUtils.toBean(ResultBean.class, arg2).getResult();
-		
-		if (result != null && result.OK()) {
-		    AppContext.showToast(result.getErrorMessage());
+		ResultBean result = XmlUtils.toBean(ResultBean.class, arg2);
+		if (result != null && result.getResult().OK()) {
+		    AppContext.showToast(result.getResult().getErrorMessage());
 		    finish();
 		} else {
-		    AppContext.showToast(result.getErrorMessage());
+		    handler.sendEmptyMessage(R.id.restart_preview);
+		    AppContext.showToast(result != null ? result.getResult().getErrorMessage() : "登陆失败");
 		}
 	    }
 	    
 	    @Override
 	    public void onFailure(int arg0, Header[] arg1, byte[] arg2, Throwable arg3) {
 		// TODO Auto-generated method stub
+		handler.sendEmptyMessage(R.id.restart_preview);
 		if (arg2 != null) {
 		    AppContext.showToast(new String(arg2));
 		} else {
@@ -324,7 +324,7 @@ public class CaptureActivity extends BaseActivity implements Callback {
 	    public void onStart() {
 	        // TODO Auto-generated method stub
 	        super.onStart();
-	        showWaitDialog("已扫描，请稍候...");
+	        showWaitDialog("已扫描，正在登陆...");
 	    }
 	    @Override
 	    public void onFinish() {
@@ -507,7 +507,6 @@ public class CaptureActivity extends BaseActivity implements Callback {
     private void initBeepSound() {
         mediaPlayer = MediaPlayer.create(this, R.raw.qr_sacn);
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        mediaPlayer.setOnCompletionListener(beepListener);
     }
 
     private static final long VIBRATE_DURATION = 30L;
@@ -521,13 +520,6 @@ public class CaptureActivity extends BaseActivity implements Callback {
             vibrator.vibrate(VIBRATE_DURATION);
         }
     }
-
-    private final OnCompletionListener beepListener = new OnCompletionListener() {
-        @Override
-        public void onCompletion(MediaPlayer mediaPlayer) {
-            mediaPlayer.release();
-        }
-    };
 
     @Override
     public void initView() {
