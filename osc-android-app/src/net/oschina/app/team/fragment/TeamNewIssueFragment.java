@@ -90,8 +90,8 @@ public class TeamNewIssueFragment extends BaseFragment {
     @Override
     public void initView(View view) {
 	super.initView(view);
-	setHasOptionsMenu(true);
 	ButterKnife.inject(this, view);
+	setHasOptionsMenu(true);
 	view.findViewById(R.id.rl_issue_project).setOnClickListener(this);
 	view.findViewById(R.id.rl_issue_catalog).setOnClickListener(this);
 	view.findViewById(R.id.rl_issue_touser).setOnClickListener(this);
