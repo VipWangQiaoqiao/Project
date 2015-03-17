@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/team_new_issue"
-        android:icon="@drawable/icon_actionbar_add"
+        android:icon="@drawable/actionbar_icon_add"
         android:showAsAction="always"
         android:title="@string/team_new_issue"
         android:visible="true"

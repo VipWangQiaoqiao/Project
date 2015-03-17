@@ -1,7 +1,5 @@
 package net.oschina.app.team.adapter;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.team.bean.TeamProject;
@@ -9,6 +7,8 @@ import net.oschina.app.util.TypefaceUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * 团队项目适配器
@@ -46,7 +46,7 @@ public class TeamProjectListAdapterNew extends ListBaseAdapter<TeamProject> {
 	}
 
 	vh.name.setText(item.getGit().getOwnerName() + " / " + item.getGit().getName());
-	vh.issue.setText(item.getClosedCount() + "/" + item.getTotalCount());
+	vh.issue.setText(item.getIssue().getOpened() + "/" + item.getIssue().getAll());
 	
 	return convertView;
     }

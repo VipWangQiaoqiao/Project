@@ -21,8 +21,8 @@
     </string-array>
     
     <string-array name="team_issue_state_en">
-        <item>underway</item>
         <item>opened</item>
+        <item>underway</item>
         <item>closed</item>
         <item>accepted</item>
     </string-array>

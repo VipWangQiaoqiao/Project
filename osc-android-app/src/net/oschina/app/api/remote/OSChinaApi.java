@@ -890,8 +890,7 @@ public class OSChinaApi {
         RequestParams params = new RequestParams();
         String uuid = url.substring(url.lastIndexOf("=") + 1);
         params.put("uuid", uuid);
-        ApiHttpClient.getDirect(
-                "http://192.168.1.147/action/user/scanQrCode?uuid=" + uuid,
+        ApiHttpClient.getDirect(url,
                 handler);
     }
 }

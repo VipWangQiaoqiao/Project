@@ -29,6 +29,8 @@
     
     <color name="comment_yellow">#FFFFEE</color>
     
+    <color name="like_color">#1d6a2a</color>
+    
     <color name="main_background">#ffebedf0</color>
     <color name="list_divider_color">#DADADA</color>
     <color name="list_item_background_normal">@color/white</color>
@@ -92,4 +94,7 @@
     <color name="numbers_text_color">#8c8c8c</color>
 
     <color name="transparent_black">#7F000000</color>
+    
+    <color name="spinner_background">#464646</color>
+    <color name="spinner_background_press">#6baf77</color>
 </resources>

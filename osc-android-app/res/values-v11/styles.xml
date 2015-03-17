@@ -13,8 +13,9 @@
         <item name="android:actionBarStyle">@style/ActionBarBaseStyle</item>
         <item name="android:popupMenuStyle">@style/PopupMenu.ListPopupWindow</item>
         <item name="android:actionOverflowButtonStyle">@style/OverflowButton</item>
-        <item name="android:dropDownListViewStyle">@style/DrapDownListView</item>
-        <item name="android:homeAsUpIndicator">@drawable/actionbar_back_icon_normal</item>
+        <item name="android:homeAsUpIndicator">@drawable/actionbar_more_icon_normal</item>
+        <item name="android:actionMenuTextColor">@color/white</item>
+        <item name="android:dropDownListViewStyle">@style/SpinnerDropDownListView</item>
     </style>
 
     <style name="ActionBarBaseTheme.Preview" parent="@style/ActionBarBaseTheme">

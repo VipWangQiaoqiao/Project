@@ -265,11 +265,7 @@ public class TeamNewActiveActivity extends BaseActivity implements
 	    @Override
 	    public void afterTextChanged(Editable s) {
 		// TODO Auto-generated method stub
-		if (mEtInput.getText().length() == 0) {
-		    mMenuSend.setEnabled(false);
-		} else {
-		    mMenuSend.setEnabled(true);
-		}
+		updateSendMenu();
 		mTvClear.setText((MAX_TEXT_LENGTH - s.length()) + "");
 	    }
 	});
@@ -345,6 +341,16 @@ public class TeamNewActiveActivity extends BaseActivity implements
 	}
 	return emojiHeight;
     }
+    
+    private void updateSendMenu() {
+	if (mEtInput.getText().length() == 0) {
+	    mMenuSend.setEnabled(false);
+	    mMenuSend.setIcon(R.drawable.actionbar_unsend_icon);
+	} else {
+	    mMenuSend.setEnabled(true);
+	    mMenuSend.setIcon(R.drawable.actionbar_send_icon);
+	}
+    }
 
     @Override
     public void initData() {
@@ -358,6 +364,7 @@ public class TeamNewActiveActivity extends BaseActivity implements
 	// TODO Auto-generated method stub
 	getMenuInflater().inflate(R.menu.pub_new_team_active_menu, menu);
 	mMenuSend = menu.findItem(R.id.public_menu_send);
+	updateSendMenu();
 	return super.onCreateOptionsMenu(menu);
     }
 

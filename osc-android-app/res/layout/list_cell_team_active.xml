@@ -24,7 +24,9 @@
 
         <TextView
             android:id="@+id/event_listitem_username"
-            style="@style/events_list_title" />
+            android:textColor="@color/lightblue"
+            style="@style/events_list_title"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/event_listitem_content"

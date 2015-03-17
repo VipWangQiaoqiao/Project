@@ -18,6 +18,7 @@ import org.kymjs.kjframe.utils.PreferenceHelper;
 import org.kymjs.kjframe.utils.StringUtils;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -135,6 +136,7 @@ public class TeamMainActivity extends BaseActivity {
                 Team team = teamDatas.get(position);
                 if (team != null) {
                     switchTeam(position);
+		    adapter.setSelectIndex(position);
                 }
             }
 
@@ -215,9 +217,10 @@ public class TeamMainActivity extends BaseActivity {
 
     private void setTeamDataState() {
         if (teamDatas.isEmpty()) {
-            mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+            mErrorLayout.setErrorType(EmptyLayout.NODATA);
             String msg = getResources().getString(R.string.team_empty);
             mErrorLayout.setErrorMessage(msg);
+            mErrorLayout.setErrorImag(R.drawable.page_icon_empty);
         } else {
             new Handler().postDelayed(new Runnable() {
 
@@ -237,16 +240,53 @@ public class TeamMainActivity extends BaseActivity {
     }
 
     public class SpinnerAdapter extends BaseAdapter {
-
-        private final List<String> teams;
-
-        private final Context context;
-
-        public SpinnerAdapter(Context context, List<String> teams) {
-            this.teams = teams;
-            this.context = context;
-        }
-
+	
+	private List<String> teams;
+	
+	private Context context;
+	
+	private int selectIndex = 0;
+	
+	public void setSelectIndex(int index) {
+	    this.selectIndex = index;
+	}
+	
+	public SpinnerAdapter(Context context, List<String> teams) {
+	    this.teams = teams;
+	    this.context = context;
+	}
+	
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+	    // TODO Auto-generated method stub
+	    if (convertView == null) {
+		convertView = LayoutInflater.from(context).inflate(R.layout.spinner_layout_head, null);
+	    }
+	    ((TextView)convertView).setText(getItem(position));
+	   
+	    return convertView;
+	}
+	
+	@Override
+	public View getDropDownView(int position, View convertView,
+		ViewGroup parent) {
+	    // TODO Auto-generated method stub
+	    if (convertView == null) {
+		convertView = LayoutInflater.from(context).inflate(R.layout.list_cell_team, null, false);
+	    }
+	    String team = getItem(position);
+	    TextView tv = (TextView) convertView.findViewById(R.id.tv_name);
+	    if (team != null) {
+		tv.setText(team);
+	    }
+	    if (selectIndex != position) {
+		tv.setTextColor(Color.parseColor("#acd4b3"));
+	    } else {
+		tv.setTextColor(Color.parseColor("#6baf77"));
+	    }
+	    return convertView;
+	}
+	
         @Override
         public int getCount() {
             // TODO Auto-generated method stub
@@ -269,19 +309,6 @@ public class TeamMainActivity extends BaseActivity {
         public long getItemId(int position) {
             // TODO Auto-generated method stub
             return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            // TODO Auto-generated method stub
-            View cell = LayoutInflater.from(context).inflate(
-                    R.layout.list_cell_team, null);
-            String team = getItem(position);
-            TextView tv = (TextView) cell.findViewById(R.id.tv_name);
-            if (team != null) {
-                tv.setText(team);
-            }
-            return cell;
         }
 
     }
