@@ -24,14 +24,14 @@
 
         <TextView
             android:id="@+id/event_listitem_username"
-            android:textColor="@color/lightblue"
             style="@style/events_list_title"
+            android:textColor="@color/lightblue"
             android:textSize="14sp" />
 
         <TextView
-            android:text="hello"
             android:id="@+id/event_listitem_content"
-            style="@style/events_list_content" />
+            style="@style/events_list_content"
+            android:text="hello" />
 
         <ImageView
             android:id="@+id/iv_pic"
@@ -60,6 +60,8 @@
                 style="@style/events_list_data"
                 android:layout_width="0dp"
                 android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_time"
+                android:drawablePadding="3dp"
                 android:gravity="left" />
 
             <TextView

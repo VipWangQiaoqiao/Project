@@ -242,6 +242,11 @@ public class TeamDiaryDetail extends BaseFragment implements EmojiTextListener,
                         View line = View.inflate(aty,
                                 R.layout.list_head_commnt_line, null);
                         footerView.addView(line);
+                        if (datas.size() > 0) {
+                            TextView commentCount = (TextView) line
+                                    .findViewById(R.id.tv_comment_count);
+                            commentCount.setText("评论(" + datas.size() + ")");
+                        }
                         for (TeamReply data : datas) {
                             View layout = View.inflate(aty,
                                     R.layout.team_list_cell_comment, null);
@@ -259,7 +264,14 @@ public class TeamDiaryDetail extends BaseFragment implements EmojiTextListener,
                                     .findViewById(R.id.tv_content);
                             content.setText(Html.fromHtml(data.getContent())
                                     .toString().trim());
-
+                            TextView from = (TextView) layout
+                                    .findViewById(R.id.tv_from);
+                            if (StringUtils.isEmpty(data.getAppName())) {
+                                from.setVisibility(View.GONE);
+                            } else {
+                                from.setVisibility(View.VISIBLE);
+                                from.setText(data.getAppName());
+                            }
                             layout.setOnClickListener(new OnClickListener() {
                                 @Override
                                 public void onClick(View v) {

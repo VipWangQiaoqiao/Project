@@ -47,8 +47,7 @@
         android:drawablePadding="@dimen/space_4"
         android:gravity="center_vertical"
         android:textColor="@color/main_gray"
-        android:textSize="@dimen/text_size_11"
-        android:visibility="gone" />
+        android:textSize="@dimen/text_size_11" />
 
     <View
         android:layout_width="match_parent"
