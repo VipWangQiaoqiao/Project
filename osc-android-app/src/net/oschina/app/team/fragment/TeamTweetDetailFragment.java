@@ -124,7 +124,7 @@ public class TeamTweetDetailFragment extends
         String imgPath = active.getBody().getImage();
         if (!StringUtils.isEmpty(imgPath)) {
             iv_pic.setVisibility(View.VISIBLE);
-            setTweetImage(iv_pic, imgPath);
+            setTweetImage(iv_pic, imgPath, active.getBody().getImageOrigin());
         } else {
             iv_pic.setVisibility(View.GONE);
         }
@@ -189,9 +189,15 @@ public class TeamTweetDetailFragment extends
     /**
      * 动态设置图片显示样式
      * 
+     * @param url
+     *            缩略图地址
+     * @param realUrl
+     *            点击图片后要显示的大图图片地址
+     * 
      * @author kymjs
      */
-    private void setTweetImage(final ImageView pic, final String url) {
+    private void setTweetImage(final ImageView pic, final String url,
+            final String realUrl) {
         pic.setVisibility(View.VISIBLE);
         kjb.setCallback(new BitmapCallBack() {
             @Override
@@ -209,7 +215,7 @@ public class TeamTweetDetailFragment extends
             @Override
             public void onClick(View v) {
                 ImagePreviewActivity.showImagePrivew(aty, 0,
-                        new String[] { url });
+                        new String[] { realUrl });
             }
         });
     }
