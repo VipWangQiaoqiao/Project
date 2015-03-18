@@ -6,6 +6,7 @@ import net.oschina.app.team.bean.TeamActive;
 import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.AvatarView;
+import net.oschina.app.widget.TweetTextView;
 
 import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
@@ -38,7 +39,7 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
     static class ViewHolder {
         AvatarView img_head;
         TextView tv_name;
-        TextView tv_content;
+        TweetTextView tv_content;
         TextView tv_client;
         TextView tv_date;
         TextView tv_commit;
@@ -57,7 +58,7 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
                     .findViewById(R.id.event_listitem_userface);
             holder.tv_name = (TextView) v
                     .findViewById(R.id.event_listitem_username);
-            holder.tv_content = (TextView) v
+            holder.tv_content = (TweetTextView) v
                     .findViewById(R.id.event_listitem_content);
             holder.tv_client = (TextView) v
                     .findViewById(R.id.event_listitem_client);
@@ -71,7 +72,9 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
         }
         holder.img_head.setAvatarUrl(data.getAuthor().getPortrait());
         holder.tv_name.setText(data.getAuthor().getName());
-        holder.tv_content.setText(stripTags(data.getBody().getTitle()));
+        setContent(holder.tv_content, stripTags(data.getBody().getTitle())
+                .toString());
+
         holder.tv_content.setMaxLines(3);
         holder.tv_date.setText(StringUtils.friendly_time(data.getCreateTime()));
         holder.tv_commit.setText(data.getReply());
@@ -82,7 +85,6 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
         } else {
             holder.iv_pic.setVisibility(View.GONE);
         }
-        // holder.tv_client.setText("");
         return v;
     }
 
