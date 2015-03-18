@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_gravity="left"
-            android:text="任务列表" />
+            android:text="任务分组" />
 
         <TextView
             android:id="@+id/tv_issue_catalog"

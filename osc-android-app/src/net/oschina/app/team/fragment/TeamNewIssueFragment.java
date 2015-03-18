@@ -24,7 +24,9 @@ import net.oschina.app.util.XmlUtils;
 import org.apache.http.Header;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.preference.DialogPreference;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -74,7 +76,7 @@ public class TeamNewIssueFragment extends BaseFragment {
     private TeamProject mTeamProject;
 
     private TeamIssueCatalog mTeamCatalog;
-    
+
     private MenuItem mSendMenu;
 
     @Override
@@ -96,22 +98,23 @@ public class TeamNewIssueFragment extends BaseFragment {
 	view.findViewById(R.id.rl_issue_catalog).setOnClickListener(this);
 	view.findViewById(R.id.rl_issue_touser).setOnClickListener(this);
 	view.findViewById(R.id.rl_issue_time).setOnClickListener(this);
-	
+
 	mEtTitle.addTextChangedListener(new TextWatcher() {
-	    
+
 	    @Override
-	    public void onTextChanged(CharSequence s, int start, int before, int count) {
+	    public void onTextChanged(CharSequence s, int start, int before,
+		    int count) {
 		// TODO Auto-generated method stub
-		
+
 	    }
-	    
+
 	    @Override
 	    public void beforeTextChanged(CharSequence s, int start, int count,
 		    int after) {
 		// TODO Auto-generated method stub
-		
+
 	    }
-	    
+
 	    @Override
 	    public void afterTextChanged(Editable s) {
 		// TODO Auto-generated method stub
@@ -119,7 +122,7 @@ public class TeamNewIssueFragment extends BaseFragment {
 	    }
 	});
     }
-    
+
     private void updateMenuState() {
 	if (mEtTitle.getText().length() == 0) {
 	    mSendMenu.setEnabled(false);
@@ -286,6 +289,14 @@ public class TeamNewIssueFragment extends BaseFragment {
 	final CharSequence[] arrays = new CharSequence[projects.size()];
 	for (int i = 0; i < projects.size(); i++) {
 	    arrays[i] = projects.get(i).getGit().getName();
+	    if (mTeamProject != null) {
+		if (mTeamProject.getGit().getName()
+			.equals(projects.get(i).getGit().getName())
+			&& mTeamProject.getGit().getId() == projects.get(i)
+				.getGit().getId()) {
+		    projectIndex = i;
+		}
+	    }
 	}
 	projectDialog.setItems(arrays, projectIndex, new OnItemClickListener() {
 
@@ -315,7 +326,7 @@ public class TeamNewIssueFragment extends BaseFragment {
 	catalogs = null;
 	mTvCatalog.setText("未指定列表");
 
-	// 清楚指派列表
+	// 清除指派列表
 	toUserIndex = 0;
 	toUsers = null;
 	mTvToUser.setText("未指派");
@@ -332,6 +343,11 @@ public class TeamNewIssueFragment extends BaseFragment {
 	final CharSequence[] catalogs = new CharSequence[list.size()];
 	for (int i = 0; i < list.size(); i++) {
 	    catalogs[i] = list.get(i).getTitle();
+	    if (mTeamCatalog != null) {
+		if (mTeamCatalog.getTitle().equals(list.get(i).getTitle())) {
+		    catalogIndex = i;
+		}
+	    }
 	}
 	catalogDialog.setItems(catalogs, catalogIndex,
 		new OnItemClickListener() {
@@ -397,6 +413,7 @@ public class TeamNewIssueFragment extends BaseFragment {
     }
 
     private void showIssueDeadlineTime() {
+
 	final DatePickerDialog dateDialog = new DatePickerDialog(getActivity(),
 		new DatePickerDialog.OnDateSetListener() {
 
@@ -404,13 +421,41 @@ public class TeamNewIssueFragment extends BaseFragment {
 		    public void onDateSet(DatePicker view, int year,
 			    int monthOfYear, int dayOfMonth) {
 			// TODO Auto-generated method stub
-			mYear = year;
-			mMonth = monthOfYear;
-			mDay = dayOfMonth;
-			issueTime = mYear + "-" + (mMonth + 1) + "-" + mDay;
-			mTvTime.setText(issueTime);
 		    }
+
 		}, mYear, mMonth, mDay);
+	DialogInterface.OnClickListener clickListener = new DialogInterface.OnClickListener() {
+
+	    @Override
+	    public void onClick(DialogInterface dialog, int which) {
+		// TODO Auto-generated method stub
+		switch (which) {
+		case DialogInterface.BUTTON_NEGATIVE:
+		    
+		    break;
+		case DialogInterface.BUTTON_NEUTRAL:
+		    issueTime = "";
+		    mTvTime.setText(issueTime);
+		    break;
+		case DialogInterface.BUTTON_POSITIVE:
+		    mYear = dateDialog.getDatePicker().getYear();
+		    mMonth = dateDialog.getDatePicker().getMonth();
+		    mDay = dateDialog.getDatePicker().getDayOfMonth();
+		    issueTime = mYear + "-" + (mMonth + 1) + "-" + mDay;
+		    mTvTime.setText(issueTime);
+		    break;
+
+		default:
+		    break;
+		}
+	    }
+	};
+	dateDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消",
+		clickListener);
+	dateDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "清除",
+		clickListener);
+	dateDialog.setButton(DialogInterface.BUTTON_POSITIVE, "确认",
+		clickListener);
 	dateDialog.show();
     }
 
@@ -504,8 +549,8 @@ public class TeamNewIssueFragment extends BaseFragment {
 		break;
 	    // 显示指派用户对话框
 	    case show_issue_touser:
-		TeamMemberList tpmList = XmlUtils.toBean(
-			TeamMemberList.class, arg2);
+		TeamMemberList tpmList = XmlUtils.toBean(TeamMemberList.class,
+			arg2);
 		showIssueToUser(tpmList.getList());
 		break;
 	    default:
