@@ -11,6 +11,7 @@ import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamGit;
+import net.oschina.app.team.bean.TeamIssue;
 import net.oschina.app.team.bean.TeamIssueCatalog;
 import net.oschina.app.team.bean.TeamIssueCatalogList;
 import net.oschina.app.team.bean.TeamMember;
@@ -26,7 +27,6 @@ import org.apache.http.Header;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.preference.DialogPreference;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -38,6 +38,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -70,6 +71,15 @@ public class TeamNewIssueFragment extends BaseFragment {
 
     @InjectView(R.id.tv_issue_time)
     TextView mTvTime;
+    
+    @InjectView(R.id.rl_issue_push)
+    View mRlGitPush;
+    
+    @InjectView(R.id.tv_issue_push_source)
+    TextView mTvPushSource;
+    
+    @InjectView(R.id.cb_issue_push_check)
+    CheckBox mCbPush;
 
     private Team mTeam;
 
@@ -196,14 +206,17 @@ public class TeamNewIssueFragment extends BaseFragment {
 
 	    params.put("project", mTeamProject.getGit().getId());
 	    params.put("source", mTeamProject.getSource());
+	    if (mCbPush.isChecked()) {
+		params.put("gitpush", TeamIssue.TEAM_ISSUE_GITPUSHED);
+	    }
 	}
 
 	if (!TextUtils.isEmpty(issueTime)) {
 	    params.put("deadline_time", issueTime);
 	}
 
-	if (catalogIndex != 0 && catalogs != null && !catalogs.isEmpty()) {
-	    params.put("catalogid", catalogs.get(catalogIndex).getId());
+	if (mTeamCatalog != null) {
+	    params.put("catalogid", mTeamCatalog.getId());
 	}
 
 	if (toUserIndex != 0 && toUsers != null && !toUsers.isEmpty()) {
@@ -237,6 +250,7 @@ public class TeamNewIssueFragment extends BaseFragment {
 	    project.setGit(git);
 	    mTeamProject = project;
 	}
+	checkIsShowPush();
 	if (mTeamCatalog != null) {
 	    mTvCatalog.setText(mTeamCatalog.getTitle());
 	    mTvCatalog.setTag(mTeamCatalog);
@@ -311,12 +325,27 @@ public class TeamNewIssueFragment extends BaseFragment {
 		projectIndex = position;
 		mTvProject.setText(arrays[position]);
 		mTeamProject = projects.get(position);
+		checkIsShowPush();
 		clearCatalogAndToUser();
 		projectDialog.dismiss();
 	    }
 	});
 
 	projectDialog.show();
+    }
+    
+    private void checkIsShowPush() {
+	if (mTeamProject == null) return;
+	if (mTeamProject.getGit().getId() == -1) {
+	    mRlGitPush.setVisibility(View.GONE);
+	} else {
+	    mRlGitPush.setVisibility(View.VISIBLE);
+	    if (mTeamProject.getSource().equals(TeamProject.GITHUB)) {
+		mTvPushSource.setText("同步到GitHub");
+	    } else {
+		mTvPushSource.setText("同步到Git@OSC");
+	    }
+	}
     }
 
     // 重新选定项目之后清空任务列表和指派成员
@@ -332,7 +361,7 @@ public class TeamNewIssueFragment extends BaseFragment {
 	mTvToUser.setText("未指派");
     }
 
-    private void showTeamCatalogSelected(List<TeamIssueCatalog> list) {
+    private void showTeamCatalogSelected(final List<TeamIssueCatalog> list) {
 	this.catalogs = list;
 	if (catalogDialog == null) {
 	    catalogDialog = DialogHelper
@@ -357,6 +386,7 @@ public class TeamNewIssueFragment extends BaseFragment {
 			    int position, long id) {
 			// TODO Auto-generated method stub
 			catalogIndex = position;
+			mTeamCatalog = list.get(position);
 			mTvCatalog.setText(catalogs[position]);
 			catalogDialog.dismiss();
 		    }
