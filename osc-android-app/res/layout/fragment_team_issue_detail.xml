@@ -6,12 +6,12 @@
         android:id="@+id/error_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible" />
+        android:visibility="gone" />
     
     <ScrollView
         android:id="@+id/content"
         style="@style/fill_fill"
-        android:visibility="gone"
+        android:visibility="visible"
         android:background="@color/list_item_background_normal" >
 
         <LinearLayout

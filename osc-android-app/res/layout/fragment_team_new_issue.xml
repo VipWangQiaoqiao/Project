@@ -48,7 +48,7 @@
             android:id="@+id/tv_fa_catalog"
             style="@style/team_new_issue_fa"
             android:text="@string/fa_list"
-            android:textSize="14sp" />
+            android:textSize="16sp" />
 
         <TextView
             style="@style/team_new_issue_tip"
