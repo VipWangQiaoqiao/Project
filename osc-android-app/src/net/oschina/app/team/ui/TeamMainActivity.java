@@ -61,7 +61,7 @@ public class TeamMainActivity extends BaseActivity {
     private final String tag = "team_view";
 
     private FragmentManager mFragmentManager;
-
+    
     private int mCurrentContentIndex = -1;
 
     @InjectView(R.id.error_layout)

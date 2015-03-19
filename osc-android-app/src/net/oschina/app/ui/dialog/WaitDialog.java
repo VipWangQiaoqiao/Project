@@ -105,4 +105,8 @@ public class WaitDialog extends Dialog {
 	public void setMessage(String message) {
 		_messageTv.setText(message);
 	}
+	
+	public void hideMessage() {
+	    _messageTv.setVisibility(View.GONE);
+	}
 }
