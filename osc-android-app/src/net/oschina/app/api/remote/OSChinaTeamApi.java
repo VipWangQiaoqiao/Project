@@ -34,6 +34,25 @@ public class OSChinaTeamApi {
         ApiHttpClient.get("action/api/team_project_list", params, handler);
     }
 
+    /**
+     * 获取team动态列表
+     * 
+     * @param teamId
+     * @param activeId
+     * @param pageIndex
+     * @param handler
+     */
+    public static void getTeamCommentList(int teamId, int activeId,
+            int pageIndex, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("teamid", teamId);
+        params.put("id", activeId);
+        params.put("pageIndex", pageIndex);
+        params.put("pageSize", 20);
+        ApiHttpClient.get("action/api/team_reply_list_by_activeid", params,
+                handler);
+    }
+
     /***
      * 获取团队绑定项目的成员列表（包括管理员以及开发者）
      * 
