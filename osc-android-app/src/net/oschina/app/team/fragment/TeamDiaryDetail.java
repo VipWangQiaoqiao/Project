@@ -247,7 +247,7 @@ public class TeamDiaryDetail extends BaseFragment implements EmojiTextListener,
                                     .findViewById(R.id.tv_comment_count);
                             commentCount.setText("评论(" + datas.size() + ")");
                         }
-                        for (TeamReply data : datas) {
+                        for (final TeamReply data : datas) {
                             View layout = View.inflate(aty,
                                     R.layout.team_list_cell_comment, null);
                             AvatarView head = (AvatarView) layout
@@ -276,8 +276,8 @@ public class TeamDiaryDetail extends BaseFragment implements EmojiTextListener,
                                 @Override
                                 public void onClick(View v) {
                                     mEmojiFragment.setTag(v);
-                                    mEmojiFragment.setInputHint("回复" + name
-                                            + ":");
+                                    mEmojiFragment.setInputHint("回复"
+                                            + data.getAuthor().getName() + ":");
                                     mEmojiFragment.requestFocusInput();
                                 }
                             });
