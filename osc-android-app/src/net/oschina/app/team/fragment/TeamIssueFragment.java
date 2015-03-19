@@ -2,7 +2,10 @@ package net.oschina.app.team.fragment;
 
 import java.io.InputStream;
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
 import java.util.List;
+
+import butterknife.OnItemClick;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -17,6 +20,8 @@ import net.oschina.app.team.bean.TeamIssue;
 import net.oschina.app.team.bean.TeamIssueList;
 import net.oschina.app.team.bean.TeamProject;
 import net.oschina.app.team.ui.TeamMainActivity;
+import net.oschina.app.ui.dialog.CommonDialog;
+import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
@@ -27,6 +32,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
 
 /**
  * 任务列表界面
@@ -90,7 +97,7 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // TODO Auto-generated method stub
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.team_issue_catalog_menu, menu);
+        inflater.inflate(R.menu.team_issue_menu, menu);
     }
     
     @Override
@@ -100,11 +107,39 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
 	case R.id.team_new_issue:
 	    UIHelper.showCreateNewIssue(getActivity(), mTeam, mProject, mCatalog);
 	    break;
-
+	case R.id.team_issue_project_list:
+	    changeShowIssueState();
+	    break;
 	default:
 	    break;
 	}
         return super.onOptionsItemSelected(item);
+    }
+    
+    private void changeShowIssueState() {
+	final CommonDialog dialog = DialogHelper.getPinterestDialogCancelable(getActivity());
+	CharSequence[] items = {"所有任务", "待办中", "进行中", "已完成", "已验收"};
+	final CharSequence[] itemsEn = {"all", TeamIssue.TEAM_ISSUE_STATE_OPENED, TeamIssue.TEAM_ISSUE_STATE_OPENED, 
+		TeamIssue.TEAM_ISSUE_STATE_UNDERWAY, TeamIssue.TEAM_ISSUE_STATE_CLOSED, TeamIssue.TEAM_ISSUE_STATE_ACCEPTED};
+	dialog.setTitle("选择任务状态");
+	int index = 0;
+	for (int i = 0; i < itemsEn.length; i++) {
+	    if (issueState.equals(itemsEn[i])) {
+		index = i;
+	    }
+	}
+	dialog.setItems(items, index ,new OnItemClickListener() {
+
+	    @Override
+	    public void onItemClick(AdapterView<?> parent, View view,
+		    int position, long id) {
+		// TODO Auto-generated method stub
+		issueState = (itemsEn[position]).toString();
+		onRefresh();
+		dialog.dismiss();
+	    }
+	});
+	dialog.show();
     }
 
     @Override
