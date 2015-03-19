@@ -38,17 +38,17 @@ public class DiaryDetailAdapter extends BaseAdapter {
         weekIndex[0] = count;
         count += isNull(data.getSun());
         weekIndex[1] = count;
-        count += isNull(data.getMon());
-        weekIndex[2] = count;
-        count += isNull(data.getTue());
-        weekIndex[3] = count;
-        count += isNull(data.getWed());
-        weekIndex[4] = count;
-        count += isNull(data.getThu());
-        weekIndex[5] = count;
-        count += isNull(data.getFri());
-        weekIndex[6] = count;
         count += isNull(data.getSat());
+        weekIndex[2] = count;
+        count += isNull(data.getFri());
+        weekIndex[3] = count;
+        count += isNull(data.getThu());
+        weekIndex[4] = count;
+        count += isNull(data.getWed());
+        weekIndex[5] = count;
+        count += isNull(data.getTue());
+        weekIndex[6] = count;
+        count += isNull(data.getMon());
         return count;
     }
 
@@ -58,24 +58,30 @@ public class DiaryDetailAdapter extends BaseAdapter {
         if (position == weekIndex[0]) {
             hide.setVisibility(View.VISIBLE);
             week = "星期日";
-        } else if (position == weekIndex[1]) {
-            hide.setVisibility(View.VISIBLE);
-            week = "星期一";
-        } else if (position == weekIndex[2]) {
-            hide.setVisibility(View.VISIBLE);
-            week = "星期二";
-        } else if (position == weekIndex[3]) {
-            hide.setVisibility(View.VISIBLE);
-            week = "星期三";
-        } else if (position == weekIndex[4]) {
-            hide.setVisibility(View.VISIBLE);
-            week = "星期四";
-        } else if (position == weekIndex[5]) {
-            hide.setVisibility(View.VISIBLE);
-            week = "星期五";
-        } else if (position == weekIndex[6]) {
+        }
+        if (position == weekIndex[1]) {
             hide.setVisibility(View.VISIBLE);
             week = "星期六";
+        }
+        if (position == weekIndex[2]) {
+            hide.setVisibility(View.VISIBLE);
+            week = "星期五";
+        }
+        if (position == weekIndex[3]) {
+            hide.setVisibility(View.VISIBLE);
+            week = "星期四";
+        }
+        if (position == weekIndex[4]) {
+            hide.setVisibility(View.VISIBLE);
+            week = "星期三";
+        }
+        if (position == weekIndex[5]) {
+            hide.setVisibility(View.VISIBLE);
+            week = "星期二";
+        }
+        if (position == weekIndex[6]) {
+            hide.setVisibility(View.VISIBLE);
+            week = "星期一";
         }
         return week;
     }

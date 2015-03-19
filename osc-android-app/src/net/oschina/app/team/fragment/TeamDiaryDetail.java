@@ -262,8 +262,7 @@ public class TeamDiaryDetail extends BaseFragment implements EmojiTextListener,
                                     .getCreateTime()));
                             TextView content = (TextView) layout
                                     .findViewById(R.id.tv_content);
-                            content.setText(Html.fromHtml(data.getContent())
-                                    .toString().trim());
+                            content.setText(stripTags(data.getContent()));
                             TextView from = (TextView) layout
                                     .findViewById(R.id.tv_from);
                             if (StringUtils.isEmpty(data.getAppName())) {

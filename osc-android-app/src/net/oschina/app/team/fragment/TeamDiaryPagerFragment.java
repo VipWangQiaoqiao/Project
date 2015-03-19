@@ -205,13 +205,13 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
         int[] dateBundle = StringUtils.getCurrentDate();
         if ((dateBundle[0] == year && dateBundle[1] <= month)
                 || (dateBundle[0] == year && dateBundle[1] == month + 1 && dateBundle[2] < day)) {
-            AppContext.showToast("日期不正确");
+            AppContext.showToast("那天怎么会有周报呢");
         } else {
             currentYear = year;
             currentWeek = StringUtils.getWeekOfYear(new Date(year, month, day));
             mPager.setAdapter(new DiaryPagerAdapter());
             mPager.setCurrentItem(currentWeek);
-            mTvTitle.setText("第" + (currentWeek + 1) + "周周报总览");
+            mTvTitle.setText("第" + (currentWeek) + "周周报总览");
         }
     }
 
@@ -267,7 +267,7 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
                         // 设置顶部正在刷新
                         setSwipeRefreshLoadingState(pullHeadView);
                         /* !!! 设置耗时操作 !!! */
-                        setContentFromNet(errorLayout, pullHeadView, listview,
+                        setContentFromNet(null, pullHeadView, listview,
                                 whichWeek);
                         errorLayout.setErrorMessage("本周无人提交周报");
                     }
@@ -338,78 +338,75 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
         private void setContentFromNet(final EmptyLayout errorLayout,
                 final SwipeRefreshLayout pullHeadView, final ListView view,
                 final int whichWeek) {
-            OSChinaApi.getDiaryFromWhichWeek(team.getId() + "", currentYear
-                    + "", whichWeek + "", new AsyncHttpResponseHandler() {
-                @Override
-                public void onStart() {
-                    super.onStart();
-                    ListAdapter adapter = view.getAdapter();
-                    errorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-                    if (adapter == null && errorLayout != null) {
-                        errorLayout.setVisibility(View.VISIBLE);
-                    }
-                }
+            OSChinaApi.getDiaryFromWhichWeek(team.getId(), currentYear,
+                    whichWeek, new AsyncHttpResponseHandler() {
+                        @Override
+                        public void onStart() {
+                            super.onStart();
+                            if (errorLayout != null) {
+                                ListAdapter adapter = view.getAdapter();
+                                errorLayout
+                                        .setErrorType(EmptyLayout.NETWORK_LOADING);
+                                if (adapter == null && errorLayout != null) {
+                                    errorLayout.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        }
 
-                @Override
-                public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                        Throwable arg3) {
-                    /* 网络异常 */
-                    if (errorLayout != null) {
-                        errorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-                        errorLayout.setVisibility(View.VISIBLE);
-                    }
-                }
+                        @Override
+                        public void onFailure(int arg0, Header[] arg1,
+                                byte[] arg2, Throwable arg3) {
+                            /* 网络异常 */
+                            if (errorLayout != null) {
+                                errorLayout
+                                        .setErrorType(EmptyLayout.NETWORK_ERROR);
+                                errorLayout.setVisibility(View.VISIBLE);
+                            }
+                            if (pullHeadView != null) {
+                                setSwipeRefreshLoadedState(pullHeadView);
+                            }
+                        }
 
-                @Override
-                public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-                    final TeamDiaryList bundle = XmlUtils
-                            .toBean(TeamDiaryList.class,
+                        @Override
+                        public void onSuccess(int arg0, Header[] arg1,
+                                byte[] arg2) {
+                            final TeamDiaryList bundle = XmlUtils.toBean(
+                                    TeamDiaryList.class,
                                     new ByteArrayInputStream(arg2));
 
-                    KJAsyncTask.execute(new Runnable() {
-                        // dataBundleList没有加入线程安全，由于whichWeek对应的value只在此处会修改，
-                        // 线程冲突概率非常小，为了ListView流畅性，忽略线程安全性
-                        @Override
-                        public void run() {
-                            if (dataBundleList.get(whichWeek) != null) {
-                                dataBundleList.remove(whichWeek);
+                            new Thread(new Runnable() {
+                                // dataBundleList没有加入线程安全，由于whichWeek对应的value只在此处会修改，
+                                // 线程冲突概率非常小，为了ListView流畅性，忽略线程安全性
+                                @Override
+                                public void run() {
+                                    if (dataBundleList.get(whichWeek) != null) {
+                                        dataBundleList.remove(whichWeek);
+                                    }
+                                    dataBundleList.put(whichWeek, bundle);
+                                    CacheManager.saveObject(aty, bundle, TAG
+                                            + whichWeek);
+                                }
+                            }).start();
+
+                            List<TeamDiary> tempData = bundle.getList();
+                            if ((tempData == null || tempData.isEmpty())
+                                    && errorLayout != null) {
+                                errorLayout.setNoDataContent("本周无人提交周报");
+                                errorLayout.setErrorType(EmptyLayout.NODATA);
+                                errorLayout.setVisibility(View.VISIBLE);
+                            } else {
+                                if (errorLayout != null) {
+                                    errorLayout.setVisibility(View.GONE);
+                                }
+                                view.setAdapter(new TeamDiaryListAdapter(aty,
+                                        tempData));
                             }
-                            dataBundleList.put(whichWeek, bundle);
-                            CacheManager.saveObject(aty, bundle, TAG
-                                    + whichWeek);
+
+                            if (pullHeadView != null) {
+                                setSwipeRefreshLoadedState(pullHeadView);
+                            }
                         }
                     });
-
-                    List<TeamDiary> tempData = bundle.getList();
-                    if ((tempData == null || tempData.isEmpty())
-                            && errorLayout != null) {
-                        errorLayout.setNoDataContent("本周无人提交周报");
-                        errorLayout.setErrorType(EmptyLayout.NODATA);
-                        errorLayout.setVisibility(View.VISIBLE);
-                    } else {
-                        if (errorLayout != null) {
-                            errorLayout.setVisibility(View.GONE);
-                        }
-
-                        ListAdapter adapter = view.getAdapter();
-                        if (adapter != null
-                                && adapter instanceof TeamDiaryListAdapter) {
-                            ((TeamDiaryListAdapter) adapter).refresh(tempData);
-                        } else {
-                            view.setAdapter(new TeamDiaryListAdapter(aty,
-                                    tempData));
-                        }
-                    }
-                }
-
-                @Override
-                public void onFinish() {
-                    super.onFinish();
-                    if (pullHeadView != null) {
-                        setSwipeRefreshLoadedState(pullHeadView);
-                    }
-                }
-            });
         }
 
         /* self annotation */
@@ -421,8 +418,7 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
                 errorLayout.setErrorType(EmptyLayout.NODATA);
                 errorLayout.setVisibility(View.VISIBLE);
             }
-
-            view.setAdapter(new TeamDiaryListAdapter(aty, dataBundle.getList()));
+            view.setAdapter(new TeamDiaryListAdapter(aty, tempData));
         }
     }
 }

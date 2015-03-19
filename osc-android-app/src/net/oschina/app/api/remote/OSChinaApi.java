@@ -793,8 +793,8 @@ public class OSChinaApi {
      * @param week
      * @param handler
      */
-    public static void getDiaryFromWhichWeek(String teamid, String year,
-            String week, AsyncHttpResponseHandler handler) {
+    public static void getDiaryFromWhichWeek(int teamid, int year, int week,
+            AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("teamid", teamid);
         params.put("year", year);
