@@ -158,6 +158,7 @@ public class TeamDiscussDetailFragment extends
 	UIHelper.addWebImageShow(getActivity(), mWebView);
 	mWebView.loadDataWithBaseURL(null, UIHelper.WEB_STYLE + detailBean.getBody(), "text/html",
 		"utf-8", null);
+	mAdapter.setNoDataText(R.string.comment_empty);
     }
 
     @Override
