@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/list_item_background_pressed"
-                android:padding="10dp"
+                android:padding="8dp"
                 android:visibility="visible" >
 
                 <TextView
@@ -34,8 +34,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:text="team_issue"
-                    android:textColor="#10ad88"
-                    android:textSize="15sp" />
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -54,6 +53,44 @@
                     android:text="任务标题"
                     android:textSize="18sp" />
             </LinearLayout>
+            
+            <View 
+                android:layout_width="match_parent"
+                android:background="#ccc"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_height="1dp"/>
+            
+            <LinearLayout
+                android:id="@+id/ll_issue_child"
+                style="@style/team_issue_detail_layout" >
+
+                <TextView
+                    android:id="@+id/tv_issue_fa_child"
+                    style="@style/team_issue_detail_tip_fa"
+                    android:text="@string/fa_plus" />
+
+                <LinearLayout
+                    style="@style/team_issue_detail_info_layout" >
+
+                    <TextView
+                        style="@style/team_issue_detail_tip"
+                        android:text="子任务" />
+
+                    <TextView
+                        android:id="@+id/tv_issue_child"
+                        style="@style/team_issue_detail_text"
+                        android:text="点击添加子任务" />
+                </LinearLayout>
+            </LinearLayout>
+            
+            <LinearLayout
+                android:id="@+id/ll_issue_childs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="28dp"
+                android:orientation="vertical"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/ll_issue_touser"
@@ -65,9 +102,7 @@
                     android:text="@string/fa_user" />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
+                    style="@style/team_issue_detail_info_layout" >
 
                     <TextView
                         style="@style/team_issue_detail_tip"
@@ -76,10 +111,37 @@
                     <TextView
                         android:id="@+id/tv_issue_touser"
                         style="@style/team_issue_detail_text"
+                        android:gravity="right"
                         android:text="点击设置指派任务" />
                 </LinearLayout>
             </LinearLayout>
 
+            
+
+            <LinearLayout
+                android:id="@+id/ll_issue_die_time"
+                style="@style/team_issue_detail_layout" >
+
+                <TextView
+                    android:id="@+id/tv_issue_fa_die_time"
+                    style="@style/team_issue_detail_tip_fa"
+                    android:textSize="16sp"
+                    android:text="@string/fa_calendar" />
+
+                <LinearLayout
+                    style="@style/team_issue_detail_info_layout" >
+
+                    <TextView
+                        style="@style/team_issue_detail_tip"
+                        android:text="截止日期" />
+
+                    <TextView
+                        android:id="@+id/tv_issue_die_time"
+                        style="@style/team_issue_detail_text"
+                        android:text="点击设置截止日期" />
+                </LinearLayout>
+            </LinearLayout>
+            
             <LinearLayout
                 android:id="@+id/ll_issue_cooperate_user"
                 style="@style/team_issue_detail_layout" >
@@ -87,12 +149,11 @@
                 <TextView
                     android:id="@+id/tv_issue_fa_cooperate_user"
                     style="@style/team_issue_detail_tip_fa"
-                    android:text="@string/fa_users" />
+                    android:text="@string/fa_users"
+                    android:textSize="16sp" />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
+                    style="@style/team_issue_detail_info_layout" >
 
                     <TextView
                         style="@style/team_issue_detail_tip"
@@ -106,31 +167,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/ll_issue_die_time"
-                style="@style/team_issue_detail_layout" >
-
-                <TextView
-                    android:id="@+id/tv_issue_fa_die_time"
-                    style="@style/team_issue_detail_tip_fa"
-                    android:text="@string/fa_calendar" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <TextView
-                        style="@style/team_issue_detail_tip"
-                        android:text="截止日期" />
-
-                    <TextView
-                        android:id="@+id/tv_issue_die_time"
-                        style="@style/team_issue_detail_text"
-                        android:text="点击设置截止日期" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/ll_issue_state"
                 style="@style/team_issue_detail_layout" >
 
@@ -140,9 +176,7 @@
                     android:text="@string/fa_trello" />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
+                    style="@style/team_issue_detail_info_layout" >
 
                     <TextView
                         style="@style/team_issue_detail_tip"
@@ -154,39 +188,6 @@
                         android:text="任务当前阶段" />
                 </LinearLayout>
             </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ll_issue_child"
-                style="@style/team_issue_detail_layout" >
-
-                <TextView
-                    android:id="@+id/tv_issue_fa_child"
-                    style="@style/team_issue_detail_tip_fa"
-                    android:text="@string/fa_plus" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <TextView
-                        style="@style/team_issue_detail_tip"
-                        android:text="子任务" />
-
-                    <TextView
-                        android:id="@+id/tv_issue_child"
-                        style="@style/team_issue_detail_text"
-                        android:text="点击添加子任务" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ll_issue_childs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="28dp"
-                android:orientation="vertical"
-                android:visibility="gone" />
 
             <LinearLayout style="@style/team_issue_detail_layout" >
 
@@ -213,9 +214,7 @@
                     android:text="@string/fa_paperclip" />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
+                    style="@style/team_issue_detail_info_layout" >
 
                     <TextView
                         style="@style/team_issue_detail_tip"
@@ -238,9 +237,7 @@
                     android:text="@string/fa_link" />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
+                    style="@style/team_issue_detail_info_layout" >
 
                     <TextView
                         style="@style/team_issue_detail_tip"

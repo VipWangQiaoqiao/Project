@@ -90,16 +90,26 @@
     </style>
     
     <style name="team_issue_detail_tip_fa" parent="@style/wrap_wrap">
-        <item name="android:textSize">20sp</item>
-        <item name="android:layout_marginRight">20dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:textColor">@color/main_gray</item>
+    </style>
+    
+    <style name="team_issue_detail_info_layout">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
     </style>
     
     <style name="team_issue_detail_tip" parent="@style/wrap_wrap">
         <item name="android:textSize">15sp</item>
     </style>
     
-    <style name="team_issue_detail_text" parent="@style/wrap_wrap">
-        <item name="android:layout_alignParentRight">true</item>
+    <style name="team_issue_detail_text">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">right</item>
         <item name="android:textColor">@color/main_gray</item>
     </style>
     
