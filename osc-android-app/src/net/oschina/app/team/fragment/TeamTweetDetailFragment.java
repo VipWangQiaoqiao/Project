@@ -6,10 +6,10 @@ import java.io.Serializable;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
-import net.oschina.app.adapter.CommentAdapter;
 import net.oschina.app.adapter.CommentAdapter.OnOperationListener;
 import net.oschina.app.api.OperationResponseHandler;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BeseHaveHeaderListFragment;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Comment;
@@ -19,8 +19,11 @@ import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
 import net.oschina.app.interf.EmojiFragmentControl;
+import net.oschina.app.team.adapter.TeamReplyAdapter;
 import net.oschina.app.team.bean.TeamActive;
 import net.oschina.app.team.bean.TeamActiveDetail;
+import net.oschina.app.team.bean.TeamRepliesList;
+import net.oschina.app.team.bean.TeamReply;
 import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
@@ -62,7 +65,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
  * 
  */
 public class TeamTweetDetailFragment extends
-        BeseHaveHeaderListFragment<Comment, TeamActiveDetail> implements
+        BeseHaveHeaderListFragment<TeamReply, TeamActiveDetail> implements
         EmojiTextListener, EmojiFragmentControl, OnOperationListener,
         OnItemClickListener, OnItemLongClickListener {
 
@@ -164,18 +167,8 @@ public class TeamTweetDetailFragment extends
             UIHelper.showLoginActivity(getActivity());
             return;
         }
-        if (mEmojiFragment.getInputTag() != null) {
-            Comment comment = (Comment) mEmojiFragment.getInputTag();
-            OSChinaApi
-                    .replyComment(active.getId(), CommentList.CATALOG_TWEET,
-                            comment.getId(), comment.getAuthorId(), AppContext
-                                    .getInstance().getLoginUid(), text,
-                            mCommentHandler);
-        } else {
-            OSChinaApi.publicComment(CommentList.CATALOG_TWEET, active.getId(),
-                    AppContext.getInstance().getLoginUid(), text, 0,
-                    mCommentHandler);
-        }
+        OSChinaTeamApi.pubTeamTweetReply(teamId, active.getType(),
+                active.getId(), text, mCommentHandler);
     }
 
     private void initImageSize(Context cxt) {
@@ -239,9 +232,9 @@ public class TeamTweetDetailFragment extends
     }
 
     @Override
-    protected CommentList readList(Serializable seri) {
+    protected TeamRepliesList readList(Serializable seri) {
         super.readList(seri);
-        return (CommentList) seri;
+        return (TeamRepliesList) seri;
     }
 
     @Override
@@ -256,9 +249,9 @@ public class TeamTweetDetailFragment extends
     }
 
     @Override
-    protected ListEntity<Comment> parseList(InputStream is) throws Exception {
+    protected ListEntity<TeamReply> parseList(InputStream is) throws Exception {
         super.parseList(is);
-        CommentList list = XmlUtils.toBean(CommentList.class, is);
+        TeamRepliesList list = XmlUtils.toBean(TeamRepliesList.class, is);
         return list;
     }
 
@@ -268,14 +261,14 @@ public class TeamTweetDetailFragment extends
     }
 
     @Override
-    protected ListBaseAdapter<Comment> getListAdapter() {
-        return new CommentAdapter(this, true);
+    protected ListBaseAdapter<TeamReply> getListAdapter() {
+        return new TeamReplyAdapter();
     }
 
     @Override
     protected void sendRequestData() {
-        OSChinaApi.getCommentList(active.getId(), CommentList.CATALOG_TWEET,
-                mCurrentPage, mHandler);
+        OSChinaTeamApi.getTeamCommentList(teamId, active.getId(), mCurrentPage,
+                mHandler);
     }
 
     @Override
@@ -284,10 +277,10 @@ public class TeamTweetDetailFragment extends
         if (position - 1 == -1) {
             return false;
         }
-        final Comment item = mAdapter.getItem(position - 1);
+        final TeamReply item = mAdapter.getItem(position - 1);
         if (item == null)
             return false;
-        int itemsLen = item.getAuthorId() == AppContext.getInstance()
+        int itemsLen = item.getAuthor().getId() == AppContext.getInstance()
                 .getLoginUid() ? 2 : 1;
         String[] items = new String[itemsLen];
         items[0] = getResources().getString(R.string.copy);
@@ -315,19 +308,18 @@ public class TeamTweetDetailFragment extends
         return true;
     }
 
-    private void handleDeleteComment(Comment comment) {
+    private void handleDeleteComment(TeamReply comment) {
         if (!AppContext.getInstance().isLogin()) {
             UIHelper.showLoginActivity(getActivity());
             return;
         }
         AppContext.showToastShort(R.string.deleting);
         OSChinaApi.deleteComment(active.getId(), CommentList.CATALOG_TWEET,
-                comment.getId(), comment.getAuthorId(),
+                comment.getId(), comment.getAuthor().getId(),
                 new DeleteOperationResponseHandler(comment));
     }
 
     class DeleteOperationResponseHandler extends OperationResponseHandler {
-
         DeleteOperationResponseHandler(Object... args) {
             super(args);
         }
@@ -358,37 +350,24 @@ public class TeamTweetDetailFragment extends
     private final AsyncHttpResponseHandler mCommentHandler = new AsyncHttpResponseHandler() {
         @Override
         public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-            try {
-                ResultBean rsb = XmlUtils.toBean(ResultBean.class,
-                        new ByteArrayInputStream(arg2));
-                Result res = rsb.getResult();
-                if (res.OK()) {
-                    hideWaitDialog();
-                    AppContext.showToastShort(R.string.comment_publish_success);
-                    mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
-                    mAdapter.addItem(0, rsb.getComment());
-                    mEmojiFragment.reset();
-                    // setTweetCommentCount();
-                } else {
-                    hideWaitDialog();
-                    AppContext.showToastShort(res.getErrorMessage());
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                onFailure(arg0, arg1, arg2, e);
-            }
+            mEmojiFragment.reset();
+            onRefresh();
         }
 
         @Override
         public void onFailure(int arg0, Header[] arg1, byte[] arg2,
                 Throwable arg3) {
-            hideWaitDialog();
             AppContext.showToastShort(R.string.comment_publish_faile);
         }
+
+        @Override
+        public void onFinish() {
+            hideWaitDialog();
+        };
     };
 
     @Override
-    protected void executeOnLoadDataSuccess(java.util.List<Comment> data) {
+    protected void executeOnLoadDataSuccess(java.util.List<TeamReply> data) {
         super.executeOnLoadDataSuccess(data);
         if (mTvCommentCount != null && data != null) {
             mTvCommentCount.setText("评论(" + (mAdapter.getCount() - 1) + ")");
@@ -418,12 +397,12 @@ public class TeamTweetDetailFragment extends
         if (position < 1) { // header view
             return;
         }
-        final Comment comment = mAdapter.getItem(position - 1);
+        final TeamReply comment = mAdapter.getItem(position - 1);
         if (comment == null) {
             return;
         }
         mEmojiFragment.setTag(comment);
-        mEmojiFragment.setInputHint("回复" + comment.getAuthor() + ":");
+        mEmojiFragment.setInputHint("回复" + comment.getAuthor().getName() + ":");
         mEmojiFragment.requestFocusInput();
     }
 }
