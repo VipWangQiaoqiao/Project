@@ -79,6 +79,7 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
     private int currentYear = 2015;
     private Map<Integer, TeamDiaryList> dataBundleList; // 用于实现二级缓存
     private final Calendar calendar = Calendar.getInstance();
+    private TeamDiaryListAdapter listAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -267,7 +268,7 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
                         // 设置顶部正在刷新
                         setSwipeRefreshLoadingState(pullHeadView);
                         /* !!! 设置耗时操作 !!! */
-                        setContentFromNet(errorLayout, pullHeadView, listview,
+                        setContentFromNet(null, pullHeadView, listview,
                                 whichWeek);
                         errorLayout.setErrorMessage("本周无人提交周报");
                     }
@@ -343,11 +344,13 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
                         @Override
                         public void onStart() {
                             super.onStart();
-                            ListAdapter adapter = view.getAdapter();
-                            errorLayout
-                                    .setErrorType(EmptyLayout.NETWORK_LOADING);
-                            if (adapter == null && errorLayout != null) {
-                                errorLayout.setVisibility(View.VISIBLE);
+                            if (errorLayout != null) {
+                                ListAdapter adapter = view.getAdapter();
+                                errorLayout
+                                        .setErrorType(EmptyLayout.NETWORK_LOADING);
+                                if (adapter == null && errorLayout != null) {
+                                    errorLayout.setVisibility(View.VISIBLE);
+                                }
                             }
                         }
 
@@ -360,6 +363,9 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
                                         .setErrorType(EmptyLayout.NETWORK_ERROR);
                                 errorLayout.setVisibility(View.VISIBLE);
                             }
+                            if (pullHeadView != null) {
+                                setSwipeRefreshLoadedState(pullHeadView);
+                            }
                         }
 
                         @Override
@@ -369,7 +375,7 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
                                     TeamDiaryList.class,
                                     new ByteArrayInputStream(arg2));
 
-                            KJAsyncTask.execute(new Runnable() {
+                            new Thread(new Runnable() {
                                 // dataBundleList没有加入线程安全，由于whichWeek对应的value只在此处会修改，
                                 // 线程冲突概率非常小，为了ListView流畅性，忽略线程安全性
                                 @Override
@@ -381,7 +387,7 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
                                     CacheManager.saveObject(aty, bundle, TAG
                                             + whichWeek);
                                 }
-                            });
+                            }).start();
 
                             List<TeamDiary> tempData = bundle.getList();
                             if ((tempData == null || tempData.isEmpty())
@@ -393,22 +399,15 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
                                 if (errorLayout != null) {
                                     errorLayout.setVisibility(View.GONE);
                                 }
-
-                                ListAdapter adapter = view.getAdapter();
-                                if (adapter != null
-                                        && adapter instanceof TeamDiaryListAdapter) {
-                                    ((TeamDiaryListAdapter) adapter)
-                                            .refresh(tempData);
+                                if (listAdapter == null) {
+                                    listAdapter = new TeamDiaryListAdapter(aty,
+                                            tempData);
+                                    view.setAdapter(listAdapter);
                                 } else {
-                                    view.setAdapter(new TeamDiaryListAdapter(
-                                            aty, tempData));
+                                    listAdapter.refresh(tempData);
                                 }
                             }
-                        }
 
-                        @Override
-                        public void onFinish() {
-                            super.onFinish();
                             if (pullHeadView != null) {
                                 setSwipeRefreshLoadedState(pullHeadView);
                             }
@@ -425,8 +424,12 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
                 errorLayout.setErrorType(EmptyLayout.NODATA);
                 errorLayout.setVisibility(View.VISIBLE);
             }
-
-            view.setAdapter(new TeamDiaryListAdapter(aty, dataBundle.getList()));
+            if (listAdapter == null) {
+                listAdapter = new TeamDiaryListAdapter(aty, tempData);
+                view.setAdapter(listAdapter);
+            } else {
+                listAdapter.refresh(tempData);
+            }
         }
     }
 }
