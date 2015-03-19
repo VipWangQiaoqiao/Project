@@ -57,56 +57,58 @@ public class CommentAdapter extends ListBaseAdapter<Comment> {
         } else {
             vh = (ViewHolder) convertView.getTag();
         }
+        try {
 
-        final Comment item = mDatas.get(position);
+            final Comment item = mDatas.get(position);
 
-        // 若Authorid为0，则显示非会员
-        vh.name.setText(item.getAuthor()
-                + (item.getAuthorId() == 0 ? "(非会员)" : ""));
+            // 若Authorid为0，则显示非会员
+            vh.name.setText(item.getAuthor()
+                    + (item.getAuthorId() == 0 ? "(非会员)" : ""));
 
-        vh.content.setMovementMethod(MyLinkMovementMethod.a());
-        vh.content.setFocusable(false);
-        vh.content.setDispatchToParent(true);
-        vh.content.setLongClickable(false);
-        Spanned span = Html
-                .fromHtml(TweetTextView.modifyPath(item.getContent()));
-        vh.content.setText(span);
-        MyURLSpan.parseLinkText(vh.content, span);
+            vh.content.setMovementMethod(MyLinkMovementMethod.a());
+            vh.content.setFocusable(false);
+            vh.content.setDispatchToParent(true);
+            vh.content.setLongClickable(false);
+            Spanned span = Html.fromHtml(TweetTextView.modifyPath(item
+                    .getContent()));
+            vh.content.setText(span);
+            MyURLSpan.parseLinkText(vh.content, span);
 
-        vh.time.setText(StringUtils.friendly_time(item.getPubDate()));
+            vh.time.setText(StringUtils.friendly_time(item.getPubDate()));
 
-        vh.from.setVisibility(View.VISIBLE);
-        switch (item.getAppClient()) {
-        default:
-            vh.from.setText("");
-            vh.from.setVisibility(View.GONE);
-            break;
-        case Tweet.CLIENT_MOBILE:
-            vh.from.setText(R.string.from_mobile);
-            break;
-        case Tweet.CLIENT_ANDROID:
-            vh.from.setText(R.string.from_android);
-            break;
-        case Tweet.CLIENT_IPHONE:
-            vh.from.setText(R.string.from_iphone);
-            break;
-        case Tweet.CLIENT_WINDOWS_PHONE:
-            vh.from.setText(R.string.from_windows_phone);
-            break;
-        case Tweet.CLIENT_WECHAT:
-            vh.from.setText(R.string.from_wechat);
-            break;
+            vh.from.setVisibility(View.VISIBLE);
+            switch (item.getAppClient()) {
+            default:
+                vh.from.setText("");
+                vh.from.setVisibility(View.GONE);
+                break;
+            case Tweet.CLIENT_MOBILE:
+                vh.from.setText(R.string.from_mobile);
+                break;
+            case Tweet.CLIENT_ANDROID:
+                vh.from.setText(R.string.from_android);
+                break;
+            case Tweet.CLIENT_IPHONE:
+                vh.from.setText(R.string.from_iphone);
+                break;
+            case Tweet.CLIENT_WINDOWS_PHONE:
+                vh.from.setText(R.string.from_windows_phone);
+                break;
+            case Tweet.CLIENT_WECHAT:
+                vh.from.setText(R.string.from_wechat);
+                break;
+            }
+
+            // setup refers
+            setupRefers(parent.getContext(), vh, item.getRefers());
+
+            // setup replies
+            setupReplies(parent.getContext(), vh, item.getReplies());
+
+            vh.avatar.setAvatarUrl(item.getPortrait());
+            vh.avatar.setUserInfo(item.getAuthorId(), item.getAuthor());
+        } catch (Exception e) {
         }
-
-        // setup refers
-        setupRefers(parent.getContext(), vh, item.getRefers());
-
-        // setup replies
-        setupReplies(parent.getContext(), vh, item.getReplies());
-
-        vh.avatar.setAvatarUrl(item.getPortrait());
-        vh.avatar.setUserInfo(item.getAuthorId(), item.getAuthor());
-
         return convertView;
     }
 

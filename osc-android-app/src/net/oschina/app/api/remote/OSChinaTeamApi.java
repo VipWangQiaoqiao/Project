@@ -28,10 +28,10 @@ public class OSChinaTeamApi {
      * @param handler
      */
     public static void getTeamProjectList(int teamId,
-	    AsyncHttpResponseHandler handler) {
-	RequestParams params = new RequestParams();
-	params.put("teamid", teamId);
-	ApiHttpClient.get("action/api/team_project_list", params, handler);
+            AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("teamid", teamId);
+        ApiHttpClient.get("action/api/team_project_list", params, handler);
     }
 
     /***
@@ -44,18 +44,19 @@ public class OSChinaTeamApi {
      * @param teamProject
      * @param handler
      */
-    public static void getTeamProjectMemberList(int teamId, TeamProject teamProject, AsyncHttpResponseHandler handler) {
-	RequestParams params = new RequestParams();
-	params.put("teamid", teamId);
-	params.put("uid", AppContext.getInstance().getLoginUid());
-	params.put("projectid", teamProject.getGit().getId());
-	String source = teamProject.getSource();
-	if (source != null && !TextUtils.isEmpty(source)) {
+    public static void getTeamProjectMemberList(int teamId,
+            TeamProject teamProject, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("teamid", teamId);
+        params.put("uid", AppContext.getInstance().getLoginUid());
+        params.put("projectid", teamProject.getGit().getId());
+        String source = teamProject.getSource();
+        if (source != null && !TextUtils.isEmpty(source)) {
 
-	    params.put("source", teamProject.getSource());
-	}
-	ApiHttpClient.get("action/api/team_project_member_list", params,
-		handler);
+            params.put("source", teamProject.getSource());
+        }
+        ApiHttpClient.get("action/api/team_project_member_list", params,
+                handler);
     }
 
     /***
@@ -72,18 +73,18 @@ public class OSChinaTeamApi {
      * @param handler
      */
     public static void getTeamProjectActiveList(int teamId,
-	    TeamProject project, String type, int page,
-	    AsyncHttpResponseHandler handler) {
-	RequestParams params = new RequestParams();
-	params.put("teamid", teamId);
-	params.put("projectid", project.getGit().getId());
-	if (!TextUtils.isEmpty(project.getSource())) {
-	    params.put("source", project.getSource());
-	}
-	params.put("type", type);
-	params.put("pageIndex", page);
-	ApiHttpClient.get("action/api/team_project_active_list", params,
-		handler);
+            TeamProject project, String type, int page,
+            AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("teamid", teamId);
+        params.put("projectid", project.getGit().getId());
+        if (!TextUtils.isEmpty(project.getSource())) {
+            params.put("source", project.getSource());
+        }
+        params.put("type", type);
+        params.put("pageIndex", page);
+        ApiHttpClient.get("action/api/team_project_active_list", params,
+                handler);
     }
 
     /**
@@ -99,14 +100,14 @@ public class OSChinaTeamApi {
      *            "Git@OSC","GitHub"(只有设置了projectid值，这里才需要设置该值)
      */
     public static void getTeamCatalogIssueList(int uId, int teamId,
-	    int projectId, String source, AsyncHttpResponseHandler handler) {
-	RequestParams params = new RequestParams();
-	params.put("uid", uId);
-	params.put("teamid", teamId);
-	params.put("projectid", projectId);
-	params.put("source", source);
-	ApiHttpClient.get("action/api/team_project_catalog_list", params,
-		handler);
+            int projectId, String source, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("uid", uId);
+        params.put("teamid", teamId);
+        params.put("projectid", projectId);
+        params.put("source", source);
+        ApiHttpClient.get("action/api/team_project_catalog_list", params,
+                handler);
     }
 
     /**
@@ -131,19 +132,19 @@ public class OSChinaTeamApi {
      * @param handler
      */
     public static void getTeamIssueList(int teamId, int projectId,
-	    int catalogId, String source, int uid, String state, String scope,
-	    int pageIndex, int pageSize, AsyncHttpResponseHandler handler) {
-	RequestParams params = new RequestParams();
-	params.put("teamid", teamId);
-	params.put("projectid", projectId);
-	params.put("catalogid", catalogId);
-	params.put("source", source);
-	params.put("uid", uid);
-	params.put("state", state);
-	params.put("scope", scope);
-	params.put("pageIndex", pageIndex);
-	params.put("pageSize", pageSize);
-	ApiHttpClient.get("action/api/team_issue_list", params, handler);
+            int catalogId, String source, int uid, String state, String scope,
+            int pageIndex, int pageSize, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("teamid", teamId);
+        params.put("projectid", projectId);
+        params.put("catalogid", catalogId);
+        params.put("source", source);
+        params.put("uid", uid);
+        params.put("state", state);
+        params.put("scope", scope);
+        params.put("pageIndex", pageIndex);
+        params.put("pageSize", pageSize);
+        ApiHttpClient.get("action/api/team_issue_list", params, handler);
     }
 
     /***
@@ -159,27 +160,27 @@ public class OSChinaTeamApi {
      * @param handler
      */
     public static void changeIssueState(int teamId, TeamIssue issue,
-	    String target, AsyncHttpResponseHandler handler) {
-	if (issue == null)
-	    return;
-	RequestParams params = new RequestParams();
-	params.put("uid", AppContext.getInstance().getLoginUid());
-	params.put("teamid", teamId);
-	params.put("target", target);
-	params.put("issueid", issue.getId());
-	if (target.equals("state")) {
-	    params.put("state", issue.getState());
-	} else if (target.equals("assignee")) {
-	    params.put("assignee", issue.getToUser().getId());
-	} else if (target.equals("deadline")) {
-	    params.put("deadline", issue.getDeadlineTime());
-	}
-	ApiHttpClient.post("action/api/team_issue_update", params, handler);
+            String target, AsyncHttpResponseHandler handler) {
+        if (issue == null)
+            return;
+        RequestParams params = new RequestParams();
+        params.put("uid", AppContext.getInstance().getLoginUid());
+        params.put("teamid", teamId);
+        params.put("target", target);
+        params.put("issueid", issue.getId());
+        if (target.equals("state")) {
+            params.put("state", issue.getState());
+        } else if (target.equals("assignee")) {
+            params.put("assignee", issue.getToUser().getId());
+        } else if (target.equals("deadline")) {
+            params.put("deadline", issue.getDeadlineTime());
+        }
+        ApiHttpClient.post("action/api/team_issue_update", params, handler);
     }
 
     public static void pubTeamNewIssue(RequestParams params,
-	    AsyncHttpResponseHandler handler) {
-	ApiHttpClient.post("action/api/team_issue_pub", params, handler);
+            AsyncHttpResponseHandler handler) {
+        ApiHttpClient.post("action/api/team_issue_pub", params, handler);
     }
 
     /***
@@ -192,14 +193,14 @@ public class OSChinaTeamApi {
      * @param handler
      */
     public static void getTeamDiscussList(String type, int teamId, int uid,
-	    int pageIndex, AsyncHttpResponseHandler handler) {
-	RequestParams params = new RequestParams();
-	params.put("type", type);
-	params.put("teamid", teamId);
-	params.put("uid", uid);
-	params.put("pageIndex", pageIndex);
-	params.put("pageSize", AppContext.PAGE_SIZE);
-	ApiHttpClient.get("action/api/team_discuss_list", params, handler);
+            int pageIndex, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("type", type);
+        params.put("teamid", teamId);
+        params.put("uid", uid);
+        params.put("pageIndex", pageIndex);
+        params.put("pageSize", AppContext.PAGE_SIZE);
+        ApiHttpClient.get("action/api/team_discuss_list", params, handler);
     }
 
     /***
@@ -213,11 +214,11 @@ public class OSChinaTeamApi {
      * @param handler
      */
     public static void getTeamDiscussDetail(int teamId, int discussId,
-	    AsyncHttpResponseHandler handler) {
-	RequestParams params = new RequestParams();
-	params.put("teamid", teamId);
-	params.put("discussid", discussId);
-	ApiHttpClient.get("action/api/team_discuss_detail", params, handler);
+            AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("teamid", teamId);
+        params.put("discussid", discussId);
+        ApiHttpClient.get("action/api/team_discuss_detail", params, handler);
     }
 
     /***
@@ -233,13 +234,13 @@ public class OSChinaTeamApi {
      * @param handler
      */
     public static void pubTeamDiscussReply(int uid, int teamId, int discussId,
-	    String content, AsyncHttpResponseHandler handler) {
-	RequestParams params = new RequestParams();
-	params.put("uid", uid);
-	params.put("teamid", teamId);
-	params.put("discussid", discussId);
-	params.put("content", content);
-	ApiHttpClient.post("action/api/team_discuss_reply", params, handler);
+            String content, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("uid", uid);
+        params.put("teamid", teamId);
+        params.put("discussid", discussId);
+        params.put("content", content);
+        ApiHttpClient.post("action/api/team_discuss_reply", params, handler);
     }
 
     /***
@@ -255,15 +256,15 @@ public class OSChinaTeamApi {
      * @param content
      * @param handler
      */
-    public static void pubTeamTweetReply(int teamId, byte type, long tweetId,
-	    String content, AsyncHttpResponseHandler handler) {
-	RequestParams params = new RequestParams();
-	params.put("uid", AppContext.getInstance().getLoginUid());
-	params.put("type", type);
-	params.put("teamid", teamId);
-	params.put("tweetid", tweetId);
-	params.put("content", content);
-	ApiHttpClient.post("action/api/team_tweet_reply", params, handler);
+    public static void pubTeamTweetReply(int teamId, int type, long tweetId,
+            String content, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("uid", AppContext.getInstance().getLoginUid());
+        params.put("type", type);
+        params.put("teamid", teamId);
+        params.put("tweetid", tweetId);
+        params.put("content", content);
+        ApiHttpClient.post("action/api/team_tweet_reply", params, handler);
     }
 
     /***
@@ -273,11 +274,11 @@ public class OSChinaTeamApi {
      * 
      */
     public static void getTeamIssueDetail(int teamId, int issueId,
-	    AsyncHttpResponseHandler handler) {
-	RequestParams params = new RequestParams();
-	params.put("teamid", teamId);
-	params.put("issueid", issueId);
-	ApiHttpClient.get("action/api/team_issue_detail", params, handler);
+            AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("teamid", teamId);
+        params.put("issueid", issueId);
+        ApiHttpClient.get("action/api/team_issue_detail", params, handler);
     }
 
     /***
@@ -291,15 +292,15 @@ public class OSChinaTeamApi {
      * @param handler
      */
     public static void getTeamDiaryList(int uid, int teamId, int year,
-	    int week, int pageIndex, AsyncHttpResponseHandler handler) {
-	RequestParams params = new RequestParams();
-	params.put("uid", uid);
-	params.put("teamid", teamId);
-	params.put("year", year);
-	params.put("week", week);
-	params.put("pageIndex", pageIndex);
-	params.put("pageSize", AppContext.PAGE_SIZE);
-	ApiHttpClient.get("action/api/team_diary_list", params, handler);
+            int week, int pageIndex, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("uid", uid);
+        params.put("teamid", teamId);
+        params.put("year", year);
+        params.put("week", week);
+        params.put("pageIndex", pageIndex);
+        params.put("pageSize", AppContext.PAGE_SIZE);
+        ApiHttpClient.get("action/api/team_diary_list", params, handler);
     }
 
     /***
@@ -316,23 +317,22 @@ public class OSChinaTeamApi {
      * @param handler
      */
     public static void getTeamReplyList(int teamId, int id, String type,
-	    int pageIndex, AsyncHttpResponseHandler handler) {
-	RequestParams params = new RequestParams();
-	params.put("teamid", teamId);
-	params.put("id", id);
-	params.put("type", type);
-	params.put("pageIndex", pageIndex);
-	ApiHttpClient
-		.get("action/api/team_reply_list_by_type", params, handler);
+            int pageIndex, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("teamid", teamId);
+        params.put("id", id);
+        params.put("type", type);
+        params.put("pageIndex", pageIndex);
+        ApiHttpClient
+                .get("action/api/team_reply_list_by_type", params, handler);
 
     }
 
     /***
      * 发表一个新的团队动态
      * 
-     * @author 火蚁
-     * 2015-3-9 下午2:46:13
-     *
+     * @author 火蚁 2015-3-9 下午2:46:13
+     * 
      * @return void
      * @param teamId
      * @param content
@@ -340,65 +340,68 @@ public class OSChinaTeamApi {
      * @param handler
      */
     public static void pubTeamNewActive(int teamId, String content, File img,
-	    AsyncHttpResponseHandler handler) {
-	RequestParams params = new RequestParams();
-	params.put("teamid", teamId);
-	params.put("uid", AppContext.getInstance().getLoginUid());
-	params.put("msg", content);
-	params.put("appid", 3);
-	if (img != null) {
+            AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("teamid", teamId);
+        params.put("uid", AppContext.getInstance().getLoginUid());
+        params.put("msg", content);
+        params.put("appid", 3);
+        if (img != null) {
 
-	    try {
-		params.put("img", img);
-	    } catch (FileNotFoundException e) {
-		e.printStackTrace();
-	    }
-	}
-	ApiHttpClient.post("action/api/team_tweet_pub", params, handler);
+            try {
+                params.put("img", img);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        ApiHttpClient.post("action/api/team_tweet_pub", params, handler);
     }
-    
+
     /***
      * 更新子任务属性
-     * @author 火蚁
-     * 2015-3-10 下午4:53:49
-     *
+     * 
+     * @author 火蚁 2015-3-10 下午4:53:49
+     * 
      * @return void
      * @param teamId
      * @param target
      * @param childIssue
      * @param handler
      */
-    public static void updateChildIssue(int teamId, String target, TeamIssue childIssue, AsyncHttpResponseHandler handler) {
-	RequestParams params = new RequestParams();
-	params.put("uid", AppContext.getInstance().getLoginUid());
-	params.put("teamid", teamId);
-	params.put("childissueid", childIssue.getId());
-	params.put("target", target);
-	if (target.equals("state")) {
-	    params.put("state", childIssue.getState());
-	} else {
-	    params.put("title", childIssue.getTitle());
-	}
-	ApiHttpClient.post("action/api/team_issue_update_child_issue", params, handler);
+    public static void updateChildIssue(int teamId, String target,
+            TeamIssue childIssue, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("uid", AppContext.getInstance().getLoginUid());
+        params.put("teamid", teamId);
+        params.put("childissueid", childIssue.getId());
+        params.put("target", target);
+        if (target.equals("state")) {
+            params.put("state", childIssue.getState());
+        } else {
+            params.put("title", childIssue.getTitle());
+        }
+        ApiHttpClient.post("action/api/team_issue_update_child_issue", params,
+                handler);
     }
-    
+
     /***
      * 发表任务评论
-     * @author 火蚁
-     * 2015-3-13 下午6:22:41
-     *
+     * 
+     * @author 火蚁 2015-3-13 下午6:22:41
+     * 
      * @return void
      * @param teamId
      * @param issueId
      * @param content
      * @param handler
      */
-    public static void pubTeamIssueReply(int teamId, int issueId, String content, AsyncHttpResponseHandler handler) {
-	RequestParams params = new RequestParams();
-	params.put("uid", AppContext.getInstance().getLoginUid());
-	params.put("teamid", teamId);
-	params.put("content", content);
-	params.put("issueid", issueId);
-	ApiHttpClient.post("action/api/team_issue_reply", params, handler);
+    public static void pubTeamIssueReply(int teamId, int issueId,
+            String content, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("uid", AppContext.getInstance().getLoginUid());
+        params.put("teamid", teamId);
+        params.put("content", content);
+        params.put("issueid", issueId);
+        ApiHttpClient.post("action/api/team_issue_reply", params, handler);
     }
 }

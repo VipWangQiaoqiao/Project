@@ -10,6 +10,7 @@ import net.oschina.app.adapter.CommentAdapter;
 import net.oschina.app.adapter.CommentAdapter.OnOperationListener;
 import net.oschina.app.api.OperationResponseHandler;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BeseHaveHeaderListFragment;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Comment;
@@ -164,18 +165,8 @@ public class TeamTweetDetailFragment extends
             UIHelper.showLoginActivity(getActivity());
             return;
         }
-        if (mEmojiFragment.getInputTag() != null) {
-            Comment comment = (Comment) mEmojiFragment.getInputTag();
-            OSChinaApi
-                    .replyComment(active.getId(), CommentList.CATALOG_TWEET,
-                            comment.getId(), comment.getAuthorId(), AppContext
-                                    .getInstance().getLoginUid(), text,
-                            mCommentHandler);
-        } else {
-            OSChinaApi.publicComment(CommentList.CATALOG_TWEET, active.getId(),
-                    AppContext.getInstance().getLoginUid(), text, 0,
-                    mCommentHandler);
-        }
+        OSChinaTeamApi.pubTeamTweetReply(teamId, active.getType(),
+                active.getId(), text, mCommentHandler);
     }
 
     private void initImageSize(Context cxt) {
@@ -327,7 +318,6 @@ public class TeamTweetDetailFragment extends
     }
 
     class DeleteOperationResponseHandler extends OperationResponseHandler {
-
         DeleteOperationResponseHandler(Object... args) {
             super(args);
         }
@@ -368,11 +358,11 @@ public class TeamTweetDetailFragment extends
                     mAdapter.setState(ListBaseAdapter.STATE_NO_MORE);
                     mAdapter.addItem(0, rsb.getComment());
                     mEmojiFragment.reset();
-                    // setTweetCommentCount();
                 } else {
                     hideWaitDialog();
                     AppContext.showToastShort(res.getErrorMessage());
                 }
+                onRefresh();
             } catch (Exception e) {
                 e.printStackTrace();
                 onFailure(arg0, arg1, arg2, e);

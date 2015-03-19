@@ -24,9 +24,19 @@ public class TeamActive extends Entity {
     private String createTime;
     @XStreamAlias("author")
     private Author author;
+    @XStreamAlias("type")
+    private int type;
 
     public Body getBody() {
         return body;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     @Override
