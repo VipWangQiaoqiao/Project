@@ -11,8 +11,9 @@
         android:id="@+id/tv_state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="5dp"
         android:textSize="20sp"
+        android:textColor="@color/main_gray"
         android:text="@string/fa_check_circle_o" />
     
     <net.oschina.app.widget.AvatarView 

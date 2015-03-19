@@ -84,7 +84,7 @@ public class BaseFragment extends Fragment implements
     protected WaitDialog showWaitDialog() {
         return showWaitDialog(R.string.loading);
     }
-
+    
     protected WaitDialog showWaitDialog(int resid) {
         FragmentActivity activity = getActivity();
         if (activity instanceof DialogControl) {

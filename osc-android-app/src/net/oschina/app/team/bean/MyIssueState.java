@@ -27,6 +27,9 @@ public class MyIssueState extends Entity {
     private String accepted; // 已验收
     @XStreamAlias("all")
     private String all;
+    
+    @XStreamAlias("member")
+    private TeamMember user;
 
     public String getFinished() {
         return finished;
@@ -82,5 +85,13 @@ public class MyIssueState extends Entity {
 
     public void setAll(String all) {
         this.all = all;
+    }
+
+    public TeamMember getUser() {
+        return user;
+    }
+
+    public void setUser(TeamMember user) {
+        this.user = user;
     }
 }
