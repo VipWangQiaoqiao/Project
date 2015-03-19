@@ -79,7 +79,6 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
     private int currentYear = 2015;
     private Map<Integer, TeamDiaryList> dataBundleList; // 用于实现二级缓存
     private final Calendar calendar = Calendar.getInstance();
-    private TeamDiaryListAdapter listAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -206,13 +205,13 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
         int[] dateBundle = StringUtils.getCurrentDate();
         if ((dateBundle[0] == year && dateBundle[1] <= month)
                 || (dateBundle[0] == year && dateBundle[1] == month + 1 && dateBundle[2] < day)) {
-            AppContext.showToast("日期不正确");
+            AppContext.showToast("那天怎么会有周报呢");
         } else {
             currentYear = year;
             currentWeek = StringUtils.getWeekOfYear(new Date(year, month, day));
             mPager.setAdapter(new DiaryPagerAdapter());
             mPager.setCurrentItem(currentWeek);
-            mTvTitle.setText("第" + (currentWeek + 1) + "周周报总览");
+            mTvTitle.setText("第" + (currentWeek) + "周周报总览");
         }
     }
 
@@ -399,13 +398,8 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
                                 if (errorLayout != null) {
                                     errorLayout.setVisibility(View.GONE);
                                 }
-                                if (listAdapter == null) {
-                                    listAdapter = new TeamDiaryListAdapter(aty,
-                                            tempData);
-                                    view.setAdapter(listAdapter);
-                                } else {
-                                    listAdapter.refresh(tempData);
-                                }
+                                view.setAdapter(new TeamDiaryListAdapter(aty,
+                                        tempData));
                             }
 
                             if (pullHeadView != null) {
@@ -424,12 +418,7 @@ public class TeamDiaryPagerFragment extends BaseFragment implements
                 errorLayout.setErrorType(EmptyLayout.NODATA);
                 errorLayout.setVisibility(View.VISIBLE);
             }
-            if (listAdapter == null) {
-                listAdapter = new TeamDiaryListAdapter(aty, tempData);
-                view.setAdapter(listAdapter);
-            } else {
-                listAdapter.refresh(tempData);
-            }
+            view.setAdapter(new TeamDiaryListAdapter(aty, tempData));
         }
     }
 }
