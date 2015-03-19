@@ -15,7 +15,7 @@
         android:background="@drawable/bg_edittext"
         android:gravity="top|left|center"
         android:hint="@string/str_feedback_et_hint"
-        android:lines="5"
+        android:lines="2"
         android:paddingBottom="10dp"
         android:paddingLeft="10dp"
         android:paddingTop="10dp"

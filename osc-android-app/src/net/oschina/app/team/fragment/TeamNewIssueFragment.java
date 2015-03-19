@@ -20,6 +20,7 @@ import net.oschina.app.team.bean.TeamProject;
 import net.oschina.app.team.bean.TeamProjectList;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
+import net.oschina.app.util.TypefaceUtils;
 import net.oschina.app.util.XmlUtils;
 
 import org.apache.http.Header;
@@ -74,6 +75,8 @@ public class TeamNewIssueFragment extends BaseFragment {
     
     @InjectView(R.id.rl_issue_push)
     View mRlGitPush;
+    @InjectView(R.id.push_line)
+    View mPushLine;
     
     @InjectView(R.id.tv_issue_push_source)
     TextView mTvPushSource;
@@ -131,6 +134,15 @@ public class TeamNewIssueFragment extends BaseFragment {
 		updateMenuState();
 	    }
 	});
+	
+	TypefaceUtils.setTypeface((TextView) view
+		.findViewById(R.id.tv_fa_project));
+	TypefaceUtils.setTypeface((TextView) view
+		.findViewById(R.id.tv_fa_catalog));
+	TypefaceUtils.setTypeface((TextView) view
+		.findViewById(R.id.tv_fa_touser));
+	TypefaceUtils.setTypeface((TextView) view
+		.findViewById(R.id.tv_fa_time));
     }
 
     private void updateMenuState() {
@@ -338,8 +350,10 @@ public class TeamNewIssueFragment extends BaseFragment {
 	if (mTeamProject == null) return;
 	if (mTeamProject.getGit().getId() == -1) {
 	    mRlGitPush.setVisibility(View.GONE);
+	    mPushLine.setVisibility(View.GONE);
 	} else {
 	    mRlGitPush.setVisibility(View.VISIBLE);
+	    mPushLine.setVisibility(View.VISIBLE);
 	    if (mTeamProject.getSource().equals(TeamProject.GITHUB)) {
 		mTvPushSource.setText("同步到GitHub");
 	    } else {

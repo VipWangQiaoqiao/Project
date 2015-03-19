@@ -11,122 +11,103 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
+        android:padding="10dp"
+        android:background="@drawable/edit_select"
         android:hint="任务标题" />
 
     <RelativeLayout
         android:id="@+id/rl_issue_project"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:clickable="true"
-        android:background="@drawable/list_item_background"
-        android:padding="15dp" >
+        android:gravity="center"
+        android:layout_gravity="center"
+        style="@style/team_new_issue_layout" >
+        
+        <TextView 
+            android:id="@+id/tv_fa_project"
+            style="@style/team_new_issue_fa"
+            android:text="@string/fa_inbox" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_gravity="left"
+            style="@style/team_new_issue_tip"
+            android:layout_toRightOf="@id/tv_fa_project"
             android:text="项目" />
 
         <TextView
             android:id="@+id/tv_issue_project"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            style="@style/team_new_issue_info"
             android:text="不指定项目" />
     </RelativeLayout>
 
     <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/list_divider_color" />
+        style="@style/team_new_issue_line" />
 
     <RelativeLayout
         android:id="@+id/rl_issue_catalog"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:clickable="true"
-        android:background="@drawable/list_item_background"
-        android:padding="15dp" >
+        style="@style/team_new_issue_layout" >
+        
+        <TextView 
+            android:id="@+id/tv_fa_catalog"
+            style="@style/team_new_issue_fa"
+            android:text="@string/fa_list"
+            android:textSize="14sp" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_gravity="left"
+            style="@style/team_new_issue_tip"
+            android:layout_toRightOf="@id/tv_fa_catalog"
             android:text="任务分组" />
 
         <TextView
             android:id="@+id/tv_issue_catalog"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            style="@style/team_new_issue_info"
             android:text="未指定列表" />
     </RelativeLayout>
 
     <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/list_divider_color" />
+        style="@style/team_new_issue_line" />
 
     <RelativeLayout
         android:id="@+id/rl_issue_touser"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@drawable/list_item_background"
-        android:clickable="true"
-        android:padding="15dp" >
+        style="@style/team_new_issue_layout" >
+        
+        <TextView 
+            android:id="@+id/tv_fa_touser"
+            style="@style/team_new_issue_fa"
+            android:text="@string/fa_user" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_gravity="left"
+            style="@style/team_new_issue_tip"
+            android:layout_toRightOf="@id/tv_fa_touser"
             android:text="指派成员" />
 
         <TextView
             android:id="@+id/tv_issue_touser"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            style="@style/team_new_issue_info"
             android:text="未指派" />
     </RelativeLayout>
 
     <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/list_divider_color" />
+        style="@style/team_new_issue_line" />
 
     <RelativeLayout
         android:id="@+id/rl_issue_time"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-       	android:clickable="true"
-       	android:background="@drawable/list_item_background"
-        android:padding="15dp" >
+        style="@style/team_new_issue_layout" >
+        
+        <TextView 
+            android:id="@+id/tv_fa_time"
+            style="@style/team_new_issue_fa"
+            android:text="@string/fa_clock_o" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_gravity="left"
+            style="@style/team_new_issue_tip"
+            android:layout_toRightOf="@id/tv_fa_time"
             android:text="完成时间" />
 
         <TextView
             android:id="@+id/tv_issue_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true" />
+            style="@style/team_new_issue_info" />
     </RelativeLayout>
 
     <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/list_divider_color" />
+        style="@style/team_new_issue_line" />
     
     <RelativeLayout
         android:id="@+id/rl_issue_push"
@@ -156,8 +137,7 @@
     </RelativeLayout>
     
     <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/list_divider_color" />
+        android:id="@+id/push_line"
+        style="@style/team_new_issue_line" />
 
 </LinearLayout>

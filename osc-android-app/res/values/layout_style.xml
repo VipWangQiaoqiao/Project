@@ -103,5 +103,32 @@
         <item name="android:textColor">@color/main_gray</item>
     </style>
     
+    <style name="team_new_issue_layout" parent="@style/fill_wrap">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:background">@drawable/list_item_background</item>
+        <item name="android:padding">15dp</item>
+    </style>
+    
+    <style name="team_new_issue_fa" parent="@style/wrap_wrap">
+        <item name="android:textColor">@color/main_green</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_marginRight">5dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_marginTop">3dp</item>
+    </style>
+    
+    <style name="team_new_issue_tip" parent="@style/wrap_wrap">
+    </style>
+    
+    <style name="team_new_issue_info" parent="@style/wrap_wrap">
+        <item name="android:textColor">@color/main_gray</item>
+        <item name="android:layout_alignParentRight">true</item>
+    </style>
+    
+    <style name="team_new_issue_line">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">#ececec</item>
+    </style>
     
 </resources>
