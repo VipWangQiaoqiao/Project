@@ -199,7 +199,7 @@ public class TeamNewIssueFragment extends BaseFragment {
 	}
 
 	RequestParams params = new RequestParams();
-	params.put("team", mTeam.getId());
+	params.put("teamid", mTeam.getId());
 	params.put("uid", AppContext.getInstance().getLoginUid());
 	params.put("title", title);
 	if (mTeamProject.getGit().getId() > 0) {
