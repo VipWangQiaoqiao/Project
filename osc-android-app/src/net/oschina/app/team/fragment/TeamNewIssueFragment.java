@@ -11,6 +11,7 @@ import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamGit;
+import net.oschina.app.team.bean.TeamIssue;
 import net.oschina.app.team.bean.TeamIssueCatalog;
 import net.oschina.app.team.bean.TeamIssueCatalogList;
 import net.oschina.app.team.bean.TeamMember;
@@ -24,6 +25,7 @@ import net.oschina.app.util.XmlUtils;
 import org.apache.http.Header;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -36,6 +38,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -68,13 +71,22 @@ public class TeamNewIssueFragment extends BaseFragment {
 
     @InjectView(R.id.tv_issue_time)
     TextView mTvTime;
+    
+    @InjectView(R.id.rl_issue_push)
+    View mRlGitPush;
+    
+    @InjectView(R.id.tv_issue_push_source)
+    TextView mTvPushSource;
+    
+    @InjectView(R.id.cb_issue_push_check)
+    CheckBox mCbPush;
 
     private Team mTeam;
 
     private TeamProject mTeamProject;
 
     private TeamIssueCatalog mTeamCatalog;
-    
+
     private MenuItem mSendMenu;
 
     @Override
@@ -96,22 +108,23 @@ public class TeamNewIssueFragment extends BaseFragment {
 	view.findViewById(R.id.rl_issue_catalog).setOnClickListener(this);
 	view.findViewById(R.id.rl_issue_touser).setOnClickListener(this);
 	view.findViewById(R.id.rl_issue_time).setOnClickListener(this);
-	
+
 	mEtTitle.addTextChangedListener(new TextWatcher() {
-	    
+
 	    @Override
-	    public void onTextChanged(CharSequence s, int start, int before, int count) {
+	    public void onTextChanged(CharSequence s, int start, int before,
+		    int count) {
 		// TODO Auto-generated method stub
-		
+
 	    }
-	    
+
 	    @Override
 	    public void beforeTextChanged(CharSequence s, int start, int count,
 		    int after) {
 		// TODO Auto-generated method stub
-		
+
 	    }
-	    
+
 	    @Override
 	    public void afterTextChanged(Editable s) {
 		// TODO Auto-generated method stub
@@ -119,7 +132,7 @@ public class TeamNewIssueFragment extends BaseFragment {
 	    }
 	});
     }
-    
+
     private void updateMenuState() {
 	if (mEtTitle.getText().length() == 0) {
 	    mSendMenu.setEnabled(false);
@@ -193,14 +206,17 @@ public class TeamNewIssueFragment extends BaseFragment {
 
 	    params.put("project", mTeamProject.getGit().getId());
 	    params.put("source", mTeamProject.getSource());
+	    if (mCbPush.isChecked()) {
+		params.put("gitpush", TeamIssue.TEAM_ISSUE_GITPUSHED);
+	    }
 	}
 
 	if (!TextUtils.isEmpty(issueTime)) {
 	    params.put("deadline_time", issueTime);
 	}
 
-	if (catalogIndex != 0 && catalogs != null && !catalogs.isEmpty()) {
-	    params.put("catalogid", catalogs.get(catalogIndex).getId());
+	if (mTeamCatalog != null) {
+	    params.put("catalogid", mTeamCatalog.getId());
 	}
 
 	if (toUserIndex != 0 && toUsers != null && !toUsers.isEmpty()) {
@@ -234,6 +250,7 @@ public class TeamNewIssueFragment extends BaseFragment {
 	    project.setGit(git);
 	    mTeamProject = project;
 	}
+	checkIsShowPush();
 	if (mTeamCatalog != null) {
 	    mTvCatalog.setText(mTeamCatalog.getTitle());
 	    mTvCatalog.setTag(mTeamCatalog);
@@ -286,6 +303,14 @@ public class TeamNewIssueFragment extends BaseFragment {
 	final CharSequence[] arrays = new CharSequence[projects.size()];
 	for (int i = 0; i < projects.size(); i++) {
 	    arrays[i] = projects.get(i).getGit().getName();
+	    if (mTeamProject != null) {
+		if (mTeamProject.getGit().getName()
+			.equals(projects.get(i).getGit().getName())
+			&& mTeamProject.getGit().getId() == projects.get(i)
+				.getGit().getId()) {
+		    projectIndex = i;
+		}
+	    }
 	}
 	projectDialog.setItems(arrays, projectIndex, new OnItemClickListener() {
 
@@ -300,12 +325,27 @@ public class TeamNewIssueFragment extends BaseFragment {
 		projectIndex = position;
 		mTvProject.setText(arrays[position]);
 		mTeamProject = projects.get(position);
+		checkIsShowPush();
 		clearCatalogAndToUser();
 		projectDialog.dismiss();
 	    }
 	});
 
 	projectDialog.show();
+    }
+    
+    private void checkIsShowPush() {
+	if (mTeamProject == null) return;
+	if (mTeamProject.getGit().getId() == -1) {
+	    mRlGitPush.setVisibility(View.GONE);
+	} else {
+	    mRlGitPush.setVisibility(View.VISIBLE);
+	    if (mTeamProject.getSource().equals(TeamProject.GITHUB)) {
+		mTvPushSource.setText("同步到GitHub");
+	    } else {
+		mTvPushSource.setText("同步到Git@OSC");
+	    }
+	}
     }
 
     // 重新选定项目之后清空任务列表和指派成员
@@ -315,13 +355,13 @@ public class TeamNewIssueFragment extends BaseFragment {
 	catalogs = null;
 	mTvCatalog.setText("未指定列表");
 
-	// 清楚指派列表
+	// 清除指派列表
 	toUserIndex = 0;
 	toUsers = null;
 	mTvToUser.setText("未指派");
     }
 
-    private void showTeamCatalogSelected(List<TeamIssueCatalog> list) {
+    private void showTeamCatalogSelected(final List<TeamIssueCatalog> list) {
 	this.catalogs = list;
 	if (catalogDialog == null) {
 	    catalogDialog = DialogHelper
@@ -332,6 +372,11 @@ public class TeamNewIssueFragment extends BaseFragment {
 	final CharSequence[] catalogs = new CharSequence[list.size()];
 	for (int i = 0; i < list.size(); i++) {
 	    catalogs[i] = list.get(i).getTitle();
+	    if (mTeamCatalog != null) {
+		if (mTeamCatalog.getTitle().equals(list.get(i).getTitle())) {
+		    catalogIndex = i;
+		}
+	    }
 	}
 	catalogDialog.setItems(catalogs, catalogIndex,
 		new OnItemClickListener() {
@@ -341,6 +386,7 @@ public class TeamNewIssueFragment extends BaseFragment {
 			    int position, long id) {
 			// TODO Auto-generated method stub
 			catalogIndex = position;
+			mTeamCatalog = list.get(position);
 			mTvCatalog.setText(catalogs[position]);
 			catalogDialog.dismiss();
 		    }
@@ -397,6 +443,7 @@ public class TeamNewIssueFragment extends BaseFragment {
     }
 
     private void showIssueDeadlineTime() {
+
 	final DatePickerDialog dateDialog = new DatePickerDialog(getActivity(),
 		new DatePickerDialog.OnDateSetListener() {
 
@@ -404,13 +451,41 @@ public class TeamNewIssueFragment extends BaseFragment {
 		    public void onDateSet(DatePicker view, int year,
 			    int monthOfYear, int dayOfMonth) {
 			// TODO Auto-generated method stub
-			mYear = year;
-			mMonth = monthOfYear;
-			mDay = dayOfMonth;
-			issueTime = mYear + "-" + (mMonth + 1) + "-" + mDay;
-			mTvTime.setText(issueTime);
 		    }
+
 		}, mYear, mMonth, mDay);
+	DialogInterface.OnClickListener clickListener = new DialogInterface.OnClickListener() {
+
+	    @Override
+	    public void onClick(DialogInterface dialog, int which) {
+		// TODO Auto-generated method stub
+		switch (which) {
+		case DialogInterface.BUTTON_NEGATIVE:
+		    
+		    break;
+		case DialogInterface.BUTTON_NEUTRAL:
+		    issueTime = "";
+		    mTvTime.setText(issueTime);
+		    break;
+		case DialogInterface.BUTTON_POSITIVE:
+		    mYear = dateDialog.getDatePicker().getYear();
+		    mMonth = dateDialog.getDatePicker().getMonth();
+		    mDay = dateDialog.getDatePicker().getDayOfMonth();
+		    issueTime = mYear + "-" + (mMonth + 1) + "-" + mDay;
+		    mTvTime.setText(issueTime);
+		    break;
+
+		default:
+		    break;
+		}
+	    }
+	};
+	dateDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "取消",
+		clickListener);
+	dateDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "清除",
+		clickListener);
+	dateDialog.setButton(DialogInterface.BUTTON_POSITIVE, "确认",
+		clickListener);
 	dateDialog.show();
     }
 
@@ -504,8 +579,8 @@ public class TeamNewIssueFragment extends BaseFragment {
 		break;
 	    // 显示指派用户对话框
 	    case show_issue_touser:
-		TeamMemberList tpmList = XmlUtils.toBean(
-			TeamMemberList.class, arg2);
+		TeamMemberList tpmList = XmlUtils.toBean(TeamMemberList.class,
+			arg2);
 		showIssueToUser(tpmList.getList());
 		break;
 	    default:

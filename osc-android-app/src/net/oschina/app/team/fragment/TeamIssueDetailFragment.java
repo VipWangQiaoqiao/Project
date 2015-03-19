@@ -200,7 +200,7 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 	if (mTeamIssue.getProject() != null
 		&& mTeamIssue.getProject().getGit() != null) {
 	    mProjectView.setVisibility(View.VISIBLE);
-	    String pushState = mTeamIssue.getGitpush() == TeamIssue.TEAM_ISSUE_GITPUSHED ? "-未同步"
+	    String pushState = mTeamIssue.getGitpush() != TeamIssue.TEAM_ISSUE_GITPUSHED ? " -未同步"
 		    : "";
 	    mTvProject.setText(mTeamIssue.getProject().getGit().getName()
 		    + pushState);
@@ -379,7 +379,7 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 //    @OnClick({ R.id.ll_issue_state_title, R.id.ll_issue_touser,
 //	    R.id.ll_issue_cooperate_user, R.id.ll_issue_die_time,
 //	    R.id.ll_issue_state, R.id.ll_issue_child })
-    @OnClick({ R.id.ll_issue_state_title, R.id.ll_issue_state })
+    @OnClick({ R.id.ll_issue_state_title, R.id.ll_issue_state, R.id.ll_issue_child })
     public void onClick(View v) {
 	// TODO Auto-generated method stub
 	switch (v.getId()) {
