@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 public class AvatarView extends CircleImageView {
@@ -96,5 +97,11 @@ public class AvatarView extends CircleImageView {
         if (source == null)
             return "";
         return source.replaceAll(AVATAR_SIZE_REG, LARGE_SIZE);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        super.onTouchEvent(event);
+        return false;
     }
 }

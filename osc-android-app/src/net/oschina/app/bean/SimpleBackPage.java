@@ -21,11 +21,10 @@ import net.oschina.app.fragment.TweetPubFragment;
 import net.oschina.app.fragment.TweetRecordFragment;
 import net.oschina.app.fragment.UserBlogFragment;
 import net.oschina.app.fragment.UserCenterFragment;
-import net.oschina.app.team.fragment.TeamActiveFragment;
 import net.oschina.app.team.fragment.NoteBookFragment;
 import net.oschina.app.team.fragment.NoteEditFragment;
+import net.oschina.app.team.fragment.TeamActiveFragment;
 import net.oschina.app.team.fragment.TeamDiaryDetail;
-import net.oschina.app.team.fragment.TeamDiaryPagerFragment;
 import net.oschina.app.team.fragment.TeamDiscussFragment;
 import net.oschina.app.team.fragment.TeamIssueFragment;
 import net.oschina.app.team.fragment.TeamNewIssueFragment;
@@ -33,6 +32,7 @@ import net.oschina.app.team.fragment.TeamProjectFragment;
 import net.oschina.app.team.fragment.TeamProjectMemberSelectFragment;
 import net.oschina.app.team.fragment.UserInfoFragment;
 import net.oschina.app.team.viewpagefragment.MyIssuePagerfragment;
+import net.oschina.app.team.viewpagefragment.TeamDiaryFragment;
 import net.oschina.app.team.viewpagefragment.TeamIssueViewPageFragment;
 import net.oschina.app.team.viewpagefragment.TeamProjectViewPagerFragment;
 import net.oschina.app.viewpagerfragment.BlogViewPagerFragment;
@@ -135,12 +135,12 @@ public enum SimpleBackPage {
 
     TEAM_DISCUSS(39, R.string.team_discuss, TeamDiscussFragment.class),
 
-    TEAM_DIRAY(40, R.string.team_diary, TeamDiaryPagerFragment.class),
+    TEAM_DIRAY(40, R.string.team_diary, TeamDiaryFragment.class),
 
     TEAM_DIRAY_DETAIL(41, R.string.team_diary_detail, TeamDiaryDetail.class),
-    
+
     TEAM_PROJECT_MEMBER_SELECT(42, 0, TeamProjectMemberSelectFragment.class),
-    
+
     TEAM_PROJECT(43, R.string.team_project, TeamProjectFragment.class);
 
     private int title;

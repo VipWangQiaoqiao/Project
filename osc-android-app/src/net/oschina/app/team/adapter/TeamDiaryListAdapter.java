@@ -5,12 +5,10 @@ import java.util.List;
 
 import net.oschina.app.R;
 import net.oschina.app.team.bean.TeamDiary;
-import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.AvatarView;
 import android.content.Context;
 import android.text.Html;
-import android.text.Spanned;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -19,7 +17,7 @@ import android.widget.TextView;
 /**
  * 周报的ListView适配器
  * 
- * @author kymjs
+ * @author kymjs (http://www.kymjs.com)
  * 
  */
 public class TeamDiaryListAdapter extends BaseAdapter {
@@ -77,24 +75,24 @@ public class TeamDiaryListAdapter extends BaseAdapter {
         holder.tv_author.setText(data.getAuthor().getName());
         holder.tv_count.setText(data.getReply() + "");
         holder.tv_date.setText(StringUtils.friendly_time(data.getCreateTime()));
-        // holder.tv_title.setText(Html.fromHtml(data.getTitle()).toString());
-        holder.tv_title.setText(HTMLUtil.delHTMLTag(data.getTitle()));
+        holder.tv_title.setText(Html.fromHtml(data.getTitle()).toString()
+                .trim());
         return v;
     }
 
-    /**
-     * 移除字符串中的Html标签
-     * 
-     * @author kymjs (https://github.com/kymjs)
-     * @param pHTMLString
-     * @return
-     */
-    public static Spanned stripTags(final String pHTMLString) {
-        // String str = pHTMLString.replaceAll("\\<.*?>", "");
-        String str = pHTMLString.replaceAll("\\t*", "");
-        str = str.replaceAll("<\\s*img\\s+([^>]*)\\s*>", "").trim();
-        return Html.fromHtml(str);
-    }
+    // /**
+    // * 移除字符串中的Html标签
+    // *
+    // * @author kymjs (https://github.com/kymjs)
+    // * @param pHTMLString
+    // * @return
+    // */
+    // public static Spanned stripTags(final String pHTMLString) {
+    // // String str = pHTMLString.replaceAll("\\<.*?>", "");
+    // String str = pHTMLString.replaceAll("\\t*", "");
+    // str = str.replaceAll("<\\s*img\\s+([^>]*)\\s*>", "").trim();
+    // return Html.fromHtml(str);
+    // }
 
     static class ViewHolder {
         AvatarView iv_face;

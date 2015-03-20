@@ -6,12 +6,10 @@ import java.util.List;
 import net.oschina.app.R;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamMember;
-import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.AvatarView;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -45,7 +43,6 @@ public class TeamMemberAdapter extends BaseAdapter {
         }
         this.datas = datas;
         notifyDataSetChanged();
-        notifyDataSetInvalidated();
     }
 
     @Override
@@ -87,12 +84,7 @@ public class TeamMemberAdapter extends BaseAdapter {
             holder = (ViewHolder) v.getTag();
         }
         holder.tv_name.setText(data.getName());
-        String imgUrl = data.getPortrait();
-        int end = imgUrl.indexOf('?');
-        if (end > 0) {
-            imgUrl = imgUrl.substring(0, end);
-        }
-        holder.img_head.setAvatarUrl(imgUrl);
+        holder.img_head.setAvatarUrl(data.getPortrait());
         if (127 == data.getTeamRole()) { // 创建人，红色
             holder.img_tip.setImageDrawable(new ColorDrawable(0xffff0000));
         } else if (126 == data.getTeamRole()) { // 管理者，黄色
@@ -100,17 +92,6 @@ public class TeamMemberAdapter extends BaseAdapter {
         } else {
             holder.img_tip.setImageDrawable(null);
         }
-
-        holder.img_head.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onItemClick(position);
-            }
-        });
         return v;
-    }
-
-    public void onItemClick(int position) {
-        UIHelper.showTeamMemberInfo(cxt, team.getId(), datas.get(position));
     }
 }

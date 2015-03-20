@@ -1,7 +1,5 @@
 package net.oschina.app.team.fragment;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.List;
 
 import net.oschina.app.AppContext;
@@ -15,9 +13,11 @@ import net.oschina.app.team.bean.TeamMember;
 import net.oschina.app.team.bean.TeamMemberList;
 import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
 import org.apache.http.Header;
+import org.kymjs.kjframe.http.core.KJAsyncTask;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -40,8 +40,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
  * @author kymjs (kymjs123@gmail.com)
  * 
  */
-public class TeamMemberFragment extends BaseFragment implements
-        OnRefreshListener {
+public class TeamMemberFragment extends BaseFragment {
 
     @InjectView(R.id.fragment_team_grid)
     GridView mGrid;
@@ -104,21 +103,29 @@ public class TeamMemberFragment extends BaseFragment implements
     public void initView(View view) {
         mEmpty.setErrorType(EmptyLayout.HIDE_LAYOUT);
         mEmpty.setOnLayoutClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-                requsetData();
+                refurbish(true);
             }
         });
         mGrid.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
-                ((TeamMemberAdapter) parent.getAdapter()).onItemClick(position);
+                UIHelper.showTeamMemberInfo(aty, team.getId(),
+                        datas.get(position));
             }
         });
 
-        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (mState == STATE_REFRESH) {
+                    return;
+                }
+                refurbish(false);
+            }
+        });
         mSwipeRefreshLayout.setColorSchemeResources(
                 R.color.swiperefresh_color1, R.color.swiperefresh_color2,
                 R.color.swiperefresh_color3, R.color.swiperefresh_color4);
@@ -126,89 +133,71 @@ public class TeamMemberFragment extends BaseFragment implements
 
     @Override
     public void initData() {
-        requsetData();
-    }
-
-    private void requsetData() {
-        OSChinaApi.getTeamMemberList(team.getId(),
-                new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onStart() {
-                        super.onStart();
-                        mEmpty.setErrorType(EmptyLayout.NETWORK_LOADING);
-                    }
-
-                    @Override
-                    public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-                        InputStream is = new ByteArrayInputStream(arg2);
-                        TeamMemberList list = XmlUtils.toBean(
-                                TeamMemberList.class, is);
-                        datas = list.getList();
-                        if (adapter == null) {
-                            adapter = new TeamMemberAdapter(aty, datas, team);
-                            mGrid.setAdapter(adapter);
-                        } else {
-                            adapter.refresh(datas);
-                        }
-                        CacheManager.saveObject(aty, list, TEAM_MEMBER_DATA);
-                        preRefreshTime = System.currentTimeMillis();
-                        mEmpty.setErrorType(EmptyLayout.HIDE_LAYOUT);
-                    }
-
-                    @Override
-                    public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                            Throwable arg3) {
-                        mEmpty.setErrorType(EmptyLayout.NETWORK_ERROR);
-                    }
-                });
+        refurbish(true);
     }
 
     /**
      * 刷新列表数据
      */
-    private void refurbish() {
+    private void refurbish(final boolean isFirst) {
         final long currentTime = System.currentTimeMillis();
-        if (currentTime - preRefreshTime > 100000) {
-            OSChinaApi.getTeamMemberList(team.getId(),
-                    new AsyncHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int arg0, Header[] arg1,
-                                byte[] arg2) {
-                            InputStream is = new ByteArrayInputStream(arg2);
-                            final TeamMemberList list = XmlUtils.toBean(
-                                    TeamMemberList.class, is);
-                            datas = list.getList();
-                            if (adapter == null) {
-                                adapter = new TeamMemberAdapter(aty, datas,
-                                        team);
-                                mGrid.setAdapter(adapter);
-                            } else {
-                                adapter.refresh(datas);
-                            }
-                            CacheManager
-                                    .saveObject(aty, list, TEAM_MEMBER_DATA);
-                            preRefreshTime = currentTime;
-                        }
-
-                        @Override
-                        public void onFailure(int arg0, Header[] arg1,
-                                byte[] arg2, Throwable arg3) {
-                            AppContext.showToast("成员信息获取失败");
-                        }
-                    });
-        }
-    }
-
-    @Override
-    public void onRefresh() {
-        if (mState == STATE_REFRESH) {
+        if (currentTime - preRefreshTime < 100000) {
+            setSwipeRefreshLoadedState();
             return;
         }
-        // 设置顶部正在刷新
-        mGrid.setSelection(0);
-        setSwipeRefreshLoadingState();
-        refurbish();
-        setSwipeRefreshLoadedState();
+        OSChinaApi.getTeamMemberList(team.getId(),
+                new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onStart() {
+                        super.onStart();
+                        // setSwipeRefreshLoadingState();
+                        if (isFirst) {
+                            mEmpty.setErrorType(EmptyLayout.NETWORK_LOADING);
+                        }
+                    }
+
+                    @Override
+                    public void onSuccess(int arg0, Header[] arg1,
+                            final byte[] arg2) {
+                        KJAsyncTask.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                TeamMemberList list = XmlUtils.toBean(
+                                        TeamMemberList.class, arg2);
+                                CacheManager.saveObject(aty, list,
+                                        TEAM_MEMBER_DATA);
+                                datas = list.getList();
+                                aty.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (adapter == null) {
+                                            adapter = new TeamMemberAdapter(
+                                                    aty, datas, team);
+                                            mGrid.setAdapter(adapter);
+                                        } else {
+                                            adapter.refresh(datas);
+                                        }
+                                        preRefreshTime = currentTime;
+                                        if (isFirst) {
+                                            mEmpty.setErrorType(EmptyLayout.HIDE_LAYOUT);
+                                        }
+                                        setSwipeRefreshLoadedState();
+                                    }
+                                });
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+                            Throwable arg3) {
+                        AppContext.showToast("成员信息获取失败");
+                        if (isFirst) {
+                            mEmpty.setErrorType(EmptyLayout.NETWORK_ERROR);
+                        }
+                        setSwipeRefreshLoadedState();
+                    }
+                });
     }
 
     /**
