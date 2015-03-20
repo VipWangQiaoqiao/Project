@@ -152,9 +152,7 @@
         </activity>
         <activity
             android:name=".team.ui.TeamMainActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/team_new_active" >
-        </activity>
+            android:screenOrientation="portrait" />
         <activity 
             android:name=".team.ui.TeamNewActiveActivity"
             android:screenOrientation="portrait"/>

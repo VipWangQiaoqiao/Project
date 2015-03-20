@@ -11,10 +11,14 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.ListEntity;
+import net.oschina.app.bean.Result;
+import net.oschina.app.bean.ResultBean;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
+import net.oschina.app.util.TLog;
+import net.oschina.app.util.XmlUtils;
 
 import org.apache.http.Header;
 
@@ -60,6 +64,8 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
     protected int mCurrentPage = 0;
 
     protected int mCatalog = 1;
+    // 错误信息
+    protected Result mResult;
 
     private AsyncTask<String, Void, ListEntity<T>> mCacheTask;
     private ParserTask mParserTask;
@@ -366,7 +372,13 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
         if (data == null) {
             data = new ArrayList<T>();
         }
-
+        
+        if (mResult != null && !mResult.OK()) {
+	    AppContext.showToast(mResult.getErrorMessage());
+	    // 注销登陆，密码已经修改，cookie，失效了
+	    AppContext.getInstance().Logout();
+	}
+        
         mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
         if (mCurrentPage == 0) {
             mAdapter.clear();
@@ -494,8 +506,15 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
                         reponseData));
                 new SaveCacheTask(getActivity(), data, getCacheKey()).execute();
                 list = data.getList();
+                if (list == null) {
+                    ResultBean resultBean = XmlUtils.toBean(ResultBean.class, reponseData);
+                    if (resultBean != null) {
+                	mResult = resultBean.getResult();
+                    }
+        	}
             } catch (Exception e) {
                 e.printStackTrace();
+                
                 parserError = true;
             }
             return null;

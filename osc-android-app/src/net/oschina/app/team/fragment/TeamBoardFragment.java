@@ -242,11 +242,11 @@ public class TeamBoardFragment extends BaseFragment {
 	    public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 		MyIssueState data = XmlUtils.toBean(MyIssueState.class,
 			new ByteArrayInputStream(arg2));
-		mTvName.setText(data.getUser().getName());
-		mTvWaitDo.setText(data.getOpened());
-		mTvOutdate.setText(data.getOutdate());
-		mTvIng.setText(data.getUnderway());
-		mTvAll.setText(data.getFinished());
+		if (data != null) {
+		    fillUI(data);
+		} else {
+		    // 用户未登陆的情况
+		}
 	    }
 
 	    @Override
@@ -266,5 +266,13 @@ public class TeamBoardFragment extends BaseFragment {
     public void refresh() {
 	showWaitDialog().hideMessage();
 	requestData();
+    }
+    
+    private void fillUI(MyIssueState data) {
+	mTvName.setText(data.getUser().getName());
+	mTvWaitDo.setText(data.getOpened());
+	mTvOutdate.setText(data.getOutdate());
+	mTvIng.setText(data.getUnderway());
+	mTvAll.setText(data.getFinished());
     }
 }
