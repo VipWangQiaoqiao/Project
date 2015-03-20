@@ -300,7 +300,11 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 		TextView text = (TextView) LayoutInflater.from(getActivity())
 			.inflate(R.layout.team_issue_lable, null, false);
 		text.setText(label.getName());
-		int color = Color.parseColor(label.getColor());
+		String colorStr = label.getColor();
+		if (colorStr.equalsIgnoreCase("#ffffff")) {
+		    colorStr = "#000000";
+		}
+		int color = Color.parseColor(colorStr);
 		LayoutParams params = new LayoutParams(
 			LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		params.setMargins(4, 0, 4, 0);
