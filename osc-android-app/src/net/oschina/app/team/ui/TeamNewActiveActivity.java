@@ -693,10 +693,11 @@ public class TeamNewActiveActivity extends BaseActivity implements
 			public void onSuccess(int arg0, Header[] arg1,
 				byte[] arg2) {
 			    // TODO Auto-generated method stub
-			    mTeamMemberList = XmlUtils.toBean(
-				    TeamMemberList.class, arg2).getList();
-			    if (mTeamMemberList != null
-				    && !mTeamMemberList.isEmpty()) {
+			    TeamMemberList memberList = XmlUtils.toBean(
+				    TeamMemberList.class, arg2);
+			    
+			    if (memberList != null) {
+				mTeamMemberList = memberList.getList();
 				showMetionUser();
 			    } else {
 				AppContext.showToast("获取团队成员失败");
