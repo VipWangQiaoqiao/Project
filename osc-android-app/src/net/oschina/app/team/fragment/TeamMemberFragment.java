@@ -193,6 +193,7 @@ public class TeamMemberFragment extends BaseFragment {
                         if (isFirst) {
                             mEmpty.setErrorType(EmptyLayout.NETWORK_ERROR);
                         }
+                        setSwipeRefreshLoadedState();
                     }
                 });
     }

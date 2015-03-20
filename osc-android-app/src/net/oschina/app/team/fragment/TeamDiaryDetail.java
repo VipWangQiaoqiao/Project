@@ -14,6 +14,7 @@ import net.oschina.app.team.bean.TeamDiary;
 import net.oschina.app.team.bean.TeamDiaryDetailBean;
 import net.oschina.app.team.bean.TeamRepliesList;
 import net.oschina.app.team.bean.TeamReply;
+import net.oschina.app.team.viewpagefragment.TeamDiaryFragment;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -91,9 +92,9 @@ public class TeamDiaryDetail extends BaseFragment implements EmojiTextListener,
         super.initData();
         Bundle bundle = aty.getIntent().getBundleExtra("diary");
         if (bundle != null) {
-            teamid = bundle.getInt(TeamDiaryPagerFragment.TEAMID_KEY);
+            teamid = bundle.getInt(TeamDiaryFragment.TEAMID_KEY);
             diaryData = (TeamDiary) bundle
-                    .getSerializable(TeamDiaryPagerFragment.DIARYDETAIL_KEY);
+                    .getSerializable(TeamDiaryFragment.DIARYDETAIL_KEY);
         } else {
             diaryData = new TeamDiary();
             Log.e("debug", getClass().getSimpleName() + "diaryData初始化异常");

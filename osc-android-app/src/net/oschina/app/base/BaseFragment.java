@@ -21,12 +21,12 @@ import android.view.ViewGroup;
  */
 public class BaseFragment extends Fragment implements
         android.view.View.OnClickListener, BaseFragmentInterface {
-    protected static final int STATE_NONE = 0;
-    protected static final int STATE_REFRESH = 1;
-    protected static final int STATE_LOADMORE = 2;
-    protected static final int STATE_NOMORE = 3;
-    protected static final int STATE_PRESSNONE = 4;// 正在下拉但还没有到刷新的状态
-    protected int mState = STATE_NONE;
+    public static final int STATE_NONE = 0;
+    public static final int STATE_REFRESH = 1;
+    public static final int STATE_LOADMORE = 2;
+    public static final int STATE_NOMORE = 3;
+    public static final int STATE_PRESSNONE = 4;// 正在下拉但还没有到刷新的状态
+    public static int mState = STATE_NONE;
 
     protected LayoutInflater mInflater;
 
@@ -84,7 +84,7 @@ public class BaseFragment extends Fragment implements
     protected WaitDialog showWaitDialog() {
         return showWaitDialog(R.string.loading);
     }
-    
+
     protected WaitDialog showWaitDialog(int resid) {
         FragmentActivity activity = getActivity();
         if (activity instanceof DialogControl) {

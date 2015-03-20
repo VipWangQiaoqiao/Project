@@ -7,7 +7,6 @@ import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.fragment.TeamBoardFragment;
 import net.oschina.app.team.fragment.TeamIssueFragment;
 import net.oschina.app.team.fragment.TeamMemberFragment;
-import net.oschina.app.team.fragment.TeamProjectFragment;
 import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.team.ui.TeamNewActiveActivity;
 import net.oschina.app.util.UIHelper;
@@ -27,46 +26,46 @@ import android.view.View;
 public class TeamMainViewPagerFragment extends BaseViewPagerFragment {
 
     private Team mTeam;
-    
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-	inflater.inflate(R.menu.team_main_menu, menu);
-	super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.team_main_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // TODO Auto-generated method stub
-	switch (item.getItemId()) {
-	case R.id.team_new_active:
-	    showCreateNewActive();
-	    break;
-	case R.id.team_new_issue:
-	    UIHelper.showCreateNewIssue(getActivity(), mTeam, null, null);
-	    break;
-	default:
-	    break;
-	}
+        switch (item.getItemId()) {
+        case R.id.team_new_active:
+            showCreateNewActive();
+            break;
+        case R.id.team_new_issue:
+            UIHelper.showCreateNewIssue(getActivity(), mTeam, null, null);
+            break;
+        default:
+            break;
+        }
         return super.onOptionsItemSelected(item);
     }
-    
+
     private void showCreateNewActive() {
-	Intent intent = new Intent(getActivity(), TeamNewActiveActivity.class);
-	Bundle bundle = new Bundle();
-	bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_TEAM, mTeam);
-	intent.putExtras(bundle);
-	getActivity().startActivity(intent);
+        Intent intent = new Intent(getActivity(), TeamNewActiveActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_TEAM, mTeam);
+        intent.putExtras(bundle);
+        getActivity().startActivity(intent);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-	super.onViewCreated(view, savedInstanceState);
-	setHasOptionsMenu(true);
-	mViewPager.setOffscreenPageLimit(2);
-	Bundle bundle = getArguments();
-	if (bundle != null) {
-	    mTeam = (Team) bundle.getSerializable(TeamMainActivity.BUNDLE_KEY_TEAM);
-	}
+        super.onViewCreated(view, savedInstanceState);
+        setHasOptionsMenu(true);
+        mViewPager.setOffscreenPageLimit(2);
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            mTeam = (Team) bundle
+                    .getSerializable(TeamMainActivity.BUNDLE_KEY_TEAM);
+        }
     }
 
     @Override
@@ -86,15 +85,16 @@ public class TeamMainViewPagerFragment extends BaseViewPagerFragment {
 
     @Override
     protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
-	String[] arraStrings = getResources().getStringArray(
-		R.array.team_main_viewpager);
+        String[] arraStrings = getResources().getStringArray(
+                R.array.team_main_viewpager);
 
-	adapter.addTab(arraStrings[0], "team_board", TeamBoardFragment.class,
-		getArguments());
-	Bundle issueFragmentBundle = getArguments();
-	issueFragmentBundle.putBoolean("needmenu", false);
-	adapter.addTab(arraStrings[1], "team_issue", TeamIssueFragment.class, issueFragmentBundle);
-	adapter.addTab(arraStrings[2], "team_member", TeamMemberFragment.class,
-		getArguments());
+        adapter.addTab(arraStrings[0], "team_board", TeamBoardFragment.class,
+                getArguments());
+        Bundle issueFragmentBundle = getArguments();
+        issueFragmentBundle.putBoolean("needmenu", false);
+        adapter.addTab(arraStrings[1], "team_issue", TeamIssueFragment.class,
+                issueFragmentBundle);
+        adapter.addTab(arraStrings[2], "team_member", TeamMemberFragment.class,
+                getArguments());
     }
 }
