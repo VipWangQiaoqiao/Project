@@ -39,13 +39,15 @@
             style="@style/team_user_infor" />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/fragment_team_img_tel"
+    <TextView
+        android:id="@+id/fragment_team_tv_tel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_margin="20dp"
-        android:src="@drawable/ic_launcher" />
+        android:text="@string/fa_icon_phone"
+        android:textColor="@color/main_green"
+        android:textSize="40sp"
+        android:layout_margin="20dp" />
 
 </RelativeLayout>

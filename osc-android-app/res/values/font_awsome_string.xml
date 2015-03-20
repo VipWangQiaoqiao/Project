@@ -27,5 +27,6 @@
    	<string name="fa_comment">&#xf075;</string>
    	<string name="fa_thumbs_o_up">&#xf087;</string>
    	<string name="fa_list">&#xf03a;</string>
+   	<string name="fa_icon_phone">&#xf095;</string>
     
 </resources>

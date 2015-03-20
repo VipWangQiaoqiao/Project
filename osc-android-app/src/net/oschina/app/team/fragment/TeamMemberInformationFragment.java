@@ -14,6 +14,7 @@ import net.oschina.app.team.bean.TeamMember;
 import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.util.TLog;
+import net.oschina.app.util.TypefaceUtils;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
 
@@ -37,7 +38,7 @@ import android.widget.TextView;
  * @author kymjs (https://github.com/kymjs)
  * 
  */
-public class UserInfoFragment extends BaseListFragment<TeamActive> {
+public class TeamMemberInformationFragment extends BaseListFragment<TeamActive> {
 
     private TextView mTvName;
     private TextView mTvUserName;
@@ -45,13 +46,13 @@ public class UserInfoFragment extends BaseListFragment<TeamActive> {
     private TextView mTvTel;
     private TextView mTvAddress;
     private AvatarView mImgHead;
-    private ImageView mImgTel;
+    private TextView mTvToTel;
 
     private Activity aty;
     private TeamMember teamMember;
     private int teamId;
 
-    protected static final String TAG = UserInfoFragment.class.getSimpleName();
+    protected static final String TAG = TeamMemberInformationFragment.class.getSimpleName();
     private static final String CACHE_KEY_PREFIX = "DynamicFragment_list";
 
     @Override
@@ -74,8 +75,9 @@ public class UserInfoFragment extends BaseListFragment<TeamActive> {
     public void initView(View view) {
         View headview = View.inflate(aty, R.layout.fragment_team_userinfo_head,
                 null);
-        mImgTel = (ImageView) headview.findViewById(R.id.fragment_team_img_tel);
-        mImgTel.setOnClickListener(new OnClickListener() {
+        mTvToTel = (TextView) headview.findViewById(R.id.fragment_team_tv_tel);
+        TypefaceUtils.setTypeface(mTvToTel);
+        mTvToTel.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"
@@ -105,8 +107,10 @@ public class UserInfoFragment extends BaseListFragment<TeamActive> {
         String tel = teamMember.getTeamTelephone();
         if (StringUtils.isEmpty(tel)) {
             tel = "未填写手机号";
+            mTvToTel.setVisibility(View.GONE);
         }
         mTvTel.setText(tel);
+        
         mTvAddress.setText(teamMember.getLocation());
         mImgHead.setAvatarUrl(teamMember.getPortrait());
         super.initView(view);
