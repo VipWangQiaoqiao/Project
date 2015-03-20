@@ -198,9 +198,7 @@ public class MainActivity extends ActionBarActivity implements
         IntentFilter filter = new IntentFilter(Constants.INTENT_ACTION_NOTICE);
         filter.addAction(Constants.INTENT_ACTION_LOGOUT);
         registerReceiver(mReceiver, filter);
-
         NoticeUtils.bindToService(this);
-        UIHelper.sendBroadcastForNotice(this);
 
         if (AppContext.isFristStart()) {
             mNavigationDrawerFragment.openDrawerMenu();

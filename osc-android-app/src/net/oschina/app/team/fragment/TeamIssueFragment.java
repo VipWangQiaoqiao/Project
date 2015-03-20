@@ -103,7 +103,7 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
 	case R.id.team_new_issue:
 	    UIHelper.showCreateNewIssue(getActivity(), mTeam, mProject, mCatalog);
 	    break;
-	case R.id.team_issue_project_list:
+	case R.id.team_issue_change_state:
 	    changeShowIssueState();
 	    break;
 	default:

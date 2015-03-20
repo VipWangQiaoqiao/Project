@@ -34,6 +34,8 @@ import org.apache.http.Header;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -41,6 +43,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -63,7 +66,7 @@ public class TeamIssueDetailFragment extends BaseFragment implements
     private TeamIssue mTeamIssue;
 
     private TeamIssueCatalog mCatalog;
-    
+
     @InjectView(R.id.content)
     View mContent;
     @InjectView(R.id.error_layout)
@@ -137,9 +140,9 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 		.findViewById(R.id.tv_issue_fa_relations));
 	TypefaceUtils.setTypeface((TextView) view
 		.findViewById(R.id.tv_issue_fa_attachments));
-	
+
 	mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
-	    
+
 	    @Override
 	    public void onClick(View v) {
 		// TODO Auto-generated method stub
@@ -160,7 +163,7 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 	@Override
 	public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 	    // TODO Auto-generated method stub
-	   
+
 	    TeamIssueDetail teamIssueDetail = XmlUtils.toBean(
 		    TeamIssueDetail.class, arg2);
 	    if (teamIssueDetail != null) {
@@ -209,7 +212,7 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 	}
 
 	mTvTitle.setText(mTeamIssue.getTitle());
-	
+
 	setIssueState();
 
 	if (mTeamIssue.getToUser() != null
@@ -250,19 +253,22 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 	}
 
 	setChildIssues(mTeamIssue.getChildIssues().getChildIssues());
-	
+
 	setLabels(mTeamIssue);
 	setIssueCollaborator();
     }
-    
+
     private void setIssueCollaborator() {
 	StringBuffer cooperateUserStr = new StringBuffer();
 	if (mTeamIssue.getCollaborators().size() > 0) {
 	    for (int i = 0; i < mTeamIssue.getCollaborators().size(); i++) {
-		if (i == mTeamIssue.getCollaborators().size() -1) {
-		    cooperateUserStr.append(mTeamIssue.getCollaborators().get(i).getName());
+		if (i == mTeamIssue.getCollaborators().size() - 1) {
+		    cooperateUserStr.append(mTeamIssue.getCollaborators()
+			    .get(i).getName());
 		} else {
-		    cooperateUserStr.append(mTeamIssue.getCollaborators().get(i).getName() + "，");
+		    cooperateUserStr.append(mTeamIssue.getCollaborators()
+			    .get(i).getName()
+			    + "，");
 		}
 	    }
 	    mTvCooperateUser.setText(cooperateUserStr.toString());
@@ -270,17 +276,19 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 	    mTvCooperateUser.setText("暂无协作者");
 	}
     }
-    
+
     private void setIssueState() {
 	TypefaceUtils.setTypeface(mTvStateTitle,
 		mTeamIssue.getIssueStateFaTextId());
 
-	if (mTeamIssue.getState().equals("closed") || mTeamIssue.getState().equals("accepted")) {
-	    ViewUtils.setTextViewLineFlag(mTvTitle, Paint.STRIKE_THRU_TEXT_FLAG);
+	if (mTeamIssue.getState().equals("closed")
+		|| mTeamIssue.getState().equals("accepted")) {
+	    ViewUtils
+		    .setTextViewLineFlag(mTvTitle, Paint.STRIKE_THRU_TEXT_FLAG);
 	} else {
 	    ViewUtils.setTextViewLineFlag(mTvTitle, 0);
 	}
-	
+
 	mTvState.setText(mTeamIssue.getIssueStateText());
     }
 
@@ -293,8 +301,15 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 			.inflate(R.layout.team_issue_lable, null, false);
 		text.setText(label.getName());
 		int color = Color.parseColor(label.getColor());
-		text.setBackgroundColor(color);
-		mLLlabels.addView(text);
+		LayoutParams params = new LayoutParams(
+			LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		params.setMargins(4, 0, 4, 0);
+
+		GradientDrawable d = (GradientDrawable) text.getBackground();
+		d.setStroke(1, color);
+		text.setTextColor(color);
+
+		mLLlabels.addView(text, params);
 	    }
 	}
     }
@@ -315,13 +330,14 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 	    return;
 	}
 	showWaitDialog("提交评论中...");
-	OSChinaTeamApi.pubTeamIssueReply(mTeam.getId(), mTeamIssue.getId(), text,
-		new AsyncHttpResponseHandler() {
+	OSChinaTeamApi.pubTeamIssueReply(mTeam.getId(), mTeamIssue.getId(),
+		text, new AsyncHttpResponseHandler() {
 
 		    @Override
 		    public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 			// TODO Auto-generated method stub
-			TeamReply reply = XmlUtils.toBean(TeamReplyBean.class, arg2).getTeamReply();
+			TeamReply reply = XmlUtils.toBean(TeamReplyBean.class,
+				arg2).getTeamReply();
 			if (reply != null) {
 			    addComment(reply);
 			    emojiFragment.reset();
@@ -335,7 +351,8 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 		    public void onFailure(int arg0, Header[] arg1, byte[] arg2,
 			    Throwable arg3) {
 			// TODO Auto-generated method stub
-			Result result = XmlUtils.toBean(ResultBean.class, arg2).getResult();
+			Result result = XmlUtils.toBean(ResultBean.class, arg2)
+				.getResult();
 			AppContext.showToast(result.getErrorMessage());
 		    }
 
@@ -349,14 +366,14 @@ public class TeamIssueDetailFragment extends BaseFragment implements
     }
 
     private AsyncHttpResponseHandler mChangeIssueHandler = new AsyncHttpResponseHandler() {
-	
+
 	@Override
 	public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 	    // TODO Auto-generated method stub
 	    Result result = XmlUtils.toBean(ResultBean.class, arg2).getResult();
 	    if (result.OK()) {
 		setIssueState();
-	    }	    
+	    }
 	    AppContext.showToast(result.getErrorMessage());
 	}
 
@@ -366,20 +383,22 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 	    // TODO Auto-generated method stub
 	    AppContext.showToast("更新失败");
 	}
+
 	public void onStart() {
 	    showWaitDialog("正在修改...");
 	};
-	
+
 	public void onFinish() {
 	    hideWaitDialog();
 	};
     };
 
     @Override
-//    @OnClick({ R.id.ll_issue_state_title, R.id.ll_issue_touser,
-//	    R.id.ll_issue_cooperate_user, R.id.ll_issue_die_time,
-//	    R.id.ll_issue_state, R.id.ll_issue_child })
-    @OnClick({ R.id.ll_issue_state_title, R.id.ll_issue_state, R.id.ll_issue_child })
+    // @OnClick({ R.id.ll_issue_state_title, R.id.ll_issue_touser,
+    // R.id.ll_issue_cooperate_user, R.id.ll_issue_die_time,
+    // R.id.ll_issue_state, R.id.ll_issue_child })
+    @OnClick({ R.id.ll_issue_state_title, R.id.ll_issue_state,
+	    R.id.ll_issue_child })
     public void onClick(View v) {
 	// TODO Auto-generated method stub
 	switch (v.getId()) {
@@ -389,10 +408,12 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 	    break;
 	case R.id.ll_issue_touser:
 	    // 暂时屏蔽修改任务指派
-//	    Bundle bundle = new Bundle();
-//	    bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_TEAM, mTeam);
-//	    bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_PROJECT, mTeamIssue.getProject());
-//	    UIHelper.showSimpleBack(getActivity(), SimpleBackPage.TEAM_PROJECT_MEMBER_SELECT, bundle);
+	    // Bundle bundle = new Bundle();
+	    // bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_TEAM, mTeam);
+	    // bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_PROJECT,
+	    // mTeamIssue.getProject());
+	    // UIHelper.showSimpleBack(getActivity(),
+	    // SimpleBackPage.TEAM_PROJECT_MEMBER_SELECT, bundle);
 	    break;
 	case R.id.ll_issue_cooperate_user:
 
@@ -418,10 +439,13 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 	    AppContext.showToast("抱歉，无更改权限");
 	    return;
 	}
-	final CommonDialog dialog = DialogHelper.getPinterestDialogCancelable(getActivity());
+	final CommonDialog dialog = DialogHelper
+		.getPinterestDialogCancelable(getActivity());
 	dialog.setTitle("修改任务状态");
-	final CharSequence[] items = getResources().getTextArray(R.array.team_issue_state);
-	final CharSequence[] itemsEn = getResources().getTextArray(R.array.team_issue_state_en);
+	final CharSequence[] items = getResources().getTextArray(
+		R.array.team_issue_state);
+	final CharSequence[] itemsEn = getResources().getTextArray(
+		R.array.team_issue_state_en);
 	int index = 0;
 	for (int i = 0; i < itemsEn.length; i++) {
 	    if (itemsEn[i].equals(mTeamIssue.getState())) {
@@ -440,15 +464,15 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 		    return;
 		}
 		mTeamIssue.setState(itemsEn[position].toString());
-		OSChinaTeamApi.changeIssueState(mTeam.getId(), mTeamIssue, "state",
-			mChangeIssueHandler);
+		OSChinaTeamApi.changeIssueState(mTeam.getId(), mTeamIssue,
+			"state", mChangeIssueHandler);
 		dialog.dismiss();
 	    }
 	});
 	dialog.setPositiveButton(R.string.cancle, null);
 	dialog.show();
     }
-    
+
     @InjectView(R.id.ll_issue_childs)
     LinearLayout mLLChildIssues;
 
@@ -472,7 +496,7 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 	content.setText(teamIssue.getTitle());
 	setChildIssueState(cell, teamIssue);
 	cell.setOnClickListener(new View.OnClickListener() {
-	    
+
 	    @Override
 	    public void onClick(View v) {
 		// TODO Auto-generated method stub
@@ -481,11 +505,11 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 	});
 	mLLChildIssues.addView(cell);
     }
-    
+
     private void setChildIssueState(View cell, TeamIssue childIssue) {
 	TextView content = (TextView) cell.findViewById(R.id.tv_content);
 	TextView state = (TextView) cell.findViewById(R.id.tv_state);
-	
+
 	if (childIssue.getState().equalsIgnoreCase("closed")) {
 	    ViewUtils.setTextViewLineFlag(content, Paint.STRIKE_THRU_TEXT_FLAG);
 	    TypefaceUtils.setTypeface(state, R.string.fa_check_circle_o);
@@ -494,44 +518,50 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 	    TypefaceUtils.setTypeface(state, R.string.fa_circle_o);
 	}
     }
-    
-    private void updateChildIssueState(final View cell, final TeamIssue childIssue) {
+
+    private void updateChildIssueState(final View cell,
+	    final TeamIssue childIssue) {
 	switchChildIssueState(childIssue);
-	OSChinaTeamApi.updateChildIssue(mTeam.getId(), "state", childIssue, new AsyncHttpResponseHandler() {
-	    
-	    @Override
-	    public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-		// TODO Auto-generated method stub
-		Result result = XmlUtils.toBean(ResultBean.class, arg2).getResult();
-		if (result.OK()) {
-		    setChildIssueState(cell, childIssue);
-		} else {
-		    switchChildIssueState(childIssue);
-		}
-		AppContext.showToast(result.getErrorMessage());
-	    }
-	    
-	    @Override
-	    public void onFailure(int arg0, Header[] arg1, byte[] arg2, Throwable arg3) {
-		// TODO Auto-generated method stub
-		AppContext.showToast("更新失败");
-		switchChildIssueState(childIssue);
-	    }
-	    @Override
-	    public void onStart() {
-	        // TODO Auto-generated method stub
-	        super.onStart();
-	        showWaitDialog("正在更新状态...");
-	    }
-	    @Override
-	    public void onFinish() {
-	        // TODO Auto-generated method stub
-	        super.onFinish();
-	        hideWaitDialog();
-	    }
-	});
+	OSChinaTeamApi.updateChildIssue(mTeam.getId(), "state", childIssue,
+		new AsyncHttpResponseHandler() {
+
+		    @Override
+		    public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+			// TODO Auto-generated method stub
+			Result result = XmlUtils.toBean(ResultBean.class, arg2)
+				.getResult();
+			if (result.OK()) {
+			    setChildIssueState(cell, childIssue);
+			} else {
+			    switchChildIssueState(childIssue);
+			}
+			AppContext.showToast(result.getErrorMessage());
+		    }
+
+		    @Override
+		    public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+			    Throwable arg3) {
+			// TODO Auto-generated method stub
+			AppContext.showToast("更新失败");
+			switchChildIssueState(childIssue);
+		    }
+
+		    @Override
+		    public void onStart() {
+			// TODO Auto-generated method stub
+			super.onStart();
+			showWaitDialog("正在更新状态...");
+		    }
+
+		    @Override
+		    public void onFinish() {
+			// TODO Auto-generated method stub
+			super.onFinish();
+			hideWaitDialog();
+		    }
+		});
     }
-    
+
     private void switchChildIssueState(TeamIssue childIssue) {
 	if (childIssue.getState().equals("opened")) {
 	    childIssue.setState("closed");

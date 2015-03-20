@@ -12,10 +12,12 @@ import net.oschina.app.base.BaseApplication;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.User;
 import net.oschina.app.cache.DataCleanManager;
+import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.util.CyptoUtils;
 import net.oschina.app.util.MethodsCompat;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TLog;
+import net.oschina.app.util.UIHelper;
 
 import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.bitmap.BitmapConfig;
@@ -54,6 +56,8 @@ public class AppContext extends BaseApplication {
         instance = this;
         init();
         initLogin();
+        
+        UIHelper.sendBroadcastForNotice(this);
     }
 
     private void init() {
