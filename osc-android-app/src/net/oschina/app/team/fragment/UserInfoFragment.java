@@ -24,9 +24,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -43,6 +45,7 @@ public class UserInfoFragment extends BaseListFragment<TeamActive> {
     private TextView mTvTel;
     private TextView mTvAddress;
     private AvatarView mImgHead;
+    private ImageView mImgTel;
 
     private Activity aty;
     private TeamMember teamMember;
@@ -71,6 +74,16 @@ public class UserInfoFragment extends BaseListFragment<TeamActive> {
     public void initView(View view) {
         View headview = View.inflate(aty, R.layout.fragment_team_userinfo_head,
                 null);
+        mImgTel = (ImageView) headview.findViewById(R.id.fragment_team_img_tel);
+        mImgTel.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"
+                        + teamMember.getTeamTelephone()));
+
+                startActivity(intent);
+            }
+        });
         mImgHead = (AvatarView) headview.findViewById(R.id.fragment_team_head);
         mTvName = (TextView) headview.findViewById(R.id.fragment_team_name);
         mTvUserName = (TextView) headview
@@ -103,10 +116,6 @@ public class UserInfoFragment extends BaseListFragment<TeamActive> {
             public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
                 if (position == 0) {// 第一项是头部
-                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri
-                            .parse("tel:" + teamMember.getTeamTelephone()));
-
-                    startActivity(intent);
                 } else {
                     Adapter adapter = parent.getAdapter();
                     if (adapter != null) {
