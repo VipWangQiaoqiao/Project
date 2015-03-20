@@ -13,6 +13,7 @@ import net.oschina.app.team.bean.TeamMember;
 import net.oschina.app.team.bean.TeamMemberList;
 import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
 import org.apache.http.Header;
@@ -111,7 +112,8 @@ public class TeamMemberFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
-                ((TeamMemberAdapter) parent.getAdapter()).onItemClick(position);
+                UIHelper.showTeamMemberInfo(aty, team.getId(),
+                        datas.get(position));
             }
         });
 

@@ -311,6 +311,7 @@ public class TeamDiaryDetail extends BaseFragment implements EmojiTextListener,
      */
     public static Spanned stripTags(final String pHTMLString) {
         String str = pHTMLString.replaceAll("<\\s*>", "");
+        str = str.replaceAll("<\\s*img\\s+([^>]*)\\s*>", "").trim();
         return Html.fromHtml(str);
     }
 
