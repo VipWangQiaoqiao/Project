@@ -55,6 +55,7 @@ public class TeamDiaryFragment extends BaseFragment implements
     private int currentYear = 2015;
     private Map<Integer, TeamDiaryList> dataBundleList; // 用于实现二级缓存
     private final Calendar calendar = Calendar.getInstance();
+    private DiaryPagerAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,8 +78,8 @@ public class TeamDiaryFragment extends BaseFragment implements
                     .getSerializable(TeamMainActivity.BUNDLE_KEY_TEAM);
         }
         TAG += team.getId();
-        currentWeek = StringUtils.getWeekOfYear();
-        dataBundleList = new HashMap<Integer, TeamDiaryList>(currentWeek);
+        currentWeek = StringUtils.getWeekOfYear() - 1;
+        dataBundleList = new HashMap<Integer, TeamDiaryList>(currentWeek + 5);
         // 异步读缓存
         KJAsyncTask.execute(new Runnable() {
             @Override
@@ -100,48 +101,48 @@ public class TeamDiaryFragment extends BaseFragment implements
     @Override
     public void initView(View view) {
         super.initView(view);
-        mPager.setAdapter(new DiaryPagerAdapter(aty, currentYear, team.getId()));
-        mPager.setCurrentItem(currentWeek); // 首先显示当前周，然后左翻页查看历史
-
-        final int currentPage = mPager.getCurrentItem();
-        if (currentPage == 0) {
-            mImgLeft.setImageResource(R.drawable.ic_diary_back);
-        } else {
-            mImgLeft.setImageResource(R.drawable.ic_diary_canback);
-        }
-        if (currentPage == currentWeek - 1) {
-            mImgRight.setImageResource(R.drawable.ic_diary_forward);
-        } else {
-            mImgRight.setImageResource(R.drawable.ic_diary_canforward);
-        }
-
-        mTvTitle.setText("第" + currentWeek + "周周报总览");
+        adapter = new DiaryPagerAdapter(aty, currentYear, team.getId());
+        mPager.setAdapter(adapter);
+        changeUI(currentWeek, adapter.getCount());
         mImgCalendar.setOnClickListener(this);
         mImgLeft.setOnClickListener(this);
         mImgRight.setOnClickListener(this);
         mPager.setOnPageChangeListener(new OnPageChangeListener() {
             @Override
-            public void onPageSelected(int arg0) {}
+            public void onPageSelected(int arg0) {
+                changeUI(arg0, mPager.getAdapter().getCount());
+            }
 
             @Override
             public void onPageScrolled(int arg0, float arg1, int arg2) {}
 
             @Override
-            public void onPageScrollStateChanged(int arg0) {
-                int currentPage = mPager.getCurrentItem();
-                if (currentPage == 0) {
-                    mImgLeft.setImageResource(R.drawable.ic_diary_back);
-                } else {
-                    mImgLeft.setImageResource(R.drawable.ic_diary_canback);
-                }
-                if (currentPage == currentWeek - 1) {
-                    mImgRight.setImageResource(R.drawable.ic_diary_forward);
-                } else {
-                    mImgRight.setImageResource(R.drawable.ic_diary_canforward);
-                }
-                mTvTitle.setText("第" + (currentPage + 1) + "周周报总览");
-            }
+            public void onPageScrollStateChanged(int arg0) {}
         });
+    }
+
+    /**
+     * 改变Title
+     * 
+     * @param currentPage
+     *            当前页(从0开始)
+     * @param totalPage
+     *            总共有多少页(从0开始)
+     */
+    private void changeUI(int currentPage, int totalPage) {
+        mPager.setCurrentItem(currentPage);
+
+        if (currentPage <= 0) {
+            mImgLeft.setImageResource(R.drawable.ic_diary_back);
+        } else {
+            mImgLeft.setImageResource(R.drawable.ic_diary_canback);
+        }
+        if (currentPage >= adapter.getCount() - 1) {
+            mImgRight.setImageResource(R.drawable.ic_diary_forward);
+        } else {
+            mImgRight.setImageResource(R.drawable.ic_diary_canforward);
+        }
+        mTvTitle.setText("第" + (currentPage + 1) + "周周报总览");
     }
 
     @Override
@@ -183,10 +184,9 @@ public class TeamDiaryFragment extends BaseFragment implements
             AppContext.showToast("那天怎么会有周报呢");
         } else {
             currentYear = year;
-            currentWeek = StringUtils.getWeekOfYear(new Date(year, month, day));
+            currentWeek = StringUtils.getWeekOfYear(new Date(year, month, day)) - 1;
             mPager.setAdapter(new DiaryPagerAdapter(aty, year, team.getId()));
-            mPager.setCurrentItem(currentWeek);
-            mTvTitle.setText("第" + (currentWeek) + "周周报总览");
+            changeUI(currentWeek, mPager.getAdapter().getCount());
         }
     }
 }
