@@ -572,7 +572,7 @@ public class TeamNewIssueFragment extends BaseFragment {
 	public void onFailure(int arg0, Header[] arg1, byte[] arg2,
 		Throwable arg3) {
 	    // TODO Auto-generated method stub
-
+	    showFaile();
 	}
 
 	@Override
@@ -583,23 +583,39 @@ public class TeamNewIssueFragment extends BaseFragment {
 	    case show_project:
 		TeamProjectList plist = XmlUtils.toBean(TeamProjectList.class,
 			arg2);
+		if (plist == null) {
+		    showFaile();
+		    return;
+		}
 		showTeamProjectSelected(plist.getList());
 		break;
 	    // 显示任务列表选择对话框
 	    case show_issue_catalog:
 		TeamIssueCatalogList clist = XmlUtils.toBean(
 			TeamIssueCatalogList.class, arg2);
+		if (clist == null) {
+		    showFaile();
+		    return;
+		}
 		showTeamCatalogSelected(clist.getList());
 		break;
 	    // 显示指派用户对话框
 	    case show_issue_touser:
 		TeamMemberList tpmList = XmlUtils.toBean(TeamMemberList.class,
 			arg2);
+		if (tpmList == null) {
+		    showFaile();
+		    return;
+		}
 		showIssueToUser(tpmList.getList());
 		break;
 	    default:
 		break;
 	    }
+	}
+	
+	private void showFaile() {
+	    AppContext.showToast("获取失败");
 	}
     }
 }

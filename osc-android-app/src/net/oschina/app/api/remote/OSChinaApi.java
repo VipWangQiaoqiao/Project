@@ -493,7 +493,9 @@ public class OSChinaApi {
     }
 
     public static void getNotices(AsyncHttpResponseHandler handler) {
-        ApiHttpClient.get("action/api/user_notice", handler);
+	RequestParams params = new RequestParams();
+	params.put("uid", AppContext.getInstance().getLoginUid());
+        ApiHttpClient.get("action/api/user_notice", params, handler);
     }
 
     /**

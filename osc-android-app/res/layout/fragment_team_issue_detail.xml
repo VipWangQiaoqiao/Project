@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/fill_fill" >
-	
-    <net.oschina.app.ui.empty.EmptyLayout 
+
+    <net.oschina.app.ui.empty.EmptyLayout
         android:id="@+id/error_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />
-    
+
     <ScrollView
         android:id="@+id/content"
         style="@style/fill_fill"
-        android:visibility="visible"
-        android:background="@color/list_item_background_normal" >
+        android:background="@color/list_item_background_normal"
+        android:visibility="visible" >
 
         <LinearLayout
             style="@style/fill_wrap"
@@ -53,14 +53,14 @@
                     android:text="任务标题"
                     android:textSize="18sp" />
             </LinearLayout>
-            
-            <View 
+
+            <View
                 android:layout_width="match_parent"
-                android:background="#ccc"
+                android:layout_height="1dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:layout_height="1dp"/>
-            
+                android:background="#ccc" />
+
             <LinearLayout
                 android:id="@+id/ll_issue_child"
                 style="@style/team_issue_detail_layout" >
@@ -70,8 +70,7 @@
                     style="@style/team_issue_detail_tip_fa"
                     android:text="@string/fa_plus" />
 
-                <LinearLayout
-                    style="@style/team_issue_detail_info_layout" >
+                <LinearLayout style="@style/team_issue_detail_info_layout" >
 
                     <TextView
                         style="@style/team_issue_detail_tip"
@@ -83,7 +82,7 @@
                         android:text="点击添加子任务" />
                 </LinearLayout>
             </LinearLayout>
-            
+
             <LinearLayout
                 android:id="@+id/ll_issue_childs"
                 android:layout_width="match_parent"
@@ -101,8 +100,7 @@
                     style="@style/team_issue_detail_tip_fa"
                     android:text="@string/fa_user" />
 
-                <LinearLayout
-                    style="@style/team_issue_detail_info_layout" >
+                <LinearLayout style="@style/team_issue_detail_info_layout" >
 
                     <TextView
                         style="@style/team_issue_detail_tip"
@@ -116,8 +114,6 @@
                 </LinearLayout>
             </LinearLayout>
 
-            
-
             <LinearLayout
                 android:id="@+id/ll_issue_die_time"
                 style="@style/team_issue_detail_layout" >
@@ -125,11 +121,10 @@
                 <TextView
                     android:id="@+id/tv_issue_fa_die_time"
                     style="@style/team_issue_detail_tip_fa"
-                    android:textSize="16sp"
-                    android:text="@string/fa_calendar" />
+                    android:text="@string/fa_calendar"
+                    android:textSize="16sp" />
 
-                <LinearLayout
-                    style="@style/team_issue_detail_info_layout" >
+                <LinearLayout style="@style/team_issue_detail_info_layout" >
 
                     <TextView
                         style="@style/team_issue_detail_tip"
@@ -141,7 +136,7 @@
                         android:text="点击设置截止日期" />
                 </LinearLayout>
             </LinearLayout>
-            
+
             <LinearLayout
                 android:id="@+id/ll_issue_cooperate_user"
                 style="@style/team_issue_detail_layout" >
@@ -152,8 +147,7 @@
                     android:text="@string/fa_users"
                     android:textSize="16sp" />
 
-                <LinearLayout
-                    style="@style/team_issue_detail_info_layout" >
+                <LinearLayout style="@style/team_issue_detail_info_layout" >
 
                     <TextView
                         style="@style/team_issue_detail_tip"
@@ -175,8 +169,7 @@
                     style="@style/team_issue_detail_tip_fa"
                     android:text="@string/fa_trello" />
 
-                <LinearLayout
-                    style="@style/team_issue_detail_info_layout" >
+                <LinearLayout style="@style/team_issue_detail_info_layout" >
 
                     <TextView
                         style="@style/team_issue_detail_tip"
@@ -196,12 +189,18 @@
                     style="@style/team_issue_detail_tip_fa"
                     android:text="@string/fa_tags" />
 
-                <LinearLayout
-                    android:id="@+id/ll_issue_labels"
+                <HorizontalScrollView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:orientation="horizontal" />
+                    android:scrollbars="none" >
+
+                    <LinearLayout
+                        android:id="@+id/ll_issue_labels"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:orientation="horizontal" />
+                </HorizontalScrollView>
             </LinearLayout>
 
             <LinearLayout
@@ -213,8 +212,7 @@
                     style="@style/team_issue_detail_tip_fa"
                     android:text="@string/fa_paperclip" />
 
-                <LinearLayout
-                    style="@style/team_issue_detail_info_layout" >
+                <LinearLayout style="@style/team_issue_detail_info_layout" >
 
                     <TextView
                         style="@style/team_issue_detail_tip"
@@ -236,8 +234,7 @@
                     style="@style/team_issue_detail_tip_fa"
                     android:text="@string/fa_link" />
 
-                <LinearLayout
-                    style="@style/team_issue_detail_info_layout" >
+                <LinearLayout style="@style/team_issue_detail_info_layout" >
 
                     <TextView
                         style="@style/team_issue_detail_tip"

@@ -2,6 +2,7 @@ package net.oschina.app.fragment;
 
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.List;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -12,6 +13,7 @@ import net.oschina.app.bean.Active;
 import net.oschina.app.bean.ActiveList;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.Notice;
+import net.oschina.app.bean.Result;
 import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.ui.MainActivity;
 import net.oschina.app.ui.dialog.CommonDialog;
@@ -19,6 +21,7 @@ import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
+import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.viewpagerfragment.NoticeViewPagerFragment;
@@ -110,7 +113,7 @@ public class ActiveFragment extends BaseListFragment<Active> implements
     }
 
     @Override
-    protected ActiveList parseList(InputStream is) throws Exception {
+    protected ActiveList parseList(InputStream is) {
         ActiveList list = XmlUtils.toBean(ActiveList.class, is);
         return list;
     }

@@ -2,10 +2,7 @@ package net.oschina.app.team.fragment;
 
 import java.io.InputStream;
 import java.io.Serializable;
-import java.lang.annotation.Annotation;
 import java.util.List;
-
-import butterknife.OnItemClick;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -33,7 +30,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
 
 /**
  * 任务列表界面
@@ -107,7 +103,7 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
 	case R.id.team_new_issue:
 	    UIHelper.showCreateNewIssue(getActivity(), mTeam, mProject, mCatalog);
 	    break;
-	case R.id.team_issue_project_list:
+	case R.id.team_issue_change_state:
 	    changeShowIssueState();
 	    break;
 	default:
@@ -135,6 +131,7 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
 		    int position, long id) {
 		// TODO Auto-generated method stub
 		issueState = (itemsEn[position]).toString();
+		
 		onRefresh();
 		dialog.dismiss();
 	    }

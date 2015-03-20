@@ -103,7 +103,7 @@ public class TeamIssueViewPageFragment extends BaseViewPagerFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 	switch (item.getItemId()) {
-	case R.id.team_issue_project_list:
+	case R.id.team_issue_change_state:
 	    showProjectsSelectDialog();
 	    break;
 	case R.id.team_new_issue:

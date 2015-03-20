@@ -101,6 +101,7 @@ public class MyInformationFragment extends BaseFragment {
                 if (mErrorLayout != null) {
                     mIsWatingLogin = true;
                     steupUser();
+                    mMesCount.hide();
                 }
             } else if (action.equals(Constants.INTENT_ACTION_USER_CHANGE)) {
                 requestData(true);

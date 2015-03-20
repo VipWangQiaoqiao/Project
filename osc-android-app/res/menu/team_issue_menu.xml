@@ -10,10 +10,10 @@
         android:visible="true"
         osc:showAsAction="always"/>
     <item
-        android:id="@+id/team_issue_project_list"
-        android:icon="@drawable/actionbar_icon_project"
+        android:id="@+id/team_issue_change_state"
+        android:icon="@drawable/actionbar_icon_switch_issue_state"
         android:showAsAction="always"
-        android:title="@string/team_project_list"
+        android:title="任务状态更改"
         android:visible="true"
         osc:showAsAction="always"/>
 
