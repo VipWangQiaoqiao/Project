@@ -9,8 +9,6 @@ import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.AvatarView;
 import android.content.Context;
-import android.text.Html;
-import android.text.Spanned;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -82,19 +80,19 @@ public class TeamDiaryListAdapter extends BaseAdapter {
         return v;
     }
 
-    /**
-     * 移除字符串中的Html标签
-     * 
-     * @author kymjs (https://github.com/kymjs)
-     * @param pHTMLString
-     * @return
-     */
-    public static Spanned stripTags(final String pHTMLString) {
-        // String str = pHTMLString.replaceAll("\\<.*?>", "");
-        String str = pHTMLString.replaceAll("\\t*", "");
-        str = str.replaceAll("<\\s*img\\s+([^>]*)\\s*>", "").trim();
-        return Html.fromHtml(str);
-    }
+    // /**
+    // * 移除字符串中的Html标签
+    // *
+    // * @author kymjs (https://github.com/kymjs)
+    // * @param pHTMLString
+    // * @return
+    // */
+    // public static Spanned stripTags(final String pHTMLString) {
+    // // String str = pHTMLString.replaceAll("\\<.*?>", "");
+    // String str = pHTMLString.replaceAll("\\t*", "");
+    // str = str.replaceAll("<\\s*img\\s+([^>]*)\\s*>", "").trim();
+    // return Html.fromHtml(str);
+    // }
 
     static class ViewHolder {
         AvatarView iv_face;

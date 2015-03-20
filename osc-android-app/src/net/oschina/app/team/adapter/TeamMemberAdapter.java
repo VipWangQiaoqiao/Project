@@ -45,7 +45,6 @@ public class TeamMemberAdapter extends BaseAdapter {
         }
         this.datas = datas;
         notifyDataSetChanged();
-        notifyDataSetInvalidated();
     }
 
     @Override
@@ -82,17 +81,18 @@ public class TeamMemberAdapter extends BaseAdapter {
                     .findViewById(R.id.item_team_membar_tip);
             holder.tv_name = (TextView) v
                     .findViewById(R.id.item_team_membar_name);
+            holder.img_head.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemClick(position);
+                }
+            });
             v.setTag(holder);
         } else {
             holder = (ViewHolder) v.getTag();
         }
         holder.tv_name.setText(data.getName());
-        String imgUrl = data.getPortrait();
-        int end = imgUrl.indexOf('?');
-        if (end > 0) {
-            imgUrl = imgUrl.substring(0, end);
-        }
-        holder.img_head.setAvatarUrl(imgUrl);
+        holder.img_head.setAvatarUrl(data.getPortrait());
         if (127 == data.getTeamRole()) { // 创建人，红色
             holder.img_tip.setImageDrawable(new ColorDrawable(0xffff0000));
         } else if (126 == data.getTeamRole()) { // 管理者，黄色
@@ -100,13 +100,6 @@ public class TeamMemberAdapter extends BaseAdapter {
         } else {
             holder.img_tip.setImageDrawable(null);
         }
-
-        holder.img_head.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onItemClick(position);
-            }
-        });
         return v;
     }
 

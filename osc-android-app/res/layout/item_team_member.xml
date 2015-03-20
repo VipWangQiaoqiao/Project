@@ -19,9 +19,7 @@
         android:layout_width="9dp"
         android:layout_height="9dp"
         android:layout_alignParentRight="true"
-        android:layout_margin="10dp"
-        android:clickable="true"
-        android:focusable="false" />
+        android:layout_margin="10dp" />
 
     <TextView
         android:id="@+id/item_team_membar_name"
