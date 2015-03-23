@@ -115,8 +115,8 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
     private void changeShowIssueState() {
 	final CommonDialog dialog = DialogHelper.getPinterestDialogCancelable(getActivity());
 	CharSequence[] items = {"所有任务", "待办中", "进行中", "已完成", "已验收"};
-	final CharSequence[] itemsEn = {"all", TeamIssue.TEAM_ISSUE_STATE_OPENED, TeamIssue.TEAM_ISSUE_STATE_OPENED, 
-		TeamIssue.TEAM_ISSUE_STATE_UNDERWAY, TeamIssue.TEAM_ISSUE_STATE_CLOSED, TeamIssue.TEAM_ISSUE_STATE_ACCEPTED};
+	final CharSequence[] itemsEn = {"all", TeamIssue.TEAM_ISSUE_STATE_OPENED, TeamIssue.TEAM_ISSUE_STATE_UNDERWAY,
+		TeamIssue.TEAM_ISSUE_STATE_CLOSED, TeamIssue.TEAM_ISSUE_STATE_ACCEPTED};
 	dialog.setTitle("选择任务状态");
 	int index = 0;
 	for (int i = 0; i < itemsEn.length; i++) {
@@ -154,7 +154,7 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
     @Override
     protected String getCacheKeyPrefix() {
 	return CACHE_KEY_PREFIX + mTeamId + "_" + mProjectId + "_"
-		+ mCatalogId;
+		+ issueState;
     }
 
     @Override
