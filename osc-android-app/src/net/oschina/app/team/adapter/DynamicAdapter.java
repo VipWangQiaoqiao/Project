@@ -14,8 +14,6 @@ import org.kymjs.kjframe.bitmap.helper.BitmapHelper;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.text.Html;
-import android.text.Spanned;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -77,7 +75,7 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> implements
         holder.img_head.setUserInfo(data.getAuthor().getId(), data.getAuthor()
                 .getName());
         holder.tv_name.setText(data.getAuthor().getName());
-        setContent(holder.tv_content, data.getBody().getTitle());
+        setContent(holder.tv_content, stripTags(data.getBody().getTitle()));
 
         holder.tv_content.setMaxLines(3);
         holder.tv_date.setText(StringUtils.friendly_time(data.getCreateTime()));
@@ -99,11 +97,11 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> implements
      * @param pHTMLString
      * @return
      */
-    public static Spanned stripTags(final String pHTMLString) {
+    public static String stripTags(final String pHTMLString) {
         // String str = pHTMLString.replaceAll("\\<.*?>", "");
         String str = pHTMLString.replaceAll("\\t", "");
-        str = str.replaceAll("<\\s*img\\s+([^>]*)\\s*>", "[表情]").trim();
-        return Html.fromHtml(str);
+        str = str.replaceAll("<\\s*img\\s+([^>]*)\\s*>", "").trim();
+        return str;
     }
 
     @Override
