@@ -92,8 +92,9 @@ public class SynchronizeController {
             jsonData.append("{");
             jsonData.append("\"id\":").append(data.getId()).append(",");
             jsonData.append("\"iid\":").append(data.getIid()).append(",");
-            jsonData.append("\"content\":\"").append(data.getContent())
-                    .append("\",");
+            String content = data.getContent();
+            content.replaceAll("\"", "\\\"");
+            jsonData.append("\"content\":\"").append(content).append("\",");
             jsonData.append("\"color\":\"").append(data.getColorText())
                     .append("\",");
 
