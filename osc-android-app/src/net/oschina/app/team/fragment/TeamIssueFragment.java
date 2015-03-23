@@ -153,7 +153,7 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
      */
     @Override
     protected String getCacheKeyPrefix() {
-	return CACHE_KEY_PREFIX + mTeamId + "_" + mProjectId + "_"
+	return CACHE_KEY_PREFIX + mTeamId + "_" + mProjectId + "_" +  mCatalogId + "_"
 		+ issueState;
     }
 
