@@ -16,8 +16,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,8 +25,7 @@ import android.widget.TextView;
  * @author kymjs (https://github.com/kymjs)
  * 
  */
-public class DynamicAdapter extends ListBaseAdapter<TeamActive> implements
-        OnItemClickListener {
+public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
     private final Context context;
     private static int rectSize;
     private final KJBitmap kjb = KJBitmap.create();
@@ -145,8 +142,4 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> implements
             rectSize = 300;
         }
     }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {}
 }
