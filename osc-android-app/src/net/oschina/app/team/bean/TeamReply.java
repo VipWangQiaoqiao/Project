@@ -1,5 +1,8 @@
 package net.oschina.app.team.bean;
 
+import java.io.Serializable;
+import java.util.List;
+
 import net.oschina.app.bean.Entity;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
@@ -43,6 +46,9 @@ public class TeamReply extends Entity {
 
     @XStreamAlias("appName")
     private String appName;
+    
+    @XStreamAlias("replies")
+    private List<TeamReply> replies;
 
     public String getAppName() {
         return appName;
@@ -82,5 +88,13 @@ public class TeamReply extends Entity {
 
     public void setAuthor(Author author) {
         this.author = author;
+    }
+    
+    public List<TeamReply> getReplies() {
+        return replies;
+    }
+
+    public void setReplies(List<TeamReply> replies) {
+        this.replies = replies;
     }
 }

@@ -12,10 +12,10 @@
 
     <TextView
         android:id="@+id/tv_name"
-        android:text="火蚁"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/iv_avatar"
+        android:text="火蚁"
         android:textColor="@color/lightblue"
         android:textSize="@dimen/text_size_13" />
 
@@ -34,8 +34,8 @@
         android:layout_below="@id/tv_name"
         android:layout_marginTop="@dimen/space_4"
         android:layout_toRightOf="@id/iv_avatar"
-        android:textColor="@color/main_black"
         android:text="评论内容"
+        android:textColor="@color/main_black"
         android:textSize="@dimen/text_size_14" />
 
     <TextView
@@ -48,8 +48,19 @@
         android:drawableLeft="@drawable/platform"
         android:drawablePadding="@dimen/space_4"
         android:gravity="center_vertical"
-        android:visibility="gone"
         android:textColor="@color/main_gray"
-        android:textSize="@dimen/text_size_11" />
+        android:textSize="@dimen/text_size_11"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/ly_relies"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_from"
+        android:layout_marginTop="@dimen/space_5"
+        android:layout_toRightOf="@id/iv_avatar"
+        android:orientation="vertical"
+        android:visibility="visible" >
+    </LinearLayout>
 
 </RelativeLayout>
