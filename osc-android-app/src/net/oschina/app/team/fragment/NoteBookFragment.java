@@ -237,7 +237,6 @@ public class NoteBookFragment extends BaseFragment implements
         setSwipeRefreshLoadingState();
 
         refurbish();
-        setSwipeRefreshLoadedState();
     }
 
     /**
@@ -318,11 +317,13 @@ public class NoteBookFragment extends BaseFragment implements
                     adapter.refurbishData(datas);
                     updateEmptyView();
                 }
+                setSwipeRefreshLoadedState();
             }
 
             @Override
             public void onFailure() {
                 AppContext.showToast("网络不好，请稍后执行同步");
+                setSwipeRefreshLoadedState();
             }
         });
         updateEmptyView();
