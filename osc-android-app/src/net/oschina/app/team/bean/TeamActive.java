@@ -13,6 +13,9 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @SuppressWarnings("serial")
 @XStreamAlias("active")
 public class TeamActive extends Entity {
+
+    @XStreamAlias("id")
+    private int id;
     @XStreamAlias("body")
     private Body body;
     @XStreamAlias("reply")
@@ -21,9 +24,29 @@ public class TeamActive extends Entity {
     private String createTime;
     @XStreamAlias("author")
     private Author author;
+    @XStreamAlias("type")
+    private int type;
 
     public Body getBody() {
         return body;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setBody(Body body) {
@@ -55,9 +78,11 @@ public class TeamActive extends Entity {
     }
 
     @XStreamAlias("body")
-    public class Body {
+    public class Body extends Entity {
         @XStreamAlias("detail")
         private String detail;
+        @XStreamAlias("title")
+        private String title;
         @XStreamAlias("code")
         private String code;
         @XStreamAlias("codeType")
@@ -66,6 +91,14 @@ public class TeamActive extends Entity {
         private String image;
         @XStreamAlias("imageOrigin")
         private String imageOrigin;
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
 
         public String getDetail() {
             return detail;
@@ -109,21 +142,11 @@ public class TeamActive extends Entity {
     }
 
     @XStreamAlias("author")
-    public class Author {
-        @XStreamAlias("id")
-        private String id;
+    public class Author extends Entity {
         @XStreamAlias("name")
         private String name;
         @XStreamAlias("portrait")
         private String portrait;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
 
         public String getName() {
             return name;

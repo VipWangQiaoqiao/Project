@@ -249,7 +249,7 @@
 	<string name="update">检查新版本</string>
 	<string name="about">关于开源中国</string>
 	<string name="feedback">意见反馈</string>
-	<string name="exit">注销</string>
+	<string name="exit">退出</string>
 	<string name="grade">去评分</string>
 	
 	<string name="notice_accept">接收新通知</string>
@@ -287,6 +287,7 @@
 	
 	
 	<string name="team_dynamic">团队动态</string>
+	<string name="actionbar_dynamic_detail">动态内容</string>
 
 	<!-- 反馈 -->
     <string name="str_feedback_submit">提交</string>
@@ -300,4 +301,5 @@
     <string name="str_team_userinfo">用户主页</string>
     <string name="str_team_select_team">选择团队</string>
 	
+    <string name="str_team_my_issue">我的任务</string>
 </resources>

@@ -27,6 +27,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -151,8 +152,10 @@
         </activity>
         <activity
             android:name=".team.ui.TeamMainActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait" />
+        <activity 
+            android:name=".team.ui.TeamNewActiveActivity"
+            android:screenOrientation="portrait"/>
 
         <service android:name="net.oschina.app.LogUploadService" />
 

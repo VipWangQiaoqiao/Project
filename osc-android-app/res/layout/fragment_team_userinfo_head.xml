@@ -1,42 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:paddingRight="5dp" >
 
-    <ImageView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:layout_weight="1" />
+    <net.oschina.app.widget.AvatarView
+        android:id="@+id/fragment_team_head"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="20dp" />
 
     <LinearLayout
         style="@style/wrap_wrap"
-        android:orientation="vertical" >
+        android:layout_toRightOf="@+id/fragment_team_head"
+        android:orientation="vertical"
+        android:paddingTop="3dp" >
 
         <TextView
             android:id="@+id/fragment_team_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            style="@style/team_user_infor" />
 
         <TextView
             android:id="@+id/fragment_team_username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            style="@style/team_user_infor"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/fragment_team_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            style="@style/team_user_infor" />
 
         <TextView
-            android:id="@+id/fragment_team_joindate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:id="@+id/fragment_team_tel"
+            style="@style/team_user_infor" />
 
         <TextView
             android:id="@+id/fragment_team_address"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            style="@style/team_user_infor" />
     </LinearLayout>
-</LinearLayout>
+
+    <!-- <TextView
+        android:id="@+id/fragment_team_tv_tel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:text="@string/fa_icon_phone"
+        android:textColor="@color/main_green"
+        android:textSize="40sp"
+        android:layout_margin="20dp" /> -->
+    <ImageView
+        android:id="@+id/fragment_team_tv_tel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/icon_call"
+        android:layout_margin="20dp" />
+
+</RelativeLayout>

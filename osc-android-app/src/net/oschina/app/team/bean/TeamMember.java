@@ -1,6 +1,6 @@
 package net.oschina.app.team.bean;
 
-import java.io.Serializable;
+import net.oschina.app.bean.Entity;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
@@ -11,7 +11,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * 
  */
 @XStreamAlias("member")
-public class TeamMember implements Serializable {
+public class TeamMember extends Entity {
     private static final long serialVersionUID = 1L;
 
     @XStreamAlias("id")
@@ -39,10 +39,12 @@ public class TeamMember implements Serializable {
     @XStreamAlias("location")
     private String location;
 
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }

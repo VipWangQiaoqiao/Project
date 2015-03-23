@@ -24,6 +24,15 @@ import net.oschina.app.interf.OnWebViewImageListener;
 import net.oschina.app.service.DownloadService;
 import net.oschina.app.service.DownloadService.DownloadBinder;
 import net.oschina.app.service.NoticeService;
+import net.oschina.app.team.adapter.TeamMemberAdapter;
+import net.oschina.app.team.bean.Team;
+import net.oschina.app.team.bean.TeamActive;
+import net.oschina.app.team.bean.TeamDiscuss;
+import net.oschina.app.team.bean.TeamIssue;
+import net.oschina.app.team.bean.TeamIssueCatalog;
+import net.oschina.app.team.bean.TeamMember;
+import net.oschina.app.team.bean.TeamProject;
+import net.oschina.app.team.fragment.TeamActiveFragment;
 import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.EventLocationActivity;
@@ -112,9 +121,8 @@ public class UIHelper {
      * 
      * @param context
      */
-    public static void showTeamMainActivity(Context context, Bundle bundle) {
+    public static void showTeamMainActivity(Context context) {
         Intent intent = new Intent(context, TeamMainActivity.class);
-        intent.putExtras(bundle);
         context.startActivity(intent);
     }
 
@@ -380,7 +388,8 @@ public class UIHelper {
     public static void showUrlShake(Context context, ShakeObject obj) {
         if (StringUtils.isEmpty(obj.getUrl())) {
             if (ShakeObject.RANDOMTYPE_NEWS.equals(obj.getRandomtype())) {
-                UIHelper.showNewsDetail(context, StringUtils.toInt(obj.getId()),
+                UIHelper.showNewsDetail(context,
+                        StringUtils.toInt(obj.getId()),
                         StringUtils.toInt(obj.getCommentCount()));
             }
         } else {
@@ -446,6 +455,12 @@ public class UIHelper {
             break;
         case URLsUtils.URL_OBJ_TYPE_OTHER:
             openBrowser(context, objKey);
+            break;
+        case URLsUtils.URL_OBJ_TYPE_TEAM:
+            openSysBrowser(context, objKey);
+            break;
+        case URLsUtils.URL_OBJ_TYPE_GIT:
+            openSysBrowser(context, objKey);
             break;
         }
     }
@@ -976,5 +991,109 @@ public class UIHelper {
         intent.putExtra("city", city);
         intent.putExtra("location", location);
         context.startActivity(intent);
+    }
+
+    public static void showCreateNewIssue(Context context, Team team,
+            TeamProject project, TeamIssueCatalog catalog) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("team", team);
+        if (project != null) {
+            bundle.putSerializable("project", project);
+        }
+        if (catalog != null) {
+            bundle.putSerializable("catalog", catalog);
+        }
+        UIHelper.showSimpleBack(context, SimpleBackPage.TEAM_NEW_ISSUE, bundle);
+    }
+
+    /***
+     * 显示任务详情
+     * 
+     * @author 火蚁 2015-1-30 下午2:59:57
+     * 
+     * @return void
+     * @param context
+     * @param team
+     * @param issue
+     */
+    public static void showTeamIssueDetail(Context context, Team team,
+            TeamIssue issue, TeamIssueCatalog catalog) {
+        Intent intent = new Intent(context, DetailActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("teamid", team.getId());
+        bundle.putInt("issueid", issue.getId());
+        bundle.putSerializable("team", team);
+        bundle.putSerializable("issue", issue);
+        bundle.putSerializable("issue_catalog", catalog);
+        bundle.putInt(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+                DetailActivity.DISPLAY_TEAM_ISSUE_DETAIL);
+        intent.putExtras(bundle);
+        context.startActivity(intent);
+    }
+
+    /**
+     * 显示讨论贴详情
+     * 
+     * @author 火蚁 2015-2-2 下午6:37:53
+     * 
+     * @return void
+     * @param context
+     * @param team
+     * @param discuss
+     */
+    public static void showTeamDiscussDetail(Context context, Team team,
+            TeamDiscuss discuss) {
+        Intent intent = new Intent(context, DetailActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putInt("teamid", team.getId());
+        bundle.putInt("discussid", discuss.getId());
+        bundle.putInt(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+                DetailActivity.DISPLAY_TEAM_DISCUSS_DETAIL);
+        intent.putExtras(bundle);
+        context.startActivity(intent);
+    }
+
+    /**
+     * 显示周报详情
+     * 
+     * @param context
+     * @param data
+     */
+    public static void showDiaryDetail(Context context, Bundle data) {
+        Intent intent = new Intent(context, DetailActivity.class);
+        intent.putExtra("diary", data);
+        intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+                DetailActivity.DISPLAY_TEAM_DIARY);
+        context.startActivity(intent);
+    }
+
+    public static void showTeamMemberInfo(Context context, int teamId,
+            TeamMember teamMember) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(TeamMemberAdapter.TEAM_MEMBER_KEY, teamMember);
+        bundle.putInt(TeamMemberAdapter.TEAM_ID_KEY, teamId);
+        UIHelper.showSimpleBack(context, SimpleBackPage.TEAM_USER_INFO, bundle);
+    }
+    
+    /***
+     * 显示团队动态详情
+     * @author 火蚁
+     * 2015-3-13 下午5:34:50
+     *
+     * @return void
+     * @param contex
+     * @param teamId
+     * @param active
+     */
+    public static void showTeamActiveDetail(Context contex, int teamId, TeamActive active) {
+	Intent intent = new Intent(contex, DetailActivity.class);
+        
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(TeamActiveFragment.DYNAMIC_FRAGMENT_KEY, active);
+        bundle.putInt(TeamActiveFragment.DYNAMIC_FRAGMENT_TEAM_KEY, teamId);
+        bundle.putInt(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+                DetailActivity.DISPLAY_TEAM_TWEET_DETAIL);
+        intent.putExtras(bundle);
+        contex.startActivity(intent);
     }
 }

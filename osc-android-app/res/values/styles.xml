@@ -15,12 +15,12 @@
     </style>
 
     <style name="OverflowButton" parent="@style/Widget.AppCompat.ActionButton.Overflow">
-        <item name="android:src">@drawable/actionbar_more_icon</item>
+        <item name="android:src">@drawable/actionbar_more_icon_normal</item>
     </style>
-
-    <style name="DrapDownListView" parent="@style/Widget.AppCompat.Light.ListView.DropDown">
-        <item name="android:dividerHeight">1px</item>
-        <item name="android:divider">@color/list_divider_color</item>
+    
+    <style name="PopupMenu.ListPopupWindow" parent="@style/Widget.AppCompat.Light.Base.ListPopupWindow">
+        <!--<item name="android:popupBackground">@color/menu_dropdown_panel_dark</item>-->
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="ActionBarBaseStyle" parent="@style/Widget.AppCompat.Light.ActionBar">
@@ -37,10 +37,13 @@
 
     <style name="ActionBarBaseTheme" parent="@style/Theme.AppCompat.Light">
         <item name="android:windowBackground">@color/window_background</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu.ListPopupWindow</item>
         <item name="actionBarStyle">@style/ActionBarBaseStyle</item>
         <item name="actionOverflowButtonStyle">@style/OverflowButton</item>
         <item name="actionBarItemBackground">@drawable/socialize_titlebar_item_background_selector</item>
-        <item name="dropDownListViewStyle">@style/DrapDownListView</item>
+        <item name="android:actionMenuTextColor">@color/white</item>
+        <item name="android:dropDownListViewStyle">@style/SpinnerDropDownListView</item>
+        <item name="popupMenuStyle">@style/mylistPopupWindowStyle</item>
     </style>
 
     <style name="ActionBarBaseTheme.Preview" parent="@style/ActionBarBaseTheme">
@@ -367,7 +370,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/list_item_background</item>
         <item name="android:clickable">true</item>
-        <item name="android:padding">@dimen/space_12</item>
+        <item name="android:padding">@dimen/space_13</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:orientation">horizontal</item>
     </style>
@@ -392,6 +395,12 @@
     <style name="option_item_text" parent="@style/option_item_text_parent">
         <item name="android:drawablePadding">@dimen/space_8</item>
         <item name="android:textColor">#666</item>
+    </style>
+    
+    <style name="option_item_text_fa" parent="@style/option_item_text_parent">
+        <item name="android:layout_marginRight">10dp</item>
+		<item name="android:textColor">@color/main_green</item>  
+		<item name="android:textSize">22sp</item>      
     </style>
 
     <style name="option_item_goto_right">
@@ -574,13 +583,28 @@
 
     <style name="myissue_text" parent="@style/fill_wrap">
         <item name="android:textColor">#999999</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:gravity">center|left</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="myissue_text_num" parent="@style/myissue_text">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_alignParentRight">true</item>
+        <item name="android:text">0</item>
+    </style>
+    
+    <style name="team_user_infor" parent="@style/wrap_wrap">
+        <item name="android:padding">5dp</item>
+    </style>
+    
+    <style name="SpinnerDropDownListView" parent="@style/Widget.AppCompat.Light.ListView.DropDown">
+        <item name="android:divider">#3f3f3f</item>
+        <item name="android:dividerHeight">1dp</item>
+    </style>
+    
+    <style name="mylistPopupWindowStyle" parent="@style/Widget.AppCompat.Light.PopupMenu">
+        <item name="android:dropDownSelector">#343434</item>
+        <item name="android:popupBackground">#343434</item>
     </style>
 
 </resources>

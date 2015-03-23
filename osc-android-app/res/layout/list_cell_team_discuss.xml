@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/fill_wrap"
+    android:background="@drawable/list_item_background"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="horizontal"
+    android:paddingBottom="9dip"
+    android:paddingLeft="6dip"
+    android:paddingRight="6dip"
+    android:paddingTop="10dip" >
+
+    <net.oschina.app.widget.AvatarView
+        android:id="@+id/iv_face"
+        style="@style/user_face_image"
+        android:layout_marginRight="@dimen/space_10" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        style="@style/list_text_title"
+        android:layout_marginBottom="@dimen/space_5"
+        android:layout_toRightOf="@id/iv_face"
+        android:ellipsize="end"
+        android:maxLines="2"/>
+
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_title"
+        android:layout_marginBottom="@dimen/space_8"
+        android:layout_toRightOf="@id/iv_face"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="@color/main_gray" />
+
+    <TextView
+        android:id="@+id/tv_author"
+        style="@style/list_text_info"
+        android:layout_below="@id/tv_description"
+        android:layout_toRightOf="@id/iv_face" />
+
+    <TextView
+        android:id="@+id/tv_date"
+        style="@style/list_text_info"
+        android:layout_below="@id/tv_description"
+        android:layout_marginLeft="@dimen/space_10"
+        android:layout_toRightOf="@id/tv_author" />
+
+    <TextView
+        android:id="@+id/tv_count"
+        style="@style/list_text_info"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/tv_description"
+        android:layout_marginLeft="@dimen/space_10"/>
+
+    <TextView
+        android:id="@+id/tv_vote_up"
+        style="@style/list_text_info"
+        android:layout_toLeftOf="@id/tv_count"
+        android:layout_below="@id/tv_description"/>
+
+</RelativeLayout>

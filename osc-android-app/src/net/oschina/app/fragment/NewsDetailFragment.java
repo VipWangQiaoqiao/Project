@@ -297,8 +297,7 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 
     @Override
     protected String getShareContent() {
-        return mNews != null ? StringUtils.getSubString(0, 55,
-                getFilterHtmlBody(mNews.getBody())) : "";
+        return mNews != null ? StringUtils.getSubString(0, 55, getFilterHtmlBody(mNews.getBody())) : "";
     }
 
     @Override

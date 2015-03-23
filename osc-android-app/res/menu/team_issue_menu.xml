@@ -3,25 +3,18 @@
     xmlns:osc="http://schemas.android.com/apk/res-auto" >
 
     <item
-        android:id="@+id/team_issue_new"
-        android:icon="@drawable/actionbar_send_icon"
+        android:id="@+id/team_new_issue"
+        android:icon="@drawable/actionbar_icon_add"
         android:showAsAction="always"
-        android:title="@string/team_issue_new"
+        android:title="@string/team_new_issue"
         android:visible="true"
         osc:showAsAction="always"/>
     <item
-        android:id="@+id/team_issue_project_list"
-        android:icon="@drawable/actionbar_send_icon"
+        android:id="@+id/team_issue_change_state"
+        android:icon="@drawable/actionbar_icon_switch_issue_state"
         android:showAsAction="always"
-        android:title="@string/team_project_list"
+        android:title="任务状态更改"
         android:visible="true"
         osc:showAsAction="always"/>
-    <item
-        android:id="@+id/team_issue_setting"
-        android:icon="@drawable/actionbar_send_icon"
-        android:showAsAction="always"
-        android:title="@string/team_project_list"
-        android:visible="true"
-        osc:showAsAction="ifRoom"/>
 
 </menu>

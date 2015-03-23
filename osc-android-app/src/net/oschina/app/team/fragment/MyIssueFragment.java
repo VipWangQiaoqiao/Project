@@ -1,95 +1,94 @@
 package net.oschina.app.team.fragment;
 
-import net.oschina.app.R;
-import net.oschina.app.base.BaseFragment;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.util.List;
 
-import org.kymjs.kjframe.utils.SystemTool;
+import net.oschina.app.AppContext;
+import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.base.BaseListFragment;
+import net.oschina.app.fragment.MyInformationFragment;
+import net.oschina.app.team.adapter.TeamIssueAdapter;
+import net.oschina.app.team.bean.Team;
+import net.oschina.app.team.bean.TeamIssue;
+import net.oschina.app.team.bean.TeamIssueList;
+import net.oschina.app.team.bean.TeamList;
+import net.oschina.app.team.ui.TeamMainActivity;
+import net.oschina.app.team.viewpagefragment.MyIssuePagerfragment;
+import net.oschina.app.ui.SimpleBackActivity;
+import net.oschina.app.util.TLog;
+import net.oschina.app.util.UIHelper;
+import net.oschina.app.util.XmlUtils;
+
+import org.kymjs.kjframe.utils.PreferenceHelper;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
+import android.widget.AdapterView;
 
 /**
- * Team任务界面
+ * 我的任务列表界面
  * 
- * @author kymjs (kymjs123@gmail.com)
+ * @author kymjs (https://github.com/kymjs)
  * 
  */
-public class MyIssueFragment extends BaseFragment {
+public class MyIssueFragment extends BaseListFragment<TeamIssue> {
 
-    @InjectView(R.id.team_myissue_ing)
-    RelativeLayout mRlIng;
-    @InjectView(R.id.team_myissue_will)
-    RelativeLayout mRlWill;
-    @InjectView(R.id.team_myissue_ed)
-    RelativeLayout mRlEd;
-    @InjectView(R.id.team_myissue_all)
-    RelativeLayout mRlAll;
-    @InjectView(R.id.myissue_title)
-    LinearLayout mLlTitle;
+    protected static final String TAG = TeamIssueFragment.class.getSimpleName();
+    private static final String CACHE_KEY_PREFIX = "my_issue_";
 
-    @InjectView(R.id.team_myissue_ing_num)
-    TextView mTvIng;
-    @InjectView(R.id.team_myissue_will_num)
-    TextView mTvWill;
-    @InjectView(R.id.team_myissue_ed_num)
-    TextView mTvEd;
-    @InjectView(R.id.team_myissue_all_num)
-    TextView mTvAll;
-
-    @InjectView(R.id.team_myissue_name)
-    TextView mTvName;
-    @InjectView(R.id.team_myissue_date)
-    TextView mTvDate;
+    private Team mTeam;
+    private String type = "all";
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        View rootView = inflater.inflate(R.layout.fragment_team_issue,
-                container, false);
-        ButterKnife.inject(this, rootView);
-        initData();
-        initView(rootView);
-        return rootView;
-    }
-
-    @Override
-    public void initView(View view) {
-        mRlIng.setOnClickListener(this);
-        mRlWill.setOnClickListener(this);
-        mRlEd.setOnClickListener(this);
-        mRlAll.setOnClickListener(this);
-
-        mTvIng.setText("1");
-        mTvWill.setText("2");
-        mTvEd.setText("3");
-        mTvAll.setText("4");
-        mTvName.setText("你是谁，上午好！");
-        mTvDate.setText(SystemTool.getDataTime("yyyy年MM月dd日"));
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-        case R.id.team_myissue_ing:
-            break;
-        case R.id.team_myissue_will:
-            break;
-        case R.id.team_myissue_ed:
-            break;
-        case R.id.team_myissue_all:
-            break;
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            mTeam = (Team) bundle.getSerializable(TeamMainActivity.BUNDLE_KEY_TEAM);
+            type = bundle.getString(MyIssuePagerfragment.MY_ISSUEDETAIL_KEY,
+                    "all");
         }
     }
 
     @Override
-    public void initData() {}
+    protected TeamIssueAdapter getListAdapter() {
+        return new TeamIssueAdapter();
+    }
 
+    /**
+     * 获取当前展示页面的缓存数据
+     */
+    @Override
+    protected String getCacheKeyPrefix() {
+        return CACHE_KEY_PREFIX + AppContext.getInstance().getLoginUid() + "_"
+                + mTeam.getId() + mCurrentPage + type;
+    }
+
+    @Override
+    protected TeamIssueList parseList(InputStream is) throws Exception {
+        TeamIssueList list = XmlUtils.toBean(TeamIssueList.class, is);
+        return list;
+    }
+
+    @Override
+    protected TeamIssueList readList(Serializable seri) {
+        return ((TeamIssueList) seri);
+    }
+
+    @Override
+    protected void sendRequestData() {
+        OSChinaApi.getMyIssue(mTeam.getId() + "", AppContext.getInstance()
+                .getLoginUid() + "", mCurrentPage, type, mHandler);
+    }
+    
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position,
+            long id) {
+        // TODO Auto-generated method stub
+	TeamIssue issue = mAdapter.getItem(position);
+	if (issue != null) {
+	    UIHelper.showTeamIssueDetail(getActivity(), mTeam, issue, null);
+	}
+    }
 }

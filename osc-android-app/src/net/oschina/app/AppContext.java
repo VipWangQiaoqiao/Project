@@ -12,10 +12,12 @@ import net.oschina.app.base.BaseApplication;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.User;
 import net.oschina.app.cache.DataCleanManager;
+import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.util.CyptoUtils;
 import net.oschina.app.util.MethodsCompat;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TLog;
+import net.oschina.app.util.UIHelper;
 
 import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.bitmap.BitmapConfig;
@@ -49,11 +51,13 @@ public class AppContext extends BaseApplication {
     public void onCreate() {
         super.onCreate();
         // 注册App异常崩溃处理器
-         Thread.setDefaultUncaughtExceptionHandler(AppException
-         .getAppExceptionHandler(this));
+        // Thread.setDefaultUncaughtExceptionHandler(AppException
+        // .getAppExceptionHandler(this));
         instance = this;
         init();
         initLogin();
+        
+        UIHelper.sendBroadcastForNotice(this);
     }
 
     private void init() {
@@ -109,6 +113,12 @@ public class AppContext extends BaseApplication {
         AppConfig.getAppConfig(this).set(key, value);
     }
 
+    /**
+     * 获取cookie时传AppConfig.CONF_COOKIE
+     * 
+     * @param key
+     * @return
+     */
     public String getProperty(String key) {
         String res = AppConfig.getAppConfig(this).get(key);
         return res;

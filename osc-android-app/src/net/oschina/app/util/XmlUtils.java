@@ -1,5 +1,6 @@
 package net.oschina.app.util;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -57,6 +58,11 @@ public class XmlUtils {
             }
         }
         return obj;
+    }
+    
+    public static <T> T toBean(Class<T> type, byte[] bytes) {
+	if (bytes == null) return null;
+	return toBean(type, new ByteArrayInputStream(bytes));
     }
 
     private static class MyIntCoverter extends IntConverter {

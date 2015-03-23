@@ -11,9 +11,11 @@
     <style name="ActionBarBaseTheme" parent="@style/Theme.AppCompat.Light">
         <item name="android:windowBackground">@color/window_background</item>
         <item name="android:actionBarStyle">@style/ActionBarBaseStyle</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu.ListPopupWindow</item>
         <item name="android:actionOverflowButtonStyle">@style/OverflowButton</item>
-        <item name="android:dropDownListViewStyle">@style/DrapDownListView</item>
-        <item name="android:homeAsUpIndicator">@drawable/actionbar_back_icon_normal</item>
+        <item name="android:homeAsUpIndicator">@drawable/actionbar_more_icon_normal</item>
+        <item name="android:dropDownListViewStyle">@style/SpinnerDropDownListView</item>
+        <item name="popupMenuStyle">@style/mylistPopupWindowStyle</item>
     </style>
 
     <style name="ActionBarBaseTheme.Preview" parent="@style/ActionBarBaseTheme">
@@ -21,5 +23,5 @@
         <item name="android:actionBarStyle">@style/ActionBarBaseStyle.Transparent</item>
         <item name="android:windowActionBarOverlay">true</item>
     </style>
-
+    
 </resources>

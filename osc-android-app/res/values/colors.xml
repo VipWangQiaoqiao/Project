@@ -29,9 +29,12 @@
     
     <color name="comment_yellow">#FFFFEE</color>
     
+    <color name="like_color">#1d6a2a</color>
+    
     <color name="main_background">#ffebedf0</color>
     <color name="list_divider_color">#DADADA</color>
-    <color name="list_item_background_normal">#f9f9f9</color>
+    <color name="list_item_background_normal">@color/white</color>
+    <color name="teamlist_item_background_normal">#ffffff</color>
     <color name="list_item_background_pressed">#efefef</color>
     
  	<color name="drawer_menu_item_background_normal">#e2e2e2</color>
@@ -74,4 +77,24 @@
 	<!-- 反馈 -->
 	<color name="text_color_account_info">#ff5e5546</color>
 	<color name="edittext_hint_color">#ffa9a9a9</color>
+	
+	<!-- 日历dialog -->
+	<color name="white">#ffffffff</color>
+    <color name="circle_background">#fff2f2f2</color>
+    <color name="line_background">#ffcccccc</color>
+    <color name="done_text_color_normal">#ff333333</color>
+    <color name="done_text_color_disabled">#ffcccccc</color>
+    <color name="blue">#ff33cc33</color>
+    <color name="darker_blue">#ff00cc99</color>
+    <color name="date_picker_text_normal">#ff999999</color>
+    <color name="calendar_header">#ff999999</color>
+    <color name="date_picker_view_animator">#fff2f2f2</color>
+
+    <color name="ampm_text_color">#8c8c8c</color>
+    <color name="numbers_text_color">#8c8c8c</color>
+
+    <color name="transparent_black">#7F000000</color>
+    
+    <color name="spinner_background">#464646</color>
+    <color name="spinner_background_press">#6baf77</color>
 </resources>

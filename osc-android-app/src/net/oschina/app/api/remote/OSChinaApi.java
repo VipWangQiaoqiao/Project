@@ -492,10 +492,10 @@ public class OSChinaApi {
         ApiHttpClient.post("action/api/portrait_update", params, handler);
     }
 
-    public static void getNotices(int uid, AsyncHttpResponseHandler handler) {
-        RequestParams params = new RequestParams();
-        params.put("uid1", uid);
-        ApiHttpClient.post("action/api/user_notice", params, handler);
+    public static void getNotices(AsyncHttpResponseHandler handler) {
+	RequestParams params = new RequestParams();
+	params.put("uid", AppContext.getInstance().getLoginUid());
+        ApiHttpClient.get("action/api/user_notice", params, handler);
     }
 
     /**
@@ -684,10 +684,11 @@ public class OSChinaApi {
     public static void teamDynamic(Team team, int page,
             AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
-        KJLoger.debug("teamid=" + team.getId());
+        // int uid = AppContext.getInstance().getLoginUid();
+        // params.put("uid", uid);
         params.put("teamid", team.getId());
-        params.put("pageIndex", page + "");
-        params.put("pageSize", 10);
+        params.put("pageIndex", page);
+        params.put("pageSize", 20);
         params.put("type", "all");
         ApiHttpClient.get("action/api/team_active_list", params, handler);
     }
@@ -706,7 +707,7 @@ public class OSChinaApi {
      * 
      * @param handler
      */
-    public static void getTeamMemberList(String teamid,
+    public static void getTeamMemberList(int teamid,
             AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("teamid", teamid);
@@ -726,5 +727,175 @@ public class OSChinaApi {
         params.put("pageIndex", pageIndex);
         params.put("pageSize", 20);
         ApiHttpClient.get("action/api/team_user_information", params, handler);
+    }
+
+    /**
+     * 获取我的任务中进行中、未完成、已完成等状态的数量
+     */
+    public static void getMyIssueState(String teamid, String uid,
+            AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("teamid", teamid);
+        params.put("uid", uid);
+        ApiHttpClient.get("action/api/team_user_issue_information", params,
+                handler);
+    }
+
+    /**
+     * 获取指定用户的动态
+     */
+    public static void getUserDynamic(int teamid, String uid, int pageIndex,
+            AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("teamid", teamid);
+        params.put("pageIndex", pageIndex);
+        params.put("pageSize", 20);
+        params.put("type", "git");
+        params.put("uid", uid);
+        ApiHttpClient.get("action/api/team_active_list", params, handler);
+    }
+
+    /**
+     * 动态详情
+     * 
+     * @param activeid
+     * @param teamid
+     * @param uid
+     * @param handler
+     */
+    public static void getDynamicDetail(int activeid, int teamid, int uid,
+            AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("teamid", teamid);
+        params.put("uid", uid);
+        params.put("activeid", activeid);
+        ApiHttpClient.get("action/api/team_active_detail", params, handler);
+    }
+
+    /**
+     * 获取指定用户的任务
+     */
+    public static void getMyIssue(String teamid, String uid, int pageIndex,
+            String type, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("teamid", teamid);
+        params.put("uid", uid);
+        params.put("pageIndex", pageIndex);
+        params.put("pageSize", 20);
+        params.put("state", type);
+        params.put("projectid", "-1");
+        ApiHttpClient.get("action/api/team_issue_list", params, handler);
+    }
+
+    /**
+     * 获取指定周周报
+     * 
+     * @param teamid
+     * @param year
+     * @param week
+     * @param handler
+     */
+    public static void getDiaryFromWhichWeek(int teamid, int year, int week,
+            AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("teamid", teamid);
+        params.put("year", year);
+        params.put("week", week);
+        ApiHttpClient.get("action/api/team_diary_list", params, handler);
+    }
+
+    /**
+     * 删除一个便签
+     * 
+     * @param id
+     *            便签id
+     * @param uid
+     *            用户id
+     */
+    public static void deleteNoteBook(int id, int uid,
+            AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("uid", uid);
+        params.put("id", id); // 便签id
+        ApiHttpClient
+                .get("action/api/team_stickynote_recycle", params, handler);
+    }
+
+    public static void getNoteBook(int uid, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("uid", uid);
+        ApiHttpClient.get("action/api/team_sticky_list", params, handler);
+    }
+
+    /**
+     * 获取指定周报的详细信息
+     * 
+     * @param teamid
+     * @param diaryid
+     * @param handler
+     */
+    public static void getDiaryDetail(int teamid, int diaryid,
+            AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("teamid", teamid);
+        params.put("diaryid", diaryid);
+        ApiHttpClient.get("action/api/team_diary_detail", params, handler);
+    }
+
+    /**
+     * diary评论列表
+     * 
+     * @param teamid
+     * @param diaryid
+     * @param handler
+     */
+    public static void getDiaryComment(int teamid, int diaryid,
+            AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("teamid", teamid);
+        params.put("id", diaryid);
+        params.put("type", "diary");
+        params.put("pageIndex", 0);
+        params.put("pageSize", "20");
+        KJLoger.debug(teamid + "==getDiaryComment接口=" + diaryid);
+        ApiHttpClient
+                .get("action/api/team_reply_list_by_type", params, handler);
+    }
+
+    /**
+     * 周报评论（以后可改为全局评论）
+     * 
+     * @param uid
+     * @param teamid
+     * @param diaryId
+     * @param content
+     * @param handler
+     */
+    public static void sendComment(int uid, int teamid, int diaryId,
+            String content, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("uid", uid);
+        params.put("teamid", teamid);
+        params.put("type", "118");
+        params.put("tweetid", diaryId);
+        params.put("content", content);
+        ApiHttpClient.post("action/api/team_tweet_reply", params, handler);
+    }
+
+    /***
+     * 客户端扫描二维码登陆
+     * 
+     * @author 火蚁 2015-3-13 上午11:45:47
+     * 
+     * @return void
+     * @param url
+     * @param handler
+     */
+    public static void scanQrCodeLogin(String url,
+            AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        String uuid = url.substring(url.lastIndexOf("=") + 1);
+        params.put("uuid", uuid);
+        ApiHttpClient.getDirect(url, handler);
     }
 }

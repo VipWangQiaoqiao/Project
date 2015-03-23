@@ -81,6 +81,8 @@ public class EventAdapter extends ListBaseAdapter<Event> {
                 vh.status
                         .setImageResource(R.drawable.icon_event_status_checked);
                 vh.status.setVisibility(View.VISIBLE);
+            } else {
+        	vh.status.setVisibility(View.GONE);
             }
             break;
         case EventList.EVENT_LIST_TYPE_MY_EVENT:

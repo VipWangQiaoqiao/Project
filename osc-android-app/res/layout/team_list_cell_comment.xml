@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:paddingTop="@dimen/space_10" >
+
+    <net.oschina.app.widget.AvatarView
+        android:id="@+id/iv_avatar"
+        style="@style/comment_user_face_image"
+        android:layout_marginRight="@dimen/space_10" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/iv_avatar"
+        android:textColor="@color/lightblue"
+        android:textSize="@dimen/text_size_13" />
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/tweet_time_platform"
+        android:textSize="@dimen/text_size_10" />
+
+    <net.oschina.app.widget.TweetTextView
+        android:id="@+id/tv_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_name"
+        android:layout_marginTop="@dimen/space_8"
+        android:layout_toRightOf="@id/iv_avatar"
+        android:textColor="@color/main_black"
+        android:textSize="@dimen/text_size_14" />
+
+    <TextView
+        android:id="@+id/tv_from"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_content"
+        android:layout_marginTop="@dimen/space_8"
+        android:layout_toRightOf="@id/iv_avatar"
+        android:drawableLeft="@drawable/platform"
+        android:drawablePadding="@dimen/space_4"
+        android:gravity="center_vertical"
+        android:textColor="@color/main_gray"
+        android:textSize="@dimen/text_size_11" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/tv_from"
+        android:layout_marginTop="10dp"
+        android:background="@color/list_divider_color" />
+
+</RelativeLayout>

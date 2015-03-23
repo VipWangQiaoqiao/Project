@@ -12,8 +12,6 @@ import net.oschina.app.fragment.FindUserFragment;
 import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.fragment.MyInformationFragmentDetail;
-import net.oschina.app.fragment.NoteBookFragment;
-import net.oschina.app.fragment.NoteEditFragment;
 import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.fragment.SettingsFragment;
 import net.oschina.app.fragment.SettingsNotificationFragment;
@@ -23,9 +21,20 @@ import net.oschina.app.fragment.TweetPubFragment;
 import net.oschina.app.fragment.TweetRecordFragment;
 import net.oschina.app.fragment.UserBlogFragment;
 import net.oschina.app.fragment.UserCenterFragment;
-import net.oschina.app.team.fragment.DynamicFragment;
-import net.oschina.app.team.fragment.SelectTeamFragment;
-import net.oschina.app.team.fragment.UserInfoFragment;
+import net.oschina.app.team.fragment.NoteBookFragment;
+import net.oschina.app.team.fragment.NoteEditFragment;
+import net.oschina.app.team.fragment.TeamActiveFragment;
+import net.oschina.app.team.fragment.TeamDiaryDetail;
+import net.oschina.app.team.fragment.TeamDiscussFragment;
+import net.oschina.app.team.fragment.TeamIssueFragment;
+import net.oschina.app.team.fragment.TeamNewIssueFragment;
+import net.oschina.app.team.fragment.TeamProjectFragment;
+import net.oschina.app.team.fragment.TeamProjectMemberSelectFragment;
+import net.oschina.app.team.fragment.TeamMemberInformationFragment;
+import net.oschina.app.team.viewpagefragment.MyIssuePagerfragment;
+import net.oschina.app.team.viewpagefragment.TeamDiaryFragment;
+import net.oschina.app.team.viewpagefragment.TeamIssueViewPageFragment;
+import net.oschina.app.team.viewpagefragment.TeamProjectViewPagerFragment;
 import net.oschina.app.viewpagerfragment.BlogViewPagerFragment;
 import net.oschina.app.viewpagerfragment.EventViewPagerFragment;
 import net.oschina.app.viewpagerfragment.FriendsViewPagerFragment;
@@ -103,16 +112,36 @@ public enum SimpleBackPage {
 
     BROWSER(28, R.string.app_name, BrowserFragment.class),
 
-    DYNAMIC(29, R.string.team_dynamic, DynamicFragment.class),
+    DYNAMIC(29, R.string.team_dynamic, TeamActiveFragment.class),
 
     MY_INFORMATION_DETAIL(30, R.string.actionbar_title_my_information,
             MyInformationFragmentDetail.class),
 
     FEED_BACK(31, R.string.str_feedback_title, FeedBackFragment.class),
 
-    TEAM_USER_INFO(32, R.string.str_team_userinfo, UserInfoFragment.class),
+    TEAM_USER_INFO(32, R.string.str_team_userinfo, TeamMemberInformationFragment.class),
 
-    SELECT_TEAM(33, R.string.str_team_select_team, SelectTeamFragment.class);
+    MY_ISSUE_PAGER(33, R.string.str_team_my_issue, MyIssuePagerfragment.class),
+
+    TEAM_NEW_ISSUE(34, R.string.team_new_issue, TeamNewIssueFragment.class),
+
+    TEAM_PROJECT_MAIN(35, 0, TeamProjectViewPagerFragment.class),
+
+    TEAM_ISSUECATALOG_ISSUE_LIST(36, 0, TeamIssueFragment.class),
+
+    TEAM_ACTIVE(37, R.string.team_actvie, TeamActiveFragment.class),
+
+    TEAM_ISSUE(38, R.string.team_issue, TeamIssueViewPageFragment.class),
+
+    TEAM_DISCUSS(39, R.string.team_discuss, TeamDiscussFragment.class),
+
+    TEAM_DIRAY(40, R.string.team_diary, TeamDiaryFragment.class),
+
+    TEAM_DIRAY_DETAIL(41, R.string.team_diary_detail, TeamDiaryDetail.class),
+
+    TEAM_PROJECT_MEMBER_SELECT(42, 0, TeamProjectMemberSelectFragment.class),
+
+    TEAM_PROJECT(43, R.string.team_project, TeamProjectFragment.class);
 
     private int title;
     private Class<?> clz;

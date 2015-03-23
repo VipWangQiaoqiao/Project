@@ -40,26 +40,25 @@ import butterknife.InjectView;
 public class TweetAdapter extends ListBaseAdapter<Tweet> {
 
     static class ViewHolder {
-	@InjectView(R.id.tv_tweet_name)
-	TextView author;
-	@InjectView(R.id.tv_tweet_time)
-	TextView time;
-	@InjectView(R.id.tweet_item)
-	TweetTextView content;
-	@InjectView(R.id.tv_tweet_comment_count)
-	TextView commentcount;
-	@InjectView(R.id.tv_tweet_platform)
-	TextView platform;
+        @InjectView(R.id.tv_tweet_name)
+        TextView author;
+        @InjectView(R.id.tv_tweet_time)
+        TextView time;
+        @InjectView(R.id.tweet_item)
+        TweetTextView content;
+        @InjectView(R.id.tv_tweet_comment_count)
+        TextView commentcount;
+        @InjectView(R.id.tv_tweet_platform)
+        TextView platform;
+        @InjectView(R.id.iv_tweet_face)
+        public AvatarView face;
 
-	@InjectView(R.id.iv_tweet_face)
-	public AvatarView face;
+        @InjectView(R.id.iv_tweet_image)
+        public ImageView image;
 
-	@InjectView(R.id.iv_tweet_image)
-	public ImageView image;
-
-	public ViewHolder(View view) {
-	    ButterKnife.inject(this, view);
-	}
+        public ViewHolder(View view) {
+            ButterKnife.inject(this, view);
+        }
     }
 
     private Bitmap recordBitmap;
@@ -67,80 +66,81 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
     private final KJBitmap kjb = KJBitmap.create();
 
     private void initRecordImg(Context cxt) {
-	recordBitmap = BitmapFactory.decodeResource(cxt.getResources(),
-		R.drawable.audio3);
-	recordBitmap = ImageUtils.zoomBitmap(recordBitmap,
-		DensityUtils.dip2px(cxt, 20f), DensityUtils.dip2px(cxt, 20f));
+        recordBitmap = BitmapFactory.decodeResource(cxt.getResources(),
+                R.drawable.audio3);
+        recordBitmap = ImageUtils.zoomBitmap(recordBitmap,
+                DensityUtils.dip2px(cxt, 20f), DensityUtils.dip2px(cxt, 20f));
     }
 
     @Override
     protected View getRealView(int position, View convertView,
-	    final ViewGroup parent) {
-	ViewHolder vh = null;
-	if (convertView == null || convertView.getTag() == null) {
-	    convertView = getLayoutInflater(parent.getContext()).inflate(
-		    R.layout.list_cell_tweets, null);
-	    vh = new ViewHolder(convertView);
-	    convertView.setTag(vh);
-	} else {
-	    vh = (ViewHolder) convertView.getTag();
-	}
+            final ViewGroup parent) {
+        ViewHolder vh = null;
+        if (convertView == null || convertView.getTag() == null) {
+            convertView = getLayoutInflater(parent.getContext()).inflate(
+                    R.layout.list_cell_tweets, null);
+            vh = new ViewHolder(convertView);
+            convertView.setTag(vh);
+        } else {
+            vh = (ViewHolder) convertView.getTag();
+        }
 
-	final Tweet tweet = mDatas.get(position);
+        final Tweet tweet = mDatas.get(position);
 
-	vh.face.setUserInfo(tweet.getAuthorid(), tweet.getAuthor());
-	vh.face.setAvatarUrl(tweet.getPortrait());
-	vh.author.setText(tweet.getAuthor());
-	vh.time.setText(StringUtils.friendly_time(tweet.getPubDate()));
+        vh.face.setUserInfo(tweet.getAuthorid(), tweet.getAuthor());
+        vh.face.setAvatarUrl(tweet.getPortrait());
+        vh.author.setText(tweet.getAuthor());
+        vh.time.setText(StringUtils.friendly_time(tweet.getPubDate()));
 
-	vh.content.setMovementMethod(MyLinkMovementMethod.a());
-	vh.content.setFocusable(false);
-	vh.content.setDispatchToParent(true);
-	vh.content.setLongClickable(false);
+        vh.content.setMovementMethod(MyLinkMovementMethod.a());
+        vh.content.setFocusable(false);
+        vh.content.setDispatchToParent(true);
+        vh.content.setLongClickable(false);
 
-	Spanned span = Html.fromHtml(TweetTextView.modifyPath(tweet.getBody()));
-	if (!StringUtils.isEmpty(tweet.getAttach())) {
-	    if (recordBitmap == null) {
-		initRecordImg(parent.getContext());
-	    }
-	    ImageSpan recordImg = new ImageSpan(parent.getContext(),
-		    recordBitmap);
-	    SpannableString str = new SpannableString("c" + span);
-	    str.setSpan(recordImg, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-	    vh.content.setText(str);
-	} else {
-	    vh.content.setText(span);
-	}
-	MyURLSpan.parseLinkText(vh.content, span);
+        Spanned span = Html.fromHtml(TweetTextView.modifyPath(tweet.getBody()
+                .trim()));
+        if (!StringUtils.isEmpty(tweet.getAttach())) {
+            if (recordBitmap == null) {
+                initRecordImg(parent.getContext());
+            }
+            ImageSpan recordImg = new ImageSpan(parent.getContext(),
+                    recordBitmap);
+            SpannableString str = new SpannableString("c" + span);
+            str.setSpan(recordImg, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+            vh.content.setText(str);
+        } else {
+            vh.content.setText(span);
+        }
+        MyURLSpan.parseLinkText(vh.content, span);
 
-	vh.commentcount.setText(tweet.getCommentCount() + "");
+        vh.commentcount.setText(tweet.getCommentCount() + "");
 
-	showTweetImage(vh, tweet.getImgSmall(), tweet.getImgBig(),
-		parent.getContext());
+        showTweetImage(vh, tweet.getImgSmall(), tweet.getImgBig(),
+                parent.getContext());
 
-	vh.platform.setVisibility(View.VISIBLE);
-	switch (tweet.getAppclient()) {
-	case Tweet.CLIENT_MOBILE:
-	    vh.platform.setText(R.string.from_mobile);
-	    break;
-	case Tweet.CLIENT_ANDROID:
-	    vh.platform.setText(R.string.from_android);
-	    break;
-	case Tweet.CLIENT_IPHONE:
-	    vh.platform.setText(R.string.from_iphone);
-	    break;
-	case Tweet.CLIENT_WINDOWS_PHONE:
-	    vh.platform.setText(R.string.from_windows_phone);
-	    break;
-	case Tweet.CLIENT_WECHAT:
-	    vh.platform.setText(R.string.from_wechat);
-	    break;
-	default:
-	    vh.platform.setText("");
-	    vh.platform.setVisibility(View.GONE);
-	    break;
-	}
-	return convertView;
+        vh.platform.setVisibility(View.VISIBLE);
+        switch (tweet.getAppclient()) {
+        case Tweet.CLIENT_MOBILE:
+            vh.platform.setText(R.string.from_mobile);
+            break;
+        case Tweet.CLIENT_ANDROID:
+            vh.platform.setText(R.string.from_android);
+            break;
+        case Tweet.CLIENT_IPHONE:
+            vh.platform.setText(R.string.from_iphone);
+            break;
+        case Tweet.CLIENT_WINDOWS_PHONE:
+            vh.platform.setText(R.string.from_windows_phone);
+            break;
+        case Tweet.CLIENT_WECHAT:
+            vh.platform.setText(R.string.from_wechat);
+            break;
+        default:
+            vh.platform.setText("");
+            vh.platform.setVisibility(View.GONE);
+            break;
+        }
+        return convertView;
     }
 
     /**
@@ -149,30 +149,30 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
      * @author kymjs
      */
     private void showTweetImage(final ViewHolder vh, String imgSmall,
-	    final String imgBig, final Context context) {
-	if (imgSmall != null && !TextUtils.isEmpty(imgSmall)) {
-	    initImageSize(context);
-	    kjb.setCallback(new BitmapCallBack() {
-		@Override
-		public void onSuccess(View view, Bitmap bitmap) {
-		    super.onSuccess(view, bitmap);
-		    initBitmapInList(vh, view, bitmap);
-		}
-	    });
+            final String imgBig, final Context context) {
+        if (imgSmall != null && !TextUtils.isEmpty(imgSmall)) {
+            initImageSize(context);
+            kjb.setCallback(new BitmapCallBack() {
+                @Override
+                public void onSuccess(View view, Bitmap bitmap) {
+                    super.onSuccess(view, bitmap);
+                    initBitmapInList(vh, view, bitmap);
+                }
+            });
 
-	    kjb.display(vh.image, imgSmall, R.drawable.pic_bg, rectSize,
-		    rectSize);
-	    vh.image.setOnClickListener(new View.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-		    ImagePreviewActivity.showImagePrivew(context, 0,
-			    new String[] { imgBig });
-		}
-	    });
-	    vh.image.setVisibility(AvatarView.VISIBLE);
-	} else {
-	    vh.image.setVisibility(AvatarView.GONE);
-	}
+            kjb.display(vh.image, imgSmall, R.drawable.pic_bg, rectSize,
+                    rectSize);
+            vh.image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ImagePreviewActivity.showImagePrivew(context, 0,
+                            new String[] { imgBig });
+                }
+            });
+            vh.image.setVisibility(AvatarView.VISIBLE);
+        } else {
+            vh.image.setVisibility(AvatarView.GONE);
+        }
     }
 
     /**
@@ -181,11 +181,11 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
      * @param cxt
      */
     private void initImageSize(Context cxt) {
-	if (cxt != null && rectSize == 0) {
-	    rectSize = (int) cxt.getResources().getDimension(R.dimen.space_100);
-	} else {
-	    rectSize = 300;
-	}
+        if (cxt != null && rectSize == 0) {
+            rectSize = (int) cxt.getResources().getDimension(R.dimen.space_100);
+        } else {
+            rectSize = 300;
+        }
     }
 
     /**
@@ -197,8 +197,8 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
      * @param bitmap
      */
     private void initBitmapInList(final ViewHolder vh, View view, Bitmap bitmap) {
-	bitmap = BitmapHelper
-		.scaleWithXY(bitmap, rectSize / bitmap.getHeight());
-	((ImageView) view).setImageBitmap(bitmap);
+        bitmap = BitmapHelper
+                .scaleWithXY(bitmap, rectSize / bitmap.getHeight());
+        ((ImageView) view).setImageBitmap(bitmap);
     }
 }

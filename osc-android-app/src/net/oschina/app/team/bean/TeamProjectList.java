@@ -8,6 +8,8 @@ import net.oschina.app.bean.ListEntity;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 /** 
  * 团队项目实体类
  * 
@@ -17,7 +19,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  */
 @SuppressWarnings("serial")
 @XStreamAlias("oschina")
-public class TeamProjectList extends Entity implements ListEntity {
+public class TeamProjectList extends Entity implements ListEntity<TeamProject> {
 	
 	@XStreamAlias("pagesize")
 	private int pageSize;

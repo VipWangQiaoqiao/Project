@@ -8,10 +8,12 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.bean.BarCode;
+import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.SingInResult;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
+import net.oschina.app.util.XmlUtils;
 
 import org.apache.http.Header;
 
@@ -230,6 +232,7 @@ public class CaptureActivity extends BaseActivity implements Callback {
     @Override
     protected void onDestroy() {
         inactivityTimer.shutdown();
+        mediaPlayer.release();
         super.onDestroy();
     }
 
@@ -256,6 +259,10 @@ public class CaptureActivity extends BaseActivity implements Callback {
     }
 
     private void showUrlOption(final String url) {
+	if (url.contains("scanLogin")) {
+	    handleScanLogin(url);
+	    return;
+	}
         if (url.contains("oschina.net")) {
             UIHelper.showUrlRedirect(CaptureActivity.this, url);
             finish();
@@ -281,6 +288,51 @@ public class CaptureActivity extends BaseActivity implements Callback {
             }
         });
         dialog.show();
+    }
+    
+    private void handleScanLogin(final String url) {
+	if (!AppContext.getInstance().isLogin()) {
+	    showLogin();
+	    return;
+	}
+	OSChinaApi.scanQrCodeLogin(url, new AsyncHttpResponseHandler() {
+	    
+	    @Override
+	    public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+		// TODO Auto-generated method stub
+		ResultBean result = XmlUtils.toBean(ResultBean.class, arg2);
+		if (result != null && result.getResult().OK()) {
+		    AppContext.showToast(result.getResult().getErrorMessage());
+		    finish();
+		} else {
+		    handler.sendEmptyMessage(R.id.restart_preview);
+		    AppContext.showToast(result != null ? result.getResult().getErrorMessage() : "登陆失败");
+		}
+	    }
+	    
+	    @Override
+	    public void onFailure(int arg0, Header[] arg1, byte[] arg2, Throwable arg3) {
+		// TODO Auto-generated method stub
+		handler.sendEmptyMessage(R.id.restart_preview);
+		if (arg2 != null) {
+		    AppContext.showToast(new String(arg2));
+		} else {
+		    AppContext.showToast("网页登陆失败");
+		}
+	    }
+	    @Override
+	    public void onStart() {
+	        // TODO Auto-generated method stub
+	        super.onStart();
+	        showWaitDialog("已扫描，正在登陆...");
+	    }
+	    @Override
+	    public void onFinish() {
+	        // TODO Auto-generated method stub
+	        super.onFinish();
+	        hideWaitDialog();
+	    }
+	});
     }
 
     private void handleOtherText(final String text) {
@@ -455,7 +507,6 @@ public class CaptureActivity extends BaseActivity implements Callback {
     private void initBeepSound() {
         mediaPlayer = MediaPlayer.create(this, R.raw.qr_sacn);
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        mediaPlayer.setOnCompletionListener(beepListener);
     }
 
     private static final long VIBRATE_DURATION = 30L;
@@ -469,13 +520,6 @@ public class CaptureActivity extends BaseActivity implements Callback {
             vibrator.vibrate(VIBRATE_DURATION);
         }
     }
-
-    private final OnCompletionListener beepListener = new OnCompletionListener() {
-        @Override
-        public void onCompletion(MediaPlayer mediaPlayer) {
-            mediaPlayer.release();
-        }
-    };
 
     @Override
     public void initView() {

@@ -2,40 +2,74 @@ package net.oschina.app.bean;
 
 import java.io.Serializable;
 
-public class NotebookData implements Serializable {
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
+/**
+ * 便签数据bean（有重载equals()方法）
+ * 
+ * @author kymjs (https://github.com/kymjs)
+ * 
+ */
+@XStreamAlias("sticky")
+public class NotebookData extends Entity implements Serializable,
+        Comparable<NotebookData> {
     private static final long serialVersionUID = 1L;
 
+    @XStreamAlias("id")
     private int id;
-    private String time;
+    @XStreamAlias("iid")
+    private int iid;
+    @XStreamAlias("timestamp")
+    private String unixTime;
+    @XStreamAlias("updateTime")
     private String date;
+    @XStreamAlias("content")
     private String content;
-    private boolean star;
+    @XStreamAlias("color")
+    private String colorText;
+
+    private String serverUpdateTime; // 服务器端需要，客户端无用
     private int color;
 
-    private boolean checked; // view需要，非交互数据需要
-
-    public boolean isChecked() {
-        return checked;
+    @Override
+    public boolean equals(Object o) {
+        if (super.equals(o)) {
+            return true;
+        } else {
+            if (o instanceof NotebookData) {
+                NotebookData data = (NotebookData) o;
+                try {
+                    return (this.id == data.getId())
+                            && (this.iid == data.getIid())
+                            && (this.unixTime == data.getUnixTime())
+                            && (this.date.equals(data.getDate()))
+                            && (this.content == data.getContent())
+                            && (this.color == data.getColor());
+                } catch (NullPointerException e) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
     }
 
-    public void setChecked(boolean checked) {
-        this.checked = checked;
-    }
-
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }
 
-    public boolean isStar() {
-        return star;
+    public int getIid() {
+        return iid;
     }
 
-    public void setStar(boolean star) {
-        this.star = star;
+    public void setIid(int iid) {
+        this.iid = iid;
     }
 
     public String getContent() {
@@ -54,20 +88,72 @@ public class NotebookData implements Serializable {
         this.date = date;
     }
 
-    public String getTime() {
-        return time;
+    public String getUnixTime() {
+        return unixTime;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setUnixTime(String time) {
+        this.unixTime = time;
+        setServerUpdateTime(time);
+    }
+
+    public String getColorText() {
+        return colorText;
+    }
+
+    public void setColorText(String color) {
+        this.colorText = color;
     }
 
     public int getColor() {
+        // 客户端始终以当前手机上的颜色为准
+        if ("blue".equals(colorText)) {
+            this.color = 3;
+        } else if ("red".equals(colorText)) {
+            this.color = 2;
+        } else if ("yellow".equals(colorText)) {
+            this.color = 1;
+        } else if ("purple".equals(colorText)) {
+            this.color = 4;
+        } else if ("green".equals(colorText)) {
+            this.color = 0;
+        }
         return color;
     }
 
-    public void setColor(int color) {
-        this.color = color;
+    public String getServerUpdateTime() {
+        return serverUpdateTime;
     }
 
+    public void setServerUpdateTime(String serverUpdateTime) {
+        this.serverUpdateTime = serverUpdateTime;
+    }
+
+    public void setColor(int color) {
+        switch (color) {
+        case 0:
+            colorText = "green";
+            break;
+        case 1:
+            colorText = "yellow";
+            break;
+        case 2:
+            colorText = "red";
+            break;
+        case 3:
+            colorText = "blue";
+            break;
+        case 4:
+            colorText = "purple";
+            break;
+        default:
+            this.color = color;
+            break;
+        }
+    }
+
+    @Override
+    public int compareTo(NotebookData another) {
+        return this.iid - another.getIid();
+    }
 }

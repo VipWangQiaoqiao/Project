@@ -63,6 +63,10 @@ public class MyURLSpan extends URLSpan {
      * Internationalized URLs, aka IRIs. Commonly used Unicode characters are
      * added.
      */
+
+    public static final Pattern WEB_URL2 = Pattern
+            .compile("(http|ftp|https):\\/\\/[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?");
+
     public static final Pattern WEB_URL = Pattern
             .compile("((?:(http|https|Http|Https|rtsp|Rtsp):\\/\\/(?:(?:[a-zA-Z0-9\\$\\-\\_\\.\\+\\!\\*\\'\\(\\)"
                     + "\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,64}(?:\\:(?:[a-zA-Z0-9\\$\\-\\_"
@@ -149,8 +153,9 @@ public class MyURLSpan extends URLSpan {
                 String value = m.group();
                 Emoji emoji = EmojiHelper.getEmoji(value);
                 if (emoji != null) {
-                    sp.setSpan(new EmojiSpan(value, EmojiEditText.emojiSize, 0), start, e,
-                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    sp.setSpan(
+                            new EmojiSpan(value, EmojiEditText.emojiSize, 0),
+                            start, e, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
             }
 
@@ -161,8 +166,9 @@ public class MyURLSpan extends URLSpan {
                 String value = m.group();
                 Emoji emoji = EmojiHelper.getEmojiByNumber(value);
                 if (emoji != null) {
-                    sp.setSpan(new EmojiSpan(value, EmojiEditText.emojiSize, 1), start, e,
-                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    sp.setSpan(
+                            new EmojiSpan(value, EmojiEditText.emojiSize, 1),
+                            start, e, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
             }
 

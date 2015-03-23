@@ -46,6 +46,8 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+import com.networkbench.agent.impl.NBSAppAgent;
+
 @SuppressLint("InflateParams")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class MainActivity extends ActionBarActivity implements
@@ -119,6 +121,10 @@ public class MainActivity extends ActionBarActivity implements
         AppManager.getAppManager().addActivity(this);
 
         handleIntent(getIntent());
+        // 注册听云的检测分析
+        NBSAppAgent.setLicenseKey("0ed0cc66c5cb45c0a91c6fa932ca99ac")
+                .withCrashReportEnabled(true).withLocationServiceEnabled(true)
+                .start(this);
     }
 
     @Override
@@ -192,9 +198,7 @@ public class MainActivity extends ActionBarActivity implements
         IntentFilter filter = new IntentFilter(Constants.INTENT_ACTION_NOTICE);
         filter.addAction(Constants.INTENT_ACTION_LOGOUT);
         registerReceiver(mReceiver, filter);
-
         NoticeUtils.bindToService(this);
-        UIHelper.sendBroadcastForNotice(this);
 
         if (AppContext.isFristStart()) {
             mNavigationDrawerFragment.openDrawerMenu();

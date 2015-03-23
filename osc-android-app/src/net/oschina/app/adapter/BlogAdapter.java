@@ -1,8 +1,11 @@
 package net.oschina.app.adapter;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Blog;
+import net.oschina.app.bean.BlogList;
+import net.oschina.app.bean.NewsList;
 import net.oschina.app.util.StringUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +63,15 @@ public class BlogAdapter extends ListBaseAdapter<Blog> {
 	}
 
 	vh.title.setText(blog.getTitle());
+	
+	if (AppContext.isOnReadedPostList(BlogList.PREF_READED_BLOG_LIST,
+                blog.getId() + "")) {
+            vh.title.setTextColor(parent.getContext().getResources()
+                    .getColor(R.color.main_gray));
+        } else {
+            vh.title.setTextColor(parent.getContext().getResources()
+                    .getColor(R.color.main_black));
+        }
 
 	vh.description.setVisibility(View.GONE);
 	String description = blog.getBody();

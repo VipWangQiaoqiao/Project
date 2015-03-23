@@ -53,6 +53,7 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
         super.onResume();
         setNoticeTip();
         changePagers();
+        mViewPager.setOffscreenPageLimit(2);
     }
 
     /**

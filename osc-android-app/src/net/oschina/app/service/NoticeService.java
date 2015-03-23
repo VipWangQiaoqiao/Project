@@ -218,13 +218,21 @@ public class NoticeService extends Service {
         public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
             try {
                 Notice notice = XmlUtils.toBean(NoticeDetail.class,
-                        new ByteArrayInputStream(arg2)).getNotice();
+                	arg2).getNotice();
                 if (notice != null) {
                     UIHelper.sendBroadCast(NoticeService.this, notice);
                     if (AppContext.get(AppConfig.KEY_NOTIFICATION_ACCEPT, true)) {
                         notification(notice);
                     }
                     mNotice = notice;
+                } else {
+                    ResultBean resultBean = XmlUtils.toBean(ResultBean.class, arg2);
+                    if (resultBean != null && resultBean.getResult() != null) {
+                	AppContext appContext = AppContext.getInstance();
+                	if (appContext != null) {
+                	    appContext.Logout();
+                	}
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -265,8 +273,7 @@ public class NoticeService extends Service {
      * 请求是否有新通知
      */
     private void requestNotice() {
-        OSChinaApi.getNotices(AppContext.getInstance().getLoginUid(),
-                mGetNoticeHandler);
+        OSChinaApi.getNotices(mGetNoticeHandler);
     }
 
     private static class ServiceStub extends INoticeService.Stub {

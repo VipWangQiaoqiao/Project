@@ -8,6 +8,7 @@
         android:id="@+id/item_select_team_name"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/list_item_background"
         android:gravity="center"
         android:padding="15dp"
         android:textSize="18sp" />
