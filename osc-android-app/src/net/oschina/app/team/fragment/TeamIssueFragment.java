@@ -204,4 +204,10 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
 	}
     }
     
+    @Override
+    protected long getAutoRefreshTime() {
+        // TODO Auto-generated method stub
+	// 1小时间距，主动刷新列表
+        return 1 * 60 * 60;
+    }
 }

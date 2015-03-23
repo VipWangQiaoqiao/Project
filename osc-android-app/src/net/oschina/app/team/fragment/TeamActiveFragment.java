@@ -101,4 +101,12 @@ public class TeamActiveFragment extends BaseListFragment<TeamActive> {
             UIHelper.showTeamActiveDetail(aty, team.getId(), active);
         }
     }
+    
+    @Override
+    protected long getAutoRefreshTime() {
+        // TODO Auto-generated method stub
+	// 1小时间距，主动刷新列表
+        return 1 * 60 * 60;
+    }
+
 }

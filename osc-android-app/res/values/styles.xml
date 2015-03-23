@@ -603,8 +603,8 @@
     </style>
     
     <style name="mylistPopupWindowStyle" parent="@style/Widget.AppCompat.Light.PopupMenu">
-        <item name="android:dropDownSelector">@color/red</item>
-        <item name="android:popupBackground">@color/red</item>
+        <item name="android:dropDownSelector">#343434</item>
+        <item name="android:popupBackground">#343434</item>
     </style>
 
 </resources>

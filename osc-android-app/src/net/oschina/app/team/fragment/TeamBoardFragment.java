@@ -269,7 +269,7 @@ public class TeamBoardFragment extends BaseFragment {
     }
     
     private void fillUI(MyIssueState data) {
-	mTvName.setText(data.getUser().getName());
+	mTvName.setText(data.getUser().getName() + "，" + getGreetings());
 	mTvWaitDo.setText(data.getOpened());
 	mTvOutdate.setText(data.getOutdate());
 	mTvIng.setText(data.getUnderway());
