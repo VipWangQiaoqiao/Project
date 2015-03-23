@@ -84,6 +84,7 @@ public class TeamMemberAdapter extends BaseAdapter {
             holder = (ViewHolder) v.getTag();
         }
         holder.tv_name.setText(data.getName());
+        holder.img_head.setOnClickListener(null);
         holder.img_head.setAvatarUrl(data.getPortrait());
         if (127 == data.getTeamRole()) { // 创建人，红色
             holder.img_tip.setImageDrawable(new ColorDrawable(0xffff0000));

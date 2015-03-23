@@ -102,6 +102,6 @@ public class AvatarView extends CircleImageView {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
-        return false;
+        return callOnClick();
     }
 }

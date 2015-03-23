@@ -18,6 +18,8 @@ import android.text.Html;
 import android.text.Spanned;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,7 +29,8 @@ import android.widget.TextView;
  * @author kymjs (https://github.com/kymjs)
  * 
  */
-public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
+public class DynamicAdapter extends ListBaseAdapter<TeamActive> implements
+        OnItemClickListener {
     private final Context context;
     private static int rectSize;
     private final KJBitmap kjb = KJBitmap.create();
@@ -71,9 +74,10 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
             holder = (ViewHolder) v.getTag();
         }
         holder.img_head.setAvatarUrl(data.getAuthor().getPortrait());
+        holder.img_head.setUserInfo(data.getAuthor().getId(), data.getAuthor()
+                .getName());
         holder.tv_name.setText(data.getAuthor().getName());
-        setContent(holder.tv_content, stripTags(data.getBody().getTitle())
-                .toString());
+        setContent(holder.tv_content, data.getBody().getTitle());
 
         holder.tv_content.setMaxLines(3);
         holder.tv_date.setText(StringUtils.friendly_time(data.getCreateTime()));
@@ -144,4 +148,7 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
         }
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position,
+            long id) {}
 }
