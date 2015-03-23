@@ -495,7 +495,7 @@ public class OSChinaApi {
     public static void getNotices(AsyncHttpResponseHandler handler) {
 	RequestParams params = new RequestParams();
 	params.put("uid", AppContext.getInstance().getLoginUid());
-        ApiHttpClient.get("action/api/user_notice", params, handler);
+        ApiHttpClient.get("action/api/user_notice", handler);
     }
 
     /**
@@ -699,7 +699,9 @@ public class OSChinaApi {
      * @param handler
      */
     public static void teamList(AsyncHttpResponseHandler handler) {
-        ApiHttpClient.get("action/api/team_list", handler);
+	RequestParams params = new RequestParams();
+	params.put("uid", AppContext.getInstance().getLoginUid());
+        ApiHttpClient.get("action/api/team_list", params, handler);
     }
 
     /**

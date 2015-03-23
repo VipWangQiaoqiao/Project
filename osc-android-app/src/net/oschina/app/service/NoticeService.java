@@ -226,13 +226,13 @@ public class NoticeService extends Service {
                     }
                     mNotice = notice;
                 } else {
-                    ResultBean resultBean = XmlUtils.toBean(ResultBean.class, arg2);
-                    if (resultBean != null && resultBean.getResult() != null) {
-                	AppContext appContext = AppContext.getInstance();
-                	if (appContext != null) {
-                	    appContext.Logout();
-                	}
-                    }
+//                    ResultBean resultBean = XmlUtils.toBean(ResultBean.class, arg2);
+//                    if (resultBean != null && resultBean.getResult() != null) {
+//                	AppContext appContext = AppContext.getInstance();
+//                	if (appContext != null) {
+//                	    appContext.Logout();
+//                	}
+//                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();

@@ -199,12 +199,22 @@ public class TeamMainActivity extends BaseActivity {
             @Override
             public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
                 TeamList datas = XmlUtils.toBean(TeamList.class, arg2);
-                if ((teamDatas == null || teamDatas.isEmpty()) && !datas.getList().isEmpty()) {
+                if (teamDatas.isEmpty() && datas != null) {
                     teamDatas.addAll(datas.getList());
                     setTeamDataState();
+                } else {
+                    if (teamDatas == null && datas == null) {
+                	AppContext.showToast(new String(arg2));
+                        mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+                        mErrorLayout.setErrorMessage("获取团队失败");
+                    }
                 }
-                PreferenceHelper.write(TeamMainActivity.this, TEAM_LIST_FILE,
-                        TEAM_LIST_KEY, datas.toCacheData());
+                
+                if (datas != null) {
+                    // 保存新的团队列表
+                    PreferenceHelper.write(TeamMainActivity.this, TEAM_LIST_FILE,
+                            TEAM_LIST_KEY, datas.toCacheData());
+                }
             }
 
             @Override

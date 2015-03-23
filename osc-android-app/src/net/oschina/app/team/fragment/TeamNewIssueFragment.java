@@ -218,7 +218,7 @@ public class TeamNewIssueFragment extends BaseFragment {
 
 	    params.put("project", mTeamProject.getGit().getId());
 	    params.put("source", mTeamProject.getSource());
-	    if (mCbPush.isChecked()) {
+	    if (mCbPush.isChecked() && mTeamProject.isGitpush()) {
 		params.put("gitpush", TeamIssue.TEAM_ISSUE_GITPUSHED);
 	    }
 	}
@@ -348,7 +348,7 @@ public class TeamNewIssueFragment extends BaseFragment {
     
     private void checkIsShowPush() {
 	if (mTeamProject == null) return;
-	if (mTeamProject.getGit().getId() == -1) {
+	if (mTeamProject.getGit().getId() == -1 || !mTeamProject.isGitpush()) {
 	    mRlGitPush.setVisibility(View.GONE);
 	    mPushLine.setVisibility(View.GONE);
 	} else {

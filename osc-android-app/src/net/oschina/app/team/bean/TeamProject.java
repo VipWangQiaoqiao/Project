@@ -19,12 +19,15 @@ public class TeamProject extends Entity {
 
     public final static String GITOSC = "Git@OSC";
     public final static String GITHUB = "GitHub";
-
+    
     @XStreamAlias("source")
     private String source;
 
     @XStreamAlias("team")
     private String team;
+    
+    @XStreamAlias("gitpush")
+    private boolean gitpush;
 
     @XStreamAlias("git")
     private TeamGit git;
@@ -38,6 +41,14 @@ public class TeamProject extends Entity {
 
     public void setSource(String source) {
 	this.source = source;
+    }
+    
+    public boolean isGitpush() {
+        return gitpush;
+    }
+
+    public void setGitpush(boolean gitpush) {
+        this.gitpush = gitpush;
     }
 
     public String getTeam() {
