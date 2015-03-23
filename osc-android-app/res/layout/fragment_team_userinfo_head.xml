@@ -39,7 +39,7 @@
             style="@style/team_user_infor" />
     </LinearLayout>
 
-    <TextView
+    <!-- <TextView
         android:id="@+id/fragment_team_tv_tel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -48,6 +48,14 @@
         android:text="@string/fa_icon_phone"
         android:textColor="@color/main_green"
         android:textSize="40sp"
+        android:layout_margin="20dp" /> -->
+    <ImageView
+        android:id="@+id/fragment_team_tv_tel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/icon_call"
         android:layout_margin="20dp" />
 
 </RelativeLayout>
