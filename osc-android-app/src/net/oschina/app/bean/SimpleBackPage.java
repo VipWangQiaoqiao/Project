@@ -30,7 +30,7 @@ import net.oschina.app.team.fragment.TeamIssueFragment;
 import net.oschina.app.team.fragment.TeamNewIssueFragment;
 import net.oschina.app.team.fragment.TeamProjectFragment;
 import net.oschina.app.team.fragment.TeamProjectMemberSelectFragment;
-import net.oschina.app.team.fragment.UserInfoFragment;
+import net.oschina.app.team.fragment.TeamMemberInformationFragment;
 import net.oschina.app.team.viewpagefragment.MyIssuePagerfragment;
 import net.oschina.app.team.viewpagefragment.TeamDiaryFragment;
 import net.oschina.app.team.viewpagefragment.TeamIssueViewPageFragment;
@@ -119,7 +119,7 @@ public enum SimpleBackPage {
 
     FEED_BACK(31, R.string.str_feedback_title, FeedBackFragment.class),
 
-    TEAM_USER_INFO(32, R.string.str_team_userinfo, UserInfoFragment.class),
+    TEAM_USER_INFO(32, R.string.str_team_userinfo, TeamMemberInformationFragment.class),
 
     MY_ISSUE_PAGER(33, R.string.str_team_my_issue, MyIssuePagerfragment.class),
 
