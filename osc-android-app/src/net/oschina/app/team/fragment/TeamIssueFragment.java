@@ -189,7 +189,7 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
 	int projectId = this.mProjectId;
 	int catalogId = mCatalogId;
 	String source = mProject == null ? "" : mProject.getSource();
-	int uid = mCatalogId == 0 ? 0 : AppContext.getInstance().getLoginUid();
+	int uid = 0;
 	String scope = "";
 	OSChinaTeamApi.getTeamIssueList(teamId, projectId, catalogId, source, uid, issueState,
 		scope, mCurrentPage, AppContext.PAGE_SIZE, mHandler);
