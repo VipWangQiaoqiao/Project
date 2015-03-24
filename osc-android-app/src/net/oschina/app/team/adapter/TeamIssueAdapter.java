@@ -115,9 +115,9 @@ public class TeamIssueAdapter extends ListBaseAdapter<TeamIssue> {
         TypefaceUtils.setTypeface(vh.state, teamIssue.getIssueStateFaTextId());
         
         if (teamIssue.getState().equals("closed") || teamIssue.getState().equals("accepted")) {
-            ViewUtils.setTextViewLineFlag(vh.title, Paint.STRIKE_THRU_TEXT_FLAG);
+            ViewUtils.setTextViewLineFlag(vh.title, Paint.STRIKE_THRU_TEXT_FLAG|Paint.ANTI_ALIAS_FLAG);
         } else {
-            ViewUtils.setTextViewLineFlag(vh.title, 0);
+            ViewUtils.setTextViewLineFlag(vh.title, 0|Paint.ANTI_ALIAS_FLAG);
         }
     }
 

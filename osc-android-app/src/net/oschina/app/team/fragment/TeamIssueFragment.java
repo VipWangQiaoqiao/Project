@@ -54,7 +54,7 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
 
     private int mProjectId;
     
-    private int mCatalogId;
+    private int mCatalogId = -1;
     
     private boolean isNeedMenu;
 
