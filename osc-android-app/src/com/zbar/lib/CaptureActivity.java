@@ -259,7 +259,7 @@ public class CaptureActivity extends BaseActivity implements Callback {
     }
 
     private void showUrlOption(final String url) {
-	if (url.contains("scanLogin")) {
+	if (url.contains("scan_login")) {
 	    handleScanLogin(url);
 	    return;
 	}
@@ -410,7 +410,7 @@ public class CaptureActivity extends BaseActivity implements Callback {
 
     private void showLogin() {
         CommonDialog dialog = new CommonDialog(CaptureActivity.this);
-        dialog.setMessage("需要先登录");
+        dialog.setMessage("请先登录，再进行");
         dialog.setPositiveButton("知道了", new DialogInterface.OnClickListener() {
 
             @Override
