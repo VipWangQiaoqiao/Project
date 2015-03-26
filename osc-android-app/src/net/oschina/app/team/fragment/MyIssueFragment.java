@@ -2,26 +2,19 @@ package net.oschina.app.team.fragment;
 
 import java.io.InputStream;
 import java.io.Serializable;
-import java.util.List;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.team.adapter.TeamIssueAdapter;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamIssue;
 import net.oschina.app.team.bean.TeamIssueList;
-import net.oschina.app.team.bean.TeamList;
 import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.team.viewpagefragment.MyIssuePagerfragment;
-import net.oschina.app.ui.SimpleBackActivity;
-import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
-
-import org.kymjs.kjframe.utils.PreferenceHelper;
-
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -45,10 +38,18 @@ public class MyIssueFragment extends BaseListFragment<TeamIssue> {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         if (bundle != null) {
-            mTeam = (Team) bundle.getSerializable(TeamMainActivity.BUNDLE_KEY_TEAM);
+            mTeam = (Team) bundle
+                    .getSerializable(TeamMainActivity.BUNDLE_KEY_TEAM);
             type = bundle.getString(MyIssuePagerfragment.MY_ISSUEDETAIL_KEY,
                     "all");
         }
+    }
+
+    @Override
+    public void initView(View view) {
+        super.initView(view);
+        mListView.setDivider(new ColorDrawable(0x00000000));
+        mListView.setSelector(new ColorDrawable(0x00000000));
     }
 
     @Override
@@ -81,14 +82,14 @@ public class MyIssueFragment extends BaseListFragment<TeamIssue> {
         OSChinaApi.getMyIssue(mTeam.getId() + "", AppContext.getInstance()
                 .getLoginUid() + "", mCurrentPage, type, mHandler);
     }
-    
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
             long id) {
         // TODO Auto-generated method stub
-	TeamIssue issue = mAdapter.getItem(position);
-	if (issue != null) {
-	    UIHelper.showTeamIssueDetail(getActivity(), mTeam, issue, null);
-	}
+        TeamIssue issue = mAdapter.getItem(position);
+        if (issue != null) {
+            UIHelper.showTeamIssueDetail(getActivity(), mTeam, issue, null);
+        }
     }
 }

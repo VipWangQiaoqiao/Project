@@ -45,6 +45,19 @@ public class TeamIssueAdapter extends ListBaseAdapter<TeamIssue> {
 
         vh.title.setText(item.getTitle());
 
+        String date = StringUtils.friendly_time2(item.getCreateTime());
+        String preDate = "";
+        if (position > 0) {
+            preDate = StringUtils.friendly_time2(mDatas.get(position - 1)
+                    .getCreateTime());
+        }
+        if (preDate.equals(date)) {
+            vh.title_line.setVisibility(View.GONE);
+        } else {
+            vh.title_line.setText(date);
+            vh.title_line.setVisibility(View.VISIBLE);
+        }
+
         setIssueState(vh, item);
 
         setIssueSource(vh, item);
@@ -113,11 +126,13 @@ public class TeamIssueAdapter extends ListBaseAdapter<TeamIssue> {
         if (TextUtils.isEmpty(state))
             return;
         TypefaceUtils.setTypeface(vh.state, teamIssue.getIssueStateFaTextId());
-        
-        if (teamIssue.getState().equals("closed") || teamIssue.getState().equals("accepted")) {
-            ViewUtils.setTextViewLineFlag(vh.title, Paint.STRIKE_THRU_TEXT_FLAG|Paint.ANTI_ALIAS_FLAG);
+
+        if (teamIssue.getState().equals("closed")
+                || teamIssue.getState().equals("accepted")) {
+            ViewUtils.setTextViewLineFlag(vh.title, Paint.STRIKE_THRU_TEXT_FLAG
+                    | Paint.ANTI_ALIAS_FLAG);
         } else {
-            ViewUtils.setTextViewLineFlag(vh.title, 0|Paint.ANTI_ALIAS_FLAG);
+            ViewUtils.setTextViewLineFlag(vh.title, 0 | Paint.ANTI_ALIAS_FLAG);
         }
     }
 
@@ -145,7 +160,6 @@ public class TeamIssueAdapter extends ListBaseAdapter<TeamIssue> {
     }
 
     static class ViewHolder {
-
         @InjectView(R.id.iv_issue_state)
         TextView state;
         @InjectView(R.id.tv_title)
@@ -172,6 +186,8 @@ public class TeamIssueAdapter extends ListBaseAdapter<TeamIssue> {
         TextView time;
         @InjectView(R.id.tv_comment_count)
         TextView comment;
+        @InjectView(R.id.title)
+        TextView title_line;
 
         public ViewHolder(View view) {
             ButterKnife.inject(this, view);

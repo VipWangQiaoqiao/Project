@@ -15,6 +15,7 @@ import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import android.app.Activity;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -64,6 +65,13 @@ public class TeamActiveFragment extends BaseListFragment<TeamActive> {
     }
 
     @Override
+    public void initView(View view) {
+        super.initView(view);
+        mListView.setDivider(new ColorDrawable(0x00000000));
+        mListView.setSelector(new ColorDrawable(0x00000000));
+    }
+
+    @Override
     protected DynamicAdapter getListAdapter() {
         return new DynamicAdapter(aty);
     }
@@ -96,16 +104,19 @@ public class TeamActiveFragment extends BaseListFragment<TeamActive> {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
             long id) {
-        TeamActive active = mAdapter.getItem(position);
-        if (active != null) {
-            UIHelper.showTeamActiveDetail(aty, team.getId(), active);
+        try {
+            TeamActive active = mAdapter.getItem(position);
+            if (active != null) {
+                UIHelper.showTeamActiveDetail(aty, team.getId(), active);
+            }
+        } catch (IndexOutOfBoundsException e) {
         }
     }
-    
+
     @Override
     protected long getAutoRefreshTime() {
         // TODO Auto-generated method stub
-	// 1小时间距，主动刷新列表
+        // 1小时间距，主动刷新列表
         return 1 * 60 * 60;
     }
 

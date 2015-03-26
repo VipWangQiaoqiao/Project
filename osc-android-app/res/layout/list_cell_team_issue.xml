@@ -3,11 +3,36 @@
     style="@style/fill_wrap"
     android:background="@drawable/list_item_background"
     android:orientation="vertical"
-    android:padding="@dimen/space_10" >
+    android:paddingBottom="10dp" >
+
+    <RelativeLayout
+        android:id="@+id/title_line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="10dp" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_centerVertical="true"
+            android:background="@color/list_divider_color" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:paddingLeft="15dp"
+            android:paddingRight="10dp"
+            android:text="标题" />
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:gravity="center_vertical"
         android:orientation="horizontal" >
 
@@ -20,14 +45,14 @@
             android:textColor="@color/main_gray"
             android:textSize="20sp"
             android:visibility="visible" />
-        
-        <TextView 
+
+        <TextView
             android:id="@+id/iv_issue_source"
-            android:text="@string/fa_team"
-            android:layout_marginRight="3dp"
-            android:textColor="@color/main_gray"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginRight="3dp"
+            android:text="@string/fa_team"
+            android:textColor="@color/main_gray" />
 
         <TextView
             android:id="@+id/tv_title"
@@ -39,17 +64,21 @@
     <TextView
         android:id="@+id/tv_project"
         style="@style/list_text_info"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:text="team_issue - 未同步" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
         android:orientation="horizontal" >
 
         <TextView
-            android:id="@+id/tv_accept_time" 
+            android:id="@+id/tv_accept_time"
             style="@style/list_text_info"
             android:layout_marginRight="5dp"
             android:text="完成时间" />
@@ -74,31 +103,33 @@
     </LinearLayout>
 
     <RelativeLayout
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp" >
 
         <TextView
             android:id="@+id/tv_author"
-            android:text="火蚁"
-            style="@style/list_text_info"
-            android:layout_below="@id/tv_title"
-            android:layout_marginRight="@dimen/space_5" />
-
-        <TextView
-            android:id="@+id/tv_to"
-            android:text="指派给"
             style="@style/list_text_info"
             android:layout_below="@id/tv_title"
             android:layout_marginRight="@dimen/space_5"
-            android:layout_toRightOf="@id/tv_author" />
+            android:text="火蚁" />
+
+        <TextView
+            android:id="@+id/tv_to"
+            style="@style/list_text_info"
+            android:layout_below="@id/tv_title"
+            android:layout_marginRight="@dimen/space_5"
+            android:layout_toRightOf="@id/tv_author"
+            android:text="指派给" />
 
         <TextView
             android:id="@+id/tv_touser"
-            android:text="火蚁"
             style="@style/list_text_info"
             android:layout_below="@id/tv_title"
-            android:layout_toRightOf="@id/tv_to" />
+            android:layout_toRightOf="@id/tv_to"
+            android:text="火蚁" />
 
         <TextView
             android:id="@+id/tv_time"

@@ -6,10 +6,12 @@ import java.util.List;
 import net.oschina.app.R;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamMember;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.AvatarView;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -84,7 +86,13 @@ public class TeamMemberAdapter extends BaseAdapter {
             holder = (ViewHolder) v.getTag();
         }
         holder.tv_name.setText(data.getName());
-        holder.img_head.setOnClickListener(null);
+        holder.img_head.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UIHelper.showTeamMemberInfo(cxt, team.getId(),
+                        datas.get(position));
+            }
+        });
         holder.img_head.setAvatarUrl(data.getPortrait());
         if (127 == data.getTeamRole()) { // 创建人，红色
             holder.img_tip.setImageDrawable(new ColorDrawable(0xffff0000));
