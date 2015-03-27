@@ -99,6 +99,32 @@ public class OSChinaApi {
         params.put("pageSize", AppContext.PAGE_SIZE);
         ApiHttpClient.get("action/api/tweet_list", params, handler);
     }
+    
+    public static void pubLikeTweet(int tweetId, int authorId, AsyncHttpResponseHandler handler) {
+	
+	RequestParams params = new RequestParams();
+	params.put("tweetid", tweetId);
+	params.put("user", AppContext.getInstance().getLoginUid());
+	params.put("ownerOfTweet", authorId);
+	ApiHttpClient.post("action/api/tweet_like", params, handler);
+    }
+    
+    public static void pubUnLikeTweet(int tweetId, int authorId, AsyncHttpResponseHandler handler) {
+	RequestParams params = new RequestParams();
+	params.put("tweetid", tweetId);
+	params.put("user", AppContext.getInstance().getLoginUid());
+	params.put("ownerOfTweet", authorId);
+	ApiHttpClient.post("action/api/tweet_unlike", params, handler);
+    }
+    
+    public static void getTweetLikeList(int tweetId, int page, AsyncHttpResponseHandler handler) {
+	RequestParams params = new RequestParams();
+	params.put("tweetid", tweetId);
+	params.put("pageIndex", page);
+	params.put("pageSize", AppContext.PAGE_SIZE);
+	ApiHttpClient.get("action/api/tweet_like_list", params, handler);
+	
+    }
 
     public static void getActiveList(int uid, int catalog, int page,
             AsyncHttpResponseHandler handler) {

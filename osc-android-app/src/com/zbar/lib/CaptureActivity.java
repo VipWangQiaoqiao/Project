@@ -260,7 +260,7 @@ public class CaptureActivity extends BaseActivity implements Callback {
 
     private void showUrlOption(final String url) {
 	if (url.contains("scan_login")) {
-	    handleScanLogin(url);
+	    showConfirmLogin(url);
 	    return;
 	}
         if (url.contains("oschina.net")) {
@@ -275,6 +275,29 @@ public class CaptureActivity extends BaseActivity implements Callback {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 UIHelper.showUrlRedirect(CaptureActivity.this, url);
+                dialog.dismiss();
+                finish();
+            }
+        });
+        dialog.setPositiveButton("取消", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                finish();
+            }
+        });
+        dialog.show();
+    }
+    
+    private void showConfirmLogin(final String url) {
+	CommonDialog dialog = new CommonDialog(CaptureActivity.this);
+        dialog.setMessage("扫描成功，是否进行网页登陆");
+        dialog.setNegativeButton("登陆", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+        	handleScanLogin(url);
                 dialog.dismiss();
                 finish();
             }

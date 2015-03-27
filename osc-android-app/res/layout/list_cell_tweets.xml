@@ -35,7 +35,7 @@
     <ImageView
         android:id="@+id/iv_tweet_image"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/space_100"
+        android:layout_height="wrap_content"
         android:layout_below="@id/tweet_item"
         android:layout_marginBottom="@dimen/space_5"
         android:layout_marginRight="50dp"
@@ -47,45 +47,75 @@
         android:src="@drawable/pic_bg"
         android:visibility="gone" />
 
+    <net.oschina.app.widget.LikeContainer
+        android:id="@+id/ll_likeed_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iv_tweet_image"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@id/iv_tweet_face"
+        android:orientation="horizontal" >
+    </net.oschina.app.widget.LikeContainer>
+
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/iv_tweet_image"
+        android:layout_below="@id/ll_likeed_user"
+        android:layout_centerVertical="true"
         android:layout_marginBottom="@dimen/space_2"
         android:layout_marginTop="@dimen/space_6"
         android:layout_toRightOf="@id/iv_tweet_face"
-        android:gravity="center" >
+        android:gravity="center_vertical" >
 
         <TextView
             android:id="@+id/tv_tweet_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/list_text_info"
+            android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/space_10"
             android:drawableLeft="@drawable/ic_time"
-            android:drawablePadding="@dimen/space_5"
-            android:textColor="@color/tweet_time_platform"
-            android:textSize="@dimen/text_size_11" />
+            android:drawablePadding="@dimen/space_5" />
 
         <TextView
             android:id="@+id/tv_tweet_platform"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/list_text_info"
+            android:layout_centerVertical="true"
             android:layout_toRightOf="@id/tv_tweet_time"
             android:drawableLeft="@drawable/platform"
             android:drawablePadding="@dimen/space_5"
-            android:gravity="center"
-            android:textColor="@color/main_gray"
-            android:textSize="@dimen/text_size_11" />
+            android:gravity="bottom" />
 
-        <TextView
-            android:id="@+id/tv_tweet_comment_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <LinearLayout
+            android:id="@+id/ll_comment"
+            android:layout_width="35dp"
+            android:layout_height="20dp"
+            android:layout_marginRight="5dp"
             android:layout_alignParentRight="true"
-            android:drawableLeft="@drawable/ic_comment_count"
-            android:drawablePadding="@dimen/space_3"
-            android:textColor="@color/main_gray"
-            android:textSize="@dimen/text_size_12" />
+            android:background="@drawable/btn_oval_background"
+            android:gravity="center" >
+
+            <TextView
+                android:id="@+id/tv_tweet_comment_count"
+                style="@style/list_text_info"
+                android:layout_alignParentRight="true"
+                android:drawableLeft="@drawable/ic_comment_count"
+                android:drawablePadding="@dimen/space_3" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_like"
+            android:layout_width="35dp"
+            android:layout_height="20dp"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@id/ll_comment"
+            android:background="@drawable/btn_oval_background"
+            android:gravity="center" >
+
+            <ImageView
+                android:id="@+id/iv_like_state"
+                android:layout_width="15dp"
+                android:layout_height="12dp"
+                android:background="@drawable/ic_unlike" />
+        </LinearLayout>
     </RelativeLayout>
 
 </RelativeLayout>

@@ -71,7 +71,7 @@ public class User extends Entity {
 	
 	private boolean isRememberMe;
 
-	public int getUid() {
+    public int getUid() {
 		return uid;
 	}
 

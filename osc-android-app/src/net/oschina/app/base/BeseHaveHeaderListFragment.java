@@ -10,6 +10,7 @@ import net.oschina.app.emoji.EmojiFragment;
 import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
 import net.oschina.app.interf.EmojiFragmentControl;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.TLog;
 
 import org.apache.http.Header;
 
