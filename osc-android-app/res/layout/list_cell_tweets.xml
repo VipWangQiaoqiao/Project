@@ -116,6 +116,18 @@
                 android:layout_height="12dp"
                 android:background="@drawable/ic_unlike" />
         </LinearLayout>
+        
+        <TextView 
+            android:id="@+id/tv_del"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/ll_like"
+            android:layout_centerVertical="true"
+            android:textColor="#ccc"
+            android:layout_marginRight="10dp"
+            android:textSize="18sp"
+            android:text="@string/fa_trash" />
+        
     </RelativeLayout>
 
 </RelativeLayout>

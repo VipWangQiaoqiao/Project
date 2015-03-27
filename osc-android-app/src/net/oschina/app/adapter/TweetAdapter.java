@@ -10,6 +10,7 @@ import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TLog;
+import net.oschina.app.util.TypefaceUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
@@ -69,9 +70,12 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
 	ImageView likeState;
 	@InjectView(R.id.ll_likeed_user)
 	LikeContainer likeUser;
+	@InjectView(R.id.tv_del)
+	TextView del;
 
 	public ViewHolder(View view) {
 	    ButterKnife.inject(this, view);
+	    TypefaceUtils.setTypeface(del);
 	}
     }
 
@@ -101,7 +105,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
     }
 
     @Override
-    protected View getRealView(int position, View convertView,
+    protected View getRealView(final int position, View convertView,
 	    final ViewGroup parent) {
 	ViewHolder vh = null;
 	if (convertView == null || convertView.getTag() == null) {
@@ -115,11 +119,42 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
 
 	final Tweet tweet = mDatas.get(position);
 
+	if (tweet.getAuthorid() == AppContext.getInstance().getLoginUid()) {
+	    vh.del.setVisibility(View.VISIBLE);
+	    vh.del.setOnClickListener(new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+		    // TODO Auto-generated method stub
+		    OSChinaApi.deleteTweet(tweet.getAuthorid(), tweet.getId(),
+			    new AsyncHttpResponseHandler() {
+
+				@Override
+				public void onSuccess(int arg0, Header[] arg1,
+					byte[] arg2) {
+				    // TODO Auto-generated method stub
+				    mDatas.remove(position);
+				    notifyDataSetChanged();
+				}
+
+				@Override
+				public void onFailure(int arg0, Header[] arg1,
+					byte[] arg2, Throwable arg3) {
+				    // TODO Auto-generated method stub
+
+				}
+			    });
+		}
+	    });
+	} else {
+	    vh.del.setVisibility(View.GONE);
+	}
+
 	vh.face.setUserInfo(tweet.getAuthorid(), tweet.getAuthor());
 	vh.face.setAvatarUrl(tweet.getPortrait());
 	vh.author.setText(tweet.getAuthor());
 	vh.time.setText(StringUtils.friendly_time(tweet.getPubDate()));
-	
+
 	vh.content.setMovementMethod(MyLinkMovementMethod.a());
 	vh.content.setFocusable(false);
 	vh.content.setDispatchToParent(true);
@@ -155,17 +190,18 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
 	}
 	final ViewHolder vh1 = vh;
 	OnClickListener likeClick = new OnClickListener() {
-	    
+
 	    @Override
 	    public void onClick(View v) {
 		// TODO Auto-generated method stub
 		if (AppContext.getInstance().isLogin()) {
-		    if (tweet.getAuthorid() == AppContext.getInstance().getLoginUid()) {
+		    if (tweet.getAuthorid() == AppContext.getInstance()
+			    .getLoginUid()) {
 			AppContext.showToast("不能给自己点赞~");
 		    } else {
 			updateLikeState(vh1, tweet);
 		    }
-		    
+
 		} else {
 		    AppContext.showToast("先登陆再赞~");
 		    UIHelper.showLoginActivity(parent.getContext());
@@ -202,18 +238,20 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
 	}
 	return convertView;
     }
-    
+
     private void updateLikeState(ViewHolder vh, Tweet tweet) {
-	
+
 	if (tweet.getIsLike() == 1) {
 	    vh.likeUser.removeViewAt(0);
-	    OSChinaApi.pubUnLikeTweet(tweet.getId(), tweet.getAuthorid(), handler);
+	    OSChinaApi.pubUnLikeTweet(tweet.getId(), tweet.getAuthorid(),
+		    handler);
 	    vh.likeState.setBackgroundResource(R.drawable.ic_unlike);
 	    tweet.setIsLike(0);
 	    tweet.setLikeCount(tweet.getLikeCount() - 1);
 	} else {
 	    vh.likeUser.addLikeUser(AppContext.getInstance().getLoginUser());
-	    OSChinaApi.pubLikeTweet(tweet.getId(), tweet.getAuthorid(), handler);
+	    OSChinaApi
+		    .pubLikeTweet(tweet.getId(), tweet.getAuthorid(), handler);
 	    vh.likeState.setBackgroundResource(R.drawable.ic_likeed);
 	    tweet.setIsLike(1);
 	    tweet.setLikeCount(tweet.getLikeCount() + 1);

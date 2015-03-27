@@ -28,5 +28,6 @@
    	<string name="fa_thumbs_o_up">&#xf087;</string>
    	<string name="fa_list">&#xf03a;</string>
    	<string name="fa_icon_phone">&#xf095;</string>
+   	<string name="fa_trash">&#xf014;</string>
     
 </resources>
