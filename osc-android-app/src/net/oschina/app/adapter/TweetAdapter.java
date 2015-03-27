@@ -160,8 +160,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
                 }
             });
 
-            kjb.display(vh.image, imgSmall, R.drawable.pic_bg, rectSize,
-                    rectSize);
+            kjb.display(vh.image, imgSmall, R.drawable.pic_bg, 500, 500);
             vh.image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -197,8 +196,9 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
      * @param bitmap
      */
     private void initBitmapInList(final ViewHolder vh, View view, Bitmap bitmap) {
-        bitmap = BitmapHelper
-                .scaleWithXY(bitmap, rectSize / bitmap.getHeight());
+        bitmap = BitmapHelper.scaleWithXY(bitmap,
+                DensityUtils.getScreenW(view.getContext()) / bitmap.getHeight()
+                        / 3);
         ((ImageView) view).setImageBitmap(bitmap);
     }
 }
