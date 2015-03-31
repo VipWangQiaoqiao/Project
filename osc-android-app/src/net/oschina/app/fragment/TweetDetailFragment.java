@@ -508,12 +508,14 @@ public class TweetDetailFragment extends
 	if (AppContext.getInstance().isLogin()) {
 	    if (mTweet.getIsLike() == 1) {
 		mTweet.setIsLike(0);
+		mTweet.getLikeUser().remove(0);
 		mTweet.setLikeCount(mTweet.getLikeCount() - 1);
 		OSChinaApi.pubUnLikeTweet(mTweetId, mTweet.getAuthorid(),
 			handler);
 	    } else {
 		mLikeState.setAnimation(KJAnimations.getScaleAnimation(1.5f, 300));
 		mTweet.setIsLike(1);
+		mTweet.getLikeUser().add(0, AppContext.getInstance().getLoginUser());
 		mTweet.setLikeCount(mTweet.getLikeCount() + 1);
 		OSChinaApi
 			.pubLikeTweet(mTweetId, mTweet.getAuthorid(), handler);

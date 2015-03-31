@@ -328,7 +328,7 @@ public class Tweet extends Entity implements Parcelable {
             }
         }
         if (likeUsers.length < getLikeCount()) {
-            return ssb.append("等" + getLikeCount() + "觉得赞");
+            return ssb.append("等" + getLikeCount() + "人觉得赞");
         } else {
             return ssb.append("觉得赞");
         }
