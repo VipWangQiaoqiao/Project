@@ -110,7 +110,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         final ViewHolder vh;
         if (convertView == null || convertView.getTag() == null) {
             convertView = getLayoutInflater(parent.getContext()).inflate(
-                    R.layout.list_cell_tweets, null);
+                    R.layout.list_cell_tweet, null);
             vh = new ViewHolder(convertView);
             convertView.setTag(vh);
         } else {
