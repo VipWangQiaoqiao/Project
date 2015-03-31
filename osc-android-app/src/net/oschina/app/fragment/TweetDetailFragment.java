@@ -491,6 +491,10 @@ public class TweetDetailFragment extends
     private void likeOption() {
 	if (mTweet == null)
 	    return;
+	if (mTweet.getAuthorid() == AppContext.getInstance().getLoginUid()) {
+	    AppContext.showToast("不能为自己点赞~");
+	    return;
+	}
 	AsyncHttpResponseHandler handler = new AsyncHttpResponseHandler() {
 
 	    @Override
