@@ -106,6 +106,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
     @Override
     protected View getRealView(final int position, View convertView,
             final ViewGroup parent) {
+	context = parent.getContext();
         final ViewHolder vh;
         if (convertView == null || convertView.getTag() == null) {
             convertView = getLayoutInflater(parent.getContext()).inflate(

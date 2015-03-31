@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.util.UIHelper;
+import net.oschina.app.widget.MyLinkMovementMethod;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -250,8 +251,9 @@ public class Tweet extends Entity implements Parcelable {
         if (getLikeCount() > 0) {
             likeUser.setVisibility(View.VISIBLE);
             likeUser.setMovementMethod(LinkMovementMethod.getInstance());
+            likeUser.setFocusable(false);
+            likeUser.setLongClickable(false);
             likeUser.setText(addClickablePart(contet), BufferType.SPANNABLE);
-            likeUser.setOnClickListener(null);
         } else {
             likeUser.setVisibility(View.GONE);
             likeUser.setText("");
