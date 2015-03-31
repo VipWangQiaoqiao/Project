@@ -4,18 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.R;
 import net.oschina.app.util.UIHelper;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.text.style.ImageSpan;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
@@ -73,264 +70,265 @@ public class Tweet extends Entity implements Parcelable {
     private String imageFilePath;
     private String audioPath;
 
-    public Tweet() {
-    }
+    public Tweet() {}
 
     public Tweet(Parcel dest) {
-	id = dest.readInt();
-	portrait = dest.readString();
-	author = dest.readString();
-	authorid = dest.readInt();
-	body = dest.readString();
-	appclient = dest.readInt();
-	commentCount = dest.readString();
-	pubDate = dest.readString();
-	imgSmall = dest.readString();
-	imgBig = dest.readString();
-	attach = dest.readString();
-	imageFilePath = dest.readString();
-	audioPath = dest.readString();
-	isLike = dest.readInt();
+        id = dest.readInt();
+        portrait = dest.readString();
+        author = dest.readString();
+        authorid = dest.readInt();
+        body = dest.readString();
+        appclient = dest.readInt();
+        commentCount = dest.readString();
+        pubDate = dest.readString();
+        imgSmall = dest.readString();
+        imgBig = dest.readString();
+        attach = dest.readString();
+        imageFilePath = dest.readString();
+        audioPath = dest.readString();
+        isLike = dest.readInt();
     }
 
     public String getAttach() {
-	return attach;
+        return attach;
     }
 
     public void setAttach(String attach) {
-	this.attach = attach;
+        this.attach = attach;
     }
 
     public String getPortrait() {
-	return portrait;
+        return portrait;
     }
 
     public void setPortrait(String portrait) {
-	this.portrait = portrait;
+        this.portrait = portrait;
     }
 
     public String getAuthor() {
-	return author;
+        return author;
     }
 
     public void setAuthor(String author) {
-	this.author = author;
+        this.author = author;
     }
 
     public int getAuthorid() {
-	return authorid;
+        return authorid;
     }
 
     public void setAuthorid(int authorid) {
-	this.authorid = authorid;
+        this.authorid = authorid;
     }
 
     public String getBody() {
-	return body;
+        return body;
     }
 
     public void setBody(String body) {
-	this.body = body;
+        this.body = body;
     }
 
     public int getAppclient() {
-	return appclient;
+        return appclient;
     }
 
     public void setAppclient(int appclient) {
-	this.appclient = appclient;
+        this.appclient = appclient;
     }
 
     public String getCommentCount() {
-	return commentCount;
+        return commentCount;
     }
 
     public void setCommentCount(String commentCount) {
-	this.commentCount = commentCount;
+        this.commentCount = commentCount;
     }
 
     public String getPubDate() {
-	return pubDate;
+        return pubDate;
     }
 
     public void setPubDate(String pubDate) {
-	this.pubDate = pubDate;
+        this.pubDate = pubDate;
     }
 
     public String getImgSmall() {
-	return imgSmall;
+        return imgSmall;
     }
 
     public void setImgSmall(String imgSmall) {
-	this.imgSmall = imgSmall;
+        this.imgSmall = imgSmall;
     }
 
     public String getImgBig() {
-	return imgBig;
+        return imgBig;
     }
 
     public void setImgBig(String imgBig) {
-	this.imgBig = imgBig;
+        this.imgBig = imgBig;
     }
 
     public String getImageFilePath() {
-	return imageFilePath;
+        return imageFilePath;
     }
 
     public void setImageFilePath(String imageFilePath) {
-	this.imageFilePath = imageFilePath;
+        this.imageFilePath = imageFilePath;
     }
 
     public String getAudioPath() {
-	return audioPath;
+        return audioPath;
     }
 
     public void setAudioPath(String audioPath) {
-	this.audioPath = audioPath;
+        this.audioPath = audioPath;
     }
 
     public List<User> getLikeUser() {
-	return likeUser;
+        return likeUser;
     }
 
     public void setLikeUser(List<User> likeUser) {
-	this.likeUser = likeUser;
+        this.likeUser = likeUser;
     }
 
     public int getLikeCount() {
-	return likeCount;
+        return likeCount;
     }
 
     public void setLikeCount(int likeCount) {
-	this.likeCount = likeCount;
+        this.likeCount = likeCount;
     }
 
     public int getIsLike() {
-	return isLike;
+        return isLike;
     }
 
     public void setIsLike(int isLike) {
-	this.isLike = isLike;
+        this.isLike = isLike;
     }
 
     @Override
     public int describeContents() {
-	return 0;
+        return 0;
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-	dest.writeInt(id);
-	dest.writeString(portrait);
-	dest.writeString(author);
-	dest.writeInt(authorid);
-	dest.writeString(body);
-	dest.writeInt(appclient);
-	dest.writeString(commentCount);
-	dest.writeString(pubDate);
-	dest.writeString(imgSmall);
-	dest.writeString(imgBig);
-	dest.writeString(attach);
-	dest.writeString(imageFilePath);
-	dest.writeString(audioPath);
-	dest.writeInt(isLike);
+        dest.writeInt(id);
+        dest.writeString(portrait);
+        dest.writeString(author);
+        dest.writeInt(authorid);
+        dest.writeString(body);
+        dest.writeInt(appclient);
+        dest.writeString(commentCount);
+        dest.writeString(pubDate);
+        dest.writeString(imgSmall);
+        dest.writeString(imgBig);
+        dest.writeString(attach);
+        dest.writeString(imageFilePath);
+        dest.writeString(audioPath);
+        dest.writeInt(isLike);
     }
 
     public static final Parcelable.Creator<Tweet> CREATOR = new Creator<Tweet>() {
 
-	@Override
-	public Tweet[] newArray(int size) {
-	    return new Tweet[size];
-	}
+        @Override
+        public Tweet[] newArray(int size) {
+            return new Tweet[size];
+        }
 
-	@Override
-	public Tweet createFromParcel(Parcel source) {
-	    return new Tweet(source);
-	}
+        @Override
+        public Tweet createFromParcel(Parcel source) {
+            return new Tweet(source);
+        }
     };
 
     public void setLikeUsers(Context contet, TextView likeUser) {
-	// 构造多个超链接的html, 通过选中的位置来获取用户名
-	if (getLikeCount() > 0) {
-	    likeUser.setVisibility(View.VISIBLE);
-	    likeUser.setMovementMethod(LinkMovementMethod.getInstance());
-	    likeUser.setText(addClickablePart(contet), BufferType.SPANNABLE);
-	} else {
-	    likeUser.setVisibility(View.GONE);
-	    likeUser.setText("");
-	}
+        // 构造多个超链接的html, 通过选中的位置来获取用户名
+        if (getLikeCount() > 0) {
+            likeUser.setVisibility(View.VISIBLE);
+            likeUser.setMovementMethod(LinkMovementMethod.getInstance());
+            likeUser.setText(addClickablePart(contet), BufferType.SPANNABLE);
+            likeUser.setOnClickListener(null);
+        } else {
+            likeUser.setVisibility(View.GONE);
+            likeUser.setText("");
+        }
     }
-    
+
     /**
      * @param str
      * @return
      */
     private SpannableStringBuilder addClickablePart(final Context context) {
 
-	StringBuilder sbBuilder = new StringBuilder();
-	int showCunt = getLikeCount();
-	if (getLikeCount() > 4) {
-	    showCunt = 4;
-	}
-	
-	if (getIsLike() == 1) {
-	    
-	    for (int i = 0; i < getLikeUser().size(); i++) {
-		if (getLikeUser().get(i).getUid() == AppContext.getInstance().getLoginUid()) {
-		    getLikeUser().remove(i);
-		}
-	    }
-	    getLikeUser().add(0, AppContext.getInstance().getLoginUser());
-	}
-	
-	for (int i = 0; i < showCunt; i++) {
-	    sbBuilder.append(getLikeUser().get(i).getName() + "、");
-	}
+        StringBuilder sbBuilder = new StringBuilder();
+        int showCunt = getLikeCount();
+        if (getLikeCount() > 4) {
+            showCunt = 4;
+        }
 
-	String likeUsersStr = sbBuilder
-		.substring(0, sbBuilder.lastIndexOf("、")).toString();
+        if (getIsLike() == 1) {
 
-	// 第一个赞图标
-//	ImageSpan span = new ImageSpan(AppContext.getInstance(),
-//		R.drawable.ic_unlike_small);
-	SpannableString spanStr = new SpannableString("");
-//	spanStr.setSpan(span, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+            for (int i = 0; i < getLikeUser().size(); i++) {
+                if (getLikeUser().get(i).getUid() == AppContext.getInstance()
+                        .getLoginUid()) {
+                    getLikeUser().remove(i);
+                }
+            }
+            getLikeUser().add(0, AppContext.getInstance().getLoginUser());
+        }
 
-	SpannableStringBuilder ssb = new SpannableStringBuilder(spanStr);
-	ssb.append(likeUsersStr);
+        for (int i = 0; i < showCunt; i++) {
+            sbBuilder.append(getLikeUser().get(i).getName() + "、");
+        }
 
-	String[] likeUsers = likeUsersStr.split("、");
+        String likeUsersStr = sbBuilder
+                .substring(0, sbBuilder.lastIndexOf("、")).toString();
 
-	if (likeUsers.length > 0) {
-	    // 最后一个
-	    for (int i = 0; i < likeUsers.length; i++) {
-		final String name = likeUsers[i];
-		final int start = likeUsersStr.indexOf(name) + spanStr.length();
-		final int index = i;
-		ssb.setSpan(new ClickableSpan() {
+        // 第一个赞图标
+        // ImageSpan span = new ImageSpan(AppContext.getInstance(),
+        // R.drawable.ic_unlike_small);
+        SpannableString spanStr = new SpannableString("");
+        // spanStr.setSpan(span, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
 
-		    @Override
-		    public void onClick(View widget) {
-			User user = getLikeUser().get(index);
-			UIHelper.showUserCenter(context, user.getUid(),
-				user.getName());
-		    }
+        SpannableStringBuilder ssb = new SpannableStringBuilder(spanStr);
+        ssb.append(likeUsersStr);
 
-		    @Override
-		    public void updateDrawState(TextPaint ds) {
-			super.updateDrawState(ds);
-			// ds.setColor(R.color.link_color); // 设置文本颜色
-			// 去掉下划线
-			ds.setUnderlineText(false);
-		    }
+        String[] likeUsers = likeUsersStr.split("、");
 
-		}, start, start + name.length(), 0);
-	    }
-	}
-	if (likeUsers.length < getLikeCount()) {
-	    return ssb.append("等" + getLikeCount() + "觉得赞");
-	} else {
-	    return ssb.append("觉得赞");
-	}
+        if (likeUsers.length > 0) {
+            // 最后一个
+            for (int i = 0; i < likeUsers.length; i++) {
+                final String name = likeUsers[i];
+                final int start = likeUsersStr.indexOf(name) + spanStr.length();
+                final int index = i;
+                ssb.setSpan(new ClickableSpan() {
+
+                    @Override
+                    public void onClick(View widget) {
+                        User user = getLikeUser().get(index);
+                        UIHelper.showUserCenter(context, user.getUid(),
+                                user.getName());
+                    }
+
+                    @Override
+                    public void updateDrawState(TextPaint ds) {
+                        super.updateDrawState(ds);
+                        // ds.setColor(R.color.link_color); // 设置文本颜色
+                        // 去掉下划线
+                        ds.setUnderlineText(false);
+                    }
+
+                }, start, start + name.length(), 0);
+            }
+        }
+        if (likeUsers.length < getLikeCount()) {
+            return ssb.append("等" + getLikeCount() + "觉得赞");
+        } else {
+            return ssb.append("觉得赞");
+        }
     }
 }

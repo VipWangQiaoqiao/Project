@@ -41,6 +41,7 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
         TextView tv_client;
         TextView tv_date;
         TextView tv_commit;
+        TextView tv_title;
         ImageView iv_pic;
     }
 
@@ -56,6 +57,7 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
                     .findViewById(R.id.event_listitem_userface);
             holder.tv_name = (TextView) v
                     .findViewById(R.id.event_listitem_username);
+            holder.tv_title = (TextView) v.findViewById(R.id.title);
             holder.tv_content = (TweetTextView) v
                     .findViewById(R.id.event_listitem_content);
             holder.tv_client = (TextView) v
@@ -73,6 +75,19 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
                 .getName());
         holder.tv_name.setText(data.getAuthor().getName());
         setContent(holder.tv_content, stripTags(data.getBody().getTitle()));
+
+        String date = StringUtils.friendly_time2(data.getCreateTime());
+        String preDate = "";
+        if (position > 0) {
+            preDate = StringUtils.friendly_time2(mDatas.get(position - 1)
+                    .getCreateTime());
+        }
+        if (preDate.equals(date)) {
+            holder.tv_title.setVisibility(View.GONE);
+        } else {
+            holder.tv_title.setText(date);
+            holder.tv_title.setVisibility(View.VISIBLE);
+        }
 
         holder.tv_content.setMaxLines(3);
         holder.tv_date.setText(StringUtils.friendly_time(data.getCreateTime()));

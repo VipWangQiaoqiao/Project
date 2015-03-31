@@ -128,6 +128,54 @@ public class StringUtils {
         return ftime;
     }
 
+    public static String friendly_time2(String sdate) {
+        String res = "";
+        if (isEmpty(sdate))
+            return "";
+
+        String[] weekDays = { "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" };
+        String currentData = StringUtils.getDataTime("MM-dd");
+        int currentDay = toInt(currentData.substring(3));
+        int currentMoth = toInt(currentData.substring(0, 2));
+
+        int sMoth = toInt(sdate.substring(5, 7));
+        int sDay = toInt(sdate.substring(8, 10));
+        int sYear = toInt(sdate.substring(0, 4));
+        Date dt = new Date(sYear, sMoth - 1, sDay - 1);
+
+        if (sDay == currentDay && sMoth == currentMoth) {
+            res = "今天 / " + weekDays[getWeekOfDate(new Date())];
+        } else if (sDay == currentDay + 1 && sMoth == currentMoth) {
+            res = "昨天 / " + weekDays[(getWeekOfDate(new Date()) + 6) % 7];
+        } else {
+            if (sMoth < 10) {
+                res = "0";
+            }
+            res += sMoth + "/";
+            if (sDay < 10) {
+                res += "0";
+            }
+            res += sDay + " / " + weekDays[getWeekOfDate(dt)];
+        }
+
+        return res;
+    }
+
+    /**
+     * 获取当前日期是星期几<br>
+     * 
+     * @param dt
+     * @return 当前日期是星期几
+     */
+    public static int getWeekOfDate(Date dt) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(dt);
+        int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
+        if (w < 0)
+            w = 0;
+        return w;
+    }
+
     /**
      * 判断给定字符串时间是否为今日
      * 

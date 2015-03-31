@@ -126,7 +126,7 @@ public class NotebookAdapter extends BaseAdapter implements DragGridBaseAdapter 
         }
         holder.thumbtack.setImageResource(NoteEditFragment.sThumbtackImgs[data
                 .getColor()]);
-        holder.content.setText(Html.fromHtml(data.getContent()).toString());
+        holder.content.setText(Html.fromHtml(data.getContent()));
         holder.content.setBackgroundColor(NoteEditFragment.sBackGrounds[data
                 .getColor()]);
         if (position == currentHidePosition) {
