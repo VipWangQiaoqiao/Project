@@ -27,6 +27,7 @@ import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.HTMLUtil;
+import net.oschina.app.util.KJAnimations;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -80,9 +81,8 @@ public class TweetDetailFragment extends
     private final RecordButtonUtil util = new RecordButtonUtil();
 
     private View mLLLikeOPtion;
-    private LikeContainer mLikeUser;
+    private TextView mLikeUser;
     private ImageView mLikeState;
-    private View mLikeLine;
     private View mLLComment;
 
     @Override
@@ -217,12 +217,10 @@ public class TweetDetailFragment extends
     private void setLikeUser() {
 	if (mTweet == null || mTweet.getLikeUser() == null
 		|| mTweet.getLikeUser().isEmpty()) {
-	    mLikeLine.setVisibility(View.GONE);
 	    mLikeUser.setVisibility(View.GONE);
 	} else {
-	    mLikeLine.setVisibility(View.VISIBLE);
 	    mLikeUser.setVisibility(View.VISIBLE);
-	    mLikeUser.setLikeUser(mTweet);
+	    mTweet.setLikeUsers(getApplication(), mLikeUser);
 	}
     }
 
@@ -446,6 +444,11 @@ public class TweetDetailFragment extends
     }
 
     @Override
+    protected boolean isRefresh() {
+	return true;
+    }
+
+    @Override
     protected View initHeaderView() {
 	Intent args = getActivity().getIntent();
 	mTweetId = args.getIntExtra("tweet_id", 0);
@@ -472,9 +475,8 @@ public class TweetDetailFragment extends
 		likeOption();
 	    }
 	});
-	mLikeUser = (LikeContainer) header.findViewById(R.id.ll_likeed_user);
+	mLikeUser = (TextView) header.findViewById(R.id.tv_likeusers);
 	mLikeState = (ImageView) header.findViewById(R.id.iv_like_state);
-	mLikeLine = header.findViewById(R.id.like_line);
 	mLLComment = header.findViewById(R.id.ll_comment);
 	mLLComment.setOnClickListener(new OnClickListener() {
 
@@ -491,27 +493,34 @@ public class TweetDetailFragment extends
 	if (mTweet == null)
 	    return;
 	AsyncHttpResponseHandler handler = new AsyncHttpResponseHandler() {
-	    
+
 	    @Override
 	    public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 		// TODO Auto-generated method stub
 	    }
-	    
+
 	    @Override
-	    public void onFailure(int arg0, Header[] arg1, byte[] arg2, Throwable arg3) {
+	    public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+		    Throwable arg3) {
 		// TODO Auto-generated method stub
-		
+
 	    }
 	};
 	if (AppContext.getInstance().isLogin()) {
 	    if (mTweet.getIsLike() == 1) {
 		mTweet.setIsLike(0);
-		OSChinaApi.pubUnLikeTweet(mTweetId, mTweet.getAuthorid(), handler);
+		mTweet.setLikeCount(mTweet.getLikeCount() - 1);
+		OSChinaApi.pubUnLikeTweet(mTweetId, mTweet.getAuthorid(),
+			handler);
 	    } else {
+		mLikeState.setAnimation(KJAnimations.getScaleAnimation(1.5f, 300));
 		mTweet.setIsLike(1);
-		OSChinaApi.pubLikeTweet(mTweetId, mTweet.getAuthorid(), handler);
+		mTweet.setLikeCount(mTweet.getLikeCount() + 1);
+		OSChinaApi
+			.pubLikeTweet(mTweetId, mTweet.getAuthorid(), handler);
 	    }
 	    setLikeState();
+	    mTweet.setLikeUsers(getActivity(), mLikeUser);
 	} else {
 	    AppContext.showToast("先登陆再点赞~");
 	}

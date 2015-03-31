@@ -78,11 +78,10 @@
             android:textColor="@android:color/white"
             android:textSize="15sp" />
     </RelativeLayout>
-
+    
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ll_likeed_user"
         android:layout_centerVertical="true"
         android:layout_marginBottom="@dimen/space_2"
         android:layout_marginTop="@dimen/space_6"
@@ -124,21 +123,15 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <View
-        android:id="@+id/like_line"
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:background="@color/list_divider_color" />
-
-    <net.oschina.app.widget.LikeContainer
-        android:id="@+id/ll_likeed_user"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tweet_bg_record"
-        android:layout_margin="10dp"
+    <TextView 
+        android:id="@+id/tv_likeusers"
+        android:layout_below="@id/ll_info"
         android:layout_toRightOf="@id/iv_tweet_face"
-        android:orientation="horizontal" >
-
-    </net.oschina.app.widget.LikeContainer>
+        android:layout_width="match_parent"
+        android:padding="8dp"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:clickable="false"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

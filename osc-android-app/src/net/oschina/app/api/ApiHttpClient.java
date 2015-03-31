@@ -16,10 +16,10 @@ import com.loopj.android.http.RequestParams;
 
 public class ApiHttpClient {
 
-    public final static String HOST = "www.oschina.net";
-    private static String API_URL = "http://www.oschina.net/%s";
-//    public final static String HOST = "192.168.1.118";
-//    private static String API_URL = "http://192.168.1.118/%s";
+//    public final static String HOST = "www.oschina.net";
+//    private static String API_URL = "http://www.oschina.net/%s";
+    public final static String HOST = "192.168.1.11";
+    private static String API_URL = "http://192.168.1.11:8000/%s";
     public static final String DELETE = "DELETE";
     public static final String GET = "GET";
     public static final String POST = "POST";
@@ -118,6 +118,7 @@ public class ApiHttpClient {
         client.addHeader("Connection", "Keep-Alive");
         client.getHttpClient().getParams()
                 .setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, true);
+        
         setUserAgent(ApiClientHelper.getUserAgent(AppContext.getInstance()));
     }
 

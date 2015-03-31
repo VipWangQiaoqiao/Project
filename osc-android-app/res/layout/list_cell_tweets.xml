@@ -18,7 +18,7 @@
         android:layout_marginBottom="@dimen/space_2"
         android:layout_toRightOf="@id/iv_tweet_face"
         android:textColor="@color/lightblue"
-        android:textSize="@dimen/text_size_13" />
+        android:textSize="@dimen/text_size_14" />
 
     <net.oschina.app.widget.TweetTextView
         android:id="@+id/tweet_item"
@@ -34,8 +34,8 @@
 
     <ImageView
         android:id="@+id/iv_tweet_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_below="@id/tweet_item"
         android:layout_marginBottom="@dimen/space_5"
         android:layout_marginRight="50dp"
@@ -47,20 +47,11 @@
         android:src="@drawable/pic_bg"
         android:visibility="gone" />
 
-    <net.oschina.app.widget.LikeContainer
-        android:id="@+id/ll_likeed_user"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/iv_tweet_image"
-        android:layout_marginTop="5dp"
-        android:layout_toRightOf="@id/iv_tweet_face"
-        android:orientation="horizontal" >
-    </net.oschina.app.widget.LikeContainer>
-
     <RelativeLayout
+        android:id="@+id/ll_info"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ll_likeed_user"
+        android:layout_below="@id/iv_tweet_image"
         android:layout_centerVertical="true"
         android:layout_marginBottom="@dimen/space_2"
         android:layout_marginTop="@dimen/space_6"
@@ -71,24 +62,18 @@
             android:id="@+id/tv_tweet_time"
             style="@style/list_text_info"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/space_10"
-            android:drawableLeft="@drawable/ic_time"
-            android:drawablePadding="@dimen/space_5" />
+            android:layout_marginRight="5dp" />
 
         <TextView
             android:id="@+id/tv_tweet_platform"
             style="@style/list_text_info"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/tv_tweet_time"
-            android:drawableLeft="@drawable/platform"
-            android:drawablePadding="@dimen/space_5"
-            android:gravity="bottom" />
+            android:layout_toRightOf="@id/tv_tweet_time" />
 
         <LinearLayout
             android:id="@+id/ll_comment"
             android:layout_width="35dp"
             android:layout_height="20dp"
-            android:layout_marginRight="5dp"
             android:layout_alignParentRight="true"
             android:background="@drawable/btn_oval_background"
             android:gravity="center" >
@@ -116,18 +101,31 @@
                 android:layout_height="12dp"
                 android:background="@drawable/ic_unlike" />
         </LinearLayout>
-        
-        <TextView 
+
+        <TextView
             android:id="@+id/tv_del"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/ll_like"
             android:layout_centerVertical="true"
-            android:textColor="#ccc"
             android:layout_marginRight="10dp"
-            android:textSize="18sp"
-            android:text="@string/fa_trash" />
-        
+            android:layout_toLeftOf="@id/ll_like"
+            android:text="删除"
+            android:textColor="#ccc"
+            android:textSize="11sp" />
     </RelativeLayout>
+    
+    <TextView 
+        android:id="@+id/tv_likeusers"
+        android:layout_below="@id/ll_info"
+        android:layout_toRightOf="@id/iv_tweet_face"
+        android:layout_width="match_parent"
+        android:clickable="false"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="5dp"
+        android:textSize="12sp"
+        android:background="@drawable/comment_reply_container_bg2"
+        android:layout_height="wrap_content"/>
 
 </RelativeLayout>
