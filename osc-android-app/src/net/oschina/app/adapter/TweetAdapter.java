@@ -62,7 +62,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
     }
 
     private Bitmap recordBitmap;
-    private int rectSize;
+    private final int rectSize = 300;
     private final KJBitmap kjb = KJBitmap.create();
 
     private void initRecordImg(Context cxt) {
@@ -75,7 +75,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
     @Override
     protected View getRealView(int position, View convertView,
             final ViewGroup parent) {
-        ViewHolder vh = null;
+        final ViewHolder vh;
         if (convertView == null || convertView.getTag() == null) {
             convertView = getLayoutInflater(parent.getContext()).inflate(
                     R.layout.list_cell_tweets, null);
@@ -84,7 +84,6 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         } else {
             vh = (ViewHolder) convertView.getTag();
         }
-
         final Tweet tweet = mDatas.get(position);
 
         vh.face.setUserInfo(tweet.getAuthorid(), tweet.getAuthor());
@@ -150,17 +149,15 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
      */
     private void showTweetImage(final ViewHolder vh, String imgSmall,
             final String imgBig, final Context context) {
+        kjb.setCallback(new BitmapCallBack() {
+            @Override
+            public void onSuccess(View view, Bitmap bitmap) {
+                super.onSuccess(view, bitmap);
+                initBitmapInList(vh, view, bitmap);
+            }
+        });
         if (imgSmall != null && !TextUtils.isEmpty(imgSmall)) {
-            initImageSize(context);
-            kjb.setCallback(new BitmapCallBack() {
-                @Override
-                public void onSuccess(View view, Bitmap bitmap) {
-                    super.onSuccess(view, bitmap);
-                    initBitmapInList(vh, view, bitmap);
-                }
-            });
-
-            kjb.display(vh.image, imgSmall, R.drawable.pic_bg, 500, 500);
+            kjb.display(vh.image, imgSmall, R.drawable.pic_bg, -1, -1);
             vh.image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -175,19 +172,6 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
     }
 
     /**
-     * 初始化图片控件高度值
-     * 
-     * @param cxt
-     */
-    private void initImageSize(Context cxt) {
-        if (cxt != null && rectSize == 0) {
-            rectSize = (int) cxt.getResources().getDimension(R.dimen.space_100);
-        } else {
-            rectSize = 300;
-        }
-    }
-
-    /**
      * 初始化在ListView中的ImageView
      * 
      * @param vh
@@ -196,9 +180,8 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
      * @param bitmap
      */
     private void initBitmapInList(final ViewHolder vh, View view, Bitmap bitmap) {
-        bitmap = BitmapHelper.scaleWithXY(bitmap,
-                DensityUtils.getScreenW(view.getContext()) / bitmap.getHeight()
-                        / 3);
+        bitmap = BitmapHelper
+                .scaleWithXY(bitmap, rectSize / bitmap.getHeight());
         ((ImageView) view).setImageBitmap(bitmap);
     }
 }
