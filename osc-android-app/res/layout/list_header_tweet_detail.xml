@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/iv_avatar"
-            android:textColor="@color/main_purple"
+            android:textColor="@color/lightblue"
             android:textSize="@dimen/text_size_16" />
 
         <TextView

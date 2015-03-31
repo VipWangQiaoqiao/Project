@@ -33,7 +33,6 @@ import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
-import net.oschina.app.widget.LikeContainer;
 import net.oschina.app.widget.RecordButtonUtil;
 import net.oschina.app.widget.RecordButtonUtil.OnPlayListener;
 
