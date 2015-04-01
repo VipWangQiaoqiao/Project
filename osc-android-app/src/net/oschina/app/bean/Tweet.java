@@ -248,7 +248,7 @@ public class Tweet extends Entity implements Parcelable {
 
     public void setLikeUsers(Context contet, TextView likeUser) {
         // 构造多个超链接的html, 通过选中的位置来获取用户名
-        if (getLikeCount() > 0) {
+        if (getLikeCount() > 0 && getLikeUser() != null && !getLikeUser().isEmpty()) {
             likeUser.setVisibility(View.VISIBLE);
             likeUser.setMovementMethod(LinkMovementMethod.getInstance());
             likeUser.setFocusable(false);
