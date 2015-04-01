@@ -725,14 +725,9 @@ public class UIHelper {
         if (!((AppContext) context.getApplicationContext()).isLogin()
                 || notice == null)
             return;
-        TLog.log("NOTICE", "发送通知广播");
         Intent intent = new Intent(Constants.INTENT_ACTION_NOTICE);
         Bundle bundle = new Bundle();
         bundle.putSerializable("notice_bean", notice);
-        bundle.putInt("atmeCount", notice.getAtmeCount());
-        bundle.putInt("msgCount", notice.getMsgCount());
-        bundle.putInt("reviewCount", notice.getReviewCount());
-        bundle.putInt("newFansCount", notice.getNewFansCount());
         intent.putExtras(bundle);
         context.sendBroadcast(intent);
     }

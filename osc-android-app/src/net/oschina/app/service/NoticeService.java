@@ -54,12 +54,14 @@ public class NoticeService extends Service {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (Constants.INTENT_ACTION_NOTICE.equals(action)) {
-                int atmeCount = intent.getIntExtra("atmeCount", 0);// @我
-                int msgCount = intent.getIntExtra("msgCount", 0);// 留言
-                int reviewCount = intent.getIntExtra("reviewCount", 0);// 评论
-                int newFansCount = intent.getIntExtra("newFansCount", 0);// 新粉丝
+        	Notice notice = (Notice) intent.getSerializableExtra("notice_bean");
+                int atmeCount = notice.getAtmeCount();// @我
+                int msgCount = notice.getMsgCount();// 留言
+                int reviewCount = notice.getReviewCount();// 评论
+                int newFansCount = notice.getNewFansCount();// 新粉丝
+                int newLikeCount = notice.getNewLikeCount();// 点赞数
                 int activeCount = atmeCount + reviewCount + msgCount
-                        + newFansCount;
+                        + newFansCount + newLikeCount;
                 if (activeCount == 0) {
                     NotificationManagerCompat.from(NoticeService.this).cancel(
                             R.string.you_have_news_messages);
@@ -151,8 +153,9 @@ public class NoticeService extends Service {
         int msgCount = notice.getMsgCount();
         int reviewCount = notice.getReviewCount();
         int newFansCount = notice.getNewFansCount();
+        int newLikeCount = notice.getNewLikeCount();
 
-        int count = atmeCount + msgCount + reviewCount + newFansCount;
+        int count = atmeCount + msgCount + reviewCount + newFansCount + newLikeCount;
 
         if (count == 0) {
             lastNotifiyCount = 0;
@@ -182,6 +185,9 @@ public class NoticeService extends Service {
         }
         if (newFansCount > 0) {
             sb.append(getString(R.string.fans_count, newFansCount));
+        }
+        if (newLikeCount > 0) {
+            sb.append(getString(R.string.like_count, newLikeCount));
         }
         contentText = sb.toString();
 

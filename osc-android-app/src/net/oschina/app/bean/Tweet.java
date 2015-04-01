@@ -267,11 +267,12 @@ public class Tweet extends Entity implements Parcelable {
     private SpannableStringBuilder addClickablePart(final Context context) {
 
         StringBuilder sbBuilder = new StringBuilder();
-        int showCunt = getLikeCount();
+        int showCunt = getLikeUser().size();
         if (getLikeCount() > 4) {
             showCunt = 4;
         }
-
+        
+        // 如果已经点赞，始终让该用户在首位
         if (getIsLike() == 1) {
 
             for (int i = 0; i < getLikeUser().size(); i++) {

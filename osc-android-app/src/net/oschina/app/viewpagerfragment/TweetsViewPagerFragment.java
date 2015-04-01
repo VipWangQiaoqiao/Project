@@ -7,6 +7,7 @@ import net.oschina.app.base.BaseViewPagerFragment;
 import net.oschina.app.bean.TweetsList;
 import net.oschina.app.fragment.TweetsFragment;
 import net.oschina.app.interf.OnTabReselectListener;
+import net.oschina.app.ui.MainActivity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -19,48 +20,60 @@ import android.view.View;
  * 
  */
 public class TweetsViewPagerFragment extends BaseViewPagerFragment implements
-        OnTabReselectListener {
-
+	OnTabReselectListener {
+    
+    @Override
+    public void onResume() {
+        // TODO Auto-generated method stub
+        super.onResume();
+        if (MainActivity.mNotice != null && MainActivity.mNotice.getNewLikeCount() > 0) {
+            mViewPager.setCurrentItem(2);
+        }
+    }
+    
     @Override
     protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
 
-        String[] title = getResources().getStringArray(
-                R.array.tweets_viewpage_arrays);
-        adapter.addTab(title[0], "new_tweets", TweetsFragment.class,
-                getBundle(TweetsList.CATALOG_LATEST));
-        adapter.addTab(title[1], "hot_tweets", TweetsFragment.class,
-                getBundle(TweetsList.CATALOG_HOT));
-        adapter.addTab(title[2], "my_tweets", TweetsFragment.class,
-                getBundle(TweetsList.CATALOG_ME));
+	String[] title = getResources().getStringArray(
+		R.array.tweets_viewpage_arrays);
+	adapter.addTab(title[0], "new_tweets", TweetsFragment.class,
+		getBundle(TweetsList.CATALOG_LATEST));
+	adapter.addTab(title[1], "hot_tweets", TweetsFragment.class,
+		getBundle(TweetsList.CATALOG_HOT));
+	adapter.addTab(title[2], "my_tweets", TweetsFragment.class,
+		getBundle(TweetsList.CATALOG_ME));
     }
 
     private Bundle getBundle(int catalog) {
-        Bundle bundle = new Bundle();
-        bundle.putInt(BaseListFragment.BUNDLE_KEY_CATALOG, catalog);
-        return bundle;
+	Bundle bundle = new Bundle();
+	bundle.putInt(BaseListFragment.BUNDLE_KEY_CATALOG, catalog);
+	return bundle;
     }
 
     @Override
-    public void onClick(View v) {}
+    public void onClick(View v) {
+    }
 
     @Override
-    public void initView(View view) {}
+    public void initView(View view) {
+    }
 
     @Override
-    public void initData() {}
+    public void initData() {
+    }
 
     @Override
     public void onTabReselect() {
-        try {
-            int currentIndex = mViewPager.getCurrentItem();
-            Fragment currentFragment = getChildFragmentManager().getFragments()
-                    .get(currentIndex);
-            if (currentFragment != null
-                    && currentFragment instanceof OnTabReselectListener) {
-                OnTabReselectListener listener = (OnTabReselectListener) currentFragment;
-                listener.onTabReselect();
-            }
-        } catch (NullPointerException e) {
-        }
+	try {
+	    int currentIndex = mViewPager.getCurrentItem();
+	    Fragment currentFragment = getChildFragmentManager().getFragments()
+		    .get(currentIndex);
+	    if (currentFragment != null
+		    && currentFragment instanceof OnTabReselectListener) {
+		OnTabReselectListener listener = (OnTabReselectListener) currentFragment;
+		listener.onTabReselect();
+	    }
+	} catch (NullPointerException e) {
+	}
     }
 }
