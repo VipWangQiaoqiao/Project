@@ -268,7 +268,7 @@ public class Tweet extends Entity implements Parcelable {
 
         StringBuilder sbBuilder = new StringBuilder();
         int showCunt = getLikeUser().size();
-        if (getLikeCount() > 4) {
+        if (showCunt > 4) {
             showCunt = 4;
         }
         

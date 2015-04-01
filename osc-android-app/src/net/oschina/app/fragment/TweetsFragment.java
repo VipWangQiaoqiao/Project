@@ -23,6 +23,7 @@ import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
+import net.oschina.app.widget.BadgeView;
 
 import org.apache.http.Header;
 
@@ -49,7 +50,7 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
     private static final String CACHE_KEY_PREFIX = "tweetslist_";
 
     private boolean mIsWatingLogin;
-
+    
     class DeleteTweetResponseHandler extends OperationResponseHandler {
 
 	DeleteTweetResponseHandler(Object... args) {

@@ -93,7 +93,7 @@ public class MainActivity extends ActionBarActivity implements
                 	mBvNotice.show();
                     } else {
                 	mBvNotice.hide();
-                        mNotice = null;
+                        //mNotice = null;
                     }
                     
                     if (newLikeCount > 0) {

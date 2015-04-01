@@ -1,5 +1,6 @@
 package net.oschina.app.viewpagerfragment;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.base.BaseListFragment;
@@ -28,6 +29,8 @@ public class TweetsViewPagerFragment extends BaseViewPagerFragment implements
         super.onResume();
         if (MainActivity.mNotice != null && MainActivity.mNotice.getNewLikeCount() > 0) {
             mViewPager.setCurrentItem(2);
+        } else {
+            AppContext.showToast("没有通知");
         }
     }
     
