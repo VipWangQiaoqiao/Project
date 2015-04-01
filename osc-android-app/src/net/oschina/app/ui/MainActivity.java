@@ -67,7 +67,6 @@ public class MainActivity extends ActionBarActivity implements
     public MyFragmentTabHost mTabHost;
 
     private BadgeView mBvNotice;
-    private BadgeView mBvLike;
 
     public static Notice mNotice;
 
@@ -82,7 +81,7 @@ public class MainActivity extends ActionBarActivity implements
                 int newFansCount = mNotice.getNewFansCount();// 新粉丝
                 int newLikeCount= mNotice.getNewLikeCount();// 收到赞
                 int activeCount = atmeCount + reviewCount + msgCount
-                        + newFansCount;
+                        + newFansCount + newLikeCount;
 
                 Fragment fragment = getCurrentFragment();
                 if (fragment instanceof MyInformationFragment) {
@@ -93,14 +92,7 @@ public class MainActivity extends ActionBarActivity implements
                 	mBvNotice.show();
                     } else {
                 	mBvNotice.hide();
-                        //mNotice = null;
-                    }
-                    
-                    if (newLikeCount > 0) {
-                	mBvLike.setText(newLikeCount + "");
-                	mBvLike.show();
-                    } else {
-                	mBvLike.hide();
+                        mNotice = null;
                     }
                 }
             } else if (intent.getAction()
@@ -280,14 +272,6 @@ public class MainActivity extends ActionBarActivity implements
                 mBvNotice.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
                 mBvNotice.setBackgroundResource(R.drawable.notification_bg);
                 mBvNotice.setGravity(Gravity.CENTER);
-            }
-            if (mainTab.equals(MainTab.TWEET)) {
-        	View cn = indicator.findViewById(R.id.tab_mes);
-                mBvLike = new BadgeView(MainActivity.this, cn);
-                mBvLike.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
-                mBvLike.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
-                mBvLike.setBackgroundResource(R.drawable.notification_bg);
-                mBvLike.setGravity(Gravity.CENTER);
             }
             mTabHost.getTabWidget().getChildAt(i).setOnTouchListener(this);
         }

@@ -246,14 +246,14 @@ public class Tweet extends Entity implements Parcelable {
         }
     };
 
-    public void setLikeUsers(Context contet, TextView likeUser) {
+    public void setLikeUsers(Context contet, TextView likeUser, boolean limit) {
         // 构造多个超链接的html, 通过选中的位置来获取用户名
         if (getLikeCount() > 0 && getLikeUser() != null && !getLikeUser().isEmpty()) {
             likeUser.setVisibility(View.VISIBLE);
             likeUser.setMovementMethod(LinkMovementMethod.getInstance());
             likeUser.setFocusable(false);
             likeUser.setLongClickable(false);
-            likeUser.setText(addClickablePart(contet), BufferType.SPANNABLE);
+            likeUser.setText(addClickablePart(contet, limit), BufferType.SPANNABLE);
         } else {
             likeUser.setVisibility(View.GONE);
             likeUser.setText("");
@@ -264,11 +264,11 @@ public class Tweet extends Entity implements Parcelable {
      * @param str
      * @return
      */
-    private SpannableStringBuilder addClickablePart(final Context context) {
+    private SpannableStringBuilder addClickablePart(final Context context, boolean limit) {
 
         StringBuilder sbBuilder = new StringBuilder();
         int showCunt = getLikeUser().size();
-        if (showCunt > 4) {
+        if (limit && showCunt > 4) {
             showCunt = 4;
         }
         

@@ -219,7 +219,7 @@ public class TweetDetailFragment extends
 	    mLikeUser.setVisibility(View.GONE);
 	} else {
 	    mLikeUser.setVisibility(View.VISIBLE);
-	    mTweet.setLikeUsers(getApplication(), mLikeUser);
+	    mTweet.setLikeUsers(getActivity(), mLikeUser, false);
 	}
     }
 
@@ -525,7 +525,7 @@ public class TweetDetailFragment extends
 			.pubLikeTweet(mTweetId, mTweet.getAuthorid(), handler);
 	    }
 	    setLikeState();
-	    mTweet.setLikeUsers(getActivity(), mLikeUser);
+	    mTweet.setLikeUsers(getActivity(), mLikeUser, false);
 	} else {
 	    AppContext.showToast("先登陆再点赞~");
 	}

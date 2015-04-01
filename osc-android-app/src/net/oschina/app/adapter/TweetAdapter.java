@@ -160,7 +160,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
 
         showTweetImage(vh, tweet.getImgSmall(), tweet.getImgBig(),
                 parent.getContext());
-        tweet.setLikeUsers(context, vh.likeUsers);
+        tweet.setLikeUsers(context, vh.likeUsers, true);
         final ViewHolder vh1 = vh;
         OnClickListener likeClick = new OnClickListener() {
 
@@ -231,7 +231,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             tweet.setIsLike(1);
             tweet.setLikeCount(tweet.getLikeCount() + 1);
         }
-        tweet.setLikeUsers(context, vh.likeUsers);
+        tweet.setLikeUsers(context, vh.likeUsers, true);
     }
 
     private void optionDel(Context context, final Tweet tweet,
