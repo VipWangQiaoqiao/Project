@@ -21,12 +21,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/white"
-            android:paddingBottom="20dp"
             android:paddingLeft="15dp"
             android:paddingRight="10dp"
-            android:paddingTop="20dp"
-            android:text="标题"
-            android:textSize="17sp" />
+            android:text="标题" />
     </RelativeLayout>
 
     <LinearLayout
