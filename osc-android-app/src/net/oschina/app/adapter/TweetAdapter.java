@@ -71,6 +71,8 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         TextView del;
         @InjectView(R.id.tv_likeusers)
         TextView likeUsers;
+        @InjectView(R.id.ll_like)
+        View likeOption;
 
         public ViewHolder(View view) {
             ButterKnife.inject(this, view);
@@ -181,7 +183,11 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
                 }
             }
         };
-        vh.likeState.setOnClickListener(likeClick);
+        if (tweet.getLikeUser() == null) {
+            vh.likeOption.setVisibility(View.GONE);
+        }
+        
+        vh.likeOption.setOnClickListener(likeClick);
         if (tweet.getIsLike() == 1) {
             vh.likeState.setBackgroundResource(R.drawable.ic_likeed);
         } else {
