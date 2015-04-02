@@ -153,7 +153,7 @@ public class FindUserFragment extends BaseFragment implements
 	    long id) {
 	User user = (User) mAdapter.getItem(position);
 	if (user != null)
-	    UIHelper.showUserCenter(getActivity(), user.getUid(),
+	    UIHelper.showUserCenter(getActivity(), user.getId(),
 		    user.getName());
     }
 

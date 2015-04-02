@@ -11,11 +11,13 @@ import net.oschina.app.api.OperationResponseHandler;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.Constants;
+import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetsList;
 import net.oschina.app.interf.OnTabReselectListener;
+import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -23,6 +25,7 @@ import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
+import net.oschina.app.viewpagerfragment.NoticeViewPagerFragment;
 import net.oschina.app.widget.BadgeView;
 
 import org.apache.http.Header;
@@ -50,7 +53,7 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
     private static final String CACHE_KEY_PREFIX = "tweetslist_";
 
     private boolean mIsWatingLogin;
-    
+
     class DeleteTweetResponseHandler extends OperationResponseHandler {
 
 	DeleteTweetResponseHandler(Object... args) {
@@ -259,7 +262,7 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
     public void onTabReselect() {
 	onRefresh();
     }
-    
+
     @Override
     protected long getAutoRefreshTime() {
 	// 最新动弹3分钟刷新一次
@@ -267,5 +270,18 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
 	    return 3 * 60;
 	}
 	return super.getAutoRefreshTime();
+    }
+
+    @Override
+    protected void onRefreshNetworkSuccess() {
+	// TODO Auto-generated method stub
+	super.onRefreshNetworkSuccess();
+	if (AppContext.getInstance().isLogin()
+		&& mCatalog == AppContext.getInstance().getLoginUid()
+		&& 4 == NoticeViewPagerFragment.sCurrentPage) {
+	    AppContext.showToast("请求清空动弹类的通知");
+	    NoticeUtils.clearNotice(Notice.TYPE_NEWLIKE);
+	    UIHelper.sendBroadcastForNotice(getActivity());
+	}
     }
 }

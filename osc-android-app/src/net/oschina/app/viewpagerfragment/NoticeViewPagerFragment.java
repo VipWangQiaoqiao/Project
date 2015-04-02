@@ -269,7 +269,6 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
                 ((BaseListFragment) getChildFragmentManager().getFragments()
                         .get(index)).onRefresh();
             } catch (Exception e) {
-        	AppContext.showToast("异常了");
                 e.printStackTrace();
             }
         }

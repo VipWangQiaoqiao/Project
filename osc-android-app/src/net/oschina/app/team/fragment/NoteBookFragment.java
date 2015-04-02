@@ -303,7 +303,7 @@ public class NoteBookFragment extends BaseFragment implements
                 mGrid.setAdapter(adapter);
             }
         }
-        if (user.getUid() == 0) { // 未登录时不请求网络
+        if (user.getId() == 0) { // 未登录时不请求网络
             return;
         }
         controller.doSynchronize(aty, new SynchronizeListener() {
@@ -337,8 +337,8 @@ public class NoteBookFragment extends BaseFragment implements
     private void delete(int index) {
         final int noteId = datas.get(index).getId();
         // 只有是登录用户才执行网络请求
-        if (user.getUid() > 0) {
-            OSChinaApi.deleteNoteBook(noteId, user.getUid(),
+        if (user.getId() > 0) {
+            OSChinaApi.deleteNoteBook(noteId, user.getId(),
                     new AsyncHttpResponseHandler() {
                         @Override
                         public void onSuccess(int arg0, Header[] arg1,

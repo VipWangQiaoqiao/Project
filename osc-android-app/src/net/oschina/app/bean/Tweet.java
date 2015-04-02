@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.oschina.app.AppContext;
+import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.MyLinkMovementMethod;
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.SpannableString;
@@ -276,7 +278,7 @@ public class Tweet extends Entity implements Parcelable {
         if (getIsLike() == 1) {
 
             for (int i = 0; i < getLikeUser().size(); i++) {
-                if (getLikeUser().get(i).getUid() == AppContext.getInstance()
+                if (getLikeUser().get(i).getId() == AppContext.getInstance()
                         .getLoginUid()) {
                     getLikeUser().remove(i);
                 }
@@ -313,7 +315,7 @@ public class Tweet extends Entity implements Parcelable {
                     @Override
                     public void onClick(View widget) {
                         User user = getLikeUser().get(index);
-                        UIHelper.showUserCenter(context, user.getUid(),
+                        UIHelper.showUserCenter(context, user.getId(),
                                 user.getName());
                     }
 
@@ -329,7 +331,29 @@ public class Tweet extends Entity implements Parcelable {
             }
         }
         if (likeUsers.length < getLikeCount()) {
-            return ssb.append("等" + getLikeCount() + "人觉得很赞");
+            ssb.append("等");
+            int start = ssb.length();
+            String more = getLikeCount() + "人";
+            ssb.append(more);
+            ssb.setSpan(new ClickableSpan() {
+
+                @Override
+                public void onClick(View widget) {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(BaseListFragment.BUNDLE_KEY_CATALOG, getId());
+                    UIHelper.showSimpleBack(context, SimpleBackPage.TWEET_LIKE_USER_LIST, bundle);
+                }
+
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    super.updateDrawState(ds);
+                    // ds.setColor(R.color.link_color); // 设置文本颜色
+                    // 去掉下划线
+                    ds.setUnderlineText(false);
+                }
+
+            }, start, start + more.length(), 0);
+            return ssb.append("觉得很赞");
         } else {
             return ssb.append("觉得很赞");
         }
