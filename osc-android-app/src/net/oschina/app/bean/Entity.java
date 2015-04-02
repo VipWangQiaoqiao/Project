@@ -12,24 +12,24 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @SuppressWarnings("serial")
 public abstract class Entity extends Base {
 
-	@XStreamAlias("id")
-	protected int id;
+    @XStreamAlias("id")
+    protected int id;
 
-	protected String cacheKey;
+    protected String cacheKey;
 
-	public int getId() {
-		return id;
-	}
+    public int getId() {
+	return id;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public void setId(int id) {
+	this.id = id;
+    }
 
-	public String getCacheKey() {
-		return cacheKey;
-	}
+    public String getCacheKey() {
+	return cacheKey;
+    }
 
-	public void setCacheKey(String cacheKey) {
-		this.cacheKey = cacheKey;
-	}
+    public void setCacheKey(String cacheKey) {
+	this.cacheKey = cacheKey;
+    }
 }

@@ -136,12 +136,12 @@ public class SoftWareTweetsFrament extends BaseListFragment<Tweet> implements
         mEmojiFragment.reset();
     }
 
-    // @Override
-    // public void onMoreClick(final Comment comment) {
-    // }
-
     @Override
     public void onSendClick(String text) {
+	if (mId == 0) {
+	    AppContext.showToast("无法获取该软件~");
+	    return;
+	}
         if (!TDevice.hasInternet()) {
             AppContext.showToastShort(R.string.tip_network_error);
             return;

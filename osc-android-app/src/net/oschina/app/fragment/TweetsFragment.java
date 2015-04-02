@@ -279,7 +279,6 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
 	if (AppContext.getInstance().isLogin()
 		&& mCatalog == AppContext.getInstance().getLoginUid()
 		&& 4 == NoticeViewPagerFragment.sCurrentPage) {
-	    AppContext.showToast("请求清空动弹类的通知");
 	    NoticeUtils.clearNotice(Notice.TYPE_NEWLIKE);
 	    UIHelper.sendBroadcastForNotice(getActivity());
 	}

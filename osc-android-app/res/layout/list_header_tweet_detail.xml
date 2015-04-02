@@ -91,7 +91,7 @@
 
         <LinearLayout
             android:id="@+id/ll_comment"
-            android:layout_width="45dp"
+            android:layout_width="50dp"
             android:layout_height="22dp"
             android:layout_alignParentRight="true"
             android:layout_marginRight="5dp"
@@ -108,7 +108,7 @@
 
         <LinearLayout
             android:id="@+id/ll_like"
-            android:layout_width="45dp"
+            android:layout_width="50dp"
             android:layout_height="22dp"
             android:layout_marginRight="5dp"
             android:layout_toLeftOf="@id/ll_comment"

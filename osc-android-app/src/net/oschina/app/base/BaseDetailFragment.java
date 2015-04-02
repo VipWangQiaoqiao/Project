@@ -325,6 +325,7 @@ public class BaseDetailFragment extends BaseFragment implements
      * @return
      */
     protected String getFilterHtmlBody(String body) {
+	if (body == null) return "";
     	return HTMLUtil.delHTMLTag(body.trim());
     }
 
