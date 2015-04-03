@@ -229,9 +229,9 @@ public class TweetDetailFragment extends
     private void fillWebViewBody() {
 	StringBuffer body = new StringBuffer();
 	body.append(UIHelper.WEB_STYLE + UIHelper.WEB_LOAD_IMAGES);
-	String tweetBody = TextUtils.isEmpty(mTweet.getImgBig()) ? mTweet
+	String tweetBody = TextUtils.isEmpty(mTweet.getImgSmall()) ? mTweet
 		.getBody() : mTweet.getBody() + "<br/><img src=\""
-		+ mTweet.getImgBig() + "\">";
+		+ mTweet.getImgSmall() + "\">";
 	body.append(setHtmlCotentSupportImagePreview(tweetBody));
 	UIHelper.addWebImageShow(getActivity(), mContent);
 	mContent.loadDataWithBaseURL(null, body.toString(), "text/html",
