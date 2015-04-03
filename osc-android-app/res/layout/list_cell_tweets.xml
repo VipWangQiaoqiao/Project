@@ -42,7 +42,7 @@
         android:layout_marginTop="@dimen/space_4"
         android:layout_toRightOf="@id/iv_tweet_face"
         android:clickable="true"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
         android:src="@drawable/pic_bg"
         android:visibility="gone" />
 
