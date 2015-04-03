@@ -133,7 +133,6 @@ public class SynchronizeController {
                         @Override
                         public void onFailure(int arg0, Header[] arg1,
                                 byte[] arg2, Throwable arg3) {
-                            KJLoger.debug(arg0 + new String(arg2));
                             cb.onFailure();
                         }
 

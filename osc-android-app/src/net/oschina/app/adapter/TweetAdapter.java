@@ -81,7 +81,6 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
 
     private Bitmap recordBitmap;
     private Context context;
-    private int rectSize;
     private final KJBitmap kjb = KJBitmap.create();
 
     final private AsyncHttpResponseHandler handler = new AsyncHttpResponseHandler() {
@@ -108,7 +107,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
     @Override
     protected View getRealView(final int position, View convertView,
             final ViewGroup parent) {
-	context = parent.getContext();
+        context = parent.getContext();
         final ViewHolder vh;
         if (convertView == null || convertView.getTag() == null) {
             convertView = getLayoutInflater(parent.getContext()).inflate(
@@ -165,7 +164,6 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         tweet.setLikeUsers(context, vh.likeUsers, true);
         final ViewHolder vh1 = vh;
         OnClickListener likeClick = new OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
@@ -186,7 +184,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         if (tweet.getLikeUser() == null) {
             vh.likeOption.setVisibility(View.GONE);
         }
-        
+
         vh.likeOption.setOnClickListener(likeClick);
         if (tweet.getIsLike() == 1) {
             vh.likeState.setBackgroundResource(R.drawable.ic_likeed);
@@ -289,7 +287,9 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             @Override
             public void onSuccess(View view, Bitmap bitmap) {
                 super.onSuccess(view, bitmap);
-                initBitmapInList(vh, view, bitmap);
+                bitmap = BitmapHelper.scaleWithXY(bitmap,
+                        350 / bitmap.getHeight());
+                ((ImageView) view).setImageBitmap(bitmap);
             }
         });
         if (imgSmall != null && !TextUtils.isEmpty(imgSmall)) {
@@ -305,19 +305,5 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         } else {
             vh.image.setVisibility(AvatarView.GONE);
         }
-    }
-
-    /**
-     * 初始化在ListView中的ImageView
-     * 
-     * @param vh
-     * @param params
-     * @param view
-     * @param bitmap
-     */
-    private void initBitmapInList(final ViewHolder vh, View view, Bitmap bitmap) {
-        bitmap = BitmapHelper
-                .scaleWithXY(bitmap, rectSize / bitmap.getHeight());
-        ((ImageView) view).setImageBitmap(bitmap);
     }
 }

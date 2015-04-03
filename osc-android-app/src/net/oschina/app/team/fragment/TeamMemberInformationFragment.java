@@ -21,6 +21,7 @@ import org.kymjs.kjframe.utils.StringUtils;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -118,6 +119,8 @@ public class TeamMemberInformationFragment extends BaseListFragment<TeamActive> 
         mTvAddress.setText(teamMember.getLocation());
         mImgHead.setAvatarUrl(teamMember.getPortrait());
         super.initView(view);
+        mListView.setSelector(new ColorDrawable(android.R.color.transparent));
+        mListView.setDivider(new ColorDrawable(android.R.color.transparent));
 
         mListView.setOnItemClickListener(new OnItemClickListener() {
             @Override

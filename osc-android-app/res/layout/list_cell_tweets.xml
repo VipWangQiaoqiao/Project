@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/list_item_background"
+    android:padding="@dimen/space_8" >
+
+    <net.oschina.app.widget.AvatarView
+        android:id="@+id/iv_tweet_face"
+        style="@style/user_face_image"
+        android:layout_marginRight="@dimen/space_10"
+        android:layout_marginTop="@dimen/space_3" />
+
+    <TextView
+        android:id="@+id/tv_tweet_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/space_2"
+        android:layout_toRightOf="@id/iv_tweet_face"
+        android:textColor="@color/lightblue"
+        android:textSize="@dimen/text_size_13" />
+
+    <net.oschina.app.widget.TweetTextView
+        android:id="@+id/tweet_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_tweet_name"
+        android:layout_marginTop="@dimen/space_4"
+        android:layout_toRightOf="@id/iv_tweet_face"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:textColor="@color/main_black"
+        android:textSize="@dimen/text_size_15" />
+
+    <ImageView
+        android:id="@+id/iv_tweet_image"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/space_100"
+        android:layout_below="@id/tweet_item"
+        android:layout_marginBottom="@dimen/space_5"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="@dimen/space_4"
+        android:layout_toRightOf="@id/iv_tweet_face"
+        android:clickable="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/pic_bg"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iv_tweet_image"
+        android:layout_marginBottom="@dimen/space_2"
+        android:layout_marginTop="@dimen/space_6"
+        android:layout_toRightOf="@id/iv_tweet_face"
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/tv_tweet_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/space_10"
+            android:drawableLeft="@drawable/ic_time"
+            android:drawablePadding="@dimen/space_5"
+            android:textColor="@color/tweet_time_platform"
+            android:textSize="@dimen/text_size_11" />
+
+        <TextView
+            android:id="@+id/tv_tweet_platform"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tv_tweet_time"
+            android:drawableLeft="@drawable/platform"
+            android:drawablePadding="@dimen/space_5"
+            android:gravity="center"
+            android:textColor="@color/main_gray"
+            android:textSize="@dimen/text_size_11" />
+
+        <TextView
+            android:id="@+id/tv_tweet_comment_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:drawableLeft="@drawable/ic_comment_count"
+            android:drawablePadding="@dimen/space_3"
+            android:textColor="@color/main_gray"
+            android:textSize="@dimen/text_size_12" />
+    </RelativeLayout>
+
+</RelativeLayout>
