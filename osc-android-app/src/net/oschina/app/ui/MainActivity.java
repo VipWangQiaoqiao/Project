@@ -394,4 +394,10 @@ public class MainActivity extends ActionBarActivity implements
         }
         return super.onKeyDown(keyCode, event);
     }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        // TODO Auto-generated method stub
+	// 当 API Level > 11 调用这个方法可能导致奔溃（android.os.Build.VERSION.SDK_INT > 11）
+    }
 }
