@@ -285,10 +285,16 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             final String imgBig, final Context context) {
         kjb.setCallback(new BitmapCallBack() {
             @Override
+            public void onPreLoad(View view) {
+                super.onPreLoad(view);
+                ((ImageView) view).setImageResource(R.drawable.pic_bg);
+            }
+
+            @Override
             public void onSuccess(View view, Bitmap bitmap) {
                 super.onSuccess(view, bitmap);
                 bitmap = BitmapHelper.scaleWithXY(bitmap,
-                        350 / bitmap.getHeight());
+                        300 / bitmap.getHeight());
                 ((ImageView) view).setImageBitmap(bitmap);
             }
         });

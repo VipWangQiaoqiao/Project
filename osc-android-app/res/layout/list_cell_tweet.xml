@@ -35,7 +35,7 @@
     <ImageView
         android:id="@+id/iv_tweet_image"
         android:layout_width="wrap_content"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/tweet_item"
         android:layout_marginBottom="@dimen/space_5"
         android:layout_marginRight="50dp"
