@@ -67,7 +67,7 @@
                 android:layout_marginTop="@dimen/space_4"
                 android:contentDescription="@null"
                 android:minWidth="@dimen/space_100"
-                android:scaleType="centerCrop"
+                android:scaleType="fitXY"
                 android:src="#cfcfcf" />
 
             <LinearLayout

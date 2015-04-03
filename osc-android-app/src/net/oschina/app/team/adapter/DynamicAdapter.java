@@ -9,11 +9,8 @@ import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.TweetTextView;
 
 import org.kymjs.kjframe.KJBitmap;
-import org.kymjs.kjframe.bitmap.BitmapCallBack;
-import org.kymjs.kjframe.bitmap.helper.BitmapHelper;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -27,7 +24,6 @@ import android.widget.TextView;
  */
 public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
     private final Context context;
-    private static int rectSize;
     private final KJBitmap kjb = KJBitmap.create();
 
     public DynamicAdapter(Context cxt) {
@@ -128,19 +124,7 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
      * @author kymjs
      */
     private void setTweetImage(final ImageView pic, final String url) {
-        pic.setVisibility(View.VISIBLE);
-        kjb.setCallback(new BitmapCallBack() {
-            @Override
-            public void onSuccess(View view, Bitmap bitmap) {
-                super.onSuccess(view, bitmap);
-                bitmap = BitmapHelper.scaleWithXY(bitmap,
-                        rectSize / bitmap.getHeight());
-                ((ImageView) view).setImageBitmap(bitmap);
-            }
-        });
-
-        kjb.display(pic, url, R.drawable.pic_bg, rectSize, rectSize);
-
+        kjb.display(pic, url, R.drawable.pic_bg, -1, -1);
         pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,13 +132,5 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
                         new String[] { url });
             }
         });
-    }
-
-    private static void initImageSize(Context cxt) {
-        if (cxt != null && rectSize == 0) {
-            rectSize = (int) cxt.getResources().getDimension(R.dimen.space_100);
-        } else {
-            rectSize = 300;
-        }
     }
 }
