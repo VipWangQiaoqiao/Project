@@ -27,7 +27,6 @@ import android.widget.TextView;
  */
 public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
     private final Context context;
-    private static int rectSize;
     private final KJBitmap kjb = KJBitmap.create();
 
     public DynamicAdapter(Context cxt) {
@@ -134,12 +133,12 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
             public void onSuccess(View view, Bitmap bitmap) {
                 super.onSuccess(view, bitmap);
                 bitmap = BitmapHelper.scaleWithXY(bitmap,
-                        rectSize / bitmap.getHeight());
+                        360 / bitmap.getHeight());
                 ((ImageView) view).setImageBitmap(bitmap);
             }
         });
 
-        kjb.display(pic, url, R.drawable.pic_bg, rectSize, rectSize);
+        kjb.display(pic, url, R.drawable.pic_bg, -1, -1);
 
         pic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,13 +147,5 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
                         new String[] { url });
             }
         });
-    }
-
-    private static void initImageSize(Context cxt) {
-        if (cxt != null && rectSize == 0) {
-            rectSize = (int) cxt.getResources().getDimension(R.dimen.space_100);
-        } else {
-            rectSize = 300;
-        }
     }
 }
