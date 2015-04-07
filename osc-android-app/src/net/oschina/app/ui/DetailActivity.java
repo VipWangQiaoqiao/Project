@@ -29,6 +29,10 @@ import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import butterknife.InjectView;
 
+import com.rockerhieu.emojicon.EmojiconGridFragment.OnEmojiconClickedListener;
+import com.rockerhieu.emojicon.EmojiconsFragment.OnEmojiconBackspaceClickedListener;
+import com.rockerhieu.emojicon.emoji.Emojicon;
+
 /**
  * 详情activity（包括：资讯、博客、软件、问答、动弹）
  * 
@@ -37,7 +41,8 @@ import butterknife.InjectView;
  * 
  */
 public class DetailActivity extends BaseActivity implements
-        ToolbarEmojiVisiableControl {
+        ToolbarEmojiVisiableControl, OnEmojiconBackspaceClickedListener,
+        OnEmojiconClickedListener {
 
     public static final int DISPLAY_NEWS = 0;
     public static final int DISPLAY_BLOG = 1;
@@ -139,6 +144,7 @@ public class DetailActivity extends BaseActivity implements
             trans.replace(R.id.emoji_container, f);
             ((EmojiFragmentControl) fragment).setEmojiFragment(f);
         }
+
         // 加入操作工具条
         if (fragment instanceof ToolbarFragmentControl) {
             ToolbarFragment f = new ToolbarFragment();
@@ -171,14 +177,10 @@ public class DetailActivity extends BaseActivity implements
             out.setAnimationListener(new AnimationListener() {
 
                 @Override
-                public void onAnimationStart(Animation animation) {
-                    //
-                }
+                public void onAnimationStart(Animation animation) {}
 
                 @Override
-                public void onAnimationRepeat(Animation animation) {
-                    // TODO Auto-generated method stub
-                }
+                public void onAnimationRepeat(Animation animation) {}
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
@@ -199,14 +201,10 @@ public class DetailActivity extends BaseActivity implements
             out.setAnimationListener(new AnimationListener() {
 
                 @Override
-                public void onAnimationStart(Animation animation) {
-                    // TODO Auto-generated method stub
-                }
+                public void onAnimationStart(Animation animation) {}
 
                 @Override
-                public void onAnimationRepeat(Animation animation) {
-                    // TODO Auto-generated method stub
-                }
+                public void onAnimationRepeat(Animation animation) {}
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
@@ -253,4 +251,15 @@ public class DetailActivity extends BaseActivity implements
 
     @Override
     public void initData() {}
+
+    @Override
+    public void onEmojiconBackspaceClicked(View v) {
+
+    }
+
+    @Override
+    public void onEmojiconClicked(Emojicon emojicon) {
+        // TODO Auto-generated method stub
+
+    }
 }
