@@ -71,6 +71,8 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         TextView del;
         @InjectView(R.id.tv_likeusers)
         TextView likeUsers;
+        @InjectView(R.id.ll_like)
+        View likeOption;
 
         public ViewHolder(View view) {
             ButterKnife.inject(this, view);
@@ -79,7 +81,6 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
 
     private Bitmap recordBitmap;
     private Context context;
-    private int rectSize;
     private final KJBitmap kjb = KJBitmap.create();
 
     final private AsyncHttpResponseHandler handler = new AsyncHttpResponseHandler() {
@@ -106,10 +107,11 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
     @Override
     protected View getRealView(final int position, View convertView,
             final ViewGroup parent) {
+        context = parent.getContext();
         final ViewHolder vh;
         if (convertView == null || convertView.getTag() == null) {
             convertView = getLayoutInflater(parent.getContext()).inflate(
-                    R.layout.list_cell_tweets, null);
+                    R.layout.list_cell_tweet, null);
             vh = new ViewHolder(convertView);
             convertView.setTag(vh);
         } else {
@@ -159,10 +161,9 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
 
         showTweetImage(vh, tweet.getImgSmall(), tweet.getImgBig(),
                 parent.getContext());
-        tweet.setLikeUsers(context, vh.likeUsers);
+        tweet.setLikeUsers(context, vh.likeUsers, true);
         final ViewHolder vh1 = vh;
         OnClickListener likeClick = new OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
@@ -180,7 +181,11 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
                 }
             }
         };
-        vh.likeState.setOnClickListener(likeClick);
+        if (tweet.getLikeUser() == null) {
+            vh.likeOption.setVisibility(View.GONE);
+        }
+
+        vh.likeOption.setOnClickListener(likeClick);
         if (tweet.getIsLike() == 1) {
             vh.likeState.setBackgroundResource(R.drawable.ic_likeed);
         } else {
@@ -230,7 +235,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             tweet.setIsLike(1);
             tweet.setLikeCount(tweet.getLikeCount() + 1);
         }
-        tweet.setLikeUsers(context, vh.likeUsers);
+        tweet.setLikeUsers(context, vh.likeUsers, true);
     }
 
     private void optionDel(Context context, final Tweet tweet,
@@ -280,9 +285,17 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             final String imgBig, final Context context) {
         kjb.setCallback(new BitmapCallBack() {
             @Override
+            public void onPreLoad(View view) {
+                super.onPreLoad(view);
+                ((ImageView) view).setImageResource(R.drawable.pic_bg);
+            }
+
+            @Override
             public void onSuccess(View view, Bitmap bitmap) {
                 super.onSuccess(view, bitmap);
-                initBitmapInList(vh, view, bitmap);
+                bitmap = BitmapHelper.scaleWithXY(bitmap,
+                        300 / bitmap.getHeight());
+                ((ImageView) view).setImageBitmap(bitmap);
             }
         });
         if (imgSmall != null && !TextUtils.isEmpty(imgSmall)) {
@@ -298,19 +311,5 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         } else {
             vh.image.setVisibility(AvatarView.GONE);
         }
-    }
-
-    /**
-     * 初始化在ListView中的ImageView
-     * 
-     * @param vh
-     * @param params
-     * @param view
-     * @param bitmap
-     */
-    private void initBitmapInList(final ViewHolder vh, View view, Bitmap bitmap) {
-        bitmap = BitmapHelper
-                .scaleWithXY(bitmap, rectSize / bitmap.getHeight());
-        ((ImageView) view).setImageBitmap(bitmap);
     }
 }

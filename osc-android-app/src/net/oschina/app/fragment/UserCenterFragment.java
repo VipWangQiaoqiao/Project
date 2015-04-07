@@ -140,10 +140,10 @@ public class UserCenterFragment extends BaseFragment implements
             UIHelper.showUserAvatar(getActivity(), mUser.getPortrait());
             break;
         case R.id.ly_following:
-            UIHelper.showFriends(getActivity(), mUser.getUid(), 0);
+            UIHelper.showFriends(getActivity(), mUser.getId(), 0);
             break;
         case R.id.ly_follower:
-            UIHelper.showFriends(getActivity(), mUser.getUid(), 1);
+            UIHelper.showFriends(getActivity(), mUser.getId(), 1);
             break;
         case R.id.tv_follow_user:
             handleUserRelation();
@@ -231,7 +231,7 @@ public class UserCenterFragment extends BaseFragment implements
     private void fillUI() {
         mListView.setVisibility(View.VISIBLE);
         ((AvatarView) mIvAvatar).setAvatarUrl(mUser.getPortrait());
-        mHisUid = mUser.getUid();
+        mHisUid = mUser.getId();
         mHisName = mUser.getName();
         mTvName.setText(mHisName);
 

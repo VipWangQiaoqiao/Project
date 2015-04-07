@@ -304,6 +304,10 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
 
     @Override
     public void onSendClick(String text) {
+	if (mSoftware.getId() == 0) {
+	    AppContext.showToast("无法获取该软件~");
+	    return;
+	}
 	if (!TDevice.hasInternet()) {
 	    AppContext.showToastShort(R.string.tip_network_error);
 	    return;

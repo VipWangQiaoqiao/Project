@@ -4,6 +4,8 @@ import java.io.InputStream;
 import java.io.Serializable;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 
 import net.oschina.app.adapter.TweetLikeUsersAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
@@ -11,6 +13,7 @@ import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.TweetLikeUserList;
 import net.oschina.app.bean.User;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
 /**
@@ -59,6 +62,16 @@ public class TweetLikeUsersFragment extends BaseListFragment<User> {
     protected void sendRequestData() {
         // TODO Auto-generated method stub
 	OSChinaApi.getTweetLikeList(mCatalog, mCurrentPage, mHandler);
+    }
+    
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position,
+            long id) {
+        // TODO Auto-generated method stub
+	User item = mAdapter.getItem(position);
+	if (item != null && item.getId() > 0) {
+	    UIHelper.showUserCenter(getActivity(), item.getId(), item.getName());
+	}
     }
 }
 

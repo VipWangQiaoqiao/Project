@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.oschina.app.AppContext;
+import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.util.UIHelper;
+import net.oschina.app.widget.MyLinkMovementMethod;
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.SpannableString;
@@ -245,13 +248,14 @@ public class Tweet extends Entity implements Parcelable {
         }
     };
 
-    public void setLikeUsers(Context contet, TextView likeUser) {
+    public void setLikeUsers(Context contet, TextView likeUser, boolean limit) {
         // 构造多个超链接的html, 通过选中的位置来获取用户名
-        if (getLikeCount() > 0) {
+        if (getLikeCount() > 0 && getLikeUser() != null && !getLikeUser().isEmpty()) {
             likeUser.setVisibility(View.VISIBLE);
             likeUser.setMovementMethod(LinkMovementMethod.getInstance());
-            likeUser.setText(addClickablePart(contet), BufferType.SPANNABLE);
-            likeUser.setOnClickListener(null);
+            likeUser.setFocusable(false);
+            likeUser.setLongClickable(false);
+            likeUser.setText(addClickablePart(contet, limit), BufferType.SPANNABLE);
         } else {
             likeUser.setVisibility(View.GONE);
             likeUser.setText("");
@@ -262,18 +266,19 @@ public class Tweet extends Entity implements Parcelable {
      * @param str
      * @return
      */
-    private SpannableStringBuilder addClickablePart(final Context context) {
+    private SpannableStringBuilder addClickablePart(final Context context, boolean limit) {
 
         StringBuilder sbBuilder = new StringBuilder();
-        int showCunt = getLikeCount();
-        if (getLikeCount() > 4) {
+        int showCunt = getLikeUser().size();
+        if (limit && showCunt > 4) {
             showCunt = 4;
         }
-
+        
+        // 如果已经点赞，始终让该用户在首位
         if (getIsLike() == 1) {
 
             for (int i = 0; i < getLikeUser().size(); i++) {
-                if (getLikeUser().get(i).getUid() == AppContext.getInstance()
+                if (getLikeUser().get(i).getId() == AppContext.getInstance()
                         .getLoginUid()) {
                     getLikeUser().remove(i);
                 }
@@ -310,7 +315,7 @@ public class Tweet extends Entity implements Parcelable {
                     @Override
                     public void onClick(View widget) {
                         User user = getLikeUser().get(index);
-                        UIHelper.showUserCenter(context, user.getUid(),
+                        UIHelper.showUserCenter(context, user.getId(),
                                 user.getName());
                     }
 
@@ -326,9 +331,31 @@ public class Tweet extends Entity implements Parcelable {
             }
         }
         if (likeUsers.length < getLikeCount()) {
-            return ssb.append("等" + getLikeCount() + "觉得赞");
+            ssb.append("等");
+            int start = ssb.length();
+            String more = getLikeCount() + "人";
+            ssb.append(more);
+            ssb.setSpan(new ClickableSpan() {
+
+                @Override
+                public void onClick(View widget) {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(BaseListFragment.BUNDLE_KEY_CATALOG, getId());
+                    UIHelper.showSimpleBack(context, SimpleBackPage.TWEET_LIKE_USER_LIST, bundle);
+                }
+
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    super.updateDrawState(ds);
+                    // ds.setColor(R.color.link_color); // 设置文本颜色
+                    // 去掉下划线
+                    ds.setUnderlineText(false);
+                }
+
+            }, start, start + more.length(), 0);
+            return ssb.append("觉得很赞");
         } else {
-            return ssb.append("觉得赞");
+            return ssb.append("觉得很赞");
         }
     }
 }

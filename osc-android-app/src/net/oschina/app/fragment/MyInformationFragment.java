@@ -168,7 +168,8 @@ public class MyInformationFragment extends BaseFragment {
             int msgCount = notice.getMsgCount();// 留言
             int reviewCount = notice.getReviewCount();// 评论
             int newFansCount = notice.getNewFansCount();// 新粉丝
-            int activeCount = atmeCount + reviewCount + msgCount + newFansCount;// 信息总数
+            int newLikeCount = notice.getNewLikeCount();// 获得点赞
+            int activeCount = atmeCount + reviewCount + msgCount + newFansCount + newLikeCount;// 信息总数
             if (activeCount > 0) {
                 mMesCount.setText(activeCount + "");
                 mMesCount.show();

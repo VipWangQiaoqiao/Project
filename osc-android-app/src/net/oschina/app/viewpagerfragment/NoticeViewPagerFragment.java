@@ -9,9 +9,11 @@ import net.oschina.app.bean.ActiveList;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.FriendsList;
 import net.oschina.app.bean.Notice;
+import net.oschina.app.bean.TweetsList;
 import net.oschina.app.fragment.ActiveFragment;
 import net.oschina.app.fragment.FriendsFragment;
 import net.oschina.app.fragment.MessageFragment;
+import net.oschina.app.fragment.TweetsFragment;
 import net.oschina.app.ui.MainActivity;
 import net.oschina.app.widget.BadgeView;
 import net.oschina.app.widget.PagerSlidingTabStrip.OnPagerChangeLis;
@@ -34,9 +36,9 @@ import android.view.View;
  */
 public class NoticeViewPagerFragment extends BaseViewPagerFragment {
 
-    public BadgeView mBvAtMe, mBvComment, mBvMsg, mBvFans;
+    public BadgeView mBvAtMe, mBvComment, mBvMsg, mBvFans, mBvLike;
     public static int sCurrentPage = 0;
-    public static int[] sShowCount = new int[] { 0, 0, 0, 0 }; // 当前界面显示了多少次
+    public static int[] sShowCount = new int[] { 0, 0, 0, 0, 0}; // 当前界面显示了多少次
     private BroadcastReceiver mNoticeReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -66,6 +68,7 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
             changeTip(mBvComment, notice.getReviewCount());// 评论
             changeTip(mBvMsg, notice.getMsgCount());// 留言
             changeTip(mBvFans, notice.getNewFansCount());// 新粉丝
+            changeTip(mBvLike, notice.getNewLikeCount());// 点赞数
         } else {
             switch (mViewPager.getCurrentItem()) {
             case 0:
@@ -80,6 +83,9 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
             case 3:
                 changeTip(mBvFans, -1);
                 break;
+            case 4:
+        	changeTip(mBvLike, -1);
+        	break;
             }
         }
     }
@@ -115,6 +121,8 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
             return mBvMsg.isShown();
         case 3:
             return mBvFans.isShown();
+        case 4:
+            return mBvLike.isShown();
         default:
             return false;
         }
@@ -148,6 +156,11 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
             sCurrentPage = 3;
             refreshPage(3);
             sShowCount[3] = 1;
+        } else if (notice.getNewLikeCount() != 0) {
+            mViewPager.setCurrentItem(4);
+            sCurrentPage = 4;
+            refreshPage(4);
+            sShowCount[4] = 1;
         }
     }
 
@@ -181,11 +194,18 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
         mBvFans.setBadgePosition(BadgeView.POSITION_CENTER);
         mBvFans.setGravity(Gravity.CENTER);
         mBvFans.setBackgroundResource(R.drawable.notification_bg);
+        
+        mBvLike = new BadgeView(getActivity(), mTabStrip.getBadgeView(4));
+        mBvLike.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+        mBvLike.setBadgePosition(BadgeView.POSITION_CENTER);
+        mBvLike.setGravity(Gravity.CENTER);
+        mBvLike.setBackgroundResource(R.drawable.notification_bg);
 
         mTabStrip.getBadgeView(0).setVisibility(View.GONE);
         mTabStrip.getBadgeView(1).setVisibility(View.VISIBLE);
         mTabStrip.getBadgeView(2).setVisibility(View.VISIBLE);
         mTabStrip.getBadgeView(3).setVisibility(View.VISIBLE);
+        mTabStrip.getBadgeView(4).setVisibility(View.VISIBLE);
         initData();
         initView(view);
     }
@@ -215,6 +235,9 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
         bundle.putInt(FriendsFragment.BUNDLE_KEY_UID, AppContext.getInstance()
                 .getLoginUid());
         adapter.addTab(title[3], "active_fans", FriendsFragment.class, bundle);
+        Bundle tweetBundle = new Bundle();
+        tweetBundle.putInt(BaseListFragment.BUNDLE_KEY_CATALOG, TweetsList.CATALOG_ME);
+        adapter.addTab(title[4], "my_tweet", TweetsFragment.class, tweetBundle);
     }
 
     private Bundle getBundle(int catalog) {

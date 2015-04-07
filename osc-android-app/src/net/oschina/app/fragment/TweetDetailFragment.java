@@ -33,7 +33,6 @@ import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
-import net.oschina.app.widget.LikeContainer;
 import net.oschina.app.widget.RecordButtonUtil;
 import net.oschina.app.widget.RecordButtonUtil.OnPlayListener;
 
@@ -220,7 +219,7 @@ public class TweetDetailFragment extends
 	    mLikeUser.setVisibility(View.GONE);
 	} else {
 	    mLikeUser.setVisibility(View.VISIBLE);
-	    mTweet.setLikeUsers(getApplication(), mLikeUser);
+	    mTweet.setLikeUsers(getActivity(), mLikeUser, false);
 	}
     }
 
@@ -492,6 +491,10 @@ public class TweetDetailFragment extends
     private void likeOption() {
 	if (mTweet == null)
 	    return;
+	if (mTweet.getAuthorid() == AppContext.getInstance().getLoginUid()) {
+	    AppContext.showToast("不能为自己点赞~");
+	    return;
+	}
 	AsyncHttpResponseHandler handler = new AsyncHttpResponseHandler() {
 
 	    @Override
@@ -509,18 +512,20 @@ public class TweetDetailFragment extends
 	if (AppContext.getInstance().isLogin()) {
 	    if (mTweet.getIsLike() == 1) {
 		mTweet.setIsLike(0);
+		mTweet.getLikeUser().remove(0);
 		mTweet.setLikeCount(mTweet.getLikeCount() - 1);
 		OSChinaApi.pubUnLikeTweet(mTweetId, mTweet.getAuthorid(),
 			handler);
 	    } else {
 		mLikeState.setAnimation(KJAnimations.getScaleAnimation(1.5f, 300));
 		mTweet.setIsLike(1);
+		mTweet.getLikeUser().add(0, AppContext.getInstance().getLoginUser());
 		mTweet.setLikeCount(mTweet.getLikeCount() + 1);
 		OSChinaApi
 			.pubLikeTweet(mTweetId, mTweet.getAuthorid(), handler);
 	    }
 	    setLikeState();
-	    mTweet.setLikeUsers(getActivity(), mLikeUser);
+	    mTweet.setLikeUsers(getActivity(), mLikeUser, false);
 	} else {
 	    AppContext.showToast("先登陆再点赞~");
 	}

@@ -267,7 +267,7 @@ public class OSChinaApi {
             AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
-        ApiHttpClient.post("action/api/my_information", params, handler);
+        ApiHttpClient.get("action/api/my_information", params, handler);
     }
 
     /**
@@ -521,7 +521,7 @@ public class OSChinaApi {
     public static void getNotices(AsyncHttpResponseHandler handler) {
 	RequestParams params = new RequestParams();
 	params.put("uid", AppContext.getInstance().getLoginUid());
-        ApiHttpClient.get("action/api/user_notice", handler);
+        ApiHttpClient.get("action/api/user_notice", params, handler);
     }
 
     /**

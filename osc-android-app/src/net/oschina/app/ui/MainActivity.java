@@ -66,7 +66,7 @@ public class MainActivity extends ActionBarActivity implements
     @InjectView(android.R.id.tabhost)
     public MyFragmentTabHost mTabHost;
 
-    private BadgeView mBvTweet;
+    private BadgeView mBvNotice;
 
     public static Notice mNotice;
 
@@ -74,30 +74,30 @@ public class MainActivity extends ActionBarActivity implements
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Constants.INTENT_ACTION_NOTICE)) {
-                int atmeCount = intent.getIntExtra("atmeCount", 0);// @我
-                int msgCount = intent.getIntExtra("msgCount", 0);// 留言
-                int reviewCount = intent.getIntExtra("reviewCount", 0);// 评论
-                int newFansCount = intent.getIntExtra("newFansCount", 0);// 新粉丝
+        	mNotice = (Notice) intent.getSerializableExtra("notice_bean");
+                int atmeCount = mNotice.getAtmeCount();// @我
+                int msgCount = mNotice.getMsgCount();// 留言
+                int reviewCount = mNotice.getReviewCount();// 评论
+                int newFansCount = mNotice.getNewFansCount();// 新粉丝
+                int newLikeCount= mNotice.getNewLikeCount();// 收到赞
                 int activeCount = atmeCount + reviewCount + msgCount
-                        + newFansCount;//
-                // 信息总数
-                mNotice = (Notice) intent.getSerializableExtra("notice_bean");
+                        + newFansCount + newLikeCount;
 
                 Fragment fragment = getCurrentFragment();
                 if (fragment instanceof MyInformationFragment) {
                     ((MyInformationFragment) fragment).setNotice();
                 } else {
                     if (activeCount > 0) {
-                        mBvTweet.setText(activeCount + "");
-                        mBvTweet.show();
+                	mBvNotice.setText(activeCount + "");
+                	mBvNotice.show();
                     } else {
-                        mBvTweet.hide();
+                	mBvNotice.hide();
                         mNotice = null;
                     }
                 }
             } else if (intent.getAction()
                     .equals(Constants.INTENT_ACTION_LOGOUT)) {
-                mBvTweet.hide();
+        	mBvNotice.hide();
                 mNotice = null;
             }
         }
@@ -267,11 +267,11 @@ public class MainActivity extends ActionBarActivity implements
 
             if (mainTab.equals(MainTab.ME)) {
                 View cn = indicator.findViewById(R.id.tab_mes);
-                mBvTweet = new BadgeView(MainActivity.this, cn);
-                mBvTweet.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
-                mBvTweet.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
-                mBvTweet.setBackgroundResource(R.drawable.notification_bg);
-                mBvTweet.setGravity(Gravity.CENTER);
+                mBvNotice = new BadgeView(MainActivity.this, cn);
+                mBvNotice.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
+                mBvNotice.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+                mBvNotice.setBackgroundResource(R.drawable.notification_bg);
+                mBvNotice.setGravity(Gravity.CENTER);
             }
             mTabHost.getTabWidget().getChildAt(i).setOnTouchListener(this);
         }
@@ -325,8 +325,8 @@ public class MainActivity extends ActionBarActivity implements
             }
         }
         if (tabId.equals(getString(MainTab.ME.getResName()))) {
-            mBvTweet.setText("");
-            mBvTweet.hide();
+            mBvNotice.setText("");
+            mBvNotice.hide();
         }
         supportInvalidateOptionsMenu();
     }
@@ -393,5 +393,11 @@ public class MainActivity extends ActionBarActivity implements
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        // TODO Auto-generated method stub
+	// 当 API Level > 11 调用这个方法可能导致奔溃（android.os.Build.VERSION.SDK_INT > 11）
     }
 }

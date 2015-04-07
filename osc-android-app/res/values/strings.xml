@@ -221,6 +221,7 @@
 	<string name="msg_count">留言(%s) </string>
 	<string name="review_count">评论(%s) </string>
 	<string name="fans_count">新粉丝(%s) </string>
+	<string name="like_count">收到赞(%s) </string>
 	
 	<string name="blog">博客</string>
 	<string name="information">资料</string>
