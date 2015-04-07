@@ -220,7 +220,9 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         if (tweet.getIsLike() == 1) {
             tweet.setIsLike(0);
             tweet.setLikeCount(tweet.getLikeCount() - 1);
-            tweet.getLikeUser().remove(0);
+            if (!tweet.getLikeUser().isEmpty()) {
+        	tweet.getLikeUser().remove(0);
+            }
             OSChinaApi.pubUnLikeTweet(tweet.getId(), tweet.getAuthorid(),
                     handler);
             vh.likeState.setBackgroundResource(R.drawable.ic_unlike);
