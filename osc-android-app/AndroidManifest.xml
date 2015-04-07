@@ -155,6 +155,9 @@
         <activity
             android:name=".team.ui.TeamMainActivity"
             android:screenOrientation="portrait" />
+        <activity 
+            android:name=".team.ui.TeamNewActiveActivity"
+            android:screenOrientation="portrait"/>
 
         <service android:name="net.oschina.app.LogUploadService" />
 
