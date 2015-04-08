@@ -15,6 +15,7 @@ import net.oschina.app.team.bean.Team;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TLog;
 
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.kymjs.kjframe.utils.KJLoger;
 
 import android.text.TextUtils;
@@ -294,7 +295,7 @@ public class OSChinaApi {
      */
     public static void getSoftwareDetail(String ident,
             AsyncHttpResponseHandler handler) {
-        RequestParams params = new RequestParams("ident", ident);
+        RequestParams params = new RequestParams("ident", ident.replace(" ", ""));
         ApiHttpClient.get("action/api/software_detail", params, handler);
     }
 
