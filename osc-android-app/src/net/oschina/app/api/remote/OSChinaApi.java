@@ -104,7 +104,7 @@ public class OSChinaApi {
 	
 	RequestParams params = new RequestParams();
 	params.put("tweetid", tweetId);
-	params.put("user", AppContext.getInstance().getLoginUid());
+	params.put("uid", AppContext.getInstance().getLoginUid());
 	params.put("ownerOfTweet", authorId);
 	ApiHttpClient.post("action/api/tweet_like", params, handler);
     }
@@ -112,7 +112,7 @@ public class OSChinaApi {
     public static void pubUnLikeTweet(int tweetId, int authorId, AsyncHttpResponseHandler handler) {
 	RequestParams params = new RequestParams();
 	params.put("tweetid", tweetId);
-	params.put("user", AppContext.getInstance().getLoginUid());
+	params.put("uid", AppContext.getInstance().getLoginUid());
 	params.put("ownerOfTweet", authorId);
 	ApiHttpClient.post("action/api/tweet_unlike", params, handler);
     }

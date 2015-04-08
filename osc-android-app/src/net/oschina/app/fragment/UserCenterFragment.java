@@ -330,11 +330,11 @@ public class UserCenterFragment extends BaseFragment implements
             relationAction = User.RELATION_ACTION_DELETE;
             break;
         case User.RELATION_TYPE_FANS_ME:
-            dialogTitle = "确定关注他吗？";
+            dialogTitle = "确定关注Ta吗？";
             relationAction = User.RELATION_ACTION_ADD;
             break;
         case User.RELATION_TYPE_NULL:
-            dialogTitle = "确定关注他吗？";
+            dialogTitle = "确定关注Ta吗？";
             relationAction = User.RELATION_ACTION_ADD;
             break;
         }

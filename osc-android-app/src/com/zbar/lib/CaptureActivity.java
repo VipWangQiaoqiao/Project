@@ -52,6 +52,7 @@ import com.zbar.lib.decode.InactivityTimer;
  * @created 2014年10月31日 上午10:44:54
  * 
  */
+@SuppressWarnings("deprecation")
 public class CaptureActivity extends BaseActivity implements Callback {
 
     private CaptureActivityHandler handler;
@@ -291,6 +292,10 @@ public class CaptureActivity extends BaseActivity implements Callback {
     }
     
     private void showConfirmLogin(final String url) {
+	if (!AppContext.getInstance().isLogin()) {
+	    showLogin();
+	    return;
+	}
 	CommonDialog dialog = new CommonDialog(CaptureActivity.this);
         dialog.setMessage("扫描成功，是否进行网页登陆");
         dialog.setNegativeButton("登陆", new DialogInterface.OnClickListener() {
@@ -314,10 +319,6 @@ public class CaptureActivity extends BaseActivity implements Callback {
     }
     
     private void handleScanLogin(final String url) {
-	if (!AppContext.getInstance().isLogin()) {
-	    showLogin();
-	    return;
-	}
 	OSChinaApi.scanQrCodeLogin(url, new AsyncHttpResponseHandler() {
 	    
 	    @Override

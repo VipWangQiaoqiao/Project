@@ -390,7 +390,7 @@ public class TweetDetailFragment extends
 	mAdapter.notifyDataSetChanged();
 	if (mTweet != null) {
 	    mTweet.setCommentCount(mAdapter.getDataSize() + "");
-	    mTvCommentCount.setText("评论(" + mTweet.getCommentCount() + ")");
+	    mTvCommentCount.setText(mTweet.getCommentCount() + "");
 	}
     }
 

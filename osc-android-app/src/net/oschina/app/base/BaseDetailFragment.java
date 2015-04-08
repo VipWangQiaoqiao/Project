@@ -27,8 +27,11 @@ import net.oschina.app.util.XmlUtils;
 import org.apache.http.Header;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -175,10 +178,10 @@ public class BaseDetailFragment extends BaseFragment implements
             readCacheData(key);
         }
     }
-
+    
     // 刷新数据
     protected void sendRefresh() {
-        sendRequestData();
+	sendRequestData();
     }
 
     private void readCacheData(String cacheKey) {
@@ -315,17 +318,15 @@ public class BaseDetailFragment extends BaseFragment implements
     protected String getShareContent() {
         return "";
     }
-
+    
     /***
      * 获取去除html标签的body
-     * 
      * @param body
      * @return
      */
     protected String getFilterHtmlBody(String body) {
-        if (body == null)
-            return "";
-        return HTMLUtil.delHTMLTag(body.trim());
+	if (body == null) return "";
+    	return HTMLUtil.delHTMLTag(body.trim());
     }
 
     protected UMImage getShareImg() {

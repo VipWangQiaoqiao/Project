@@ -226,6 +226,9 @@ public class TeamMainActivity extends BaseActivity {
     }
 
     private void setTeamDataState() {
+	if (teamDatas == null) {
+	    teamDatas = new ArrayList<Team>();
+	}
         if (teamDatas.isEmpty()) {
             mErrorLayout.setErrorType(EmptyLayout.NODATA);
             String msg = getResources().getString(R.string.team_empty);
