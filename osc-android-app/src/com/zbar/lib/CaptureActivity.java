@@ -297,8 +297,8 @@ public class CaptureActivity extends BaseActivity implements Callback {
 	    return;
 	}
 	CommonDialog dialog = new CommonDialog(CaptureActivity.this);
-        dialog.setMessage("扫描成功，是否进行网页登陆");
-        dialog.setNegativeButton("登陆", new DialogInterface.OnClickListener() {
+        dialog.setMessage("扫描成功，是否进行网页登录");
+        dialog.setNegativeButton("登录", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -341,14 +341,14 @@ public class CaptureActivity extends BaseActivity implements Callback {
 		if (arg2 != null) {
 		    AppContext.showToast(new String(arg2));
 		} else {
-		    AppContext.showToast("网页登陆失败");
+		    AppContext.showToast("网页登录失败");
 		}
 	    }
 	    @Override
 	    public void onStart() {
 	        // TODO Auto-generated method stub
 	        super.onStart();
-	        showWaitDialog("已扫描，正在登陆...");
+	        showWaitDialog("已扫描，正在登录...");
 	    }
 	    @Override
 	    public void onFinish() {
@@ -435,7 +435,7 @@ public class CaptureActivity extends BaseActivity implements Callback {
     private void showLogin() {
         CommonDialog dialog = new CommonDialog(CaptureActivity.this);
         dialog.setMessage("请先登录，再进行");
-        dialog.setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+        dialog.setPositiveButton("好的", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
