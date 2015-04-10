@@ -101,6 +101,10 @@ public class OSChinaApi {
         ApiHttpClient.get("action/api/tweet_list", params, handler);
     }
     
+    public static void getTweetLikeList(AsyncHttpResponseHandler handler) {
+	ApiHttpClient.get("action/api/my_tweet_like_list", handler);
+    }
+    
     public static void pubLikeTweet(int tweetId, int authorId, AsyncHttpResponseHandler handler) {
 	
 	RequestParams params = new RequestParams();

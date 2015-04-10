@@ -271,16 +271,4 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
 	}
 	return super.getAutoRefreshTime();
     }
-
-    @Override
-    protected void onRefreshNetworkSuccess() {
-	// TODO Auto-generated method stub
-	super.onRefreshNetworkSuccess();
-	if (AppContext.getInstance().isLogin()
-		&& mCatalog == AppContext.getInstance().getLoginUid()
-		&& 4 == NoticeViewPagerFragment.sCurrentPage) {
-	    NoticeUtils.clearNotice(Notice.TYPE_NEWLIKE);
-	    UIHelper.sendBroadcastForNotice(getActivity());
-	}
-    }
 }

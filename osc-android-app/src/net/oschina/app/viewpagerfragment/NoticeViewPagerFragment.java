@@ -14,6 +14,7 @@ import net.oschina.app.fragment.ActiveFragment;
 import net.oschina.app.fragment.FriendsFragment;
 import net.oschina.app.fragment.MessageFragment;
 import net.oschina.app.fragment.TweetsFragment;
+import net.oschina.app.fragment.TweetsLikesFragment;
 import net.oschina.app.ui.MainActivity;
 import net.oschina.app.widget.BadgeView;
 import net.oschina.app.widget.PagerSlidingTabStrip.OnPagerChangeLis;
@@ -235,9 +236,7 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
         bundle.putInt(FriendsFragment.BUNDLE_KEY_UID, AppContext.getInstance()
                 .getLoginUid());
         adapter.addTab(title[3], "active_fans", FriendsFragment.class, bundle);
-        Bundle tweetBundle = new Bundle();
-        tweetBundle.putInt(BaseListFragment.BUNDLE_KEY_CATALOG, TweetsList.CATALOG_ME);
-        adapter.addTab(title[4], "my_tweet", TweetsFragment.class, tweetBundle);
+        adapter.addTab(title[4], "my_tweet", TweetsLikesFragment.class, null);
     }
 
     private Bundle getBundle(int catalog) {
