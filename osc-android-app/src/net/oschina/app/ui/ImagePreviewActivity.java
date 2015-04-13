@@ -1,5 +1,7 @@
 package net.oschina.app.ui;
 
+import java.io.FileNotFoundException;
+
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -22,7 +24,9 @@ import uk.co.senab.photoview.PhotoViewAttacher.OnFinishListener;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -165,6 +169,18 @@ public class ImagePreviewActivity extends BaseActivity implements
                 @Override
                 public void run() {
                     kjb.saveImage(imgUrl, filePath);
+                    // 其次把文件插入到系统图库
+                    try {
+                        MediaStore.Images.Media.insertImage(
+                                ImagePreviewActivity.this.getContentResolver(),
+                                filePath, getFileName(imgUrl), null);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    // 最后通知图库更新
+                    ImagePreviewActivity.this.sendBroadcast(new Intent(
+                            Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri
+                                    .parse("file://" + filePath)));
                 }
             });
             AppContext.showToastShort(getString(R.string.tip_save_image_suc,
