@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <net.oschina.app.emoji.EmojiEditText
+    <EditText
         android:id="@+id/et_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"

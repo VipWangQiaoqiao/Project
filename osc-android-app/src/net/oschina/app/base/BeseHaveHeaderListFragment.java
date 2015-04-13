@@ -6,11 +6,7 @@ import java.lang.ref.WeakReference;
 
 import net.oschina.app.bean.Entity;
 import net.oschina.app.cache.CacheManager;
-import net.oschina.app.emoji.EmojiFragment;
-import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
-import net.oschina.app.interf.EmojiFragmentControl;
 import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.TLog;
 
 import org.apache.http.Header;
 
@@ -35,12 +31,10 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
  * @data 2015-1-27 下午3:02:42
  */
 public abstract class BeseHaveHeaderListFragment<T1 extends Entity, T2 extends Serializable>
-        extends BaseListFragment<T1> implements EmojiTextListener,
-        EmojiFragmentControl {
+        extends BaseListFragment<T1> {
 
     protected T2 detailBean;// list 头部的详情实体类
 
-    protected EmojiFragment mEmojiFragment;
     protected Activity aty;
 
     protected final AsyncHttpResponseHandler mDetailHandler = new AsyncHttpResponseHandler() {
@@ -175,13 +169,6 @@ public abstract class BeseHaveHeaderListFragment<T1 extends Entity, T2 extends S
         mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
         mAdapter.setState(ListBaseAdapter.STATE_NETWORK_ERROR);
         mAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void setEmojiFragment(EmojiFragment fragment) {
-        mEmojiFragment = fragment;
-        mEmojiFragment.setEmojiTextListener(this);
-
     }
 
     @SuppressWarnings("unchecked")

@@ -6,19 +6,15 @@ import java.io.Serializable;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
-import net.oschina.app.adapter.CommentAdapter.OnOperationListener;
 import net.oschina.app.api.OperationResponseHandler;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BeseHaveHeaderListFragment;
 import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
-import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
-import net.oschina.app.interf.EmojiFragmentControl;
 import net.oschina.app.team.adapter.TeamReplyAdapter;
 import net.oschina.app.team.bean.TeamActive;
 import net.oschina.app.team.bean.TeamActiveDetail;
@@ -48,7 +44,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -66,7 +61,6 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
  */
 public class TeamTweetDetailFragment extends
         BeseHaveHeaderListFragment<TeamReply, TeamActiveDetail> implements
-        EmojiTextListener, EmojiFragmentControl, OnOperationListener,
         OnItemClickListener, OnItemLongClickListener {
 
     private static final String CACHE_KEY_PREFIX = "team_tweet_";
@@ -132,28 +126,6 @@ public class TeamTweetDetailFragment extends
             iv_pic.setVisibility(View.GONE);
         }
         return headView;
-    }
-
-    /**
-     * 点击发送按钮时
-     */
-    @Override
-    public void onSendClick(String text) {
-        if (!TDevice.hasInternet()) {
-            AppContext.showToastShort(R.string.tip_network_error);
-            return;
-        }
-        if (!AppContext.getInstance().isLogin()) {
-            UIHelper.showLoginActivity(getActivity());
-            mEmojiFragment.hideKeyboard();
-            return;
-        }
-        if (TextUtils.isEmpty(text)) {
-            AppContext.showToastShort(R.string.tip_comment_content_empty);
-            mEmojiFragment.requestFocusInput();
-            return;
-        }
-        handleComment(text);
     }
 
     /**
@@ -350,7 +322,6 @@ public class TeamTweetDetailFragment extends
     private final AsyncHttpResponseHandler mCommentHandler = new AsyncHttpResponseHandler() {
         @Override
         public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-            mEmojiFragment.reset();
             onRefresh();
         }
 
@@ -373,9 +344,6 @@ public class TeamTweetDetailFragment extends
             mTvCommentCount.setText("评论(" + (mAdapter.getCount() - 1) + ")");
         }
     };
-
-    @Override
-    public void onMoreClick(Comment comment) {}
 
     /**
      * 移除字符串中的Html标签
@@ -401,8 +369,5 @@ public class TeamTweetDetailFragment extends
         if (comment == null) {
             return;
         }
-        mEmojiFragment.setTag(comment);
-        mEmojiFragment.setInputHint("回复" + comment.getAuthor().getName() + ":");
-        mEmojiFragment.requestFocusInput();
     }
 }

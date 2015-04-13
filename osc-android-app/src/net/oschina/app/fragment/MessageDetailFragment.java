@@ -19,8 +19,6 @@ import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
-import net.oschina.app.emoji.EmojiFragment;
-import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -31,15 +29,12 @@ import net.oschina.app.util.XmlUtils;
 
 import org.apache.http.Header;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -49,7 +44,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 public class MessageDetailFragment extends BaseListFragment<Comment> implements
-        EmojiTextListener, OnItemLongClickListener {
+        OnItemLongClickListener {
     protected static final String TAG = ActiveFragment.class.getSimpleName();
     public static final String BUNDLE_KEY_FID = "BUNDLE_KEY_FID";
     public static final String BUNDLE_KEY_FNAME = "BUNDLE_KEY_FNAME";
@@ -58,7 +53,6 @@ public class MessageDetailFragment extends BaseListFragment<Comment> implements
 
     private int mFid;
     private String mFName;
-    private EmojiFragment mEmojiFragment;
 
     private final AsyncHttpResponseHandler mPublicHandler = new AsyncHttpResponseHandler() {
 
@@ -73,7 +67,6 @@ public class MessageDetailFragment extends BaseListFragment<Comment> implements
                     AppContext
                             .showToastShort(R.string.tip_message_public_success);
                     mAdapter.addItem(0, resb.getComment());
-                    mEmojiFragment.reset();
                 } else {
                     AppContext.showToastShort(res.getErrorMessage());
                 }
@@ -102,18 +95,6 @@ public class MessageDetailFragment extends BaseListFragment<Comment> implements
             }
         }
     };
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        BaseActivity act = ((BaseActivity) activity);
-        FragmentTransaction trans = act.getSupportFragmentManager()
-                .beginTransaction();
-        mEmojiFragment = new EmojiFragment();
-        mEmojiFragment.setEmojiTextListener(this);
-        trans.replace(R.id.emoji_container, mEmojiFragment);
-        trans.commit();
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -228,25 +209,9 @@ public class MessageDetailFragment extends BaseListFragment<Comment> implements
     }
 
     @Override
-    public void onSendClick(String text) {
-        if (!AppContext.getInstance().isLogin()) {
-            UIHelper.showLoginActivity(getActivity());
-            return;
-        }
-        if (TextUtils.isEmpty(text)) {
-            mEmojiFragment.requestFocusInput();
-            AppContext.showToastShort(R.string.tip_content_empty);
-            return;
-        }
-        showWaitDialog("提交中...");
-        OSChinaApi.publicMessage(AppContext.getInstance().getLoginUid(), mFid,
-                text, mPublicHandler);
-    }
-
-    @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view,
             int position, long id) {
-        final Comment message = (Comment) mAdapter.getItem(position);
+        final Comment message = mAdapter.getItem(position);
         final CommonDialog dialog = DialogHelper
                 .getPinterestDialogCancelable(getActivity());
         dialog.setItemsWithoutChk(

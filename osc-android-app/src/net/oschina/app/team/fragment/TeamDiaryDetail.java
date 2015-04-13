@@ -2,13 +2,9 @@ package net.oschina.app.team.fragment;
 
 import java.util.List;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseFragment;
-import net.oschina.app.emoji.EmojiFragment;
-import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
-import net.oschina.app.interf.EmojiFragmentControl;
 import net.oschina.app.team.adapter.DiaryDetailAdapter;
 import net.oschina.app.team.bean.TeamDiary;
 import net.oschina.app.team.bean.TeamDiaryDetailBean;
@@ -17,7 +13,6 @@ import net.oschina.app.team.bean.TeamReply;
 import net.oschina.app.team.viewpagefragment.TeamDiaryFragment;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
@@ -31,11 +26,9 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.text.Html;
 import android.text.Spanned;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
@@ -53,8 +46,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
  * 
  * @author kymjs (https://github.com/kymjs)
  */
-public class TeamDiaryDetail extends BaseFragment implements EmojiTextListener,
-        EmojiFragmentControl {
+public class TeamDiaryDetail extends BaseFragment {
 
     private static final String CACHE_KEY_PREFIX = "team_diary_detail_";
 
@@ -69,8 +61,6 @@ public class TeamDiaryDetail extends BaseFragment implements EmojiTextListener,
     private int teamid;
     private Activity aty;
     private DiaryDetailAdapter adapter;
-
-    protected EmojiFragment mEmojiFragment;
 
     private LinearLayout footerView;
 
@@ -272,15 +262,6 @@ public class TeamDiaryDetail extends BaseFragment implements EmojiTextListener,
                                 from.setVisibility(View.VISIBLE);
                                 from.setText(data.getAppName());
                             }
-                            layout.setOnClickListener(new OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    mEmojiFragment.setTag(v);
-                                    mEmojiFragment.setInputHint("回复"
-                                            + data.getAuthor().getName() + ":");
-                                    mEmojiFragment.requestFocusInput();
-                                }
-                            });
 
                             footerView.addView(layout);
                         }
@@ -313,42 +294,5 @@ public class TeamDiaryDetail extends BaseFragment implements EmojiTextListener,
         String str = pHTMLString.replaceAll("<\\s*>", "");
         str = str.replaceAll("<\\s*img\\s+([^>]*)\\s*>", "").trim();
         return Html.fromHtml(str);
-    }
-
-    @Override
-    public void setEmojiFragment(EmojiFragment fragment) {
-        mEmojiFragment = fragment;
-        mEmojiFragment.setEmojiTextListener(this);
-    }
-
-    @Override
-    public void onSendClick(String text) {
-        if (!TDevice.hasInternet()) {
-            AppContext.showToastShort(R.string.tip_network_error);
-            return;
-        }
-        if (!AppContext.getInstance().isLogin()) {
-            UIHelper.showLoginActivity(getActivity());
-            mEmojiFragment.hideKeyboard();
-            return;
-        }
-        if (TextUtils.isEmpty(text)) {
-            AppContext.showToastShort(R.string.tip_comment_content_empty);
-            mEmojiFragment.requestFocusInput();
-            return;
-        }
-        OSChinaApi.sendComment(AppContext.getInstance().getLoginUid(), teamid,
-                diaryData.getId(), text, new AsyncHttpResponseHandler() {
-
-                    @Override
-                    public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-                        initCommitLayout();
-                        mEmojiFragment.reset();
-                    }
-
-                    @Override
-                    public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                            Throwable arg3) {}
-                });
     }
 }

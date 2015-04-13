@@ -10,7 +10,6 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseDetailFragment;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.Event;
@@ -21,17 +20,12 @@ import net.oschina.app.bean.PostDetail;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.SimpleBackPage;
-import net.oschina.app.emoji.EmojiFragment;
-import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
 import net.oschina.app.fragment.ToolbarFragment.OnActionClickListener;
 import net.oschina.app.fragment.ToolbarFragment.ToolAction;
-import net.oschina.app.interf.EmojiFragmentControl;
 import net.oschina.app.interf.ToolbarEmojiVisiableControl;
-import net.oschina.app.interf.ToolbarFragmentControl;
 import net.oschina.app.ui.EventApplyDialog;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
@@ -41,7 +35,6 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -61,8 +54,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
  * @created 2014年12月12日 下午3:08:49
  * 
  */
-public class EventDetailFragment extends BaseDetailFragment implements
-        EmojiTextListener, EmojiFragmentControl, ToolbarFragmentControl {
+public class EventDetailFragment extends BaseDetailFragment {
 
     protected static final String TAG = EventDetailFragment.class
             .getSimpleName();
@@ -97,8 +89,6 @@ public class EventDetailFragment extends BaseDetailFragment implements
 
     private int mPostId;
     private Post mPost;
-    private EmojiFragment mEmojiFragment;
-    private ToolbarFragment mToolBarFragment;
 
     private EventApplyDialog mEventApplyDialog;
 
@@ -129,7 +119,6 @@ public class EventDetailFragment extends BaseDetailFragment implements
                 if (act != null && act instanceof ToolbarEmojiVisiableControl) {
                     ((ToolbarEmojiVisiableControl) act).toggleToolbarEmoji();
                 }
-                mEmojiFragment.showKeyboardIfNoEmojiGrid();
                 break;
             case ACTION_VIEW_COMMENT:
                 UIHelper.showComment(getActivity(), mPostId,
@@ -310,9 +299,6 @@ public class EventDetailFragment extends BaseDetailFragment implements
                 mPost.getEvent().getEndTime()));
         mTvSpot.setText(mPost.getEvent().getCity() + " "
                 + mPost.getEvent().getSpot());
-        if (mToolBarFragment != null) {
-            mToolBarFragment.setCommentCount(mPost.getAnswerCount());
-        }
         notifyFavorite(mPost.getFavorite() == 1);
 
         // 站外活动
@@ -390,61 +376,6 @@ public class EventDetailFragment extends BaseDetailFragment implements
                             URLEncoder.encode(tag), tag));
         }
         return String.format("<div style='margin-top:10px;'>%s</div>", tags);
-    }
-
-    @Override
-    public void setEmojiFragment(EmojiFragment fragment) {
-        mEmojiFragment = fragment;
-        mEmojiFragment.setEmojiTextListener(this);
-        mEmojiFragment.setButtonMoreVisibility(View.VISIBLE);
-        mEmojiFragment.setButtonMoreClickListener(mMoreListener);
-    }
-
-    @Override
-    public void setToolBarFragment(ToolbarFragment fragment) {
-        mToolBarFragment = fragment;
-        mToolBarFragment.setOnActionClickListener(mActionListener);
-        mToolBarFragment.setActionVisiable(ToolAction.ACTION_CHANGE, true);
-        mToolBarFragment.setActionVisiable(ToolAction.ACTION_FAVORITE, true);
-        mToolBarFragment.setActionVisiable(ToolAction.ACTION_WRITE_COMMENT,
-                true);
-        mToolBarFragment
-                .setActionVisiable(ToolAction.ACTION_VIEW_COMMENT, true);
-        mToolBarFragment.setActionVisiable(ToolAction.ACTION_SHARE, true);
-    }
-
-    @Override
-    public void onSendClick(String text) {
-        if (!TDevice.hasInternet()) {
-            AppContext.showToastShort(R.string.tip_network_error);
-            return;
-        }
-        if (!AppContext.getInstance().isLogin()) {
-            UIHelper.showLoginActivity(getActivity());
-            return;
-        }
-        if (TextUtils.isEmpty(text)) {
-            AppContext.showToastShort(R.string.tip_comment_content_empty);
-            mEmojiFragment.requestFocusInput();
-            return;
-        }
-        showWaitDialog(R.string.progress_submit);
-        OSChinaApi.publicComment(CommentList.CATALOG_POST, mPostId, AppContext
-                .getInstance().getLoginUid(), text, 0, mCommentHandler);
-    }
-
-    @Override
-    protected void commentPubSuccess(Comment comment) {
-        super.commentPubSuccess(comment);
-        mEmojiFragment.reset();
-    }
-
-    @Override
-    protected void onFavoriteChanged(boolean flag) {
-        super.onFavoriteChanged(flag);
-        if (mToolBarFragment != null) {
-            mToolBarFragment.setFavorite(flag);
-        }
     }
 
     @Override

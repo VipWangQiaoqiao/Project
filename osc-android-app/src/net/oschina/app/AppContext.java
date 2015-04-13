@@ -49,9 +49,6 @@ public class AppContext extends BaseApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        // 注册App异常崩溃处理器
-         Thread.setDefaultUncaughtExceptionHandler(AppException
-         .getAppExceptionHandler(this));
         instance = this;
         init();
         initLogin();
