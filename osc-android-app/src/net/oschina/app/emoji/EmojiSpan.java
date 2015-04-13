@@ -7,12 +7,10 @@ import android.text.style.DynamicDrawableSpan;
 public class EmojiSpan extends DynamicDrawableSpan {
     private final String value;
     private Drawable mDrawable;
-    private final int mSize;
     private final int type;
 
-    public EmojiSpan(String value, int size, int type) {
+    public EmojiSpan(String value, int type) {
         this.value = value;
-        this.mSize = size;
         this.type = type;
     }
 

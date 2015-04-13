@@ -4,7 +4,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.oschina.app.emoji.Emoji;
-import net.oschina.app.emoji.EmojiEditText;
 import net.oschina.app.emoji.EmojiHelper;
 import net.oschina.app.emoji.EmojiSpan;
 import net.oschina.app.util.UIHelper;
@@ -153,9 +152,8 @@ public class MyURLSpan extends URLSpan {
                 String value = m.group();
                 Emoji emoji = EmojiHelper.getEmoji(value);
                 if (emoji != null) {
-                    sp.setSpan(
-                            new EmojiSpan(value, EmojiEditText.emojiSize, 0),
-                            start, e, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    sp.setSpan(new EmojiSpan(value, 0), start, e,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
             }
 
@@ -166,9 +164,8 @@ public class MyURLSpan extends URLSpan {
                 String value = m.group();
                 Emoji emoji = EmojiHelper.getEmojiByNumber(value);
                 if (emoji != null) {
-                    sp.setSpan(
-                            new EmojiSpan(value, EmojiEditText.emojiSize, 1),
-                            start, e, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    sp.setSpan(new EmojiSpan(value, 1), start, e,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
             }
 

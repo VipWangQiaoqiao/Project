@@ -45,7 +45,7 @@ public class EmojiEditText extends EditText {
             String value = m.group();
             Emoji emoji = EmojiHelper.getEmojiByNumber(value);
             if (emoji != null) {
-                sp.setSpan(new EmojiSpan(value, emojiSize, 1), s, e,
+                sp.setSpan(new EmojiSpan(value, 1), s, e,
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
@@ -57,7 +57,7 @@ public class EmojiEditText extends EditText {
             String value = m2.group();
             Emoji emoji = EmojiHelper.getEmoji(value);
             if (emoji != null) {
-                sp.setSpan(new EmojiSpan(value, emojiSize, 0), s, e,
+                sp.setSpan(new EmojiSpan(value, 0), s, e,
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
