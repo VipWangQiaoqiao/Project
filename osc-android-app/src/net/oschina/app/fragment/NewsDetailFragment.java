@@ -3,6 +3,7 @@ package net.oschina.app.fragment;
 import java.io.InputStream;
 import java.io.Serializable;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseDetailFragment;
@@ -18,12 +19,18 @@ import net.oschina.app.fragment.ToolbarFragment.ToolAction;
 import net.oschina.app.interf.ToolbarEmojiVisiableControl;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.URLsUtils;
 import net.oschina.app.util.XmlUtils;
+
+import org.kymjs.emoji.OnSendClickListener;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,7 +40,8 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class NewsDetailFragment extends BaseDetailFragment {
+public class NewsDetailFragment extends BaseDetailFragment implements
+        OnSendClickListener {
 
     protected static final String TAG = NewsDetailFragment.class
             .getSimpleName();
@@ -246,5 +254,25 @@ public class NewsDetailFragment extends BaseDetailFragment {
     protected String getShareUrl() {
         return mNews != null ? URLsUtils.URL_MOBILE + "news/" + mNews.getId()
                 : null;
+    }
+
+    @Override
+    public void onClickSendButton(Editable str) {
+        if (!TDevice.hasInternet()) {
+            AppContext.showToastShort(R.string.tip_network_error);
+            return;
+        }
+        if (!AppContext.getInstance().isLogin()) {
+            UIHelper.showLoginActivity(getActivity());
+            return;
+        }
+        if (TextUtils.isEmpty(str)) {
+            AppContext.showToastShort(R.string.tip_comment_content_empty);
+            return;
+        }
+        showWaitDialog(R.string.progress_submit);
+        OSChinaApi.publicComment(CommentList.CATALOG_NEWS, mNewsId, AppContext
+                .getInstance().getLoginUid(), str.toString(), 0,
+                mCommentHandler);
     }
 }

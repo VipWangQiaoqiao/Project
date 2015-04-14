@@ -260,7 +260,7 @@ public class FileUtil {
 	/**
 	 * 获取目录文件个数
 	 * 
-	 * @param f
+	 * @param emojiFragment
 	 * @return
 	 */
 	public long getFileList(File dir) {

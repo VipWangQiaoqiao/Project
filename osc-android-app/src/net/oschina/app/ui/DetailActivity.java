@@ -1,7 +1,5 @@
 package net.oschina.app.ui;
 
-import java.lang.ref.WeakReference;
-
 import net.oschina.app.R;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseFragment;
@@ -15,8 +13,13 @@ import net.oschina.app.team.fragment.TeamDiaryDetail;
 import net.oschina.app.team.fragment.TeamDiscussDetailFragment;
 import net.oschina.app.team.fragment.TeamIssueDetailFragment;
 import net.oschina.app.team.fragment.TeamTweetDetailFragment;
+
+import org.kymjs.emoji.KJEmojiFragment;
+import org.kymjs.emoji.OnSendClickListener;
+
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Editable;
 import android.view.View;
 
 /**
@@ -26,7 +29,7 @@ import android.view.View;
  * @created 2014年10月11日 上午11:18:41
  * 
  */
-public class DetailActivity extends BaseActivity {
+public class DetailActivity extends BaseActivity implements OnSendClickListener {
 
     public static final int DISPLAY_NEWS = 0;
     public static final int DISPLAY_BLOG = 1;
@@ -41,7 +44,8 @@ public class DetailActivity extends BaseActivity {
 
     public static final String BUNDLE_KEY_DISPLAY_TYPE = "BUNDLE_KEY_DISPLAY_TYPE";
 
-    private WeakReference<BaseFragment> mFragment, mEmojiFragment;
+    private OnSendClickListener currentFragment;
+    public KJEmojiFragment emojiFragment;
 
     @Override
     protected int getLayoutId() {
@@ -112,42 +116,28 @@ public class DetailActivity extends BaseActivity {
         setActionBarTitle(actionBarTitle);
         FragmentTransaction trans = getSupportFragmentManager()
                 .beginTransaction();
-        mFragment = new WeakReference<BaseFragment>(fragment);
         trans.replace(R.id.container, fragment);
         trans.commitAllowingStateLoss();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (mEmojiFragment != null && mEmojiFragment.get() != null) {
-            if (mEmojiFragment.get().onBackPressed()) {
-                return;
-            }
-        }
-        if (mFragment != null && mFragment.get() != null) {
-            if (mFragment.get().onBackPressed()) {
-                return;
-            }
-        }
-        super.onBackPressed();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
+        currentFragment = (OnSendClickListener) fragment;
     }
 
     @Override
     public void onClick(View v) {}
 
     @Override
-    public void initView() {}
+    public void initView() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.emoji_keyboard,
+                        emojiFragment = new KJEmojiFragment()).commit();
+    }
 
     @Override
     public void initData() {}
+
+    @Override
+    public void onClickSendButton(Editable str) {
+        currentFragment.onClickSendButton(str);
+        emojiFragment.clean();
+    }
 }

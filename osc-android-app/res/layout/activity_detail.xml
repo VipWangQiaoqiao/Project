@@ -11,4 +11,18 @@
         android:layout_height="match_parent"
         android:paddingBottom="48dp" />
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" >
+
+        <FrameLayout
+            android:id="@+id/emoji_keyboard"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/white" />
+
+    </FrameLayout>
+
 </RelativeLayout>
