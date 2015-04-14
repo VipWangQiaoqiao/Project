@@ -10,15 +10,11 @@ import net.oschina.app.bean.Blog;
 import net.oschina.app.bean.BlogDetail;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.FavoriteList;
-import net.oschina.app.fragment.ToolbarFragment.OnActionClickListener;
-import net.oschina.app.fragment.ToolbarFragment.ToolAction;
-import net.oschina.app.interf.ToolbarEmojiVisiableControl;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.URLsUtils;
 import net.oschina.app.util.XmlUtils;
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -44,55 +40,6 @@ public class BlogDetailFragment extends BaseDetailFragment {
     private WebView mWebView;
     private int mBlogId;
     private Blog mBlog;
-    private ToolbarFragment mToolBarFragment;
-
-    private final OnClickListener mMoreListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            Activity act = getActivity();
-            if (act != null && act instanceof ToolbarEmojiVisiableControl) {
-                ((ToolbarEmojiVisiableControl) act).toggleToolbarEmoji();
-            }
-        }
-    };
-
-    private final OnActionClickListener mActionListener = new OnActionClickListener() {
-
-        @Override
-        public void onActionClick(ToolAction action) {
-            switch (action) {
-            case ACTION_CHANGE:
-                Activity act = getActivity();
-                if (act != null && act instanceof ToolbarEmojiVisiableControl) {
-                    ((ToolbarEmojiVisiableControl) act).toggleToolbarEmoji();
-                }
-                break;
-            case ACTION_WRITE_COMMENT:
-                act = getActivity();
-                if (act != null && act instanceof ToolbarEmojiVisiableControl) {
-                    ((ToolbarEmojiVisiableControl) act).toggleToolbarEmoji();
-                }
-                break;
-            case ACTION_VIEW_COMMENT:
-                if (mBlog != null)
-                    UIHelper.showBlogComment(getActivity(), mBlogId,
-                            mBlog.getAuthorId());
-                break;
-            case ACTION_FAVORITE:
-                handleFavoriteOrNot();
-                break;
-            case ACTION_SHARE:
-                handleShare();
-                break;
-            case ACTION_REPORT:
-                onReportMenuClick();
-                break;
-            default:
-                break;
-            }
-        }
-    };
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -177,9 +124,6 @@ public class BlogDetailFragment extends BaseDetailFragment {
             }
         });
         mTvTime.setText(StringUtils.friendly_time(mBlog.getPubDate()));
-        if (mToolBarFragment != null) {
-            mToolBarFragment.setCommentCount(mBlog.getCommentCount());
-        }
         notifyFavorite(mBlog.getFavorite() == 1);
     }
 
@@ -189,14 +133,6 @@ public class BlogDetailFragment extends BaseDetailFragment {
         body.append(UIHelper.WEB_STYLE).append(UIHelper.WEB_LOAD_IMAGES);
         mWebView.loadDataWithBaseURL(null, body.toString(), "text/html",
                 "utf-8", null);
-    }
-
-    @Override
-    protected void onFavoriteChanged(boolean flag) {
-        super.onFavoriteChanged(flag);
-        if (mToolBarFragment != null) {
-            mToolBarFragment.setFavorite(flag);
-        }
     }
 
     @Override

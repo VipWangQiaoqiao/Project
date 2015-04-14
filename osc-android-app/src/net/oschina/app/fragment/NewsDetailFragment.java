@@ -14,9 +14,6 @@ import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.News;
 import net.oschina.app.bean.News.Relative;
 import net.oschina.app.bean.NewsDetail;
-import net.oschina.app.fragment.ToolbarFragment.OnActionClickListener;
-import net.oschina.app.fragment.ToolbarFragment.ToolAction;
-import net.oschina.app.interf.ToolbarEmojiVisiableControl;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -26,7 +23,6 @@ import net.oschina.app.util.XmlUtils;
 
 import org.kymjs.emoji.OnSendClickListener;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -55,51 +51,6 @@ public class NewsDetailFragment extends BaseDetailFragment implements
     private int mNewsId;
     private int mCommentCount;
     private News mNews;
-    private ToolbarFragment mToolBarFragment;
-
-    private final OnClickListener mMoreListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Activity act = getActivity();
-            if (act != null && act instanceof ToolbarEmojiVisiableControl) {
-                ((ToolbarEmojiVisiableControl) act).toggleToolbarEmoji();
-            }
-        }
-    };
-
-    private final OnActionClickListener mActionListener = new OnActionClickListener() {
-
-        @Override
-        public void onActionClick(ToolAction action) {
-            switch (action) {
-            case ACTION_CHANGE:
-                Activity act = getActivity();
-                if (act != null && act instanceof ToolbarEmojiVisiableControl) {
-                    ((ToolbarEmojiVisiableControl) act).toggleToolbarEmoji();
-                }
-                break;
-            case ACTION_WRITE_COMMENT:
-                act = getActivity();
-                if (act != null && act instanceof ToolbarEmojiVisiableControl) {
-                    ((ToolbarEmojiVisiableControl) act).toggleToolbarEmoji();
-                }
-                break;
-            case ACTION_VIEW_COMMENT:
-                if (mNews != null)
-                    UIHelper.showComment(getActivity(), mNewsId,
-                            CommentList.CATALOG_NEWS);
-                break;
-            case ACTION_FAVORITE:
-                handleFavoriteOrNot();
-                break;
-            case ACTION_SHARE:
-                handleShare();
-                break;
-            default:
-                break;
-            }
-        }
-    };
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -149,9 +100,6 @@ public class NewsDetailFragment extends BaseDetailFragment implements
         if (id == mNewsId && catalog == CommentList.CATALOG_NEWS && !isBlog) {
             if (Comment.OPT_ADD == opt && mNews != null) {
                 mNews.setCommentCount(mNews.getCommentCount() + 1);
-                if (mToolBarFragment != null) {
-                    mToolBarFragment.setCommentCount(mNews.getCommentCount());
-                }
             }
         }
     }
@@ -174,12 +122,6 @@ public class NewsDetailFragment extends BaseDetailFragment implements
             }
         });
         mTvTime.setText(StringUtils.friendly_time(mNews.getPubDate()));
-        if (mToolBarFragment != null) {
-            if (mCommentCount <= 0) {
-                mCommentCount = mNews.getCommentCount();
-            }
-            mToolBarFragment.setCommentCount(mCommentCount);
-        }
         notifyFavorite(mNews.getFavorite() == 1);
     }
 
@@ -222,9 +164,6 @@ public class NewsDetailFragment extends BaseDetailFragment implements
     @Override
     protected void onFavoriteChanged(boolean flag) {
         mNews.setFavorite(flag ? 1 : 0);
-        if (mToolBarFragment != null) {
-            mToolBarFragment.setFavorite(flag);
-        }
         saveCache(mNews);
     }
 

@@ -10,10 +10,6 @@ import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.Software;
 import net.oschina.app.bean.SoftwareDetail;
-import net.oschina.app.fragment.ToolbarFragment.OnActionClickListener;
-import net.oschina.app.fragment.ToolbarFragment.ToolAction;
-import net.oschina.app.interf.ToolbarEmojiVisiableControl;
-import net.oschina.app.interf.ToolbarFragmentControl;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
@@ -21,12 +17,10 @@ import net.oschina.app.util.XmlUtils;
 
 import org.kymjs.kjframe.KJBitmap;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ImageView;
@@ -41,8 +35,7 @@ import butterknife.InjectView;
  * @created 2014年11月21日 上午10:41:45
  * 
  */
-public class SoftwareDetailFragment extends BaseDetailFragment implements
-        ToolbarFragmentControl {
+public class SoftwareDetailFragment extends BaseDetailFragment {
 
     protected static final String TAG = SoftwareDetailFragment.class
             .getSimpleName();
@@ -82,52 +75,6 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
     ImageView mIvLogo;
     private String mIdent;
     private Software mSoftware;
-    private ToolbarFragment mToolBarFragment;
-
-    private final OnClickListener mMoreListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            Activity act = getActivity();
-            if (act != null && act instanceof ToolbarEmojiVisiableControl) {
-                ((ToolbarEmojiVisiableControl) act).toggleToolbarEmoji();
-            }
-        }
-    };
-
-    private final OnActionClickListener mActionListener = new OnActionClickListener() {
-
-        @Override
-        public void onActionClick(ToolAction action) {
-            switch (action) {
-            case ACTION_CHANGE:
-                Activity act = getActivity();
-                if (act != null && act instanceof ToolbarEmojiVisiableControl) {
-                    ((ToolbarEmojiVisiableControl) act).toggleToolbarEmoji();
-                }
-                break;
-            case ACTION_WRITE_COMMENT:
-                act = getActivity();
-                if (act != null && act instanceof ToolbarEmojiVisiableControl) {
-                    ((ToolbarEmojiVisiableControl) act).toggleToolbarEmoji();
-                }
-                break;
-            case ACTION_VIEW_COMMENT:
-                if (mSoftware != null)
-                    UIHelper.showSoftWareTweets(getActivity(),
-                            mSoftware.getId());
-                break;
-            case ACTION_FAVORITE:
-                handleFavoriteOrNot();
-                break;
-            case ACTION_SHARE:
-                handleShare();
-                break;
-            default:
-                break;
-            }
-        }
-    };
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -200,9 +147,6 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
         mTvLanguage.setText(mSoftware.getLanguage());
         mTvOs.setText(mSoftware.getOs());
         mTvRecordTime.setText(mSoftware.getRecordtime());
-        if (mToolBarFragment != null) {
-            mToolBarFragment.setCommentCount(mSoftware.getTweetCount());
-        }
         KJBitmap.create().display(mIvLogo, mSoftware.getLogo(),
                 R.drawable.widget_dface);
         notifyFavorite(mSoftware.getFavorite() == 1);
@@ -238,24 +182,8 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
     }
 
     @Override
-    public void setToolBarFragment(ToolbarFragment fragment) {
-        mToolBarFragment = fragment;
-        mToolBarFragment.setOnActionClickListener(mActionListener);
-        mToolBarFragment.setActionVisiable(ToolAction.ACTION_CHANGE, true);
-        mToolBarFragment.setActionVisiable(ToolAction.ACTION_FAVORITE, true);
-        mToolBarFragment.setActionVisiable(ToolAction.ACTION_WRITE_COMMENT,
-                true);
-        mToolBarFragment
-                .setActionVisiable(ToolAction.ACTION_VIEW_COMMENT, true);
-        mToolBarFragment.setActionVisiable(ToolAction.ACTION_SHARE, true);
-    }
-
-    @Override
     protected void onFavoriteChanged(boolean flag) {
         mSoftware.setFavorite(flag ? 1 : 0);
-        if (mToolBarFragment != null) {
-            mToolBarFragment.setFavorite(flag);
-        }
     }
 
     @Override
