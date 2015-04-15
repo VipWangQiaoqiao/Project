@@ -49,7 +49,6 @@ public class NewsDetailFragment extends BaseDetailFragment implements
     @InjectView(R.id.tv_time)
     TextView mTvTime;
     private int mNewsId;
-    private int mCommentCount;
     private News mNews;
 
     @Override
@@ -59,8 +58,6 @@ public class NewsDetailFragment extends BaseDetailFragment implements
                 false);
 
         mNewsId = getActivity().getIntent().getIntExtra("news_id", 0);
-        mCommentCount = getActivity().getIntent().getIntExtra("comment_count",
-                0);
         ButterKnife.inject(this, view);
         initViews(view);
         return view;

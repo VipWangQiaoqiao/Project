@@ -8,7 +8,6 @@ import java.util.List;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.CommentAdapter;
-import net.oschina.app.adapter.CommentAdapter.OnOperationListener;
 import net.oschina.app.api.OperationResponseHandler;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BeseHaveHeaderListFragment;
@@ -20,6 +19,7 @@ import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetDetail;
 import net.oschina.app.cache.CacheManager;
+import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -34,9 +34,11 @@ import net.oschina.app.widget.RecordButtonUtil;
 import net.oschina.app.widget.RecordButtonUtil.OnPlayListener;
 
 import org.apache.http.Header;
+import org.kymjs.emoji.OnSendClickListener;
 
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,7 +64,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
  */
 public class TweetDetailFragment extends
         BeseHaveHeaderListFragment<Comment, TweetDetail> implements
-        OnOperationListener, OnItemClickListener, OnItemLongClickListener {
+        OnItemClickListener, OnItemLongClickListener, OnSendClickListener {
 
     private static final String CACHE_KEY_PREFIX = "tweet_";
     private static final String CACHE_KEY_TWEET_COMMENT = "tweet_comment_";
@@ -77,11 +79,12 @@ public class TweetDetailFragment extends
     private View mLLLikeOPtion;
     private TextView mLikeUser;
     private ImageView mLikeState;
-    private View mLLComment;
+
+    private DetailActivity outAty;
 
     @Override
     protected CommentAdapter getListAdapter() {
-        return new CommentAdapter(this, true);
+        return new CommentAdapter();
     }
 
     @Override
@@ -162,6 +165,7 @@ public class TweetDetailFragment extends
     }
 
     private void fillUI() {
+        outAty = (DetailActivity) getActivity();
         mIvAvatar.setAvatarUrl(mTweet.getPortrait());
         mIvAvatar.setUserInfo(mTweet.getAuthorid(), mTweet.getAuthor());
         mTvName.setText(mTweet.getAuthor());
@@ -254,10 +258,9 @@ public class TweetDetailFragment extends
         final Comment comment = mAdapter.getItem(position - 1);
         if (comment == null)
             return;
+        outAty.emojiFragment.getEditText().setHint("回复:" + comment.getAuthor());
+        outAty.emojiFragment.getEditText().setTag(comment);
     }
-
-    @Override
-    public void onMoreClick(final Comment comment) {}
 
     private final AsyncHttpResponseHandler mCommentHandler = new AsyncHttpResponseHandler() {
 
@@ -290,17 +293,6 @@ public class TweetDetailFragment extends
             AppContext.showToastShort(R.string.comment_publish_faile);
         }
     };
-
-    private void handleComment(String text) {
-        showWaitDialog(R.string.progress_submit);
-        if (!AppContext.getInstance().isLogin()) {
-            UIHelper.showLoginActivity(getActivity());
-            return;
-        }
-        OSChinaApi.publicComment(CommentList.CATALOG_TWEET, mTweetId,
-                AppContext.getInstance().getLoginUid(), text, 0,
-                mCommentHandler);
-    }
 
     class DeleteOperationResponseHandler extends OperationResponseHandler {
 
@@ -432,7 +424,6 @@ public class TweetDetailFragment extends
         });
         mLikeUser = (TextView) header.findViewById(R.id.tv_likeusers);
         mLikeState = (ImageView) header.findViewById(R.id.iv_like_state);
-        mLLComment = header.findViewById(R.id.ll_comment);
         return header;
     }
 
@@ -446,16 +437,11 @@ public class TweetDetailFragment extends
         AsyncHttpResponseHandler handler = new AsyncHttpResponseHandler() {
 
             @Override
-            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-                // TODO Auto-generated method stub
-            }
+            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {}
 
             @Override
             public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                    Throwable arg3) {
-                // TODO Auto-generated method stub
-
-            }
+                    Throwable arg3) {}
         };
         if (AppContext.getInstance().isLogin()) {
             if (mTweet.getIsLike() == 1) {
@@ -508,5 +494,26 @@ public class TweetDetailFragment extends
             commentCount = mAdapter.getCount() - 1;
         }
         mTvCommentCount.setText(commentCount + "");
+    }
+
+    @Override
+    public void onClickSendButton(Editable str) {
+        showWaitDialog(R.string.progress_submit);
+        if (!AppContext.getInstance().isLogin()) {
+            UIHelper.showLoginActivity(getActivity());
+            return;
+        }
+        if (outAty.emojiFragment.getEditText().getTag() != null) {
+            Comment comment = (Comment) outAty.emojiFragment.getEditText()
+                    .getTag();
+            OSChinaApi.replyComment(mTweetId, CommentList.CATALOG_TWEET,
+                    comment.getId(), comment.getAuthorId(), AppContext
+                            .getInstance().getLoginUid(), str.toString(),
+                    mCommentHandler);
+        } else {
+            OSChinaApi.publicComment(CommentList.CATALOG_TWEET, mTweetId,
+                    AppContext.getInstance().getLoginUid(), str.toString(), 0,
+                    mCommentHandler);
+        }
     }
 }

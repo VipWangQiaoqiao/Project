@@ -20,6 +20,7 @@ import org.kymjs.emoji.OnSendClickListener;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
+import android.view.KeyEvent;
 import android.view.View;
 
 /**
@@ -139,5 +140,15 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
     public void onClickSendButton(Editable str) {
         currentFragment.onClickSendButton(str);
         emojiFragment.clean();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && emojiFragment.isShowEmojiKeyBoard()) {
+            emojiFragment.hideAllKeyBoard();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

@@ -14,6 +14,9 @@ import net.oschina.app.widget.FloorView;
 import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
+
+import org.kymjs.emoji.helper.InputHelper;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.Html;
@@ -26,23 +29,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class CommentAdapter extends ListBaseAdapter<Comment> {
-
-    private boolean showSplit;
-
-    public interface OnOperationListener {
-        void onMoreClick(Comment comment);
-    }
-
-    private final OnOperationListener mListener;
-
-    public CommentAdapter(OnOperationListener lis) {
-        mListener = lis;
-    }
-
-    public CommentAdapter(OnOperationListener lis, boolean showSplit) {
-        this.showSplit = showSplit;
-        mListener = lis;
-    }
 
     @SuppressLint({ "InflateParams", "CutPasteId" })
     @Override
@@ -71,6 +57,8 @@ public class CommentAdapter extends ListBaseAdapter<Comment> {
             vh.content.setLongClickable(false);
             Spanned span = Html.fromHtml(TweetTextView.modifyPath(item
                     .getContent()));
+            span = InputHelper.displayEmoji(parent.getContext().getResources(),
+                    span.toString());
             vh.content.setText(span);
             MyURLSpan.parseLinkText(vh.content, span);
 

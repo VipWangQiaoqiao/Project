@@ -65,7 +65,7 @@ public class AppContext extends BaseApplication {
         ApiHttpClient.setCookie(ApiHttpClient.getCookie(this));
 
         // Log控制器
-        KJLoger.openDebutLog(BuildConfig.DEBUG);
+        KJLoger.openDebutLog(false);
         TLog.DEBUG = BuildConfig.DEBUG;
 
         // Bitmap缓存地址

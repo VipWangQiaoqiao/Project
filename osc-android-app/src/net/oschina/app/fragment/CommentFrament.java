@@ -7,7 +7,6 @@ import java.io.Serializable;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.CommentAdapter;
-import net.oschina.app.adapter.CommentAdapter.OnOperationListener;
 import net.oschina.app.api.OperationResponseHandler;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseActivity;
@@ -39,7 +38,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 public class CommentFrament extends BaseListFragment<Comment> implements
-        OnItemLongClickListener, OnOperationListener {
+        OnItemLongClickListener {
 
     public static final String BUNDLE_KEY_CATALOG = "BUNDLE_KEY_CATALOG";
     public static final String BUNDLE_KEY_BLOG = "BUNDLE_KEY_BLOG";
@@ -134,7 +133,7 @@ public class CommentFrament extends BaseListFragment<Comment> implements
 
     @Override
     protected CommentAdapter getListAdapter() {
-        return new CommentAdapter(this);
+        return new CommentAdapter();
     }
 
     @Override
@@ -285,10 +284,5 @@ public class CommentFrament extends BaseListFragment<Comment> implements
         });
         dialog.show();
         return true;
-    }
-
-    @Override
-    public void onMoreClick(Comment comment) {
-
     }
 }

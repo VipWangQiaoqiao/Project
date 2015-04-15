@@ -150,11 +150,11 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             SpannableString str = new SpannableString("c" + span);
             str.setSpan(recordImg, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
             str = InputHelper.displayEmoji(context.getResources(),
-                    span.toString(), "[", "]", ":", ":");
+                    span.toString());
             vh.content.setText(str);
         } else {
             span = InputHelper.displayEmoji(context.getResources(),
-                    span.toString(), "[", "]", ":", ":");
+                    span.toString());
             vh.content.setText(span);
         }
         MyURLSpan.parseLinkText(vh.content, span);
@@ -255,7 +255,6 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
                 dialog.dismiss();
                 OSChinaApi.deleteTweet(tweet.getAuthorid(), tweet.getId(),
                         new AsyncHttpResponseHandler() {
-
                             @Override
                             public void onSuccess(int arg0, Header[] arg1,
                                     byte[] arg2) {

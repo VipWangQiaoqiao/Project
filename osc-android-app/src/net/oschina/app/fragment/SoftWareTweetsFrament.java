@@ -6,13 +6,11 @@ import java.io.Serializable;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
-import net.oschina.app.adapter.CommentAdapter.OnOperationListener;
 import net.oschina.app.adapter.TweetAdapter;
 import net.oschina.app.api.OperationResponseHandler;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.Tweet;
@@ -28,7 +26,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 
 public class SoftWareTweetsFrament extends BaseListFragment<Tweet> implements
-        OnOperationListener, OnItemLongClickListener {
+        OnItemLongClickListener {
 
     public static final String BUNDLE_KEY_ID = "BUNDLE_KEY_ID";
     protected static final String TAG = SoftWareTweetsFrament.class
@@ -165,10 +163,5 @@ public class SoftWareTweetsFrament extends BaseListFragment<Tweet> implements
         // });
         // dialog.show();
         return true;
-    }
-
-    @Override
-    public void onMoreClick(Comment comment) {
-
     }
 }
