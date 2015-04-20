@@ -10,6 +10,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseDetailFragment;
 import net.oschina.app.base.BaseListFragment;
+import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.Event;
 import net.oschina.app.bean.EventApplyData;
@@ -22,14 +23,18 @@ import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.ui.EventApplyDialog;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
 import org.apache.http.Header;
+import org.kymjs.emoji.OnSendClickListener;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +53,8 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
  * @created 2014年12月12日 下午3:08:49
  * 
  */
-public class EventDetailFragment extends BaseDetailFragment {
+public class EventDetailFragment extends BaseDetailFragment implements
+        OnSendClickListener {
 
     protected static final String TAG = EventDetailFragment.class
             .getSimpleName();
@@ -354,5 +360,25 @@ public class EventDetailFragment extends BaseDetailFragment {
     protected String getShareUrl() {
         return mPost != null ? mPost.getUrl().replace("http://www", "http://m")
                 : null;
+    }
+
+    @Override
+    public void onClickSendButton(Editable str) {
+        if (!TDevice.hasInternet()) {
+            AppContext.showToastShort(R.string.tip_network_error);
+            return;
+        }
+        if (!AppContext.getInstance().isLogin()) {
+            UIHelper.showLoginActivity(getActivity());
+            return;
+        }
+        if (TextUtils.isEmpty(str)) {
+            AppContext.showToastShort(R.string.tip_comment_content_empty);
+            return;
+        }
+        showWaitDialog(R.string.progress_submit);
+        OSChinaApi.publicComment(CommentList.CATALOG_POST, mPostId, AppContext
+                .getInstance().getLoginUid(), str.toString(), 0,
+                mCommentHandler);
     }
 }

@@ -21,6 +21,7 @@ import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
+import org.kymjs.emoji.EmojiKeyboardFragment;
 import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.bitmap.helper.BitmapCreate;
 import org.kymjs.kjframe.http.core.KJAsyncTask;
@@ -40,7 +41,6 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -58,8 +58,6 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-import com.viewpagerindicator.CirclePageIndicator;
-
 public class TweetPubFragment extends BaseFragment {
 
     public static final int ACTION_TYPE_ALBUM = 0;
@@ -74,12 +72,6 @@ public class TweetPubFragment extends BaseFragment {
     private static final String TEXT_SOFTWARE = "#请输入软件名#";
 
     private String fromSharedTextContent = "";
-
-    @InjectView(R.id.view_pager)
-    ViewPager mViewPager;
-
-    @InjectView(R.id.indicator)
-    CirclePageIndicator mIndicator;
 
     @InjectView(R.id.ib_emoji_keyboard)
     ImageButton mIbEmoji;
@@ -96,9 +88,6 @@ public class TweetPubFragment extends BaseFragment {
     @InjectView(R.id.tv_clear)
     TextView mTvClear;
 
-    @InjectView(R.id.ly_emoji)
-    View mLyEmoji;
-
     @InjectView(R.id.rl_img)
     View mLyImage;
 
@@ -111,8 +100,6 @@ public class TweetPubFragment extends BaseFragment {
     private MenuItem mSendMenu;
 
     private boolean mIsKeyboardVisible;
-    private boolean mNeedHideEmoji;
-    private int mCurrentKeyboardHeigh;
 
     private String theLarge, theThumbnail;
     private File imgFile;
@@ -336,15 +323,10 @@ public class TweetPubFragment extends BaseFragment {
         }
         mEtInput.setText(content);
         mEtInput.setSelection(mEtInput.getText().toString().length());
-        mIndicator.setViewPager(mViewPager);
     }
 
     @Override
     public boolean onBackPressed() {
-        if (mLyEmoji.getVisibility() == View.VISIBLE) {
-            hideEmojiPanel();
-            return true;
-        }
         final String tweet = mEtInput.getText().toString();
         if (!TextUtils.isEmpty(tweet)) {
             CommonDialog dialog = DialogHelper
@@ -376,14 +358,7 @@ public class TweetPubFragment extends BaseFragment {
     @Override
     public void onClick(View v) {
         final int id = v.getId();
-        if (id == R.id.ib_emoji_keyboard) {
-            if (mLyEmoji.getVisibility() == View.GONE) {
-                mNeedHideEmoji = true;
-                tryShowEmojiPanel();
-            } else {
-                tryHideEmojiPanel();
-            }
-        } else if (id == R.id.ib_picture) {
+        if (id == R.id.ib_picture) {
             handleSelectPicture();
         } else if (id == R.id.ib_mention) {
             insertMention();
@@ -395,6 +370,11 @@ public class TweetPubFragment extends BaseFragment {
             mIvImage.setImageBitmap(null);
             mLyImage.setVisibility(View.GONE);
             imgFile = null;
+        } else if (id == R.id.ib_emoji_keyboard) {
+            getFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.emoji_keyboard_fragment,
+                            new EmojiKeyboardFragment()).commit();
         }
     }
 
@@ -583,35 +563,6 @@ public class TweetPubFragment extends BaseFragment {
             break;
         default:
             break;
-        }
-    }
-
-    private void tryShowEmojiPanel() {
-        if (mIsKeyboardVisible) {
-            TDevice.hideSoftKeyboard(getActivity().getCurrentFocus());
-        } else {
-            showEmojiPanel();
-        }
-    }
-
-    private void showEmojiPanel() {
-        mNeedHideEmoji = false;
-        mLyEmoji.setVisibility(View.VISIBLE);
-        mIbEmoji.setImageResource(R.drawable.compose_toolbar_keyboard_selector);
-    }
-
-    private void tryHideEmojiPanel() {
-        if (!mIsKeyboardVisible) {
-            TDevice.showSoftKeyboard(mEtInput);
-        } else {
-            hideEmojiPanel();
-        }
-    }
-
-    private void hideEmojiPanel() {
-        if (mLyEmoji.getVisibility() == View.VISIBLE) {
-            mLyEmoji.setVisibility(View.GONE);
-            mIbEmoji.setImageResource(R.drawable.compose_toolbar_emoji_selector);
         }
     }
 

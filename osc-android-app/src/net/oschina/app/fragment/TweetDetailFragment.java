@@ -228,10 +228,32 @@ public class TweetDetailFragment extends
     private void fillWebViewBody() {
         StringBuffer body = new StringBuffer();
         body.append(UIHelper.WEB_STYLE + UIHelper.WEB_LOAD_IMAGES);
+
         String tweetBody = TextUtils.isEmpty(mTweet.getImgSmall()) ? mTweet
                 .getBody() : mTweet.getBody() + "<br/><img src=\""
                 + mTweet.getImgSmall() + "\">";
         body.append(setHtmlCotentSupportImagePreview(tweetBody));
+
+        String tweetbody = mTweet.getBody();
+        int index = tweetbody.indexOf("data-name=");
+        String emoji = "";
+        if (index > 0) {
+            int len = tweetbody.indexOf("\"", index + 11);
+            if (len > index) {
+                emoji = tweetbody.substring(index + 11, len);
+            }
+        }
+
+        int start = tweetbody.indexOf("<emoji");
+        if (start > 0) {
+            int end = tweetbody.indexOf("</emoji", start);
+            if (end > start) {
+                body.append("<img src=\"http://www.oschina.net/js/team/grunt/dist/images/emoji/people/"
+                        + emoji + ".png\" width=\"25\" height=\"25\"/>");
+                mTweet.setBody(tweetbody);
+            }
+        }
+
         UIHelper.addWebImageShow(getActivity(), mContent);
         mContent.loadDataWithBaseURL(null, body.toString(), "text/html",
                 "utf-8", null);
@@ -418,7 +440,6 @@ public class TweetDetailFragment extends
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 likeOption();
             }
         });

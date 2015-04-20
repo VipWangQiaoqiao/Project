@@ -335,7 +335,6 @@ public class UIHelper {
     public static void addWebImageShow(final Context cxt, WebView wv) {
         wv.getSettings().setJavaScriptEnabled(true);
         wv.addJavascriptInterface(new OnWebViewImageListener() {
-
             @Override
             @JavascriptInterface
             public void showImagePreview(String bigImageUrl) {
@@ -1069,20 +1068,21 @@ public class UIHelper {
         bundle.putInt(TeamMemberAdapter.TEAM_ID_KEY, teamId);
         UIHelper.showSimpleBack(context, SimpleBackPage.TEAM_USER_INFO, bundle);
     }
-    
+
     /***
      * 显示团队动态详情
-     * @author 火蚁
-     * 2015-3-13 下午5:34:50
-     *
+     * 
+     * @author 火蚁 2015-3-13 下午5:34:50
+     * 
      * @return void
      * @param contex
      * @param teamId
      * @param active
      */
-    public static void showTeamActiveDetail(Context contex, int teamId, TeamActive active) {
-	Intent intent = new Intent(contex, DetailActivity.class);
-        
+    public static void showTeamActiveDetail(Context contex, int teamId,
+            TeamActive active) {
+        Intent intent = new Intent(contex, DetailActivity.class);
+
         Bundle bundle = new Bundle();
         bundle.putSerializable(TeamActiveFragment.DYNAMIC_FRAGMENT_KEY, active);
         bundle.putInt(TeamActiveFragment.DYNAMIC_FRAGMENT_TEAM_KEY, teamId);

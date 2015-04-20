@@ -57,7 +57,6 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.viewpagerindicator.CirclePageIndicator;
 
 /**
  * 团队新动态 TeamNewActiveFragment.java
@@ -78,9 +77,6 @@ public class TeamNewActiveActivity extends BaseActivity {
     @InjectView(R.id.view_pager)
     ViewPager mViewPager;
 
-    @InjectView(R.id.indicator)
-    CirclePageIndicator mIndicator;
-
     @InjectView(R.id.ib_emoji_keyboard)
     ImageButton mIbEmoji;
 
@@ -95,9 +91,6 @@ public class TeamNewActiveActivity extends BaseActivity {
 
     @InjectView(R.id.tv_clear)
     TextView mTvClear;
-
-    @InjectView(R.id.ly_emoji)
-    View mLyEmoji;
 
     @InjectView(R.id.rl_img)
     View mLyImage;
@@ -154,15 +147,6 @@ public class TeamNewActiveActivity extends BaseActivity {
             break;
         case R.id.ib_trend_software:
             insertTrendSoftware();
-            break;
-
-        case R.id.ib_emoji_keyboard:
-            if (mLyEmoji.getVisibility() == View.GONE) {
-                mNeedHideEmoji = true;
-                tryShowEmojiPanel();
-            } else {
-                tryHideEmojiPanel();
-            }
             break;
         case R.id.iv_clear_img:
             mIvImage.setImageBitmap(null);
@@ -306,7 +290,6 @@ public class TeamNewActiveActivity extends BaseActivity {
 
                     @Override
                     public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-                        // TODO Auto-generated method stub
                         Result result = XmlUtils.toBean(ResultBean.class, arg2)
                                 .getResult();
                         if (result != null && result.OK()) {
@@ -320,58 +303,25 @@ public class TeamNewActiveActivity extends BaseActivity {
                     @Override
                     public void onFailure(int arg0, Header[] arg1, byte[] arg2,
                             Throwable arg3) {
-                        // TODO Auto-generated method stub
                         AppContext.showToast("发表失败，请检查下你的网络");
                     }
 
                     @Override
                     public void onStart() {
-                        // TODO Auto-generated method stub
                         super.onStart();
                         showWaitDialog("提交中...");
                     }
 
                     @Override
                     public void onFinish() {
-                        // TODO Auto-generated method stub
                         super.onFinish();
                         hideWaitDialog();
                     }
                 });
     }
 
-    private void showEmojiPanel() {
-        mNeedHideEmoji = false;
-        mLyEmoji.setVisibility(View.VISIBLE);
-        mIbEmoji.setImageResource(R.drawable.compose_toolbar_keyboard_selector);
-    }
-
-    private void tryShowEmojiPanel() {
-        if (mIsKeyboardVisible) {
-            TDevice.hideSoftKeyboard(this.getCurrentFocus());
-        } else {
-            showEmojiPanel();
-        }
-    }
-
-    private void tryHideEmojiPanel() {
-        if (!mIsKeyboardVisible) {
-            TDevice.showSoftKeyboard(mEtInput);
-        } else {
-            hideEmojiPanel();
-        }
-    }
-
-    private void hideEmojiPanel() {
-        if (mLyEmoji.getVisibility() == View.VISIBLE) {
-            mLyEmoji.setVisibility(View.GONE);
-            mIbEmoji.setImageResource(R.drawable.compose_toolbar_emoji_selector);
-        }
-    }
-
     @Override
     public void onBackPressed() {
-        // TODO Auto-generated method stub
         if (mEtInput.getText().length() != 0) {
             showConfirmExit();
             return;
