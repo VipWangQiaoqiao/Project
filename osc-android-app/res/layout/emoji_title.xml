@@ -8,10 +8,10 @@
 
     <CheckBox
         android:id="@+id/emoji_title_flag"
-        android:layout_width="26dp"
-        android:layout_height="26dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
-        android:background="@drawable/selector_keyboard"
+        android:background="@drawable/btn_opt_text_to_tools_selector"
         android:button="@null"
         android:checked="false"
         android:contentDescription="@null"
@@ -22,12 +22,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_margin="5dp"
+        android:layout_margin="8dp"
         android:layout_weight="1"
         android:background="@drawable/bg_edittext"
         android:gravity="center_vertical"
         android:hint="说点什么吧"
-        android:padding="10dp"
+        android:padding="3dp"
         android:textSize="19sp" />
 
     <CheckBox

@@ -25,14 +25,13 @@
             android:contentDescription="@null"
             android:paddingLeft="@dimen/space_8"
             android:paddingRight="@dimen/space_8"
-            android:src="@drawable/btn_opt_tools_to_text_selector"
-            android:visibility="gone" />
+            android:src="@drawable/btn_opt_tools_to_text_selector" />
 
         <View
             android:layout_width="1px"
             android:layout_height="match_parent"
             android:background="@color/list_divider_color" />
-        
+
         <FrameLayout
             android:id="@+id/view_comment_layout"
             android:layout_width="0.0dip"

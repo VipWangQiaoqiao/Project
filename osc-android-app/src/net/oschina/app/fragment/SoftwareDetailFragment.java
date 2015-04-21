@@ -3,6 +3,7 @@ package net.oschina.app.fragment;
 import java.io.InputStream;
 import java.io.Serializable;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseDetailFragment;
@@ -10,8 +11,11 @@ import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.Software;
 import net.oschina.app.bean.SoftwareDetail;
+import net.oschina.app.bean.Tweet;
+import net.oschina.app.emoji.OnSendClickListener;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
@@ -19,6 +23,8 @@ import org.kymjs.kjframe.KJBitmap;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +41,8 @@ import butterknife.InjectView;
  * @created 2014年11月21日 上午10:41:45
  * 
  */
-public class SoftwareDetailFragment extends BaseDetailFragment {
+public class SoftwareDetailFragment extends BaseDetailFragment implements
+        OnSendClickListener {
 
     protected static final String TAG = SoftwareDetailFragment.class
             .getSimpleName();
@@ -181,6 +188,19 @@ public class SoftwareDetailFragment extends BaseDetailFragment {
         }
     }
 
+    // @Override
+    // public void setToolBarFragment(ToolbarFragment fragment) {
+    // mToolBarFragment = fragment;
+    // mToolBarFragment.setOnActionClickListener(mActionListener);
+    // mToolBarFragment.setActionVisiable(ToolAction.ACTION_CHANGE, true);
+    // mToolBarFragment.setActionVisiable(ToolAction.ACTION_FAVORITE, true);
+    // mToolBarFragment.setActionVisiable(ToolAction.ACTION_WRITE_COMMENT,
+    // true);
+    // mToolBarFragment
+    // .setActionVisiable(ToolAction.ACTION_VIEW_COMMENT, true);
+    // mToolBarFragment.setActionVisiable(ToolAction.ACTION_SHARE, true);
+    // }
+
     @Override
     protected void onFavoriteChanged(boolean flag) {
         mSoftware.setFavorite(flag ? 1 : 0);
@@ -213,4 +233,32 @@ public class SoftwareDetailFragment extends BaseDetailFragment {
         return mSoftware != null ? mSoftware.getUrl().replace("http://www",
                 "http://m") : "";
     }
+
+    @Override
+    public void onClickSendButton(Editable str) {
+        if (mSoftware.getId() == 0) {
+            AppContext.showToast("无法获取该软件~");
+            return;
+        }
+        if (!TDevice.hasInternet()) {
+            AppContext.showToastShort(R.string.tip_network_error);
+            return;
+        }
+        if (!AppContext.getInstance().isLogin()) {
+            UIHelper.showLoginActivity(getActivity());
+            return;
+        }
+        if (TextUtils.isEmpty(str)) {
+            AppContext.showToastShort(R.string.tip_comment_content_empty);
+            return;
+        }
+        Tweet tweet = new Tweet();
+        tweet.setAuthorid(AppContext.getInstance().getLoginUid());
+        tweet.setBody(str.toString());
+        showWaitDialog(R.string.progress_submit);
+        OSChinaApi.pubSoftWareTweet(tweet, mSoftware.getId(), mCommentHandler);
+    }
+
+    @Override
+    public void onClickFlagButton() {}
 }
