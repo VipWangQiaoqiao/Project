@@ -159,4 +159,5 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
                 .replace(R.id.emoji_keyboard,
                         toolFragment = new ToolbarFragment()).commit();
     }
+
 }

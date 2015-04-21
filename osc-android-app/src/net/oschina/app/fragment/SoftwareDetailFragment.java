@@ -188,19 +188,6 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
         }
     }
 
-    // @Override
-    // public void setToolBarFragment(ToolbarFragment fragment) {
-    // mToolBarFragment = fragment;
-    // mToolBarFragment.setOnActionClickListener(mActionListener);
-    // mToolBarFragment.setActionVisiable(ToolAction.ACTION_CHANGE, true);
-    // mToolBarFragment.setActionVisiable(ToolAction.ACTION_FAVORITE, true);
-    // mToolBarFragment.setActionVisiable(ToolAction.ACTION_WRITE_COMMENT,
-    // true);
-    // mToolBarFragment
-    // .setActionVisiable(ToolAction.ACTION_VIEW_COMMENT, true);
-    // mToolBarFragment.setActionVisiable(ToolAction.ACTION_SHARE, true);
-    // }
-
     @Override
     protected void onFavoriteChanged(boolean flag) {
         mSoftware.setFavorite(flag ? 1 : 0);
