@@ -11,6 +11,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.Tweet;
+import net.oschina.app.emoji.EmojiKeyboardFragment;
 import net.oschina.app.service.ServerTaskUtils;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
@@ -21,7 +22,6 @@ import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
-import org.kymjs.emoji.EmojiKeyboardFragment;
 import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.bitmap.helper.BitmapCreate;
 import org.kymjs.kjframe.http.core.KJAsyncTask;
@@ -100,6 +100,8 @@ public class TweetPubFragment extends BaseFragment {
     private MenuItem mSendMenu;
 
     private boolean mIsKeyboardVisible;
+
+    private final EmojiKeyboardFragment keyboardFragment = new EmojiKeyboardFragment();
 
     private String theLarge, theThumbnail;
     private File imgFile;
@@ -323,6 +325,10 @@ public class TweetPubFragment extends BaseFragment {
         }
         mEtInput.setText(content);
         mEtInput.setSelection(mEtInput.getText().toString().length());
+
+        getFragmentManager().beginTransaction()
+                .replace(R.id.emoji_keyboard_fragment, keyboardFragment)
+                .commit();
     }
 
     @Override
@@ -371,10 +377,13 @@ public class TweetPubFragment extends BaseFragment {
             mLyImage.setVisibility(View.GONE);
             imgFile = null;
         } else if (id == R.id.ib_emoji_keyboard) {
-            getFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.emoji_keyboard_fragment,
-                            new EmojiKeyboardFragment()).commit();
+            if (!keyboardFragment.isShow()) {// emoji隐藏中
+                keyboardFragment.showEmojiKeyBoard();
+                keyboardFragment.hideSoftKeyboard();
+            } else {
+                keyboardFragment.hideEmojiKeyBoard();
+                keyboardFragment.showSoftKeyboard(mEtInput);
+            }
         }
     }
 

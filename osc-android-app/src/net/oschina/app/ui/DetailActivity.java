@@ -3,6 +3,9 @@ package net.oschina.app.ui;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseFragment;
+import net.oschina.app.emoji.KJEmojiFragment;
+import net.oschina.app.emoji.OnSendClickListener;
+import net.oschina.app.emoji.ToolbarFragment;
 import net.oschina.app.fragment.BlogDetailFragment;
 import net.oschina.app.fragment.EventDetailFragment;
 import net.oschina.app.fragment.NewsDetailFragment;
@@ -13,10 +16,6 @@ import net.oschina.app.team.fragment.TeamDiaryDetail;
 import net.oschina.app.team.fragment.TeamDiscussDetailFragment;
 import net.oschina.app.team.fragment.TeamIssueDetailFragment;
 import net.oschina.app.team.fragment.TeamTweetDetailFragment;
-
-import org.kymjs.emoji.KJEmojiFragment;
-import org.kymjs.emoji.OnSendClickListener;
-
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
@@ -47,6 +46,7 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
 
     private OnSendClickListener currentFragment;
     public KJEmojiFragment emojiFragment;
+    public ToolbarFragment toolFragment;
 
     @Override
     protected int getLayoutId() {
@@ -150,5 +150,13 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onClickFlagButton() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.emoji_keyboard,
+                        toolFragment = new ToolbarFragment()).commit();
     }
 }

@@ -14,15 +14,13 @@ import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.News;
 import net.oschina.app.bean.News.Relative;
 import net.oschina.app.bean.NewsDetail;
+import net.oschina.app.emoji.OnSendClickListener;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.URLsUtils;
 import net.oschina.app.util.XmlUtils;
-
-import org.kymjs.emoji.OnSendClickListener;
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -211,4 +209,7 @@ public class NewsDetailFragment extends BaseDetailFragment implements
                 .getInstance().getLoginUid(), str.toString(), 0,
                 mCommentHandler);
     }
+
+    @Override
+    public void onClickFlagButton() {}
 }

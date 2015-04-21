@@ -8,15 +8,13 @@ import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Comment.Refer;
 import net.oschina.app.bean.Comment.Reply;
 import net.oschina.app.bean.Tweet;
+import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.FloorView;
 import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
-
-import org.kymjs.emoji.helper.InputHelper;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.Html;

@@ -20,6 +20,7 @@ import net.oschina.app.bean.PostDetail;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.emoji.OnSendClickListener;
 import net.oschina.app.ui.EventApplyDialog;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
@@ -28,7 +29,6 @@ import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
 import org.apache.http.Header;
-import org.kymjs.emoji.OnSendClickListener;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -381,4 +381,7 @@ public class EventDetailFragment extends BaseDetailFragment implements
                 .getInstance().getLoginUid(), str.toString(), 0,
                 mCommentHandler);
     }
+
+    @Override
+    public void onClickFlagButton() {}
 }

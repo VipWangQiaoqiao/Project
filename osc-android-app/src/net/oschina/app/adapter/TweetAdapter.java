@@ -5,6 +5,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Tweet;
+import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
@@ -18,7 +19,6 @@ import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
 
 import org.apache.http.Header;
-import org.kymjs.emoji.helper.InputHelper;
 import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
 import org.kymjs.kjframe.bitmap.helper.BitmapHelper;

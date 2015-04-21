@@ -19,6 +19,7 @@ import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetDetail;
 import net.oschina.app.cache.CacheManager;
+import net.oschina.app.emoji.OnSendClickListener;
 import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
@@ -34,7 +35,6 @@ import net.oschina.app.widget.RecordButtonUtil;
 import net.oschina.app.widget.RecordButtonUtil.OnPlayListener;
 
 import org.apache.http.Header;
-import org.kymjs.emoji.OnSendClickListener;
 
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
@@ -229,30 +229,24 @@ public class TweetDetailFragment extends
         StringBuffer body = new StringBuffer();
         body.append(UIHelper.WEB_STYLE + UIHelper.WEB_LOAD_IMAGES);
 
-        String tweetBody = TextUtils.isEmpty(mTweet.getImgSmall()) ? mTweet
-                .getBody() : mTweet.getBody() + "<br/><img src=\""
+        StringBuilder tweetbody = new StringBuilder(mTweet.getBody());
+        int index = 0;
+        for (int i = 0; i < mTweet.getBody().split(".png\"").length; i++) {
+            index = tweetbody.indexOf(".png\"", index + 1);
+            if (index > 0) {
+                // 这个问题也太奇葩了，如果只添加一个宽高限制，没有作用，必须添加两个
+                tweetbody
+                        .insert(index + 5,
+                                " width=\"25px\" height=\"25px\" width=\"25px\" height=\"25px\"");
+            } else {
+                break;
+            }
+        }
+
+        String tweetBody = TextUtils.isEmpty(mTweet.getImgSmall()) ? tweetbody
+                .toString() : tweetbody.toString() + "<br/><img src=\""
                 + mTweet.getImgSmall() + "\">";
         body.append(setHtmlCotentSupportImagePreview(tweetBody));
-
-        String tweetbody = mTweet.getBody();
-        int index = tweetbody.indexOf("data-name=");
-        String emoji = "";
-        if (index > 0) {
-            int len = tweetbody.indexOf("\"", index + 11);
-            if (len > index) {
-                emoji = tweetbody.substring(index + 11, len);
-            }
-        }
-
-        int start = tweetbody.indexOf("<emoji");
-        if (start > 0) {
-            int end = tweetbody.indexOf("</emoji", start);
-            if (end > start) {
-                body.append("<img src=\"http://www.oschina.net/js/team/grunt/dist/images/emoji/people/"
-                        + emoji + ".png\" width=\"25\" height=\"25\"/>");
-                mTweet.setBody(tweetbody);
-            }
-        }
 
         UIHelper.addWebImageShow(getActivity(), mContent);
         mContent.loadDataWithBaseURL(null, body.toString(), "text/html",
@@ -537,4 +531,7 @@ public class TweetDetailFragment extends
                     mCommentHandler);
         }
     }
+
+    @Override
+    public void onClickFlagButton() {}
 }

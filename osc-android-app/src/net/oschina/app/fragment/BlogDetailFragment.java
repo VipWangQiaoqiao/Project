@@ -11,15 +11,13 @@ import net.oschina.app.bean.Blog;
 import net.oschina.app.bean.BlogDetail;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.FavoriteList;
+import net.oschina.app.emoji.OnSendClickListener;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.URLsUtils;
 import net.oschina.app.util.XmlUtils;
-
-import org.kymjs.emoji.OnSendClickListener;
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -199,4 +197,7 @@ public class BlogDetailFragment extends BaseDetailFragment implements
         OSChinaApi.publicBlogComment(mBlogId, AppContext.getInstance()
                 .getLoginUid(), str.toString(), mCommentHandler);
     }
+
+    @Override
+    public void onClickFlagButton() {}
 }
