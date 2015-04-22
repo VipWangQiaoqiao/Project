@@ -230,18 +230,18 @@ public class TweetDetailFragment extends
         body.append(UIHelper.WEB_STYLE + UIHelper.WEB_LOAD_IMAGES);
 
         StringBuilder tweetbody = new StringBuilder(mTweet.getBody());
-        int index = 0;
-        for (int i = 0; i < mTweet.getBody().split(".png\"").length; i++) {
-            index = tweetbody.indexOf(".png\"", index + 1);
-            if (index > 0) {
-                // 这个问题也太奇葩了，如果只添加一个宽高限制，没有作用，必须添加两个
-                tweetbody
-                        .insert(index + 5,
-                                " width=\"25px\" height=\"25px\" width=\"25px\" height=\"25px\"");
-            } else {
-                break;
-            }
-        }
+        // int index = 0;
+        // for (int i = 0; i < mTweet.getBody().split(".png\"").length; i++) {
+        // index = tweetbody.indexOf(".png\"", index + 1);
+        // if (index > 0) {
+        // // 这个问题也太奇葩了，如果只添加一个宽高限制，没有作用，必须添加两个
+        // tweetbody
+        // .insert(index + 5,
+        // " width=\"25px\" height=\"25px\" width=\"25px\" height=\"25px\"");
+        // } else {
+        // break;
+        // }
+        // }
 
         String tweetBody = TextUtils.isEmpty(mTweet.getImgSmall()) ? tweetbody
                 .toString() : tweetbody.toString() + "<br/><img src=\""
