@@ -41,9 +41,11 @@ public class EmojiPageFragment extends Fragment {
     private List<Emojicon> datas;
     private GridView sGrid;
     private EmojiGridAdapter adapter;
+    private final OnEmojiClickListener listener;
 
-    public EmojiPageFragment(int index, int type) {
+    public EmojiPageFragment(int index, int type, OnEmojiClickListener l) {
         initData(index, type);
+        this.listener = l;
     }
 
     private void initData(int index, int type) {
@@ -75,6 +77,10 @@ public class EmojiPageFragment extends Fragment {
                     int position, long id) {
                 EditText editText = (EditText) getActivity().findViewById(
                         R.id.emoji_titile_input);
+                if (listener != null) {
+                    listener.onEmojiClick((Emojicon) parent.getAdapter().getItem(
+                            position));
+                }
                 if (position + 1 != datas.size()) {
                     InputHelper.input2OSC(editText, (Emojicon) parent
                             .getAdapter().getItem(position));

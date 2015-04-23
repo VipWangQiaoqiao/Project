@@ -170,6 +170,7 @@ public class TweetDetailFragment extends
         mIvAvatar.setUserInfo(mTweet.getAuthorid(), mTweet.getAuthor());
         mTvName.setText(mTweet.getAuthor());
         mTvTime.setText(StringUtils.friendly_time(mTweet.getPubDate()));
+        outAty.emojiFragment.hideFlagButton();
         switch (mTweet.getAppclient()) {
         default:
             mTvFrom.setVisibility(View.GONE);

@@ -12,6 +12,9 @@ import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.emoji.EmojiKeyboardFragment;
+import net.oschina.app.emoji.Emojicon;
+import net.oschina.app.emoji.InputHelper;
+import net.oschina.app.emoji.OnEmojiClickListener;
 import net.oschina.app.service.ServerTaskUtils;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
@@ -58,7 +61,8 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class TweetPubFragment extends BaseFragment {
+public class TweetPubFragment extends BaseFragment implements
+        OnEmojiClickListener {
 
     public static final int ACTION_TYPE_ALBUM = 0;
     public static final int ACTION_TYPE_PHOTO = 1;
@@ -329,6 +333,17 @@ public class TweetPubFragment extends BaseFragment {
         getFragmentManager().beginTransaction()
                 .replace(R.id.emoji_keyboard_fragment, keyboardFragment)
                 .commit();
+        keyboardFragment.setOnEmojiClickListener(new OnEmojiClickListener() {
+            @Override
+            public void onEmojiClick(Emojicon v) {
+                InputHelper.input2OSC(mEtInput, v);
+            }
+
+            @Override
+            public void onDeleteButtonClick(View v) {
+                InputHelper.backspace(mEtInput);
+            }
+        });
     }
 
     @Override
@@ -630,4 +645,12 @@ public class TweetPubFragment extends BaseFragment {
 
     @Override
     public void initData() {}
+
+    @Override
+    public void onDeleteButtonClick(View v) {}
+
+    @Override
+    public void onEmojiClick(Emojicon v) {
+        InputHelper.input2OSC(mEtInput, v);
+    }
 }

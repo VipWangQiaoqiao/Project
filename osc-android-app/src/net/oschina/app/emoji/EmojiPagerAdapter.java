@@ -26,9 +26,13 @@ import android.support.v4.app.FragmentPagerAdapter;
  */
 public class EmojiPagerAdapter extends FragmentPagerAdapter {
 
-    public EmojiPagerAdapter(FragmentManager fm, int tabCount) {
+    private OnEmojiClickListener listener;
+
+    public EmojiPagerAdapter(FragmentManager fm, int tabCount,
+            OnEmojiClickListener l) {
         super(fm);
         KJEmojiFragment.EMOJI_TAB_CONTENT = tabCount;
+        listener = l;
     }
 
     public EmojiPagerAdapter(FragmentManager fm) {
@@ -38,9 +42,9 @@ public class EmojiPagerAdapter extends FragmentPagerAdapter {
     @Override
     public EmojiPageFragment getItem(int index) {
         if (KJEmojiFragment.EMOJI_TAB_CONTENT > 1) {
-            return new EmojiPageFragment(index, index);
+            return new EmojiPageFragment(index, index, listener);
         } else {
-            return new EmojiPageFragment(index, 0);
+            return new EmojiPageFragment(index, 0, listener);
         }
     }
 

@@ -74,7 +74,8 @@ public class EmojiKeyboardFragment extends Fragment implements
         params.height = EMOJI_TAB_CONTENT > 1 ? 490 : 370;
         mEmojiContent.setLayoutParams(params);
         mEmojiPager = (ViewPager) mEmojiContent.findViewById(R.id.emoji_pager);
-        adapter = new EmojiPagerAdapter(getFragmentManager(), EMOJI_TAB_CONTENT);
+        adapter = new EmojiPagerAdapter(getFragmentManager(),
+                EMOJI_TAB_CONTENT, listener);
         mEmojiPager.setAdapter(adapter);
         mEmojiContent.setVisibility(View.VISIBLE);
 
