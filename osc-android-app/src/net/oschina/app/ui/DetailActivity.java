@@ -176,6 +176,14 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
             @Override
             public void onActionClick(ToolAction action) {
                 switch (action) {
+                case ACTION_CHANGE:
+                case ACTION_WRITE_COMMENT:
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.emoji_keyboard,
+                                    emojiFragment = new KJEmojiFragment())
+                            .commit();
+                    break;
                 case ACTION_FAVORITE:
                     ((BaseDetailFragment) currentFragment)
                             .handleFavoriteOrNot();
@@ -187,9 +195,6 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
                     ((BaseDetailFragment) currentFragment).handleShare();
                     break;
                 case ACTION_VIEW_COMMENT:
-                    ((BaseDetailFragment) currentFragment).onclickComment();
-                    break;
-                case ACTION_WRITE_COMMENT:
                     ((BaseDetailFragment) currentFragment)
                             .onclickWriteComment();
                     break;
@@ -199,5 +204,4 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
             }
         });
     }
-
 }

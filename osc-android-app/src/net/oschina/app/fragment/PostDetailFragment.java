@@ -7,6 +7,7 @@ import java.net.URLEncoder;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseDetailFragment;
+import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.Post;
@@ -167,5 +168,11 @@ public class PostDetailFragment extends BaseDetailFragment {
     @Override
     protected int getRepotrId() {
         return mPost != null ? mPostId : 0;
+    }
+
+    @Override
+    public void onclickWriteComment() {
+        super.onclickWriteComment();
+        UIHelper.showComment(getActivity(), mPostId, CommentList.CATALOG_POST);
     }
 }

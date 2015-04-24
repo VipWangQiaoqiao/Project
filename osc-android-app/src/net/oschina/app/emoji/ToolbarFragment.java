@@ -16,13 +16,13 @@ public class ToolbarFragment extends BaseFragment {
     }
 
     public enum ToolAction {
-        ACTION_WRITE_COMMENT, ACTION_VIEW_COMMENT, ACTION_FAVORITE, ACTION_SHARE, ACTION_REPORT
+        ACTION_CHANGE, ACTION_WRITE_COMMENT, ACTION_VIEW_COMMENT, ACTION_FAVORITE, ACTION_SHARE, ACTION_REPORT
     }
 
     private OnActionClickListener mActionListener;
 
-    private View mActionChange, mActionWriteComment, mActionViewComment,
-            mActionFavorite, mActionReport, mActionShare;
+    private View mActionWriteComment, mActionViewComment, mActionFavorite,
+            mActionReport, mActionShare;
 
     private View mIvFavorite;
     private boolean mFavorite;
@@ -45,9 +45,7 @@ public class ToolbarFragment extends BaseFragment {
 
     @Override
     public void initView(View view) {
-        mActionChange = view.findViewById(R.id.btn_change);
-        mActionChange.setOnClickListener(this);
-
+        view.findViewById(R.id.btn_change).setOnClickListener(this);
         mActionWriteComment = view.findViewById(R.id.write_comment_layout);
         mActionWriteComment.setOnClickListener(this);
 
@@ -80,7 +78,9 @@ public class ToolbarFragment extends BaseFragment {
     public void onClick(View v) {
         final int id = v.getId();
         ToolAction action = null;
-        if (id == R.id.write_comment_layout) {
+        if (id == R.id.btn_change) {
+            action = ToolAction.ACTION_CHANGE;
+        } else if (id == R.id.write_comment_layout) {
             action = ToolAction.ACTION_WRITE_COMMENT;
         } else if (id == R.id.view_comment_layout) {
             action = ToolAction.ACTION_VIEW_COMMENT;

@@ -718,8 +718,6 @@ public class BaseDetailFragment extends BaseFragment implements
     @Override
     public void initView(View view) {}
 
-    public void onclickComment() {}
-
     public void onclickWriteComment() {}
 
     @Override

@@ -384,4 +384,10 @@ public class EventDetailFragment extends BaseDetailFragment implements
 
     @Override
     public void onClickFlagButton() {}
+
+    @Override
+    public void onclickWriteComment() {
+        super.onclickWriteComment();
+        UIHelper.showComment(getActivity(), mPostId, CommentList.CATALOG_POST);
+    }
 }

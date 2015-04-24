@@ -92,6 +92,14 @@ public class BlogDetailFragment extends BaseDetailFragment implements
         return (Blog) seri;
     }
 
+    @Override
+    public void onclickWriteComment() {
+        super.onclickWriteComment();
+        if (mBlog != null)
+            UIHelper.showBlogComment(getActivity(), mBlogId,
+                    mBlog.getAuthorId());
+    }
+
     // @Override
     // protected void onCommentChanged(int opt, int id, int catalog,
     // boolean isBlog, Comment comment) {

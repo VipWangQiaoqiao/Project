@@ -212,4 +212,12 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 
     @Override
     public void onClickFlagButton() {}
+
+    @Override
+    public void onclickWriteComment() {
+        super.onclickWriteComment();
+        if (mNews != null)
+            UIHelper.showComment(getActivity(), mNewsId,
+                    CommentList.CATALOG_NEWS);
+    }
 }
