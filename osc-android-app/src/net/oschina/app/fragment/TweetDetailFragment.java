@@ -231,18 +231,6 @@ public class TweetDetailFragment extends
         body.append(UIHelper.WEB_STYLE + UIHelper.WEB_LOAD_IMAGES);
 
         StringBuilder tweetbody = new StringBuilder(mTweet.getBody());
-        // int index = 0;
-        // for (int i = 0; i < mTweet.getBody().split(".png\"").length; i++) {
-        // index = tweetbody.indexOf(".png\"", index + 1);
-        // if (index > 0) {
-        // // 这个问题也太奇葩了，如果只添加一个宽高限制，没有作用，必须添加两个
-        // tweetbody
-        // .insert(index + 5,
-        // " width=\"25px\" height=\"25px\" width=\"25px\" height=\"25px\"");
-        // } else {
-        // break;
-        // }
-        // }
 
         String tweetBody = TextUtils.isEmpty(mTweet.getImgSmall()) ? tweetbody
                 .toString() : tweetbody.toString() + "<br/><img src=\""
@@ -519,17 +507,21 @@ public class TweetDetailFragment extends
             UIHelper.showLoginActivity(getActivity());
             return;
         }
-        if (outAty.emojiFragment.getEditText().getTag() != null) {
-            Comment comment = (Comment) outAty.emojiFragment.getEditText()
-                    .getTag();
-            OSChinaApi.replyComment(mTweetId, CommentList.CATALOG_TWEET,
-                    comment.getId(), comment.getAuthorId(), AppContext
-                            .getInstance().getLoginUid(), str.toString(),
-                    mCommentHandler);
-        } else {
-            OSChinaApi.publicComment(CommentList.CATALOG_TWEET, mTweetId,
-                    AppContext.getInstance().getLoginUid(), str.toString(), 0,
-                    mCommentHandler);
+        try {
+            if (outAty.emojiFragment.getEditText().getTag() != null) {
+                Comment comment = (Comment) outAty.emojiFragment.getEditText()
+                        .getTag();
+                OSChinaApi.replyComment(mTweetId, CommentList.CATALOG_TWEET,
+                        comment.getId(), comment.getAuthorId(), AppContext
+                                .getInstance().getLoginUid(), str.toString(),
+                        mCommentHandler);
+            } else {
+                OSChinaApi.publicComment(CommentList.CATALOG_TWEET, mTweetId,
+                        AppContext.getInstance().getLoginUid(), str.toString(),
+                        0, mCommentHandler);
+            }
+        } catch (Exception e) {
+            // 网速问题可能会造成空指针
         }
     }
 

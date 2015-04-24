@@ -21,12 +21,6 @@ public class ToolbarFragment extends BaseFragment {
 
     private OnActionClickListener mActionListener;
 
-    private boolean mActionVisiableChange = true,
-            mActionVisiableWriteComment = false,
-            mActionVisiableViewComment = false,
-            mActionVisiableFavorite = false, mActionVisiableShare = false,
-            mActionVisiableReport = false;
-
     private View mActionChange, mActionWriteComment, mActionViewComment,
             mActionFavorite, mActionReport, mActionShare;
 
@@ -130,22 +124,16 @@ public class ToolbarFragment extends BaseFragment {
     public void setActionVisiable(ToolAction action, boolean visiable) {
         switch (action) {
         case ACTION_CHANGE:
-            mActionVisiableChange = visiable;
             break;
         case ACTION_FAVORITE:
-            mActionVisiableFavorite = visiable;
             break;
         case ACTION_REPORT:
-            mActionVisiableReport = visiable;
             break;
         case ACTION_SHARE:
-            mActionVisiableShare = visiable;
             break;
         case ACTION_VIEW_COMMENT:
-            mActionVisiableViewComment = visiable;
             break;
         case ACTION_WRITE_COMMENT:
-            mActionVisiableWriteComment = visiable;
             break;
         default:
             break;
