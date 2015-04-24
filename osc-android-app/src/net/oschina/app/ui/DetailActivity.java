@@ -2,10 +2,13 @@ package net.oschina.app.ui;
 
 import net.oschina.app.R;
 import net.oschina.app.base.BaseActivity;
+import net.oschina.app.base.BaseDetailFragment;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.emoji.KJEmojiFragment;
 import net.oschina.app.emoji.OnSendClickListener;
 import net.oschina.app.emoji.ToolbarFragment;
+import net.oschina.app.emoji.ToolbarFragment.OnActionClickListener;
+import net.oschina.app.emoji.ToolbarFragment.ToolAction;
 import net.oschina.app.fragment.BlogDetailFragment;
 import net.oschina.app.fragment.EventDetailFragment;
 import net.oschina.app.fragment.NewsDetailFragment;
@@ -119,7 +122,17 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
                 .beginTransaction();
         trans.replace(R.id.container, fragment);
         trans.commitAllowingStateLoss();
-        currentFragment = (OnSendClickListener) fragment;
+        if (fragment instanceof OnSendClickListener) {
+            currentFragment = (OnSendClickListener) fragment;
+        } else {
+            currentFragment = new OnSendClickListener() {
+                @Override
+                public void onClickSendButton(Editable str) {}
+
+                @Override
+                public void onClickFlagButton() {}
+            };
+        }
     }
 
     @Override
@@ -158,6 +171,33 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
                 .beginTransaction()
                 .replace(R.id.emoji_keyboard,
                         toolFragment = new ToolbarFragment()).commit();
+
+        toolFragment.setOnActionClickListener(new OnActionClickListener() {
+            @Override
+            public void onActionClick(ToolAction action) {
+                switch (action) {
+                case ACTION_FAVORITE:
+                    ((BaseDetailFragment) currentFragment)
+                            .handleFavoriteOrNot();
+                    break;
+                case ACTION_REPORT:
+                    ((BaseDetailFragment) currentFragment).onReportMenuClick();
+                    break;
+                case ACTION_SHARE:
+                    ((BaseDetailFragment) currentFragment).handleShare();
+                    break;
+                case ACTION_VIEW_COMMENT:
+                    ((BaseDetailFragment) currentFragment).onclickComment();
+                    break;
+                case ACTION_WRITE_COMMENT:
+                    ((BaseDetailFragment) currentFragment)
+                            .onclickWriteComment();
+                    break;
+                default:
+                    break;
+                }
+            }
+        });
     }
 
 }

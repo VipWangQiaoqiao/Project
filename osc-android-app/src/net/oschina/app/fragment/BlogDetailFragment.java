@@ -62,9 +62,7 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 
     private void initViews(View view) {
         mEmptyLayout = (EmptyLayout) view.findViewById(R.id.error_layout);
-
         mWebView = (WebView) view.findViewById(R.id.webview);
-
         UIHelper.initWebView(mWebView);
     }
 
@@ -200,4 +198,5 @@ public class BlogDetailFragment extends BaseDetailFragment implements
 
     @Override
     public void onClickFlagButton() {}
+
 }

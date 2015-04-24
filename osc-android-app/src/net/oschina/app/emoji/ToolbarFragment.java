@@ -16,7 +16,7 @@ public class ToolbarFragment extends BaseFragment {
     }
 
     public enum ToolAction {
-        ACTION_CHANGE, ACTION_WRITE_COMMENT, ACTION_VIEW_COMMENT, ACTION_FAVORITE, ACTION_SHARE, ACTION_REPORT
+        ACTION_WRITE_COMMENT, ACTION_VIEW_COMMENT, ACTION_FAVORITE, ACTION_SHARE, ACTION_REPORT
     }
 
     private OnActionClickListener mActionListener;
@@ -80,12 +80,7 @@ public class ToolbarFragment extends BaseFragment {
     public void onClick(View v) {
         final int id = v.getId();
         ToolAction action = null;
-        if (id == R.id.btn_change) {
-            action = ToolAction.ACTION_CHANGE;
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.emoji_keyboard, new KJEmojiFragment())
-                    .commit();
-        } else if (id == R.id.write_comment_layout) {
+        if (id == R.id.write_comment_layout) {
             action = ToolAction.ACTION_WRITE_COMMENT;
         } else if (id == R.id.view_comment_layout) {
             action = ToolAction.ACTION_VIEW_COMMENT;
@@ -121,25 +116,6 @@ public class ToolbarFragment extends BaseFragment {
         }
     }
 
-    public void setActionVisiable(ToolAction action, boolean visiable) {
-        switch (action) {
-        case ACTION_CHANGE:
-            break;
-        case ACTION_FAVORITE:
-            break;
-        case ACTION_REPORT:
-            break;
-        case ACTION_SHARE:
-            break;
-        case ACTION_VIEW_COMMENT:
-            break;
-        case ACTION_WRITE_COMMENT:
-            break;
-        default:
-            break;
-        }
-    }
-
     public void setCommentCount(String text) {
         mCommentCountText = text;
         if (mTvCommentCount != null && mCommentCountText != null) {
@@ -149,8 +125,5 @@ public class ToolbarFragment extends BaseFragment {
     }
 
     @Override
-    public void initData() {
-        // TODO Auto-generated method stub
-
-    }
+    public void initData() {}
 }

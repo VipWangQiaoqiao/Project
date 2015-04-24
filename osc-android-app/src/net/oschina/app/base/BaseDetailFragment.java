@@ -43,6 +43,7 @@ import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -375,7 +376,7 @@ public class BaseDetailFragment extends BaseFragment implements
         }
     };
 
-    protected void onReportMenuClick() {
+    public void onReportMenuClick() {
         if (getRepotrId() == 0) {
             AppContext.showToast("正在加载，请稍等...");
         }
@@ -415,7 +416,10 @@ public class BaseDetailFragment extends BaseFragment implements
         return 0;
     }
 
-    protected void handleFavoriteOrNot() {
+    /**
+     * 收藏
+     */
+    public void handleFavoriteOrNot() {
         if (!TDevice.hasInternet()) {
             AppContext.showToastShort(R.string.tip_no_internet);
             return;
@@ -437,7 +441,10 @@ public class BaseDetailFragment extends BaseFragment implements
         }
     }
 
-    protected void handleShare() {
+    /**
+     * 分享
+     */
+    public void handleShare() {
         if (TextUtils.isEmpty(getShareContent())
                 || TextUtils.isEmpty(getShareUrl())) {
             AppContext.showToast("内容加载失败...");
@@ -448,10 +455,8 @@ public class BaseDetailFragment extends BaseFragment implements
         dialog.setCanceledOnTouchOutside(true);
         dialog.setTitle(R.string.share_to);
         dialog.setOnPlatformClickListener(new OnSharePlatformClick() {
-
             @Override
             public void onPlatformClick(int id) {
-
                 switch (id) {
                 case R.id.ly_share_weichat_circle:
                     shareToWeiChatCircle();
@@ -654,6 +659,9 @@ public class BaseDetailFragment extends BaseFragment implements
                     mIsFavorited = true;
                     getActivity().supportInvalidateOptionsMenu();
                     onFavoriteChanged(true);
+                    ImageView view = (ImageView) getActivity().findViewById(
+                            R.id.action_favor);
+                    view.setImageResource(R.drawable.ic_action_favor_on_normal);
                 } else {
                     AppContext.showToastShort(res.getErrorMessage());
                 }
@@ -685,6 +693,9 @@ public class BaseDetailFragment extends BaseFragment implements
                     mIsFavorited = false;
                     getActivity().supportInvalidateOptionsMenu();
                     onFavoriteChanged(false);
+                    ImageView view = (ImageView) getActivity().findViewById(
+                            R.id.action_favor);
+                    view.setImageResource(R.drawable.ic_action_favor);
                 } else {
                     AppContext.showToastShort(res.getErrorMessage());
                 }
@@ -706,6 +717,10 @@ public class BaseDetailFragment extends BaseFragment implements
 
     @Override
     public void initView(View view) {}
+
+    public void onclickComment() {}
+
+    public void onclickWriteComment() {}
 
     @Override
     public void initData() {}
