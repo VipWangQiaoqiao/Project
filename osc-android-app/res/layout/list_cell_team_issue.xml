@@ -11,7 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginBottom="10dp"
-        android:background="@android:color/white" >
+        android:background="@android:color/white"
+        android:paddingTop="5dp" >
 
         <View
             android:layout_width="match_parent"
