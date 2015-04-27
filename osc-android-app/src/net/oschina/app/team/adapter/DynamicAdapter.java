@@ -133,9 +133,11 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
             @Override
             public void onSuccess(Bitmap bitmap) {
                 super.onSuccess(bitmap);
-                bitmap = BitmapHelper.scaleWithXY(bitmap,
-                        360 / bitmap.getHeight());
-                pic.setImageBitmap(bitmap);
+                if (bitmap != null) {
+                    bitmap = BitmapHelper.scaleWithXY(bitmap,
+                            360 / bitmap.getHeight());
+                    pic.setImageBitmap(bitmap);
+                }
             }
         });
 

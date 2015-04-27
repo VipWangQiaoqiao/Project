@@ -160,24 +160,6 @@ public class ImagePreviewActivity extends BaseActivity implements
             final String imgUrl = mAdapter.getItem(mCurrentPostion);
             final String filePath = AppConfig.DEFAULT_SAVE_IMAGE_PATH
                     + getFileName(imgUrl);
-            // KJAsyncTask.execute(new Runnable() {
-            // @Override
-            // public void run() {
-            // kjb.saveImage(imgUrl, filePath);
-            // // 其次把文件插入到系统图库
-            // try {
-            // MediaStore.Images.Media.insertImage(
-            // ImagePreviewActivity.this.getContentResolver(),
-            // filePath, getFileName(imgUrl), null);
-            // } catch (FileNotFoundException e) {
-            // e.printStackTrace();
-            // }
-            // // 最后通知图库更新
-            // ImagePreviewActivity.this.sendBroadcast(new Intent(
-            // Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri
-            // .parse("file://" + filePath)));
-            // }
-            // });
             kjb.saveImage(this, imgUrl, filePath);
             AppContext.showToastShort(getString(R.string.tip_save_image_suc,
                     filePath));

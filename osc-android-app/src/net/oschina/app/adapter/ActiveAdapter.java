@@ -184,9 +184,11 @@ public class ActiveAdapter extends ListBaseAdapter {
                     @Override
                     public void onSuccess(Bitmap bitmap) {
                         super.onSuccess(bitmap);
-                        bitmap = BitmapHelper.scaleWithXY(bitmap, rectSize
-                                / bitmap.getHeight());
-                        vh.pic.setImageBitmap(bitmap);
+                        if (bitmap != null) {
+                            bitmap = BitmapHelper.scaleWithXY(bitmap, rectSize
+                                    / bitmap.getHeight());
+                            vh.pic.setImageBitmap(bitmap);
+                        }
                     }
                 });
 
