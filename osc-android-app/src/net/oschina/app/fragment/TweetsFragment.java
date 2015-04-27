@@ -108,6 +108,13 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
 
     @Override
     protected String getCacheKeyPrefix() {
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            String str = bundle.getString("topic");
+            if (str != null) {
+                return "";
+            }
+        }
         return CACHE_KEY_PREFIX + mCatalog;
     }
 
@@ -124,6 +131,14 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
 
     @Override
     protected void sendRequestData() {
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            String str = bundle.getString("topic");
+            if (str != null) {
+                OSChinaApi.getTweetTopicList(mCurrentPage, str, mHandler);
+                return;
+            }
+        }
         OSChinaApi.getTweetList(mCatalog, mCurrentPage, mHandler);
     }
 

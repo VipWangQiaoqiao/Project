@@ -15,7 +15,6 @@ import net.oschina.app.team.bean.Team;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TLog;
 
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.kymjs.kjframe.utils.KJLoger;
 
 import android.text.TextUtils;
@@ -100,35 +99,47 @@ public class OSChinaApi {
         params.put("pageSize", AppContext.PAGE_SIZE);
         ApiHttpClient.get("action/api/tweet_list", params, handler);
     }
-    
+
+    public static void getTweetTopicList(int page, String topic,
+            AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("pageIndex", page);
+        params.put("title", topic);
+        params.put("pageSize", AppContext.PAGE_SIZE);
+        ApiHttpClient.get("action/api/tweet_topic_list", params, handler);
+    }
+
     public static void getTweetLikeList(AsyncHttpResponseHandler handler) {
-	ApiHttpClient.get("action/api/my_tweet_like_list", handler);
+        ApiHttpClient.get("action/api/my_tweet_like_list", handler);
     }
-    
-    public static void pubLikeTweet(int tweetId, int authorId, AsyncHttpResponseHandler handler) {
-	
-	RequestParams params = new RequestParams();
-	params.put("tweetid", tweetId);
-	params.put("uid", AppContext.getInstance().getLoginUid());
-	params.put("ownerOfTweet", authorId);
-	ApiHttpClient.post("action/api/tweet_like", params, handler);
+
+    public static void pubLikeTweet(int tweetId, int authorId,
+            AsyncHttpResponseHandler handler) {
+
+        RequestParams params = new RequestParams();
+        params.put("tweetid", tweetId);
+        params.put("uid", AppContext.getInstance().getLoginUid());
+        params.put("ownerOfTweet", authorId);
+        ApiHttpClient.post("action/api/tweet_like", params, handler);
     }
-    
-    public static void pubUnLikeTweet(int tweetId, int authorId, AsyncHttpResponseHandler handler) {
-	RequestParams params = new RequestParams();
-	params.put("tweetid", tweetId);
-	params.put("uid", AppContext.getInstance().getLoginUid());
-	params.put("ownerOfTweet", authorId);
-	ApiHttpClient.post("action/api/tweet_unlike", params, handler);
+
+    public static void pubUnLikeTweet(int tweetId, int authorId,
+            AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("tweetid", tweetId);
+        params.put("uid", AppContext.getInstance().getLoginUid());
+        params.put("ownerOfTweet", authorId);
+        ApiHttpClient.post("action/api/tweet_unlike", params, handler);
     }
-    
-    public static void getTweetLikeList(int tweetId, int page, AsyncHttpResponseHandler handler) {
-	RequestParams params = new RequestParams();
-	params.put("tweetid", tweetId);
-	params.put("pageIndex", page);
-	params.put("pageSize", AppContext.PAGE_SIZE);
-	ApiHttpClient.get("action/api/tweet_like_list", params, handler);
-	
+
+    public static void getTweetLikeList(int tweetId, int page,
+            AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("tweetid", tweetId);
+        params.put("pageIndex", page);
+        params.put("pageSize", AppContext.PAGE_SIZE);
+        ApiHttpClient.get("action/api/tweet_like_list", params, handler);
+
     }
 
     public static void getActiveList(int uid, int catalog, int page,
@@ -299,7 +310,8 @@ public class OSChinaApi {
      */
     public static void getSoftwareDetail(String ident,
             AsyncHttpResponseHandler handler) {
-        RequestParams params = new RequestParams("ident", ident.replace(" ", ""));
+        RequestParams params = new RequestParams("ident",
+                ident.replace(" ", ""));
         ApiHttpClient.get("action/api/software_detail", params, handler);
     }
 
@@ -524,8 +536,8 @@ public class OSChinaApi {
     }
 
     public static void getNotices(AsyncHttpResponseHandler handler) {
-	RequestParams params = new RequestParams();
-	params.put("uid", AppContext.getInstance().getLoginUid());
+        RequestParams params = new RequestParams();
+        params.put("uid", AppContext.getInstance().getLoginUid());
         ApiHttpClient.get("action/api/user_notice", params, handler);
     }
 
@@ -730,8 +742,8 @@ public class OSChinaApi {
      * @param handler
      */
     public static void teamList(AsyncHttpResponseHandler handler) {
-	RequestParams params = new RequestParams();
-	params.put("uid", AppContext.getInstance().getLoginUid());
+        RequestParams params = new RequestParams();
+        params.put("uid", AppContext.getInstance().getLoginUid());
         ApiHttpClient.get("action/api/team_list", params, handler);
     }
 

@@ -20,6 +20,7 @@ import net.oschina.app.fragment.SoftWareTweetsFrament;
 import net.oschina.app.fragment.TweetLikeUsersFragment;
 import net.oschina.app.fragment.TweetPubFragment;
 import net.oschina.app.fragment.TweetRecordFragment;
+import net.oschina.app.fragment.TweetsFragment;
 import net.oschina.app.fragment.UserBlogFragment;
 import net.oschina.app.fragment.UserCenterFragment;
 import net.oschina.app.team.fragment.NoteBookFragment;
@@ -28,10 +29,10 @@ import net.oschina.app.team.fragment.TeamActiveFragment;
 import net.oschina.app.team.fragment.TeamDiaryDetail;
 import net.oschina.app.team.fragment.TeamDiscussFragment;
 import net.oschina.app.team.fragment.TeamIssueFragment;
+import net.oschina.app.team.fragment.TeamMemberInformationFragment;
 import net.oschina.app.team.fragment.TeamNewIssueFragment;
 import net.oschina.app.team.fragment.TeamProjectFragment;
 import net.oschina.app.team.fragment.TeamProjectMemberSelectFragment;
-import net.oschina.app.team.fragment.TeamMemberInformationFragment;
 import net.oschina.app.team.viewpagefragment.MyIssuePagerfragment;
 import net.oschina.app.team.viewpagefragment.TeamDiaryFragment;
 import net.oschina.app.team.viewpagefragment.TeamIssueViewPageFragment;
@@ -120,7 +121,8 @@ public enum SimpleBackPage {
 
     FEED_BACK(31, R.string.str_feedback_title, FeedBackFragment.class),
 
-    TEAM_USER_INFO(32, R.string.str_team_userinfo, TeamMemberInformationFragment.class),
+    TEAM_USER_INFO(32, R.string.str_team_userinfo,
+            TeamMemberInformationFragment.class),
 
     MY_ISSUE_PAGER(33, R.string.str_team_my_issue, MyIssuePagerfragment.class),
 
@@ -143,8 +145,10 @@ public enum SimpleBackPage {
     TEAM_PROJECT_MEMBER_SELECT(42, 0, TeamProjectMemberSelectFragment.class),
 
     TEAM_PROJECT(43, R.string.team_project, TeamProjectFragment.class),
-    
-    TWEET_LIKE_USER_LIST(44, 0, TweetLikeUsersFragment.class);
+
+    TWEET_LIKE_USER_LIST(44, 0, TweetLikeUsersFragment.class),
+
+    TWEET_TOPIC_LIST(45, 0, TweetsFragment.class);
 
     private int title;
     private Class<?> clz;
