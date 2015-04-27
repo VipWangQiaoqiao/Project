@@ -17,7 +17,7 @@ import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
 import org.apache.http.Header;
-import org.kymjs.kjframe.http.core.KJAsyncTask;
+import org.kymjs.kjframe.http.KJAsyncTask;
 
 import android.app.Activity;
 import android.os.Bundle;

@@ -20,7 +20,7 @@ import net.oschina.app.widget.TweetTextView;
 import org.apache.http.Header;
 import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
-import org.kymjs.kjframe.bitmap.helper.BitmapHelper;
+import org.kymjs.kjframe.bitmap.BitmapHelper;
 import org.kymjs.kjframe.utils.DensityUtils;
 
 import android.content.Context;
@@ -81,7 +81,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
 
     private Bitmap recordBitmap;
     private Context context;
-    private final KJBitmap kjb = KJBitmap.create();
+    private final KJBitmap kjb = new KJBitmap();
 
     final private AsyncHttpResponseHandler handler = new AsyncHttpResponseHandler() {
 
@@ -221,7 +221,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             tweet.setIsLike(0);
             tweet.setLikeCount(tweet.getLikeCount() - 1);
             if (!tweet.getLikeUser().isEmpty()) {
-        	tweet.getLikeUser().remove(0);
+                tweet.getLikeUser().remove(0);
             }
             OSChinaApi.pubUnLikeTweet(tweet.getId(), tweet.getAuthorid(),
                     handler);
@@ -285,23 +285,24 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
      */
     private void showTweetImage(final ViewHolder vh, String imgSmall,
             final String imgBig, final Context context) {
-        kjb.setCallback(new BitmapCallBack() {
-            @Override
-            public void onPreLoad(View view) {
-                super.onPreLoad(view);
-                ((ImageView) view).setImageResource(R.drawable.pic_bg);
-            }
-
-            @Override
-            public void onSuccess(View view, Bitmap bitmap) {
-                super.onSuccess(view, bitmap);
-                bitmap = BitmapHelper.scaleWithXY(bitmap,
-                        300 / bitmap.getHeight());
-                ((ImageView) view).setImageBitmap(bitmap);
-            }
-        });
         if (imgSmall != null && !TextUtils.isEmpty(imgSmall)) {
-            kjb.display(vh.image, imgSmall, R.drawable.pic_bg, -1, -1);
+            kjb.display(vh.image, imgSmall, new BitmapCallBack() {
+                @Override
+                public void onPreLoad() {
+                    super.onPreLoad();
+                    vh.image.setImageResource(R.drawable.pic_bg);
+                }
+
+                @Override
+                public void onSuccess(Bitmap bitmap) {
+                    super.onSuccess(bitmap);
+                    if (bitmap != null) {
+                        bitmap = BitmapHelper.scaleWithXY(bitmap,
+                                300 / bitmap.getHeight());
+                        vh.image.setImageBitmap(bitmap);
+                    }
+                }
+            });
             vh.image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

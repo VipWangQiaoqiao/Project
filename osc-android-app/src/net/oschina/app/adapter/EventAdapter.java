@@ -24,7 +24,7 @@ import butterknife.InjectView;
 public class EventAdapter extends ListBaseAdapter<Event> {
 
     private int eventType = EventList.EVENT_LIST_TYPE_NEW_EVENT;
-    private final KJBitmap kjb = KJBitmap.create();
+    private final KJBitmap kjb = new KJBitmap();
 
     static class ViewHolder {
 
@@ -82,7 +82,7 @@ public class EventAdapter extends ListBaseAdapter<Event> {
                         .setImageResource(R.drawable.icon_event_status_checked);
                 vh.status.setVisibility(View.VISIBLE);
             } else {
-        	vh.status.setVisibility(View.GONE);
+                vh.status.setVisibility(View.GONE);
             }
             break;
         case EventList.EVENT_LIST_TYPE_MY_EVENT:

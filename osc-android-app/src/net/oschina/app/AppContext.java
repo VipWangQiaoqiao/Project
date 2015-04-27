@@ -50,8 +50,8 @@ public class AppContext extends BaseApplication {
     public void onCreate() {
         super.onCreate();
         // 注册App异常崩溃处理器
-         Thread.setDefaultUncaughtExceptionHandler(AppException
-         .getAppExceptionHandler(this));
+        // Thread.setDefaultUncaughtExceptionHandler(AppException
+        // .getAppExceptionHandler(this));
         instance = this;
         init();
         initLogin();
@@ -293,7 +293,7 @@ public class AppContext extends BaseApplication {
             if (_key.startsWith("temp"))
                 removeProperty(_key);
         }
-        KJBitmap.create().removeCacheAll();
+        new KJBitmap().cleanCache();
     }
 
     public static void setLoadImage(boolean flag) {

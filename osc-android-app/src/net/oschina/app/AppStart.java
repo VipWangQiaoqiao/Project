@@ -5,7 +5,7 @@ import java.io.File;
 import net.oschina.app.ui.MainActivity;
 import net.oschina.app.util.TDevice;
 
-import org.kymjs.kjframe.http.core.KJAsyncTask;
+import org.kymjs.kjframe.http.KJAsyncTask;
 import org.kymjs.kjframe.utils.FileUtils;
 import org.kymjs.kjframe.utils.PreferenceHelper;
 

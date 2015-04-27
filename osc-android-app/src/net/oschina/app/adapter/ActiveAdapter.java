@@ -16,7 +16,7 @@ import net.oschina.app.widget.TweetTextView;
 
 import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
-import org.kymjs.kjframe.bitmap.helper.BitmapHelper;
+import org.kymjs.kjframe.bitmap.BitmapHelper;
 import org.kymjs.kjframe.utils.DensityUtils;
 
 import android.annotation.SuppressLint;
@@ -43,7 +43,7 @@ public class ActiveAdapter extends ListBaseAdapter {
     public ActiveAdapter() {}
 
     private Bitmap recordBitmap;
-    private final KJBitmap kjb = KJBitmap.create();
+    private final KJBitmap kjb = new KJBitmap();
     private int rectSize;
 
     private void initRecordImg(Context cxt) {
@@ -178,18 +178,17 @@ public class ActiveAdapter extends ListBaseAdapter {
     private void setTweetImage(final ViewGroup parent, final ViewHolder vh,
             final Active item) {
         vh.pic.setVisibility(View.VISIBLE);
-        kjb.setCallback(new BitmapCallBack() {
-            @Override
-            public void onSuccess(View view, Bitmap bitmap) {
-                super.onSuccess(view, bitmap);
-                bitmap = BitmapHelper.scaleWithXY(bitmap,
-                        rectSize / bitmap.getHeight());
-                ((ImageView) view).setImageBitmap(bitmap);
-            }
-        });
 
-        kjb.display(vh.pic, item.getTweetimage(), R.drawable.pic_bg,
-                rectSize, rectSize);
+        kjb.display(vh.pic, item.getTweetimage(), R.drawable.pic_bg, rectSize,
+                rectSize, new BitmapCallBack() {
+                    @Override
+                    public void onSuccess(Bitmap bitmap) {
+                        super.onSuccess(bitmap);
+                        bitmap = BitmapHelper.scaleWithXY(bitmap, rectSize
+                                / bitmap.getHeight());
+                        vh.pic.setImageBitmap(bitmap);
+                    }
+                });
 
         vh.pic.setOnClickListener(new View.OnClickListener() {
             @Override

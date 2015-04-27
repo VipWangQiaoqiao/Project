@@ -10,7 +10,7 @@ import net.oschina.app.widget.TweetTextView;
 
 import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
-import org.kymjs.kjframe.bitmap.helper.BitmapHelper;
+import org.kymjs.kjframe.bitmap.BitmapHelper;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -27,7 +27,7 @@ import android.widget.TextView;
  */
 public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
     private final Context context;
-    private final KJBitmap kjb = KJBitmap.create();
+    private final KJBitmap kjb = new KJBitmap();
 
     public DynamicAdapter(Context cxt) {
         this.context = cxt;
@@ -128,17 +128,16 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
      */
     private void setTweetImage(final ImageView pic, final String url) {
         pic.setVisibility(View.VISIBLE);
-        kjb.setCallback(new BitmapCallBack() {
+
+        kjb.display(pic, url, R.drawable.pic_bg, 0, 0, new BitmapCallBack() {
             @Override
-            public void onSuccess(View view, Bitmap bitmap) {
-                super.onSuccess(view, bitmap);
+            public void onSuccess(Bitmap bitmap) {
+                super.onSuccess(bitmap);
                 bitmap = BitmapHelper.scaleWithXY(bitmap,
                         360 / bitmap.getHeight());
-                ((ImageView) view).setImageBitmap(bitmap);
+                pic.setImageBitmap(bitmap);
             }
         });
-
-        kjb.display(pic, url, R.drawable.pic_bg, -1, -1);
 
         pic.setOnClickListener(new View.OnClickListener() {
             @Override

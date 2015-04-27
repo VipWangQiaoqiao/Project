@@ -18,8 +18,8 @@ public class ApiHttpClient {
 
     public final static String HOST = "www.oschina.net";
     private static String API_URL = "http://www.oschina.net/%s";
-//    public final static String HOST = "192.168.1.214";
-//    private static String API_URL = "http://192.168.1.214/%s";
+    // public final static String HOST = "192.168.1.46";
+    // private static String API_URL = "http://192.168.1.46/%s";
     public static final String DELETE = "DELETE";
     public static final String GET = "GET";
     public static final String POST = "POST";
@@ -88,11 +88,12 @@ public class ApiHttpClient {
         log(new StringBuilder("POST ").append(partUrl).append("&")
                 .append(params).toString());
     }
-    
-    public static void postDirect(String url, RequestParams params, AsyncHttpResponseHandler handler) {
-	client.post(url, params, handler);
-	log(new StringBuilder("POST ").append(url).append("&")
-                .append(params).toString());
+
+    public static void postDirect(String url, RequestParams params,
+            AsyncHttpResponseHandler handler) {
+        client.post(url, params, handler);
+        log(new StringBuilder("POST ").append(url).append("&").append(params)
+                .toString());
     }
 
     public static void put(String partUrl, AsyncHttpResponseHandler handler) {
@@ -118,7 +119,7 @@ public class ApiHttpClient {
         client.addHeader("Connection", "Keep-Alive");
         client.getHttpClient().getParams()
                 .setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, true);
-        
+
         setUserAgent(ApiClientHelper.getUserAgent(AppContext.getInstance()));
     }
 

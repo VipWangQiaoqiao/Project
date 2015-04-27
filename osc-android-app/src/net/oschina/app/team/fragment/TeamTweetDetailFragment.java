@@ -41,7 +41,7 @@ import net.oschina.app.widget.TweetTextView;
 import org.apache.http.Header;
 import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
-import org.kymjs.kjframe.bitmap.helper.BitmapHelper;
+import org.kymjs.kjframe.bitmap.BitmapHelper;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -82,7 +82,7 @@ public class TeamTweetDetailFragment extends
     private TeamActive active;
     private int teamId;
     private static int rectSize;
-    private final KJBitmap kjb = KJBitmap.create();
+    private final KJBitmap kjb = new KJBitmap();
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -192,17 +192,17 @@ public class TeamTweetDetailFragment extends
     private void setTweetImage(final ImageView pic, final String url,
             final String realUrl) {
         pic.setVisibility(View.VISIBLE);
-        kjb.setCallback(new BitmapCallBack() {
-            @Override
-            public void onSuccess(View view, Bitmap bitmap) {
-                super.onSuccess(view, bitmap);
-                bitmap = BitmapHelper.scaleWithXY(bitmap,
-                        rectSize / bitmap.getHeight());
-                ((ImageView) view).setImageBitmap(bitmap);
-            }
-        });
 
-        kjb.display(pic, url, R.drawable.pic_bg, rectSize, rectSize);
+        kjb.display(pic, url, R.drawable.pic_bg, rectSize, rectSize,
+                new BitmapCallBack() {
+                    @Override
+                    public void onSuccess(Bitmap bitmap) {
+                        super.onSuccess(bitmap);
+                        bitmap = BitmapHelper.scaleWithXY(bitmap, rectSize
+                                / bitmap.getHeight());
+                        pic.setImageBitmap(bitmap);
+                    }
+                });
 
         pic.setOnClickListener(new View.OnClickListener() {
             @Override

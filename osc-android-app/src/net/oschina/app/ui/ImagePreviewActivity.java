@@ -1,7 +1,5 @@
 package net.oschina.app.ui;
 
-import java.io.FileNotFoundException;
-
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -18,15 +16,12 @@ import net.oschina.app.widget.PhotoImageView;
 
 import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
-import org.kymjs.kjframe.http.core.KJAsyncTask;
 
 import uk.co.senab.photoview.PhotoViewAttacher.OnFinishListener;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,7 +72,7 @@ public class ImagePreviewActivity extends BaseActivity implements
     @Override
     protected void init(Bundle savedInstanceState) {
         super.init(savedInstanceState);
-        kjb = KJBitmap.create();
+        kjb = new KJBitmap();
         mViewPager = (HackyViewPager) findViewById(R.id.view_pager);
 
         mImageUrls = getIntent().getStringArrayExtra(BUNDLE_KEY_IMAGES);
@@ -165,24 +160,25 @@ public class ImagePreviewActivity extends BaseActivity implements
             final String imgUrl = mAdapter.getItem(mCurrentPostion);
             final String filePath = AppConfig.DEFAULT_SAVE_IMAGE_PATH
                     + getFileName(imgUrl);
-            KJAsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    kjb.saveImage(imgUrl, filePath);
-                    // 其次把文件插入到系统图库
-                    try {
-                        MediaStore.Images.Media.insertImage(
-                                ImagePreviewActivity.this.getContentResolver(),
-                                filePath, getFileName(imgUrl), null);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    // 最后通知图库更新
-                    ImagePreviewActivity.this.sendBroadcast(new Intent(
-                            Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri
-                                    .parse("file://" + filePath)));
-                }
-            });
+            // KJAsyncTask.execute(new Runnable() {
+            // @Override
+            // public void run() {
+            // kjb.saveImage(imgUrl, filePath);
+            // // 其次把文件插入到系统图库
+            // try {
+            // MediaStore.Images.Media.insertImage(
+            // ImagePreviewActivity.this.getContentResolver(),
+            // filePath, getFileName(imgUrl), null);
+            // } catch (FileNotFoundException e) {
+            // e.printStackTrace();
+            // }
+            // // 最后通知图库更新
+            // ImagePreviewActivity.this.sendBroadcast(new Intent(
+            // Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri
+            // .parse("file://" + filePath)));
+            // }
+            // });
+            kjb.saveImage(this, imgUrl, filePath);
             AppContext.showToastShort(getString(R.string.tip_save_image_suc,
                     filePath));
         } else {
@@ -251,17 +247,17 @@ public class ImagePreviewActivity extends BaseActivity implements
                 }
             });
             final ProgressBar bar = vh.progress;
-            KJBitmap kjbitmap = KJBitmap.create();
-            kjbitmap.setCallback(new BitmapCallBack() {
+            KJBitmap kjbitmap = new KJBitmap();
+            kjbitmap.display(vh.image, images[position], new BitmapCallBack() {
                 @Override
-                public void onPreLoad(View view) {
-                    super.onPreLoad(view);
+                public void onPreLoad() {
+                    super.onPreLoad();
                     bar.setVisibility(View.VISIBLE);
                 }
 
                 @Override
-                public void onFinish(View view) {
-                    super.onFinish(view);
+                public void onFinish() {
+                    super.onFinish();
                     bar.setVisibility(View.GONE);
                 }
 
@@ -270,7 +266,6 @@ public class ImagePreviewActivity extends BaseActivity implements
                     AppContext.showToast(R.string.tip_load_image_faile);
                 }
             });
-            kjbitmap.display(vh.image, images[position]);
             return convertView;
         }
     }

@@ -21,6 +21,7 @@ public class AvatarView extends CircleImageView {
     private int id;
     private String name;
     private Activity aty;
+    private static KJBitmap kjb = new KJBitmap();
 
     public AvatarView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -65,21 +66,20 @@ public class AvatarView extends CircleImageView {
         } else {
             headUrl = url;
         }
-        KJBitmap kjb = KJBitmap.create();
-        kjb.setCallback(new BitmapCallBack() {
-            @Override
-            public void onFailure(Exception e) {
-                super.onFailure(e);
-                aty.runOnUiThread(new Runnable() {
+        kjb.display(this, headUrl, R.drawable.widget_dface, 0, 0,
+                new BitmapCallBack() {
                     @Override
-                    public void run() {
+                    public void onFailure(Exception e) {
+                        super.onFailure(e);
+                        aty.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                setImageResource(R.drawable.widget_dface);
+                            }
+                        });
                         setImageResource(R.drawable.widget_dface);
                     }
                 });
-                setImageResource(R.drawable.widget_dface);
-            }
-        });
-        kjb.display(this, headUrl, R.drawable.widget_dface);
     }
 
     public static String getSmallAvatar(String source) {

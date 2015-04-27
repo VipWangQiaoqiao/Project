@@ -15,7 +15,7 @@ import net.oschina.app.team.bean.TeamDiaryList;
 import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.util.StringUtils;
 
-import org.kymjs.kjframe.http.core.KJAsyncTask;
+import org.kymjs.kjframe.http.KJAsyncTask;
 
 import android.app.Activity;
 import android.os.Bundle;

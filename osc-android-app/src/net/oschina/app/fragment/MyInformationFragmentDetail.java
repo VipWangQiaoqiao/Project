@@ -225,7 +225,7 @@ public class MyInformationFragmentDetail extends BaseFragment {
     }
 
     public void fillUI() {
-        KJBitmap.create().display(mUserFace, mUser.getPortrait(),
+        new KJBitmap().displayWithLoadBitmap(mUserFace, mUser.getPortrait(),
                 R.drawable.widget_dface);
         mName.setText(mUser.getName());
         mJoinTime.setText(StringUtils.friendly_time(mUser.getJointime()));
