@@ -139,6 +139,11 @@ public class BlogDetailFragment extends BaseDetailFragment implements
         notifyFavorite(mBlog.getFavorite() == 1);
     }
 
+    @Override
+    public int getCommentCount() {
+        return mBlog.getCommentCount();
+    }
+
     private void fillWebViewBody() {
         StringBuffer body = new StringBuffer();
         body.append(UIHelper.setHtmlCotentSupportImagePreview(mBlog.getBody()));

@@ -267,6 +267,11 @@ public class EventDetailFragment extends BaseDetailFragment implements
         }
     }
 
+    @Override
+    public int getCommentCount() {
+        return mPost.getAnswerCount();
+    }
+
     // 显示活动 以及报名的状态
     private void notifyEventStatus() {
         int eventStatus = mPost.getEvent().getStatus();

@@ -120,6 +120,11 @@ public class NewsDetailFragment extends BaseDetailFragment implements
         notifyFavorite(mNews.getFavorite() == 1);
     }
 
+    @Override
+    public int getCommentCount() {
+        return mNews.getCommentCount();
+    }
+
     private void fillWebViewBody() {
 
         StringBuffer body = new StringBuffer();

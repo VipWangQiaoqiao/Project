@@ -159,6 +159,11 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
         notifyFavorite(mSoftware.getFavorite() == 1);
     }
 
+    @Override
+    public int getCommentCount() {
+        return mSoftware.getTweetCount();
+    }
+
     private void fillWebViewBody() {
         StringBuffer body = new StringBuffer(
                 UIHelper.setHtmlCotentSupportImagePreview(mSoftware.getBody()));

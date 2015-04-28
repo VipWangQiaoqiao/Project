@@ -171,6 +171,8 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
                 .beginTransaction()
                 .replace(R.id.emoji_keyboard,
                         toolFragment = new ToolbarFragment()).commit();
+        toolFragment.setCommentCount(((BaseDetailFragment) currentFragment)
+                .getCommentCount());
 
         toolFragment.setOnActionClickListener(new OnActionClickListener() {
             @Override

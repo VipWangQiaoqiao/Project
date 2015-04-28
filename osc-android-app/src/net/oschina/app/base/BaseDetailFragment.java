@@ -15,6 +15,7 @@ import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.cache.CacheManager;
+import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.ReportDialog;
 import net.oschina.app.ui.ShareDialog;
 import net.oschina.app.ui.ShareDialog.OnSharePlatformClick;
@@ -61,7 +62,7 @@ import com.umeng.socialize.weixin.controller.UMWXHandler;
 import com.umeng.socialize.weixin.media.CircleShareContent;
 import com.umeng.socialize.weixin.media.WeiXinShareContent;
 
-public class BaseDetailFragment extends BaseFragment implements
+public abstract class BaseDetailFragment extends BaseFragment implements
         OnItemClickListener {
 
     public static final String INTENT_ACTION_COMMENT_CHANGED = "INTENT_ACTION_COMMENT_CHAGED";
@@ -105,6 +106,11 @@ public class BaseDetailFragment extends BaseFragment implements
             hideWaitDialog();
             AppContext.showToastShort(R.string.comment_publish_faile);
         }
+
+        @Override
+        public void onFinish() {
+            ((DetailActivity) getActivity()).emojiFragment.hideAllKeyBoard();
+        };
     };
 
     protected void recycleWebView() {
@@ -711,6 +717,8 @@ public class BaseDetailFragment extends BaseFragment implements
             AppContext.showToastShort(R.string.del_favorite_faile);
         }
     };
+
+    public abstract int getCommentCount();
 
     @Override
     public void onClick(View v) {}

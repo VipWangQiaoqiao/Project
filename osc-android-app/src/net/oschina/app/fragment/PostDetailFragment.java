@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URLEncoder;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseDetailFragment;
@@ -12,13 +13,17 @@ import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.Post;
 import net.oschina.app.bean.PostDetail;
+import net.oschina.app.emoji.OnSendClickListener;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.URLsUtils;
 import net.oschina.app.util.XmlUtils;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +32,8 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class PostDetailFragment extends BaseDetailFragment {
+public class PostDetailFragment extends BaseDetailFragment implements
+        OnSendClickListener {
 
     protected static final String TAG = PostDetailFragment.class
             .getSimpleName();
@@ -100,6 +106,11 @@ public class PostDetailFragment extends BaseDetailFragment {
         mTvSource.setText(mPost.getAuthor());
         mTvTime.setText(StringUtils.friendly_time(mPost.getPubDate()));
         notifyFavorite(mPost.getFavorite() == 1);
+    }
+
+    @Override
+    public int getCommentCount() {
+        return mPost.getAnswerCount();
     }
 
     private void fillWebViewBody() {
@@ -175,4 +186,27 @@ public class PostDetailFragment extends BaseDetailFragment {
         super.onclickWriteComment();
         UIHelper.showComment(getActivity(), mPostId, CommentList.CATALOG_POST);
     }
+
+    @Override
+    public void onClickSendButton(Editable str) {
+        if (!TDevice.hasInternet()) {
+            AppContext.showToastShort(R.string.tip_network_error);
+            return;
+        }
+        if (!AppContext.getInstance().isLogin()) {
+            UIHelper.showLoginActivity(getActivity());
+            return;
+        }
+        if (TextUtils.isEmpty(str)) {
+            AppContext.showToastShort(R.string.tip_comment_content_empty);
+            return;
+        }
+        showWaitDialog(R.string.progress_submit);
+        OSChinaApi.publicComment(CommentList.CATALOG_POST, mPostId, AppContext
+                .getInstance().getLoginUid(), str.toString(), 0,
+                mCommentHandler);
+    }
+
+    @Override
+    public void onClickFlagButton() {}
 }
