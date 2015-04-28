@@ -3,6 +3,7 @@
     android:id="@+id/emoji_title"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@android:color/white"
     android:gravity="center_vertical"
     android:orientation="horizontal" >
 
@@ -20,11 +21,11 @@
     <EditText
         android:id="@+id/emoji_titile_input"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_gravity="center_vertical"
-        android:layout_margin="8dp"
+        android:layout_margin="4dp"
         android:layout_weight="1"
-        android:background="@drawable/bg_edittext"
+        android:background="@drawable/comment_edittext_selector"
         android:gravity="center_vertical"
         android:hint="说点什么吧"
         android:padding="3dp"

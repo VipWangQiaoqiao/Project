@@ -5,8 +5,8 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingBottom="4dp"
-    android:paddingTop="4dp"
+    android:paddingBottom="6dp"
+    android:paddingTop="6dp"
     android:visibility="gone" >
 
     <TextView
@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:padding="3dp"
+        android:padding="1dp"
         android:src="@drawable/btn_del" />
 
 </RadioGroup>

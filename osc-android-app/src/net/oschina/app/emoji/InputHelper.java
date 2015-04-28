@@ -72,7 +72,7 @@ public class InputHelper {
                     // 构建图片span
                     Drawable drawable = res.getDrawable(resId);
 
-                    drawable.setBounds(10, 10, 70, 70);
+                    drawable.setBounds(0, 40, 80, 120);
                     ImageSpan span = new ImageSpan(drawable,
                             ImageSpan.ALIGN_BASELINE);
                     spannable.setSpan(span, index1, length1 + "]".length(),
