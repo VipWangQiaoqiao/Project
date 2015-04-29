@@ -157,10 +157,16 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK
-                && emojiFragment.isShowEmojiKeyBoard()) {
-            emojiFragment.hideAllKeyBoard();
-            return true;
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (emojiFragment.isShowEmojiKeyBoard()) {
+                emojiFragment.hideAllKeyBoard();
+                return true;
+            }
+            if (emojiFragment.getEditText().getTag() != null) {
+                emojiFragment.getEditText().setTag(null);
+                emojiFragment.getEditText().setHint("说点什么吧");
+                return true;
+            }
         }
         return super.onKeyDown(keyCode, event);
     }

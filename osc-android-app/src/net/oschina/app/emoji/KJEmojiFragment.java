@@ -140,6 +140,7 @@ public class KJEmojiFragment extends Fragment implements
                         public void onClick(View v) {
                             listener.onClickSendButton(mEt.getText());
                             mEt.setHint("说点什么吧");
+                            hideAllKeyBoard();
                         }
                     });
         }
