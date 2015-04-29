@@ -23,7 +23,6 @@ import android.content.DialogInterface;
 import android.graphics.Point;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -260,10 +259,10 @@ public class CaptureActivity extends BaseActivity implements Callback {
     }
 
     private void showUrlOption(final String url) {
-	if (url.contains("scan_login")) {
-	    showConfirmLogin(url);
-	    return;
-	}
+        if (url.contains("scan_login")) {
+            showConfirmLogin(url);
+            return;
+        }
         if (url.contains("oschina.net")) {
             UIHelper.showUrlRedirect(CaptureActivity.this, url);
             finish();
@@ -290,19 +289,19 @@ public class CaptureActivity extends BaseActivity implements Callback {
         });
         dialog.show();
     }
-    
+
     private void showConfirmLogin(final String url) {
-	if (!AppContext.getInstance().isLogin()) {
-	    showLogin();
-	    return;
-	}
-	CommonDialog dialog = new CommonDialog(CaptureActivity.this);
+        if (!AppContext.getInstance().isLogin()) {
+            showLogin();
+            return;
+        }
+        CommonDialog dialog = new CommonDialog(CaptureActivity.this);
         dialog.setMessage("扫描成功，是否进行网页登陆");
         dialog.setNegativeButton("登陆", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-        	handleScanLogin(url);
+                handleScanLogin(url);
                 dialog.dismiss();
                 finish();
             }
@@ -317,46 +316,50 @@ public class CaptureActivity extends BaseActivity implements Callback {
         });
         dialog.show();
     }
-    
+
     private void handleScanLogin(final String url) {
-	OSChinaApi.scanQrCodeLogin(url, new AsyncHttpResponseHandler() {
-	    
-	    @Override
-	    public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-		// TODO Auto-generated method stub
-		ResultBean result = XmlUtils.toBean(ResultBean.class, arg2);
-		if (result != null && result.getResult().OK()) {
-		    AppContext.showToast(result.getResult().getErrorMessage());
-		    finish();
-		} else {
-		    handler.sendEmptyMessage(R.id.restart_preview);
-		    AppContext.showToast(result != null ? result.getResult().getErrorMessage() : "登陆失败");
-		}
-	    }
-	    
-	    @Override
-	    public void onFailure(int arg0, Header[] arg1, byte[] arg2, Throwable arg3) {
-		// TODO Auto-generated method stub
-		handler.sendEmptyMessage(R.id.restart_preview);
-		if (arg2 != null) {
-		    AppContext.showToast(new String(arg2));
-		} else {
-		    AppContext.showToast("网页登陆失败");
-		}
-	    }
-	    @Override
-	    public void onStart() {
-	        // TODO Auto-generated method stub
-	        super.onStart();
-	        showWaitDialog("已扫描，正在登陆...");
-	    }
-	    @Override
-	    public void onFinish() {
-	        // TODO Auto-generated method stub
-	        super.onFinish();
-	        hideWaitDialog();
-	    }
-	});
+        OSChinaApi.scanQrCodeLogin(url, new AsyncHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+                // TODO Auto-generated method stub
+                ResultBean result = XmlUtils.toBean(ResultBean.class, arg2);
+                if (result != null && result.getResult().OK()) {
+                    AppContext.showToast(result.getResult().getErrorMessage());
+                    finish();
+                } else {
+                    handler.sendEmptyMessage(R.id.restart_preview);
+                    AppContext.showToast(result != null ? result.getResult()
+                            .getErrorMessage() : "登陆失败");
+                }
+            }
+
+            @Override
+            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+                    Throwable arg3) {
+                // TODO Auto-generated method stub
+                handler.sendEmptyMessage(R.id.restart_preview);
+                if (arg2 != null) {
+                    AppContext.showToast(new String(arg2));
+                } else {
+                    AppContext.showToast("网页登陆失败");
+                }
+            }
+
+            @Override
+            public void onStart() {
+                // TODO Auto-generated method stub
+                super.onStart();
+                showWaitDialog("已扫描，正在登陆...");
+            }
+
+            @Override
+            public void onFinish() {
+                // TODO Auto-generated method stub
+                super.onFinish();
+                hideWaitDialog();
+            }
+        });
     }
 
     private void handleOtherText(final String text) {
