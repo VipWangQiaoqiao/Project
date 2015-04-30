@@ -21,6 +21,7 @@ import uk.co.senab.photoview.PhotoViewAttacher.OnFinishListener;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
@@ -230,24 +231,26 @@ public class ImagePreviewActivity extends BaseActivity implements
             });
             final ProgressBar bar = vh.progress;
             KJBitmap kjbitmap = new KJBitmap();
-            kjbitmap.display(vh.image, images[position], new BitmapCallBack() {
-                @Override
-                public void onPreLoad() {
-                    super.onPreLoad();
-                    bar.setVisibility(View.VISIBLE);
-                }
+            kjbitmap.displayWithDefWH(vh.image, images[position],
+                    new ColorDrawable(0x000000), new ColorDrawable(0x000000),
+                    new BitmapCallBack() {
+                        @Override
+                        public void onPreLoad() {
+                            super.onPreLoad();
+                            bar.setVisibility(View.VISIBLE);
+                        }
 
-                @Override
-                public void onFinish() {
-                    super.onFinish();
-                    bar.setVisibility(View.GONE);
-                }
+                        @Override
+                        public void onFinish() {
+                            super.onFinish();
+                            bar.setVisibility(View.GONE);
+                        }
 
-                @Override
-                public void onFailure(Exception arg0) {
-                    AppContext.showToast(R.string.tip_load_image_faile);
-                }
-            });
+                        @Override
+                        public void onFailure(Exception arg0) {
+                            AppContext.showToast(R.string.tip_load_image_faile);
+                        }
+                    });
             return convertView;
         }
     }

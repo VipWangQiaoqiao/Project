@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
+    android:background="@android:color/black"
     android:gravity="center" >
 
     <!-- android.support.v4.widget.ContentLoadingProgressBar -->
@@ -11,7 +12,8 @@
         android:id="@+id/photoview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"
+        android:background="@android:color/black" />
 
     <ProgressBar
         android:id="@+id/progress"
