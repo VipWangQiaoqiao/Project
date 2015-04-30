@@ -299,23 +299,30 @@ public class TweetPubFragment extends BaseFragment implements
      */
     private void handleImageUrl(final String url) {
         if (!StringUtils.isEmpty(url)) {
-            KJAsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    final Message msg = Message.obtain();
-                    msg.what = 1;
-                    msg.obj = kjb.getCache(url);
-                    if (msg.obj == null) {
-                        msg.obj = DiskImageRequest.loadFromFile(url, 300, 300,
-                                new BitmapCallBack() {});
+            final Message msg = Message.obtain();
+            msg.what = 1;
+            msg.obj = kjb.getCache(url);
+            if (msg.obj == null) {
+                DiskImageRequest req = new DiskImageRequest();
+                req.load(url, 300, 300, new BitmapCallBack() {
+                    @Override
+                    public void onSuccess(Bitmap bitmap) {
+                        super.onSuccess(bitmap);
+                        msg.obj = bitmap;
+                        String path = FileUtils.getSDCardPath()
+                                + "/OSChina/tempfile.jpg";
+                        FileUtils.bitmapToFile((Bitmap) msg.obj, path);
+                        imgFile = new File(path);
+                        handler.sendMessage(msg);
                     }
-                    String path = FileUtils.getSDCardPath()
-                            + "/OSChina/tempfile.jpg";
-                    FileUtils.bitmapToFile((Bitmap) msg.obj, path);
-                    imgFile = new File(path);
-                    handler.sendMessage(msg);
-                }
-            });
+                });
+            } else {
+                String path = FileUtils.getSDCardPath()
+                        + "/OSChina/tempfile.jpg";
+                FileUtils.bitmapToFile((Bitmap) msg.obj, path);
+                imgFile = new File(path);
+                handler.sendMessage(msg);
+            }
         }
     }
 
