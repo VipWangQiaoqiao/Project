@@ -6,12 +6,16 @@ import net.oschina.app.R;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.fragment.TweetPubFragment;
+import net.oschina.app.fragment.TweetsFragment;
 import net.oschina.app.util.UIHelper;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 public class SimpleBackActivity extends BaseActivity {
@@ -21,6 +25,8 @@ public class SimpleBackActivity extends BaseActivity {
     private static final String TAG = "FLAG_TAG";
     protected WeakReference<Fragment> mFragment;
     protected int mPageValue = -1;
+
+    private MenuItem mSendMenu;
 
     @Override
     protected int getLayoutId() {
@@ -73,6 +79,43 @@ public class SimpleBackActivity extends BaseActivity {
             throw new IllegalArgumentException(
                     "generate fragment error. by value:" + pageValue);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.public_menu_send:
+            if (mFragment.get() instanceof TweetsFragment) {
+                sendTopic();
+            } else {
+                return super.onOptionsItemSelected(item);
+            }
+            break;
+        default:
+            break;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (mFragment.get() instanceof TweetsFragment) {
+            getMenuInflater().inflate(R.menu.pub_tweet_menu, menu);
+            mSendMenu = menu.findItem(R.id.public_menu_send);
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    /**
+     * 发送话题
+     */
+    private void sendTopic() {
+        Bundle bundle = new Bundle();
+        bundle.putInt(TweetPubFragment.ACTION_TYPE,
+                TweetPubFragment.ACTION_TYPE_TOPIC);
+        bundle.putString("tweet_topic", "#"
+                + ((TweetsFragment) mFragment.get()).getTopic() + "# ");
+        UIHelper.showTweetActivity(this, SimpleBackPage.TWEET_PUB, bundle);
     }
 
     @Override

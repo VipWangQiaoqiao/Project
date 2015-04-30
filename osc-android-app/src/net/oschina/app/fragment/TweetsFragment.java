@@ -112,10 +112,21 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
         if (bundle != null) {
             String str = bundle.getString("topic");
             if (str != null) {
-                return "";
+                return str;
             }
         }
         return CACHE_KEY_PREFIX + mCatalog;
+    }
+
+    public String getTopic() {
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            String str = bundle.getString("topic");
+            if (str != null) {
+                return str;
+            }
+        }
+        return "";
     }
 
     @Override
@@ -152,7 +163,6 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
     }
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-
         @Override
         public void onReceive(Context context, Intent intent) {
             setupContent();

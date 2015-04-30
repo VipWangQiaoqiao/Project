@@ -80,6 +80,7 @@ public class TweetPubFragment extends BaseFragment implements
     public static final int ACTION_TYPE_ALBUM = 0;
     public static final int ACTION_TYPE_PHOTO = 1;
     public static final int ACTION_TYPE_RECORD = 2; // 录音
+    public static final int ACTION_TYPE_TOPIC = 3; // 录音
     public static final String FROM_IMAGEPAGE_KEY = "from_image_page";
 
     public static final String ACTION_TYPE = "action_type";
@@ -158,7 +159,7 @@ public class TweetPubFragment extends BaseFragment implements
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.pub_tweet_menu, menu);
+        inflater.inflate(R.menu.pub_topic_menu, menu);
         mSendMenu = menu.findItem(R.id.public_menu_send);
         updateMenuState();
     }
@@ -641,6 +642,17 @@ public class TweetPubFragment extends BaseFragment implements
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
             startActivityForResult(intent,
                     ImageUtils.REQUEST_CODE_GETIMAGE_BYCAMERA);
+            break;
+
+        case ACTION_TYPE_TOPIC:
+            Bundle bundle = getArguments();
+            if (bundle != null) {
+                String topic = bundle.getString("tweet_topic");
+                setContentText(topic);
+                if (mEtInput != null) {
+                    mEtInput.setSelection(topic.length());
+                }
+            }
             break;
         default:
             break;
