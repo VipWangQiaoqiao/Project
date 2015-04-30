@@ -45,6 +45,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -301,7 +302,8 @@ public class TweetPubFragment extends BaseFragment implements
         if (!StringUtils.isEmpty(url)) {
             final Message msg = Message.obtain();
             msg.what = 1;
-            msg.obj = kjb.getCache(url);
+            byte[] cache = kjb.getCache(url);
+            msg.obj = BitmapFactory.decodeByteArray(cache, 0, cache.length);
             if (msg.obj == null) {
                 DiskImageRequest req = new DiskImageRequest();
                 req.load(url, 300, 300, new BitmapCallBack() {
@@ -311,9 +313,9 @@ public class TweetPubFragment extends BaseFragment implements
                         msg.obj = bitmap;
                         String path = FileUtils.getSDCardPath()
                                 + "/OSChina/tempfile.jpg";
+                        handler.sendMessage(msg);
                         FileUtils.bitmapToFile((Bitmap) msg.obj, path);
                         imgFile = new File(path);
-                        handler.sendMessage(msg);
                     }
                 });
             } else {
