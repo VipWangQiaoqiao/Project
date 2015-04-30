@@ -1,5 +1,7 @@
 package net.oschina.app.util;
 
+import java.net.URLDecoder;
+
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.AppManager;
@@ -483,7 +485,8 @@ public class UIHelper {
             Bundle bundle = new Bundle();
             int i = url.lastIndexOf("/");
             if (i != -1) {
-                bundle.putString("topic", url.substring(i + 1));
+                bundle.putString("topic",
+                        URLDecoder.decode(url.substring(i + 1)));
             }
             UIHelper.showSimpleBack(context, SimpleBackPage.TWEET_TOPIC_LIST,
                     bundle);
