@@ -516,6 +516,13 @@ public class TweetPubFragment extends BaseFragment implements
         dialog.show();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        keyboardFragment.showSoftKeyboard(mEtInput);
+        keyboardFragment.hideEmojiKeyBoard();
+    }
+
     private void handleSelectPicture() {
         final CommonDialog dialog = DialogHelper
                 .getPinterestDialogCancelable(getActivity());

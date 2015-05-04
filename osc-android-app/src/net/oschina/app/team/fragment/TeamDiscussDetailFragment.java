@@ -10,11 +10,13 @@ import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BeseHaveHeaderListFragment;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
+import net.oschina.app.emoji.OnSendClickListener;
 import net.oschina.app.team.adapter.TeamReplyAdapter;
 import net.oschina.app.team.bean.TeamDiscuss;
 import net.oschina.app.team.bean.TeamDiscussDetail;
 import net.oschina.app.team.bean.TeamRepliesList;
 import net.oschina.app.team.bean.TeamReply;
+import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
@@ -22,6 +24,9 @@ import net.oschina.app.util.XmlUtils;
 import org.apache.http.Header;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebView;
@@ -38,7 +43,8 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
  * @data 2015-2-2 下午6:14:15
  */
 public class TeamDiscussDetailFragment extends
-        BeseHaveHeaderListFragment<TeamReply, TeamDiscuss> {
+        BeseHaveHeaderListFragment<TeamReply, TeamDiscuss> implements
+        OnSendClickListener {
 
     private int mTeamId;
 
@@ -54,10 +60,18 @@ public class TeamDiscussDetailFragment extends
 
     private WebView mWebView;
 
+    private DetailActivity outAty;
+
     @Override
     protected void sendRequestData() {
         OSChinaTeamApi.getTeamReplyList(mTeamId, mDiscussId,
                 TeamReply.REPLY_TYPE_DISCUSS, mCurrentPage, mHandler);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        outAty = (DetailActivity) getActivity();
+        super.onViewCreated(view, savedInstanceState);
     }
 
     private final AsyncHttpResponseHandler mReplyHandler = new AsyncHttpResponseHandler() {
@@ -104,7 +118,6 @@ public class TeamDiscussDetailFragment extends
 
     @Override
     protected View initHeaderView() {
-        // TODO Auto-generated method stub
         Intent args = getActivity().getIntent();
         if (args != null) {
             mTeamId = args.getIntExtra("teamid", 0);
@@ -121,6 +134,12 @@ public class TeamDiscussDetailFragment extends
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        outAty.emojiFragment.hideFlagButton();
+    }
+
+    @Override
     protected String getDetailCacheKey() {
         // TODO Auto-generated method stub
         return "team_discuss_detail_" + mTeamId + mDiscussId;
@@ -128,7 +147,6 @@ public class TeamDiscussDetailFragment extends
 
     @Override
     protected void executeOnLoadDetailSuccess(TeamDiscuss detailBean) {
-        // TODO Auto-generated method stub
         mTvTitle.setText(detailBean.getTitle());
         mTvAuthor.setText(detailBean.getAuthor().getName());
         mTvTime.setText(StringUtils.friendly_time(detailBean.getCreateTime()));
@@ -181,4 +199,23 @@ public class TeamDiscussDetailFragment extends
             return;
     }
 
+    @Override
+    public void onClickSendButton(Editable str) {
+        if (TextUtils.isEmpty(str)) {
+            AppContext.showToast("请先输入评论内容...");
+            return;
+        }
+        if (!AppContext.getInstance().isLogin()) {
+            UIHelper.showLoginActivity(getActivity());
+            return;
+        }
+        int uid = AppContext.getInstance().getLoginUid();
+        OSChinaTeamApi.pubTeamDiscussReply(uid, mTeamId, mDiscussId,
+                str.toString(), mReplyHandler);
+    }
+
+    @Override
+    public void onClickFlagButton() {
+
+    }
 }

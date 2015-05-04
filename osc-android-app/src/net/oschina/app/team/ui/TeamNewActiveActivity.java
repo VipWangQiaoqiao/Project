@@ -13,6 +13,10 @@ import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
+import net.oschina.app.emoji.EmojiKeyboardFragment;
+import net.oschina.app.emoji.Emojicon;
+import net.oschina.app.emoji.InputHelper;
+import net.oschina.app.emoji.OnEmojiClickListener;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamMember;
 import net.oschina.app.team.bean.TeamMemberList;
@@ -21,11 +25,9 @@ import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.util.FileUtil;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.TDevice;
 import net.oschina.app.util.XmlUtils;
 
 import org.apache.http.Header;
-import org.kymjs.kjframe.KJBitmap;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -39,7 +41,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
-import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -74,9 +75,6 @@ public class TeamNewActiveActivity extends BaseActivity {
 
     private MenuItem mMenuSend;
 
-    @InjectView(R.id.view_pager)
-    ViewPager mViewPager;
-
     @InjectView(R.id.ib_emoji_keyboard)
     ImageButton mIbEmoji;
 
@@ -101,14 +99,10 @@ public class TeamNewActiveActivity extends BaseActivity {
     @InjectView(R.id.et_content)
     EditText mEtInput;
 
-    private boolean mIsKeyboardVisible;
-    private boolean mNeedHideEmoji;
-    private int mCurrentKeyboardHeigh;
+    private final EmojiKeyboardFragment keyboardFragment = new EmojiKeyboardFragment();
 
     private String theLarge, theThumbnail;
     private File imgFile;
-
-    private final KJBitmap kjb = KJBitmap.create();
 
     private final Handler handler = new Handler() {
         @Override
@@ -137,8 +131,16 @@ public class TeamNewActiveActivity extends BaseActivity {
     @OnClick({ R.id.ib_picture, R.id.ib_mention, R.id.ib_trend_software,
             R.id.ib_emoji_keyboard, R.id.iv_clear_img, R.id.tv_clear })
     public void onClick(View v) {
-        // TODO Auto-generated method stub
         switch (v.getId()) {
+        case R.id.ib_emoji_keyboard:
+            if (keyboardFragment.isShow()) {
+                keyboardFragment.hideEmojiKeyBoard();
+                keyboardFragment.showSoftKeyboard(mEtInput);
+            } else {
+                keyboardFragment.showEmojiKeyBoard();
+                keyboardFragment.hideSoftKeyboard();
+            }
+            break;
         case R.id.ib_picture:
             handleSelectPicture();
             break;
@@ -175,9 +177,6 @@ public class TeamNewActiveActivity extends BaseActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         mEtInput.getText().clear();
-                        if (mIsKeyboardVisible) {
-                            TDevice.showSoftKeyboard(mEtInput);
-                        }
                     }
                 });
         dialog.setNegativeButton(R.string.cancle, null);
@@ -234,11 +233,32 @@ public class TeamNewActiveActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                // TODO Auto-generated method stub
                 updateSendMenu();
                 mTvClear.setText((MAX_TEXT_LENGTH - s.length()) + "");
             }
         });
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.emoji_keyboard_fragment, keyboardFragment)
+                .commit();
+
+        keyboardFragment.setOnEmojiClickListener(new OnEmojiClickListener() {
+            @Override
+            public void onEmojiClick(Emojicon v) {
+                InputHelper.input2OSC(mEtInput, v);
+            }
+
+            @Override
+            public void onDeleteButtonClick(View v) {
+                InputHelper.backspace(mEtInput);
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        keyboardFragment.hideEmojiKeyBoard();
     }
 
     private void updateSendMenu() {

@@ -15,11 +15,13 @@ import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
+import net.oschina.app.emoji.OnSendClickListener;
 import net.oschina.app.team.adapter.TeamReplyAdapter;
 import net.oschina.app.team.bean.TeamActive;
 import net.oschina.app.team.bean.TeamActiveDetail;
 import net.oschina.app.team.bean.TeamRepliesList;
 import net.oschina.app.team.bean.TeamReply;
+import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
@@ -42,8 +44,10 @@ import org.kymjs.kjframe.bitmap.helper.BitmapHelper;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.Html;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -61,7 +65,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
  */
 public class TeamTweetDetailFragment extends
         BeseHaveHeaderListFragment<TeamReply, TeamActiveDetail> implements
-        OnItemClickListener, OnItemLongClickListener {
+        OnItemClickListener, OnItemLongClickListener, OnSendClickListener {
 
     private static final String CACHE_KEY_PREFIX = "team_tweet_";
 
@@ -78,6 +82,8 @@ public class TeamTweetDetailFragment extends
     private static int rectSize;
     private final KJBitmap kjb = KJBitmap.create();
 
+    private DetailActivity outAty;
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // 使用simpleBackActivity传递的时候使用
@@ -87,7 +93,7 @@ public class TeamTweetDetailFragment extends
         active = (TeamActive) bundle
                 .getSerializable(TeamActiveFragment.DYNAMIC_FRAGMENT_KEY);
         teamId = bundle.getInt(TeamActiveFragment.DYNAMIC_FRAGMENT_TEAM_KEY, 0);
-
+        outAty = (DetailActivity) getActivity();
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -96,7 +102,6 @@ public class TeamTweetDetailFragment extends
         View headView = View.inflate(getActivity(),
                 R.layout.frag_dynamic_detail, null);
         initImageSize(aty);
-
         img_head = (AvatarView) headView.findViewById(R.id.iv_avatar);
         tv_name = (TextView) headView.findViewById(R.id.tv_name);
         mTvCommentCount = (TextView) headView
@@ -149,6 +154,12 @@ public class TeamTweetDetailFragment extends
         } else {
             rectSize = 300;
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        outAty.emojiFragment.hideFlagButton();
     }
 
     /**
@@ -370,4 +381,25 @@ public class TeamTweetDetailFragment extends
             return;
         }
     }
+
+    @Override
+    public void onClickSendButton(Editable str) {
+        if (!TDevice.hasInternet()) {
+            AppContext.showToastShort(R.string.tip_network_error);
+            return;
+        }
+        if (!AppContext.getInstance().isLogin()) {
+            UIHelper.showLoginActivity(getActivity());
+            return;
+        }
+        if (TextUtils.isEmpty(str)) {
+            AppContext.showToastShort(R.string.tip_comment_content_empty);
+            return;
+        }
+        handleComment(str.toString());
+    }
+
+    @Override
+    public void onClickFlagButton() {}
+
 }

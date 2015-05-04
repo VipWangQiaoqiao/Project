@@ -116,5 +116,11 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/list_divider_color" />
+    
+    <FrameLayout
+        android:id="@+id/emoji_keyboard_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" />
 
 </LinearLayout>
