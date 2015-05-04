@@ -8,6 +8,7 @@ import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Comment.Refer;
 import net.oschina.app.bean.Comment.Reply;
 import net.oschina.app.bean.Tweet;
+import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.FloorView;
@@ -26,23 +27,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class CommentAdapter extends ListBaseAdapter<Comment> {
-
-    private boolean showSplit;
-
-    public interface OnOperationListener {
-        void onMoreClick(Comment comment);
-    }
-
-    private final OnOperationListener mListener;
-
-    public CommentAdapter(OnOperationListener lis) {
-        mListener = lis;
-    }
-
-    public CommentAdapter(OnOperationListener lis, boolean showSplit) {
-        this.showSplit = showSplit;
-        mListener = lis;
-    }
 
     @SuppressLint({ "InflateParams", "CutPasteId" })
     @Override
@@ -71,6 +55,8 @@ public class CommentAdapter extends ListBaseAdapter<Comment> {
             vh.content.setLongClickable(false);
             Spanned span = Html.fromHtml(TweetTextView.modifyPath(item
                     .getContent()));
+            span = InputHelper.displayEmoji(parent.getContext().getResources(),
+                    span.toString());
             vh.content.setText(span);
             MyURLSpan.parseLinkText(vh.content, span);
 

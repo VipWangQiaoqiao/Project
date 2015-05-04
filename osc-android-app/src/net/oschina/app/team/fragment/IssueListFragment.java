@@ -6,7 +6,6 @@ import java.io.Serializable;
 import net.oschina.app.AppContext;
 import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.team.adapter.TeamIssueAdapter;
 import net.oschina.app.team.bean.Team;
@@ -25,41 +24,40 @@ import net.oschina.app.util.XmlUtils;
 
 public class IssueListFragment extends BaseListFragment<TeamIssue> {
 
-    private String CACHE_KEY_PREFIX = "issue_list_";
+    private final String CACHE_KEY_PREFIX = "issue_list_";
 
     private Team mTeam;
 
     private TeamProject mTeamProject;
 
-    private int mTeamId = 12481;
+    private final int mTeamId = 12481;
 
-    private int mProjectId = 435;
+    private final int mProjectId = 435;
 
     @Override
     protected TeamIssueAdapter getListAdapter() {
-	return new TeamIssueAdapter();
+        return new TeamIssueAdapter();
     }
 
     @Override
     protected String getCacheKeyPrefix() {
-	return CACHE_KEY_PREFIX + "_" + mCurrentPage;
+        return CACHE_KEY_PREFIX + "_" + mCurrentPage;
     }
 
     @Override
     protected TeamIssueList parseList(InputStream is) throws Exception {
-	TeamIssueList list = XmlUtils.toBean(TeamIssueList.class, is);
-	return list;
+        TeamIssueList list = XmlUtils.toBean(TeamIssueList.class, is);
+        return list;
     }
 
     @Override
     protected void sendRequestData() {
-	OSChinaTeamApi.getTeamIssueList(mTeamId, mProjectId, 0, "", 253900,
-		"state", "scope", mCurrentPage, AppContext.PAGE_SIZE, mHandler);
+        OSChinaTeamApi.getTeamIssueList(mTeamId, mProjectId, 0, "", 253900,
+                "state", "scope", mCurrentPage, AppContext.PAGE_SIZE, mHandler);
     }
 
     @Override
     protected ListEntity<TeamIssue> readList(Serializable seri) {
-	// TODO Auto-generated method stub
-	return null;
+        return null;
     }
 }

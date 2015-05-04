@@ -7,7 +7,6 @@ import java.io.Serializable;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.CommentAdapter;
-import net.oschina.app.adapter.CommentAdapter.OnOperationListener;
 import net.oschina.app.api.OperationResponseHandler;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseActivity;
@@ -18,8 +17,6 @@ import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
-import net.oschina.app.emoji.EmojiFragment;
-import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.util.HTMLUtil;
@@ -32,8 +29,6 @@ import org.apache.http.Header;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -43,7 +38,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 public class CommentFrament extends BaseListFragment<Comment> implements
-        OnOperationListener, EmojiTextListener, OnItemLongClickListener {
+        OnItemLongClickListener {
 
     public static final String BUNDLE_KEY_CATALOG = "BUNDLE_KEY_CATALOG";
     public static final String BUNDLE_KEY_BLOG = "BUNDLE_KEY_BLOG";
@@ -56,8 +51,6 @@ public class CommentFrament extends BaseListFragment<Comment> implements
 
     private int mId, mOwnerId;
     private boolean mIsBlogComment;
-
-    private EmojiFragment mEmojiFragment;
 
     private final AsyncHttpResponseHandler mCommentHandler = new AsyncHttpResponseHandler() {
 
@@ -73,7 +66,6 @@ public class CommentFrament extends BaseListFragment<Comment> implements
 
                     mAdapter.addItem(0, rsb.getComment());
                     mAdapter.notifyDataSetChanged();
-                    mEmojiFragment.reset();
                     UIHelper.sendBroadCastCommentChanged(getActivity(),
                             mIsBlogComment, mId, mCatalog, Comment.OPT_ADD,
                             rsb.getComment());
@@ -95,24 +87,6 @@ public class CommentFrament extends BaseListFragment<Comment> implements
             AppContext.showToastShort(R.string.comment_publish_faile);
         }
     };
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        BaseActivity act = ((BaseActivity) activity);
-        FragmentTransaction trans = act.getSupportFragmentManager()
-                .beginTransaction();
-        mEmojiFragment = new EmojiFragment();
-        mEmojiFragment.setEmojiTextListener(this);
-        trans.replace(R.id.emoji_container, mEmojiFragment);
-        trans.commit();
-        if (activity != null) {
-            View view = activity.findViewById(R.id.emoji_container);
-            if (view != null) {
-                view.setVisibility(View.VISIBLE);
-            }
-        }
-    }
 
     protected int getLayoutRes() {
         return R.layout.fragment_pull_refresh_listview;
@@ -159,7 +133,7 @@ public class CommentFrament extends BaseListFragment<Comment> implements
 
     @Override
     protected CommentAdapter getListAdapter() {
-        return new CommentAdapter(this);
+        return new CommentAdapter();
     }
 
     @Override
@@ -186,14 +160,6 @@ public class CommentFrament extends BaseListFragment<Comment> implements
     }
 
     @Override
-    public boolean onBackPressed() {
-        if (mEmojiFragment != null) {
-            return mEmojiFragment.onBackPressed();
-        }
-        return super.onBackPressed();
-    }
-
-    @Override
     protected void sendRequestData() {
         if (mIsBlogComment) {
             OSChinaApi.getBlogCommentList(mId, mCurrentPage, mHandler);
@@ -205,12 +171,9 @@ public class CommentFrament extends BaseListFragment<Comment> implements
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
             long id) {
-        final Comment comment = (Comment) mAdapter.getItem(position);
+        final Comment comment = mAdapter.getItem(position);
         if (comment == null)
             return;
-        mEmojiFragment.setTag(comment);
-        mEmojiFragment.setInputHint("回复" + comment.getAuthor() + ":");
-        mEmojiFragment.requestFocusInput();
     }
 
     private void handleReplyComment(Comment comment, String text) {
@@ -261,29 +224,6 @@ public class CommentFrament extends BaseListFragment<Comment> implements
         }
     }
 
-    @Override
-    public void onSendClick(String text) {
-        if (!TDevice.hasInternet()) {
-            AppContext.showToastShort(R.string.tip_network_error);
-            return;
-        }
-        if (!AppContext.getInstance().isLogin()) {
-            UIHelper.showLoginActivity(getActivity());
-            return;
-        }
-        if (TextUtils.isEmpty(text)) {
-            AppContext.showToastShort(R.string.tip_comment_content_empty);
-            mEmojiFragment.requestFocusInput();
-            return;
-        }
-
-        if (mEmojiFragment.getInputTag() != null) {
-            handleReplyComment((Comment) mEmojiFragment.getInputTag(), text);
-        } else {
-            handleComment(text);
-        }
-    }
-
     class DeleteOperationResponseHandler extends OperationResponseHandler {
 
         DeleteOperationResponseHandler(Object... args) {
@@ -315,7 +255,7 @@ public class CommentFrament extends BaseListFragment<Comment> implements
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view,
             int position, long id) {
-        final Comment item = (Comment) mAdapter.getItem(position);
+        final Comment item = mAdapter.getItem(position);
         if (item == null)
             return false;
         int itemsLen = item.getAuthorId() == AppContext.getInstance()
@@ -344,10 +284,5 @@ public class CommentFrament extends BaseListFragment<Comment> implements
         });
         dialog.show();
         return true;
-    }
-
-    @Override
-    public void onMoreClick(Comment comment) {
-
     }
 }

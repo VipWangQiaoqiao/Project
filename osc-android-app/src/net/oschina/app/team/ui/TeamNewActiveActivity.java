@@ -3,12 +3,8 @@ package net.oschina.app.team.ui;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -17,13 +13,10 @@ import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
-import net.oschina.app.emoji.Emoji;
-import net.oschina.app.emoji.EmojiEditText;
-import net.oschina.app.emoji.EmojiHelper;
-import net.oschina.app.emoji.EmojiViewPagerAdapter;
-import net.oschina.app.emoji.EmojiViewPagerAdapter.OnClickEmojiListener;
-import net.oschina.app.emoji.SoftKeyboardStateHelper;
-import net.oschina.app.emoji.SoftKeyboardStateHelper.SoftKeyboardStateListener;
+import net.oschina.app.emoji.EmojiKeyboardFragment;
+import net.oschina.app.emoji.Emojicon;
+import net.oschina.app.emoji.InputHelper;
+import net.oschina.app.emoji.OnEmojiClickListener;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamMember;
 import net.oschina.app.team.bean.TeamMemberList;
@@ -32,7 +25,6 @@ import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.util.FileUtil;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.TDevice;
 import net.oschina.app.util.XmlUtils;
 
 import org.apache.http.Header;
@@ -49,26 +41,23 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
-import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.viewpagerindicator.CirclePageIndicator;
 
 /**
  * 团队新动态 TeamNewActiveFragment.java
@@ -77,8 +66,7 @@ import com.viewpagerindicator.CirclePageIndicator;
  * 
  * @data 2015-3-6 下午6:39:53
  */
-public class TeamNewActiveActivity extends BaseActivity implements
-        SoftKeyboardStateListener, OnClickEmojiListener {
+public class TeamNewActiveActivity extends BaseActivity {
 
     private static final int MAX_TEXT_LENGTH = 160;
     private static final String TEXT_SOFTWARE = "#请输入软件名#";
@@ -86,12 +74,6 @@ public class TeamNewActiveActivity extends BaseActivity implements
     private Team mTeam;
 
     private MenuItem mMenuSend;
-
-    @InjectView(R.id.view_pager)
-    ViewPager mViewPager;
-
-    @InjectView(R.id.indicator)
-    CirclePageIndicator mIndicator;
 
     @InjectView(R.id.ib_emoji_keyboard)
     ImageButton mIbEmoji;
@@ -108,9 +90,6 @@ public class TeamNewActiveActivity extends BaseActivity implements
     @InjectView(R.id.tv_clear)
     TextView mTvClear;
 
-    @InjectView(R.id.ly_emoji)
-    View mLyEmoji;
-
     @InjectView(R.id.rl_img)
     View mLyImage;
 
@@ -118,13 +97,9 @@ public class TeamNewActiveActivity extends BaseActivity implements
     ImageView mIvImage;
 
     @InjectView(R.id.et_content)
-    EmojiEditText mEtInput;
+    EditText mEtInput;
 
-    private EmojiViewPagerAdapter mPagerAdapter;
-    private SoftKeyboardStateHelper mKeyboardHelper;
-    private boolean mIsKeyboardVisible;
-    private boolean mNeedHideEmoji;
-    private int mCurrentKeyboardHeigh;
+    private final EmojiKeyboardFragment keyboardFragment = new EmojiKeyboardFragment();
 
     private String theLarge, theThumbnail;
     private File imgFile;
@@ -156,8 +131,16 @@ public class TeamNewActiveActivity extends BaseActivity implements
     @OnClick({ R.id.ib_picture, R.id.ib_mention, R.id.ib_trend_software,
             R.id.ib_emoji_keyboard, R.id.iv_clear_img, R.id.tv_clear })
     public void onClick(View v) {
-        // TODO Auto-generated method stub
         switch (v.getId()) {
+        case R.id.ib_emoji_keyboard:
+            if (keyboardFragment.isShow()) {
+                keyboardFragment.hideEmojiKeyBoard();
+                keyboardFragment.showSoftKeyboard(mEtInput);
+            } else {
+                keyboardFragment.showEmojiKeyBoard();
+                keyboardFragment.hideSoftKeyboard();
+            }
+            break;
         case R.id.ib_picture:
             handleSelectPicture();
             break;
@@ -166,15 +149,6 @@ public class TeamNewActiveActivity extends BaseActivity implements
             break;
         case R.id.ib_trend_software:
             insertTrendSoftware();
-            break;
-
-        case R.id.ib_emoji_keyboard:
-            if (mLyEmoji.getVisibility() == View.GONE) {
-                mNeedHideEmoji = true;
-                tryShowEmojiPanel();
-            } else {
-                tryHideEmojiPanel();
-            }
             break;
         case R.id.iv_clear_img:
             mIvImage.setImageBitmap(null);
@@ -203,9 +177,6 @@ public class TeamNewActiveActivity extends BaseActivity implements
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         mEtInput.getText().clear();
-                        if (mIsKeyboardVisible) {
-                            TDevice.showSoftKeyboard(mEtInput);
-                        }
                     }
                 });
         dialog.setNegativeButton(R.string.cancle, null);
@@ -262,82 +233,32 @@ public class TeamNewActiveActivity extends BaseActivity implements
 
             @Override
             public void afterTextChanged(Editable s) {
-                // TODO Auto-generated method stub
                 updateSendMenu();
                 mTvClear.setText((MAX_TEXT_LENGTH - s.length()) + "");
             }
         });
 
-        initEmoji();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.emoji_keyboard_fragment, keyboardFragment)
+                .commit();
 
-        mKeyboardHelper = new SoftKeyboardStateHelper(
-                this.findViewById(R.id.container));
-        mKeyboardHelper.addSoftKeyboardStateListener(this);
+        keyboardFragment.setOnEmojiClickListener(new OnEmojiClickListener() {
+            @Override
+            public void onEmojiClick(Emojicon v) {
+                InputHelper.input2OSC(mEtInput, v);
+            }
+
+            @Override
+            public void onDeleteButtonClick(View v) {
+                InputHelper.backspace(mEtInput);
+            }
+        });
     }
 
-    private void initEmoji() {
-        Map<String, Emoji> emojis = EmojiHelper.qq_emojis_nos;
-        // int pagerSize = emojis.size() / 20;
-        EmojiHelper.initEmojis();
-
-        List<Emoji> allEmojis = new ArrayList<Emoji>();
-        Iterator<String> itr1 = emojis.keySet().iterator();
-        while (itr1.hasNext()) {
-            Emoji ej = emojis.get(itr1.next());
-            allEmojis.add(new Emoji(ej.getResId(), ej.getValue(), ej
-                    .getValueNo(), ej.getIndex()));
-        }
-        Collections.sort(allEmojis);
-
-        List<List<Emoji>> pagers = new ArrayList<List<Emoji>>();
-        List<Emoji> es = null;
-        int size = 0;
-        boolean justAdd = false;
-        for (Emoji ej : allEmojis) {
-            if (size == 0) {
-                es = new ArrayList<Emoji>();
-            }
-            es.add(new Emoji(ej.getResId(), ej.getValue(), ej.getValueNo()));
-            size++;
-            if (size == 20) {
-                pagers.add(es);
-                size = 0;
-                justAdd = true;
-            } else {
-                justAdd = false;
-            }
-        }
-        if (!justAdd && es != null) {
-            pagers.add(es);
-        }
-
-        int emojiHeight = caculateEmojiPanelHeight();
-
-        mPagerAdapter = new EmojiViewPagerAdapter(this, pagers, emojiHeight,
-                this);
-        mViewPager.setAdapter(mPagerAdapter);
-        mIndicator.setViewPager(mViewPager);
-
-        int mode = WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE
-                | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
-        getWindow().setSoftInputMode(mode);
-    }
-
-    private int caculateEmojiPanelHeight() {
-        if (mCurrentKeyboardHeigh == 0) {
-            mCurrentKeyboardHeigh = (int) TDevice.dpToPixel(180);
-        }
-        int emojiPanelHeight = (int) (mCurrentKeyboardHeigh - TDevice
-                .dpToPixel(20));
-        int emojiHeight = emojiPanelHeight / 3;
-
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, emojiPanelHeight);
-        mViewPager.setLayoutParams(lp);
-        if (mPagerAdapter != null) {
-            mPagerAdapter.setEmojiHeight(emojiHeight);
-        }
-        return emojiHeight;
+    @Override
+    protected void onResume() {
+        super.onResume();
+        keyboardFragment.hideEmojiKeyBoard();
     }
 
     private void updateSendMenu() {
@@ -389,7 +310,6 @@ public class TeamNewActiveActivity extends BaseActivity implements
 
                     @Override
                     public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-                        // TODO Auto-generated method stub
                         Result result = XmlUtils.toBean(ResultBean.class, arg2)
                                 .getResult();
                         if (result != null && result.OK()) {
@@ -403,20 +323,17 @@ public class TeamNewActiveActivity extends BaseActivity implements
                     @Override
                     public void onFailure(int arg0, Header[] arg1, byte[] arg2,
                             Throwable arg3) {
-                        // TODO Auto-generated method stub
                         AppContext.showToast("发表失败，请检查下你的网络");
                     }
 
                     @Override
                     public void onStart() {
-                        // TODO Auto-generated method stub
                         super.onStart();
                         showWaitDialog("提交中...");
                     }
 
                     @Override
                     public void onFinish() {
-                        // TODO Auto-generated method stub
                         super.onFinish();
                         hideWaitDialog();
                     }
@@ -424,61 +341,7 @@ public class TeamNewActiveActivity extends BaseActivity implements
     }
 
     @Override
-    public void onEmojiClick(Emoji emoji) {
-        mEtInput.insertEmoji(emoji);
-    }
-
-    @Override
-    public void onDelete() {
-        mEtInput.delete();
-    }
-
-    @Override
-    public void onSoftKeyboardOpened(int keyboardHeightInPx) {
-        mIsKeyboardVisible = true;
-        hideEmojiPanel();
-    }
-
-    @Override
-    public void onSoftKeyboardClosed() {
-        mIsKeyboardVisible = false;
-        if (mNeedHideEmoji) {
-            showEmojiPanel();
-        }
-    }
-
-    private void showEmojiPanel() {
-        mNeedHideEmoji = false;
-        mLyEmoji.setVisibility(View.VISIBLE);
-        mIbEmoji.setImageResource(R.drawable.compose_toolbar_keyboard_selector);
-    }
-
-    private void tryShowEmojiPanel() {
-        if (mIsKeyboardVisible) {
-            TDevice.hideSoftKeyboard(this.getCurrentFocus());
-        } else {
-            showEmojiPanel();
-        }
-    }
-
-    private void tryHideEmojiPanel() {
-        if (!mIsKeyboardVisible) {
-            TDevice.showSoftKeyboard(mEtInput);
-        } else {
-            hideEmojiPanel();
-        }
-    }
-
-    private void hideEmojiPanel() {
-        if (mLyEmoji.getVisibility() == View.VISIBLE) {
-            mLyEmoji.setVisibility(View.GONE);
-            mIbEmoji.setImageResource(R.drawable.compose_toolbar_emoji_selector);
-        }
-    }
-
-    @Override
     public void onBackPressed() {
-        // TODO Auto-generated method stub
         if (mEtInput.getText().length() != 0) {
             showConfirmExit();
             return;

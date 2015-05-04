@@ -15,6 +15,7 @@ import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.cache.CacheManager;
+import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.ReportDialog;
 import net.oschina.app.ui.ShareDialog;
 import net.oschina.app.ui.ShareDialog.OnSharePlatformClick;
@@ -27,11 +28,8 @@ import net.oschina.app.util.XmlUtils;
 import org.apache.http.Header;
 
 import android.annotation.SuppressLint;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -46,6 +44,7 @@ import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -63,7 +62,7 @@ import com.umeng.socialize.weixin.controller.UMWXHandler;
 import com.umeng.socialize.weixin.media.CircleShareContent;
 import com.umeng.socialize.weixin.media.WeiXinShareContent;
 
-public class BaseDetailFragment extends BaseFragment implements
+public abstract class BaseDetailFragment extends BaseFragment implements
         OnItemClickListener {
 
     public static final String INTENT_ACTION_COMMENT_CHANGED = "INTENT_ACTION_COMMENT_CHAGED";
@@ -107,6 +106,11 @@ public class BaseDetailFragment extends BaseFragment implements
             hideWaitDialog();
             AppContext.showToastShort(R.string.comment_publish_faile);
         }
+
+        @Override
+        public void onFinish() {
+            ((DetailActivity) getActivity()).emojiFragment.hideAllKeyBoard();
+        };
     };
 
     protected void recycleWebView() {
@@ -178,10 +182,10 @@ public class BaseDetailFragment extends BaseFragment implements
             readCacheData(key);
         }
     }
-    
+
     // 刷新数据
     protected void sendRefresh() {
-	sendRequestData();
+        sendRequestData();
     }
 
     private void readCacheData(String cacheKey) {
@@ -318,15 +322,17 @@ public class BaseDetailFragment extends BaseFragment implements
     protected String getShareContent() {
         return "";
     }
-    
+
     /***
      * 获取去除html标签的body
+     * 
      * @param body
      * @return
      */
     protected String getFilterHtmlBody(String body) {
-	if (body == null) return "";
-    	return HTMLUtil.delHTMLTag(body.trim());
+        if (body == null)
+            return "";
+        return HTMLUtil.delHTMLTag(body.trim());
     }
 
     protected UMImage getShareImg() {
@@ -376,7 +382,7 @@ public class BaseDetailFragment extends BaseFragment implements
         }
     };
 
-    protected void onReportMenuClick() {
+    public void onReportMenuClick() {
         if (getRepotrId() == 0) {
             AppContext.showToast("正在加载，请稍等...");
         }
@@ -416,7 +422,10 @@ public class BaseDetailFragment extends BaseFragment implements
         return 0;
     }
 
-    protected void handleFavoriteOrNot() {
+    /**
+     * 收藏
+     */
+    public void handleFavoriteOrNot() {
         if (!TDevice.hasInternet()) {
             AppContext.showToastShort(R.string.tip_no_internet);
             return;
@@ -438,7 +447,10 @@ public class BaseDetailFragment extends BaseFragment implements
         }
     }
 
-    protected void handleShare() {
+    /**
+     * 分享
+     */
+    public void handleShare() {
         if (TextUtils.isEmpty(getShareContent())
                 || TextUtils.isEmpty(getShareUrl())) {
             AppContext.showToast("内容加载失败...");
@@ -449,10 +461,8 @@ public class BaseDetailFragment extends BaseFragment implements
         dialog.setCanceledOnTouchOutside(true);
         dialog.setTitle(R.string.share_to);
         dialog.setOnPlatformClickListener(new OnSharePlatformClick() {
-
             @Override
             public void onPlatformClick(int id) {
-
                 switch (id) {
                 case R.id.ly_share_weichat_circle:
                     shareToWeiChatCircle();
@@ -655,6 +665,9 @@ public class BaseDetailFragment extends BaseFragment implements
                     mIsFavorited = true;
                     getActivity().supportInvalidateOptionsMenu();
                     onFavoriteChanged(true);
+                    ImageView view = (ImageView) getActivity().findViewById(
+                            R.id.action_favor);
+                    view.setImageResource(R.drawable.ic_action_favor_on_normal);
                 } else {
                     AppContext.showToastShort(res.getErrorMessage());
                 }
@@ -686,6 +699,9 @@ public class BaseDetailFragment extends BaseFragment implements
                     mIsFavorited = false;
                     getActivity().supportInvalidateOptionsMenu();
                     onFavoriteChanged(false);
+                    ImageView view = (ImageView) getActivity().findViewById(
+                            R.id.action_favor);
+                    view.setImageResource(R.drawable.ic_action_favor);
                 } else {
                     AppContext.showToastShort(res.getErrorMessage());
                 }
@@ -702,18 +718,16 @@ public class BaseDetailFragment extends BaseFragment implements
         }
     };
 
-    @Override
-    public void onClick(View v) {
-
-    }
+    public abstract int getCommentCount();
 
     @Override
-    public void initView(View view) {
-
-    }
+    public void onClick(View v) {}
 
     @Override
-    public void initData() {
+    public void initView(View view) {}
 
-    }
+    public void onclickWriteComment() {}
+
+    @Override
+    public void initData() {}
 }

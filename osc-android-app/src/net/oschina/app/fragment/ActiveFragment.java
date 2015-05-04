@@ -180,7 +180,7 @@ public class ActiveFragment extends BaseListFragment<Active> implements
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
             long id) {
-        Active active = (Active) mAdapter.getItem(position);
+        Active active = mAdapter.getItem(position);
         if (active != null)
             UIHelper.showActiveRedirect(view.getContext(), active);
     }
@@ -188,7 +188,7 @@ public class ActiveFragment extends BaseListFragment<Active> implements
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view,
             int position, long id) {
-        final Active active = (Active) mAdapter.getItem(position);
+        final Active active = mAdapter.getItem(position);
         if (active == null)
             return false;
         String[] items = new String[] { getResources().getString(R.string.copy) };

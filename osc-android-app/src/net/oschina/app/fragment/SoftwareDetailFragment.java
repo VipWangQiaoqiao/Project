@@ -7,19 +7,12 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseDetailFragment;
-import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.Software;
 import net.oschina.app.bean.SoftwareDetail;
 import net.oschina.app.bean.Tweet;
-import net.oschina.app.emoji.EmojiFragment;
-import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
-import net.oschina.app.fragment.ToolbarFragment.OnActionClickListener;
-import net.oschina.app.fragment.ToolbarFragment.ToolAction;
-import net.oschina.app.interf.EmojiFragmentControl;
-import net.oschina.app.interf.ToolbarEmojiVisiableControl;
-import net.oschina.app.interf.ToolbarFragmentControl;
+import net.oschina.app.emoji.OnSendClickListener;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -28,13 +21,12 @@ import net.oschina.app.util.XmlUtils;
 
 import org.kymjs.kjframe.KJBitmap;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ImageView;
@@ -50,7 +42,7 @@ import butterknife.InjectView;
  * 
  */
 public class SoftwareDetailFragment extends BaseDetailFragment implements
-        ToolbarFragmentControl, EmojiTextListener, EmojiFragmentControl {
+        OnSendClickListener {
 
     protected static final String TAG = SoftwareDetailFragment.class
             .getSimpleName();
@@ -90,54 +82,6 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
     ImageView mIvLogo;
     private String mIdent;
     private Software mSoftware;
-    private EmojiFragment mEmojiFragment;
-    private ToolbarFragment mToolBarFragment;
-
-    private final OnClickListener mMoreListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            Activity act = getActivity();
-            if (act != null && act instanceof ToolbarEmojiVisiableControl) {
-                ((ToolbarEmojiVisiableControl) act).toggleToolbarEmoji();
-            }
-        }
-    };
-
-    private final OnActionClickListener mActionListener = new OnActionClickListener() {
-
-        @Override
-        public void onActionClick(ToolAction action) {
-            switch (action) {
-            case ACTION_CHANGE:
-                Activity act = getActivity();
-                if (act != null && act instanceof ToolbarEmojiVisiableControl) {
-                    ((ToolbarEmojiVisiableControl) act).toggleToolbarEmoji();
-                }
-                break;
-            case ACTION_WRITE_COMMENT:
-                act = getActivity();
-                if (act != null && act instanceof ToolbarEmojiVisiableControl) {
-                    ((ToolbarEmojiVisiableControl) act).toggleToolbarEmoji();
-                }
-                mEmojiFragment.showKeyboardIfNoEmojiGrid();
-                break;
-            case ACTION_VIEW_COMMENT:
-                if (mSoftware != null)
-                    UIHelper.showSoftWareTweets(getActivity(),
-                            mSoftware.getId());
-                break;
-            case ACTION_FAVORITE:
-                handleFavoriteOrNot();
-                break;
-            case ACTION_SHARE:
-                handleShare();
-                break;
-            default:
-                break;
-            }
-        }
-    };
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -210,12 +154,14 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
         mTvLanguage.setText(mSoftware.getLanguage());
         mTvOs.setText(mSoftware.getOs());
         mTvRecordTime.setText(mSoftware.getRecordtime());
-        if (mToolBarFragment != null) {
-            mToolBarFragment.setCommentCount(mSoftware.getTweetCount());
-        }
         new KJBitmap().displayWithLoadBitmap(mIvLogo, mSoftware.getLogo(),
                 R.drawable.widget_dface);
         notifyFavorite(mSoftware.getFavorite() == 1);
+    }
+
+    @Override
+    public int getCommentCount() {
+        return mSoftware.getTweetCount();
     }
 
     private void fillWebViewBody() {
@@ -248,32 +194,8 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
     }
 
     @Override
-    public void setToolBarFragment(ToolbarFragment fragment) {
-        mToolBarFragment = fragment;
-        mToolBarFragment.setOnActionClickListener(mActionListener);
-        mToolBarFragment.setActionVisiable(ToolAction.ACTION_CHANGE, true);
-        mToolBarFragment.setActionVisiable(ToolAction.ACTION_FAVORITE, true);
-        mToolBarFragment.setActionVisiable(ToolAction.ACTION_WRITE_COMMENT,
-                true);
-        mToolBarFragment
-                .setActionVisiable(ToolAction.ACTION_VIEW_COMMENT, true);
-        mToolBarFragment.setActionVisiable(ToolAction.ACTION_SHARE, true);
-    }
-
-    @Override
-    public void setEmojiFragment(EmojiFragment fragment) {
-        mEmojiFragment = fragment;
-        mEmojiFragment.setEmojiTextListener(this);
-        mEmojiFragment.setButtonMoreVisibility(View.VISIBLE);
-        mEmojiFragment.setButtonMoreClickListener(mMoreListener);
-    }
-
-    @Override
     protected void onFavoriteChanged(boolean flag) {
         mSoftware.setFavorite(flag ? 1 : 0);
-        if (mToolBarFragment != null) {
-            mToolBarFragment.setFavorite(flag);
-        }
     }
 
     @Override
@@ -305,7 +227,7 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
     }
 
     @Override
-    public void onSendClick(String text) {
+    public void onClickSendButton(Editable str) {
         if (mSoftware.getId() == 0) {
             AppContext.showToast("无法获取该软件~");
             return;
@@ -318,21 +240,17 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
             UIHelper.showLoginActivity(getActivity());
             return;
         }
-        if (TextUtils.isEmpty(text)) {
+        if (TextUtils.isEmpty(str)) {
             AppContext.showToastShort(R.string.tip_comment_content_empty);
-            mEmojiFragment.requestFocusInput();
             return;
         }
         Tweet tweet = new Tweet();
         tweet.setAuthorid(AppContext.getInstance().getLoginUid());
-        tweet.setBody(text);
+        tweet.setBody(str.toString());
         showWaitDialog(R.string.progress_submit);
         OSChinaApi.pubSoftWareTweet(tweet, mSoftware.getId(), mCommentHandler);
     }
 
     @Override
-    protected void commentPubSuccess(Comment comment) {
-        super.commentPubSuccess(comment);
-        mEmojiFragment.reset();
-    }
+    public void onClickFlagButton() {}
 }

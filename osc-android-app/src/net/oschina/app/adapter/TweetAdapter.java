@@ -5,6 +5,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Tweet;
+import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
@@ -86,15 +87,11 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
     final private AsyncHttpResponseHandler handler = new AsyncHttpResponseHandler() {
 
         @Override
-        public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-            // TODO Auto-generated method stub
-        }
+        public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {}
 
         @Override
         public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                Throwable arg3) {
-            // TODO Auto-generated method stub
-        }
+                Throwable arg3) {}
     };
 
     private void initRecordImg(Context cxt) {
@@ -143,6 +140,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
 
         Spanned span = Html.fromHtml(TweetTextView.modifyPath(tweet.getBody()
                 .trim()));
+
         if (!StringUtils.isEmpty(tweet.getAttach())) {
             if (recordBitmap == null) {
                 initRecordImg(parent.getContext());
@@ -151,8 +149,12 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
                     recordBitmap);
             SpannableString str = new SpannableString("c" + span);
             str.setSpan(recordImg, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+            str = InputHelper.displayEmoji(context.getResources(),
+                    span.toString());
             vh.content.setText(str);
         } else {
+            span = InputHelper.displayEmoji(context.getResources(),
+                    span.toString());
             vh.content.setText(span);
         }
         MyURLSpan.parseLinkText(vh.content, span);
@@ -166,7 +168,6 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         OnClickListener likeClick = new OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 if (AppContext.getInstance().isLogin()) {
                     if (tweet.getAuthorid() == AppContext.getInstance()
                             .getLoginUid()) {
@@ -251,25 +252,19 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // TODO Auto-generated method stub
                 dialog.dismiss();
                 OSChinaApi.deleteTweet(tweet.getAuthorid(), tweet.getId(),
                         new AsyncHttpResponseHandler() {
-
                             @Override
                             public void onSuccess(int arg0, Header[] arg1,
                                     byte[] arg2) {
-                                // TODO Auto-generated method stub
                                 mDatas.remove(position);
                                 notifyDataSetChanged();
                             }
 
                             @Override
                             public void onFailure(int arg0, Header[] arg1,
-                                    byte[] arg2, Throwable arg3) {
-                                // TODO Auto-generated method stub
-
-                            }
+                                    byte[] arg2, Throwable arg3) {}
                         });
             }
         });

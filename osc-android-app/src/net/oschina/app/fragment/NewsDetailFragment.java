@@ -14,22 +14,16 @@ import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.News;
 import net.oschina.app.bean.News.Relative;
 import net.oschina.app.bean.NewsDetail;
-import net.oschina.app.emoji.EmojiFragment;
-import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
-import net.oschina.app.fragment.ToolbarFragment.OnActionClickListener;
-import net.oschina.app.fragment.ToolbarFragment.ToolAction;
-import net.oschina.app.interf.EmojiFragmentControl;
-import net.oschina.app.interf.ToolbarEmojiVisiableControl;
-import net.oschina.app.interf.ToolbarFragmentControl;
+import net.oschina.app.emoji.OnSendClickListener;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.URLsUtils;
 import net.oschina.app.util.XmlUtils;
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +35,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class NewsDetailFragment extends BaseDetailFragment implements
-        ToolbarFragmentControl, EmojiTextListener, EmojiFragmentControl {
+        OnSendClickListener {
 
     protected static final String TAG = NewsDetailFragment.class
             .getSimpleName();
@@ -53,55 +47,7 @@ public class NewsDetailFragment extends BaseDetailFragment implements
     @InjectView(R.id.tv_time)
     TextView mTvTime;
     private int mNewsId;
-    private int mCommentCount;
     private News mNews;
-    private EmojiFragment mEmojiFragment;
-    private ToolbarFragment mToolBarFragment;
-
-    private final OnClickListener mMoreListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Activity act = getActivity();
-            if (act != null && act instanceof ToolbarEmojiVisiableControl) {
-                ((ToolbarEmojiVisiableControl) act).toggleToolbarEmoji();
-            }
-        }
-    };
-
-    private final OnActionClickListener mActionListener = new OnActionClickListener() {
-
-        @Override
-        public void onActionClick(ToolAction action) {
-            switch (action) {
-            case ACTION_CHANGE:
-                Activity act = getActivity();
-                if (act != null && act instanceof ToolbarEmojiVisiableControl) {
-                    ((ToolbarEmojiVisiableControl) act).toggleToolbarEmoji();
-                }
-                break;
-            case ACTION_WRITE_COMMENT:
-                act = getActivity();
-                if (act != null && act instanceof ToolbarEmojiVisiableControl) {
-                    ((ToolbarEmojiVisiableControl) act).toggleToolbarEmoji();
-                }
-                mEmojiFragment.showKeyboardIfNoEmojiGrid();
-                break;
-            case ACTION_VIEW_COMMENT:
-                if (mNews != null)
-                    UIHelper.showComment(getActivity(), mNewsId,
-                            CommentList.CATALOG_NEWS);
-                break;
-            case ACTION_FAVORITE:
-                handleFavoriteOrNot();
-                break;
-            case ACTION_SHARE:
-                handleShare();
-                break;
-            default:
-                break;
-            }
-        }
-    };
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -110,8 +56,6 @@ public class NewsDetailFragment extends BaseDetailFragment implements
                 false);
 
         mNewsId = getActivity().getIntent().getIntExtra("news_id", 0);
-        mCommentCount = getActivity().getIntent().getIntExtra("comment_count",
-                0);
         ButterKnife.inject(this, view);
         initViews(view);
         return view;
@@ -151,9 +95,6 @@ public class NewsDetailFragment extends BaseDetailFragment implements
         if (id == mNewsId && catalog == CommentList.CATALOG_NEWS && !isBlog) {
             if (Comment.OPT_ADD == opt && mNews != null) {
                 mNews.setCommentCount(mNews.getCommentCount() + 1);
-                if (mToolBarFragment != null) {
-                    mToolBarFragment.setCommentCount(mNews.getCommentCount());
-                }
             }
         }
     }
@@ -176,13 +117,12 @@ public class NewsDetailFragment extends BaseDetailFragment implements
             }
         });
         mTvTime.setText(StringUtils.friendly_time(mNews.getPubDate()));
-        if (mToolBarFragment != null) {
-            if (mCommentCount <= 0) {
-                mCommentCount = mNews.getCommentCount();
-            }
-            mToolBarFragment.setCommentCount(mCommentCount);
-        }
         notifyFavorite(mNews.getFavorite() == 1);
+    }
+
+    @Override
+    public int getCommentCount() {
+        return mNews.getCommentCount();
     }
 
     private void fillWebViewBody() {
@@ -224,59 +164,7 @@ public class NewsDetailFragment extends BaseDetailFragment implements
     @Override
     protected void onFavoriteChanged(boolean flag) {
         mNews.setFavorite(flag ? 1 : 0);
-        if (mToolBarFragment != null) {
-            mToolBarFragment.setFavorite(flag);
-        }
         saveCache(mNews);
-    }
-
-    @Override
-    public void setToolBarFragment(ToolbarFragment fragment) {
-        mToolBarFragment = fragment;
-        mToolBarFragment.setOnActionClickListener(mActionListener);
-        mToolBarFragment.setActionVisiable(ToolAction.ACTION_CHANGE, true);
-        mToolBarFragment.setActionVisiable(ToolAction.ACTION_FAVORITE, true);
-        mToolBarFragment.setActionVisiable(ToolAction.ACTION_WRITE_COMMENT,
-                true);
-        mToolBarFragment
-                .setActionVisiable(ToolAction.ACTION_VIEW_COMMENT, true);
-        mToolBarFragment.setActionVisiable(ToolAction.ACTION_SHARE, true);
-    }
-
-    @Override
-    public void setEmojiFragment(EmojiFragment fragment) {
-        mEmojiFragment = fragment;
-        mEmojiFragment.setEmojiTextListener(this);
-        mEmojiFragment.setButtonMoreVisibility(View.VISIBLE);
-        mEmojiFragment.setButtonMoreClickListener(mMoreListener);
-    }
-
-    @Override
-    public void onSendClick(String text) {
-        if (!TDevice.hasInternet()) {
-            AppContext.showToastShort(R.string.tip_network_error);
-            return;
-        }
-        if (!AppContext.getInstance().isLogin()) {
-            UIHelper.showLoginActivity(getActivity());
-            return;
-        }
-        if (TextUtils.isEmpty(text)) {
-            AppContext.showToastShort(R.string.tip_comment_content_empty);
-            mEmojiFragment.requestFocusInput();
-            return;
-        }
-        showWaitDialog(R.string.progress_submit);
-        OSChinaApi.publicComment(CommentList.CATALOG_NEWS, mNewsId, AppContext
-                .getInstance().getLoginUid(), text, 0, mCommentHandler);
-    }
-
-    @Override
-    protected void commentPubSuccess(Comment comment) {
-        super.commentPubSuccess(comment);
-        mEmojiFragment.reset();
-        UIHelper.sendBroadCastCommentChanged(getActivity(), false, mNewsId,
-                CommentList.CATALOG_NEWS, Comment.OPT_ADD, comment);
     }
 
     @Override
@@ -297,12 +185,44 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 
     @Override
     protected String getShareContent() {
-        return mNews != null ? StringUtils.getSubString(0, 55, getFilterHtmlBody(mNews.getBody())) : "";
+        return mNews != null ? StringUtils.getSubString(0, 55,
+                getFilterHtmlBody(mNews.getBody())) : "";
     }
 
     @Override
     protected String getShareUrl() {
         return mNews != null ? URLsUtils.URL_MOBILE + "news/" + mNews.getId()
                 : null;
+    }
+
+    @Override
+    public void onClickSendButton(Editable str) {
+        if (!TDevice.hasInternet()) {
+            AppContext.showToastShort(R.string.tip_network_error);
+            return;
+        }
+        if (!AppContext.getInstance().isLogin()) {
+            UIHelper.showLoginActivity(getActivity());
+            return;
+        }
+        if (TextUtils.isEmpty(str)) {
+            AppContext.showToastShort(R.string.tip_comment_content_empty);
+            return;
+        }
+        showWaitDialog(R.string.progress_submit);
+        OSChinaApi.publicComment(CommentList.CATALOG_NEWS, mNewsId, AppContext
+                .getInstance().getLoginUid(), str.toString(), 0,
+                mCommentHandler);
+    }
+
+    @Override
+    public void onClickFlagButton() {}
+
+    @Override
+    public void onclickWriteComment() {
+        super.onclickWriteComment();
+        if (mNews != null)
+            UIHelper.showComment(getActivity(), mNewsId,
+                    CommentList.CATALOG_NEWS);
     }
 }

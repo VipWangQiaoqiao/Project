@@ -337,7 +337,6 @@ public class UIHelper {
     public static void addWebImageShow(final Context cxt, WebView wv) {
         wv.getSettings().setJavaScriptEnabled(true);
         wv.addJavascriptInterface(new OnWebViewImageListener() {
-
             @Override
             @JavascriptInterface
             public void showImagePreview(String bigImageUrl) {

@@ -1,4 +1,18 @@
-
+/*
+ * Copyright (c) 2015, 张涛.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package net.oschina.app.emoji;
 
 import java.util.LinkedList;
@@ -8,7 +22,12 @@ import android.graphics.Rect;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
-public class SoftKeyboardStateHelper implements ViewTreeObserver.OnGlobalLayoutListener {
+/**
+ * 
+ * @author kymjs (http://www.kymjs.com)
+ */
+public class SoftKeyboardStateHelper implements
+        ViewTreeObserver.OnGlobalLayoutListener {
 
     public interface SoftKeyboardStateListener {
         void onSoftKeyboardOpened(int keyboardHeightInPx);
@@ -25,7 +44,8 @@ public class SoftKeyboardStateHelper implements ViewTreeObserver.OnGlobalLayoutL
         this(activityRootView, false);
     }
 
-    public SoftKeyboardStateHelper(View activityRootView, boolean isSoftKeyboardOpened) {
+    public SoftKeyboardStateHelper(View activityRootView,
+            boolean isSoftKeyboardOpened) {
         this.activityRootView = activityRootView;
         this.isSoftKeyboardOpened = isSoftKeyboardOpened;
         activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(this);
@@ -38,7 +58,8 @@ public class SoftKeyboardStateHelper implements ViewTreeObserver.OnGlobalLayoutL
         // visible.
         activityRootView.getWindowVisibleDisplayFrame(r);
 
-        final int heightDiff = activityRootView.getRootView().getHeight() - (r.bottom - r.top);
+        final int heightDiff = activityRootView.getRootView().getHeight()
+                - (r.bottom - r.top);
         if (!isSoftKeyboardOpened && heightDiff > 100) { // if more than 100
                                                          // pixels, its probably
                                                          // a keyboard...
@@ -71,7 +92,8 @@ public class SoftKeyboardStateHelper implements ViewTreeObserver.OnGlobalLayoutL
         listeners.add(listener);
     }
 
-    public void removeSoftKeyboardStateListener(SoftKeyboardStateListener listener) {
+    public void removeSoftKeyboardStateListener(
+            SoftKeyboardStateListener listener) {
         listeners.remove(listener);
     }
 

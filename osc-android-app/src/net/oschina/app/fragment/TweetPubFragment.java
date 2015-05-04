@@ -5,24 +5,16 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.Tweet;
-import net.oschina.app.emoji.Emoji;
-import net.oschina.app.emoji.EmojiEditText;
-import net.oschina.app.emoji.EmojiHelper;
-import net.oschina.app.emoji.EmojiViewPagerAdapter;
-import net.oschina.app.emoji.EmojiViewPagerAdapter.OnClickEmojiListener;
-import net.oschina.app.emoji.SoftKeyboardStateHelper;
-import net.oschina.app.emoji.SoftKeyboardStateHelper.SoftKeyboardStateListener;
+import net.oschina.app.emoji.EmojiKeyboardFragment;
+import net.oschina.app.emoji.Emojicon;
+import net.oschina.app.emoji.InputHelper;
+import net.oschina.app.emoji.OnEmojiClickListener;
 import net.oschina.app.service.ServerTaskUtils;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
@@ -55,7 +47,6 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -66,17 +57,15 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-import com.viewpagerindicator.CirclePageIndicator;
-
 public class TweetPubFragment extends BaseFragment implements
-        SoftKeyboardStateListener, OnClickEmojiListener {
+        OnEmojiClickListener {
 
     public static final int ACTION_TYPE_ALBUM = 0;
     public static final int ACTION_TYPE_PHOTO = 1;
@@ -91,12 +80,6 @@ public class TweetPubFragment extends BaseFragment implements
     private static final String TEXT_SOFTWARE = "#请输入软件名#";
 
     private String fromSharedTextContent = "";
-
-    @InjectView(R.id.view_pager)
-    ViewPager mViewPager;
-
-    @InjectView(R.id.indicator)
-    CirclePageIndicator mIndicator;
 
     @InjectView(R.id.ib_emoji_keyboard)
     ImageButton mIbEmoji;
@@ -113,9 +96,6 @@ public class TweetPubFragment extends BaseFragment implements
     @InjectView(R.id.tv_clear)
     TextView mTvClear;
 
-    @InjectView(R.id.ly_emoji)
-    View mLyEmoji;
-
     @InjectView(R.id.rl_img)
     View mLyImage;
 
@@ -123,15 +103,13 @@ public class TweetPubFragment extends BaseFragment implements
     ImageView mIvImage;
 
     @InjectView(R.id.et_content)
-    EmojiEditText mEtInput;
+    EditText mEtInput;
 
     private MenuItem mSendMenu;
 
-    private EmojiViewPagerAdapter mPagerAdapter;
-    private SoftKeyboardStateHelper mKeyboardHelper;
     private boolean mIsKeyboardVisible;
-    private boolean mNeedHideEmoji;
-    private int mCurrentKeyboardHeigh;
+
+    private final EmojiKeyboardFragment keyboardFragment = new EmojiKeyboardFragment();
 
     private String theLarge, theThumbnail;
     private File imgFile;
@@ -247,9 +225,6 @@ public class TweetPubFragment extends BaseFragment implements
                 false);
 
         initView(view);
-        mKeyboardHelper = new SoftKeyboardStateHelper(getActivity()
-                .findViewById(R.id.container));
-        mKeyboardHelper.addSoftKeyboardStateListener(this);
         return view;
     }
 
@@ -367,55 +342,25 @@ public class TweetPubFragment extends BaseFragment implements
         }
         mEtInput.setText(content);
         mEtInput.setSelection(mEtInput.getText().toString().length());
-        Map<String, Emoji> emojis = EmojiHelper.qq_emojis_nos;
-        // int pagerSize = emojis.size() / 20;
-        EmojiHelper.initEmojis();
 
-        List<Emoji> allEmojis = new ArrayList<Emoji>();
-        Iterator<String> itr1 = emojis.keySet().iterator();
-        while (itr1.hasNext()) {
-            Emoji ej = emojis.get(itr1.next());
-            allEmojis.add(new Emoji(ej.getResId(), ej.getValue(), ej
-                    .getValueNo(), ej.getIndex()));
-        }
-        Collections.sort(allEmojis);
-
-        List<List<Emoji>> pagers = new ArrayList<List<Emoji>>();
-        List<Emoji> es = null;
-        int size = 0;
-        boolean justAdd = false;
-        for (Emoji ej : allEmojis) {
-            if (size == 0) {
-                es = new ArrayList<Emoji>();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.emoji_keyboard_fragment, keyboardFragment)
+                .commit();
+        keyboardFragment.setOnEmojiClickListener(new OnEmojiClickListener() {
+            @Override
+            public void onEmojiClick(Emojicon v) {
+                InputHelper.input2OSC(mEtInput, v);
             }
-            es.add(new Emoji(ej.getResId(), ej.getValue(), ej.getValueNo()));
-            size++;
-            if (size == 20) {
-                pagers.add(es);
-                size = 0;
-                justAdd = true;
-            } else {
-                justAdd = false;
+
+            @Override
+            public void onDeleteButtonClick(View v) {
+                InputHelper.backspace(mEtInput);
             }
-        }
-        if (!justAdd && es != null) {
-            pagers.add(es);
-        }
-
-        int emojiHeight = caculateEmojiPanelHeight();
-
-        mPagerAdapter = new EmojiViewPagerAdapter(getActivity(), pagers,
-                emojiHeight, this);
-        mViewPager.setAdapter(mPagerAdapter);
-        mIndicator.setViewPager(mViewPager);
+        });
     }
 
     @Override
     public boolean onBackPressed() {
-        if (mLyEmoji.getVisibility() == View.VISIBLE) {
-            hideEmojiPanel();
-            return true;
-        }
         final String tweet = mEtInput.getText().toString();
         if (!TextUtils.isEmpty(tweet)) {
             CommonDialog dialog = DialogHelper
@@ -447,14 +392,7 @@ public class TweetPubFragment extends BaseFragment implements
     @Override
     public void onClick(View v) {
         final int id = v.getId();
-        if (id == R.id.ib_emoji_keyboard) {
-            if (mLyEmoji.getVisibility() == View.GONE) {
-                mNeedHideEmoji = true;
-                tryShowEmojiPanel();
-            } else {
-                tryHideEmojiPanel();
-            }
-        } else if (id == R.id.ib_picture) {
+        if (id == R.id.ib_picture) {
             handleSelectPicture();
         } else if (id == R.id.ib_mention) {
             insertMention();
@@ -466,6 +404,14 @@ public class TweetPubFragment extends BaseFragment implements
             mIvImage.setImageBitmap(null);
             mLyImage.setVisibility(View.GONE);
             imgFile = null;
+        } else if (id == R.id.ib_emoji_keyboard) {
+            if (!keyboardFragment.isShow()) {// emoji隐藏中
+                keyboardFragment.showEmojiKeyBoard();
+                keyboardFragment.hideSoftKeyboard();
+            } else {
+                keyboardFragment.hideEmojiKeyBoard();
+                keyboardFragment.showSoftKeyboard(mEtInput);
+            }
         }
     }
 
@@ -583,6 +529,13 @@ public class TweetPubFragment extends BaseFragment implements
         dialog.show();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        keyboardFragment.showSoftKeyboard(mEtInput);
+        keyboardFragment.hideEmojiKeyBoard();
+    }
+
     private void handleSelectPicture() {
         final CommonDialog dialog = DialogHelper
                 .getPinterestDialogCancelable(getActivity());
@@ -652,7 +605,6 @@ public class TweetPubFragment extends BaseFragment implements
             startActivityForResult(intent,
                     ImageUtils.REQUEST_CODE_GETIMAGE_BYCAMERA);
             break;
-
         case ACTION_TYPE_TOPIC:
             Bundle bundle = getArguments();
             if (bundle != null) {
@@ -666,76 +618,6 @@ public class TweetPubFragment extends BaseFragment implements
         default:
             break;
         }
-    }
-
-    private void tryShowEmojiPanel() {
-        if (mIsKeyboardVisible) {
-            TDevice.hideSoftKeyboard(getActivity().getCurrentFocus());
-        } else {
-            showEmojiPanel();
-        }
-    }
-
-    private void showEmojiPanel() {
-        mNeedHideEmoji = false;
-        mLyEmoji.setVisibility(View.VISIBLE);
-        mIbEmoji.setImageResource(R.drawable.compose_toolbar_keyboard_selector);
-    }
-
-    private void tryHideEmojiPanel() {
-        if (!mIsKeyboardVisible) {
-            TDevice.showSoftKeyboard(mEtInput);
-        } else {
-            hideEmojiPanel();
-        }
-    }
-
-    private void hideEmojiPanel() {
-        if (mLyEmoji.getVisibility() == View.VISIBLE) {
-            mLyEmoji.setVisibility(View.GONE);
-            mIbEmoji.setImageResource(R.drawable.compose_toolbar_emoji_selector);
-        }
-    }
-
-    @Override
-    public void onSoftKeyboardOpened(int keyboardHeightInPx) {
-        mIsKeyboardVisible = true;
-        hideEmojiPanel();
-    }
-
-    @Override
-    public void onSoftKeyboardClosed() {
-        mIsKeyboardVisible = false;
-        if (mNeedHideEmoji) {
-            showEmojiPanel();
-        }
-    }
-
-    private int caculateEmojiPanelHeight() {
-        if (mCurrentKeyboardHeigh == 0) {
-            mCurrentKeyboardHeigh = (int) TDevice.dpToPixel(180);
-        }
-        int emojiPanelHeight = (int) (mCurrentKeyboardHeigh - TDevice
-                .dpToPixel(20));
-        int emojiHeight = emojiPanelHeight / 3;
-
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, emojiPanelHeight);
-        mViewPager.setLayoutParams(lp);
-        if (mPagerAdapter != null) {
-            mPagerAdapter.setEmojiHeight(emojiHeight);
-        }
-        return emojiHeight;
-    }
-
-    @Override
-    public void onEmojiClick(Emoji emoji) {
-        mEtInput.insertEmoji(emoji);
-    }
-
-    @Override
-    public void onDelete() {
-        mEtInput.delete();
     }
 
     private void insertMention() {
@@ -793,4 +675,12 @@ public class TweetPubFragment extends BaseFragment implements
 
     @Override
     public void initData() {}
+
+    @Override
+    public void onDeleteButtonClick(View v) {}
+
+    @Override
+    public void onEmojiClick(Emojicon v) {
+        InputHelper.input2OSC(mEtInput, v);
+    }
 }

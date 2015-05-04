@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.Entity;
+import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.widget.MyLinkMovementMethod;
@@ -266,6 +267,8 @@ public class ListBaseAdapter<T extends Entity> extends BaseAdapter {
         contentView.setDispatchToParent(true);
         contentView.setLongClickable(false);
         Spanned span = Html.fromHtml(TweetTextView.modifyPath(content));
+        span = InputHelper.displayEmoji(contentView.getResources(),
+                span.toString());
         contentView.setText(span);
         MyURLSpan.parseLinkText(contentView, span);
     }

@@ -6,34 +6,27 @@ import java.io.Serializable;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
-import net.oschina.app.adapter.CommentAdapter.OnOperationListener;
 import net.oschina.app.adapter.TweetAdapter;
 import net.oschina.app.api.OperationResponseHandler;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetsList;
-import net.oschina.app.emoji.EmojiFragment;
-import net.oschina.app.emoji.EmojiFragment.EmojiTextListener;
 import net.oschina.app.service.ServerTaskUtils;
-import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 
 public class SoftWareTweetsFrament extends BaseListFragment<Tweet> implements
-        OnOperationListener, EmojiTextListener, OnItemLongClickListener {
+        OnItemLongClickListener {
 
     public static final String BUNDLE_KEY_ID = "BUNDLE_KEY_ID";
     protected static final String TAG = SoftWareTweetsFrament.class
@@ -42,18 +35,10 @@ public class SoftWareTweetsFrament extends BaseListFragment<Tweet> implements
 
     private int mId;
 
-    private EmojiFragment mEmojiFragment;
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         BaseActivity act = ((BaseActivity) activity);
-        FragmentTransaction trans = act.getSupportFragmentManager()
-                .beginTransaction();
-        mEmojiFragment = new EmojiFragment();
-        mEmojiFragment.setEmojiTextListener(this);
-        trans.replace(R.id.emoji_container, mEmojiFragment);
-        trans.commit();
         try {
             activity.findViewById(R.id.emoji_container).setVisibility(
                     View.VISIBLE);
@@ -106,14 +91,6 @@ public class SoftWareTweetsFrament extends BaseListFragment<Tweet> implements
     }
 
     @Override
-    public boolean onBackPressed() {
-        if (mEmojiFragment != null) {
-            return mEmojiFragment.onBackPressed();
-        }
-        return super.onBackPressed();
-    }
-
-    @Override
     protected void sendRequestData() {
         OSChinaApi.getSoftTweetList(mId, mCurrentPage, mHandler);
     }
@@ -121,7 +98,7 @@ public class SoftWareTweetsFrament extends BaseListFragment<Tweet> implements
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
             long id) {
-        final Tweet tweet = (Tweet) mAdapter.getItem(position);
+        final Tweet tweet = mAdapter.getItem(position);
         if (tweet == null) {
             return;
         }
@@ -133,30 +110,6 @@ public class SoftWareTweetsFrament extends BaseListFragment<Tweet> implements
         tweet.setAuthorid(AppContext.getInstance().getLoginUid());
         tweet.setBody(text);
         ServerTaskUtils.pubSoftWareTweet(getActivity(), tweet, mId);
-        mEmojiFragment.reset();
-    }
-
-    @Override
-    public void onSendClick(String text) {
-	if (mId == 0) {
-	    AppContext.showToast("无法获取该软件~");
-	    return;
-	}
-        if (!TDevice.hasInternet()) {
-            AppContext.showToastShort(R.string.tip_network_error);
-            return;
-        }
-        if (!AppContext.getInstance().isLogin()) {
-            UIHelper.showLoginActivity(getActivity());
-            return;
-        }
-        if (TextUtils.isEmpty(text)) {
-            AppContext.showToastShort(R.string.tip_comment_content_empty);
-            mEmojiFragment.requestFocusInput();
-            return;
-        }
-
-        handleComment(text);
     }
 
     class DeleteOperationResponseHandler extends OperationResponseHandler {
@@ -210,10 +163,5 @@ public class SoftWareTweetsFrament extends BaseListFragment<Tweet> implements
         // });
         // dialog.show();
         return true;
-    }
-
-    @Override
-    public void onMoreClick(Comment comment) {
-
     }
 }

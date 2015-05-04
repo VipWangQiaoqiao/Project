@@ -3,10 +3,6 @@ package net.oschina.app.widget;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.oschina.app.emoji.Emoji;
-import net.oschina.app.emoji.EmojiEditText;
-import net.oschina.app.emoji.EmojiHelper;
-import net.oschina.app.emoji.EmojiSpan;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.URLsUtils;
 import android.os.Parcel;
@@ -145,32 +141,30 @@ public class MyURLSpan extends URLSpan {
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            // 检查出所有表情
-            m = EMOJI.matcher(text);
-            while (m.find()) {
-                int start = m.start();
-                int e = m.end();
-                String value = m.group();
-                Emoji emoji = EmojiHelper.getEmoji(value);
-                if (emoji != null) {
-                    sp.setSpan(
-                            new EmojiSpan(value, EmojiEditText.emojiSize, 0),
-                            start, e, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                }
-            }
-
-            m = EMOJI_NUMBERS.matcher(text);
-            while (m.find()) {
-                int start = m.start();
-                int e = m.end();
-                String value = m.group();
-                Emoji emoji = EmojiHelper.getEmojiByNumber(value);
-                if (emoji != null) {
-                    sp.setSpan(
-                            new EmojiSpan(value, EmojiEditText.emojiSize, 1),
-                            start, e, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                }
-            }
+            // // 检查出所有表情
+            // m = EMOJI.matcher(text);
+            // while (m.find()) {
+            // int start = m.start();
+            // int e = m.end();
+            // String value = m.group();
+            // Emoji emoji = EmojiHelper.getEmoji(value);
+            // if (emoji != null) {
+            // sp.setSpan(new EmojiSpan(value, 0), start, e,
+            // Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            // }
+            // }
+            //
+            // m = EMOJI_NUMBERS.matcher(text);
+            // while (m.find()) {
+            // int start = m.start();
+            // int e = m.end();
+            // String value = m.group();
+            // Emoji emoji = EmojiHelper.getEmojiByNumber(value);
+            // if (emoji != null) {
+            // sp.setSpan(new EmojiSpan(value, 1), start, e,
+            // Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            // }
+            // }
 
             int end = text.length();
             URLSpan[] urls = sp.getSpans(0, end, URLSpan.class);
