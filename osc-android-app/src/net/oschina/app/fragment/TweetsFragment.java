@@ -48,8 +48,6 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
     protected static final String TAG = TweetsFragment.class.getSimpleName();
     private static final String CACHE_KEY_PREFIX = "tweetslist_";
 
-    private boolean mIsWatingLogin;
-
     class DeleteTweetResponseHandler extends OperationResponseHandler {
 
         DeleteTweetResponseHandler(Object... args) {
@@ -171,12 +169,10 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
 
     private void setupContent() {
         if (AppContext.getInstance().isLogin()) {
-            mIsWatingLogin = false;
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
             requestData(true);
         } else {
             mCatalog = TweetsList.CATALOG_ME;
-            mIsWatingLogin = true;
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
             mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
         }
@@ -187,15 +183,12 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
         if (mCatalog > 0) {
             if (AppContext.getInstance().isLogin()) {
                 mCatalog = AppContext.getInstance().getLoginUid();
-                mIsWatingLogin = false;
                 super.requestData(refresh);
             } else {
-                mIsWatingLogin = true;
                 mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
                 mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
             }
         } else {
-            mIsWatingLogin = false;
             super.requestData(refresh);
         }
     }

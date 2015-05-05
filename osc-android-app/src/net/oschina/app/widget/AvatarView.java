@@ -5,6 +5,7 @@ import net.oschina.app.util.UIHelper;
 
 import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
+import org.kymjs.kjframe.utils.StringUtils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -56,7 +57,7 @@ public class AvatarView extends CircleImageView {
     }
 
     public void setAvatarUrl(String url) {
-        if (url == null)
+        if (StringUtils.isEmpty(url))
             return;
         // 由于头像地址默认加了一段参数需要去掉
         int end = url.indexOf('?');

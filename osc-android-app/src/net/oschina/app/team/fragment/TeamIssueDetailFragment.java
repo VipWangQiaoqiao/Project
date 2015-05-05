@@ -144,7 +144,6 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 requestDetail();
             }
         });
@@ -418,7 +417,6 @@ public class TeamIssueDetailFragment extends BaseFragment implements
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
-                // TODO Auto-generated method stub
                 if (position == selIndex) {
                     dialog.dismiss();
                     return;
@@ -459,7 +457,6 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 updateChildIssueState(cell, teamIssue);
             }
         });
@@ -501,21 +498,18 @@ public class TeamIssueDetailFragment extends BaseFragment implements
                     @Override
                     public void onFailure(int arg0, Header[] arg1, byte[] arg2,
                             Throwable arg3) {
-                        // TODO Auto-generated method stub
                         AppContext.showToast("更新失败");
                         switchChildIssueState(childIssue);
                     }
 
                     @Override
                     public void onStart() {
-                        // TODO Auto-generated method stub
                         super.onStart();
                         showWaitDialog("正在更新状态...");
                     }
 
                     @Override
                     public void onFinish() {
-                        // TODO Auto-generated method stub
                         super.onFinish();
                         hideWaitDialog();
                     }
@@ -587,7 +581,6 @@ public class TeamIssueDetailFragment extends BaseFragment implements
         showWaitDialog("提交评论中...");
         OSChinaTeamApi.pubTeamIssueReply(mTeam.getId(), mTeamIssue.getId(),
                 str.toString(), new AsyncHttpResponseHandler() {
-
                     @Override
                     public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
                         TeamReply reply = XmlUtils.toBean(TeamReplyBean.class,

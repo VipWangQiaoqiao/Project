@@ -17,7 +17,6 @@ import net.oschina.app.cache.CacheManager;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
-import net.oschina.app.util.TLog;
 import net.oschina.app.util.XmlUtils;
 
 import org.apache.http.Header;
@@ -85,7 +84,6 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // 通过注解绑定控件
         ButterKnife.inject(this, view);
         initView(view);
     }
@@ -195,7 +193,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
         return new StringBuilder(getCacheKeyPrefix()).append("_")
                 .append(mCurrentPage).toString();
     }
-    
+
     // 是否需要自动刷新
     protected boolean needAutoRefresh() {
         return true;
@@ -273,7 +271,6 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
     @Override
     public void onResume() {
-        // TODO Auto-generated method stub
         super.onResume();
         if (onTimeRefresh()) {
             onRefresh();
@@ -372,13 +369,13 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
         if (data == null) {
             data = new ArrayList<T>();
         }
-        
+
         if (mResult != null && !mResult.OK()) {
-	    AppContext.showToast(mResult.getErrorMessage());
-	    // 注销登陆，密码已经修改，cookie，失效了
-	    AppContext.getInstance().Logout();
-	}
-        
+            AppContext.showToast(mResult.getErrorMessage());
+            // 注销登陆，密码已经修改，cookie，失效了
+            AppContext.getInstance().Logout();
+        }
+
         mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
         if (mCurrentPage == 0) {
             mAdapter.clear();
@@ -507,14 +504,15 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
                 new SaveCacheTask(getActivity(), data, getCacheKey()).execute();
                 list = data.getList();
                 if (list == null) {
-                    ResultBean resultBean = XmlUtils.toBean(ResultBean.class, reponseData);
+                    ResultBean resultBean = XmlUtils.toBean(ResultBean.class,
+                            reponseData);
                     if (resultBean != null) {
-                	mResult = resultBean.getResult();
+                        mResult = resultBean.getResult();
                     }
-        	}
+                }
             } catch (Exception e) {
                 e.printStackTrace();
-                
+
                 parserError = true;
             }
             return null;
@@ -553,7 +551,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
         if (mState == STATE_NONE && scrollEnd) {
             if (mAdapter.getState() == ListBaseAdapter.STATE_LOAD_MORE
-        	    || mAdapter.getState() == ListBaseAdapter.STATE_NETWORK_ERROR) {
+                    || mAdapter.getState() == ListBaseAdapter.STATE_NETWORK_ERROR) {
                 mCurrentPage++;
                 mState = STATE_LOADMORE;
                 requestData(false);
