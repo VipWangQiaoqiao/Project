@@ -72,6 +72,10 @@ public class KJEmojiFragment extends Fragment implements
         return mRootView;
     }
 
+    public LinearLayout getRootView() {
+        return mRootView;
+    }
+
     private void initWidget(View rootView) {
         // title
         mEmojiTitle = rootView.findViewById(R.id.emoji_title);

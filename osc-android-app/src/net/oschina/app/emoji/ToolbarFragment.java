@@ -33,14 +33,19 @@ public class ToolbarFragment extends BaseFragment {
 
     private String mCommentCountText;
 
+    private View mRootView;
+
     @Override
     public View onCreateView(LayoutInflater inflater,
             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_detail_tool_bar,
+        mRootView = inflater.inflate(R.layout.fragment_detail_tool_bar,
                 container, false);
+        initView(mRootView);
+        return mRootView;
+    }
 
-        initView(view);
-        return view;
+    public View getRootView() {
+        return mRootView;
     }
 
     @Override

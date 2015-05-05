@@ -175,6 +175,8 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
     public void onClickFlagButton() {
         getSupportFragmentManager()
                 .beginTransaction()
+                .setCustomAnimations(R.anim.footer_menu_slide_in,
+                        R.anim.footer_menu_slide_out)
                 .replace(R.id.emoji_keyboard,
                         toolFragment = new ToolbarFragment()).commit();
         toolFragment.setCommentCount(((BaseDetailFragment) currentFragment)
@@ -188,6 +190,8 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
                 case ACTION_WRITE_COMMENT:
                     getSupportFragmentManager()
                             .beginTransaction()
+                            .setCustomAnimations(R.anim.footer_menu_slide_in,
+                                    R.anim.footer_menu_slide_out)
                             .replace(R.id.emoji_keyboard,
                                     emojiFragment = new KJEmojiFragment())
                             .commit();
