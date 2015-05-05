@@ -9,12 +9,15 @@ import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
+import net.oschina.app.emoji.OnSendClickListener;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamIssue;
 import net.oschina.app.team.bean.TeamIssueCatalog;
 import net.oschina.app.team.bean.TeamIssueDetail;
 import net.oschina.app.team.bean.TeamRepliesList;
 import net.oschina.app.team.bean.TeamReply;
+import net.oschina.app.team.bean.TeamReplyBean;
+import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -32,6 +35,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,7 +57,8 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
  * 
  * @data 2015-2-12 下午3:44:47
  */
-public class TeamIssueDetailFragment extends BaseFragment {
+public class TeamIssueDetailFragment extends BaseFragment implements
+        OnSendClickListener {
 
     private Team mTeam;
 
@@ -147,9 +152,14 @@ public class TeamIssueDetailFragment extends BaseFragment {
 
     @Override
     public void initData() {
-        // TODO Auto-generated method stub
         super.initData();
         requestDetail();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((DetailActivity) getActivity()).emojiFragment.hideFlagButton();
     }
 
     private final AsyncHttpResponseHandler mDetailHandler = new AsyncHttpResponseHandler() {
@@ -568,4 +578,43 @@ public class TeamIssueDetailFragment extends BaseFragment {
         time.setText(StringUtils.friendly_time(reply.getCreateTime()));
         mLLComments.addView(cell);
     }
+
+    @Override
+    public void onClickSendButton(Editable str) {
+        if (mTeamIssue == null) {
+            return;
+        }
+        showWaitDialog("提交评论中...");
+        OSChinaTeamApi.pubTeamIssueReply(mTeam.getId(), mTeamIssue.getId(),
+                str.toString(), new AsyncHttpResponseHandler() {
+
+                    @Override
+                    public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+                        TeamReply reply = XmlUtils.toBean(TeamReplyBean.class,
+                                arg2).getTeamReply();
+                        if (reply != null) {
+                            addComment(reply);
+                        } else {
+                            AppContext.showToast("评论失败");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+                            Throwable arg3) {
+                        Result result = XmlUtils.toBean(ResultBean.class, arg2)
+                                .getResult();
+                        AppContext.showToast(result.getErrorMessage());
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        super.onFinish();
+                        hideWaitDialog();
+                    }
+                });
+    }
+
+    @Override
+    public void onClickFlagButton() {}
 }
