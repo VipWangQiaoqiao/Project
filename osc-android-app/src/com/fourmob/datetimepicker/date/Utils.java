@@ -1,4 +1,4 @@
-package com.fourmob.datetimepicker;
+package com.fourmob.datetimepicker.date;
 
 import java.util.Calendar;
 

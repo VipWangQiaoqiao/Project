@@ -26,9 +26,6 @@ import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
-
-import org.apache.http.Header;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -41,55 +38,21 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 
-import com.loopj.android.http.AsyncHttpResponseHandler;
-
 public class MessageDetailFragment extends BaseListFragment<Comment> implements
         OnItemLongClickListener {
     protected static final String TAG = ActiveFragment.class.getSimpleName();
     public static final String BUNDLE_KEY_FID = "BUNDLE_KEY_FID";
     public static final String BUNDLE_KEY_FNAME = "BUNDLE_KEY_FNAME";
     private static final String CACHE_KEY_PREFIX = "message_detail_list";
-    private boolean mIsWatingLogin;
 
     private int mFid;
     private String mFName;
-
-    private final AsyncHttpResponseHandler mPublicHandler = new AsyncHttpResponseHandler() {
-
-        @Override
-        public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-            hideWaitDialog();
-            try {
-                ResultBean resb = XmlUtils.toBean(ResultBean.class,
-                        new ByteArrayInputStream(arg2));
-                Result res = resb.getResult();
-                if (res.OK()) {
-                    AppContext
-                            .showToastShort(R.string.tip_message_public_success);
-                    mAdapter.addItem(0, resb.getComment());
-                } else {
-                    AppContext.showToastShort(res.getErrorMessage());
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                onFailure(arg0, arg1, arg2, e);
-            }
-        }
-
-        @Override
-        public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                Throwable arg3) {
-            hideWaitDialog();
-            AppContext.showToastShort(R.string.tip_message_public_faile);
-        }
-    };
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
             if (mErrorLayout != null) {
-                mIsWatingLogin = true;
                 mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
                 mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
             }
@@ -166,10 +129,8 @@ public class MessageDetailFragment extends BaseListFragment<Comment> implements
     protected void requestData(boolean refresh) {
         mErrorLayout.setErrorMessage("");
         if (AppContext.getInstance().isLogin()) {
-            mIsWatingLogin = false;
             super.requestData(refresh);
         } else {
-            mIsWatingLogin = true;
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
             mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
         }

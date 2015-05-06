@@ -130,7 +130,7 @@ public abstract class BaseDetailFragment extends BaseFragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMenuAdapter = new MenuAdapter(hasReportMenu());
+        mMenuAdapter = new MenuAdapter();
         setHasOptionsMenu(true);
 
         mController.getConfig().closeToast();
@@ -588,19 +588,7 @@ public abstract class BaseDetailFragment extends BaseFragment implements
     @SuppressLint("ViewHolder")
     private static class MenuAdapter extends BaseAdapter {
 
-        private boolean isFavorite;
-        private final boolean hasReport;
-
-        public MenuAdapter(boolean hasReport) {
-            this.hasReport = hasReport;
-        }
-
-        public boolean isFavorite() {
-            return isFavorite;
-        }
-
         public void setFavorite(boolean favorite) {
-            isFavorite = favorite;
             notifyDataSetChanged();
         }
 

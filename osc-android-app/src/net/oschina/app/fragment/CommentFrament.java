@@ -17,6 +17,8 @@ import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
+import net.oschina.app.emoji.KJEmojiFragment;
+import net.oschina.app.emoji.OnSendClickListener;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.util.HTMLUtil;
@@ -29,6 +31,7 @@ import org.apache.http.Header;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -38,7 +41,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 public class CommentFrament extends BaseListFragment<Comment> implements
-        OnItemLongClickListener {
+        OnItemLongClickListener, OnSendClickListener {
 
     public static final String BUNDLE_KEY_CATALOG = "BUNDLE_KEY_CATALOG";
     public static final String BUNDLE_KEY_BLOG = "BUNDLE_KEY_BLOG";
@@ -51,6 +54,7 @@ public class CommentFrament extends BaseListFragment<Comment> implements
 
     private int mId, mOwnerId;
     private boolean mIsBlogComment;
+    private final KJEmojiFragment emojiFragment = new KJEmojiFragment();
 
     private final AsyncHttpResponseHandler mCommentHandler = new AsyncHttpResponseHandler() {
 
@@ -88,8 +92,13 @@ public class CommentFrament extends BaseListFragment<Comment> implements
         }
     };
 
+    @Override
+    protected int getLayoutId() {
+        return R.layout.fragment_comment_listview;
+    };
+
     protected int getLayoutRes() {
-        return R.layout.fragment_pull_refresh_listview;
+        return R.layout.fragment_comment_listview;
     }
 
     @Override
@@ -117,6 +126,17 @@ public class CommentFrament extends BaseListFragment<Comment> implements
         int mode = WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN
                 | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
         getActivity().getWindow().setSoftInputMode(mode);
+
+        emojiFragment.setOnSendClickListener(this);
+
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.emoji_keyboard, emojiFragment).commit();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        emojiFragment.hideFlagButton();
     }
 
     @Override
@@ -174,35 +194,8 @@ public class CommentFrament extends BaseListFragment<Comment> implements
         final Comment comment = mAdapter.getItem(position);
         if (comment == null)
             return;
-    }
-
-    private void handleReplyComment(Comment comment, String text) {
-        showWaitDialog(R.string.progress_submit);
-        if (!AppContext.getInstance().isLogin()) {
-            UIHelper.showLoginActivity(getActivity());
-            return;
-        }
-
-        if (mIsBlogComment) {
-            OSChinaApi.replyBlogComment(mId, AppContext.getInstance()
-                    .getLoginUid(), text, comment.getId(), comment
-                    .getAuthorId(), mCommentHandler);
-        } else {
-            OSChinaApi.replyComment(mId, mCatalog, comment.getId(), comment
-                    .getAuthorId(), AppContext.getInstance().getLoginUid(),
-                    text, mCommentHandler);
-        }
-    }
-
-    private void handleComment(String text) {
-        showWaitDialog(R.string.progress_submit);
-        if (mIsBlogComment) {
-            OSChinaApi.publicBlogComment(mId, AppContext.getInstance()
-                    .getLoginUid(), text, mCommentHandler);
-        } else {
-            OSChinaApi.publicComment(mCatalog, mId, AppContext.getInstance()
-                    .getLoginUid(), text, 1, mCommentHandler);
-        }
+        emojiFragment.getEditText().setTag(comment);
+        emojiFragment.getEditText().setHint("回复：" + comment.getAuthor());
     }
 
     private void handleDeleteComment(Comment comment) {
@@ -285,4 +278,62 @@ public class CommentFrament extends BaseListFragment<Comment> implements
         dialog.show();
         return true;
     }
+
+    @Override
+    public void onClickSendButton(Editable text) {
+        if (emojiFragment.getEditText().getTag() != null) {
+            handleReplyComment((Comment) emojiFragment.getEditText().getTag(),
+                    text.toString());
+        } else {
+            sendReply(text.toString());
+        }
+    }
+
+    private void sendReply(String text) {
+        showWaitDialog(R.string.progress_submit);
+        if (mIsBlogComment) {
+            OSChinaApi.publicBlogComment(mId, AppContext.getInstance()
+                    .getLoginUid(), text, mCommentHandler);
+        } else {
+            OSChinaApi.publicComment(mCatalog, mId, AppContext.getInstance()
+                    .getLoginUid(), text, 1, mCommentHandler);
+        }
+        emojiFragment.clean();
+    }
+
+    private void handleReplyComment(Comment comment, String text) {
+        showWaitDialog(R.string.progress_submit);
+        if (!AppContext.getInstance().isLogin()) {
+            UIHelper.showLoginActivity(getActivity());
+            return;
+        }
+
+        if (mIsBlogComment) {
+            OSChinaApi.replyBlogComment(mId, AppContext.getInstance()
+                    .getLoginUid(), text, comment.getId(), comment
+                    .getAuthorId(), mCommentHandler);
+        } else {
+            OSChinaApi.replyComment(mId, mCatalog, comment.getId(), comment
+                    .getAuthorId(), AppContext.getInstance().getLoginUid(),
+                    text, mCommentHandler);
+        }
+        emojiFragment.clean();
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        if (emojiFragment.isShowEmojiKeyBoard()) {
+            emojiFragment.hideAllKeyBoard();
+            return true;
+        }
+        if (emojiFragment.getEditText().getTag() != null) {
+            emojiFragment.getEditText().setTag(null);
+            emojiFragment.getEditText().setHint("说点什么吧");
+            return true;
+        }
+        return super.onBackPressed();
+    }
+
+    @Override
+    public void onClickFlagButton() {}
 }

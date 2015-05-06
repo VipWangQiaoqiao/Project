@@ -23,6 +23,19 @@
             android:scrollingCache="true" />
     </android.support.v4.widget.SwipeRefreshLayout>
     
+     <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" >
+
+        <FrameLayout
+            android:id="@+id/emoji_keyboard"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/white" />
+
+    </FrameLayout>
 
     <net.oschina.app.ui.empty.EmptyLayout
         android:id="@+id/error_layout"

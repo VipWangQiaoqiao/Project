@@ -534,7 +534,6 @@ public class TweetDetailFragment extends
                         0, mCommentHandler);
             }
         } catch (Exception e) {
-            // 网速问题可能会造成空指针
         }
     }
 

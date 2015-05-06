@@ -3,7 +3,6 @@ package com.fourmob.datetimepicker.date;
 import java.security.InvalidParameterException;
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
-import java.util.Formatter;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -19,8 +18,6 @@ import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.view.MotionEvent;
 import android.view.View;
-
-import com.fourmob.datetimepicker.Utils;
 
 /**
  * 摘取自https://github.com/flavienlaurent/datetimepicker
@@ -67,7 +64,6 @@ public class SimpleMonthView extends View {
     protected int mTodayNumberColor;
 
     private final StringBuilder mStringBuilder;
-    private final Formatter mFormatter;
 
     protected int mFirstJulianDay = -1;
     protected int mFirstMonth = -1;
@@ -109,7 +105,6 @@ public class SimpleMonthView extends View {
         mMonthTitleBGColor = resources.getColor(R.color.circle_background);
 
         mStringBuilder = new StringBuilder(50);
-        mFormatter = new Formatter(mStringBuilder, Locale.getDefault());
 
         MINI_DAY_NUMBER_TEXT_SIZE = resources
                 .getDimensionPixelSize(R.dimen.day_number_size);

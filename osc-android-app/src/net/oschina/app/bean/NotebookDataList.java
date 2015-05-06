@@ -9,6 +9,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 public class NotebookDataList extends Entity implements
         ListEntity<NotebookData> {
 
+    private static final long serialVersionUID = 1L;
     @XStreamAlias("stickies")
     private List<NotebookData> list = new ArrayList<NotebookData>();
 

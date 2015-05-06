@@ -138,6 +138,8 @@ public class KJEmojiFragment extends Fragment implements
         mKeyboardHelper.addSoftKeyboardStateListener(this);
         if (getActivity() instanceof OnSendClickListener) {
             listener = (OnSendClickListener) getActivity();
+        }
+        if (listener != null) {
             mEmojiTitle.findViewById(R.id.emoji_title_send).setOnClickListener(
                     new OnClickListener() {
                         @Override
@@ -163,6 +165,10 @@ public class KJEmojiFragment extends Fragment implements
                 mEmojiPager.setCurrentItem(index);
             }
         };
+    }
+
+    public void setOnSendClickListener(OnSendClickListener l) {
+        this.listener = l;
     }
 
     /******************************* preference *************************************/

@@ -6,7 +6,6 @@ import java.util.List;
 import net.oschina.app.AppContext;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.util.UIHelper;
-import net.oschina.app.widget.MyLinkMovementMethod;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcel;
@@ -250,12 +249,14 @@ public class Tweet extends Entity implements Parcelable {
 
     public void setLikeUsers(Context contet, TextView likeUser, boolean limit) {
         // 构造多个超链接的html, 通过选中的位置来获取用户名
-        if (getLikeCount() > 0 && getLikeUser() != null && !getLikeUser().isEmpty()) {
+        if (getLikeCount() > 0 && getLikeUser() != null
+                && !getLikeUser().isEmpty()) {
             likeUser.setVisibility(View.VISIBLE);
             likeUser.setMovementMethod(LinkMovementMethod.getInstance());
             likeUser.setFocusable(false);
             likeUser.setLongClickable(false);
-            likeUser.setText(addClickablePart(contet, limit), BufferType.SPANNABLE);
+            likeUser.setText(addClickablePart(contet, limit),
+                    BufferType.SPANNABLE);
         } else {
             likeUser.setVisibility(View.GONE);
             likeUser.setText("");
@@ -266,14 +267,15 @@ public class Tweet extends Entity implements Parcelable {
      * @param str
      * @return
      */
-    private SpannableStringBuilder addClickablePart(final Context context, boolean limit) {
+    private SpannableStringBuilder addClickablePart(final Context context,
+            boolean limit) {
 
         StringBuilder sbBuilder = new StringBuilder();
         int showCunt = getLikeUser().size();
         if (limit && showCunt > 4) {
             showCunt = 4;
         }
-        
+
         // 如果已经点赞，始终让该用户在首位
         if (getIsLike() == 1) {
 
@@ -341,7 +343,8 @@ public class Tweet extends Entity implements Parcelable {
                 public void onClick(View widget) {
                     Bundle bundle = new Bundle();
                     bundle.putInt(BaseListFragment.BUNDLE_KEY_CATALOG, getId());
-                    UIHelper.showSimpleBack(context, SimpleBackPage.TWEET_LIKE_USER_LIST, bundle);
+                    UIHelper.showSimpleBack(context,
+                            SimpleBackPage.TWEET_LIKE_USER_LIST, bundle);
                 }
 
                 @Override

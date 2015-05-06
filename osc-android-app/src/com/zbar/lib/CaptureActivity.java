@@ -202,7 +202,6 @@ public class CaptureActivity extends BaseActivity implements Callback {
         }
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     protected void onResume() {
         super.onResume();
@@ -322,7 +321,6 @@ public class CaptureActivity extends BaseActivity implements Callback {
 
             @Override
             public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-                // TODO Auto-generated method stub
                 ResultBean result = XmlUtils.toBean(ResultBean.class, arg2);
                 if (result != null && result.getResult().OK()) {
                     AppContext.showToast(result.getResult().getErrorMessage());
@@ -337,7 +335,6 @@ public class CaptureActivity extends BaseActivity implements Callback {
             @Override
             public void onFailure(int arg0, Header[] arg1, byte[] arg2,
                     Throwable arg3) {
-                // TODO Auto-generated method stub
                 handler.sendEmptyMessage(R.id.restart_preview);
                 if (arg2 != null) {
                     AppContext.showToast(new String(arg2));
@@ -348,14 +345,12 @@ public class CaptureActivity extends BaseActivity implements Callback {
 
             @Override
             public void onStart() {
-                // TODO Auto-generated method stub
                 super.onStart();
                 showWaitDialog("已扫描，正在登陆...");
             }
 
             @Override
             public void onFinish() {
-                // TODO Auto-generated method stub
                 super.onFinish();
                 hideWaitDialog();
             }
@@ -454,7 +449,6 @@ public class CaptureActivity extends BaseActivity implements Callback {
         dialog.setMessage(text);
         dialog.setNegativeButton("复制", new DialogInterface.OnClickListener() {
 
-            @SuppressWarnings("deprecation")
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ClipboardManager cbm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);

@@ -26,8 +26,6 @@ public class SimpleBackActivity extends BaseActivity {
     protected WeakReference<Fragment> mFragment;
     protected int mPageValue = -1;
 
-    private MenuItem mSendMenu;
-
     @Override
     protected int getLayoutId() {
         return R.layout.activity_simple_fragment;
@@ -101,7 +99,6 @@ public class SimpleBackActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         if (mFragment.get() instanceof TweetsFragment) {
             getMenuInflater().inflate(R.menu.pub_tweet_menu, menu);
-            mSendMenu = menu.findItem(R.id.public_menu_send);
         }
         return super.onCreateOptionsMenu(menu);
     }

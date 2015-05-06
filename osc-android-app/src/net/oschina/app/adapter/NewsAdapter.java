@@ -6,7 +6,6 @@ import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.News;
 import net.oschina.app.bean.NewsList;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.URLsUtils;
 import android.annotation.SuppressLint;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,36 +85,6 @@ public class NewsAdapter extends ListBaseAdapter<News> {
 
         public ViewHolder(View view) {
             ButterKnife.inject(this, view);
-        }
-    }
-
-    /**
-     * URL解析判断链接是否为站内链接
-     * 
-     * @param data
-     * @return
-     */
-    private boolean hasExternalLink(News data) {
-        // if (!StringUtils.isEmpty(data.getNewType().getEventUrl())) {
-        // return false;
-        // }
-        //
-        // if (StringUtils.isEmpty(data.getUrl())) {
-        // switch (data.getNewType().getType()) {
-        // case News.NEWSTYPE_NEWS:
-        // case News.NEWSTYPE_SOFTWARE:
-        // case News.NEWSTYPE_POST:
-        // case News.NEWSTYPE_BLOG:
-        // return false;
-        // default:
-        // return true;
-        // }
-        // }
-        // return true;
-        if (!StringUtils.isEmpty(data.getUrl())) {
-            return URLsUtils.parseURL(data.getUrl()) == null;
-        } else {
-            return false;
         }
     }
 }

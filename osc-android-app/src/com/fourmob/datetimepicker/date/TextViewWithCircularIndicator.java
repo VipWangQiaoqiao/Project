@@ -20,7 +20,6 @@ public class TextViewWithCircularIndicator extends TextView {
     private final Paint mCirclePaint = new Paint();
     private boolean mDrawCircle;
     private final String mItemIsSelectedText;
-    private final int mRadius;
 
     public TextViewWithCircularIndicator(Context context,
             AttributeSet attributeSet) {
@@ -28,8 +27,6 @@ public class TextViewWithCircularIndicator extends TextView {
 
         Resources res = context.getResources();
         mCircleColor = res.getColor(R.color.blue);
-        mRadius = res
-                .getDimensionPixelOffset(R.dimen.month_select_circle_radius);
         mItemIsSelectedText = "已选择";
 
         init();

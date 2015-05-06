@@ -70,7 +70,6 @@ public class AppContext extends BaseApplication {
 
         // Bitmap缓存地址
         BitmapConfig.CACHEPATH = "OSChina/imagecache";
-        BitmapConfig.CACHE_FILENAME_PREFIX = "OSChina_";
     }
 
     private void initLogin() {

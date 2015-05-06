@@ -1,7 +1,5 @@
 package net.oschina.app.base;
 
-import java.lang.reflect.Method;
-
 import net.oschina.app.AppManager;
 import net.oschina.app.R;
 import net.oschina.app.interf.BaseViewInterface;
@@ -21,7 +19,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -252,32 +249,11 @@ public abstract class BaseActivity extends ActionBarActivity implements
             }
         }
     }
-    
-    @Override  
-    public boolean onMenuOpened(int featureId, Menu menu) {  
-	
-        //setOverflowIconVisible(featureId, menu);  
-        return super.onMenuOpened(featureId, menu);  
-    }  
-  
-    /** 
-     * 显示OverflowMenu的Icon 
-     *  
-     * @param featureId 
-     * @param menu 
-     */  
-    private void setOverflowIconVisible(int featureId, Menu menu) {  
-        if (featureId == Window.FEATURE_ACTION_BAR && menu != null) {  
-            if (menu.getClass().getSimpleName().equals("MenuBuilder")) {  
-                try {  
-                    Method m = menu.getClass().getDeclaredMethod(  
-                            "setOptionalIconsVisible", Boolean.TYPE);  
-                    m.setAccessible(true);  
-                    m.invoke(menu, true);  
-                } catch (Exception e) {  
-                    //Log.d("OverflowIconVisible", e.getMessage());  
-                }  
-            }  
-        }  
-    } 
+
+    @Override
+    public boolean onMenuOpened(int featureId, Menu menu) {
+
+        // setOverflowIconVisible(featureId, menu);
+        return super.onMenuOpened(featureId, menu);
+    }
 }
