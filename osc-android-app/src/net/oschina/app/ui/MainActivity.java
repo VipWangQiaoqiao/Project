@@ -74,12 +74,12 @@ public class MainActivity extends ActionBarActivity implements
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Constants.INTENT_ACTION_NOTICE)) {
-        	mNotice = (Notice) intent.getSerializableExtra("notice_bean");
+                mNotice = (Notice) intent.getSerializableExtra("notice_bean");
                 int atmeCount = mNotice.getAtmeCount();// @我
                 int msgCount = mNotice.getMsgCount();// 留言
                 int reviewCount = mNotice.getReviewCount();// 评论
                 int newFansCount = mNotice.getNewFansCount();// 新粉丝
-                int newLikeCount= mNotice.getNewLikeCount();// 收到赞
+                int newLikeCount = mNotice.getNewLikeCount();// 收到赞
                 int activeCount = atmeCount + reviewCount + msgCount
                         + newFansCount + newLikeCount;
 
@@ -88,16 +88,16 @@ public class MainActivity extends ActionBarActivity implements
                     ((MyInformationFragment) fragment).setNotice();
                 } else {
                     if (activeCount > 0) {
-                	mBvNotice.setText(activeCount + "");
-                	mBvNotice.show();
+                        mBvNotice.setText(activeCount + "");
+                        mBvNotice.show();
                     } else {
-                	mBvNotice.hide();
+                        mBvNotice.hide();
                         mNotice = null;
                     }
                 }
             } else if (intent.getAction()
                     .equals(Constants.INTENT_ACTION_LOGOUT)) {
-        	mBvNotice.hide();
+                mBvNotice.hide();
                 mNotice = null;
             }
         }
@@ -146,9 +146,7 @@ public class MainActivity extends ActionBarActivity implements
             return;
         String action = intent.getAction();
         if (action != null && action.equals(Intent.ACTION_VIEW)) {
-
             UIHelper.showUrlRedirect(this, intent.getDataString());
-
         } else if (intent.getBooleanExtra("NOTICE", false)) {
             notifitcationBarClick(intent);
         }
@@ -394,10 +392,10 @@ public class MainActivity extends ActionBarActivity implements
         }
         return super.onKeyDown(keyCode, event);
     }
-    
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         // TODO Auto-generated method stub
-	// 当 API Level > 11 调用这个方法可能导致奔溃（android.os.Build.VERSION.SDK_INT > 11）
+        // 当 API Level > 11 调用这个方法可能导致奔溃（android.os.Build.VERSION.SDK_INT > 11）
     }
 }
