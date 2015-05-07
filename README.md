@@ -10,7 +10,7 @@
     * 包括资讯、动弹两个模块，采用[ViewPagerFragment](http://git.oschina.net/oschina/osc-android-app/blob/master/osc-android-app/src/net/oschina/app/viewpagerfragment/NewsViewPagerFragment.java)根据滑动到不同页面显示不同信息。  
 3. 详情界面  
     * 详情界面包括[博客详情](http://git.oschina.net/oschina/osc-android-app/blob/master/osc-android-app/src/net/oschina/app/fragment/BlogDetailFragment.java)，[动弹详情](http://git.oschina.net/oschina/osc-android-app/blob/master/osc-android-app/src/net/oschina/app/fragment/TweetDetailFragment.java)，[新闻详情](http://git.oschina.net/oschina/osc-android-app/blob/master/osc-android-app/src/net/oschina/app/fragment/NewsDetailFragment.java)，[帖子详情](http://git.oschina.net/oschina/osc-android-app/blob/master/osc-android-app/src/net/oschina/app/fragment/PostDetailFragment.java)， [活动详情](http://git.oschina.net/oschina/osc-android-app/blob/master/osc-android-app/src/net/oschina/app/fragment/EventDetailFragment.java)等……是通过在Fragment中的WebView直接loadData()加载一段html数据并显示。  
-    而详情Fragment的显示则是通过一个外部DetailActivity，来根据传入的参数不同来加载不同的Fragment。  
+    * 而详情Fragment的显示则是通过一个外部DetailActivity，来根据传入的参数不同来加载不同的Fragment。  
 4. 链接跳转  
     * 整个应用打开链接的规则都定义在UIHelper.openBrowser()方法中，本方法会根据不同的url去解析，如果是www.oschina.net的链接，则会调用相应的界面去展示；如果是git.oschina.net我们目前会使用手机自带的浏览器打开(之后会改为使用[OscGit客户端](http://git.oschina.net/oschina/git-osc-android-project)打开)；如果不是oschina的站内链接，则使用内置浏览器打开。  
 5. 侧滑菜单  
