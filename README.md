@@ -18,13 +18,13 @@
 
 ##依赖包介绍
 1. jar包依赖  
-  * 网络请求库 *android-async-http* ：http://loopj.com/android-async-http/  
-  注解绑定控件 *butterknife* http://jakewharton.github.io/butterknife/  
-  网络图片加载库 *KJFrameForAndroid* http://git.oschina.net/kymjs/KJFrameForAndroid  
-  XML解析库 *xstream* http://xstream.codehaus.org/  
+  * 网络请求库 **android-async-http** ：http://loopj.com/android-async-http/  
+  * 注解绑定控件 **butterknife** http://jakewharton.github.io/butterknife/  
+  * 网络图片加载库 **KJFrameForAndroid** http://git.oschina.net/kymjs/KJFrameForAndroid  
+  * XML解析库 **xstream** http://xstream.codehaus.org/  
 2. 源码依赖  
-  * *PhotoView-library* ：用于图片预览界面展示 
-  * *UmengShareLib* ：用于分享到第三方平台
+  * **PhotoView-library** ：用于图片预览界面展示 
+  * **UmengShareLib** ：用于分享到第三方平台
 
 ##开源协议
  Copyright (C) 2014, The OSChina Open Source Project
