@@ -25,6 +25,9 @@ import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
@@ -205,6 +208,18 @@ public class PostDetailFragment extends BaseDetailFragment implements
         OSChinaApi.publicComment(CommentList.CATALOG_POST, mPostId, AppContext
                 .getInstance().getLoginUid(), str.toString(), 0,
                 mCommentHandler);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.refresh_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        sendRequestData();
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
