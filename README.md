@@ -14,7 +14,7 @@
 4. 链接跳转  
     * 整个应用打开链接的规则都定义在UIHelper.openBrowser()方法中，本方法会根据不同的url去解析，如果是www.oschina.net的链接，则会调用相应的界面去展示；如果是git.oschina.net我们目前会使用手机自带的浏览器打开(之后会改为使用[OscGit客户端](http://git.oschina.net/oschina/git-osc-android-project)打开)；如果不是oschina的站内链接，则使用内置浏览器打开。  
 5. 侧滑菜单  
-    * [侧滑菜单](http://git.oschina.net/oschina/osc-android-app/blob/master/osc-android-app/src/net/oschina/app/ui/NavigationDrawerFragment.java)采用系统的DrawerLayout实现。关于很多朋友好奇的左上角箭头，是采用的开源控件(准确的说不应该是控件而是一个Drawable)[DrawerArrowDrawable](http://git.oschina.net/oschina/osc-android-app/blob/master/osc-android-app/src/net/oschina/app/widget/DrawerArrowDrawable.java)
+    * [侧滑菜单](http://git.oschina.net/oschina/osc-android-app/blob/master/osc-android-app/src/net/oschina/app/ui/NavigationDrawerFragment.java)采用系统的DrawerLayout实现。关于很多朋友好奇的左上角箭头，是采用的开源控件[DrawerArrowDrawable](http://git.oschina.net/oschina/osc-android-app/blob/master/osc-android-app/src/net/oschina/app/widget/DrawerArrowDrawable.java)(准确的说不应该是控件而是一个Drawable)
 
 ##依赖包介绍
 1. jar包依赖  
