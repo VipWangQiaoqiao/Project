@@ -98,7 +98,7 @@ public class SimpleBackActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (mFragment.get() instanceof TweetsFragment) {
-            getMenuInflater().inflate(R.menu.pub_tweet_menu, menu);
+            getMenuInflater().inflate(R.menu.pub_topic_menu, menu);
         }
         return super.onCreateOptionsMenu(menu);
     }

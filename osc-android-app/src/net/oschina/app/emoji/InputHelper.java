@@ -57,9 +57,15 @@ public class InputHelper {
      * Support OSChina Client，due to the need to support both 2 Format<br>
      * (I'm drunk, I go home)
      */
-    public static SpannableString displayEmoji(Resources res, String str) {
-        // 构建文字span
-        SpannableString spannable = new SpannableString(str);
+    public static Spannable displayEmoji(Resources res, CharSequence s) {
+        String str = s.toString();
+        Spannable spannable = null;
+        if (s instanceof Spannable) {
+            spannable = (Spannable) s;
+        } else {
+            // 构建文字span
+            spannable = new SpannableString(str);
+        }
         for (int i = 0; i < str.length(); i++) {
             int index1 = str.indexOf("[", i);
             int length1 = str.indexOf("]", index1 + 1);
@@ -111,7 +117,7 @@ public class InputHelper {
                     emojicon.getEmojiStr()));
         } else {
             // 将已选中的部分替换为表情(当长按文字时会多选刷中很多文字)
-            SpannableString str = displayEmoji(editText.getResources(),
+            Spannable str = displayEmoji(editText.getResources(),
                     emojicon.getEmojiStr());
             editText.getText().replace(Math.min(start, end),
                     Math.max(start, end), str, 0, str.length());

@@ -38,9 +38,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 
 /**
- * @author HuangWenwei
- * 
- * @date 2014年10月10日
+ * @author kymjs (http://www.kymjs.com)
  */
 public class TweetsFragment extends BaseListFragment<Tweet> implements
         OnItemLongClickListener, OnTabReselectListener {

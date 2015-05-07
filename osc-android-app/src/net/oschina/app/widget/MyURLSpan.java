@@ -141,31 +141,6 @@ public class MyURLSpan extends URLSpan {
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            // // 检查出所有表情
-            // m = EMOJI.matcher(text);
-            // while (m.find()) {
-            // int start = m.start();
-            // int e = m.end();
-            // String value = m.group();
-            // Emoji emoji = EmojiHelper.getEmoji(value);
-            // if (emoji != null) {
-            // sp.setSpan(new EmojiSpan(value, 0), start, e,
-            // Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            // }
-            // }
-            //
-            // m = EMOJI_NUMBERS.matcher(text);
-            // while (m.find()) {
-            // int start = m.start();
-            // int e = m.end();
-            // String value = m.group();
-            // Emoji emoji = EmojiHelper.getEmojiByNumber(value);
-            // if (emoji != null) {
-            // sp.setSpan(new EmojiSpan(value, 1), start, e,
-            // Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            // }
-            // }
-
             int end = text.length();
             URLSpan[] urls = sp.getSpans(0, end, URLSpan.class);
             URLSpan[] htmlurls = spanhtml != null ? spanhtml.getSpans(0, end,
@@ -187,7 +162,7 @@ public class MyURLSpan extends URLSpan {
                             Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
                     continue;
                 }
-                style.removeSpan(url);// 只需要移除之前的URL样式，再重新设置
+                style.removeSpan(url); // 只需要移除之前的URL样式，再重新设置
                 MyURLSpan myURLSpan = new MyURLSpan(url.getURL());
                 style.setSpan(myURLSpan, sp.getSpanStart(url),
                         sp.getSpanEnd(url), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);

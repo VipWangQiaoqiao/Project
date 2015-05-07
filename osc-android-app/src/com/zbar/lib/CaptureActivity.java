@@ -545,12 +545,8 @@ public class CaptureActivity extends BaseActivity implements Callback {
     }
 
     @Override
-    public void initView() {
-
-    }
+    public void initView() {}
 
     @Override
-    public void initData() {
-
-    }
+    public void initData() {}
 }

@@ -138,8 +138,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         vh.content.setDispatchToParent(true);
         vh.content.setLongClickable(false);
 
-        Spanned span = Html.fromHtml(TweetTextView.modifyPath(tweet.getBody()
-                .trim()));
+        Spanned span = Html.fromHtml(tweet.getBody().trim());
 
         if (!StringUtils.isEmpty(tweet.getAttach())) {
             if (recordBitmap == null) {
@@ -147,14 +146,13 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             }
             ImageSpan recordImg = new ImageSpan(parent.getContext(),
                     recordBitmap);
-            SpannableString str = new SpannableString("c" + span);
+            SpannableString str = new SpannableString("c");
             str.setSpan(recordImg, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-            str = InputHelper.displayEmoji(context.getResources(),
-                    span.toString());
             vh.content.setText(str);
+            span = InputHelper.displayEmoji(context.getResources(), span);
+            vh.content.append(span);
         } else {
-            span = InputHelper.displayEmoji(context.getResources(),
-                    span.toString());
+            span = InputHelper.displayEmoji(context.getResources(), span);
             vh.content.setText(span);
         }
         MyURLSpan.parseLinkText(vh.content, span);
