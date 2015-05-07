@@ -322,12 +322,14 @@ public class CaptureActivity extends BaseActivity implements Callback {
             @Override
             public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
                 ResultBean result = XmlUtils.toBean(ResultBean.class, arg2);
-                if (result != null && result.getResult().OK()) {
+                if (result != null && result.getResult() != null
+                        && result.getResult().OK()) {
                     AppContext.showToast(result.getResult().getErrorMessage());
                     finish();
                 } else {
                     handler.sendEmptyMessage(R.id.restart_preview);
-                    AppContext.showToast(result != null ? result.getResult()
+                    AppContext.showToast(result != null
+                            && result.getResult() != null ? result.getResult()
                             .getErrorMessage() : "登陆失败");
                 }
             }
