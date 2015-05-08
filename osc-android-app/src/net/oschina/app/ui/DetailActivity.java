@@ -48,8 +48,8 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
     public static final String BUNDLE_KEY_DISPLAY_TYPE = "BUNDLE_KEY_DISPLAY_TYPE";
 
     private OnSendClickListener currentFragment;
-    public KJEmojiFragment emojiFragment;
-    public ToolbarFragment toolFragment;
+    public KJEmojiFragment emojiFragment = new KJEmojiFragment();
+    public ToolbarFragment toolFragment = new ToolbarFragment();
 
     @Override
     protected int getLayoutId() {
@@ -140,48 +140,8 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
 
     @Override
     public void initView() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.emoji_keyboard,
-                        emojiFragment = new KJEmojiFragment()).commit();
-    }
-
-    @Override
-    public void initData() {}
-
-    @Override
-    public void onClickSendButton(Editable str) {
-        currentFragment.onClickSendButton(str);
-        emojiFragment.clean();
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (emojiFragment.isShowEmojiKeyBoard()) {
-                emojiFragment.hideAllKeyBoard();
-                return true;
-            }
-            if (emojiFragment.getEditText().getTag() != null) {
-                emojiFragment.getEditText().setTag(null);
-                emojiFragment.getEditText().setHint("说点什么吧");
-                return true;
-            }
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    public void onClickFlagButton() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(R.anim.footer_menu_slide_in,
-                        R.anim.footer_menu_slide_out)
-                .replace(R.id.emoji_keyboard,
-                        toolFragment = new ToolbarFragment()).commit();
-        toolFragment.setCommentCount(((BaseDetailFragment) currentFragment)
-                .getCommentCount());
-
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.emoji_keyboard, toolFragment).commit();
         toolFragment.setOnActionClickListener(new OnActionClickListener() {
             @Override
             public void onActionClick(ToolAction action) {
@@ -192,8 +152,7 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
                             .beginTransaction()
                             .setCustomAnimations(R.anim.footer_menu_slide_in,
                                     R.anim.footer_menu_slide_out)
-                            .replace(R.id.emoji_keyboard,
-                                    emojiFragment = new KJEmojiFragment())
+                            .replace(R.id.emoji_keyboard, emojiFragment)
                             .commit();
                     break;
                 case ACTION_FAVORITE:
@@ -215,5 +174,44 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
                 }
             }
         });
+    }
+
+    @Override
+    public void initData() {}
+
+    @Override
+    public void onClickSendButton(Editable str) {
+        currentFragment.onClickSendButton(str);
+        emojiFragment.clean();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            try {
+                if (emojiFragment.isShowEmojiKeyBoard()) {
+                    emojiFragment.hideAllKeyBoard();
+                    return true;
+                }
+                if (emojiFragment.getEditText().getTag() != null) {
+                    emojiFragment.getEditText().setTag(null);
+                    emojiFragment.getEditText().setHint("说点什么吧");
+                    return true;
+                }
+            } catch (NullPointerException e) {
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onClickFlagButton() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(R.anim.footer_menu_slide_in,
+                        R.anim.footer_menu_slide_out)
+                .replace(R.id.emoji_keyboard, toolFragment).commit();
+        toolFragment.setCommentCount(((BaseDetailFragment) currentFragment)
+                .getCommentCount());
     }
 }

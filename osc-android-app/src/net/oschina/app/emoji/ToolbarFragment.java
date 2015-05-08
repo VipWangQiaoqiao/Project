@@ -129,6 +129,10 @@ public class ToolbarFragment extends BaseFragment {
         }
     }
 
+    public void hideReportButton() {
+        mActionReport.setVisibility(View.GONE);
+    }
+
     @Override
     public void initData() {}
 }

@@ -234,7 +234,11 @@ public class KJEmojiFragment extends Fragment implements
     }
 
     public boolean isShowEmojiKeyBoard() {
-        return mCBox.isChecked();
+        if (mCBox == null) {
+            return false;
+        } else {
+            return mCBox.isChecked();
+        }
     }
 
     /**

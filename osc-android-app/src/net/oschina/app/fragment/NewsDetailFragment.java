@@ -15,6 +15,7 @@ import net.oschina.app.bean.News;
 import net.oschina.app.bean.News.Relative;
 import net.oschina.app.bean.NewsDetail;
 import net.oschina.app.emoji.OnSendClickListener;
+import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -216,6 +217,12 @@ public class NewsDetailFragment extends BaseDetailFragment implements
         OSChinaApi.publicComment(CommentList.CATALOG_NEWS, mNewsId, AppContext
                 .getInstance().getLoginUid(), str.toString(), 0,
                 mCommentHandler);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((DetailActivity) getActivity()).toolFragment.hideReportButton();
     }
 
     @Override
