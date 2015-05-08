@@ -409,6 +409,12 @@ public class UIHelper {
     public static void showUrlRedirect(Context context, String url) {
         if (url == null)
             return;
+        if (url.contains("city.oschina.net/")) {
+            int id = StringUtils.toInt(url.substring(url.lastIndexOf('/') + 1));
+            UIHelper.showEventDetail(context, id);
+            return;
+        }
+
         if (url.startsWith(SHOWIMAGE)) {
             String realUrl = url.substring(SHOWIMAGE.length());
             try {
