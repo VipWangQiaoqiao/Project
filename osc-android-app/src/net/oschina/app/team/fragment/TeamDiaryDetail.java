@@ -4,13 +4,16 @@ import java.util.List;
 
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BaseFragment;
+import net.oschina.app.emoji.OnSendClickListener;
 import net.oschina.app.team.adapter.DiaryDetailAdapter;
 import net.oschina.app.team.bean.TeamDiary;
 import net.oschina.app.team.bean.TeamDiaryDetailBean;
 import net.oschina.app.team.bean.TeamRepliesList;
 import net.oschina.app.team.bean.TeamReply;
 import net.oschina.app.team.viewpagefragment.TeamDiaryFragment;
+import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
@@ -18,12 +21,12 @@ import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
 
 import org.apache.http.Header;
-import org.kymjs.kjframe.utils.KJLoger;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.text.Editable;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
@@ -46,9 +49,8 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
  * 
  * @author kymjs (https://github.com/kymjs)
  */
-public class TeamDiaryDetail extends BaseFragment {
-
-    private static final String CACHE_KEY_PREFIX = "team_diary_detail_";
+public class TeamDiaryDetail extends BaseFragment implements
+        OnSendClickListener {
 
     @InjectView(R.id.listview)
     ListView mList;
@@ -89,7 +91,6 @@ public class TeamDiaryDetail extends BaseFragment {
             diaryData = new TeamDiary();
             Log.e("debug", getClass().getSimpleName() + "diaryData初始化异常");
         }
-        KJLoger.debug("TeamDiaryDetail=81===id=：" + diaryData.getId());
     }
 
     @Override
@@ -221,6 +222,12 @@ public class TeamDiaryDetail extends BaseFragment {
                 });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((DetailActivity) getActivity()).emojiFragment.hideFlagButton();
+    }
+
     private void initCommitLayout() {
         OSChinaApi.getDiaryComment(teamid, diaryData.getId(),
                 new AsyncHttpResponseHandler() {
@@ -295,4 +302,20 @@ public class TeamDiaryDetail extends BaseFragment {
         str = str.replaceAll("<\\s*img\\s+([^>]*)\\s*>", "").trim();
         return Html.fromHtml(str);
     }
+
+    @Override
+    public void onClickSendButton(Editable str) {
+        OSChinaTeamApi.pubTeamTweetReply(teamid, 118, diaryData.getId(),
+                str.toString(), new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {}
+
+                    @Override
+                    public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+                            Throwable arg3) {}
+                });
+    }
+
+    @Override
+    public void onClickFlagButton() {}
 }

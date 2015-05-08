@@ -140,8 +140,16 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
 
     @Override
     public void initView() {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.emoji_keyboard, toolFragment).commit();
+        if (currentFragment instanceof TweetDetailFragment
+                || currentFragment instanceof TeamTweetDetailFragment
+                || currentFragment instanceof TeamDiaryDetail
+                || currentFragment instanceof TeamDiscussDetailFragment) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.emoji_keyboard, emojiFragment).commit();
+        } else {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.emoji_keyboard, toolFragment).commit();
+        }
         toolFragment.setOnActionClickListener(new OnActionClickListener() {
             @Override
             public void onActionClick(ToolAction action) {
@@ -174,6 +182,7 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
                 }
             }
         });
+
     }
 
     @Override
@@ -211,7 +220,10 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
                 .setCustomAnimations(R.anim.footer_menu_slide_in,
                         R.anim.footer_menu_slide_out)
                 .replace(R.id.emoji_keyboard, toolFragment).commit();
-        toolFragment.setCommentCount(((BaseDetailFragment) currentFragment)
-                .getCommentCount());
+        try {
+            toolFragment.setCommentCount(((BaseDetailFragment) currentFragment)
+                    .getCommentCount());
+        } catch (Exception e) {
+        }
     }
 }

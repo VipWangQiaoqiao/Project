@@ -246,13 +246,19 @@ public class KJEmojiFragment extends Fragment implements
      */
     @Override
     public void onSoftKeyboardOpened(int keyboardHeightInPx) {
-        mEmojiBottom.setVisibility(View.GONE);
-        mEmojiContent.setVisibility(View.GONE);
-        mCBox.setChecked(false);
+        if (mEmojiBottom != null && mEmojiContent != null) {
+            mEmojiBottom.setVisibility(View.GONE);
+            mEmojiContent.setVisibility(View.GONE);
+        }
+        if (mCBox != null) {
+            mCBox.setChecked(false);
+        }
     }
 
     public void hideFlagButton() {
-        mCboxFlag.setVisibility(View.GONE);
+        if (mCboxFlag != null) {
+            mCboxFlag.setVisibility(View.GONE);
+        }
     }
 
     @Override
