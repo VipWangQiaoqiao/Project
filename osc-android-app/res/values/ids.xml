@@ -7,5 +7,6 @@
     <item name="decode_succeeded" type="id"/>
     <item name="restart_preview" type="id"/>
     <item name="quit" type="id"/>
+    <item name="return_scan_result" type="id"/>
 
 </resources>

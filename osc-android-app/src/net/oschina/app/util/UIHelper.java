@@ -49,6 +49,8 @@ import net.oschina.app.widget.AvatarView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.dtr.zxing.activity.CaptureActivity;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ComponentName;
@@ -78,7 +80,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ZoomButtonsController;
 
-import com.zbar.lib.CaptureActivity;
 
 /**
  * 界面帮助类
