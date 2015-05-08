@@ -12,12 +12,12 @@ import net.oschina.app.ui.dialog.ImageMenuDialog.OnMenuClickListener;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.HackyViewPager;
-import net.oschina.app.widget.PhotoImageView;
 
 import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
 
-import uk.co.senab.photoview.PhotoViewAttacher.OnFinishListener;
+import uk.co.senab.photoview.PhotoView;
+import uk.co.senab.photoview.PhotoViewAttacher.OnPhotoTapListener;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -223,9 +223,9 @@ public class ImagePreviewActivity extends BaseActivity implements
             } else {
                 vh = (ViewHolder) convertView.getTag();
             }
-            vh.image.setOnFinishListener(new OnFinishListener() {
+            vh.image.setOnFinishListener(new OnPhotoTapListener() {
                 @Override
-                public void onClick() {
+                public void onPhotoTap(View view, float x, float y) {
                     ImagePreviewActivity.this.finish();
                 }
             });
@@ -256,11 +256,11 @@ public class ImagePreviewActivity extends BaseActivity implements
     }
 
     static class ViewHolder {
-        PhotoImageView image;
+        PhotoView image;
         ProgressBar progress;
 
         ViewHolder(View view) {
-            image = (PhotoImageView) view.findViewById(R.id.photoview);
+            image = (PhotoView) view.findViewById(R.id.photoview);
             progress = (ProgressBar) view.findViewById(R.id.progress);
         }
     }

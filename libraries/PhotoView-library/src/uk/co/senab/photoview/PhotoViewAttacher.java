@@ -32,7 +32,6 @@ import android.graphics.Matrix;
 import android.graphics.Matrix.ScaleToFit;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.os.Handler;
 import android.util.FloatMath;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -48,54 +47,6 @@ import android.widget.ImageView.ScaleType;
 
 public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
         OnGestureListener, ViewTreeObserver.OnGlobalLayoutListener {
-
-    private OnFinishListener listener;
-    private long previousTouch = 0;
-    private long downTime = 0;
-    static boolean effect; // 有效
-    static boolean notFinish = false; // 是否 不finish界面
-
-    public void setOnFinishListener(OnFinishListener l) {
-        listener = l;
-    }
-
-    /**
-     * 开始计时
-     */
-    private void doTime() {
-        if (effect) {
-            handle.postDelayed(send, 400);
-        }
-    }
-
-    /**
-     * 取消计时
-     */
-    private void cancleTime() {
-        handle.removeCallbacks(send);
-    }
-
-    public interface OnFinishListener {
-        void onClick();
-    }
-
-    Handler handle = new Handler() {
-        @Override
-        public void handleMessage(android.os.Message msg) {
-            if (listener != null) {
-                listener.onClick();
-                Log.i("kymjs", "listener != null");
-            }
-            Log.i("kymjs", "click");
-        };
-    };
-
-    Runnable send = new Runnable() {
-        @Override
-        public void run() {
-            handle.sendEmptyMessage(0x00000078);
-        }
-    };
 
     // ///////////////////////////////////////////////////////////////////////
 
@@ -513,7 +464,6 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
     @Override
     public boolean onTouch(View v, MotionEvent ev) {
         boolean handled = false;
-        long upTime = 0;
         if (mZoomEnabled && hasDrawable((ImageView) v)) {
             ViewParent parent = v.getParent();
             switch (ev.getAction()) {
@@ -529,17 +479,9 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
                 // fling
                 cancelFling();
 
-                downTime = System.currentTimeMillis();
-                effect = false;
-
-                if (downTime - previousTouch < 400) {
-                    cancleTime();
-                    notFinish = true;
-                }
                 break;
 
             case MotionEvent.ACTION_MOVE:
-                notFinish = true; // 如果有move事件就不执行finish()事件
                 break;
             case ACTION_CANCEL:
             case ACTION_UP:
@@ -553,16 +495,6 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
                         handled = true;
                     }
                 }
-                upTime = System.currentTimeMillis();
-                if (upTime - downTime < 200) {
-                    effect = true;
-                }
-                if (!notFinish) {
-                    doTime();
-                } else {
-                    notFinish = false;
-                }
-                previousTouch = upTime;
                 break;
             }
 

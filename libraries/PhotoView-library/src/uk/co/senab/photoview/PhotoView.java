@@ -15,7 +15,6 @@
  *******************************************************************************/
 package uk.co.senab.photoview;
 
-import uk.co.senab.photoview.PhotoViewAttacher.OnFinishListener;
 import uk.co.senab.photoview.PhotoViewAttacher.OnMatrixChangedListener;
 import uk.co.senab.photoview.PhotoViewAttacher.OnPhotoTapListener;
 import uk.co.senab.photoview.PhotoViewAttacher.OnViewTapListener;
@@ -286,7 +285,7 @@ public class PhotoView extends ImageView implements IPhotoView {
         super.onDetachedFromWindow();
     }
 
-    public void setOnFinishListener(OnFinishListener l) {
-        mAttacher.setOnFinishListener(l);
+    public void setOnFinishListener(OnPhotoTapListener l) {
+        mAttacher.setOnPhotoTapListener(l);
     }
 }
