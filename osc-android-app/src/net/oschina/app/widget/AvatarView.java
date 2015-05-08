@@ -18,7 +18,6 @@ public class AvatarView extends CircleImageView {
     public static final String MIDDLE_SIZE = "_100";
     public static final String LARGE_SIZE = "_200";
 
-    private static final String PGIF = "portrait.gif";
     private int id;
     private String name;
     private Activity aty;
@@ -57,8 +56,10 @@ public class AvatarView extends CircleImageView {
     }
 
     public void setAvatarUrl(String url) {
-        if (StringUtils.isEmpty(url))
+        if (StringUtils.isEmpty(url)) {
+            setImageResource(R.drawable.widget_dface);
             return;
+        }
         // 由于头像地址默认加了一段参数需要去掉
         int end = url.indexOf('?');
         final String headUrl;
@@ -67,6 +68,7 @@ public class AvatarView extends CircleImageView {
         } else {
             headUrl = url;
         }
+
         kjb.display(this, headUrl, R.drawable.widget_dface, 0, 0,
                 new BitmapCallBack() {
                     @Override
