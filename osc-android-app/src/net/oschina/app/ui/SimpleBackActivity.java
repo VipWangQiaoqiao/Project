@@ -80,6 +80,14 @@ public class SimpleBackActivity extends BaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (mFragment.get() instanceof TweetsFragment) {
+            setActionBarTitle("话题");
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.public_menu_send:

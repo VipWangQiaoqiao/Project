@@ -78,15 +78,11 @@ public class EmojiPageFragment extends Fragment {
                 EditText editText = (EditText) getActivity().findViewById(
                         R.id.emoji_titile_input);
                 if (listener != null) {
-                    listener.onEmojiClick((Emojicon) parent.getAdapter().getItem(
-                            position));
+                    listener.onEmojiClick((Emojicon) parent.getAdapter()
+                            .getItem(position));
                 }
-                if (position + 1 != datas.size()) {
-                    InputHelper.input2OSC(editText, (Emojicon) parent
-                            .getAdapter().getItem(position));
-                } else {
-                    InputHelper.backspace(editText);
-                }
+                InputHelper.input2OSC(editText, (Emojicon) parent.getAdapter()
+                        .getItem(position));
             }
         });
         sGrid.setSelector(new ColorDrawable(android.R.color.transparent));
