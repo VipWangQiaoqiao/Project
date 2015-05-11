@@ -59,7 +59,8 @@ public class EmojiPageFragment extends Fragment {
             for (int i = index * KJEmojiConfig.COUNT_IN_PAGE; i < max; i++) {
                 datas.add(dataAll.get(i));
             }
-            datas.add(new Emojicon(KJEmojiConfig.DELETE_EMOJI_ID, 1, "delete:"));
+            datas.add(new Emojicon(KJEmojiConfig.DELETE_EMOJI_ID, 1, "delete:",
+                    "delete:"));
         }
     }
 

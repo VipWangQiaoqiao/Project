@@ -114,11 +114,11 @@ public class InputHelper {
         if (start < 0) {
             // 没有多选时，直接在当前光标处添加
             editText.append(displayEmoji(editText.getResources(),
-                    emojicon.getEmojiStr()));
+                    emojicon.getRemote()));
         } else {
             // 将已选中的部分替换为表情(当长按文字时会多选刷中很多文字)
             Spannable str = displayEmoji(editText.getResources(),
-                    emojicon.getEmojiStr());
+                    emojicon.getRemote());
             editText.getText().replace(Math.min(start, end),
                     Math.max(start, end), str, 0, str.length());
         }
