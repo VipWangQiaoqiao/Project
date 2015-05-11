@@ -21,7 +21,7 @@ import android.widget.AdapterView;
  * @author kymjs(kymjs123@gmail.com)
  */
 public class BlogFragment extends BaseListFragment<Blog> implements
-	OnTabReselectListener {
+        OnTabReselectListener {
 
     public static final String BUNDLE_BLOG_TYPE = "BUNDLE_BLOG_TYPE";
 
@@ -32,16 +32,16 @@ public class BlogFragment extends BaseListFragment<Blog> implements
 
     @Override
     protected BlogAdapter getListAdapter() {
-	return new BlogAdapter();
+        return new BlogAdapter();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-	super.onCreate(savedInstanceState);
-	Bundle args = getArguments();
-	if (args != null) {
-	    blogType = args.getString(BUNDLE_BLOG_TYPE);
-	}
+        super.onCreate(savedInstanceState);
+        Bundle args = getArguments();
+        if (args != null) {
+            blogType = args.getString(BUNDLE_BLOG_TYPE);
+        }
     }
 
     /**
@@ -49,49 +49,50 @@ public class BlogFragment extends BaseListFragment<Blog> implements
      */
     @Override
     protected String getCacheKeyPrefix() {
-	return CACHE_KEY_PREFIX + blogType;
+        return CACHE_KEY_PREFIX + blogType;
     }
 
     @Override
     protected BlogList parseList(InputStream is) throws Exception {
-	BlogList list = XmlUtils.toBean(BlogList.class, is);
-	return list;
+        BlogList list = XmlUtils.toBean(BlogList.class, is);
+        return list;
     }
 
     @Override
     protected BlogList readList(Serializable seri) {
-	return ((BlogList) seri);
+        return ((BlogList) seri);
     }
 
     @Override
     protected void sendRequestData() {
-	OSChinaApi.getBlogList(blogType, mCurrentPage, mHandler);
+        OSChinaApi.getBlogList(blogType, mCurrentPage, mHandler);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
-	    long id) {
-	Blog blog = (Blog) mAdapter.getItem(position);
-	if (blog != null) {
-	    UIHelper.showBlogDetail(getActivity(), blog.getId());
-	    // 保存到已读列表
-	    saveToReadedList(view, BlogList.PREF_READED_BLOG_LIST, blog.getId()
-		    + "");
-	}
+            long id) {
+        Blog blog = mAdapter.getItem(position);
+        if (blog != null) {
+            UIHelper.showBlogDetail(getActivity(), blog.getId(),
+                    blog.getCommentCount());
+            // 保存到已读列表
+            saveToReadedList(view, BlogList.PREF_READED_BLOG_LIST, blog.getId()
+                    + "");
+        }
     }
 
     @Override
     public void onTabReselect() {
-	onRefresh();
+        onRefresh();
     }
 
     @Override
     protected long getAutoRefreshTime() {
-	// TODO Auto-generated method stub
-	// 最新博客
-	if (blogType.equals(BlogList.CATALOG_LATEST)) {
-	    return 2 * 60 * 60;
-	}
-	return super.getAutoRefreshTime();
+        // TODO Auto-generated method stub
+        // 最新博客
+        if (blogType.equals(BlogList.CATALOG_LATEST)) {
+            return 2 * 60 * 60;
+        }
+        return super.getAutoRefreshTime();
     }
 }

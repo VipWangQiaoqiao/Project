@@ -253,6 +253,8 @@ public class EventDetailFragment extends BaseDetailFragment implements
         mPost = (Post) entity;
         fillUI();
         fillWebViewBody();
+        ((DetailActivity) getActivity()).toolFragment.setCommentCount(mPost
+                .getAnswerCount());
     }
 
     private void fillUI() {

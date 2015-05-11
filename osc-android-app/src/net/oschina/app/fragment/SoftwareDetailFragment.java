@@ -13,6 +13,7 @@ import net.oschina.app.bean.Software;
 import net.oschina.app.bean.SoftwareDetail;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.emoji.OnSendClickListener;
+import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -129,10 +130,19 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        ((DetailActivity) getActivity()).toolFragment.hideReportButton();
+    }
+
+    @Override
     protected void executeOnLoadDataSuccess(Entity entity) {
         mSoftware = (Software) entity;
         fillUI();
         fillWebViewBody();
+        mCommentCount = mSoftware.getTweetCount();
+        ((DetailActivity) getActivity()).toolFragment
+                .setCommentCount(mCommentCount);
     }
 
     private void fillUI() {

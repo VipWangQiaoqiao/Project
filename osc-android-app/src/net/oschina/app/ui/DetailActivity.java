@@ -213,6 +213,13 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
         return super.onKeyDown(keyCode, event);
     }
 
+    public void setCommentCount(int count) {
+        try {
+            toolFragment.setCommentCount(count);
+        } catch (Exception e) {
+        }
+    }
+
     @Override
     public void onClickFlagButton() {
         getSupportFragmentManager()

@@ -14,6 +14,7 @@ import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.Post;
 import net.oschina.app.bean.PostDetail;
 import net.oschina.app.emoji.OnSendClickListener;
+import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -56,7 +57,8 @@ public class PostDetailFragment extends BaseDetailFragment implements
             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news_detail, container,
                 false);
-
+        mCommentCount = getActivity().getIntent().getIntExtra("comment_count",
+                0);
         mPostId = getActivity().getIntent().getIntExtra("post_id", 0);
         ButterKnife.inject(this, view);
         initViews(view);
@@ -66,7 +68,8 @@ public class PostDetailFragment extends BaseDetailFragment implements
 
     private void initViews(View view) {
         mEmptyLayout = (EmptyLayout) view.findViewById(R.id.error_layout);
-
+        ((DetailActivity) getActivity()).toolFragment
+                .setCommentCount(mCommentCount);
         mWebView = (WebView) view.findViewById(R.id.webview);
         UIHelper.initWebView(mWebView);
     }

@@ -58,7 +58,8 @@ public class NewsDetailFragment extends BaseDetailFragment implements
             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news_detail, container,
                 false);
-
+        mCommentCount = getActivity().getIntent().getIntExtra("comment_count",
+                0);
         mNewsId = getActivity().getIntent().getIntExtra("news_id", 0);
         ButterKnife.inject(this, view);
         initViews(view);
@@ -67,7 +68,8 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 
     private void initViews(View view) {
         mEmptyLayout = (EmptyLayout) view.findViewById(R.id.error_layout);
-
+        ((DetailActivity) getActivity()).toolFragment
+                .setCommentCount(mCommentCount);
         mWebView = (WebView) view.findViewById(R.id.webview);
         UIHelper.initWebView(mWebView);
     }
@@ -108,6 +110,8 @@ public class NewsDetailFragment extends BaseDetailFragment implements
         mNews = (News) entity;
         fillUI();
         fillWebViewBody();
+        ((DetailActivity) getActivity()).setCommentCount(mNews
+                .getCommentCount());
     }
 
     private void fillUI() {

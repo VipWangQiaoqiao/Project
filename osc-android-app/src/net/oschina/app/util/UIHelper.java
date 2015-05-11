@@ -49,8 +49,6 @@ import net.oschina.app.widget.AvatarView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.dtr.zxing.activity.CaptureActivity;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ComponentName;
@@ -80,6 +78,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ZoomButtonsController;
 
+import com.dtr.zxing.activity.CaptureActivity;
 
 /**
  * 界面帮助类
@@ -151,9 +150,10 @@ public class UIHelper {
      * @param context
      * @param blogId
      */
-    public static void showBlogDetail(Context context, int blogId) {
+    public static void showBlogDetail(Context context, int blogId, int count) {
         Intent intent = new Intent(context, DetailActivity.class);
         intent.putExtra("blog_id", blogId);
+        intent.putExtra("comment_count", count);
         intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
                 DetailActivity.DISPLAY_BLOG);
         context.startActivity(intent);
@@ -165,9 +165,10 @@ public class UIHelper {
      * @param context
      * @param postId
      */
-    public static void showPostDetail(Context context, int postId) {
+    public static void showPostDetail(Context context, int postId, int count) {
         Intent intent = new Intent(context, DetailActivity.class);
         intent.putExtra("post_id", postId);
+        intent.putExtra("comment_count", count);
         intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
                 DetailActivity.DISPLAY_POST);
         context.startActivity(intent);
@@ -262,10 +263,12 @@ public class UIHelper {
                 showSoftwareDetail(context, objId);
                 break;
             case News.NEWSTYPE_POST:
-                showPostDetail(context, StringUtils.toInt(objId));
+                showPostDetail(context, StringUtils.toInt(objId),
+                        news.getCommentCount());
                 break;
             case News.NEWSTYPE_BLOG:
-                showBlogDetail(context, StringUtils.toInt(objId));
+                showBlogDetail(context, StringUtils.toInt(objId),
+                        news.getCommentCount());
                 break;
             default:
                 break;
@@ -297,13 +300,13 @@ public class UIHelper {
                 showNewsDetail(context, id, active.getCommentCount());
                 break;
             case Active.CATALOG_POST:
-                showPostDetail(context, id);
+                showPostDetail(context, id, active.getCommentCount());
                 break;
             case Active.CATALOG_TWEET:
                 showTweetDetail(context, null, id);
                 break;
             case Active.CATALOG_BLOG:
-                showBlogDetail(context, id);
+                showBlogDetail(context, id, active.getCommentCount());
                 break;
             default:
                 break;
@@ -444,7 +447,7 @@ public class UIHelper {
             showNewsDetail(context, objId, -1);
             break;
         case URLsUtils.URL_OBJ_TYPE_QUESTION:
-            showPostDetail(context, objId);
+            showPostDetail(context, objId, 0);
             break;
         case URLsUtils.URL_OBJ_TYPE_QUESTION_TAG:
             showPostListByTag(context, objKey);
@@ -459,7 +462,7 @@ public class UIHelper {
             showTweetDetail(context, null, objId);
             break;
         case URLsUtils.URL_OBJ_TYPE_BLOG:
-            showBlogDetail(context, objId);
+            showBlogDetail(context, objId, 0);
             break;
         case URLsUtils.URL_OBJ_TYPE_OTHER:
             openBrowser(context, objKey);

@@ -12,6 +12,7 @@ import net.oschina.app.bean.BlogDetail;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.emoji.OnSendClickListener;
+import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -56,6 +57,8 @@ public class BlogDetailFragment extends BaseDetailFragment implements
         View view = inflater.inflate(R.layout.fragment_news_detail, container,
                 false);
 
+        mCommentCount = getActivity().getIntent().getIntExtra("comment_count",
+                0);
         mBlogId = getActivity().getIntent().getIntExtra("blog_id", 0);
         ButterKnife.inject(this, view);
         initViews(view);
@@ -64,6 +67,8 @@ public class BlogDetailFragment extends BaseDetailFragment implements
     }
 
     private void initViews(View view) {
+        ((DetailActivity) getActivity()).toolFragment
+                .setCommentCount(mCommentCount);
         mEmptyLayout = (EmptyLayout) view.findViewById(R.id.error_layout);
         mWebView = (WebView) view.findViewById(R.id.webview);
         UIHelper.initWebView(mWebView);
@@ -103,29 +108,16 @@ public class BlogDetailFragment extends BaseDetailFragment implements
                     mBlog.getAuthorId());
     }
 
-    // @Override
-    // protected void onCommentChanged(int opt, int id, int catalog,
-    // boolean isBlog, Comment comment) {
-    // if (id == mBlogId && isBlog) {
-    // if (Comment.OPT_ADD == opt && mBlog != null) {
-    // mBlog.setCommentCount(mBlog.getCommentCount() + 1);
-    // // if (mTvCommentCount != null) {
-    // // mTvCommentCount.setVisibility(View.VISIBLE);
-    // // mTvCommentCount.setText(getString(R.string.comment_count,
-    // // mBlog.getCommentCount()));
-    // // }
-    // if (mToolBarFragment != null) {
-    // mToolBarFragment.setCommentCount(mBlog.getCommentCount());
-    // }
-    // }
-    // }
-    // }
-
     @Override
     protected void executeOnLoadDataSuccess(Entity entity) {
         mBlog = (Blog) entity;
         fillUI();
         fillWebViewBody();
+        if (mBlog.getCommentCount() > mCommentCount) {
+            mCommentCount = mBlog.getCommentCount();
+            ((DetailActivity) getActivity()).toolFragment.setCommentCount(mBlog
+                    .getCommentCount());
+        }
     }
 
     private void fillUI() {

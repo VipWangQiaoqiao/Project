@@ -75,6 +75,8 @@ public abstract class BaseDetailFragment extends BaseFragment implements
 
     protected EmptyLayout mEmptyLayout;
 
+    public int mCommentCount = 0;
+
     protected WebView mWebView;
 
     protected AsyncHttpResponseHandler mCommentHandler = new AsyncHttpResponseHandler() {
