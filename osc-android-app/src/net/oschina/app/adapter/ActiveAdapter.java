@@ -5,6 +5,7 @@ import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Active;
 import net.oschina.app.bean.Active.ObjectReply;
 import net.oschina.app.bean.Tweet;
+import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.StringUtils;
@@ -90,22 +91,26 @@ public class ActiveAdapter extends ListBaseAdapter {
             vh.body.setFocusable(false);
             vh.body.setDispatchToParent(true);
             vh.body.setLongClickable(false);
+
             Spanned span = Html.fromHtml(modifyPath(item.getMessage()));
 
-            // 判断是否有语音
             if (!StringUtils.isEmpty(item.getTweetattach())) {
                 if (recordBitmap == null) {
                     initRecordImg(parent.getContext());
                 }
                 ImageSpan recordImg = new ImageSpan(parent.getContext(),
                         recordBitmap);
-                SpannableString str = new SpannableString("c" + span);
+                SpannableString str = new SpannableString("c");
                 str.setSpan(recordImg, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
                 vh.body.setText(str);
+                span = InputHelper.displayEmoji(parent.getContext()
+                        .getResources(), span);
+                vh.body.append(span);
             } else {
+                span = InputHelper.displayEmoji(parent.getContext()
+                        .getResources(), span);
                 vh.body.setText(span);
             }
-
             MyURLSpan.parseLinkText(vh.body, span);
         }
 
