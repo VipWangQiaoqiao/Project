@@ -62,7 +62,6 @@ public class PostDetailFragment extends BaseDetailFragment implements
         mPostId = getActivity().getIntent().getIntExtra("post_id", 0);
         ButterKnife.inject(this, view);
         initViews(view);
-
         return view;
     }
 
@@ -95,16 +94,16 @@ public class PostDetailFragment extends BaseDetailFragment implements
         return (Post) seri;
     }
 
-    // @Override
-    // protected void onCommentChanged(int opt, int id, int catalog,
-    // boolean isBlog, Comment comment) {
-    // }
-
     @Override
     protected void executeOnLoadDataSuccess(Entity entity) {
         mPost = (Post) entity;
         fillUI();
         fillWebViewBody();
+        if (mPost.getAnswerCount() > mCommentCount) {
+            mCommentCount = mPost.getAnswerCount();
+            ((DetailActivity) getActivity()).toolFragment
+                    .setCommentCount(mCommentCount);
+        }
     }
 
     private void fillUI() {
@@ -160,7 +159,6 @@ public class PostDetailFragment extends BaseDetailFragment implements
 
     @Override
     protected String getShareTitle() {
-        // TODO Auto-generated method stub
         return mPost != null ? mPost.getTitle()
                 : getString(R.string.share_title_post);
     }
