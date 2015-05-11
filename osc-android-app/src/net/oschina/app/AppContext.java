@@ -52,7 +52,8 @@ public class AppContext extends BaseApplication {
         instance = this;
         init();
         initLogin();
-
+        Thread.setDefaultUncaughtExceptionHandler(AppException
+                .getAppExceptionHandler(this));
         UIHelper.sendBroadcastForNotice(this);
     }
 

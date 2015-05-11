@@ -211,8 +211,8 @@ public class ImagePreviewActivity extends BaseActivity implements
             return images.length;
         }
 
-        @SuppressLint("InflateParams")
         @Override
+        @SuppressLint("InflateParams")
         public View getView(int position, View convertView, ViewGroup container) {
             ViewHolder vh = null;
             if (convertView == null) {
