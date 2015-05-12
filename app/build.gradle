@@ -12,20 +12,6 @@ android {
         versionCode 43
         versionName "2.2"
     }
-
-    packagingOptions {
-        exclude 'META-INF/ASL2.0'
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/LICENSE.txt'
-    }
-
-    dexOptions {
-        incremental true
-    }
-
 }
 
 dependencies {
