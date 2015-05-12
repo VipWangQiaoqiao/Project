@@ -1,24 +1,5 @@
 package net.oschina.app.adapter;
 
-import net.oschina.app.R;
-import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.bean.Active;
-import net.oschina.app.bean.Active.ObjectReply;
-import net.oschina.app.bean.Tweet;
-import net.oschina.app.ui.ImagePreviewActivity;
-import net.oschina.app.util.ImageUtils;
-import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.UIHelper;
-import net.oschina.app.widget.AvatarView;
-import net.oschina.app.widget.MyLinkMovementMethod;
-import net.oschina.app.widget.MyURLSpan;
-import net.oschina.app.widget.TweetTextView;
-
-import org.kymjs.kjframe.KJBitmap;
-import org.kymjs.kjframe.bitmap.BitmapCallBack;
-import org.kymjs.kjframe.bitmap.BitmapHelper;
-import org.kymjs.kjframe.utils.DensityUtils;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -33,6 +14,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import net.oschina.app.R;
+import net.oschina.app.base.ListBaseAdapter;
+import net.oschina.app.bean.Active;
+import net.oschina.app.bean.Active.ObjectReply;
+import net.oschina.app.bean.Tweet;
+import net.oschina.app.emoji.InputHelper;
+import net.oschina.app.ui.ImagePreviewActivity;
+import net.oschina.app.util.ImageUtils;
+import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.UIHelper;
+import net.oschina.app.widget.AvatarView;
+import net.oschina.app.widget.MyLinkMovementMethod;
+import net.oschina.app.widget.MyURLSpan;
+import net.oschina.app.widget.TweetTextView;
+
+import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.bitmap.BitmapCallBack;
+import org.kymjs.kjframe.bitmap.BitmapHelper;
+import org.kymjs.kjframe.utils.DensityUtils;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -64,7 +66,7 @@ public class ActiveAdapter extends ListBaseAdapter {
     @SuppressLint("InflateParams")
     @Override
     protected View getRealView(int position, View convertView,
-            final ViewGroup parent) {
+                               final ViewGroup parent) {
         ViewHolder vh = null;
         initImageSize(parent.getContext());
         if (convertView == null || convertView.getTag() == null) {
@@ -90,22 +92,26 @@ public class ActiveAdapter extends ListBaseAdapter {
             vh.body.setFocusable(false);
             vh.body.setDispatchToParent(true);
             vh.body.setLongClickable(false);
+
             Spanned span = Html.fromHtml(modifyPath(item.getMessage()));
 
-            // 判断是否有语音
             if (!StringUtils.isEmpty(item.getTweetattach())) {
                 if (recordBitmap == null) {
                     initRecordImg(parent.getContext());
                 }
                 ImageSpan recordImg = new ImageSpan(parent.getContext(),
                         recordBitmap);
-                SpannableString str = new SpannableString("c" + span);
+                SpannableString str = new SpannableString("c");
                 str.setSpan(recordImg, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
                 vh.body.setText(str);
+                span = InputHelper.displayEmoji(parent.getContext()
+                        .getResources(), span);
+                vh.body.append(span);
             } else {
+                span = InputHelper.displayEmoji(parent.getContext()
+                        .getResources(), span);
                 vh.body.setText(span);
             }
-
             MyURLSpan.parseLinkText(vh.body, span);
         }
 
@@ -129,25 +135,25 @@ public class ActiveAdapter extends ListBaseAdapter {
 
         vh.from.setVisibility(View.VISIBLE);
         switch (item.getAppClient()) {
-        default:
-            vh.from.setText(R.string.from_web); // 不显示
-            vh.from.setVisibility(View.GONE);
-            break;
-        case Tweet.CLIENT_MOBILE:
-            vh.from.setText(R.string.from_mobile);
-            break;
-        case Tweet.CLIENT_ANDROID:
-            vh.from.setText(R.string.from_android);
-            break;
-        case Tweet.CLIENT_IPHONE:
-            vh.from.setText(R.string.from_iphone);
-            break;
-        case Tweet.CLIENT_WINDOWS_PHONE:
-            vh.from.setText(R.string.from_windows_phone);
-            break;
-        case Tweet.CLIENT_WECHAT:
-            vh.from.setText(R.string.from_wechat);
-            break;
+            default:
+                vh.from.setText(R.string.from_web); // 不显示
+                vh.from.setVisibility(View.GONE);
+                break;
+            case Tweet.CLIENT_MOBILE:
+                vh.from.setText(R.string.from_mobile);
+                break;
+            case Tweet.CLIENT_ANDROID:
+                vh.from.setText(R.string.from_android);
+                break;
+            case Tweet.CLIENT_IPHONE:
+                vh.from.setText(R.string.from_iphone);
+                break;
+            case Tweet.CLIENT_WINDOWS_PHONE:
+                vh.from.setText(R.string.from_windows_phone);
+                break;
+            case Tweet.CLIENT_WECHAT:
+                vh.from.setText(R.string.from_wechat);
+                break;
         }
 
         if (item.getCommentCount() > 0) {
@@ -172,11 +178,11 @@ public class ActiveAdapter extends ListBaseAdapter {
 
     /**
      * 动态设置图片显示样式
-     * 
+     *
      * @author kymjs
      */
     private void setTweetImage(final ViewGroup parent, final ViewHolder vh,
-            final Active item) {
+                               final Active item) {
         vh.pic.setVisibility(View.VISIBLE);
 
         kjb.display(vh.pic, item.getTweetimage(), R.drawable.pic_bg, rectSize,
