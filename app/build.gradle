@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'newlens'
+//apply plugin: 'newlens'
 
 android {
     compileSdkVersion 22
