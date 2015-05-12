@@ -1,13 +1,5 @@
 package net.oschina.app.ui;
 
-import net.oschina.app.AppManager;
-import net.oschina.app.R;
-import net.oschina.app.base.BaseFragment;
-import net.oschina.app.bean.SimpleBackPage;
-import net.oschina.app.util.TDevice;
-import net.oschina.app.util.UIHelper;
-import net.oschina.app.widget.ActionBarDrawerToggle;
-import net.oschina.app.widget.DrawerArrowDrawable;
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -15,6 +7,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,6 +15,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+
+import net.oschina.app.AppManager;
+import net.oschina.app.R;
+import net.oschina.app.base.BaseFragment;
+import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.util.TDevice;
+import net.oschina.app.util.UIHelper;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -49,8 +50,6 @@ public class NavigationDrawerFragment extends BaseFragment implements
      * Helper component that ties the action bar to the navigation drawer.
      */
     private ActionBarDrawerToggle mDrawerToggle;
-
-    private DrawerArrowDrawable drawerArrow;
 
     private DrawerLayout mDrawerLayout;
     private View mDrawerListView;
@@ -207,15 +206,8 @@ public class NavigationDrawerFragment extends BaseFragment implements
 	actionBar.setDisplayHomeAsUpEnabled(true);
 	actionBar.setHomeButtonEnabled(true);
 
-	drawerArrow = new DrawerArrowDrawable(getActivity()) {
-	    @Override
-	    public boolean isLayoutRtl() {
-		return false;
-	    }
-	};
-
 	mDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout,
-		drawerArrow, R.string.navigation_drawer_open,
+		null, R.string.navigation_drawer_open,
 		R.string.navigation_drawer_close) {
 
 	    public void onDrawerClosed(View view) {
