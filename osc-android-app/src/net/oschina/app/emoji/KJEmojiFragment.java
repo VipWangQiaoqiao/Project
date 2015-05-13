@@ -33,7 +33,6 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.RadioGroup;
 
 /**
@@ -125,10 +124,6 @@ public class KJEmojiFragment extends Fragment implements
         // content必须放在bottom下面初始化
         mEmojiContent = (LinearLayout) rootView
                 .findViewById(R.id.emoji_content);
-        LayoutParams params = (LayoutParams) mEmojiContent.getLayoutParams();
-        // Emoji内容区域的高度，显示多高自己定义，一行的高度是120，但是要多加10(上下的高度)
-        params.height = EMOJI_TAB_CONTENT > 1 ? 490 : 370;
-        mEmojiContent.setLayoutParams(params);
         mEmojiPager = (ViewPager) mEmojiContent.findViewById(R.id.emoji_pager);
         adapter = new EmojiPagerAdapter(getFragmentManager());
         mEmojiPager.setAdapter(adapter);

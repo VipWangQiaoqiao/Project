@@ -38,6 +38,8 @@
     <dimen name="text_size_8">8.0dip</dimen>
     <dimen name="text_size_7">7.0dip</dimen>
     <dimen name="space_100">100.0dip</dimen>
+    <dimen name="space_60">60dp</dimen>
+    <dimen name="space_49">49dip</dimen>
     <dimen name="space_35">35.0dip</dimen>
     <dimen name="space_30">30.0dip</dimen>
     <dimen name="space_29">29.0dip</dimen>

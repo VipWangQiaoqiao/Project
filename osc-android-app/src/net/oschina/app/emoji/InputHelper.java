@@ -15,6 +15,7 @@
  */
 package net.oschina.app.emoji;
 
+import net.oschina.app.R;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.text.Spannable;
@@ -71,6 +72,7 @@ public class InputHelper {
             int length1 = str.indexOf("]", index1 + 1);
             int index2 = str.indexOf(":", i);
             int length2 = str.indexOf(":", index2 + 1);
+            int bound = (int) res.getDimension(R.dimen.space_20);
             try {
                 String emojiStr = str.substring(index1, length1 + "]".length());
                 int resId = getEmojiResId(emojiStr);
@@ -78,7 +80,7 @@ public class InputHelper {
                     // 构建图片span
                     Drawable drawable = res.getDrawable(resId);
 
-                    drawable.setBounds(0, 40, 80, 120);
+                    drawable.setBounds(0, 20, bound, bound + 20);
                     ImageSpan span = new ImageSpan(drawable,
                             ImageSpan.ALIGN_BASELINE);
                     spannable.setSpan(span, index1, length1 + "]".length(),
@@ -92,7 +94,7 @@ public class InputHelper {
                 int resId2 = getEmojiResId(emojiStr2);
                 if (resId2 > 0) {
                     Drawable emojiDrawable = res.getDrawable(resId2);
-                    emojiDrawable.setBounds(0, 0, 70, 70);
+                    emojiDrawable.setBounds(0, 0, bound, bound);
                     // 构建图片span
                     ImageSpan imageSpan = new ImageSpan(emojiDrawable, str);
                     spannable.setSpan(imageSpan, index2,

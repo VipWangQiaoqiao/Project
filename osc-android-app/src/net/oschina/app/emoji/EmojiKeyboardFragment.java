@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.RadioGroup;
 
 public class EmojiKeyboardFragment extends Fragment implements
@@ -69,10 +68,6 @@ public class EmojiKeyboardFragment extends Fragment implements
         // content必须放在bottom下面初始化
         mEmojiContent = (LinearLayout) rootView
                 .findViewById(R.id.emoji_content);
-        LayoutParams params = (LayoutParams) mEmojiContent.getLayoutParams();
-        // Emoji内容区域的高度，显示多高自己定义，一行的高度是120，但是要多加10(上下的高度)
-        params.height = EMOJI_TAB_CONTENT > 1 ? 490 : 370;
-        mEmojiContent.setLayoutParams(params);
         mEmojiPager = (ViewPager) mEmojiContent.findViewById(R.id.emoji_pager);
         adapter = new EmojiPagerAdapter(getFragmentManager(),
                 EMOJI_TAB_CONTENT, listener);
