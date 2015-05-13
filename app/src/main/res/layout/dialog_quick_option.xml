@@ -2,22 +2,44 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/set_pop"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:background="#66000000"
+    android:layout_height="match_parent">
 
+    <LinearLayout
+        android:id="@+id/ll_foot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/list_item_background_normal"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:padding="10dip"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/iv_close"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:contentDescription="@null"
+            android:focusable="false"
+            android:src="@drawable/btn_quickoption_route" />
+    </LinearLayout>
+    
     <LinearLayout
         android:id="@+id/ll_option_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:paddingBottom="55dp"
+        android:layout_alignBottom="@+id/ll_foot"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/ly_quick_option_text"
-                style="@style/quick_option_item" >
+                style="@style/quick_option_item">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -31,7 +53,7 @@
 
             <LinearLayout
                 android:id="@+id/ly_quick_option_album"
-                style="@style/quick_option_item" >
+                style="@style/quick_option_item">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -45,7 +67,7 @@
 
             <LinearLayout
                 android:id="@+id/ly_quick_option_photo"
-                style="@style/quick_option_item" >
+                style="@style/quick_option_item">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -63,9 +85,9 @@
             android:id="@+id/ly_quick_option_voice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
-            <LinearLayout style="@style/quick_option_item" >
+            <LinearLayout style="@style/quick_option_item">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -80,7 +102,7 @@
 
             <LinearLayout
                 android:id="@+id/ly_quick_option_scan"
-                style="@style/quick_option_item" >
+                style="@style/quick_option_item">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -95,7 +117,7 @@
 
             <LinearLayout
                 android:id="@+id/ly_quick_option_note"
-                style="@style/quick_option_item" >
+                style="@style/quick_option_item">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -108,25 +130,6 @@
                     android:text="@string/quick_option_note" />
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_foot"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ll_option_container"
-        android:background="@color/list_item_background_normal"
-        android:gravity="center"
-        android:padding="10dip"
-        android:visibility="visible" >
-
-        <ImageView
-            android:id="@+id/iv_close"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:contentDescription="@null"
-            android:focusable="false"
-            android:src="@drawable/btn_quickoption_route" />
     </LinearLayout>
 
 </RelativeLayout>
