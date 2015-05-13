@@ -33,7 +33,7 @@ import uk.co.senab.photoview.PhotoView;
 
 /**
  * 图片预览界面
- * 
+ *
  * @author kymjs
  */
 public class ImagePreviewActivity extends BaseActivity implements
@@ -51,7 +51,7 @@ public class ImagePreviewActivity extends BaseActivity implements
     private KJBitmap kjb;
 
     public static void showImagePrivew(Context context, int index,
-            String[] images) {
+                                       String[] images) {
         Intent intent = new Intent(context, ImagePreviewActivity.class);
 
         intent.putExtra(BUNDLE_KEY_IMAGES, images);
@@ -95,19 +95,21 @@ public class ImagePreviewActivity extends BaseActivity implements
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
-        case R.id.iv_more:
-            showOptionMenu();
-            break;
-        default:
-            break;
+            case R.id.iv_more:
+                showOptionMenu();
+                break;
+            default:
+                break;
         }
     }
 
     @Override
-    public void initView() {}
+    public void initView() {
+    }
 
     @Override
-    public void initData() {}
+    public void initData() {
+    }
 
     private void showOptionMenu() {
         final ImageMenuDialog dialog = new ImageMenuDialog(this);
@@ -178,10 +180,12 @@ public class ImagePreviewActivity extends BaseActivity implements
     }
 
     @Override
-    public void onPageScrollStateChanged(int arg0) {}
+    public void onPageScrollStateChanged(int arg0) {
+    }
 
     @Override
-    public void onPageScrolled(int arg0, float arg1, int arg2) {}
+    public void onPageScrolled(int arg0, float arg1, int arg2) {
+    }
 
     @Override
     public void onPageSelected(int idx) {
@@ -196,7 +200,7 @@ public class ImagePreviewActivity extends BaseActivity implements
 
     class SamplePagerAdapter extends RecyclingPagerAdapter {
 
-        private String[] images = new String[] {};
+        private String[] images = new String[]{};
 
         SamplePagerAdapter(String[] images) {
             this.images = images;

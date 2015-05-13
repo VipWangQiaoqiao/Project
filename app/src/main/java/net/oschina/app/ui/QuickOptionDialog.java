@@ -8,6 +8,7 @@ import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -73,7 +74,6 @@ public class QuickOptionDialog extends Dialog implements
             }
         });
         super.setContentView(contentView);
-
     }
 
     public QuickOptionDialog(Context context) {
@@ -81,16 +81,17 @@ public class QuickOptionDialog extends Dialog implements
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        getWindow().setGravity(Gravity.BOTTOM);
-
+        
         WindowManager m = getWindow().getWindowManager();
         Display d = m.getDefaultDisplay();
         WindowManager.LayoutParams p = getWindow().getAttributes();
         p.width = d.getWidth();
+        p.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         getWindow().setAttributes(p);
+        
+        getWindow().setGravity(Gravity.BOTTOM);
     }
 
     public void setOnQuickOptionformClickListener(OnQuickOptionformClick lis) {

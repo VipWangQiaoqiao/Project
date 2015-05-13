@@ -48,8 +48,6 @@ import net.oschina.app.widget.MyFragmentTabHost;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-//import com.networkbench.agent.impl.NBSAppAgent;
-
 @SuppressLint("InflateParams")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class MainActivity extends ActionBarActivity implements
@@ -339,7 +337,6 @@ public class MainActivity extends ActionBarActivity implements
         case R.id.quick_option_iv:
             showQuickOption();
             break;
-
         default:
             break;
         }

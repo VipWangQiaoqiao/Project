@@ -1,16 +1,5 @@
 package net.oschina.app.base;
 
-import net.oschina.app.AppManager;
-import net.oschina.app.R;
-import net.oschina.app.interf.BaseViewInterface;
-import net.oschina.app.ui.dialog.CommonToast;
-import net.oschina.app.ui.dialog.DialogControl;
-import net.oschina.app.ui.dialog.DialogHelper;
-import net.oschina.app.ui.dialog.WaitDialog;
-import net.oschina.app.util.TDevice;
-
-import org.kymjs.kjframe.utils.StringUtils;
-
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.LayoutParams;
@@ -22,6 +11,18 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import net.oschina.app.AppManager;
+import net.oschina.app.R;
+import net.oschina.app.interf.BaseViewInterface;
+import net.oschina.app.ui.dialog.CommonToast;
+import net.oschina.app.ui.dialog.DialogControl;
+import net.oschina.app.ui.dialog.DialogHelper;
+import net.oschina.app.ui.dialog.WaitDialog;
+import net.oschina.app.util.TDevice;
+
+import org.kymjs.kjframe.utils.StringUtils;
+
 import butterknife.ButterKnife;
 
 /**
@@ -110,6 +111,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
         if (actionBar == null)
             return;
         if (hasBackButton()) {
+            
             mActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
             int layoutRes = getActionBarCustomView();
             View view = inflateView(layoutRes == 0 ? R.layout.actionbar_custom_backtitle
