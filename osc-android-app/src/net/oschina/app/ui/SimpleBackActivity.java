@@ -104,7 +104,7 @@ public class SimpleBackActivity extends BaseActivity implements
         default:
             break;
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
