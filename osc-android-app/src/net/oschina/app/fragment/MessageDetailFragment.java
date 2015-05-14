@@ -19,6 +19,8 @@ import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
+import net.oschina.app.emoji.KJEmojiFragment;
+import net.oschina.app.emoji.OnSendClickListener;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -26,20 +28,27 @@ import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
+
+import org.apache.http.Header;
+import org.kymjs.kjframe.utils.StringUtils;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 
+import com.loopj.android.http.AsyncHttpResponseHandler;
+
 public class MessageDetailFragment extends BaseListFragment<Comment> implements
-        OnItemLongClickListener {
+        OnItemLongClickListener, OnSendClickListener {
     protected static final String TAG = ActiveFragment.class.getSimpleName();
     public static final String BUNDLE_KEY_FID = "BUNDLE_KEY_FID";
     public static final String BUNDLE_KEY_FNAME = "BUNDLE_KEY_FNAME";
@@ -47,6 +56,37 @@ public class MessageDetailFragment extends BaseListFragment<Comment> implements
 
     private int mFid;
     private String mFName;
+    public KJEmojiFragment emojiFragment = new KJEmojiFragment();
+
+    private final AsyncHttpResponseHandler mPublicHandler = new AsyncHttpResponseHandler() {
+
+        @Override
+        public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+            hideWaitDialog();
+            try {
+                ResultBean resb = XmlUtils.toBean(ResultBean.class,
+                        new ByteArrayInputStream(arg2));
+                Result res = resb.getResult();
+                if (res.OK()) {
+                    AppContext
+                            .showToastShort(R.string.tip_message_public_success);
+                    mAdapter.addItem(0, resb.getComment());
+                } else {
+                    AppContext.showToastShort(res.getErrorMessage());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                onFailure(arg0, arg1, arg2, e);
+            }
+        }
+
+        @Override
+        public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+                Throwable arg3) {
+            hideWaitDialog();
+            AppContext.showToastShort(R.string.tip_message_public_faile);
+        }
+    };
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
@@ -76,12 +116,25 @@ public class MessageDetailFragment extends BaseListFragment<Comment> implements
         int mode = WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN
                 | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
         getActivity().getWindow().setSoftInputMode(mode);
+
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.emoji_container, emojiFragment).commit();
     }
 
     @Override
     public void onDestroy() {
         getActivity().unregisterReceiver(mReceiver);
         super.onDestroy();
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        if (emojiFragment.isShowEmojiKeyBoard()) {
+            emojiFragment.hideAllKeyBoard();
+            return true;
+        } else {
+            return super.onBackPressed();
+        }
     }
 
     @Override
@@ -113,7 +166,6 @@ public class MessageDetailFragment extends BaseListFragment<Comment> implements
         mListView.setDividerHeight(0);
         mListView.setOnItemLongClickListener(this);
         mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 if (AppContext.getInstance().isLogin()) {
@@ -164,10 +216,7 @@ public class MessageDetailFragment extends BaseListFragment<Comment> implements
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
-        // Message active = (Message) mAdapter.getItem(position - 1);
-        // UIHelper.showMessageDetail(context, friendid, friendname);
-    }
+            long id) {}
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view,
@@ -199,6 +248,12 @@ public class MessageDetailFragment extends BaseListFragment<Comment> implements
         dialog.setNegativeButton(R.string.cancle, null);
         dialog.show();
         return true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        emojiFragment.hideFlagButton();
     }
 
     private void handleDeleteMessage(final Comment message) {
@@ -251,4 +306,22 @@ public class MessageDetailFragment extends BaseListFragment<Comment> implements
             hideWaitDialog();
         }
     }
+
+    @Override
+    public void onClickSendButton(Editable str) {
+        if (!AppContext.getInstance().isLogin()) {
+            UIHelper.showLoginActivity(getActivity());
+            return;
+        }
+        if (StringUtils.isEmpty(str)) {
+            AppContext.showToastShort(R.string.tip_content_empty);
+            return;
+        }
+        showWaitDialog("提交中...");
+        OSChinaApi.publicMessage(AppContext.getInstance().getLoginUid(), mFid,
+                str.toString(), mPublicHandler);
+    }
+
+    @Override
+    public void onClickFlagButton() {}
 }
