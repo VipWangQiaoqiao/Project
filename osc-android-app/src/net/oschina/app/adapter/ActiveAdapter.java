@@ -62,8 +62,8 @@ public class ActiveAdapter extends ListBaseAdapter {
         }
     }
 
-    @SuppressLint("InflateParams")
     @Override
+    @SuppressLint("InflateParams")
     protected View getRealView(int position, View convertView,
             final ViewGroup parent) {
         ViewHolder vh = null;
