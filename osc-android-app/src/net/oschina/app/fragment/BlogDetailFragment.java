@@ -113,11 +113,8 @@ public class BlogDetailFragment extends BaseDetailFragment implements
         mBlog = (Blog) entity;
         fillUI();
         fillWebViewBody();
-        if (mBlog.getCommentCount() > mCommentCount) {
-            mCommentCount = mBlog.getCommentCount();
-            ((DetailActivity) getActivity()).toolFragment.setCommentCount(mBlog
-                    .getCommentCount());
-        }
+        ((DetailActivity) getActivity()).toolFragment
+                .setCommentCount(mCommentCount);
     }
 
     private void fillUI() {
