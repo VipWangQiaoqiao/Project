@@ -43,11 +43,8 @@ import com.tencent.tauth.UiError;
 /**
  * 用户登录界面
  * 
- * @author FireAnt（http://my.oschina.net/LittleDY）
- * @version 创建时间：2014年9月26日 下午3:24:31
- * 
+ * @author kymjs (http://www.kymjs.com/)
  */
-
 public class LoginActivity extends BaseActivity {
 
     public static final int REQUEST_CODE_INIT = 0;
@@ -293,7 +290,7 @@ public class LoginActivity extends BaseActivity {
         @Override
         public void onComplete(Object arg0) {
             // packQQLoginBean(user, obj);
-            AppContext.showToast("成功");
+            AppContext.showToast("成功"); // 服务器端暂无
         }
 
         @Override

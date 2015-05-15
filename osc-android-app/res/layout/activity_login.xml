@@ -52,7 +52,8 @@
             android:id="@+id/qq_login"
             style="@style/button_common_blue"
             android:layout_marginTop="30dp"
-            android:text="qq登录" />
+            android:text="qq登录"
+            android:visibility="gone" />
     </LinearLayout>
 
 </ScrollView>
