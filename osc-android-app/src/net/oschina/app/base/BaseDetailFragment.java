@@ -100,6 +100,7 @@ public abstract class BaseDetailFragment extends BaseFragment implements
                 e.printStackTrace();
                 onFailure(arg0, arg1, arg2, e);
             }
+            ((DetailActivity) getActivity()).emojiFragment.clean();
         }
 
         @Override

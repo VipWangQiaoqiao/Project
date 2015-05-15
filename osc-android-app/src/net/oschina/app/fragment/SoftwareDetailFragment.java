@@ -183,6 +183,13 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
     }
 
     @Override
+    public void onclickWriteComment() {
+        super.onclickWriteComment();
+        if (mSoftware != null)
+            UIHelper.showSoftWareTweets(getActivity(), mSoftware.getId());
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
         case R.id.btn_software_index:

@@ -32,6 +32,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -78,6 +79,7 @@ public class CommentFrament extends BaseListFragment<Comment> implements
                     hideWaitDialog();
                     AppContext.showToastShort(res.getErrorMessage());
                 }
+                emojiFragment.clean();
             } catch (Exception e) {
                 e.printStackTrace();
                 onFailure(arg0, arg1, arg2, e);
@@ -127,8 +129,6 @@ public class CommentFrament extends BaseListFragment<Comment> implements
                 | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
         getActivity().getWindow().setSoftInputMode(mode);
 
-        emojiFragment.setOnSendClickListener(this);
-
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.emoji_keyboard, emojiFragment).commit();
     }
@@ -137,6 +137,7 @@ public class CommentFrament extends BaseListFragment<Comment> implements
     public void onResume() {
         super.onResume();
         emojiFragment.hideFlagButton();
+        emojiFragment.setOnSendClickListener(this);
     }
 
     @Override
@@ -282,6 +283,18 @@ public class CommentFrament extends BaseListFragment<Comment> implements
 
     @Override
     public void onClickSendButton(Editable text) {
+        if (!TDevice.hasInternet()) {
+            AppContext.showToastShort(R.string.tip_network_error);
+            return;
+        }
+        if (TextUtils.isEmpty(text)) {
+            AppContext.showToastShort(R.string.tip_comment_content_empty);
+            return;
+        }
+        if (!AppContext.getInstance().isLogin()) {
+            UIHelper.showLoginActivity(getActivity());
+            return;
+        }
         if (emojiFragment.getEditText().getTag() != null) {
             handleReplyComment((Comment) emojiFragment.getEditText().getTag(),
                     text.toString());
@@ -299,7 +312,6 @@ public class CommentFrament extends BaseListFragment<Comment> implements
             OSChinaApi.publicComment(mCatalog, mId, AppContext.getInstance()
                     .getLoginUid(), text, 1, mCommentHandler);
         }
-        emojiFragment.clean();
     }
 
     private void handleReplyComment(Comment comment, String text) {
@@ -317,7 +329,6 @@ public class CommentFrament extends BaseListFragment<Comment> implements
                     .getAuthorId(), AppContext.getInstance().getLoginUid(),
                     text, mCommentHandler);
         }
-        emojiFragment.clean();
     }
 
     @Override
