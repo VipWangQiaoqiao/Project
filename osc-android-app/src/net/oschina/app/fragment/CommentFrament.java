@@ -196,6 +196,7 @@ public class CommentFrament extends BaseListFragment<Comment> implements
             return;
         emojiFragment.getEditText().setTag(comment);
         emojiFragment.getEditText().setHint("回复：" + comment.getAuthor());
+        emojiFragment.showSoftKeyboard();
     }
 
     private void handleDeleteComment(Comment comment) {
@@ -307,7 +308,6 @@ public class CommentFrament extends BaseListFragment<Comment> implements
             UIHelper.showLoginActivity(getActivity());
             return;
         }
-
         if (mIsBlogComment) {
             OSChinaApi.replyBlogComment(mId, AppContext.getInstance()
                     .getLoginUid(), text, comment.getId(), comment

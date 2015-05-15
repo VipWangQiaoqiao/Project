@@ -110,8 +110,7 @@ public class NewsDetailFragment extends BaseDetailFragment implements
         mNews = (News) entity;
         fillUI();
         fillWebViewBody();
-        ((DetailActivity) getActivity()).setCommentCount(mNews
-                .getCommentCount());
+        ((DetailActivity) getActivity()).setCommentCount(mCommentCount);
     }
 
     private void fillUI() {
@@ -125,12 +124,13 @@ public class NewsDetailFragment extends BaseDetailFragment implements
             }
         });
         mTvTime.setText(StringUtils.friendly_time(mNews.getPubDate()));
+
         notifyFavorite(mNews.getFavorite() == 1);
     }
 
     @Override
     public int getCommentCount() {
-        return mNews.getCommentCount();
+        return mCommentCount;
     }
 
     private void fillWebViewBody() {

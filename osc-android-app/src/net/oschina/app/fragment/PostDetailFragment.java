@@ -99,11 +99,8 @@ public class PostDetailFragment extends BaseDetailFragment implements
         mPost = (Post) entity;
         fillUI();
         fillWebViewBody();
-        if (mPost.getAnswerCount() > mCommentCount) {
-            mCommentCount = mPost.getAnswerCount();
-            ((DetailActivity) getActivity()).toolFragment
-                    .setCommentCount(mCommentCount);
-        }
+        ((DetailActivity) getActivity()).toolFragment
+                .setCommentCount(mCommentCount);
     }
 
     private void fillUI() {
