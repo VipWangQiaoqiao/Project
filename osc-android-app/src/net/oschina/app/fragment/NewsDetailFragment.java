@@ -224,12 +224,6 @@ public class NewsDetailFragment extends BaseDetailFragment implements
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        ((DetailActivity) getActivity()).toolFragment.hideReportButton();
-    }
-
-    @Override
     public void onClickFlagButton() {}
 
     @Override

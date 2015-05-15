@@ -88,7 +88,8 @@
             android:id="@+id/report_layout"
             android:layout_width="0.0dip"
             android:layout_height="fill_parent"
-            android:layout_weight="1.0" >
+            android:layout_weight="1.0"
+            android:visibility="gone" >
 
             <ImageView
                 android:id="@+id/action_report"

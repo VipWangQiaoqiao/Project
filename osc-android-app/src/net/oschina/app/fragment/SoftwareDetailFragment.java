@@ -130,12 +130,6 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        ((DetailActivity) getActivity()).toolFragment.hideReportButton();
-    }
-
-    @Override
     protected void executeOnLoadDataSuccess(Entity entity) {
         mSoftware = (Software) entity;
         fillUI();

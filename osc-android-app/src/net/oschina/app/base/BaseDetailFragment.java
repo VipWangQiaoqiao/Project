@@ -588,6 +588,10 @@ public abstract class BaseDetailFragment extends BaseFragment implements
         onFavoriteChanged(favorite);
     }
 
+    public boolean isFavorited() {
+        return mIsFavorited;
+    }
+
     @SuppressLint("ViewHolder")
     private static class MenuAdapter extends BaseAdapter {
 

@@ -145,12 +145,6 @@ public class EventDetailFragment extends BaseDetailFragment implements
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        ((DetailActivity) getActivity()).toolFragment.hideReportButton();
-    }
-
     private void showEventApplies() {
         Bundle args = new Bundle();
         args.putInt(BaseListFragment.BUNDLE_KEY_CATALOG, mPost.getEvent()

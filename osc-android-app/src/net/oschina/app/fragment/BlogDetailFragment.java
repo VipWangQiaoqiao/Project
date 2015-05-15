@@ -80,6 +80,12 @@ public class BlogDetailFragment extends BaseDetailFragment implements
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        ((DetailActivity) getActivity()).toolFragment.showReportButton();
+    }
+
+    @Override
     protected String getCacheKey() {
         return new StringBuilder(BLOG_CACHE_KEY).append(mBlogId).toString();
     }
