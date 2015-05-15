@@ -1,7 +1,5 @@
 package net.oschina.app.widget;
 
-import java.io.IOException;
-
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.util.StringUtils;
@@ -70,7 +68,7 @@ public class RecordButtonUtil {
         try {
             mRecorder.prepare();
             mRecorder.start();
-        } catch (IOException e) {
+        } catch (Exception e) {
             AppContext.showToast("小屁孩不听你说话了,请返回重试");
         }
     }
