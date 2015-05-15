@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginBottom="10dp"
+        android:padding="8dp"
         android:background="@android:color/white" >
 
         <View
@@ -24,7 +25,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/white"
-            android:paddingLeft="15dp"
             android:paddingRight="10dp"
             android:text="标题" />
     </RelativeLayout>
