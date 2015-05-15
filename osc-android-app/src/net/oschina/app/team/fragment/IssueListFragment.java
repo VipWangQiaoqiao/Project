@@ -8,10 +8,8 @@ import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.team.adapter.TeamIssueAdapter;
-import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamIssue;
 import net.oschina.app.team.bean.TeamIssueList;
-import net.oschina.app.team.bean.TeamProject;
 import net.oschina.app.util.XmlUtils;
 
 /**
@@ -25,10 +23,6 @@ import net.oschina.app.util.XmlUtils;
 public class IssueListFragment extends BaseListFragment<TeamIssue> {
 
     private final String CACHE_KEY_PREFIX = "issue_list_";
-
-    private Team mTeam;
-
-    private TeamProject mTeamProject;
 
     private final int mTeamId = 12481;
 
