@@ -192,7 +192,6 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
     @Override
     public void onClickSendButton(Editable str) {
         currentFragment.onClickSendButton(str);
-        emojiFragment.clean();
     }
 
     @Override
