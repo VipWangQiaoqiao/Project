@@ -74,6 +74,7 @@ public class MessageDetailFragment extends BaseListFragment<Comment> implements
                 } else {
                     AppContext.showToastShort(res.getErrorMessage());
                 }
+                emojiFragment.clean();
             } catch (Exception e) {
                 e.printStackTrace();
                 onFailure(arg0, arg1, arg2, e);

@@ -299,6 +299,7 @@ public class TweetDetailFragment extends
                     hideWaitDialog();
                     AppContext.showToastShort(res.getErrorMessage());
                 }
+                outAty.emojiFragment.clean();
             } catch (Exception e) {
                 e.printStackTrace();
                 onFailure(arg0, arg1, arg2, e);
