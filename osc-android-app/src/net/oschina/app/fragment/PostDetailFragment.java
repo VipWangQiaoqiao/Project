@@ -71,6 +71,12 @@ public class PostDetailFragment extends BaseDetailFragment implements
         initViews(view);
         return view;
     }
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((DetailActivity) getActivity()).toolFragment.showReportButton();
+    }
 
     private void initViews(View view) {
         mEmptyLayout = (EmptyLayout) view.findViewById(R.id.error_layout);
