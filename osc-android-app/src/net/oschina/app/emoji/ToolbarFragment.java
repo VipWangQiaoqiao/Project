@@ -4,7 +4,6 @@ import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -117,7 +116,6 @@ public class ToolbarFragment extends BaseFragment {
 
     public void setFavorite(boolean favorite) {
         mFavorite = favorite;
-        Log.i("kymjs", "tool120" + favorite);
         if (mIvFavorite != null) {
             mIvFavorite.setSelected(favorite);
         }
