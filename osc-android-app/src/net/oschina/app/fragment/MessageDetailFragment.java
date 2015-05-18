@@ -47,6 +47,12 @@ import android.widget.AdapterView.OnItemLongClickListener;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
+/**
+ * 与某人的聊天记录界面（留言详情）
+ * 
+ * @author kymjs (http://www.kymjs.com/)
+ * 
+ */
 public class MessageDetailFragment extends BaseListFragment<Comment> implements
         OnItemLongClickListener, OnSendClickListener {
     protected static final String TAG = ActiveFragment.class.getSimpleName();
@@ -59,7 +65,6 @@ public class MessageDetailFragment extends BaseListFragment<Comment> implements
     public KJEmojiFragment emojiFragment = new KJEmojiFragment();
 
     private final AsyncHttpResponseHandler mPublicHandler = new AsyncHttpResponseHandler() {
-
         @Override
         public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
             hideWaitDialog();
@@ -90,7 +95,6 @@ public class MessageDetailFragment extends BaseListFragment<Comment> implements
     };
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-
         @Override
         public void onReceive(Context context, Intent intent) {
             if (mErrorLayout != null) {
@@ -165,6 +169,7 @@ public class MessageDetailFragment extends BaseListFragment<Comment> implements
         super.initView(view);
         mListView.setDivider(null);
         mListView.setDividerHeight(0);
+        mListView.setStackFromBottom(true);
         mListView.setOnItemLongClickListener(this);
         mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
             @Override
@@ -192,6 +197,15 @@ public class MessageDetailFragment extends BaseListFragment<Comment> implements
     @Override
     protected void sendRequestData() {
         OSChinaApi.getCommentList(mFid, mCatalog, mCurrentPage, mHandler);
+    }
+
+    @Override
+    protected boolean isReadCacheData(boolean refresh) {
+        if (!TDevice.hasInternet()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

@@ -99,7 +99,6 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
     @Override
     public void initView(View view) {
-
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorSchemeResources(
                 R.color.swiperefresh_color1, R.color.swiperefresh_color2,
@@ -227,7 +226,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
      * @param refresh
      * @return
      */
-    private boolean isReadCacheData(boolean refresh) {
+    protected boolean isReadCacheData(boolean refresh) {
         String key = getCacheKey();
         if (!TDevice.hasInternet()) {
             return true;
