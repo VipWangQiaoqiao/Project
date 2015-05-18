@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -124,7 +125,7 @@ public class NewsDetailFragment extends BaseDetailFragment implements
             }
         });
         mTvTime.setText(StringUtils.friendly_time(mNews.getPubDate()));
-
+        Log.i("kymjs", "newsdetail==128==" + mNews.getFavorite());
         notifyFavorite(mNews.getFavorite() == 1);
     }
 
@@ -171,6 +172,7 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 
     @Override
     protected void onFavoriteChanged(boolean flag) {
+        super.onFavoriteChanged(flag);
         mNews.setFavorite(flag ? 1 : 0);
         saveCache(mNews);
     }

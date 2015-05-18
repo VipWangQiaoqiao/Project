@@ -53,6 +53,13 @@ public class PostDetailFragment extends BaseDetailFragment implements
     private Post mPost;
 
     @Override
+    protected void onFavoriteChanged(boolean flag) {
+        super.onFavoriteChanged(flag);
+        mPost.setFavorite(flag ? 1 : 0);
+        saveCache(mPost);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater,
             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news_detail, container,

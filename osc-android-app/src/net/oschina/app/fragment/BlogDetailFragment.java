@@ -86,6 +86,13 @@ public class BlogDetailFragment extends BaseDetailFragment implements
     }
 
     @Override
+    protected void onFavoriteChanged(boolean flag) {
+        super.onFavoriteChanged(flag);
+        mBlog.setFavorite(flag ? 1 : 0);
+        saveCache(mBlog);
+    }
+
+    @Override
     protected String getCacheKey() {
         return new StringBuilder(BLOG_CACHE_KEY).append(mBlogId).toString();
     }

@@ -37,6 +37,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.internal.widget.ListPopupWindow;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -304,7 +305,9 @@ public abstract class BaseDetailFragment extends BaseFragment implements
 
     protected void executeOnLoadFinish() {}
 
-    protected void onFavoriteChanged(boolean flag) {}
+    protected void onFavoriteChanged(boolean flag) {
+        ((DetailActivity) getActivity()).toolFragment.setFavorite(flag);
+    }
 
     protected int getFavoriteTargetId() {
         return -1;
@@ -585,6 +588,7 @@ public abstract class BaseDetailFragment extends BaseFragment implements
         if (mMenuAdapter != null) {
             mMenuAdapter.setFavorite(favorite);
         }
+        Log.i("kymjs", "basedetail=591==" + favorite);
         onFavoriteChanged(favorite);
     }
 

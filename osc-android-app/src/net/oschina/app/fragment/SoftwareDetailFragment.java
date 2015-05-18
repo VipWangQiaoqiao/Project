@@ -206,7 +206,9 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
 
     @Override
     protected void onFavoriteChanged(boolean flag) {
+        super.onFavoriteChanged(flag);
         mSoftware.setFavorite(flag ? 1 : 0);
+        saveCache(mSoftware);
     }
 
     @Override
