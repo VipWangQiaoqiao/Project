@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/list_item_background"
+    android:background="?attr/layout_item_bg"
     android:padding="@dimen/space_8" >
 
     <net.oschina.app.widget.AvatarView
@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/space_2"
         android:layout_toRightOf="@id/iv_avatar"
-        android:textColor="@color/lightblue"
+        android:textColor="?android:textColorLink"
         android:textSize="@dimen/text_size_14" />
 
     <TextView
@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/space_10"
-            android:textColor="@color/main_gray"
+            android:textColor="?attr/infoTextColor"
             android:textSize="@dimen/text_size_12"
             android:visibility="visible" />
 
@@ -63,7 +63,7 @@
         android:layout_toRightOf="@id/iv_avatar"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:textColor="@color/main_black"
+        android:textColor="?attr/textColor"
         android:textSize="@dimen/text_size_15" />
 
     <LinearLayout
@@ -126,15 +126,10 @@
 
         <TextView
             android:id="@+id/tv_comment_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_gravity="center_vertical"
-            android:drawableLeft="@drawable/ic_comment_count"
-            android:drawablePadding="@dimen/space_2"
+            style="@style/list_text_info"
             android:gravity="center_vertical"
-            android:textColor="@color/main_gray"
-            android:textSize="@dimen/text_size_12"
             android:visibility="gone" />
     </RelativeLayout>
 

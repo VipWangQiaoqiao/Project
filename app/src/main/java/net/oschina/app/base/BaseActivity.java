@@ -1,5 +1,15 @@
 package net.oschina.app.base;
 
+import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Spinner;
+import android.widget.TextView;
+
 import net.oschina.app.AppManager;
 import net.oschina.app.R;
 import net.oschina.app.interf.BaseViewInterface;
@@ -11,17 +21,6 @@ import net.oschina.app.util.TDevice;
 
 import org.kymjs.kjframe.utils.StringUtils;
 
-import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBar.LayoutParams;
-import android.support.v7.app.ActionBarActivity;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Spinner;
-import android.widget.TextView;
 import butterknife.ButterKnife;
 
 /**
@@ -30,7 +29,7 @@ import butterknife.ButterKnife;
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @created 2014年9月25日 上午11:30:15 引用自：tonlin
  */
-public abstract class BaseActivity extends ActionBarActivity implements
+public abstract class BaseActivity extends AppCompatActivity implements
         DialogControl, View.OnClickListener, BaseViewInterface {
     public static final String INTENT_ACTION_EXIT_APP = "INTENT_ACTION_EXIT_APP";
 
@@ -110,42 +109,8 @@ public abstract class BaseActivity extends ActionBarActivity implements
         if (actionBar == null)
             return;
         if (hasBackButton()) {
-            mActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-            int layoutRes = getActionBarCustomView();
-            View view = inflateView(layoutRes == 0 ? R.layout.actionbar_custom_backtitle
-                    : layoutRes);
-            View back = view.findViewById(R.id.btn_back);
-            if (back == null) {
-                throw new IllegalArgumentException(
-                        "can not find R.id.btn_back in customView");
-            }
-            back.setOnClickListener(new OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    TDevice.hideSoftKeyboard(getCurrentFocus());
-                    onBackPressed();
-                }
-            });
-            mTvActionTitle = (TextView) view
-                    .findViewById(R.id.tv_actionbar_title);
-            if (mTvActionTitle == null) {
-                throw new IllegalArgumentException(
-                        "can not find R.id.tv_actionbar_title in customView");
-            }
-            int titleRes = getActionBarTitle();
-            if (titleRes != 0) {
-                mTvActionTitle.setText(titleRes);
-            }
-            LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT,
-                    LayoutParams.MATCH_PARENT);
-            actionBar.setCustomView(view, params);
-            View spinner = actionBar.getCustomView().findViewById(R.id.spinner);
-            if (haveSpinner()) {
-                spinner.setVisibility(View.VISIBLE);
-            } else {
-                spinner.setVisibility(View.GONE);
-            }
+            mActionBar.setDisplayHomeAsUpEnabled(true);
+            mActionBar.setHomeButtonEnabled(true);
         } else {
             actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE);
             actionBar.setDisplayUseLogoEnabled(false);
@@ -157,7 +122,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
     }
 
     protected Spinner getSpinner() {
-        return (Spinner) mActionBar.getCustomView().findViewById(R.id.spinner);
+        return null;
     }
 
     public void setActionBarTitle(int resId) {

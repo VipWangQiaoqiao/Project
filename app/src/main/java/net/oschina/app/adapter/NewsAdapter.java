@@ -1,16 +1,17 @@
 package net.oschina.app.adapter;
 
-import net.oschina.app.AppContext;
-import net.oschina.app.R;
-import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.bean.News;
-import net.oschina.app.bean.NewsList;
-import net.oschina.app.util.StringUtils;
 import android.annotation.SuppressLint;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import net.oschina.app.R;
+import net.oschina.app.base.ListBaseAdapter;
+import net.oschina.app.bean.News;
+import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TypefaceUtils;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -32,14 +33,14 @@ public class NewsAdapter extends ListBaseAdapter<News> {
         News news = mDatas.get(position);
         vh.title.setText(news.getTitle());
 
-        if (AppContext.isOnReadedPostList(NewsList.PREF_READED_NEWS_LIST,
-                news.getId() + "")) {
-            vh.title.setTextColor(parent.getContext().getResources()
-                    .getColor(R.color.main_gray));
-        } else {
-            vh.title.setTextColor(parent.getContext().getResources()
-                    .getColor(R.color.main_black));
-        }
+//        if (AppContext.isOnReadedPostList(NewsList.PREF_READED_NEWS_LIST,
+//                news.getId() + "")) {
+//            vh.title.setTextColor(parent.getContext().getResources()
+//                    .getColor(R.color.main_gray));
+//        } else {
+//            vh.title.setTextColor(parent.getContext().getResources()
+//                    .getColor(R.color.main_black));
+//        }
 
         String description = news.getBody();
         vh.description.setVisibility(View.GONE);
@@ -49,20 +50,14 @@ public class NewsAdapter extends ListBaseAdapter<News> {
         }
 
         vh.source.setText(news.getAuthor());
-        vh.time.setText(StringUtils.friendly_time(news.getPubDate()));
         if (StringUtils.isToday(news.getPubDate())) {
             vh.tip.setVisibility(View.VISIBLE);
         } else {
             vh.tip.setVisibility(View.GONE);
         }
-        //
-        // if (hasExternalLink(news)) {
-        // vh.link.setVisibility(View.VISIBLE);
-        // } else {
-        // vh.link.setVisibility(View.GONE);
-        // }
-
-        vh.comment_count.setText(news.getCommentCount() + "");
+        TypefaceUtils.setTypeface(vh.source);
+        TypefaceUtils.setTypeFaceWithText(vh.time, R.string.fa_clock_o, StringUtils.friendly_time(news.getPubDate()));
+        TypefaceUtils.setTypeFaceWithText(vh.comment_count, R.string.fa_comment, news.getCommentCount() + "");
 
         return convertView;
     }

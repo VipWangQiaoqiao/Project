@@ -37,9 +37,7 @@
             </LinearLayout>
 
             <View
-                android:layout_width="wrap_content"
-                android:layout_height="1px"
-                android:background="@color/list_divider_color" />
+                style="@style/h_line" />
 
             <LinearLayout
                 android:id="@+id/rl_blog"
@@ -56,9 +54,7 @@
             </LinearLayout>
 
             <View
-                android:layout_width="wrap_content"
-                android:layout_height="1px"
-                android:background="@color/list_divider_color" />
+                style="@style/h_line" />
 
             <LinearLayout
                 android:id="@+id/rl_note"
@@ -75,9 +71,7 @@
             </LinearLayout>
 
             <View
-                android:layout_width="wrap_content"
-                android:layout_height="1px"
-                android:background="@color/list_divider_color" />
+                style="@style/h_line" />
 
             <LinearLayout
                 android:id="@+id/rl_team"
@@ -94,9 +88,7 @@
             </LinearLayout>
 
             <View
-                android:layout_width="wrap_content"
-                android:layout_height="1px"
-                android:background="@color/list_divider_color" />
+                style="@style/h_line" />
         </LinearLayout>
     </net.oschina.app.widget.CustomerScrollView>
 

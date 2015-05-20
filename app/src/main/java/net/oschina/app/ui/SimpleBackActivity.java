@@ -6,6 +6,8 @@ import net.oschina.app.R;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.emoji.OnSendClickListener;
+import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.TweetPubFragment;
 import net.oschina.app.fragment.TweetsFragment;
 import net.oschina.app.util.UIHelper;
@@ -13,12 +15,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Editable;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-public class SimpleBackActivity extends BaseActivity {
+public class SimpleBackActivity extends BaseActivity implements
+        OnSendClickListener {
 
     public final static String BUNDLE_KEY_PAGE = "BUNDLE_KEY_PAGE";
     public final static String BUNDLE_KEY_ARGS = "BUNDLE_KEY_ARGS";
@@ -100,7 +104,7 @@ public class SimpleBackActivity extends BaseActivity {
         default:
             break;
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -158,4 +162,15 @@ public class SimpleBackActivity extends BaseActivity {
 
     @Override
     public void initData() {}
+
+    @Override
+    public void onClickSendButton(Editable str) {
+        if (mFragment.get() instanceof MessageDetailFragment) {
+            ((OnSendClickListener) mFragment.get()).onClickSendButton(str);
+            ((MessageDetailFragment) mFragment.get()).emojiFragment.clean();
+        }
+    }
+
+    @Override
+    public void onClickFlagButton() {}
 }

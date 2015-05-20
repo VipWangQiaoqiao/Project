@@ -33,9 +33,9 @@ import android.widget.GridView;
 
 /**
  * 表情页，每页的显示
- *
+ * 
  * @author kymjs (http://www.kymjs.com)
- *
+ * 
  */
 public class EmojiPageFragment extends Fragment {
     private List<Emojicon> datas;
@@ -66,7 +66,7 @@ public class EmojiPageFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater,
-                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         sGrid = new GridView(getActivity());
         sGrid.setNumColumns(KJEmojiConfig.COLUMNS);
@@ -75,7 +75,7 @@ public class EmojiPageFragment extends Fragment {
         sGrid.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
+                    int position, long id) {
                 EditText editText = (EditText) getActivity().findViewById(
                         R.id.emoji_titile_input);
                 if (listener != null) {

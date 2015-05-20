@@ -20,7 +20,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white" >
+            android:background="?attr/windows_bg" >
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -32,11 +32,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dip" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="#D6D6D6" />
             </RelativeLayout>
 
             <!-- 快速操作按钮 -->

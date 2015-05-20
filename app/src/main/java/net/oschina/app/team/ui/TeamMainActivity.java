@@ -91,11 +91,7 @@ public class TeamMainActivity extends BaseActivity {
     public void initView() {
         ButterKnife.inject(this);
         // 隐藏actionbar的标题
-        mActionBar.getCustomView().findViewById(R.id.tv_actionbar_title)
-                .setVisibility(View.GONE);
-        // ImageView back = (ImageView)
-        // mActionBar.getCustomView().findViewById(R.id.btn_back);
-        // back.setImageResource(R.drawable.abc_ab_bottom_solid_dark_holo);
+        mActionBar.setDisplayShowTitleEnabled(false);
         mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
         mErrorLayout.setErrorMessage("获取团队中...");
         mErrorLayout.setOnClickListener(new View.OnClickListener() {

@@ -61,7 +61,7 @@ public class ImagePreviewActivity extends BaseActivity implements
 
     @Override
     protected boolean hasActionBar() {
-        getActionBar().hide();
+        getSupportActionBar().hide();
         return true;
     }
 

@@ -26,24 +26,24 @@
     <style name="h_line">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">1dip</item>
-        <item name="android:background">@color/list_divider_color</item>
+        <item name="android:background">?attr/lineColor</item>
     </style>
     <!-- 纵向线条 -->
     <style name="v_line">
         <item name="android:layout_width">1dip</item>
         <item name="android:layout_height">fill_parent</item>
-        <item name="android:background">@color/list_divider_color</item>
+        <item name="android:background">?attr/lineColor</item>
     </style>
     
     <style name="list_text_title" parent="@style/wrap_wrap">
-        <item name="android:textColor">@color/main_black</item>
+        <item name="android:textColor">?attr/textColor</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">normal</item>
     </style>
     
     <style name="list_text_info" parent="@style/wrap_wrap">
-        <item name="android:textColor">@color/main_gray</item>
-        <item name="android:textSize">@dimen/text_size_10</item>
+        <item name="android:textColor">?attr/infoTextColor</item>
+        <item name="android:textSize">11sp</item>
         <item name="android:drawablePadding">@dimen/space_3</item>
         <item name="android:gravity">center_vertical</item>
     </style>
@@ -56,7 +56,7 @@
         <item name="android:orientation">horizontal</item>
         <item name="android:paddingLeft">20dip</item>
         <item name="android:paddingRight">20dip</item>
-        <item name="android:background">@drawable/list_item_background</item>
+        <item name="android:background">@drawable/day_list_item_background</item>
     </style>
     
     <!-- Team菜单ImageView的样式 -->
@@ -86,7 +86,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">18dp</item>
         <item name="android:orientation">horizontal</item>
-        <item name="android:background">@drawable/list_item_background</item>
+        <item name="android:background">@drawable/day_list_item_background</item>
         <item name="android:gravity">center|left</item>
     </style>
     
@@ -116,7 +116,7 @@
     
     <style name="team_new_issue_layout" parent="@style/fill_wrap">
         <item name="android:orientation">horizontal</item>
-        <item name="android:background">@drawable/list_item_background</item>
+        <item name="android:background">@drawable/day_list_item_background</item>
         <item name="android:padding">15dp</item>
     </style>
     

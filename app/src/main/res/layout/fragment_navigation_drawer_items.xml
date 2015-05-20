@@ -21,9 +21,7 @@
     </LinearLayout>
 
     <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#d2d2d2" />
+        style="@style/h_line" />
 
     <LinearLayout
         android:id="@+id/menu_item_opensoft"
@@ -40,9 +38,7 @@
     </LinearLayout>
 
     <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#d2d2d2" />
+        style="@style/h_line" />
 
     <LinearLayout
         android:id="@+id/menu_item_blog"
@@ -59,9 +55,7 @@
     </LinearLayout>
 
     <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#d2d2d2" />
+        style="@style/h_line" />
     
     <LinearLayout
         android:id="@+id/menu_item_gitapp"
@@ -76,11 +70,9 @@
             style="@style/MenuItemTextViewStyle"
             android:text="@string/gitapp" />
     </LinearLayout>
-    
+
     <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#d2d2d2" />
+        style="@style/h_line" />
 
     <LinearLayout
         android:id="@+id/menu_item_rss"
@@ -98,9 +90,7 @@
     </LinearLayout>
 
     <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#d2d2d2"
+        style="@style/h_line"
         android:visibility="gone" />
 
 </LinearLayout>

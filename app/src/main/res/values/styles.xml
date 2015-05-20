@@ -37,12 +37,13 @@
 
     <style name="ActionBarBaseTheme" parent="@style/Theme.AppCompat.Light">
         <item name="android:windowBackground">@color/window_background</item>
-        <item name="popupMenuStyle">@style/PopupMenu.ListPopupWindow</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu.ListPopupWindow</item>
         <item name="actionBarStyle">@style/ActionBarBaseStyle</item>
         <item name="actionOverflowButtonStyle">@style/OverflowButton</item>
         <item name="actionBarItemBackground">@drawable/socialize_titlebar_item_background_selector</item>
-        <item name="actionMenuTextColor">@color/white</item>
+        <item name="android:actionMenuTextColor">@color/white</item>
         <item name="android:dropDownListViewStyle">@style/SpinnerDropDownListView</item>
+        <item name="popupMenuStyle">@style/mylistPopupWindowStyle</item>
     </style>
 
     <style name="ActionBarBaseTheme.Preview" parent="@style/ActionBarBaseTheme">
@@ -71,7 +72,7 @@
         <item name="android:orientation">horizontal</item>
         <item name="android:paddingLeft">15dip</item>
         <item name="android:paddingRight">15dip</item>
-        <item name="android:background">@drawable/drawer_menu_item_background</item>
+        <item name="android:background">?attr/layout_item_bg</item>
     </style>
 
     <!-- 菜单ImageView的样式 -->
@@ -213,7 +214,7 @@
         <item name="android:layout_alignParentBottom">true</item>
     </style>
 
-    <style name="dialog_common" >
+    <style name="dialog_common" parent="@style/Theme.AppCompat.Dialog">
         <item name="android:windowBackground">@drawable/dialog_background</item>
     </style>
 
@@ -367,7 +368,7 @@
     <style name="option_item_rl">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@drawable/list_item_background</item>
+        <item name="android:background">?attr/layout_item_bg</item>
         <item name="android:clickable">true</item>
         <item name="android:padding">@dimen/space_13</item>
         <item name="android:gravity">center_vertical</item>
@@ -448,7 +449,7 @@
         <item name="android:gravity">center_horizontal</item>
         <item name="android:orientation">vertical</item>
         <item name="android:padding">@dimen/space_16</item>
-        <item name="android:background">@drawable/list_item_background</item>
+        <item name="android:background">?attr/layout_item_bg</item>
     </style>
 
     <style name="quick_option_item_text">
@@ -519,6 +520,7 @@
     </style>
 
     <style name="Theme.AppStartLoad" parent="android:Theme.Black.NoTitleBar.Fullscreen">
+        <item name="android:windowBackground">@drawable/welcome</item>
         <item name="android:windowNoTitle">true</item>
     </style>
 

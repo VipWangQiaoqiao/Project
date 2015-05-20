@@ -24,12 +24,12 @@ public class OpenCameraInterface {
 	private static final String TAG = OpenCameraInterface.class.getName();
 
 	/**
-	 * Opens the requested camera with {@link Camera#open(int)}, if one exists.
+	 * Opens the requested camera with {@link android.hardware.Camera#open(int)}, if one exists.
 	 *
 	 * @param cameraId
 	 *            camera ID of the camera to use. A negative value means
 	 *            "no preference"
-	 * @return handle to {@link Camera} that was opened
+	 * @return handle to {@link android.hardware.Camera} that was opened
 	 */
 	public static Camera open(int cameraId) {
 
@@ -74,10 +74,10 @@ public class OpenCameraInterface {
 	}
 
 	/**
-	 * Opens a rear-facing camera with {@link Camera#open(int)}, if one exists,
+	 * Opens a rear-facing camera with {@link android.hardware.Camera#open(int)}, if one exists,
 	 * or opens camera 0.
 	 *
-	 * @return handle to {@link Camera} that was opened
+	 * @return handle to {@link android.hardware.Camera} that was opened
 	 */
 	public static Camera open() {
 		return open(-1);

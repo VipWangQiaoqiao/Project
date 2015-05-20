@@ -53,6 +53,13 @@ public class PostDetailFragment extends BaseDetailFragment implements
     private Post mPost;
 
     @Override
+    protected void onFavoriteChanged(boolean flag) {
+        super.onFavoriteChanged(flag);
+        mPost.setFavorite(flag ? 1 : 0);
+        saveCache(mPost);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater,
             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news_detail, container,
@@ -63,6 +70,12 @@ public class PostDetailFragment extends BaseDetailFragment implements
         ButterKnife.inject(this, view);
         initViews(view);
         return view;
+    }
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((DetailActivity) getActivity()).toolFragment.showReportButton();
     }
 
     private void initViews(View view) {
@@ -99,11 +112,8 @@ public class PostDetailFragment extends BaseDetailFragment implements
         mPost = (Post) entity;
         fillUI();
         fillWebViewBody();
-        if (mPost.getAnswerCount() > mCommentCount) {
-            mCommentCount = mPost.getAnswerCount();
-            ((DetailActivity) getActivity()).toolFragment
-                    .setCommentCount(mCommentCount);
-        }
+        ((DetailActivity) getActivity()).toolFragment
+                .setCommentCount(mCommentCount);
     }
 
     private void fillUI() {

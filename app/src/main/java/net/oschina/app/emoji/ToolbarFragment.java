@@ -129,8 +129,8 @@ public class ToolbarFragment extends BaseFragment {
         }
     }
 
-    public void hideReportButton() {
-        mActionReport.setVisibility(View.GONE);
+    public void showReportButton() {
+        mActionReport.setVisibility(View.VISIBLE);
     }
 
     @Override

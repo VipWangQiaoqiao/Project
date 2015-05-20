@@ -18,6 +18,7 @@ package net.oschina.app.emoji;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.oschina.app.R;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,9 +78,12 @@ public class EmojiGridAdapter extends BaseAdapter {
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = new ImageView(cxt);
-            LayoutParams params = new LayoutParams(120, 120);
+            int bound = (int) cxt.getResources().getDimension(R.dimen.space_49);
+            LayoutParams params = new LayoutParams(bound, bound);
             convertView.setLayoutParams(params);
-            convertView.setPadding(10, 10, 10, 10);
+            int padding = (int) cxt.getResources().getDimension(
+                    R.dimen.space_10);
+            convertView.setPadding(padding, padding, padding, padding);
             holder.image = (ImageView) convertView;
             convertView.setTag(holder);
         } else {

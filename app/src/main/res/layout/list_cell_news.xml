@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/list_item_background"
+    android:background="?attr/layout_item_bg"
     android:padding="@dimen/space_8" >
 
     <LinearLayout
@@ -37,7 +37,7 @@
         android:layout_marginBottom="@dimen/space_5"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textColor="@color/main_gray" />
+        android:textColor="?attr/infoTextColor" />
 
     <TextView
         android:id="@+id/tv_source"
@@ -52,7 +52,6 @@
         android:layout_marginLeft="@dimen/space_10"
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@id/tv_source"
-        android:drawableLeft="@drawable/ic_time"
         android:drawablePadding="@dimen/space_2" />
 
     <TextView
@@ -62,7 +61,6 @@
         android:layout_marginLeft="@dimen/space_10"
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@id/tv_time"
-        android:drawableLeft="@drawable/ic_comment_count"
         android:drawablePadding="@dimen/space_2" />
 
     <ImageView

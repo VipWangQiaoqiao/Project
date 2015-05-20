@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
+    android:background="?attr/layout_item_bg"
     android:padding="@dimen/space_10" >
 
     <net.oschina.app.widget.AvatarView
@@ -15,16 +15,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/iv_avatar"
-        android:textColor="@color/lightblue"
-        android:textSize="@dimen/text_size_13" />
+        android:textColor="?android:textColorLink"
+        android:textSize="15sp" />
 
     <TextView
         android:id="@+id/tv_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:textColor="@color/tweet_time_platform"
-        android:textSize="@dimen/text_size_10" />
+        style="@style/list_text_info" />
 
     <net.oschina.app.widget.FloorView
         android:id="@+id/ly_refers"
@@ -43,8 +40,8 @@
         android:layout_below="@id/ly_refers"
         android:layout_marginTop="@dimen/space_8"
         android:layout_toRightOf="@id/iv_avatar"
-        android:textColor="@color/main_black"
-        android:textSize="@dimen/text_size_14" />
+        android:textColor="?attr/textColor"
+        android:textSize="14sp" />
 
     <LinearLayout
         android:id="@+id/ly_relies"
@@ -58,15 +55,12 @@
 
     <TextView
         android:id="@+id/tv_from"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_below="@id/ly_relies"
         android:layout_marginTop="@dimen/space_8"
+        style="@style/list_text_info"
         android:layout_toRightOf="@id/iv_avatar"
         android:drawableLeft="@drawable/platform"
         android:drawablePadding="@dimen/space_4"
-        android:gravity="center_vertical"
-        android:textColor="@color/main_gray"
-        android:textSize="@dimen/text_size_11" />
+        android:gravity="center_vertical" />
 
 </RelativeLayout>

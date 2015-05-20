@@ -80,6 +80,19 @@ public class BlogDetailFragment extends BaseDetailFragment implements
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        ((DetailActivity) getActivity()).toolFragment.showReportButton();
+    }
+
+    @Override
+    protected void onFavoriteChanged(boolean flag) {
+        super.onFavoriteChanged(flag);
+        mBlog.setFavorite(flag ? 1 : 0);
+        saveCache(mBlog);
+    }
+
+    @Override
     protected String getCacheKey() {
         return new StringBuilder(BLOG_CACHE_KEY).append(mBlogId).toString();
     }
@@ -113,11 +126,8 @@ public class BlogDetailFragment extends BaseDetailFragment implements
         mBlog = (Blog) entity;
         fillUI();
         fillWebViewBody();
-        if (mBlog.getCommentCount() > mCommentCount) {
-            mCommentCount = mBlog.getCommentCount();
-            ((DetailActivity) getActivity()).toolFragment.setCommentCount(mBlog
-                    .getCommentCount());
-        }
+        ((DetailActivity) getActivity()).toolFragment
+                .setCommentCount(mCommentCount);
     }
 
     private void fillUI() {

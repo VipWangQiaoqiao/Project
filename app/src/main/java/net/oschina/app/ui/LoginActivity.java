@@ -24,6 +24,7 @@ import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.protocol.HttpContext;
 import org.kymjs.kjframe.http.HttpConfig;
+import org.kymjs.kjframe.utils.KJLoger;
 
 import android.content.Intent;
 import android.text.TextUtils;
@@ -35,15 +36,15 @@ import butterknife.InjectView;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.tencent.tauth.IUiListener;
+import com.tencent.tauth.Tencent;
+import com.tencent.tauth.UiError;
 
 /**
  * 用户登录界面
  * 
- * @author FireAnt（http://my.oschina.net/LittleDY）
- * @version 创建时间：2014年9月26日 下午3:24:31
- * 
+ * @author kymjs (http://www.kymjs.com/)
  */
-
 public class LoginActivity extends BaseActivity {
 
     public static final int REQUEST_CODE_INIT = 0;
@@ -64,12 +65,14 @@ public class LoginActivity extends BaseActivity {
 
     @InjectView(R.id.btn_login)
     Button mBtnLogin;
+    @InjectView(R.id.qq_login)
+    Button mBtnQQLogin;
 
     private final int requestCode = REQUEST_CODE_INIT;
-
     private String mUserName;
-
     private String mPassword;
+
+    private Tencent mTencent;
 
     private final TextWatcher mUserNameWatcher = new SimpleTextWatcher() {
         @Override
@@ -120,6 +123,9 @@ public class LoginActivity extends BaseActivity {
             break;
         case R.id.btn_login:
             handleLogin();
+            break;
+        case R.id.qq_login:
+            qqLogin();
             break;
         default:
             break;
@@ -232,6 +238,7 @@ public class LoginActivity extends BaseActivity {
         mIvClearUserName.setOnClickListener(this);
         mIvClearPassword.setOnClickListener(this);
         mBtnLogin.setOnClickListener(this);
+        mBtnQQLogin.setOnClickListener(this);
 
         mEtUserName.addTextChangedListener(mUserNameWatcher);
         mEtPassword.addTextChangedListener(mPassswordWatcher);
@@ -239,9 +246,56 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public void initData() {
+        mTencent = Tencent.createInstance(AppConfig.APP_QQ_KEY,
+                this.getApplicationContext());
+
         mEtUserName.setText(AppContext.getInstance()
                 .getProperty("user.account"));
         mEtPassword.setText(CyptoUtils.decode("oschinaApp", AppContext
                 .getInstance().getProperty("user.pwd")));
+    }
+
+    /**
+     * QQ登陆
+     */
+    private void qqLogin() {
+        if (!mTencent.isSessionValid()) {
+            mTencent.login(this, "all", new AuthorListener());
+        }
+    }
+
+    // /**
+    // * 封装并返回QQ登陆数据
+    // */
+    // private User packQQLoginBean(User user, JSONObject obj) {
+    // user.setLoginType(QQ_LOGIN);
+    // if (obj.has("openid")) {
+    // user.setUserId(obj.optString("openid"));
+    // } else {
+    // user.setUserName(obj.optString("nickname"));
+    // user.setSex("男".equals(obj.optString("gender")) ? 1 : 2);
+    // user.setHeadUrl(obj.optString("figureurl_qq_1"));
+    // user.setPwd(user.getUserId());
+    // }
+    // return user;
+    // }
+
+    class AuthorListener implements IUiListener {
+
+        @Override
+        public void onCancel() {
+            KJLoger.debug(getClass().getName() + "用户取消登陆");
+        }
+
+        @Override
+        public void onComplete(Object arg0) {
+            // packQQLoginBean(user, obj);
+            AppContext.showToast("成功"); // 服务器端暂无
+        }
+
+        @Override
+        public void onError(UiError error) {
+            KJLoger.debug(getClass().getName() + "登陆失败" + error.errorDetail);
+        }
     }
 }

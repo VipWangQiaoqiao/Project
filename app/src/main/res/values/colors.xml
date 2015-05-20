@@ -10,7 +10,6 @@
     <color name="gold">#FFD700</color>
     <color name="yellow">#FFFF00</color>
     <color name="green">#008000</color>
-    <color name="blue">#0000FF</color>
     <color name="purple">#800080</color>
     <color name="pink">#FFC0CB</color>
     <color name="orange">#FFA500</color>
@@ -83,6 +82,7 @@
     <color name="line_background">#ffcccccc</color>
     <color name="done_text_color_normal">#ff333333</color>
     <color name="done_text_color_disabled">#ffcccccc</color>
+    <color name="blue">#ff33cc33</color>
     <color name="darker_blue">#ff00cc99</color>
     <color name="date_picker_text_normal">#ff999999</color>
     <color name="calendar_header">#ff999999</color>

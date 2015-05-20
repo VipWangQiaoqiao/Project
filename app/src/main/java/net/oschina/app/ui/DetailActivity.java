@@ -143,6 +143,7 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
         if (currentFragment instanceof TweetDetailFragment
                 || currentFragment instanceof TeamTweetDetailFragment
                 || currentFragment instanceof TeamDiaryDetail
+                || currentFragment instanceof TeamIssueDetailFragment
                 || currentFragment instanceof TeamDiscussDetailFragment) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.emoji_keyboard, emojiFragment).commit();
@@ -191,7 +192,6 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
     @Override
     public void onClickSendButton(Editable str) {
         currentFragment.onClickSendButton(str);
-        emojiFragment.clean();
     }
 
     @Override

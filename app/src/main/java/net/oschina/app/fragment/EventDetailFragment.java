@@ -116,6 +116,13 @@ public class EventDetailFragment extends BaseDetailFragment implements
         requestData(true);
     }
 
+    @Override
+    protected void onFavoriteChanged(boolean flag) {
+        super.onFavoriteChanged(flag);
+        mPost.setFavorite(flag ? 1 : 0);
+        saveCache(mPost);
+    }
+
     private void initViews(View view) {
         mEmptyLayout = (EmptyLayout) view.findViewById(R.id.error_layout);
 
@@ -143,12 +150,6 @@ public class EventDetailFragment extends BaseDetailFragment implements
         default:
             break;
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        ((DetailActivity) getActivity()).toolFragment.hideReportButton();
     }
 
     private void showEventApplies() {

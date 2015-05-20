@@ -16,6 +16,7 @@
 
 package com.dtr.zxing.utils;
 
+import net.oschina.app.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,8 +27,6 @@ import com.dtr.zxing.activity.CaptureActivity;
 import com.dtr.zxing.camera.CameraManager;
 import com.dtr.zxing.decode.DecodeThread;
 import com.google.zxing.Result;
-
-import net.oschina.app.R;
 
 
 /**

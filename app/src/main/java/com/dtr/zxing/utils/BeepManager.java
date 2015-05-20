@@ -25,13 +25,13 @@ import android.media.MediaPlayer;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.Log;
-
 import com.dtr.zxing.activity.CaptureActivity;
 
-import net.oschina.app.R;
 
 import java.io.Closeable;
 import java.io.IOException;
+
+import net.oschina.app.R;
 
 /**
  * Manages beeps and vibrations for {@link CaptureActivity}.

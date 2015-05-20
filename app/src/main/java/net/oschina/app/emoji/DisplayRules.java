@@ -15,16 +15,16 @@
  */
 package net.oschina.app.emoji;
 
-import net.oschina.app.R;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.oschina.app.R;
+
 /**
  * Emoji在手机上的显示规则
- *
+ * 
  * @author kymjs (http://www.kymjs.com)
  */
 public enum DisplayRules {
@@ -808,9 +808,7 @@ public enum DisplayRules {
 
     Nature114(2, 1, R.drawable.squirrel, ":squirrel:", ":squirrel:");
 
-    /**
-     * ****************************** 操作 *************************************
-     */
+    /********************************* 操作 **************************************/
     private String emojiStr;
     private String remote;
     private int value;
@@ -819,7 +817,7 @@ public enum DisplayRules {
     private static Map<String, Integer> sEmojiMap;
 
     private DisplayRules(int type, int value, int resId, String cls,
-                         String remote) {
+            String remote) {
         this.type = type;
         this.emojiStr = cls;
         this.value = value;

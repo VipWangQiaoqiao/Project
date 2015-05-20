@@ -130,12 +130,6 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        ((DetailActivity) getActivity()).toolFragment.hideReportButton();
-    }
-
-    @Override
     protected void executeOnLoadDataSuccess(Entity entity) {
         mSoftware = (Software) entity;
         fillUI();
@@ -183,6 +177,13 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
     }
 
     @Override
+    public void onclickWriteComment() {
+        super.onclickWriteComment();
+        if (mSoftware != null)
+            UIHelper.showSoftWareTweets(getActivity(), mSoftware.getId());
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
         case R.id.btn_software_index:
@@ -205,7 +206,9 @@ public class SoftwareDetailFragment extends BaseDetailFragment implements
 
     @Override
     protected void onFavoriteChanged(boolean flag) {
+        super.onFavoriteChanged(flag);
         mSoftware.setFavorite(flag ? 1 : 0);
+        saveCache(mSoftware);
     }
 
     @Override

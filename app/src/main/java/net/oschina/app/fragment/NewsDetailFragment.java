@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -110,8 +111,7 @@ public class NewsDetailFragment extends BaseDetailFragment implements
         mNews = (News) entity;
         fillUI();
         fillWebViewBody();
-        ((DetailActivity) getActivity()).setCommentCount(mNews
-                .getCommentCount());
+        ((DetailActivity) getActivity()).setCommentCount(mCommentCount);
     }
 
     private void fillUI() {
@@ -125,12 +125,13 @@ public class NewsDetailFragment extends BaseDetailFragment implements
             }
         });
         mTvTime.setText(StringUtils.friendly_time(mNews.getPubDate()));
+        Log.i("kymjs", "newsdetail==128==" + mNews.getFavorite());
         notifyFavorite(mNews.getFavorite() == 1);
     }
 
     @Override
     public int getCommentCount() {
-        return mNews.getCommentCount();
+        return mCommentCount;
     }
 
     private void fillWebViewBody() {
@@ -171,6 +172,7 @@ public class NewsDetailFragment extends BaseDetailFragment implements
 
     @Override
     protected void onFavoriteChanged(boolean flag) {
+        super.onFavoriteChanged(flag);
         mNews.setFavorite(flag ? 1 : 0);
         saveCache(mNews);
     }
@@ -221,12 +223,6 @@ public class NewsDetailFragment extends BaseDetailFragment implements
         OSChinaApi.publicComment(CommentList.CATALOG_NEWS, mNewsId, AppContext
                 .getInstance().getLoginUid(), str.toString(), 0,
                 mCommentHandler);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        ((DetailActivity) getActivity()).toolFragment.hideReportButton();
     }
 
     @Override

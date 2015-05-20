@@ -1,29 +1,5 @@
 package net.oschina.app.adapter;
 
-import net.oschina.app.AppContext;
-import net.oschina.app.R;
-import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.bean.Tweet;
-import net.oschina.app.emoji.InputHelper;
-import net.oschina.app.ui.ImagePreviewActivity;
-import net.oschina.app.ui.dialog.CommonDialog;
-import net.oschina.app.ui.dialog.DialogHelper;
-import net.oschina.app.util.ImageUtils;
-import net.oschina.app.util.KJAnimations;
-import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.UIHelper;
-import net.oschina.app.widget.AvatarView;
-import net.oschina.app.widget.MyLinkMovementMethod;
-import net.oschina.app.widget.MyURLSpan;
-import net.oschina.app.widget.TweetTextView;
-
-import org.apache.http.Header;
-import org.kymjs.kjframe.KJBitmap;
-import org.kymjs.kjframe.bitmap.BitmapCallBack;
-import org.kymjs.kjframe.bitmap.BitmapHelper;
-import org.kymjs.kjframe.utils.DensityUtils;
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -39,10 +15,36 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
+
+import net.oschina.app.AppContext;
+import net.oschina.app.R;
+import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.base.ListBaseAdapter;
+import net.oschina.app.bean.Tweet;
+import net.oschina.app.emoji.InputHelper;
+import net.oschina.app.ui.ImagePreviewActivity;
+import net.oschina.app.ui.dialog.CommonDialog;
+import net.oschina.app.ui.dialog.DialogHelper;
+import net.oschina.app.util.ImageUtils;
+import net.oschina.app.util.KJAnimations;
+import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TypefaceUtils;
+import net.oschina.app.util.UIHelper;
+import net.oschina.app.widget.AvatarView;
+import net.oschina.app.widget.MyLinkMovementMethod;
+import net.oschina.app.widget.MyURLSpan;
+import net.oschina.app.widget.TweetTextView;
+
+import org.apache.http.Header;
+import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.bitmap.BitmapCallBack;
+import org.kymjs.kjframe.bitmap.BitmapHelper;
+import org.kymjs.kjframe.utils.DensityUtils;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * @author HuangWenwei
@@ -68,6 +70,8 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         ImageView image;
         @InjectView(R.id.iv_like_state)
         ImageView likeState;
+        @InjectView(R.id.tv_like_state)
+        TextView tvLikeState;
         @InjectView(R.id.tv_del)
         TextView del;
         @InjectView(R.id.tv_likeusers)
@@ -87,11 +91,13 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
     final private AsyncHttpResponseHandler handler = new AsyncHttpResponseHandler() {
 
         @Override
-        public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {}
+        public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+        }
 
         @Override
         public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                Throwable arg3) {}
+                              Throwable arg3) {
+        }
     };
 
     private void initRecordImg(Context cxt) {
@@ -103,7 +109,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
 
     @Override
     protected View getRealView(final int position, View convertView,
-            final ViewGroup parent) {
+                               final ViewGroup parent) {
         context = parent.getContext();
         final ViewHolder vh;
         if (convertView == null || convertView.getTag() == null) {
@@ -157,7 +163,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         }
         MyURLSpan.parseLinkText(vh.content, span);
 
-        vh.commentcount.setText(tweet.getCommentCount() + "");
+        TypefaceUtils.setTypeFaceWithText(vh.commentcount, R.string.fa_comment, tweet.getCommentCount() + "");
 
         showTweetImage(vh, tweet.getImgSmall(), tweet.getImgBig(),
                 parent.getContext());
@@ -167,13 +173,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             @Override
             public void onClick(View v) {
                 if (AppContext.getInstance().isLogin()) {
-                    if (tweet.getAuthorid() == AppContext.getInstance()
-                            .getLoginUid()) {
-                        AppContext.showToast("不能给自己点赞~");
-                    } else {
-                        updateLikeState(vh1, tweet);
-                    }
-
+                    updateLikeState(vh1, tweet);
                 } else {
                     AppContext.showToast("先登陆再赞~");
                     UIHelper.showLoginActivity(parent.getContext());
@@ -185,6 +185,8 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         }
 
         vh.likeOption.setOnClickListener(likeClick);
+
+        TypefaceUtils.setTypeface(vh.tvLikeState);
         if (tweet.getIsLike() == 1) {
             vh.likeState.setBackgroundResource(R.drawable.ic_likeed);
         } else {
@@ -192,25 +194,25 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         }
         vh.platform.setVisibility(View.VISIBLE);
         switch (tweet.getAppclient()) {
-        case Tweet.CLIENT_MOBILE:
-            vh.platform.setText(R.string.from_mobile);
-            break;
-        case Tweet.CLIENT_ANDROID:
-            vh.platform.setText(R.string.from_android);
-            break;
-        case Tweet.CLIENT_IPHONE:
-            vh.platform.setText(R.string.from_iphone);
-            break;
-        case Tweet.CLIENT_WINDOWS_PHONE:
-            vh.platform.setText(R.string.from_windows_phone);
-            break;
-        case Tweet.CLIENT_WECHAT:
-            vh.platform.setText(R.string.from_wechat);
-            break;
-        default:
-            vh.platform.setText("");
-            vh.platform.setVisibility(View.GONE);
-            break;
+            case Tweet.CLIENT_MOBILE:
+                vh.platform.setText(R.string.from_mobile);
+                break;
+            case Tweet.CLIENT_ANDROID:
+                vh.platform.setText(R.string.from_android);
+                break;
+            case Tweet.CLIENT_IPHONE:
+                vh.platform.setText(R.string.from_iphone);
+                break;
+            case Tweet.CLIENT_WINDOWS_PHONE:
+                vh.platform.setText(R.string.from_windows_phone);
+                break;
+            case Tweet.CLIENT_WECHAT:
+                vh.platform.setText(R.string.from_wechat);
+                break;
+            default:
+                vh.platform.setText("");
+                vh.platform.setVisibility(View.GONE);
+                break;
         }
         return convertView;
     }
@@ -240,7 +242,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
     }
 
     private void optionDel(Context context, final Tweet tweet,
-            final int position) {
+                           final int position) {
 
         CommonDialog dialog = DialogHelper
                 .getPinterestDialogCancelable(context);
@@ -255,14 +257,15 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
                         new AsyncHttpResponseHandler() {
                             @Override
                             public void onSuccess(int arg0, Header[] arg1,
-                                    byte[] arg2) {
+                                                  byte[] arg2) {
                                 mDatas.remove(position);
                                 notifyDataSetChanged();
                             }
 
                             @Override
                             public void onFailure(int arg0, Header[] arg1,
-                                    byte[] arg2, Throwable arg3) {}
+                                                  byte[] arg2, Throwable arg3) {
+                            }
                         });
             }
         });
@@ -273,11 +276,11 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
 
     /**
      * 动态设置动弹列表图片显示规则
-     * 
+     *
      * @author kymjs
      */
     private void showTweetImage(final ViewHolder vh, String imgSmall,
-            final String imgBig, final Context context) {
+                                final String imgBig, final Context context) {
         if (imgSmall != null && !TextUtils.isEmpty(imgSmall)) {
             kjb.display(vh.image, imgSmall, new BitmapCallBack() {
                 @Override
@@ -300,7 +303,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
                 @Override
                 public void onClick(View v) {
                     ImagePreviewActivity.showImagePrivew(context, 0,
-                            new String[] { imgBig });
+                            new String[]{imgBig});
                 }
             });
             vh.image.setVisibility(AvatarView.VISIBLE);

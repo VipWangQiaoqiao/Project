@@ -2,7 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#e2e2e2" >
+    android:background="?attr/layout_bg_normal" >
 	
     <net.oschina.app.widget.CustomerScrollView
         android:layout_width="match_parent"

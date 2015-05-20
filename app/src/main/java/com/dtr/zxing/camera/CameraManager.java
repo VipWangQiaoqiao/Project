@@ -68,7 +68,7 @@ public class CameraManager {
      * @param holder
      *            The surface object which the camera will draw preview frames
      *            into.
-     * @throws IOException
+     * @throws java.io.IOException
      *             Indicates the camera driver failed to open.
      */
     public synchronized void openDriver(SurfaceHolder holder)
@@ -94,7 +94,7 @@ public class CameraManager {
 	    configManager.initFromCameraParameters(theCamera);
 	}
 
-	Parameters parameters = theCamera.getParameters();
+	Camera.Parameters parameters = theCamera.getParameters();
 	String parametersFlattened = parameters == null ? null : parameters
 		.flatten(); // Save
 			    // these,

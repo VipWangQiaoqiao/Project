@@ -26,7 +26,7 @@
     </LinearLayout>
     
     <LinearLayout
-        android:id="@+id/menu_item_exit"
+        android:id="@+id/menu_item_theme"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_margin="5dip"
@@ -41,7 +41,7 @@
         <TextView
             style="@style/MenuItemTextViewStyle"
             android:textSize="@dimen/text_size_14"
-            android:text="@string/menu_exit" />
+            android:text="@string/menu_theme" />
     </LinearLayout>
 
 </LinearLayout>

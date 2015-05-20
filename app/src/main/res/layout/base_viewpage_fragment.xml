@@ -11,9 +11,9 @@
         android:id="@+id/pager_tabstrip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/sliding_tab_strip_background"
+        android:background="?attr/windows_bg"
         app:allowWidthFull="true"
-        app:slidingBlock="@drawable/image_sliding_block" >
+        app:slidingBlock="?attr/sliding_block_bg" >
     </net.oschina.app.widget.PagerSlidingTabStrip>
 
     <android.support.v4.view.ViewPager

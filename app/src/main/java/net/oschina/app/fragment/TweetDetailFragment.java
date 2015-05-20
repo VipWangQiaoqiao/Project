@@ -278,6 +278,7 @@ public class TweetDetailFragment extends
             return;
         outAty.emojiFragment.getEditText().setHint("回复:" + comment.getAuthor());
         outAty.emojiFragment.getEditText().setTag(comment);
+        outAty.emojiFragment.showSoftKeyboard();
     }
 
     private final AsyncHttpResponseHandler mCommentHandler = new AsyncHttpResponseHandler() {
@@ -298,6 +299,7 @@ public class TweetDetailFragment extends
                     hideWaitDialog();
                     AppContext.showToastShort(res.getErrorMessage());
                 }
+                outAty.emojiFragment.clean();
             } catch (Exception e) {
                 e.printStackTrace();
                 onFailure(arg0, arg1, arg2, e);
@@ -515,11 +517,19 @@ public class TweetDetailFragment extends
 
     @Override
     public void onClickSendButton(Editable str) {
-        showWaitDialog(R.string.progress_submit);
         if (!AppContext.getInstance().isLogin()) {
             UIHelper.showLoginActivity(getActivity());
             return;
         }
+        if (!TDevice.hasInternet()) {
+            AppContext.showToastShort(R.string.tip_network_error);
+            return;
+        }
+        if (TextUtils.isEmpty(str)) {
+            AppContext.showToastShort(R.string.tip_comment_content_empty);
+            return;
+        }
+        showWaitDialog(R.string.progress_submit);
         try {
             if (outAty.emojiFragment.getEditText().getTag() != null) {
                 Comment comment = (Comment) outAty.emojiFragment.getEditText()

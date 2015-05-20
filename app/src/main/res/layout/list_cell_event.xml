@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/list_item_background"
+    android:background="?attr/layout_item_bg"
     android:paddingBottom="@dimen/space_10"
     android:orientation="vertical" >
     
@@ -31,9 +31,10 @@
             android:id="@+id/tv_event_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="16sp"
             android:layout_marginRight="@dimen/space_15"
             android:layout_marginBottom="@dimen/space_10"
-            android:textColor="@color/main_black" />
+            android:textColor="?attr/textColor" />
 
         <TextView
             android:id="@+id/tv_event_time"
@@ -41,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_event_title"
             android:layout_toRightOf="@id/iv_event_img"
-            android:textColor="@color/main_gray" />
+            android:textColor="?attr/infoTextColor" />
 
         <TextView
             android:id="@+id/tv_event_spot"
@@ -49,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_event_time"
             android:layout_toRightOf="@id/iv_event_img"
-            android:textColor="@color/main_gray" />
+            android:textColor="?attr/infoTextColor" />
     </LinearLayout>
 
 </RelativeLayout>

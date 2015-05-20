@@ -45,6 +45,8 @@ public class AppConfig {
 
     public static final String KEY_FRITST_START = "KEY_FRIST_START";
 
+    public static final String APP_QQ_KEY = "100942993";
+
     // 默认存放图片的路径
     public final static String DEFAULT_SAVE_IMAGE_PATH = Environment
             .getExternalStorageDirectory()

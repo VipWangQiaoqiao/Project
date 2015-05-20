@@ -14,7 +14,7 @@
             android:layout_height="match_parent"
             android:cacheColorHint="#ffffffff"
             android:descendantFocusability="blocksDescendants"
-            android:divider="@color/list_divider_color"
+            android:divider="?attr/lineColor"
             android:dividerHeight="1.0px"
             android:listSelector="@android:color/transparent" />
 
@@ -24,7 +24,7 @@
             android:layout_height="match_parent"
             android:cacheColorHint="#ffffffff"
             android:descendantFocusability="blocksDescendants"
-            android:divider="@color/list_divider_color"
+            android:divider="?attr/lineColor"
             android:dividerHeight="1.0px"
             android:listSelector="@android:color/transparent" />
 
@@ -32,7 +32,7 @@
             android:id="@+id/lv_software"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="@color/white"
+            android:divider="?attr/lineColor"
             android:scrollingCache="true" />
     </net.oschina.app.widget.ScrollLayout>
 

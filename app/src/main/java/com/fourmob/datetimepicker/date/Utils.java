@@ -1,4 +1,6 @@
-package com.fourmob.datetimepicker;
+package com.fourmob.datetimepicker.date;
+
+import java.util.Calendar;
 
 import android.annotation.SuppressLint;
 import android.os.Build;
@@ -8,8 +10,6 @@ import android.view.accessibility.AccessibilityManager;
 import com.nineoldandroids.animation.Keyframe;
 import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.animation.PropertyValuesHolder;
-
-import java.util.Calendar;
 
 /**
  * 摘取自https://github.com/flavienlaurent/datetimepicker

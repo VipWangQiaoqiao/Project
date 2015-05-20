@@ -82,6 +82,7 @@ public abstract class BaseDetailFragment extends BaseFragment implements
                 e.printStackTrace();
                 onFailure(arg0, arg1, arg2, e);
             }
+            ((DetailActivity) getActivity()).emojiFragment.clean();
         }
 
         @Override
@@ -283,7 +284,9 @@ public abstract class BaseDetailFragment extends BaseFragment implements
 
     protected void executeOnLoadFinish() {}
 
-    protected void onFavoriteChanged(boolean flag) {}
+    protected void onFavoriteChanged(boolean flag) {
+        ((DetailActivity) getActivity()).toolFragment.setFavorite(flag);
+    }
 
     protected int getFavoriteTargetId() {
         return -1;
@@ -444,7 +447,6 @@ public abstract class BaseDetailFragment extends BaseFragment implements
                 case R.id.ly_share_sina_weibo:
                     break;
                 case R.id.ly_share_qq:
-                    //shareToQQ(SHARE_MEDIA.QQ);
                     break;
                 case R.id.ly_share_copy_link:
                     TDevice.copyTextToBoard(getShareUrl());
@@ -472,6 +474,10 @@ public abstract class BaseDetailFragment extends BaseFragment implements
             mMenuAdapter.setFavorite(favorite);
         }
         onFavoriteChanged(favorite);
+    }
+
+    public boolean isFavorited() {
+        return mIsFavorited;
     }
 
     @SuppressLint("ViewHolder")
