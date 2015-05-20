@@ -1,21 +1,5 @@
 package net.oschina.app.ui;
 
-import net.oschina.app.AppConfig;
-import net.oschina.app.AppContext;
-import net.oschina.app.AppManager;
-import net.oschina.app.R;
-import net.oschina.app.bean.Constants;
-import net.oschina.app.bean.Notice;
-import net.oschina.app.bean.SimpleBackPage;
-import net.oschina.app.cache.DataCleanManager;
-import net.oschina.app.fragment.MyInformationFragment;
-import net.oschina.app.interf.BaseViewInterface;
-import net.oschina.app.interf.OnTabReselectListener;
-import net.oschina.app.service.NoticeUtils;
-import net.oschina.app.util.UIHelper;
-import net.oschina.app.util.UpdateManager;
-import net.oschina.app.widget.BadgeView;
-import net.oschina.app.widget.MyFragmentTabHost;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
@@ -43,10 +27,28 @@ import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabContentFactory;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 import com.networkbench.agent.impl.NBSAppAgent;
+
+import net.oschina.app.AppConfig;
+import net.oschina.app.AppContext;
+import net.oschina.app.AppManager;
+import net.oschina.app.R;
+import net.oschina.app.bean.Constants;
+import net.oschina.app.bean.Notice;
+import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.cache.DataCleanManager;
+import net.oschina.app.fragment.MyInformationFragment;
+import net.oschina.app.interf.BaseViewInterface;
+import net.oschina.app.interf.OnTabReselectListener;
+import net.oschina.app.service.NoticeUtils;
+import net.oschina.app.util.UIHelper;
+import net.oschina.app.util.UpdateManager;
+import net.oschina.app.widget.BadgeView;
+import net.oschina.app.widget.MyFragmentTabHost;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 @SuppressLint("InflateParams")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -337,7 +339,6 @@ public class MainActivity extends ActionBarActivity implements
         case R.id.quick_option_iv:
             showQuickOption();
             break;
-
         default:
             break;
         }

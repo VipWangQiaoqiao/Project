@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/set_pop"
+    android:layout_gravity="bottom"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" >
 
@@ -115,7 +116,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/ll_option_container"
-        android:background="?attr/layout_item_bg"
+        android:background="?attr/layout_bg_normal"
         android:gravity="center"
         android:padding="10dip"
         android:visibility="visible" >

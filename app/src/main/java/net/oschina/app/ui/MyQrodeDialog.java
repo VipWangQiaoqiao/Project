@@ -1,23 +1,27 @@
 package net.oschina.app.ui;
 
-import net.oschina.app.AppContext;
-import net.oschina.app.R;
-import net.oschina.app.util.QrCodeUtils;
-
-import org.kymjs.kjframe.utils.FileUtils;
-
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnLongClickListener;
+import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.google.zxing.WriterException;
+
+import net.oschina.app.AppContext;
+import net.oschina.app.R;
+import net.oschina.app.util.QrCodeUtils;
+
+import org.kymjs.kjframe.utils.FileUtils;
 
 public class MyQrodeDialog extends Dialog {
 
@@ -25,7 +29,7 @@ public class MyQrodeDialog extends Dialog {
     private Bitmap bitmap;
 
     private MyQrodeDialog(Context context, boolean flag,
-            OnCancelListener listener) {
+                          OnCancelListener listener) {
         super(context, flag, listener);
     }
 
@@ -44,7 +48,7 @@ public class MyQrodeDialog extends Dialog {
             e.printStackTrace();
         }
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        contentView.setOnLongClickListener(new OnLongClickListener() {
+        mIvCode.setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 dismiss();
@@ -57,6 +61,14 @@ public class MyQrodeDialog extends Dialog {
                 return false;
             }
         });
+
+        contentView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                MyQrodeDialog.this.dismiss();
+                return false;
+            }
+        });
         super.setContentView(contentView);
     }
 
@@ -64,9 +76,16 @@ public class MyQrodeDialog extends Dialog {
         this(context, R.style.quick_option_dialog);
     }
 
+
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         getWindow().setGravity(Gravity.CENTER);
+        WindowManager m = getWindow().getWindowManager();
+        Display d = m.getDefaultDisplay();
+        WindowManager.LayoutParams p = getWindow().getAttributes();
+        p.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        p.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        getWindow().setAttributes(p);
     }
 }

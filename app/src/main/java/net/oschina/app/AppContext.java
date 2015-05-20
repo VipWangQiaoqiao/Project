@@ -1,11 +1,11 @@
 package net.oschina.app;
 
-import static net.oschina.app.AppConfig.KEY_FRITST_START;
-import static net.oschina.app.AppConfig.KEY_LOAD_IMAGE;
-import static net.oschina.app.AppConfig.KEY_TWEET_DRAFT;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 
-import java.util.Properties;
-import java.util.UUID;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.PersistentCookieStore;
 
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.base.BaseApplication;
@@ -22,12 +22,12 @@ import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.bitmap.BitmapConfig;
 import org.kymjs.kjframe.utils.KJLoger;
 
-import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
+import java.util.Properties;
+import java.util.UUID;
 
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.PersistentCookieStore;
+import static net.oschina.app.AppConfig.KEY_FRITST_START;
+import static net.oschina.app.AppConfig.KEY_LOAD_IMAGE;
+import static net.oschina.app.AppConfig.KEY_TWEET_DRAFT;
 
 /**
  * 全局应用程序类：用于保存和调用全局应用配置及访问网络数据
@@ -52,8 +52,9 @@ public class AppContext extends BaseApplication {
         instance = this;
         init();
         initLogin();
-        // Thread.setDefaultUncaughtExceptionHandler(AppException
-        // .getAppExceptionHandler(this));
+
+        Thread.setDefaultUncaughtExceptionHandler(AppException
+                .getAppExceptionHandler(this));
         UIHelper.sendBroadcastForNotice(this);
     }
 
@@ -158,8 +159,7 @@ public class AppContext extends BaseApplication {
     /**
      * 保存登录信息
      * 
-     * @param username
-     * @param pwd
+     * @param user 用户信息
      */
     @SuppressWarnings("serial")
     public void saveUserInfo(final User user) {
