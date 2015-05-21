@@ -19,10 +19,10 @@ import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Active;
 import net.oschina.app.bean.Active.ObjectReply;
-import net.oschina.app.bean.Tweet;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.util.ImageUtils;
+import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TypefaceUtils;
 import net.oschina.app.util.UIHelper;
@@ -134,28 +134,7 @@ public class ActiveAdapter extends ListBaseAdapter {
 
         vh.time.setText(StringUtils.friendly_time(item.getPubDate()));
 
-        vh.from.setVisibility(View.VISIBLE);
-        switch (item.getAppClient()) {
-        default:
-            vh.from.setText(R.string.from_web); // 不显示
-            vh.from.setVisibility(View.GONE);
-            break;
-        case Tweet.CLIENT_MOBILE:
-            vh.from.setText(R.string.from_mobile);
-            break;
-        case Tweet.CLIENT_ANDROID:
-            vh.from.setText(R.string.from_android);
-            break;
-        case Tweet.CLIENT_IPHONE:
-            vh.from.setText(R.string.from_iphone);
-            break;
-        case Tweet.CLIENT_WINDOWS_PHONE:
-            vh.from.setText(R.string.from_windows_phone);
-            break;
-        case Tweet.CLIENT_WECHAT:
-            vh.from.setText(R.string.from_wechat);
-            break;
-        }
+        PlatfromUtil.setPlatFromString(vh.from, item.getAppClient());
 
         if (item.getCommentCount() > 0) {
             TypefaceUtils.setTypeFaceWithText(vh.commentCount, R.string.fa_comment, String.valueOf(item.getCommentCount()));

@@ -29,6 +29,7 @@ import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.KJAnimations;
+import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TypefaceUtils;
 import net.oschina.app.util.UIHelper;
@@ -68,16 +69,12 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         AvatarView face;
         @InjectView(R.id.iv_tweet_image)
         ImageView image;
-        @InjectView(R.id.iv_like_state)
-        ImageView likeState;
         @InjectView(R.id.tv_like_state)
         TextView tvLikeState;
         @InjectView(R.id.tv_del)
         TextView del;
         @InjectView(R.id.tv_likeusers)
         TextView likeUsers;
-        @InjectView(R.id.ll_like)
-        View likeOption;
 
         public ViewHolder(View view) {
             ButterKnife.inject(this, view);
@@ -138,7 +135,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         vh.face.setUserInfo(tweet.getAuthorid(), tweet.getAuthor());
         vh.face.setAvatarUrl(tweet.getPortrait());
         vh.author.setText(tweet.getAuthor());
-        vh.time.setText(StringUtils.friendly_time(tweet.getPubDate()));
+        TypefaceUtils.setTypeFaceWithText(vh.time, R.string.fa_clock_o, StringUtils.friendly_time(tweet.getPubDate()));
         vh.content.setMovementMethod(MyLinkMovementMethod.a());
         vh.content.setFocusable(false);
         vh.content.setDispatchToParent(true);
@@ -181,39 +178,18 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             }
         };
         if (tweet.getLikeUser() == null) {
-            vh.likeOption.setVisibility(View.GONE);
+            vh.tvLikeState.setVisibility(View.GONE);
         }
 
-        vh.likeOption.setOnClickListener(likeClick);
+        vh.tvLikeState.setOnClickListener(likeClick);
 
         TypefaceUtils.setTypeface(vh.tvLikeState);
         if (tweet.getIsLike() == 1) {
-            vh.likeState.setBackgroundResource(R.drawable.ic_likeed);
+            //vh.tvLikeState.setTextColor(R.color.link_color);
         } else {
-            vh.likeState.setBackgroundResource(R.drawable.ic_unlike);
+            //vh.tvLikeState.setTextColor(R.color.gray);
         }
-        vh.platform.setVisibility(View.VISIBLE);
-        switch (tweet.getAppclient()) {
-            case Tweet.CLIENT_MOBILE:
-                vh.platform.setText(R.string.from_mobile);
-                break;
-            case Tweet.CLIENT_ANDROID:
-                vh.platform.setText(R.string.from_android);
-                break;
-            case Tweet.CLIENT_IPHONE:
-                vh.platform.setText(R.string.from_iphone);
-                break;
-            case Tweet.CLIENT_WINDOWS_PHONE:
-                vh.platform.setText(R.string.from_windows_phone);
-                break;
-            case Tweet.CLIENT_WECHAT:
-                vh.platform.setText(R.string.from_wechat);
-                break;
-            default:
-                vh.platform.setText("");
-                vh.platform.setVisibility(View.GONE);
-                break;
-        }
+        PlatfromUtil.setPlatFromString(vh.platform, tweet.getAppclient());
         return convertView;
     }
 
@@ -226,15 +202,15 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             }
             OSChinaApi.pubUnLikeTweet(tweet.getId(), tweet.getAuthorid(),
                     handler);
-            vh.likeState.setBackgroundResource(R.drawable.ic_unlike);
+            //vh.tvLikeState.setTextColor(R.color.gray);
         } else {
             tweet.setIsLike(1);
-            vh.likeState
+            vh.tvLikeState
                     .setAnimation(KJAnimations.getScaleAnimation(1.5f, 300));
             tweet.getLikeUser().add(0, AppContext.getInstance().getLoginUser());
             OSChinaApi
                     .pubLikeTweet(tweet.getId(), tweet.getAuthorid(), handler);
-            vh.likeState.setBackgroundResource(R.drawable.ic_likeed);
+           // vh.tvLikeState.setTextColor(R.color.link_color);
             tweet.setIsLike(1);
             tweet.setLikeCount(tweet.getLikeCount() + 1);
         }

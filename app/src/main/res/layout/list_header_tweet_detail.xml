@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/layout_bg_normal"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/space_8" >
+        android:padding="@dimen/space_8">
 
         <net.oschina.app.widget.AvatarView
             android:id="@+id/iv_avatar"
@@ -18,11 +19,10 @@
 
         <TextView
             android:id="@+id/tv_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/list_cell_text"
             android:layout_toRightOf="@id/iv_avatar"
-            android:textColor="@color/lightblue"
-            android:textSize="@dimen/text_size_16" />
+            android:textColor="?android:textColorLink"
+            tools:text="火蚁" />
 
         <TextView
             android:id="@+id/tv_time"
@@ -58,7 +58,7 @@
         android:layout_height="40dp"
         android:layout_margin="10dp"
         android:background="@drawable/selector_record_layout"
-        android:padding="3dp" >
+        android:padding="3dp">
 
         <ImageView
             android:id="@+id/tweet_img_record"
@@ -78,60 +78,44 @@
             android:textColor="@android:color/white"
             android:textSize="15sp" />
     </RelativeLayout>
-    
+
+
+    <TextView
+        android:id="@+id/tv_likeusers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:clickable="false"
+        android:gravity="center_vertical"
+        android:padding="8dp"
+        android:textColor="?attr/infoTextColor" />
+
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginBottom="@dimen/space_2"
-        android:layout_marginTop="@dimen/space_6"
-        android:layout_toRightOf="@id/iv_tweet_face"
-        android:layout_margin="5dp"
-        android:gravity="center_vertical" >
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical">
 
-        <LinearLayout
-            android:id="@+id/ll_comment"
-            android:layout_width="50dp"
-            android:layout_height="22dp"
+        <TextView
+            android:id="@+id/tv_comment_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/btn_oval_background"
-            android:gravity="center" >
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:textColor="?attr/infoTextColor"
+            android:textSize="14sp"
+            tools:text="30" />
 
-            <TextView
-                android:id="@+id/tv_comment_count"
-                style="@style/list_text_info"
-                android:layout_alignParentRight="true"
-                android:drawableLeft="@drawable/ic_comment_count"
-                android:drawablePadding="@dimen/space_3" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_like"
-            android:layout_width="50dp"
-            android:layout_height="22dp"
-            android:layout_marginRight="5dp"
-            android:layout_toLeftOf="@id/ll_comment"
-            android:background="@drawable/btn_oval_background"
-            android:gravity="center" >
-
-            <ImageView
-                android:id="@+id/iv_like_state"
-                android:layout_width="15dp"
-                android:layout_height="12dp"
-                android:background="@drawable/ic_unlike" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_like_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/tv_comment_count"
+            android:padding="8dp"
+            android:text="@string/fa_thumbs_o_up"
+            android:textSize="16sp" />
     </RelativeLayout>
-
-    <TextView 
-        android:id="@+id/tv_likeusers"
-        android:layout_below="@id/ll_info"
-        android:layout_toRightOf="@id/iv_tweet_face"
-        android:layout_width="match_parent"
-        android:padding="8dp"
-        android:layout_gravity="center_vertical"
-        android:gravity="center_vertical"
-        android:clickable="false"
-        android:layout_height="wrap_content"/>
 
 </LinearLayout>

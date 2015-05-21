@@ -1,20 +1,5 @@
 package net.oschina.app.adapter;
 
-import java.util.List;
-
-import net.oschina.app.R;
-import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.bean.Comment;
-import net.oschina.app.bean.Comment.Refer;
-import net.oschina.app.bean.Comment.Reply;
-import net.oschina.app.bean.Tweet;
-import net.oschina.app.emoji.InputHelper;
-import net.oschina.app.util.StringUtils;
-import net.oschina.app.widget.AvatarView;
-import net.oschina.app.widget.FloorView;
-import net.oschina.app.widget.MyLinkMovementMethod;
-import net.oschina.app.widget.MyURLSpan;
-import net.oschina.app.widget.TweetTextView;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.Html;
@@ -23,6 +8,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import net.oschina.app.R;
+import net.oschina.app.base.ListBaseAdapter;
+import net.oschina.app.bean.Comment;
+import net.oschina.app.bean.Comment.Refer;
+import net.oschina.app.bean.Comment.Reply;
+import net.oschina.app.emoji.InputHelper;
+import net.oschina.app.util.PlatfromUtil;
+import net.oschina.app.util.StringUtils;
+import net.oschina.app.widget.AvatarView;
+import net.oschina.app.widget.FloorView;
+import net.oschina.app.widget.MyLinkMovementMethod;
+import net.oschina.app.widget.MyURLSpan;
+import net.oschina.app.widget.TweetTextView;
+
+import java.util.List;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -62,28 +64,7 @@ public class CommentAdapter extends ListBaseAdapter<Comment> {
 
             vh.time.setText(StringUtils.friendly_time(item.getPubDate()));
 
-            vh.from.setVisibility(View.VISIBLE);
-            switch (item.getAppClient()) {
-            default:
-                vh.from.setText("");
-                vh.from.setVisibility(View.GONE);
-                break;
-            case Tweet.CLIENT_MOBILE:
-                vh.from.setText(R.string.from_mobile);
-                break;
-            case Tweet.CLIENT_ANDROID:
-                vh.from.setText(R.string.from_android);
-                break;
-            case Tweet.CLIENT_IPHONE:
-                vh.from.setText(R.string.from_iphone);
-                break;
-            case Tweet.CLIENT_WINDOWS_PHONE:
-                vh.from.setText(R.string.from_windows_phone);
-                break;
-            case Tweet.CLIENT_WECHAT:
-                vh.from.setText(R.string.from_wechat);
-                break;
-            }
+            PlatfromUtil.setPlatFromString(vh.from, item.getAppClient());
 
             // setup refers
             setupRefers(parent.getContext(), vh, item.getRefers());

@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:contentDescription="@null"
-        android:src="@drawable/shake_logo" />
+        android:src="@drawable/shaking" />
 
     <ProgressBar
         android:id="@+id/progress"
@@ -26,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        layout="@layout/exploreproject_listitem"
+        layout="@layout/list_cell_shake_result"
         android:visibility="gone" />
 
 </RelativeLayout>

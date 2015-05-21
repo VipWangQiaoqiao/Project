@@ -1,20 +1,5 @@
 package net.oschina.app.fragment;
 
-import java.io.ByteArrayInputStream;
-
-import net.oschina.app.AppContext;
-import net.oschina.app.R;
-import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.base.BaseFragment;
-import net.oschina.app.bean.ShakeObject;
-import net.oschina.app.util.KJAnimations;
-import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.UIHelper;
-import net.oschina.app.util.XmlUtils;
-
-import org.apache.http.Header;
-import org.kymjs.kjframe.KJBitmap;
-
 import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
@@ -34,11 +19,31 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
+import net.oschina.app.AppContext;
+import net.oschina.app.R;
+import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.base.BaseFragment;
+import net.oschina.app.bean.ShakeObject;
+import net.oschina.app.util.KJAnimations;
+import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TypefaceUtils;
+import net.oschina.app.util.UIHelper;
+import net.oschina.app.util.XmlUtils;
+
+import org.apache.http.Header;
+import org.kymjs.kjframe.KJBitmap;
+
+import java.io.ByteArrayInputStream;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
+/**
+ * 摇一摇界面
+ */
 public class ShakeFragment extends BaseFragment implements SensorEventListener {
 
     @InjectView(R.id.shake_img)
@@ -48,17 +53,17 @@ public class ShakeFragment extends BaseFragment implements SensorEventListener {
     ProgressBar mProgress;
     @InjectView(R.id.shake_bottom)
     LinearLayout mLayoutBottom;
-    @InjectView(R.id.exploreproject_listitem_userface)
+    @InjectView(R.id.iv_face)
     ImageView mImgHead;
-    @InjectView(R.id.exploreproject_listitem_title)
+    @InjectView(R.id.tv_title)
     TextView mTvTitle;
-    @InjectView(R.id.exploreproject_listitem_description)
+    @InjectView(R.id.tv_description)
     TextView mTvDetail;
-    @InjectView(R.id.exploreproject_listitem_language)
+    @InjectView(R.id.tv_author)
     TextView mTvAuthor;
-    @InjectView(R.id.exploreproject_listitem_star)
+    @InjectView(R.id.tv_comment_count)
     TextView mTvCommentCount;
-    @InjectView(R.id.exploreproject_listitem_fork)
+    @InjectView(R.id.tv_time)
     TextView mTvDate;
 
     private SensorManager sensorManager = null;
@@ -84,7 +89,8 @@ public class ShakeFragment extends BaseFragment implements SensorEventListener {
     }
 
     @Override
-    public void initView(View view) {}
+    public void initView(View view) {
+    }
 
     /**
      * 摇动手机成功后调用
@@ -96,10 +102,12 @@ public class ShakeFragment extends BaseFragment implements SensorEventListener {
         anim.setAnimationListener(new AnimationListener() {
 
             @Override
-            public void onAnimationStart(Animation animation) {}
+            public void onAnimationStart(Animation animation) {
+            }
 
             @Override
-            public void onAnimationRepeat(Animation animation) {}
+            public void onAnimationRepeat(Animation animation) {
+            }
 
             @Override
             public void onAnimationEnd(Animation animation) {
@@ -113,7 +121,7 @@ public class ShakeFragment extends BaseFragment implements SensorEventListener {
                         if (obj != null) {
                             if (StringUtils.isEmpty(obj.getAuthor())
                                     && StringUtils.isEmpty(obj
-                                            .getCommentCount())
+                                    .getCommentCount())
                                     && StringUtils.isEmpty(obj.getPubDate())) {
                                 jokeToast();
                             } else {
@@ -131,10 +139,10 @@ public class ShakeFragment extends BaseFragment implements SensorEventListener {
                                                 R.drawable.widget_dface);
                                 mTvTitle.setText(obj.getTitle());
                                 mTvDetail.setText(obj.getDetail());
-                                mTvAuthor.setText("作者:" + obj.getAuthor());
-                                mTvCommentCount.setText("评论:"
-                                        + obj.getCommentCount());
-                                mTvDate.setText("时间:" + obj.getPubDate());
+                                mTvAuthor.setText(obj.getAuthor());
+                                TypefaceUtils.setTypeface(mTvAuthor);
+                                TypefaceUtils.setTypeFaceWithText(mTvCommentCount, R.string.fa_comment, obj.getCommentCount() + "");
+                                TypefaceUtils.setTypeFaceWithText(mTvDate, R.string.fa_clock_o, StringUtils.friendly_time(obj.getPubDate()));
                             }
                         } else {
                             jokeToast();
@@ -144,7 +152,7 @@ public class ShakeFragment extends BaseFragment implements SensorEventListener {
 
                     @Override
                     public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                            Throwable arg3) {
+                                          Throwable arg3) {
                         isRequest = false;
                         mProgress.setVisibility(View.GONE);
                         jokeToast();
@@ -209,7 +217,7 @@ public class ShakeFragment extends BaseFragment implements SensorEventListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_shake, container,
                 false);
@@ -219,29 +227,11 @@ public class ShakeFragment extends BaseFragment implements SensorEventListener {
         return rootView;
     }
 
-    // @Override
-    // public void onCreate(Bundle savedInstanceState) {
-    // super.onCreate(savedInstanceState);
-    // setHasOptionsMenu(true);
-    // }
-    //
-    // @Override
-    // public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-    // inflater.inflate(R.menu.pub_tweet_menu, menu);
-    // }
-    //
-    // @Override
-    // public boolean onOptionsItemSelected(MenuItem item) {
-    // switch (item.getItemId()) {
-    // case R.id.public_menu_send:
-    // break;
-    // }
-    // return true;
-    // }
+    @Override
+    public void onClick(View v) {
+    }
 
     @Override
-    public void onClick(View v) {}
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
 }

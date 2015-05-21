@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <!-- google 官方下拉刷新 -->
 
@@ -10,23 +10,22 @@
         android:id="@+id/swiperefreshlayout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:visibility="visible" >
+        android:visibility="visible">
 
         <ListView
             android:id="@+id/listview"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="@color/list_item_background_normal"
-            android:divider="@color/list_divider_color"
+            android:divider="?attr/lineColor"
             android:dividerHeight="1px"
             android:scrollbars="none"
             android:scrollingCache="true" />
     </android.support.v4.widget.SwipeRefreshLayout>
-    
-     <FrameLayout
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" >
+        android:layout_alignParentBottom="true">
 
         <FrameLayout
             android:id="@+id/emoji_keyboard"

@@ -33,12 +33,6 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @XStreamAlias("tweet")
 public class Tweet extends Entity implements Parcelable {
 
-    public final static int CLIENT_MOBILE = 2;
-    public final static int CLIENT_ANDROID = 3;
-    public final static int CLIENT_IPHONE = 4;
-    public final static int CLIENT_WINDOWS_PHONE = 5;
-    public final static int CLIENT_WECHAT = 6;
-
     @XStreamAlias("portrait")
     private String portrait;
     @XStreamAlias("author")

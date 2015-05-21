@@ -1,8 +1,17 @@
 package net.oschina.app.fragment;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.Serializable;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -28,18 +37,9 @@ import net.oschina.app.util.XmlUtils;
 
 import org.apache.http.Header;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
-
-import com.loopj.android.http.AsyncHttpResponseHandler;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.Serializable;
 
 public class CommentFrament extends BaseListFragment<Comment> implements
         OnItemLongClickListener, OnSendClickListener {
@@ -98,10 +98,6 @@ public class CommentFrament extends BaseListFragment<Comment> implements
     protected int getLayoutId() {
         return R.layout.fragment_comment_listview;
     };
-
-    protected int getLayoutRes() {
-        return R.layout.fragment_comment_listview;
-    }
 
     @Override
     public void initView(View view) {

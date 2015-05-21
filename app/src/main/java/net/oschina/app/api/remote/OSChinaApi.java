@@ -1,8 +1,9 @@
 package net.oschina.app.api.remote;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.net.URLEncoder;
+import android.text.TextUtils;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
@@ -17,10 +18,9 @@ import net.oschina.app.util.TLog;
 
 import org.kymjs.kjframe.utils.KJLoger;
 
-import android.text.TextUtils;
-
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.net.URLEncoder;
 
 public class OSChinaApi {
 
@@ -235,6 +235,7 @@ public class OSChinaApi {
         params.put("id", id);
         params.put("pageIndex", page);
         params.put("pageSize", AppContext.PAGE_SIZE);
+        params.put("clientType", "android");
         ApiHttpClient.get("action/api/comment_list", params, handler);
     }
 
@@ -289,7 +290,7 @@ public class OSChinaApi {
     /**
      * 获取新闻明细
      * 
-     * @param newsId
+     * @param id 新闻的id
      * @param handler
      */
     public static void getNewsDetail(int id, AsyncHttpResponseHandler handler) {

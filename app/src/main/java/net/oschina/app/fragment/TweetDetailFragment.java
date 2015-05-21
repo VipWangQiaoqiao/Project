@@ -1,9 +1,23 @@
 package net.oschina.app.fragment;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.util.List;
+import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -26,8 +40,10 @@ import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.KJAnimations;
+import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
+import net.oschina.app.util.TypefaceUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
@@ -36,24 +52,10 @@ import net.oschina.app.widget.RecordButtonUtil.OnPlayListener;
 
 import org.apache.http.Header;
 
-import android.content.Intent;
-import android.graphics.drawable.AnimationDrawable;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-import com.loopj.android.http.AsyncHttpResponseHandler;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.util.List;
 
 /***
  * 动弹详情，实际每个item显示的数据类型是Comment
@@ -78,9 +80,8 @@ public class TweetDetailFragment extends
     private RelativeLayout mRlRecordSound;
     private final RecordButtonUtil util = new RecordButtonUtil();
 
-    private View mLLLikeOPtion;
     private TextView mLikeUser;
-    private ImageView mLikeState;
+    private TextView mTvLikeState;
 
     private DetailActivity outAty;
 
@@ -184,28 +185,9 @@ public class TweetDetailFragment extends
         mIvAvatar.setUserInfo(mTweet.getAuthorid(), mTweet.getAuthor());
         mTvName.setText(mTweet.getAuthor());
         mTvTime.setText(StringUtils.friendly_time(mTweet.getPubDate()));
-        switch (mTweet.getAppclient()) {
-        default:
-            mTvFrom.setVisibility(View.GONE);
-            break;
-        case Tweet.CLIENT_MOBILE:
-            mTvFrom.setText(R.string.from_mobile);
-            break;
-        case Tweet.CLIENT_ANDROID:
-            mTvFrom.setText(R.string.from_android);
-            break;
-        case Tweet.CLIENT_IPHONE:
-            mTvFrom.setText(R.string.from_iphone);
-            break;
-        case Tweet.CLIENT_WINDOWS_PHONE:
-            mTvFrom.setText(R.string.from_windows_phone);
-            break;
-        case Tweet.CLIENT_WECHAT:
-            mTvFrom.setText(R.string.from_wechat);
-            break;
-        }
+        PlatfromUtil.setPlatFromString(mTvFrom, mTweet.getAppclient());
 
-        mTvCommentCount.setText(mTweet.getCommentCount() + "");
+        TypefaceUtils.setTypeFaceWithText(mTvCommentCount, R.string.fa_comment, mTweet.getCommentCount() + "");
         if (StringUtils.isEmpty(mTweet.getAttach())) {
             mRlRecordSound.setVisibility(View.GONE);
         } else {
@@ -219,9 +201,9 @@ public class TweetDetailFragment extends
     private void setLikeState() {
         if (mTweet != null) {
             if (mTweet.getIsLike() == 1) {
-                mLikeState.setBackgroundResource(R.drawable.ic_likeed);
+                mTvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color.day_colorPrimary));
             } else {
-                mLikeState.setBackgroundResource(R.drawable.ic_unlike);
+                mTvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color.gray));
             }
         }
     }
@@ -358,7 +340,7 @@ public class TweetDetailFragment extends
         mAdapter.notifyDataSetChanged();
         if (mTweet != null) {
             mTweet.setCommentCount(mAdapter.getDataSize() + "");
-            mTvCommentCount.setText(mTweet.getCommentCount() + "");
+            TypefaceUtils.setTypeFaceWithText(mTvCommentCount, R.string.fa_comment, mTweet.getCommentCount() + "");
         }
     }
 
@@ -433,26 +415,22 @@ public class TweetDetailFragment extends
         mContent = (WebView) header.findViewById(R.id.webview);
         UIHelper.initWebView(mContent);
         initSoundView(header);
-        mLLLikeOPtion = header.findViewById(R.id.ll_like);
-        mLLLikeOPtion.setOnClickListener(new OnClickListener() {
+        mLikeUser = (TextView) header.findViewById(R.id.tv_likeusers);
+        mTvLikeState = (TextView) header.findViewById(R.id.tv_like_state);
+        mTvLikeState.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 likeOption();
             }
         });
-        mLikeUser = (TextView) header.findViewById(R.id.tv_likeusers);
-        mLikeState = (ImageView) header.findViewById(R.id.iv_like_state);
+        TypefaceUtils.setTypeface(mTvLikeState);
         return header;
     }
 
     private void likeOption() {
         if (mTweet == null)
             return;
-        if (mTweet.getAuthorid() == AppContext.getInstance().getLoginUid()) {
-            AppContext.showToast("不能为自己点赞~");
-            return;
-        }
         AsyncHttpResponseHandler handler = new AsyncHttpResponseHandler() {
 
             @Override
@@ -470,7 +448,7 @@ public class TweetDetailFragment extends
                 OSChinaApi.pubUnLikeTweet(mTweetId, mTweet.getAuthorid(),
                         handler);
             } else {
-                mLikeState.setAnimation(KJAnimations.getScaleAnimation(1.5f,
+                mTvLikeState.setAnimation(KJAnimations.getScaleAnimation(1.5f,
                         300));
                 mTweet.setIsLike(1);
                 mTweet.getLikeUser().add(0,
@@ -483,6 +461,7 @@ public class TweetDetailFragment extends
             mTweet.setLikeUsers(getActivity(), mLikeUser, false);
         } else {
             AppContext.showToast("先登陆再点赞~");
+            UIHelper.showLoginActivity(getActivity());
         }
     }
 
@@ -512,7 +491,7 @@ public class TweetDetailFragment extends
         if (commentCount < (mAdapter.getCount() - 1)) {
             commentCount = mAdapter.getCount() - 1;
         }
-        mTvCommentCount.setText(commentCount + "");
+        TypefaceUtils.setTypeFaceWithText(mTvCommentCount, R.string.fa_comment, commentCount + "");
     }
 
     @Override

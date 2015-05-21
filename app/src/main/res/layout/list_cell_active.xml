@@ -117,7 +117,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_marginRight="@dimen/space_10"
-            android:drawableLeft="@drawable/platform"
             android:drawablePadding="@dimen/space_5"
             android:gravity="center_vertical"
             android:text="Android"
