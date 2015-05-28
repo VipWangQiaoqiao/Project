@@ -8,14 +8,12 @@ import net.oschina.app.fragment.CommentFrament;
 import net.oschina.app.fragment.EventAppliesFragment;
 import net.oschina.app.fragment.EventFragment;
 import net.oschina.app.fragment.FeedBackFragment;
-import net.oschina.app.fragment.FindUserFragment;
 import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.fragment.MyInformationFragmentDetail;
 import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.fragment.SettingsFragment;
 import net.oschina.app.fragment.SettingsNotificationFragment;
-import net.oschina.app.fragment.ShakeFragment;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
 import net.oschina.app.fragment.TweetLikeUsersFragment;
 import net.oschina.app.fragment.TweetPubFragment;
@@ -26,11 +24,10 @@ import net.oschina.app.fragment.UserCenterFragment;
 import net.oschina.app.team.fragment.NoteBookFragment;
 import net.oschina.app.team.fragment.NoteEditFragment;
 import net.oschina.app.team.fragment.TeamActiveFragment;
-import net.oschina.app.team.fragment.TeamDiaryDetail;
+import net.oschina.app.team.fragment.TeamDiaryDetailFragment;
 import net.oschina.app.team.fragment.TeamDiscussFragment;
 import net.oschina.app.team.fragment.TeamIssueFragment;
 import net.oschina.app.team.fragment.TeamMemberInformationFragment;
-import net.oschina.app.team.fragment.TeamNewIssueFragment;
 import net.oschina.app.team.fragment.TeamProjectFragment;
 import net.oschina.app.team.fragment.TeamProjectMemberSelectFragment;
 import net.oschina.app.team.viewpagefragment.MyIssuePagerfragment;
@@ -97,58 +94,52 @@ public enum SimpleBackPage {
 
     SEARCH(20, R.string.actionbar_title_search, SearchViewPageFragment.class),
 
-    FIND_USER(21, R.string.actionbar_title_find_user, FindUserFragment.class),
+    EVENT_LIST(21, R.string.actionbar_title_event, EventViewPagerFragment.class),
 
-    EVENT_LIST(22, R.string.actionbar_title_event, EventViewPagerFragment.class),
-
-    EVENT_APPLY(23, R.string.actionbar_title_event_apply,
+    EVENT_APPLY(22, R.string.actionbar_title_event_apply,
             EventAppliesFragment.class),
 
-    SAME_CITY(24, R.string.actionbar_title_same_city, EventFragment.class),
+    SAME_CITY(23, R.string.actionbar_title_same_city, EventFragment.class),
 
-    NOTE(25, R.string.actionbar_title_note, NoteBookFragment.class),
+    NOTE(24, R.string.actionbar_title_note, NoteBookFragment.class),
 
-    NOTE_EDIT(26, R.string.actionbar_title_noteedit, NoteEditFragment.class),
+    NOTE_EDIT(25, R.string.actionbar_title_noteedit, NoteEditFragment.class),
 
-    SHAKE(27, R.string.actionbar_title_shake, ShakeFragment.class),
+    BROWSER(26, R.string.app_name, BrowserFragment.class),
 
-    BROWSER(28, R.string.app_name, BrowserFragment.class),
+    DYNAMIC(27, R.string.team_dynamic, TeamActiveFragment.class),
 
-    DYNAMIC(29, R.string.team_dynamic, TeamActiveFragment.class),
-
-    MY_INFORMATION_DETAIL(30, R.string.actionbar_title_my_information,
+    MY_INFORMATION_DETAIL(28, R.string.actionbar_title_my_information,
             MyInformationFragmentDetail.class),
 
-    FEED_BACK(31, R.string.str_feedback_title, FeedBackFragment.class),
+    FEED_BACK(29, R.string.str_feedback_title, FeedBackFragment.class),
 
-    TEAM_USER_INFO(32, R.string.str_team_userinfo,
+    TEAM_USER_INFO(30, R.string.str_team_userinfo,
             TeamMemberInformationFragment.class),
 
-    MY_ISSUE_PAGER(33, R.string.str_team_my_issue, MyIssuePagerfragment.class),
+    MY_ISSUE_PAGER(31, R.string.str_team_my_issue, MyIssuePagerfragment.class),
 
-    TEAM_NEW_ISSUE(34, R.string.team_new_issue, TeamNewIssueFragment.class),
+    TEAM_PROJECT_MAIN(32, 0, TeamProjectViewPagerFragment.class),
 
-    TEAM_PROJECT_MAIN(35, 0, TeamProjectViewPagerFragment.class),
+    TEAM_ISSUECATALOG_ISSUE_LIST(33, 0, TeamIssueFragment.class),
 
-    TEAM_ISSUECATALOG_ISSUE_LIST(36, 0, TeamIssueFragment.class),
+    TEAM_ACTIVE(34, R.string.team_actvie, TeamActiveFragment.class),
 
-    TEAM_ACTIVE(37, R.string.team_actvie, TeamActiveFragment.class),
+    TEAM_ISSUE(35, R.string.team_issue, TeamIssueViewPageFragment.class),
 
-    TEAM_ISSUE(38, R.string.team_issue, TeamIssueViewPageFragment.class),
+    TEAM_DISCUSS(36, R.string.team_discuss, TeamDiscussFragment.class),
 
-    TEAM_DISCUSS(39, R.string.team_discuss, TeamDiscussFragment.class),
+    TEAM_DIRAY(37, R.string.team_diary, TeamDiaryFragment.class),
 
-    TEAM_DIRAY(40, R.string.team_diary, TeamDiaryFragment.class),
+    TEAM_DIRAY_DETAIL(38, R.string.team_diary_detail, TeamDiaryDetailFragment.class),
 
-    TEAM_DIRAY_DETAIL(41, R.string.team_diary_detail, TeamDiaryDetail.class),
+    TEAM_PROJECT_MEMBER_SELECT(39, 0, TeamProjectMemberSelectFragment.class),
 
-    TEAM_PROJECT_MEMBER_SELECT(42, 0, TeamProjectMemberSelectFragment.class),
+    TEAM_PROJECT(40, R.string.team_project, TeamProjectFragment.class),
 
-    TEAM_PROJECT(43, R.string.team_project, TeamProjectFragment.class),
+    TWEET_LIKE_USER_LIST(41, 0, TweetLikeUsersFragment.class),
 
-    TWEET_LIKE_USER_LIST(44, 0, TweetLikeUsersFragment.class),
-
-    TWEET_TOPIC_LIST(45, 0, TweetsFragment.class);
+    TWEET_TOPIC_LIST(42, 0, TweetsFragment.class);
 
     private int title;
     private Class<?> clz;

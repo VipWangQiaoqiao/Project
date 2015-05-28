@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/layout_bg_normal"
+    android:background="?attr/layout_item_bg"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -39,7 +39,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_below="@id/tv_name"
-            android:drawableLeft="@drawable/platform"
             android:drawablePadding="@dimen/space_5"
             android:textColor="@color/main_gray"
             android:textSize="@dimen/text_size_12" />
@@ -79,17 +78,6 @@
             android:textSize="15sp" />
     </RelativeLayout>
 
-
-    <TextView
-        android:id="@+id/tv_likeusers"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:clickable="false"
-        android:gravity="center_vertical"
-        android:padding="8dp"
-        android:textColor="?attr/infoTextColor" />
-
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -117,5 +105,15 @@
             android:text="@string/fa_thumbs_o_up"
             android:textSize="16sp" />
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_likeusers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:clickable="false"
+        android:gravity="center_vertical"
+        android:padding="8dp"
+        android:textColor="?attr/infoTextColor" />
 
 </LinearLayout>

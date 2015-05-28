@@ -1,14 +1,14 @@
 package net.oschina.app;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.util.Properties;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.Properties;
 
 /**
  * 应用程序配置类：用于保存用户相关信息及设置
@@ -33,17 +33,12 @@ public class AppConfig {
     public static final String KEY_CHECK_UPDATE = "KEY_CHECK_UPDATE";
     public static final String KEY_DOUBLE_CLICK_EXIT = "KEY_DOUBLE_CLICK_EXIT";
 
-    public static final String LAST_QUESTION_CATEGORY_IDX = "LAST_QUESTION_CATEGORY_IDX";
-    public static final String KEY_DAILY_ENGLISH = "KEY_DAILY_ENGLISH";
-    public static final String KEY_GET_LAST_DAILY_ENG = "KEY_GET_LAST_DAILY_ENG";
     public static final String KEY_TWEET_DRAFT = "KEY_TWEET_DRAFT";
     public static final String KEY_NOTE_DRAFT = "KEY_NOTE_DRAFT";
-    public static final String KEY_QUESTION_TITLE_DRAFT = "KEY_QUESTION_TITLE_DRAFT";
-    public static final String KEY_QUESTION_CONTENT_DRAFT = "KEY_QUESTION_CONTENT_DRAFT";
-    public static final String KEY_QUESTION_TYPE_DRAFT = "KEY_QUESTION_TYPE_DRAFT";
-    public static final String KEY_QUESTION_LMK_DRAFT = "KEY_QUESTION_LMK_DRAFT";
 
     public static final String KEY_FRITST_START = "KEY_FRIST_START";
+
+    public static final String KEY_NIGHT_MODE_SWITCH="night_mode_switch";
 
     public static final String APP_QQ_KEY = "100942993";
 

@@ -2,13 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="?attr/windows_bg"
     android:orientation="vertical" >
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="5dp" >
+        android:padding="8dp" >
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -31,7 +31,7 @@
                 android:layout_marginRight="15dp"
                 android:gravity="center"
                 android:text="标题"
-                android:textColor="@color/main_gray"
+                android:textColor="?infoTextColor"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -55,8 +55,6 @@
         android:id="@+id/team_diary_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@drawable/bg_notebook"
-        android:paddingTop="1dp" />
+        android:layout_weight="1" />
 
 </LinearLayout>

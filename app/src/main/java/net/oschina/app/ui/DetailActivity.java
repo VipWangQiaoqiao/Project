@@ -1,36 +1,37 @@
 package net.oschina.app.ui;
 
-import net.oschina.app.R;
-import net.oschina.app.base.BaseActivity;
-import net.oschina.app.base.BaseDetailFragment;
-import net.oschina.app.base.BaseFragment;
-import net.oschina.app.emoji.KJEmojiFragment;
-import net.oschina.app.emoji.OnSendClickListener;
-import net.oschina.app.emoji.ToolbarFragment;
-import net.oschina.app.emoji.ToolbarFragment.OnActionClickListener;
-import net.oschina.app.emoji.ToolbarFragment.ToolAction;
-import net.oschina.app.fragment.BlogDetailFragment;
-import net.oschina.app.fragment.EventDetailFragment;
-import net.oschina.app.fragment.NewsDetailFragment;
-import net.oschina.app.fragment.PostDetailFragment;
-import net.oschina.app.fragment.SoftwareDetailFragment;
-import net.oschina.app.fragment.TweetDetailFragment;
-import net.oschina.app.team.fragment.TeamDiaryDetail;
-import net.oschina.app.team.fragment.TeamDiscussDetailFragment;
-import net.oschina.app.team.fragment.TeamIssueDetailFragment;
-import net.oschina.app.team.fragment.TeamTweetDetailFragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.view.KeyEvent;
 import android.view.View;
 
+import net.oschina.app.R;
+import net.oschina.app.base.BaseActivity;
+import net.oschina.app.base.BaseFragment;
+import net.oschina.app.base.CommonDetailFragment;
+import net.oschina.app.emoji.KJEmojiFragment;
+import net.oschina.app.emoji.OnSendClickListener;
+import net.oschina.app.emoji.ToolbarFragment;
+import net.oschina.app.emoji.ToolbarFragment.OnActionClickListener;
+import net.oschina.app.emoji.ToolbarFragment.ToolAction;
+import net.oschina.app.fragment.BlogDetailFragment;
+import net.oschina.app.fragment.CommentFrament;
+import net.oschina.app.fragment.EventDetailFragment;
+import net.oschina.app.fragment.NewsDetailFragment;
+import net.oschina.app.fragment.PostDetailFragment;
+import net.oschina.app.fragment.SoftwareDetailFragment;
+import net.oschina.app.fragment.TweetDetailFragment;
+import net.oschina.app.team.fragment.TeamDiaryDetailFragment;
+import net.oschina.app.team.fragment.TeamDiscussDetailFragment;
+import net.oschina.app.team.fragment.TeamIssueDetailFragment;
+import net.oschina.app.team.fragment.TeamTweetDetailFragment;
+
 /**
  * 详情activity（包括：资讯、博客、软件、问答、动弹）
- * 
+ *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @created 2014年10月11日 上午11:18:41
- * 
  */
 public class DetailActivity extends BaseActivity implements OnSendClickListener {
 
@@ -44,6 +45,7 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
     public static final int DISPLAY_TEAM_DISCUSS_DETAIL = 7;
     public static final int DISPLAY_TEAM_TWEET_DETAIL = 8;
     public static final int DISPLAY_TEAM_DIARY = 9;
+    public static final int DISPLAY_COMMENT = 10;
 
     public static final String BUNDLE_KEY_DISPLAY_TYPE = "BUNDLE_KEY_DISPLAY_TYPE";
 
@@ -74,48 +76,51 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
         BaseFragment fragment = null;
         int actionBarTitle = 0;
         switch (displayType) {
-        case DISPLAY_NEWS:
-            actionBarTitle = R.string.actionbar_title_news;
-            fragment = new NewsDetailFragment();
-            break;
-        case DISPLAY_BLOG:
-            actionBarTitle = R.string.actionbar_title_blog;
-            fragment = new BlogDetailFragment();
-            break;
-        case DISPLAY_SOFTWARE:
-            actionBarTitle = R.string.actionbar_title_software;
-            fragment = new SoftwareDetailFragment();
-            break;
-        case DISPLAY_POST:
-            actionBarTitle = R.string.actionbar_title_question;
-            fragment = new PostDetailFragment();
-            break;
-        case DISPLAY_TWEET:
-            actionBarTitle = R.string.actionbar_title_tweet;
-            fragment = new TweetDetailFragment();
-            break;
-        case DISPLAY_EVENT:
-            actionBarTitle = R.string.actionbar_title_event_detail;
-            fragment = new EventDetailFragment();
-            break;
-        case DISPLAY_TEAM_ISSUE_DETAIL:
-            actionBarTitle = R.string.team_issue_detail;
-            fragment = new TeamIssueDetailFragment();
-            break;
-        case DISPLAY_TEAM_DISCUSS_DETAIL:
-            actionBarTitle = R.string.actionbar_title_question;
-            fragment = new TeamDiscussDetailFragment();
-            break;
-        case DISPLAY_TEAM_TWEET_DETAIL:
-            actionBarTitle = R.string.actionbar_dynamic_detail;
-            fragment = new TeamTweetDetailFragment();
-            break;
-        case DISPLAY_TEAM_DIARY:
-            actionBarTitle = R.string.team_diary_detail;
-            fragment = new TeamDiaryDetail();
-            break;
-        default:
-            break;
+            case DISPLAY_NEWS:
+                actionBarTitle = R.string.actionbar_title_news;
+                fragment = new NewsDetailFragment();
+                break;
+            case DISPLAY_BLOG:
+                actionBarTitle = R.string.actionbar_title_blog;
+                fragment = new BlogDetailFragment();
+                break;
+            case DISPLAY_SOFTWARE:
+                actionBarTitle = R.string.actionbar_title_software;
+                fragment = new SoftwareDetailFragment();
+                break;
+            case DISPLAY_POST:
+                actionBarTitle = R.string.actionbar_title_question;
+                fragment = new PostDetailFragment();
+                break;
+            case DISPLAY_TWEET:
+                actionBarTitle = R.string.actionbar_title_tweet;
+                fragment = new TweetDetailFragment();
+                break;
+            case DISPLAY_EVENT:
+                actionBarTitle = R.string.actionbar_title_event_detail;
+                fragment = new EventDetailFragment();
+                break;
+            case DISPLAY_TEAM_ISSUE_DETAIL:
+                actionBarTitle = R.string.team_issue_detail;
+                fragment = new TeamIssueDetailFragment();
+                break;
+            case DISPLAY_TEAM_DISCUSS_DETAIL:
+                actionBarTitle = R.string.actionbar_title_question;
+                fragment = new TeamDiscussDetailFragment();
+                break;
+            case DISPLAY_TEAM_TWEET_DETAIL:
+                actionBarTitle = R.string.actionbar_dynamic_detail;
+                fragment = new TeamTweetDetailFragment();
+                break;
+            case DISPLAY_TEAM_DIARY:
+                actionBarTitle = R.string.team_diary_detail;
+                fragment = new TeamDiaryDetailFragment();
+                break;
+            case DISPLAY_COMMENT:
+                actionBarTitle = R.string.actionbar_title_comment;
+                fragment = new CommentFrament();
+            default:
+                break;
         }
         setActionBarTitle(actionBarTitle);
         FragmentTransaction trans = getSupportFragmentManager()
@@ -127,24 +132,28 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
         } else {
             currentFragment = new OnSendClickListener() {
                 @Override
-                public void onClickSendButton(Editable str) {}
+                public void onClickSendButton(Editable str) {
+                }
 
                 @Override
-                public void onClickFlagButton() {}
+                public void onClickFlagButton() {
+                }
             };
         }
     }
 
     @Override
-    public void onClick(View v) {}
+    public void onClick(View v) {
+    }
 
     @Override
     public void initView() {
         if (currentFragment instanceof TweetDetailFragment
                 || currentFragment instanceof TeamTweetDetailFragment
-                || currentFragment instanceof TeamDiaryDetail
+                || currentFragment instanceof TeamDiaryDetailFragment
                 || currentFragment instanceof TeamIssueDetailFragment
-                || currentFragment instanceof TeamDiscussDetailFragment) {
+                || currentFragment instanceof TeamDiscussDetailFragment
+                || currentFragment instanceof CommentFrament) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.emoji_keyboard, emojiFragment).commit();
         } else {
@@ -155,31 +164,31 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
             @Override
             public void onActionClick(ToolAction action) {
                 switch (action) {
-                case ACTION_CHANGE:
-                case ACTION_WRITE_COMMENT:
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .setCustomAnimations(R.anim.footer_menu_slide_in,
-                                    R.anim.footer_menu_slide_out)
-                            .replace(R.id.emoji_keyboard, emojiFragment)
-                            .commit();
-                    break;
-                case ACTION_FAVORITE:
-                    ((BaseDetailFragment) currentFragment)
-                            .handleFavoriteOrNot();
-                    break;
-                case ACTION_REPORT:
-                    ((BaseDetailFragment) currentFragment).onReportMenuClick();
-                    break;
-                case ACTION_SHARE:
-                    ((BaseDetailFragment) currentFragment).handleShare();
-                    break;
-                case ACTION_VIEW_COMMENT:
-                    ((BaseDetailFragment) currentFragment)
-                            .onclickWriteComment();
-                    break;
-                default:
-                    break;
+                    case ACTION_CHANGE:
+                    case ACTION_WRITE_COMMENT:
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .setCustomAnimations(R.anim.footer_menu_slide_in,
+                                        R.anim.footer_menu_slide_out)
+                                .replace(R.id.emoji_keyboard, emojiFragment)
+                                .commit();
+                        break;
+                    case ACTION_FAVORITE:
+                        ((CommonDetailFragment) currentFragment)
+                                .handleFavoriteOrNot();
+                        break;
+                    case ACTION_REPORT:
+                        ((CommonDetailFragment) currentFragment).onReportMenuClick();
+                        break;
+                    case ACTION_SHARE:
+                        ((CommonDetailFragment) currentFragment).handleShare();
+                        break;
+                    case ACTION_VIEW_COMMENT:
+                        ((CommonDetailFragment) currentFragment)
+                                .onCilckShowComment();
+                        break;
+                    default:
+                        break;
                 }
             }
         });
@@ -187,7 +196,8 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
     }
 
     @Override
-    public void initData() {}
+    public void initData() {
+    }
 
     @Override
     public void onClickSendButton(Editable str) {
@@ -228,7 +238,7 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
                         R.anim.footer_menu_slide_out)
                 .replace(R.id.emoji_keyboard, toolFragment).commit();
         try {
-            toolFragment.setCommentCount(((BaseDetailFragment) currentFragment)
+            toolFragment.setCommentCount(((CommonDetailFragment) currentFragment)
                     .getCommentCount());
         } catch (Exception e) {
         }

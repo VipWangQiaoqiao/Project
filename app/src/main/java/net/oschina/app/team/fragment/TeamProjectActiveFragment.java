@@ -8,7 +8,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.team.adapter.DynamicAdapter;
+import net.oschina.app.team.adapter.TeamActiveAdapter;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamActive;
 import net.oschina.app.team.bean.TeamActives;
@@ -60,9 +60,9 @@ public class TeamProjectActiveFragment extends BaseListFragment<TeamActive> {
     }
 
     @Override
-    protected DynamicAdapter getListAdapter() {
+    protected TeamActiveAdapter getListAdapter() {
         // TODO Auto-generated method stub
-        return new DynamicAdapter(getActivity());
+        return new TeamActiveAdapter(getActivity());
     }
 
     @Override

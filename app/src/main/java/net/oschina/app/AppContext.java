@@ -27,6 +27,7 @@ import java.util.UUID;
 
 import static net.oschina.app.AppConfig.KEY_FRITST_START;
 import static net.oschina.app.AppConfig.KEY_LOAD_IMAGE;
+import static net.oschina.app.AppConfig.KEY_NIGHT_MODE_SWITCH;
 import static net.oschina.app.AppConfig.KEY_TWEET_DRAFT;
 
 /**
@@ -332,5 +333,15 @@ public class AppContext extends BaseApplication {
 
     public static void setFristStart(boolean frist) {
         set(KEY_FRITST_START, frist);
+    }
+
+    //夜间模式
+    public static boolean getNightModeSwitch() {
+        return getPreferences().getBoolean(KEY_NIGHT_MODE_SWITCH, false);
+    }
+
+    // 设置夜间模式
+    public static void setNightModeSwitch(boolean on) {
+        set(KEY_NIGHT_MODE_SWITCH, on);
     }
 }

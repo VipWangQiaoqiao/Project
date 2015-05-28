@@ -185,9 +185,9 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
 
         TypefaceUtils.setTypeface(vh.tvLikeState);
         if (tweet.getIsLike() == 1) {
-            //vh.tvLikeState.setTextColor(R.color.link_color);
+            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color.day_colorPrimary));
         } else {
-            //vh.tvLikeState.setTextColor(R.color.gray);
+            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color.gray));
         }
         PlatfromUtil.setPlatFromString(vh.platform, tweet.getAppclient());
         return convertView;
@@ -202,7 +202,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             }
             OSChinaApi.pubUnLikeTweet(tweet.getId(), tweet.getAuthorid(),
                     handler);
-            //vh.tvLikeState.setTextColor(R.color.gray);
+            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color.gray));
         } else {
             tweet.setIsLike(1);
             vh.tvLikeState
@@ -210,7 +210,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             tweet.getLikeUser().add(0, AppContext.getInstance().getLoginUser());
             OSChinaApi
                     .pubLikeTweet(tweet.getId(), tweet.getAuthorid(), handler);
-           // vh.tvLikeState.setTextColor(R.color.link_color);
+            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color.day_colorPrimary));
             tweet.setIsLike(1);
             tweet.setLikeCount(tweet.getLikeCount() + 1);
         }

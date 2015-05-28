@@ -1,8 +1,10 @@
 package net.oschina.app.team.adapter;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import android.graphics.Paint;
+import android.text.TextUtils;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
@@ -10,11 +12,11 @@ import net.oschina.app.team.bean.TeamIssue;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TypefaceUtils;
 import net.oschina.app.util.ViewUtils;
-import android.graphics.Paint;
-import android.text.TextUtils;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -40,8 +42,6 @@ public class TeamIssueAdapter extends ListBaseAdapter<TeamIssue> {
         }
 
         TeamIssue item = mDatas.get(position);
-
-        vh.comment.setText(item.getReplyCount() + "");
 
         vh.title.setText(item.getTitle());
 
@@ -73,7 +73,8 @@ public class TeamIssueAdapter extends ListBaseAdapter<TeamIssue> {
             vh.touser.setText(item.getToUser().getName());
         }
 
-        setText(vh.time, StringUtils.friendly_time(item.getCreateTime()));
+        TypefaceUtils.setTypeFaceWithText(vh.time, R.string.fa_clock_o, StringUtils.friendly_time(item.getCreateTime()));
+        TypefaceUtils.setTypeFaceWithText(vh.comment, R.string.fa_comment, item.getReplyCount() + "");
 
         if (item.getProject() != null && item.getProject().getGit() != null) {
             vh.project.setVisibility(View.VISIBLE);

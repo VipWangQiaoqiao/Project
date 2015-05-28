@@ -1,15 +1,15 @@
 package net.oschina.app.team.bean;
 
-import java.io.Serializable;
-import java.util.List;
-
-import net.oschina.app.bean.Entity;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
+import net.oschina.app.bean.Entity;
+
+import java.io.Serializable;
+import java.util.List;
+
 @XStreamAlias("detail")
-public class Detail extends Entity {
+public class TeamDiaryDetail extends Entity {
     @XStreamAlias("sun")
     private DayData sun;
     @XStreamAlias("thu")

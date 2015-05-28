@@ -38,7 +38,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppBaseTheme.Night" >
+        android:theme="@style/AppBaseTheme_Light" >
         <activity
             android:name=".AppStart"
             android:label="@string/app_name"
@@ -121,6 +121,8 @@
                 <data android:mimeType="image/*" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.FindUserActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ui.EventLocationActivity" />
         <activity
             android:name=".ui.LoginActivity"
@@ -149,11 +151,19 @@
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity android:name=".team.ui.TeamNewIssueActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:label="新团队任务"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
             android:name="com.dtr.zxing.activity.CaptureActivity"
             android:label="@string/actionbar_title_qr_scan"
             android:screenOrientation="portrait" >
         </activity>
+        <activity android:name=".ui.ShakeActivity"
+            android:label="@string/actionbar_title_shake"
+            android:screenOrientation="portrait"/>
 
         <service android:name="net.oschina.app.LogUploadService" />
 

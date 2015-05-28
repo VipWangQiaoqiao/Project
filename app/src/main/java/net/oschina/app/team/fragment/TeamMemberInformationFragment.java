@@ -6,7 +6,7 @@ import java.io.Serializable;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.team.adapter.DynamicAdapter;
+import net.oschina.app.team.adapter.TeamActiveAdapter;
 import net.oschina.app.team.adapter.TeamMemberAdapter;
 import net.oschina.app.team.bean.TeamActive;
 import net.oschina.app.team.bean.TeamActives;
@@ -153,8 +153,8 @@ public class TeamMemberInformationFragment extends BaseListFragment<TeamActive> 
     }
 
     @Override
-    protected DynamicAdapter getListAdapter() {
-        return new DynamicAdapter(aty);
+    protected TeamActiveAdapter getListAdapter() {
+        return new TeamActiveAdapter(aty);
     }
 
     @Override

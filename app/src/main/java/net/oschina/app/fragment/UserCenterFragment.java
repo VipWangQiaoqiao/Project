@@ -1,7 +1,20 @@
 package net.oschina.app.fragment;
 
-import java.io.ByteArrayInputStream;
-import java.util.List;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -25,23 +38,11 @@ import net.oschina.app.widget.AvatarView;
 
 import org.apache.http.Header;
 
-import android.content.DialogInterface;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
+import java.io.ByteArrayInputStream;
+import java.util.List;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-
-import com.loopj.android.http.AsyncHttpResponseHandler;
 
 /**
  * @author FireAnt（http://my.oschina.net/LittleDY）
@@ -151,6 +152,10 @@ public class UserCenterFragment extends BaseFragment implements
         case R.id.tv_private_message:
             if (mHisUid == AppContext.getInstance().getLoginUid()) {
                 AppContext.showToast("不能给自己发送留言:)");
+                return;
+            }
+            if (!AppContext.getInstance().isLogin()) {
+                UIHelper.showLoginActivity(getActivity());
                 return;
             }
             UIHelper.showMessageDetail(getActivity(), mHisUid, mHisName);

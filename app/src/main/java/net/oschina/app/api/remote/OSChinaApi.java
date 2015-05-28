@@ -222,11 +222,11 @@ public class OSChinaApi {
     /**
      * 获取评论列表
      * 
-     * @param id
-     * @param catalog
+     * @PARAM ID
+     * @PARAM CATALOG
      *            1新闻 2帖子 3动弹 4动态
-     * @param page
-     * @param handler
+     * @PARAM PAGE
+     * @PARAM HANDLER
      */
     public static void getCommentList(int id, int catalog, int page,
             AsyncHttpResponseHandler handler) {

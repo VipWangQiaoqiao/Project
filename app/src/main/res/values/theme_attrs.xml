@@ -7,5 +7,7 @@
     <attr name="windows_bg" format="reference"/>
     <attr name="sliding_block_bg" format="reference"/>
     <attr name="layout_item_bg" format="reference"/>
+    <attr name="editor_color" format="reference"/>
+    <attr name="editor_hit_color" format="reference"/>
 
 </resources>

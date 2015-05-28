@@ -22,6 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/iv_img"
+            android:textColor="?attr/textColor"
             android:text="退出开源中国" />
 
         <TextView
@@ -30,7 +31,7 @@
             android:layout_below="@id/tv_title"
             android:layout_toRightOf="@id/iv_img"
             android:text="退出后将不再接收新的消息提醒"
-            android:textColor="@color/main_gray" />
+            android:textColor="?attr/infoTextColor" />
     </RelativeLayout>
 
     <View
@@ -39,7 +40,7 @@
         android:layout_height="1px"
         android:layout_marginLeft="@dimen/space_8"
         android:layout_marginRight="@dimen/space_8"
-        android:background="@color/list_divider_color" />
+        android:background="?attr/lineColor" />
 
     <RelativeLayout
         android:id="@+id/rl_loginout"
@@ -58,6 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/iv_img1"
+            android:textColor="?attr/textColor"
             android:text="注销该账号" />
 
         <TextView
@@ -66,7 +68,7 @@
             android:layout_below="@id/tv_title1"
             android:layout_toRightOf="@id/iv_img1"
             android:text="注销/切换其他账号登录"
-            android:textColor="@color/main_gray" />
+            android:textColor="?attr/infoTextColor" />
     </RelativeLayout>
 
 </LinearLayout>

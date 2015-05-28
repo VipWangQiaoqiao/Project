@@ -16,7 +16,6 @@
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:textColor="#acd4b3"
-        android:textSize="@dimen/text_size_18"
-        android:paddingStart="?android:attr/listPreferredItemPaddingStart"/>
+        android:textSize="@dimen/text_size_18"/>
 
 </LinearLayout>

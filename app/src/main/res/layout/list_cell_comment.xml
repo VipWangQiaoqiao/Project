@@ -33,7 +33,7 @@
         android:layout_marginTop="@dimen/space_4"
         android:layout_toRightOf="@id/iv_avatar"
         android:orientation="vertical"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
     <net.oschina.app.widget.TweetTextView
         android:id="@+id/tv_content"
@@ -54,7 +54,7 @@
         android:layout_marginTop="@dimen/space_4"
         android:layout_toRightOf="@id/iv_avatar"
         android:orientation="vertical"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tv_from"

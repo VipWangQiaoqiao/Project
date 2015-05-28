@@ -43,6 +43,7 @@ import net.oschina.app.util.KJAnimations;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
+import net.oschina.app.util.ThemeSwitchUtils;
 import net.oschina.app.util.TypefaceUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
@@ -223,6 +224,7 @@ public class TweetDetailFragment extends
      */
     private void fillWebViewBody() {
         StringBuffer body = new StringBuffer();
+        body.append(ThemeSwitchUtils.getWebViewBodyString());
         body.append(UIHelper.WEB_STYLE + UIHelper.WEB_LOAD_IMAGES);
 
         StringBuilder tweetbody = new StringBuilder(mTweet.getBody());
@@ -233,6 +235,8 @@ public class TweetDetailFragment extends
         body.append(setHtmlCotentSupportImagePreview(tweetBody));
 
         UIHelper.addWebImageShow(getActivity(), mContent);
+        // 封尾
+        body.append("</div></body>");
         mContent.loadDataWithBaseURL(null, body.toString(), "text/html",
                 "utf-8", null);
     }
@@ -414,6 +418,7 @@ public class TweetDetailFragment extends
         mTvCommentCount = (TextView) header.findViewById(R.id.tv_comment_count);
         mContent = (WebView) header.findViewById(R.id.webview);
         UIHelper.initWebView(mContent);
+        mContent.loadUrl("file:///android_asset/detail_page.html");
         initSoundView(header);
         mLikeUser = (TextView) header.findViewById(R.id.tv_likeusers);
         mTvLikeState = (TextView) header.findViewById(R.id.tv_like_state);
@@ -528,4 +533,18 @@ public class TweetDetailFragment extends
 
     @Override
     public void onClickFlagButton() {}
+
+    @Override
+    public boolean onBackPressed() {
+        if (outAty.emojiFragment.isShowEmojiKeyBoard()) {
+            outAty.emojiFragment.hideAllKeyBoard();
+            return true;
+        }
+        if (outAty.emojiFragment.getEditText().getTag() != null) {
+            outAty.emojiFragment.getEditText().setTag(null);
+            outAty.emojiFragment.getEditText().setHint("说点什么吧");
+            return true;
+        }
+        return super.onBackPressed();
+    }
 }

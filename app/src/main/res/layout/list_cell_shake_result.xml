@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/day_list_item_background"
+    android:background="?attr/layout_item_bg"
     android:descendantFocusability="blocksDescendants"
     android:orientation="horizontal"
     android:paddingBottom="7dip"
@@ -36,7 +36,7 @@
             tools:text="描述"
             android:layout_marginTop="5dp"
             android:textSize="14sp"
-            android:textColor="@color/day_infoTextColor"
+            android:textColor="?attr/textColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -51,21 +51,18 @@
                 android:id="@+id/tv_author"
                 tools:text="作者"
                 android:layout_marginRight="10dp"
-                style="@style/list_text_info"
-                android:textColor="@color/day_infoTextColor"/>
+                style="@style/list_text_info"/>
 
             <TextView
                 android:id="@+id/tv_time"
                 tools:text="时间"
                 android:layout_marginRight="10dp"
-                style="@style/list_text_info"
-                android:textColor="@color/day_infoTextColor"/>
+                style="@style/list_text_info"/>
 
             <TextView
                 android:id="@+id/tv_comment_count"
                 tools:text="评论数"
-                style="@style/list_text_info"
-                android:textColor="@color/day_infoTextColor"/>
+                style="@style/list_text_info"/>
         </LinearLayout>
     </LinearLayout>
 

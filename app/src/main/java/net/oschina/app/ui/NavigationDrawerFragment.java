@@ -16,7 +16,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
-import net.oschina.app.AppManager;
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.SimpleBackPage;
@@ -136,7 +136,6 @@ public class NavigationDrawerFragment extends BaseFragment implements
                         TDevice.gotoMarket(getActivity(), "net.oschina.gitapp");
                     }
                 }
-
                 break;
             case R.id.menu_item_rss:
                 break;
@@ -144,7 +143,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
                 UIHelper.showSetting(getActivity());
                 break;
             case R.id.menu_item_theme:
-                AppManager.getAppManager().AppExit(getActivity());
+                switchTheme();
                 break;
             default:
                 break;
@@ -157,6 +156,14 @@ public class NavigationDrawerFragment extends BaseFragment implements
                 mDrawerLayout.closeDrawers();
             }
         }, 800);
+    }
+
+    private void switchTheme() {
+        if (AppContext.getNightModeSwitch()) {
+            AppContext.setNightModeSwitch(false);
+        } else {
+            AppContext.setNightModeSwitch(true);
+        }
     }
 
     @Override

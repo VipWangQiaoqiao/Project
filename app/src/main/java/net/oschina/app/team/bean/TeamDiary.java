@@ -21,14 +21,14 @@ public class TeamDiary extends Entity {
     private Author author;
 
     @XStreamAlias("detail")
-    private Detail detail;
+    private TeamDiaryDetail teamDiaryDetail;
 
-    public Detail getDetail() {
-        return detail;
+    public TeamDiaryDetail getTeamDiaryDetail() {
+        return teamDiaryDetail;
     }
 
-    public void setDetail(Detail detail) {
-        this.detail = detail;
+    public void setTeamDiaryDetail(TeamDiaryDetail teamDiaryDetail) {
+        this.teamDiaryDetail = teamDiaryDetail;
     }
 
     public String getTitle() {

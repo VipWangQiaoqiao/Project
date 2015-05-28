@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:background="?attr/layout_bg_normal"
-    android:padding="@dimen/space_8" >
+    android:padding="@dimen/space_8">
 
     <net.oschina.app.widget.AvatarView
         android:id="@+id/iv_avatar"
@@ -56,10 +57,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/space_8"
                 android:layout_marginBottom="@dimen/space_4"
-                android:textColor="@color/main_black"
+                android:textColor="?attr/textColor"
                 android:textSize="@dimen/text_size_16" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/space_8"
@@ -67,19 +68,17 @@
 
                 <TextView
                     android:id="@+id/tv_time"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="@color/main_gray"
+                    android:layout_alignParentLeft="true"
+                    tools:text="3天前"
+                    style="@style/list_text_info"
                     android:textSize="@dimen/text_size_12" />
 
                 <TextView
                     android:id="@+id/tv_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/main_gray"
-                    android:textSize="@dimen/text_size_12" />
-            </LinearLayout>
+                    android:layout_alignParentRight="true"
+                    tools:text="58"
+                    style="@style/list_text_info" />
+            </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
 

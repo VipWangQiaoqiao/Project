@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/list_item_background_normal"
+    android:background="?attr/windows_bg"
     android:orientation="vertical"
     android:padding="10dp" >
 
@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
         android:padding="10dp"
+        android:textColor="?android:editTextColor"
         android:background="@drawable/edit_select"
         android:hint="任务标题" />
 
@@ -38,7 +39,7 @@
     </RelativeLayout>
 
     <View
-        style="@style/team_new_issue_line" />
+        style="@style/h_line" />
 
     <RelativeLayout
         android:id="@+id/rl_issue_catalog"
@@ -62,7 +63,7 @@
     </RelativeLayout>
 
     <View
-        style="@style/team_new_issue_line" />
+        style="@style/h_line" />
 
     <RelativeLayout
         android:id="@+id/rl_issue_touser"
@@ -85,7 +86,7 @@
     </RelativeLayout>
 
     <View
-        style="@style/team_new_issue_line" />
+        style="@style/h_line" />
 
     <RelativeLayout
         android:id="@+id/rl_issue_time"
@@ -107,7 +108,7 @@
     </RelativeLayout>
 
     <View
-        style="@style/team_new_issue_line" />
+        style="@style/h_line" />
     
     <RelativeLayout
         android:id="@+id/rl_issue_push"
@@ -138,6 +139,6 @@
     
     <View
         android:id="@+id/push_line"
-        style="@style/team_new_issue_line" />
+        style="@style/h_line" />
 
 </LinearLayout>

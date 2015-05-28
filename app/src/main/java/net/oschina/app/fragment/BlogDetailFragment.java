@@ -1,198 +1,88 @@
 package net.oschina.app.fragment;
 
-import java.io.InputStream;
-import java.io.Serializable;
+import android.text.Editable;
+import android.text.TextUtils;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.base.BaseDetailFragment;
+import net.oschina.app.base.CommonDetailFragment;
 import net.oschina.app.bean.Blog;
 import net.oschina.app.bean.BlogDetail;
-import net.oschina.app.bean.Entity;
+import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.FavoriteList;
-import net.oschina.app.emoji.OnSendClickListener;
 import net.oschina.app.ui.DetailActivity;
-import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
+import net.oschina.app.util.ThemeSwitchUtils;
 import net.oschina.app.util.UIHelper;
-import net.oschina.app.util.URLsUtils;
 import net.oschina.app.util.XmlUtils;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.widget.TextView;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 
-public class BlogDetailFragment extends BaseDetailFragment implements
-        OnSendClickListener {
+import java.io.InputStream;
 
-    protected static final String TAG = BlogDetailFragment.class
-            .getSimpleName();
-    private static final String BLOG_CACHE_KEY = "blog_";
-    @InjectView(R.id.tv_title)
-    TextView mTvTitle;
-    @InjectView(R.id.tv_source)
-    TextView mTvSource;
-    @InjectView(R.id.tv_time)
-    TextView mTvTime;
-    private WebView mWebView;
-    private int mBlogId;
-    private Blog mBlog;
-
-    @Override
-    public View onCreateView(LayoutInflater inflater,
-            @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_news_detail, container,
-                false);
-
-        mCommentCount = getActivity().getIntent().getIntExtra("comment_count",
-                0);
-        mBlogId = getActivity().getIntent().getIntExtra("blog_id", 0);
-        ButterKnife.inject(this, view);
-        initViews(view);
-
-        return view;
-    }
-
-    private void initViews(View view) {
-        ((DetailActivity) getActivity()).toolFragment
-                .setCommentCount(mCommentCount);
-        mEmptyLayout = (EmptyLayout) view.findViewById(R.id.error_layout);
-        mWebView = (WebView) view.findViewById(R.id.webview);
-        UIHelper.initWebView(mWebView);
-    }
-
-    @Override
-    protected boolean hasReportMenu() {
-        return true;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        ((DetailActivity) getActivity()).toolFragment.showReportButton();
-    }
-
-    @Override
-    protected void onFavoriteChanged(boolean flag) {
-        super.onFavoriteChanged(flag);
-        mBlog.setFavorite(flag ? 1 : 0);
-        saveCache(mBlog);
-    }
-
+/**
+ * Created by 火蚁 on 15/5/25.
+ */
+public class BlogDetailFragment extends CommonDetailFragment<Blog> {
     @Override
     protected String getCacheKey() {
-        return new StringBuilder(BLOG_CACHE_KEY).append(mBlogId).toString();
+        return "blog_" + mId;
     }
 
     @Override
-    protected void sendRequestData() {
-        mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-        OSChinaApi.getBlogDetail(mBlogId, mHandler);
+    protected void sendRequestDataForNet() {
+        OSChinaApi.getBlogDetail(mId, mDetailHeandler);
     }
 
     @Override
-    protected Entity parseData(InputStream is) throws Exception {
+    protected Blog parseData(InputStream is) {
         return XmlUtils.toBean(BlogDetail.class, is).getBlog();
     }
 
     @Override
-    protected Entity readData(Serializable seri) {
-        return (Blog) seri;
-    }
-
-    @Override
-    public void onclickWriteComment() {
-        super.onclickWriteComment();
-        if (mBlog != null)
-            UIHelper.showBlogComment(getActivity(), mBlogId,
-                    mBlog.getAuthorId());
-    }
-
-    @Override
-    protected void executeOnLoadDataSuccess(Entity entity) {
-        mBlog = (Blog) entity;
-        fillUI();
-        fillWebViewBody();
-        ((DetailActivity) getActivity()).toolFragment
-                .setCommentCount(mCommentCount);
-    }
-
-    private void fillUI() {
-        mTvTitle.setText(mBlog.getTitle());
-        mTvSource.setText(mBlog.getAuthor());
-        mTvSource.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UIHelper.showUserCenter(getActivity(), mBlog.getAuthorId(),
-                        mBlog.getAuthor());
-            }
-        });
-        mTvTime.setText(StringUtils.friendly_time(mBlog.getPubDate()));
-        notifyFavorite(mBlog.getFavorite() == 1);
-    }
-
-    @Override
-    public int getCommentCount() {
-        return mBlog.getCommentCount();
-    }
-
-    private void fillWebViewBody() {
+    protected String getWebViewBody(Blog detail) {
         StringBuffer body = new StringBuffer();
-        body.append(UIHelper.setHtmlCotentSupportImagePreview(mBlog.getBody()));
         body.append(UIHelper.WEB_STYLE).append(UIHelper.WEB_LOAD_IMAGES);
-        mWebView.loadDataWithBaseURL(null, body.toString(), "text/html",
-                "utf-8", null);
+        body.append(ThemeSwitchUtils.getWebViewBodyString());
+        // 添加title
+        body.append(String.format("<div class='title'>%s</div>", mDetail.getTitle()));
+        // 添加作者和时间
+        String time = StringUtils.friendly_time(mDetail.getPubDate());
+        String author = String.format("<a class='author' href='http://my.oschina.net/u/%s'>%s</a>", mDetail.getAuthorId(), mDetail.getAuthor());
+        body.append(String.format("<div class='authortime'>%s&nbsp;&nbsp;&nbsp;&nbsp;%s</div>", author, time));
+        // 添加图片点击放大支持
+        body.append(UIHelper.setHtmlCotentSupportImagePreview(mDetail.getBody()));
+        // 封尾
+        body.append("</div></body>");
+        return body.toString();
     }
 
     @Override
-    protected int getFavoriteTargetId() {
-        return mBlog != null ? mBlog.getId() : -1;
+    protected void showCommentView() {
+        if (mDetail != null)
+            UIHelper.showBlogComment(getActivity(), mId,
+                    mDetail.getAuthorId());
+    }
+
+    @Override
+    protected int getCommentType() {
+        return CommentList.CATALOG_MESSAGE;
     }
 
     @Override
     protected int getFavoriteTargetType() {
-        return mBlog != null ? FavoriteList.TYPE_BLOG : -1;
+        return FavoriteList.TYPE_BLOG;
     }
 
     @Override
-    protected String getShareUrl() {
-        return mBlog != null ? URLsUtils.URL_MOBILE + "blog/" + mBlog.getId()
-                : null;
+    protected int getFavoriteState() {
+        return mDetail.getFavorite();
     }
 
     @Override
-    protected String getRepotrUrl() {
-        return mBlog != null ? mBlog.getUrl() : "";
-    }
-
-    @Override
-    protected String getShareTitle() {
-        return mBlog != null ? mBlog.getTitle()
-                : getString(R.string.share_title_blog);
-    }
-
-    @Override
-    protected String getShareContent() {
-        return mBlog != null ? StringUtils.getSubString(0, 55,
-                getFilterHtmlBody(mBlog.getBody())) : "";
-    }
-
-    @Override
-    protected int getRepotrId() {
-        return mBlog != null ? mBlogId : 0;
+    protected void updateFavoriteChanged(int newFavoritedState) {
+        mDetail.setFavorite(newFavoritedState);
+        saveCache(mDetail);
     }
 
     @Override
@@ -210,22 +100,18 @@ public class BlogDetailFragment extends BaseDetailFragment implements
             return;
         }
         showWaitDialog(R.string.progress_submit);
-        OSChinaApi.publicBlogComment(mBlogId, AppContext.getInstance()
+        OSChinaApi.publicBlogComment(mId, AppContext.getInstance()
                 .getLoginUid(), str.toString(), mCommentHandler);
     }
 
     @Override
-    public void onClickFlagButton() {}
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.refresh_menu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
+    public void onResume() {
+        super.onResume();
+        ((DetailActivity) getActivity()).toolFragment.showReportButton();
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        sendRequestData();
-        return super.onOptionsItemSelected(item);
+    protected String getRepotrUrl() {
+        return mDetail.getUrl();
     }
 }

@@ -16,6 +16,7 @@
         style="@style/wrap_wrap"
         android:textSize="15sp"
         android:textStyle="bold"
+        android:textColor="?attr/textColor"
         android:text="用户名" />
 
 </LinearLayout>

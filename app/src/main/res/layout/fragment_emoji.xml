@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/list_item_background_normal"
+    android:background="?attr/layout_item_bg"
     android:gravity="bottom"
     android:orientation="vertical" >
 
@@ -15,7 +15,7 @@
         android:id="@+id/ly_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/list_item_background_normal"
+        android:background="?attr/layout_item_bg"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingBottom="4dp"
@@ -51,8 +51,6 @@
                 android:paddingLeft="8dp"
                 android:paddingRight="@dimen/space_26"
                 android:paddingTop="@dimen/space_2"
-                android:textColor="@color/main_black"
-                android:textColorHint="@color/main_gray"
                 android:textSize="@dimen/text_size_16" />
 
             <ImageButton

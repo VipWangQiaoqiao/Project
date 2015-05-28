@@ -3,7 +3,7 @@
     android:id="@+id/emoji_title"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white"
+    android:background="?attr/layout_item_bg"
     android:gravity="center_vertical"
     android:orientation="horizontal" >
 
@@ -25,11 +25,12 @@
         android:layout_gravity="center_vertical"
         android:layout_margin="4dp"
         android:layout_weight="1"
-        android:background="@drawable/comment_edittext_selector"
+        android:background="?android:editTextBackground"
         android:gravity="center_vertical"
         android:hint="说点什么吧"
         android:minHeight="40dp"
-        android:padding="3dp"
+        android:textColor="?android:editTextColor"
+        android:padding="10dp"
         android:textSize="17sp" />
 
     <CheckBox

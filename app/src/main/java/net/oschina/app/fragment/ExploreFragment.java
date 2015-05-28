@@ -1,13 +1,18 @@
 package net.oschina.app.fragment;
 
-import net.oschina.app.R;
-import net.oschina.app.base.BaseFragment;
-import net.oschina.app.bean.SimpleBackPage;
-import net.oschina.app.util.UIHelper;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import net.oschina.app.R;
+import net.oschina.app.base.BaseFragment;
+import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.ui.FindUserActivity;
+import net.oschina.app.ui.ShakeActivity;
+import net.oschina.app.util.UIHelper;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -57,7 +62,7 @@ public class ExploreFragment extends BaseFragment {
             UIHelper.showMyActive(getActivity());
             break;
         case R.id.rl_find_osc:
-            UIHelper.showSimpleBack(getActivity(), SimpleBackPage.FIND_USER);
+            showFindUser();
             break;
         case R.id.rl_city:
             UIHelper.showSimpleBack(getActivity(), SimpleBackPage.SAME_CITY);
@@ -69,11 +74,23 @@ public class ExploreFragment extends BaseFragment {
             UIHelper.showScanActivity(getActivity());
             break;
         case R.id.rl_shake:
-            UIHelper.showSimpleBack(getActivity(), SimpleBackPage.SHAKE);
+            showShake();
             break;
         default:
             break;
         }
+    }
+
+    private void showShake() {
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), ShakeActivity.class);
+        getActivity().startActivity(intent);
+    }
+
+    private void showFindUser() {
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), FindUserActivity.class);
+        getActivity().startActivity(intent);
     }
 
     @Override

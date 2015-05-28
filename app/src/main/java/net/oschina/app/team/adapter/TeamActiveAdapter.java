@@ -1,17 +1,5 @@
 package net.oschina.app.team.adapter;
 
-import net.oschina.app.R;
-import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.team.bean.TeamActive;
-import net.oschina.app.ui.ImagePreviewActivity;
-import net.oschina.app.util.StringUtils;
-import net.oschina.app.widget.AvatarView;
-import net.oschina.app.widget.TweetTextView;
-
-import org.kymjs.kjframe.KJBitmap;
-import org.kymjs.kjframe.bitmap.BitmapCallBack;
-import org.kymjs.kjframe.bitmap.BitmapHelper;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.View;
@@ -19,17 +7,30 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import net.oschina.app.R;
+import net.oschina.app.base.ListBaseAdapter;
+import net.oschina.app.team.bean.TeamActive;
+import net.oschina.app.ui.ImagePreviewActivity;
+import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TypefaceUtils;
+import net.oschina.app.widget.AvatarView;
+import net.oschina.app.widget.TweetTextView;
+
+import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.bitmap.BitmapCallBack;
+import org.kymjs.kjframe.bitmap.BitmapHelper;
+
 /**
  * Team动态界面ListView适配器 (kymjs123@gmail.com)
  * 
  * @author kymjs (https://github.com/kymjs)
  * 
  */
-public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
+public class TeamActiveAdapter extends ListBaseAdapter<TeamActive> {
     private final Context context;
     private final KJBitmap kjb = new KJBitmap();
 
-    public DynamicAdapter(Context cxt) {
+    public TeamActiveAdapter(Context cxt) {
         this.context = cxt;
     }
 
@@ -89,8 +90,9 @@ public class DynamicAdapter extends ListBaseAdapter<TeamActive> {
         }
 
         holder.tv_content.setMaxLines(3);
-        holder.tv_date.setText(StringUtils.friendly_time(data.getCreateTime()));
-        holder.tv_commit.setText(data.getReply());
+        TypefaceUtils.setTypeFaceWithText(holder.tv_date, R.string.fa_clock_o, StringUtils.friendly_time(data.getCreateTime()));
+        TypefaceUtils.setTypeFaceWithText(holder.tv_commit, R.string.fa_comment, data.getReply());
+        
         String imgPath = data.getBody().getImage();
         if (!StringUtils.isEmpty(imgPath)) {
             holder.iv_pic.setVisibility(View.VISIBLE);

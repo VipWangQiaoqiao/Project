@@ -1,26 +1,5 @@
 package net.oschina.app.base;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
-
-import net.oschina.app.AppContext;
-import net.oschina.app.R;
-import net.oschina.app.bean.Entity;
-import net.oschina.app.bean.ListEntity;
-import net.oschina.app.bean.Result;
-import net.oschina.app.bean.ResultBean;
-import net.oschina.app.cache.CacheManager;
-import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.TDevice;
-import net.oschina.app.util.XmlUtils;
-
-import org.apache.http.Header;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -35,10 +14,33 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
+
+import net.oschina.app.AppContext;
+import net.oschina.app.R;
+import net.oschina.app.bean.Entity;
+import net.oschina.app.bean.ListEntity;
+import net.oschina.app.bean.Result;
+import net.oschina.app.bean.ResultBean;
+import net.oschina.app.cache.CacheManager;
+import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TDevice;
+import net.oschina.app.util.ThemeSwitchUtils;
+import net.oschina.app.util.XmlUtils;
+
+import org.apache.http.Header;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 @SuppressLint("NewApi")
 public abstract class BaseListFragment<T extends Entity> extends BaseFragment
@@ -593,7 +595,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
         AppContext.putReadedPostList(prefFileName, key, "true");
         TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
         if (tvTitle != null) {
-            tvTitle.setTextColor(0xff9a9a9a);
+            tvTitle.setTextColor(AppContext.getInstance().getResources().getColor(ThemeSwitchUtils.getTitleReadedColor()));
         }
     }
 }

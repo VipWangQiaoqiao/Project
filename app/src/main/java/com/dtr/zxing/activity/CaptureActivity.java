@@ -241,6 +241,7 @@ public final class CaptureActivity extends BaseActivity implements
     }
 
     private void handleText(String text) {
+
         if (StringUtils.isUrl(text)) {
             showUrlOption(text);
         } else {

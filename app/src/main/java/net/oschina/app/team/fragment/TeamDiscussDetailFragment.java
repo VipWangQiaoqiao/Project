@@ -1,8 +1,15 @@
 package net.oschina.app.team.fragment;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.Serializable;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.webkit.WebView;
+import android.widget.AdapterView;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -18,22 +25,15 @@ import net.oschina.app.team.bean.TeamRepliesList;
 import net.oschina.app.team.bean.TeamReply;
 import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.ThemeSwitchUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
 import org.apache.http.Header;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.webkit.WebView;
-import android.widget.AdapterView;
-import android.widget.TextView;
-
-import com.loopj.android.http.AsyncHttpResponseHandler;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.Serializable;
 
 /**
  * TeamDiscussDetailFragment.java
@@ -49,14 +49,6 @@ public class TeamDiscussDetailFragment extends
     private int mTeamId;
 
     private int mDiscussId;
-
-    private TextView mTvTitle;
-
-    private TextView mTvAuthor;
-
-    private TextView mTvTime;
-
-    private TextView mTvAnswerVote;
 
     private WebView mWebView;
 
@@ -125,10 +117,6 @@ public class TeamDiscussDetailFragment extends
         }
         View headerView = LayoutInflater.from(getActivity()).inflate(
                 R.layout.fragment_team_discuss_detail, null);
-        mTvTitle = findHeaderView(headerView, R.id.tv_title);
-        mTvAuthor = findHeaderView(headerView, R.id.tv_author);
-        mTvTime = findHeaderView(headerView, R.id.tv_time);
-        mTvAnswerVote = findHeaderView(headerView, R.id.tv_answer_vote);
         mWebView = findHeaderView(headerView, R.id.webview);
         return headerView;
     }
@@ -147,15 +135,27 @@ public class TeamDiscussDetailFragment extends
 
     @Override
     protected void executeOnLoadDetailSuccess(TeamDiscuss detailBean) {
-        mTvTitle.setText(detailBean.getTitle());
-        mTvAuthor.setText(detailBean.getAuthor().getName());
-        mTvTime.setText(StringUtils.friendly_time(detailBean.getCreateTime()));
-        mTvAnswerVote.setText(detailBean.getVoteUp() + "赞/"
-                + detailBean.getAnswerCount() + "回");
+
         UIHelper.initWebView(mWebView);
         UIHelper.addWebImageShow(getActivity(), mWebView);
+
+        StringBuffer body = new StringBuffer();
+        body.append(UIHelper.WEB_STYLE).append(UIHelper.WEB_LOAD_IMAGES);
+        body.append(ThemeSwitchUtils.getWebViewBodyString());
+        // 添加title
+        body.append(String.format("<div class='title'>%s</div>", detailBean.getTitle()));
+        // 添加作者和时间
+        String time = StringUtils.friendly_time(detailBean.getCreateTime());
+        String author = String.format("<a class='author' href='http://my.oschina.net/u/%s'>%s</a>", detailBean.getAuthor().getId(), detailBean.getAuthor().getName());
+        String answerCountAndVoteup = detailBean.getVoteUp() + "赞/"
+                + detailBean.getAnswerCount() + "回";
+        body.append(String.format("<div class='authortime'>%s&nbsp;&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;&nbsp;&nbsp;%s</div>", author, time, answerCountAndVoteup));
+        // 添加图片点击放大支持
+        body.append(UIHelper.setHtmlCotentSupportImagePreview(detailBean.getBody()));
+        // 封尾
+        body.append("</div></body>");
         mWebView.loadDataWithBaseURL(null,
-                UIHelper.WEB_STYLE + detailBean.getBody(), "text/html",
+                UIHelper.WEB_STYLE + body.toString(), "text/html",
                 "utf-8", null);
         mAdapter.setNoDataText(R.string.comment_empty);
     }

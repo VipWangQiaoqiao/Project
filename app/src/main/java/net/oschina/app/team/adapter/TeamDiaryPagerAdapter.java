@@ -12,12 +12,12 @@ import android.view.ViewGroup;
  * 
  * @author kymjs (http://www.kymjs.com)
  */
-public class DiaryPagerAdapter extends PagerAdapter {
+public class TeamDiaryPagerAdapter extends PagerAdapter {
     private final Context cxt;
     private final int currentYear;
     private final int teamId;
 
-    public DiaryPagerAdapter(Context cxt, int currentYear, int teamId) {
+    public TeamDiaryPagerAdapter(Context cxt, int currentYear, int teamId) {
         this.currentYear = currentYear;
         this.cxt = cxt;
         this.teamId = teamId;

@@ -10,6 +10,7 @@
         android:id="@+id/item_diary_detail_week"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="?attr/textColor"
         android:layout_gravity="top"
         android:layout_marginLeft="5dp" />
 
@@ -18,6 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="35dp"
         android:layout_gravity="top"
+        android:textColor="?attr/textColor"
         android:layout_marginLeft="90dp"
         android:maxLines="2" />
 

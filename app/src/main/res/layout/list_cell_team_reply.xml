@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/iv_avatar"
         android:text="火蚁"
-        android:textColor="@color/lightblue"
+        android:textColor="?android:textColorLink"
         android:textSize="@dimen/text_size_13" />
 
     <TextView
@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:textColor="@color/tweet_time_platform"
+        android:textColor="?attr/infoTextColor"
         android:textSize="@dimen/text_size_10" />
 
     <net.oschina.app.widget.TweetTextView
@@ -35,7 +35,7 @@
         android:layout_marginTop="@dimen/space_4"
         android:layout_toRightOf="@id/iv_avatar"
         android:text="评论内容"
-        android:textColor="@color/main_black"
+        android:textColor="?attr/textColor"
         android:textSize="@dimen/text_size_14" />
 
     <TextView

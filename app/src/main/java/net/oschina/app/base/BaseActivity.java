@@ -2,14 +2,14 @@ package net.oschina.app.base;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Spinner;
 import android.widget.TextView;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.AppManager;
 import net.oschina.app.R;
 import net.oschina.app.interf.BaseViewInterface;
@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @created 2014年9月25日 上午11:30:15 引用自：tonlin
  */
-public abstract class BaseActivity extends AppCompatActivity implements
+public abstract class BaseActivity extends ActionBarActivity implements
         DialogControl, View.OnClickListener, BaseViewInterface {
     public static final String INTENT_ACTION_EXIT_APP = "INTENT_ACTION_EXIT_APP";
 
@@ -50,6 +50,11 @@ public abstract class BaseActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (AppContext.getNightModeSwitch()) {
+            setTheme(R.style.AppBaseTheme_Night);
+        } else {
+            setTheme(R.style.AppBaseTheme_Light);
+        }
         AppManager.getAppManager().addActivity(this);
         if (!hasActionBar()) {
             // supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -95,14 +100,6 @@ public abstract class BaseActivity extends AppCompatActivity implements
         return false;
     }
 
-    protected int getActionBarCustomView() {
-        return 0;
-    }
-
-    protected boolean haveSpinner() {
-        return false;
-    }
-
     protected void init(Bundle savedInstanceState) {}
 
     protected void initActionBar(ActionBar actionBar) {
@@ -119,10 +116,6 @@ public abstract class BaseActivity extends AppCompatActivity implements
                 actionBar.setTitle(titleRes);
             }
         }
-    }
-
-    protected Spinner getSpinner() {
-        return null;
     }
 
     public void setActionBarTitle(int resId) {

@@ -1,16 +1,18 @@
 package net.oschina.app.team.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.oschina.app.R;
-import net.oschina.app.team.bean.TeamProject;
-import net.oschina.app.util.TypefaceUtils;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import net.oschina.app.R;
+import net.oschina.app.team.bean.TeamProject;
+import net.oschina.app.util.TypefaceUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -77,6 +79,8 @@ public class TeamProjectListAdapter extends BaseAdapter {
             TypefaceUtils.setTypeface(tvSource, R.string.fa_gitosc);
         } else if (source.equalsIgnoreCase(TeamProject.GITHUB)) {
             TypefaceUtils.setTypeface(tvSource, R.string.fa_github);
+        } else {
+            TypefaceUtils.setTypeface(tvSource, R.string.fa_list_alt);
         }
         vh.name.setText(item.getGit().getName());
 

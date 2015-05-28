@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res/net.oschina.app"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/list_item_background_normal"
-    android:orientation="vertical" >
+    android:background="?attr/windows_bg"
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/ll_user_container"
@@ -106,7 +106,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/list_divider_color" />
+        android:background="?attr/lineColor" />
 
     <TextView
         android:id="@+id/tv_latest_login_time"
@@ -121,7 +121,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/list_divider_color" />
+        android:background="?attr/lineColor" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -142,7 +142,7 @@
             android:paddingLeft="@dimen/space_20"
             android:paddingRight="@dimen/space_20"
             android:text="留言"
-            android:textColor="@color/main_black"
+            android:textColor="?attr/textColor"
             android:textSize="@dimen/text_size_12" />
 
         <TextView
@@ -165,12 +165,12 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/list_divider_color" />
+        android:background="?attr/lineColor" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/list_item_background_normal"
+        android:background="?attr/layout_item_bg"
         android:gravity="center_vertical"
         android:orientation="horizontal" >
 
@@ -179,30 +179,30 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/day_list_item_background"
+            android:background="?attr/layout_item_bg"
             android:clickable="true"
             android:gravity="center"
             android:padding="@dimen/space_8"
             android:text="@string/blog"
-            android:textColor="@color/main_gray"
+            android:textColor="?attr/textColor"
             android:textSize="@dimen/text_size_14" />
 
         <View
             android:layout_width="1px"
             android:layout_height="20dp"
-            android:background="@color/list_divider_color" />
+            android:background="?attr/lineColor" />
 
         <TextView
             android:id="@+id/tv_information"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/day_list_item_background"
+            android:background="?attr/layout_item_bg"
             android:clickable="true"
             android:gravity="center"
             android:padding="@dimen/space_8"
             android:text="@string/information"
-            android:textColor="@color/main_gray"
+            android:textColor="?attr/textColor"
             android:textSize="@dimen/text_size_14" />
     </LinearLayout>
 

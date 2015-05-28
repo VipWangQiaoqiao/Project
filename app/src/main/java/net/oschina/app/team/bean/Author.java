@@ -4,37 +4,36 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 import net.oschina.app.bean.Entity;
 
-/***
- * 帖子、任务、讨论的创建者， 
- * 		注：节点
- * 
- * @author fireant
+/**
+ * 帖子、任务、讨论的创建者，
+ * 注：节点
  *
+ * @author fireant
  */
 @SuppressWarnings("serial")
 @XStreamAlias("author")
 public class Author extends Entity {
-	
-	@XStreamAlias("name")
-	private String name;
-	
-	@XStreamAlias("portrait")
-	private String portrait;
 
-	public String getName() {
-		return name;
-	}
+    @XStreamAlias("name")
+    private String name;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    @XStreamAlias("portrait")
+    private String portrait;
 
-	public String getPortrait() {
-		return portrait;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setPortrait(String portrait) {
-		this.portrait = portrait;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPortrait() {
+        return portrait;
+    }
+
+    public void setPortrait(String portrait) {
+        this.portrait = portrait;
+    }
 
 }

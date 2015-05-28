@@ -32,6 +32,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dip" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="?attr/lineColor" />
+
             </RelativeLayout>
 
             <!-- 快速操作按钮 -->

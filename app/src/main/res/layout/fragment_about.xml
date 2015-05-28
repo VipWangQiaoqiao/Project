@@ -2,6 +2,7 @@
 <net.oschina.app.widget.CustomerScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
+    android:background="?attr/windows_bg"
     android:orientation="vertical"
     android:scrollbars="none" >
 
@@ -24,16 +25,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/space_5"
-            android:textColor="@color/main_gray"
+            android:textColor="?attr/textColor"
             android:textSize="@dimen/text_size_16" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_marginLeft="@dimen/space_8"
-            android:layout_marginRight="@dimen/space_8"
-            android:layout_marginTop="@dimen/space_12"
-            android:background="@color/list_divider_color" />
 
         <RelativeLayout
             android:id="@+id/rl_check_update"
@@ -42,7 +35,7 @@
             <TextView
                 style="@style/option_item_text_parent"
                 android:text="@string/update"
-                android:textColor="@color/main_black"
+                android:textColor="?attr/textColor"
                 android:textSize="@dimen/text_size_16" />
 
             <LinearLayout
@@ -62,7 +55,7 @@
                     android:id="@+id/tv_version"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/main_gray"
+                    android:textColor="?attr/textColor"
                     android:textSize="@dimen/text_size_14"
                     android:tag="false"
                     android:visibility="gone" />
@@ -77,16 +70,12 @@
             <TextView
                 style="@style/option_item_text_parent"
                 android:text="@string/feedback"
-                android:textColor="@color/main_black"
+                android:textColor="?attr/textColor"
                 android:textSize="@dimen/text_size_16" />
         </RelativeLayout>
 
         <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_marginLeft="@dimen/space_8"
-            android:layout_marginRight="@dimen/space_8"
-            android:background="@color/list_divider_color" />
+            style="@style/h_line" />
 
         <RelativeLayout
             android:id="@+id/rl_grade"
@@ -95,7 +84,7 @@
             <TextView
                 style="@style/option_item_text_parent"
                 android:text="@string/grade"
-                android:textColor="@color/main_black"
+                android:textColor="?attr/textColor"
                 android:textSize="@dimen/text_size_16" />
         </RelativeLayout>
 
@@ -107,7 +96,7 @@
             <TextView
                 style="@style/option_item_text_parent"
                 android:text="@string/gitapp"
-                android:textColor="@color/main_black"
+                android:textColor="?attr/textColor"
                 android:textSize="@dimen/text_size_16" />
         </RelativeLayout>
 
@@ -125,7 +114,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/oscsite"
-                android:textColor="@color/lightblue" />
+                android:textColor="?android:textColorLink" />
 
             <View
                 android:layout_width="2px"
@@ -141,7 +130,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/knowmore"
-                android:textColor="@color/lightblue" />
+                android:textColor="?android:textColorLink" />
         </LinearLayout>
 
         <TextView
@@ -149,7 +138,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/copyright"
-            android:textColor="@color/main_gray" />
+            android:textColor="?attr/infoTextColor" />
     </LinearLayout>
 
 </net.oschina.app.widget.CustomerScrollView>

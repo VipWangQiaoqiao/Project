@@ -7,6 +7,7 @@
     <ListView
         android:id="@+id/fragment_team_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:divider="?attr/lineColor"/>
 
 </LinearLayout>

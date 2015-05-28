@@ -1,20 +1,14 @@
-package net.oschina.app.fragment;
+package net.oschina.app.ui;
 
-import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Bundle;
 import android.os.Vibrator;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -25,7 +19,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.base.BaseFragment;
+import net.oschina.app.base.BaseActivity;
 import net.oschina.app.bean.ShakeObject;
 import net.oschina.app.util.KJAnimations;
 import net.oschina.app.util.StringUtils;
@@ -38,13 +32,13 @@ import org.kymjs.kjframe.KJBitmap;
 
 import java.io.ByteArrayInputStream;
 
-import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
  * 摇一摇界面
+ * Created by 火蚁 on 15/5/28.
  */
-public class ShakeFragment extends BaseFragment implements SensorEventListener {
+public class ShakeActivity extends BaseActivity implements SensorEventListener {
 
     @InjectView(R.id.shake_img)
     ImageView mImgShake;
@@ -69,7 +63,6 @@ public class ShakeFragment extends BaseFragment implements SensorEventListener {
     private SensorManager sensorManager = null;
     private Sensor sensor;
     private Vibrator vibrator = null;
-    private Activity aty;
 
     private boolean isRequest = false;
 
@@ -81,15 +74,18 @@ public class ShakeFragment extends BaseFragment implements SensorEventListener {
     private static final int UPTATE_INTERVAL_TIME = 50;
 
     @Override
-    public void initData() {
-        aty = getActivity();
-        sensorManager = (SensorManager) aty
-                .getSystemService(Context.SENSOR_SERVICE);
-        vibrator = (Vibrator) aty.getSystemService(Service.VIBRATOR_SERVICE);
+    protected boolean hasBackButton() {
+        return true;
     }
 
     @Override
-    public void initView(View view) {
+    protected int getLayoutId() {
+        return R.layout.activity_shake;
+    }
+
+    @Override
+    public void initView() {
+
     }
 
     /**
@@ -99,7 +95,7 @@ public class ShakeFragment extends BaseFragment implements SensorEventListener {
         isRequest = true;
         mProgress.setVisibility(View.VISIBLE);
         Animation anim = KJAnimations.shakeAnimation(mImgShake.getLeft());
-        anim.setAnimationListener(new AnimationListener() {
+        anim.setAnimationListener(new Animation.AnimationListener() {
 
             @Override
             public void onAnimationStart(Animation animation) {
@@ -127,10 +123,10 @@ public class ShakeFragment extends BaseFragment implements SensorEventListener {
                             } else {
                                 mLayoutBottom.setVisibility(View.VISIBLE);
                                 mLayoutBottom
-                                        .setOnClickListener(new OnClickListener() {
+                                        .setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
-                                                UIHelper.showUrlShake(aty, obj);
+                                                UIHelper.showUrlShake(ShakeActivity.this, obj);
                                             }
                                         });
                                 new KJBitmap()
@@ -216,22 +212,19 @@ public class ShakeFragment extends BaseFragment implements SensorEventListener {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        View rootView = inflater.inflate(R.layout.fragment_shake, container,
-                false);
-        ButterKnife.inject(this, rootView);
-        initData();
-        initView(rootView);
-        return rootView;
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
     }
 
     @Override
-    public void onClick(View v) {
+    public void initData() {
+        sensorManager = (SensorManager) this
+                .getSystemService(Context.SENSOR_SERVICE);
+        vibrator = (Vibrator) this.getSystemService(Service.VIBRATOR_SERVICE);
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    public void onClick(View view) {
+
     }
 }

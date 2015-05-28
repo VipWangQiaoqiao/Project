@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<net.oschina.app.widget.CustomerScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
+    android:background="?attr/windows_bg"
     android:orientation="vertical"
     android:scrollbars="none">
 
@@ -30,8 +31,7 @@
 
         <View
             style="@style/h_line"
-            android:layout_marginLeft="@dimen/space_8"
-            android:layout_marginRight="@dimen/space_8" />
+            android:layout_marginLeft="@dimen/space_8" />
 
         <RelativeLayout
             android:id="@+id/rl_notification_settings"
@@ -46,8 +46,7 @@
 
         <View
             style="@style/h_line"
-            android:layout_marginLeft="@dimen/space_8"
-            android:layout_marginRight="@dimen/space_8" />
+            android:layout_marginLeft="@dimen/space_8" />
 
         <RelativeLayout
             android:id="@+id/rl_clean_cache"
@@ -71,8 +70,7 @@
 
         <View
             style="@style/h_line"
-            android:layout_marginLeft="@dimen/space_8"
-            android:layout_marginRight="@dimen/space_8" />
+            android:layout_marginLeft="@dimen/space_8" />
 
         <RelativeLayout
             android:id="@+id/rl_double_click_exit"
@@ -121,8 +119,7 @@
 
         <View
             style="@style/h_line"
-            android:layout_marginLeft="@dimen/space_8"
-            android:layout_marginRight="@dimen/space_8" />
+            android:layout_marginLeft="@dimen/space_8" />
 
         <RelativeLayout
             android:id="@+id/rl_exit"
@@ -137,4 +134,4 @@
         </RelativeLayout>
     </LinearLayout>
 
-</net.oschina.app.widget.CustomerScrollView>
+</ScrollView>

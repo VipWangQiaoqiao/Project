@@ -1,16 +1,17 @@
 package net.oschina.app.base;
 
-import net.oschina.app.AppContext;
-import net.oschina.app.R;
-import net.oschina.app.interf.BaseFragmentInterface;
-import net.oschina.app.ui.dialog.DialogControl;
-import net.oschina.app.ui.dialog.WaitDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import net.oschina.app.AppContext;
+import net.oschina.app.R;
+import net.oschina.app.interf.BaseFragmentInterface;
+import net.oschina.app.ui.dialog.DialogControl;
+import net.oschina.app.ui.dialog.WaitDialog;
 
 /**
  * 碎片基类
@@ -93,10 +94,10 @@ public class BaseFragment extends Fragment implements
         return null;
     }
 
-    protected WaitDialog showWaitDialog(String resid) {
+    protected WaitDialog showWaitDialog(String str) {
         FragmentActivity activity = getActivity();
         if (activity instanceof DialogControl) {
-            return ((DialogControl) activity).showWaitDialog(resid);
+            return ((DialogControl) activity).showWaitDialog(str);
         }
         return null;
     }

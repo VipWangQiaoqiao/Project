@@ -28,7 +28,7 @@
             android:gravity="center"
             android:paddingTop="@dimen/space_10"
             android:text="@string/qr_code_tip"
-            android:textColor="@color/main_gray" />
+            android:textColor="?attr/textColor" />
 
         <TextView
             android:layout_width="match_parent"
@@ -38,7 +38,7 @@
             android:gravity="center"
             android:paddingBottom="@dimen/space_10"
             android:text="@string/qr_code_tip2"
-            android:textColor="@color/main_gray" />
+            android:textColor="?attr/textColor" />
     </LinearLayout>
 
 </LinearLayout>

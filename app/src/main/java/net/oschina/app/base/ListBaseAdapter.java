@@ -1,16 +1,5 @@
 package net.oschina.app.base;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.oschina.app.R;
-import net.oschina.app.bean.Entity;
-import net.oschina.app.emoji.InputHelper;
-import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.TDevice;
-import net.oschina.app.widget.MyLinkMovementMethod;
-import net.oschina.app.widget.MyURLSpan;
-import net.oschina.app.widget.TweetTextView;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.Html;
@@ -23,6 +12,18 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import net.oschina.app.R;
+import net.oschina.app.bean.Entity;
+import net.oschina.app.emoji.InputHelper;
+import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TDevice;
+import net.oschina.app.widget.MyLinkMovementMethod;
+import net.oschina.app.widget.MyURLSpan;
+import net.oschina.app.widget.TweetTextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ListBaseAdapter<T extends Entity> extends BaseAdapter {
     public static final int STATE_EMPTY_ITEM = 0;

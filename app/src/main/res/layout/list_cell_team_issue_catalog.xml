@@ -10,6 +10,7 @@
         android:text="标题"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="?attr/textColor"
         android:textSize="17sp"/>
     
     <TextView 
@@ -24,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_team_issue_catalog_title"
-        android:textColor="@color/main_gray"
+        android:textColor="?attr/infoTextColor"
         android:layout_marginTop="2dp"
         android:maxLines="2"
         android:ellipsize="end"

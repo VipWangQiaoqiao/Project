@@ -7,12 +7,11 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -39,14 +38,12 @@ import butterknife.InjectView;
 
 /**
  * 团队主界面
- * 
+ *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @version 创建时间：2015年1月13日 下午3:36:56
- * 
- * 
  */
 
-public class TeamMainActivity extends BaseActivity {
+public class TeamMainActivity extends BaseActivity implements ActionBar.OnNavigationListener {
 
     private final String TEAM_LIST_FILE = "team_list_file";
     private final String TEAM_LIST_KEY = "team_list_key"
@@ -61,7 +58,7 @@ public class TeamMainActivity extends BaseActivity {
     private final String tag = "team_view";
 
     private FragmentManager mFragmentManager;
-    
+
     private int mCurrentContentIndex = -1;
 
     @InjectView(R.id.error_layout)
@@ -80,11 +77,7 @@ public class TeamMainActivity extends BaseActivity {
     }
 
     @Override
-    public void onClick(View v) {}
-
-    @Override
-    protected boolean haveSpinner() {
-        return true;
+    public void onClick(View v) {
     }
 
     @Override
@@ -103,50 +96,26 @@ public class TeamMainActivity extends BaseActivity {
                 requestTeamList();
             }
         });
-        initSpinner();
+
+        mActionBar.setDisplayShowTitleEnabled(false);
+        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        adapter = new SpinnerAdapter(this, teamName);
+        mActionBar.setListNavigationCallbacks(adapter, this);
         requestTeamList();
 
         mFragmentManager = getSupportFragmentManager();
     }
 
     @Override
-    public void initData() {}
+    public void initData() {
+    }
 
-    private Spinner mSpinner;
     private SpinnerAdapter adapter;
 
     private final List<String> teamName = new ArrayList<String>();
     private List<Team> teamDatas = new ArrayList<Team>();
 
-    private void initSpinner() {
-        mSpinner = getSpinner();
-        adapter = new SpinnerAdapter(this, teamName);
-        mSpinner.setAdapter(adapter);
-        mSpinner.setVisibility(View.GONE);
-
-        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                    int position, long id) {
-                // TODO Auto-generated method stub
-                Team team = teamDatas.get(position);
-                if (team != null) {
-                    switchTeam(position);
-                    adapter.setSelectIndex(position);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // TODO Auto-generated method stub
-
-            }
-        });
-    }
-
     /**
-     * 
      * @param pos
      */
     private void switchTeam(int pos) {
@@ -184,7 +153,7 @@ public class TeamMainActivity extends BaseActivity {
         String cache = PreferenceHelper.readString(this, TEAM_LIST_FILE,
                 TEAM_LIST_KEY, "");
         if (!StringUtils.isEmpty(cache)) {
-           // mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+            // mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             teamDatas = TeamList.toTeamList(cache);
             setTeamDataState();
         } else {
@@ -200,12 +169,12 @@ public class TeamMainActivity extends BaseActivity {
                     setTeamDataState();
                 } else {
                     if (teamDatas == null && datas == null) {
-                	AppContext.showToast(new String(arg2));
+                        AppContext.showToast(new String(arg2));
                         mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
                         mErrorLayout.setErrorMessage("获取团队失败");
                     }
                 }
-                
+
                 if (datas != null) {
                     // 保存新的团队列表
                     PreferenceHelper.write(TeamMainActivity.this, TEAM_LIST_FILE,
@@ -215,16 +184,16 @@ public class TeamMainActivity extends BaseActivity {
 
             @Override
             public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                    Throwable arg3) {
-               //AppContext.showToast("网络不好，请稍后重试");
+                                  Throwable arg3) {
+                //AppContext.showToast("网络不好，请稍后重试");
             }
         });
     }
 
     private void setTeamDataState() {
-	if (teamDatas == null) {
-	    teamDatas = new ArrayList<Team>();
-	}
+        if (teamDatas == null) {
+            teamDatas = new ArrayList<Team>();
+        }
         if (teamDatas.isEmpty()) {
             mErrorLayout.setErrorType(EmptyLayout.NODATA);
             String msg = getResources().getString(R.string.team_empty);
@@ -239,13 +208,23 @@ public class TeamMainActivity extends BaseActivity {
                     mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
                 }
             }, 800);
-            mSpinner.setVisibility(View.VISIBLE);
             container.setVisibility(View.VISIBLE);
         }
         for (Team team : this.teamDatas) {
             teamName.add(team.getName());
         }
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+        Team team = teamDatas.get(itemPosition);
+        if (team != null) {
+            switchTeam(itemPosition);
+            adapter.setSelectIndex(itemPosition);
+        }
+
+        return false;
     }
 
     public class SpinnerAdapter extends BaseAdapter {
@@ -279,7 +258,7 @@ public class TeamMainActivity extends BaseActivity {
 
         @Override
         public View getDropDownView(int position, View convertView,
-                ViewGroup parent) {
+                                    ViewGroup parent) {
             // TODO Auto-generated method stub
             if (convertView == null) {
                 convertView = LayoutInflater.from(context).inflate(

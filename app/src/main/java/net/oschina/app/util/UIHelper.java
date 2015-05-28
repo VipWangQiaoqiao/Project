@@ -1,6 +1,35 @@
 package net.oschina.app.util;
 
-import java.net.URLDecoder;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.support.v4.app.Fragment;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
+import android.view.View;
+import android.webkit.JavascriptInterface;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.ZoomButtonsController;
+
+import com.dtr.zxing.activity.CaptureActivity;
 
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
@@ -36,6 +65,7 @@ import net.oschina.app.team.bean.TeamMember;
 import net.oschina.app.team.bean.TeamProject;
 import net.oschina.app.team.fragment.TeamActiveFragment;
 import net.oschina.app.team.ui.TeamMainActivity;
+import net.oschina.app.team.ui.TeamNewIssueActivity;
 import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.EventLocationActivity;
 import net.oschina.app.ui.ImagePreviewActivity;
@@ -49,36 +79,7 @@ import net.oschina.app.widget.AvatarView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.ServiceConnection;
-import android.graphics.Color;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.Message;
-import android.support.v4.app.Fragment;
-import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.AbsoluteSizeSpan;
-import android.text.style.ForegroundColorSpan;
-import android.view.View;
-import android.webkit.JavascriptInterface;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.ZoomButtonsController;
-
-import com.dtr.zxing.activity.CaptureActivity;
+import java.net.URLDecoder;
 
 /**
  * 界面帮助类
@@ -94,10 +95,11 @@ public class UIHelper {
     public final static String linkCss = "<script type=\"text/javascript\" src=\"file:///android_asset/shCore.js\"></script>"
             + "<script type=\"text/javascript\" src=\"file:///android_asset/brush.js\"></script>"
             + "<script type=\"text/javascript\" src=\"file:///android_asset/client.js\"></script>"
+            + "<script type=\"text/javascript\">SyntaxHighlighter.all();</script>"
+            + "<script type=\"text/javascript\">function showImagePreview(var url){window.location.url= url;}</script>"
             + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/shThemeDefault.css\">"
             + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/shCore.css\">"
-            + "<script type=\"text/javascript\">SyntaxHighlighter.all();</script>"
-            + "<script type=\"text/javascript\">function showImagePreview(var url){window.location.url= url;}</script>";
+            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/css/common.css\">";
     public final static String WEB_STYLE = linkCss
             + "<style>* {font-size:16px;line-height:20px;} p {color:#333;} a {color:#3E62A6;} img {max-width:310px;} "
             + "img.alignleft {float:left;max-width:120px;margin:0 10px 5px 0;border:1px solid #ccc;background:#fff;padding:2px;} "
@@ -137,7 +139,7 @@ public class UIHelper {
     public static void showNewsDetail(Context context, int newsId,
             int commentCount) {
         Intent intent = new Intent(context, DetailActivity.class);
-        intent.putExtra("news_id", newsId);
+        intent.putExtra("id", newsId);
         intent.putExtra("comment_count", commentCount);
         intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
                 DetailActivity.DISPLAY_NEWS);
@@ -152,7 +154,7 @@ public class UIHelper {
      */
     public static void showBlogDetail(Context context, int blogId, int count) {
         Intent intent = new Intent(context, DetailActivity.class);
-        intent.putExtra("blog_id", blogId);
+        intent.putExtra("id", blogId);
         intent.putExtra("comment_count", count);
         intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
                 DetailActivity.DISPLAY_BLOG);
@@ -167,7 +169,7 @@ public class UIHelper {
      */
     public static void showPostDetail(Context context, int postId, int count) {
         Intent intent = new Intent(context, DetailActivity.class);
-        intent.putExtra("post_id", postId);
+        intent.putExtra("id", postId);
         intent.putExtra("comment_count", count);
         intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
                 DetailActivity.DISPLAY_POST);
@@ -182,7 +184,7 @@ public class UIHelper {
      */
     public static void showEventDetail(Context context, int eventId) {
         Intent intent = new Intent(context, DetailActivity.class);
-        intent.putExtra("post_id", eventId);
+        intent.putExtra("id", eventId);
         intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
                 DetailActivity.DISPLAY_EVENT);
         context.startActivity(intent);
@@ -190,7 +192,7 @@ public class UIHelper {
 
     /**
      * 显示相关Tag帖子列表
-     * 
+     *
      * @param context
      * @param tag
      */
@@ -203,8 +205,8 @@ public class UIHelper {
     /**
      * 显示动弹详情
      * 
-     * @param context
-     * @param id
+     * @param context context
+     * @param tweetid 动弹的id
      */
     public static void showTweetDetail(Context context, Tweet tweet, int tweetid) {
         Intent intent = new Intent(context, DetailActivity.class);
@@ -221,7 +223,7 @@ public class UIHelper {
 
     /**
      * 显示软件详情
-     * 
+     *
      * @param context
      * @param ident
      */
@@ -236,10 +238,7 @@ public class UIHelper {
     /**
      * 新闻超链接点击跳转
      * 
-     * @param context
-     * @param newsId
-     * @param newsType
-     * @param objId
+     * @param context context
      */
     public static void showNewsRedirect(Context context, News news) {
         String url = news.getUrl();
@@ -281,9 +280,8 @@ public class UIHelper {
     /**
      * 动态点击跳转到相关新闻、帖子等
      * 
-     * @param context
-     * @param id
-     * @param catalog
+     * @param context context
+     * @param active 动态实体类
      *            0其他 1新闻 2帖子 3动弹 4博客
      */
     public static void showActiveRedirect(Context context, Active active) {
@@ -591,10 +589,16 @@ public class UIHelper {
     }
 
     public static void showComment(Context context, int id, int catalog) {
-        Bundle args = new Bundle();
-        args.putInt(CommentFrament.BUNDLE_KEY_ID, id);
-        args.putInt(CommentFrament.BUNDLE_KEY_CATALOG, catalog);
-        showSimpleBack(context, SimpleBackPage.COMMENT, args);
+//        Bundle args = new Bundle();
+//        args.putInt(CommentFrament.BUNDLE_KEY_ID, id);
+//        args.putInt(CommentFrament.BUNDLE_KEY_CATALOG, catalog);
+//        showSimpleBack(context, SimpleBackPage.COMMENT, args);
+        Intent intent = new Intent(context, DetailActivity.class);
+        intent.putExtra(CommentFrament.BUNDLE_KEY_ID, id);
+        intent.putExtra(CommentFrament.BUNDLE_KEY_CATALOG, catalog);
+        intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+                DetailActivity.DISPLAY_COMMENT);
+        context.startActivity(intent);
     }
 
     public static void showSoftWareTweets(Context context, int id) {
@@ -691,7 +695,7 @@ public class UIHelper {
     /**
      * 发送App异常崩溃报告
      * 
-     * @param cont
+     * @param context
      * @param crashReport
      */
     public static void sendAppCrashReport(final Context context,
@@ -769,7 +773,7 @@ public class UIHelper {
      * 显示用户中心页面
      * 
      * @param context
-     * @param uid
+     * @param hisuid
      * @param hisuid
      * @param hisname
      */
@@ -851,7 +855,7 @@ public class UIHelper {
     /**
      * 显示用户收藏界面
      * 
-     * @param activity
+     * @param context
      */
     public static void showUserFavorite(Context context, int uid) {
 
@@ -876,7 +880,7 @@ public class UIHelper {
      * 显示留言对话页面
      * 
      * @param context
-     * @param catalog
+     * @param friendid
      * @param friendid
      */
     public static void showMessageDetail(Context context, int friendid,
@@ -1001,7 +1005,6 @@ public class UIHelper {
      * 显示活动地址地图信息
      * 
      * @param context
-     * @param page
      */
     public static void showEventLocation(Context context, String city,
             String location) {
@@ -1021,7 +1024,10 @@ public class UIHelper {
         if (catalog != null) {
             bundle.putSerializable("catalog", catalog);
         }
-        UIHelper.showSimpleBack(context, SimpleBackPage.TEAM_NEW_ISSUE, bundle);
+        Intent intent = new Intent();
+        intent.putExtras(bundle);
+        intent.setClass(context, TeamNewIssueActivity.class);
+        context.startActivity(intent);
     }
 
     /***

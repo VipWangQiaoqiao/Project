@@ -1,15 +1,19 @@
 package net.oschina.app.adapter;
 
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Blog;
 import net.oschina.app.bean.BlogList;
 import net.oschina.app.util.StringUtils;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+import net.oschina.app.util.ThemeSwitchUtils;
+import net.oschina.app.util.TypefaceUtils;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -66,10 +70,10 @@ public class BlogAdapter extends ListBaseAdapter<Blog> {
         if (AppContext.isOnReadedPostList(BlogList.PREF_READED_BLOG_LIST,
                 blog.getId() + "")) {
             vh.title.setTextColor(parent.getContext().getResources()
-                    .getColor(R.color.main_gray));
+                    .getColor(ThemeSwitchUtils.getTitleReadedColor()));
         } else {
             vh.title.setTextColor(parent.getContext().getResources()
-                    .getColor(R.color.main_black));
+                    .getColor(ThemeSwitchUtils.getTitleUnReadedColor()));
         }
 
         vh.description.setVisibility(View.GONE);
@@ -80,8 +84,9 @@ public class BlogAdapter extends ListBaseAdapter<Blog> {
         }
 
         vh.source.setText(blog.getAuthor());
-        vh.time.setText(StringUtils.friendly_time(blog.getPubDate()));
-        vh.comment_count.setText(blog.getCommentCount() + "");
+        TypefaceUtils.setTypeface(vh.source);
+        TypefaceUtils.setTypeFaceWithText(vh.time, R.string.fa_clock_o, StringUtils.friendly_time(blog.getPubDate()));
+        TypefaceUtils.setTypeFaceWithText(vh.comment_count, R.string.fa_comment, blog.getCommentCount() + "");
         return convertView;
     }
 }

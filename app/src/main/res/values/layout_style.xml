@@ -86,7 +86,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">18dp</item>
         <item name="android:orientation">horizontal</item>
-        <item name="android:background">@drawable/day_list_item_background</item>
+        <item name="android:background">?attr/layout_item_bg</item>
         <item name="android:gravity">center|left</item>
     </style>
     
@@ -104,6 +104,7 @@
     
     <style name="team_issue_detail_tip" parent="@style/wrap_wrap">
         <item name="android:textSize">15sp</item>
+        <item name="android:textColor">?attr/textColor</item>
     </style>
     
     <style name="team_issue_detail_text">
@@ -111,12 +112,12 @@
         <item name="android:layout_weight">1</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">right</item>
-        <item name="android:textColor">@color/main_gray</item>
+        <item name="android:textColor">?attr/infoTextColor</item>
     </style>
     
     <style name="team_new_issue_layout" parent="@style/fill_wrap">
         <item name="android:orientation">horizontal</item>
-        <item name="android:background">@drawable/day_list_item_background</item>
+        <item name="android:background">?attr/layout_item_bg</item>
         <item name="android:padding">15dp</item>
     </style>
     
@@ -129,17 +130,12 @@
     </style>
     
     <style name="team_new_issue_tip" parent="@style/wrap_wrap">
+        <item name="android:textColor">?attr/textColor</item>
     </style>
     
     <style name="team_new_issue_info" parent="@style/wrap_wrap">
-        <item name="android:textColor">@color/main_gray</item>
+        <item name="android:textColor">?attr/infoTextColor</item>
         <item name="android:layout_alignParentRight">true</item>
-    </style>
-    
-    <style name="team_new_issue_line">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">1dp</item>
-        <item name="android:background">#ececec</item>
     </style>
     
 </resources>

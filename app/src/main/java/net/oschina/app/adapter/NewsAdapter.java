@@ -6,10 +6,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.News;
+import net.oschina.app.bean.NewsList;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.ThemeSwitchUtils;
 import net.oschina.app.util.TypefaceUtils;
 
 import butterknife.ButterKnife;
@@ -33,14 +36,14 @@ public class NewsAdapter extends ListBaseAdapter<News> {
         News news = mDatas.get(position);
         vh.title.setText(news.getTitle());
 
-//        if (AppContext.isOnReadedPostList(NewsList.PREF_READED_NEWS_LIST,
-//                news.getId() + "")) {
-//            vh.title.setTextColor(parent.getContext().getResources()
-//                    .getColor(R.color.main_gray));
-//        } else {
-//            vh.title.setTextColor(parent.getContext().getResources()
-//                    .getColor(R.color.main_black));
-//        }
+        if (AppContext.isOnReadedPostList(NewsList.PREF_READED_NEWS_LIST,
+                news.getId() + "")) {
+            vh.title.setTextColor(parent.getContext().getResources()
+                    .getColor(ThemeSwitchUtils.getTitleReadedColor()));
+        } else {
+            vh.title.setTextColor(parent.getContext().getResources()
+                    .getColor(ThemeSwitchUtils.getTitleUnReadedColor()));
+        }
 
         String description = news.getBody();
         vh.description.setVisibility(View.GONE);

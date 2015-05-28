@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:background="?attr/layout_item_bg"
     android:layout_height="match_parent">
 
     <!-- google 官方下拉刷新 -->

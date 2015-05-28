@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:background="?attr/windows_bg"
     android:layout_height="match_parent" >
 
-    <net.oschina.app.widget.CustomerScrollView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
@@ -90,7 +91,7 @@
             <View
                 style="@style/h_line" />
         </LinearLayout>
-    </net.oschina.app.widget.CustomerScrollView>
+    </ScrollView>
 
     <net.oschina.app.ui.empty.EmptyLayout
         android:id="@+id/error_layout"

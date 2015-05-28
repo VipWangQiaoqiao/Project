@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -26,8 +28,8 @@ import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.ListEntity;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
-import net.oschina.app.emoji.KJEmojiFragment;
 import net.oschina.app.emoji.OnSendClickListener;
+import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.util.HTMLUtil;
@@ -55,7 +57,7 @@ public class CommentFrament extends BaseListFragment<Comment> implements
 
     private int mId, mOwnerId;
     private boolean mIsBlogComment;
-    private final KJEmojiFragment emojiFragment = new KJEmojiFragment();
+    private DetailActivity outAty;
 
     private final AsyncHttpResponseHandler mCommentHandler = new AsyncHttpResponseHandler() {
 
@@ -75,11 +77,11 @@ public class CommentFrament extends BaseListFragment<Comment> implements
                             mIsBlogComment, mId, mCatalog, Comment.OPT_ADD,
                             rsb.getComment());
                     onRefresh();
+                    outAty.emojiFragment.clean();
                 } else {
                     hideWaitDialog();
                     AppContext.showToastShort(res.getErrorMessage());
                 }
-                emojiFragment.clean();
             } catch (Exception e) {
                 e.printStackTrace();
                 onFailure(arg0, arg1, arg2, e);
@@ -95,20 +97,22 @@ public class CommentFrament extends BaseListFragment<Comment> implements
     };
 
     @Override
-    protected int getLayoutId() {
-        return R.layout.fragment_comment_listview;
-    };
-
-    @Override
     public void initView(View view) {
         super.initView(view);
         mListView.setOnItemLongClickListener(this);
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        outAty = (DetailActivity) getActivity();
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
     public void onCreate(android.os.Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle args = getArguments();
+        Bundle args = getActivity().getIntent().getExtras();
         if (args != null) {
             mCatalog = args.getInt(BUNDLE_KEY_CATALOG, 0);
             mId = args.getInt(BUNDLE_KEY_ID, 0);
@@ -124,16 +128,12 @@ public class CommentFrament extends BaseListFragment<Comment> implements
         int mode = WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN
                 | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
         getActivity().getWindow().setSoftInputMode(mode);
-
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.emoji_keyboard, emojiFragment).commit();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        emojiFragment.hideFlagButton();
-        emojiFragment.setOnSendClickListener(this);
+        outAty.emojiFragment.hideFlagButton();
     }
 
     @Override
@@ -191,9 +191,9 @@ public class CommentFrament extends BaseListFragment<Comment> implements
         final Comment comment = mAdapter.getItem(position);
         if (comment == null)
             return;
-        emojiFragment.getEditText().setTag(comment);
-        emojiFragment.getEditText().setHint("回复：" + comment.getAuthor());
-        emojiFragment.showSoftKeyboard();
+        outAty.emojiFragment.getEditText().setTag(comment);
+        outAty.emojiFragment.getEditText().setHint("回复：" + comment.getAuthor());
+        outAty.emojiFragment.showSoftKeyboard();
     }
 
     private void handleDeleteComment(Comment comment) {
@@ -291,8 +291,8 @@ public class CommentFrament extends BaseListFragment<Comment> implements
             UIHelper.showLoginActivity(getActivity());
             return;
         }
-        if (emojiFragment.getEditText().getTag() != null) {
-            handleReplyComment((Comment) emojiFragment.getEditText().getTag(),
+        if (outAty.emojiFragment.getEditText().getTag() != null) {
+            handleReplyComment((Comment) outAty.emojiFragment.getEditText().getTag(),
                     text.toString());
         } else {
             sendReply(text.toString());
@@ -329,13 +329,13 @@ public class CommentFrament extends BaseListFragment<Comment> implements
 
     @Override
     public boolean onBackPressed() {
-        if (emojiFragment.isShowEmojiKeyBoard()) {
-            emojiFragment.hideAllKeyBoard();
+        if (outAty.emojiFragment.isShowEmojiKeyBoard()) {
+            outAty.emojiFragment.hideAllKeyBoard();
             return true;
         }
-        if (emojiFragment.getEditText().getTag() != null) {
-            emojiFragment.getEditText().setTag(null);
-            emojiFragment.getEditText().setHint("说点什么吧");
+        if (outAty.emojiFragment.getEditText().getTag() != null) {
+            outAty.emojiFragment.getEditText().setTag(null);
+            outAty.emojiFragment.getEditText().setHint("说点什么吧");
             return true;
         }
         return super.onBackPressed();

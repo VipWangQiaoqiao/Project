@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="?attr/windows_bg"
     android:orientation="vertical" >
 
     <ListView
@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollingCache="true"
+        android:divider="?attr/lineColor"
         android:visibility="gone" />
 
     <net.oschina.app.ui.empty.EmptyLayout

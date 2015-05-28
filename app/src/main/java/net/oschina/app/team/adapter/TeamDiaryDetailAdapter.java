@@ -1,11 +1,5 @@
 package net.oschina.app.team.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.oschina.app.R;
-import net.oschina.app.team.bean.Detail;
-import net.oschina.app.team.bean.Detail.DayData;
 import android.content.Context;
 import android.text.Html;
 import android.text.Spanned;
@@ -16,14 +10,21 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class DiaryDetailAdapter extends BaseAdapter {
+import net.oschina.app.R;
+import net.oschina.app.team.bean.TeamDiaryDetail;
+import net.oschina.app.team.bean.TeamDiaryDetail.DayData;
 
-    private final Detail data;
+import java.util.ArrayList;
+import java.util.List;
+
+public class TeamDiaryDetailAdapter extends BaseAdapter {
+
+    private final TeamDiaryDetail data;
     private final Context cxt;
     private final List<String> datas;
     private final int[] weekIndex = new int[7];
 
-    public DiaryDetailAdapter(Context cxt, Detail datas) {
+    public TeamDiaryDetailAdapter(Context cxt, TeamDiaryDetail datas) {
         this.cxt = cxt;
         this.data = datas;
         this.datas = new ArrayList<String>(20);

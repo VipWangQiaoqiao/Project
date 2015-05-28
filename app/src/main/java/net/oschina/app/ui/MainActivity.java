@@ -117,6 +117,11 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (AppContext.getNightModeSwitch()) {
+            setTheme(R.style.AppBaseTheme_Night);
+        } else {
+            setTheme(R.style.AppBaseTheme_Light);
+        }
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
         initView();

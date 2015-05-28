@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="?attr/windows_bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/list_item_background_normal"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <net.oschina.app.widget.CustomerScrollView
         android:id="@+id/sv_news_container"
@@ -15,7 +16,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
             android:orientation="vertical" >
 
             <TextView
@@ -24,13 +24,12 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/space_10"
                 android:layout_marginTop="@dimen/space_20"
-                android:textColor="@color/main_black"
-                android:textSize="@dimen/text_size_15" />
+                android:textColor="?attr/textColor"
+                tools:text="奔跑吧，OpenStack"
+                android:textSize="17sp" />
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/list_divider_color" />
+                style="@style/h_line" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -55,7 +54,7 @@
                 android:id="@+id/rl_event_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/day_list_item_background"
+                android:background="?attr/layout_item_bg"
                 android:clickable="true"
                 android:orientation="horizontal"
                 android:padding="@dimen/space_10" >
@@ -65,7 +64,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textColor="@color/lightblue"
+                    android:textColor="?android:textColorLink"
+                    tools:text="深圳南山"
                     android:textSize="14sp" />
 
                 <ImageView
@@ -106,14 +106,12 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/space_10"
                 android:text="你的报名已确认，现场可以扫描二维码签到！"
-                android:textColor="@color/main_gray"
+                android:textColor="?attr/infoTextColor"
                 android:visibility="gone" />
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="@dimen/space_10"
-                android:background="@color/list_divider_color" />
+                style="@style/h_line"
+                android:layout_marginTop="@dimen/space_10" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -123,17 +121,14 @@
                 android:textColor="#999" />
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
+                style="@style/h_line"
                 android:layout_marginLeft="@dimen/space_10"
-                android:layout_marginRight="@dimen/space_10"
-                android:background="@color/list_divider_color" />
+                android:layout_marginRight="@dimen/space_10" />
 
             <WebView
                 android:id="@+id/webview"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/list_item_background_normal" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </net.oschina.app.widget.CustomerScrollView>
 

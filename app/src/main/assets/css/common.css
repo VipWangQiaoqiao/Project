@@ -1,0 +1,127 @@
+body {
+	background-color: #f6f6f6;
+	word-wrap: break-word;
+	overflow: auto;
+	overflow-x: hidden;
+}
+
+a{
+	text-decoration:none;
+}
+
+.title {
+	color: #333333;
+	font-size: 22px;
+	line-height: 24px;
+	font-weight: bold;
+}
+
+.authortime {
+	font-size: 13px;
+	padding: 5px 0 0 0;
+	color: #aaaaaa;
+}
+
+.author {
+	font-size: 13px;
+}
+
+.contentstyle {
+	color: #333333;
+	font-size: 18px;
+	font-weight: normal;
+}
+
+// 相关软件
+.oschina_software {
+	color: #999999
+}
+
+// 软件详情
+.software_attr {
+	background: #f6f6f6;
+	font-size: 16px;
+}
+
+.software_attr {
+	list-style-type: none;
+}
+
+.software_urls {
+	list-style-type: none;
+}
+
+.software_urls {
+	margin: 10px 10px 10px 0px;
+}
+
+.software_urls li {
+	float: left;
+	margin-right: 8px;
+	color: #fff;
+}
+
+.software_urls li a {
+	background: #557DBA;
+	color: #fff;
+	width: 20px;
+	height: 30px;
+	line-height: 28px;
+	font-size: 12pt;
+	text-align: center;
+	text-decoration: none;
+	padding: 5 10 5 10
+}
+
+body.night .contentstyle {
+	color: #FFF;
+}
+
+.contentstyle p {
+	line-height: 170%;
+	letter-spacing: 0.3px;
+}
+
+body.night {
+	opacity: 0.5;
+}
+
+body.night {
+	background: #222222;
+}
+
+body.night .about {
+	color: #999999
+}
+
+body.night .oschina_software {
+	color: #999999
+}
+
+body.night p {
+	color: #999999
+}
+
+body.night a {
+	color: #4877b1
+}
+
+body.night .title {
+	color: #a8a8a8;
+}
+
+body.night .authortime {
+	color: #696969;
+}
+
+body.night .software_urls li a {
+	background: #696969;
+	color: #fff;
+	width: 20px;
+	height: 30px;
+	line-height: 28px;
+	font-size: 12pt;
+	text-align: center;
+	text-decoration: none;
+	padding: 5 10 5 10
+}

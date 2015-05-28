@@ -1,27 +1,5 @@
 package net.oschina.app.team.fragment;
 
-import java.util.List;
-
-import net.oschina.app.R;
-import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.api.remote.OSChinaTeamApi;
-import net.oschina.app.base.BaseFragment;
-import net.oschina.app.emoji.OnSendClickListener;
-import net.oschina.app.team.adapter.DiaryDetailAdapter;
-import net.oschina.app.team.bean.TeamDiary;
-import net.oschina.app.team.bean.TeamDiaryDetailBean;
-import net.oschina.app.team.bean.TeamRepliesList;
-import net.oschina.app.team.bean.TeamReply;
-import net.oschina.app.team.viewpagefragment.TeamDiaryFragment;
-import net.oschina.app.ui.DetailActivity;
-import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.UIHelper;
-import net.oschina.app.util.XmlUtils;
-import net.oschina.app.widget.AvatarView;
-
-import org.apache.http.Header;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -37,10 +15,34 @@ import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
+
+import net.oschina.app.R;
+import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.api.remote.OSChinaTeamApi;
+import net.oschina.app.base.BaseFragment;
+import net.oschina.app.emoji.OnSendClickListener;
+import net.oschina.app.team.adapter.TeamDiaryDetailAdapter;
+import net.oschina.app.team.bean.TeamDiary;
+import net.oschina.app.team.bean.TeamDiaryDetailBean;
+import net.oschina.app.team.bean.TeamRepliesList;
+import net.oschina.app.team.bean.TeamReply;
+import net.oschina.app.team.viewpagefragment.TeamDiaryFragment;
+import net.oschina.app.ui.DetailActivity;
+import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.ThemeSwitchUtils;
+import net.oschina.app.util.UIHelper;
+import net.oschina.app.util.XmlUtils;
+import net.oschina.app.widget.AvatarView;
+
+import org.apache.http.Header;
+
+import java.util.List;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * 周报详情<br>
@@ -49,7 +51,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
  * 
  * @author kymjs (https://github.com/kymjs)
  */
-public class TeamDiaryDetail extends BaseFragment implements
+public class TeamDiaryDetailFragment extends BaseFragment implements
         OnSendClickListener {
 
     @InjectView(R.id.listview)
@@ -62,7 +64,7 @@ public class TeamDiaryDetail extends BaseFragment implements
     private TeamDiary diaryData;
     private int teamid;
     private Activity aty;
-    private DiaryDetailAdapter adapter;
+    private TeamDiaryDetailAdapter adapter;
 
     private LinearLayout footerView;
 
@@ -167,7 +169,6 @@ public class TeamDiaryDetail extends BaseFragment implements
 
         UIHelper.initWebView(content);
         fillWebViewBody(content);
-        // content.setText(Html.fromHtml(diaryData.getTitle()));
         time.setText(StringUtils.friendly_time(diaryData.getCreateTime()));
         return headerView;
     }
@@ -176,9 +177,14 @@ public class TeamDiaryDetail extends BaseFragment implements
      * 填充webview内容
      */
     private void fillWebViewBody(WebView mContent) {
+
         StringBuffer body = new StringBuffer();
-        body.append(UIHelper.WEB_STYLE + UIHelper.WEB_LOAD_IMAGES);
-        body.append(diaryData.getTitle());
+        body.append(UIHelper.WEB_STYLE).append(UIHelper.WEB_LOAD_IMAGES);
+        body.append(ThemeSwitchUtils.getWebViewBodyString());
+        // 添加图片点击放大支持
+        body.append(UIHelper.setHtmlCotentSupportImagePreview(diaryData.getTitle()));
+        // 封尾
+        body.append("</div></body>");
         UIHelper.addWebImageShow(getActivity(), mContent);
         mContent.loadDataWithBaseURL(null, body.toString(), "text/html",
                 "utf-8", null);
@@ -188,8 +194,6 @@ public class TeamDiaryDetail extends BaseFragment implements
         footerView = new LinearLayout(aty);
         footerView.setPadding(20, 0, 20, 20);
         footerView.setOrientation(LinearLayout.VERTICAL);
-        View line = View.inflate(aty, R.layout.list_head_commnt_line, null);
-        footerView.addView(line);
         return footerView;
     }
 
@@ -206,8 +210,8 @@ public class TeamDiaryDetail extends BaseFragment implements
                     public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
                         TeamDiaryDetailBean data = XmlUtils.toBean(
                                 TeamDiaryDetailBean.class, arg2);
-                        adapter = new DiaryDetailAdapter(aty, data
-                                .getTeamDiary().getDetail());
+                        adapter = new TeamDiaryDetailAdapter(aty, data
+                                .getTeamDiary().getTeamDiaryDetail());
                         mList.setAdapter(adapter);
                         mErrorLayout.setVisibility(View.GONE);
                     }
@@ -237,17 +241,9 @@ public class TeamDiaryDetail extends BaseFragment implements
                         List<TeamReply> datas = XmlUtils.toBean(
                                 TeamRepliesList.class, arg2).getList();
                         footerView.removeAllViews();
-                        View line = View.inflate(aty,
-                                R.layout.list_head_commnt_line, null);
-                        footerView.addView(line);
-                        if (datas.size() > 0) {
-                            TextView commentCount = (TextView) line
-                                    .findViewById(R.id.tv_comment_count);
-                            commentCount.setText("评论(" + datas.size() + ")");
-                        }
                         for (final TeamReply data : datas) {
                             View layout = View.inflate(aty,
-                                    R.layout.team_list_cell_comment, null);
+                                    R.layout.list_cell_comment, null);
                             AvatarView head = (AvatarView) layout
                                     .findViewById(R.id.iv_avatar);
                             head.setAvatarUrl(data.getAuthor().getPortrait());

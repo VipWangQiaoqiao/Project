@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     style="@style/fill_wrap"
     android:background="?attr/layout_item_bg"
     android:descendantFocusability="blocksDescendants"
@@ -22,9 +21,9 @@
         android:layout_marginBottom="@dimen/space_5"
         android:layout_toRightOf="@id/iv_face"
         android:ellipsize="end"
-        android:textColor="@color/lightblue"
+        android:textColor="?android:textColorLink"
         android:maxLines="2"
-        android:text="hello,woshi title" />
+        android:text="周报作者" />
 
     <TextView
         android:id="@+id/tv_title"
@@ -36,14 +35,13 @@
         android:ellipsize="end"
         android:maxLines="4"
         android:text="我是内容"
-        android:textColor="@color/main_gray" />
+        android:textColor="?attr/infoTextColor" />
 
 
     <TextView
         android:id="@+id/tv_date"
         style="@style/list_text_info"
         android:layout_below="@id/tv_title"
-        android:drawableLeft="@drawable/ic_time"
         android:layout_toRightOf="@id/iv_face"
         android:text="2014-10-15" />
 
@@ -53,7 +51,6 @@
         android:layout_alignParentRight="true"
         android:layout_below="@id/tv_title"
         android:layout_marginRight="@dimen/space_10"
-        android:drawableLeft="@drawable/ic_comment_count"
         android:text="10" />
 
 </RelativeLayout>

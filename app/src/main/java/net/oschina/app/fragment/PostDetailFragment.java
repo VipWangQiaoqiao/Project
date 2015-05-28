@@ -1,142 +1,56 @@
 package net.oschina.app.fragment;
 
-import java.io.InputStream;
-import java.io.Serializable;
-import java.net.URLEncoder;
-
-import net.oschina.app.AppContext;
-import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.base.BaseDetailFragment;
+import net.oschina.app.base.CommonDetailFragment;
 import net.oschina.app.bean.CommentList;
-import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.Post;
 import net.oschina.app.bean.PostDetail;
-import net.oschina.app.emoji.OnSendClickListener;
 import net.oschina.app.ui.DetailActivity;
-import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.TDevice;
+import net.oschina.app.util.ThemeSwitchUtils;
 import net.oschina.app.util.UIHelper;
-import net.oschina.app.util.URLsUtils;
 import net.oschina.app.util.XmlUtils;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.widget.TextView;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 
-public class PostDetailFragment extends BaseDetailFragment implements
-        OnSendClickListener {
+import java.io.InputStream;
+import java.net.URLEncoder;
 
-    protected static final String TAG = PostDetailFragment.class
-            .getSimpleName();
-    private static final String POST_CACHE_KEY = "post_";
-    @InjectView(R.id.tv_title)
-    TextView mTvTitle;
-    @InjectView(R.id.tv_source)
-    TextView mTvSource;
-    @InjectView(R.id.tv_time)
-    TextView mTvTime;
-    private WebView mWebView;
-    private int mPostId;
-    private Post mPost;
-
-    @Override
-    protected void onFavoriteChanged(boolean flag) {
-        super.onFavoriteChanged(flag);
-        mPost.setFavorite(flag ? 1 : 0);
-        saveCache(mPost);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater,
-            @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_news_detail, container,
-                false);
-        mCommentCount = getActivity().getIntent().getIntExtra("comment_count",
-                0);
-        mPostId = getActivity().getIntent().getIntExtra("post_id", 0);
-        ButterKnife.inject(this, view);
-        initViews(view);
-        return view;
-    }
-    
-    @Override
-    public void onResume() {
-        super.onResume();
-        ((DetailActivity) getActivity()).toolFragment.showReportButton();
-    }
-
-    private void initViews(View view) {
-        mEmptyLayout = (EmptyLayout) view.findViewById(R.id.error_layout);
-        ((DetailActivity) getActivity()).toolFragment
-                .setCommentCount(mCommentCount);
-        mWebView = (WebView) view.findViewById(R.id.webview);
-        UIHelper.initWebView(mWebView);
-    }
-
+/**
+ * Created by 火蚁 on 15/5/25.
+ */
+public class PostDetailFragment extends CommonDetailFragment<Post> {
     @Override
     protected String getCacheKey() {
-        return new StringBuilder(POST_CACHE_KEY).append(mPostId).toString();
+        return "post_" + mId;
     }
 
     @Override
-    protected void sendRequestData() {
-        mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-        OSChinaApi.getPostDetail(mPostId, mHandler);
+    protected void sendRequestDataForNet() {
+        OSChinaApi.getPostDetail(mId, mDetailHeandler);
     }
 
     @Override
-    protected Entity parseData(InputStream is) throws Exception {
+    protected Post parseData(InputStream is) {
         return XmlUtils.toBean(PostDetail.class, is).getPost();
     }
 
     @Override
-    protected Entity readData(Serializable seri) {
-        return (Post) seri;
-    }
-
-    @Override
-    protected void executeOnLoadDataSuccess(Entity entity) {
-        mPost = (Post) entity;
-        fillUI();
-        fillWebViewBody();
-        ((DetailActivity) getActivity()).toolFragment
-                .setCommentCount(mCommentCount);
-    }
-
-    private void fillUI() {
-        mTvTitle.setText(mPost.getTitle());
-        mTvSource.setText(mPost.getAuthor());
-        mTvTime.setText(StringUtils.friendly_time(mPost.getPubDate()));
-        notifyFavorite(mPost.getFavorite() == 1);
-    }
-
-    @Override
-    public int getCommentCount() {
-        return mPost.getAnswerCount();
-    }
-
-    private void fillWebViewBody() {
-        // 显示标签
+    protected String getWebViewBody(Post detail) {
         StringBuffer body = new StringBuffer();
-        body.append(UIHelper.setHtmlCotentSupportImagePreview(mPost.getBody()));
-        body.append(UIHelper.WEB_STYLE).append(UIHelper.WEB_LOAD_IMAGES)
-                .append(getPostTags(mPost.getTags()))
-                .append("<div style=\"margin-bottom: 80px\" />");
-        mWebView.loadDataWithBaseURL(null, body.toString(), "text/html",
-                "utf-8", null);
+        body.append(UIHelper.WEB_STYLE).append(UIHelper.WEB_LOAD_IMAGES);
+        body.append(ThemeSwitchUtils.getWebViewBodyString());
+        // 添加title
+        body.append(String.format("<div class='title'>%s</div>", mDetail.getTitle()));
+        // 添加作者和时间
+        String time = StringUtils.friendly_time(mDetail.getPubDate());
+        String author = String.format("<a class='author' href='http://my.oschina.net/u/%s'>%s</a>", mDetail.getAuthorId(), mDetail.getAuthor());
+        body.append(String.format("<div class='authortime'>%s&nbsp;&nbsp;&nbsp;&nbsp;%s</div>", author, time));
+        // 添加图片点击放大支持
+        body.append(UIHelper.setHtmlCotentSupportImagePreview(mDetail.getBody()));
+        body.append(getPostTags(mDetail.getTags()));
+        // 封尾
+        body.append("</div></body>");
+        return body.toString();
     }
 
     @SuppressWarnings("deprecation")
@@ -153,86 +67,41 @@ public class PostDetailFragment extends BaseDetailFragment implements
     }
 
     @Override
-    protected boolean hasReportMenu() {
-        return true;
+    protected void showCommentView() {
+        if (mDetail != null) {
+            UIHelper.showComment(getActivity(), mId, CommentList.CATALOG_POST);
+        }
     }
 
     @Override
-    protected int getFavoriteTargetId() {
-        return mPost != null ? mPost.getId() : -1;
+    protected int getCommentType() {
+        return CommentList.CATALOG_POST;
     }
 
     @Override
     protected int getFavoriteTargetType() {
-        return mPost != null ? FavoriteList.TYPE_POST : -1;
+        return FavoriteList.TYPE_POST;
     }
 
     @Override
-    protected String getShareTitle() {
-        return mPost != null ? mPost.getTitle()
-                : getString(R.string.share_title_post);
+    protected int getFavoriteState() {
+        return mDetail.getFavorite();
     }
 
     @Override
-    protected String getShareContent() {
-        return mPost != null ? StringUtils.getSubString(0, 55,
-                getFilterHtmlBody(mPost.getBody())) : "";
+    protected void updateFavoriteChanged(int newFavoritedState) {
+        mDetail.setFavorite(newFavoritedState);
+        saveCache(mDetail);
     }
 
     @Override
-    protected String getShareUrl() {
-        return mPost != null ? URLsUtils.URL_MOBILE + "qusetion/"
-                + mPost.getId() : null;
+    public void onResume() {
+        super.onResume();
+        ((DetailActivity) getActivity()).toolFragment.showReportButton();
     }
 
     @Override
     protected String getRepotrUrl() {
-        return mPost != null ? mPost.getUrl() : "";
+        return mDetail.getUrl();
     }
-
-    @Override
-    protected int getRepotrId() {
-        return mPost != null ? mPostId : 0;
-    }
-
-    @Override
-    public void onclickWriteComment() {
-        super.onclickWriteComment();
-        UIHelper.showComment(getActivity(), mPostId, CommentList.CATALOG_POST);
-    }
-
-    @Override
-    public void onClickSendButton(Editable str) {
-        if (!TDevice.hasInternet()) {
-            AppContext.showToastShort(R.string.tip_network_error);
-            return;
-        }
-        if (!AppContext.getInstance().isLogin()) {
-            UIHelper.showLoginActivity(getActivity());
-            return;
-        }
-        if (TextUtils.isEmpty(str)) {
-            AppContext.showToastShort(R.string.tip_comment_content_empty);
-            return;
-        }
-        showWaitDialog(R.string.progress_submit);
-        OSChinaApi.publicComment(CommentList.CATALOG_POST, mPostId, AppContext
-                .getInstance().getLoginUid(), str.toString(), 0,
-                mCommentHandler);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.refresh_menu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        sendRequestData();
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onClickFlagButton() {}
 }
