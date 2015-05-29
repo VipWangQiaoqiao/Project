@@ -20,6 +20,9 @@ public class Author extends Entity {
     @XStreamAlias("portrait")
     private String portrait;
 
+    @XStreamAlias("")
+    private String oscName;
+
     public String getName() {
         return name;
     }

@@ -1,10 +1,19 @@
 package net.oschina.app.fragment;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.text.Editable;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -32,20 +41,11 @@ import net.oschina.app.util.XmlUtils;
 import org.apache.http.Header;
 import org.kymjs.kjframe.utils.StringUtils;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
-import android.text.Editable;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
-
-import com.loopj.android.http.AsyncHttpResponseHandler;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 与某人的聊天记录界面（留言详情）
@@ -169,7 +169,6 @@ public class MessageDetailFragment extends BaseListFragment<Comment> implements
         super.initView(view);
         mListView.setDivider(null);
         mListView.setDividerHeight(0);
-        mListView.setStackFromBottom(true);
         mListView.setOnItemLongClickListener(this);
         mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
             @Override

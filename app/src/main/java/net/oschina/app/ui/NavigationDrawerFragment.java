@@ -164,6 +164,14 @@ public class NavigationDrawerFragment extends BaseFragment implements
         } else {
             AppContext.setNightModeSwitch(true);
         }
+
+        if (AppContext.getNightModeSwitch()) {
+            getActivity().setTheme(R.style.AppBaseTheme_Night);
+        } else {
+            getActivity().setTheme(R.style.AppBaseTheme_Light);
+        }
+
+        getActivity().recreate();
     }
 
     @Override
