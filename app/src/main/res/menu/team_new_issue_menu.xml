@@ -5,7 +5,6 @@
     <item
         android:id="@+id/team_issue_new_pub"
         android:icon="@drawable/actionbar_send_icon"
-        android:showAsAction="always"
         android:title="发布"
         android:visible="true"
         osc:showAsAction="always"/>

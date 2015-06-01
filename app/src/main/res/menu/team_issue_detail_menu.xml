@@ -11,12 +11,10 @@
     <item
         android:id="@+id/team_issue_detail_appoint"
         android:icon="@drawable/actionbar_send_icon"
-        android:showAsAction="ifRoom"
         android:title="指派人"/>
     <item
         android:id="@+id/team_issue_detail_time"
         android:icon="@drawable/actionbar_send_icon"
-        android:showAsAction="ifRoom"
         android:title="完成时间"/>
 
 </menu>

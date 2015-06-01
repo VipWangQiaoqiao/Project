@@ -1,6 +1,5 @@
 package net.oschina.app.fragment;
 
-import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.CommonDetailFragment;
 import net.oschina.app.bean.CommentList;
@@ -96,20 +95,18 @@ public class NewsDetailFragment extends CommonDetailFragment<News> {
 
     @Override
     protected String getShareTitle() {
-        return mDetail != null ? mDetail.getTitle()
-                : getString(R.string.share_title_news);
+        return mDetail.getTitle();
     }
 
     @Override
     protected String getShareContent() {
-        return mDetail != null ? StringUtils.getSubString(0, 55,
-                getFilterHtmlBody(mDetail.getBody())) : "";
+        return StringUtils.getSubString(0, 55,
+                getFilterHtmlBody(mDetail.getBody()));
     }
 
     @Override
     protected String getShareUrl() {
-        return mDetail != null ? URLsUtils.URL_MOBILE + "news/" + mId
-                : null;
+        return String.format(URLsUtils.URL_MOBILE + "news/%s", mId);
     }
 
     @Override

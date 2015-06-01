@@ -15,13 +15,9 @@
  */
 package net.oschina.app.emoji;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.oschina.app.R;
+import android.annotation.SuppressLint;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,17 +27,23 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.GridView;
 
+import net.oschina.app.R;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 表情页，每页的显示
  * 
  * @author kymjs (http://www.kymjs.com)
  * 
  */
+@SuppressLint("ValidFragment")
 public class EmojiPageFragment extends Fragment {
     private List<Emojicon> datas;
     private GridView sGrid;
     private EmojiGridAdapter adapter;
-    private final OnEmojiClickListener listener;
+    private OnEmojiClickListener listener;
 
     public EmojiPageFragment(int index, int type, OnEmojiClickListener l) {
         initData(index, type);
@@ -65,8 +67,7 @@ public class EmojiPageFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater,
-            @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         sGrid = new GridView(getActivity());
         sGrid.setNumColumns(KJEmojiConfig.COLUMNS);

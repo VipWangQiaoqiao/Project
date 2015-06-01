@@ -4,13 +4,11 @@
      <item
         android:id="@+id/team_new_active"
         android:icon="@drawable/actionbar_send_icon"
-        android:showAsAction="ifRoom"
         android:title="@string/team_new_active"
         android:visible="true"/>
     <item
         android:id="@+id/team_new_issue"
         android:icon="@drawable/actionbar_send_icon"
-        android:showAsAction="ifRoom"
         android:title="@string/team_new_issue"
         android:visible="true"/>
     

@@ -35,9 +35,7 @@ import net.oschina.app.R;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.ui.ShareDialog;
-import net.oschina.app.ui.ShareDialog.OnSharePlatformClick;
 import net.oschina.app.ui.SimpleBackActivity;
-import net.oschina.app.util.TDevice;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -221,32 +219,7 @@ public class BrowserFragment extends BaseFragment {
         dialog.setCancelable(true);
         dialog.setCanceledOnTouchOutside(true);
         dialog.setTitle(R.string.share_to);
-        dialog.setOnPlatformClickListener(new OnSharePlatformClick() {
-            @Override
-            public void onPlatformClick(int id) {
-
-                switch (id) {
-                case R.id.ly_share_weichat_circle:
-                    break;
-                case R.id.ly_share_weichat:
-                    break;
-                case R.id.ly_share_sina_weibo:
-                    break;
-                case R.id.ly_share_qq:
-                    break;
-                case R.id.ly_share_copy_link:
-                    TDevice.copyTextToBoard(mCurrentUrl);
-                    break;
-                case R.id.ly_share_more_option:
-                    TDevice.showSystemShareOption(getActivity(),
-                            mWebView.getTitle(), mCurrentUrl);
-                    break;
-                default:
-                    break;
-                }
-                dialog.dismiss();
-            }
-        });
+        dialog.setShareInfo(getShareTitle(), getShareContent(), mCurrentUrl);
         dialog.show();
     }
 
@@ -335,12 +308,6 @@ public class BrowserFragment extends BaseFragment {
         @Override
         public void onProgressChanged(WebView view, int newProgress) { // 进度
             super.onProgressChanged(view, newProgress);
-            // if (newProgress == 100) {
-            // mProgress.setVisibility(View.GONE);
-            // } else {
-            // mProgress.setVisibility(View.VISIBLE);
-            // mProgress.setProgress(newProgress);
-            // }
             if (newProgress > 90) {
                 mProgress.setVisibility(View.GONE);
             }

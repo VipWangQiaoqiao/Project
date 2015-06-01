@@ -396,8 +396,8 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
     }
     // 分享
     public void handleShare() {
-        if (TextUtils.isEmpty(getShareContent())
-                || TextUtils.isEmpty(getShareUrl())) {
+        if (mDetail == null || TextUtils.isEmpty(getShareContent())
+                || TextUtils.isEmpty(getShareUrl()) || TextUtils.isEmpty(getShareTitle())) {
             AppContext.showToast("内容加载失败...");
             return;
         }
@@ -405,6 +405,7 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
         dialog.setCancelable(true);
         dialog.setCanceledOnTouchOutside(true);
         dialog.setTitle(R.string.share_to);
+        dialog.setShareInfo(getShareTitle(), getShareContent(), getShareUrl());
         dialog.show();
     }
     // 显示评论列表
@@ -506,9 +507,9 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
     protected abstract void showCommentView();
     // 获取评论的类型
     protected abstract int getCommentType();
-    protected String getShareTitle() {return  "";}
-    protected String getShareContent(){return  "";}
-    protected String getShareUrl(){return "";}
+    protected abstract String getShareTitle();
+    protected abstract String getShareContent();
+    protected abstract String getShareUrl();
     // 返回举报的url
     protected String getRepotrUrl() {return  "";}
 

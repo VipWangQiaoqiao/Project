@@ -16,6 +16,7 @@ import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.ThemeSwitchUtils;
 import net.oschina.app.util.UIHelper;
+import net.oschina.app.util.URLsUtils;
 import net.oschina.app.util.XmlUtils;
 
 import java.io.InputStream;
@@ -67,6 +68,22 @@ public class BlogDetailFragment extends CommonDetailFragment<Blog> {
     @Override
     protected int getCommentType() {
         return CommentList.CATALOG_MESSAGE;
+    }
+
+    @Override
+    protected String getShareTitle() {
+        return mDetail.getTitle();
+    }
+
+    @Override
+    protected String getShareContent() {
+        return StringUtils.getSubString(0, 55,
+                getFilterHtmlBody(mDetail.getBody()));
+    }
+
+    @Override
+    protected String getShareUrl() {
+        return String.format(URLsUtils.URL_MOBILE + "blog/%s", mId);
     }
 
     @Override

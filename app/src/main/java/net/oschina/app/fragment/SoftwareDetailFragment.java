@@ -11,9 +11,11 @@ import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.Software;
 import net.oschina.app.bean.SoftwareDetail;
 import net.oschina.app.bean.Tweet;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.ThemeSwitchUtils;
 import net.oschina.app.util.UIHelper;
+import net.oschina.app.util.URLsUtils;
 import net.oschina.app.util.XmlUtils;
 
 import java.io.InputStream;
@@ -63,7 +65,7 @@ public class SoftwareDetailFragment extends CommonDetailFragment<Software> {
         body.append(ThemeSwitchUtils.getWebViewBodyString());
         body.append(UIHelper.WEB_STYLE).append(UIHelper.WEB_LOAD_IMAGES);
         // 添加title
-        body.append(String.format("<div class='title'>%s</div>", mDetail.getTitle()));
+        body.append(String.format("<div class='title'>%s %s</div>", mDetail.getExtensionTitle(), mDetail.getTitle()));
         // 添加图片点击放大支持
         body.append(UIHelper.setHtmlCotentSupportImagePreview(mDetail.getBody()));
 
@@ -139,5 +141,21 @@ public class SoftwareDetailFragment extends CommonDetailFragment<Software> {
     protected void updateFavoriteChanged(int newFavoritedState) {
         mDetail.setFavorite(newFavoritedState);
         saveCache(mDetail);
+    }
+
+    @Override
+    protected String getShareTitle() {
+        return String.format("%s %s", mDetail.getExtensionTitle(), mDetail.getTitle());
+    }
+
+    @Override
+    protected String getShareContent() {
+        return StringUtils.getSubString(0, 55,
+                getFilterHtmlBody(mDetail.getBody()));
+    }
+
+    @Override
+    protected String getShareUrl() {
+        return String.format(URLsUtils.URL_MOBILE + "p/%s", mIden);
     }
 }
