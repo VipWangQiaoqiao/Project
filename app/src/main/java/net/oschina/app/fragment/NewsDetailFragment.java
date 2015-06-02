@@ -9,7 +9,6 @@ import net.oschina.app.bean.NewsDetail;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.ThemeSwitchUtils;
 import net.oschina.app.util.UIHelper;
-import net.oschina.app.util.URLsUtils;
 import net.oschina.app.util.XmlUtils;
 
 import java.io.InputStream;
@@ -106,7 +105,7 @@ public class NewsDetailFragment extends CommonDetailFragment<News> {
 
     @Override
     protected String getShareUrl() {
-        return String.format(URLsUtils.URL_MOBILE + "news/%s", mId);
+        return mDetail.getUrl().replace("http://www", "http:m");
     }
 
     @Override
@@ -118,5 +117,10 @@ public class NewsDetailFragment extends CommonDetailFragment<News> {
     protected void updateFavoriteChanged(int newFavoritedState) {
         mDetail.setFavorite(newFavoritedState);
         saveCache(mDetail);
+    }
+
+    @Override
+    protected int getCommentCount() {
+        return mDetail.getCommentCount();
     }
 }

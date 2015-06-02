@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="?attr/windows_bg"
+    android:background="?attr/layout_item_bg"
     android:layout_height="match_parent" >
 
     <ScrollView

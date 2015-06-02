@@ -125,6 +125,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_gravity="left"
+            android:textColor="?attr/textColor"
             android:text="同步到Git@OSC" />
         
         <CheckBox 

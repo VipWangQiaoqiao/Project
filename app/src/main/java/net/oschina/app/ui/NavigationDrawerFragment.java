@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -176,6 +177,13 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
     @Override
     public void initView(View view) {
+
+        TextView night = (TextView) view.findViewById(R.id.tv_night);
+        if (AppContext.getNightModeSwitch()) {
+            night.setText("日间");
+        } else {
+            night.setText("夜间");
+        }
 
         mMenu_item_rss.setOnClickListener(this);
         mMenu_item_opensoft.setOnClickListener(this);

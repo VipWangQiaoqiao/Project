@@ -53,13 +53,6 @@ public class SoftwareDetailFragment extends CommonDetailFragment<Software> {
     }
 
     @Override
-    protected void executeOnLoadDataSuccess(Software detail) {
-        mCommentCount = detail.getTweetCount();
-        setCommentCount();
-        super.executeOnLoadDataSuccess(detail);
-    }
-
-    @Override
     protected String getWebViewBody(Software detail) {
         StringBuffer body = new StringBuffer();
         body.append(ThemeSwitchUtils.getWebViewBodyString());
@@ -141,6 +134,11 @@ public class SoftwareDetailFragment extends CommonDetailFragment<Software> {
     protected void updateFavoriteChanged(int newFavoritedState) {
         mDetail.setFavorite(newFavoritedState);
         saveCache(mDetail);
+    }
+
+    @Override
+    protected int getCommentCount() {
+        return mDetail.getTweetCount();
     }
 
     @Override

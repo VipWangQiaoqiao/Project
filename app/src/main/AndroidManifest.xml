@@ -197,10 +197,6 @@
             android:value="53cb520c56240bbd7d076ce5" >
         </meta-data>
         <meta-data
-            android:name="UMENG_CHANNEL"
-            android:value="channel_beta" >
-        </meta-data>
-        <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="pIbgtjFevz8LlkbNsYUNl4Qp" />
 

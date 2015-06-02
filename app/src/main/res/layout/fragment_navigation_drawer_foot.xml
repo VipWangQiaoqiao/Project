@@ -36,10 +36,11 @@
 
         <ImageView
             style="@style/MenuItemImageViewStyle"
-            android:background="@drawable/drawer_menu_icon_exit" />
+            android:background="@drawable/drawer_menu_icon_theme" />
 
         <TextView
             style="@style/MenuItemTextViewStyle"
+            android:id="@+id/tv_night"
             android:textSize="@dimen/text_size_14"
             android:text="@string/menu_theme" />
     </LinearLayout>

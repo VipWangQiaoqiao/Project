@@ -93,8 +93,8 @@
             android:layout_toLeftOf="@id/tv_tweet_comment_count"
             android:text="@string/fa_thumbs_o_up"
             android:textColor="@color/gray"
-            android:layout_marginRight="8dp"
-            android:textSize="16sp" />
+            android:layout_marginRight="12dp"
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/tv_del"

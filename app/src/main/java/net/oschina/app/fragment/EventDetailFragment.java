@@ -205,6 +205,11 @@ public class EventDetailFragment extends CommonDetailFragment<Post> {
     }
 
     @Override
+    protected int getCommentCount() {
+        return mDetail.getAnswerCount();
+    }
+
+    @Override
 
     public void onClick(View v) {
         super.onClick(v);

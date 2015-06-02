@@ -2,14 +2,14 @@
 <net.oschina.app.widget.CustomerScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
-    android:background="?attr/windows_bg"
+    android:background="?attr/layout_item_bg"
     android:orientation="vertical"
-    android:scrollbars="none" >
+    android:scrollbars="none">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -28,9 +28,13 @@
             android:textColor="?attr/textColor"
             android:textSize="@dimen/text_size_16" />
 
+        <View
+            style="@style/h_line"
+            android:layout_marginTop="10dp" />
+
         <RelativeLayout
             android:id="@+id/rl_check_update"
-            style="@style/option_item_rl" >
+            style="@style/option_item_rl">
 
             <TextView
                 style="@style/option_item_text_parent"
@@ -42,7 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <ProgressBar
                     android:id="@+id/pb_loading"
@@ -55,17 +59,22 @@
                     android:id="@+id/tv_version"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:tag="false"
                     android:textColor="?attr/textColor"
                     android:textSize="@dimen/text_size_14"
-                    android:tag="false"
                     android:visibility="gone" />
             </LinearLayout>
         </RelativeLayout>
 
+        <View style="@style/h_line" />
+
+        <View
+            style="@style/h_line"
+            android:layout_marginTop="20dip" />
+
         <RelativeLayout
             android:id="@+id/rl_feedback"
-            style="@style/option_item_rl"
-            android:layout_marginTop="20dip" >
+            style="@style/option_item_rl">
 
             <TextView
                 style="@style/option_item_text_parent"
@@ -74,12 +83,11 @@
                 android:textSize="@dimen/text_size_16" />
         </RelativeLayout>
 
-        <View
-            style="@style/h_line" />
+        <View style="@style/h_line" />
 
         <RelativeLayout
             android:id="@+id/rl_grade"
-            style="@style/option_item_rl" >
+            style="@style/option_item_rl">
 
             <TextView
                 style="@style/option_item_text_parent"
@@ -88,10 +96,15 @@
                 android:textSize="@dimen/text_size_16" />
         </RelativeLayout>
 
+        <View style="@style/h_line" />
+
+        <View
+            style="@style/h_line"
+            android:layout_marginTop="20dip" />
+
         <RelativeLayout
             android:id="@+id/rl_gitapp"
-            style="@style/option_item_rl"
-            android:layout_marginTop="20dip" >
+            style="@style/option_item_rl">
 
             <TextView
                 style="@style/option_item_text_parent"
@@ -100,6 +113,8 @@
                 android:textSize="@dimen/text_size_16" />
         </RelativeLayout>
 
+        <View style="@style/h_line" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -107,23 +122,16 @@
             android:layout_marginTop="50dip"
             android:gravity="center"
             android:orientation="horizontal"
-            android:padding="10dip" >
+            android:padding="10dip">
 
             <TextView
                 android:id="@+id/tv_oscsite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
                 android:text="@string/oscsite"
                 android:textColor="?android:textColorLink" />
 
-            <View
-                android:layout_width="2px"
-                android:layout_height="fill_parent"
-                android:layout_marginTop="2dip"
-                android:layout_marginBottom="2dip"
-                android:layout_marginLeft="@dimen/space_8"
-                android:layout_marginRight="@dimen/space_8"
-                android:background="@color/main_black" />
 
             <TextView
                 android:id="@+id/tv_knowmore"
@@ -132,6 +140,7 @@
                 android:text="@string/knowmore"
                 android:textColor="?android:textColorLink" />
         </LinearLayout>
+
 
         <TextView
             android:layout_width="wrap_content"

@@ -1,5 +1,10 @@
 package net.oschina.app.adapter;
 
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Event;
@@ -7,10 +12,6 @@ import net.oschina.app.bean.EventList;
 
 import org.kymjs.kjframe.KJBitmap;
 
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 

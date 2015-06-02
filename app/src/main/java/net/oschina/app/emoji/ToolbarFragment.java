@@ -1,13 +1,14 @@
 package net.oschina.app.emoji;
 
-import net.oschina.app.R;
-import net.oschina.app.base.BaseFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import net.oschina.app.R;
+import net.oschina.app.base.BaseFragment;
 
 public class ToolbarFragment extends BaseFragment {
 
@@ -30,8 +31,6 @@ public class ToolbarFragment extends BaseFragment {
     private int mCommentCount;
 
     private TextView mTvCommentCount;
-
-    private String mCommentCountText;
 
     private View mRootView;
 
@@ -73,10 +72,6 @@ public class ToolbarFragment extends BaseFragment {
                 .findViewById(R.id.action_comment_count);
         mTvCommentCount.setText(String.valueOf(mCommentCount));
 
-        if (mCommentCountText != null) {
-            mTvCommentCount.setText(mCommentCountText);
-            mTvCommentCount.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override
@@ -118,14 +113,6 @@ public class ToolbarFragment extends BaseFragment {
         mFavorite = favorite;
         if (mIvFavorite != null) {
             mIvFavorite.setSelected(favorite);
-        }
-    }
-
-    public void setCommentCount(String text) {
-        mCommentCountText = text;
-        if (mTvCommentCount != null && mCommentCountText != null) {
-            mTvCommentCount.setText(mCommentCountText);
-            mTvCommentCount.setVisibility(View.VISIBLE);
         }
     }
 

@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,13 +16,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BaseActivity;
+import net.oschina.app.bean.Result;
+import net.oschina.app.bean.ResultBean;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamGit;
+import net.oschina.app.team.bean.TeamIssue;
 import net.oschina.app.team.bean.TeamIssueCatalog;
 import net.oschina.app.team.bean.TeamIssueCatalogList;
 import net.oschina.app.team.bean.TeamMember;
@@ -137,6 +142,85 @@ public class TeamNewIssueActivity extends BaseActivity {
             mSendMenu.setEnabled(true);
             mSendMenu.setIcon(R.drawable.actionbar_send_icon);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.team_issue_new_pub:
+                sendPubNewIssue();
+                break;
+            default:
+                break;
+        }
+        return false;
+    }
+
+    private AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
+
+        @Override
+        public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+            // TODO Auto-generated method stub
+            Result res = XmlUtils.toBean(ResultBean.class, arg2).getResult();
+            if (res.OK()) {
+                AppContext.showToast(res.getErrorMessage());
+                finish();
+            } else {
+                AppContext.showToast(res.getErrorMessage());
+            }
+        }
+
+        @Override
+        public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+                              Throwable arg3) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onFinish() {
+            hideWaitDialog();
+        };
+
+        @Override
+        public void onStart() {
+            showWaitDialog("发布中...");
+        };
+    };
+
+    private void sendPubNewIssue() {
+        String title = mEtTitle.getText().toString();
+        if (TextUtils.isEmpty(title)) {
+            AppContext.showToast("请填写任务标题");
+            return;
+        }
+
+        RequestParams params = new RequestParams();
+        params.put("teamid", mTeam.getId());
+        params.put("uid", AppContext.getInstance().getLoginUid());
+        params.put("title", title);
+        if (mTeamProject.getGit().getId() > 0) {
+
+            params.put("project", mTeamProject.getGit().getId());
+            params.put("source", mTeamProject.getSource());
+            if (mCbPush.isChecked() && mTeamProject.isGitpush()) {
+                params.put("gitpush", TeamIssue.TEAM_ISSUE_GITPUSHED);
+            }
+        }
+
+        if (!TextUtils.isEmpty(issueTime)) {
+            params.put("deadline_time", issueTime);
+        }
+
+        if (mTeamCatalog != null) {
+            params.put("catalogid", mTeamCatalog.getId());
+        }
+
+        if (toUserIndex != 0 && toUsers != null && !toUsers.isEmpty()) {
+            params.put("to_user", toUsers.get(toUserIndex).getId());
+        }
+
+        OSChinaTeamApi.pubTeamNewIssue(params, mHandler);
     }
 
     private int mYear, mMonth, mDay;

@@ -112,6 +112,11 @@ public class PostDetailFragment extends CommonDetailFragment<Post> {
     }
 
     @Override
+    protected int getCommentCount() {
+        return mDetail.getAnswerCount();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         ((DetailActivity) getActivity()).toolFragment.showReportButton();

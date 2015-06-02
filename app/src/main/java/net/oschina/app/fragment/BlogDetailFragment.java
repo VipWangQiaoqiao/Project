@@ -60,9 +60,10 @@ public class BlogDetailFragment extends CommonDetailFragment<Blog> {
 
     @Override
     protected void showCommentView() {
-        if (mDetail != null)
+        if (mDetail != null) {
             UIHelper.showBlogComment(getActivity(), mId,
                     mDetail.getAuthorId());
+        }
     }
 
     @Override
@@ -100,6 +101,11 @@ public class BlogDetailFragment extends CommonDetailFragment<Blog> {
     protected void updateFavoriteChanged(int newFavoritedState) {
         mDetail.setFavorite(newFavoritedState);
         saveCache(mDetail);
+    }
+
+    @Override
+    protected int getCommentCount() {
+        return mDetail.getCommentCount();
     }
 
     @Override

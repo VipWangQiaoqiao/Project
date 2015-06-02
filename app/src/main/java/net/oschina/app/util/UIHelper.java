@@ -589,10 +589,6 @@ public class UIHelper {
     }
 
     public static void showComment(Context context, int id, int catalog) {
-//        Bundle args = new Bundle();
-//        args.putInt(CommentFrament.BUNDLE_KEY_ID, id);
-//        args.putInt(CommentFrament.BUNDLE_KEY_CATALOG, catalog);
-//        showSimpleBack(context, SimpleBackPage.COMMENT, args);
         Intent intent = new Intent(context, DetailActivity.class);
         intent.putExtra(CommentFrament.BUNDLE_KEY_ID, id);
         intent.putExtra(CommentFrament.BUNDLE_KEY_CATALOG, catalog);
@@ -608,11 +604,13 @@ public class UIHelper {
     }
 
     public static void showBlogComment(Context context, int id, int ownerId) {
-        Bundle args = new Bundle();
-        args.putInt(CommentFrament.BUNDLE_KEY_ID, id);
-        args.putInt(CommentFrament.BUNDLE_KEY_OWNER_ID, ownerId);
-        args.putBoolean(CommentFrament.BUNDLE_KEY_BLOG, true);
-        showSimpleBack(context, SimpleBackPage.COMMENT, args);
+        Intent intent = new Intent(context, DetailActivity.class);
+        intent.putExtra(CommentFrament.BUNDLE_KEY_ID, id);
+        intent.putExtra(CommentFrament.BUNDLE_KEY_OWNER_ID, ownerId);
+        intent.putExtra(CommentFrament.BUNDLE_KEY_BLOG, true);
+        intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+                DetailActivity.DISPLAY_COMMENT);
+        context.startActivity(intent);
     }
 
     public static SpannableString parseActiveAction(int objecttype,

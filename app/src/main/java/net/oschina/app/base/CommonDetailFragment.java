@@ -90,19 +90,17 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
 
     private void initViews(View view) {
         mEmptyLayout = (EmptyLayout) view.findViewById(R.id.error_layout);
-        setCommentCount();
+        setCommentCount(mCommentCount);
         mWebView = (WebView) view.findViewById(R.id.webview);
         UIHelper.initWebView(mWebView);
     }
 
-    protected void setCommentCount() {
+    protected void setCommentCount(int commentCount) {
         ((DetailActivity) getActivity()).toolFragment
-                .setCommentCount(mCommentCount);
+                .setCommentCount(commentCount);
     }
 
-    public String getCommentCount() {
-        return mCommentCount + "";
-    }
+
 
     private void requestData(boolean refresh) {
         String key = getCacheKey();
@@ -215,6 +213,12 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
         mWebView.loadDataWithBaseURL(null, this.getWebViewBody(detail), "text/html", "UTF-8", null);
         boolean favoriteState = getFavoriteState() == 1 ? true : false;
         setFavoriteState(favoriteState);
+
+        // 判断最新的评论数是否大于
+        if (getCommentCount() > mCommentCount) {
+            mCommentCount = getCommentCount();
+        }
+        setCommentCount(mCommentCount);
     }
 
     protected void executeOnLoadDataError() {
@@ -430,8 +434,7 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
                     hideWaitDialog();
                     AppContext.showToastShort(res.getErrorMessage());
                     // 评论成功之后，评论数加1
-                    mCommentCount++;
-                    setCommentCount();
+                    setCommentCount(mCommentCount + 1);
                 } else {
                     hideWaitDialog();
                     AppContext.showToastShort(res.getErrorMessage());
@@ -517,4 +520,5 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
     protected abstract int getFavoriteTargetType();
     protected abstract int getFavoriteState();
     protected abstract void updateFavoriteChanged(int newFavoritedState);
+    protected abstract int getCommentCount();
 }

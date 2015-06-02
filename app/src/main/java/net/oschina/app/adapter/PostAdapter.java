@@ -83,7 +83,7 @@ public class PostAdapter extends ListBaseAdapter<Post> {
         vh.author.setText(post.getAuthor());
         TypefaceUtils.setTypeface(vh.author);
         TypefaceUtils.setTypeFaceWithText(vh.time, R.string.fa_clock_o, StringUtils.friendly_time(post.getPubDate()));
-        TypefaceUtils.setTypeFaceWithText(vh.comment_count, R.string.fa_comment, post.getAnswerCount() + "回/"
+        TypefaceUtils.setTypeFaceWithText(vh.comment_count, R.string.fa_comment, post.getAnswerCount() + "回 / "
                 + post.getViewCount() + "阅");
 
         return convertView;

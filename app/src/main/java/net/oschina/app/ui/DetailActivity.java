@@ -238,8 +238,7 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
                         R.anim.footer_menu_slide_out)
                 .replace(R.id.emoji_keyboard, toolFragment).commit();
         try {
-            toolFragment.setCommentCount(((CommonDetailFragment) currentFragment)
-                    .getCommentCount());
+
         } catch (Exception e) {
         }
     }
