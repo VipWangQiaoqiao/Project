@@ -11,7 +11,6 @@ import net.oschina.app.bean.Blog;
 import net.oschina.app.bean.BlogDetail;
 import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.FavoriteList;
-import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.ThemeSwitchUtils;
@@ -125,12 +124,6 @@ public class BlogDetailFragment extends CommonDetailFragment<Blog> {
         showWaitDialog(R.string.progress_submit);
         OSChinaApi.publicBlogComment(mId, AppContext.getInstance()
                 .getLoginUid(), str.toString(), mCommentHandler);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        ((DetailActivity) getActivity()).toolFragment.showReportButton();
     }
 
     @Override
