@@ -38,8 +38,6 @@
         android:id="@+id/v_line"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_marginLeft="@dimen/space_8"
-        android:layout_marginRight="@dimen/space_8"
         android:background="?attr/lineColor" />
 
     <RelativeLayout

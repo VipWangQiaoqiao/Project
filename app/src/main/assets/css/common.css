@@ -1,5 +1,5 @@
 body {
-	background-color: #f6f6f6;
+	background-color: #f6f6f6, !important;
 	word-wrap: break-word;
 	overflow: auto;
 	overflow-x: hidden;
@@ -11,9 +11,20 @@ a{
 
 .title {
 	color: #333333;
-	font-size: 22px;
+	font-size: 20px;
 	line-height: 24px;
 	font-weight: bold;
+	margin-top: 15px
+}
+
+.title img {
+	width: 28px;
+	vertical-align:middle;
+	margin-right: 8
+}
+
+.title .recommend {
+	width:20px
 }
 
 .authortime {
@@ -45,6 +56,12 @@ a{
 
 .software_attr {
 	list-style-type: none;
+	border: 1px solid #eee;
+	padding: 5px
+}
+
+.software_attr li {
+	padding: 0 0 5 0
 }
 
 .software_urls {
@@ -53,6 +70,7 @@ a{
 
 .software_urls {
 	margin: 10px 10px 10px 0px;
+	margin: 10 0 50 0
 }
 
 .software_urls li {
@@ -62,6 +80,7 @@ a{
 }
 
 .software_urls li a {
+	border-radius: 5px; 
 	background: #557DBA;
 	color: #fff;
 	width: 20px;
@@ -71,6 +90,7 @@ a{
 	text-align: center;
 	text-decoration: none;
 	padding: 5 10 5 10
+	
 }
 
 body.night .contentstyle {

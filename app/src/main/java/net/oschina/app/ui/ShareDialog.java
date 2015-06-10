@@ -32,9 +32,9 @@ import net.oschina.app.util.TDevice;
 
 /**
  * 分享界面dialog
- * 
+ *
  * @author kymjs
- * 
+ *
  */
 public class ShareDialog extends CommonDialog implements
         android.view.View.OnClickListener {

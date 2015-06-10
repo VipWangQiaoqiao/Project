@@ -22,17 +22,19 @@ import butterknife.InjectView;
 
 /**
  * 任务列表适配器
- * 
+ *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @version 创建时间：2015年1月14日 下午5:28:51
- * 
+ *
  */
 public class TeamIssueAdapter extends ListBaseAdapter<TeamIssue> {
 
     @Override
     protected View getRealView(int position, View convertView, ViewGroup parent) {
         ViewHolder vh = null;
+        int type = getItemViewType(position);
         if (convertView == null || convertView.getTag() == null) {
+
             convertView = getLayoutInflater(parent.getContext()).inflate(
                     R.layout.list_cell_team_issue, null);
             vh = new ViewHolder(convertView);

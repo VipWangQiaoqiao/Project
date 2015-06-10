@@ -1,6 +1,12 @@
 package net.oschina.app.fragment;
 
-import java.io.File;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
@@ -17,14 +23,8 @@ import net.oschina.app.widget.togglebutton.ToggleButton.OnToggleChanged;
 
 import org.kymjs.kjframe.bitmap.BitmapConfig;
 
-import android.content.DialogInterface;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import java.io.File;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -174,42 +174,10 @@ public class SettingsFragment extends BaseFragment {
     }
 
     private void onClickExit() {
-        final CommonDialog dialog = DialogHelper
-                .getPinterestDialogCancelable(getActivity());
-
-        OnClickListener click = new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                int id = v.getId();
-                dialog.dismiss();
-                switch (id) {
-                case R.id.rl_app_exit:
-                    AppContext
-                            .set(AppConfig.KEY_NOTIFICATION_DISABLE_WHEN_EXIT,
-                                    false);
-                    AppManager.getAppManager().AppExit(getActivity());
-                    getActivity().finish();
-                    break;
-                case R.id.rl_loginout:
-                    AppContext.getInstance().Logout();
-                    AppContext.showToastShort(R.string.tip_logout_success);
-                    getActivity().finish();
-                    break;
-                default:
-                    break;
-                }
-            }
-        };
-        View view = LayoutInflater.from(getActivity()).inflate(
-                R.layout.dialog_setting_exit, null);
-        view.findViewById(R.id.rl_app_exit).setOnClickListener(click);
-        view.findViewById(R.id.rl_loginout).setOnClickListener(click);
-        if (!AppContext.getInstance().isLogin()) {
-            view.findViewById(R.id.rl_loginout).setVisibility(View.GONE);
-            view.findViewById(R.id.v_line).setVisibility(View.GONE);
-        }
-        dialog.setContent(view);
-        dialog.show();
+        AppContext
+                .set(AppConfig.KEY_NOTIFICATION_DISABLE_WHEN_EXIT,
+                        false);
+        AppManager.getAppManager().AppExit(getActivity());
+        getActivity().finish();
     }
 }

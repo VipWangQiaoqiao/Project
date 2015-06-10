@@ -58,7 +58,14 @@ public class SoftwareDetailFragment extends CommonDetailFragment<Software> {
         body.append(ThemeSwitchUtils.getWebViewBodyString());
         body.append(UIHelper.WEB_STYLE).append(UIHelper.WEB_LOAD_IMAGES);
         // 添加title
-        body.append(String.format("<div class='title'>%s %s</div>", mDetail.getExtensionTitle(), mDetail.getTitle()));
+        String title = "";
+        // 判断是否推荐
+        if (mDetail.getRecommended() == 4) {
+            title = String.format("<div class='title'><img src=\"%s\"/>%s %s <img class='recommend' src=\"%s\"/></div>", mDetail.getLogo(), mDetail.getExtensionTitle(), mDetail.getTitle(), "file:///android_asset/ic_soft_recommend.png");
+        } else {
+            title = String.format("<div class='title'><img src=\"%s\"/>%s %s</div>", mDetail.getLogo(), mDetail.getExtensionTitle(), mDetail.getTitle());
+        }
+        body.append(title);
         // 添加图片点击放大支持
         body.append(UIHelper.setHtmlCotentSupportImagePreview(mDetail.getBody()));
 
@@ -66,18 +73,25 @@ public class SoftwareDetailFragment extends CommonDetailFragment<Software> {
         body.append("<div class='software_attr'>");
         if (!TextUtils.isEmpty(mDetail.getAuthor())) {
             String author = String.format("<a class='author' href='http://my.oschina.net/u/%s'>%s</a>", mDetail.getAuthorId(), mDetail.getAuthor());
-            body.append(String.format("<li class='software'>软件作者:&nbsp;%s</li>", author));
+            body.append(String.format("<li class='software'>软件作者:&nbsp;&nbsp;%s</li>", author));
         }
-        body.append(String.format("<li class='software'>开源协议:&nbsp;%s</li>", mDetail.getLicense()));
-        body.append(String.format("<li class='software'>开发语言:&nbsp;%s</li>", mDetail.getLanguage()));
-        body.append(String.format("<li class='software'>操作系统:&nbsp;%s</li>", mDetail.getOs()));
-        body.append(String.format("<li class='software'>收录时间:&nbsp;%s</li>", mDetail.getRecordtime()));
+        body.append(String.format("<li class='software'>开源协议:&nbsp;&nbsp;%s</li>", mDetail.getLicense()));
+        body.append(String.format("<li class='software'>开发语言:&nbsp;&nbsp;%s</li>", mDetail.getLanguage()));
+        body.append(String.format("<li class='software'>操作系统:&nbsp;&nbsp;%s</li>", mDetail.getOs()));
+        body.append(String.format("<li class='software'>收录时间:&nbsp;&nbsp;%s</li>", mDetail.getRecordtime()));
         body.append("</div>");
+
         // 软件的首页、文档、下载
         body.append("<div class='software_urls'>");
-        body.append(String.format("<li class='software'><a href='%s'>软件首页</a></li>", mDetail.getHomepage()));
-        body.append(String.format("<li class='software'><a href='%s'>软件文档</a></li>", mDetail.getDocument()));
-        body.append(String.format("<li class='software'><a href='%s'>软件下载</a></li>", mDetail.getDownload()));
+        if (!TextUtils.isEmpty(mDetail.getHomepage())) {
+            body.append(String.format("<li class='software'><a href='%s'>软件首页</a></li>", mDetail.getHomepage()));
+        }
+        if (!TextUtils.isEmpty(mDetail.getDocument())) {
+            body.append(String.format("<li class='software'><a href='%s'>软件文档</a></li>", mDetail.getDocument()));
+        }
+        if (!TextUtils.isEmpty(mDetail.getDownload())) {
+            body.append(String.format("<li class='software'><a href='%s'>软件下载</a></li>", mDetail.getDownload()));
+        }
         body.append("</div>");
         // 封尾
         body.append("</div></body>");

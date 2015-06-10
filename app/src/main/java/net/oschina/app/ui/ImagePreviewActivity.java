@@ -30,6 +30,7 @@ import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
 
 import uk.co.senab.photoview.PhotoView;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * 图片预览界面
@@ -227,12 +228,7 @@ public class ImagePreviewActivity extends BaseActivity implements
             } else {
                 vh = (ViewHolder) convertView.getTag();
             }
-//            vh.image.setOnFinishListener(new OnPhotoTapListener() {
-//                @Override
-//                public void onPhotoTap(View view, float x, float y) {
-//                    ImagePreviewActivity.this.finish();
-//                }
-//            });
+
             final ProgressBar bar = vh.progress;
             KJBitmap kjbitmap = new KJBitmap();
             kjbitmap.displayWithDefWH(vh.image, images[position],
@@ -255,6 +251,12 @@ public class ImagePreviewActivity extends BaseActivity implements
                             AppContext.showToast(R.string.tip_load_image_faile);
                         }
                     });
+            vh.attacher.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
+                @Override
+                public void onPhotoTap(View view, float v, float v1) {
+                    ImagePreviewActivity.this.finish();
+                }
+            });
             return convertView;
         }
     }
@@ -262,10 +264,12 @@ public class ImagePreviewActivity extends BaseActivity implements
     static class ViewHolder {
         PhotoView image;
         ProgressBar progress;
+        PhotoViewAttacher attacher;
 
         ViewHolder(View view) {
             image = (PhotoView) view.findViewById(R.id.photoview);
             progress = (ProgressBar) view.findViewById(R.id.progress);
+            attacher = new PhotoViewAttacher(image);
         }
     }
 }

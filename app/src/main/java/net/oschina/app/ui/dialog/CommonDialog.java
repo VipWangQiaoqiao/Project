@@ -1,7 +1,5 @@
 package net.oschina.app.ui.dialog;
 
-import net.oschina.app.R;
-import net.oschina.app.util.TDevice;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Dialog;
@@ -24,6 +22,9 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import net.oschina.app.R;
+import net.oschina.app.util.TDevice;
 
 public class CommonDialog extends Dialog {
 	public DialogInterface.OnClickListener listener;
@@ -118,8 +119,8 @@ public class CommonDialog extends Dialog {
 			}
 		}
 	}
-	
-	
+
+
 
 	@Override
 	public void onBackPressed() {

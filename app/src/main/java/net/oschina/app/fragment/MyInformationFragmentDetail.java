@@ -1,10 +1,23 @@
 package net.oschina.app.fragment;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.provider.MediaStore.Images;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -26,33 +39,21 @@ import net.oschina.app.util.XmlUtils;
 import org.apache.http.Header;
 import org.kymjs.kjframe.KJBitmap;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.provider.MediaStore.Images;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageView;
-import android.widget.TextView;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-
-import com.loopj.android.http.AsyncHttpResponseHandler;
+import butterknife.OnClick;
 
 /**
  * 登录用户信息详情
- * 
+ *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @version 创建时间：2015年1月6日 上午10:33:18
- * 
  */
 
 public class MyInformationFragmentDetail extends BaseFragment {
@@ -114,7 +115,7 @@ public class MyInformationFragmentDetail extends BaseFragment {
 
         @Override
         public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                Throwable arg3) {
+                              Throwable arg3) {
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
         }
 
@@ -122,7 +123,7 @@ public class MyInformationFragmentDetail extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         ViewGroup view = (ViewGroup) inflater.inflate(
                 R.layout.fragment_my_information_detail, container, false);
         initView(view);
@@ -131,14 +132,19 @@ public class MyInformationFragmentDetail extends BaseFragment {
     }
 
     @Override
+    @OnClick({R.id.iv_avatar, R.id.btn_logout})
     public void onClick(View v) {
         switch (v.getId()) {
-        case R.id.iv_avatar:
-            showClickAvatar();
-            break;
-
-        default:
-            break;
+            case R.id.iv_avatar:
+                showClickAvatar();
+                break;
+            case R.id.btn_logout:
+                AppContext.getInstance().Logout();
+                AppContext.showToastShort(R.string.tip_logout_success);
+                getActivity().finish();
+                break;
+            default:
+                break;
         }
     }
 
@@ -157,7 +163,7 @@ public class MyInformationFragmentDetail extends BaseFragment {
 
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view,
-                            int position, long id) {
+                                            int position, long id) {
                         if (position == 0) {
                             handleSelectPicture();
                         } else {
@@ -185,7 +191,7 @@ public class MyInformationFragmentDetail extends BaseFragment {
 
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view,
-                            int position, long id) {
+                                            int position, long id) {
                         dialog.dismiss();
                         goToSelectPicture(position);
                     }
@@ -195,14 +201,14 @@ public class MyInformationFragmentDetail extends BaseFragment {
 
     private void goToSelectPicture(int position) {
         switch (position) {
-        case ACTION_TYPE_ALBUM:
-            startImagePick();
-            break;
-        case ACTION_TYPE_PHOTO:
-            startTakePhoto();
-            break;
-        default:
-            break;
+            case ACTION_TYPE_ALBUM:
+                startImagePick();
+                break;
+            case ACTION_TYPE_PHOTO:
+                startTakePhoto();
+                break;
+            default:
+                break;
         }
     }
 
@@ -257,12 +263,12 @@ public class MyInformationFragmentDetail extends BaseFragment {
 
             try {
                 OSChinaApi.updatePortrait(AppContext.getInstance()
-                        .getLoginUid(), protraitFile,
+                                .getLoginUid(), protraitFile,
                         new AsyncHttpResponseHandler() {
 
                             @Override
                             public void onSuccess(int arg0, Header[] arg1,
-                                    byte[] arg2) {
+                                                  byte[] arg2) {
                                 Result res = XmlUtils.toBean(ResultBean.class,
                                         new ByteArrayInputStream(arg2))
                                         .getResult();
@@ -278,7 +284,7 @@ public class MyInformationFragmentDetail extends BaseFragment {
 
                             @Override
                             public void onFailure(int arg0, Header[] arg1,
-                                    byte[] arg2, Throwable arg3) {
+                                                  byte[] arg2, Throwable arg3) {
                                 AppContext.showToast("更换头像失败");
                             }
 
@@ -295,8 +301,6 @@ public class MyInformationFragmentDetail extends BaseFragment {
 
     /**
      * 选择图片裁剪
-     * 
-     * @param output
      */
     private void startImagePick() {
         Intent intent;
@@ -384,11 +388,8 @@ public class MyInformationFragmentDetail extends BaseFragment {
 
     /**
      * 拍照后裁剪
-     * 
-     * @param data
-     *            原始图片
-     * @param output
-     *            裁剪后图片
+     *
+     * @param data 原始图片
      */
     private void startActionCrop(Uri data) {
         Intent intent = new Intent("com.android.camera.action.CROP");
@@ -407,20 +408,20 @@ public class MyInformationFragmentDetail extends BaseFragment {
 
     @Override
     public void onActivityResult(final int requestCode, final int resultCode,
-            final Intent imageReturnIntent) {
+                                 final Intent imageReturnIntent) {
         if (resultCode != Activity.RESULT_OK)
             return;
 
         switch (requestCode) {
-        case ImageUtils.REQUEST_CODE_GETIMAGE_BYCAMERA:
-            startActionCrop(origUri);// 拍照后裁剪
-            break;
-        case ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP:
-            startActionCrop(imageReturnIntent.getData());// 选图后裁剪
-            break;
-        case ImageUtils.REQUEST_CODE_GETIMAGE_BYSDCARD:
-            uploadNewPhoto();
-            break;
+            case ImageUtils.REQUEST_CODE_GETIMAGE_BYCAMERA:
+                startActionCrop(origUri);// 拍照后裁剪
+                break;
+            case ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP:
+                startActionCrop(imageReturnIntent.getData());// 选图后裁剪
+                break;
+            case ImageUtils.REQUEST_CODE_GETIMAGE_BYSDCARD:
+                uploadNewPhoto();
+                break;
         }
     }
 }

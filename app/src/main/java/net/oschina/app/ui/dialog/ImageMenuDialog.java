@@ -1,7 +1,7 @@
 package net.oschina.app.ui.dialog;
 
-import net.oschina.app.R;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.Display;
@@ -10,13 +10,15 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import net.oschina.app.R;
+
 /**
  * 分享界面dialog
  * 
  * @author kymjs (https://github.com/kymjs)
  * 
  */
-public class ImageMenuDialog extends CommonDialog implements
+public class ImageMenuDialog extends Dialog implements
         android.view.View.OnClickListener {
 
     public interface OnMenuClickListener {
@@ -38,7 +40,7 @@ public class ImageMenuDialog extends CommonDialog implements
         view.findViewById(R.id.menu1).setOnClickListener(this);
         view.findViewById(R.id.menu2).setOnClickListener(this);
         view.findViewById(R.id.menu3).setOnClickListener(this);
-        setContent(view);
+        super.setContentView(view);
     }
 
     public ImageMenuDialog(Context context) {
