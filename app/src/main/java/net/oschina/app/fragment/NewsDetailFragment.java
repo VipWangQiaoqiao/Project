@@ -105,7 +105,7 @@ public class NewsDetailFragment extends CommonDetailFragment<News> {
 
     @Override
     protected String getShareUrl() {
-        return mDetail.getUrl().replace("http://www", "http:m");
+        return mDetail.getUrl().replace("http://www", "http://m");
     }
 
     @Override
