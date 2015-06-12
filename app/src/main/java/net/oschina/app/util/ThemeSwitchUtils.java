@@ -33,9 +33,9 @@ public class ThemeSwitchUtils {
 
     public static String getWebViewBodyString() {
         if (AppContext.getNightModeSwitch()) {
-            return "<body class='night'><div class='contentstyle'>";
+            return "<body class='night'><div class='contentstyle' id='article_body'>";
         } else {
-            return "<body ><div class='contentstyle'>";
+            return "<body ><div class='contentstyle' id='article_body'>";
         }
     }
 }

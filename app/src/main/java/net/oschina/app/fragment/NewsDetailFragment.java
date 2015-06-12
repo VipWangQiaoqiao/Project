@@ -46,8 +46,7 @@ public class NewsDetailFragment extends CommonDetailFragment<News> {
         body.append(String.format("<div class='authortime'>%s&nbsp;&nbsp;&nbsp;&nbsp;%s</div>", author, time));
         // 添加图片点击放大支持
         body.append(UIHelper.setHtmlCotentSupportImagePreview(mDetail.getBody()));
-        // 封尾
-        body.append("</div></body>");
+
 
         // 更多关于***软件的信息
         String softwareName = mDetail.getSoftwareName();
@@ -64,14 +63,16 @@ public class NewsDetailFragment extends CommonDetailFragment<News> {
             String strRelative = "";
             for (News.Relative relative : mDetail.getRelatives()) {
                 strRelative += String.format(
-                        "<a href='%s' style='text-decoration:none'>%s</a><p/>",
+                        "<li><a href='%s' style='text-decoration:none'>%s</a></li>",
                         relative.url, relative.title);
             }
-            body.append("<p/><div class='about' style=\"height:1px;width:100%;background:#DADADA;margin-bottom:10px;\"/>"
-                    + String.format("<br/> <b>相关资讯</b> <div><p/>%s</div>",
+            body.append("<p/><div style=\"height:1px;width:100%;background:#DADADA;margin-bottom:10px;\"/>"
+                    + String.format("<br/> <b>相关资讯</b><ul class='about'>%s</ul>",
                     strRelative));
         }
         body.append("<br/>");
+        // 封尾
+        body.append("</div></body>");
         return  body.toString();
     }
 

@@ -90,5 +90,12 @@
         <item>更换头像</item>
         <item>查看大头像</item>
     </string-array>
+
+    <string-array name="font_size">
+        <item>特大号字</item>
+        <item>大号字</item>
+        <item>中号字</item>
+        <item>小号字</item>
+    </string-array>
     
 </resources>

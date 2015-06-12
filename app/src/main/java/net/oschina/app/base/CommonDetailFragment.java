@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.AdapterView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -29,7 +30,10 @@ import net.oschina.app.emoji.OnSendClickListener;
 import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.ReportDialog;
 import net.oschina.app.ui.ShareDialog;
+import net.oschina.app.ui.dialog.CommonDialog;
+import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.FontSizeUtils;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -99,8 +103,6 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
         ((DetailActivity) getActivity()).toolFragment
                 .setCommentCount(commentCount);
     }
-
-
 
     private void requestData(boolean refresh) {
         String key = getCacheKey();
@@ -206,12 +208,15 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
 
     protected void executeOnLoadDataSuccess(T detail) {
         this.mDetail = detail;
-        if (this.mDetail == null) {
+        if (this.mDetail == null || TextUtils.isEmpty(this.getWebViewBody(detail))) {
             executeOnLoadDataError();
             return;
         }
+
         mWebView.loadDataWithBaseURL(null, this.getWebViewBody(detail), "text/html", "UTF-8", null);
-        boolean favoriteState = getFavoriteState() == 1 ? true : false;
+        // 显示存储的字体大小
+        mWebView.loadUrl(FontSizeUtils.getSaveFontSize());
+        boolean favoriteState = getFavoriteState() == 1;
         setFavoriteState(favoriteState);
 
         // 判断最新的评论数是否大于
@@ -258,9 +263,11 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.refresh_menu, menu);
+        inflater.inflate(R.menu.common_detail_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
+
+    int i = 0;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -268,10 +275,34 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
             case R.id.refresh:
                 sendRequestDataForNet();
                 return false;
+            case R.id.font_size:
+                showChangeFontSize();
+                break;
             default:
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showChangeFontSize() {
+        final CommonDialog dialog = DialogHelper
+                .getPinterestDialogCancelable(getActivity());
+        dialog.setTitle("正文字号");
+        final CharSequence[] items = getResources().getTextArray(
+                R.array.font_size);
+        dialog.setItems(items, FontSizeUtils.getSaveFontSizeIndex(), new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                // 更改字体大小
+                FontSizeUtils.saveFontSize(position);
+                mWebView.loadUrl(FontSizeUtils.getFontSize(position));
+                dialog.dismiss();
+            }
+        });
+        dialog.setPositiveButton(R.string.cancle, null);
+        dialog.show();
     }
 
     // 收藏或者取消收藏
@@ -298,7 +329,7 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
                             new ByteArrayInputStream(arg2)).getResult();
                     if (res.OK()) {
                         AppContext.showToast(res.getErrorMessage());
-                        boolean newFavorited = isFavorited == true ? false : true;
+                        boolean newFavorited = !isFavorited;
                         setFavoriteState(newFavorited);
                         // 更新收藏的状态
                         updateFavoriteChanged(!newFavorited ? 0 : 1);
