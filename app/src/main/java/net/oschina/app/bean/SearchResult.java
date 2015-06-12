@@ -13,7 +13,7 @@ public class SearchResult extends Entity {
 	private int id;
 	
 	@XStreamAlias("type")
-	private int type;
+	private String type;
 	
 	@XStreamAlias("title")
 	private String title;
@@ -38,11 +38,11 @@ public class SearchResult extends Entity {
 		this.id = id;
 	}
 
-	public int getType() {
+	public String getType() {
 		return type;
 	}
 
-	public void setType(int type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 

@@ -312,7 +312,18 @@ public class OSChinaApi {
     public static void getSoftwareDetail(String ident,
             AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams("ident",
-                ident.replace(" ", ""));
+                ident);
+        ApiHttpClient.get("action/api/software_detail", params, handler);
+    }
+
+    /***
+     * 通过id获取软件详情
+     * @param id
+     * @param handler
+     */
+    public static void getSoftwareDetail(int id, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams("id",
+                id);
         ApiHttpClient.get("action/api/software_detail", params, handler);
     }
 

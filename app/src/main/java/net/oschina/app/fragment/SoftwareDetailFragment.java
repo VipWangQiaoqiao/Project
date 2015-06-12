@@ -19,6 +19,8 @@ import net.oschina.app.util.URLsUtils;
 import net.oschina.app.util.XmlUtils;
 
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  * Created by 火蚁 on 15/5/26.
@@ -29,11 +31,20 @@ public class SoftwareDetailFragment extends CommonDetailFragment<Software> {
 
     @Override
     protected String getCacheKey() {
+        if (mId > 0) {
+            return "software_" + mId;
+        }
         return "software_" + mIden;
     }
 
     @Override
     protected void sendRequestDataForNet() {
+        // 通过id来获取软件详情
+        if (mId > 0) {
+            OSChinaApi.getSoftwareDetail(mId, mDetailHeandler);
+            return;
+        }
+
         if (TextUtils.isEmpty(mIden)) {
             executeOnLoadDataError();
             return;
@@ -45,6 +56,14 @@ public class SoftwareDetailFragment extends CommonDetailFragment<Software> {
     public void initData() {
         super.initData();
         mIden = getActivity().getIntent().getStringExtra("ident");
+        if (TextUtils.isEmpty(mIden)) {
+            return;
+        }
+        try {
+            mIden = URLEncoder.encode(mIden, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -54,6 +73,9 @@ public class SoftwareDetailFragment extends CommonDetailFragment<Software> {
 
     @Override
     protected String getWebViewBody(Software detail) {
+        if (TextUtils.isEmpty(detail.getBody())) {
+            return "";
+        }
         StringBuffer body = new StringBuffer();
         body.append(ThemeSwitchUtils.getWebViewBodyString());
         body.append(UIHelper.WEB_STYLE).append(UIHelper.WEB_LOAD_IMAGES);
