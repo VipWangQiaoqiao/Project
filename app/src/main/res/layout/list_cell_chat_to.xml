@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:gravity="center_vertical"
-            android:textColor="@color/main_black"
+            android:textColor="@color/gray"
             android:textSize="@dimen/text_size_15" />
 
         <TextView

@@ -19,6 +19,15 @@
         <item name="layout_item_bg">@drawable/day_list_item_background</item>
         <item name="android:editTextColor">@color/day_edit_color</item>
         <item name="android:textColorHint">@color/day_edit_hit_color</item>
+        <item name="comment_reply_container_bg">@drawable/day_comment_reply_container_bg</item>
+        <item name="message_bg_left">@drawable/chat_from_bg_normal</item>
+        <item name="message_bg_right">@drawable/chat_to_bg_normal</item>
+        <item name="quickoption_icon_text_selector">@drawable/day_quickoption_icon_text_selector</item>
+        <item name="quickoption_icon_album_selector">@drawable/day_quickoption_icon_album_selector</item>
+        <item name="quickoption_icon_photo_selector">@drawable/day_quickoption_icon_photo_selector</item>
+        <item name="quickoption_icon_voice_selector">@drawable/day_quickoption_icon_voice_selector</item>
+        <item name="quickoption_icon_scan_selector">@drawable/day_quickoption_icon_scan_selector</item>
+        <item name="quickoption_icon_note_selector">@drawable/day_quickoption_icon_note_selector</item>
     </style>
 
     <!-- 夜间模式 -->
@@ -36,6 +45,15 @@
         <item name="layout_item_bg">@drawable/night_list_item_background</item>
         <item name="android:editTextColor">@color/night_edit_color</item>
         <item name="android:textColorHint">@color/night_edit_hit_color</item>
+        <item name="comment_reply_container_bg">@drawable/night_comment_reply_container_bg</item>
+        <item name="message_bg_left">@drawable/night_chat_from_bg_normal</item>
+        <item name="message_bg_right">@drawable/chat_to_bg_pressed</item>
+        <item name="quickoption_icon_text_selector">@drawable/night_quickoption_icon_text_selector</item>
+        <item name="quickoption_icon_album_selector">@drawable/night_quickoption_icon_album_selector</item>
+        <item name="quickoption_icon_photo_selector">@drawable/night_quickoption_icon_photo_selector</item>
+        <item name="quickoption_icon_voice_selector">@drawable/night_quickoption_icon_voice_selector</item>
+        <item name="quickoption_icon_scan_selector">@drawable/night_quickoption_icon_scan_selector</item>
+        <item name="quickoption_icon_note_selector">@drawable/night_quickoption_icon_note_selector</item>
     </style>
 
 </resources>

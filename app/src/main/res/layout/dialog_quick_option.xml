@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/set_pop"
     android:layout_gravity="bottom"
+    android:background="?attr/layout_item_bg"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" >
 
@@ -9,6 +10,7 @@
         android:id="@+id/ll_option_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
         android:orientation="vertical" >
 
         <LinearLayout
@@ -21,9 +23,8 @@
                 style="@style/quick_option_item" >
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/quickoption_icon_text_selector" />
+                    style="@style/quick_option_img"
+                    android:src="?attr/quickoption_icon_text_selector" />
 
                 <TextView
                     style="@style/quick_option_item_text"
@@ -35,9 +36,8 @@
                 style="@style/quick_option_item" >
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/quickoption_icon_album_selector" />
+                    style="@style/quick_option_img"
+                    android:src="?attr/quickoption_icon_album_selector" />
 
                 <TextView
                     style="@style/quick_option_item_text"
@@ -49,10 +49,8 @@
                 style="@style/quick_option_item" >
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:src="@drawable/quickoption_icon_photo_selector" />
+                    style="@style/quick_option_img"
+                    android:src="?attr/quickoption_icon_photo_selector" />
 
                 <TextView
                     style="@style/quick_option_item_text"
@@ -69,10 +67,8 @@
             <LinearLayout style="@style/quick_option_item" >
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:src="@drawable/quickoption_icon_voice_selector" />
+                    style="@style/quick_option_img"
+                    android:src="?attr/quickoption_icon_voice_selector" />
 
                 <TextView
                     style="@style/quick_option_item_text"
@@ -84,10 +80,8 @@
                 style="@style/quick_option_item" >
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:src="@drawable/quickoption_icon_scan_selector" />
+                    style="@style/quick_option_img"
+                    android:src="?attr/quickoption_icon_scan_selector" />
 
                 <TextView
                     style="@style/quick_option_item_text"
@@ -99,10 +93,8 @@
                 style="@style/quick_option_item" >
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:src="@drawable/quickoption_icon_note_selector" />
+                    style="@style/quick_option_img"
+                    android:src="?attr/quickoption_icon_note_selector" />
 
                 <TextView
                     style="@style/quick_option_item_text"
@@ -127,6 +119,7 @@
             android:layout_height="35dp"
             android:contentDescription="@null"
             android:focusable="false"
+            android:visibility="gone"
             android:src="@drawable/btn_quickoption_route" />
     </LinearLayout>
 

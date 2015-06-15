@@ -70,9 +70,6 @@ public class NavigationDrawerFragment extends BaseFragment implements
     @InjectView(R.id.menu_item_gitapp)
     View mMenu_item_gitapp;
 
-    @InjectView(R.id.menu_item_rss)
-    View mMenu_item_rss;
-
     @InjectView(R.id.menu_item_setting)
     View mMenu_item_setting;
 
@@ -138,8 +135,6 @@ public class NavigationDrawerFragment extends BaseFragment implements
                     }
                 }
                 break;
-            case R.id.menu_item_rss:
-                break;
             case R.id.menu_item_setting:
                 UIHelper.showSetting(getActivity());
                 break;
@@ -185,7 +180,6 @@ public class NavigationDrawerFragment extends BaseFragment implements
             night.setText("夜间");
         }
 
-        mMenu_item_rss.setOnClickListener(this);
         mMenu_item_opensoft.setOnClickListener(this);
         mMenu_item_blog.setOnClickListener(this);
         mMenu_item_quests.setOnClickListener(this);

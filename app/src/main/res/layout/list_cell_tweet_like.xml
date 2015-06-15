@@ -47,7 +47,7 @@
         android:layout_below="@id/tv_action"
         android:layout_marginTop="4dp"
         android:layout_toRightOf="@id/iv_avatar"
-        android:background="@drawable/comment_reply_container_bg2"
+        android:background="?attr/comment_reply_container_bg"
         android:visibility="visible" >
 
         <net.oschina.app.widget.TweetTextView

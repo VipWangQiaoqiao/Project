@@ -86,13 +86,14 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
                 0);
         mId = getActivity().getIntent().getIntExtra("id", 0);
         ButterKnife.inject(this, view);
-        initViews(view);
+        initView(view);
         initData();
         requestData(false);
         return view;
     }
 
-    private void initViews(View view) {
+    @Override
+    public void initView(View view) {
         mEmptyLayout = (EmptyLayout) view.findViewById(R.id.error_layout);
         setCommentCount(mCommentCount);
         mWebView = (WebView) view.findViewById(R.id.webview);

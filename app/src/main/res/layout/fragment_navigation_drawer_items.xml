@@ -11,7 +11,7 @@
 
         <ImageView
             style="@style/MenuItemImageViewStyle"
-            android:background="@drawable/drawer_menu_icon_quest"
+            android:background="@drawable/drawer_menu_icon_quest_nor"
             android:contentDescription="@null" />
 
         <TextView
@@ -29,7 +29,7 @@
 
         <ImageView
             style="@style/MenuItemImageViewStyle"
-            android:background="@drawable/drawer_menu_icon_opensoft"
+            android:background="@drawable/drawer_menu_icon_opensoft_nor"
             android:contentDescription="@null" />
 
         <TextView
@@ -46,7 +46,7 @@
 
         <ImageView
             style="@style/MenuItemImageViewStyle"
-            android:background="@drawable/drawer_menu_icon_blog"
+            android:background="@drawable/drawer_menu_icon_blog_nor"
             android:contentDescription="@null" />
 
         <TextView
@@ -63,7 +63,7 @@
 
         <ImageView
             style="@style/MenuItemImageViewStyle"
-            android:background="@drawable/drawer_menu_icon_gitapp"
+            android:background="@drawable/drawer_menu_icon_gitapp_nor"
             android:contentDescription="@null" />
 
         <TextView
@@ -73,24 +73,5 @@
 
     <View
         style="@style/h_line" />
-
-    <LinearLayout
-        android:id="@+id/menu_item_rss"
-        style="@style/MenuItemLayoutStyle"
-        android:visibility="gone" >
-
-        <ImageView
-            style="@style/MenuItemImageViewStyle"
-            android:background="@drawable/drawer_menu_icon_rss"
-            android:contentDescription="@null" />
-
-        <TextView
-            style="@style/MenuItemTextViewStyle"
-            android:text="@string/menu_rss" />
-    </LinearLayout>
-
-    <View
-        style="@style/h_line"
-        android:visibility="gone" />
 
 </LinearLayout>

@@ -70,7 +70,9 @@ public class EventDetailFragment extends CommonDetailFragment<Post> {
     @Override
     public void initView(View view) {
         super.initView(view);
-
+        mLocation.setOnClickListener(this);
+        mBtAttend.setOnClickListener(this);
+        mBtEventApply.setOnClickListener(this);
     }
 
     @Override
@@ -210,9 +212,7 @@ public class EventDetailFragment extends CommonDetailFragment<Post> {
     }
 
     @Override
-
     public void onClick(View v) {
-        super.onClick(v);
         int id = v.getId();
         switch (id) {
             case R.id.rl_event_location:

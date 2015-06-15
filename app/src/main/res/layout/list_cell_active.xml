@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/layout_item_bg"
-    android:padding="@dimen/space_8" >
+    android:padding="@dimen/space_8">
 
     <net.oschina.app.widget.AvatarView
         android:id="@+id/iv_avatar"
@@ -17,8 +18,9 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/space_2"
         android:layout_toRightOf="@id/iv_avatar"
+        tools:text="火蚁"
         android:textColor="?android:textColorLink"
-        android:textSize="@dimen/text_size_14" />
+        android:textSize="15sp" />
 
     <TextView
         android:id="@+id/tv_time"
@@ -73,7 +75,7 @@
         android:layout_below="@id/tv_body"
         android:layout_marginTop="4dp"
         android:layout_toRightOf="@id/iv_avatar"
-        android:background="@drawable/comment_reply_container_bg2"
+        android:background="?attr/comment_reply_container_bg"
         android:visibility="visible" >
 
         <net.oschina.app.widget.TweetTextView
@@ -84,7 +86,8 @@
             android:focusableInTouchMode="false"
             android:gravity="center_vertical"
             android:padding="@dimen/space_4"
-            android:textColor="@color/main_gray"
+            tools:text="内容"
+            android:textColor="?attr/textColor"
             android:textSize="@dimen/text_size_13" />
     </LinearLayout>
 
