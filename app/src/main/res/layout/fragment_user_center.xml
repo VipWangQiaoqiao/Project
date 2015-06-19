@@ -8,6 +8,8 @@
     <ListView
         android:id="@+id/lv_user_active"
         android:divider="?attr/lineColor"
+        android:listSelector="@color/transparent"
+        android:dividerHeight="1px"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

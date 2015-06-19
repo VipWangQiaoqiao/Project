@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/windows_bg"
+    android:background="?attr/layout_item_bg"
     android:orientation="vertical">
 
     <LinearLayout
@@ -128,7 +128,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
-        android:padding="@dimen/space_4" >
+        android:padding="@dimen/space_4">
 
         <TextView
             android:id="@+id/tv_private_message"
