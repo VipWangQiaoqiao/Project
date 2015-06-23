@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-//apply plugin: 'newlens'
+apply plugin: 'newlens'
 
 android {
     compileSdkVersion 22
@@ -9,8 +9,8 @@ android {
         applicationId "net.oschina.app"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 44
-        versionName "2.2.1 beta"
+        versionCode 45
+        versionName "2.3"
     }
 }
 
