@@ -12,6 +12,11 @@ android {
         versionCode 45
         versionName "2.3"
     }
+
+    // 移除lint检查的error
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
