@@ -2,6 +2,7 @@ package net.oschina.app.ui;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -27,7 +28,6 @@ import com.umeng.socialize.weixin.media.WeiXinShareContent;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.bean.Constants;
-import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.util.TDevice;
 
 /**
@@ -36,7 +36,7 @@ import net.oschina.app.util.TDevice;
  * @author kymjs
  *
  */
-public class ShareDialog extends CommonDialog implements
+public class ShareDialog extends Dialog implements
         android.view.View.OnClickListener {
 
     private Context context;
@@ -68,7 +68,7 @@ public class ShareDialog extends CommonDialog implements
         shareView.findViewById(R.id.ly_share_weichat).setOnClickListener(this);
         shareView.findViewById(R.id.ly_share_weichat_circle)
                 .setOnClickListener(this);
-        setContent(shareView, 0);
+        setContentView(shareView);
     }
 
     public ShareDialog(Context context) {

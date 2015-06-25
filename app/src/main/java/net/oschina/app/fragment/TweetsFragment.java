@@ -1,8 +1,14 @@
 package net.oschina.app.fragment;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.Serializable;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -16,9 +22,8 @@ import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetsList;
 import net.oschina.app.interf.OnTabReselectListener;
-import net.oschina.app.ui.dialog.CommonDialog;
-import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -26,16 +31,9 @@ import net.oschina.app.util.XmlUtils;
 
 import org.apache.http.Header;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.Serializable;
 
 /**
  * @author kymjs (http://www.kymjs.com)
@@ -233,41 +231,27 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
         } else {
             items = new String[] { getResources().getString(R.string.copy) };
         }
-        final CommonDialog dialog = DialogHelper
-                .getPinterestDialogCancelable(getActivity());
-        dialog.setNegativeButton(R.string.cancle, null);
-        dialog.setItemsWithoutChk(items, new OnItemClickListener() {
 
+        DialogHelp.getSelectDialog(getActivity(), items, new DialogInterface.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                    int position, long id) {
-                dialog.dismiss();
-                if (position == 0) {
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (i == 0) {
                     TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(tweet.getBody()));
-                } else if (position == 1) {
+                } else if (i == 1) {
                     handleDeleteTweet(tweet);
                 }
             }
-        });
-        dialog.show();
+        }).show();
     }
 
     private void handleDeleteTweet(final Tweet tweet) {
-        CommonDialog dialog = DialogHelper
-                .getPinterestDialogCancelable(getActivity());
-        dialog.setMessage(R.string.message_delete_tweet);
-        dialog.setPositiveButton(R.string.ok,
-                new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        OSChinaApi.deleteTweet(tweet.getAuthorid(), tweet
-                                .getId(), new DeleteTweetResponseHandler(tweet));
-                    }
-                });
-        dialog.setNegativeButton(R.string.cancle, null);
-        dialog.show();
+        DialogHelp.getConfirmDialog(getActivity(), "是否删除该动弹?", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                OSChinaApi.deleteTweet(tweet.getAuthorid(), tweet
+                        .getId(), new DeleteTweetResponseHandler(tweet));
+            }
+        }).show();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package net.oschina.app.base;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -11,7 +12,6 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.interf.BaseFragmentInterface;
 import net.oschina.app.ui.dialog.DialogControl;
-import net.oschina.app.ui.dialog.WaitDialog;
 
 /**
  * 碎片基类
@@ -82,11 +82,11 @@ public class BaseFragment extends Fragment implements
         }
     }
 
-    protected WaitDialog showWaitDialog() {
+    protected ProgressDialog showWaitDialog() {
         return showWaitDialog(R.string.loading);
     }
 
-    protected WaitDialog showWaitDialog(int resid) {
+    protected ProgressDialog showWaitDialog(int resid) {
         FragmentActivity activity = getActivity();
         if (activity instanceof DialogControl) {
             return ((DialogControl) activity).showWaitDialog(resid);
@@ -94,7 +94,7 @@ public class BaseFragment extends Fragment implements
         return null;
     }
 
-    protected WaitDialog showWaitDialog(String str) {
+    protected ProgressDialog showWaitDialog(String str) {
         FragmentActivity activity = getActivity();
         if (activity instanceof DialogControl) {
             return ((DialogControl) activity).showWaitDialog(str);

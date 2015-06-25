@@ -1,8 +1,21 @@
 package net.oschina.app.team.fragment;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.Serializable;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.Html;
+import android.text.Spanned;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -23,9 +36,8 @@ import net.oschina.app.team.bean.TeamRepliesList;
 import net.oschina.app.team.bean.TeamReply;
 import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.ImagePreviewActivity;
-import net.oschina.app.ui.dialog.CommonDialog;
-import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -41,21 +53,9 @@ import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
 import org.kymjs.kjframe.bitmap.BitmapHelper;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.Html;
-import android.text.Spanned;
-import android.text.TextUtils;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.loopj.android.http.AsyncHttpResponseHandler;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.Serializable;
 
 /**
  * Team动态的详情界面
@@ -270,24 +270,18 @@ public class TeamTweetDetailFragment extends
         if (itemsLen == 2) {
             items[1] = getResources().getString(R.string.delete);
         }
-        final CommonDialog dialog = DialogHelper
-                .getPinterestDialogCancelable(getActivity());
-        dialog.setNegativeButton(R.string.cancle, null);
-        dialog.setItemsWithoutChk(items, new OnItemClickListener() {
-
+        DialogHelp.getSelectDialog(getActivity(), items, new DialogInterface.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                    int position, long id) {
-                dialog.dismiss();
-                if (position == 0) {
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (i == 0) {
                     TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(item
                             .getContent()));
-                } else if (position == 1) {
+                } else if (i == 1) {
                     handleDeleteComment(item);
                 }
             }
-        });
-        dialog.show();
+        }).show();
+
         return true;
     }
 

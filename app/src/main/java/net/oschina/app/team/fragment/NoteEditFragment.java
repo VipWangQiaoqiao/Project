@@ -1,17 +1,5 @@
 package net.oschina.app.team.fragment;
 
-import net.oschina.app.AppContext;
-import net.oschina.app.R;
-import net.oschina.app.base.BaseFragment;
-import net.oschina.app.bean.NotebookData;
-import net.oschina.app.bean.SimpleBackPage;
-import net.oschina.app.db.NoteDatabase;
-import net.oschina.app.ui.SimpleBackActivity;
-import net.oschina.app.ui.dialog.CommonDialog;
-import net.oschina.app.ui.dialog.DialogHelper;
-import net.oschina.app.util.KJAnimations;
-import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.UIHelper;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
@@ -30,6 +18,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import net.oschina.app.AppContext;
+import net.oschina.app.R;
+import net.oschina.app.base.BaseFragment;
+import net.oschina.app.bean.NotebookData;
+import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.db.NoteDatabase;
+import net.oschina.app.ui.SimpleBackActivity;
+import net.oschina.app.util.DialogHelp;
+import net.oschina.app.util.KJAnimations;
+import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.UIHelper;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -243,28 +244,19 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
         if (isNewNote) {
             final String content = mEtContent.getText().toString();
             if (!TextUtils.isEmpty(content)) {
-                CommonDialog dialog = DialogHelper
-                        .getPinterestDialogCancelable(getActivity());
-                dialog.setMessage(R.string.draft_tweet_message);
-                dialog.setNegativeButton(R.string.cancle,
-                        new OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                    int which) {
-                                AppContext.setNoteDraft("");
-                                getActivity().finish();
-                            }
-                        });
-                dialog.setPositiveButton(R.string.ok, new OnClickListener() {
-
+                DialogHelp.getConfirmDialog(getActivity(), "是否保存为草稿?", new OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        AppContext.setNoteDraft("");
+                        getActivity().finish();
+                    }
+                }, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
                         AppContext.setNoteDraft(content);
                         getActivity().finish();
                     }
-                });
-                dialog.show();
+                }).show();
                 return true;
             }
         }

@@ -1,6 +1,22 @@
 package net.oschina.app.team.fragment;
 
-import java.util.List;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.GradientDrawable;
+import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.TextView;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -18,9 +34,8 @@ import net.oschina.app.team.bean.TeamRepliesList;
 import net.oschina.app.team.bean.TeamReply;
 import net.oschina.app.team.bean.TeamReplyBean;
 import net.oschina.app.ui.DetailActivity;
-import net.oschina.app.ui.dialog.CommonDialog;
-import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TypefaceUtils;
@@ -30,31 +45,16 @@ import net.oschina.app.widget.AvatarView;
 
 import org.apache.http.Header;
 
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.drawable.GradientDrawable;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
-import android.widget.TextView;
+import java.util.List;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-import com.loopj.android.http.AsyncHttpResponseHandler;
-
 /**
  * TeamIssueDetailFragmentNew.java
- * 
+ *
  * @author 火蚁(http://my.oschina.net/u/253900)
- * 
  * @data 2015-2-12 下午3:44:47
  */
 public class TeamIssueDetailFragment extends BaseFragment implements
@@ -98,7 +98,7 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.fragment_team_issue_detail,
                 container, false);
@@ -183,7 +183,7 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 
         @Override
         public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                Throwable arg3) {
+                              Throwable arg3) {
             // TODO Auto-generated method stub
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
         }
@@ -191,7 +191,9 @@ public class TeamIssueDetailFragment extends BaseFragment implements
         @Override
         public void onStart() {
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-        };
+        }
+
+        ;
 
     };
 
@@ -336,7 +338,7 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 
         @Override
         public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                Throwable arg3) {
+                              Throwable arg3) {
             // TODO Auto-generated method stub
             AppContext.showToast("更新失败");
         }
@@ -344,66 +346,70 @@ public class TeamIssueDetailFragment extends BaseFragment implements
         @Override
         public void onStart() {
             showWaitDialog("正在修改...");
-        };
+        }
+
+        ;
 
         @Override
         public void onFinish() {
             hideWaitDialog();
-        };
+        }
+
+        ;
     };
 
     @Override
     // @OnClick({ R.id.ll_issue_state_title, R.id.ll_issue_touser,
     // R.id.ll_issue_cooperate_user, R.id.ll_issue_die_time,
     // R.id.ll_issue_state, R.id.ll_issue_child })
-    @OnClick({ R.id.ll_issue_state_title, R.id.ll_issue_state,
-            R.id.ll_issue_child })
+    @OnClick({R.id.ll_issue_state_title, R.id.ll_issue_state,
+            R.id.ll_issue_child})
     public void onClick(View v) {
         // TODO Auto-generated method stub
         switch (v.getId()) {
-        case R.id.ll_issue_state_title:
-        case R.id.ll_issue_state:
-            changeIssueState();
-            break;
-        case R.id.ll_issue_touser:
-            // 暂时屏蔽修改任务指派
-            // Bundle bundle = new Bundle();
-            // bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_TEAM, mTeam);
-            // bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_PROJECT,
-            // mTeamIssue.getProject());
-            // UIHelper.showSimpleBack(getActivity(),
-            // SimpleBackPage.TEAM_PROJECT_MEMBER_SELECT, bundle);
-            break;
-        case R.id.ll_issue_cooperate_user:
+            case R.id.ll_issue_state_title:
+            case R.id.ll_issue_state:
+                changeIssueState();
+                break;
+            case R.id.ll_issue_touser:
+                // 暂时屏蔽修改任务指派
+                // Bundle bundle = new Bundle();
+                // bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_TEAM, mTeam);
+                // bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_PROJECT,
+                // mTeamIssue.getProject());
+                // UIHelper.showSimpleBack(getActivity(),
+                // SimpleBackPage.TEAM_PROJECT_MEMBER_SELECT, bundle);
+                break;
+            case R.id.ll_issue_cooperate_user:
 
-            break;
-        case R.id.ll_issue_die_time:
+                break;
+            case R.id.ll_issue_die_time:
 
-            break;
-        case R.id.ll_issue_child:
-            if (mLLChildIssues.getVisibility() == View.GONE) {
-                mLLChildIssues.setVisibility(View.VISIBLE);
-            } else {
-                mLLChildIssues.setVisibility(View.GONE);
-            }
-            break;
+                break;
+            case R.id.ll_issue_child:
+                if (mLLChildIssues.getVisibility() == View.GONE) {
+                    mLLChildIssues.setVisibility(View.VISIBLE);
+                } else {
+                    mLLChildIssues.setVisibility(View.GONE);
+                }
+                break;
 
-        default:
-            break;
+            default:
+                break;
         }
     }
+
+    private AlertDialog dialog;
 
     private void changeIssueState() {
         if (!mTeamIssue.getAuthority().isUpdateState()) {
             AppContext.showToast("抱歉，无更改权限");
             return;
         }
-        final CommonDialog dialog = DialogHelper
-                .getPinterestDialogCancelable(getActivity());
-        dialog.setTitle("修改任务状态");
-        final CharSequence[] items = getResources().getTextArray(
+
+        final String[] items = getResources().getStringArray(
                 R.array.team_issue_state);
-        final CharSequence[] itemsEn = getResources().getTextArray(
+        final String[] itemsEn = getResources().getStringArray(
                 R.array.team_issue_state_en);
         int index = 0;
         for (int i = 0; i < itemsEn.length; i++) {
@@ -412,23 +418,19 @@ public class TeamIssueDetailFragment extends BaseFragment implements
             }
         }
         final int selIndex = index;
-        dialog.setItems(items, index, new AdapterView.OnItemClickListener() {
-
+        dialog = DialogHelp.getSingleChoiceDialog(getActivity(), "更改任务状态", items, selIndex, new DialogInterface.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                    int position, long id) {
-                if (position == selIndex) {
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (i == selIndex) {
                     dialog.dismiss();
                     return;
                 }
-                mTeamIssue.setState(itemsEn[position].toString());
+                mTeamIssue.setState(itemsEn[i].toString());
                 OSChinaTeamApi.changeIssueState(mTeam.getId(), mTeamIssue,
                         "state", mChangeIssueHandler);
                 dialog.dismiss();
             }
-        });
-        dialog.setPositiveButton(R.string.cancle, null);
-        dialog.show();
+        }).show();
     }
 
     @InjectView(R.id.ll_issue_childs)
@@ -477,7 +479,7 @@ public class TeamIssueDetailFragment extends BaseFragment implements
     }
 
     private void updateChildIssueState(final View cell,
-            final TeamIssue childIssue) {
+                                       final TeamIssue childIssue) {
         switchChildIssueState(childIssue);
         OSChinaTeamApi.updateChildIssue(mTeam.getId(), "state", childIssue,
                 new AsyncHttpResponseHandler() {
@@ -497,7 +499,7 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 
                     @Override
                     public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                            Throwable arg3) {
+                                          Throwable arg3) {
                         AppContext.showToast("更新失败");
                         switchChildIssueState(childIssue);
                     }
@@ -544,7 +546,7 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 
                     @Override
                     public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                            Throwable arg3) {
+                                          Throwable arg3) {
                         // TODO Auto-generated method stub
 
                     }
@@ -594,7 +596,7 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 
                     @Override
                     public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                            Throwable arg3) {
+                                          Throwable arg3) {
                         Result result = XmlUtils.toBean(ResultBean.class, arg2)
                                 .getResult();
                         AppContext.showToast(result.getErrorMessage());
@@ -609,5 +611,6 @@ public class TeamIssueDetailFragment extends BaseFragment implements
     }
 
     @Override
-    public void onClickFlagButton() {}
+    public void onClickFlagButton() {
+    }
 }

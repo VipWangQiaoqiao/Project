@@ -15,8 +15,6 @@
  */
 package net.oschina.app.emoji;
 
-import net.oschina.app.R;
-import net.oschina.app.emoji.SoftKeyboardStateHelper.SoftKeyboardStateListener;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -34,6 +32,9 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
+
+import net.oschina.app.R;
+import net.oschina.app.emoji.SoftKeyboardStateHelper.SoftKeyboardStateListener;
 
 /**
  * 
@@ -170,6 +171,7 @@ public class KJEmojiFragment extends Fragment implements
 
     public void clean() {
         mEt.setText(null);
+        mEt.setTag(null);
     }
 
     public void hideAllKeyBoard() {

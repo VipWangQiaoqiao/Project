@@ -1,5 +1,6 @@
 package net.oschina.app.base;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -15,8 +16,7 @@ import net.oschina.app.R;
 import net.oschina.app.interf.BaseViewInterface;
 import net.oschina.app.ui.dialog.CommonToast;
 import net.oschina.app.ui.dialog.DialogControl;
-import net.oschina.app.ui.dialog.DialogHelper;
-import net.oschina.app.ui.dialog.WaitDialog;
+import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.TDevice;
 
 import org.kymjs.kjframe.utils.StringUtils;
@@ -34,7 +34,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
     public static final String INTENT_ACTION_EXIT_APP = "INTENT_ACTION_EXIT_APP";
 
     private boolean _isVisible;
-    private WaitDialog _waitDialog;
+    private ProgressDialog _waitDialog;
 
     protected LayoutInflater mInflater;
     protected ActionBar mActionBar;
@@ -172,20 +172,20 @@ public abstract class BaseActivity extends ActionBarActivity implements
     }
 
     @Override
-    public WaitDialog showWaitDialog() {
+    public ProgressDialog showWaitDialog() {
         return showWaitDialog(R.string.loading);
     }
 
     @Override
-    public WaitDialog showWaitDialog(int resid) {
+    public ProgressDialog showWaitDialog(int resid) {
         return showWaitDialog(getString(resid));
     }
 
     @Override
-    public WaitDialog showWaitDialog(String message) {
+    public ProgressDialog showWaitDialog(String message) {
         if (_isVisible) {
             if (_waitDialog == null) {
-                _waitDialog = DialogHelper.getWaitDialog(this, message);
+                _waitDialog = DialogHelp.getWaitDialog(this, message);
             }
             if (_waitDialog != null) {
                 _waitDialog.setMessage(message);

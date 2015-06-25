@@ -3,13 +3,13 @@ package net.oschina.app.team.ui;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -33,8 +33,7 @@ import net.oschina.app.team.bean.TeamMember;
 import net.oschina.app.team.bean.TeamMemberList;
 import net.oschina.app.team.bean.TeamProject;
 import net.oschina.app.team.bean.TeamProjectList;
-import net.oschina.app.ui.dialog.CommonDialog;
-import net.oschina.app.ui.dialog.DialogHelper;
+import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.TypefaceUtils;
 import net.oschina.app.util.XmlUtils;
 
@@ -260,9 +259,9 @@ public class TeamNewIssueActivity extends BaseActivity {
         this.mDay = cal.get(Calendar.DATE);
     }
 
-    private CommonDialog projectDialog;
-    private CommonDialog catalogDialog;
-    private CommonDialog toUserDialog;
+    private AlertDialog projectDialog;
+    private AlertDialog catalogDialog;
+    private AlertDialog toUserDialog;
 
     private List<TeamProject> projects;
     private int projectIndex = 0;
@@ -285,13 +284,8 @@ public class TeamNewIssueActivity extends BaseActivity {
             projects.add(0, unProject);
             this.projects = projects;
         }
-        if (projectDialog == null) {
-            projectDialog = DialogHelper
-                    .getPinterestDialogCancelable(this);
-            projectDialog.setTitle("指定项目");
-        }
 
-        final CharSequence[] arrays = new CharSequence[projects.size()];
+        final String[] arrays = new String[projects.size()];
         for (int i = 0; i < projects.size(); i++) {
             arrays[i] = projects.get(i).getGit().getName();
             if (mTeamProject != null) {
@@ -303,37 +297,27 @@ public class TeamNewIssueActivity extends BaseActivity {
                 }
             }
         }
-        projectDialog.setItems(arrays, projectIndex, new AdapterView.OnItemClickListener() {
-
+        projectDialog = DialogHelp.getSingleChoiceDialog(this, "指定项目", arrays, projectIndex, new DialogInterface.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
+            public void onClick(DialogInterface dialogInterface, int i) {
                 // TODO Auto-generated method stub
-                if (position == projectIndex) {
+                if (i == projectIndex) {
                     projectDialog.dismiss();
                     return;
                 }
-                projectIndex = position;
-                mTvProject.setText(arrays[position]);
-                mTeamProject = projects.get(position);
+                projectIndex = i;
+                mTvProject.setText(arrays[i]);
+                mTeamProject = projects.get(i);
                 checkIsShowPush();
                 clearCatalogAndToUser();
                 projectDialog.dismiss();
             }
-        });
-
-        projectDialog.show();
+        }).show();
     }
 
     private void showTeamCatalogSelected(final List<TeamIssueCatalog> list) {
         this.catalogs = list;
-        if (catalogDialog == null) {
-            catalogDialog = DialogHelper
-                    .getPinterestDialogCancelable(this);
-            catalogDialog.setTitle("指定任务列表");
-
-        }
-        final CharSequence[] catalogs = new CharSequence[list.size()];
+        final String[] catalogs = new String[list.size()];
         for (int i = 0; i < list.size(); i++) {
             catalogs[i] = list.get(i).getTitle();
             if (mTeamCatalog != null) {
@@ -342,20 +326,15 @@ public class TeamNewIssueActivity extends BaseActivity {
                 }
             }
         }
-        catalogDialog.setItems(catalogs, catalogIndex,
-                new AdapterView.OnItemClickListener() {
-
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view,
-                                            int position, long id) {
-                        // TODO Auto-generated method stub
-                        catalogIndex = position;
-                        mTeamCatalog = list.get(position);
-                        mTvCatalog.setText(catalogs[position]);
-                        catalogDialog.dismiss();
-                    }
-                });
-        catalogDialog.show();
+        catalogDialog = DialogHelp.getSingleChoiceDialog(this, "指定任务列表", catalogs, catalogIndex, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                catalogIndex = i;
+                mTeamCatalog = list.get(i);
+                mTvCatalog.setText(catalogs[i]);
+                catalogDialog.dismiss();
+            }
+        }).show();
     }
 
     private void showIssueToUser(List<TeamMember> list) {
@@ -364,27 +343,19 @@ public class TeamNewIssueActivity extends BaseActivity {
         member.setName("未指派");
         list.add(0, member);
         this.toUsers = list;
-        if (toUserDialog == null) {
-            toUserDialog = DialogHelper
-                    .getPinterestDialogCancelable(this);
-            toUserDialog.setTitle("指派成员");
-
-        }
-        final CharSequence[] toUsers = new CharSequence[list.size()];
+        final String[] toUsers = new String[list.size()];
         for (int i = 0; i < list.size(); i++) {
             toUsers[i] = list.get(i).getName();
         }
-        toUserDialog.setItems(toUsers, toUserIndex, new AdapterView.OnItemClickListener() {
-
+        toUserDialog = DialogHelp.getSingleChoiceDialog(this, "指派成员", toUsers, toUserIndex, new DialogInterface.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                // TODO Auto-generated method stub
-                toUserIndex = position;
-                mTvToUser.setText(toUsers[position]);
+            public void onClick(DialogInterface dialogInterface, int i) {
+                toUserIndex = i;
+                mTvToUser.setText(toUsers[i]);
                 toUserDialog.dismiss();
             }
-        });
+        }).show();
+
         toUserDialog.show();
     }
 

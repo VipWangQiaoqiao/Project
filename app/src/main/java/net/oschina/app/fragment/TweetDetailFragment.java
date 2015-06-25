@@ -1,5 +1,6 @@
 package net.oschina.app.fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
@@ -35,9 +36,8 @@ import net.oschina.app.bean.TweetDetail;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.emoji.OnSendClickListener;
 import net.oschina.app.ui.DetailActivity;
-import net.oschina.app.ui.dialog.CommonDialog;
-import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.KJAnimations;
 import net.oschina.app.util.PlatfromUtil;
@@ -364,23 +364,17 @@ public class TweetDetailFragment extends
         if (itemsLen == 2) {
             items[1] = getResources().getString(R.string.delete);
         }
-        final CommonDialog dialog = DialogHelper
-                .getPinterestDialogCancelable(getActivity());
-        dialog.setNegativeButton(R.string.cancle, null);
-        dialog.setItemsWithoutChk(items, new OnItemClickListener() {
+        DialogHelp.getSelectDialog(getActivity(), items, new DialogInterface.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                    int position, long id) {
-                dialog.dismiss();
-                if (position == 0) {
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (i == 0) {
                     TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(item
                             .getContent()));
-                } else if (position == 1) {
+                } else if (i == 1) {
                     handleDeleteComment(item);
                 }
             }
-        });
-        dialog.show();
+        }).show();
         return true;
     }
 

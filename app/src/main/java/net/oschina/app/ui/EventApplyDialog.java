@@ -1,18 +1,19 @@
 package net.oschina.app.ui;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
+
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.bean.EventApplyData;
 import net.oschina.app.ui.dialog.CommonDialog;
-import net.oschina.app.ui.dialog.DialogHelper;
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.text.TextUtils;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.EditText;
-import android.widget.TextView;
+import net.oschina.app.util.DialogHelp;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -81,20 +82,12 @@ public class EventApplyDialog extends CommonDialog implements
 				break;
 			}
 		}
-		final CommonDialog dialog = DialogHelper
-				.getPinterestDialogCancelable(getContext());
-		dialog.setTitle("性别");
-		dialog.setItems(genders, idx, new OnItemClickListener() {
-
+		DialogHelp.getSelectDialog(getContext(), genders, new OnClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				dialog.dismiss();
-				mGender.setText(genders[position]);
+			public void onClick(DialogInterface dialogInterface, int i) {
+				mGender.setText(genders[i]);
 			}
-		});
-		dialog.setNegativeButton(R.string.cancle, null);
-		dialog.show();
+		}).show();
 	}
 	
 	public EventApplyData getApplyData() {

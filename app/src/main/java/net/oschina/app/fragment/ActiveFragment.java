@@ -1,7 +1,14 @@
 package net.oschina.app.fragment;
 
-import java.io.InputStream;
-import java.io.Serializable;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -14,23 +21,16 @@ import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.Notice;
 import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.ui.MainActivity;
-import net.oschina.app.ui.dialog.CommonDialog;
-import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.viewpagerfragment.NoticeViewPagerFragment;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
+
+import java.io.InputStream;
+import java.io.Serializable;
 
 /**
  * 动态fragment
@@ -192,19 +192,12 @@ public class ActiveFragment extends BaseListFragment<Active> implements
         if (active == null)
             return false;
         String[] items = new String[] { getResources().getString(R.string.copy) };
-        final CommonDialog dialog = DialogHelper
-                .getPinterestDialogCancelable(getActivity());
-        dialog.setNegativeButton(R.string.cancle, null);
-        dialog.setItemsWithoutChk(items, new OnItemClickListener() {
-
+        DialogHelp.getSelectDialog(getActivity(), items, new DialogInterface.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                    int position, long id) {
-                dialog.dismiss();
+            public void onClick(DialogInterface dialogInterface, int i) {
                 TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(active.getMessage()));
             }
-        });
-        dialog.show();
+        }).show();
         return true;
     }
 

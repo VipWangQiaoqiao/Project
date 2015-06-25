@@ -2,16 +2,16 @@ package net.oschina.app.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.Report;
 import net.oschina.app.ui.dialog.CommonDialog;
-import net.oschina.app.ui.dialog.DialogHelper;
+import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.TDevice;
 
 public class ReportDialog extends CommonDialog implements
@@ -70,6 +70,8 @@ public class ReportDialog extends CommonDialog implements
         }
     }
 
+    AlertDialog reson = null;
+
     private void selectReason() {
         String reason = mTvReason.getText().toString();
         int idx = 0;
@@ -79,20 +81,12 @@ public class ReportDialog extends CommonDialog implements
                 break;
             }
         }
-        final CommonDialog dialog = DialogHelper
-                .getPinterestDialogCancelable(getContext());
-        dialog.setTitle(R.string.report_reson);
-        dialog.setItems(reasons, idx, new OnItemClickListener() {
-
+        reson = DialogHelp.getSingleChoiceDialog(getContext(), "举报原因", reasons, idx, new OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                dialog.dismiss();
-                mTvReason.setText(reasons[position]);
+            public void onClick(DialogInterface dialogInterface, int i) {
+                mTvReason.setText(reasons[i]);
             }
-        });
-        dialog.setNegativeButton(R.string.cancle, null);
-        dialog.show();
+        }).show();
     }
 
     public Report getReport() {

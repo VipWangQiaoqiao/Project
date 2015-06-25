@@ -1,10 +1,30 @@
 package net.oschina.app.team.ui;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
+import android.provider.MediaStore;
+import android.provider.MediaStore.Images;
+import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -20,8 +40,7 @@ import net.oschina.app.emoji.OnEmojiClickListener;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamMember;
 import net.oschina.app.team.bean.TeamMemberList;
-import net.oschina.app.ui.dialog.CommonDialog;
-import net.oschina.app.ui.dialog.DialogHelper;
+import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.FileUtil;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.StringUtils;
@@ -29,35 +48,15 @@ import net.oschina.app.util.XmlUtils;
 
 import org.apache.http.Header;
 
-import android.app.Activity;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
-import android.provider.MediaStore;
-import android.provider.MediaStore.Images;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-
-import com.loopj.android.http.AsyncHttpResponseHandler;
 
 /**
  * 团队新动态 TeamNewActiveFragment.java
@@ -167,20 +166,12 @@ public class TeamNewActiveActivity extends BaseActivity {
     private void handleClearWords() {
         if (TextUtils.isEmpty(mEtInput.getText().toString()))
             return;
-        final CommonDialog dialog = DialogHelper
-                .getPinterestDialogCancelable(this);
-        dialog.setMessage(R.string.clearwords);
-        dialog.setPositiveButton(R.string.ok,
-                new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        mEtInput.getText().clear();
-                    }
-                });
-        dialog.setNegativeButton(R.string.cancle, null);
-        dialog.show();
+        DialogHelp.getConfirmDialog(this, "是否清空内容?", new OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                mEtInput.getText().clear();
+            }
+        }).show();
     }
 
     private void insertTrendSoftware() {
@@ -351,43 +342,21 @@ public class TeamNewActiveActivity extends BaseActivity {
     }
 
     private void showConfirmExit() {
-        CommonDialog dialog = DialogHelper.getPinterestDialogCancelable(this);
-        dialog.setMessage("是否取消发送动态?");
-        dialog.setNegativeButton(R.string.cancle, new OnClickListener() {
-
+        DialogHelp.getConfirmDialog(this, "是否放弃这次操作?", new OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        dialog.setPositiveButton(R.string.ok, new OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+            public void onClick(DialogInterface dialogInterface, int i) {
                 finish();
             }
-        });
-        dialog.show();
+        }).show();
     }
 
     private void handleSelectPicture() {
-        final CommonDialog dialog = DialogHelper
-                .getPinterestDialogCancelable(this);
-        dialog.setTitle(R.string.choose_picture);
-        dialog.setNegativeButton(R.string.cancle, null);
-        dialog.setItemsWithoutChk(
-                getResources().getStringArray(R.array.choose_picture),
-                new OnItemClickListener() {
-
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view,
-                            int position, long id) {
-                        dialog.dismiss();
-                        goToSelectPicture(position);
-                    }
-                });
-        dialog.show();
+        DialogHelp.getSelectDialog(this, getResources().getStringArray(R.array.choose_picture), new OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                goToSelectPicture(i);
+            }
+        }).show();
     }
 
     public static final int ACTION_TYPE_ALBUM = 0;
@@ -543,7 +512,7 @@ public class TeamNewActiveActivity extends BaseActivity {
 
     private List<TeamMember> mTeamMemberList;
 
-    private CommonDialog metionUserDialog;
+    private AlertDialog metionUserDialog;
 
     private void tryToShowMetionUser() {
         if (mTeamMemberList == null || mTeamMemberList.isEmpty()) {
@@ -593,30 +562,29 @@ public class TeamNewActiveActivity extends BaseActivity {
     }
 
     private void showMetionUser() {
+
         if (mTeamMemberList == null || mTeamMemberList.isEmpty())
             return;
         if (metionUserDialog == null) {
-            metionUserDialog = DialogHelper.getPinterestDialogCancelable(this);
-            metionUserDialog.setTitle("艾特团队成员");
 
-            final CharSequence[] toUsers = new CharSequence[mTeamMemberList
+
+            final String[] toUsers = new String[mTeamMemberList
                     .size() + 1];
             toUsers[0] = "全体成员(all)";
             for (int i = 1; i < toUsers.length; i++) {
                 toUsers[i] = mTeamMemberList.get(i - 1).getName();
             }
-            metionUserDialog.setItems(toUsers, -1, new OnItemClickListener() {
-
+            metionUserDialog = DialogHelp.getSingleChoiceDialog(this, "艾特团队成员", toUsers, -1, new OnClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> parent, View view,
-                        int position, long id) {
+                public void onClick(DialogInterface dialogInterface, int i) {
                     // TODO Auto-generated method st
                     mEtInput.getText().insert(mEtInput.getSelectionStart(),
-                            "@" + toUsers[position] + " ");
+                            "@" + toUsers[i] + " ");
                     mEtInput.setSelection(mEtInput.length());
                     metionUserDialog.dismiss();
+
                 }
-            });
+            }).show();
         }
 
         metionUserDialog.show();

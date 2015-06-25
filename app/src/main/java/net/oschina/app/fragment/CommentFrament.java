@@ -1,6 +1,7 @@
 package net.oschina.app.fragment;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -10,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -30,8 +30,7 @@ import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.emoji.OnSendClickListener;
 import net.oschina.app.ui.DetailActivity;
-import net.oschina.app.ui.dialog.CommonDialog;
-import net.oschina.app.ui.dialog.DialogHelper;
+import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -256,24 +255,17 @@ public class CommentFrament extends BaseListFragment<Comment> implements
         if (itemsLen == 2) {
             items[1] = getResources().getString(R.string.delete);
         }
-        final CommonDialog dialog = DialogHelper
-                .getPinterestDialogCancelable(getActivity());
-        dialog.setNegativeButton(R.string.cancle, null);
-        dialog.setItemsWithoutChk(items, new OnItemClickListener() {
-
+        DialogHelp.getSelectDialog(getActivity(), items, new DialogInterface.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                    int position, long id) {
-                dialog.dismiss();
-                if (position == 0) {
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (i == 0) {
                     TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(item
                             .getContent()));
-                } else if (position == 1) {
+                } else if (i == 1) {
                     handleDeleteComment(item);
                 }
             }
-        });
-        dialog.show();
+        }).show();
         return true;
     }
 

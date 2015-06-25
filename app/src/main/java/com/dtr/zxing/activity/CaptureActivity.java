@@ -50,7 +50,7 @@ import net.oschina.app.base.BaseActivity;
 import net.oschina.app.bean.BarCode;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.SingInResult;
-import net.oschina.app.ui.dialog.CommonDialog;
+import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
@@ -259,26 +259,18 @@ public final class CaptureActivity extends BaseActivity implements
             finish();
             return;
         }
-        CommonDialog dialog = new CommonDialog(CaptureActivity.this);
-        dialog.setMessage("可能存在风险，是否打开链接?<br/>" + url);
-        dialog.setNegativeButton("打开", new DialogInterface.OnClickListener() {
-
+        DialogHelp.getConfirmDialog(this, "可能存在风险，是否打开链接?</br>" + url, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(DialogInterface dialogInterface, int i) {
                 UIHelper.showUrlRedirect(CaptureActivity.this, url);
-                dialog.dismiss();
                 finish();
             }
-        });
-        dialog.setPositiveButton("取消", new DialogInterface.OnClickListener() {
-
+        }, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+            public void onClick(DialogInterface dialogInterface, int i) {
                 finish();
             }
-        });
-        dialog.show();
+        }).show();
     }
 
     private void showConfirmLogin(final String url) {
@@ -286,26 +278,18 @@ public final class CaptureActivity extends BaseActivity implements
             showLogin();
             return;
         }
-        CommonDialog dialog = new CommonDialog(CaptureActivity.this);
-        dialog.setMessage("扫描成功，是否进行网页登陆");
-        dialog.setNegativeButton("登陆", new DialogInterface.OnClickListener() {
-
+        DialogHelp.getConfirmDialog(this, "扫描成功，是否进行网页登陆", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(DialogInterface dialogInterface, int i) {
                 handleScanLogin(url);
-                dialog.dismiss();
                 finish();
             }
-        });
-        dialog.setPositiveButton("取消", new DialogInterface.OnClickListener() {
-
+        }, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+            public void onClick(DialogInterface dialogInterface, int i) {
                 finish();
             }
-        });
-        dialog.show();
+        }).show();
     }
 
     private void handleScanLogin(final String url) {
@@ -384,9 +368,9 @@ public final class CaptureActivity extends BaseActivity implements
                 try {
                     SingInResult res = SingInResult.parse(new String(arg2));
                     if (res.isOk()) {
-                        getMesDialog(res.getMessage()).show();
+                        DialogHelp.getMessageDialog(CaptureActivity.this, res.getMessage()).show();
                     } else {
-                        getMesDialog(res.getErrorMes()).show();
+                        DialogHelp.getMessageDialog(CaptureActivity.this, res.getErrorMes()).show();
                     }
                 } catch (AppException e) {
                     e.printStackTrace();
@@ -398,7 +382,7 @@ public final class CaptureActivity extends BaseActivity implements
             public void onFailure(int arg0, Header[] arg1, byte[] arg2,
                                   Throwable arg3) {
                 hideWaitDialog();
-                getMesDialog(arg3.getMessage()).show();
+                DialogHelp.getMessageDialog(CaptureActivity.this, arg3.getMessage()).show();
             }
 
             @Override
@@ -410,56 +394,30 @@ public final class CaptureActivity extends BaseActivity implements
         OSChinaApi.singnIn(barCode.getUrl(), handler);
     }
 
-    private CommonDialog getMesDialog(String mes) {
-        CommonDialog dialog = new CommonDialog(CaptureActivity.this);
-        dialog.setMessage(mes);
-        dialog.setPositiveButton("我知道了", null);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                finish();
-            }
-        });
-        return dialog;
-    }
-
     private void showLogin() {
-        CommonDialog dialog = new CommonDialog(CaptureActivity.this);
-        dialog.setMessage("请先登录，再进行");
-        dialog.setPositiveButton("好的", new DialogInterface.OnClickListener() {
-
+        DialogHelp.getConfirmDialog(this, "请先登录，再进行", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(DialogInterface dialogInterface, int i) {
                 UIHelper.showLoginActivity(CaptureActivity.this);
-                dialog.dismiss();
             }
-        });
-        dialog.show();
+        }).show();
     }
 
     private void showCopyTextOption(final String text) {
-        CommonDialog dialog = new CommonDialog(CaptureActivity.this);
-        dialog.setMessage(text);
-        dialog.setNegativeButton("复制", new DialogInterface.OnClickListener() {
-
+        DialogHelp.getConfirmDialog(this, text, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(DialogInterface dialogInterface, int i) {
                 ClipboardManager cbm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 cbm.setText(text);
                 AppContext.showToast("复制成功");
-                dialog.dismiss();
                 finish();
             }
-        });
-        dialog.setPositiveButton("取消", new DialogInterface.OnClickListener() {
-
+        }, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(DialogInterface dialogInterface, int i) {
                 finish();
             }
-        });
-        dialog.show();
+        }).show();
     }
 
     private void initCamera(SurfaceHolder surfaceHolder) {
@@ -485,8 +443,6 @@ public final class CaptureActivity extends BaseActivity implements
             Log.w(TAG, ioe);
             displayFrameworkBugMessageAndExit();
         } catch (RuntimeException e) {
-            // Barcode Scanner has seen crashes in the wild of this variety:
-            // java.?lang.?RuntimeException: Fail to connect to camera service
             Log.w(TAG, "Unexpected error initializing camera", e);
             displayFrameworkBugMessageAndExit();
         }

@@ -1,8 +1,14 @@
 package net.oschina.app.fragment;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.Serializable;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -18,24 +24,17 @@ import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.ui.MainActivity;
-import net.oschina.app.ui.dialog.CommonDialog;
-import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.viewpagerfragment.NoticeViewPagerFragment;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.Serializable;
 
 public class MessageFragment extends BaseListFragment<Messages> implements
         OnItemLongClickListener {
@@ -169,54 +168,38 @@ public class MessageFragment extends BaseListFragment<Messages> implements
     public boolean onItemLongClick(AdapterView<?> parent, View view,
             int position, long id) {
         final Messages message = (Messages) mAdapter.getItem(position);
-        final CommonDialog dialog = DialogHelper
-                .getPinterestDialogCancelable(getActivity());
-        dialog.setItemsWithoutChk(
-                getResources().getStringArray(R.array.message_list_options),
-                new OnItemClickListener() {
-
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view,
-                            int position, long id) {
-                        dialog.dismiss();
-                        switch (position) {
-                        case 0:
-                            TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(message
-                                    .getContent()));
-                            break;
-                        case 1:
-                            handleDeleteMessage(message);
-                            break;
-                        default:
-                            break;
-                        }
-                    }
-                });
-        dialog.setNegativeButton(R.string.cancle, null);
-        dialog.show();
+        DialogHelp.getSelectDialog(getActivity(), getResources().getStringArray(R.array.message_list_options), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                switch (i) {
+                    case 0:
+                        TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(message
+                                .getContent()));
+                        break;
+                    case 1:
+                        handleDeleteMessage(message);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }).show();
         return true;
     }
 
     private void handleDeleteMessage(final Messages message) {
-        CommonDialog dialog = DialogHelper
-                .getPinterestDialogCancelable(getActivity());
-        dialog.setMessage(getString(R.string.confirm_delete_message,
-                message.getFriendName()));
-        dialog.setNegativeButton(R.string.cancle, null);
-        dialog.setPositiveButton(R.string.ok,
-                new DialogInterface.OnClickListener() {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        showWaitDialog(R.string.progress_submit);
+        DialogHelp.getConfirmDialog(getActivity(), getString(R.string.confirm_delete_message,
+                message.getFriendName()), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                showWaitDialog(R.string.progress_submit);
 
-                        OSChinaApi.deleteMessage(AppContext.getInstance()
+                OSChinaApi.deleteMessage(AppContext.getInstance()
                                 .getLoginUid(), message.getFriendId(),
-                                new DeleteMessageOperationHandler(message));
-                    }
-                });
-        dialog.show();
+                        new DeleteMessageOperationHandler(message));
+            }
+        }).show();
     }
 
     class DeleteMessageOperationHandler extends OperationResponseHandler {

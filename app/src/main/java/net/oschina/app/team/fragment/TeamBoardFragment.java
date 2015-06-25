@@ -1,7 +1,12 @@
 package net.oschina.app.team.fragment;
 
-import java.io.ByteArrayInputStream;
-import java.util.Calendar;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -19,16 +24,12 @@ import net.oschina.app.widget.AvatarView;
 import org.apache.http.Header;
 import org.kymjs.kjframe.utils.SystemTool;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import java.io.ByteArrayInputStream;
+import java.util.Calendar;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-
-import com.loopj.android.http.AsyncHttpResponseHandler;
 
 /**
  * Team面板界面
@@ -263,7 +264,6 @@ public class TeamBoardFragment extends BaseFragment {
     }
 
     public void refresh() {
-        showWaitDialog().hideMessage();
         requestData();
     }
 

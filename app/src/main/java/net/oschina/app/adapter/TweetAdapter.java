@@ -25,8 +25,7 @@ import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.ui.ImagePreviewActivity;
-import net.oschina.app.ui.dialog.CommonDialog;
-import net.oschina.app.ui.dialog.DialogHelper;
+import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.KJAnimations;
 import net.oschina.app.util.PlatfromUtil;
@@ -220,15 +219,9 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
     private void optionDel(Context context, final Tweet tweet,
                            final int position) {
 
-        CommonDialog dialog = DialogHelper
-                .getPinterestDialogCancelable(context);
-        dialog.setTitle("提示");
-        dialog.setMessage("确定删除吗？");
-        dialog.setNegativeButton("确定", new DialogInterface.OnClickListener() {
-
+        DialogHelp.getConfirmDialog(context, "确定删除吗?", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+            public void onClick(DialogInterface dialogInterface, int i) {
                 OSChinaApi.deleteTweet(tweet.getAuthorid(), tweet.getId(),
                         new AsyncHttpResponseHandler() {
                             @Override
@@ -244,10 +237,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
                             }
                         });
             }
-        });
-        dialog.setPositiveButton("取消", null);
-
-        dialog.show();
+        }).show();
     }
 
     /**

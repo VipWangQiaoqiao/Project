@@ -1,6 +1,7 @@
 package net.oschina.app.fragment;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -12,8 +13,6 @@ import android.provider.MediaStore.Images;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,9 +26,8 @@ import net.oschina.app.bean.MyInformation;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.User;
-import net.oschina.app.ui.dialog.CommonDialog;
-import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.FileUtil;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.StringUtils;
@@ -153,50 +151,26 @@ public class MyInformationFragmentDetail extends BaseFragment {
             AppContext.showToast("");
             return;
         }
-        final CommonDialog dialog = DialogHelper
-                .getPinterestDialogCancelable(getActivity());
-        dialog.setTitle("选择操作");
-        dialog.setNegativeButton(R.string.cancle, null);
-        dialog.setItemsWithoutChk(
-                getResources().getStringArray(R.array.avatar_option),
-                new OnItemClickListener() {
-
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view,
-                                            int position, long id) {
-                        if (position == 0) {
-                            handleSelectPicture();
-                        } else {
-                            if (mUser == null) {
-                                dialog.dismiss();
-                                return;
-                            }
-                            UIHelper.showUserAvatar(getActivity(),
-                                    mUser.getPortrait());
-                        }
-                        dialog.dismiss();
-                    }
-                });
-        dialog.show();
+        DialogHelp.getSelectDialog(getActivity(), "选择操作", getResources().getStringArray(R.array.avatar_option), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (i == 0) {
+                    handleSelectPicture();
+                } else {
+                    UIHelper.showUserAvatar(getActivity(),
+                            mUser.getPortrait());
+                }
+            }
+        }).show();
     }
 
     private void handleSelectPicture() {
-        final CommonDialog dialog = DialogHelper
-                .getPinterestDialogCancelable(getActivity());
-        dialog.setTitle(R.string.choose_picture);
-        dialog.setNegativeButton(R.string.cancle, null);
-        dialog.setItemsWithoutChk(
-                getResources().getStringArray(R.array.choose_picture),
-                new OnItemClickListener() {
-
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view,
-                                            int position, long id) {
-                        dialog.dismiss();
-                        goToSelectPicture(position);
-                    }
-                });
-        dialog.show();
+        DialogHelp.getSelectDialog(getActivity(), "选择图片", getResources().getStringArray(R.array.choose_picture), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                goToSelectPicture(i);
+            }
+        }).show();
     }
 
     private void goToSelectPicture(int position) {

@@ -1,8 +1,14 @@
 package net.oschina.app.team.fragment;
 
-import java.io.InputStream;
-import java.io.Serializable;
-import java.util.List;
+import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -17,26 +23,20 @@ import net.oschina.app.team.bean.TeamIssueCatalog;
 import net.oschina.app.team.bean.TeamIssueList;
 import net.oschina.app.team.bean.TeamProject;
 import net.oschina.app.team.ui.TeamMainActivity;
-import net.oschina.app.ui.dialog.CommonDialog;
-import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
+
+import java.io.InputStream;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * 任务列表界面
- * 
+ *
  * @author fireant(http://my.oschina.net/u/253900)
- * 
  */
 public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
 
@@ -111,48 +111,46 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
     public boolean onOptionsItemSelected(MenuItem item) {
         // TODO Auto-generated method stub
         switch (item.getItemId()) {
-        case R.id.team_new_issue:
-            UIHelper.showCreateNewIssue(getActivity(), mTeam, mProject,
-                    mCatalog);
-            break;
-        case R.id.team_issue_change_state:
-            changeShowIssueState();
-            break;
-        default:
-            break;
+            case R.id.team_new_issue:
+                UIHelper.showCreateNewIssue(getActivity(), mTeam, mProject,
+                        mCatalog);
+                break;
+            case R.id.team_issue_change_state:
+                changeShowIssueState();
+                break;
+            default:
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    AlertDialog dialog = null;
+
     private void changeShowIssueState() {
-        final CommonDialog dialog = DialogHelper
-                .getPinterestDialogCancelable(getActivity());
-        CharSequence[] items = { "所有任务", "待办中", "进行中", "已完成", "已验收" };
-        final CharSequence[] itemsEn = { "all",
+        String[] items = {"所有任务", "待办中", "进行中", "已完成", "已验收"};
+        final CharSequence[] itemsEn = {"all",
                 TeamIssue.TEAM_ISSUE_STATE_OPENED,
                 TeamIssue.TEAM_ISSUE_STATE_UNDERWAY,
                 TeamIssue.TEAM_ISSUE_STATE_CLOSED,
-                TeamIssue.TEAM_ISSUE_STATE_ACCEPTED };
-        dialog.setTitle("选择任务状态");
+                TeamIssue.TEAM_ISSUE_STATE_ACCEPTED};
+
+
         int index = 0;
         for (int i = 0; i < itemsEn.length; i++) {
             if (issueState.equals(itemsEn[i])) {
                 index = i;
             }
         }
-        dialog.setItems(items, index, new OnItemClickListener() {
 
+        dialog = DialogHelp.getSingleChoiceDialog(getActivity(), "选择任务状态", items, index, new DialogInterface.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                    int position, long id) {
-                // TODO Auto-generated method stub
-                issueState = (itemsEn[position]).toString();
+            public void onClick(DialogInterface dialogInterface, int i) {
+                issueState = (itemsEn[i]).toString();
 
                 onRefresh();
                 dialog.dismiss();
             }
-        });
-        dialog.show();
+        }).show();
     }
 
     @Override
@@ -214,7 +212,7 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
+                            long id) {
         TeamIssue issue = mAdapter.getItem(position);
         if (issue != null) {
             UIHelper.showTeamIssueDetail(getActivity(), mTeam, issue, mCatalog);

@@ -1,40 +1,7 @@
 package net.oschina.app.fragment;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import net.oschina.app.AppContext;
-import net.oschina.app.R;
-import net.oschina.app.base.BaseFragment;
-import net.oschina.app.bean.Tweet;
-import net.oschina.app.emoji.EmojiKeyboardFragment;
-import net.oschina.app.emoji.Emojicon;
-import net.oschina.app.emoji.InputHelper;
-import net.oschina.app.emoji.OnEmojiClickListener;
-import net.oschina.app.service.ServerTaskUtils;
-import net.oschina.app.ui.dialog.CommonDialog;
-import net.oschina.app.ui.dialog.DialogHelper;
-import net.oschina.app.util.FileUtil;
-import net.oschina.app.util.ImageUtils;
-import net.oschina.app.util.SimpleTextWatcher;
-import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.TDevice;
-import net.oschina.app.util.UIHelper;
-
-import org.kymjs.kjframe.KJBitmap;
-import org.kymjs.kjframe.bitmap.BitmapCallBack;
-import org.kymjs.kjframe.bitmap.BitmapCreate;
-import org.kymjs.kjframe.bitmap.DiskImageRequest;
-import org.kymjs.kjframe.http.KJAsyncTask;
-import org.kymjs.kjframe.utils.FileUtils;
-
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -55,12 +22,42 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import net.oschina.app.AppContext;
+import net.oschina.app.R;
+import net.oschina.app.base.BaseFragment;
+import net.oschina.app.bean.Tweet;
+import net.oschina.app.emoji.EmojiKeyboardFragment;
+import net.oschina.app.emoji.Emojicon;
+import net.oschina.app.emoji.InputHelper;
+import net.oschina.app.emoji.OnEmojiClickListener;
+import net.oschina.app.service.ServerTaskUtils;
+import net.oschina.app.util.DialogHelp;
+import net.oschina.app.util.FileUtil;
+import net.oschina.app.util.ImageUtils;
+import net.oschina.app.util.SimpleTextWatcher;
+import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TDevice;
+import net.oschina.app.util.UIHelper;
+
+import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.bitmap.BitmapCallBack;
+import org.kymjs.kjframe.bitmap.BitmapCreate;
+import org.kymjs.kjframe.bitmap.DiskImageRequest;
+import org.kymjs.kjframe.http.KJAsyncTask;
+import org.kymjs.kjframe.utils.FileUtils;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -363,18 +360,7 @@ public class TweetPubFragment extends BaseFragment implements
     public boolean onBackPressed() {
         final String tweet = mEtInput.getText().toString();
         if (!TextUtils.isEmpty(tweet)) {
-            CommonDialog dialog = DialogHelper
-                    .getPinterestDialogCancelable(getActivity());
-            dialog.setMessage(R.string.draft_tweet_message);
-            dialog.setNegativeButton(R.string.cancle, new OnClickListener() {
-
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    AppContext.setTweetDraft("");
-                    getActivity().finish();
-                }
-            });
-            dialog.setPositiveButton(R.string.ok, new OnClickListener() {
+            DialogHelp.getConfirmDialog(getActivity(), "是否保存为草稿?", new DialogInterface.OnClickListener() {
 
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -382,8 +368,14 @@ public class TweetPubFragment extends BaseFragment implements
                     AppContext.setTweetDraft(tweet);
                     getActivity().finish();
                 }
-            });
-            dialog.show();
+            }, new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    AppContext.setTweetDraft("");
+                    getActivity().finish();
+                }
+            }).show();
             return true;
         }
         return super.onBackPressed();
@@ -510,23 +502,15 @@ public class TweetPubFragment extends BaseFragment implements
     private void handleClearWords() {
         if (TextUtils.isEmpty(mEtInput.getText().toString()))
             return;
-        final CommonDialog dialog = DialogHelper
-                .getPinterestDialogCancelable(getActivity());
-        dialog.setMessage(R.string.clearwords);
-        dialog.setPositiveButton(R.string.ok,
-                new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        mEtInput.getText().clear();
-                        if (mIsKeyboardVisible) {
-                            TDevice.showSoftKeyboard(mEtInput);
-                        }
-                    }
-                });
-        dialog.setNegativeButton(R.string.cancle, null);
-        dialog.show();
+        DialogHelp.getConfirmDialog(getActivity(), "是否清空内容?", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                mEtInput.getText().clear();
+                if (mIsKeyboardVisible) {
+                    TDevice.showSoftKeyboard(mEtInput);
+                }
+            }
+        }).show();
     }
 
     @Override
@@ -537,22 +521,12 @@ public class TweetPubFragment extends BaseFragment implements
     }
 
     private void handleSelectPicture() {
-        final CommonDialog dialog = DialogHelper
-                .getPinterestDialogCancelable(getActivity());
-        dialog.setTitle(R.string.choose_picture);
-        dialog.setNegativeButton(R.string.cancle, null);
-        dialog.setItemsWithoutChk(
-                getResources().getStringArray(R.array.choose_picture),
-                new OnItemClickListener() {
-
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view,
-                            int position, long id) {
-                        dialog.dismiss();
-                        goToSelectPicture(position);
-                    }
-                });
-        dialog.show();
+        DialogHelp.getSelectDialog(getActivity(), getResources().getStringArray(R.array.choose_picture), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                goToSelectPicture(i);
+            }
+        }).show();
     }
 
     private void goToSelectPicture(int position) {

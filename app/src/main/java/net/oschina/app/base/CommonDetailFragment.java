@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -14,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.AdapterView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -30,9 +30,8 @@ import net.oschina.app.emoji.OnSendClickListener;
 import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.ReportDialog;
 import net.oschina.app.ui.ShareDialog;
-import net.oschina.app.ui.dialog.CommonDialog;
-import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.FontSizeUtils;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
@@ -285,25 +284,21 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
         return super.onOptionsItemSelected(item);
     }
 
-    private void showChangeFontSize() {
-        final CommonDialog dialog = DialogHelper
-                .getPinterestDialogCancelable(getActivity());
-        dialog.setTitle("正文字号");
-        final CharSequence[] items = getResources().getTextArray(
-                R.array.font_size);
-        dialog.setItems(items, FontSizeUtils.getSaveFontSizeIndex(), new AdapterView.OnItemClickListener() {
+    AlertDialog fontSizeChange;
 
+    private void showChangeFontSize() {
+
+        final String[] items = getResources().getStringArray(
+                R.array.font_size);
+        fontSizeChange = DialogHelp.getSingleChoiceDialog(getActivity(), items, FontSizeUtils.getSaveFontSizeIndex(), new DialogInterface.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
+            public void onClick(DialogInterface dialogInterface, int i) {
                 // 更改字体大小
-                FontSizeUtils.saveFontSize(position);
-                mWebView.loadUrl(FontSizeUtils.getFontSize(position));
-                dialog.dismiss();
+                FontSizeUtils.saveFontSize(i);
+                mWebView.loadUrl(FontSizeUtils.getFontSize(i));
+                fontSizeChange.dismiss();
             }
-        });
-        dialog.setPositiveButton(R.string.cancle, null);
-        dialog.show();
+        }).show();
     }
 
     // 收藏或者取消收藏

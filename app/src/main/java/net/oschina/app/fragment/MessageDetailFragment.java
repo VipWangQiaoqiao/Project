@@ -10,7 +10,6 @@ import android.text.Editable;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -30,9 +29,8 @@ import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.emoji.KJEmojiFragment;
 import net.oschina.app.emoji.OnSendClickListener;
-import net.oschina.app.ui.dialog.CommonDialog;
-import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -236,31 +234,22 @@ public class MessageDetailFragment extends BaseListFragment<Comment> implements
     public boolean onItemLongClick(AdapterView<?> parent, View view,
             int position, long id) {
         final Comment message = mAdapter.getItem(position);
-        final CommonDialog dialog = DialogHelper
-                .getPinterestDialogCancelable(getActivity());
-        dialog.setItemsWithoutChk(
-                getResources().getStringArray(R.array.message_list_options),
-                new OnItemClickListener() {
-
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view,
-                            int position, long id) {
-                        dialog.dismiss();
-                        switch (position) {
-                        case 0:
-                            TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(message
-                                    .getContent()));
-                            break;
-                        case 1:
-                            handleDeleteMessage(message);
-                            break;
-                        default:
-                            break;
-                        }
-                    }
-                });
-        dialog.setNegativeButton(R.string.cancle, null);
-        dialog.show();
+        DialogHelp.getSelectDialog(getActivity(), getResources().getStringArray(R.array.message_list_options), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                switch (i) {
+                    case 0:
+                        TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(message
+                                .getContent()));
+                        break;
+                    case 1:
+                        handleDeleteMessage(message);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }).show();
         return true;
     }
 
@@ -271,25 +260,16 @@ public class MessageDetailFragment extends BaseListFragment<Comment> implements
     }
 
     private void handleDeleteMessage(final Comment message) {
-        CommonDialog dialog = DialogHelper
-                .getPinterestDialogCancelable(getActivity());
-        dialog.setMessage(getString(R.string.confirm_delete_one_message,
-                message.getAuthor()));
-        dialog.setNegativeButton(R.string.cancle, null);
-        dialog.setPositiveButton(R.string.ok,
-                new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        showWaitDialog(R.string.progress_submit);
-                        OSChinaApi.deleteComment(mFid,
-                                CommentList.CATALOG_MESSAGE, message.getId(),
-                                message.getAuthorId(),
-                                new DeleteMessageOperationHandler(message));
-                    }
-                });
-        dialog.show();
+        DialogHelp.getConfirmDialog(getActivity(), "是否删除该留言?", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                showWaitDialog(R.string.progress_submit);
+                OSChinaApi.deleteComment(mFid,
+                        CommentList.CATALOG_MESSAGE, message.getId(),
+                        message.getAuthorId(),
+                        new DeleteMessageOperationHandler(message));
+            }
+        }).show();
     }
 
     class DeleteMessageOperationHandler extends OperationResponseHandler {

@@ -3,6 +3,7 @@ package net.oschina.app.fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,9 +28,8 @@ import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.User;
 import net.oschina.app.bean.UserInformation;
-import net.oschina.app.ui.dialog.CommonDialog;
-import net.oschina.app.ui.dialog.DialogHelper;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -293,12 +293,11 @@ public class UserCenterFragment extends BaseFragment implements
         mBtnFollowUser.setPadding(padding, 0, padding, 0);
     }
 
-    private CommonDialog mInformationDialog;
+    private AlertDialog mInformationDialog;
 
     private void showInformationDialog() {
         if (mInformationDialog == null) {
-            mInformationDialog = DialogHelper
-                    .getPinterestDialogCancelable(getActivity());
+            mInformationDialog = DialogHelp.getDialog(getActivity()).show();
             View view = LayoutInflater.from(getActivity()).inflate(
                     R.layout.fragment_user_center_information, null);
             ((TextView) view.findViewById(R.id.tv_join_time))
@@ -309,8 +308,9 @@ public class UserCenterFragment extends BaseFragment implements
                     .setText(StringUtils.getString(mUser.getDevplatform()));
             ((TextView) view.findViewById(R.id.tv_academic_focus))
                     .setText(StringUtils.getString(mUser.getExpertise()));
-            mInformationDialog.setContent(view);
+            mInformationDialog.setContentView(view);
         }
+
         mInformationDialog.show();
     }
 
@@ -344,25 +344,13 @@ public class UserCenterFragment extends BaseFragment implements
             break;
         }
         final int ra = relationAction;
-        CommonDialog dialog = DialogHelper
-                .getPinterestDialogCancelable(getActivity());
-        dialog.setMessage(dialogTitle);
-        dialog.setPositiveButton(R.string.ok,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        sendUpdateRelcationRequest(ra);
-                        dialog.dismiss();
-                    }
-                });
-        dialog.setNegativeButton(R.string.cancle,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        dialog.show();
+
+        DialogHelp.getConfirmDialog(getActivity(), dialogTitle, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                sendUpdateRelcationRequest(ra);
+            }
+        }).show();
     }
 
     private void sendUpdateRelcationRequest(int ra) {

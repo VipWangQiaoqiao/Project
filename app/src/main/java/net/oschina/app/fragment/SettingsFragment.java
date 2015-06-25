@@ -13,8 +13,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.AppManager;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
-import net.oschina.app.ui.dialog.CommonDialog;
-import net.oschina.app.ui.dialog.DialogHelper;
+import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.FileUtil;
 import net.oschina.app.util.MethodsCompat;
 import net.oschina.app.util.UIHelper;
@@ -156,21 +155,13 @@ public class SettingsFragment extends BaseFragment {
     }
 
     private void onClickCleanCache() {
-        CommonDialog dialog = DialogHelper
-                .getPinterestDialogCancelable(getActivity());
-        dialog.setMessage(R.string.clean_cache_mes);
-        dialog.setPositiveButton(R.string.ok,
-                new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        UIHelper.clearAppCache(getActivity());
-                        mTvCacheSize.setText("0KB");
-                        dialog.dismiss();
-                    }
-                });
-        dialog.setNegativeButton(R.string.cancle, null);
-        dialog.show();
+        DialogHelp.getConfirmDialog(getActivity(), "是否清空缓存?", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                UIHelper.clearAppCache(getActivity());
+                mTvCacheSize.setText("0KB");
+            }
+        }).show();
     }
 
     private void onClickExit() {

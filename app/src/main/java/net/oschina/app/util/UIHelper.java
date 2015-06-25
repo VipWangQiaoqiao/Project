@@ -33,8 +33,6 @@ import com.dtr.zxing.activity.CaptureActivity;
 
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
-import net.oschina.app.AppManager;
-import net.oschina.app.R;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.Active;
 import net.oschina.app.bean.Comment;
@@ -72,7 +70,6 @@ import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.ui.LoginActivity;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.ui.TweetActivity;
-import net.oschina.app.ui.dialog.CommonDialog;
 import net.oschina.app.viewpagerfragment.FriendsViewPagerFragment;
 import net.oschina.app.widget.AvatarView;
 
@@ -702,48 +699,15 @@ public class UIHelper {
      * @param context
      * @param crashReport
      */
-    public static void sendAppCrashReport(final Context context,
-            final String crashReport) {
-        CommonDialog dialog = new CommonDialog(context);
-
-        dialog.setTitle(R.string.app_error);
-        dialog.setMessage(R.string.app_error_message);
-        dialog.setPositiveButton(R.string.submit_report,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        // 发送异常报告
-                        TDevice.sendEmail(context, "OSCAndroid客户端耍脾气 - 症状诊断报告",
-                                crashReport, "apposchina@163.com");
-                        // 退出
-                        AppManager.getAppManager().AppExit(context);
-                    }
-                });
-        dialog.setNegativeButton(R.string.cancle,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        // 退出
-                        AppManager.getAppManager().AppExit(context);
-                    }
-                });
-        dialog.show();
-    }
-
     public static void sendAppCrashReport(final Context context) {
-        CommonDialog dialog = new CommonDialog(context);
-        dialog.setTitle(R.string.app_error);
-        dialog.setMessage(R.string.app_error_message);
-        dialog.setNegativeButton(R.string.ok,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        System.exit(-1);
-                    }
-                });
-        dialog.show();
+
+        DialogHelp.getConfirmDialog(context, "程序发生异常", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // 退出
+                System.exit(-1);
+            }
+        }).show();
     }
 
     /**
