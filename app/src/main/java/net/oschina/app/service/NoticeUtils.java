@@ -1,16 +1,17 @@
 package net.oschina.app.service;
 
-import java.util.HashMap;
-
-import net.oschina.app.AppConfig;
-import net.oschina.app.AppContext;
-import net.oschina.app.util.TLog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.RemoteException;
 import android.util.Log;
+
+import net.oschina.app.AppConfig;
+import net.oschina.app.AppContext;
+import net.oschina.app.util.TLog;
+
+import java.util.HashMap;
 
 public class NoticeUtils {
 
@@ -111,10 +112,5 @@ public class NoticeUtils {
             context.sendBroadcast(new Intent(
                     NoticeService.INTENT_ACTION_SHUTDOWN));
         }
-    }
-
-    public static void startNotifyService(Context context) {
-        Intent service = new Intent(context, NoticeService.class);
-        context.startService(service);
     }
 }
