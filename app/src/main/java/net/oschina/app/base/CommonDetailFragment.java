@@ -181,7 +181,6 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
 
         @Override
         protected T doInBackground(String... params) {
-            mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
             if (mContext.get() != null) {
                 Serializable seri = CacheManager.readObject(mContext.get(),
                         params[0]);
@@ -203,6 +202,12 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
                 executeOnLoadDataError();
             }
             mEmptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
         }
     }
 
