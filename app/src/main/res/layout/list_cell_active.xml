@@ -110,29 +110,29 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/iv_pic"
         android:layout_marginBottom="@dimen/space_4"
-        android:layout_marginTop="@dimen/space_4"
+        android:layout_marginTop="5dp"
         android:layout_toRightOf="@id/iv_avatar"
         android:gravity="center_vertical" >
 
         <TextView
             android:id="@+id/tv_from"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_marginRight="@dimen/space_10"
-            android:drawablePadding="@dimen/space_5"
-            android:gravity="center_vertical"
-            android:text="Android"
-            android:textColor="@color/main_gray"
-            android:textSize="@dimen/text_size_12" />
+            style="@style/list_text_info" />
 
-        <TextView
-            android:id="@+id/tv_comment_count"
+        <LinearLayout
+            android:id="@+id/ll_comments"
             android:layout_alignParentRight="true"
-            android:layout_gravity="center_vertical"
-            style="@style/list_text_info"
-            android:gravity="center_vertical"
-            android:visibility="gone" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <IconTextView
+                style="@style/list_text_info"
+                android:text="{fa-comments-o} " />
+
+            <TextView
+                android:id="@+id/tv_comment_count"
+                style="@style/list_text_info" />
+        </LinearLayout>
+
     </RelativeLayout>
 
 </RelativeLayout>

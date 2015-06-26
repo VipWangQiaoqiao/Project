@@ -134,7 +134,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         vh.face.setUserInfo(tweet.getAuthorid(), tweet.getAuthor());
         vh.face.setAvatarUrl(tweet.getPortrait());
         vh.author.setText(tweet.getAuthor());
-        TypefaceUtils.setTypeFaceWithText(vh.time, R.string.fa_clock_o, StringUtils.friendly_time(tweet.getPubDate()));
+        vh.time.setText(StringUtils.friendly_time(tweet.getPubDate()));
         vh.content.setMovementMethod(MyLinkMovementMethod.a());
         vh.content.setFocusable(false);
         vh.content.setDispatchToParent(true);
@@ -159,7 +159,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         }
         MyURLSpan.parseLinkText(vh.content, span);
 
-        TypefaceUtils.setTypeFaceWithText(vh.commentcount, R.string.fa_comment, tweet.getCommentCount() + "");
+        vh.commentcount.setText(tweet.getCommentCount() + "");
 
         showTweetImage(vh, tweet.getImgSmall(), tweet.getImgBig(),
                 parent.getContext());

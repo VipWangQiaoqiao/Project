@@ -3,7 +3,6 @@ package net.oschina.app.team.ui;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -200,14 +199,7 @@ public class TeamMainActivity extends BaseActivity implements ActionBar.OnNaviga
             mErrorLayout.setErrorMessage(msg);
             mErrorLayout.setErrorImag(R.drawable.page_icon_empty);
         } else {
-            new Handler().postDelayed(new Runnable() {
-
-                @Override
-                public void run() {
-                    // TODO Auto-generated method stub
-                    mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-                }
-            }, 800);
+            mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             container.setVisibility(View.VISIBLE);
         }
         for (Team team : this.teamDatas) {

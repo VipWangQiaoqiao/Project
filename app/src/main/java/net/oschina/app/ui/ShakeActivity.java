@@ -143,15 +143,21 @@ public class ShakeActivity extends BaseActivity implements SensorEventListener {
                         } else {
                             jokeToast();
                         }
-                        mProgress.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void onFailure(int arg0, Header[] arg1, byte[] arg2,
                                           Throwable arg3) {
                         isRequest = false;
-                        mProgress.setVisibility(View.GONE);
                         jokeToast();
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        super.onFinish();
+                        if (mProgress != null) {
+                            mProgress.setVisibility(View.GONE);
+                        }
                     }
                 });
             }

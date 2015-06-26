@@ -24,7 +24,6 @@ import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.TypefaceUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.MyLinkMovementMethod;
@@ -136,12 +135,7 @@ public class ActiveAdapter extends ListBaseAdapter {
 
         PlatfromUtil.setPlatFromString(vh.from, item.getAppClient());
 
-        if (item.getCommentCount() > 0) {
-            TypefaceUtils.setTypeFaceWithText(vh.commentCount, R.string.fa_comment, String.valueOf(item.getCommentCount()));
-            vh.commentCount.setVisibility(View.VISIBLE);
-        } else {
-            vh.commentCount.setVisibility(View.GONE);
-        }
+        vh.commentCount.setText(item.getCommentCount() + "");
 
         vh.avatar.setUserInfo(item.getAuthorId(), item.getAuthor());
         vh.avatar.setAvatarUrl(item.getPortrait());

@@ -12,7 +12,6 @@ import net.oschina.app.bean.PostList;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.ThemeSwitchUtils;
-import net.oschina.app.util.TypefaceUtils;
 import net.oschina.app.widget.AvatarView;
 
 import butterknife.ButterKnife;
@@ -81,9 +80,8 @@ public class PostAdapter extends ListBaseAdapter<Post> {
         }
 
         vh.author.setText(post.getAuthor());
-        TypefaceUtils.setTypeface(vh.author);
-        TypefaceUtils.setTypeFaceWithText(vh.time, R.string.fa_clock_o, StringUtils.friendly_time(post.getPubDate()));
-        TypefaceUtils.setTypeFaceWithText(vh.comment_count, R.string.fa_comment, post.getAnswerCount() + "回 / "
+        vh.time.setText(StringUtils.friendly_time(post.getPubDate()));
+        vh.comment_count.setText(post.getAnswerCount() + "回 / "
                 + post.getViewCount() + "阅");
 
         return convertView;

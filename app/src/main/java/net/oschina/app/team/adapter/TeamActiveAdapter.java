@@ -12,7 +12,6 @@ import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.team.bean.TeamActive;
 import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.TypefaceUtils;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.TweetTextView;
 
@@ -90,9 +89,9 @@ public class TeamActiveAdapter extends ListBaseAdapter<TeamActive> {
         }
 
         holder.tv_content.setMaxLines(3);
-        TypefaceUtils.setTypeFaceWithText(holder.tv_date, R.string.fa_clock_o, StringUtils.friendly_time(data.getCreateTime()));
-        TypefaceUtils.setTypeFaceWithText(holder.tv_commit, R.string.fa_comment, data.getReply());
-        
+        holder.tv_date.setText(StringUtils.friendly_time(data.getCreateTime()));
+        holder.tv_commit.setText(data.getReply());
+
         String imgPath = data.getBody().getImage();
         if (!StringUtils.isEmpty(imgPath)) {
             holder.iv_pic.setVisibility(View.VISIBLE);

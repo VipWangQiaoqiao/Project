@@ -75,8 +75,8 @@ public class TeamIssueAdapter extends ListBaseAdapter<TeamIssue> {
             vh.touser.setText(item.getToUser().getName());
         }
 
-        TypefaceUtils.setTypeFaceWithText(vh.time, R.string.fa_clock_o, StringUtils.friendly_time(item.getCreateTime()));
-        TypefaceUtils.setTypeFaceWithText(vh.comment, R.string.fa_comment, item.getReplyCount() + "");
+        vh.time.setText(StringUtils.friendly_time(item.getCreateTime()));
+        vh.comment.setText(item.getReplyCount() + "");
 
         if (item.getProject() != null && item.getProject().getGit() != null) {
             vh.project.setVisibility(View.VISIBLE);

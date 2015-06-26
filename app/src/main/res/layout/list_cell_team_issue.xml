@@ -125,18 +125,31 @@
             android:layout_toRightOf="@id/tv_to"
             android:text="火蚁" />
 
-        <TextView
-            android:id="@+id/tv_time"
-            style="@style/list_text_info"
-            android:layout_marginTop="4dp"
-            android:layout_alignParentRight="true" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_comment_count"
-            style="@style/list_text_info"
-            android:layout_marginRight="@dimen/space_10"
-            android:layout_marginTop="4dp"
-            android:layout_toLeftOf="@id/tv_time" />
+            <IconTextView
+                style="@style/list_text_info"
+                android:text="{fa-clock-o} " />
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_marginRight="10dp"
+                style="@style/list_text_info" />
+
+            <IconTextView
+                style="@style/list_text_info"
+                android:text="{fa-comments-o} " />
+
+            <TextView
+                android:id="@+id/tv_comment_count"
+                style="@style/list_text_info" />
+        </LinearLayout>
+
+
     </RelativeLayout>
 
 </LinearLayout>

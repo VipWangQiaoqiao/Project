@@ -10,7 +10,6 @@ import android.widget.TextView;
 import net.oschina.app.R;
 import net.oschina.app.team.bean.TeamDiary;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.TypefaceUtils;
 import net.oschina.app.widget.AvatarView;
 
 import java.util.ArrayList;
@@ -75,8 +74,8 @@ public class TeamDiaryListAdapter extends BaseAdapter {
         }
         holder.iv_face.setAvatarUrl(data.getAuthor().getPortrait());
         holder.tv_author.setText(data.getAuthor().getName());
-        TypefaceUtils.setTypeFaceWithText(holder.tv_count, R.string.fa_comment, data.getReply() + "");
-        TypefaceUtils.setTypeFaceWithText(holder.tv_date, R.string.fa_clock_o, StringUtils.friendly_time(data.getCreateTime()));
+        holder.tv_date.setText(StringUtils.friendly_time(data.getCreateTime()));
+        holder.tv_count.setText(data.getReply() + "");
         holder.tv_title.setText(Html.fromHtml(data.getTitle()).toString()
                 .trim());
         return v;

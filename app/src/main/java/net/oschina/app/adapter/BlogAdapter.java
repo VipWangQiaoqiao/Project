@@ -12,7 +12,6 @@ import net.oschina.app.bean.Blog;
 import net.oschina.app.bean.BlogList;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.ThemeSwitchUtils;
-import net.oschina.app.util.TypefaceUtils;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -84,9 +83,8 @@ public class BlogAdapter extends ListBaseAdapter<Blog> {
         }
 
         vh.source.setText(blog.getAuthor());
-        TypefaceUtils.setTypeface(vh.source);
-        TypefaceUtils.setTypeFaceWithText(vh.time, R.string.fa_clock_o, StringUtils.friendly_time(blog.getPubDate()));
-        TypefaceUtils.setTypeFaceWithText(vh.comment_count, R.string.fa_comment, blog.getCommentCount() + "");
+        vh.time.setText(StringUtils.friendly_time(blog.getPubDate()));
+        vh.comment_count.setText(blog.getCommentCount() + "");
         return convertView;
     }
 }

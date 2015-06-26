@@ -196,12 +196,12 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
         @Override
         protected void onPostExecute(T detail) {
             super.onPostExecute(detail);
+            mEmptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             if (detail != null) {
                 executeOnLoadDataSuccess(detail);
             } else {
                 executeOnLoadDataError();
             }
-            mEmptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
         }
 
         @Override

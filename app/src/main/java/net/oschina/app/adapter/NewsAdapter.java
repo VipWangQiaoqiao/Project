@@ -13,7 +13,6 @@ import net.oschina.app.bean.News;
 import net.oschina.app.bean.NewsList;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.ThemeSwitchUtils;
-import net.oschina.app.util.TypefaceUtils;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -58,9 +57,8 @@ public class NewsAdapter extends ListBaseAdapter<News> {
         } else {
             vh.tip.setVisibility(View.GONE);
         }
-        TypefaceUtils.setTypeface(vh.source);
-        TypefaceUtils.setTypeFaceWithText(vh.time, R.string.fa_clock_o, StringUtils.friendly_time(news.getPubDate()));
-        TypefaceUtils.setTypeFaceWithText(vh.comment_count, R.string.fa_comment, news.getCommentCount() + "");
+        vh.time.setText(StringUtils.friendly_time(news.getPubDate()));
+        vh.comment_count.setText(news.getCommentCount() + "");
 
         return convertView;
     }
@@ -78,8 +76,6 @@ public class NewsAdapter extends ListBaseAdapter<News> {
         TextView comment_count;
         @InjectView(R.id.iv_tip)
         ImageView tip;
-        @InjectView(R.id.iv_link)
-        ImageView link;
 
         public ViewHolder(View view) {
             ButterKnife.inject(this, view);
