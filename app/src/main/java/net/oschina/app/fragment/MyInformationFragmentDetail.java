@@ -102,9 +102,10 @@ public class MyInformationFragmentDetail extends BaseFragment {
         @Override
         public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
             mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-            mUser = XmlUtils.toBean(MyInformation.class,
-                    new ByteArrayInputStream(arg2)).getUser();
-            if (mUser != null) {
+            MyInformation  user = XmlUtils.toBean(MyInformation.class,
+                    new ByteArrayInputStream(arg2));
+            if (user != null && user.getUser() != null) {
+                mUser = user.getUser();
                 fillUI();
             } else {
                 this.onFailure(arg0, arg1, arg2, null);
