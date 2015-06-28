@@ -222,7 +222,6 @@ public class TeamTweetDetailFragment extends
 
     @Override
     protected void executeOnLoadDetailSuccess(TeamActiveDetail detailBean) {
-        mListView.setHeaderDividersEnabled(false);
         mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
         this.active = detailBean.getTeamActive();
         tv_content.setText(stripTags(this.active.getBody().getTitle()));
@@ -346,7 +345,7 @@ public class TeamTweetDetailFragment extends
     protected void executeOnLoadDataSuccess(java.util.List<TeamReply> data) {
         super.executeOnLoadDataSuccess(data);
         if (mTvCommentCount != null && data != null) {
-            mTvCommentCount.setText("评论(" + (mAdapter.getCount() - 1) + ")");
+            mTvCommentCount.setText((mAdapter.getCount() - 1) + "");
         }
     };
 

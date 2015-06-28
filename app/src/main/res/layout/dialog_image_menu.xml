@@ -10,6 +10,7 @@
         android:background="?attr/layout_item_bg"
         android:gravity="center"
         android:padding="15dp"
+        android:textColor="?attr/textColor"
         android:text="保存"
         android:textSize="18sp" />
 
@@ -21,6 +22,7 @@
         android:background="?attr/layout_item_bg"
         android:gravity="center"
         android:padding="15dp"
+        android:textColor="?attr/textColor"
         android:text="发送到动弹"
         android:textSize="18sp" />
 
@@ -32,6 +34,7 @@
         android:background="?attr/layout_item_bg"
         android:gravity="center"
         android:padding="15dp"
+        android:textColor="?attr/textColor"
         android:text="复制图片链接"
         android:textSize="18sp" />
 

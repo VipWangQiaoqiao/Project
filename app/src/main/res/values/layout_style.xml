@@ -44,7 +44,6 @@
     <style name="list_text_info" parent="@style/wrap_wrap">
         <item name="android:textColor">?attr/infoTextColor</item>
         <item name="android:textSize">11sp</item>
-        <item name="android:drawablePadding">@dimen/space_3</item>
         <item name="android:gravity">center_vertical</item>
     </style>
     

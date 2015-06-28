@@ -7,7 +7,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
         android:padding="@dimen/space_8" >
 
         <net.oschina.app.widget.AvatarView
@@ -21,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/iv_avatar"
-            android:textColor="@color/main_purple"
+            android:textColor="?android:textColorLink"
             android:textSize="@dimen/text_size_16" />
 
         <TextView
@@ -35,13 +34,14 @@
 
         <TextView
             android:id="@+id/tv_from"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_below="@id/tv_name"
             android:drawableLeft="@drawable/platform"
             android:drawablePadding="@dimen/space_5"
-            android:textColor="@color/main_gray"
+            android:textColor="?attr/infoTextColor"
             android:textSize="@dimen/text_size_12"
             android:visibility="gone" />
     </RelativeLayout>
@@ -49,7 +49,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/list_divider_color" />
+        android:background="?attr/lineColor" />
 
     <net.oschina.app.widget.TweetTextView
         android:id="@+id/tv_content"
@@ -59,7 +59,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:background="@color/white"
+        android:textColor="?attr/textColor"
         android:textSize="15sp" />
 
     <ImageView

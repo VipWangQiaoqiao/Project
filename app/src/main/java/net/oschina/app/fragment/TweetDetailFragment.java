@@ -188,7 +188,7 @@ public class TweetDetailFragment extends
         mTvTime.setText(StringUtils.friendly_time(mTweet.getPubDate()));
         PlatfromUtil.setPlatFromString(mTvFrom, mTweet.getAppclient());
 
-        TypefaceUtils.setTypeFaceWithText(mTvCommentCount, R.string.fa_comment, mTweet.getCommentCount() + "");
+        mTvCommentCount.setText(mTweet.getCommentCount() + "");
         if (StringUtils.isEmpty(mTweet.getAttach())) {
             mRlRecordSound.setVisibility(View.GONE);
         } else {
@@ -344,7 +344,7 @@ public class TweetDetailFragment extends
         mAdapter.notifyDataSetChanged();
         if (mTweet != null) {
             mTweet.setCommentCount(mAdapter.getDataSize() + "");
-            TypefaceUtils.setTypeFaceWithText(mTvCommentCount, R.string.fa_comment, mTweet.getCommentCount() + "");
+            mTvCommentCount.setText(mTweet.getCommentCount() + "");
         }
     }
 
@@ -490,7 +490,7 @@ public class TweetDetailFragment extends
         if (commentCount < (mAdapter.getCount() - 1)) {
             commentCount = mAdapter.getCount() - 1;
         }
-        TypefaceUtils.setTypeFaceWithText(mTvCommentCount, R.string.fa_comment, commentCount + "");
+        mTvCommentCount.setText(commentCount + "");
     }
 
     @Override
