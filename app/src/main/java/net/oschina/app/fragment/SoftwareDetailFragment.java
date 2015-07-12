@@ -31,7 +31,7 @@ public class SoftwareDetailFragment extends CommonDetailFragment<Software> {
 
     @Override
     protected String getCacheKey() {
-        if (mId > 0) {
+        if (TextUtils.isEmpty(mIden)) {
             return "software_" + mId;
         }
         return "software_" + mIden;
@@ -73,6 +73,7 @@ public class SoftwareDetailFragment extends CommonDetailFragment<Software> {
 
     @Override
     protected String getWebViewBody(Software detail) {
+        mId = detail.getId();
         if (TextUtils.isEmpty(detail.getBody())) {
             return "";
         }
