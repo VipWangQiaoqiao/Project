@@ -218,7 +218,7 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
             return;
         }
 
-        mWebView.loadDataWithBaseURL(null, this.getWebViewBody(detail), "text/html", "UTF-8", null);
+        mWebView.loadDataWithBaseURL("", this.getWebViewBody(detail), "text/html", "UTF-8", "");
         // 显示存储的字体大小
         mWebView.loadUrl(FontSizeUtils.getSaveFontSize());
         boolean favoriteState = getFavoriteState() == 1;
