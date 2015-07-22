@@ -5,6 +5,7 @@
         <item name="colorPrimary">@color/day_colorPrimary</item>
         <item name="colorPrimaryDark">@color/day_colorPrimaryDark</item>
         <item name="android:textColorLink">#0b9a27</item>
+        <item name="colorAccent">@color/day_colorPrimary</item>
         <item name="android:textColorPrimary">@color/white</item>
         <item name="editTextColor">@color/gray</item>
         <item name="actionBarPopupTheme">@style/ThemeOverlay.AppCompat.Dark</item>
@@ -36,6 +37,7 @@
         <item name="colorPrimary">@color/night_colorPrimary</item>
         <item name="colorPrimaryDark">@color/night_colorPrimaryDark</item>
         <item name="android:textColorLink">@color/night_colorPrimary</item>
+        <item name="colorAccent">@color/night_colorPrimary</item>
         <item name="android:windowBackground">@color/night_windows_bg</item>
         <item name="textColor">@color/night_textColor</item>
         <item name="infoTextColor">@color/night_infoTextColor</item>

@@ -8,10 +8,9 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.LoginUserBean;
+import net.oschina.app.bean.OpenIdCatalog;
 import net.oschina.app.util.CyptoUtils;
 import net.oschina.app.util.DialogHelp;
-import net.oschina.app.util.SimpleTextWatcher;
-import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.TLog;
 import net.oschina.app.util.XmlUtils;
@@ -25,10 +24,9 @@ import org.kymjs.kjframe.http.HttpConfig;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 
 import butterknife.InjectView;
@@ -49,8 +47,8 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.controller.UMServiceFactory;
 import com.umeng.socialize.controller.UMSocialService;
 import com.umeng.socialize.controller.listener.SocializeListeners;
+import com.umeng.socialize.exception.SocializeException;
 import com.umeng.socialize.sso.SinaSsoHandler;
-import com.umeng.socialize.sso.UMSsoHandler;
 
 import java.util.Map;
 import java.util.Set;
@@ -72,43 +70,20 @@ public class LoginActivity extends BaseActivity implements IWXAPIEventHandler, I
     @InjectView(R.id.et_password)
     EditText mEtPassword;
 
-    @InjectView(R.id.iv_clear_username)
-    View mIvClearUserName;
-
-    @InjectView(R.id.iv_clear_password)
-    View mIvClearPassword;
-
-    @InjectView(R.id.btn_login)
-    Button mBtnLogin;
-
     private final int requestCode = REQUEST_CODE_INIT;
     private String mUserName = "";
     private String mPassword = "";
 
     private Tencent mTencent;
 
-    private final TextWatcher mUserNameWatcher = new SimpleTextWatcher() {
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before,
-                                  int count) {
-            mIvClearUserName
-                    .setVisibility(TextUtils.isEmpty(s) ? View.INVISIBLE
-                            : View.VISIBLE);
-        }
-    };
-    private final TextWatcher mPassswordWatcher = new SimpleTextWatcher() {
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before,
-                                  int count) {
-            mIvClearPassword
-                    .setVisibility(TextUtils.isEmpty(s) ? View.INVISIBLE
-                            : View.VISIBLE);
-        }
-    };
-
     @Override
     protected int getLayoutId() {
         return R.layout.activity_login;
+    }
+
+    @Override
+    public void initView() {
+
     }
 
     @Override
@@ -127,14 +102,6 @@ public class LoginActivity extends BaseActivity implements IWXAPIEventHandler, I
 
         int id = v.getId();
         switch (id) {
-            case R.id.iv_clear_username:
-                mEtUserName.getText().clear();
-                mEtUserName.requestFocus();
-                break;
-            case R.id.iv_clear_password:
-                mEtPassword.getText().clear();
-                mEtPassword.requestFocus();
-                break;
             case R.id.btn_login:
                 handleLogin();
                 break;
@@ -154,7 +121,7 @@ public class LoginActivity extends BaseActivity implements IWXAPIEventHandler, I
 
     private void handleLogin() {
 
-        if (!prepareForLogin()) {
+        if (prepareForLogin()) {
             return;
         }
 
@@ -200,37 +167,21 @@ public class LoginActivity extends BaseActivity implements IWXAPIEventHandler, I
     private boolean prepareForLogin() {
         if (!TDevice.hasInternet()) {
             AppContext.showToastShort(R.string.tip_no_internet);
-            return false;
+            return true;
         }
-        String uName = mEtUserName.getText().toString();
-        if (StringUtils.isEmpty(uName)) {
-            AppContext.showToastShort(R.string.tip_please_input_username);
+        if (mEtUserName.length() == 0) {
+            mEtUserName.setError("请输入邮箱/用户名");
             mEtUserName.requestFocus();
-            return false;
+            return true;
         }
-        // 去除邮箱正确性检测
-        // if (!StringUtils.isEmail(uName)) {
-        // AppContext.showToastShort(R.string.tip_illegal_email);
-        // mEtUserName.requestFocus();
-        // return false;
-        // }
-        String pwd = mEtPassword.getText().toString();
-        if (StringUtils.isEmpty(pwd)) {
-            AppContext.showToastShort(R.string.tip_please_input_password);
+
+        if (mEtPassword.length() == 0) {
+            mEtPassword.setError("请输入密码");
             mEtPassword.requestFocus();
-            return false;
+            return true;
         }
-        return true;
-    }
 
-    @Override
-    public void initView() {
-        mIvClearUserName.setOnClickListener(this);
-        mIvClearPassword.setOnClickListener(this);
-        mBtnLogin.setOnClickListener(this);
-
-        mEtUserName.addTextChangedListener(mUserNameWatcher);
-        mEtPassword.addTextChangedListener(mPassswordWatcher);
+        return false;
     }
 
     @Override
@@ -266,33 +217,71 @@ public class LoginActivity extends BaseActivity implements IWXAPIEventHandler, I
         api.sendReq(req);
     }
 
-    UMSocialService mController = UMServiceFactory.getUMSocialService("com.umeng.login");
 
     /**
      * 新浪登录
      */
     private void sinaLogin() {
+        final UMSocialService mController = UMServiceFactory.getUMSocialService("com.umeng.login");
+        SinaSsoHandler sinaSsoHandler = new SinaSsoHandler();
+        mController.getConfig().setSsoHandler(sinaSsoHandler);
+        mController.doOauthVerify(this, SHARE_MEDIA.SINA,
+                new SocializeListeners.UMAuthListener() {
 
-        mController.getConfig().setSsoHandler(new SinaSsoHandler());
-        mController.getPlatformInfo(this, SHARE_MEDIA.SINA, new SocializeListeners.UMDataListener() {
-            @Override
-            public void onStart() {
-                AppContext.showToast("开始获取");
-            }
-            @Override
-            public void onComplete(int status, Map<String, Object> info) {
-                if(status == 200 && info != null){
-                    StringBuilder sb = new StringBuilder();
-                    Set<String> keys = info.keySet();
-                    for(String key : keys){
-                        sb.append(key+"="+info.get(key).toString()+"\r\n");
+                    @Override
+                    public void onStart(SHARE_MEDIA arg0) {
                     }
-                    AppContext.showToast(sb.toString());
-                }else{
-                    AppContext.showToast("出错" + status);
-                }
-            }
-        });
+
+                    @Override
+                    public void onError(SocializeException arg0,
+                                        SHARE_MEDIA arg1) {
+                        AppContext.showToast("新浪授权失败");
+                    }
+
+                    @Override
+                    public void onComplete(Bundle value, SHARE_MEDIA arg1) {
+                        if (value != null && !TextUtils.isEmpty(value.getString("uid"))) {
+                            // 获取平台信息
+                            mController.getPlatformInfo(LoginActivity.this, SHARE_MEDIA.SINA, new SocializeListeners.UMDataListener() {
+                                @Override
+                                public void onStart() {
+
+                                }
+
+                                @Override
+                                public void onComplete(int i, Map<String, Object> map) {
+                                    if (i == 200 && map != null) {
+                                        StringBuilder sb = new StringBuilder("{");
+                                        Set<String> keys = map.keySet();
+                                        int index = 0;
+                                        for (String key : keys) {
+                                            index++;
+                                            String jsonKey = key;
+                                            if (jsonKey.equals("uid")) {
+                                                jsonKey = "openid";
+                                            }
+                                            sb.append(String.format("\"%s\":\"%s\"", jsonKey, map.get(key).toString()));
+                                            if (index != map.size()) {
+                                                sb.append(",");
+                                            }
+                                        }
+                                        sb.append("}");
+                                        openIdLogin(OpenIdCatalog.WEIBO, sb.toString());
+                                    } else {
+                                        AppContext.showToast("发生错误：" + i);
+                                    }
+                                }
+                            });
+                        } else {
+                            AppContext.showToast("授权失败");
+                        }
+                    }
+
+                    @Override
+                    public void onCancel(SHARE_MEDIA arg0) {
+                        AppContext.showToast("已取消新浪登陆");
+                    }
+                });
     }
 
     @Override
@@ -318,7 +307,7 @@ public class LoginActivity extends BaseActivity implements IWXAPIEventHandler, I
     // 获取到QQ授权登陆的信息
     @Override
     public void onComplete(Object o) {
-        openIdLogin("qq", o.toString());
+        openIdLogin(OpenIdCatalog.QQ, o.toString());
     }
 
     @Override
@@ -391,11 +380,7 @@ public class LoginActivity extends BaseActivity implements IWXAPIEventHandler, I
                 }
                 break;
             default:
-                /**使用SSO授权必须添加如下代码 */
-                UMSsoHandler ssoHandler = mController.getConfig().getSsoHandler(requestCode) ;
-                if(ssoHandler != null){
-                    ssoHandler.authorizeCallBack(requestCode, resultCode, data);
-                }
+
                 break;
         }
     }

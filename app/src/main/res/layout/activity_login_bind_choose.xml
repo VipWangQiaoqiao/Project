@@ -23,8 +23,8 @@
 
     <Button
         android:id="@+id/bt_bind"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/button_common_blue"
+        android:layout_marginTop="3dp"
         android:text="绑定到已有账号" />
 
     <TextView
@@ -36,8 +36,8 @@
 
     <Button
         android:id="@+id/bt_reg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/button_common_blue"
+        android:layout_marginTop="3dp"
         android:text="立即开启开源之旅" />
 
 </LinearLayout>
