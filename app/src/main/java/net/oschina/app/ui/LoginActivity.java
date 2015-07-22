@@ -146,7 +146,7 @@ public class LoginActivity extends BaseActivity implements IWXAPIEventHandler, I
         @Override
         public void onFailure(int arg0, Header[] arg1, byte[] arg2,
                               Throwable arg3) {
-            AppContext.showToast(R.string.tip_login_error_for_network);
+            AppContext.showToast("网络出错" + arg0);
         }
 
         @Override
