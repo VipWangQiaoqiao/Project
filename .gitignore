@@ -121,3 +121,5 @@ tmp/
 
 # TeXlipse plugin
 .texlipseXml version="1.0" encoding="UTF-8"?>
+gradle.properties
+app/oschina.keystore

@@ -13,6 +13,28 @@ android {
         versionName "2.3.1"
     }
 
+    signingConfigs {
+        release {
+            try {
+                storeFile file("oschina.keystore")
+                storePassword KEYSTORE_PASSWORD
+                keyAlias "oschina"
+                keyPassword KEY_PASSWORD
+            } catch (ex) {
+                throw  new InvalidUserDataException("you should define KEYSTORE_PASSWORD and KEY_PASSWORD in gradle.properies")
+            }
+        }
+    }
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.release
+        }
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
+
+
     // 移除lint检查的error
     lintOptions {
         abortOnError false
@@ -20,7 +42,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':social_sdk_library_project')
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.github.chrisbanes.photoview:library:1.2.3'
