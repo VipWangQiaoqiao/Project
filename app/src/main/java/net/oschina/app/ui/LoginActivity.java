@@ -375,7 +375,6 @@ public class LoginActivity extends BaseActivity implements IWXAPIEventHandler, I
                 }
                 LoginUserBean loginUserBean = (LoginUserBean) data.getSerializableExtra(BUNDLE_KEY_LOGINBEAN);
                 if (loginUserBean !=  null) {
-                    AppContext.showToast(loginUserBean.getUser().toString());
                     handleLoginBean(loginUserBean);
                 }
                 break;
