@@ -107,7 +107,7 @@ public class LoginBindActivityChooseActivity extends BaseActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
+                DialogHelp.getMessageDialog(LoginBindActivityChooseActivity.this, "网络出错" + statusCode).show();
             }
 
             @Override
