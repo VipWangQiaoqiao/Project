@@ -199,9 +199,7 @@ public class LoginActivity extends BaseActivity implements IWXAPIEventHandler, I
      * QQ登陆
      */
     private void qqLogin() {
-        if (!mTencent.isSessionValid()) {
-            mTencent.login(this, "all", this);
-        }
+        mTencent.login(this, "all", this);
     }
 
     /**
