@@ -101,7 +101,11 @@ public class LoginBindActivityChooseActivity extends BaseActivity {
                 if (loginUserBean != null && loginUserBean.getResult().OK()) {
                     backLogin(loginUserBean);
                 } else {
-                    DialogHelp.getMessageDialog(LoginBindActivityChooseActivity.this, loginUserBean.getResult().getErrorMessage()).show();
+                    if (loginUserBean.getResult() != null) {
+                        DialogHelp.getMessageDialog(LoginBindActivityChooseActivity.this, loginUserBean.getResult().getErrorMessage()).show();
+                    } else {
+                        DialogHelp.getMessageDialog(LoginBindActivityChooseActivity.this, "使用第三方注册失败").show();
+                    }
                 }
             }
 

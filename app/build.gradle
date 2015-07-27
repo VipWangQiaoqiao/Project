@@ -15,14 +15,6 @@ android {
 
     signingConfigs {
         release {
-            try {
-                storeFile file("oschina.keystore")
-                storePassword KEYSTORE_PASSWORD
-                keyAlias "oschina"
-                keyPassword KEY_PASSWORD
-            } catch (ex) {
-                throw  new InvalidUserDataException("you should define KEYSTORE_PASSWORD and KEY_PASSWORD in gradle.properies")
-            }
         }
     }
     buildTypes {
@@ -52,5 +44,23 @@ dependencies {
     compile 'com.networkbench.newlens.agent.android:nbs.newlens.agent:2.2.5'
     compile 'com.google.zxing:core:3.2.0'
     compile 'com.joanzapata.android:android-iconify:1.0.9'
-    compile 'org.eclipse.mylyn.github:org.eclipse.egit.github.core:2.1.5'
+}
+
+// 配置签名文件以及相关的账号信息
+File propFile = new File('sign.properties')
+if (propFile.exists()) {
+    def Properties props = new Properties()
+    props.load(new FileInputStream(propFile))
+
+    if (props.containsKey('STORE_FILE') && props.containsKey('STORE_PASSWORD') &&
+            props.containsKey('KEY_ALIAS') && props.containsKey('KEY_PASSWORD')) {
+        android.signingConfigs.release.storeFile = file(props['STORE_FILE'])
+        android.signingConfigs.release.storePassword = props['STORE_PASSWORD']
+        android.signingConfigs.release.keyAlias = props['KEY_ALIAS']
+        android.signingConfigs.release.keyPassword = props['KEY_PASSWORD']
+    } else {
+        android.buildTypes.release.signingConfig = null
+    }
+} else {
+    android.buildTypes.release.signingConfig = null
 }

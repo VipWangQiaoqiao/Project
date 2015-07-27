@@ -23,7 +23,10 @@ import org.apache.http.protocol.HttpContext;
 import org.kymjs.kjframe.http.HttpConfig;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -34,11 +37,8 @@ import butterknife.OnClick;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.tencent.mm.sdk.modelbase.BaseReq;
-import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.tencent.mm.sdk.modelmsg.SendAuth;
 import com.tencent.mm.sdk.openapi.IWXAPI;
-import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
@@ -58,7 +58,7 @@ import java.util.Set;
  *
  * @author kymjs (http://www.kymjs.com/)
  */
-public class LoginActivity extends BaseActivity implements IWXAPIEventHandler, IUiListener {
+public class LoginActivity extends BaseActivity implements IUiListener {
 
     public static final int REQUEST_CODE_INIT = 0;
     private static final String BUNDLE_KEY_REQUEST_CODE = "BUNDLE_KEY_REQUEST_CODE";
@@ -73,8 +73,6 @@ public class LoginActivity extends BaseActivity implements IWXAPIEventHandler, I
     private final int requestCode = REQUEST_CODE_INIT;
     private String mUserName = "";
     private String mPassword = "";
-
-    private Tencent mTencent;
 
     @Override
     protected int getLayoutId() {
@@ -186,8 +184,6 @@ public class LoginActivity extends BaseActivity implements IWXAPIEventHandler, I
 
     @Override
     public void initData() {
-        mTencent = Tencent.createInstance(AppConfig.APP_QQ_KEY,
-                this.getApplicationContext());
 
         mEtUserName.setText(AppContext.getInstance()
                 .getProperty("user.account"));
@@ -199,6 +195,8 @@ public class LoginActivity extends BaseActivity implements IWXAPIEventHandler, I
      * QQ登陆
      */
     private void qqLogin() {
+        Tencent mTencent = Tencent.createInstance(AppConfig.APP_QQ_KEY,
+                this);
         mTencent.login(this, "all", this);
     }
 
@@ -208,13 +206,29 @@ public class LoginActivity extends BaseActivity implements IWXAPIEventHandler, I
     private void wxLogin() {
         IWXAPI api = WXAPIFactory.createWXAPI(this, Constants.WEICHAT_APPID, false);
         api.registerApp(Constants.WEICHAT_APPID);
-        api.handleIntent(getIntent(), this);
+
+        if (!api.isWXAppInstalled()) {
+            AppContext.showToast("手机中没有安装微信客户端");
+            return;
+        }
+        // 唤起微信登录授权
         final SendAuth.Req req = new SendAuth.Req();
         req.scope = "snsapi_userinfo";
-        req.state = "none";
+        req.state = "wechat_login";
         api.sendReq(req);
+        // 注册一个广播，监听微信的获取openid返回（类：WXEntryActivity中）
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(OpenIdCatalog.WECHAT);
+        registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent != null) {
+                    String openid_info = intent.getStringExtra(LoginBindActivityChooseActivity.BUNDLE_KEY_OPENIDINFO);
+                    openIdLogin(OpenIdCatalog.WECHAT, openid_info);
+                }
+            }
+        }, intentFilter);
     }
-
 
     /**
      * 新浪登录
@@ -282,26 +296,6 @@ public class LoginActivity extends BaseActivity implements IWXAPIEventHandler, I
                 });
     }
 
-    @Override
-    public void onReq(BaseReq baseReq) {
-
-    }
-
-    @Override
-    public void onResp(BaseResp baseResp) {
-
-        switch (baseResp.errCode) {
-            case BaseResp.ErrCode.ERR_OK:
-                String code = ((SendAuth.Resp) baseResp).code;
-                //上面的code就是接入指南里要拿到的code
-                DialogHelp.getMessageDialog(this, code + "sdff").show();
-                break;
-
-            default:
-                break;
-        }
-    }
-
     // 获取到QQ授权登陆的信息
     @Override
     public void onComplete(Object o) {
@@ -342,7 +336,7 @@ public class LoginActivity extends BaseActivity implements IWXAPIEventHandler, I
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
+                AppContext.showToast("网络出错" + statusCode);
             }
 
             @Override

@@ -8,6 +8,7 @@ import com.loopj.android.http.RequestParams;
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
 import net.oschina.app.api.ApiHttpClient;
+import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.EventApplyData;
 import net.oschina.app.bean.NewsList;
 import net.oschina.app.bean.Report;
@@ -1002,4 +1003,5 @@ public class OSChinaApi {
         params.put("openid_info", openIdInfo);
         ApiHttpClient.post("action/api/openid_reg", params, handler);
     }
+
 }
