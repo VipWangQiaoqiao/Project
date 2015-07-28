@@ -29,7 +29,7 @@ public class XmlUtils {
      * 将一个xml流转换为bean实体类
      * 
      * @param type
-     * @param instance
+     * @param is
      * @return
      * @throws AppException
      */
@@ -61,8 +61,8 @@ public class XmlUtils {
     }
     
     public static <T> T toBean(Class<T> type, byte[] bytes) {
-	if (bytes == null) return null;
-	return toBean(type, new ByteArrayInputStream(bytes));
+        if (bytes == null) return null;
+        return toBean(type, new ByteArrayInputStream(bytes));
     }
 
     private static class MyIntCoverter extends IntConverter {

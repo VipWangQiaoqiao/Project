@@ -97,15 +97,19 @@ public class LoginBindActivityChooseActivity extends BaseActivity {
         OSChinaApi.openid_reg(catalog, openIdInfo, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                LoginUserBean loginUserBean = XmlUtils.toBean(LoginUserBean.class, responseBody);
-                if (loginUserBean != null && loginUserBean.getResult().OK()) {
-                    backLogin(loginUserBean);
-                } else {
-                    if (loginUserBean.getResult() != null) {
-                        DialogHelp.getMessageDialog(LoginBindActivityChooseActivity.this, loginUserBean.getResult().getErrorMessage()).show();
+                try {
+                    LoginUserBean loginUserBean = XmlUtils.toBean(LoginUserBean.class, responseBody);
+                    if (loginUserBean != null && loginUserBean.getResult().OK()) {
+                        backLogin(loginUserBean);
                     } else {
-                        DialogHelp.getMessageDialog(LoginBindActivityChooseActivity.this, "使用第三方注册失败").show();
+                        if (loginUserBean.getResult() != null) {
+                            DialogHelp.getMessageDialog(LoginBindActivityChooseActivity.this, loginUserBean.getResult().getErrorMessage()).show();
+                        } else {
+                            DialogHelp.getMessageDialog(LoginBindActivityChooseActivity.this, "使用第三方注册失败").show();
+                        }
                     }
+                } catch (Exception e) {
+                    DialogHelp.getMessageDialog(LoginBindActivityChooseActivity.this, "使用第三方注册失败").show();
                 }
             }
 
