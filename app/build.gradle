@@ -9,8 +9,8 @@ android {
         applicationId "net.oschina.app"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 46
-        versionName "2.3.1"
+        versionCode 47
+        versionName "2.4"
     }
 
     signingConfigs {
