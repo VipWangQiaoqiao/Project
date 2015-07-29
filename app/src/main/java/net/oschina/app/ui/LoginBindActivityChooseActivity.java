@@ -13,6 +13,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.bean.LoginUserBean;
+import net.oschina.app.bean.OpenIdCatalog;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.XmlUtils;
 
@@ -61,13 +62,13 @@ public class LoginBindActivityChooseActivity extends BaseActivity {
     @InjectView(R.id.tv_openid_tip)
     TextView tvOpenIdTip;
     private void initCatalogText() {
-        if (catalog.equals("qq")) {
+        if (catalog.equals(OpenIdCatalog.QQ)) {
             tvOpenIdTip.setText("你好，QQ用户");
-        } else if (catalog.equals("wechat")) {
+        } else if (catalog.equals(OpenIdCatalog.WECHAT)) {
             tvOpenIdTip.setText("你好，微信用户");
-        } else if (catalog.equals("sina")) {
+        } else if (catalog.equals(OpenIdCatalog.WEIBO)) {
             tvOpenIdTip.setText("你好，新浪用户");
-        } else if (catalog.equals("github")) {
+        } else if (catalog.equals(OpenIdCatalog.GITHUB)) {
             tvOpenIdTip.setText("你好，Github用户");
         }
     }

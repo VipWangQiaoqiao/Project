@@ -200,6 +200,7 @@ public class LoginActivity extends BaseActivity implements IUiListener {
         mTencent.login(this, "all", this);
     }
 
+    BroadcastReceiver receiver;
     /**
      * 微信登陆
      */
@@ -219,15 +220,21 @@ public class LoginActivity extends BaseActivity implements IUiListener {
         // 注册一个广播，监听微信的获取openid返回（类：WXEntryActivity中）
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(OpenIdCatalog.WECHAT);
-        registerReceiver(new BroadcastReceiver() {
+        receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent != null) {
                     String openid_info = intent.getStringExtra(LoginBindActivityChooseActivity.BUNDLE_KEY_OPENIDINFO);
                     openIdLogin(OpenIdCatalog.WECHAT, openid_info);
+                    // 注销这个监听广播
+                    if (receiver != null) {
+                        unregisterReceiver(receiver);
+                    }
                 }
             }
-        }, intentFilter);
+        };
+
+        registerReceiver(receiver, intentFilter);
     }
 
     /**
