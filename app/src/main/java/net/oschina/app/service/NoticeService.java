@@ -56,7 +56,7 @@ public class NoticeService extends Service {
             if (Constants.INTENT_ACTION_NOTICE.equals(action)) {
         	Notice notice = (Notice) intent.getSerializableExtra("notice_bean");
                 int atmeCount = notice.getAtmeCount();// @我
-                int msgCount = notice.getMsgCount();// 留言
+                int msgCount = notice.getMsgCount();// 私信
                 int reviewCount = notice.getReviewCount();// 评论
                 int newFansCount = notice.getNewFansCount();// 新粉丝
                 int newLikeCount = notice.getNewLikeCount();// 点赞数

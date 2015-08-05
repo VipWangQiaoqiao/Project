@@ -67,7 +67,7 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
         if (notice != null) {
             changeTip(mBvAtMe, notice.getAtmeCount());// @我
             changeTip(mBvComment, notice.getReviewCount());// 评论
-            changeTip(mBvMsg, notice.getMsgCount());// 留言
+            changeTip(mBvMsg, notice.getMsgCount());// 私信
             changeTip(mBvFans, notice.getNewFansCount());// 新粉丝
             changeTip(mBvLike, notice.getNewLikeCount());// 点赞数
         } else {
