@@ -223,6 +223,7 @@ public class MessageDetailFragment extends BaseListFragment<Comment> implements
                 mAdapter.setState(ListBaseAdapter.STATE_LOAD_MORE);
             }
             mAdapter.notifyDataSetChanged();
+            mListView.setSelection(mListView.getBottom());
         }
     }
 
