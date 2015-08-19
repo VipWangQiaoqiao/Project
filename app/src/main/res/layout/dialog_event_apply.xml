@@ -59,4 +59,21 @@
         android:id="@+id/et_job"
         style="@style/dialog_event_apply_edittext" />
 
+    <TextView
+        android:id="@+id/tv_remarks_tip"
+        style="@style/dialog_event_apply_text"
+        android:visibility="gone"
+        android:text="备注" />
+
+    <TextView
+        android:id="@+id/tv_remarks_selecte"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_2"
+        android:drawableRight="@drawable/ic_item_goto_right_tip"
+        android:gravity="center_vertical"
+        android:padding="@dimen/space_8"
+        android:visibility="gone"
+        android:textColor="@color/main_black"
+        android:textSize="@dimen/text_size_12" />
 </LinearLayout>

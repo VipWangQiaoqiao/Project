@@ -702,6 +702,9 @@ public class OSChinaApi {
         params.put("mobile", data.getPhone());
         params.put("company", data.getCompany());
         params.put("job", data.getJob());
+        if (!StringUtils.isEmpty(data.getRemark())) {
+            params.put("misc_info", data.getRemark());
+        }
         ApiHttpClient.post("action/api/event_apply", params, handler);
     }
 

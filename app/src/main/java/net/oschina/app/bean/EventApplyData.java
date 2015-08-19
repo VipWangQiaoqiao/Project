@@ -24,6 +24,8 @@ public class EventApplyData extends Entity {
 	
 	private String job;// 职业名称
 
+	private String remark;// 备注
+
 	public int getEvent() {
 		return event;
 	}
@@ -78,5 +80,13 @@ public class EventApplyData extends Entity {
 
 	public void setJob(String job) {
 		this.job = job;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 }

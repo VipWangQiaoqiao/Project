@@ -61,6 +61,9 @@ public class Event extends Entity {
 	@XStreamAlias("category")
 	private int category;// 活动类型 1源创会 2技术交流 3其他 4站外活动
 
+	@XStreamAlias("remark")
+	private EventRemark eventRemark;
+
 	public int getCategory() {
 		return category;
 	}
@@ -171,5 +174,13 @@ public class Event extends Entity {
 
 	public void setApplyStatus(int applyStatus) {
 		this.applyStatus = applyStatus;
+	}
+
+	public EventRemark getEventRemark() {
+		return eventRemark;
+	}
+
+	public void setEventRemark(EventRemark eventRemark) {
+		this.eventRemark = eventRemark;
 	}
 }

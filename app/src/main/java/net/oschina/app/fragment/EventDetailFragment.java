@@ -279,7 +279,7 @@ public class EventDetailFragment extends CommonDetailFragment<Post> {
             return;
         }
         if (mEventApplyDialog == null) {
-            mEventApplyDialog = new EventApplyDialog(getActivity());
+            mEventApplyDialog = new EventApplyDialog(getActivity(), mDetail.getEvent());
             mEventApplyDialog.setCanceledOnTouchOutside(true);
             mEventApplyDialog.setCancelable(true);
             mEventApplyDialog.setTitle("活动报名");
