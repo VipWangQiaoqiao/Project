@@ -660,7 +660,9 @@ public class SelectFriendsActivity extends BaseActivity {
             mEmptyLayout.setErrorType(EmptyLayout.NODATA);
         } else {
             if(TDevice.hasInternet()) {
-                mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+                if(mAllFriendItems.isEmpty()) {
+                    mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+                }
                 OSChinaApi.getAllFriendsList(uid, new ResponseHandler(this, key));
             } else {
                 if(mAllFriendItems.isEmpty()) {
@@ -687,6 +689,8 @@ public class SelectFriendsActivity extends BaseActivity {
             if(mAllFriendItems.isEmpty()) {
                 mEmptyLayout.setNoDataContent(getString(R.string.select_friends_empty));
                 mEmptyLayout.setErrorType(EmptyLayout.NODATA);
+            } else {
+                mEmptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             }
         } else {
             mEmptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
@@ -738,7 +742,7 @@ public class SelectFriendsActivity extends BaseActivity {
         @Override
         protected void onPostExecute(List<FriendItem> list) {
             SelectFriendsActivity activity = mActivity.get();
-            if(activity == null) {
+            if(activity == null || activity.isFinishing()) {
                 return;
             }
             //如果缓存为空，则读取网络的数据
@@ -813,7 +817,7 @@ public class SelectFriendsActivity extends BaseActivity {
                 @Override
                 protected void onPostExecute(List<FriendItem> friendItems) {
                     SelectFriendsActivity activity = mActivity.get();
-                    if(activity == null) {
+                    if(activity == null || activity.isFinishing()) {
                         return;
                     }
                     if(friendItems == null) {
