@@ -97,7 +97,7 @@ public class SearchFriendAdapter extends BaseAdapter {
             int start = item.getStartIndex();
             if(start != -1) {
                 SpannableString ss = new SpannableString(item.getFriend().getName());
-                ss.setSpan(new ForegroundColorSpan(0xff40AA53), start,
+                ss.setSpan(new ForegroundColorSpan(item.getHightLightColor()), start,
                         start + item.getKeyLength(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
                 name.setText(ss);
             } else {

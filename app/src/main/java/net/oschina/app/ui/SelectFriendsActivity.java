@@ -2,6 +2,8 @@ package net.oschina.app.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.view.MotionEventCompat;
@@ -143,12 +145,15 @@ public class SelectFriendsActivity extends BaseActivity {
 
     private int relation = 1;
 
+    private int lineColor;
+    private int colorPrimary;
+
     @Override
     public void onClick(View v) {}
 
     /** 创建一个空白的ListView头部*/
     private View createListHeaderView() {
-        View view = new View(this);
+        View view = getLayoutInflater().inflate(R.layout.listview_header_view, null);
         int headerHeight = getResources().getDimensionPixelOffset(R.dimen.select_friend_header_height);
         AbsListView.LayoutParams lp = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, headerHeight);
         view.setLayoutParams(lp);
@@ -157,6 +162,11 @@ public class SelectFriendsActivity extends BaseActivity {
 
     @Override
     public void initView() {
+        TypedArray a = obtainStyledAttributes(new int[]{R.attr.lineColor, R.attr.colorPrimary});
+        lineColor = a.getColor(0, 0xFFDADADA);
+        colorPrimary = a.getColor(1, 0xFF40AA53);
+        a.recycle();
+
         mListView.addHeaderView(createListHeaderView());
         mListView.setOnScrollListener(scrollListener);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -269,6 +279,13 @@ public class SelectFriendsActivity extends BaseActivity {
                 }
             }
         });
+
+        //顶部设置透明度
+        View selectLayout = findViewById(R.id.select_layout);
+        Drawable bg = selectLayout.getBackground();
+        if(bg != null) {
+            bg.setAlpha(238);
+        }
 
         //提示刷新的界面
         mEmptyLayout.setOnLayoutClickListener(new View.OnClickListener() {
@@ -443,6 +460,7 @@ public class SelectFriendsActivity extends BaseActivity {
                 }
                 item.startIndex = start;
                 item.keyLength = len;
+                item.hightLightColor = colorPrimary;
                 mSearchResultList.add(item);
             }
         }
@@ -461,9 +479,9 @@ public class SelectFriendsActivity extends BaseActivity {
             TDevice.hideSoftKeyboard(mSearchEditText);
             resetLastSelectView();
             mSearchEditText.setCursorVisible(false);
-            mDividerView1.setBackgroundColor(getResources().getColor(R.color.list_divider_color));
+            mDividerView1.setBackgroundColor(lineColor);
         } else {
-            mDividerView1.setBackgroundColor(getResources().getColor(R.color.day_colorPrimary));
+            mDividerView1.setBackgroundColor(colorPrimary);
             mSearchEditText.setCursorVisible(true);
         }
         isEditMode = edit;
@@ -606,6 +624,8 @@ public class SelectFriendsActivity extends BaseActivity {
         private transient int startIndex = -1;
         //搜索关键字的长度
         private transient int keyLength = 0;
+        //高亮显示的颜色值
+        private transient int hightLightColor = 0xff000000;
 
         public FriendItem(Friend friend, String name, String indexStr) {
             this.friend = friend;
@@ -631,6 +651,10 @@ public class SelectFriendsActivity extends BaseActivity {
 
         public int getKeyLength() {
             return keyLength;
+        }
+
+        public int getHightLightColor() {
+            return hightLightColor;
         }
 
         @Override

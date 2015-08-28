@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/iv_avatar"
         android:layout_centerVertical="true"
-        android:textColor="@color/black"
+        android:textColor="?attr/textColor"
         android:textSize="@dimen/text_size_16"/>
 
     <CheckBox

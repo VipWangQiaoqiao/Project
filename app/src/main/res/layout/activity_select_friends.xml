@@ -27,7 +27,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/select_friend_header_height"
         android:layout_gravity="right"
-        android:textColor="#444444"
+        android:textColor="?attr/textColor"
         android:textSize="12dp"/>
 
     <TextView
@@ -46,14 +46,14 @@
         android:id="@+id/search_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="?attr/layout_item_bg"
         android:visibility="gone">
 
         <TextView
             android:id="@+id/search_result_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:textColor="?attr/textColor"
             android:layout_gravity="center_horizontal"
             android:textSize="@dimen/text_size_16"
             android:text="@string/select_friends_noresult"
@@ -73,10 +73,11 @@
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/select_layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/select_friend_header_height"
         android:clickable="true"
-        android:background="#eeffffff">
+        android:background="?attr/layout_item_bg">
 
         <LinearLayout
             android:id="@+id/top_layout"
@@ -119,7 +120,8 @@
                 android:textSize="@dimen/text_size_16"
                 android:singleLine="true"
                 android:cursorVisible="false"
-                android:textColor="@color/black"
+                android:textColor="?attr/textColor"
+                android:textColorHint="@color/edittext_hint_color"
                 android:background="@color/transparent"
                 android:hint="@string/select_friends_search"/>
         </LinearLayout>
@@ -132,7 +134,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:layout_gravity="bottom"
-            android:background="@color/list_divider_color"/>
+            android:background="?attr/lineColor"/>
 
         <View
             android:id="@+id/divider2"
@@ -140,6 +142,6 @@
             android:layout_height="2px"
             android:layout_gravity="bottom"
             android:visibility="gone"
-            android:background="@color/list_divider_color"/>
+            android:background="?attr/lineColor"/>
     </FrameLayout>
 </FrameLayout>
