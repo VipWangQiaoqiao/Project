@@ -53,8 +53,11 @@ public class CircleImageView extends ImageView {
     private boolean mReady;
     private boolean mSetupPending;
 
+    //默认显示圆形
+    private boolean isDisplayCircle = true;
+
     public CircleImageView(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public CircleImageView(Context context, AttributeSet attrs) {
@@ -94,6 +97,10 @@ public class CircleImageView extends ImageView {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        if(!isDisplayCircle) {
+            super.onDraw(canvas);
+            return;
+        }
         if (getDrawable() == null) {
             return;
         }
@@ -108,6 +115,10 @@ public class CircleImageView extends ImageView {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         setup();
+    }
+
+    public void setDisplayCircle(boolean isDisplayCircle) {
+        this.isDisplayCircle = isDisplayCircle;
     }
 
     public int getBorderColor() {

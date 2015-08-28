@@ -36,6 +36,7 @@ import net.oschina.app.emoji.Emojicon;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.emoji.OnEmojiClickListener;
 import net.oschina.app.service.ServerTaskUtils;
+import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.FileUtil;
 import net.oschina.app.util.ImageUtils;
@@ -75,6 +76,8 @@ public class TweetPubFragment extends BaseFragment implements
     private static final int MAX_TEXT_LENGTH = 160;
     private static final String TEXT_ATME = "@请输入用户名 ";
     private static final String TEXT_SOFTWARE = "#请输入软件名#";
+
+    private static final int SELECT_FRIENDS_REEQUEST_CODE = 100;
 
     private String fromSharedTextContent = "";
 
@@ -387,7 +390,8 @@ public class TweetPubFragment extends BaseFragment implements
         if (id == R.id.ib_picture) {
             handleSelectPicture();
         } else if (id == R.id.ib_mention) {
-            insertMention();
+            //insertMention();
+            handleSelectFriends();
         } else if (id == R.id.ib_trend_software) {
             insertTrendSoftware();
         } else if (id == R.id.tv_clear) {
@@ -412,6 +416,20 @@ public class TweetPubFragment extends BaseFragment implements
             final Intent imageReturnIntent) {
         if (resultCode != Activity.RESULT_OK)
             return;
+        if(requestCode == SELECT_FRIENDS_REEQUEST_CODE) {
+            //选中好友的名字
+            String names[] = imageReturnIntent.getStringArrayExtra("names");
+            if(names != null && names.length > 0) {
+                //拼成字符串
+                String text = "";
+                for(String n : names) {
+                    text += "@" + n + " ";
+                }
+                //插入到文本中
+                mEtInput.getText().insert(mEtInput.getSelectionStart(), text);
+            }
+            return;
+        }
         new Thread() {
             private String selectedImagePath;
 
@@ -518,6 +536,12 @@ public class TweetPubFragment extends BaseFragment implements
         super.onResume();
         keyboardFragment.showSoftKeyboard(mEtInput);
         keyboardFragment.hideEmojiKeyBoard();
+    }
+
+    /** 跳转选择好友*/
+    private void handleSelectFriends() {
+        Intent intent = new Intent(getActivity(), SelectFriendsActivity.class);
+        startActivityForResult(intent, SELECT_FRIENDS_REEQUEST_CODE);
     }
 
     private void handleSelectPicture() {
