@@ -28,6 +28,8 @@ import butterknife.InjectView;
  */
 public class SelectFriendAdapter extends BaseAdapter {
 
+    private static final char DEFAULT_OTHER_LETTER = '#';
+
     private static final int VIEWTYPE_HEADER = 0;
     private static final int VIEWTYPE_NORMAL = 1;
 
@@ -53,6 +55,9 @@ public class SelectFriendAdapter extends BaseAdapter {
         mPositionArray.clear();
         mList.clear();
 
+        //非字母开头的列表
+        List<ItemData> otherList = null;
+
         char lastIndex = '0';
         for(SelectFriendsActivity.FriendItem item : list) {
             char indexLetter;
@@ -62,14 +67,27 @@ public class SelectFriendAdapter extends BaseAdapter {
             } else if(c >= 'a' && c <= 'z') {
                 indexLetter = (char)(c - 'a' + 'A');
             } else {
-                indexLetter = '#';
+                indexLetter = DEFAULT_OTHER_LETTER;
             }
-            if(indexLetter != lastIndex) {
-                mPositionArray.append(indexLetter, mList.size());
-                mList.add(new HeaderItemData(String.valueOf(indexLetter)));
-                lastIndex = indexLetter;
+            if(indexLetter == DEFAULT_OTHER_LETTER) {
+                if(otherList == null) {
+                    otherList = new ArrayList<>();
+                }
+                otherList.add(new NormalItemData(item));
+            } else {
+                if (indexLetter != lastIndex) {
+                    mPositionArray.append(indexLetter, mList.size());
+                    mList.add(new HeaderItemData(String.valueOf(indexLetter)));
+                    lastIndex = indexLetter;
+                }
+                mList.add(new NormalItemData(item));
             }
-            mList.add(new NormalItemData(item));
+        }
+        //将没有索引的数据列表放到最后
+        if(otherList != null && !otherList.isEmpty()) {
+            mPositionArray.append(DEFAULT_OTHER_LETTER, mList.size());
+            mList.add(new HeaderItemData(String.valueOf(DEFAULT_OTHER_LETTER)));
+            mList.addAll(otherList);
         }
 
         notifyDataSetChanged();
