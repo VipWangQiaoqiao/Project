@@ -50,7 +50,6 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
 import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
-import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
 import org.apache.http.Header;
 
@@ -84,7 +83,7 @@ public class SelectFriendsActivity extends BaseActivity {
     /** 数据缓存有效时间*/
     private static final int CACHE_TIME = 2 * 60; //2分钟
 
-    private static final String CACHE_KEY_PREFIX = "all_friend_list";
+    private static final String CACHE_KEY_PREFIX = "friend_list_all";
 
     @InjectView(R.id.lv_list)
     ListView mListView;
@@ -135,7 +134,7 @@ public class SelectFriendsActivity extends BaseActivity {
     private List<Integer> mCheckedFriendIds = new ArrayList<>();
 
     //搜索结果集合
-    private List<FriendItem> mSearchResultList = new ArrayList<>();
+    private List<SearchItem> mSearchResultList = new ArrayList<>();
 
     private SelectFriendAdapter mAdapter;
 
@@ -145,7 +144,9 @@ public class SelectFriendsActivity extends BaseActivity {
 
     private int relation = 1;
 
+    //未选中edittext的线条颜色
     private int lineColor;
+    //选中edittext的线条颜色
     private int colorPrimary;
 
     @Override
@@ -193,14 +194,14 @@ public class SelectFriendsActivity extends BaseActivity {
                 if (position < 0) {
                     return;
                 }
-                FriendItem item = mSearchResultList.get(position);
+                SearchItem item = mSearchResultList.get(position);
 
                 resetSearchResult();
                 //清空搜索字键字
                 mSearchEditText.setText("");
                 mSearchAdapter.notifyDataSetChanged();
 
-                itemClick(item);
+                itemClick(item.friendItem);
             }
         });
 
@@ -435,10 +436,6 @@ public class SelectFriendsActivity extends BaseActivity {
 
     /** 清空搜索结果*/
     private void resetSearchResult() {
-        for(FriendItem item : mSearchResultList) {
-            item.startIndex = -1;
-            item.keyLength = 0;
-        }
         mSearchResultList.clear();
     }
 
@@ -448,20 +445,65 @@ public class SelectFriendsActivity extends BaseActivity {
         if(!TextUtils.isEmpty(key)) {
             key = key.toLowerCase();
             int len = key.length();
+            int keyLength;
             int start;
             for (FriendItem item : mAllFriendItems) {
                 String name = item.name;
                 if(TextUtils.isEmpty(name)) {
                     continue;
                 }
+                keyLength = len;
+
+                //先按名字查找
                 start = name.indexOf(key);
                 if(start == -1) {
-                    continue;
+                    //判断是否是纯英文
+                    if(!key.matches("[a-zA-Z]+")) {
+                        continue;
+                    }
+                    boolean match = false;
+                    //判断是不是拼音
+                    if(!TextUtils.isEmpty(item.pinYin)) {
+                        if(item.pinYin.startsWith(key)) {
+                            match = true;
+                            start = 0;
+                            int total = 0;
+                            for(int i = 0; i < item.pinYinArray.length; i ++) {
+                                String py = item.pinYinArray[i];
+                                total += py.length();
+                                if(len <= total) {
+                                    keyLength = i + 1;
+                                    break;
+                                }
+                            }
+                        } else if(key.startsWith(item.pinYin)) {
+                            match = true;
+                            start = -1;
+                            keyLength = 0;
+                        }
+                    }
+
+                    if(!match) {
+                        if(!TextUtils.isEmpty(item.firstPinYin)) {
+                            //判断是不是首字母拼间
+                            if (item.firstPinYin.startsWith(key)) {
+                                match = true;
+                                start = 0;
+                                keyLength = len;
+                            } else if(key.startsWith(item.firstPinYin)) {
+                                match = true;
+                                start = -1;
+                                keyLength = 0;
+                            }
+                        }
+                    }
+
+                    if(!match) {
+                        continue;
+                    }
                 }
-                item.startIndex = start;
-                item.keyLength = len;
-                item.hightLightColor = colorPrimary;
-                mSearchResultList.add(item);
+
+                mSearchResultList.add(new SearchItem(item, start, keyLength, colorPrimary));
             }
         }
         if(mSearchResultList.isEmpty()) {
@@ -616,21 +658,30 @@ public class SelectFriendsActivity extends BaseActivity {
     public static class FriendItem implements Serializable, Comparable<FriendItem> {
         private Friend friend;
         private String indexStr;
+        //首字母索引
+        private char firstLetter;
+
+        private String pinYinArray[];
+        //连续中文组合的拼音
+        private String pinYin;
+        //每个中文的拼音首字母
+        private String firstPinYin;
         //用于搜索
         private String name;
 
         private transient boolean isSelected;
-        //搜索关键字的开始位置
-        private transient int startIndex = -1;
-        //搜索关键字的长度
-        private transient int keyLength = 0;
-        //高亮显示的颜色值
-        private transient int hightLightColor = 0xff000000;
 
-        public FriendItem(Friend friend, String name, String indexStr) {
+        public FriendItem(Friend friend, String name, String indexStr, String pinYinArray[], String pinYin, String firstPinYin) {
             this.friend = friend;
             this.name = name;
             this.indexStr = indexStr;
+            this.pinYinArray = pinYinArray;
+            this.pinYin = pinYin;
+            this.firstPinYin = firstPinYin;
+            
+            if(indexStr != null && indexStr.length() >= 0) {
+                this.firstLetter = indexStr.charAt(0);
+            }
         }
 
         public boolean isSelected() {
@@ -645,6 +696,36 @@ public class SelectFriendsActivity extends BaseActivity {
             return indexStr;
         }
 
+        public char getFirstLetter() {
+            return firstLetter;
+        }
+
+        @Override
+        public int compareTo(FriendItem another) {
+            String s1 = indexStr == null ? "" : indexStr;
+            String s2 = another == null || another.indexStr == null ? "" : another.indexStr;
+            return s1.compareTo(s2);
+        }
+    }
+
+    public static class SearchItem {
+
+        private FriendItem friendItem;
+
+        //搜索关键字的开始位置
+        private int startIndex = -1;
+        //搜索关键字的长度
+        private int keyLength = 0;
+        //高亮显示的颜色值
+        private int hightLightColor;
+
+        public SearchItem(FriendItem friendItem, int startIndex, int keyLength, int hightLightColor) {
+            this.friendItem = friendItem;
+            this.startIndex = startIndex;
+            this.keyLength = keyLength;
+            this.hightLightColor = hightLightColor;
+        }
+
         public int getStartIndex() {
             return startIndex;
         }
@@ -657,11 +738,8 @@ public class SelectFriendsActivity extends BaseActivity {
             return hightLightColor;
         }
 
-        @Override
-        public int compareTo(FriendItem another) {
-            String s1 = indexStr == null ? "" : indexStr;
-            String s2 = another == null || another.indexStr == null ? "" : another.indexStr;
-            return s1.compareTo(s2);
+        public FriendItem getFriendItem() {
+            return friendItem;
         }
     }
 
@@ -820,21 +898,52 @@ public class SelectFriendsActivity extends BaseActivity {
                         FriendsList friendsList = XmlUtils.toBean(FriendsList.class,
                                 new ByteArrayInputStream(responseBody));
                         ArrayList<FriendItem> newList = new ArrayList<>();
+
+                        StringBuilder indexStr = new StringBuilder("");
+                        StringBuilder firstPinYin = new StringBuilder("");
+                        StringBuilder pinYin = new StringBuilder("");
+
+                        String name;
+                        char[] input;
+
                         for(Friend friend : friendsList.getList()) {
-                            String indexStr;
-                            String name;
+                            indexStr.replace(0, indexStr.length(), "");
+                            firstPinYin.replace(0, firstPinYin.length(), "");
+                            pinYin.replace(0, pinYin.length(), "");
+
                             if(TextUtils.isEmpty(friend.getName())) {
-                                indexStr = "";
                                 name = "";
                             } else {
                                 name = friend.getName().toLowerCase();
-                                indexStr = getPinYin(name, format);
+                                input = name.trim().toCharArray();
+
+                                boolean lastCNChar = true;
+                                for (char c : input) {
+                                    String str = Character.toString(c);
+                                    //判断是否为中文
+                                    if (str.matches("[\u4E00-\u9FA5]+")) {
+                                        try {
+                                            String[] temp = PinyinHelper.toHanyuPinyinStringArray(c, format);
+                                            String pinyin = temp[0];
+                                            if (!TextUtils.isEmpty(pinyin)) {
+                                                indexStr.append(pinyin);
+                                                if(lastCNChar) {
+                                                    pinYin.append(pinyin).append(" ");
+                                                    firstPinYin.append(pinyin.charAt(0));
+                                                }
+                                            }
+                                        }  catch (Exception e){}
+                                    } else {
+                                        lastCNChar = false;
+                                        indexStr.append(str);
+                                    }
+                                }
                             }
-                            if(indexStr == null) {
-                                indexStr = "";
-                            }
-                            FriendItem item = new FriendItem(friend, name, indexStr);
-                            item.friend = friend;
+                            String py = pinYin.toString();
+                            String pyArray[] = py.split(" ");
+                            py = py.replace(" ", "");
+                            FriendItem item = new FriendItem(friend, name, indexStr.toString(), pyArray,
+                                    py, firstPinYin.toString());
                             newList.add(item);
                         }
                         //将集合按字母排序
@@ -873,25 +982,6 @@ public class SelectFriendsActivity extends BaseActivity {
                 return;
             }
             activity.handleFail();
-        }
-
-        /** 将字符串转为拼音*/
-        private String getPinYin(String inputString, HanyuPinyinOutputFormat format) {
-            try {
-                char[] input = inputString.trim().toCharArray();
-                StringBuilder output = new StringBuilder("");
-                for (char c : input) {
-                    if (Character.toString(c).matches("[\u4E00-\u9FA5]+")) {
-                        String[] temp = PinyinHelper.toHanyuPinyinStringArray(c, format);
-                        output.append(temp[0]);
-                    } else
-                        output.append(Character.toString(c));
-                }
-                return output.toString();
-            } catch (BadHanyuPinyinOutputFormatCombination e) {
-                e.printStackTrace();
-            }
-            return inputString;
         }
     }
 }

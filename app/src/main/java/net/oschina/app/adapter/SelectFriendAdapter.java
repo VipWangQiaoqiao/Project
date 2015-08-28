@@ -56,17 +56,13 @@ public class SelectFriendAdapter extends BaseAdapter {
         char lastIndex = '0';
         for(SelectFriendsActivity.FriendItem item : list) {
             char indexLetter;
-            if(item.getIndexStr() == null || item.getIndexStr().length() == 0) {
-                indexLetter = '#';
+            char c = item.getFirstLetter();
+            if(c >= 'A' && c <= 'Z') {
+                indexLetter = c;
+            } else if(c >= 'a' && c <= 'z') {
+                indexLetter = (char)(c - 'a' + 'A');
             } else {
-                char c = item.getIndexStr().charAt(0);
-                if(c >= 'A' && c <= 'Z') {
-                    indexLetter = c;
-                } else if(c >= 'a' && c <= 'z') {
-                    indexLetter = (char)(c - 'a' + 'A');
-                } else {
-                    indexLetter = '#';
-                }
+                indexLetter = '#';
             }
             if(indexLetter != lastIndex) {
                 mPositionArray.append(indexLetter, mList.size());

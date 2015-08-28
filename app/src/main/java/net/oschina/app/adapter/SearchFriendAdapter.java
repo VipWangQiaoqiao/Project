@@ -31,10 +31,10 @@ import butterknife.InjectView;
  */
 public class SearchFriendAdapter extends BaseAdapter {
 
-    final List<SelectFriendsActivity.FriendItem> mSearchResults;
+    final List<SelectFriendsActivity.SearchItem> mSearchResults;
     private LayoutInflater mInflater;
 
-    public SearchFriendAdapter(List<SelectFriendsActivity.FriendItem> list) {
+    public SearchFriendAdapter(List<SelectFriendsActivity.SearchItem> list) {
         this.mSearchResults = list;
     }
 
@@ -52,7 +52,7 @@ public class SearchFriendAdapter extends BaseAdapter {
     }
 
     @Override
-    public SelectFriendsActivity.FriendItem getItem(int position) {
+    public SelectFriendsActivity.SearchItem getItem(int position) {
         return mSearchResults.get(position);
     }
 
@@ -88,20 +88,21 @@ public class SearchFriendAdapter extends BaseAdapter {
             avatar.setClickable(false);
         }
 
-        public void bind(SelectFriendsActivity.FriendItem item) {
-            avatar.setAvatarUrl(item.getFriend().getPortrait());
-            checkBox.setChecked(item.isSelected());
+        public void bind(SelectFriendsActivity.SearchItem item) {
+            SelectFriendsActivity.FriendItem friendItem = item.getFriendItem();
+            avatar.setAvatarUrl(friendItem.getFriend().getPortrait());
+            checkBox.setChecked(friendItem.isSelected());
 
             avatar.setDisplayCircle(false);
 
             int start = item.getStartIndex();
             if(start != -1) {
-                SpannableString ss = new SpannableString(item.getFriend().getName());
+                SpannableString ss = new SpannableString(friendItem.getFriend().getName());
                 ss.setSpan(new ForegroundColorSpan(item.getHightLightColor()), start,
                         start + item.getKeyLength(), Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
                 name.setText(ss);
             } else {
-                name.setText(item.getFriend().getName());
+                name.setText(friendItem.getFriend().getName());
             }
 
         }
