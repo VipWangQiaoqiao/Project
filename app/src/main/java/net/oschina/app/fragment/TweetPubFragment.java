@@ -540,6 +540,11 @@ public class TweetPubFragment extends BaseFragment implements
 
     /** 跳转选择好友*/
     private void handleSelectFriends() {
+        //如果没登录，则先去登录界面
+        if (!AppContext.getInstance().isLogin()) {
+            UIHelper.showLoginActivity(getActivity());
+            return;
+        }
         Intent intent = new Intent(getActivity(), SelectFriendsActivity.class);
         startActivityForResult(intent, SELECT_FRIENDS_REEQUEST_CODE);
     }
