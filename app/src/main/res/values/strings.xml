@@ -309,4 +309,5 @@
 	<string name="select_friends_search">搜索</string>
 	<string name="select_friends_noresult">无结果</string>
 	<string name="select_friends_empty">暂无好友</string>
+	<string name="select_friends_max_tips">最多只能选%1$d个好友哦</string>
 </resources>

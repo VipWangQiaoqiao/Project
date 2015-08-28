@@ -141,6 +141,8 @@ public class SelectFriendsActivity extends BaseActivity {
     //是否正在输入搜索
     private boolean isEditMode = false;
 
+    private int relation = 1;
+
     @Override
     public void onClick(View v) {}
 
@@ -221,21 +223,13 @@ public class SelectFriendsActivity extends BaseActivity {
             }
         });
 
-        //设置不可手动滚动
-        mHorizontalScrollView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return true;
-            }
-        });
-
         mSearchEditText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_DEL) {
                     if (mSearchEditText.length() == 0) {
                         if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                            handleDelete();
+                            handleDeleteKeyEvent();
                         }
                         return true;
                     }
@@ -355,12 +349,16 @@ public class SelectFriendsActivity extends BaseActivity {
         int userId = item.friend.getUserid();
         boolean contains = mCheckedFriendIds.contains(userId);
         if (isSelected) {
-            if (mCheckedFriendIds.size() < MAX_SELECTED_SIZE && !contains) {
-                mCheckedFriendIds.add(userId);
-                item.isSelected = isSelected;
-                mAdapter.notifyDataSetChanged();
+            if (mCheckedFriendIds.size() < MAX_SELECTED_SIZE) {
+                if(!contains) {
+                    mCheckedFriendIds.add(userId);
+                    item.isSelected = isSelected;
+                    mAdapter.notifyDataSetChanged();
 
-                addHeaderSelectView(item.friend);
+                    addHeaderSelectView(item.friend);
+                }
+            } else {
+                AppContext.showToast(getString(R.string.select_friends_max_tips, MAX_SELECTED_SIZE));
             }
         } else {
             if (contains) {
@@ -476,11 +474,21 @@ public class SelectFriendsActivity extends BaseActivity {
         mHorizontalScrollView.setVisibility(View.VISIBLE);
         mSearchIcon.setVisibility(View.GONE);
 
+        final int userId = friend.getUserid();
+
         final AvatarView image = new AvatarView(this);
         image.setDisplayCircle(false);
         image.setImageResource(R.drawable.widget_dface);
         image.setAvatarUrl(friend.getPortrait());
-        image.setTag(friend.getUserid());
+        image.setTag(userId);
+
+        //点击删除
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeCheckedFriend(userId);
+            }
+        });
 
         int size = getResources().getDimensionPixelSize(R.dimen.select_friend_avatar_size);
         int minSize = (int) mSearchEditText.getPaint().measureText("搜 索");
@@ -546,7 +554,7 @@ public class SelectFriendsActivity extends BaseActivity {
     }
 
     /** 处理删除按键的事件*/
-    private void handleDelete() {
+    private void handleDeleteKeyEvent() {
         if(mSelectContainer.getChildCount() == 0) {
             return;
         }
@@ -563,23 +571,28 @@ public class SelectFriendsActivity extends BaseActivity {
                 view.setAlpha(0.5f);
             }
         } else {
-            Iterator<Integer> iterator = mCheckedFriendIds.iterator();
-            while (iterator.hasNext()) {
-                if (iterator.next() == userId) {
-                    iterator.remove();
-                }
-            }
-            for(FriendItem item : mAllFriendItems) {
-                if(item.friend.getUserid() == userId) {
-                    item.isSelected = false;
-                    break;
-                }
-            }
-            mAdapter.notifyDataSetChanged();
-            removeHeaderSelectView(userId);
-
-            updateTopButton();
+            removeCheckedFriend(userId);
         }
+    }
+
+    /** 移除一个已选择的好友*/
+    private void removeCheckedFriend(int userId) {
+        Iterator<Integer> iterator = mCheckedFriendIds.iterator();
+        while (iterator.hasNext()) {
+            if (iterator.next() == userId) {
+                iterator.remove();
+            }
+        }
+        for(FriendItem item : mAllFriendItems) {
+            if(item.friend.getUserid() == userId) {
+                item.isSelected = false;
+                break;
+            }
+        }
+        mAdapter.notifyDataSetChanged();
+        removeHeaderSelectView(userId);
+
+        updateTopButton();
     }
 
     public static class FriendItem implements Serializable, Comparable<FriendItem> {
@@ -629,7 +642,7 @@ public class SelectFriendsActivity extends BaseActivity {
     }
 
     private String getCacheKey(int uid) {
-        return CACHE_KEY_PREFIX + "_" + uid;
+        return CACHE_KEY_PREFIX + "_" + relation + "_" + uid;
     }
 
     /***
@@ -663,7 +676,7 @@ public class SelectFriendsActivity extends BaseActivity {
                 if(mAllFriendItems.isEmpty()) {
                     mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
                 }
-                OSChinaApi.getAllFriendsList(uid, new ResponseHandler(this, key));
+                OSChinaApi.getAllFriendsList(uid, relation, new ResponseHandler(this, key));
             } else {
                 if(mAllFriendItems.isEmpty()) {
                     mEmptyLayout.setErrorType(EmptyLayout.NETWORK_ERROR);

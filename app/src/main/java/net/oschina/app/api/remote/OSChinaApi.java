@@ -168,16 +168,17 @@ public class OSChinaApi {
     }
 
     /**
-     * 获取所有好友列表
+     * 获取所有关注好友列表
      *
      * @param uid
      *            指定用户UID
      * @param handler
      * */
-    public static void getAllFriendsList(int uid, AsyncHttpResponseHandler handler) {
+    public static void getAllFriendsList(int uid, int relation, AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
-        params.put("all", "1");
+        params.put("relation", relation);
+        params.put("all", 1);
         ApiHttpClient.get("action/api/friends_list", params, handler);
     }
 
