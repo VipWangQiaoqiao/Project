@@ -154,7 +154,7 @@ public class SelectFriendsActivity extends BaseActivity {
 
     /** 创建一个空白的ListView头部*/
     private View createListHeaderView() {
-        View view = getLayoutInflater().inflate(R.layout.listview_header_view, null);
+        View view = new View(this);
         int headerHeight = getResources().getDimensionPixelOffset(R.dimen.select_friend_header_height);
         AbsListView.LayoutParams lp = new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, headerHeight);
         view.setLayoutParams(lp);
