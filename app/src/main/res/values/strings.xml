@@ -303,4 +303,11 @@
     <string name="str_team_select_team">选择团队</string>
 	
     <string name="str_team_my_issue">我的任务</string>
+
+	<!-- 选择好友 -->
+	<string name="actionbar_title_select_friends">选择&#064;好友</string>
+	<string name="select_friends_search">搜索</string>
+	<string name="select_friends_noresult">无结果</string>
+	<string name="select_friends_empty">暂无好友</string>
+	<string name="select_friends_max_tips">最多只能选%1$d个好友哦</string>
 </resources>
