@@ -115,7 +115,7 @@ public class MessageDetailAdapter extends ListBaseAdapter<MessageDetail> {
 
         //检查是否需要显示时间
         if (item.isShowDate()) {
-            vh.time.setText(StringUtils.friendly_time(item.getPubDate()));
+            vh.time.setText(StringUtils.friendly_time3(item.getPubDate()));
             vh.time.setVisibility(View.VISIBLE);
         } else {
             vh.time.setVisibility(View.GONE);
