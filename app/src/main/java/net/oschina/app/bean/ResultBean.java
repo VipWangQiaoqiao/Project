@@ -22,6 +22,10 @@ public class ResultBean extends Base {
     @XStreamAlias("comment")
     private Comment comment;
 
+    //现在pub_message接口返回的是comment对象。
+    //@XStreamAlias("message")
+    private MessageDetail message;
+
     @XStreamAlias("relation")
     private int relation;
 
@@ -55,5 +59,23 @@ public class ResultBean extends Base {
 
     public void setComment(Comment comment) {
 	this.comment = comment;
+    }
+
+    public MessageDetail getMessage() {
+        //现在pub_message接口返回的是comment对象。所以要转成message
+        message = new MessageDetail();
+        if(comment!=null) {
+            message.setId(comment.getId());
+            message.setPortrait(comment.getPortrait());
+            message.setAuthor(comment.getAuthor());
+            message.setAuthorId(comment.getId());
+            message.setContent(comment.getContent());
+            message.setPubDate(comment.getPubDate());
+        }
+        return message;
+    }
+
+    public void setMessage(MessageDetail message) {
+        this.message = message;
     }
 }

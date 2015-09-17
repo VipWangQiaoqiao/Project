@@ -70,8 +70,9 @@
     <string name="actionbar_title_active">好友圈</string>
     <string name="actionbar_title_mes">消息中心</string>
     <string name="actionbar_title_message_detail">对话</string>
-    
-    <string name="share_to">分享到</string>
+
+	<string name="friend_home">查看对方资料</string>
+	<string name="share_to">分享到</string>
     <string name="platform_qq">QQ</string>
 	<string name="platform_copy_link">复制链接</string>
 	<string name="platform_more_option">更多</string>
