@@ -1,12 +1,5 @@
 package net.oschina.app.api;
 
-import java.util.Locale;
-
-import net.oschina.app.AppContext;
-import net.oschina.app.util.TLog;
-
-import org.apache.http.client.params.ClientPNames;
-
 import android.content.Context;
 import android.util.Log;
 
@@ -14,12 +7,19 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import net.oschina.app.AppContext;
+import net.oschina.app.util.TLog;
+
+import org.apache.http.client.params.ClientPNames;
+
+import java.util.Locale;
+
 public class ApiHttpClient {
 
-//    public final static String HOST = "www.oschina.net";
-//    private static String API_URL = "http://www.oschina.net/%s";
-     public final static String HOST = "192.168.1.107";
-     private static String API_URL = "http://192.168.1.107/%s";
+    public final static String HOST = "www.oschina.net";
+    private static String API_URL = "http://www.oschina.net/%s";
+     //public final static String HOST = "192.168.1.107";
+     //private static String API_URL = "http://192.168.1.107/%s";
     public static final String DELETE = "DELETE";
     public static final String GET = "GET";
     public static final String POST = "POST";
@@ -58,7 +58,10 @@ public class ApiHttpClient {
     }
 
     public static String getAbsoluteApiUrl(String partUrl) {
-        String url = String.format(API_URL, partUrl);
+        String url = partUrl;
+        if(!partUrl.startsWith("http:")&&!partUrl.startsWith("https:")) {
+            url = String.format(API_URL, partUrl);
+        }
         Log.d("BASE_CLIENT", "request:" + url);
         return url;
     }

@@ -1,6 +1,14 @@
 package net.oschina.app.ui;
 
-import java.lang.ref.WeakReference;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.text.Editable;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 
 import net.oschina.app.R;
 import net.oschina.app.base.BaseActivity;
@@ -11,15 +19,8 @@ import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.TweetPubFragment;
 import net.oschina.app.fragment.TweetsFragment;
 import net.oschina.app.util.UIHelper;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.text.Editable;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
+
+import java.lang.ref.WeakReference;
 
 public class SimpleBackActivity extends BaseActivity implements
         OnSendClickListener {
@@ -94,13 +95,20 @@ public class SimpleBackActivity extends BaseActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case R.id.public_menu_send:
-            if (mFragment.get() instanceof TweetsFragment) {
-                sendTopic();
-            } else {
-                return super.onOptionsItemSelected(item);
-            }
-            break;
+            case R.id.public_menu_send:
+                if (mFragment.get() instanceof TweetsFragment) {
+                    sendTopic();
+                } else {
+                    return super.onOptionsItemSelected(item);
+                }
+                break;
+            case R.id.chat_friend_home:
+                if (mFragment.get() instanceof MessageDetailFragment) {
+                    ((MessageDetailFragment)mFragment.get()).showFriendUserCenter();
+                } else {
+                    return super.onOptionsItemSelected(item);
+                }
+                break;
         default:
             break;
         }
@@ -111,6 +119,8 @@ public class SimpleBackActivity extends BaseActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         if (mFragment.get() instanceof TweetsFragment) {
             getMenuInflater().inflate(R.menu.pub_topic_menu, menu);
+        }else if (mFragment.get() instanceof MessageDetailFragment){
+            getMenuInflater().inflate(R.menu.chat_menu, menu);
         }
         return super.onCreateOptionsMenu(menu);
     }

@@ -74,19 +74,26 @@ public class ListBaseAdapter<T extends Entity> extends BaseAdapter {
     @Override
     public int getCount() {
         switch (getState()) {
-        case STATE_EMPTY_ITEM:
+            case STATE_EMPTY_ITEM:
+                return getDataSizePlus1();
+            case STATE_NETWORK_ERROR:
+            case STATE_LOAD_MORE:
+                return getDataSizePlus1();
+            case STATE_NO_DATA:
+                return 1;
+            case STATE_NO_MORE:
+                return getDataSizePlus1();
+            case STATE_LESS_ONE_PAGE:
+                return getDataSize();
+            default:
+                break;
+        }
+        return getDataSize();
+    }
+
+    public int getDataSizePlus1(){
+        if(hasFooterView()){
             return getDataSize() + 1;
-        case STATE_NETWORK_ERROR:
-        case STATE_LOAD_MORE:
-            return getDataSize() + 1;
-        case STATE_NO_DATA:
-            return 1;
-        case STATE_NO_MORE:
-            return getDataSize() + 1;
-        case STATE_LESS_ONE_PAGE:
-            return getDataSize();
-        default:
-            break;
         }
         return getDataSize();
     }
@@ -168,7 +175,7 @@ public class ListBaseAdapter<T extends Entity> extends BaseAdapter {
     @SuppressLint("InflateParams")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (position == getCount() - 1) {// 最后一条
+        if (position == getCount() - 1&&hasFooterView()) {// 最后一条
             // if (position < _data.size()) {
             // position = getCount() - 2; // footview
             // }
@@ -229,6 +236,10 @@ public class ListBaseAdapter<T extends Entity> extends BaseAdapter {
     }
 
     private LinearLayout mFooterView;
+
+    protected boolean hasFooterView(){
+        return true;
+    }
 
     public View getFooterView() {
         return this.mFooterView;
