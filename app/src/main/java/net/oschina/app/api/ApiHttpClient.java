@@ -18,15 +18,16 @@ public class ApiHttpClient {
 
     public final static String HOST = "www.oschina.net";
     private static String API_URL = "http://www.oschina.net/%s";
-     //public final static String HOST = "192.168.1.107";
-     //private static String API_URL = "http://192.168.1.107/%s";
+//    public final static String HOST = "192.168.1.101";
+//    private static String API_URL = "http://192.168.1.101/%s";
     public static final String DELETE = "DELETE";
     public static final String GET = "GET";
     public static final String POST = "POST";
     public static final String PUT = "PUT";
     public static AsyncHttpClient client;
 
-    public ApiHttpClient() {}
+    public ApiHttpClient() {
+    }
 
     public static AsyncHttpClient getHttpClient() {
         return client;
@@ -51,7 +52,7 @@ public class ApiHttpClient {
     }
 
     public static void get(String partUrl, RequestParams params,
-            AsyncHttpResponseHandler handler) {
+                           AsyncHttpResponseHandler handler) {
         client.get(getAbsoluteApiUrl(partUrl), params, handler);
         log(new StringBuilder("GET ").append(partUrl).append("&")
                 .append(params).toString());
@@ -59,7 +60,7 @@ public class ApiHttpClient {
 
     public static String getAbsoluteApiUrl(String partUrl) {
         String url = partUrl;
-        if(!partUrl.startsWith("http:")&&!partUrl.startsWith("https:")) {
+        if (!partUrl.startsWith("http:") && !partUrl.startsWith("https:")) {
             url = String.format(API_URL, partUrl);
         }
         Log.d("BASE_CLIENT", "request:" + url);
@@ -86,14 +87,14 @@ public class ApiHttpClient {
     }
 
     public static void post(String partUrl, RequestParams params,
-            AsyncHttpResponseHandler handler) {
+                            AsyncHttpResponseHandler handler) {
         client.post(getAbsoluteApiUrl(partUrl), params, handler);
         log(new StringBuilder("POST ").append(partUrl).append("&")
                 .append(params).toString());
     }
 
     public static void postDirect(String url, RequestParams params,
-            AsyncHttpResponseHandler handler) {
+                                  AsyncHttpResponseHandler handler) {
         client.post(url, params, handler);
         log(new StringBuilder("POST ").append(url).append("&").append(params)
                 .toString());
@@ -105,7 +106,7 @@ public class ApiHttpClient {
     }
 
     public static void put(String partUrl, RequestParams params,
-            AsyncHttpResponseHandler handler) {
+                           AsyncHttpResponseHandler handler) {
         client.put(getAbsoluteApiUrl(partUrl), params, handler);
         log(new StringBuilder("PUT ").append(partUrl).append("&")
                 .append(params).toString());

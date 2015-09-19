@@ -675,17 +675,14 @@ public class OSChinaApi {
      */
     public static void report(Report report, AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
-        params.put("obj_id", report.getReportId());
-        params.put("url", report.getLinkAddress());
-        params.put("obj_type", report.getReason());
+        params.put("obj_id", report.getObjId());
+        params.put("url", report.getUrl());
+        params.put("obj_type", report.getObjType());
+        params.put("reason", report.getReason());
         if (report.getOtherReason() != null
                 && !StringUtils.isEmpty(report.getOtherReason())) {
             params.put("memo", report.getOtherReason());
-        } else {
-            params.put("memo", "其他原因");
         }
-        TLog.log("Test", report.getReportId() + "" + report.getLinkAddress()
-                + report.getReason() + report.getOtherReason());
         ApiHttpClient.post("action/communityManage/report", params, handler);
     }
 
