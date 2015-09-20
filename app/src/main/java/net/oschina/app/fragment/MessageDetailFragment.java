@@ -52,7 +52,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 与某人的聊天记录界面（留言详情）
+ * 与某人的聊天记录界面（私信详情）
  *
  * @author kymjs (http://www.kymjs.com/)
  *
@@ -309,7 +309,7 @@ public class MessageDetailFragment extends BaseListFragment<MessageDetail> imple
     }
 
     private void handleDeleteMessage(final MessageDetail message) {
-        DialogHelp.getConfirmDialog(getActivity(), "是否删除该留言?", new DialogInterface.OnClickListener() {
+        DialogHelp.getConfirmDialog(getActivity(), "是否删除该私信?", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 showWaitDialog(R.string.progress_submit);
