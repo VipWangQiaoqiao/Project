@@ -71,8 +71,7 @@
         </LinearLayout>
 
         <View
-            style="@style/h_line"
-            android:layout_marginLeft="15dp" />
+            style="@style/h_line" />
 
         <LinearLayout 
             android:id="@+id/rl_activities"
@@ -110,8 +109,7 @@
         </LinearLayout>
 
         <View
-            style="@style/h_line"
-            android:layout_marginLeft="15dp" />
+            style="@style/h_line" />
 
         <LinearLayout
             android:id="@+id/rl_shake"

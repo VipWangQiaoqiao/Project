@@ -272,7 +272,7 @@ public class OSChinaApi {
         params.put("id", friendId);
         params.put("pageIndex", page);
         params.put("pageSize", AppContext.PAGE_SIZE);
-        ApiHttpClient.post("action/api/message_detail", params, handler);
+        ApiHttpClient.get("action/api/message_detail", params, handler);
     }
 
     public static void getUserInformation(int uid, int hisuid, String hisname,
