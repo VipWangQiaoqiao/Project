@@ -21,7 +21,7 @@ import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
 
-import org.apache.http.Header;
+
 import org.kymjs.kjframe.utils.SystemTool;
 
 import java.io.ByteArrayInputStream;
@@ -30,6 +30,7 @@ import java.util.Calendar;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Team面板界面

@@ -17,8 +17,7 @@ import net.oschina.app.ui.MainActivity;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
-import org.apache.http.Header;
-
+import cz.msebera.android.httpclient.Header;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;

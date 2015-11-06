@@ -36,6 +36,7 @@ import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 
+
 /**
  * 活动地图位置显示
  * 
@@ -183,7 +184,6 @@ public class EventLocationActivity extends BaseActivity implements
 	/**
 	 * 开始导航
 	 * 
-	 * @param view
 	 */
 	private void startNavi(LatLng pt1, LatLng pt2) {
 		// 构建 导航参数

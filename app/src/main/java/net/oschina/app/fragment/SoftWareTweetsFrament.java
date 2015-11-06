@@ -1,18 +1,14 @@
 package net.oschina.app.fragment;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.TweetAdapter;
-import net.oschina.app.api.OperationResponseHandler;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.bean.Result;
-import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetsList;
 import net.oschina.app.service.ServerTaskUtils;
@@ -112,56 +108,9 @@ public class SoftWareTweetsFrament extends BaseListFragment<Tweet> implements
         ServerTaskUtils.pubSoftWareTweet(getActivity(), tweet, mId);
     }
 
-    class DeleteOperationResponseHandler extends OperationResponseHandler {
-
-        DeleteOperationResponseHandler(Object... args) {
-            super(args);
-        }
-
-        @Override
-        public void onSuccess(int code, ByteArrayInputStream is, Object[] args) {
-            try {
-                Result res = XmlUtils.toBean(ResultBean.class, is).getResult();
-                if (res.OK()) {
-                    // AppContext.showToastShort(R.string.delete_success);
-                    // mAdapter.removeItem(args[0]);
-                } else {
-                    AppContext.showToastShort(res.getErrorMessage());
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                onFailure(code, e.getMessage(), args);
-            }
-        }
-
-        @Override
-        public void onFailure(int code, String errorMessage, Object[] args) {
-            // AppContext.showToastShort(R.string.delete_faile);
-        }
-    }
-
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view,
             int position, long id) {
-        // final Comment item = (Comment) mAdapter.getItem(position - 1);
-        // if (item == null)
-        // return false;
-        // String[] items = new String[] {
-        // getResources().getString(R.string.copy) };
-        // final CommonDialog dialog = DialogHelper
-        // .getPinterestDialogCancelable(getActivity());
-        // dialog.setNegativeButton(R.string.cancle, null);
-        // dialog.setItemsWithoutChk(items, new OnItemClickListener() {
-        //
-        // @Override
-        // public void onItemClick(AdapterView<?> parent, View view,
-        // int position, long id) {
-        // dialog.dismiss();
-        // TDevice.copyTextToBoard(HTMLSpirit.delHTMLTag(item
-        // .getContent()));
-        // }
-        // });
-        // dialog.show();
         return true;
     }
 }

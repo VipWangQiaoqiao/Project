@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
+import cz.msebera.android.httpclient.Header;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -28,8 +29,6 @@ import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
-
-import org.apache.http.Header;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -70,8 +69,12 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
         }
 
         @Override
-        public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                Throwable arg3) {
+        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
             AppContext.showToastShort(R.string.delete_faile);
         }
     }

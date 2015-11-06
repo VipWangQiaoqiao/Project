@@ -15,8 +15,7 @@ import net.oschina.app.bean.LoginUserBean;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.XmlUtils;
 
-import org.apache.http.Header;
-
+import cz.msebera.android.httpclient.Header;
 import butterknife.InjectView;
 import butterknife.OnClick;
 

@@ -51,8 +51,7 @@ import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.RecordButtonUtil;
 import net.oschina.app.widget.RecordButtonUtil.OnPlayListener;
 
-import org.apache.http.Header;
-
+import cz.msebera.android.httpclient.Header;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -324,7 +323,12 @@ public class TweetDetailFragment extends
         }
 
         @Override
-        public void onFailure(int code, String errorMessage, Object[] args) {
+        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
             AppContext.showToastShort(R.string.delete_faile);
         }
     }

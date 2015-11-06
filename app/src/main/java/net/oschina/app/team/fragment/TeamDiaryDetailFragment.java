@@ -37,8 +37,7 @@ import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
 
-import org.apache.http.Header;
-
+import cz.msebera.android.httpclient.Header;
 import java.util.List;
 
 import butterknife.ButterKnife;

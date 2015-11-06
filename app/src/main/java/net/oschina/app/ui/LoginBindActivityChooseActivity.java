@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseActivity;
@@ -17,7 +16,7 @@ import net.oschina.app.bean.OpenIdCatalog;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.XmlUtils;
 
-import org.apache.http.Header;
+import cz.msebera.android.httpclient.Header;
 
 import butterknife.InjectView;
 import butterknife.OnClick;

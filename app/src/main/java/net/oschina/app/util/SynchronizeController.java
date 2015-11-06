@@ -1,6 +1,5 @@
 package net.oschina.app.util;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import net.oschina.app.AppContext;
@@ -8,22 +7,22 @@ import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.bean.NotebookData;
 import net.oschina.app.db.NoteDatabase;
 
-import org.apache.http.Header;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.protocol.HTTP;
+import cz.msebera.android.httpclient.Header;
+
 import org.kymjs.kjframe.utils.KJLoger;
 import org.kymjs.kjframe.utils.SystemTool;
 
 import android.app.Activity;
+import cz.msebera.android.httpclient.entity.StringEntity;
+import cz.msebera.android.httpclient.protocol.HTTP;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 /**
  * 一个文件云同步解决方案（便签同步）
- * 
+ *
  * @author kymjs (https://github.com/kymjs)
- * 
  */
 public class SynchronizeController {
 
@@ -54,18 +53,14 @@ public class SynchronizeController {
 
     /**
      * GPRS环境下：使用二重循环遍历差异文件并更新云端文件达到同步
-     * 
-     * @param localDatas
-     *            本地数据
-     * @param cloudDatas
-     *            云端数据
      */
-    private void doSynchronizeWithGPRS() {}
+    private void doSynchronizeWithGPRS() {
+    }
 
     /**
      * WIFI环境下：客户端直接提交全部文件，交由服务器做同步判断<br>
      * 由于量可能会比较大，采用json传输，而不是from
-     * 
+     *
      * @author kymjs (https://github.com/kymjs)
      */
     private void doSynchronizeWithWIFI(final SynchronizeListener cb) {
@@ -115,31 +110,27 @@ public class SynchronizeController {
 
         AsyncHttpClient client = ApiHttpClient.getHttpClient();
         client.addHeader("Content-Type", "application/json; charset=UTF-8");
-        try {
-            client.post(
-                    aty,
-                    ApiHttpClient
-                            .getAbsoluteApiUrl("action/api/team_stickynote_batch_update"),
-                    new StringEntity(jsonData.toString(), HTTP.UTF_8),
-                    "application/json; charset=UTF-8",
-                    new AsyncHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int arg0, Header[] arg1,
-                                byte[] arg2) {
-                            KJLoger.debug("获取便签:" + new String(arg2));
-                            cb.onSuccess(arg2);
-                        }
+        client.post(
+                aty,
+                ApiHttpClient
+                        .getAbsoluteApiUrl("action/api/team_stickynote_batch_update"),
+                new StringEntity(jsonData.toString(), HTTP.UTF_8),
+                "application/json; charset=UTF-8",
+                new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int arg0, Header[] arg1,
+                                          byte[] arg2) {
+                        KJLoger.debug("获取便签:" + new String(arg2));
+                        cb.onSuccess(arg2);
+                    }
 
-                        @Override
-                        public void onFailure(int arg0, Header[] arg1,
-                                byte[] arg2, Throwable arg3) {
-                            cb.onFailure();
-                        }
+                    @Override
+                    public void onFailure(int arg0, Header[] arg1,
+                                          byte[] arg2, Throwable arg3) {
+                        cb.onFailure();
+                    }
 
-                    });
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+                });
         ApiHttpClient.setHttpClient(client);
     }
 }

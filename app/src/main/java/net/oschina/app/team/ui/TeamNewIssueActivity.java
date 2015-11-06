@@ -37,8 +37,7 @@ import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.TypefaceUtils;
 import net.oschina.app.util.XmlUtils;
 
-import org.apache.http.Header;
-
+import cz.msebera.android.httpclient.Header;
 import java.util.Calendar;
 import java.util.List;
 

@@ -33,6 +33,7 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import cz.msebera.android.httpclient.Header;
 
 import com.dtr.zxing.camera.CameraManager;
 import com.dtr.zxing.decode.DecodeThread;
@@ -55,7 +56,6 @@ import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
-import org.apache.http.Header;
 
 import java.io.IOException;
 import java.lang.reflect.Field;

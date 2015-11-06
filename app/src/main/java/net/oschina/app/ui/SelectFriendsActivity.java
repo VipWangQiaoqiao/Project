@@ -51,7 +51,6 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
 import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
 
-import org.apache.http.Header;
 
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
@@ -62,6 +61,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import butterknife.InjectView;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * <p>Created 15/8/26 上午11:45.</p>

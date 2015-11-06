@@ -36,13 +36,13 @@ import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
 
-import org.apache.http.Header;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * @author FireAnt（http://my.oschina.net/LittleDY）

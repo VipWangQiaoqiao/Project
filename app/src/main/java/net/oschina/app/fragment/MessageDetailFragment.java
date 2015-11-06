@@ -41,7 +41,7 @@ import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
-import org.apache.http.Header;
+import cz.msebera.android.httpclient.Header;
 import org.kymjs.kjframe.utils.StringUtils;
 
 import java.io.ByteArrayInputStream;
@@ -344,7 +344,12 @@ public class MessageDetailFragment extends BaseListFragment<MessageDetail> imple
         }
 
         @Override
-        public void onFailure(int code, String errorMessage, Object[] args) {
+        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
             AppContext.showToastShort(R.string.tip_delete_faile);
             hideWaitDialog();
         }

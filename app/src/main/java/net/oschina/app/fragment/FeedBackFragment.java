@@ -7,8 +7,7 @@ import net.oschina.app.base.BaseFragment;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 
-import org.apache.http.Header;
-
+import cz.msebera.android.httpclient.Header;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;

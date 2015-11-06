@@ -7,7 +7,7 @@ import java.io.FileNotFoundException;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.util.StringUtils;
 
-import org.apache.http.Header;
+import cz.msebera.android.httpclient.Header;
 import org.kymjs.kjframe.utils.FileUtils;
 
 import android.app.Service;

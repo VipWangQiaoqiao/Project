@@ -22,8 +22,7 @@ import net.oschina.app.widget.KJDragGridView;
 import net.oschina.app.widget.KJDragGridView.OnDeleteListener;
 import net.oschina.app.widget.KJDragGridView.OnMoveListener;
 
-import org.apache.http.Header;
-
+import cz.msebera.android.httpclient.Header;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Color;
@@ -332,7 +331,7 @@ public class NoteBookFragment extends BaseFragment implements
     /**
      * 删除数据
      * 
-     * @param data
+     * @param index
      */
     private void delete(int index) {
         final int noteId = datas.get(index).getId();

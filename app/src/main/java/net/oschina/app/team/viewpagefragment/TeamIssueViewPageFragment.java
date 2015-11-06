@@ -8,7 +8,6 @@ import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseViewPagerFragment;
-import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamGit;
 import net.oschina.app.team.bean.TeamIssueCatalog;
@@ -23,8 +22,7 @@ import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
-import org.apache.http.Header;
-
+import cz.msebera.android.httpclient.Header;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;

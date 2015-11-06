@@ -2,6 +2,7 @@ package net.oschina.app.api;
 
 import android.content.Context;
 import android.util.Log;
+import cz.msebera.android.httpclient.client.params.ClientPNames;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -9,8 +10,6 @@ import com.loopj.android.http.RequestParams;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.util.TLog;
-
-import org.apache.http.client.params.ClientPNames;
 
 import java.util.Locale;
 

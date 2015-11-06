@@ -30,8 +30,7 @@ import net.oschina.app.util.TDevice;
 import net.oschina.app.util.ThemeSwitchUtils;
 import net.oschina.app.util.XmlUtils;
 
-import org.apache.http.Header;
-
+import cz.msebera.android.httpclient.Header;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;

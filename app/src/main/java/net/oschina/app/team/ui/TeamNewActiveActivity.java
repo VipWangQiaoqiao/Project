@@ -46,8 +46,7 @@ import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.XmlUtils;
 
-import org.apache.http.Header;
-
+import cz.msebera.android.httpclient.Header;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
