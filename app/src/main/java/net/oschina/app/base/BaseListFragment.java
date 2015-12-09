@@ -201,10 +201,10 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
     /***
      * 获取列表数据
-     * 
-     * 
+     *
+     *
      * @author 火蚁 2015-2-9 下午3:16:12
-     * 
+     *
      * @return void
      * @param refresh
      */
@@ -220,9 +220,9 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
     /***
      * 判断是否需要读取缓存的数据
-     * 
+     *
      * @author 火蚁 2015-2-10 下午2:41:02
-     * 
+     *
      * @return boolean
      * @param refresh
      * @return
@@ -257,11 +257,11 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
     /***
      * 自动刷新的时间
-     * 
+     *
      * 默认：自动刷新的时间为半天时间
-     * 
+     *
      * @author 火蚁 2015-2-9 下午5:55:11
-     * 
+     *
      * @return long
      * @return
      */
@@ -413,9 +413,9 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
     /**
      * 是否需要隐藏listview，显示无数据状态
-     * 
+     *
      * @author 火蚁 2015-1-27 下午6:18:59
-     * 
+     *
      */
     protected boolean needShowEmptyNoData() {
         return true;
@@ -444,6 +444,12 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
                 && !CacheManager.isExistDataCache(getActivity(), getCacheKey())) {
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
         } else {
+
+          //在无网络时，滚动到底部时，mCurrentPage先自加了，然而在失败时却
+          //没有减回来，如果刻意在无网络的情况下上拉，可以出现漏页问题
+          //find by TopJohn
+            mCurrentPage--;
+
             mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             mAdapter.setState(ListBaseAdapter.STATE_NETWORK_ERROR);
             mAdapter.notifyDataSetChanged();
@@ -583,7 +589,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
     /**
      * 保存已读的文章列表
-     * 
+     *
      * @param view
      * @param prefFileName
      * @param key
