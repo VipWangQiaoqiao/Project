@@ -12,7 +12,6 @@ import java.net.UnknownHostException;
 
 import net.oschina.app.util.UIHelper;
 
-import org.apache.http.HttpException;
 import org.kymjs.kjframe.utils.FileUtils;
 import org.kymjs.kjframe.utils.SystemTool;
 
@@ -22,6 +21,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
 import android.os.Looper;
+import cz.msebera.android.httpclient.HttpException;
 
 /**
  * 应用程序异常：用于捕获异常和提示错误信息

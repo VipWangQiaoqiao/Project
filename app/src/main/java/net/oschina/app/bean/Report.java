@@ -9,14 +9,46 @@ package net.oschina.app.bean;
  */
 public class Report extends Entity {
     private static final long serialVersionUID = 1L;
-    public final static String REPORT_ID = "id";
-    public final static String REPORT_LINK = "link";
-    public final static String REPORT_REASON = "reason";
-    public final static String REPORT_OTHER_REASON = "otherreason";
-    private int reportId;
-    private String linkAddress;
-    private String reason;
-    private String otherReason;
+
+    public static final byte TYPE_QUESTION = 0x02;// 问题
+
+    private int objId;//需要举报的id
+    private String url;// 举报的链接地址
+    private byte objType;// 举报的类型
+    private int reason;// 原因
+    private String otherReason;// 其他原因
+
+    public int getObjId() {
+        return objId;
+    }
+
+    public void setObjId(int objId) {
+        this.objId = objId;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public byte getObjType() {
+        return objType;
+    }
+
+    public void setObjType(byte objType) {
+        this.objType = objType;
+    }
+
+    public int getReason() {
+        return reason;
+    }
+
+    public void setReason(int reason) {
+        this.reason = reason;
+    }
 
     public String getOtherReason() {
         return otherReason;
@@ -24,35 +56,5 @@ public class Report extends Entity {
 
     public void setOtherReason(String otherReason) {
         this.otherReason = otherReason;
-    }
-
-    public int getReportId() {
-        return reportId;
-    }
-
-    public void setReportId(int reportId) {
-        this.reportId = reportId;
-    }
-
-    public String getLinkAddress() {
-        return linkAddress;
-    }
-
-    public void setLinkAddress(String linkAddress) {
-        this.linkAddress = linkAddress;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
-    @Override
-    public String toString() {
-        return "Report [reportId=" + reportId + ", linkAddress=" + linkAddress
-                + ", reason=" + reason + ", otherReason=" + otherReason + "]";
     }
 }

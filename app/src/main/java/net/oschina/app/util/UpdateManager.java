@@ -12,8 +12,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Update;
 
-import org.apache.http.Header;
-
+import cz.msebera.android.httpclient.Header;
 import java.io.ByteArrayInputStream;
 
 /**

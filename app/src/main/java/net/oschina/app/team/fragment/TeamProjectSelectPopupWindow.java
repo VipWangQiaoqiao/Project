@@ -13,8 +13,7 @@ import net.oschina.app.team.bean.TeamProjectList;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.XmlUtils;
 
-import org.apache.http.Header;
-
+import cz.msebera.android.httpclient.Header;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;

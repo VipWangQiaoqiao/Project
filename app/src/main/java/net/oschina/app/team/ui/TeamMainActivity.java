@@ -25,7 +25,7 @@ import net.oschina.app.team.viewpagefragment.TeamMainViewPagerFragment;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.XmlUtils;
 
-import org.apache.http.Header;
+import cz.msebera.android.httpclient.Header;
 import org.kymjs.kjframe.utils.PreferenceHelper;
 import org.kymjs.kjframe.utils.StringUtils;
 

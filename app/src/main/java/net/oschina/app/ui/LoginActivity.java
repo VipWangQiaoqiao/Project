@@ -15,11 +15,7 @@ import net.oschina.app.util.TDevice;
 import net.oschina.app.util.TLog;
 import net.oschina.app.util.XmlUtils;
 
-import org.apache.http.Header;
-import org.apache.http.client.CookieStore;
-import org.apache.http.client.protocol.ClientContext;
-import org.apache.http.cookie.Cookie;
-import org.apache.http.protocol.HttpContext;
+import cz.msebera.android.httpclient.Header;
 import org.kymjs.kjframe.http.HttpConfig;
 
 import android.app.ProgressDialog;
@@ -34,6 +30,10 @@ import android.widget.EditText;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
+import cz.msebera.android.httpclient.client.CookieStore;
+import cz.msebera.android.httpclient.client.protocol.ClientContext;
+import cz.msebera.android.httpclient.cookie.Cookie;
+import cz.msebera.android.httpclient.protocol.HttpContext;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;

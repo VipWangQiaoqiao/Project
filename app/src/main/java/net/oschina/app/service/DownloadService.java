@@ -96,8 +96,8 @@ public class DownloadService extends Service {
 					PendingIntent contentIntent = PendingIntent.getActivity(
 							mContext, 0, intent,
 							PendingIntent.FLAG_UPDATE_CURRENT);
-					mNotification.setLatestEventInfo(mContext, "下载完成",
-							"文件已下载完毕", contentIntent);
+//					mNotification.setLatestEventInfo(mContext, "下载完成",
+//							"文件已下载完毕", contentIntent);
 					serviceIsDestroy = true;
 					stopSelf();// 停掉服务自身
 				}

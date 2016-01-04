@@ -8,7 +8,6 @@ import com.loopj.android.http.RequestParams;
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
 import net.oschina.app.api.ApiHttpClient;
-import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.EventApplyData;
 import net.oschina.app.bean.NewsList;
 import net.oschina.app.bean.Report;
@@ -27,7 +26,7 @@ public class OSChinaApi {
 
     /**
      * 登陆
-     * 
+     *
      * @param username
      * @param password
      * @param handler
@@ -48,7 +47,7 @@ public class OSChinaApi {
 
     /**
      * 获取新闻列表
-     * 
+     *
      * @param catalog
      *            类别 （1，2，3）
      * @param page
@@ -168,8 +167,23 @@ public class OSChinaApi {
     }
 
     /**
+     * 获取所有关注好友列表
+     *
+     * @param uid
+     *            指定用户UID
+     * @param handler
+     * */
+    public static void getAllFriendsList(int uid, int relation, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("uid", uid);
+        params.put("relation", relation);
+        params.put("all", 1);
+        ApiHttpClient.get("action/api/friends_list", params, handler);
+    }
+
+    /**
      * 获取用户收藏
-     * 
+     *
      * @param uid
      *            指定用户UID
      * @param type
@@ -189,7 +203,7 @@ public class OSChinaApi {
 
     /**
      * 分类列表
-     * 
+     *
      * @param tag
      *            第一级:0
      * @param handler
@@ -226,7 +240,7 @@ public class OSChinaApi {
 
     /**
      * 获取评论列表
-     * 
+     *
      * @PARAM ID
      * @PARAM CATALOG
      *            1新闻 2帖子 3动弹 4动态
@@ -251,6 +265,14 @@ public class OSChinaApi {
         params.put("pageIndex", page);
         params.put("pageSize", AppContext.PAGE_SIZE);
         ApiHttpClient.get("action/api/blogcomment_list", params, handler);
+    }
+
+    public static void getChatMessageList(int friendId, int page, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("id", friendId);
+        params.put("pageIndex", page);
+        params.put("pageSize", AppContext.PAGE_SIZE);
+        ApiHttpClient.get("action/api/message_detail", params, handler);
     }
 
     public static void getUserInformation(int uid, int hisuid, String hisname,
@@ -294,7 +316,7 @@ public class OSChinaApi {
 
     /**
      * 获取新闻明细
-     * 
+     *
      * @param id 新闻的id
      * @param handler
      */
@@ -310,7 +332,7 @@ public class OSChinaApi {
 
     /**
      * 获取软件详情
-     * 
+     *
      * @param ident
      * @param handler
      */
@@ -344,7 +366,7 @@ public class OSChinaApi {
 
     /**
      * 用户针对某个新闻，帖子，动弹，消息发表评论的接口，参数使用POST方式提交
-     * 
+     *
      * @param catalog
      *            　　 1新闻　　2 帖子　　３　动弹　　４消息中心
      * @param id
@@ -473,7 +495,7 @@ public class OSChinaApi {
 
     /**
      * 用户添加收藏
-     * 
+     *
      * @param uid
      *            用户UID
      * @param objid
@@ -515,6 +537,7 @@ public class OSChinaApi {
         params.put("uid", uid);
         params.put("receiver", receiver);
         params.put("content", content);
+
         ApiHttpClient.post("action/api/message_pub", params, handler);
     }
 
@@ -652,17 +675,14 @@ public class OSChinaApi {
      */
     public static void report(Report report, AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
-        params.put("obj_id", report.getReportId());
-        params.put("url", report.getLinkAddress());
-        params.put("obj_type", report.getReason());
+        params.put("obj_id", report.getObjId());
+        params.put("url", report.getUrl());
+        params.put("obj_type", report.getObjType());
+        params.put("reason", report.getReason());
         if (report.getOtherReason() != null
                 && !StringUtils.isEmpty(report.getOtherReason())) {
             params.put("memo", report.getOtherReason());
-        } else {
-            params.put("memo", "其他原因");
         }
-        TLog.log("Test", report.getReportId() + "" + report.getLinkAddress()
-                + report.getReason() + report.getOtherReason());
         ApiHttpClient.post("action/communityManage/report", params, handler);
     }
 
@@ -1006,5 +1026,4 @@ public class OSChinaApi {
         params.put("openid_info", openIdInfo);
         ApiHttpClient.post("action/api/openid_reg", params, handler);
     }
-
 }

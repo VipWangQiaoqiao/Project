@@ -18,7 +18,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/iv_image"
-        android:textColor="@color/white"
         android:text="@string/down_state" />
 
     <ProgressBar

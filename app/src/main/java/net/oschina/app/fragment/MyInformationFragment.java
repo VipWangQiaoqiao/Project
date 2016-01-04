@@ -24,7 +24,6 @@ import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.BadgeView;
 
-import org.apache.http.Header;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -44,6 +43,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import cz.msebera.android.httpclient.Header;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 

@@ -38,7 +38,7 @@ import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
-import org.apache.http.Header;
+import cz.msebera.android.httpclient.Header;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -155,7 +155,7 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                onFailure(arg0, arg1, arg2, e);
+                executeOnLoadDataError();
             }
         }
 
@@ -388,7 +388,7 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
         int reportId = mId;
 
         final ReportDialog dialog = new ReportDialog(getActivity(),
-                getRepotrUrl(), reportId);
+                getRepotrUrl(), reportId, getReportType());
         dialog.setCancelable(true);
         dialog.setTitle(R.string.report);
         dialog.setCanceledOnTouchOutside(true);
@@ -547,6 +547,8 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
     protected abstract String getShareUrl();
     // 返回举报的url
     protected String getRepotrUrl() {return  "";}
+    // 返回举报的类型
+    protected byte getReportType() {return  Report.TYPE_QUESTION;}
 
     // 获取收藏类型（如新闻、博客、帖子）
     protected abstract int getFavoriteTargetType();

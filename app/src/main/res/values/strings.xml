@@ -70,8 +70,9 @@
     <string name="actionbar_title_active">好友圈</string>
     <string name="actionbar_title_mes">消息中心</string>
     <string name="actionbar_title_message_detail">对话</string>
-    
-    <string name="share_to">分享到</string>
+
+	<string name="friend_home">查看对方资料</string>
+	<string name="share_to">分享到</string>
     <string name="platform_qq">QQ</string>
 	<string name="platform_copy_link">复制链接</string>
 	<string name="platform_more_option">更多</string>
@@ -303,4 +304,11 @@
     <string name="str_team_select_team">选择团队</string>
 	
     <string name="str_team_my_issue">我的任务</string>
+
+	<!-- 选择好友 -->
+	<string name="actionbar_title_select_friends">选择&#064;好友</string>
+	<string name="select_friends_search">搜索</string>
+	<string name="select_friends_noresult">无结果</string>
+	<string name="select_friends_empty">暂无好友</string>
+	<string name="select_friends_max_tips">最多只能选%1$d个好友哦</string>
 </resources>

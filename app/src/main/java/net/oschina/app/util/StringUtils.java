@@ -161,6 +161,95 @@ public class StringUtils {
         return res;
     }
 
+
+    /**
+     * 智能格式化
+     */
+    public static String friendly_time3(String sdate) {
+        String res = "";
+        if (isEmpty(sdate))
+            return "";
+
+        Date date = StringUtils.toDate(sdate);
+        if (date == null)
+            return sdate;
+
+        SimpleDateFormat format = dateFormater2.get();
+
+        if (isToday(date.getTime())) {
+            format.applyPattern(isMorning(date.getTime()) ? "上午 hh:mm" : "下午 hh:mm");
+            res = format.format(date);
+        } else if (isYesterday(date.getTime())) {
+            format.applyPattern(isMorning(date.getTime()) ? "昨天 上午 hh:mm" : "昨天 下午 hh:mm");
+            res = format.format(date);
+        } else if (isCurrentYear(date.getTime())) {
+            format.applyPattern(isMorning(date.getTime()) ? "MM-dd 上午 hh:mm" : "MM-dd 下午 hh:mm");
+            res = format.format(date);
+        } else {
+            format.applyPattern(isMorning(date.getTime()) ? "yyyy-MM-dd 上午 hh:mm" : "yyyy-MM-dd 下午 hh:mm");
+            res = format.format(date);
+        }
+        return res;
+    }
+
+    /**
+     * @return 判断一个时间是不是上午
+     */
+    public static boolean isMorning(long when) {
+        android.text.format.Time time = new android.text.format.Time();
+        time.set(when);
+
+        int hour = time.hour;
+        return (hour >= 0) && (hour < 12);
+    }
+
+    /**
+     * @return 判断一个时间是不是今天
+     */
+    public static boolean isToday(long when) {
+        android.text.format.Time time = new android.text.format.Time();
+        time.set(when);
+
+        int thenYear = time.year;
+        int thenMonth = time.month;
+        int thenMonthDay = time.monthDay;
+
+        time.set(System.currentTimeMillis());
+        return (thenYear == time.year)
+                && (thenMonth == time.month)
+                && (thenMonthDay == time.monthDay);
+    }
+
+    /**
+     * @return 判断一个时间是不是昨天
+     */
+    public static boolean isYesterday(long when) {
+        android.text.format.Time time = new android.text.format.Time();
+        time.set(when);
+
+        int thenYear = time.year;
+        int thenMonth = time.month;
+        int thenMonthDay = time.monthDay;
+
+        time.set(System.currentTimeMillis());
+        return (thenYear == time.year)
+                && (thenMonth == time.month)
+                && (time.monthDay - thenMonthDay == 1);
+    }
+
+    /**
+     * @return 判断一个时间是不是今年
+     */
+    public static boolean isCurrentYear(long when) {
+        android.text.format.Time time = new android.text.format.Time();
+        time.set(when);
+
+        int thenYear = time.year;
+
+        time.set(System.currentTimeMillis());
+        return (thenYear == time.year);
+    }
+
     /**
      * 获取当前日期是星期几<br>
      * 

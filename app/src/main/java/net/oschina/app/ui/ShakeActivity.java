@@ -27,7 +27,7 @@ import net.oschina.app.util.TypefaceUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
-import org.apache.http.Header;
+import cz.msebera.android.httpclient.Header;
 import org.kymjs.kjframe.KJBitmap;
 
 import java.io.ByteArrayInputStream;

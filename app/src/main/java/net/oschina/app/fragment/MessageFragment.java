@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
+import cz.msebera.android.httpclient.Header;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -225,7 +226,12 @@ public class MessageFragment extends BaseListFragment<Messages> implements
         }
 
         @Override
-        public void onFailure(int code, String errorMessage, Object[] args) {
+        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
             AppContext.showToastShort(R.string.tip_delete_faile);
             hideWaitDialog();
         }

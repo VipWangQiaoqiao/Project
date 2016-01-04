@@ -8,7 +8,7 @@ import net.oschina.app.bean.Entity;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.ui.empty.EmptyLayout;
 
-import org.apache.http.Header;
+import cz.msebera.android.httpclient.Header;
 
 import android.app.Activity;
 import android.content.Context;

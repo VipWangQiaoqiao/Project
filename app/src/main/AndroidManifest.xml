@@ -171,6 +171,11 @@
             android:label="@string/actionbar_title_shake"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".ui.SelectFriendsActivity"
+                  android:label="@string/actionbar_title_select_friends"
+                  android:windowSoftInputMode="stateAlwaysHidden"
+                  android:screenOrientation="portrait"/>
+
         <service android:name="net.oschina.app.LogUploadService" />
 
         <service android:name="net.oschina.app.service.ServerTaskService" >
