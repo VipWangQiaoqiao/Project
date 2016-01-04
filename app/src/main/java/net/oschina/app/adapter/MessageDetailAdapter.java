@@ -25,6 +25,7 @@ import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
 
+import org.kymjs.kjframe.Core;
 import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.bitmap.BitmapConfig;
 import org.kymjs.kjframe.http.HttpConfig;
@@ -40,8 +41,9 @@ import butterknife.OnClick;
  */
 public class MessageDetailAdapter extends ListBaseAdapter<MessageDetail> {
 
+    KJBitmap mKjBitmap = Core.getKJBitmap();
+
     private OnRetrySendMessageListener mOnRetrySendMessageListener;
-    private KJBitmap mKjBitmap;
 
     @Override
     protected boolean loadMoreHasBg() {
@@ -49,12 +51,9 @@ public class MessageDetailAdapter extends ListBaseAdapter<MessageDetail> {
     }
 
     public MessageDetailAdapter() {
-        HttpConfig config = new HttpConfig();
-        config.setCookieString(ApiHttpClient.getCookie(AppContext.getInstance()));
-        mKjBitmap = new KJBitmap();
         try {
             //初始化display，设置图片的最大宽高和最小宽高
-            ChatImageDisplayer displayer = new ChatImageDisplayer(config, new BitmapConfig());
+            ChatImageDisplayer displayer = new ChatImageDisplayer(new BitmapConfig());
             int maxWidth = TDevice.getDisplayMetrics().widthPixels / 2;
             int maxHeight = maxWidth;
             int minWidth = maxWidth / 2;
@@ -72,7 +71,7 @@ public class MessageDetailAdapter extends ListBaseAdapter<MessageDetail> {
 
     @Override
     protected View getRealView(int position, View convertView,
-            final ViewGroup parent) {
+                               final ViewGroup parent) {
         final MessageDetail item = mDatas.get(mDatas.size() - position - 1);
 
         int itemType = 0;
@@ -93,7 +92,8 @@ public class MessageDetailAdapter extends ListBaseAdapter<MessageDetail> {
 
         if (needCreateView) {
             convertView = getLayoutInflater(parent.getContext()).inflate(
-                    itemType == 0 ? R.layout.list_cell_chat_from : R.layout.list_cell_chat_to, null);
+                    itemType == 0 ? R.layout.list_cell_chat_from : R.layout.list_cell_chat_to,
+                    null);
             vh = new ViewHolder(convertView);
             vh.type = itemType;
             convertView.setTag(vh);
@@ -106,12 +106,12 @@ public class MessageDetailAdapter extends ListBaseAdapter<MessageDetail> {
 
         //判断是不是图片
         if (item.getBtype() == 3) {
-            showImage(vh,item);
+            showImage(vh, item);
         } else /*if(item.getBtype()==1)*/ {
             //文本消息
-            showText(vh,item);
+            showText(vh, item);
         }
-        showStatus(vh,item);
+        showStatus(vh, item);
 
         //检查是否需要显示时间
         if (item.isShowDate()) {
@@ -126,10 +126,11 @@ public class MessageDetailAdapter extends ListBaseAdapter<MessageDetail> {
 
     /**
      * 显示文字消息
+     *
      * @param vh
      * @param msg
      */
-    private void showText(ViewHolder vh,MessageDetail msg){
+    private void showText(ViewHolder vh, MessageDetail msg) {
         vh.image.setVisibility(View.GONE);
         vh.content.setVisibility(View.VISIBLE);
         Spanned span = Html.fromHtml(msg.getContent());
@@ -140,23 +141,27 @@ public class MessageDetailAdapter extends ListBaseAdapter<MessageDetail> {
 
     /**
      * 显示图片
+     *
      * @param vh
      * @param msg
      */
-    private void showImage(ViewHolder vh,MessageDetail msg){
+    private void showImage(ViewHolder vh, MessageDetail msg) {
         vh.content.setVisibility(View.GONE);
         vh.image.setVisibility(View.VISIBLE);
         //加载图片
         vh.image.setImageResource(R.drawable.load_img_loading);
-        mKjBitmap.display(vh.image, msg.getContent(), R.drawable.load_img_error, 0, 0, null);
+        HttpConfig.sCookie = ApiHttpClient.getCookie(AppContext.getInstance());
+        mKjBitmap.display(vh.image, msg.getContent(), R.drawable.load_img_error, 0, 0,
+                null);
     }
 
     /**
      * 显示消息状态
+     *
      * @param vh
      * @param msg
      */
-    private void showStatus(ViewHolder vh,MessageDetail msg) {
+    private void showStatus(ViewHolder vh, MessageDetail msg) {
         //如果msg正在发送，则显示progressBar. 发送错误显示错误图标
         if (msg.getStatus() != null && msg.getStatus() != MessageDetail.MessageStatus.NORMAL) {
             vh.msgStatusPanel.setVisibility(View.VISIBLE);
@@ -184,7 +189,8 @@ public class MessageDetailAdapter extends ListBaseAdapter<MessageDetail> {
         return mOnRetrySendMessageListener;
     }
 
-    public void setOnRetrySendMessageListener(OnRetrySendMessageListener onRetrySendMessageListener) {
+    public void setOnRetrySendMessageListener(OnRetrySendMessageListener
+                                                      onRetrySendMessageListener) {
         this.mOnRetrySendMessageListener = onRetrySendMessageListener;
     }
 
@@ -241,7 +247,7 @@ public class MessageDetailAdapter extends ListBaseAdapter<MessageDetail> {
     }
 
 
-    public interface OnRetrySendMessageListener{
+    public interface OnRetrySendMessageListener {
         void onRetrySendMessage(int msgId);
     }
 }

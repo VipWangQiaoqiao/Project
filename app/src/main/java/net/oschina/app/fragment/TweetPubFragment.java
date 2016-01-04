@@ -45,7 +45,7 @@ import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
-import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.Core;
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
 import org.kymjs.kjframe.bitmap.BitmapCreate;
 import org.kymjs.kjframe.bitmap.DiskImageRequest;
@@ -113,8 +113,6 @@ public class TweetPubFragment extends BaseFragment implements
 
     private String theLarge, theThumbnail;
     private File imgFile;
-
-    private final KJBitmap kjb = new KJBitmap();
 
     private final Handler handler = new Handler() {
         @Override
@@ -277,7 +275,7 @@ public class TweetPubFragment extends BaseFragment implements
         if (!StringUtils.isEmpty(url)) {
             final Message msg = Message.obtain();
             msg.what = 1;
-            byte[] cache = kjb.getCache(url);
+            byte[] cache = Core.getKJBitmap().getCache(url);
             msg.obj = BitmapFactory.decodeByteArray(cache, 0, cache.length);
             if (msg.obj == null) {
                 DiskImageRequest req = new DiskImageRequest();

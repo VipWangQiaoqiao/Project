@@ -34,8 +34,7 @@ import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
-import cz.msebera.android.httpclient.Header;
-import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.Core;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -46,6 +45,7 @@ import java.util.Date;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * 登录用户信息详情
@@ -206,7 +206,7 @@ public class MyInformationFragmentDetail extends BaseFragment {
     }
 
     public void fillUI() {
-        new KJBitmap().displayWithLoadBitmap(mUserFace, mUser.getPortrait(),
+        Core.getKJBitmap().displayWithLoadBitmap(mUserFace, mUser.getPortrait(),
                 R.drawable.widget_dface);
         mName.setText(mUser.getName());
         mJoinTime.setText(StringUtils.friendly_time(mUser.getJointime()));

@@ -37,6 +37,7 @@ import net.oschina.app.team.bean.TeamReply;
 import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.BitmapHelper;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
@@ -48,20 +49,19 @@ import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
 
-import cz.msebera.android.httpclient.Header;
-import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.Core;
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
-import org.kymjs.kjframe.bitmap.BitmapHelper;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
 
+import cz.msebera.android.httpclient.Header;
+
 /**
  * Team动态的详情界面
- * 
+ *
  * @author kymjs (https://github.com/kymjs)
- * 
  */
 public class TeamTweetDetailFragment extends
         BeseHaveHeaderListFragment<TeamReply, TeamActiveDetail> implements
@@ -80,7 +80,6 @@ public class TeamTweetDetailFragment extends
     private TeamActive active;
     private int teamId;
     private static int rectSize;
-    private final KJBitmap kjb = new KJBitmap();
 
     private DetailActivity outAty;
 
@@ -135,7 +134,7 @@ public class TeamTweetDetailFragment extends
 
     /**
      * 处理回复的提交
-     * 
+     *
      * @param text
      */
     private void handleComment(String text) {
@@ -164,19 +163,16 @@ public class TeamTweetDetailFragment extends
 
     /**
      * 动态设置图片显示样式
-     * 
-     * @param url
-     *            缩略图地址
-     * @param realUrl
-     *            点击图片后要显示的大图图片地址
-     * 
+     *
+     * @param url     缩略图地址
+     * @param realUrl 点击图片后要显示的大图图片地址
      * @author kymjs
      */
     private void setTweetImage(final ImageView pic, final String url,
-            final String realUrl) {
+                               final String realUrl) {
         pic.setVisibility(View.VISIBLE);
 
-        kjb.display(pic, url, R.drawable.pic_bg, rectSize, rectSize,
+        Core.getKJBitmap().display(pic, url, R.drawable.pic_bg, rectSize, rectSize,
                 new BitmapCallBack() {
                     @Override
                     public void onSuccess(Bitmap bitmap) {
@@ -191,7 +187,7 @@ public class TeamTweetDetailFragment extends
             @Override
             public void onClick(View v) {
                 ImagePreviewActivity.showImagePrivew(aty, 0,
-                        new String[] { realUrl });
+                        new String[]{realUrl});
             }
         });
     }
@@ -255,7 +251,7 @@ public class TeamTweetDetailFragment extends
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view,
-            int position, long id) {
+                                   int position, long id) {
         if (position - 1 == -1) {
             return false;
         }
@@ -331,14 +327,16 @@ public class TeamTweetDetailFragment extends
 
         @Override
         public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                Throwable arg3) {
+                              Throwable arg3) {
             AppContext.showToastShort(R.string.comment_publish_faile);
         }
 
         @Override
         public void onFinish() {
             hideWaitDialog();
-        };
+        }
+
+        ;
     };
 
     @Override
@@ -347,14 +345,16 @@ public class TeamTweetDetailFragment extends
         if (mTvCommentCount != null && data != null) {
             mTvCommentCount.setText((mAdapter.getCount() - 1) + "");
         }
-    };
+    }
+
+    ;
 
     /**
      * 移除字符串中的Html标签
-     * 
-     * @author kymjs (https://github.com/kymjs)
+     *
      * @param pHTMLString
      * @return
+     * @author kymjs (https://github.com/kymjs)
      */
     public static Spanned stripTags(final String pHTMLString) {
         // String str = pHTMLString.replaceAll("\\<.*?>", "");
@@ -365,7 +365,7 @@ public class TeamTweetDetailFragment extends
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
+                            long id) {
         if (position < 1) { // header view
             return;
         }
@@ -393,6 +393,7 @@ public class TeamTweetDetailFragment extends
     }
 
     @Override
-    public void onClickFlagButton() {}
+    public void onClickFlagButton() {
+    }
 
 }

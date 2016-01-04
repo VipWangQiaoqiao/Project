@@ -27,12 +27,12 @@ import net.oschina.app.util.TypefaceUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
-import cz.msebera.android.httpclient.Header;
-import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.Core;
 
 import java.io.ByteArrayInputStream;
 
 import butterknife.InjectView;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * 摇一摇界面
@@ -129,16 +129,16 @@ public class ShakeActivity extends BaseActivity implements SensorEventListener {
                                                 UIHelper.showUrlShake(ShakeActivity.this, obj);
                                             }
                                         });
-                                new KJBitmap()
-                                        .displayWithLoadBitmap(mImgHead,
-                                                obj.getImage(),
-                                                R.drawable.widget_dface);
+                                Core.getKJBitmap().displayWithLoadBitmap(mImgHead,
+                                        obj.getImage(), R.drawable.widget_dface);
                                 mTvTitle.setText(obj.getTitle());
                                 mTvDetail.setText(obj.getDetail());
                                 mTvAuthor.setText(obj.getAuthor());
                                 TypefaceUtils.setTypeface(mTvAuthor);
-                                TypefaceUtils.setTypeFaceWithText(mTvCommentCount, R.string.fa_comment, obj.getCommentCount() + "");
-                                TypefaceUtils.setTypeFaceWithText(mTvDate, R.string.fa_clock_o, StringUtils.friendly_time(obj.getPubDate()));
+                                TypefaceUtils.setTypeFaceWithText(mTvCommentCount, R.string
+                                        .fa_comment, obj.getCommentCount() + "");
+                                TypefaceUtils.setTypeFaceWithText(mTvDate, R.string.fa_clock_o,
+                                        StringUtils.friendly_time(obj.getPubDate()));
                             }
                         } else {
                             jokeToast();

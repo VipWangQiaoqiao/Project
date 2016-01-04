@@ -25,6 +25,7 @@ import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.ui.ImagePreviewActivity;
+import net.oschina.app.util.BitmapHelper;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.KJAnimations;
@@ -37,14 +38,13 @@ import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
 
-import cz.msebera.android.httpclient.Header;
-import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.Core;
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
-import org.kymjs.kjframe.bitmap.BitmapHelper;
 import org.kymjs.kjframe.utils.DensityUtils;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * @author HuangWenwei
@@ -82,7 +82,6 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
 
     private Bitmap recordBitmap;
     private Context context;
-    private final KJBitmap kjb = new KJBitmap();
 
     final private AsyncHttpResponseHandler handler = new AsyncHttpResponseHandler() {
 
@@ -184,9 +183,11 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
 
         TypefaceUtils.setTypeface(vh.tvLikeState);
         if (tweet.getIsLike() == 1) {
-            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color.day_colorPrimary));
+            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
+                    .day_colorPrimary));
         } else {
-            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color.gray));
+            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
+                    .gray));
         }
         PlatfromUtil.setPlatFromString(vh.platform, tweet.getAppclient());
         return convertView;
@@ -201,7 +202,8 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             }
             OSChinaApi.pubUnLikeTweet(tweet.getId(), tweet.getAuthorid(),
                     handler);
-            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color.gray));
+            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
+                    .gray));
         } else {
             tweet.setIsLike(1);
             vh.tvLikeState
@@ -209,7 +211,8 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             tweet.getLikeUser().add(0, AppContext.getInstance().getLoginUser());
             OSChinaApi
                     .pubLikeTweet(tweet.getId(), tweet.getAuthorid(), handler);
-            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color.day_colorPrimary));
+            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
+                    .day_colorPrimary));
             tweet.setIsLike(1);
             tweet.setLikeCount(tweet.getLikeCount() + 1);
         }
@@ -248,7 +251,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
     private void showTweetImage(final ViewHolder vh, String imgSmall,
                                 final String imgBig, final Context context) {
         if (imgSmall != null && !TextUtils.isEmpty(imgSmall)) {
-            kjb.display(vh.image, imgSmall, new BitmapCallBack() {
+            Core.getKJBitmap().display(vh.image, imgSmall, new BitmapCallBack() {
                 @Override
                 public void onPreLoad() {
                     super.onPreLoad();

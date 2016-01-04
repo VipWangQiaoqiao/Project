@@ -26,7 +26,7 @@ import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.HackyViewPager;
 
-import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.Core;
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
 
 import uk.co.senab.photoview.PhotoView;
@@ -48,8 +48,6 @@ public class ImagePreviewActivity extends BaseActivity implements
     private ImageView mIvMore;
     private int mCurrentPostion = 0;
     private String[] mImageUrls;
-
-    private KJBitmap kjb;
 
     public static void showImagePrivew(Context context, int index,
                                        String[] images) {
@@ -74,7 +72,6 @@ public class ImagePreviewActivity extends BaseActivity implements
     @Override
     protected void init(Bundle savedInstanceState) {
         super.init(savedInstanceState);
-        kjb = new KJBitmap();
         mViewPager = (HackyViewPager) findViewById(R.id.view_pager);
 
         mImageUrls = getIntent().getStringArrayExtra(BUNDLE_KEY_IMAGES);
@@ -164,7 +161,7 @@ public class ImagePreviewActivity extends BaseActivity implements
             final String imgUrl = mAdapter.getItem(mCurrentPostion);
             final String filePath = AppConfig.DEFAULT_SAVE_IMAGE_PATH
                     + getFileName(imgUrl);
-            kjb.saveImage(this, imgUrl, filePath);
+            Core.getKJBitmap().saveImage(this, imgUrl, filePath);
             AppContext.showToastShort(getString(R.string.tip_save_image_suc,
                     filePath));
         } else {
@@ -230,8 +227,7 @@ public class ImagePreviewActivity extends BaseActivity implements
             }
 
             final ProgressBar bar = vh.progress;
-            KJBitmap kjbitmap = new KJBitmap();
-            kjbitmap.displayWithDefWH(vh.image, images[position],
+            Core.getKJBitmap().displayWithDefWH(vh.image, images[position],
                     new ColorDrawable(0x000000), new ColorDrawable(0x000000),
                     new BitmapCallBack() {
                         @Override
