@@ -38,6 +38,9 @@ public class WXEntryActivity extends Activity {
     }
 
     private void handleIntent(Intent intent) {
+        if (intent == null) {
+            return;
+        }
         SendAuth.Resp resp = new SendAuth.Resp(intent.getExtras());
         if (resp.errCode == BaseResp.ErrCode.ERR_OK) {
 
