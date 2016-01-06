@@ -16,6 +16,7 @@
 package net.oschina.app.emoji;
 
 import net.oschina.app.R;
+
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.text.Spannable;
@@ -25,7 +26,6 @@ import android.view.KeyEvent;
 import android.widget.EditText;
 
 /**
- * 
  * @author kymjs (http://www.kymjs.com)
  */
 public class InputHelper {
@@ -40,7 +40,7 @@ public class InputHelper {
 
     /**
      * 获取name对应的资源
-     * 
+     *
      * @param map
      * @param name
      * @return
@@ -67,6 +67,8 @@ public class InputHelper {
             // 构建文字span
             spannable = new SpannableString(str);
         }
+        if (!str.contains(":") && !str.contains("[")) return spannable;
+
         for (int i = 0; i < str.length(); i++) {
             int index1 = str.indexOf("[", i);
             int length1 = str.indexOf("]", index1 + 1);
