@@ -11,23 +11,21 @@ import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.team.bean.TeamActive;
 import net.oschina.app.ui.ImagePreviewActivity;
+import net.oschina.app.util.BitmapHelper;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.TweetTextView;
 
-import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.Core;
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
-import org.kymjs.kjframe.bitmap.BitmapHelper;
 
 /**
  * Team动态界面ListView适配器 (kymjs123@gmail.com)
- * 
+ *
  * @author kymjs (https://github.com/kymjs)
- * 
  */
 public class TeamActiveAdapter extends ListBaseAdapter<TeamActive> {
     private final Context context;
-    private final KJBitmap kjb = new KJBitmap();
 
     public TeamActiveAdapter(Context cxt) {
         this.context = cxt;
@@ -104,10 +102,10 @@ public class TeamActiveAdapter extends ListBaseAdapter<TeamActive> {
 
     /**
      * 移除字符串中的Html标签
-     * 
-     * @author kymjs (https://github.com/kymjs)
+     *
      * @param pHTMLString
      * @return
+     * @author kymjs (https://github.com/kymjs)
      */
     public static String stripTags(final String pHTMLString) {
         // String str = pHTMLString.replaceAll("\\<.*?>", "");
@@ -124,13 +122,13 @@ public class TeamActiveAdapter extends ListBaseAdapter<TeamActive> {
 
     /**
      * 动态设置图片显示样式
-     * 
+     *
      * @author kymjs
      */
     private void setTweetImage(final ImageView pic, final String url) {
         pic.setVisibility(View.VISIBLE);
 
-        kjb.display(pic, url, R.drawable.pic_bg, 0, 0, new BitmapCallBack() {
+        Core.getKJBitmap().display(pic, url, R.drawable.pic_bg, 0, 0, new BitmapCallBack() {
             @Override
             public void onSuccess(Bitmap bitmap) {
                 super.onSuccess(bitmap);
@@ -146,7 +144,7 @@ public class TeamActiveAdapter extends ListBaseAdapter<TeamActive> {
             @Override
             public void onClick(View v) {
                 ImagePreviewActivity.showImagePrivew(context, 0,
-                        new String[] { url });
+                        new String[]{url});
             }
         });
     }

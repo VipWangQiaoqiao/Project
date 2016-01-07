@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,7 @@ import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.HackyViewPager;
 
-import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.Core;
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
 
 import uk.co.senab.photoview.PhotoView;
@@ -42,14 +43,10 @@ public class ImagePreviewActivity extends BaseActivity implements
 
     public static final String BUNDLE_KEY_IMAGES = "bundle_key_images";
     private static final String BUNDLE_KEY_INDEX = "bundle_key_index";
-    private HackyViewPager mViewPager;
     private SamplePagerAdapter mAdapter;
     private TextView mTvImgIndex;
-    private ImageView mIvMore;
     private int mCurrentPostion = 0;
     private String[] mImageUrls;
-
-    private KJBitmap kjb;
 
     public static void showImagePrivew(Context context, int index,
                                        String[] images) {
@@ -62,7 +59,10 @@ public class ImagePreviewActivity extends BaseActivity implements
 
     @Override
     protected boolean hasActionBar() {
-        getSupportActionBar().hide();
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.hide();
+        }
         return true;
     }
 
@@ -74,19 +74,18 @@ public class ImagePreviewActivity extends BaseActivity implements
     @Override
     protected void init(Bundle savedInstanceState) {
         super.init(savedInstanceState);
-        kjb = new KJBitmap();
-        mViewPager = (HackyViewPager) findViewById(R.id.view_pager);
+        HackyViewPager mViewPager = (HackyViewPager) findViewById(R.id.view_pager);
 
         mImageUrls = getIntent().getStringArrayExtra(BUNDLE_KEY_IMAGES);
         int index = getIntent().getIntExtra(BUNDLE_KEY_INDEX, 0);
 
         mAdapter = new SamplePagerAdapter(mImageUrls);
         mViewPager.setAdapter(mAdapter);
-        mViewPager.setOnPageChangeListener(this);
+        mViewPager.addOnPageChangeListener(this);
         mViewPager.setCurrentItem(index);
 
         mTvImgIndex = (TextView) findViewById(R.id.tv_img_index);
-        mIvMore = (ImageView) findViewById(R.id.iv_more);
+        ImageView mIvMore = (ImageView) findViewById(R.id.iv_more);
         mIvMore.setOnClickListener(this);
 
         onPageSelected(index);
@@ -164,7 +163,7 @@ public class ImagePreviewActivity extends BaseActivity implements
             final String imgUrl = mAdapter.getItem(mCurrentPostion);
             final String filePath = AppConfig.DEFAULT_SAVE_IMAGE_PATH
                     + getFileName(imgUrl);
-            kjb.saveImage(this, imgUrl, filePath);
+            Core.getKJBitmap().saveImage(this, imgUrl, filePath);
             AppContext.showToastShort(getString(R.string.tip_save_image_suc,
                     filePath));
         } else {
@@ -193,8 +192,7 @@ public class ImagePreviewActivity extends BaseActivity implements
         mCurrentPostion = idx;
         if (mImageUrls != null && mImageUrls.length > 1) {
             if (mTvImgIndex != null) {
-                mTvImgIndex.setText((mCurrentPostion + 1) + "/"
-                        + mImageUrls.length);
+                mTvImgIndex.setText(String.format("%d/%d", mCurrentPostion + 1, mImageUrls.length));
             }
         }
     }
@@ -230,19 +228,18 @@ public class ImagePreviewActivity extends BaseActivity implements
             }
 
             final ProgressBar bar = vh.progress;
-            KJBitmap kjbitmap = new KJBitmap();
-            kjbitmap.displayWithDefWH(vh.image, images[position],
-                    new ColorDrawable(0x000000), new ColorDrawable(0x000000),
-                    new BitmapCallBack() {
+            new Core.Builder().view(vh.image).url(images[position])
+                    .loadBitmap(new ColorDrawable(0x000000))
+                    .errorBitmap(new ColorDrawable(0x000000))
+                    .size(0, 0)
+                    .bitmapCallBack(new BitmapCallBack() {
                         @Override
                         public void onPreLoad() {
-                            super.onPreLoad();
                             bar.setVisibility(View.VISIBLE);
                         }
 
                         @Override
                         public void onFinish() {
-                            super.onFinish();
                             bar.setVisibility(View.GONE);
                         }
 
@@ -250,7 +247,7 @@ public class ImagePreviewActivity extends BaseActivity implements
                         public void onFailure(Exception arg0) {
                             AppContext.showToast(R.string.tip_load_image_faile);
                         }
-                    });
+                    }).doTask();
             vh.attacher.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
                 @Override
                 public void onPhotoTap(View view, float v, float v1) {

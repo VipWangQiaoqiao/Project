@@ -37,6 +37,7 @@ import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
 
+import cz.msebera.android.httpclient.Header;
 import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
 import org.kymjs.kjframe.bitmap.BitmapHelper;
@@ -44,7 +45,6 @@ import org.kymjs.kjframe.utils.DensityUtils;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import cz.msebera.android.httpclient.Header;
 
 /**
  * @author HuangWenwei
@@ -104,11 +104,13 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
     }
 
     @Override
-    protected View getRealView(final int position, View convertView, ViewGroup parent) {
+    protected View getRealView(final int position, View convertView,
+                               final ViewGroup parent) {
         context = parent.getContext();
         final ViewHolder vh;
         if (convertView == null || convertView.getTag() == null) {
-            convertView = View.inflate(context, R.layout.list_cell_tweet, null);
+            convertView = getLayoutInflater(parent.getContext()).inflate(
+                    R.layout.list_cell_tweet, null);
             vh = new ViewHolder(convertView);
             convertView.setTag(vh);
         } else {
@@ -122,7 +124,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
 
                 @Override
                 public void onClick(View v) {
-                    optionDel(context, tweet, position);
+                    optionDel(parent.getContext(), tweet, position);
                 }
             });
         } else {
@@ -142,9 +144,10 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
 
         if (!StringUtils.isEmpty(tweet.getAttach())) {
             if (recordBitmap == null) {
-                initRecordImg(context);
+                initRecordImg(parent.getContext());
             }
-            ImageSpan recordImg = new ImageSpan(context, recordBitmap);
+            ImageSpan recordImg = new ImageSpan(parent.getContext(),
+                    recordBitmap);
             SpannableString str = new SpannableString("c");
             str.setSpan(recordImg, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
             vh.content.setText(str);
@@ -156,19 +159,20 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         }
         MyURLSpan.parseLinkText(vh.content, span);
 
-        vh.commentcount.setText(tweet.getCommentCount());
+        vh.commentcount.setText(tweet.getCommentCount() + "");
 
         showTweetImage(vh, tweet.getImgSmall(), tweet.getImgBig(),
                 parent.getContext());
         tweet.setLikeUsers(context, vh.likeUsers, true);
+        final ViewHolder vh1 = vh;
         OnClickListener likeClick = new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (AppContext.getInstance().isLogin()) {
-                    updateLikeState(vh, tweet);
+                    updateLikeState(vh1, tweet);
                 } else {
                     AppContext.showToast("先登陆再赞~");
-                    UIHelper.showLoginActivity(context);
+                    UIHelper.showLoginActivity(parent.getContext());
                 }
             }
         };
@@ -180,11 +184,9 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
 
         TypefaceUtils.setTypeface(vh.tvLikeState);
         if (tweet.getIsLike() == 1) {
-            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
-                    .day_colorPrimary));
+            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color.day_colorPrimary));
         } else {
-            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
-                    .gray));
+            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color.gray));
         }
         PlatfromUtil.setPlatFromString(vh.platform, tweet.getAppclient());
         return convertView;
@@ -199,8 +201,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             }
             OSChinaApi.pubUnLikeTweet(tweet.getId(), tweet.getAuthorid(),
                     handler);
-            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
-                    .gray));
+            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color.gray));
         } else {
             tweet.setIsLike(1);
             vh.tvLikeState
@@ -208,8 +209,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             tweet.getLikeUser().add(0, AppContext.getInstance().getLoginUser());
             OSChinaApi
                     .pubLikeTweet(tweet.getId(), tweet.getAuthorid(), handler);
-            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
-                    .day_colorPrimary));
+            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color.day_colorPrimary));
             tweet.setIsLike(1);
             tweet.setLikeCount(tweet.getLikeCount() + 1);
         }
@@ -259,7 +259,8 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
                 public void onSuccess(Bitmap bitmap) {
                     super.onSuccess(bitmap);
                     if (bitmap != null) {
-                        bitmap = BitmapHelper.scaleWithXY(bitmap, 300 / bitmap.getHeight());
+                        bitmap = BitmapHelper.scaleWithXY(bitmap,
+                                300 / bitmap.getHeight());
                         vh.image.setImageBitmap(bitmap);
                     }
                 }

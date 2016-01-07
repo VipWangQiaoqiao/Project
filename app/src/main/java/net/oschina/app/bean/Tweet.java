@@ -1,11 +1,5 @@
 package net.oschina.app.bean;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.oschina.app.AppContext;
-import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.util.UIHelper;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcel;
@@ -21,9 +15,16 @@ import android.widget.TextView.BufferType;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
+import net.oschina.app.AppContext;
+import net.oschina.app.base.BaseListFragment;
+import net.oschina.app.util.UIHelper;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 动弹实体类
- * 
+ *
  * @author liux (http://my.oschina.net/liux),kymjs(kymjs123@gmail.com)
  * @version 1.1 添加语音动弹功能
  * @created 2012-3-21
@@ -66,7 +67,8 @@ public class Tweet extends Entity implements Parcelable {
     private String imageFilePath;
     private String audioPath;
 
-    public Tweet() {}
+    public Tweet() {
+    }
 
     public Tweet(Parcel dest) {
         id = dest.readInt();
@@ -249,8 +251,7 @@ public class Tweet extends Entity implements Parcelable {
             likeUser.setMovementMethod(LinkMovementMethod.getInstance());
             likeUser.setFocusable(false);
             likeUser.setLongClickable(false);
-            likeUser.setText(addClickablePart(contet, limit),
-                    BufferType.SPANNABLE);
+            likeUser.setText(addClickablePart(contet, limit), BufferType.SPANNABLE);
         } else {
             likeUser.setVisibility(View.GONE);
             likeUser.setText("");
@@ -258,11 +259,10 @@ public class Tweet extends Entity implements Parcelable {
     }
 
     /**
-     * @param str
      * @return
      */
     private SpannableStringBuilder addClickablePart(final Context context,
-            boolean limit) {
+                                                    boolean limit) {
 
         StringBuilder sbBuilder = new StringBuilder();
         int showCunt = getLikeUser().size();
@@ -283,11 +283,10 @@ public class Tweet extends Entity implements Parcelable {
         }
 
         for (int i = 0; i < showCunt; i++) {
-            sbBuilder.append(getLikeUser().get(i).getName() + "、");
+            sbBuilder.append(getLikeUser().get(i).getName()).append("、");
         }
 
-        String likeUsersStr = sbBuilder
-                .substring(0, sbBuilder.lastIndexOf("、")).toString();
+        String likeUsersStr = sbBuilder.substring(0, sbBuilder.lastIndexOf("、"));
 
         // 第一个赞图标
         // ImageSpan span = new ImageSpan(AppContext.getInstance(),
@@ -307,7 +306,6 @@ public class Tweet extends Entity implements Parcelable {
                 final int start = likeUsersStr.indexOf(name) + spanStr.length();
                 final int index = i;
                 ssb.setSpan(new ClickableSpan() {
-
                     @Override
                     public void onClick(View widget) {
                         User user = getLikeUser().get(index);
@@ -322,7 +320,6 @@ public class Tweet extends Entity implements Parcelable {
                         // 去掉下划线
                         ds.setUnderlineText(false);
                     }
-
                 }, start, start + name.length(), 0);
             }
         }

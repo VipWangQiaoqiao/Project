@@ -2,10 +2,10 @@ package net.oschina.app.util;
 
 import android.graphics.Bitmap;
 
+import org.kymjs.kjframe.Core;
 import org.kymjs.kjframe.bitmap.BitmapConfig;
 import org.kymjs.kjframe.bitmap.ImageDisplayer;
 import org.kymjs.kjframe.http.HttpCallBack;
-import org.kymjs.kjframe.http.HttpConfig;
 import org.kymjs.kjframe.http.KJHttpException;
 import org.kymjs.kjframe.http.Request;
 
@@ -20,20 +20,21 @@ public class ChatImageDisplayer extends ImageDisplayer {
     private int mMinWidth;
     private int mMinHeight;
 
-    public ChatImageDisplayer(HttpConfig httpConfig, BitmapConfig bitmapConfig) {
-        super(httpConfig, bitmapConfig);
+    public ChatImageDisplayer(BitmapConfig bitmapConfig) {
+        super(Core.getKJHttp(), bitmapConfig);
     }
 
-    public void setImageSize(int maxWidth, int maxHeight, int minWidth, int minHeight){
+    public void setImageSize(int maxWidth, int maxHeight, int minWidth, int minHeight) {
         this.mMaxWidth = maxWidth;
         this.mMaxHeight = maxHeight;
         this.mMinWidth = minWidth;
         this.mMinHeight = minHeight;
     }
 
-    protected Request<Bitmap> makeImageRequest(final String requestUrl, int maxWidth, int maxHeight) {
+    protected Request<Bitmap> makeImageRequest(final String requestUrl, int maxWidth, int
+            maxHeight) {
         //原本的ImageRequest 换成 ChatImageRequest
-        return new ChatImageRequest(requestUrl, mMaxWidth, mMaxHeight,mMinWidth,mMinHeight,
+        return new ChatImageRequest(requestUrl, mMaxWidth, mMaxHeight, mMinWidth, mMinHeight,
                 new HttpCallBack() {
                     @Override
                     public void onSuccess(Bitmap t) {
