@@ -90,7 +90,7 @@ public class MainActivity extends ActionBarActivity implements
                     ((MyInformationFragment) fragment).setNotice();
                 } else {
                     if (activeCount > 0) {
-                        mBvNotice.setText(activeCount + "");
+                        mBvNotice.setText(String.format("%d", activeCount));
                         mBvNotice.show();
                     } else {
                         mBvNotice.hide();
@@ -142,11 +142,10 @@ public class MainActivity extends ActionBarActivity implements
 
     /**
      * 处理传进来的intent
-     * 
-     * @author 火蚁 2015-1-28 下午3:48:44
-     * 
-     * @return void
+     *
      * @param intent
+     * @return void
+     * @author 火蚁 2015-1-28 下午3:48:44
      */
     private void handleIntent(Intent intent) {
         if (intent == null)
@@ -161,7 +160,7 @@ public class MainActivity extends ActionBarActivity implements
 
     /**
      * 从通知栏点击的时候相应
-     * 
+     *
      * @param fromWhich
      */
     private void notifitcationBarClick(Intent fromWhich) {
@@ -251,10 +250,8 @@ public class MainActivity extends ActionBarActivity implements
             View indicator = LayoutInflater.from(getApplicationContext())
                     .inflate(R.layout.tab_indicator, null);
             TextView title = (TextView) indicator.findViewById(R.id.tab_title);
-            Drawable drawable = this.getResources().getDrawable(
-                    mainTab.getResIcon());
-            title.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null,
-                    null);
+            Drawable drawable = this.getResources().getDrawable(mainTab.getResIcon());
+            title.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
             if (i == 2) {
                 indicator.setVisibility(View.INVISIBLE);
                 mTabHost.setNoTabChangedTag(getString(mainTab.getResName()));
@@ -289,9 +286,11 @@ public class MainActivity extends ActionBarActivity implements
 
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
+        if (actionBar != null) {
+            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setTitle(mTitle);
+        }
     }
 
     @Override
@@ -308,12 +307,12 @@ public class MainActivity extends ActionBarActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-        case R.id.search:
-            UIHelper.showSimpleBack(this, SimpleBackPage.SEARCH);
-            break;
+            case R.id.search:
+                UIHelper.showSimpleBack(this, SimpleBackPage.SEARCH);
+                break;
 
-        default:
-            break;
+            default:
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -340,12 +339,12 @@ public class MainActivity extends ActionBarActivity implements
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
-        // 点击了快速操作按钮
-        case R.id.quick_option_iv:
-            showQuickOption();
-            break;
-        default:
-            break;
+            // 点击了快速操作按钮
+            case R.id.quick_option_iv:
+                showQuickOption();
+                break;
+            default:
+                break;
         }
     }
 

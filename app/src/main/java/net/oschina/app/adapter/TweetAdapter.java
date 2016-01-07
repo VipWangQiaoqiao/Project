@@ -158,7 +158,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
 
         vh.commentcount.setText(tweet.getCommentCount());
 
-        showTweetImage(vh, tweet.getImgSmall(), tweet.getImgBig());
+        showTweetImage(vh, tweet.getImgBig());
         tweet.setLikeUsers(context, vh.likeUsers, true);
 
         if (tweet.getLikeUser() == null) {
@@ -238,7 +238,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
     /**
      * 动态设置动弹列表图片显示规则
      */
-    private void showTweetImage(final ViewHolder vh, String imgSmall, final String imgBig) {
+    private void showTweetImage(final ViewHolder vh, final String imgBig) {
         if (!TextUtils.isEmpty(imgBig)) {
             vh.image.setTag(imgBig);
             new Core.Builder().view(vh.image).size(300, 300).url(imgBig + "?300X300")
