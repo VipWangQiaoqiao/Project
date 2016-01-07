@@ -25,7 +25,6 @@ import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.ui.ImagePreviewActivity;
-import net.oschina.app.util.BitmapHelper;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.KJAnimations;
@@ -35,22 +34,15 @@ import net.oschina.app.util.TypefaceUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.MyLinkMovementMethod;
-import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
 
 import org.kymjs.kjframe.Core;
-import org.kymjs.kjframe.bitmap.BitmapCallBack;
 import org.kymjs.kjframe.utils.DensityUtils;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import cz.msebera.android.httpclient.Header;
 
-/**
- * @author HuangWenwei
- * @author kymjs
- * @date 2014年10月10日
- */
 public class TweetAdapter extends ListBaseAdapter<Tweet> {
 
     static class ViewHolder {
@@ -77,6 +69,17 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
 
         public ViewHolder(View view) {
             ButterKnife.inject(this, view);
+            image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String url = (String) v.getTag();
+                    int index = url.lastIndexOf("?");
+                    if (index > 0) {
+                        url = url.substring(0, index);
+                    }
+                    ImagePreviewActivity.showImagePrivew(v.getContext(), 0, new String[]{url});
+                }
+            });
         }
     }
 
@@ -103,13 +106,11 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
     }
 
     @Override
-    protected View getRealView(final int position, View convertView,
-                               final ViewGroup parent) {
+    protected View getRealView(final int position, View convertView, ViewGroup parent) {
         context = parent.getContext();
         final ViewHolder vh;
         if (convertView == null || convertView.getTag() == null) {
-            convertView = getLayoutInflater(parent.getContext()).inflate(
-                    R.layout.list_cell_tweet, null);
+            convertView = View.inflate(context, R.layout.list_cell_tweet, null);
             vh = new ViewHolder(convertView);
             convertView.setTag(vh);
         } else {
@@ -120,10 +121,9 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         if (tweet.getAuthorid() == AppContext.getInstance().getLoginUid()) {
             vh.del.setVisibility(View.VISIBLE);
             vh.del.setOnClickListener(new OnClickListener() {
-
                 @Override
                 public void onClick(View v) {
-                    optionDel(parent.getContext(), tweet, position);
+                    optionDel(context, tweet, position);
                 }
             });
         } else {
@@ -143,10 +143,9 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
 
         if (!StringUtils.isEmpty(tweet.getAttach())) {
             if (recordBitmap == null) {
-                initRecordImg(parent.getContext());
+                initRecordImg(context);
             }
-            ImageSpan recordImg = new ImageSpan(parent.getContext(),
-                    recordBitmap);
+            ImageSpan recordImg = new ImageSpan(context, recordBitmap);
             SpannableString str = new SpannableString("c");
             str.setSpan(recordImg, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
             vh.content.setText(str);
@@ -156,30 +155,27 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             span = InputHelper.displayEmoji(context.getResources(), span);
             vh.content.setText(span);
         }
-        MyURLSpan.parseLinkText(vh.content, span);
 
-        vh.commentcount.setText(tweet.getCommentCount() + "");
+        vh.commentcount.setText(tweet.getCommentCount());
 
-        showTweetImage(vh, tweet.getImgSmall(), tweet.getImgBig(),
-                parent.getContext());
+        showTweetImage(vh, tweet.getImgSmall(), tweet.getImgBig());
         tweet.setLikeUsers(context, vh.likeUsers, true);
-        final ViewHolder vh1 = vh;
-        OnClickListener likeClick = new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (AppContext.getInstance().isLogin()) {
-                    updateLikeState(vh1, tweet);
-                } else {
-                    AppContext.showToast("先登陆再赞~");
-                    UIHelper.showLoginActivity(parent.getContext());
-                }
-            }
-        };
+
         if (tweet.getLikeUser() == null) {
             vh.tvLikeState.setVisibility(View.GONE);
+        } else {
+            vh.tvLikeState.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (AppContext.getInstance().isLogin()) {
+                        updateLikeState(vh, tweet);
+                    } else {
+                        AppContext.showToast("先登陆再赞~");
+                        UIHelper.showLoginActivity(context);
+                    }
+                }
+            });
         }
-
-        vh.tvLikeState.setOnClickListener(likeClick);
 
         TypefaceUtils.setTypeface(vh.tvLikeState);
         if (tweet.getIsLike() == 1) {
@@ -205,12 +201,9 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
                     .gray));
         } else {
-            tweet.setIsLike(1);
-            vh.tvLikeState
-                    .setAnimation(KJAnimations.getScaleAnimation(1.5f, 300));
+            vh.tvLikeState.setAnimation(KJAnimations.getScaleAnimation(1.5f, 300));
             tweet.getLikeUser().add(0, AppContext.getInstance().getLoginUser());
-            OSChinaApi
-                    .pubLikeTweet(tweet.getId(), tweet.getAuthorid(), handler);
+            OSChinaApi.pubLikeTweet(tweet.getId(), tweet.getAuthorid(), handler);
             vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
                     .day_colorPrimary));
             tweet.setIsLike(1);
@@ -219,8 +212,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         tweet.setLikeUsers(context, vh.likeUsers, true);
     }
 
-    private void optionDel(Context context, final Tweet tweet,
-                           final int position) {
+    private void optionDel(Context context, final Tweet tweet, final int position) {
 
         DialogHelp.getConfirmDialog(context, "确定删除吗?", new DialogInterface.OnClickListener() {
             @Override
@@ -245,36 +237,12 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
 
     /**
      * 动态设置动弹列表图片显示规则
-     *
-     * @author kymjs
      */
-    private void showTweetImage(final ViewHolder vh, String imgSmall,
-                                final String imgBig, final Context context) {
-        if (imgSmall != null && !TextUtils.isEmpty(imgSmall)) {
-            Core.getKJBitmap().display(vh.image, imgSmall, new BitmapCallBack() {
-                @Override
-                public void onPreLoad() {
-                    super.onPreLoad();
-                    vh.image.setImageResource(R.drawable.pic_bg);
-                }
-
-                @Override
-                public void onSuccess(Bitmap bitmap) {
-                    super.onSuccess(bitmap);
-                    if (bitmap != null) {
-                        bitmap = BitmapHelper.scaleWithXY(bitmap,
-                                300 / bitmap.getHeight());
-                        vh.image.setImageBitmap(bitmap);
-                    }
-                }
-            });
-            vh.image.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ImagePreviewActivity.showImagePrivew(context, 0,
-                            new String[]{imgBig});
-                }
-            });
+    private void showTweetImage(final ViewHolder vh, String imgSmall, final String imgBig) {
+        if (!TextUtils.isEmpty(imgBig)) {
+            vh.image.setTag(imgBig);
+            new Core.Builder().view(vh.image).size(300, 300).url(imgBig + "?300X300")
+                    .loadBitmapRes(R.drawable.pic_bg).doTask();
             vh.image.setVisibility(AvatarView.VISIBLE);
         } else {
             vh.image.setVisibility(AvatarView.GONE);

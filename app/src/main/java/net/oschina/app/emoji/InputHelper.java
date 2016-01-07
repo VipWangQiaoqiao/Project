@@ -15,7 +15,6 @@
  */
 package net.oschina.app.emoji;
 
-import net.oschina.app.R;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.text.Spannable;
@@ -24,8 +23,9 @@ import android.text.style.ImageSpan;
 import android.view.KeyEvent;
 import android.widget.EditText;
 
+import net.oschina.app.R;
+
 /**
- * 
  * @author kymjs (http://www.kymjs.com)
  */
 public class InputHelper {
@@ -40,15 +40,11 @@ public class InputHelper {
 
     /**
      * 获取name对应的资源
-     * 
-     * @param map
-     * @param name
-     * @return
      */
     public static int getEmojiResId(String name) {
         Integer res = DisplayRules.getMapAll().get(name);
         if (res != null) {
-            return res.intValue();
+            return res;
         } else {
             return -1;
         }
@@ -60,46 +56,52 @@ public class InputHelper {
      */
     public static Spannable displayEmoji(Resources res, CharSequence s) {
         String str = s.toString();
-        Spannable spannable = null;
+        Spannable spannable;
         if (s instanceof Spannable) {
             spannable = (Spannable) s;
         } else {
             // 构建文字span
             spannable = new SpannableString(str);
         }
+        if (!str.contains(":") && !str.contains("[")) {
+            return spannable;
+        }
+
         for (int i = 0; i < str.length(); i++) {
             int index1 = str.indexOf("[", i);
             int length1 = str.indexOf("]", index1 + 1);
             int index2 = str.indexOf(":", i);
             int length2 = str.indexOf(":", index2 + 1);
             int bound = (int) res.getDimension(R.dimen.space_20);
-            try {
-                String emojiStr = str.substring(index1, length1 + "]".length());
-                int resId = getEmojiResId(emojiStr);
-                if (resId > 0) {
-                    // 构建图片span
-                    Drawable drawable = res.getDrawable(resId);
 
-                    drawable.setBounds(0, 20, bound, bound + 20);
-                    ImageSpan span = new ImageSpan(drawable,
-                            ImageSpan.ALIGN_BASELINE);
-                    spannable.setSpan(span, index1, length1 + "]".length(),
-                            Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-                }
-            } catch (Exception e) {
-            }
             try {
-                String emojiStr2 = str
-                        .substring(index2, length2 + ":".length());
-                int resId2 = getEmojiResId(emojiStr2);
-                if (resId2 > 0) {
-                    Drawable emojiDrawable = res.getDrawable(resId2);
-                    emojiDrawable.setBounds(0, 0, bound, bound);
-                    // 构建图片span
-                    ImageSpan imageSpan = new ImageSpan(emojiDrawable, str);
-                    spannable.setSpan(imageSpan, index2,
-                            length2 + ":".length(),
-                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                if (index1 > 0) {
+                    String emojiStr = str.substring(index1, length1 + "]".length());
+                    int resId = getEmojiResId(emojiStr);
+                    if (resId > 0) {
+                        // 构建图片span
+                        Drawable drawable = res.getDrawable(resId);
+
+                        drawable.setBounds(0, 20, bound, bound + 20);
+                        ImageSpan span = new ImageSpan(drawable,
+                                ImageSpan.ALIGN_BASELINE);
+                        spannable.setSpan(span, index1, length1 + "]".length(),
+                                Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+                    }
+                }
+                if (index2 > 0) {
+                    String emojiStr2 = str
+                            .substring(index2, length2 + ":".length());
+                    int resId2 = getEmojiResId(emojiStr2);
+                    if (resId2 > 0) {
+                        Drawable emojiDrawable = res.getDrawable(resId2);
+                        emojiDrawable.setBounds(0, 0, bound, bound);
+                        // 构建图片span
+                        ImageSpan imageSpan = new ImageSpan(emojiDrawable, str);
+                        spannable.setSpan(imageSpan, index2,
+                                length2 + ":".length(),
+                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
                 }
             } catch (Exception e) {
             }
