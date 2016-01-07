@@ -67,7 +67,7 @@ public class SoftWareTweetsFrament extends BaseListFragment<Tweet> implements
 
     @Override
     protected TweetAdapter getListAdapter() {
-        return new TweetAdapter();
+        return new TweetAdapter(getActivity());
     }
 
     @Override

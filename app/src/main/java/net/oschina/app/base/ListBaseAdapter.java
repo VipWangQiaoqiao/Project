@@ -1,7 +1,11 @@
 package net.oschina.app.base;
 
+import com.squareup.picasso.Picasso;
+
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.DrawableRes;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -9,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -16,6 +21,7 @@ import android.widget.TextView;
 import net.oschina.app.R;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.emoji.InputHelper;
+import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.widget.MyLinkMovementMethod;
@@ -42,6 +48,12 @@ public class ListBaseAdapter<T extends Entity> extends BaseAdapter {
     protected int mScreenWidth;
 
     private LayoutInflater mInflater;
+
+    protected Context mContext;
+
+    public ListBaseAdapter(Context context) {
+        mContext = context;
+    }
 
     protected LayoutInflater getLayoutInflater(Context context) {
         if (mInflater == null) {
@@ -293,6 +305,33 @@ public class ListBaseAdapter<T extends Entity> extends BaseAdapter {
         } else {
             textView.setText(text);
         }
+    }
+
+    protected void loadPortrait(ImageView imageView, String url) {
+        if (TextUtils.isEmpty(url)) {
+            setImageRes(imageView, R.drawable.widget_dface);
+            return;
+        }
+
+        Picasso.with(mContext)
+                .load(url)
+                .placeholder(R.drawable.widget_dface)
+                .into(imageView);
+    }
+
+    protected void loadImageForUrl(ImageView imageView, String url, @DrawableRes int placeholderRes) {
+        if (TextUtils.isEmpty(url)) {
+            return;
+        }
+        imageView.setVisibility(View.VISIBLE);
+        Picasso.with(mContext)
+                .load(url)
+                .placeholder(placeholderRes)
+                .into(imageView);
+    }
+
+    protected void setImageRes(ImageView imageRes,@DrawableRes int resId) {
+        imageRes.setImageResource(resId);
     }
 
     protected void setText(TextView textView, String text) {

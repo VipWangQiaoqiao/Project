@@ -30,6 +30,7 @@ import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.KJAnimations;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TLog;
 import net.oschina.app.util.TypefaceUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.AvatarView;
@@ -38,6 +39,7 @@ import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
 
 import cz.msebera.android.httpclient.Header;
+
 import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
 import org.kymjs.kjframe.bitmap.BitmapHelper;
@@ -81,8 +83,10 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
     }
 
     private Bitmap recordBitmap;
-    private Context context;
-    private final KJBitmap kjb = new KJBitmap();
+
+    public TweetAdapter(Context context) {
+        this.mContext = context;
+    }
 
     final private AsyncHttpResponseHandler handler = new AsyncHttpResponseHandler() {
 
@@ -106,7 +110,9 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
     @Override
     protected View getRealView(final int position, View convertView,
                                final ViewGroup parent) {
-        context = parent.getContext();
+        if (mContext == null) {
+            mContext = parent.getContext();
+        }
         final ViewHolder vh;
         if (convertView == null || convertView.getTag() == null) {
             convertView = getLayoutInflater(parent.getContext()).inflate(
@@ -151,19 +157,31 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             SpannableString str = new SpannableString("c");
             str.setSpan(recordImg, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
             vh.content.setText(str);
-            span = InputHelper.displayEmoji(context.getResources(), span);
+            span = InputHelper.displayEmoji(mContext.getResources(), span);
             vh.content.append(span);
         } else {
-            span = InputHelper.displayEmoji(context.getResources(), span);
+            span = InputHelper.displayEmoji(mContext.getResources(), span);
             vh.content.setText(span);
         }
         MyURLSpan.parseLinkText(vh.content, span);
 
         vh.commentcount.setText(tweet.getCommentCount() + "");
 
-        showTweetImage(vh, tweet.getImgSmall(), tweet.getImgBig(),
-                parent.getContext());
-        tweet.setLikeUsers(context, vh.likeUsers, true);
+        if (!TextUtils.isEmpty(tweet.getImgSmall())) {
+            loadImageForUrl(vh.image, tweet.getImgSmall(), R.drawable.pic_bg);
+            vh.image.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ImagePreviewActivity.showImagePrivew(mContext, 0,
+                            new String[]{tweet.getImgBig()});
+                }
+            });
+
+        } else {
+            vh.image.setVisibility(View.GONE);
+        }
+
+        tweet.setLikeUsers(mContext, vh.likeUsers, true);
         final ViewHolder vh1 = vh;
         OnClickListener likeClick = new OnClickListener() {
             @Override
@@ -213,7 +231,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             tweet.setIsLike(1);
             tweet.setLikeCount(tweet.getLikeCount() + 1);
         }
-        tweet.setLikeUsers(context, vh.likeUsers, true);
+        tweet.setLikeUsers(mContext, vh.likeUsers, true);
     }
 
     private void optionDel(Context context, final Tweet tweet,
@@ -238,43 +256,5 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
                         });
             }
         }).show();
-    }
-
-    /**
-     * 动态设置动弹列表图片显示规则
-     *
-     * @author kymjs
-     */
-    private void showTweetImage(final ViewHolder vh, String imgSmall,
-                                final String imgBig, final Context context) {
-        if (imgSmall != null && !TextUtils.isEmpty(imgSmall)) {
-            kjb.display(vh.image, imgSmall, new BitmapCallBack() {
-                @Override
-                public void onPreLoad() {
-                    super.onPreLoad();
-                    vh.image.setImageResource(R.drawable.pic_bg);
-                }
-
-                @Override
-                public void onSuccess(Bitmap bitmap) {
-                    super.onSuccess(bitmap);
-                    if (bitmap != null) {
-                        bitmap = BitmapHelper.scaleWithXY(bitmap,
-                                300 / bitmap.getHeight());
-                        vh.image.setImageBitmap(bitmap);
-                    }
-                }
-            });
-            vh.image.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ImagePreviewActivity.showImagePrivew(context, 0,
-                            new String[]{imgBig});
-                }
-            });
-            vh.image.setVisibility(AvatarView.VISIBLE);
-        } else {
-            vh.image.setVisibility(AvatarView.GONE);
-        }
     }
 }

@@ -100,7 +100,7 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
 
     @Override
     protected TweetAdapter getListAdapter() {
-        return new TweetAdapter();
+        return new TweetAdapter(getActivity());
     }
 
     @Override

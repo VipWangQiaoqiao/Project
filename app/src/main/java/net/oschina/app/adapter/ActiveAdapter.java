@@ -45,7 +45,6 @@ public class ActiveAdapter extends ListBaseAdapter {
     public ActiveAdapter() {}
 
     private Bitmap recordBitmap;
-    private final KJBitmap kjb = new KJBitmap();
     private int rectSize;
 
     private void initRecordImg(Context cxt) {
@@ -141,44 +140,20 @@ public class ActiveAdapter extends ListBaseAdapter {
         vh.avatar.setAvatarUrl(item.getPortrait());
 
         if (!TextUtils.isEmpty(item.getTweetimage())) {
-            setTweetImage(parent, vh, item);
+            vh.pic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ImagePreviewActivity.showImagePrivew(parent.getContext(), 0,
+                            new String[]{getOriginalUrl(item.getTweetimage())});
+                }
+            });
+            loadImageForUrl(vh.pic, item.getTweetimage(), R.drawable.pic_bg);
         } else {
             vh.pic.setVisibility(View.GONE);
             vh.pic.setImageBitmap(null);
         }
 
         return convertView;
-    }
-
-    /**
-     * 动态设置图片显示样式
-     * 
-     * @author kymjs
-     */
-    private void setTweetImage(final ViewGroup parent, final ViewHolder vh,
-            final Active item) {
-        vh.pic.setVisibility(View.VISIBLE);
-
-        kjb.display(vh.pic, item.getTweetimage(), R.drawable.pic_bg, rectSize,
-                rectSize, new BitmapCallBack() {
-                    @Override
-                    public void onSuccess(Bitmap bitmap) {
-                        super.onSuccess(bitmap);
-                        if (bitmap != null) {
-                            bitmap = BitmapHelper.scaleWithXY(bitmap, rectSize
-                                    / bitmap.getHeight());
-                            vh.pic.setImageBitmap(bitmap);
-                        }
-                    }
-                });
-
-        vh.pic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ImagePreviewActivity.showImagePrivew(parent.getContext(), 0,
-                        new String[] { getOriginalUrl(item.getTweetimage()) });
-            }
-        });
     }
 
     private String modifyPath(String message) {
