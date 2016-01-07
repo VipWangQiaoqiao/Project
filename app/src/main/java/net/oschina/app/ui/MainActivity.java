@@ -82,8 +82,7 @@ public class MainActivity extends ActionBarActivity implements
                 int reviewCount = mNotice.getReviewCount();// 评论
                 int newFansCount = mNotice.getNewFansCount();// 新粉丝
                 int newLikeCount = mNotice.getNewLikeCount();// 收到赞
-                int activeCount = atmeCount + reviewCount + msgCount
-                        + newFansCount + newLikeCount;
+                int activeCount = atmeCount + reviewCount + msgCount + newFansCount + newLikeCount;
 
                 Fragment fragment = getCurrentFragment();
                 if (fragment instanceof MyInformationFragment) {
