@@ -1,7 +1,8 @@
 package net.oschina.app.fragment;
 
-import java.io.InputStream;
-import java.io.Serializable;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 
 import net.oschina.app.adapter.BlogAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
@@ -11,9 +12,9 @@ import net.oschina.app.bean.BlogList;
 import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
+
+import java.io.InputStream;
+import java.io.Serializable;
 
 /**
  * 博客区中单一模块的展示
@@ -54,8 +55,7 @@ public class BlogFragment extends BaseListFragment<Blog> implements
 
     @Override
     protected BlogList parseList(InputStream is) throws Exception {
-        BlogList list = XmlUtils.toBean(BlogList.class, is);
-        return list;
+        return XmlUtils.toBean(BlogList.class, is);
     }
 
     @Override

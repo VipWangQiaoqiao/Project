@@ -1,7 +1,8 @@
 package net.oschina.app.fragment;
 
-import java.io.InputStream;
-import java.io.Serializable;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 
 import net.oschina.app.R;
 import net.oschina.app.adapter.PostAdapter;
@@ -12,15 +13,14 @@ import net.oschina.app.bean.Post;
 import net.oschina.app.bean.PostList;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
+
+import java.io.InputStream;
+import java.io.Serializable;
 
 /**
  * 标签相关帖子
  * 
  * @author FireAnt（http://my.oschina.net/LittleDY）
- * @created 2014年11月6日 下午3:39:07
  * 
  */
 public class QuestionTagFragment extends BaseListFragment<Post> {
@@ -49,13 +49,12 @@ public class QuestionTagFragment extends BaseListFragment<Post> {
 
     @Override
     protected String getCacheKeyPrefix() {
-        return new StringBuffer(CACHE_KEY_PREFIX).append(mTag).toString();
+        return CACHE_KEY_PREFIX + mTag;
     }
 
     @Override
     protected PostList parseList(InputStream is) throws Exception {
-        PostList list = XmlUtils.toBean(PostList.class, is);
-        return list;
+        return XmlUtils.toBean(PostList.class, is);
     }
 
     @Override

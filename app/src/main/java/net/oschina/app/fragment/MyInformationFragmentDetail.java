@@ -84,15 +84,12 @@ public class MyInformationFragmentDetail extends BaseFragment {
 
     private boolean isChangeFace = false;
 
-    private String theLarge;
-
     private final static int CROP = 200;
 
     private final static String FILE_SAVEPATH = Environment
             .getExternalStorageDirectory().getAbsolutePath()
             + "/OSChina/Portrait/";
     private Uri origUri;
-    private Uri cropUri;
     private File protraitFile;
     private Bitmap protraitBitmap;
     private String protraitPath;
@@ -321,7 +318,7 @@ public class MyInformationFragmentDetail extends BaseFragment {
         Uri uri = Uri.fromFile(out);
         origUri = uri;
 
-        theLarge = savePath + fileName;// 该照片的绝对路径
+        String theLarge = savePath + fileName;
 
         intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
@@ -341,8 +338,7 @@ public class MyInformationFragmentDetail extends BaseFragment {
             AppContext.showToast("无法保存上传的头像，请检查SD卡是否挂载");
             return null;
         }
-        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss")
-                .format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         String thePath = ImageUtils.getAbsolutePathFromNoStandardUri(uri);
 
         // 如果是标准Uri
@@ -357,8 +353,7 @@ public class MyInformationFragmentDetail extends BaseFragment {
         protraitPath = FILE_SAVEPATH + cropFileName;
         protraitFile = new File(protraitPath);
 
-        cropUri = Uri.fromFile(protraitFile);
-        return this.cropUri;
+        return Uri.fromFile(protraitFile);
     }
 
     /**

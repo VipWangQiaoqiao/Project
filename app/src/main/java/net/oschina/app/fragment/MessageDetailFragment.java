@@ -41,7 +41,6 @@ import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
-import cz.msebera.android.httpclient.Header;
 import org.kymjs.kjframe.utils.StringUtils;
 
 import java.io.ByteArrayInputStream;
@@ -51,14 +50,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import cz.msebera.android.httpclient.Header;
+
 /**
  * 与某人的聊天记录界面（私信详情）
  *
  * @author kymjs (http://www.kymjs.com/)
- *
  */
 public class MessageDetailFragment extends BaseListFragment<MessageDetail> implements
-        OnItemLongClickListener, OnSendClickListener,MessageDetailAdapter.OnRetrySendMessageListener{
+        OnItemLongClickListener, OnSendClickListener, MessageDetailAdapter
+        .OnRetrySendMessageListener {
     protected static final String TAG = ActiveFragment.class.getSimpleName();
     public static final String BUNDLE_KEY_FID = "BUNDLE_KEY_FID";
     public static final String BUNDLE_KEY_FNAME = "BUNDLE_KEY_FNAME";
@@ -153,11 +154,10 @@ public class MessageDetailFragment extends BaseListFragment<MessageDetail> imple
 
     /**
      * 处理时间显示，设置哪些需要显示时间，哪些不需要显示时间
-     * @param list
      */
     private void handleShowDate(List<MessageDetail> list) {
         MessageDetail msg = null;
-        long lastGroupTime = 0l;
+        long lastGroupTime = 0L;
         //因为获得的列表是按时间降序的，所以需要倒着遍历
         for (int i = list.size() - 1; i >= 0; i--) {
             msg = list.get(i);
@@ -173,7 +173,7 @@ public class MessageDetailFragment extends BaseListFragment<MessageDetail> imple
         }
     }
 
-    private boolean isNeedShowDate(long currentTime,long lastTime){
+    private boolean isNeedShowDate(long currentTime, long lastTime) {
         return currentTime - lastTime > TIME_INTERVAL;
     }
 
@@ -182,7 +182,7 @@ public class MessageDetailFragment extends BaseListFragment<MessageDetail> imple
         super.initView(view);
         mListView.setDivider(null);
         mListView.setDividerHeight(0);
-        if(!AppContext.getNightModeSwitch()) {
+        if (!AppContext.getNightModeSwitch()) {
             mListView.setBackgroundColor(Color.parseColor("#ebebeb"));
         }
         mListView.setOnItemLongClickListener(this);
@@ -218,18 +218,14 @@ public class MessageDetailFragment extends BaseListFragment<MessageDetail> imple
 
     @Override
     protected boolean isReadCacheData(boolean refresh) {
-        if (!TDevice.hasInternet()) {
-            return true;
-        } else {
-            return false;
-        }
+        return !TDevice.hasInternet();
     }
 
     @Override
     protected void executeOnLoadDataSuccess(List<MessageDetail> data) {
         mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
         if (data == null) {
-            data = new ArrayList<MessageDetail>(1);
+            data = new ArrayList<>();
         }
         if (mAdapter != null) {
             if (mCurrentPage == 0)
@@ -254,13 +250,15 @@ public class MessageDetailFragment extends BaseListFragment<MessageDetail> imple
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {}
+                            long id) {
+    }
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view,
-            int position, long id) {
+                                   int position, long id) {
         final MessageDetail message = mAdapter.getItem(position);
-        DialogHelp.getSelectDialog(getActivity(), getResources().getStringArray(R.array.message_list_options), new DialogInterface.OnClickListener() {
+        DialogHelp.getSelectDialog(getActivity(), getResources().getStringArray(R.array
+                .message_list_options), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 switch (i) {
@@ -285,7 +283,7 @@ public class MessageDetailFragment extends BaseListFragment<MessageDetail> imple
         if (mState == STATE_REFRESH) {
             return;
         }
-        if(mCurrentPage==mPageCount-1){
+        if (mCurrentPage == mPageCount - 1) {
             AppContext.showToastShort("已加载全部数据！");
             setSwipeRefreshLoadedState();
             return;
@@ -298,7 +296,7 @@ public class MessageDetailFragment extends BaseListFragment<MessageDetail> imple
         requestData(true);
     }
 
-    public void showFriendUserCenter(){
+    public void showFriendUserCenter() {
         UIHelper.showUserCenter(getActivity(), mFid, mFName);
     }
 
@@ -309,7 +307,8 @@ public class MessageDetailFragment extends BaseListFragment<MessageDetail> imple
     }
 
     private void handleDeleteMessage(final MessageDetail message) {
-        DialogHelp.getConfirmDialog(getActivity(), "是否删除该私信?", new DialogInterface.OnClickListener() {
+        DialogHelp.getConfirmDialog(getActivity(), "是否删除该私信?", new DialogInterface
+                .OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 showWaitDialog(R.string.progress_submit);
@@ -349,7 +348,8 @@ public class MessageDetailFragment extends BaseListFragment<MessageDetail> imple
         }
 
         @Override
-        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable
+                error) {
             AppContext.showToastShort(R.string.tip_delete_faile);
             hideWaitDialog();
         }
@@ -378,31 +378,32 @@ public class MessageDetailFragment extends BaseListFragment<MessageDetail> imple
 
     /**
      * 发送消息
-     * @param msg
      */
-    private void sendMessage(MessageDetail msg){
+    private void sendMessage(MessageDetail msg) {
         msg.setStatus(MessageDetail.MessageStatus.SENDING);
         Date date = new Date();
         msg.setPubDate(net.oschina.app.util.StringUtils.getDateString(date));
         //如果此次发表的时间距离上次的时间达到了 TIME_INTERVAL 的间隔要求，则显示时间
-        if(isNeedShowDate(date.getTime(),mLastShowDate)) {
+        if (isNeedShowDate(date.getTime(), mLastShowDate)) {
             msg.setShowDate(true);
             mLastShowDate = date.getTime();
         }
 
         //如果待发送列表没有此条消息，说明是新消息，不是发送失败再次发送的，不需要再次添加
-        if(mSendingMsgs.indexOfKey(msg.getId())<0) {
+        if (mSendingMsgs.indexOfKey(msg.getId()) < 0) {
             mSendingMsgs.put(msg.getId(), msg);
             mAdapter.addItem(0, msg);
             mListView.setSelection(mListView.getBottom());
-        }else{
+        } else {
             mAdapter.notifyDataSetChanged();
         }
-        OSChinaApi.publicMessage(msg.getAuthorId(), mFid, msg.getContent(), new SendMessageResponseHandler(msg.getId()));
+        OSChinaApi.publicMessage(msg.getAuthorId(), mFid, msg.getContent(), new
+                SendMessageResponseHandler(msg.getId()));
     }
 
     @Override
-    public void onClickFlagButton() {}
+    public void onClickFlagButton() {
+    }
 
     @Override
     public void onRetrySendMessage(int msgId) {
@@ -412,7 +413,7 @@ public class MessageDetailFragment extends BaseListFragment<MessageDetail> imple
         }
     }
 
-    class SendMessageResponseHandler extends AsyncHttpResponseHandler{
+    class SendMessageResponseHandler extends AsyncHttpResponseHandler {
 
         private int msgTag;
 
@@ -453,7 +454,7 @@ public class MessageDetailFragment extends BaseListFragment<MessageDetail> imple
             error();
         }
 
-        private void error(){
+        private void error() {
             mSendingMsgs.get(this.msgTag).setStatus(MessageDetail.MessageStatus.ERROR);
             mAdapter.notifyDataSetChanged();
         }

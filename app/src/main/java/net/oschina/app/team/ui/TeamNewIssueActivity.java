@@ -96,24 +96,18 @@ public class TeamNewIssueActivity extends BaseActivity {
     @Override
     public void initView() {
         mEtTitle.addTextChangedListener(new TextWatcher() {
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
-                // TODO Auto-generated method stub
-
             }
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count,
                                           int after) {
-                // TODO Auto-generated method stub
-
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                // TODO Auto-generated method stub
                 updateMenuState();
             }
         });
@@ -158,7 +152,6 @@ public class TeamNewIssueActivity extends BaseActivity {
 
         @Override
         public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-            // TODO Auto-generated method stub
             Result res = XmlUtils.toBean(ResultBean.class, arg2).getResult();
             if (res.OK()) {
                 AppContext.showToast(res.getErrorMessage());
@@ -171,19 +164,17 @@ public class TeamNewIssueActivity extends BaseActivity {
         @Override
         public void onFailure(int arg0, Header[] arg1, byte[] arg2,
                               Throwable arg3) {
-            // TODO Auto-generated method stub
-
         }
 
         @Override
         public void onFinish() {
             hideWaitDialog();
-        };
+        }
 
         @Override
         public void onStart() {
             showWaitDialog("发布中...");
-        };
+        }
     };
 
     private void sendPubNewIssue() {
@@ -296,22 +287,22 @@ public class TeamNewIssueActivity extends BaseActivity {
                 }
             }
         }
-        projectDialog = DialogHelp.getSingleChoiceDialog(this, "指定项目", arrays, projectIndex, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                // TODO Auto-generated method stub
-                if (i == projectIndex) {
-                    projectDialog.dismiss();
-                    return;
-                }
-                projectIndex = i;
-                mTvProject.setText(arrays[i]);
-                mTeamProject = projects.get(i);
-                checkIsShowPush();
-                clearCatalogAndToUser();
-                projectDialog.dismiss();
-            }
-        }).show();
+        projectDialog = DialogHelp.getSingleChoiceDialog(this, "指定项目", arrays, projectIndex, new
+                DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (i == projectIndex) {
+                            projectDialog.dismiss();
+                            return;
+                        }
+                        projectIndex = i;
+                        mTvProject.setText(arrays[i]);
+                        mTeamProject = projects.get(i);
+                        checkIsShowPush();
+                        clearCatalogAndToUser();
+                        projectDialog.dismiss();
+                    }
+                }).show();
     }
 
     private void showTeamCatalogSelected(final List<TeamIssueCatalog> list) {
@@ -325,15 +316,16 @@ public class TeamNewIssueActivity extends BaseActivity {
                 }
             }
         }
-        catalogDialog = DialogHelp.getSingleChoiceDialog(this, "指定任务列表", catalogs, catalogIndex, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                catalogIndex = i;
-                mTeamCatalog = list.get(i);
-                mTvCatalog.setText(catalogs[i]);
-                catalogDialog.dismiss();
-            }
-        }).show();
+        catalogDialog = DialogHelp.getSingleChoiceDialog(this, "指定任务列表", catalogs, catalogIndex,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        catalogIndex = i;
+                        mTeamCatalog = list.get(i);
+                        mTvCatalog.setText(catalogs[i]);
+                        catalogDialog.dismiss();
+                    }
+                }).show();
     }
 
     private void showIssueToUser(List<TeamMember> list) {
@@ -346,14 +338,15 @@ public class TeamNewIssueActivity extends BaseActivity {
         for (int i = 0; i < list.size(); i++) {
             toUsers[i] = list.get(i).getName();
         }
-        toUserDialog = DialogHelp.getSingleChoiceDialog(this, "指派成员", toUsers, toUserIndex, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                toUserIndex = i;
-                mTvToUser.setText(toUsers[i]);
-                toUserDialog.dismiss();
-            }
-        }).show();
+        toUserDialog = DialogHelp.getSingleChoiceDialog(this, "指派成员", toUsers, toUserIndex, new
+                DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        toUserIndex = i;
+                        mTvToUser.setText(toUsers[i]);
+                        toUserDialog.dismiss();
+                    }
+                }).show();
 
         toUserDialog.show();
     }
@@ -414,7 +407,6 @@ public class TeamNewIssueActivity extends BaseActivity {
                     @Override
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth) {
-                        // TODO Auto-generated method stub
                     }
 
                 }, mYear, mMonth, mDay);
@@ -422,10 +414,8 @@ public class TeamNewIssueActivity extends BaseActivity {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // TODO Auto-generated method stub
                 switch (which) {
                     case DialogInterface.BUTTON_NEGATIVE:
-
                         break;
                     case DialogInterface.BUTTON_NEUTRAL:
                         issueTime = "";
@@ -506,14 +496,12 @@ public class TeamNewIssueActivity extends BaseActivity {
 
         @Override
         public void onFinish() {
-            // TODO Auto-generated method stub
             super.onFinish();
             hideWaitDialog();
         }
 
         @Override
         public void onStart() {
-            // TODO Auto-generated method stub
             super.onStart();
             showWaitDialog("获取中...");
         }
@@ -521,13 +509,11 @@ public class TeamNewIssueActivity extends BaseActivity {
         @Override
         public void onFailure(int arg0, Header[] arg1, byte[] arg2,
                               Throwable arg3) {
-            // TODO Auto-generated method stub
             showFaile();
         }
 
         @Override
         public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-            // TODO Auto-generated method stub
             switch (showType) {
                 // 显示项目选择对话框
                 case show_project:

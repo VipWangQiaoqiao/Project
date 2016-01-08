@@ -3,12 +3,10 @@ package net.oschina.app.base;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.AppManager;
@@ -25,11 +23,11 @@ import butterknife.ButterKnife;
 
 /**
  * baseActionBar Activity
- * 
+ *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @created 2014年9月25日 上午11:30:15 引用自：tonlin
  */
-public abstract class BaseActivity extends ActionBarActivity implements
+public abstract class BaseActivity extends AppCompatActivity implements
         DialogControl, View.OnClickListener, BaseViewInterface {
     public static final String INTENT_ACTION_EXIT_APP = "INTENT_ACTION_EXIT_APP";
 
@@ -38,7 +36,6 @@ public abstract class BaseActivity extends ActionBarActivity implements
 
     protected LayoutInflater mInflater;
     protected ActionBar mActionBar;
-    private TextView mTvActionTitle;
 
     @Override
     protected void onDestroy() {
@@ -55,9 +52,6 @@ public abstract class BaseActivity extends ActionBarActivity implements
             setTheme(R.style.AppBaseTheme_Light);
         }
         AppManager.getAppManager().addActivity(this);
-        if (!hasActionBar()) {
-            // supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        }
         onBeforeSetContentLayout();
         if (getLayoutId() != 0) {
             setContentView(getLayoutId());
@@ -77,10 +71,11 @@ public abstract class BaseActivity extends ActionBarActivity implements
         _isVisible = true;
     }
 
-    protected void onBeforeSetContentLayout() {}
+    protected void onBeforeSetContentLayout() {
+    }
 
     protected boolean hasActionBar() {
-        return true;
+        return getSupportActionBar() != null;
     }
 
     protected int getLayoutId() {
@@ -99,7 +94,8 @@ public abstract class BaseActivity extends ActionBarActivity implements
         return false;
     }
 
-    protected void init(Bundle savedInstanceState) {}
+    protected void init(Bundle savedInstanceState) {
+    }
 
     protected void initActionBar(ActionBar actionBar) {
         if (actionBar == null)
@@ -128,9 +124,6 @@ public abstract class BaseActivity extends ActionBarActivity implements
             title = getString(R.string.app_name);
         }
         if (hasActionBar() && mActionBar != null) {
-            if (mTvActionTitle != null) {
-                mTvActionTitle.setText(title);
-            }
             mActionBar.setTitle(title);
         }
     }
@@ -138,12 +131,12 @@ public abstract class BaseActivity extends ActionBarActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case android.R.id.home:
-            onBackPressed();
-            break;
+            case android.R.id.home:
+                onBackPressed();
+                break;
 
-        default:
-            break;
+            default:
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -205,12 +198,5 @@ public abstract class BaseActivity extends ActionBarActivity implements
                 ex.printStackTrace();
             }
         }
-    }
-
-    @Override
-    public boolean onMenuOpened(int featureId, Menu menu) {
-
-        // setOverflowIconVisible(featureId, menu);
-        return super.onMenuOpened(featureId, menu);
     }
 }

@@ -1,23 +1,19 @@
 package net.oschina.app.ui;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -50,9 +46,7 @@ import net.oschina.app.widget.MyFragmentTabHost;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-@SuppressLint("InflateParams")
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class MainActivity extends ActionBarActivity implements
+public class MainActivity extends AppCompatActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks,
         OnTabChangeListener, BaseViewInterface, View.OnClickListener,
         OnTouchListener {
@@ -141,10 +135,6 @@ public class MainActivity extends ActionBarActivity implements
 
     /**
      * 处理传进来的intent
-     *
-     * @param intent
-     * @return void
-     * @author 火蚁 2015-1-28 下午3:48:44
      */
     private void handleIntent(Intent intent) {
         if (intent == null)
@@ -159,8 +149,6 @@ public class MainActivity extends ActionBarActivity implements
 
     /**
      * 从通知栏点击的时候相应
-     *
-     * @param fromWhich
      */
     private void notifitcationBarClick(Intent fromWhich) {
         if (fromWhich != null) {
@@ -237,7 +225,6 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public void initData() {
-
     }
 
     private void initTabs() {
@@ -246,8 +233,7 @@ public class MainActivity extends ActionBarActivity implements
         for (int i = 0; i < size; i++) {
             MainTab mainTab = tabs[i];
             TabSpec tab = mTabHost.newTabSpec(getString(mainTab.getResName()));
-            View indicator = LayoutInflater.from(getApplicationContext())
-                    .inflate(R.layout.tab_indicator, null);
+            View indicator = View.inflate(this, R.layout.tab_indicator, null);
             TextView title = (TextView) indicator.findViewById(R.id.tab_title);
             Drawable drawable = this.getResources().getDrawable(mainTab.getResIcon());
             title.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
@@ -280,7 +266,6 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
     }
 
     public void restoreActionBar() {
@@ -356,7 +341,6 @@ public class MainActivity extends ActionBarActivity implements
         dialog.show();
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         super.onTouchEvent(event);
@@ -395,11 +379,5 @@ public class MainActivity extends ActionBarActivity implements
             }
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        // TODO Auto-generated method stub
-        // 当 API Level > 11 调用这个方法可能导致奔溃（android.os.Build.VERSION.SDK_INT > 11）
     }
 }

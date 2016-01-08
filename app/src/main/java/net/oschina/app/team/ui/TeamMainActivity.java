@@ -54,8 +54,6 @@ public class TeamMainActivity extends BaseActivity implements ActionBar.OnNaviga
 
     public final static String BUNDLE_KEY_ISSUE_CATALOG = "bundle_key_catalog_list";
 
-    private final String tag = "team_view";
-
     private FragmentManager mFragmentManager;
 
     private int mCurrentContentIndex = -1;
@@ -114,19 +112,15 @@ public class TeamMainActivity extends BaseActivity implements ActionBar.OnNaviga
     private final List<String> teamName = new ArrayList<String>();
     private List<Team> teamDatas = new ArrayList<Team>();
 
-    /**
-     * @param pos
-     */
     private void switchTeam(int pos) {
         if (pos == mCurrentContentIndex)
             return;
         showWaitDialog("正在切换...");
         FragmentTransaction ft = mFragmentManager.beginTransaction();
-        if (tag != null) {
-            Fragment fragment = mFragmentManager.findFragmentByTag(tag);
-            if (fragment != null) {
-                ft.remove(fragment);
-            }
+        String tag = "team_view";
+        Fragment fragmentf = mFragmentManager.findFragmentByTag(tag);
+        if (fragmentf != null) {
+            ft.remove(fragmentf);
         }
         try {
             TeamMainViewPagerFragment fragment = TeamMainViewPagerFragment.class
@@ -155,8 +149,6 @@ public class TeamMainActivity extends BaseActivity implements ActionBar.OnNaviga
             // mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             teamDatas = TeamList.toTeamList(cache);
             setTeamDataState();
-        } else {
-            //mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
         }
 
         OSChinaApi.teamList(new AsyncHttpResponseHandler() {
@@ -240,8 +232,7 @@ public class TeamMainActivity extends BaseActivity implements ActionBar.OnNaviga
         public View getView(int position, View convertView, ViewGroup parent) {
             // TODO Auto-generated method stub
             if (convertView == null) {
-                convertView = LayoutInflater.from(context).inflate(
-                        R.layout.spinner_layout_head, null);
+                convertView = View.inflate(context, R.layout.spinner_layout_head, null);
             }
             ((TextView) convertView).setText(getItem(position));
 
@@ -271,25 +262,21 @@ public class TeamMainActivity extends BaseActivity implements ActionBar.OnNaviga
 
         @Override
         public int getCount() {
-            // TODO Auto-generated method stub
             return teams.size();
         }
 
         @Override
         public void notifyDataSetChanged() {
-            // TODO Auto-generated method stub
             super.notifyDataSetChanged();
         }
 
         @Override
         public String getItem(int position) {
-            // TODO Auto-generated method stub
             return teams.get(position);
         }
 
         @Override
         public long getItemId(int position) {
-            // TODO Auto-generated method stub
             return position;
         }
 

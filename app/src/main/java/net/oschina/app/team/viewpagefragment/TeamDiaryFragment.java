@@ -60,7 +60,7 @@ public class TeamDiaryFragment extends BaseFragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         aty = getActivity();
         View view = View.inflate(aty, R.layout.fragment_team_diarypager, null);
@@ -78,9 +78,11 @@ public class TeamDiaryFragment extends BaseFragment implements
             team = (Team) bundle
                     .getSerializable(TeamMainActivity.BUNDLE_KEY_TEAM);
         }
-        TAG += team.getId();
+        if (team != null) {
+            TAG += team.getId();
+        }
         currentWeek = StringUtils.getWeekOfYear() - 1;
-        dataBundleList = new HashMap<Integer, TeamDiaryList>(currentWeek + 5);
+        dataBundleList = new HashMap<>(currentWeek + 5);
         // 异步读缓存
         KJAsyncTask.execute(new Runnable() {
             @Override
@@ -108,27 +110,27 @@ public class TeamDiaryFragment extends BaseFragment implements
         mImgCalendar.setOnClickListener(this);
         mImgLeft.setOnClickListener(this);
         mImgRight.setOnClickListener(this);
-        mPager.setOnPageChangeListener(new OnPageChangeListener() {
+        mPager.addOnPageChangeListener(new OnPageChangeListener() {
             @Override
             public void onPageSelected(int arg0) {
                 changeUI(arg0, mPager.getAdapter().getCount());
             }
 
             @Override
-            public void onPageScrolled(int arg0, float arg1, int arg2) {}
+            public void onPageScrolled(int arg0, float arg1, int arg2) {
+            }
 
             @Override
-            public void onPageScrollStateChanged(int arg0) {}
+            public void onPageScrollStateChanged(int arg0) {
+            }
         });
     }
 
     /**
      * 改变Title
-     * 
-     * @param currentPage
-     *            当前页(从0开始)
-     * @param totalPage
-     *            总共有多少页(从0开始)
+     *
+     * @param currentPage 当前页(从0开始)
+     * @param totalPage   总共有多少页(从0开始)
      */
     private void changeUI(int currentPage, int totalPage) {
         mPager.setCurrentItem(currentPage);
@@ -143,46 +145,46 @@ public class TeamDiaryFragment extends BaseFragment implements
         } else {
             mImgRight.setImageResource(R.drawable.ic_diary_canforward);
         }
-        mTvTitle.setText("第" + (currentPage + 1) + "周周报总览");
+        mTvTitle.setText(String.format("第%d周周报总览", currentPage + 1));
     }
 
     @Override
     public void onClick(View v) {
         super.onClick(v);
         switch (v.getId()) {
-        case R.id.team_diary_pager_right:
-            int currentPage1 = mPager.getCurrentItem();
-            if (currentPage1 < mPager.getAdapter().getCount()) {
-                mPager.setCurrentItem(currentPage1 + 1);
-            }
-            break;
-        case R.id.team_diary_pager_left:
-            int currentPage2 = mPager.getCurrentItem();
-            if (currentPage2 > 0) {
-                mPager.setCurrentItem(currentPage2 - 1);
-            }
-            break;
-        case R.id.team_diary_pager_calendar:
-            final DatePickerDialog datePickerDialog = DatePickerDialog
-                    .newInstance(this, calendar.get(Calendar.YEAR),
-                            calendar.get(Calendar.MONTH),
-                            calendar.get(Calendar.DAY_OF_MONTH), false);
-            datePickerDialog.setVibrate(false);
-            datePickerDialog.setYearRange(2014, 2015);
-            datePickerDialog.show(getFragmentManager(), "datepicker");
-            break;
-        default:
-            break;
+            case R.id.team_diary_pager_right:
+                int currentPage1 = mPager.getCurrentItem();
+                if (currentPage1 < mPager.getAdapter().getCount()) {
+                    mPager.setCurrentItem(currentPage1 + 1);
+                }
+                break;
+            case R.id.team_diary_pager_left:
+                int currentPage2 = mPager.getCurrentItem();
+                if (currentPage2 > 0) {
+                    mPager.setCurrentItem(currentPage2 - 1);
+                }
+                break;
+            case R.id.team_diary_pager_calendar:
+                final DatePickerDialog datePickerDialog = DatePickerDialog
+                        .newInstance(this, calendar.get(Calendar.YEAR),
+                                calendar.get(Calendar.MONTH),
+                                calendar.get(Calendar.DAY_OF_MONTH), false);
+                datePickerDialog.setVibrate(false);
+                datePickerDialog.setYearRange(2014, 2015);
+                datePickerDialog.show(getFragmentManager(), "datepicker");
+                break;
+            default:
+                break;
         }
     }
 
     @Override
     public void onDateSet(DatePickerDialog datePickerDialog, int year,
-            int month, int day) {
+                          int month, int day) {
         int[] dateBundle = StringUtils.getCurrentDate();
         if ((dateBundle[0] == year && dateBundle[1] <= month)
                 || (dateBundle[0] == year && dateBundle[1] == month + 1 && dateBundle[2] < day)) {
-            AppContext.showToast("那天怎么会有周报呢");
+            AppContext.showToast("这天怎么会有周报呢");
         } else {
             currentYear = year;
             currentWeek = StringUtils.getWeekOfYear(new Date(year, month, day)) - 1;

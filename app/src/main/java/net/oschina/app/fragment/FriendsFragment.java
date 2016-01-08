@@ -1,8 +1,10 @@
 package net.oschina.app.fragment;
 
-import java.io.InputStream;
-import java.io.Serializable;
-import java.util.List;
+import android.annotation.TargetApi;
+import android.os.Build;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.adapter.FriendAdapter;
@@ -17,11 +19,10 @@ import net.oschina.app.ui.MainActivity;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.viewpagerfragment.NoticeViewPagerFragment;
-import android.annotation.TargetApi;
-import android.os.Build;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
+
+import java.io.InputStream;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * 关注、粉丝
@@ -82,8 +83,7 @@ public class FriendsFragment extends BaseListFragment<Friend> {
 
     @Override
     protected FriendsList parseList(InputStream is) throws Exception {
-        FriendsList list = XmlUtils.toBean(FriendsList.class, is);
-        return list;
+        return XmlUtils.toBean(FriendsList.class, is);
     }
 
     @Override

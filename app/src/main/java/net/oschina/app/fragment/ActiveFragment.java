@@ -105,14 +105,12 @@ public class ActiveFragment extends BaseListFragment<Active> implements
 
     @Override
     protected String getCacheKeyPrefix() {
-        return new StringBuffer(CACHE_KEY_PREFIX + mCatalog).append(
-                AppContext.getInstance().getLoginUid()).toString();
+        return CACHE_KEY_PREFIX + mCatalog + AppContext.getInstance().getLoginUid();
     }
 
     @Override
     protected ActiveList parseList(InputStream is) {
-        ActiveList list = XmlUtils.toBean(ActiveList.class, is);
-        return list;
+        return XmlUtils.toBean(ActiveList.class, is);
     }
 
     @Override

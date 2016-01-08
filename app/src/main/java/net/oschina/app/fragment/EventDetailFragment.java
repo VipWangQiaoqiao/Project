@@ -96,7 +96,7 @@ public class EventDetailFragment extends CommonDetailFragment<Post> {
 
     @Override
     protected String getWebViewBody(Post detail) {
-        StringBuffer body = new StringBuffer();
+        StringBuilder body = new StringBuilder();
         body.append(UIHelper.WEB_STYLE).append(UIHelper.WEB_LOAD_IMAGES);
         body.append(ThemeSwitchUtils.getWebViewBodyString());
         // 添加title

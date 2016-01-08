@@ -36,10 +36,11 @@ import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
-import cz.msebera.android.httpclient.Header;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
+
+import cz.msebera.android.httpclient.Header;
 
 public class CommentFrament extends BaseListFragment<Comment> implements
         OnItemLongClickListener, OnSendClickListener {
@@ -88,7 +89,7 @@ public class CommentFrament extends BaseListFragment<Comment> implements
 
         @Override
         public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                Throwable arg3) {
+                              Throwable arg3) {
             hideWaitDialog();
             AppContext.showToastShort(R.string.comment_publish_faile);
         }
@@ -154,8 +155,7 @@ public class CommentFrament extends BaseListFragment<Comment> implements
     @Override
     protected String getCacheKeyPrefix() {
         String str = mIsBlogComment ? BLOG_CACHE_KEY_PREFIX : CACHE_KEY_PREFIX;
-        return new StringBuilder(str).append("_").append(mId).append("_Owner")
-                .append(mOwnerId).toString();
+        return str + "_" + mId + "_Owner" + mOwnerId;
     }
 
     @Override
@@ -185,7 +185,7 @@ public class CommentFrament extends BaseListFragment<Comment> implements
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
+                            long id) {
         final Comment comment = mAdapter.getItem(position);
         if (comment == null)
             return;
@@ -243,7 +243,7 @@ public class CommentFrament extends BaseListFragment<Comment> implements
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view,
-            int position, long id) {
+                                   int position, long id) {
         final Comment item = mAdapter.getItem(position);
         if (item == null)
             return false;
@@ -313,7 +313,7 @@ public class CommentFrament extends BaseListFragment<Comment> implements
                     .getAuthorId(), mCommentHandler);
         } else {
             OSChinaApi.replyComment(mId, mCatalog, comment.getId(), comment
-                    .getAuthorId(), AppContext.getInstance().getLoginUid(),
+                            .getAuthorId(), AppContext.getInstance().getLoginUid(),
                     text, mCommentHandler);
         }
     }
@@ -333,5 +333,6 @@ public class CommentFrament extends BaseListFragment<Comment> implements
     }
 
     @Override
-    public void onClickFlagButton() {}
+    public void onClickFlagButton() {
+    }
 }

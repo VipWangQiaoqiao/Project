@@ -61,7 +61,6 @@ public class ShakeActivity extends BaseActivity implements SensorEventListener {
     TextView mTvDate;
 
     private SensorManager sensorManager = null;
-    private Sensor sensor;
     private Vibrator vibrator = null;
 
     private boolean isRequest = false;
@@ -129,8 +128,8 @@ public class ShakeActivity extends BaseActivity implements SensorEventListener {
                                                 UIHelper.showUrlShake(ShakeActivity.this, obj);
                                             }
                                         });
-                                Core.getKJBitmap().displayWithLoadBitmap(mImgHead,
-                                        obj.getImage(), R.drawable.widget_dface);
+                                new Core.Builder().view(mImgHead).url(obj.getImage())
+                                        .loadBitmapRes(R.drawable.widget_dface).doTask();
                                 mTvTitle.setText(obj.getTitle());
                                 mTvDetail.setText(obj.getDetail());
                                 mTvAuthor.setText(obj.getAuthor());
@@ -179,11 +178,11 @@ public class ShakeActivity extends BaseActivity implements SensorEventListener {
     public void onResume() {
         super.onResume();
         if (sensorManager != null) {
-            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        }
-        if (sensor != null) {
-            sensorManager.registerListener(this, sensor,
-                    SensorManager.SENSOR_DELAY_GAME);
+            Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            if (sensor != null) {
+                sensorManager.registerListener(this, sensor,
+                        SensorManager.SENSOR_DELAY_GAME);
+            }
         }
     }
 

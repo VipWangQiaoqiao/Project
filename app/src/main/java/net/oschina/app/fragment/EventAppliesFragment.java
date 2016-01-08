@@ -1,7 +1,9 @@
 package net.oschina.app.fragment;
 
-import java.io.InputStream;
-import java.io.Serializable;
+import android.annotation.TargetApi;
+import android.os.Build;
+import android.view.View;
+import android.widget.AdapterView;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.adapter.EventApplyAdapter;
@@ -11,10 +13,9 @@ import net.oschina.app.bean.Apply;
 import net.oschina.app.bean.EventAppliesList;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
-import android.annotation.TargetApi;
-import android.os.Build;
-import android.view.View;
-import android.widget.AdapterView;
+
+import java.io.InputStream;
+import java.io.Serializable;
 
 /**
  * 活动出席人员列表
@@ -46,8 +47,7 @@ public class EventAppliesFragment extends BaseListFragment<Apply> {
 
 	@Override
 	protected EventAppliesList parseList(InputStream is) throws Exception {
-		EventAppliesList list = XmlUtils.toBean(EventAppliesList.class, is);
-		return list;
+		return XmlUtils.toBean(EventAppliesList.class, is);
 	}
 
 	@Override
