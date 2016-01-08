@@ -32,7 +32,7 @@ import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 
 /**
  * 便签编辑界面
@@ -41,29 +41,29 @@ import butterknife.InjectView;
  * 
  */
 public class NoteEditFragment extends BaseFragment implements OnTouchListener {
-    @InjectView(R.id.note_detail_edit)
+    @Bind(R.id.note_detail_edit)
     EditText mEtContent;
-    @InjectView(R.id.note_detail_tv_date)
+    @Bind(R.id.note_detail_tv_date)
     TextView mTvDate;
-    @InjectView(R.id.note_detail_titlebar)
+    @Bind(R.id.note_detail_titlebar)
     RelativeLayout mLayoutTitle;
-    @InjectView(R.id.note_detail_img_thumbtack)
+    @Bind(R.id.note_detail_img_thumbtack)
     ImageView mImgThumbtack;
 
-    @InjectView(R.id.note_detail_img_button)
+    @Bind(R.id.note_detail_img_button)
     ImageView mImgMenu;
-    @InjectView(R.id.note_detail_menu)
+    @Bind(R.id.note_detail_menu)
     RelativeLayout mLayoutMenu;
 
-    @InjectView(R.id.note_detail_img_green)
+    @Bind(R.id.note_detail_img_green)
     ImageView mImgGreen;
-    @InjectView(R.id.note_detail_img_blue)
+    @Bind(R.id.note_detail_img_blue)
     ImageView mImgBlue;
-    @InjectView(R.id.note_detail_img_purple)
+    @Bind(R.id.note_detail_img_purple)
     ImageView mImgPurple;
-    @InjectView(R.id.note_detail_img_yellow)
+    @Bind(R.id.note_detail_img_yellow)
     ImageView mImgYellow;
-    @InjectView(R.id.note_detail_img_red)
+    @Bind(R.id.note_detail_img_red)
     ImageView mImgRed;
 
     private NotebookData editData;
@@ -100,7 +100,7 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_note_detail,
                 container, false);
-        ButterKnife.inject(this, rootView);
+        ButterKnife.bind(this, rootView);
         initData();
         initView(rootView);
         return rootView;

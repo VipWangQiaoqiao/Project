@@ -1,32 +1,34 @@
 package net.oschina.app.fragment;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.widget.togglebutton.ToggleButton;
 import net.oschina.app.widget.togglebutton.ToggleButton.OnToggleChanged;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class SettingsNotificationFragment extends BaseFragment {
 	
-	@InjectView(R.id.tb_accept) ToggleButton mTbAccept;
-	@InjectView(R.id.tb_voice) ToggleButton mTbVoice;
-	@InjectView(R.id.tb_vibration) ToggleButton mTbVibration;
-	@InjectView(R.id.tb_app_exit) ToggleButton mTbAppExit;
+	@Bind(R.id.tb_accept) ToggleButton mTbAccept;
+	@Bind(R.id.tb_voice) ToggleButton mTbVoice;
+	@Bind(R.id.tb_vibration) ToggleButton mTbVibration;
+	@Bind(R.id.tb_app_exit) ToggleButton mTbAppExit;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_settings_notifcation, container,
 				false);
-		ButterKnife.inject(this, view);
+		ButterKnife.bind(this, view);
 		initView(view);
 		initData();
 		return view;

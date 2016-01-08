@@ -37,11 +37,11 @@ import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
 
-import cz.msebera.android.httpclient.Header;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * 周报详情<br>
@@ -53,11 +53,11 @@ import butterknife.InjectView;
 public class TeamDiaryDetailFragment extends BaseFragment implements
         OnSendClickListener {
 
-    @InjectView(R.id.listview)
+    @Bind(R.id.listview)
     ListView mList;
-    @InjectView(R.id.swiperefreshlayout)
+    @Bind(R.id.swiperefreshlayout)
     SwipeRefreshLayout mSwiperefreshlayout;
-    @InjectView(R.id.error_layout)
+    @Bind(R.id.error_layout)
     EmptyLayout mErrorLayout;
 
     private TeamDiary diaryData;
@@ -74,7 +74,7 @@ public class TeamDiaryDetailFragment extends BaseFragment implements
         View rootView = View.inflate(getActivity(),
                 R.layout.fragment_pull_refresh_listview, null);
         aty = getActivity();
-        ButterKnife.inject(this, rootView);
+        ButterKnife.bind(this, rootView);
         initData();
         initView(rootView);
         return rootView;

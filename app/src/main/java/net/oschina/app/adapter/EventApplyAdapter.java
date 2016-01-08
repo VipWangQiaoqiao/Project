@@ -1,16 +1,18 @@
 package net.oschina.app.adapter;
 
-import net.oschina.app.R;
-import net.oschina.app.base.ListBaseAdapter;
-import net.oschina.app.bean.Apply;
-import net.oschina.app.widget.AvatarView;
 import android.annotation.SuppressLint;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import net.oschina.app.R;
+import net.oschina.app.base.ListBaseAdapter;
+import net.oschina.app.bean.Apply;
+import net.oschina.app.widget.AvatarView;
+
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * 活动参会人员适配器
@@ -48,18 +50,18 @@ public class EventApplyAdapter extends ListBaseAdapter<Apply> {
 
     static class ViewHolder {
 
-        @InjectView(R.id.tv_name)
+        @Bind(R.id.tv_name)
         TextView name;
-        @InjectView(R.id.tv_desc)
+        @Bind(R.id.tv_desc)
         TextView desc;
-        @InjectView(R.id.tv_from) TextView from;
-        @InjectView(R.id.iv_gender)
+        @Bind(R.id.tv_from) TextView from;
+        @Bind(R.id.iv_gender)
         ImageView gender;
-        @InjectView(R.id.iv_avatar)
+        @Bind(R.id.iv_avatar)
         AvatarView avatar;
 
         public ViewHolder(View view) {
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
         }
     }
 }

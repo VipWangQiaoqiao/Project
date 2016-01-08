@@ -41,7 +41,7 @@ import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import cz.msebera.android.httpclient.Header;
 
 /**
@@ -55,10 +55,10 @@ public class UserCenterFragment extends BaseFragment implements
 
     private static final Object FEMALE = "女";
 
-    @InjectView(R.id.error_layout)
+    @Bind(R.id.error_layout)
     EmptyLayout mEmptyView;
 
-    @InjectView(R.id.lv_user_active)
+    @Bind(R.id.lv_user_active)
     ListView mListView;
     private ImageView mIvAvatar, mIvGender;
     private TextView mTvName, mTvFollowing, mTvFollower, mTvSore,
@@ -127,7 +127,7 @@ public class UserCenterFragment extends BaseFragment implements
         mHisUid = args.getInt("his_id", 0);
         mHisName = args.getString("his_name");
         mUid = AppContext.getInstance().getLoginUid();
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         initView(view);
 
         return view;

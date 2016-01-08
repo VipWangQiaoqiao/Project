@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 
 /**
  * 任务列表适配器
@@ -163,37 +163,37 @@ public class TeamIssueAdapter extends ListBaseAdapter<TeamIssue> {
     }
 
     static class ViewHolder {
-        @InjectView(R.id.iv_issue_state)
+        @Bind(R.id.iv_issue_state)
         TextView state;
-        @InjectView(R.id.tv_title)
+        @Bind(R.id.tv_title)
         TextView title;
-        @InjectView(R.id.iv_issue_source)
+        @Bind(R.id.iv_issue_source)
         TextView issueSource;
-        @InjectView(R.id.tv_project)
+        @Bind(R.id.tv_project)
         TextView project;
-        @InjectView(R.id.tv_attachments)
+        @Bind(R.id.tv_attachments)
         TextView attachments;// 附件
-        @InjectView(R.id.tv_childissues)
+        @Bind(R.id.tv_childissues)
         TextView childissues;// 子任务
-        @InjectView(R.id.tv_relations)
+        @Bind(R.id.tv_relations)
         TextView relations;// 关联任务
-        @InjectView(R.id.tv_accept_time)
+        @Bind(R.id.tv_accept_time)
         TextView accept_time;
-        @InjectView(R.id.tv_author)
+        @Bind(R.id.tv_author)
         TextView author;
-        @InjectView(R.id.tv_to)
+        @Bind(R.id.tv_to)
         TextView to;
-        @InjectView(R.id.tv_touser)
+        @Bind(R.id.tv_touser)
         TextView touser;
-        @InjectView(R.id.tv_time)
+        @Bind(R.id.tv_time)
         TextView time;
-        @InjectView(R.id.tv_comment_count)
+        @Bind(R.id.tv_comment_count)
         TextView comment;
-        @InjectView(R.id.title)
+        @Bind(R.id.title)
         TextView title_line;
 
         public ViewHolder(View view) {
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
         }
     }
 }

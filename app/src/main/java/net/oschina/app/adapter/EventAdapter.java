@@ -13,7 +13,7 @@ import net.oschina.app.bean.EventList;
 import org.kymjs.kjframe.Core;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 
 /**
  * 活动列表适配器
@@ -27,19 +27,19 @@ public class EventAdapter extends ListBaseAdapter<Event> {
 
     static class ViewHolder {
 
-        @InjectView(R.id.iv_event_status)
+        @Bind(R.id.iv_event_status)
         ImageView status;
-        @InjectView(R.id.iv_event_img)
+        @Bind(R.id.iv_event_img)
         ImageView img;
-        @InjectView(R.id.tv_event_title)
+        @Bind(R.id.tv_event_title)
         TextView title;
-        @InjectView(R.id.tv_event_time)
+        @Bind(R.id.tv_event_time)
         TextView time;
-        @InjectView(R.id.tv_event_spot)
+        @Bind(R.id.tv_event_spot)
         TextView spot;
 
         public ViewHolder(View view) {
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
         }
     }
 

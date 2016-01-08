@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 
 @SuppressLint("NewApi")
 public abstract class BaseListFragment<T extends Entity> extends BaseFragment
@@ -48,15 +48,15 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
     public static final String BUNDLE_KEY_CATALOG = "BUNDLE_KEY_CATALOG";
 
-    @InjectView(R.id.swiperefreshlayout)
+    @Bind(R.id.swiperefreshlayout)
     protected SwipeRefreshLayout mSwipeRefreshLayout;
 
-    @InjectView(R.id.listview)
+    @Bind(R.id.listview)
     protected ListView mListView;
 
     protected ListBaseAdapter<T> mAdapter;
 
-    @InjectView(R.id.error_layout)
+    @Bind(R.id.error_layout)
     protected EmptyLayout mErrorLayout;
 
     protected int mStoreEmptyState = -1;
@@ -85,7 +85,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         initView(view);
     }
 

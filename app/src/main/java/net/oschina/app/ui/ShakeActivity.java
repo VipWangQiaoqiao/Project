@@ -31,7 +31,7 @@ import org.kymjs.kjframe.Core;
 
 import java.io.ByteArrayInputStream;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 import cz.msebera.android.httpclient.Header;
 
 /**
@@ -40,24 +40,24 @@ import cz.msebera.android.httpclient.Header;
  */
 public class ShakeActivity extends BaseActivity implements SensorEventListener {
 
-    @InjectView(R.id.shake_img)
+    @Bind(R.id.shake_img)
     ImageView mImgShake;
 
-    @InjectView(R.id.progress)
+    @Bind(R.id.progress)
     ProgressBar mProgress;
-    @InjectView(R.id.shake_bottom)
+    @Bind(R.id.shake_bottom)
     LinearLayout mLayoutBottom;
-    @InjectView(R.id.iv_face)
+    @Bind(R.id.iv_face)
     ImageView mImgHead;
-    @InjectView(R.id.tv_title)
+    @Bind(R.id.tv_title)
     TextView mTvTitle;
-    @InjectView(R.id.tv_description)
+    @Bind(R.id.tv_description)
     TextView mTvDetail;
-    @InjectView(R.id.tv_author)
+    @Bind(R.id.tv_author)
     TextView mTvAuthor;
-    @InjectView(R.id.tv_comment_count)
+    @Bind(R.id.tv_comment_count)
     TextView mTvCommentCount;
-    @InjectView(R.id.tv_time)
+    @Bind(R.id.tv_time)
     TextView mTvDate;
 
     private SensorManager sensorManager = null;

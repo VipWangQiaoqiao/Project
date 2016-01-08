@@ -1,21 +1,5 @@
 package net.oschina.app.fragment;
 
-import java.io.File;
-
-import net.oschina.app.AppContext;
-import net.oschina.app.R;
-import net.oschina.app.base.BaseFragment;
-import net.oschina.app.bean.Tweet;
-import net.oschina.app.service.ServerTaskUtils;
-import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.TDevice;
-import net.oschina.app.util.UIHelper;
-import net.oschina.app.widget.RecordButton;
-import net.oschina.app.widget.RecordButton.OnFinishedRecordListener;
-import net.oschina.app.widget.RecordButtonUtil.OnPlayListener;
-
-import org.kymjs.kjframe.utils.DensityUtils;
-
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.text.Editable;
@@ -33,8 +17,25 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
+
+import net.oschina.app.AppContext;
+import net.oschina.app.R;
+import net.oschina.app.base.BaseFragment;
+import net.oschina.app.bean.Tweet;
+import net.oschina.app.service.ServerTaskUtils;
+import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TDevice;
+import net.oschina.app.util.UIHelper;
+import net.oschina.app.widget.RecordButton;
+import net.oschina.app.widget.RecordButton.OnFinishedRecordListener;
+import net.oschina.app.widget.RecordButtonUtil.OnPlayListener;
+
+import org.kymjs.kjframe.utils.DensityUtils;
+
+import java.io.File;
+
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * 语音动弹发布界面
@@ -44,17 +45,17 @@ import butterknife.InjectView;
  */
 public class TweetRecordFragment extends BaseFragment {
 
-    @InjectView(R.id.tweet_layout_record)
+    @Bind(R.id.tweet_layout_record)
     RelativeLayout mLayout;
-    @InjectView(R.id.tweet_btn_record)
+    @Bind(R.id.tweet_btn_record)
     RecordButton mBtnRecort;
-    @InjectView(R.id.tweet_time_record)
+    @Bind(R.id.tweet_time_record)
     TextView mTvTime;
-    @InjectView(R.id.tweet_text_record)
+    @Bind(R.id.tweet_text_record)
     TextView mTvInputLen;
-    @InjectView(R.id.tweet_edit_record)
+    @Bind(R.id.tweet_edit_record)
     EditText mEtSpeech;
-    @InjectView(R.id.tweet_img_volume)
+    @Bind(R.id.tweet_img_volume)
     ImageView mImgVolume;
 
     public static int MAX_LEN = 160;
@@ -150,7 +151,7 @@ public class TweetRecordFragment extends BaseFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.item_tweet_pub_record,
                 container, false);
-        ButterKnife.inject(this, rootView);
+        ButterKnife.bind(this, rootView);
         initView(rootView);
         initData();
         return rootView;

@@ -44,7 +44,6 @@ public abstract class BaseActivity extends ActionBarActivity implements
     protected void onDestroy() {
         super.onDestroy();
         TDevice.hideSoftKeyboard(getCurrentFocus());
-        ButterKnife.reset(this);
     }
 
     @Override
@@ -70,7 +69,7 @@ public abstract class BaseActivity extends ActionBarActivity implements
         }
 
         // 通过注解绑定控件
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         init(savedInstanceState);
         initView();

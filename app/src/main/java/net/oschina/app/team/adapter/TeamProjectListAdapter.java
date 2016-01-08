@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 
 /**
  * 团队项目适配器
@@ -88,13 +88,13 @@ public class TeamProjectListAdapter extends BaseAdapter {
     }
 
     public static class ViewHolder {
-        @InjectView(R.id.iv_source)
+        @Bind(R.id.iv_source)
         TextView source;
-        @InjectView(R.id.tv_project_name)
+        @Bind(R.id.tv_project_name)
         TextView name;
 
         public ViewHolder(View view) {
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
         }
     }
 

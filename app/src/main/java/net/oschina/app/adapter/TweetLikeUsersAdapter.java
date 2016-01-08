@@ -1,15 +1,16 @@
 package net.oschina.app.adapter;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.User;
 import net.oschina.app.widget.AvatarView;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * TweetLikeUsersAdapter.java
@@ -40,13 +41,13 @@ public class TweetLikeUsersAdapter extends ListBaseAdapter<User> {
     
     static class ViewHolder {
 	
-	@InjectView(R.id.iv_avatar)
+	@Bind(R.id.iv_avatar)
 	AvatarView avatar;
-	@InjectView(R.id.tv_name)
+	@Bind(R.id.tv_name)
 	TextView name;
 	
 	public ViewHolder(View view) {
-	    ButterKnife.inject(this, view);
+	    ButterKnife.bind(this, view);
 	}
     }   
 }

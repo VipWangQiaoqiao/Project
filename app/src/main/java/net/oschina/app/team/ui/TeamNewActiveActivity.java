@@ -46,16 +46,16 @@ import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.XmlUtils;
 
-import cz.msebera.android.httpclient.Header;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * 团队新动态 TeamNewActiveFragment.java
@@ -73,28 +73,28 @@ public class TeamNewActiveActivity extends BaseActivity {
 
     private MenuItem mMenuSend;
 
-    @InjectView(R.id.ib_emoji_keyboard)
+    @Bind(R.id.ib_emoji_keyboard)
     ImageButton mIbEmoji;
 
-    @InjectView(R.id.ib_picture)
+    @Bind(R.id.ib_picture)
     ImageButton mIbPicture;
 
-    @InjectView(R.id.ib_mention)
+    @Bind(R.id.ib_mention)
     ImageButton mIbMention;
 
-    @InjectView(R.id.ib_trend_software)
+    @Bind(R.id.ib_trend_software)
     ImageButton mIbTrendSoftware;
 
-    @InjectView(R.id.tv_clear)
+    @Bind(R.id.tv_clear)
     TextView mTvClear;
 
-    @InjectView(R.id.rl_img)
+    @Bind(R.id.rl_img)
     View mLyImage;
 
-    @InjectView(R.id.iv_img)
+    @Bind(R.id.iv_img)
     ImageView mIvImage;
 
-    @InjectView(R.id.et_content)
+    @Bind(R.id.et_content)
     EditText mEtInput;
 
     private final EmojiKeyboardFragment keyboardFragment = new EmojiKeyboardFragment();
@@ -202,7 +202,7 @@ public class TeamNewActiveActivity extends BaseActivity {
     @Override
     public void initView() {
         // TODO Auto-generated method stub
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         setActionBarTitle(R.string.team_new_active);
         mTvClear.setText(String.valueOf(MAX_TEXT_LENGTH));
         mEtInput.addTextChangedListener(new TextWatcher() {

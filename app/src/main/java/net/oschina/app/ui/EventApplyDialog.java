@@ -18,32 +18,32 @@ import net.oschina.app.util.DialogHelp;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 
 public class EventApplyDialog extends CommonDialog implements
         android.view.View.OnClickListener {
 
-    @InjectView(R.id.et_name)
+    @Bind(R.id.et_name)
     EditText mName;
 
-    @InjectView(R.id.tv_gender)
+    @Bind(R.id.tv_gender)
     TextView mGender;
 
     private String[] genders;
 
-    @InjectView(R.id.et_phone)
+    @Bind(R.id.et_phone)
     EditText mMobile;
 
-    @InjectView(R.id.et_company)
+    @Bind(R.id.et_company)
     EditText mCompany;
 
-    @InjectView(R.id.et_job)
+    @Bind(R.id.et_job)
     EditText mJob;
 
-    @InjectView(R.id.tv_remarks_tip)
+    @Bind(R.id.tv_remarks_tip)
     TextView mTvRemarksTip;// 备注提示
 
-    @InjectView(R.id.tv_remarks_selecte)
+    @Bind(R.id.tv_remarks_selecte)
     TextView mTvRemarksSelected;// 备注选择
 
     private Event mEvent;
@@ -57,7 +57,7 @@ public class EventApplyDialog extends CommonDialog implements
         super(context, defStyle);
         View shareView = getLayoutInflater().inflate(
                 R.layout.dialog_event_apply, null);
-        ButterKnife.inject(this, shareView);
+        ButterKnife.bind(this, shareView);
         setContent(shareView, 0);
         this.mEvent = event;
         initView();

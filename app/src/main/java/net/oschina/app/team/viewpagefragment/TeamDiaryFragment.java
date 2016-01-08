@@ -1,9 +1,17 @@
 package net.oschina.app.team.viewpagefragment;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import android.app.Activity;
+import android.os.Bundle;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.fourmob.datetimepicker.date.DatePickerDialog;
+import com.fourmob.datetimepicker.date.DatePickerDialog.OnDateSetListener;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -17,20 +25,13 @@ import net.oschina.app.util.StringUtils;
 
 import org.kymjs.kjframe.http.KJAsyncTask;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.fourmob.datetimepicker.date.DatePickerDialog;
-import com.fourmob.datetimepicker.date.DatePickerDialog.OnDateSetListener;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class TeamDiaryFragment extends BaseFragment implements
         OnDateSetListener {
@@ -38,15 +39,15 @@ public class TeamDiaryFragment extends BaseFragment implements
     public static String DIARYDETAIL_KEY = "team_diary_detail_key";
     public static String TEAMID_KEY = "team_diary_teamid_key";
 
-    @InjectView(R.id.team_diary_pager)
+    @Bind(R.id.team_diary_pager)
     ViewPager mPager;
-    @InjectView(R.id.team_diary_pager_title)
+    @Bind(R.id.team_diary_pager_title)
     TextView mTvTitle;
-    @InjectView(R.id.team_diary_pager_calendar)
+    @Bind(R.id.team_diary_pager_calendar)
     ImageView mImgCalendar;
-    @InjectView(R.id.team_diary_pager_left)
+    @Bind(R.id.team_diary_pager_left)
     ImageView mImgLeft;
-    @InjectView(R.id.team_diary_pager_right)
+    @Bind(R.id.team_diary_pager_right)
     ImageView mImgRight;
 
     private Activity aty;
@@ -63,7 +64,7 @@ public class TeamDiaryFragment extends BaseFragment implements
         super.onCreateView(inflater, container, savedInstanceState);
         aty = getActivity();
         View view = View.inflate(aty, R.layout.fragment_team_diarypager, null);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         initData();
         initView(view);
         return view;

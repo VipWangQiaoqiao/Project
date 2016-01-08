@@ -18,7 +18,7 @@ import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 
 /**
  * 动弹点赞适配器 TweetLikeAdapter.java
@@ -67,21 +67,21 @@ public class TweetLikeAdapter extends ListBaseAdapter<TweetLike> {
     }
 
     static class ViewHolder {
-        @InjectView(R.id.tv_name)
+        @Bind(R.id.tv_name)
         TextView name;
-        @InjectView(R.id.tv_from)
+        @Bind(R.id.tv_from)
         TextView from;
-        @InjectView(R.id.tv_time)
+        @Bind(R.id.tv_time)
         TextView time;
-        @InjectView(R.id.tv_action)
+        @Bind(R.id.tv_action)
         TextView action;
-        @InjectView(R.id.tv_reply)
+        @Bind(R.id.tv_reply)
         TweetTextView reply;
-        @InjectView(R.id.iv_avatar)
+        @Bind(R.id.iv_avatar)
         AvatarView avatar;
 
         public ViewHolder(View view) {
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
         }
     }
 }

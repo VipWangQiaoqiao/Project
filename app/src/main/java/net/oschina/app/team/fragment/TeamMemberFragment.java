@@ -1,6 +1,17 @@
 package net.oschina.app.team.fragment;
 
-import java.util.List;
+import android.app.Activity;
+import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.GridView;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -16,23 +27,13 @@ import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
-import cz.msebera.android.httpclient.Header;
 import org.kymjs.kjframe.http.KJAsyncTask;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.GridView;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
+import java.util.List;
 
-import com.loopj.android.http.AsyncHttpResponseHandler;
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * 团队成员界面
@@ -42,11 +43,11 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
  */
 public class TeamMemberFragment extends BaseFragment {
 
-    @InjectView(R.id.fragment_team_grid)
+    @Bind(R.id.fragment_team_grid)
     GridView mGrid;
-    @InjectView(R.id.fragment_team_empty)
+    @Bind(R.id.fragment_team_empty)
     EmptyLayout mEmpty;
-    @InjectView(R.id.swiperefreshlayout)
+    @Bind(R.id.swiperefreshlayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
     private Activity aty;
@@ -79,7 +80,7 @@ public class TeamMemberFragment extends BaseFragment {
         View rootView = inflater.inflate(R.layout.fragment_team_member,
                 container, false);
         aty = getActivity();
-        ButterKnife.inject(this, rootView);
+        ButterKnife.bind(this, rootView);
 
         TeamMemberList list = (TeamMemberList) CacheManager.readObject(aty,
                 TEAM_MEMBER_DATA);

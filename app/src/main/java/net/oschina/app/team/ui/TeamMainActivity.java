@@ -25,15 +25,15 @@ import net.oschina.app.team.viewpagefragment.TeamMainViewPagerFragment;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.XmlUtils;
 
-import cz.msebera.android.httpclient.Header;
 import org.kymjs.kjframe.utils.PreferenceHelper;
 import org.kymjs.kjframe.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * 团队主界面
@@ -60,9 +60,9 @@ public class TeamMainActivity extends BaseActivity implements ActionBar.OnNaviga
 
     private int mCurrentContentIndex = -1;
 
-    @InjectView(R.id.error_layout)
+    @Bind(R.id.error_layout)
     EmptyLayout mErrorLayout;
-    @InjectView(R.id.main_content)
+    @Bind(R.id.main_content)
     View container;
 
     @Override
@@ -81,7 +81,7 @@ public class TeamMainActivity extends BaseActivity implements ActionBar.OnNaviga
 
     @Override
     public void initView() {
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         // 隐藏actionbar的标题
         mActionBar.setDisplayShowTitleEnabled(false);
         mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);

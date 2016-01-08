@@ -38,14 +38,13 @@ import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
-import cz.msebera.android.httpclient.Header;
-
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
 
 import butterknife.ButterKnife;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * 通用的详情fragment
@@ -84,7 +83,7 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
         mCommentCount = getActivity().getIntent().getIntExtra("comment_count",
                 0);
         mId = getActivity().getIntent().getIntExtra("id", 0);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         initView(view);
         initData();
         requestData(false);

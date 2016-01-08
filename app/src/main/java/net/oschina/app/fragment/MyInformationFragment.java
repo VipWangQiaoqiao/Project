@@ -1,8 +1,23 @@
 package net.oschina.app.fragment;
 
-import java.io.ByteArrayInputStream;
-import java.io.Serializable;
-import java.lang.ref.WeakReference;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -24,28 +39,13 @@ import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.BadgeView;
 
+import java.io.ByteArrayInputStream;
+import java.io.Serializable;
+import java.lang.ref.WeakReference;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import cz.msebera.android.httpclient.Header;
-
-import com.loopj.android.http.AsyncHttpResponseHandler;
 
 /**
  * 登录用户中心页面
@@ -58,31 +58,31 @@ public class MyInformationFragment extends BaseFragment {
 
     public static final int sChildView = 9; // 在没有加入TeamList控件时rootview有多少子布局
 
-    @InjectView(R.id.iv_avatar)
+    @Bind(R.id.iv_avatar)
     AvatarView mIvAvatar;
-    @InjectView(R.id.iv_gender)
+    @Bind(R.id.iv_gender)
     ImageView mIvGender;
-    @InjectView(R.id.tv_name)
+    @Bind(R.id.tv_name)
     TextView mTvName;
-    @InjectView(R.id.tv_score)
+    @Bind(R.id.tv_score)
     TextView mTvScore;
-    @InjectView(R.id.tv_favorite)
+    @Bind(R.id.tv_favorite)
     TextView mTvFavorite;
-    @InjectView(R.id.tv_following)
+    @Bind(R.id.tv_following)
     TextView mTvFollowing;
-    @InjectView(R.id.tv_follower)
+    @Bind(R.id.tv_follower)
     TextView mTvFans;
-    @InjectView(R.id.tv_mes)
+    @Bind(R.id.tv_mes)
     View mMesView;
-    @InjectView(R.id.error_layout)
+    @Bind(R.id.error_layout)
     EmptyLayout mErrorLayout;
-    @InjectView(R.id.iv_qr_code)
+    @Bind(R.id.iv_qr_code)
     ImageView mQrCode;
-    @InjectView(R.id.ll_user_container)
+    @Bind(R.id.ll_user_container)
     View mUserContainer;
-    @InjectView(R.id.rl_user_unlogin)
+    @Bind(R.id.rl_user_unlogin)
     View mUserUnLogin;
-    @InjectView(R.id.rootview)
+    @Bind(R.id.rootview)
     LinearLayout rootView;
 
     private static BadgeView mMesCount;
@@ -193,7 +193,7 @@ public class MyInformationFragment extends BaseFragment {
             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my_information,
                 container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         initView(view);
         return view;
     }

@@ -12,7 +12,7 @@ import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.AvatarView;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 
 /**
  * team 讨论区帖子
@@ -24,24 +24,24 @@ public class TeamDiscussAdapter extends ListBaseAdapter<TeamDiscuss> {
 
     static class ViewHolder {
 
-        @InjectView(R.id.tv_title)
+        @Bind(R.id.tv_title)
         TextView title;
-        @InjectView(R.id.tv_description)
+        @Bind(R.id.tv_description)
         TextView description;
-        @InjectView(R.id.tv_author)
+        @Bind(R.id.tv_author)
         TextView author;
-        @InjectView(R.id.tv_date)
+        @Bind(R.id.tv_date)
         TextView time;
-        @InjectView(R.id.tv_count)
+        @Bind(R.id.tv_count)
         TextView comment_count;
-        @InjectView(R.id.tv_vote_up)
+        @Bind(R.id.tv_vote_up)
         TextView vote_up;
 
-        @InjectView(R.id.iv_face)
+        @Bind(R.id.iv_face)
         public AvatarView face;
 
         public ViewHolder(View view) {
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
         }
     }
 
@@ -65,10 +65,8 @@ public class TeamDiscussAdapter extends ListBaseAdapter<TeamDiscuss> {
         vh.title.setText(item.getTitle());
         String body = item.getBody().trim();
         vh.description.setVisibility(View.GONE);
-        if (null != body || !StringUtils.isEmpty(body)) {
-            vh.description.setVisibility(View.VISIBLE);
-            vh.description.setText(HTMLUtil.replaceTag(item.getBody()).trim());
-        }
+        vh.description.setVisibility(View.VISIBLE);
+        vh.description.setText(HTMLUtil.replaceTag(body));
         vh.author.setText(item.getAuthor().getName());
         vh.time.setText(StringUtils.friendly_time(item.getCreateTime()));
         vh.vote_up.setText(item.getVoteUp() + "");

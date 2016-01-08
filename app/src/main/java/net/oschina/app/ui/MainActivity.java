@@ -47,8 +47,8 @@ import net.oschina.app.util.UpdateManager;
 import net.oschina.app.widget.BadgeView;
 import net.oschina.app.widget.MyFragmentTabHost;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 @SuppressLint("InflateParams")
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -65,7 +65,7 @@ public class MainActivity extends ActionBarActivity implements
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
-    @InjectView(android.R.id.tabhost)
+    @Bind(android.R.id.tabhost)
     public MyFragmentTabHost mTabHost;
 
     private BadgeView mBvNotice;
@@ -110,7 +110,7 @@ public class MainActivity extends ActionBarActivity implements
      */
     private CharSequence mTitle;
 
-    @InjectView(R.id.quick_option_iv)
+    @Bind(R.id.quick_option_iv)
     View mAddBt;
 
     @Override
@@ -122,7 +122,7 @@ public class MainActivity extends ActionBarActivity implements
             setTheme(R.style.AppBaseTheme_Light);
         }
         setContentView(R.layout.activity_main);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         initView();
         AppManager.getAppManager().addActivity(this);
 

@@ -60,7 +60,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 import cz.msebera.android.httpclient.Header;
 
 /**
@@ -85,46 +85,46 @@ public class SelectFriendsActivity extends BaseActivity {
 
     private static final String CACHE_KEY_PREFIX = "friend_list_all";
 
-    @InjectView(R.id.lv_list)
+    @Bind(R.id.lv_list)
     ListView mListView;
 
-    @InjectView(R.id.error_layout)
+    @Bind(R.id.error_layout)
     EmptyLayout mEmptyLayout;
 
-    @InjectView(R.id.search_list)
+    @Bind(R.id.search_list)
     ListView mSearchListView;
 
-    @InjectView(R.id.et_search)
+    @Bind(R.id.et_search)
     EditText mSearchEditText;
 
-    @InjectView(R.id.float_text)
+    @Bind(R.id.float_text)
     TextView mFloatTextView;
 
-    @InjectView(R.id.indexview)
+    @Bind(R.id.indexview)
     IndexView mIndexView;
 
-    @InjectView(R.id.top_layout)
+    @Bind(R.id.top_layout)
     View topLayout;
 
-    @InjectView(R.id.hs_container)
+    @Bind(R.id.hs_container)
     HorizontalScrollView mHorizontalScrollView;
 
-    @InjectView(R.id.select_container)
+    @Bind(R.id.select_container)
     ViewGroup mSelectContainer;
 
-    @InjectView(R.id.search_layout)
+    @Bind(R.id.search_layout)
     View mSearchLayout;
 
-    @InjectView(R.id.search_result_text)
+    @Bind(R.id.search_result_text)
     View mSearchResultText;
 
-    @InjectView(R.id.iv_search)
+    @Bind(R.id.iv_search)
     View mSearchIcon;
 
-    @InjectView(R.id.divider1)
+    @Bind(R.id.divider1)
     View mDividerView1;
 
-    @InjectView(R.id.divider2)
+    @Bind(R.id.divider2)
     View mDividerView2;
 
     private TextView mTopRightButton;
