@@ -40,6 +40,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 
+/**
+ * 意见反馈
+ */
 public class FeedBackFragment extends BaseFragment {
     @Bind(R.id.et_feedback)
     EditText mEtContent;
@@ -153,8 +156,8 @@ public class FeedBackFragment extends BaseFragment {
     /**
      * 上传反馈信息
      *
-     * @param content
-     * @param file
+     * @param content 文字内容
+     * @param file    图片
      */
     public void upload(String content, File file) {
         final ProgressDialog dialog = UIHelper.getprogress(getActivity(), "上传中");

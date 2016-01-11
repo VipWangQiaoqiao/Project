@@ -43,10 +43,6 @@ public class SoftWareTweetsFrament extends BaseListFragment<Tweet> implements
         }
     }
 
-    protected int getLayoutRes() {
-        return R.layout.fragment_pull_refresh_listview;
-    }
-
     @Override
     public void initView(View view) {
         super.initView(view);
@@ -73,8 +69,7 @@ public class SoftWareTweetsFrament extends BaseListFragment<Tweet> implements
 
     @Override
     protected String getCacheKeyPrefix() {
-        return new StringBuilder(CACHE_KEY_PREFIX).append("_").append(mId)
-                .toString();
+        return CACHE_KEY_PREFIX + "_" + mId;
     }
 
     @Override

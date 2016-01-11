@@ -1011,9 +1011,6 @@ public class OSChinaApi {
 
     /**
      * 意见反馈
-     *
-     * @param content
-     * @param file
      */
     public static void feedback(String content, File file, AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
@@ -1023,7 +1020,7 @@ public class OSChinaApi {
             } catch (FileNotFoundException e) {
             }
         params.put("uid", AppContext.getInstance().getLoginUid());
-        params.put("receiver", "942224");
+        params.put("receiver", "2609904");
         params.put("content", content);
         ApiHttpClient.post("action/api/message_pub", params, handler);
     }
