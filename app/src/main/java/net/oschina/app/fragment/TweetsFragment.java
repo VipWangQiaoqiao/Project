@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
-import cz.msebera.android.httpclient.Header;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -33,6 +32,8 @@ import net.oschina.app.util.XmlUtils;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * @author kymjs (http://www.kymjs.com)
@@ -74,7 +75,8 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
         }
 
         @Override
-        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable 
+                error) {
             AppContext.showToastShort(R.string.delete_faile);
         }
     }
@@ -152,7 +154,7 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
+                            long id) {
         Tweet tweet = mAdapter.getItem(position);
         if (tweet != null) {
             UIHelper.showTweetDetail(view.getContext(), null, tweet.getId());
@@ -217,7 +219,7 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view,
-            int position, long id) {
+                                   int position, long id) {
         Tweet tweet = mAdapter.getItem(position);
         if (tweet != null) {
             handleLongClick(tweet);
@@ -229,10 +231,10 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
     private void handleLongClick(final Tweet tweet) {
         String[] items = null;
         if (AppContext.getInstance().getLoginUid() == tweet.getAuthorid()) {
-            items = new String[] { getResources().getString(R.string.copy),
-                    getResources().getString(R.string.delete) };
+            items = new String[]{getResources().getString(R.string.copy),
+                    getResources().getString(R.string.delete)};
         } else {
-            items = new String[] { getResources().getString(R.string.copy) };
+            items = new String[]{getResources().getString(R.string.copy)};
         }
 
         DialogHelp.getSelectDialog(getActivity(), items, new DialogInterface.OnClickListener() {
@@ -248,7 +250,8 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
     }
 
     private void handleDeleteTweet(final Tweet tweet) {
-        DialogHelp.getConfirmDialog(getActivity(), "是否删除该动弹?", new DialogInterface.OnClickListener() {
+        DialogHelp.getConfirmDialog(getActivity(), "是否删除该动弹?", new DialogInterface
+                .OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 OSChinaApi.deleteTweet(tweet.getAuthorid(), tweet

@@ -10,7 +10,7 @@ import net.oschina.app.R;
 import net.oschina.app.util.UIHelper;
 
 import org.kymjs.kjframe.Core;
-import org.kymjs.kjframe.bitmap.BitmapCallBack;
+import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.utils.StringUtils;
 
 public class AvatarView extends CircleImageView {
@@ -21,6 +21,7 @@ public class AvatarView extends CircleImageView {
     private int id;
     private String name;
     private Activity aty;
+    private static KJBitmap kjb = new KJBitmap();
 
     public AvatarView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -68,20 +69,8 @@ public class AvatarView extends CircleImageView {
             headUrl = url;
         }
 
-        Core.getKJBitmap().display(this, headUrl, R.drawable.widget_dface, 0, 0,
-                new BitmapCallBack() {
-                    @Override
-                    public void onFailure(Exception e) {
-                        super.onFailure(e);
-                        aty.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                setImageResource(R.drawable.widget_dface);
-                            }
-                        });
-                        setImageResource(R.drawable.widget_dface);
-                    }
-                });
+        new Core.Builder().view(this).url(headUrl).errorBitmapRes(R.drawable.widget_dface)
+                .loadBitmapRes(R.drawable.widget_dface).doTask();
     }
 
     public static String getSmallAvatar(String source) {

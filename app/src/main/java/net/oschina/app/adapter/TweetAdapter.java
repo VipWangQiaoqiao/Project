@@ -39,11 +39,13 @@ import net.oschina.app.widget.TweetTextView;
 import org.kymjs.kjframe.Core;
 import org.kymjs.kjframe.utils.DensityUtils;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 
 public class TweetAdapter extends ListBaseAdapter<Tweet> {
+
+    
 
     static class ViewHolder {
         @Bind(R.id.tv_tweet_name)

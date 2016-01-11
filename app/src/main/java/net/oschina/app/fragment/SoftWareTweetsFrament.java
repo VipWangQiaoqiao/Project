@@ -1,7 +1,11 @@
 package net.oschina.app.fragment;
 
-import java.io.InputStream;
-import java.io.Serializable;
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -14,12 +18,9 @@ import net.oschina.app.bean.TweetsList;
 import net.oschina.app.service.ServerTaskUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemLongClickListener;
+
+import java.io.InputStream;
+import java.io.Serializable;
 
 public class SoftWareTweetsFrament extends BaseListFragment<Tweet> implements
         OnItemLongClickListener {
@@ -93,7 +94,7 @@ public class SoftWareTweetsFrament extends BaseListFragment<Tweet> implements
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
+                            long id) {
         final Tweet tweet = mAdapter.getItem(position);
         if (tweet == null) {
             return;
@@ -110,7 +111,7 @@ public class SoftWareTweetsFrament extends BaseListFragment<Tweet> implements
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view,
-            int position, long id) {
+                                   int position, long id) {
         return true;
     }
 }
