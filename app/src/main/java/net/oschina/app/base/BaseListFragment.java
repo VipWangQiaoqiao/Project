@@ -589,10 +589,6 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
     /**
      * 保存已读的文章列表
-     *
-     * @param view
-     * @param prefFileName
-     * @param key
      */
     protected void saveToReadedList(final View view, final String prefFileName,
             final String key) {

@@ -1,7 +1,5 @@
 package net.oschina.app.ui.empty;
 
-import net.oschina.app.R;
-import net.oschina.app.util.TDevice;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
@@ -10,6 +8,9 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import net.oschina.app.R;
+import net.oschina.app.util.TDevice;
 
 public class EmptyLayout extends LinearLayout implements
         android.view.View.OnClickListener {// , ISkinUIObserver {
@@ -27,7 +28,6 @@ public class EmptyLayout extends LinearLayout implements
     public ImageView img;
     private android.view.View.OnClickListener listener;
     private int mErrorState;
-    private RelativeLayout mLayout;
     private String strNoDataContent = "";
     private TextView tv;
 
@@ -47,7 +47,7 @@ public class EmptyLayout extends LinearLayout implements
         View view = View.inflate(context, R.layout.view_error_layout, null);
         img = (ImageView) view.findViewById(R.id.img_error_layout);
         tv = (TextView) view.findViewById(R.id.tv_error_layout);
-        mLayout = (RelativeLayout) view.findViewById(R.id.pageerrLayout);
+        RelativeLayout mLayout = (RelativeLayout) view.findViewById(R.id.pageerrLayout);
         animProgress = (ProgressBar) view.findViewById(R.id.animProgress);
         setBackgroundColor(-1);
         setOnClickListener(this);
@@ -116,8 +116,6 @@ public class EmptyLayout extends LinearLayout implements
         // .getColor(getContext(), "bgcolor01"));
         // tv.setTextColor(SkinsUtil.getColor(getContext(), "textcolor05"));
     }
-
-    public void setDayNight(boolean flag) {}
 
     public void setErrorMessage(String msg) {
         tv.setText(msg);

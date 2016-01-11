@@ -1,6 +1,5 @@
 package net.oschina.app.ui;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.TextUtils;
@@ -17,8 +16,8 @@ import net.oschina.app.util.DialogHelp;
 
 import java.util.List;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class EventApplyDialog extends CommonDialog implements
         android.view.View.OnClickListener {
@@ -52,11 +51,9 @@ public class EventApplyDialog extends CommonDialog implements
         super(context, flag, listener);
     }
 
-    @SuppressLint("InflateParams")
     private EventApplyDialog(Context context, int defStyle, Event event) {
         super(context, defStyle);
-        View shareView = getLayoutInflater().inflate(
-                R.layout.dialog_event_apply, null);
+        View shareView = View.inflate(context, R.layout.dialog_event_apply, null);
         ButterKnife.bind(this, shareView);
         setContent(shareView, 0);
         this.mEvent = event;
@@ -64,13 +61,11 @@ public class EventApplyDialog extends CommonDialog implements
     }
 
     private void initView() {
-        genders = getContext().getResources().getStringArray(
-                R.array.gender);
+        genders = getContext().getResources().getStringArray(R.array.gender);
 
         mGender.setText(genders[0]);
 
         mGender.setOnClickListener(this);
-
 
         if (mEvent.getEventRemark() != null) {
             mTvRemarksTip.setVisibility(View.VISIBLE);
@@ -104,10 +99,8 @@ public class EventApplyDialog extends CommonDialog implements
 
     private void selectGender() {
         String gender = mGender.getText().toString();
-        int idx = 0;
-        for (int i = 0; i < genders.length; i++) {
-            if (genders[i].equals(gender)) {
-                idx = i;
+        for (String gender1 : genders) {
+            if (gender1.equals(gender)) {
                 break;
             }
         }
