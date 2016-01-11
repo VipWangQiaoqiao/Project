@@ -284,16 +284,14 @@ public class TweetPubFragment extends BaseFragment implements
                     public void onSuccess(Bitmap bitmap) {
                         super.onSuccess(bitmap);
                         msg.obj = bitmap;
-                        String path = FileUtils.getSDCardPath()
-                                + "/OSChina/tempfile.jpg";
+                        String path = FileUtils.getSDCardPath() + "/OSChina/tempfile.jpg";
                         handler.sendMessage(msg);
                         FileUtils.bitmapToFile((Bitmap) msg.obj, path);
                         imgFile = new File(path);
                     }
                 });
             } else {
-                String path = FileUtils.getSDCardPath()
-                        + "/OSChina/tempfile.jpg";
+                String path = FileUtils.getSDCardPath() + "/OSChina/tempfile.jpg";
                 FileUtils.bitmapToFile((Bitmap) msg.obj, path);
                 imgFile = new File(path);
                 handler.sendMessage(msg);
@@ -454,17 +452,16 @@ public class TweetPubFragment extends BaseFragment implements
                     if (AppContext
                             .isMethodsCompat(android.os.Build.VERSION_CODES.ECLAIR_MR1)) {
                         String imaName = FileUtil.getFileName(theLarge);
-                        if (imaName != null)
-                            bitmap = ImageUtils.loadImgThumbnail(getActivity(),
-                                    imaName,
-                                    MediaStore.Images.Thumbnails.MICRO_KIND);
+                        bitmap = ImageUtils.loadImgThumbnail(getActivity(),
+                                imaName,
+                                Images.Thumbnails.MICRO_KIND);
                     }
                     if (bitmap == null && !StringUtils.isEmpty(theLarge))
                         bitmap = ImageUtils
                                 .loadImgThumbnail(theLarge, 100, 100);
                 } else if (requestCode == ImageUtils.REQUEST_CODE_GETIMAGE_BYCAMERA) {
                     // 拍摄图片
-                    if (bitmap == null && !StringUtils.isEmpty(theLarge)) {
+                    if (!StringUtils.isEmpty(theLarge)) {
                         bitmap = ImageUtils
                                 .loadImgThumbnail(theLarge, 100, 100);
                     }

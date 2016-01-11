@@ -11,7 +11,6 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -229,14 +228,7 @@ public class MyInformationFragment extends BaseFragment {
         view.findViewById(R.id.rl_message).setOnClickListener(this);
         view.findViewById(R.id.rl_team).setOnClickListener(this);
         view.findViewById(R.id.rl_blog).setOnClickListener(this);
-        view.findViewById(R.id.rl_note).setOnClickListener(
-                new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        UIHelper.showSimpleBack(getActivity(),
-                                SimpleBackPage.NOTE);
-                    }
-                });
+        view.findViewById(R.id.rl_feedback).setOnClickListener(this);
         mUserUnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -250,13 +242,6 @@ public class MyInformationFragment extends BaseFragment {
         mMesCount.setGravity(Gravity.CENTER);
         mMesCount.setBackgroundResource(R.drawable.notification_bg);
         mQrCode.setOnClickListener(this);
-        // // 初始化团队列表数据
-        // String cache = PreferenceHelper.readString(getActivity(),
-        // TEAM_LIST_FILE, TEAM_LIST_KEY);
-        // if (!StringUtils.isEmpty(cache)) {
-        // List<Team> teams = TeamList.toTeamList(cache);
-        // addTeamLayout(teams);
-        // }
     }
 
     private void fillUI() {
@@ -387,6 +372,9 @@ public class MyInformationFragment extends BaseFragment {
             case R.id.ly_favorite:
                 UIHelper.showUserFavorite(getActivity(), AppContext.getInstance()
                         .getLoginUid());
+                break;
+            case R.id.rl_feedback:
+                UIHelper.showSimpleBack(getActivity(), SimpleBackPage.FEED_BACK);
                 break;
             case R.id.rl_message:
                 UIHelper.showMyMes(getActivity());

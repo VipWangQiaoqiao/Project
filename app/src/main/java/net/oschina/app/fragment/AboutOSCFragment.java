@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
-import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.UpdateManager;
@@ -38,7 +37,6 @@ public class AboutOSCFragment extends BaseFragment {
     @Override
     public void initView(View view) {
         view.findViewById(R.id.rl_check_update).setOnClickListener(this);
-        view.findViewById(R.id.rl_feedback).setOnClickListener(this);
         view.findViewById(R.id.rl_grade).setOnClickListener(this);
         view.findViewById(R.id.rl_gitapp).setOnClickListener(this);
         view.findViewById(R.id.tv_oscsite).setOnClickListener(this);
@@ -56,9 +54,6 @@ public class AboutOSCFragment extends BaseFragment {
         switch (id) {
             case R.id.rl_check_update:
                 onClickUpdate();
-                break;
-            case R.id.rl_feedback:
-                showFeedBack();
                 break;
             case R.id.rl_grade:
                 TDevice.openAppInMarket(getActivity());
@@ -90,11 +85,5 @@ public class AboutOSCFragment extends BaseFragment {
 
     private void onClickUpdate() {
         new UpdateManager(getActivity(), true).checkUpdate();
-    }
-
-    private void showFeedBack() {
-        // TDevice.sendEmail(getActivity(), "用户反馈-OSC Android客户端", "",
-        // "apposchina@163.com");
-        UIHelper.showSimpleBack(getActivity(), SimpleBackPage.FEED_BACK);
     }
 }

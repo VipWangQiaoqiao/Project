@@ -2,7 +2,6 @@ package net.oschina.app.api;
 
 import android.content.Context;
 import android.util.Log;
-import cz.msebera.android.httpclient.client.params.ClientPNames;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -13,12 +12,14 @@ import net.oschina.app.util.TLog;
 
 import java.util.Locale;
 
+import cz.msebera.android.httpclient.client.params.ClientPNames;
+
 public class ApiHttpClient {
 
     public final static String HOST = "www.oschina.net";
     private static String API_URL = "http://www.oschina.net/%s";
-//    public final static String HOST = "192.168.1.101";
-//    private static String API_URL = "http://192.168.1.101/%s";
+    //    public final static String HOST = "192.168.1.58:8080";
+//    private static String API_URL = "http://192.168.1.58:8080/%s";
     public static final String DELETE = "DELETE";
     public static final String GET = "GET";
     public static final String POST = "POST";

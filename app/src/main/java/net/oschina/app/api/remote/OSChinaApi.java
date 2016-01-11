@@ -14,7 +14,6 @@ import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.TLog;
 
 import org.kymjs.kjframe.utils.KJLoger;
 
@@ -32,7 +31,7 @@ public class OSChinaApi {
      * @param handler
      */
     public static void login(String username, String password,
-            AsyncHttpResponseHandler handler) {
+                             AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("username", username);
         params.put("pwd", password);
@@ -48,14 +47,12 @@ public class OSChinaApi {
     /**
      * 获取新闻列表
      *
-     * @param catalog
-     *            类别 （1，2，3）
-     * @param page
-     *            第几页
+     * @param catalog 类别 （1，2，3）
+     * @param page    第几页
      * @param handler
      */
     public static void getNewsList(int catalog, int page,
-            AsyncHttpResponseHandler handler) {
+                                   AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("catalog", catalog);
         params.put("pageIndex", page);
@@ -69,7 +66,7 @@ public class OSChinaApi {
     }
 
     public static void getBlogList(String type, int pageIndex,
-            AsyncHttpResponseHandler handler) {
+                                   AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("type", type);
         params.put("pageIndex", pageIndex);
@@ -78,7 +75,7 @@ public class OSChinaApi {
     }
 
     public static void getPostList(int catalog, int page,
-            AsyncHttpResponseHandler handler) {
+                                   AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("catalog", catalog);
         params.put("pageIndex", page);
@@ -87,7 +84,7 @@ public class OSChinaApi {
     }
 
     public static void getPostListByTag(String tag, int page,
-            AsyncHttpResponseHandler handler) {
+                                        AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("tag", tag);
         params.put("pageIndex", page);
@@ -96,7 +93,7 @@ public class OSChinaApi {
     }
 
     public static void getTweetList(int uid, int page,
-            AsyncHttpResponseHandler handler) {
+                                    AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
         params.put("pageIndex", page);
@@ -105,7 +102,7 @@ public class OSChinaApi {
     }
 
     public static void getTweetTopicList(int page, String topic,
-            AsyncHttpResponseHandler handler) {
+                                         AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("pageIndex", page);
         params.put("title", topic);
@@ -118,7 +115,7 @@ public class OSChinaApi {
     }
 
     public static void pubLikeTweet(int tweetId, int authorId,
-            AsyncHttpResponseHandler handler) {
+                                    AsyncHttpResponseHandler handler) {
 
         RequestParams params = new RequestParams();
         params.put("tweetid", tweetId);
@@ -128,7 +125,7 @@ public class OSChinaApi {
     }
 
     public static void pubUnLikeTweet(int tweetId, int authorId,
-            AsyncHttpResponseHandler handler) {
+                                      AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("tweetid", tweetId);
         params.put("uid", AppContext.getInstance().getLoginUid());
@@ -137,7 +134,7 @@ public class OSChinaApi {
     }
 
     public static void getTweetLikeList(int tweetId, int page,
-            AsyncHttpResponseHandler handler) {
+                                        AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("tweetid", tweetId);
         params.put("pageIndex", page);
@@ -147,7 +144,7 @@ public class OSChinaApi {
     }
 
     public static void getActiveList(int uid, int catalog, int page,
-            AsyncHttpResponseHandler handler) {
+                                     AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
         params.put("catalog", catalog);
@@ -157,7 +154,7 @@ public class OSChinaApi {
     }
 
     public static void getFriendList(int uid, int relation, int page,
-            AsyncHttpResponseHandler handler) {
+                                     AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
         params.put("relation", relation);
@@ -169,10 +166,9 @@ public class OSChinaApi {
     /**
      * 获取所有关注好友列表
      *
-     * @param uid
-     *            指定用户UID
+     * @param uid     指定用户UID
      * @param handler
-     * */
+     */
     public static void getAllFriendsList(int uid, int relation, AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
@@ -184,15 +180,13 @@ public class OSChinaApi {
     /**
      * 获取用户收藏
      *
-     * @param uid
-     *            指定用户UID
-     * @param type
-     *            收藏类型: 0:全部收藏　1:软件　2:话题　3:博客　4:新闻　5:代码
+     * @param uid     指定用户UID
+     * @param type    收藏类型: 0:全部收藏　1:软件　2:话题　3:博客　4:新闻　5:代码
      * @param page
      * @param handler
      */
     public static void getFavoriteList(int uid, int type, int page,
-            AsyncHttpResponseHandler handler) {
+                                       AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
         params.put("type", type);
@@ -204,18 +198,17 @@ public class OSChinaApi {
     /**
      * 分类列表
      *
-     * @param tag
-     *            第一级:0
+     * @param tag     第一级:0
      * @param handler
      */
     public static void getSoftwareCatalogList(int tag,
-            AsyncHttpResponseHandler handler) {
+                                              AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams("tag", tag);
         ApiHttpClient.get("action/api/softwarecatalog_list", params, handler);
     }
 
     public static void getSoftwareTagList(int searchTag, int page,
-            AsyncHttpResponseHandler handler) {
+                                          AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("searchTag", searchTag);
         params.put("pageIndex", page);
@@ -224,13 +217,12 @@ public class OSChinaApi {
     }
 
     /**
-     * @param searchTag
-     *            　　软件分类　　推荐:recommend 最新:time 热门:view 国产:list_cn
+     * @param searchTag 　　软件分类　　推荐:recommend 最新:time 热门:view 国产:list_cn
      * @param page
      * @param handler
      */
     public static void getSoftwareList(String searchTag, int page,
-            AsyncHttpResponseHandler handler) {
+                                       AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("searchTag", searchTag);
         params.put("pageIndex", page);
@@ -243,12 +235,12 @@ public class OSChinaApi {
      *
      * @PARAM ID
      * @PARAM CATALOG
-     *            1新闻 2帖子 3动弹 4动态
+     * 1新闻 2帖子 3动弹 4动态
      * @PARAM PAGE
      * @PARAM HANDLER
      */
     public static void getCommentList(int id, int catalog, int page,
-            AsyncHttpResponseHandler handler) {
+                                      AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("catalog", catalog);
         params.put("id", id);
@@ -259,7 +251,7 @@ public class OSChinaApi {
     }
 
     public static void getBlogCommentList(int id, int page,
-            AsyncHttpResponseHandler handler) {
+                                          AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("id", id);
         params.put("pageIndex", page);
@@ -267,7 +259,8 @@ public class OSChinaApi {
         ApiHttpClient.get("action/api/blogcomment_list", params, handler);
     }
 
-    public static void getChatMessageList(int friendId, int page, AsyncHttpResponseHandler handler) {
+    public static void getChatMessageList(int friendId, int page, AsyncHttpResponseHandler
+            handler) {
         RequestParams params = new RequestParams();
         params.put("id", friendId);
         params.put("pageIndex", page);
@@ -276,7 +269,7 @@ public class OSChinaApi {
     }
 
     public static void getUserInformation(int uid, int hisuid, String hisname,
-            int pageIndex, AsyncHttpResponseHandler handler) {
+                                          int pageIndex, AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
         params.put("hisuid", hisuid);
@@ -288,7 +281,8 @@ public class OSChinaApi {
 
     @SuppressWarnings("deprecation")
     public static void getUserBlogList(int authoruid, final String authorname,
-            final int uid, final int pageIndex, AsyncHttpResponseHandler handler) {
+                                       final int uid, final int pageIndex,
+                                       AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("authoruid", authoruid);
         params.put("authorname", URLEncoder.encode(authorname));
@@ -299,7 +293,7 @@ public class OSChinaApi {
     }
 
     public static void updateRelation(int uid, int hisuid, int newrelation,
-            AsyncHttpResponseHandler handler) {
+                                      AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
         params.put("hisuid", hisuid);
@@ -308,7 +302,7 @@ public class OSChinaApi {
     }
 
     public static void getMyInformation(int uid,
-            AsyncHttpResponseHandler handler) {
+                                        AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
         ApiHttpClient.get("action/api/my_information", params, handler);
@@ -317,7 +311,7 @@ public class OSChinaApi {
     /**
      * 获取新闻明细
      *
-     * @param id 新闻的id
+     * @param id      新闻的id
      * @param handler
      */
     public static void getNewsDetail(int id, AsyncHttpResponseHandler handler) {
@@ -337,7 +331,7 @@ public class OSChinaApi {
      * @param handler
      */
     public static void getSoftwareDetail(String ident,
-            AsyncHttpResponseHandler handler) {
+                                         AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams("ident",
                 ident);
         ApiHttpClient.get("action/api/software_detail", params, handler);
@@ -345,6 +339,7 @@ public class OSChinaApi {
 
     /***
      * 通过id获取软件详情
+     *
      * @param id
      * @param handler
      */
@@ -367,20 +362,16 @@ public class OSChinaApi {
     /**
      * 用户针对某个新闻，帖子，动弹，消息发表评论的接口，参数使用POST方式提交
      *
-     * @param catalog
-     *            　　 1新闻　　2 帖子　　３　动弹　　４消息中心
-     * @param id
-     *            被评论的某条新闻，帖子，动弹或者某条消息的id
-     * @param uid
-     *            当天登陆用户的UID
-     * @param content
-     *            发表的评论内容
-     * @param isPostToMyZone
-     *            是否转发到我的空间，０不转发　　１转发到我的空间（注意该功能之对某条动弹进行评论是有效，其他情况下服务器借口可以忽略该参数）
+     * @param catalog        　　 1新闻　　2 帖子　　３　动弹　　４消息中心
+     * @param id             被评论的某条新闻，帖子，动弹或者某条消息的id
+     * @param uid            当天登陆用户的UID
+     * @param content        发表的评论内容
+     * @param isPostToMyZone 是否转发到我的空间，０不转发　　１转发到我的空间（注意该功能之对某条动弹进行评论是有效，其他情况下服务器借口可以忽略该参数）
      * @param handler
      */
     public static void publicComment(int catalog, int id, int uid,
-            String content, int isPostToMyZone, AsyncHttpResponseHandler handler) {
+                                     String content, int isPostToMyZone, AsyncHttpResponseHandler
+                                             handler) {
         RequestParams params = new RequestParams();
         params.put("catalog", catalog);
         params.put("id", id);
@@ -391,8 +382,8 @@ public class OSChinaApi {
     }
 
     public static void replyComment(int id, int catalog, int replyid,
-            int authorid, int uid, String content,
-            AsyncHttpResponseHandler handler) {
+                                    int authorid, int uid, String content,
+                                    AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("catalog", catalog);
         params.put("id", id);
@@ -404,7 +395,7 @@ public class OSChinaApi {
     }
 
     public static void publicBlogComment(int blog, int uid, String content,
-            AsyncHttpResponseHandler handler) {
+                                         AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("blog", blog);
         params.put("uid", uid);
@@ -413,7 +404,8 @@ public class OSChinaApi {
     }
 
     public static void replyBlogComment(int blog, int uid, String content,
-            int reply_id, int objuid, AsyncHttpResponseHandler handler) {
+                                        int reply_id, int objuid, AsyncHttpResponseHandler
+                                                handler) {
         RequestParams params = new RequestParams();
         params.put("blog", blog);
         params.put("uid", uid);
@@ -447,7 +439,7 @@ public class OSChinaApi {
     }
 
     public static void pubSoftWareTweet(Tweet tweet, int softid,
-            AsyncHttpResponseHandler handler) {
+                                        AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("uid", tweet.getAuthorid());
         params.put("msg", tweet.getBody());
@@ -456,7 +448,7 @@ public class OSChinaApi {
     }
 
     public static void deleteTweet(int uid, int tweetid,
-            AsyncHttpResponseHandler handler) {
+                                   AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
         params.put("tweetid", tweetid);
@@ -464,7 +456,7 @@ public class OSChinaApi {
     }
 
     public static void deleteComment(int id, int catalog, int replyid,
-            int authorid, AsyncHttpResponseHandler handler) {
+                                     int authorid, AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("id", id);
         params.put("catalog", catalog);
@@ -474,7 +466,7 @@ public class OSChinaApi {
     }
 
     public static void deleteBlog(int uid, int authoruid, int id,
-            AsyncHttpResponseHandler handler) {
+                                  AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
         params.put("authoruid", authoruid);
@@ -483,7 +475,8 @@ public class OSChinaApi {
     }
 
     public static void deleteBlogComment(int uid, int blogid, int replyid,
-            int authorid, int owneruid, AsyncHttpResponseHandler handler) {
+                                         int authorid, int owneruid, AsyncHttpResponseHandler
+                                                 handler) {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
         params.put("blogid", blogid);
@@ -496,15 +489,12 @@ public class OSChinaApi {
     /**
      * 用户添加收藏
      *
-     * @param uid
-     *            用户UID
-     * @param objid
-     *            比如是新闻ID 或者问答ID 或者动弹ID
-     * @param type
-     *            1:软件 2:话题 3:博客 4:新闻 5:代码
+     * @param uid   用户UID
+     * @param objid 比如是新闻ID 或者问答ID 或者动弹ID
+     * @param type  1:软件 2:话题 3:博客 4:新闻 5:代码
      */
     public static void addFavorite(int uid, int objid, int type,
-            AsyncHttpResponseHandler handler) {
+                                   AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
         params.put("objid", objid);
@@ -513,7 +503,7 @@ public class OSChinaApi {
     }
 
     public static void delFavorite(int uid, int objid, int type,
-            AsyncHttpResponseHandler handler) {
+                                   AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
         params.put("objid", objid);
@@ -522,7 +512,7 @@ public class OSChinaApi {
     }
 
     public static void getSearchList(String catalog, String content,
-            int pageIndex, AsyncHttpResponseHandler handler) {
+                                     int pageIndex, AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("catalog", catalog);
         params.put("content", content);
@@ -532,7 +522,7 @@ public class OSChinaApi {
     }
 
     public static void publicMessage(int uid, int receiver, String content,
-            AsyncHttpResponseHandler handler) {
+                                     AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
         params.put("receiver", receiver);
@@ -542,7 +532,7 @@ public class OSChinaApi {
     }
 
     public static void deleteMessage(int uid, int friendid,
-            AsyncHttpResponseHandler handler) {
+                                     AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
         params.put("friendid", friendid);
@@ -550,7 +540,7 @@ public class OSChinaApi {
     }
 
     public static void forwardMessage(int uid, String receiverName,
-            String content, AsyncHttpResponseHandler handler) {
+                                      String content, AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
         params.put("receiverName", receiverName);
@@ -559,7 +549,7 @@ public class OSChinaApi {
     }
 
     public static void getMessageList(int uid, int pageIndex,
-            AsyncHttpResponseHandler handler) {
+                                      AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
         params.put("pageIndex", pageIndex);
@@ -568,7 +558,8 @@ public class OSChinaApi {
     }
 
     public static void updatePortrait(int uid, File portrait,
-            AsyncHttpResponseHandler handler) throws FileNotFoundException {
+                                      AsyncHttpResponseHandler handler) throws
+            FileNotFoundException {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
         params.put("portrait", portrait);
@@ -583,15 +574,14 @@ public class OSChinaApi {
 
     /**
      * 清空通知消息
-     * 
+     *
      * @param uid
-     * @param type
-     *            1:@我的信息 2:未读消息 3:评论个数 4:新粉丝个数
+     * @param type 1:@我的信息 2:未读消息 3:评论个数 4:新粉丝个数
      * @return
      * @throws AppException
      */
     public static void clearNotice(int uid, int type,
-            AsyncHttpResponseHandler handler) {
+                                   AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
         params.put("type", type);
@@ -604,12 +594,12 @@ public class OSChinaApi {
 
     /**
      * 获取软件的动态列表
-     * 
+     *
      * @param softid
      * @param handler
      */
     public static void getSoftTweetList(int softid, int page,
-            AsyncHttpResponseHandler handler) {
+                                        AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("project", softid);
         params.put("pageIndex", page);
@@ -623,12 +613,12 @@ public class OSChinaApi {
 
     /**
      * 查找用户
-     * 
+     *
      * @param username
      * @param handler
      */
     public static void findUser(String username,
-            AsyncHttpResponseHandler handler) {
+                                AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("name", username);
         ApiHttpClient.get("action/api/find_user", params, handler);
@@ -636,14 +626,13 @@ public class OSChinaApi {
 
     /**
      * 获取活动列表
-     * 
+     *
      * @param pageIndex
-     * @param uid
-     *            <= 0 近期活动 实际的用户ID 则获取用户参与的活动列表，需要已登陆的用户
+     * @param uid       <= 0 近期活动 实际的用户ID 则获取用户参与的活动列表，需要已登陆的用户
      * @param handler
      */
     public static void getEventList(int pageIndex, int uid,
-            AsyncHttpResponseHandler handler) {
+                                    AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("pageIndex", pageIndex);
         params.put("uid", uid);
@@ -653,13 +642,13 @@ public class OSChinaApi {
 
     /**
      * 获取某活动已出席的人员列表
-     * 
+     *
      * @param eventId
      * @param pageIndex
      * @param handler
      */
     public static void getEventApplies(int eventId, int pageIndex,
-            AsyncHttpResponseHandler handler) {
+                                       AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("pageIndex", pageIndex);
         params.put("event_id", eventId);
@@ -669,7 +658,7 @@ public class OSChinaApi {
 
     /**
      * 举报
-     * 
+     *
      * @param report
      * @param handler
      */
@@ -688,7 +677,7 @@ public class OSChinaApi {
 
     /**
      * 摇一摇，随机数据
-     * 
+     *
      * @param handler
      */
     public static void shake(AsyncHttpResponseHandler handler) {
@@ -708,12 +697,12 @@ public class OSChinaApi {
 
     /**
      * 活动报名
-     * 
+     *
      * @param data
      * @param handler
      */
     public static void eventApply(EventApplyData data,
-            AsyncHttpResponseHandler handler) {
+                                  AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("event", data.getEvent());
         params.put("user", data.getUser());
@@ -729,7 +718,7 @@ public class OSChinaApi {
     }
 
     private static void uploadLog(String data, String report,
-            AsyncHttpResponseHandler handler) {
+                                  AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("app", "1");
         params.put("report", report);
@@ -739,7 +728,7 @@ public class OSChinaApi {
 
     /**
      * BUG上报
-     * 
+     *
      * @param data
      * @param handler
      */
@@ -748,24 +737,14 @@ public class OSChinaApi {
     }
 
     /**
-     * 反馈意见
-     * 
-     * @param data
-     * @param handler
-     */
-    public static void feedback(String data, AsyncHttpResponseHandler handler) {
-        uploadLog(data, "2", handler);
-    }
-
-    /**
      * team动态
-     * 
+     *
      * @param team
      * @param page
      * @param handler
      */
     public static void teamDynamic(Team team, int page,
-            AsyncHttpResponseHandler handler) {
+                                   AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         // int uid = AppContext.getInstance().getLoginUid();
         // params.put("uid", uid);
@@ -778,7 +757,7 @@ public class OSChinaApi {
 
     /**
      * 获取team列表
-     * 
+     *
      * @param handler
      */
     public static void teamList(AsyncHttpResponseHandler handler) {
@@ -789,11 +768,11 @@ public class OSChinaApi {
 
     /**
      * 获取team成员列表
-     * 
+     *
      * @param handler
      */
     public static void getTeamMemberList(int teamid,
-            AsyncHttpResponseHandler handler) {
+                                         AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("teamid", teamid);
         ApiHttpClient.get("action/api/team_member_list", params, handler);
@@ -801,11 +780,11 @@ public class OSChinaApi {
 
     /**
      * 获取team成员个人信息
-     * 
+     *
      * @param handler
      */
     public static void getTeamUserInfo(String teamid, String uid,
-            int pageIndex, AsyncHttpResponseHandler handler) {
+                                       int pageIndex, AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("teamid", teamid);
         params.put("uid", uid);
@@ -818,7 +797,7 @@ public class OSChinaApi {
      * 获取我的任务中进行中、未完成、已完成等状态的数量
      */
     public static void getMyIssueState(String teamid, String uid,
-            AsyncHttpResponseHandler handler) {
+                                       AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("teamid", teamid);
         params.put("uid", uid);
@@ -830,7 +809,7 @@ public class OSChinaApi {
      * 获取指定用户的动态
      */
     public static void getUserDynamic(int teamid, String uid, int pageIndex,
-            AsyncHttpResponseHandler handler) {
+                                      AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("teamid", teamid);
         params.put("pageIndex", pageIndex);
@@ -842,14 +821,14 @@ public class OSChinaApi {
 
     /**
      * 动态详情
-     * 
+     *
      * @param activeid
      * @param teamid
      * @param uid
      * @param handler
      */
     public static void getDynamicDetail(int activeid, int teamid, int uid,
-            AsyncHttpResponseHandler handler) {
+                                        AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("teamid", teamid);
         params.put("uid", uid);
@@ -861,7 +840,7 @@ public class OSChinaApi {
      * 获取指定用户的任务
      */
     public static void getMyIssue(String teamid, String uid, int pageIndex,
-            String type, AsyncHttpResponseHandler handler) {
+                                  String type, AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("teamid", teamid);
         params.put("uid", uid);
@@ -874,14 +853,14 @@ public class OSChinaApi {
 
     /**
      * 获取指定周周报
-     * 
+     *
      * @param teamid
      * @param year
      * @param week
      * @param handler
      */
     public static void getDiaryFromWhichWeek(int teamid, int year, int week,
-            AsyncHttpResponseHandler handler) {
+                                             AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("teamid", teamid);
         params.put("year", year);
@@ -891,14 +870,12 @@ public class OSChinaApi {
 
     /**
      * 删除一个便签
-     * 
-     * @param id
-     *            便签id
-     * @param uid
-     *            用户id
+     *
+     * @param id  便签id
+     * @param uid 用户id
      */
     public static void deleteNoteBook(int id, int uid,
-            AsyncHttpResponseHandler handler) {
+                                      AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
         params.put("id", id); // 便签id
@@ -914,13 +891,13 @@ public class OSChinaApi {
 
     /**
      * 获取指定周报的详细信息
-     * 
+     *
      * @param teamid
      * @param diaryid
      * @param handler
      */
     public static void getDiaryDetail(int teamid, int diaryid,
-            AsyncHttpResponseHandler handler) {
+                                      AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("teamid", teamid);
         params.put("diaryid", diaryid);
@@ -929,13 +906,13 @@ public class OSChinaApi {
 
     /**
      * diary评论列表
-     * 
+     *
      * @param teamid
      * @param diaryid
      * @param handler
      */
     public static void getDiaryComment(int teamid, int diaryid,
-            AsyncHttpResponseHandler handler) {
+                                       AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("teamid", teamid);
         params.put("id", diaryid);
@@ -949,7 +926,7 @@ public class OSChinaApi {
 
     /**
      * 周报评论（以后可改为全局评论）
-     * 
+     *
      * @param uid
      * @param teamid
      * @param diaryId
@@ -957,7 +934,7 @@ public class OSChinaApi {
      * @param handler
      */
     public static void sendComment(int uid, int teamid, int diaryId,
-            String content, AsyncHttpResponseHandler handler) {
+                                   String content, AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
         params.put("teamid", teamid);
@@ -969,15 +946,14 @@ public class OSChinaApi {
 
     /***
      * 客户端扫描二维码登陆
-     * 
-     * @author 火蚁 2015-3-13 上午11:45:47
-     * 
-     * @return void
+     *
      * @param url
      * @param handler
+     * @return void
+     * @author 火蚁 2015-3-13 上午11:45:47
      */
     public static void scanQrCodeLogin(String url,
-            AsyncHttpResponseHandler handler) {
+                                       AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         String uuid = url.substring(url.lastIndexOf("=") + 1);
         params.put("uuid", uuid);
@@ -986,11 +962,13 @@ public class OSChinaApi {
 
     /***
      * 使用第三方登陆
-     * @param catalog 类别
+     *
+     * @param catalog    类别
      * @param openIdInfo 第三方的info
-     * @param handler handler
+     * @param handler    handler
      */
-    public static void open_login(String catalog, String openIdInfo, AsyncHttpResponseHandler handler) {
+    public static void open_login(String catalog, String openIdInfo, AsyncHttpResponseHandler
+            handler) {
         RequestParams params = new RequestParams();
         params.put("catalog", catalog);
         params.put("openid_info", openIdInfo);
@@ -999,13 +977,15 @@ public class OSChinaApi {
 
     /***
      * 第三方登陆账号绑定
-     * @param catalog 类别（QQ、wechat）
+     *
+     * @param catalog    类别（QQ、wechat）
      * @param openIdInfo 第三方info
-     * @param userName 用户名
-     * @param pwd 密码
-     * @param handler handler
+     * @param userName   用户名
+     * @param pwd        密码
+     * @param handler    handler
      */
-    public static void bind_openid(String catalog, String openIdInfo, String userName, String pwd, AsyncHttpResponseHandler handler) {
+    public static void bind_openid(String catalog, String openIdInfo, String userName, String
+            pwd, AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("catalog", catalog);
         params.put("openid_info", openIdInfo);
@@ -1016,14 +996,36 @@ public class OSChinaApi {
 
     /***
      * 使用第三方账号注册
-     * @param catalog 类别（qq、wechat）
+     *
+     * @param catalog    类别（qq、wechat）
      * @param openIdInfo 第三方info
-     * @param handler handler
+     * @param handler    handler
      */
-    public static void openid_reg(String catalog, String openIdInfo, AsyncHttpResponseHandler handler) {
+    public static void openid_reg(String catalog, String openIdInfo, AsyncHttpResponseHandler
+            handler) {
         RequestParams params = new RequestParams();
         params.put("catalog", catalog);
         params.put("openid_info", openIdInfo);
         ApiHttpClient.post("action/api/openid_reg", params, handler);
     }
+
+    /**
+     * 意见反馈
+     *
+     * @param content
+     * @param file
+     */
+    public static void feedback(String content, File file, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        if (file != null && file.exists())
+            try {
+                params.put("file", file);
+            } catch (FileNotFoundException e) {
+            }
+        params.put("uid", AppContext.getInstance().getLoginUid());
+        params.put("receiver", "942224");
+        params.put("content", content);
+        ApiHttpClient.post("action/api/message_pub", params, handler);
+    }
+
 }
