@@ -46,22 +46,21 @@ import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.XmlUtils;
 
-import cz.msebera.android.httpclient.Header;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * 团队新动态 TeamNewActiveFragment.java
- * 
+ *
  * @author 火蚁(http://my.oschina.net/u/253900)
- * 
  * @data 2015-3-6 下午6:39:53
  */
 public class TeamNewActiveActivity extends BaseActivity {
@@ -73,28 +72,28 @@ public class TeamNewActiveActivity extends BaseActivity {
 
     private MenuItem mMenuSend;
 
-    @InjectView(R.id.ib_emoji_keyboard)
+    @Bind(R.id.ib_emoji_keyboard)
     ImageButton mIbEmoji;
 
-    @InjectView(R.id.ib_picture)
+    @Bind(R.id.ib_picture)
     ImageButton mIbPicture;
 
-    @InjectView(R.id.ib_mention)
+    @Bind(R.id.ib_mention)
     ImageButton mIbMention;
 
-    @InjectView(R.id.ib_trend_software)
+    @Bind(R.id.ib_trend_software)
     ImageButton mIbTrendSoftware;
 
-    @InjectView(R.id.tv_clear)
+    @Bind(R.id.tv_clear)
     TextView mTvClear;
 
-    @InjectView(R.id.rl_img)
+    @Bind(R.id.rl_img)
     View mLyImage;
 
-    @InjectView(R.id.iv_img)
+    @Bind(R.id.iv_img)
     ImageView mIvImage;
 
-    @InjectView(R.id.et_content)
+    @Bind(R.id.et_content)
     EditText mEtInput;
 
     private final EmojiKeyboardFragment keyboardFragment = new EmojiKeyboardFragment();
@@ -126,38 +125,38 @@ public class TeamNewActiveActivity extends BaseActivity {
     }
 
     @Override
-    @OnClick({ R.id.ib_picture, R.id.ib_mention, R.id.ib_trend_software,
-            R.id.ib_emoji_keyboard, R.id.iv_clear_img, R.id.tv_clear })
+    @OnClick({R.id.ib_picture, R.id.ib_mention, R.id.ib_trend_software,
+            R.id.ib_emoji_keyboard, R.id.iv_clear_img, R.id.tv_clear})
     public void onClick(View v) {
         switch (v.getId()) {
-        case R.id.ib_emoji_keyboard:
-            if (keyboardFragment.isShow()) {
-                keyboardFragment.hideEmojiKeyBoard();
-                keyboardFragment.showSoftKeyboard(mEtInput);
-            } else {
-                keyboardFragment.showEmojiKeyBoard();
-                keyboardFragment.hideSoftKeyboard();
-            }
-            break;
-        case R.id.ib_picture:
-            handleSelectPicture();
-            break;
-        case R.id.ib_mention:
-            tryToShowMetionUser();
-            break;
-        case R.id.ib_trend_software:
-            insertTrendSoftware();
-            break;
-        case R.id.iv_clear_img:
-            mIvImage.setImageBitmap(null);
-            mLyImage.setVisibility(View.GONE);
-            imgFile = null;
-            break;
-        case R.id.tv_clear:
-            handleClearWords();
-            break;
-        default:
-            break;
+            case R.id.ib_emoji_keyboard:
+                if (keyboardFragment.isShow()) {
+                    keyboardFragment.hideEmojiKeyBoard();
+                    keyboardFragment.showSoftKeyboard(mEtInput);
+                } else {
+                    keyboardFragment.showEmojiKeyBoard();
+                    keyboardFragment.hideSoftKeyboard();
+                }
+                break;
+            case R.id.ib_picture:
+                handleSelectPicture();
+                break;
+            case R.id.ib_mention:
+                tryToShowMetionUser();
+                break;
+            case R.id.ib_trend_software:
+                insertTrendSoftware();
+                break;
+            case R.id.iv_clear_img:
+                mIvImage.setImageBitmap(null);
+                mLyImage.setVisibility(View.GONE);
+                imgFile = null;
+                break;
+            case R.id.tv_clear:
+                handleClearWords();
+                break;
+            default:
+                break;
         }
 
     }
@@ -202,23 +201,17 @@ public class TeamNewActiveActivity extends BaseActivity {
     @Override
     public void initView() {
         // TODO Auto-generated method stub
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
         setActionBarTitle(R.string.team_new_active);
         mTvClear.setText(String.valueOf(MAX_TEXT_LENGTH));
         mEtInput.addTextChangedListener(new TextWatcher() {
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before,
-                    int count) {
-                // TODO Auto-generated method stub
-
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                    int after) {
-                // TODO Auto-generated method stub
-
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
@@ -263,14 +256,12 @@ public class TeamNewActiveActivity extends BaseActivity {
 
     @Override
     public void initData() {
-        // TODO Auto-generated method stub
         mTeam = (Team) getIntent().getExtras().getSerializable(
                 TeamMainActivity.BUNDLE_KEY_TEAM);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // TODO Auto-generated method stub
         getMenuInflater().inflate(R.menu.pub_new_team_active_menu, menu);
         mMenuSend = menu.findItem(R.id.public_menu_send);
         updateSendMenu();
@@ -279,14 +270,10 @@ public class TeamNewActiveActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // TODO Auto-generated method stub
         switch (item.getItemId()) {
-        case R.id.public_menu_send:
-            handleSubmit();
-            break;
-
-        default:
-            break;
+            case R.id.public_menu_send:
+                handleSubmit();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -302,17 +289,19 @@ public class TeamNewActiveActivity extends BaseActivity {
                     public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
                         Result result = XmlUtils.toBean(ResultBean.class, arg2)
                                 .getResult();
-                        if (result != null && result.OK()) {
-                            AppContext.showToast(result.getErrorMessage());
-                            finish();
-                        } else {
-                            AppContext.showToast(result.getErrorMessage());
+                        if (result != null) {
+                            if (result.OK()) {
+                                AppContext.showToast(result.getErrorMessage());
+                                finish();
+                            } else {
+                                AppContext.showToast(result.getErrorMessage());
+                            }
                         }
                     }
 
                     @Override
                     public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                            Throwable arg3) {
+                                          Throwable arg3) {
                         AppContext.showToast("发表失败，请检查下你的网络");
                     }
 
@@ -350,12 +339,13 @@ public class TeamNewActiveActivity extends BaseActivity {
     }
 
     private void handleSelectPicture() {
-        DialogHelp.getSelectDialog(this, getResources().getStringArray(R.array.choose_picture), new OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                goToSelectPicture(i);
-            }
-        }).show();
+        DialogHelp.getSelectDialog(this, getResources().getStringArray(R.array.choose_picture),
+                new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        goToSelectPicture(i);
+                    }
+                }).show();
     }
 
     public static final int ACTION_TYPE_ALBUM = 0;
@@ -363,62 +353,62 @@ public class TeamNewActiveActivity extends BaseActivity {
 
     private void goToSelectPicture(int position) {
         switch (position) {
-        case ACTION_TYPE_ALBUM:
-            Intent intent;
-            if (Build.VERSION.SDK_INT < 19) {
-                intent = new Intent();
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/*");
-                startActivityForResult(Intent.createChooser(intent, "选择图片"),
-                        ImageUtils.REQUEST_CODE_GETIMAGE_BYSDCARD);
-            } else {
-                intent = new Intent(Intent.ACTION_PICK,
-                        Images.Media.EXTERNAL_CONTENT_URI);
-                intent.setType("image/*");
-                startActivityForResult(Intent.createChooser(intent, "选择图片"),
-                        ImageUtils.REQUEST_CODE_GETIMAGE_BYSDCARD);
-            }
-            break;
-        case ACTION_TYPE_PHOTO:
-            // 判断是否挂载了SD卡
-            String savePath = "";
-            String storageState = Environment.getExternalStorageState();
-            if (storageState.equals(Environment.MEDIA_MOUNTED)) {
-                savePath = Environment.getExternalStorageDirectory()
-                        .getAbsolutePath() + "/oschina/Camera/";
-                File savedir = new File(savePath);
-                if (!savedir.exists()) {
-                    savedir.mkdirs();
+            case ACTION_TYPE_ALBUM:
+                Intent intent;
+                if (Build.VERSION.SDK_INT < 19) {
+                    intent = new Intent();
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    intent.setType("image/*");
+                    startActivityForResult(Intent.createChooser(intent, "选择图片"),
+                            ImageUtils.REQUEST_CODE_GETIMAGE_BYSDCARD);
+                } else {
+                    intent = new Intent(Intent.ACTION_PICK,
+                            Images.Media.EXTERNAL_CONTENT_URI);
+                    intent.setType("image/*");
+                    startActivityForResult(Intent.createChooser(intent, "选择图片"),
+                            ImageUtils.REQUEST_CODE_GETIMAGE_BYSDCARD);
                 }
-            }
+                break;
+            case ACTION_TYPE_PHOTO:
+                // 判断是否挂载了SD卡
+                String savePath = "";
+                String storageState = Environment.getExternalStorageState();
+                if (storageState.equals(Environment.MEDIA_MOUNTED)) {
+                    savePath = Environment.getExternalStorageDirectory()
+                            .getAbsolutePath() + "/oschina/Camera/";
+                    File savedir = new File(savePath);
+                    if (!savedir.exists()) {
+                        savedir.mkdirs();
+                    }
+                }
 
-            // 没有挂载SD卡，无法保存文件
-            if (StringUtils.isEmpty(savePath)) {
-                AppContext.showToastShort("无法保存照片，请检查SD卡是否挂载");
-                return;
-            }
+                // 没有挂载SD卡，无法保存文件
+                if (StringUtils.isEmpty(savePath)) {
+                    AppContext.showToastShort("无法保存照片，请检查SD卡是否挂载");
+                    return;
+                }
 
-            String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss")
-                    .format(new Date());
-            String fileName = "osc_" + timeStamp + ".jpg";// 照片命名
-            File out = new File(savePath, fileName);
-            Uri uri = Uri.fromFile(out);
+                String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss")
+                        .format(new Date());
+                String fileName = "osc_" + timeStamp + ".jpg";// 照片命名
+                File out = new File(savePath, fileName);
+                Uri uri = Uri.fromFile(out);
 
-            theLarge = savePath + fileName;// 该照片的绝对路径
+                theLarge = savePath + fileName;// 该照片的绝对路径
 
-            intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-            startActivityForResult(intent,
-                    ImageUtils.REQUEST_CODE_GETIMAGE_BYCAMERA);
-            break;
-        default:
-            break;
+                intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                startActivityForResult(intent,
+                        ImageUtils.REQUEST_CODE_GETIMAGE_BYCAMERA);
+                break;
+            default:
+                break;
         }
     }
 
     @Override
     public void onActivityResult(final int requestCode, final int resultCode,
-            final Intent imageReturnIntent) {
+                                 final Intent imageReturnIntent) {
         if (resultCode != Activity.RESULT_OK)
             return;
         new Thread() {
@@ -447,19 +437,16 @@ public class TeamNewActiveActivity extends BaseActivity {
                     if (AppContext
                             .isMethodsCompat(android.os.Build.VERSION_CODES.ECLAIR_MR1)) {
                         String imaName = FileUtil.getFileName(theLarge);
-                        if (imaName != null)
-                            bitmap = ImageUtils.loadImgThumbnail(
-                                    TeamNewActiveActivity.this, imaName,
-                                    MediaStore.Images.Thumbnails.MICRO_KIND);
+                        bitmap = ImageUtils.loadImgThumbnail(
+                                TeamNewActiveActivity.this, imaName,
+                                Images.Thumbnails.MICRO_KIND);
                     }
                     if (bitmap == null && !StringUtils.isEmpty(theLarge))
-                        bitmap = ImageUtils
-                                .loadImgThumbnail(theLarge, 100, 100);
+                        bitmap = ImageUtils.loadImgThumbnail(theLarge, 100, 100);
                 } else if (requestCode == ImageUtils.REQUEST_CODE_GETIMAGE_BYCAMERA) {
                     // 拍摄图片
-                    if (bitmap == null && !StringUtils.isEmpty(theLarge)) {
-                        bitmap = ImageUtils
-                                .loadImgThumbnail(theLarge, 100, 100);
+                    if (!StringUtils.isEmpty(theLarge)) {
+                        bitmap = ImageUtils.loadImgThumbnail(theLarge, 100, 100);
                     }
                 }
 
@@ -505,7 +492,9 @@ public class TeamNewActiveActivity extends BaseActivity {
                     msg.obj = bitmap;
                     handler.sendMessage(msg);
                 }
-            };
+            }
+
+            ;
         }.start();
     }
 
@@ -520,11 +509,9 @@ public class TeamNewActiveActivity extends BaseActivity {
 
                         @Override
                         public void onSuccess(int arg0, Header[] arg1,
-                                byte[] arg2) {
-                            // TODO Auto-generated method stub
+                                              byte[] arg2) {
                             TeamMemberList memberList = XmlUtils.toBean(
                                     TeamMemberList.class, arg2);
-
                             if (memberList != null) {
                                 mTeamMemberList = memberList.getList();
                                 showMetionUser();
@@ -535,21 +522,18 @@ public class TeamNewActiveActivity extends BaseActivity {
 
                         @Override
                         public void onFailure(int arg0, Header[] arg1,
-                                byte[] arg2, Throwable arg3) {
-                            // TODO Auto-generated method stub
+                                              byte[] arg2, Throwable arg3) {
                             AppContext.showToast("获取团队成员失败");
                         }
 
                         @Override
                         public void onStart() {
-                            // TODO Auto-generated method stub
                             super.onStart();
                             showWaitDialog("正在获取团队成员...");
                         }
 
                         @Override
                         public void onFinish() {
-                            // TODO Auto-generated method stub
                             super.onFinish();
                             hideWaitDialog();
                         }
@@ -573,17 +557,17 @@ public class TeamNewActiveActivity extends BaseActivity {
             for (int i = 1; i < toUsers.length; i++) {
                 toUsers[i] = mTeamMemberList.get(i - 1).getName();
             }
-            metionUserDialog = DialogHelp.getSingleChoiceDialog(this, "艾特团队成员", toUsers, -1, new OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    // TODO Auto-generated method st
-                    mEtInput.getText().insert(mEtInput.getSelectionStart(),
-                            "@" + toUsers[i] + " ");
-                    mEtInput.setSelection(mEtInput.length());
-                    metionUserDialog.dismiss();
+            metionUserDialog = DialogHelp.getSingleChoiceDialog(this, "艾特团队成员", toUsers, -1, new
+                    OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            mEtInput.getText().insert(mEtInput.getSelectionStart(),
+                                    "@" + toUsers[i] + " ");
+                            mEtInput.setSelection(mEtInput.length());
+                            metionUserDialog.dismiss();
 
-                }
-            }).show();
+                        }
+                    }).show();
         }
 
         metionUserDialog.show();

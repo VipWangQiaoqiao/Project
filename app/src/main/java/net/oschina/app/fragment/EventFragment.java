@@ -1,7 +1,12 @@
 package net.oschina.app.fragment;
 
-import java.io.InputStream;
-import java.io.Serializable;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -14,13 +19,9 @@ import net.oschina.app.bean.EventList;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
+
+import java.io.InputStream;
+import java.io.Serializable;
 
 /**
  * 活动列表fragment
@@ -127,8 +128,7 @@ public class EventFragment extends BaseListFragment<Event> {
 
     @Override
     protected EventList parseList(InputStream is) throws Exception {
-        EventList list = XmlUtils.toBean(EventList.class, is);
-        return list;
+        return XmlUtils.toBean(EventList.class, is);
     }
 
     @Override

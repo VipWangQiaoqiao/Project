@@ -41,7 +41,7 @@ public class BlogDetailFragment extends CommonDetailFragment<Blog> {
 
     @Override
     protected String getWebViewBody(Blog detail) {
-        StringBuffer body = new StringBuffer();
+        StringBuilder body = new StringBuilder();
         body.append(UIHelper.WEB_STYLE).append(UIHelper.WEB_LOAD_IMAGES);
         body.append(ThemeSwitchUtils.getWebViewBodyString());
         // 添加title

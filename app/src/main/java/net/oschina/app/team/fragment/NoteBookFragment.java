@@ -1,6 +1,25 @@
 package net.oschina.app.team.fragment;
 
-import java.util.List;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -22,29 +41,11 @@ import net.oschina.app.widget.KJDragGridView;
 import net.oschina.app.widget.KJDragGridView.OnDeleteListener;
 import net.oschina.app.widget.KJDragGridView.OnMoveListener;
 
-import cz.msebera.android.httpclient.Header;
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageView;
-import butterknife.ButterKnife;
-import butterknife.InjectView;
+import java.util.List;
 
-import com.loopj.android.http.AsyncHttpResponseHandler;
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * 便签列表界面
@@ -54,13 +55,13 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 public class NoteBookFragment extends BaseFragment implements
         OnItemClickListener, OnRefreshListener {
 
-    @InjectView(R.id.frag_note_list)
+    @Bind(R.id.frag_note_list)
     KJDragGridView mGrid;
-    @InjectView(R.id.frag_note_trash)
+    @Bind(R.id.frag_note_trash)
     ImageView mImgTrash;
-    @InjectView(R.id.swiperefreshlayout)
+    @Bind(R.id.swiperefreshlayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
-    @InjectView(R.id.error_layout)
+    @Bind(R.id.error_layout)
     EmptyLayout mEmptyLayout;
 
     private NoteDatabase noteDb;
@@ -98,7 +99,7 @@ public class NoteBookFragment extends BaseFragment implements
         View rootView = inflater.inflate(R.layout.fragment_note, container,
                 false);
         aty = getActivity();
-        ButterKnife.inject(this, rootView);
+        ButterKnife.bind(this, rootView);
         initData();
         initView(rootView);
         return rootView;

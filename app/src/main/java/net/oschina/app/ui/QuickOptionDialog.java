@@ -1,6 +1,5 @@
 package net.oschina.app.ui;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -32,16 +31,13 @@ public class QuickOptionDialog extends Dialog implements
 
     private OnQuickOptionformClick mListener;
 
-    private QuickOptionDialog(Context context, boolean flag,
-                              OnCancelListener listener) {
+    private QuickOptionDialog(Context context, boolean flag, OnCancelListener listener) {
         super(context, flag, listener);
     }
 
-    @SuppressLint("InflateParams")
     private QuickOptionDialog(Context context, int defStyle) {
         super(context, defStyle);
-        View contentView = getLayoutInflater().inflate(
-                R.layout.dialog_quick_option, null);
+        View contentView = View.inflate(context, R.layout.dialog_quick_option, null);
         contentView.findViewById(R.id.ly_quick_option_text).setOnClickListener(
                 this);
         contentView.findViewById(R.id.ly_quick_option_album)

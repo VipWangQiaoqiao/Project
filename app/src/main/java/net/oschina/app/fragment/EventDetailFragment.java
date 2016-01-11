@@ -29,39 +29,39 @@ import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.URLsUtils;
 import net.oschina.app.util.XmlUtils;
 
-import cz.msebera.android.httpclient.Header;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-import butterknife.InjectView;
+import butterknife.Bind;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by 火蚁 on 15/5/28.
  */
 public class EventDetailFragment extends CommonDetailFragment<Post> {
 
-    @InjectView(R.id.tv_event_title)
+    @Bind(R.id.tv_event_title)
     TextView mTvTitle;
 
-    @InjectView(R.id.tv_event_start_time)
+    @Bind(R.id.tv_event_start_time)
     TextView mTvStartTime;
 
-    @InjectView(R.id.tv_event_end_time)
+    @Bind(R.id.tv_event_end_time)
     TextView mTvEndTime;
 
-    @InjectView(R.id.tv_event_spot)
+    @Bind(R.id.tv_event_spot)
     TextView mTvSpot;
 
-    @InjectView(R.id.rl_event_location)
+    @Bind(R.id.rl_event_location)
     View mLocation;
 
-    @InjectView(R.id.bt_event_attend)
+    @Bind(R.id.bt_event_attend)
     Button mBtAttend;// 出席人员
 
-    @InjectView(R.id.bt_event_apply)
+    @Bind(R.id.bt_event_apply)
     Button mBtEventApply;// 活动报名
 
-    @InjectView(R.id.tv_event_tip)
+    @Bind(R.id.tv_event_tip)
     TextView mEventTip;
 
     private EventApplyDialog mEventApplyDialog;
@@ -96,15 +96,18 @@ public class EventDetailFragment extends CommonDetailFragment<Post> {
 
     @Override
     protected String getWebViewBody(Post detail) {
-        StringBuffer body = new StringBuffer();
+        StringBuilder body = new StringBuilder();
         body.append(UIHelper.WEB_STYLE).append(UIHelper.WEB_LOAD_IMAGES);
         body.append(ThemeSwitchUtils.getWebViewBodyString());
         // 添加title
         body.append(String.format("<div class='title'>%s</div>", mDetail.getTitle()));
         // 添加作者和时间
         String time = StringUtils.friendly_time(mDetail.getPubDate());
-        String author = String.format("<a class='author' href='http://my.oschina.net/u/%s'>%s</a>", mDetail.getAuthorId(), mDetail.getAuthor());
-        body.append(String.format("<div class='authortime'>%s&nbsp;&nbsp;&nbsp;&nbsp;%s</div>", author, time));
+        String author = String.format
+                ("<a class='author' href='http://my.oschina.net/u/%s'>%s</a>", mDetail
+                        .getAuthorId(), mDetail.getAuthor());
+        body.append(String.format("<div class='authortime'>%s&nbsp;&nbsp;&nbsp;&nbsp;%s</div>", 
+                author, time));
         // 添加图片点击放大支持
         body.append(UIHelper.setHtmlCotentSupportImagePreview(mDetail.getBody()));
         // 封尾
@@ -317,6 +320,6 @@ public class EventDetailFragment extends CommonDetailFragment<Post> {
 
     @Override
     protected String getShareUrl() {
-        return  String.format(URLsUtils.URL_MOBILE + "question/%s_%s", mDetail.getAuthorId(), mId);
+        return String.format(URLsUtils.URL_MOBILE + "question/%s_%s", mDetail.getAuthorId(), mId);
     }
 }

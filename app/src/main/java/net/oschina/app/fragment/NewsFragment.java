@@ -1,8 +1,7 @@
 package net.oschina.app.fragment;
 
-import java.io.InputStream;
-import java.io.Serializable;
-import java.util.List;
+import android.view.View;
+import android.widget.AdapterView;
 
 import net.oschina.app.adapter.NewsAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
@@ -14,14 +13,15 @@ import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
-import android.view.View;
-import android.widget.AdapterView;
+
+import java.io.InputStream;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * 新闻资讯
  * 
  * @author FireAnt（http://my.oschina.net/LittleDY）
- * @created 2014年11月12日 下午4:17:45
  * 
  */
 public class NewsFragment extends BaseListFragment<News> implements

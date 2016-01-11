@@ -1,23 +1,5 @@
 package net.oschina.app.ui;
 
-import net.oschina.app.AppConfig;
-import net.oschina.app.AppContext;
-import net.oschina.app.R;
-import net.oschina.app.api.ApiHttpClient;
-import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.base.BaseActivity;
-import net.oschina.app.bean.Constants;
-import net.oschina.app.bean.LoginUserBean;
-import net.oschina.app.bean.OpenIdCatalog;
-import net.oschina.app.util.CyptoUtils;
-import net.oschina.app.util.DialogHelp;
-import net.oschina.app.util.TDevice;
-import net.oschina.app.util.TLog;
-import net.oschina.app.util.XmlUtils;
-
-import cz.msebera.android.httpclient.Header;
-import org.kymjs.kjframe.http.HttpConfig;
-
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -27,13 +9,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
-
-import butterknife.InjectView;
-import butterknife.OnClick;
-import cz.msebera.android.httpclient.client.CookieStore;
-import cz.msebera.android.httpclient.client.protocol.ClientContext;
-import cz.msebera.android.httpclient.cookie.Cookie;
-import cz.msebera.android.httpclient.protocol.HttpContext;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -50,8 +25,33 @@ import com.umeng.socialize.controller.listener.SocializeListeners;
 import com.umeng.socialize.exception.SocializeException;
 import com.umeng.socialize.sso.SinaSsoHandler;
 
+import net.oschina.app.AppConfig;
+import net.oschina.app.AppContext;
+import net.oschina.app.R;
+import net.oschina.app.api.ApiHttpClient;
+import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.base.BaseActivity;
+import net.oschina.app.bean.Constants;
+import net.oschina.app.bean.LoginUserBean;
+import net.oschina.app.bean.OpenIdCatalog;
+import net.oschina.app.util.CyptoUtils;
+import net.oschina.app.util.DialogHelp;
+import net.oschina.app.util.TDevice;
+import net.oschina.app.util.TLog;
+import net.oschina.app.util.XmlUtils;
+
+import org.kymjs.kjframe.http.HttpConfig;
+
 import java.util.Map;
 import java.util.Set;
+
+import butterknife.Bind;
+import butterknife.OnClick;
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.client.CookieStore;
+import cz.msebera.android.httpclient.client.protocol.ClientContext;
+import cz.msebera.android.httpclient.cookie.Cookie;
+import cz.msebera.android.httpclient.protocol.HttpContext;
 
 /**
  * 用户登录界面
@@ -64,10 +64,10 @@ public class LoginActivity extends BaseActivity implements IUiListener {
     private static final String BUNDLE_KEY_REQUEST_CODE = "BUNDLE_KEY_REQUEST_CODE";
     protected static final String TAG = LoginActivity.class.getSimpleName();
 
-    @InjectView(R.id.et_username)
+    @Bind(R.id.et_username)
     EditText mEtUserName;
 
-    @InjectView(R.id.et_password)
+    @Bind(R.id.et_password)
     EditText mEtPassword;
 
     private final int requestCode = REQUEST_CODE_INIT;

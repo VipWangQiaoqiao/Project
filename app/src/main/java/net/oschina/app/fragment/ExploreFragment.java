@@ -14,42 +14,41 @@ import net.oschina.app.ui.ShakeActivity;
 import net.oschina.app.util.UIHelper;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 
 /**
  * 发现页面
- * 
+ *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @version 创建时间：2014年11月4日 下午3:34:07
- * 
  */
 
 public class ExploreFragment extends BaseFragment {
 
-    @InjectView(R.id.rl_active)
+    @Bind(R.id.rl_active)
     View mRlActive;
 
-    @InjectView(R.id.rl_find_osc)
+    @Bind(R.id.rl_find_osc)
     View mFindOSCer;
 
-    @InjectView(R.id.rl_city)
+    @Bind(R.id.rl_city)
     View mCity;
 
-    @InjectView(R.id.rl_activities)
+    @Bind(R.id.rl_activities)
     View mActivities;
 
-    @InjectView(R.id.rl_scan)
+    @Bind(R.id.rl_scan)
     View mScan;
 
-    @InjectView(R.id.rl_shake)
+    @Bind(R.id.rl_shake)
     View mShake;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_explore, null);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         initView(view);
         return view;
     }
@@ -58,26 +57,26 @@ public class ExploreFragment extends BaseFragment {
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
-        case R.id.rl_active:
-            UIHelper.showMyActive(getActivity());
-            break;
-        case R.id.rl_find_osc:
-            showFindUser();
-            break;
-        case R.id.rl_city:
-            UIHelper.showSimpleBack(getActivity(), SimpleBackPage.SAME_CITY);
-            break;
-        case R.id.rl_activities:
-            UIHelper.showSimpleBack(getActivity(), SimpleBackPage.EVENT_LIST);
-            break;
-        case R.id.rl_scan:
-            UIHelper.showScanActivity(getActivity());
-            break;
-        case R.id.rl_shake:
-            showShake();
-            break;
-        default:
-            break;
+            case R.id.rl_active:
+                UIHelper.showMyActive(getActivity());
+                break;
+            case R.id.rl_find_osc:
+                showFindUser();
+                break;
+            case R.id.rl_city:
+                UIHelper.showSimpleBack(getActivity(), SimpleBackPage.SAME_CITY);
+                break;
+            case R.id.rl_activities:
+                UIHelper.showSimpleBack(getActivity(), SimpleBackPage.EVENT_LIST);
+                break;
+            case R.id.rl_scan:
+                UIHelper.showScanActivity(getActivity());
+                break;
+            case R.id.rl_shake:
+                showShake();
+                break;
+            default:
+                break;
         }
     }
 

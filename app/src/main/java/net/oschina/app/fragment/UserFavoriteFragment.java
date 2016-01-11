@@ -1,7 +1,7 @@
 package net.oschina.app.fragment;
 
-import java.io.InputStream;
-import java.io.Serializable;
+import android.view.View;
+import android.widget.AdapterView;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.adapter.UserFavoriteAdapter;
@@ -11,8 +11,9 @@ import net.oschina.app.bean.Favorite;
 import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
-import android.view.View;
-import android.widget.AdapterView;
+
+import java.io.InputStream;
+import java.io.Serializable;
 
 public class UserFavoriteFragment extends BaseListFragment<Favorite> {
 
@@ -32,9 +33,7 @@ public class UserFavoriteFragment extends BaseListFragment<Favorite> {
 
     @Override
     protected FavoriteList parseList(InputStream is) throws Exception {
-
-	FavoriteList list = XmlUtils.toBean(FavoriteList.class, is);
-	return list;
+		return XmlUtils.toBean(FavoriteList.class, is);
     }
 
     @Override

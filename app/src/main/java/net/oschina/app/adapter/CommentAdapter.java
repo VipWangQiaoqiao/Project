@@ -26,7 +26,7 @@ import net.oschina.app.widget.TweetTextView;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 
 public class CommentAdapter extends ListBaseAdapter<Comment> {
 
@@ -138,23 +138,23 @@ public class CommentAdapter extends ListBaseAdapter<Comment> {
     }
 
     static class ViewHolder {
-        @InjectView(R.id.iv_avatar)
+        @Bind(R.id.iv_avatar)
         AvatarView avatar;
-        @InjectView(R.id.tv_name)
+        @Bind(R.id.tv_name)
         TextView name;
-        @InjectView(R.id.tv_time)
+        @Bind(R.id.tv_time)
         TextView time;
-        @InjectView(R.id.tv_from)
+        @Bind(R.id.tv_from)
         TextView from;
-        @InjectView(R.id.tv_content)
+        @Bind(R.id.tv_content)
         TweetTextView content;
-        @InjectView(R.id.ly_relies)
+        @Bind(R.id.ly_relies)
         LinearLayout relies;
-        @InjectView(R.id.ly_refers)
+        @Bind(R.id.ly_refers)
         FloorView refers;
 
         ViewHolder(View view) {
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
         }
     }
 }

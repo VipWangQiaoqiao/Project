@@ -1,14 +1,16 @@
 package net.oschina.app.team.adapter;
 
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.team.bean.TeamMember;
 import net.oschina.app.widget.AvatarView;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * 团队项目适配器
@@ -42,13 +44,13 @@ public class TeamProjectMemberAdapter extends ListBaseAdapter<TeamMember> {
     }
 
     public static class ViewHolder {
-	@InjectView(R.id.iv_avatar)
+	@Bind(R.id.iv_avatar)
 	AvatarView avatar;
-	@InjectView(R.id.tv_name)
+	@Bind(R.id.tv_name)
 	TextView name;
 
 	public ViewHolder(View view) {
-	    ButterKnife.inject(this, view);
+	    ButterKnife.bind(this, view);
 	}
     }
 

@@ -20,36 +20,35 @@ import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.togglebutton.ToggleButton;
 import net.oschina.app.widget.togglebutton.ToggleButton.OnToggleChanged;
 
-import org.kymjs.kjframe.bitmap.BitmapConfig;
+import org.kymjs.kjframe.http.HttpConfig;
 
 import java.io.File;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 
 /**
  * 系统设置界面
- * 
+ *
  * @author kymjs
- * 
  */
 public class SettingsFragment extends BaseFragment {
 
-    @InjectView(R.id.tb_loading_img)
+    @Bind(R.id.tb_loading_img)
     ToggleButton mTbLoadImg;
-    @InjectView(R.id.tv_cache_size)
+    @Bind(R.id.tv_cache_size)
     TextView mTvCacheSize;
-    @InjectView(R.id.setting_logout)
+    @Bind(R.id.setting_logout)
     TextView mTvExit;
-    @InjectView(R.id.tb_double_click_exit)
+    @Bind(R.id.tb_double_click_exit)
     ToggleButton mTbDoubleClickExit;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
-            @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container,
                 false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         initView(view);
         initData();
         return view;
@@ -119,7 +118,7 @@ public class SettingsFragment extends BaseFragment {
             fileSize += FileUtil.getDirSize(externalCacheDir);
             fileSize += FileUtil.getDirSize(new File(
                     org.kymjs.kjframe.utils.FileUtils.getSDCardPath()
-                            + File.separator + BitmapConfig.CACHEPATH));
+                            + File.separator + HttpConfig.CACHEPATH));
         }
         if (fileSize > 0)
             cacheSize = FileUtil.formatFileSize(fileSize);
@@ -130,32 +129,33 @@ public class SettingsFragment extends BaseFragment {
     public void onClick(View v) {
         final int id = v.getId();
         switch (id) {
-        case R.id.rl_loading_img:
-            mTbLoadImg.toggle();
-            break;
-        case R.id.rl_notification_settings:
-            UIHelper.showSettingNotification(getActivity());
-            break;
-        case R.id.rl_clean_cache:
-            onClickCleanCache();
-            break;
-        case R.id.rl_double_click_exit:
-            mTbDoubleClickExit.toggle();
-            break;
-        case R.id.rl_about:
-            UIHelper.showAboutOSC(getActivity());
-            break;
-        case R.id.rl_exit:
-            onClickExit();
-            break;
-        default:
-            break;
+            case R.id.rl_loading_img:
+                mTbLoadImg.toggle();
+                break;
+            case R.id.rl_notification_settings:
+                UIHelper.showSettingNotification(getActivity());
+                break;
+            case R.id.rl_clean_cache:
+                onClickCleanCache();
+                break;
+            case R.id.rl_double_click_exit:
+                mTbDoubleClickExit.toggle();
+                break;
+            case R.id.rl_about:
+                UIHelper.showAboutOSC(getActivity());
+                break;
+            case R.id.rl_exit:
+                onClickExit();
+                break;
+            default:
+                break;
         }
 
     }
 
     private void onClickCleanCache() {
-        DialogHelp.getConfirmDialog(getActivity(), "是否清空缓存?", new DialogInterface.OnClickListener() {
+        DialogHelp.getConfirmDialog(getActivity(), "是否清空缓存?", new DialogInterface.OnClickListener
+                () {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 UIHelper.clearAppCache(getActivity());

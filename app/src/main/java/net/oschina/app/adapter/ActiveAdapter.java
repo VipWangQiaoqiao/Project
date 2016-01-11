@@ -21,6 +21,7 @@ import net.oschina.app.bean.Active;
 import net.oschina.app.bean.Active.ObjectReply;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.ui.ImagePreviewActivity;
+import net.oschina.app.util.BitmapHelper;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
@@ -30,22 +31,21 @@ import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
 
-import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.Core;
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
-import org.kymjs.kjframe.bitmap.BitmapHelper;
 import org.kymjs.kjframe.utils.DensityUtils;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 
 public class ActiveAdapter extends ListBaseAdapter {
     private final static String AT_HOST_PRE = "http://my.oschina.net";
     private final static String MAIN_HOST = "http://www.oschina.net";
 
-    public ActiveAdapter() {}
+    public ActiveAdapter() {
+    }
 
     private Bitmap recordBitmap;
-    private final KJBitmap kjb = new KJBitmap();
     private int rectSize;
 
     private void initRecordImg(Context cxt) {
@@ -66,8 +66,8 @@ public class ActiveAdapter extends ListBaseAdapter {
     @Override
     @SuppressLint("InflateParams")
     protected View getRealView(int position, View convertView,
-            final ViewGroup parent) {
-        ViewHolder vh = null;
+                               final ViewGroup parent) {
+        ViewHolder vh;
         initImageSize(parent.getContext());
         if (convertView == null || convertView.getTag() == null) {
             convertView = getLayoutInflater(parent.getContext()).inflate(
@@ -152,31 +152,28 @@ public class ActiveAdapter extends ListBaseAdapter {
 
     /**
      * 动态设置图片显示样式
-     * 
-     * @author kymjs
      */
     private void setTweetImage(final ViewGroup parent, final ViewHolder vh,
-            final Active item) {
+                               final Active item) {
         vh.pic.setVisibility(View.VISIBLE);
 
-        kjb.display(vh.pic, item.getTweetimage(), R.drawable.pic_bg, rectSize,
-                rectSize, new BitmapCallBack() {
-                    @Override
-                    public void onSuccess(Bitmap bitmap) {
-                        super.onSuccess(bitmap);
-                        if (bitmap != null) {
-                            bitmap = BitmapHelper.scaleWithXY(bitmap, rectSize
-                                    / bitmap.getHeight());
-                            vh.pic.setImageBitmap(bitmap);
-                        }
-                    }
-                });
+        new Core.Builder().url(item.getTweetimage()).view(vh.pic).loadBitmapRes(R.drawable
+                .pic_bg).size(rectSize, rectSize).bitmapCallBack(new BitmapCallBack() {
+            @Override
+            public void onSuccess(Bitmap bitmap) {
+                super.onSuccess(bitmap);
+                if (bitmap != null) {
+                    bitmap = BitmapHelper.scaleWithXY(bitmap, rectSize / bitmap.getHeight());
+                    vh.pic.setImageBitmap(bitmap);
+                }
+            }
+        }).doTask();
 
         vh.pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ImagePreviewActivity.showImagePrivew(parent.getContext(), 0,
-                        new String[] { getOriginalUrl(item.getTweetimage()) });
+                        new String[]{getOriginalUrl(item.getTweetimage())});
             }
         });
     }
@@ -195,33 +192,31 @@ public class ActiveAdapter extends ListBaseAdapter {
     }
 
     static class ViewHolder {
-        @InjectView(R.id.tv_name)
+        @Bind(R.id.tv_name)
         TextView name;
-        @InjectView(R.id.tv_from)
+        @Bind(R.id.tv_from)
         TextView from;
-        @InjectView(R.id.tv_time)
+        @Bind(R.id.tv_time)
         TextView time;
-        @InjectView(R.id.tv_action)
+        @Bind(R.id.tv_action)
         TextView action;
-        @InjectView(R.id.tv_action_name)
+        @Bind(R.id.tv_action_name)
         TextView actionName;
-        @InjectView(R.id.tv_comment_count)
+        @Bind(R.id.tv_comment_count)
         TextView commentCount;
-        // @InjectView(R.id.tv_reply_content)
-        // TextView retweetCount;
-        @InjectView(R.id.tv_body)
+        @Bind(R.id.tv_body)
         TweetTextView body;
-        @InjectView(R.id.tv_reply)
+        @Bind(R.id.tv_reply)
         TweetTextView reply;
-        @InjectView(R.id.iv_pic)
+        @Bind(R.id.iv_pic)
         ImageView pic;
-        @InjectView(R.id.ly_reply)
+        @Bind(R.id.ly_reply)
         View lyReply;
-        @InjectView(R.id.iv_avatar)
+        @Bind(R.id.iv_avatar)
         AvatarView avatar;
 
         public ViewHolder(View view) {
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
         }
     }
 }

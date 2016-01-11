@@ -11,7 +11,7 @@ import net.oschina.app.team.bean.TeamProject;
 import net.oschina.app.util.TypefaceUtils;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 
 /**
  * 团队项目适配器
@@ -53,22 +53,24 @@ public class TeamProjectListAdapterNew extends ListBaseAdapter<TeamProject> {
             TypefaceUtils.setTypeface(tvSource, R.string.fa_list_alt);
         }
 
-        vh.name.setText(item.getGit().getOwnerName() + " / " + item.getGit().getName());
-        vh.issue.setText(item.getIssue().getOpened() + "/" + item.getIssue().getAll());
+        vh.name.setText(String.format("%s / %s", item.getGit().getOwnerName(), item.getGit()
+                .getName()));
+        vh.issue.setText(String.format("%d/%d", item.getIssue().getOpened(), item.getIssue()
+                .getAll()));
 
         return convertView;
     }
 
     public static class ViewHolder {
-        @InjectView(R.id.iv_source)
+        @Bind(R.id.iv_source)
         TextView source;
-        @InjectView(R.id.tv_project_name)
+        @Bind(R.id.tv_project_name)
         TextView name;
-        @InjectView(R.id.tv_project_issue)
+        @Bind(R.id.tv_project_issue)
         TextView issue;
 
         public ViewHolder(View view) {
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
         }
     }
 

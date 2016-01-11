@@ -34,8 +34,7 @@ import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
-import cz.msebera.android.httpclient.Header;
-import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.Core;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -44,8 +43,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * 登录用户信息详情
@@ -59,32 +59,30 @@ public class MyInformationFragmentDetail extends BaseFragment {
     public static final int ACTION_TYPE_ALBUM = 0;
     public static final int ACTION_TYPE_PHOTO = 1;
 
-    @InjectView(R.id.iv_avatar)
+    @Bind(R.id.iv_avatar)
     ImageView mUserFace;
 
-    @InjectView(R.id.tv_name)
+    @Bind(R.id.tv_name)
     TextView mName;
 
-    @InjectView(R.id.tv_join_time)
+    @Bind(R.id.tv_join_time)
     TextView mJoinTime;
 
-    @InjectView(R.id.tv_location)
+    @Bind(R.id.tv_location)
     TextView mFrom;
 
-    @InjectView(R.id.tv_development_platform)
+    @Bind(R.id.tv_development_platform)
     TextView mPlatFrom;
 
-    @InjectView(R.id.tv_academic_focus)
+    @Bind(R.id.tv_academic_focus)
     TextView mFocus;
 
-    @InjectView(R.id.error_layout)
+    @Bind(R.id.error_layout)
     EmptyLayout mErrorLayout;
 
     private User mUser;
 
     private boolean isChangeFace = false;
-
-    private String theLarge;
 
     private final static int CROP = 200;
 
@@ -92,7 +90,6 @@ public class MyInformationFragmentDetail extends BaseFragment {
             .getExternalStorageDirectory().getAbsolutePath()
             + "/OSChina/Portrait/";
     private Uri origUri;
-    private Uri cropUri;
     private File protraitFile;
     private Bitmap protraitBitmap;
     private String protraitPath;
@@ -189,7 +186,7 @@ public class MyInformationFragmentDetail extends BaseFragment {
 
     @Override
     public void initView(View view) {
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -206,7 +203,7 @@ public class MyInformationFragmentDetail extends BaseFragment {
     }
 
     public void fillUI() {
-        new KJBitmap().displayWithLoadBitmap(mUserFace, mUser.getPortrait(),
+        Core.getKJBitmap().displayWithLoadBitmap(mUserFace, mUser.getPortrait(),
                 R.drawable.widget_dface);
         mName.setText(mUser.getName());
         mJoinTime.setText(StringUtils.friendly_time(mUser.getJointime()));
@@ -321,7 +318,7 @@ public class MyInformationFragmentDetail extends BaseFragment {
         Uri uri = Uri.fromFile(out);
         origUri = uri;
 
-        theLarge = savePath + fileName;// 该照片的绝对路径
+        String theLarge = savePath + fileName;
 
         intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
@@ -341,8 +338,7 @@ public class MyInformationFragmentDetail extends BaseFragment {
             AppContext.showToast("无法保存上传的头像，请检查SD卡是否挂载");
             return null;
         }
-        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss")
-                .format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         String thePath = ImageUtils.getAbsolutePathFromNoStandardUri(uri);
 
         // 如果是标准Uri
@@ -357,8 +353,7 @@ public class MyInformationFragmentDetail extends BaseFragment {
         protraitPath = FILE_SAVEPATH + cropFileName;
         protraitFile = new File(protraitPath);
 
-        cropUri = Uri.fromFile(protraitFile);
-        return this.cropUri;
+        return Uri.fromFile(protraitFile);
     }
 
     /**

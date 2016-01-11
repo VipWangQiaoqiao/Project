@@ -27,12 +27,12 @@ import net.oschina.app.util.TypefaceUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
-import cz.msebera.android.httpclient.Header;
-import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.Core;
 
 import java.io.ByteArrayInputStream;
 
-import butterknife.InjectView;
+import butterknife.Bind;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * 摇一摇界面
@@ -40,28 +40,27 @@ import butterknife.InjectView;
  */
 public class ShakeActivity extends BaseActivity implements SensorEventListener {
 
-    @InjectView(R.id.shake_img)
+    @Bind(R.id.shake_img)
     ImageView mImgShake;
 
-    @InjectView(R.id.progress)
+    @Bind(R.id.progress)
     ProgressBar mProgress;
-    @InjectView(R.id.shake_bottom)
+    @Bind(R.id.shake_bottom)
     LinearLayout mLayoutBottom;
-    @InjectView(R.id.iv_face)
+    @Bind(R.id.iv_face)
     ImageView mImgHead;
-    @InjectView(R.id.tv_title)
+    @Bind(R.id.tv_title)
     TextView mTvTitle;
-    @InjectView(R.id.tv_description)
+    @Bind(R.id.tv_description)
     TextView mTvDetail;
-    @InjectView(R.id.tv_author)
+    @Bind(R.id.tv_author)
     TextView mTvAuthor;
-    @InjectView(R.id.tv_comment_count)
+    @Bind(R.id.tv_comment_count)
     TextView mTvCommentCount;
-    @InjectView(R.id.tv_time)
+    @Bind(R.id.tv_time)
     TextView mTvDate;
 
     private SensorManager sensorManager = null;
-    private Sensor sensor;
     private Vibrator vibrator = null;
 
     private boolean isRequest = false;
@@ -129,16 +128,16 @@ public class ShakeActivity extends BaseActivity implements SensorEventListener {
                                                 UIHelper.showUrlShake(ShakeActivity.this, obj);
                                             }
                                         });
-                                new KJBitmap()
-                                        .displayWithLoadBitmap(mImgHead,
-                                                obj.getImage(),
-                                                R.drawable.widget_dface);
+                                new Core.Builder().view(mImgHead).url(obj.getImage())
+                                        .loadBitmapRes(R.drawable.widget_dface).doTask();
                                 mTvTitle.setText(obj.getTitle());
                                 mTvDetail.setText(obj.getDetail());
                                 mTvAuthor.setText(obj.getAuthor());
                                 TypefaceUtils.setTypeface(mTvAuthor);
-                                TypefaceUtils.setTypeFaceWithText(mTvCommentCount, R.string.fa_comment, obj.getCommentCount() + "");
-                                TypefaceUtils.setTypeFaceWithText(mTvDate, R.string.fa_clock_o, StringUtils.friendly_time(obj.getPubDate()));
+                                TypefaceUtils.setTypeFaceWithText(mTvCommentCount, R.string
+                                        .fa_comment, obj.getCommentCount() + "");
+                                TypefaceUtils.setTypeFaceWithText(mTvDate, R.string.fa_clock_o,
+                                        StringUtils.friendly_time(obj.getPubDate()));
                             }
                         } else {
                             jokeToast();
@@ -179,11 +178,11 @@ public class ShakeActivity extends BaseActivity implements SensorEventListener {
     public void onResume() {
         super.onResume();
         if (sensorManager != null) {
-            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        }
-        if (sensor != null) {
-            sensorManager.registerListener(this, sensor,
-                    SensorManager.SENSOR_DELAY_GAME);
+            Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            if (sensor != null) {
+                sensorManager.registerListener(this, sensor,
+                        SensorManager.SENSOR_DELAY_GAME);
+            }
         }
     }
 

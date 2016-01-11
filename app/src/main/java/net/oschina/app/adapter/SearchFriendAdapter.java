@@ -18,7 +18,7 @@ import net.oschina.app.widget.AvatarView;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 
 /**
  * <p>Created 15/8/27 下午9:29.</p>
@@ -76,15 +76,15 @@ public class SearchFriendAdapter extends BaseAdapter {
     }
 
     static class NormalViewHolder {
-        @InjectView(R.id.tv_name)
+        @Bind(R.id.tv_name)
         TextView name;
-        @InjectView(R.id.iv_avatar)
+        @Bind(R.id.iv_avatar)
         AvatarView avatar;
-        @InjectView(R.id.cb_check)
+        @Bind(R.id.cb_check)
         CheckBox checkBox;
 
         NormalViewHolder(View view) {
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
             avatar.setClickable(false);
         }
 

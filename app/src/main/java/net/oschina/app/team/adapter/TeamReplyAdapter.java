@@ -1,6 +1,10 @@
 package net.oschina.app.team.adapter;
 
-import java.util.List;
+import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
@@ -9,13 +13,11 @@ import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.TweetTextView;
-import android.content.Context;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+
+import java.util.List;
+
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * 评论适配器 TeamReply.java
@@ -99,21 +101,21 @@ public class TeamReplyAdapter extends ListBaseAdapter<TeamReply> {
 
     static class ViewHolder {
 
-	@InjectView(R.id.iv_avatar)
+	@Bind(R.id.iv_avatar)
 	AvatarView avatar;
-	@InjectView(R.id.tv_name)
+	@Bind(R.id.tv_name)
 	TextView name;
-	@InjectView(R.id.tv_time)
+	@Bind(R.id.tv_time)
 	TextView time;
-	@InjectView(R.id.tv_from)
+	@Bind(R.id.tv_from)
 	TextView from;
-	@InjectView(R.id.tv_content)
+	@Bind(R.id.tv_content)
 	TweetTextView content;
-	@InjectView(R.id.ly_relies)
+	@Bind(R.id.ly_relies)
 	LinearLayout relies;
 
 	public ViewHolder(View view) {
-	    ButterKnife.inject(this, view);
+	    ButterKnife.bind(this, view);
 	}
     }
 }

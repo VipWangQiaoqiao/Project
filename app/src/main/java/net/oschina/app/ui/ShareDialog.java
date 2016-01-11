@@ -34,7 +34,6 @@ import net.oschina.app.util.TDevice;
  * 分享界面dialog
  *
  * @author kymjs
- *
  */
 public class ShareDialog extends CommonDialog implements
         android.view.View.OnClickListener {
@@ -118,7 +117,7 @@ public class ShareDialog extends CommonDialog implements
                 TDevice.copyTextToBoard(this.link);
                 break;
             case R.id.ly_share_more_option:
-                TDevice.showSystemShareOption((Activity)this.context,
+                TDevice.showSystemShareOption((Activity) this.context,
                         this.content, this.title);
                 break;
             default:
@@ -191,17 +190,19 @@ public class ShareDialog extends CommonDialog implements
 
                         @Override
                         public void onComplete(Bundle arg0, SHARE_MEDIA arg1) {
-                            mController.directShare(ShareDialog.this.context, SHARE_MEDIA.SINA, null);
+                            mController.directShare(ShareDialog.this.context, SHARE_MEDIA.SINA, 
+                                    null);
                         }
 
                         @Override
-                        public void onCancel(SHARE_MEDIA arg0) {}
+                        public void onCancel(SHARE_MEDIA arg0) {
+                        }
                     });
         }
     }
 
     private void shareToQQ() {
-        UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler((Activity)this.context,
+        UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler((Activity) this.context,
                 Constants.QQ_APPID, Constants.QQ_APPKEY);
         qqSsoHandler.setTargetUrl(this.link);
         qqSsoHandler.setTitle(this.title);
@@ -212,8 +213,7 @@ public class ShareDialog extends CommonDialog implements
     }
 
     private UMImage getShareImg() {
-        UMImage img = new UMImage(this.context, R.drawable.ic_share);
-        return img;
+        return new UMImage(this.context, R.drawable.ic_share);
     }
 
     private boolean checkCanShare() {

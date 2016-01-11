@@ -1,23 +1,23 @@
 package net.oschina.app.base;
 
-import java.io.ByteArrayInputStream;
-import java.io.Serializable;
-import java.lang.ref.WeakReference;
-
-import net.oschina.app.bean.Entity;
-import net.oschina.app.cache.CacheManager;
-import net.oschina.app.ui.empty.EmptyLayout;
-
-import cz.msebera.android.httpclient.Header;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import butterknife.ButterKnife;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
+
+import net.oschina.app.bean.Entity;
+import net.oschina.app.cache.CacheManager;
+import net.oschina.app.ui.empty.EmptyLayout;
+
+import java.io.ByteArrayInputStream;
+import java.io.Serializable;
+import java.lang.ref.WeakReference;
+
+import butterknife.ButterKnife;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * 需要加入header的BaseListFragment
@@ -71,7 +71,7 @@ public abstract class BeseHaveHeaderListFragment<T1 extends Entity, T2 extends S
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // 通过注解绑定控件
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         mListView.addHeaderView(initHeaderView());
         aty = getActivity();
         super.initView(view);

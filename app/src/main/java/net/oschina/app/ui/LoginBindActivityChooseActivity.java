@@ -18,7 +18,7 @@ import net.oschina.app.util.XmlUtils;
 
 import cz.msebera.android.httpclient.Header;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
 
 /**
@@ -58,7 +58,7 @@ public class LoginBindActivityChooseActivity extends BaseActivity {
         }
     }
 
-    @InjectView(R.id.tv_openid_tip)
+    @Bind(R.id.tv_openid_tip)
     TextView tvOpenIdTip;
     private void initCatalogText() {
         if (catalog.equals(OpenIdCatalog.QQ)) {

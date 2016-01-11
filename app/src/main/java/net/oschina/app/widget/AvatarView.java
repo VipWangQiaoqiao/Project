@@ -1,17 +1,17 @@
 package net.oschina.app.widget;
 
-import net.oschina.app.R;
-import net.oschina.app.util.UIHelper;
-
-import org.kymjs.kjframe.KJBitmap;
-import org.kymjs.kjframe.bitmap.BitmapCallBack;
-import org.kymjs.kjframe.utils.StringUtils;
-
 import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
+
+import net.oschina.app.R;
+import net.oschina.app.util.UIHelper;
+
+import org.kymjs.kjframe.Core;
+import org.kymjs.kjframe.bitmap.BitmapCallBack;
+import org.kymjs.kjframe.utils.StringUtils;
 
 public class AvatarView extends CircleImageView {
     public static final String AVATAR_SIZE_REG = "_[0-9]{1,3}";
@@ -21,7 +21,6 @@ public class AvatarView extends CircleImageView {
     private int id;
     private String name;
     private Activity aty;
-    private static KJBitmap kjb = new KJBitmap();
 
     public AvatarView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -69,7 +68,7 @@ public class AvatarView extends CircleImageView {
             headUrl = url;
         }
 
-        kjb.display(this, headUrl, R.drawable.widget_dface, 0, 0,
+        Core.getKJBitmap().display(this, headUrl, R.drawable.widget_dface, 0, 0,
                 new BitmapCallBack() {
                     @Override
                     public void onFailure(Exception e) {

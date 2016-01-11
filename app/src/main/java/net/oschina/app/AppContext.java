@@ -18,8 +18,8 @@ import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TLog;
 import net.oschina.app.util.UIHelper;
 
-import org.kymjs.kjframe.KJBitmap;
-import org.kymjs.kjframe.bitmap.BitmapConfig;
+import org.kymjs.kjframe.Core;
+import org.kymjs.kjframe.http.HttpConfig;
 import org.kymjs.kjframe.utils.KJLoger;
 
 import java.util.Properties;
@@ -32,7 +32,7 @@ import static net.oschina.app.AppConfig.KEY_TWEET_DRAFT;
 
 /**
  * 全局应用程序类：用于保存和调用全局应用配置及访问网络数据
- * 
+ *
  * @author 火蚁 (http://my.oschina.net/LittleDY)
  * @version 1.0
  * @created 2014-04-22
@@ -54,8 +54,8 @@ public class AppContext extends BaseApplication {
         init();
         initLogin();
 
-        Thread.setDefaultUncaughtExceptionHandler(AppException
-                .getAppExceptionHandler(this));
+//        Thread.setDefaultUncaughtExceptionHandler(AppException
+//                .getAppExceptionHandler(this));
         UIHelper.sendBroadcastForNotice(this);
     }
 
@@ -72,7 +72,7 @@ public class AppContext extends BaseApplication {
         TLog.DEBUG = BuildConfig.DEBUG;
 
         // Bitmap缓存地址
-        BitmapConfig.CACHEPATH = "OSChina/imagecache";
+        HttpConfig.CACHEPATH = "OSChina/imagecache";
     }
 
     private void initLogin() {
@@ -87,7 +87,7 @@ public class AppContext extends BaseApplication {
 
     /**
      * 获得当前app运行的AppContext
-     * 
+     *
      * @return
      */
     public static AppContext getInstance() {
@@ -113,7 +113,7 @@ public class AppContext extends BaseApplication {
 
     /**
      * 获取cookie时传AppConfig.CONF_COOKIE
-     * 
+     *
      * @param key
      * @return
      */
@@ -128,7 +128,7 @@ public class AppContext extends BaseApplication {
 
     /**
      * 获取App唯一标识
-     * 
+     *
      * @return
      */
     public String getAppId() {
@@ -142,7 +142,7 @@ public class AppContext extends BaseApplication {
 
     /**
      * 获取App安装包信息
-     * 
+     *
      * @return
      */
     public PackageInfo getPackageInfo() {
@@ -159,7 +159,7 @@ public class AppContext extends BaseApplication {
 
     /**
      * 保存登录信息
-     * 
+     *
      * @param user 用户信息
      */
     @SuppressWarnings("serial")
@@ -190,7 +190,7 @@ public class AppContext extends BaseApplication {
 
     /**
      * 更新用户信息
-     * 
+     *
      * @param user
      */
     @SuppressWarnings("serial")
@@ -212,7 +212,7 @@ public class AppContext extends BaseApplication {
 
     /**
      * 获得登录用户的信息
-     * 
+     *
      * @return
      */
     public User getLoginUser() {
@@ -291,7 +291,7 @@ public class AppContext extends BaseApplication {
             if (_key.startsWith("temp"))
                 removeProperty(_key);
         }
-        new KJBitmap().cleanCache();
+        Core.getKJBitmap().cleanCache();
     }
 
     public static void setLoadImage(boolean flag) {
@@ -300,7 +300,7 @@ public class AppContext extends BaseApplication {
 
     /**
      * 判断当前版本是否兼容目标版本的方法
-     * 
+     *
      * @param VersionCode
      * @return
      */

@@ -12,18 +12,18 @@ import net.oschina.app.bean.SoftwareList;
 import net.oschina.app.util.ThemeSwitchUtils;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 
 public class SoftwareAdapter extends ListBaseAdapter<SoftwareDec> {
 
     static class ViewHold {
-        @InjectView(R.id.tv_title)
+        @Bind(R.id.tv_title)
         TextView name;
-        @InjectView(R.id.tv_software_des)
+        @Bind(R.id.tv_software_des)
         TextView des;
 
         public ViewHold(View view) {
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
         }
     }
 

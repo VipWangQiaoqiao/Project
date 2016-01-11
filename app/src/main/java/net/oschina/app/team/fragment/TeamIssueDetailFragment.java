@@ -43,12 +43,12 @@ import net.oschina.app.util.ViewUtils;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
 
-import cz.msebera.android.httpclient.Header;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * TeamIssueDetailFragmentNew.java
@@ -65,34 +65,34 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 
     private TeamIssueCatalog mCatalog;
 
-    @InjectView(R.id.content)
+    @Bind(R.id.content)
     View mContent;
-    @InjectView(R.id.error_layout)
+    @Bind(R.id.error_layout)
     EmptyLayout mErrorLayout;
 
-    @InjectView(R.id.ll_issue_project)
+    @Bind(R.id.ll_issue_project)
     View mProjectView;
-    @InjectView(R.id.tv_issue_project)
+    @Bind(R.id.tv_issue_project)
     TextView mTvProject;
-    @InjectView(R.id.tv_issue_state_title)
+    @Bind(R.id.tv_issue_state_title)
     TextView mTvStateTitle;
-    @InjectView(R.id.tv_issue_title)
+    @Bind(R.id.tv_issue_title)
     TextView mTvTitle;
-    @InjectView(R.id.tv_issue_touser)
+    @Bind(R.id.tv_issue_touser)
     TextView mTvToUser;
-    @InjectView(R.id.tv_issue_cooperate_user)
+    @Bind(R.id.tv_issue_cooperate_user)
     TextView mTvCooperateUser;
-    @InjectView(R.id.tv_issue_die_time)
+    @Bind(R.id.tv_issue_die_time)
     TextView mTvDieTime;
-    @InjectView(R.id.tv_issue_state)
+    @Bind(R.id.tv_issue_state)
     TextView mTvState;
-    @InjectView(R.id.ll_issue_labels)
+    @Bind(R.id.ll_issue_labels)
     LinearLayout mLLlabels;
-    @InjectView(R.id.tv_issue_attachments)
+    @Bind(R.id.tv_issue_attachments)
     TextView mTvAttachments;
-    @InjectView(R.id.tv_issue_relations)
+    @Bind(R.id.tv_issue_relations)
     TextView mTvRelations;
-    @InjectView(R.id.tv_issue_child)
+    @Bind(R.id.tv_issue_child)
     TextView mTvIssueChild;
 
     @Override
@@ -120,7 +120,7 @@ public class TeamIssueDetailFragment extends BaseFragment implements
 
     @Override
     public void initView(View view) {
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
 
         TypefaceUtils.setTypeface((TextView) view
                 .findViewById(R.id.tv_issue_fa_touser));
@@ -417,7 +417,8 @@ public class TeamIssueDetailFragment extends BaseFragment implements
             }
         }
         final int selIndex = index;
-        dialog = DialogHelp.getSingleChoiceDialog(getActivity(), "更改任务状态", items, selIndex, new DialogInterface.OnClickListener() {
+        dialog = DialogHelp.getSingleChoiceDialog(getActivity(), "更改任务状态", items, selIndex, new 
+                DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (i == selIndex) {
@@ -432,7 +433,7 @@ public class TeamIssueDetailFragment extends BaseFragment implements
         }).show();
     }
 
-    @InjectView(R.id.ll_issue_childs)
+    @Bind(R.id.ll_issue_childs)
     LinearLayout mLLChildIssues;
 
     private void setChildIssues(List<TeamIssue> list) {
@@ -525,7 +526,7 @@ public class TeamIssueDetailFragment extends BaseFragment implements
         }
     }
 
-    @InjectView(R.id.ll_issue_comments)
+    @Bind(R.id.ll_issue_comments)
     LinearLayout mLLComments;
 
     // 请求任务的评论

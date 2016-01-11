@@ -1,8 +1,22 @@
 package net.oschina.app.fragment;
 
-import java.io.ByteArrayInputStream;
-import java.io.Serializable;
-import java.lang.ref.WeakReference;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -24,32 +38,17 @@ import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.BadgeView;
 
+import java.io.ByteArrayInputStream;
+import java.io.Serializable;
+import java.lang.ref.WeakReference;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import cz.msebera.android.httpclient.Header;
-
-import com.loopj.android.http.AsyncHttpResponseHandler;
 
 /**
  * 登录用户中心页面
- * 
+ *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @author kymjs (http://my.oschina.net/kymjs)
  * @version 创建时间：2014年10月30日 下午4:05:47
@@ -58,32 +57,30 @@ public class MyInformationFragment extends BaseFragment {
 
     public static final int sChildView = 9; // 在没有加入TeamList控件时rootview有多少子布局
 
-    @InjectView(R.id.iv_avatar)
+    @Bind(R.id.iv_avatar)
     AvatarView mIvAvatar;
-    @InjectView(R.id.iv_gender)
+    @Bind(R.id.iv_gender)
     ImageView mIvGender;
-    @InjectView(R.id.tv_name)
+    @Bind(R.id.tv_name)
     TextView mTvName;
-    @InjectView(R.id.tv_score)
+    @Bind(R.id.tv_score)
     TextView mTvScore;
-    @InjectView(R.id.tv_favorite)
+    @Bind(R.id.tv_favorite)
     TextView mTvFavorite;
-    @InjectView(R.id.tv_following)
+    @Bind(R.id.tv_following)
     TextView mTvFollowing;
-    @InjectView(R.id.tv_follower)
+    @Bind(R.id.tv_follower)
     TextView mTvFans;
-    @InjectView(R.id.tv_mes)
+    @Bind(R.id.tv_mes)
     View mMesView;
-    @InjectView(R.id.error_layout)
+    @Bind(R.id.error_layout)
     EmptyLayout mErrorLayout;
-    @InjectView(R.id.iv_qr_code)
+    @Bind(R.id.iv_qr_code)
     ImageView mQrCode;
-    @InjectView(R.id.ll_user_container)
+    @Bind(R.id.ll_user_container)
     View mUserContainer;
-    @InjectView(R.id.rl_user_unlogin)
+    @Bind(R.id.rl_user_unlogin)
     View mUserUnLogin;
-    @InjectView(R.id.rootview)
-    LinearLayout rootView;
 
     private static BadgeView mMesCount;
 
@@ -97,16 +94,20 @@ public class MyInformationFragment extends BaseFragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(Constants.INTENT_ACTION_LOGOUT)) {
-                if (mErrorLayout != null) {
-                    mIsWatingLogin = true;
-                    steupUser();
-                    mMesCount.hide();
-                }
-            } else if (action.equals(Constants.INTENT_ACTION_USER_CHANGE)) {
-                requestData(true);
-            } else if (action.equals(Constants.INTENT_ACTION_NOTICE)) {
-                setNotice();
+            switch (action) {
+                case Constants.INTENT_ACTION_LOGOUT:
+                    if (mErrorLayout != null) {
+                        mIsWatingLogin = true;
+                        steupUser();
+                        mMesCount.hide();
+                    }
+                    break;
+                case Constants.INTENT_ACTION_USER_CHANGE:
+                    requestData(true);
+                    break;
+                case Constants.INTENT_ACTION_NOTICE:
+                    setNotice();
+                    break;
             }
         }
     };
@@ -133,7 +134,8 @@ public class MyInformationFragment extends BaseFragment {
 
         @Override
         public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                Throwable arg3) {}
+                              Throwable arg3) {
+        }
     };
 
     private void steupUser() {
@@ -169,9 +171,10 @@ public class MyInformationFragment extends BaseFragment {
             int reviewCount = notice.getReviewCount();// 评论
             int newFansCount = notice.getNewFansCount();// 新粉丝
             int newLikeCount = notice.getNewLikeCount();// 获得点赞
-            int activeCount = atmeCount + reviewCount + msgCount + newFansCount + newLikeCount;// 信息总数
+            int activeCount = atmeCount + reviewCount + msgCount + newFansCount + newLikeCount;//
+            // 信息总数
             if (activeCount > 0) {
-                mMesCount.setText(activeCount + "");
+                mMesCount.setText(String.format("%d", activeCount));
                 mMesCount.show();
             } else {
                 mMesCount.hide();
@@ -190,10 +193,10 @@ public class MyInformationFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater,
-            @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my_information,
                 container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         initView(view);
         return view;
     }
@@ -262,7 +265,8 @@ public class MyInformationFragment extends BaseFragment {
         mIvAvatar.setAvatarUrl(mInfo.getPortrait());
         mTvName.setText(mInfo.getName());
         mIvGender
-                .setImageResource(StringUtils.toInt(mInfo.getGender()) != 2 ? R.drawable.userinfo_icon_male
+                .setImageResource(StringUtils.toInt(mInfo.getGender()) != 2 ? R.drawable
+                        .userinfo_icon_male
                         : R.drawable.userinfo_icon_female);
         mTvScore.setText(String.valueOf(mInfo.getScore()));
         mTvFavorite.setText(String.valueOf(mInfo.getFavoritecount()));
@@ -344,7 +348,7 @@ public class MyInformationFragment extends BaseFragment {
         private final String key;
 
         private SaveCacheTask(Context context, Serializable seri, String key) {
-            mContext = new WeakReference<Context>(context);
+            mContext = new WeakReference<>(context);
             this.seri = seri;
             this.key = key;
         }
@@ -365,43 +369,43 @@ public class MyInformationFragment extends BaseFragment {
         }
         final int id = v.getId();
         switch (id) {
-        case R.id.iv_avatar:
-            UIHelper.showSimpleBack(getActivity(),
-                    SimpleBackPage.MY_INFORMATION_DETAIL);
-            break;
-        case R.id.iv_qr_code:
-            showMyQrCode();
-            break;
-        case R.id.ly_following:
-            UIHelper.showFriends(getActivity(), AppContext.getInstance()
-                    .getLoginUid(), 0);
-            break;
-        case R.id.ly_follower:
-            UIHelper.showFriends(getActivity(), AppContext.getInstance()
-                    .getLoginUid(), 1);
-            break;
-        case R.id.ly_favorite:
-            UIHelper.showUserFavorite(getActivity(), AppContext.getInstance()
-                    .getLoginUid());
-            break;
-        case R.id.rl_message:
-            UIHelper.showMyMes(getActivity());
-            setNoticeReaded();
-            break;
-        case R.id.rl_team:
-            UIHelper.showTeamMainActivity(getActivity());
-            break;
-        case R.id.rl_blog:
-            UIHelper.showUserBlog(getActivity(), AppContext.getInstance()
-                    .getLoginUid());
-            break;
-        case R.id.rl_user_center:
-            UIHelper.showUserCenter(getActivity(), AppContext.getInstance()
-                    .getLoginUid(), AppContext.getInstance().getLoginUser()
-                    .getName());
-            break;
-        default:
-            break;
+            case R.id.iv_avatar:
+                UIHelper.showSimpleBack(getActivity(),
+                        SimpleBackPage.MY_INFORMATION_DETAIL);
+                break;
+            case R.id.iv_qr_code:
+                showMyQrCode();
+                break;
+            case R.id.ly_following:
+                UIHelper.showFriends(getActivity(), AppContext.getInstance()
+                        .getLoginUid(), 0);
+                break;
+            case R.id.ly_follower:
+                UIHelper.showFriends(getActivity(), AppContext.getInstance()
+                        .getLoginUid(), 1);
+                break;
+            case R.id.ly_favorite:
+                UIHelper.showUserFavorite(getActivity(), AppContext.getInstance()
+                        .getLoginUid());
+                break;
+            case R.id.rl_message:
+                UIHelper.showMyMes(getActivity());
+                setNoticeReaded();
+                break;
+            case R.id.rl_team:
+                UIHelper.showTeamMainActivity(getActivity());
+                break;
+            case R.id.rl_blog:
+                UIHelper.showUserBlog(getActivity(), AppContext.getInstance()
+                        .getLoginUid());
+                break;
+            case R.id.rl_user_center:
+                UIHelper.showUserCenter(getActivity(), AppContext.getInstance()
+                        .getLoginUid(), AppContext.getInstance().getLoginUser()
+                        .getName());
+                break;
+            default:
+                break;
         }
     }
 
@@ -411,7 +415,8 @@ public class MyInformationFragment extends BaseFragment {
     }
 
     @Override
-    public void initData() {}
+    public void initData() {
+    }
 
     private void setNoticeReaded() {
         mMesCount.setText("");

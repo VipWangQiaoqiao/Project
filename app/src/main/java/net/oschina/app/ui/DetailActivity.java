@@ -127,7 +127,7 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
                 .beginTransaction();
         trans.replace(R.id.container, fragment);
         trans.commitAllowingStateLoss();
-        if (fragment instanceof OnSendClickListener) {
+        if (fragment != null && fragment instanceof OnSendClickListener) {
             currentFragment = (OnSendClickListener) fragment;
         } else {
             currentFragment = new OnSendClickListener() {

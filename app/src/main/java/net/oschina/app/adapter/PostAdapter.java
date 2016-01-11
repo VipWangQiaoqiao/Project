@@ -15,7 +15,7 @@ import net.oschina.app.util.ThemeSwitchUtils;
 import net.oschina.app.widget.AvatarView;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 
 /**
  * post（讨论区帖子）适配器
@@ -27,22 +27,22 @@ public class PostAdapter extends ListBaseAdapter<Post> {
 
     static class ViewHolder {
 
-        @InjectView(R.id.tv_title)
+        @Bind(R.id.tv_title)
         TextView title;
-        @InjectView(R.id.tv_description)
+        @Bind(R.id.tv_description)
         TextView description;
-        @InjectView(R.id.tv_author)
+        @Bind(R.id.tv_author)
         TextView author;
-        @InjectView(R.id.tv_date)
+        @Bind(R.id.tv_date)
         TextView time;
-        @InjectView(R.id.tv_count)
+        @Bind(R.id.tv_count)
         TextView comment_count;
 
-        @InjectView(R.id.iv_face)
+        @Bind(R.id.iv_face)
         public AvatarView face;
 
         public ViewHolder(View view) {
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
         }
     }
 

@@ -45,7 +45,7 @@ import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
-import org.kymjs.kjframe.KJBitmap;
+import org.kymjs.kjframe.Core;
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
 import org.kymjs.kjframe.bitmap.BitmapCreate;
 import org.kymjs.kjframe.bitmap.DiskImageRequest;
@@ -60,7 +60,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Bind;
 
 public class TweetPubFragment extends BaseFragment implements
         OnEmojiClickListener {
@@ -81,28 +81,28 @@ public class TweetPubFragment extends BaseFragment implements
 
     private String fromSharedTextContent = "";
 
-    @InjectView(R.id.ib_emoji_keyboard)
+    @Bind(R.id.ib_emoji_keyboard)
     ImageButton mIbEmoji;
 
-    @InjectView(R.id.ib_picture)
+    @Bind(R.id.ib_picture)
     ImageButton mIbPicture;
 
-    @InjectView(R.id.ib_mention)
+    @Bind(R.id.ib_mention)
     ImageButton mIbMention;
 
-    @InjectView(R.id.ib_trend_software)
+    @Bind(R.id.ib_trend_software)
     ImageButton mIbTrendSoftware;
 
-    @InjectView(R.id.tv_clear)
+    @Bind(R.id.tv_clear)
     TextView mTvClear;
 
-    @InjectView(R.id.rl_img)
+    @Bind(R.id.rl_img)
     View mLyImage;
 
-    @InjectView(R.id.iv_img)
+    @Bind(R.id.iv_img)
     ImageView mIvImage;
 
-    @InjectView(R.id.et_content)
+    @Bind(R.id.et_content)
     EditText mEtInput;
 
     private MenuItem mSendMenu;
@@ -113,8 +113,6 @@ public class TweetPubFragment extends BaseFragment implements
 
     private String theLarge, theThumbnail;
     private File imgFile;
-
-    private final KJBitmap kjb = new KJBitmap();
 
     private final Handler handler = new Handler() {
         @Override
@@ -277,7 +275,7 @@ public class TweetPubFragment extends BaseFragment implements
         if (!StringUtils.isEmpty(url)) {
             final Message msg = Message.obtain();
             msg.what = 1;
-            byte[] cache = kjb.getCache(url);
+            byte[] cache = Core.getKJBitmap().getCache(url);
             msg.obj = BitmapFactory.decodeByteArray(cache, 0, cache.length);
             if (msg.obj == null) {
                 DiskImageRequest req = new DiskImageRequest();
@@ -306,7 +304,7 @@ public class TweetPubFragment extends BaseFragment implements
     @Override
     public void initView(View view) {
         super.initView(view);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
         mIbEmoji.setOnClickListener(this);
         mIbPicture.setOnClickListener(this);

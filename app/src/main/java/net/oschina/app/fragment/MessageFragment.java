@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
-import cz.msebera.android.httpclient.Header;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -36,6 +35,8 @@ import net.oschina.app.viewpagerfragment.NoticeViewPagerFragment;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
+
+import cz.msebera.android.httpclient.Header;
 
 public class MessageFragment extends BaseListFragment<Messages> implements
         OnItemLongClickListener {
@@ -98,8 +99,7 @@ public class MessageFragment extends BaseListFragment<Messages> implements
 
     @Override
     protected MessageList parseList(InputStream is) throws Exception {
-        MessageList list = XmlUtils.toBean(MessageList.class, is);
-        return list;
+        return XmlUtils.toBean(MessageList.class, is);
     }
 
     @Override
@@ -157,19 +157,18 @@ public class MessageFragment extends BaseListFragment<Messages> implements
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
-        Messages message = (Messages) mAdapter.getItem(position);
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Messages message = mAdapter.getItem(position);
         if (message != null)
             UIHelper.showMessageDetail(getActivity(), message.getFriendId(),
                     message.getFriendName());
     }
 
     @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view,
-            int position, long id) {
-        final Messages message = (Messages) mAdapter.getItem(position);
-        DialogHelp.getSelectDialog(getActivity(), getResources().getStringArray(R.array.message_list_options), new DialogInterface.OnClickListener() {
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        final Messages message = mAdapter.getItem(position);
+        DialogHelp.getSelectDialog(getActivity(), getResources().getStringArray(R.array
+                .message_list_options), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 switch (i) {
@@ -231,7 +230,8 @@ public class MessageFragment extends BaseListFragment<Messages> implements
         }
 
         @Override
-        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable
+                error) {
             AppContext.showToastShort(R.string.tip_delete_faile);
             hideWaitDialog();
         }

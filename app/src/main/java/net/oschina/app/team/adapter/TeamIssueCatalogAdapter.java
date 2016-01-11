@@ -1,14 +1,16 @@
 package net.oschina.app.team.adapter;
 
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.team.bean.TeamIssueCatalog;
 import net.oschina.app.util.StringUtils;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * TeamIssueCatalogAdapter.java
@@ -49,15 +51,15 @@ public class TeamIssueCatalogAdapter extends ListBaseAdapter<TeamIssueCatalog> {
 
     static class ViewHolder {
 
-	@InjectView(R.id.tv_team_issue_catalog_title)
+	@Bind(R.id.tv_team_issue_catalog_title)
 	TextView title;
-	@InjectView(R.id.tv_team_issue_catalog_desc)
+	@Bind(R.id.tv_team_issue_catalog_desc)
 	TextView description;
-	@InjectView(R.id.tv_team_issue_catalog_state)
+	@Bind(R.id.tv_team_issue_catalog_state)
 	TextView state;
 
 	public ViewHolder(View view) {
-	    ButterKnife.inject(this, view);
+	    ButterKnife.bind(this, view);
 	}
     }
 }

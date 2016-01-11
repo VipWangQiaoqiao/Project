@@ -1,5 +1,11 @@
 package net.oschina.app.adapter;
 
+import android.text.Html;
+import android.text.Spanned;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
@@ -9,13 +15,9 @@ import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
-import android.text.Html;
-import android.text.Spanned;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class MessageAdapter extends ListBaseAdapter<Messages> {
 
@@ -26,7 +28,7 @@ public class MessageAdapter extends ListBaseAdapter<Messages> {
 
     @Override
     protected View getRealView(int position, View convertView,
-            final ViewGroup parent) {
+                               final ViewGroup parent) {
         ViewHolder vh = null;
         if (convertView == null || convertView.getTag() == null) {
             convertView = getLayoutInflater(parent.getContext()).inflate(
@@ -65,21 +67,21 @@ public class MessageAdapter extends ListBaseAdapter<Messages> {
     }
 
     static class ViewHolder {
-        @InjectView(R.id.iv_avatar)
+        @Bind(R.id.iv_avatar)
         AvatarView avatar;
-        @InjectView(R.id.tv_name)
+        @Bind(R.id.tv_name)
         TextView name;
-        @InjectView(R.id.tv_sender)
+        @Bind(R.id.tv_sender)
         TextView sender;
-        @InjectView(R.id.tv_time)
+        @Bind(R.id.tv_time)
         TextView time;
-        @InjectView(R.id.tv_count)
+        @Bind(R.id.tv_count)
         TextView count;
-        @InjectView(R.id.tv_content)
+        @Bind(R.id.tv_content)
         TweetTextView content;
 
         ViewHolder(View view) {
-            ButterKnife.inject(this, view);
+            ButterKnife.bind(this, view);
         }
     }
 }
