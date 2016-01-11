@@ -143,7 +143,7 @@ public class DownloadService extends Service {
 		CharSequence tickerText = "准备下载";
 		long when = System.currentTimeMillis();
 		mNotification = new Notification(icon, tickerText, when);
-		;
+
 		// 放置在"正在运行"栏目中
 		mNotification.flags = Notification.FLAG_ONGOING_EVENT;
 
@@ -226,12 +226,13 @@ public class DownloadService extends Service {
 			byte buffer[] = new byte[1024];
 			int readsize = 0;
 			while ((readsize = is.read(buffer)) > 0) {
+
 				fos.write(buffer, 0, readsize);
 				totalSize += readsize;
 				// 为了防止频繁的通知导致应用吃紧，百分比增加10才通知一次
 				if ((downloadCount == 0)
-						|| (int) (totalSize * 100 / updateTotalSize) - 10 >= downloadCount) {
-					downloadCount += 10;
+						|| (int) (totalSize * 100 / updateTotalSize) - 4 > downloadCount) {
+					downloadCount += 4;
 					// 更新进度
 					Message msg = mHandler.obtainMessage();
 					msg.what = 1;
