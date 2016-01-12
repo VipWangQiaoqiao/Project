@@ -22,6 +22,7 @@ import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetsList;
 import net.oschina.app.interf.OnTabReselectListener;
+import net.oschina.app.ui.TweetActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
@@ -75,7 +76,7 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
         }
 
         @Override
-        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable 
+        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable
                 error) {
             AppContext.showToastShort(R.string.delete_faile);
         }
@@ -229,24 +230,44 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
     }
 
     private void handleLongClick(final Tweet tweet) {
-        String[] items = null;
+        String[] items;
         if (AppContext.getInstance().getLoginUid() == tweet.getAuthorid()) {
-            items = new String[]{getResources().getString(R.string.copy),
-                    getResources().getString(R.string.delete)};
+            items = new String[]{getString(R.string.copy),
+                    getString(R.string.repost),
+                    getString(R.string.delete)};
         } else {
-            items = new String[]{getResources().getString(R.string.copy)};
+            items = new String[]{getString(R.string.copy), getString(R.string.repost)};
         }
 
         DialogHelp.getSelectDialog(getActivity(), items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if (i == 0) {
-                    TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(tweet.getBody()));
-                } else if (i == 1) {
-                    handleDeleteTweet(tweet);
+
+                switch (i) {
+                    case 0:
+                        TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(tweet.getBody()));
+                        break;
+                    case 1:
+                        repostTweet(tweet);
+                        break;
+                    case 2:
+                        handleDeleteTweet(tweet);
+                        break;
                 }
             }
         }).show();
+    }
+
+    /**
+     * 转发动弹
+     */
+    private void repostTweet(final Tweet tweet) {
+        Intent intent = new Intent(getActivity(), TweetActivity.class);
+        intent.setAction(TweetActivity.FROM_REPOST);
+        intent.putExtra(Intent.EXTRA_TEXT, String.format("://@%s :%s", tweet.getAuthor(), tweet
+                .getBody()));
+        intent.putExtra(TweetActivity.REPOST_IMAGE_KEY, tweet.getImgBig());
+        startActivity(intent);
     }
 
     private void handleDeleteTweet(final Tweet tweet) {

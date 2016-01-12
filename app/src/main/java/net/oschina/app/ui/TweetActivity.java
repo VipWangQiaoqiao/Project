@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.fragment.TweetPubFragment;
@@ -19,7 +20,9 @@ import java.util.ArrayList;
 public class TweetActivity extends SimpleBackActivity {
     private TweetPubFragment currentFragment;
 
-    public static String FROM_KEY = "image_shared_key";
+    public static final String FROM_KEY = "image_shared_key";
+    public static final String FROM_REPOST = "from_repost";
+    public static final String REPOST_IMAGE_KEY = "repost_image";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,14 +54,24 @@ public class TweetActivity extends SimpleBackActivity {
         } else if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
             if (type.startsWith("image/")) {
                 handleSendMultipleImages(intent); // Handle multiple images
-                // being sent
             }
-        } else {
-            // Handle other intents, such as being started from the home screen
+        } else if (FROM_REPOST.equals(action)) {
+            handleRepost(intent);
         }
     }
 
-    void handleSendText(Intent intent) {
+    private void handleRepost(Intent intent) {
+        String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+        String sharedImage = intent.getStringExtra(REPOST_IMAGE_KEY);
+        if (!TextUtils.isEmpty(sharedText)) {
+            currentFragment.setContentText(sharedText);
+        }
+        if (!TextUtils.isEmpty(sharedImage)) {
+            currentFragment.setContentImage(sharedImage);
+        }
+    }
+
+    private void handleSendText(Intent intent) {
         String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
         String sharedTitle = intent.getStringExtra(Intent.EXTRA_TITLE);
         if (sharedText != null) {
@@ -66,14 +79,14 @@ public class TweetActivity extends SimpleBackActivity {
         }
     }
 
-    void handleSendImage(Intent intent) {
+    private void handleSendImage(Intent intent) {
         Uri imageUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
         if (imageUri != null) {
             currentFragment.setContentImage(getAbsoluteImagePath(imageUri));
         }
     }
 
-    void handleSendMultipleImages(Intent intent) {
+    private void handleSendMultipleImages(Intent intent) {
         ArrayList<Uri> imageUris = intent
                 .getParcelableArrayListExtra(Intent.EXTRA_STREAM);
         if (imageUris != null) {
