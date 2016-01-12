@@ -41,6 +41,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
     protected void onDestroy() {
         super.onDestroy();
         TDevice.hideSoftKeyboard(getCurrentFocus());
+        AppManager.getAppManager().finishActivity(this);
     }
 
     @Override

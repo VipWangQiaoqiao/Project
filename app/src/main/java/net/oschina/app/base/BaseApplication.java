@@ -1,5 +1,7 @@
 package net.oschina.app.base;
 
+import com.squareup.leakcanary.LeakCanary;
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -42,6 +44,7 @@ public class BaseApplication extends Application {
         super.onCreate();
         _context = getApplicationContext();
         _resource = _context.getResources();
+        LeakCanary.install(this);
     }
 
     public static synchronized BaseApplication context() {
