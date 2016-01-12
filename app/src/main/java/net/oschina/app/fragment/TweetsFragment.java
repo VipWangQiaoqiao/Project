@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -22,7 +23,7 @@ import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetsList;
 import net.oschina.app.interf.OnTabReselectListener;
-import net.oschina.app.ui.TweetActivity;
+import net.oschina.app.ui.TweetPubActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
@@ -262,12 +263,11 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
      * 转发动弹
      */
     private void repostTweet(final Tweet tweet) {
-        Intent intent = new Intent(getActivity(), TweetActivity.class);
-        intent.setAction(TweetActivity.FROM_REPOST);
-        intent.putExtra(Intent.EXTRA_TEXT, String.format("://@%s :%s", tweet.getAuthor(), tweet
-                .getBody()));
-        intent.putExtra(TweetActivity.REPOST_IMAGE_KEY, tweet.getImgBig());
-        startActivity(intent);
+        Bundle bundle = new Bundle();
+        bundle.putString(TweetPubActivity.REPOST_IMAGE_KEY, tweet.getImgBig());
+        bundle.putString(TweetPubActivity.REPOST_TEXT_KEY, String.format("//@%s :%s",
+                tweet.getAuthor(), Html.fromHtml(tweet.getBody()).toString()));
+        UIHelper.showTweetActivity(getActivity(), TweetPubActivity.ACTION_TYPE_REPOST, bundle);
     }
 
     private void handleDeleteTweet(final Tweet tweet) {

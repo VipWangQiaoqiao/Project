@@ -70,7 +70,7 @@ import net.oschina.app.ui.EventLocationActivity;
 import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.ui.LoginActivity;
 import net.oschina.app.ui.SimpleBackActivity;
-import net.oschina.app.ui.TweetActivity;
+import net.oschina.app.ui.TweetPubActivity;
 import net.oschina.app.viewpagerfragment.FriendsViewPagerFragment;
 import net.oschina.app.widget.AvatarView;
 
@@ -609,12 +609,12 @@ public class UIHelper {
         context.startActivity(intent);
     }
 
-    public static void showTweetActivity(Context context, SimpleBackPage page,
-                                         Bundle args) {
-        Intent intent = new Intent(context, TweetActivity.class);
-        intent.putExtra(TweetActivity.FROM_KEY, 1);
-        intent.putExtra(SimpleBackActivity.BUNDLE_KEY_ARGS, args);
-        intent.putExtra(SimpleBackActivity.BUNDLE_KEY_PAGE, page.getValue());
+    public static void showTweetActivity(Context context, int actionType, Bundle bundle) {
+        Intent intent = new Intent(context, TweetPubActivity.class);
+        intent.putExtra(TweetPubActivity.ACTION_TYPE, actionType);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
         context.startActivity(intent);
     }
 
@@ -724,7 +724,6 @@ public class UIHelper {
      * 发送App异常崩溃报告
      *
      * @param context
-     * @param crashReport
      */
     public static void sendAppCrashReport(final Context context) {
 
@@ -985,7 +984,7 @@ public class UIHelper {
      * @param replyComment
      */
     public static void sendBroadCastCommentChanged(Context context,
-                                                   boolean isBlog, int id, int catalog, int 
+                                                   boolean isBlog, int id, int catalog, int
                                                            operation,
                                                    Comment replyComment) {
         Intent intent = new Intent(Constants.INTENT_ACTION_COMMENT_CHANGED);
