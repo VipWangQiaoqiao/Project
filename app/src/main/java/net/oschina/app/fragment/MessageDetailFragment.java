@@ -256,7 +256,7 @@ public class MessageDetailFragment extends BaseListFragment<MessageDetail> imple
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view,
                                    int position, long id) {
-        final MessageDetail message = mAdapter.getItem(position);
+        final MessageDetail message = mAdapter.getItem(mAdapter.getDataSize() - position -1);
         DialogHelp.getSelectDialog(getActivity(), getResources().getStringArray(R.array
                 .message_list_options), new DialogInterface.OnClickListener() {
             @Override
