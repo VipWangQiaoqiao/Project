@@ -16,7 +16,6 @@ import android.widget.ImageView;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.SimpleBackPage;
-import net.oschina.app.fragment.TweetPubFragment;
 import net.oschina.app.team.fragment.NoteEditFragment;
 import net.oschina.app.util.UIHelper;
 
@@ -116,10 +115,7 @@ public class QuickOptionDialog extends Dialog implements
                 UIHelper.showScanActivity(getContext());
                 break;
             case R.id.ly_quick_option_note:
-                // UIHelper.showSimpleBack(getContext(), SimpleBackPage.FIND_USER);
                 onClickNote();
-                //UIHelper.showSimpleBack(getContext(), SimpleBackPage.FIND_USER);
-                // onClickNote();
                 break;
             default:
                 break;
@@ -131,21 +127,18 @@ public class QuickOptionDialog extends Dialog implements
     }
 
     private void onClickTweetPub(int id) {
-        Bundle bundle = new Bundle();
         int type = -1;
         switch (id) {
             case R.id.ly_quick_option_album:
-                type = TweetPubFragment.ACTION_TYPE_ALBUM;
+                type = TweetPubActivity.ACTION_TYPE_ALBUM;
                 break;
             case R.id.ly_quick_option_photo:
-                type = TweetPubFragment.ACTION_TYPE_PHOTO;
+                type = TweetPubActivity.ACTION_TYPE_PHOTO;
                 break;
             default:
                 break;
         }
-        bundle.putInt(TweetPubFragment.ACTION_TYPE, type);
-        UIHelper.showTweetActivity(getContext(), SimpleBackPage.TWEET_PUB,
-                bundle);
+        UIHelper.showTweetActivity(getContext(), type, null);
     }
 
     private void onClickNote() {

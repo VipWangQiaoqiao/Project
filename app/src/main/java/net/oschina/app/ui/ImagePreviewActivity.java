@@ -19,8 +19,6 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.RecyclingPagerAdapter;
 import net.oschina.app.base.BaseActivity;
-import net.oschina.app.bean.SimpleBackPage;
-import net.oschina.app.fragment.TweetPubFragment;
 import net.oschina.app.ui.dialog.ImageMenuDialog;
 import net.oschina.app.ui.dialog.ImageMenuDialog.OnMenuClickListener;
 import net.oschina.app.util.TDevice;
@@ -149,8 +147,8 @@ public class ImagePreviewActivity extends BaseActivity implements
         if (mAdapter != null && mAdapter.getCount() > 0) {
             String imgUrl = mAdapter.getItem(mCurrentPostion);
             Bundle bundle = new Bundle();
-            bundle.putString(TweetPubFragment.FROM_IMAGEPAGE_KEY, imgUrl);
-            UIHelper.showSimpleBack(this, SimpleBackPage.TWEET_PUB, bundle);
+            bundle.putString(TweetPubActivity.REPOST_IMAGE_KEY, imgUrl);
+            UIHelper.showTweetActivity(this, TweetPubActivity.ACTION_TYPE_REPOST, bundle);
             finish();
         }
     }

@@ -16,7 +16,6 @@ import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.emoji.OnSendClickListener;
 import net.oschina.app.fragment.MessageDetailFragment;
-import net.oschina.app.fragment.TweetPubFragment;
 import net.oschina.app.fragment.TweetsFragment;
 import net.oschina.app.util.UIHelper;
 
@@ -104,13 +103,13 @@ public class SimpleBackActivity extends BaseActivity implements
                 break;
             case R.id.chat_friend_home:
                 if (mFragment.get() instanceof MessageDetailFragment) {
-                    ((MessageDetailFragment)mFragment.get()).showFriendUserCenter();
+                    ((MessageDetailFragment) mFragment.get()).showFriendUserCenter();
                 } else {
                     return super.onOptionsItemSelected(item);
                 }
                 break;
-        default:
-            break;
+            default:
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -119,7 +118,7 @@ public class SimpleBackActivity extends BaseActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         if (mFragment.get() instanceof TweetsFragment) {
             getMenuInflater().inflate(R.menu.pub_topic_menu, menu);
-        }else if (mFragment.get() instanceof MessageDetailFragment){
+        } else if (mFragment.get() instanceof MessageDetailFragment) {
             getMenuInflater().inflate(R.menu.chat_menu, menu);
         }
         return super.onCreateOptionsMenu(menu);
@@ -130,11 +129,9 @@ public class SimpleBackActivity extends BaseActivity implements
      */
     private void sendTopic() {
         Bundle bundle = new Bundle();
-        bundle.putInt(TweetPubFragment.ACTION_TYPE,
-                TweetPubFragment.ACTION_TYPE_TOPIC);
-        bundle.putString("tweet_topic", "#"
+        bundle.putString(TweetPubActivity.REPOST_TEXT_KEY, "#"
                 + ((TweetsFragment) mFragment.get()).getTopic() + "# ");
-        UIHelper.showTweetActivity(this, SimpleBackPage.TWEET_PUB, bundle);
+        UIHelper.showTweetActivity(this, TweetPubActivity.ACTION_TYPE_TOPIC, bundle);
     }
 
     @Override
@@ -165,13 +162,16 @@ public class SimpleBackActivity extends BaseActivity implements
     }
 
     @Override
-    public void onClick(View v) {}
+    public void onClick(View v) {
+    }
 
     @Override
-    public void initView() {}
+    public void initView() {
+    }
 
     @Override
-    public void initData() {}
+    public void initData() {
+    }
 
     @Override
     public void onClickSendButton(Editable str) {
@@ -182,5 +182,6 @@ public class SimpleBackActivity extends BaseActivity implements
     }
 
     @Override
-    public void onClickFlagButton() {}
+    public void onClickFlagButton() {
+    }
 }
