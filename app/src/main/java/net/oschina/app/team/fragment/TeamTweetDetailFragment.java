@@ -35,7 +35,7 @@ import net.oschina.app.team.bean.TeamActiveDetail;
 import net.oschina.app.team.bean.TeamRepliesList;
 import net.oschina.app.team.bean.TeamReply;
 import net.oschina.app.ui.DetailActivity;
-import net.oschina.app.ui.ImagePreviewActivity;
+import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.BitmapHelper;
 import net.oschina.app.util.DialogHelp;
@@ -186,8 +186,7 @@ public class TeamTweetDetailFragment extends
         pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImagePreviewActivity.showImagePrivew(aty, 0,
-                        new String[]{realUrl});
+                OSCPhotosActivity.showImagePrivew(aty, realUrl);
             }
         });
     }

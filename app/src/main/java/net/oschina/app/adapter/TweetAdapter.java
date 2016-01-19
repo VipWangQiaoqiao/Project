@@ -24,7 +24,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.emoji.InputHelper;
-import net.oschina.app.ui.ImagePreviewActivity;
+import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.KJAnimations;
@@ -79,7 +79,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
                     if (index > 0) {
                         url = url.substring(0, index);
                     }
-                    ImagePreviewActivity.showImagePrivew(v.getContext(), 0, new String[]{url});
+                    OSCPhotosActivity.showImagePrivew(v.getContext(), url);
                 }
             });
         }

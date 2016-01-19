@@ -10,7 +10,7 @@ import android.widget.TextView;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.team.bean.TeamActive;
-import net.oschina.app.ui.ImagePreviewActivity;
+import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.util.BitmapHelper;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.AvatarView;
@@ -143,8 +143,7 @@ public class TeamActiveAdapter extends ListBaseAdapter<TeamActive> {
         pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImagePreviewActivity.showImagePrivew(context, 0,
-                        new String[]{url});
+                OSCPhotosActivity.showImagePrivew(context, url);
             }
         });
     }

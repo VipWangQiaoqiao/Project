@@ -21,7 +21,6 @@ import android.widget.TextView;
 import net.oschina.app.R;
 import net.oschina.app.bean.Entity;
 import net.oschina.app.emoji.InputHelper;
-import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.widget.MyLinkMovementMethod;

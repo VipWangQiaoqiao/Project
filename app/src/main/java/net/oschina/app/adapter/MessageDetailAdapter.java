@@ -16,6 +16,7 @@ import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.MessageDetail;
 import net.oschina.app.emoji.InputHelper;
+import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.util.ChatImageDisplayer;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -229,7 +230,7 @@ public class MessageDetailAdapter extends ListBaseAdapter<MessageDetail> {
         void viewImage(View v) {
             if (v.getTag() != null) {
                 String url = (String) v.getTag();
-                UIHelper.showImagePreview(v.getContext(), new String[]{url});
+                OSCPhotosActivity.showImagePrivew(v.getContext(), url);
             }
         }
 

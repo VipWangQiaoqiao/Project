@@ -20,7 +20,7 @@ import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Active;
 import net.oschina.app.bean.Active.ObjectReply;
 import net.oschina.app.emoji.InputHelper;
-import net.oschina.app.ui.ImagePreviewActivity;
+import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.util.BitmapHelper;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.PlatfromUtil;
@@ -172,8 +172,7 @@ public class ActiveAdapter extends ListBaseAdapter {
         vh.pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImagePreviewActivity.showImagePrivew(parent.getContext(), 0,
-                        new String[]{getOriginalUrl(item.getTweetimage())});
+                OSCPhotosActivity.showImagePrivew(parent.getContext(), getOriginalUrl(item.getTweetimage()));
             }
         });
     }

@@ -145,10 +145,6 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
-            android:name=".ui.ImagePreviewActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".ui.SimpleBackActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"/>
@@ -180,6 +176,10 @@
             android:label="@string/actionbar_title_select_friends"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden"/>
+        <activity android:name=".ui.OSCPhotosActivity"
+            android:screenOrientation="portrait"
+            android:label=""
+            android:theme="@style/ThemePhotoBrowse"/>
 
         <service android:name=".LogUploadService"/>
         <service android:name=".service.ServerTaskService">
@@ -245,10 +245,6 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Transparent"/>
-        <activity android:name=".TestAActivity">
-        </activity>
-        <activity android:name=".TestActivity">
-        </activity>
     </application>
 
 </manifest>

@@ -67,8 +67,8 @@ import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.team.ui.TeamNewIssueActivity;
 import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.EventLocationActivity;
-import net.oschina.app.ui.ImagePreviewActivity;
 import net.oschina.app.ui.LoginActivity;
+import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.ui.TweetActivity;
 import net.oschina.app.viewpagerfragment.FriendsViewPagerFragment;
@@ -373,7 +373,7 @@ public class UIHelper {
             @JavascriptInterface
             public void showImagePreview(String bigImageUrl) {
                 if (bigImageUrl != null && !StringUtils.isEmpty(bigImageUrl)) {
-                    UIHelper.showImagePreview(cxt, new String[]{bigImageUrl});
+                    OSCPhotosActivity.showImagePrivew(cxt, bigImageUrl);
                 }
             }
         }, "mWebViewImageListener");
@@ -453,7 +453,7 @@ public class UIHelper {
                 JSONObject json = new JSONObject(realUrl);
                 int idx = json.optInt("index");
                 String[] urls = json.getString("urls").split(",");
-                showImagePreview(context, idx, urls);
+                OSCPhotosActivity.showImagePrivew(context, urls[0]);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -513,8 +513,7 @@ public class UIHelper {
     public static void openBrowser(Context context, String url) {
 
         if (StringUtils.isImgUrl(url)) {
-            ImagePreviewActivity.showImagePrivew(context, 0,
-                    new String[]{url});
+            OSCPhotosActivity.showImagePrivew(context, url);
             return;
         }
 
@@ -558,17 +557,6 @@ public class UIHelper {
             e.printStackTrace();
             AppContext.showToastShort("无法浏览此网页");
         }
-    }
-
-    @JavascriptInterface
-    public static void showImagePreview(Context context, String[] imageUrls) {
-        ImagePreviewActivity.showImagePrivew(context, 0, imageUrls);
-    }
-
-    @JavascriptInterface
-    public static void showImagePreview(Context context, int index,
-                                        String[] imageUrls) {
-        ImagePreviewActivity.showImagePrivew(context, index, imageUrls);
     }
 
     public static void showSimpleBackForResult(Fragment fragment,
@@ -724,7 +712,6 @@ public class UIHelper {
      * 发送App异常崩溃报告
      *
      * @param context
-     * @param crashReport
      */
     public static void sendAppCrashReport(final Context context) {
 
@@ -807,7 +794,7 @@ public class UIHelper {
             return;
         }
         String url = AvatarView.getLargeAvatar(avatarUrl);
-        ImagePreviewActivity.showImagePrivew(context, 0, new String[]{url});
+        OSCPhotosActivity.showImagePrivew(context, url);
     }
 
     /**
