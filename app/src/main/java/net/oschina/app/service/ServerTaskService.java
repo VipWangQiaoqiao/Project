@@ -9,6 +9,7 @@ import android.os.Looper;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.OperationResponseHandler;
 import net.oschina.app.api.remote.OSChinaApi;
@@ -111,6 +112,8 @@ public class ServerTaskService extends IntentService {
             final int id = tweet.getId();
             Result res = XmlUtils.toBean(ResultBean.class, is).getResult();
             if (res.OK()) {
+                // 发布成功之后，删除草稿
+                AppContext.setTweetDraft("");
                 notifySimpleNotifycation(id,
                         getString(R.string.tweet_publish_success),
                         getString(R.string.tweet_public),
