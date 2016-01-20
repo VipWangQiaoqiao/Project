@@ -1,8 +1,5 @@
 package net.oschina.app.widget;
 
-import net.oschina.app.util.TLog;
-
-import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -76,8 +73,6 @@ public class TouchImageView extends ImageView {
     private Matrix matrix, prevMatrix;
 
     private static enum State {NONE, DRAG, ZOOM, FLING, ANIMATE_ZOOM}
-
-    ;
     private State state;
 
     private float minScale;
@@ -582,38 +577,13 @@ public class TouchImageView extends ImageView {
         int drawableWidth = drawable.getIntrinsicWidth();
         int drawableHeight = drawable.getIntrinsicHeight();
 
+//        TLog.log("imageView", "viewWidth=" + viewWidth + ":viewHeight" + viewHeight + "drawableWidth=" + drawableWidth + ":drawableHeight" + drawableHeight);
+
         //
         // Scale image for view
         //
         float scaleX = (float) viewWidth / drawableWidth;
-        float scaleY = (float) viewHeight / drawableHeight;
-
-        switch (mScaleType) {
-            case CENTER:
-                scaleX = scaleY = 1;
-                break;
-
-            case CENTER_CROP:
-                scaleX = scaleY = Math.max(scaleX, scaleY);
-                break;
-
-            case CENTER_INSIDE:
-                scaleX = scaleY = Math.min(1, Math.min(scaleX, scaleY));
-
-            case FIT_CENTER:
-                scaleX = scaleY = Math.min(scaleX, scaleY);
-                break;
-
-            case FIT_XY:
-                break;
-
-            default:
-                //
-                // FIT_START and FIT_END not supported
-                //
-                throw new UnsupportedOperationException("TouchImageView does not support FIT_START or FIT_END");
-
-        }
+        float scaleY = scaleX;
 
         //
         // Center the image
@@ -627,7 +597,12 @@ public class TouchImageView extends ImageView {
             // Stretch and center image to fit view
             //
             matrix.setScale(scaleX, scaleY);
-            matrix.postTranslate(redundantXSpace / 2, redundantYSpace / 2);
+            if (matchViewHeight > viewHeight) {
+                matrix.postTranslate(0, 0);
+            } else {
+                matrix.postTranslate(redundantXSpace / 2, redundantYSpace / 2);
+            }
+
             normalizedScale = 1;
 
         } else {
@@ -904,99 +879,99 @@ public class TouchImageView extends ImageView {
 
             setImageMatrix(matrix);
 
-            if (!isZoomed()) {
-
-                final int y = (int) event.getRawY();
-                final int x = (int) event.getRawX();
-
-                if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
-
-                    previousFingerPositionX = x;
-                    previousFingerPositionY = y;
-                    baseLayoutPosition = (int) getY();
-
-                } else if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
-
-
-                    int diffY = y - previousFingerPositionY;
-                    int diffX = x - previousFingerPositionX;
-
-                    int height = getHeight();
-
-                    if ( Math.abs(diffY) < (height / 4)) {
-                        float absDiff = Math.abs(diffY);
-                        float intervalHeight = height / 4;
-                        float alpha = 1 - (absDiff / intervalHeight);
-                        if (alpha < 0.2) {
-                            setBackgroundAlpha(0);
-                        } else {
-                            setBackgroundAlpha((int) (alpha * 255));
-                        }
-                    }
-
-                    if (direction == Direction.NONE) {
-                        if (Math.abs(diffX) > Math.abs(diffY)) {
-                            direction = Direction.LEFT_RIGHT;
-                        } else if (Math.abs(diffX) < Math.abs(diffY)) {
-                            direction = Direction.UP_DOWN;
-                        } else {
-                            direction = Direction.NONE;
-                        }
-                    }
-
-                    if (direction == Direction.UP_DOWN) {
-                        isScrollingUp = diffY <= 0;
-
-                        setY(baseLayoutPosition + diffY);
-                        requestLayout();
-                        return true;
-                    }
-
-                } else if (event.getActionMasked() == MotionEvent.ACTION_UP) {
-
-                    setBackgroundAlpha(255);
-
-                    if (direction == Direction.UP_DOWN) {
-
-                        if (isScrollingUp) {
-
-                            int height = getHeight();
-
-                            if (Math.abs(getY()) > (height / 4)) {
-
-                                if (listener != null) {
-                                    listener.OnLayoutClosed();
-                                }
-
-                            }
-
-                        } else {
-
-                            int height = getHeight();
-
-                            if (Math.abs(getY()) > (height / 4)) {
-                                if (listener != null) {
-                                    listener.OnLayoutClosed();
-                                }
-
-                            }
-
-                        }
-
-                        ObjectAnimator positionAnimator = ObjectAnimator.ofFloat(TouchImageView.this, "y", getY(), 0);
-                        positionAnimator.setDuration(300);
-                        positionAnimator.start();
-
-                        direction = Direction.NONE;
-                        return true;
-                    }
-
-                    direction = Direction.NONE;
-                }
-
-                return true;
-
-            }
+//            if (bounds) {
+//
+//                final int y = (int) event.getRawY();
+//                final int x = (int) event.getRawX();
+//
+//                if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+//
+//                    previousFingerPositionX = x;
+//                    previousFingerPositionY = y;
+//                    baseLayoutPosition = (int) getY();
+//
+//                } else if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
+//
+//
+//                    int diffY = y - previousFingerPositionY;
+//                    int diffX = x - previousFingerPositionX;
+//
+//                    int height = getHeight();
+//
+//                    if ( Math.abs(diffY) < (height / 4)) {
+//                        float absDiff = Math.abs(diffY);
+//                        float intervalHeight = height / 4;
+//                        float alpha = 1 - (absDiff / intervalHeight);
+//                        if (alpha < 0.2) {
+//                            setBackgroundAlpha(0);
+//                        } else {
+//                            setBackgroundAlpha((int) (alpha * 255));
+//                        }
+//                    }
+//
+//                    if (direction == Direction.NONE) {
+//                        if (Math.abs(diffX) > Math.abs(diffY)) {
+//                            direction = Direction.LEFT_RIGHT;
+//                        } else if (Math.abs(diffX) < Math.abs(diffY)) {
+//                            direction = Direction.UP_DOWN;
+//                        } else {
+//                            direction = Direction.NONE;
+//                        }
+//                    }
+//
+//                    if (direction == Direction.UP_DOWN) {
+//                        isScrollingUp = diffY <= 0;
+//
+//                        setY(baseLayoutPosition + diffY);
+//                        requestLayout();
+//                        return true;
+//                    }
+//
+//                } else if (event.getActionMasked() == MotionEvent.ACTION_UP) {
+//
+//                    setBackgroundAlpha(255);
+//
+//                    if (direction == Direction.UP_DOWN) {
+//
+//                        if (isScrollingUp) {
+//
+//                            int height = getHeight();
+//
+//                            if (Math.abs(getY()) > (height / 4)) {
+//
+//                                if (listener != null) {
+//                                    listener.OnLayoutClosed();
+//                                }
+//
+//                            }
+//
+//                        } else {
+//
+//                            int height = getHeight();
+//
+//                            if (Math.abs(getY()) > (height / 4)) {
+//                                if (listener != null) {
+//                                    listener.OnLayoutClosed();
+//                                }
+//
+//                            }
+//
+//                        }
+//
+//                        ObjectAnimator positionAnimator = ObjectAnimator.ofFloat(TouchImageView.this, "y", getY(), 0);
+//                        positionAnimator.setDuration(300);
+//                        positionAnimator.start();
+//
+//                        direction = Direction.NONE;
+//                        return true;
+//                    }
+//
+//                    direction = Direction.NONE;
+//                }
+//
+//                return true;
+//
+//            }
 
             //
             // User-defined OnTouchListener
