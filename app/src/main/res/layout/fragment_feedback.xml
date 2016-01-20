@@ -88,7 +88,6 @@
 		android:layout_marginLeft="5dp"
 		android:layout_marginRight="5dp"
 		android:layout_marginTop="15dp"
-		android:gravity="center_horizontal"
 		android:shadowColor="#ffffffff"
 		android:shadowDx="1.0"
 		android:shadowDy="1.0"
