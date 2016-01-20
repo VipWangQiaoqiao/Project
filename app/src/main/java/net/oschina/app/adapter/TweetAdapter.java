@@ -45,8 +45,6 @@ import cz.msebera.android.httpclient.Header;
 
 public class TweetAdapter extends ListBaseAdapter<Tweet> {
 
-    
-
     static class ViewHolder {
         @Bind(R.id.tv_tweet_name)
         TextView author;
@@ -71,17 +69,6 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
-            image.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String url = (String) v.getTag();
-                    int index = url.lastIndexOf("?");
-                    if (index > 0) {
-                        url = url.substring(0, index);
-                    }
-                    OSCPhotosActivity.showImagePrivew(v.getContext(), url);
-                }
-            });
         }
     }
 
@@ -160,7 +147,20 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
 
         vh.commentcount.setText(tweet.getCommentCount());
 
-        showTweetImage(vh, tweet.getImgBig());
+        if (TextUtils.isEmpty(tweet.getImgSmall())) {
+            vh.image.setVisibility(View.GONE);
+        } else {
+            vh.image.setVisibility(View.VISIBLE);
+            new Core.Builder().view(vh.image).size(300, 300).url(tweet.getImgSmall() + "?300X300")
+                    .loadBitmapRes(R.drawable.pic_bg).doTask();
+            vh.image.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    OSCPhotosActivity.showImagePrivew(context, tweet.getImgBig());
+                }
+            });
+        }
+
         tweet.setLikeUsers(context, vh.likeUsers, true);
 
         if (tweet.getLikeUser() == null) {
@@ -235,19 +235,5 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
                         });
             }
         }).show();
-    }
-
-    /**
-     * 动态设置动弹列表图片显示规则
-     */
-    private void showTweetImage(final ViewHolder vh, final String imgBig) {
-        if (!TextUtils.isEmpty(imgBig)) {
-            vh.image.setTag(imgBig);
-            new Core.Builder().view(vh.image).size(300, 300).url(imgBig + "?300X300")
-                    .loadBitmapRes(R.drawable.pic_bg).doTask();
-            vh.image.setVisibility(AvatarView.VISIBLE);
-        } else {
-            vh.image.setVisibility(AvatarView.GONE);
-        }
     }
 }
