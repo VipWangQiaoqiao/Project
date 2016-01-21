@@ -102,6 +102,11 @@ public class TweetPubActivity extends BaseActivity {
     }
 
     @Override
+    protected boolean hasBackButton() {
+        return true;
+    }
+
+    @Override
     public void initView() {
         respondExternal(getIntent());
         mIbEmoji.setOnClickListener(this);
@@ -202,26 +207,27 @@ public class TweetPubActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        final String tweet = mEtInput.getText().toString();
-        if (!TextUtils.isEmpty(tweet)) {
-            DialogHelp.getConfirmDialog(this, "是否保存为草稿?", new DialogInterface
-                    .OnClickListener() {
-
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    AppContext.setTweetDraft(tweet);
-                    finish();
-                }
-            }, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    finish();
-                }
-            }).show();
-        } else {
-            super.onBackPressed();
-        }
+        super.onBackPressed();
+//        final String tweet = mEtInput.getText().toString();
+//        if (!TextUtils.isEmpty(tweet)) {
+//            DialogHelp.getConfirmDialog(this, "是否保存为草稿?", new DialogInterface
+//                    .OnClickListener() {
+//
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    dialog.dismiss();
+//                    AppContext.setTweetDraft(tweet);
+//                    finish();
+//                }
+//            }, new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//                    finish();
+//                }
+//            }).show();
+//        } else {
+//            super.onBackPressed();
+//        }
     }
 
     /**
@@ -482,7 +488,7 @@ public class TweetPubActivity extends BaseActivity {
                 handleSubmit();
                 break;
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
     /**

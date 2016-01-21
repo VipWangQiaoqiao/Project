@@ -97,7 +97,7 @@
         </activity>
         <activity
             android:name=".ui.TweetPubActivity"
-            android:label="发送到动弹"
+            android:label="弹一弹"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.SEND"/>
