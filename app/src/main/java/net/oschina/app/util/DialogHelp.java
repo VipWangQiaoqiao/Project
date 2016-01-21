@@ -71,6 +71,32 @@ public class DialogHelp {
         return builder;
     }
 
+    public static AlertDialog.Builder getConfirmDialog(Context context,
+                                                       String message,
+                                                       String okString,
+                                                       String cancleString,
+                                                       DialogInterface.OnClickListener onOkClickListener,
+                                                       DialogInterface.OnClickListener onCancleClickListener) {
+        return getConfirmDialog(context, "", message, okString, cancleString, onOkClickListener, onCancleClickListener);
+    }
+
+    public static AlertDialog.Builder getConfirmDialog(Context context,
+                                                       String title,
+                                                       String message,
+                                                       String okString,
+                                                       String cancleString,
+                                                       DialogInterface.OnClickListener onOkClickListener,
+                                                       DialogInterface.OnClickListener onCancleClickListener) {
+        AlertDialog.Builder builder = getDialog(context);
+        if (!TextUtils.isEmpty(title)) {
+            builder.setTitle(title);
+        }
+        builder.setMessage(message);
+        builder.setPositiveButton(okString, onOkClickListener);
+        builder.setNegativeButton(cancleString, onCancleClickListener);
+        return builder;
+    }
+
     public static AlertDialog.Builder getSelectDialog(Context context, String title, String[] arrays, DialogInterface.OnClickListener onClickListener) {
         AlertDialog.Builder builder = getDialog(context);
         builder.setItems(arrays, onClickListener);
