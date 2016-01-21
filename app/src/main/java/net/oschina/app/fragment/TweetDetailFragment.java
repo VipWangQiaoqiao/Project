@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +37,7 @@ import net.oschina.app.bean.TweetDetail;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.emoji.OnSendClickListener;
 import net.oschina.app.ui.DetailActivity;
+import net.oschina.app.ui.TweetPubActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
@@ -51,19 +53,19 @@ import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.RecordButtonUtil;
 import net.oschina.app.widget.RecordButtonUtil.OnPlayListener;
 
-import cz.msebera.android.httpclient.Header;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.List;
 
+import cz.msebera.android.httpclient.Header;
+
 /***
  * 动弹详情，实际每个item显示的数据类型是Comment
- * 
+ * <p/>
  * TweetDetailFragment.java
- * 
+ *
  * @author 火蚁(http://my.oschina.net/u/253900)
- * 
  * @data 2015-1-28 上午11:48:41
  */
 public class TweetDetailFragment extends
@@ -92,7 +94,7 @@ public class TweetDetailFragment extends
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         outAty = (DetailActivity) getActivity();
         return super.onCreateView(inflater, container, savedInstanceState);
     }
@@ -121,7 +123,7 @@ public class TweetDetailFragment extends
 
     /**
      * 初始化声音动弹的录音View
-     * 
+     *
      * @param header
      */
     private void initSoundView(View header) {
@@ -201,9 +203,11 @@ public class TweetDetailFragment extends
     private void setLikeState() {
         if (mTweet != null) {
             if (mTweet.getIsLike() == 1) {
-                mTvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color.day_colorPrimary));
+                mTvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R
+                        .color.day_colorPrimary));
             } else {
-                mTvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color.gray));
+                mTvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R
+                        .color.gray));
             }
         }
     }
@@ -242,7 +246,7 @@ public class TweetDetailFragment extends
 
     /**
      * 添加图片放大支持
-     * 
+     *
      * @param body
      * @return
      */
@@ -257,7 +261,7 @@ public class TweetDetailFragment extends
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
+                            long id) {
         final Comment comment = mAdapter.getItem(position - 1);
         if (comment == null)
             return;
@@ -293,7 +297,7 @@ public class TweetDetailFragment extends
 
         @Override
         public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                Throwable arg3) {
+                              Throwable arg3) {
             hideWaitDialog();
             AppContext.showToastShort(R.string.comment_publish_faile);
         }
@@ -324,11 +328,11 @@ public class TweetDetailFragment extends
 
         @Override
         public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-
         }
 
         @Override
-        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable
+                error) {
             AppContext.showToastShort(R.string.delete_faile);
         }
     }
@@ -354,7 +358,7 @@ public class TweetDetailFragment extends
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view,
-            int position, long id) {
+                                   int position, long id) {
         if (position - 1 == -1) {
             return false;
         }
@@ -362,11 +366,12 @@ public class TweetDetailFragment extends
         if (item == null)
             return false;
         int itemsLen = item.getAuthorId() == AppContext.getInstance()
-                .getLoginUid() ? 2 : 1;
+                .getLoginUid() ? 3 : 2;
         String[] items = new String[itemsLen];
         items[0] = getResources().getString(R.string.copy);
-        if (itemsLen == 2) {
-            items[1] = getResources().getString(R.string.delete);
+        items[1] = getResources().getString(R.string.repost);
+        if (itemsLen == 3) {
+            items[2] = getResources().getString(R.string.delete);
         }
         DialogHelp.getSelectDialog(getActivity(), items, new DialogInterface.OnClickListener() {
             @Override
@@ -375,11 +380,25 @@ public class TweetDetailFragment extends
                     TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(item
                             .getContent()));
                 } else if (i == 1) {
+                    repostTweet(item, mTweet);
+                } else if (i == 2) {
                     handleDeleteComment(item);
                 }
             }
         }).show();
         return true;
+    }
+
+    /**
+     * 转发动弹
+     */
+    private void repostTweet(final Comment comment, final Tweet tweet) {
+        Bundle bundle = new Bundle();
+        bundle.putString(TweetPubActivity.REPOST_IMAGE_KEY, tweet.getImgBig());
+        bundle.putString(TweetPubActivity.REPOST_TEXT_KEY, String.format("//@%s :%s//@%s :%s",
+                comment.getAuthor(), comment.getContent(),
+                tweet.getAuthor(), Html.fromHtml(tweet.getBody()).toString()));
+        UIHelper.showTweetActivity(getActivity(), TweetPubActivity.ACTION_TYPE_REPOST, bundle);
     }
 
     @Override
@@ -437,11 +456,13 @@ public class TweetDetailFragment extends
         AsyncHttpResponseHandler handler = new AsyncHttpResponseHandler() {
 
             @Override
-            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {}
+            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+            }
 
             @Override
             public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                    Throwable arg3) {}
+                                  Throwable arg3) {
+            }
         };
         if (AppContext.getInstance().isLogin()) {
             if (mTweet.getIsLike() == 1) {
@@ -530,7 +551,8 @@ public class TweetDetailFragment extends
     }
 
     @Override
-    public void onClickFlagButton() {}
+    public void onClickFlagButton() {
+    }
 
     @Override
     public boolean onBackPressed() {

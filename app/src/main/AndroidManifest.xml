@@ -96,7 +96,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.TweetActivity"
+            android:name=".ui.TweetPubActivity"
             android:label="发送到动弹"
             android:screenOrientation="portrait">
             <intent-filter>

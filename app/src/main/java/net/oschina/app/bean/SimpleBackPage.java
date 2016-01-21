@@ -16,7 +16,6 @@ import net.oschina.app.fragment.SettingsFragment;
 import net.oschina.app.fragment.SettingsNotificationFragment;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
 import net.oschina.app.fragment.TweetLikeUsersFragment;
-import net.oschina.app.fragment.TweetPubFragment;
 import net.oschina.app.fragment.TweetRecordFragment;
 import net.oschina.app.fragment.TweetsFragment;
 import net.oschina.app.fragment.UserBlogFragment;
@@ -49,7 +48,7 @@ public enum SimpleBackPage {
 
     QUEST(2, R.string.actionbar_title_questions, QuestViewPagerFragment.class),
 
-    TWEET_PUB(3, R.string.actionbar_title_tweetpub, TweetPubFragment.class),
+//    TWEET_PUB(3, R.string.actionbar_title_tweetpub, TweetPubFragment.class),
 
     SOFTWARE_TWEETS(4, R.string.actionbar_title_softtweet,
             SoftWareTweetsFrament.class),

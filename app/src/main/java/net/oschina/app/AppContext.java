@@ -175,8 +175,7 @@ public class AppContext extends BaseApplication {
                 setProperty("user.pwd",
                         CyptoUtils.encode("oschinaApp", user.getPwd()));
                 setProperty("user.location", user.getLocation());
-                setProperty("user.followers",
-                        String.valueOf(user.getFollowers()));
+                setProperty("user.followers", String.valueOf(user.getFollowers()));
                 setProperty("user.fans", String.valueOf(user.getFans()));
                 setProperty("user.score", String.valueOf(user.getScore()));
                 setProperty("user.favoritecount",
