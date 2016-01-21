@@ -40,7 +40,6 @@ public abstract class BaseActivity extends AppCompatActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        TDevice.hideSoftKeyboard(getCurrentFocus());
         AppManager.getAppManager().finishActivity(this);
     }
 
@@ -145,6 +144,9 @@ public abstract class BaseActivity extends AppCompatActivity implements
     @Override
     protected void onPause() {
         super.onPause();
+        if (this.isFinishing()){
+            TDevice.hideSoftKeyboard(getCurrentFocus());
+        }
     }
 
     @Override

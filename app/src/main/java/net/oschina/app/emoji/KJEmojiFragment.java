@@ -21,6 +21,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,6 +33,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import net.oschina.app.R;
 import net.oschina.app.emoji.SoftKeyboardStateHelper.SoftKeyboardStateListener;
@@ -213,9 +215,9 @@ public class KJEmojiFragment extends Fragment implements
      */
     public void showSoftKeyboard() {
         mEt.requestFocus();
-        ((InputMethodManager) getActivity().getSystemService(
-                Context.INPUT_METHOD_SERVICE)).showSoftInput(mEt,
-                InputMethodManager.SHOW_FORCED);
+        ((InputMethodManager) getActivity()
+                .getSystemService(Context.INPUT_METHOD_SERVICE))
+                .showSoftInput(mEt, InputMethodManager.SHOW_FORCED);
     }
 
     public View getEmojiTitle() {
