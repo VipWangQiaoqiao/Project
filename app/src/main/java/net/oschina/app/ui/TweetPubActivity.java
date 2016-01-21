@@ -1,5 +1,6 @@
 package net.oschina.app.ui;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +11,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -47,13 +51,16 @@ import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.Bind;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * @author kymjs (http://www.kymjs.com/) on 1/12/16.
  */
-public class TweetPubActivity extends BaseActivity {
+public class TweetPubActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks {
 
     private static final int MAX_TEXT_LENGTH = 160;
     private static final int SELECT_FRIENDS_REEQUEST_CODE = 100;
@@ -177,7 +184,7 @@ public class TweetPubActivity extends BaseActivity {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ib_picture:
-                selectActive(ACTION_TYPE_ALBUM);
+                handleSelectPicture();
                 break;
             case R.id.ib_mention:
                 toSelectFriends();
@@ -205,29 +212,37 @@ public class TweetPubActivity extends BaseActivity {
         }
     }
 
+    private void handleSelectPicture() {
+        DialogHelp.getSelectDialog(this, getResources().getStringArray(R.array.choose_picture), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                selectActive(i);
+            }
+        }).show();
+    }
+
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-//        final String tweet = mEtInput.getText().toString();
-//        if (!TextUtils.isEmpty(tweet)) {
-//            DialogHelp.getConfirmDialog(this, "是否保存为草稿?", new DialogInterface
-//                    .OnClickListener() {
-//
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    dialog.dismiss();
-//                    AppContext.setTweetDraft(tweet);
-//                    finish();
-//                }
-//            }, new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    finish();
-//                }
-//            }).show();
-//        } else {
-//            super.onBackPressed();
-//        }
+        final String tweet = mEtInput.getText().toString();
+        if (!TextUtils.isEmpty(tweet)) {
+            DialogHelp.getConfirmDialog(this, "是否保存为草稿?", new DialogInterface
+                    .OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    AppContext.setTweetDraft(tweet);
+                    finish();
+                }
+            }, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            }).show();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     /**
@@ -302,10 +317,10 @@ public class TweetPubActivity extends BaseActivity {
         Bundle bundle;
         switch (option) {
             case ACTION_TYPE_ALBUM:
-                toAlbum();
+                showToAlbum();
                 break;
             case ACTION_TYPE_PHOTO:
-                toCamera();
+                showToCamera();
                 break;
             case ACTION_TYPE_TOPIC://同样处理
             case ACTION_TYPE_REPOST:
@@ -417,9 +432,21 @@ public class TweetPubActivity extends BaseActivity {
         mLyImage.setVisibility(View.VISIBLE);
     }
 
+    private final int RC_CAMERA_PERM = 123;
+    private final int RC_ALBUM_PERM = 124;
+
     /**
      * 进入相机
      */
+    @AfterPermissionGranted(RC_CAMERA_PERM)
+    private void showToCamera() {
+        if (EasyPermissions.hasPermissions(this, Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            toCamera();
+        } else {
+            EasyPermissions.requestPermissions(this, "", RC_CAMERA_PERM, Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
+    }
+
     private void toCamera() {
         // 判断是否挂载了SD卡
         String savePath = "";
@@ -452,10 +479,20 @@ public class TweetPubActivity extends BaseActivity {
                 ImageUtils.REQUEST_CODE_GETIMAGE_BYCAMERA);
     }
 
+    @AfterPermissionGranted(RC_ALBUM_PERM)
+    private void showToAlbum() {
+        if (EasyPermissions.hasPermissions(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            toAlbum();
+        } else {
+            EasyPermissions.requestPermissions(this, "", RC_ALBUM_PERM, Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
+    }
+
     /**
      * 进入图库
      * requestCode = REQUEST_CODE_GETIMAGE_BYSDCARD;
      */
+
     private void toAlbum() {
         Intent intent;
         if (Build.VERSION.SDK_INT < 19) {
@@ -553,5 +590,48 @@ public class TweetPubActivity extends BaseActivity {
             // 如果游标为空说明获取的已经是绝对路径了
             return uri.getPath();
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // EasyPermissions handles the request result.
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void onPermissionsGranted(List<String> perms) {
+
+    }
+
+    @Override
+    public void onPermissionsDenied(List<String> perms) {
+        int tipres = R.string.pub_tweet_required_album_tip;
+        if (perms.get(0).equals(Manifest.permission.CAMERA)) {
+            tipres = R.string.pub_tweet_required_camera_tip;
+        } else if (perms.get(0).equals(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            tipres = R.string.pub_tweet_required_album_tip;
+        }
+        String tip = getString(tipres);
+        // 权限被拒绝了
+        DialogHelp.getConfirmDialog(this,
+                "权限申请",
+                tip,
+                "去设置",
+                "取消",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(new Intent(Settings.ACTION_APPLICATION_SETTINGS));
+                    }
+                },
+                null).show();
+    }
+
+
+    @Override
+    public boolean shouldShowRequestPermissionRationale(String permission) {
+        return false;
     }
 }

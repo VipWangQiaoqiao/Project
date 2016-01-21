@@ -348,7 +348,6 @@ public class MyInformationFragment extends BaseFragment {
     @Override
     public void onClick(View v) {
         if (mIsWatingLogin) {
-            AppContext.showToast(R.string.unlogin);
             UIHelper.showLoginActivity(getActivity());
             return;
         }
