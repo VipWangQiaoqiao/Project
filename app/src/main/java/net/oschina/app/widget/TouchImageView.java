@@ -45,12 +45,6 @@ public class TouchImageView extends ImageView {
 
     private static final String DEBUG = "DEBUG";
 
-    private View parent;
-
-    public void setParent(View parent) {
-        this.parent = parent;
-    }
-
     //
     // SuperMin and SuperMax multipliers. Determine how much the image can be
     // zoomed below or above the zoom boundaries, before animating back to the
@@ -807,27 +801,7 @@ public class TouchImageView extends ImageView {
         public void onMove();
     }
 
-    public interface OnLayoutCloseListener {
-        void OnLayoutClosed();
-    }
 
-    enum Direction {
-        UP_DOWN,
-        LEFT_RIGHT,
-        NONE
-    }
-
-    private Direction direction = Direction.NONE;
-    private int previousFingerPositionY;
-    private int previousFingerPositionX;
-    private int baseLayoutPosition;
-    private boolean isScrollingUp;
-    private boolean isLocked = false;
-    private OnLayoutCloseListener listener;
-
-    public void setLayoutCloseListener(OnLayoutCloseListener onLayoutCloseListener) {
-        this.listener = onLayoutCloseListener;
-    }
 
     /**
      * Responsible for all touch events. Handles the heavy lifting of drag and also sends
@@ -879,100 +853,6 @@ public class TouchImageView extends ImageView {
 
             setImageMatrix(matrix);
 
-//            if (bounds) {
-//
-//                final int y = (int) event.getRawY();
-//                final int x = (int) event.getRawX();
-//
-//                if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
-//
-//                    previousFingerPositionX = x;
-//                    previousFingerPositionY = y;
-//                    baseLayoutPosition = (int) getY();
-//
-//                } else if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
-//
-//
-//                    int diffY = y - previousFingerPositionY;
-//                    int diffX = x - previousFingerPositionX;
-//
-//                    int height = getHeight();
-//
-//                    if ( Math.abs(diffY) < (height / 4)) {
-//                        float absDiff = Math.abs(diffY);
-//                        float intervalHeight = height / 4;
-//                        float alpha = 1 - (absDiff / intervalHeight);
-//                        if (alpha < 0.2) {
-//                            setBackgroundAlpha(0);
-//                        } else {
-//                            setBackgroundAlpha((int) (alpha * 255));
-//                        }
-//                    }
-//
-//                    if (direction == Direction.NONE) {
-//                        if (Math.abs(diffX) > Math.abs(diffY)) {
-//                            direction = Direction.LEFT_RIGHT;
-//                        } else if (Math.abs(diffX) < Math.abs(diffY)) {
-//                            direction = Direction.UP_DOWN;
-//                        } else {
-//                            direction = Direction.NONE;
-//                        }
-//                    }
-//
-//                    if (direction == Direction.UP_DOWN) {
-//                        isScrollingUp = diffY <= 0;
-//
-//                        setY(baseLayoutPosition + diffY);
-//                        requestLayout();
-//                        return true;
-//                    }
-//
-//                } else if (event.getActionMasked() == MotionEvent.ACTION_UP) {
-//
-//                    setBackgroundAlpha(255);
-//
-//                    if (direction == Direction.UP_DOWN) {
-//
-//                        if (isScrollingUp) {
-//
-//                            int height = getHeight();
-//
-//                            if (Math.abs(getY()) > (height / 4)) {
-//
-//                                if (listener != null) {
-//                                    listener.OnLayoutClosed();
-//                                }
-//
-//                            }
-//
-//                        } else {
-//
-//                            int height = getHeight();
-//
-//                            if (Math.abs(getY()) > (height / 4)) {
-//                                if (listener != null) {
-//                                    listener.OnLayoutClosed();
-//                                }
-//
-//                            }
-//
-//                        }
-//
-//                        ObjectAnimator positionAnimator = ObjectAnimator.ofFloat(TouchImageView.this, "y", getY(), 0);
-//                        positionAnimator.setDuration(300);
-//                        positionAnimator.start();
-//
-//                        direction = Direction.NONE;
-//                        return true;
-//                    }
-//
-//                    direction = Direction.NONE;
-//                }
-//
-//                return true;
-//
-//            }
-
             //
             // User-defined OnTouchListener
             //
@@ -991,12 +871,6 @@ public class TouchImageView extends ImageView {
             // indicate event was handled
             //
             return true;
-        }
-    }
-
-    private void setBackgroundAlpha(int alpha) {
-        if (parent != null && parent.getBackground() != null) {
-            parent.getBackground().setAlpha(alpha);
         }
     }
 

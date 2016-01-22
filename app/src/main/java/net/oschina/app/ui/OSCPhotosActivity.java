@@ -26,10 +26,9 @@ import org.kymjs.kjframe.Core;
  * 图片预览界面
  *
  */
-public class OSCPhotosActivity extends BaseActivity implements TouchImageView.OnLayoutCloseListener {
+public class OSCPhotosActivity extends BaseActivity {
 
     public static final String BUNDLE_KEY_IMAGES = "bundle_key_images";
-    private View parent;
     private TouchImageView mTouchImageView;
     private ProgressBar mProgressBar;
     private ImageView mOption;
@@ -49,11 +48,6 @@ public class OSCPhotosActivity extends BaseActivity implements TouchImageView.On
         mImageUrl = getIntent().getStringExtra(BUNDLE_KEY_IMAGES);
 
         mTouchImageView = (TouchImageView) findViewById(R.id.photoview);
-
-        mTouchImageView.setLayoutCloseListener(this);
-        parent = findViewById(R.id.parent);
-
-        mTouchImageView.setParent(parent);
 
         mTouchImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,8 +167,4 @@ public class OSCPhotosActivity extends BaseActivity implements TouchImageView.On
 
     }
 
-    @Override
-    public void OnLayoutClosed() {
-        onBackPressed();
-    }
 }
