@@ -4,8 +4,9 @@
 
     <item
         android:id="@+id/public_menu_send"
-        android:icon="@drawable/actionbar_send_icon"
+        android:icon="@drawable/actionbar_unsend_icon"
         android:title="@string/str_feedback_submit"
+        android:enabled="false"
         android:visible="true"
         osc:showAsAction="always"/>
 
