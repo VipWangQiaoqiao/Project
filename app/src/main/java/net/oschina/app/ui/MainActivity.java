@@ -23,12 +23,12 @@ import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabContentFactory;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.networkbench.agent.impl.NBSAppAgent;
 
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
-import net.oschina.app.AppManager;
 import net.oschina.app.R;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.Notice;
@@ -50,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks,
         OnTabChangeListener, BaseViewInterface, View.OnClickListener,
         OnTouchListener {
+
+    private boolean isBackPressed = false;
 
     private DoubleClickExitHelper mDoubleClickExit;
 
@@ -118,7 +120,8 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         initView();
-        AppManager.getAppManager().addActivity(this);
+
+       // AppManager.getAppManager().addActivity(this);
 
         handleIntent(getIntent());
         // 注册听云的检测分析
@@ -221,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements
         unregisterReceiver(mReceiver);
         mReceiver = null;
         NoticeUtils.tryToShutDown(this);
-        AppManager.getAppManager().finishActivity(this);
+        //AppManager.getAppManager().finishActivity(this);
     }
 
     @Override
@@ -368,17 +371,35 @@ public class MainActivity extends AppCompatActivity implements
                 mTabHost.getCurrentTabTag());
     }
 
+
     /**
      * 监听返回--是否退出程序
      */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            // 是否退出应用
-            if (AppContext.get(AppConfig.KEY_DOUBLE_CLICK_EXIT, true)) {
-                return mDoubleClickExit.onKeyDown(keyCode, event);
-            }
-        }
+//        if (keyCode == KeyEvent.KEYCODE_BACK) {
+//            // 是否退出应用
+//            if (AppContext.get(AppConfig.KEY_DOUBLE_CLICK_EXIT, true)) {
+//                return mDoubleClickExit.onKeyDown(keyCode, event);
+//            }
+//        }
         return super.onKeyDown(keyCode, event);
     }
+
+
+    @Override
+    public void onBackPressed() {
+        if(isBackPressed) {
+            finish();
+        } else {
+            Toast.makeText(this,"press again to exit.",Toast.LENGTH_LONG).show();
+            isBackPressed = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    isBackPressed = false;
+                }
+            },3*1000);
+        }
+    }//end of onBackPressed()
 }
