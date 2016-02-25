@@ -88,7 +88,7 @@ public class WXEntryActivity extends Activity {
             @Override
             public void onFinish() {
                 super.onFinish();
-                waitDialog.dismiss();
+                //waitDialog.dismiss();
             }
         });
     }
