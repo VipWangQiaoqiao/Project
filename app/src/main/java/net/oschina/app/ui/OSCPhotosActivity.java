@@ -1,10 +1,8 @@
 package net.oschina.app.ui;
 
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
-
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,6 +12,7 @@ import android.widget.TextView;
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
+import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.ui.dialog.ImageMenuDialog;
 import net.oschina.app.util.TDevice;
@@ -21,10 +20,11 @@ import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.TouchImageView;
 
 import org.kymjs.kjframe.Core;
+import org.kymjs.kjframe.bitmap.BitmapCallBack;
+import org.kymjs.kjframe.http.HttpConfig;
 
 /**
  * 图片预览界面
- *
  */
 public class OSCPhotosActivity extends BaseActivity {
 
@@ -133,23 +133,20 @@ public class OSCPhotosActivity extends BaseActivity {
      * Load the item's thumbnail image into our {@link ImageView}.
      */
     private void loadImage(final ImageView mHeaderImageView, String imageUrl) {
-
-        Picasso.with(this)
-                .load(imageUrl)
-                .noFade()
-                .into(mHeaderImageView, new Callback() {
+        HttpConfig.sCookie = ApiHttpClient.getCookie(AppContext.getInstance());
+        new Core.Builder()
+                .view(mHeaderImageView)
+                .url(imageUrl)
+                .errorBitmapRes(R.drawable.load_img_error)
+                .bitmapCallBack(new BitmapCallBack() {
                     @Override
-                    public void onSuccess() {
+                    public void onSuccess(Bitmap bitmap) {
+                        super.onSuccess(bitmap);
                         mProgressBar.setVisibility(View.GONE);
                         mTouchImageView.setVisibility(View.VISIBLE);
                         mOption.setVisibility(View.VISIBLE);
                     }
-
-                    @Override
-                    public void onError() {
-                        AppContext.showToast("加载图像失败");
-                    }
-                });
+                }).doTask();
     }
 
     @Override

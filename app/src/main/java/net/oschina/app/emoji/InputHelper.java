@@ -55,10 +55,11 @@ public class InputHelper {
      * (I'm drunk, I go home)
      */
     public static Spannable displayEmoji(Resources res, CharSequence s) {
-        String str = s.toString();
+        CharSequence tempStr = " " + s;
+        String str = tempStr.toString();
         Spannable spannable;
-        if (s instanceof Spannable) {
-            spannable = (Spannable) s;
+        if (tempStr instanceof Spannable) {
+            spannable = (Spannable) tempStr;
         } else {
             // 构建文字span
             spannable = new SpannableString(str);
