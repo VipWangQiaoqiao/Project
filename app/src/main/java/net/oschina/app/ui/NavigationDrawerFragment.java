@@ -1,6 +1,7 @@
 package net.oschina.app.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
@@ -8,6 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -58,6 +60,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
 
+
     @Bind(R.id.menu_item_quests)
     View mMenu_item_quests;
 
@@ -87,6 +90,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
         }
 
         selectItem(mCurrentSelectedPosition);
+
     }
 
     @Override
@@ -167,7 +171,9 @@ public class NavigationDrawerFragment extends BaseFragment implements
             getActivity().setTheme(R.style.AppBaseTheme_Light);
         }
 
+        Log.i("asdfasd","11111111111111");
         getActivity().recreate();
+        Log.i("asdfasd", "2222222222222");
     }
 
     @Override
