@@ -20,7 +20,6 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.AppManager;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Report;
@@ -187,7 +186,7 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
                 if (seri == null) {
                     return null;
                 } else {
-                    return (T)seri;
+                    return (T) seri;
                 }
             }
             return null;
@@ -218,17 +217,19 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
             return;
         }
 
-        mWebView.loadDataWithBaseURL("", this.getWebViewBody(detail), "text/html", "UTF-8", "");
-        // 显示存储的字体大小
-        mWebView.loadUrl(FontSizeUtils.getSaveFontSize());
-        boolean favoriteState = getFavoriteState() == 1;
-        setFavoriteState(favoriteState);
+        if (mWebView != null) {
+            mWebView.loadDataWithBaseURL("", this.getWebViewBody(detail), "text/html", "UTF-8", "");
+            // 显示存储的字体大小
+            mWebView.loadUrl(FontSizeUtils.getSaveFontSize());
+            boolean favoriteState = getFavoriteState() == 1;
+            setFavoriteState(favoriteState);
 
-        // 判断最新的评论数是否大于
-        if (getCommentCount() > mCommentCount) {
-            mCommentCount = getCommentCount();
+            // 判断最新的评论数是否大于
+            if (getCommentCount() > mCommentCount) {
+                mCommentCount = getCommentCount();
+            }
+            setCommentCount(mCommentCount);
         }
-        setCommentCount(mCommentCount);
     }
 
     protected void executeOnLoadDataError() {
@@ -430,6 +431,7 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
                 });
         dialog.show();
     }
+
     // 分享
     public void handleShare() {
         if (mDetail == null || TextUtils.isEmpty(getShareContent())
@@ -444,6 +446,7 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
         dialog.setShareInfo(getShareTitle(), getShareContent(), getShareUrl());
         dialog.show();
     }
+
     // 显示评论列表
     public void onCilckShowComment() {
         showCommentView();
@@ -488,7 +491,9 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
         @Override
         public void onFinish() {
             ((DetailActivity) getActivity()).emojiFragment.hideAllKeyBoard();
-        };
+        }
+
+        ;
     };
 
     // 发表评论
@@ -532,27 +537,44 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
 
     // 获取缓存的key
     protected abstract String getCacheKey();
+
     // 从网络中读取数据
     protected abstract void sendRequestDataForNet();
+
     // 解析数据
     protected abstract T parseData(InputStream is);
+
     // 返回填充到webview中的内容
     protected abstract String getWebViewBody(T detail);
+
     // 显示评论列表
     protected abstract void showCommentView();
+
     // 获取评论的类型
     protected abstract int getCommentType();
+
     protected abstract String getShareTitle();
+
     protected abstract String getShareContent();
+
     protected abstract String getShareUrl();
+
     // 返回举报的url
-    protected String getRepotrUrl() {return  "";}
+    protected String getRepotrUrl() {
+        return "";
+    }
+
     // 返回举报的类型
-    protected byte getReportType() {return  Report.TYPE_QUESTION;}
+    protected byte getReportType() {
+        return Report.TYPE_QUESTION;
+    }
 
     // 获取收藏类型（如新闻、博客、帖子）
     protected abstract int getFavoriteTargetType();
+
     protected abstract int getFavoriteState();
+
     protected abstract void updateFavoriteChanged(int newFavoritedState);
+
     protected abstract int getCommentCount();
 }

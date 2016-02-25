@@ -48,7 +48,7 @@ public class WXEntryActivity extends Activity {
             String code = resp.code;
             String state = resp.state;
             // 如果不是登录
-            if (!state.equals("wechat_login")) {
+            if (!"wechat_login".equals(state)) {
                 finish();
             }
             //上面的code就是接入指南里要拿到的code
