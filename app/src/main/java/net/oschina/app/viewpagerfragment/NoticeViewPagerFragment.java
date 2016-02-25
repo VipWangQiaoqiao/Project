@@ -1,5 +1,14 @@
 package net.oschina.app.viewpagerfragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.View;
+
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
@@ -9,23 +18,13 @@ import net.oschina.app.bean.ActiveList;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.FriendsList;
 import net.oschina.app.bean.Notice;
-import net.oschina.app.bean.TweetsList;
 import net.oschina.app.fragment.ActiveFragment;
 import net.oschina.app.fragment.FriendsFragment;
 import net.oschina.app.fragment.MessageFragment;
-import net.oschina.app.fragment.TweetsFragment;
 import net.oschina.app.fragment.TweetsLikesFragment;
 import net.oschina.app.ui.MainActivity;
 import net.oschina.app.widget.BadgeView;
 import net.oschina.app.widget.PagerSlidingTabStrip.OnPagerChangeLis;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.View;
 
 /**
  * 消息中心页面
@@ -44,7 +43,7 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             setNoticeTip();
-            changePagers();
+//            changePagers();
         }
     };
 
@@ -55,7 +54,7 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
     public void onResume() {
         super.onResume();
         setNoticeTip();
-        changePagers();
+//        changePagers();
         mViewPager.setOffscreenPageLimit(2);
     }
 
