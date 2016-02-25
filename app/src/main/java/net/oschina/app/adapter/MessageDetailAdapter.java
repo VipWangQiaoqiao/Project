@@ -20,7 +20,6 @@ import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.util.ChatImageDisplayer;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
-import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
@@ -33,8 +32,8 @@ import org.kymjs.kjframe.http.HttpConfig;
 
 import java.lang.reflect.Field;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -152,7 +151,7 @@ public class MessageDetailAdapter extends ListBaseAdapter<MessageDetail> {
         //加载图片
         vh.image.setImageResource(R.drawable.load_img_loading);
         HttpConfig.sCookie = ApiHttpClient.getCookie(AppContext.getInstance());
-        mKjBitmap.display(vh.image, msg.getContent(), R.drawable.load_img_error, 0, 0,
+        mKjBitmap.display(vh.image, msg.getContent(), R.drawable.load_img_error, 3000, 3000,
                 null);
     }
 
