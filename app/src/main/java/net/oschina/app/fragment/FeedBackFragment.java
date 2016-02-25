@@ -128,7 +128,7 @@ public class FeedBackFragment extends BaseFragment {
             Uri selectedImageUri = data.getData();
             if (selectedImageUri != null) {
                 imgPath = ImageUtils.getImagePath(selectedImageUri, getActivity());
-                new Core.Builder().view(mImv).url(imgPath).doTask();
+                new Core.Builder().view(mImv).size(3000, 3000).url(imgPath).doTask();
                 mImClear.setVisibility(View.VISIBLE);
             }
         }
@@ -146,8 +146,8 @@ public class FeedBackFragment extends BaseFragment {
             case R.id.public_menu_send:
                 final String data = mEtContent.getText().toString();
                 final String header = String.format("［Android-主站-%s］%s",
-                    mRbError.isChecked() ? getString(R.string.str_feedback_error) :
-                            getString(R.string.str_feedback_function), data);
+                        mRbError.isChecked() ? getString(R.string.str_feedback_error) :
+                                getString(R.string.str_feedback_function), data);
                 if (!TextUtils.isEmpty(imgPath)) {
                     final String path = FileUtils.getSDCardPath() + "/OSChina/tempfile.jpg";
                     DiskImageRequest req = new DiskImageRequest();
