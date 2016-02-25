@@ -29,7 +29,6 @@ import com.networkbench.agent.impl.NBSAppAgent;
 
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
-import net.oschina.app.AppManager;
 import net.oschina.app.R;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.Notice;
@@ -122,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements
         ButterKnife.bind(this);
         initView();
 
-       // AppManager.getAppManager().addActivity(this);
+        // AppManager.getAppManager().addActivity(this);
 
         handleIntent(getIntent());
         // 注册听云的检测分析
@@ -390,17 +389,17 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
-        if(isBackPressed) {
+        if (isBackPressed) {
             finish();
         } else {
-            Toast.makeText(this,"press again to exit.",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.tip_double_click_exit, Toast.LENGTH_LONG).show();
             isBackPressed = true;
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     isBackPressed = false;
                 }
-            },3*1000);
+            }, 3 * 1000);
         }
     }//end of onBackPressed()
 }
