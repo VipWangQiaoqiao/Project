@@ -330,6 +330,8 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
                     onRefreshNetworkSuccess();
                 }
                 executeParserTask(responseBytes);
+            } else {
+                executeOnLoadFinish();
             }
         }
 
@@ -338,6 +340,8 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
                               Throwable arg3) {
             if (isAdded()) {
                 readCacheData(getCacheKey());
+            } else {
+                executeOnLoadFinish();
             }
         }
     };
