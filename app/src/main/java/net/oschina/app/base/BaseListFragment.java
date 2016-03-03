@@ -30,8 +30,6 @@ import net.oschina.app.util.TDevice;
 import net.oschina.app.util.ThemeSwitchUtils;
 import net.oschina.app.util.XmlUtils;
 
-import cz.msebera.android.httpclient.Header;
-
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -39,8 +37,9 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
+import cz.msebera.android.httpclient.Header;
 
 @SuppressLint("NewApi")
 public abstract class BaseListFragment<T extends Entity> extends BaseFragment
@@ -254,7 +253,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
     /***
      * 自动刷新的时间
-     * <p/>
+     * <p>
      * 默认：自动刷新的时间为半天时间
      *
      * @return
@@ -317,24 +316,6 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
         }
     }
 
-    private class SaveCacheTask extends AsyncTask<Void, Void, Void> {
-        private final WeakReference<Context> mContext;
-        private final Serializable seri;
-        private final String key;
-
-        private SaveCacheTask(Context context, Serializable seri, String key) {
-            mContext = new WeakReference<Context>(context);
-            this.seri = seri;
-            this.key = key;
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            CacheManager.saveObject(mContext.get(), seri, key);
-            return null;
-        }
-    }
-
     protected AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
 
         @Override
@@ -349,6 +330,8 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
                     onRefreshNetworkSuccess();
                 }
                 executeParserTask(responseBytes);
+            } else {
+                executeOnLoadFinish();
             }
         }
 
@@ -357,6 +340,8 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
                               Throwable arg3) {
             if (isAdded()) {
                 readCacheData(getCacheKey());
+            } else {
+                executeOnLoadFinish();
             }
         }
     };
@@ -505,9 +490,9 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
         @Override
         protected String doInBackground(Void... params) {
             try {
-                ListEntity<T> data = parseList(new ByteArrayInputStream(
+                final ListEntity<T> data = parseList(new ByteArrayInputStream(
                         reponseData));
-                new SaveCacheTask(getActivity(), data, getCacheKey()).execute();
+                CacheManager.saveObject(getActivity(), data, getCacheKey());
                 list = data.getList();
                 if (list == null) {
                     ResultBean resultBean = XmlUtils.toBean(ResultBean.class,
@@ -518,7 +503,6 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-
                 parserError = true;
             }
             return null;
