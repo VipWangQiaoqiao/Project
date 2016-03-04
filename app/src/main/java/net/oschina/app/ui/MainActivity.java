@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements
         unregisterReceiver(mReceiver);
         mReceiver = null;
         NoticeUtils.tryToShutDown(this);
-        AppManager.getAppManager().finishActivity(this);
+        AppManager.getAppManager().removeActivity(this);
     }
 
     @Override
