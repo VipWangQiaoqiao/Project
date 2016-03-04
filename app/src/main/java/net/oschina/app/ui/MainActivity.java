@@ -29,6 +29,7 @@ import com.networkbench.agent.impl.NBSAppAgent;
 
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
+import net.oschina.app.AppManager;
 import net.oschina.app.R;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.Notice;
@@ -121,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements
         ButterKnife.bind(this);
         initView();
 
-        // AppManager.getAppManager().addActivity(this);
+        AppManager.getAppManager().addActivity(this);
 
         handleIntent(getIntent());
         // 注册听云的检测分析
@@ -224,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements
         unregisterReceiver(mReceiver);
         mReceiver = null;
         NoticeUtils.tryToShutDown(this);
-        //AppManager.getAppManager().finishActivity(this);
+        AppManager.getAppManager().finishActivity(this);
     }
 
     @Override
