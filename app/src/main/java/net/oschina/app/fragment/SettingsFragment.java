@@ -168,7 +168,7 @@ public class SettingsFragment extends BaseFragment {
         AppContext
                 .set(AppConfig.KEY_NOTIFICATION_DISABLE_WHEN_EXIT,
                         false);
-        AppManager.getAppManager().AppExit(getActivity());
+        AppManager.getAppManager().AppExit();
         getActivity().finish();
     }
 }
