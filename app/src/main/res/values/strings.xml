@@ -266,7 +266,7 @@
 	<string name="oscsite">官网</string>
 	<string name="knowmore">了解更多</string>
 	<string name="gitapp">Git客户端</string>
-	<string name="copyright">Copyright © OSChina All rights reserved.</string>
+	<string name="copyright">Copyright © 2016 OSChina.net All rights reserved.</string>
 
 	<string name="tip_save_image_suc">图片已保存(手机相册-> osc_img)</string>
 	<string name="tip_save_image_faile">无法保存图片</string>
