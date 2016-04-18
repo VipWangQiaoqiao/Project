@@ -31,7 +31,7 @@ import android.widget.AdapterView;
 
 /**
  * 赞过我动弹的列表
- * 
+ *
  * @date 2014年10月10日
  */
 public class TweetsLikesFragment extends BaseListFragment<TweetLike> {
@@ -90,10 +90,11 @@ public class TweetsLikesFragment extends BaseListFragment<TweetLike> {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
 	    long id) {
-	Tweet tweet = mAdapter.getItem(position).getTweet();
-	if (tweet != null) {
-	    UIHelper.showTweetDetail(view.getContext(), null, tweet.getId());
-	}
+		TweetLike tweetLike = mAdapter.getItem(position);
+		if(tweetLike != null){
+			Tweet tweet = tweetLike.getTweet();
+			UIHelper.showTweetDetail(view.getContext(), null, tweet.getId());
+		}
     }
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -166,10 +167,10 @@ public class TweetsLikesFragment extends BaseListFragment<TweetLike> {
 	    UIHelper.sendBroadcastForNotice(getActivity());
 	}
     }
-    
+
     protected boolean compareTo(List<? extends Entity> data, Entity enity) {
         int s = data.size();
-        
+
         if (enity != null && enity instanceof TweetLike) {
             TweetLike tweetLike = (TweetLike) enity;
             for (int i = 0; i < s; i++) {
