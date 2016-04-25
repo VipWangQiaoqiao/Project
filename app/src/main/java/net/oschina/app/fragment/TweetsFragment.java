@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -23,7 +22,6 @@ import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetsList;
 import net.oschina.app.interf.OnTabReselectListener;
-import net.oschina.app.ui.TweetPubActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
@@ -72,8 +70,8 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
         }
 
         @Override
-        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-
+        public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+            super.onSuccess(arg0, arg1, arg2);
         }
 
         @Override
@@ -247,7 +245,7 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
                     case 0:
                         TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(tweet.getBody()));
                         break;
-                    case 2:
+                    case 1:
                         handleDeleteTweet(tweet);
                         break;
                 }
