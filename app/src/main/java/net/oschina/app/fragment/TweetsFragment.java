@@ -234,10 +234,9 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
         String[] items;
         if (AppContext.getInstance().getLoginUid() == tweet.getAuthorid()) {
             items = new String[]{getString(R.string.copy),
-                    getString(R.string.repost),
                     getString(R.string.delete)};
         } else {
-            items = new String[]{getString(R.string.copy), getString(R.string.repost)};
+            items = new String[]{getString(R.string.copy)};
         }
 
         DialogHelp.getSelectDialog(getActivity(), items, new DialogInterface.OnClickListener() {
@@ -248,26 +247,12 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
                     case 0:
                         TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(tweet.getBody()));
                         break;
-                    case 1:
-                        repostTweet(tweet);
-                        break;
                     case 2:
                         handleDeleteTweet(tweet);
                         break;
                 }
             }
         }).show();
-    }
-
-    /**
-     * 转发动弹
-     */
-    private void repostTweet(final Tweet tweet) {
-        Bundle bundle = new Bundle();
-        bundle.putString(TweetPubActivity.REPOST_IMAGE_KEY, tweet.getImgBig());
-        bundle.putString(TweetPubActivity.REPOST_TEXT_KEY, String.format("//@%s :%s",
-                tweet.getAuthor(), Html.fromHtml(tweet.getBody()).toString()));
-        UIHelper.showTweetActivity(getActivity(), TweetPubActivity.ACTION_TYPE_REPOST, bundle);
     }
 
     private void handleDeleteTweet(final Tweet tweet) {
