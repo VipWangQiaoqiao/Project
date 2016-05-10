@@ -55,15 +55,17 @@ public class InputHelper {
      * (I'm drunk, I go home)
      */
     public static Spannable displayEmoji(Resources res, CharSequence s) {
-        CharSequence tempStr = " " + s;
-        String str = tempStr.toString();
+        CharSequence tempStr = " " + s; //莫名其妙就加个空格干嘛,真的是没事做哦
+        String str = tempStr.toString().trim(); //变成字符串之前去掉空格
         Spannable spannable;
+
         if (tempStr instanceof Spannable) {
             spannable = (Spannable) tempStr;
         } else {
             // 构建文字span
             spannable = new SpannableString(str);
         }
+
         if (!str.contains(":") && !str.contains("[")) {
             return spannable;
         }
