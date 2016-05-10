@@ -362,26 +362,26 @@ public class TweetDetailFragment extends
         if (position - 1 == -1) {
             return false;
         }
+
         final Comment item = mAdapter.getItem(position - 1);
+
         if (item == null)
             return false;
-        int itemsLen = item.getAuthorId() == AppContext.getInstance()
-                .getLoginUid() ? 3 : 2;
+
+        int itemsLen = item.getAuthorId() == AppContext.getInstance().getLoginUid() ? 2 : 1; //判断是否为自己
         String[] items = new String[itemsLen];
         items[0] = getResources().getString(R.string.copy);
-        items[1] = getResources().getString(R.string.repost);
-        if (itemsLen == 3) {
-            items[2] = getResources().getString(R.string.delete);
+
+        if (itemsLen == 2) {
+            items[1] = getResources().getString(R.string.delete);
         }
+
         DialogHelp.getSelectDialog(getActivity(), items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (i == 0) {
-                    TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(item
-                            .getContent()));
+                    TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(item.getContent()));
                 } else if (i == 1) {
-                    repostTweet(item, mTweet);
-                } else if (i == 2) {
                     handleDeleteComment(item);
                 }
             }

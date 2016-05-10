@@ -28,7 +28,9 @@
 		android:layout_below="@id/tv_tweet_name"
 		android:layout_marginTop="@dimen/space_4"
 		android:layout_toRightOf="@id/iv_tweet_face"
+		android:layout_alignLeft="@+id/tv_tweet_name"
 		android:focusable="false"
+		android:includeFontPadding="false"
 		android:focusableInTouchMode="false"
 		android:textColor="?attr/textColor"
 		android:textSize="15sp"/>
