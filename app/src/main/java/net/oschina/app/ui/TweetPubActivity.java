@@ -13,7 +13,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -410,7 +409,7 @@ public class TweetPubActivity extends BaseActivity implements EasyPermissions.Pe
         if (TextUtils.isEmpty(path)) return;
         try {
             Bitmap bitmap = BitmapCreate.bitmapFromStream(
-                    new FileInputStream(path), 300, 300);
+                    new FileInputStream(path), 512, 512);
 
             setImageFromBitmap(bitmap);
         } catch (FileNotFoundException e) {
@@ -425,10 +424,16 @@ public class TweetPubActivity extends BaseActivity implements EasyPermissions.Pe
      */
     private void setImageFromBitmap(final Bitmap bitmap) {
         if (bitmap == null) return;
-        String temp = FileUtils.getSDCardPath() + "/OSChina/tempfile.jpg";
+        String temp = FileUtils.getSDCardPath() + "/OSChina/tempfile.png";
         FileUtils.bitmapToFile(bitmap, temp);
         tweet.setImageFilePath(temp);
-        mIvImage.setImageBitmap(bitmap);
+
+        // 压缩小图片用于界面显示
+        Bitmap minBitmap = ImageUtils.zoomBitmap(bitmap, 100, 100);
+        // 销毁之前的图片
+        bitmap.recycle();
+
+        mIvImage.setImageBitmap(minBitmap);
         mLyImage.setVisibility(View.VISIBLE);
     }
 
