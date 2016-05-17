@@ -223,7 +223,6 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
         return super.onKeyDown(keyCode, event);
     }
 
-
     @Override
     public void onClickFlagButton() {
         getSupportFragmentManager()
