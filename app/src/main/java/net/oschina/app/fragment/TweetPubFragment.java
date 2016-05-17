@@ -157,11 +157,11 @@ public class TweetPubFragment extends BaseFragment implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case R.id.public_menu_send:
-            handleSubmit();
-            break;
-        default:
-            break;
+            case R.id.public_menu_send:
+                handleSubmit();
+                break;
+            default:
+                break;
         }
         return true;
     }
@@ -218,7 +218,7 @@ public class TweetPubFragment extends BaseFragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater,
-            @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tweet_pub, container,
                 false);
 
@@ -240,7 +240,7 @@ public class TweetPubFragment extends BaseFragment implements
 
     /**
      * 处理从第三方分享跳转来的图片
-     * 
+     *
      * @param filePath
      */
     private void handleImageFile(final String filePath) {
@@ -252,7 +252,7 @@ public class TweetPubFragment extends BaseFragment implements
                     msg.what = 1;
                     try {
                         msg.obj = BitmapCreate.bitmapFromStream(
-                                new FileInputStream(filePath), 300, 300);
+                                new FileInputStream(filePath), 520, 520);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -268,7 +268,7 @@ public class TweetPubFragment extends BaseFragment implements
 
     /**
      * 处理从图片浏览跳转来的图片
-     * 
+     *
      * @param url
      */
     private void handleImageUrl(final String url) {
@@ -279,7 +279,7 @@ public class TweetPubFragment extends BaseFragment implements
             msg.obj = BitmapFactory.decodeByteArray(cache, 0, cache.length);
             if (msg.obj == null) {
                 DiskImageRequest req = new DiskImageRequest();
-                req.load(url, 300, 300, new BitmapCallBack() {
+                req.load(url, 520, 520, new BitmapCallBack() {
                     @Override
                     public void onSuccess(Bitmap bitmap) {
                         super.onSuccess(bitmap);
@@ -317,7 +317,7 @@ public class TweetPubFragment extends BaseFragment implements
         mEtInput.addTextChangedListener(new SimpleTextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before,
-                    int count) {
+                                      int count) {
                 mTvClear.setText((MAX_TEXT_LENGTH - s.length()) + "");
                 updateMenuState();
             }
@@ -329,7 +329,7 @@ public class TweetPubFragment extends BaseFragment implements
         mEtInput.addTextChangedListener(new SimpleTextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before,
-                    int count) {
+                                      int count) {
                 mTvClear.setText((MAX_TEXT_LENGTH - s.length()) + "");
             }
         });
@@ -411,16 +411,16 @@ public class TweetPubFragment extends BaseFragment implements
 
     @Override
     public void onActivityResult(final int requestCode, final int resultCode,
-            final Intent imageReturnIntent) {
+                                 final Intent imageReturnIntent) {
         if (resultCode != Activity.RESULT_OK)
             return;
-        if(requestCode == SELECT_FRIENDS_REEQUEST_CODE) {
+        if (requestCode == SELECT_FRIENDS_REEQUEST_CODE) {
             //选中好友的名字
             String names[] = imageReturnIntent.getStringArrayExtra("names");
-            if(names != null && names.length > 0) {
+            if (names != null && names.length > 0) {
                 //拼成字符串
                 String text = "";
-                for(String n : names) {
+                for (String n : names) {
                     text += "@" + n + " ";
                 }
                 //插入到文本中
@@ -495,7 +495,7 @@ public class TweetPubFragment extends BaseFragment implements
                             try {
                                 // 压缩上传的图片
                                 ImageUtils.createImageThumbnail(getActivity(),
-                                        theLarge, theThumbnail, 800, 80);
+                                        theLarge, theThumbnail, 860, 100);
                                 imgFile = new File(theThumbnail);
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -511,7 +511,9 @@ public class TweetPubFragment extends BaseFragment implements
                     msg.obj = bitmap;
                     handler.sendMessage(msg);
                 }
-            };
+            }
+
+            ;
         }.start();
     }
 
@@ -536,7 +538,9 @@ public class TweetPubFragment extends BaseFragment implements
         keyboardFragment.hideEmojiKeyBoard();
     }
 
-    /** 跳转选择好友*/
+    /**
+     * 跳转选择好友
+     */
     private void handleSelectFriends() {
         //如果没登录，则先去登录界面
         if (!AppContext.getInstance().isLogin()) {
@@ -558,66 +562,66 @@ public class TweetPubFragment extends BaseFragment implements
 
     private void goToSelectPicture(int position) {
         switch (position) {
-        case ACTION_TYPE_ALBUM:
-            Intent intent;
-            if (Build.VERSION.SDK_INT < 19) {
-                intent = new Intent();
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/*");
-                startActivityForResult(Intent.createChooser(intent, "选择图片"),
-                        ImageUtils.REQUEST_CODE_GETIMAGE_BYSDCARD);
-            } else {
-                intent = new Intent(Intent.ACTION_PICK,
-                        Images.Media.EXTERNAL_CONTENT_URI);
-                intent.setType("image/*");
-                startActivityForResult(Intent.createChooser(intent, "选择图片"),
-                        ImageUtils.REQUEST_CODE_GETIMAGE_BYSDCARD);
-            }
-            break;
-        case ACTION_TYPE_PHOTO:
-            // 判断是否挂载了SD卡
-            String savePath = "";
-            String storageState = Environment.getExternalStorageState();
-            if (storageState.equals(Environment.MEDIA_MOUNTED)) {
-                savePath = Environment.getExternalStorageDirectory()
-                        .getAbsolutePath() + "/oschina/Camera/";
-                File savedir = new File(savePath);
-                if (!savedir.exists()) {
-                    savedir.mkdirs();
+            case ACTION_TYPE_ALBUM:
+                Intent intent;
+                if (Build.VERSION.SDK_INT < 19) {
+                    intent = new Intent();
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    intent.setType("image/*");
+                    startActivityForResult(Intent.createChooser(intent, "选择图片"),
+                            ImageUtils.REQUEST_CODE_GETIMAGE_BYSDCARD);
+                } else {
+                    intent = new Intent(Intent.ACTION_PICK,
+                            Images.Media.EXTERNAL_CONTENT_URI);
+                    intent.setType("image/*");
+                    startActivityForResult(Intent.createChooser(intent, "选择图片"),
+                            ImageUtils.REQUEST_CODE_GETIMAGE_BYSDCARD);
                 }
-            }
-
-            // 没有挂载SD卡，无法保存文件
-            if (StringUtils.isEmpty(savePath)) {
-                AppContext.showToastShort("无法保存照片，请检查SD卡是否挂载");
-                return;
-            }
-
-            String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss")
-                    .format(new Date());
-            String fileName = "osc_" + timeStamp + ".jpg";// 照片命名
-            File out = new File(savePath, fileName);
-            Uri uri = Uri.fromFile(out);
-
-            theLarge = savePath + fileName;// 该照片的绝对路径
-
-            intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-            startActivityForResult(intent,
-                    ImageUtils.REQUEST_CODE_GETIMAGE_BYCAMERA);
-            break;
-        case ACTION_TYPE_TOPIC:
-            Bundle bundle = getArguments();
-            if (bundle != null) {
-                String topic = bundle.getString("tweet_topic");
-                setContentText(topic);
-                if (mEtInput != null) {
-                    mEtInput.setSelection(topic.length());
+                break;
+            case ACTION_TYPE_PHOTO:
+                // 判断是否挂载了SD卡
+                String savePath = "";
+                String storageState = Environment.getExternalStorageState();
+                if (storageState.equals(Environment.MEDIA_MOUNTED)) {
+                    savePath = Environment.getExternalStorageDirectory()
+                            .getAbsolutePath() + "/oschina/Camera/";
+                    File savedir = new File(savePath);
+                    if (!savedir.exists()) {
+                        savedir.mkdirs();
+                    }
                 }
-            }
-            break;
-        default:
-            break;
+
+                // 没有挂载SD卡，无法保存文件
+                if (StringUtils.isEmpty(savePath)) {
+                    AppContext.showToastShort("无法保存照片，请检查SD卡是否挂载");
+                    return;
+                }
+
+                String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss")
+                        .format(new Date());
+                String fileName = "osc_" + timeStamp + ".jpg";// 照片命名
+                File out = new File(savePath, fileName);
+                Uri uri = Uri.fromFile(out);
+
+                theLarge = savePath + fileName;// 该照片的绝对路径
+
+                intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                startActivityForResult(intent,
+                        ImageUtils.REQUEST_CODE_GETIMAGE_BYCAMERA);
+                break;
+            case ACTION_TYPE_TOPIC:
+                Bundle bundle = getArguments();
+                if (bundle != null) {
+                    String topic = bundle.getString("tweet_topic");
+                    setContentText(topic);
+                    if (mEtInput != null) {
+                        mEtInput.setSelection(topic.length());
+                    }
+                }
+                break;
+            default:
+                break;
         }
     }
 
@@ -675,10 +679,12 @@ public class TweetPubFragment extends BaseFragment implements
     }
 
     @Override
-    public void initData() {}
+    public void initData() {
+    }
 
     @Override
-    public void onDeleteButtonClick(View v) {}
+    public void onDeleteButtonClick(View v) {
+    }
 
     @Override
     public void onEmojiClick(Emojicon v) {
