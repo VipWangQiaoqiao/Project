@@ -13,7 +13,7 @@ import net.oschina.app.base.BaseFragment;
 public class ToolbarFragment extends BaseFragment {
 
     public interface OnActionClickListener {
-        public void onActionClick(ToolAction action);
+        void onActionClick(ToolAction action);
     }
 
     public enum ToolAction {
@@ -37,9 +37,15 @@ public class ToolbarFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater,
             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mRootView = inflater.inflate(R.layout.fragment_detail_tool_bar,
-                container, false);
-        initView(mRootView);
+        if (null != mRootView) {
+            ViewGroup parent = (ViewGroup) mRootView.getParent();
+            if (null != parent) {
+                parent.removeView(mRootView);
+            }
+        }else {
+            mRootView = inflater.inflate(R.layout.fragment_detail_tool_bar, container,false);
+            initView(mRootView);
+        }
         return mRootView;
     }
 

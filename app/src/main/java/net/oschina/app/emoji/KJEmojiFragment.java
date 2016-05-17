@@ -67,10 +67,15 @@ public class KJEmojiFragment extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater,
             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        mRootView = (LinearLayout) inflater.inflate(R.layout.frag_main,
-                container, false);
-        initWidget(mRootView);
+        if (null != mRootView) {
+            ViewGroup parent = (ViewGroup) mRootView.getParent();
+            if (null != parent) {
+                parent.removeView(mRootView);
+            }
+        }else {
+            mRootView = (LinearLayout) inflater.inflate(R.layout.frag_main, container,false);
+            initWidget(mRootView);
+        }
         return mRootView;
     }
 

@@ -223,12 +223,6 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
         return super.onKeyDown(keyCode, event);
     }
 
-    public void setCommentCount(int count) {
-        try {
-            toolFragment.setCommentCount(count);
-        } catch (Exception e) {
-        }
-    }
 
     @Override
     public void onClickFlagButton() {
@@ -237,9 +231,5 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
                 .setCustomAnimations(R.anim.footer_menu_slide_in,
                         R.anim.footer_menu_slide_out)
                 .replace(R.id.emoji_keyboard, toolFragment).commit();
-        try {
-
-        } catch (Exception e) {
-        }
     }
 }
