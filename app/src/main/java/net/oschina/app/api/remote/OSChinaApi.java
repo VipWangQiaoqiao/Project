@@ -110,8 +110,14 @@ public class OSChinaApi {
         ApiHttpClient.get("action/api/tweet_topic_list", params, handler);
     }
 
-    public static void getTweetLikeList(AsyncHttpResponseHandler handler) {
-        ApiHttpClient.get("action/api/my_tweet_like_list", handler);
+    /**
+     * get   TweetLikeList
+     *
+     * @param pageIndex begin 0
+     * @param handler   asyncHttpResponseHandler
+     */
+    public static void getTweetLikeList(int pageIndex, AsyncHttpResponseHandler handler) {
+        ApiHttpClient.get("action/api/my_tweet_like_list?pageIndex=" + pageIndex + "&pageSize=" + 20, handler);
     }
 
     public static void pubLikeTweet(int tweetId, int authorId,

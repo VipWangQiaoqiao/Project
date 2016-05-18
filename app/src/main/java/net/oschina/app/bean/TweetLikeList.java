@@ -1,8 +1,8 @@
 package net.oschina.app.bean;
 
-import java.util.List;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+
+import java.util.List;
 
 /**
  * LikeTweetList.java
