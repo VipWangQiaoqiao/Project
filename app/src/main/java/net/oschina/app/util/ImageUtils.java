@@ -1,18 +1,9 @@
 package net.oschina.app.util;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -33,14 +24,27 @@ import android.graphics.Shader.TileMode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.MediaStore.MediaColumns;
 import android.util.DisplayMetrics;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+
 /**
  * 图片操作工具包
- * 
+ *
  * @author liux (http://my.oschina.net/liux)
  * @version 1.0
  * @created 2012-3-21
@@ -50,18 +54,26 @@ public class ImageUtils {
     public final static String SDCARD_MNT = "/mnt/sdcard";
     public final static String SDCARD = "/sdcard";
 
-    /** 请求相册 */
+    /**
+     * 请求相册
+     */
     public static final int REQUEST_CODE_GETIMAGE_BYSDCARD = 0;
-    /** 请求相机 */
+    /**
+     * 请求相机
+     */
     public static final int REQUEST_CODE_GETIMAGE_BYCAMERA = 1;
-    /** 请求裁剪 */
+    /**
+     * 请求裁剪
+     */
     public static final int REQUEST_CODE_GETIMAGE_BYCROP = 2;
-    /** 从图片浏览界面发送动弹 */
+    /**
+     * 从图片浏览界面发送动弹
+     */
     public static final int REQUEST_CODE_GETIMAGE_IMAGEPAVER = 3;
 
     /**
      * 写图片文件 在Android系统中，文件保存在 /data/data/PACKAGE_NAME/files 目录下
-     * 
+     *
      * @throws IOException
      */
     public static void saveImage(Context context, String fileName, Bitmap bitmap)
@@ -70,7 +82,7 @@ public class ImageUtils {
     }
 
     public static void saveImage(Context context, String fileName,
-            Bitmap bitmap, int quality) throws IOException {
+                                 Bitmap bitmap, int quality) throws IOException {
         if (bitmap == null || fileName == null || context == null)
             return;
 
@@ -85,11 +97,11 @@ public class ImageUtils {
 
     /**
      * 写图片文件到SD卡
-     * 
+     *
      * @throws IOException
      */
     public static void saveImageToSD(Context ctx, String filePath,
-            Bitmap bitmap, int quality) throws IOException {
+                                     Bitmap bitmap, int quality) throws IOException {
         if (bitmap != null) {
             File file = new File(filePath.substring(0,
                     filePath.lastIndexOf(File.separator)));
@@ -108,7 +120,7 @@ public class ImageUtils {
     }
 
     public static void saveBackgroundImage(Context ctx, String filePath,
-            Bitmap bitmap, int quality) throws IOException {
+                                           Bitmap bitmap, int quality) throws IOException {
         if (bitmap != null) {
             File file = new File(filePath.substring(0,
                     filePath.lastIndexOf(File.separator)));
@@ -140,7 +152,7 @@ public class ImageUtils {
 
     /**
      * 获取bitmap
-     * 
+     *
      * @param context
      * @param fileName
      * @return
@@ -166,7 +178,7 @@ public class ImageUtils {
 
     /**
      * 获取bitmap
-     * 
+     *
      * @param filePath
      * @return
      */
@@ -175,7 +187,7 @@ public class ImageUtils {
     }
 
     public static Bitmap getBitmapByPath(String filePath,
-            BitmapFactory.Options opts) {
+                                         BitmapFactory.Options opts) {
         FileInputStream fis = null;
         Bitmap bitmap = null;
         try {
@@ -197,7 +209,7 @@ public class ImageUtils {
 
     /**
      * 获取bitmap
-     * 
+     *
      * @param file
      * @return
      */
@@ -222,7 +234,7 @@ public class ImageUtils {
 
     /**
      * 使用当前时间戳拼接一个唯一的文件名
-     * 
+     *
      * @param format
      * @return
      */
@@ -235,7 +247,7 @@ public class ImageUtils {
 
     /**
      * 获取照相机使用的目录
-     * 
+     *
      * @return
      */
     public static String getCamerPath() {
@@ -245,7 +257,7 @@ public class ImageUtils {
 
     /**
      * 判断当前Url是否标准的content://样式，如果不是，则返回绝对路径
-     * 
+     *
      * @param uri
      * @return
      */
@@ -270,16 +282,16 @@ public class ImageUtils {
 
     /**
      * 通过uri获取文件的绝对路径
-     * 
+     *
      * @param uri
      * @return
      */
     @SuppressWarnings("deprecation")
     public static String getAbsoluteImagePath(Activity context, Uri uri) {
         String imagePath = "";
-        String[] proj = { MediaStore.Images.Media.DATA };
+        String[] proj = {MediaStore.Images.Media.DATA};
         Cursor cursor = context.managedQuery(uri, proj, // Which columns to
-                                                        // return
+                // return
                 null, // WHERE clause; which rows to return (all rows)
                 null, // WHERE clause selection arguments (none)
                 null); // Order-by clause (ascending by name)
@@ -297,19 +309,18 @@ public class ImageUtils {
 
     /**
      * 获取图片缩略图 只有Android2.1以上版本支持
-     * 
+     *
      * @param imgName
-     * @param kind
-     *            MediaStore.Images.Thumbnails.MICRO_KIND
+     * @param kind    MediaStore.Images.Thumbnails.MICRO_KIND
      * @return
      */
     @SuppressWarnings("deprecation")
     public static Bitmap loadImgThumbnail(Activity context, String imgName,
-            int kind) {
+                                          int kind) {
         Bitmap bitmap = null;
 
-        String[] proj = { MediaStore.Images.Media._ID,
-                MediaStore.Images.Media.DISPLAY_NAME };
+        String[] proj = {MediaStore.Images.Media._ID,
+                MediaStore.Images.Media.DISPLAY_NAME};
 
         Cursor cursor = context.managedQuery(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, proj,
@@ -333,13 +344,13 @@ public class ImageUtils {
 
     /**
      * 获取SD卡中最新图片路径
-     * 
+     *
      * @return
      */
     public static String getLatestImage(Activity context) {
         String latestImage = null;
-        String[] items = { MediaStore.Images.Media._ID,
-                MediaStore.Images.Media.DATA };
+        String[] items = {MediaStore.Images.Media._ID,
+                MediaStore.Images.Media.DATA};
         Cursor cursor = context.managedQuery(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, items, null,
                 null, MediaStore.Images.Media._ID + " desc");
@@ -358,7 +369,7 @@ public class ImageUtils {
 
     /**
      * 计算缩放图片的宽高
-     * 
+     *
      * @param img_size
      * @param square_size
      * @return
@@ -368,27 +379,23 @@ public class ImageUtils {
             return img_size;
         double ratio = square_size
                 / (double) Math.max(img_size[0], img_size[1]);
-        return new int[] { (int) (img_size[0] * ratio),
-                (int) (img_size[1] * ratio) };
+        return new int[]{(int) (img_size[0] * ratio),
+                (int) (img_size[1] * ratio)};
     }
 
     /**
      * 创建缩略图
-     * 
+     *
      * @param context
-     * @param largeImagePath
-     *            原始大图路径
-     * @param thumbfilePath
-     *            输出缩略图路径
-     * @param square_size
-     *            输出图片宽度
-     * @param quality
-     *            输出图片质量
+     * @param largeImagePath 原始大图路径
+     * @param thumbfilePath  输出缩略图路径
+     * @param square_size    输出图片宽度
+     * @param quality        输出图片质量
      * @throws IOException
      */
     public static void createImageThumbnail(Context context,
-            String largeImagePath, String thumbfilePath, int square_size,
-            int quality) throws IOException {
+                                            String largeImagePath, String thumbfilePath, int square_size,
+                                            int quality) throws IOException {
         BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inSampleSize = 1;
         // 原始图片bitmap
@@ -398,8 +405,8 @@ public class ImageUtils {
             return;
 
         // 原始图片的高宽
-        int[] cur_img_size = new int[] { cur_bitmap.getWidth(),
-                cur_bitmap.getHeight() };
+        int[] cur_img_size = new int[]{cur_bitmap.getWidth(),
+                cur_bitmap.getHeight()};
         // 计算原始图片缩放后的宽高
         int[] new_img_size = scaleImageSize(cur_img_size, square_size);
         // 生成缩放后的bitmap
@@ -411,7 +418,7 @@ public class ImageUtils {
 
     /**
      * 放大缩小图片
-     * 
+     *
      * @param bitmap
      * @param w
      * @param h
@@ -456,9 +463,8 @@ public class ImageUtils {
 
     /**
      * (缩放)重绘图片
-     * 
-     * @param context
-     *            Activity
+     *
+     * @param context Activity
      * @param bitmap
      * @return
      */
@@ -491,7 +497,7 @@ public class ImageUtils {
 
     /**
      * 将Drawable转化为Bitmap
-     * 
+     *
      * @param drawable
      * @return
      */
@@ -510,10 +516,9 @@ public class ImageUtils {
 
     /**
      * 获得圆角图片的方法
-     * 
+     *
      * @param bitmap
-     * @param roundPx
-     *            一般设成14
+     * @param roundPx 一般设成14
      * @return
      */
     public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, float roundPx) {
@@ -540,7 +545,7 @@ public class ImageUtils {
 
     /**
      * 获得带倒影的图片方法
-     * 
+     *
      * @param bitmap
      * @return
      */
@@ -581,7 +586,7 @@ public class ImageUtils {
 
     /**
      * 将bitmap转化为drawable
-     * 
+     *
      * @param bitmap
      * @return
      */
@@ -592,7 +597,7 @@ public class ImageUtils {
 
     /**
      * 获取图片类型
-     * 
+     *
      * @param file
      * @return
      */
@@ -619,7 +624,7 @@ public class ImageUtils {
 
     /**
      * 获取图片的类型信息
-     * 
+     *
      * @param in
      * @return
      * @see #getImageType(byte[])
@@ -639,9 +644,8 @@ public class ImageUtils {
 
     /**
      * 获取图片的类型信息
-     * 
-     * @param bytes
-     *            2~8 byte at beginning of the image file
+     *
+     * @param bytes 2~8 byte at beginning of the image file
      * @return image mimetype or null if the file is not image
      */
     public static String getImageType(byte[] bytes) {
@@ -692,41 +696,86 @@ public class ImageUtils {
     }
 
     /**
-     * 获取图片路径 2014年8月12日
-     * 
-     * @param uri
-     * @param cursor
-     * @return E-mail:mr.huangwenwei@gmail.com
+     * 通过Uri获取文件路径
+     * 支持图片媒体,文件等
+     * <p/>
+     * Author qiujuer@live.cn
+     *
+     * @param uri     Uri
+     * @param context Context
+     * @return 文件路径
      */
-    public static String getImagePath(Uri uri, Activity context) {
-
-        String[] projection = { MediaColumns.DATA };
-        Cursor cursor = context.getContentResolver().query(uri, projection,
-                null, null, null);
-        if (cursor != null) {
-            cursor.moveToFirst();
-            int columIndex = cursor.getColumnIndexOrThrow(MediaColumns.DATA);
-            String ImagePath = cursor.getString(columIndex);
-            cursor.close();
-            return ImagePath;
+    @SuppressLint({"NewApi", "Recycle"})
+    public static String getImagePath(Uri uri, Context context) {
+        String selection = null;
+        String[] selectionArgs = null;
+        // Uri is different in versions after KITKAT (Android 4.4), we need to
+        if (Build.VERSION.SDK_INT >= 19 && DocumentsContract.isDocumentUri(context.getApplicationContext(), uri)) {
+            String authority = uri.getAuthority();
+            if ("com.android.externalstorage.documents".equals(authority)) {
+                // isExternalStorageDocument
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                return Environment.getExternalStorageDirectory() + "/" + split[1];
+            } else if ("com.android.providers.downloads.documents".equals(authority)) {
+                // isDownloadsDocument
+                final String id = DocumentsContract.getDocumentId(uri);
+                uri = ContentUris.withAppendedId(
+                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+            } else if ("com.android.providers.media.documents".equals(authority)) {
+                // isMediaDocument
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+                if ("image".equals(type)) {
+                    uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                } else if ("video".equals(type)) {
+                    uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                } else if ("audio".equals(type)) {
+                    uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                }
+                selection = "_id=?";
+                selectionArgs = new String[]{
+                        split[1]
+                };
+            }
         }
-
-        return uri.toString();
+        if ("content".equalsIgnoreCase(uri.getScheme())) {
+            String[] projection = {MediaStore.Images.Media.DATA};
+            Cursor cursor = null;
+            try {
+                cursor = context.getContentResolver()
+                        .query(uri, projection, selection, selectionArgs, null);
+                if (cursor != null) {
+                    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                    if (cursor.moveToFirst()) {
+                        return cursor.getString(column_index);
+                    }
+                }
+            } catch (Exception e) {
+                e.fillInStackTrace();
+            } finally {
+                if (cursor != null)
+                    cursor.close();
+            }
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
+        return null;
     }
 
     static Bitmap bitmap = null;
 
     /**
      * 2014年8月13日
-     * 
+     *
      * @param uri
-     * @param context
-     *            E-mail:mr.huangwenwei@gmail.com
+     * @param context E-mail:mr.huangwenwei@gmail.com
      */
     public static Bitmap loadPicasaImageFromGalley(final Uri uri,
-            final Activity context) {
+                                                   final Activity context) {
 
-        String[] projection = { MediaColumns.DATA, MediaColumns.DISPLAY_NAME };
+        String[] projection = {MediaColumns.DATA, MediaColumns.DISPLAY_NAME};
         Cursor cursor = context.getContentResolver().query(uri, projection,
                 null, null, null);
         if (cursor != null) {
