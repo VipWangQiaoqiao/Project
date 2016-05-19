@@ -57,5 +57,7 @@ public class TweetLike extends Entity {
     public void setAppClient(int appClient) {
         this.appClient = appClient;
     }
+
+
 }
 

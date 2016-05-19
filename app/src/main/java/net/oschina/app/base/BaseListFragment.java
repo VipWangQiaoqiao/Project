@@ -43,8 +43,7 @@ import cz.msebera.android.httpclient.Header;
 
 @SuppressLint("NewApi")
 public abstract class BaseListFragment<T extends Entity> extends BaseFragment
-        implements SwipeRefreshLayout.OnRefreshListener, OnItemClickListener,
-        OnScrollListener {
+        implements SwipeRefreshLayout.OnRefreshListener, OnItemClickListener, OnScrollListener {
 
     public static final String BUNDLE_KEY_CATALOG = "BUNDLE_KEY_CATALOG";
 
@@ -69,6 +68,35 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
     private AsyncTask<String, Void, ListEntity<T>> mCacheTask;
     private ParserTask mParserTask;
+    protected AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
+
+        @Override
+        public void onSuccess(int statusCode, Header[] headers,
+                              byte[] responseBytes) {
+            if (mCurrentPage == 0 && needAutoRefresh()) {
+                AppContext.putToLastRefreshTime(getCacheKey(),
+                        StringUtils.getCurTimeStr());
+            }
+            if (isAdded()) {
+                if (mState == STATE_REFRESH) {
+                    onRefreshNetworkSuccess();
+                }
+                executeParserTask(responseBytes);
+            } else {
+                executeOnLoadFinish();
+            }
+        }
+
+        @Override
+        public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+                              Throwable arg3) {
+            if (isAdded()) {
+                readCacheData(getCacheKey());
+            } else {
+                executeOnLoadFinish();
+            }
+        }
+    };
 
     @Override
     protected int getLayoutId() {
@@ -253,7 +281,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
     /***
      * 自动刷新的时间
-     * <p>
+     * <p/>
      * 默认：自动刷新的时间为半天时间
      *
      * @return
@@ -285,66 +313,6 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
             mCacheTask = null;
         }
     }
-
-    private class CacheTask extends AsyncTask<String, Void, ListEntity<T>> {
-        private final WeakReference<Context> mContext;
-
-        private CacheTask(Context context) {
-            mContext = new WeakReference<Context>(context);
-        }
-
-        @Override
-        protected ListEntity<T> doInBackground(String... params) {
-            Serializable seri = CacheManager.readObject(mContext.get(),
-                    params[0]);
-            if (seri == null) {
-                return null;
-            } else {
-                return readList(seri);
-            }
-        }
-
-        @Override
-        protected void onPostExecute(ListEntity<T> list) {
-            super.onPostExecute(list);
-            if (list != null) {
-                executeOnLoadDataSuccess(list.getList());
-            } else {
-                executeOnLoadDataError(null);
-            }
-            executeOnLoadFinish();
-        }
-    }
-
-    protected AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
-
-        @Override
-        public void onSuccess(int statusCode, Header[] headers,
-                              byte[] responseBytes) {
-            if (mCurrentPage == 0 && needAutoRefresh()) {
-                AppContext.putToLastRefreshTime(getCacheKey(),
-                        StringUtils.getCurTimeStr());
-            }
-            if (isAdded()) {
-                if (mState == STATE_REFRESH) {
-                    onRefreshNetworkSuccess();
-                }
-                executeParserTask(responseBytes);
-            } else {
-                executeOnLoadFinish();
-            }
-        }
-
-        @Override
-        public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                              Throwable arg3) {
-            if (isAdded()) {
-                readCacheData(getCacheKey());
-            } else {
-                executeOnLoadFinish();
-            }
-        }
-    };
 
     protected void executeOnLoadDataSuccess(List<T> data) {
         if (data == null) {
@@ -477,49 +445,6 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
         }
     }
 
-    class ParserTask extends AsyncTask<Void, Void, String> {
-
-        private final byte[] reponseData;
-        private boolean parserError;
-        private List<T> list;
-
-        public ParserTask(byte[] data) {
-            this.reponseData = data;
-        }
-
-        @Override
-        protected String doInBackground(Void... params) {
-            try {
-                final ListEntity<T> data = parseList(new ByteArrayInputStream(
-                        reponseData));
-                CacheManager.saveObject(getActivity(), data, getCacheKey());
-                list = data.getList();
-                if (list == null) {
-                    ResultBean resultBean = XmlUtils.toBean(ResultBean.class,
-                            reponseData);
-                    if (resultBean != null) {
-                        mResult = resultBean.getResult();
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                parserError = true;
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            if (parserError) {
-                readCacheData(getCacheKey());
-            } else {
-                executeOnLoadDataSuccess(list);
-                executeOnLoadFinish();
-            }
-        }
-    }
-
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         if (mAdapter == null || mAdapter.getCount() == 0) {
@@ -581,6 +506,79 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
         TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
         if (tvTitle != null) {
             tvTitle.setTextColor(AppContext.getInstance().getResources().getColor(ThemeSwitchUtils.getTitleReadedColor()));
+        }
+    }
+
+    private class CacheTask extends AsyncTask<String, Void, ListEntity<T>> {
+        private final WeakReference<Context> mContext;
+
+        private CacheTask(Context context) {
+            mContext = new WeakReference<Context>(context);
+        }
+
+        @Override
+        protected ListEntity<T> doInBackground(String... params) {
+            Serializable seri = CacheManager.readObject(mContext.get(),
+                    params[0]);
+            if (seri == null) {
+                return null;
+            } else {
+                return readList(seri);
+            }
+        }
+
+        @Override
+        protected void onPostExecute(ListEntity<T> list) {
+            super.onPostExecute(list);
+            if (list != null) {
+                executeOnLoadDataSuccess(list.getList());
+            } else {
+                executeOnLoadDataError(null);
+            }
+            executeOnLoadFinish();
+        }
+    }
+
+    class ParserTask extends AsyncTask<Void, Void, String> {
+
+        private final byte[] reponseData;
+        private boolean parserError;
+        private List<T> list;
+
+        public ParserTask(byte[] data) {
+            this.reponseData = data;
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            try {
+                final ListEntity<T> data = parseList(new ByteArrayInputStream(
+                        reponseData));
+                CacheManager.saveObject(getActivity(), data, getCacheKey());
+                list = data.getList();
+                if (list == null) {
+                    ResultBean resultBean = XmlUtils.toBean(ResultBean.class,
+                            reponseData);
+                    if (resultBean != null) {
+                        mResult = resultBean.getResult();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                parserError = true;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            if (parserError) {
+                readCacheData(getCacheKey());
+            } else {
+                executeOnLoadDataSuccess(list);
+                executeOnLoadFinish();
+            }
         }
     }
 }

@@ -352,4 +352,5 @@ public class Tweet extends Entity implements Parcelable {
             return ssb.append("觉得很赞");
         }
     }
+
 }
