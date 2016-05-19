@@ -25,7 +25,7 @@ public class GeneralViewPagerFragment extends BaseViewPagerFragment implements
     @Override
     protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
         String[] title = getResources().getStringArray(
-                R.array.general_news_viewpage_arrays);
+                R.array.general_viewpage_arrays);
         adapter.addTab(title[0], "news", NewsFragment.class,
                 getBundle(NewsList.CATALOG_ALL));
         adapter.addTab(title[1], "latest_blog", BlogFragment.class,

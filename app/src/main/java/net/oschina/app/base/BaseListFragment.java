@@ -106,6 +106,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        mInflater = inflater;
         View view = inflater.inflate(getLayoutId(), container, false);
         return view;
     }
