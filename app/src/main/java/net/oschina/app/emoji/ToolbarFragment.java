@@ -39,12 +39,9 @@ public class ToolbarFragment extends BaseFragment {
             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (null != mRootView) {
             ViewGroup parent = (ViewGroup) mRootView.getParent();
-            if (null != parent)
+            if (null != parent) {
                 parent.removeView(mRootView);
-
-
-
-
+            }
         }else {
             mRootView = inflater.inflate(R.layout.fragment_detail_tool_bar, container,false);
             initView(mRootView);

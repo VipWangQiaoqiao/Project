@@ -10,8 +10,10 @@ import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.BaseViewPagerFragment;
 import net.oschina.app.bean.BlogList;
 import net.oschina.app.bean.NewsList;
-import net.oschina.app.fragment.BlogFragment;
-import net.oschina.app.fragment.NewsFragment;
+import net.oschina.app.fragment.general.ActiveFragment;
+import net.oschina.app.fragment.general.BlogFragment;
+import net.oschina.app.fragment.general.NewsFragment;
+import net.oschina.app.fragment.general.QuestionFragment;
 import net.oschina.app.interf.OnTabReselectListener;
 
 /**
@@ -23,14 +25,14 @@ public class GeneralViewPagerFragment extends BaseViewPagerFragment implements
     @Override
     protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
         String[] title = getResources().getStringArray(
-                R.array.news_viewpage_arrays);
+                R.array.general_news_viewpage_arrays);
         adapter.addTab(title[0], "news", NewsFragment.class,
                 getBundle(NewsList.CATALOG_ALL));
-        adapter.addTab(title[1], "news_week", NewsFragment.class,
+        adapter.addTab(title[1], "latest_blog", BlogFragment.class,
                 getBundle(NewsList.CATALOG_WEEK));
-        adapter.addTab(title[2], "latest_blog", BlogFragment.class,
+        adapter.addTab(title[2], "question", QuestionFragment.class,
                 getBundle(BlogList.CATALOG_LATEST));
-        adapter.addTab(title[3], "recommend_blog", BlogFragment.class,
+        adapter.addTab(title[3], "activity", ActiveFragment.class,
                 getBundle(BlogList.CATALOG_RECOMMEND));
     }
 
