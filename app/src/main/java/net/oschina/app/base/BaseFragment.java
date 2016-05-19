@@ -15,10 +15,10 @@ import net.oschina.app.ui.dialog.DialogControl;
 
 /**
  * 碎片基类
- * 
+ *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @created 2014年9月25日 上午11:18:46
- * 
+ *
  */
 public class BaseFragment extends Fragment implements
         android.view.View.OnClickListener, BaseFragmentInterface {

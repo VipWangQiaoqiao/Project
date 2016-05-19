@@ -44,7 +44,7 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
     protected static final String TAG = TweetsFragment.class.getSimpleName();
     private static final String CACHE_KEY_PREFIX = "tweetslist_";
 
-    class DeleteTweetResponseHandler extends OperationResponseHandler {
+    private class DeleteTweetResponseHandler extends OperationResponseHandler {
 
         DeleteTweetResponseHandler(Object... args) {
             super(args);
