@@ -7,6 +7,12 @@
         <item>博客</item>
         <item>推荐</item>
     </string-array>
+    <string-array name="general_news_viewpage_arrays">
+        <item>资讯</item>
+        <item>博客</item>
+        <item>技术问答</item>
+        <item>活动</item>
+    </string-array>
     <string-array name="tweets_viewpage_arrays">
         <item>最新动弹</item>
         <item>热门动弹</item>
