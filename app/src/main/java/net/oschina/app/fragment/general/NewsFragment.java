@@ -26,7 +26,7 @@ public class NewsFragment extends BaseListFragment<News> {
 
     @Override
     public void initView(View view) {
-        mHeaderView = mInflater.inflate(R.layout.view_news_header, null);
+        mHeaderView = mInflater.inflate(R.layout.item_list_news_header, null);
         super.initView(view);
 
 
