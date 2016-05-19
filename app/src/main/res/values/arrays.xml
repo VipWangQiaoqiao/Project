@@ -7,7 +7,7 @@
         <item>博客</item>
         <item>推荐</item>
     </string-array>
-    <string-array name="general_news_viewpage_arrays">
+    <string-array name="general_viewpage_arrays">
         <item>资讯</item>
         <item>博客</item>
         <item>技术问答</item>
