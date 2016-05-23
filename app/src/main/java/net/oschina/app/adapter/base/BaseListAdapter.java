@@ -1,4 +1,4 @@
-package net.oschina.app.adapter;
+package net.oschina.app.adapter.base;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import com.bumptech.glide.RequestManager;
+
+import net.oschina.app.adapter.ViewHolder;
 
 import java.util.ArrayList;
 import java.util.Date;

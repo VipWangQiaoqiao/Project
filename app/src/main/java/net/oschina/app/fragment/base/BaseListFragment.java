@@ -4,9 +4,17 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.loopj.android.http.TextHttpResponseHandler;
+
 import net.oschina.app.R;
-import net.oschina.app.adapter.BaseListAdapter;
+import net.oschina.app.adapter.base.BaseListAdapter;
+import net.oschina.app.bean.ResultBean;
 import net.oschina.app.widget.SuperRefreshLayout;
+
+import java.lang.reflect.Type;
+import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by huanghaibin
@@ -18,8 +26,9 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
     protected ListView mListView;
     protected SuperRefreshLayout mRefreshLayout;
     protected BaseListAdapter<T> mAdapter;
-
     protected boolean mIsRefresh;
+
+    protected TextHttpResponseHandler mHandler;
 
     @Override
     protected int getLayoutId() {
@@ -33,6 +42,18 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
         mRefreshLayout = (SuperRefreshLayout) root.findViewById(R.id.superRefreshLayout);
         mAdapter = getListAdapter();
         mListView.setAdapter(mAdapter);
+
+        mHandler = new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+
+            }
+        };
     }
 
     @Override
@@ -51,6 +72,9 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
         requestData();
     }
 
+    /**
+     * request network data
+     */
     protected void requestData() {
 
     }
@@ -67,4 +91,6 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
     }
 
     protected abstract BaseListAdapter<T> getListAdapter();
+
+    protected abstract Type getType();
 }

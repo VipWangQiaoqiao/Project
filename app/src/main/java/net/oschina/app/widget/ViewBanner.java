@@ -1,0 +1,49 @@
+package net.oschina.app.widget;
+
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.bumptech.glide.RequestManager;
+
+import net.oschina.app.R;
+import net.oschina.app.bean.Banner;
+
+/**
+ * Created by huanghaibin
+ * on 16-5-23.
+ */
+public class ViewBanner extends RelativeLayout implements View.OnClickListener {
+    private Banner banner;
+    private ImageView iv_banner;
+    private TextView tv_title;
+
+    public ViewBanner(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init(context);
+    }
+
+    private void init(Context context) {
+        LayoutInflater.from(context).inflate(R.layout.view_base_toast, this, true);
+        iv_banner = (ImageView) findViewById(R.id.iv_banner);
+        tv_title = (TextView) findViewById(R.id.tv_title);
+        setOnClickListener(this);
+    }
+
+    public void initData(RequestManager manager, Banner banner) {
+        this.banner = banner;
+        tv_title.setText(banner.getName());
+        manager.load(banner.getImg()).into(iv_banner);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (banner != null) {
+            //// TODO: 16-5-23
+        }
+    }
+}

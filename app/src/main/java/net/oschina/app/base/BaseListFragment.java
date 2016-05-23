@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -96,6 +97,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
                 executeOnLoadFinish();
             }
         }
+
     };
 
     @Override
