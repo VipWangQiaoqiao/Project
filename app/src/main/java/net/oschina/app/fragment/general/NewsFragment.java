@@ -20,16 +20,17 @@ import java.util.List;
  */
 public class NewsFragment extends BaseListFragment<News> {
     private View mHeaderView;
-    ViewPager viewPager;
+
+    private ViewPager vp_news;
 
     List<Fragment> fragments = new ArrayList<>();
 
     @Override
     public void initView(View view) {
-        mHeaderView = mInflater.inflate(R.layout.view_news_header, null);
+        mHeaderView = mInflater.inflate(R.layout.item_list_news_header, null);
+        vp_news = (ViewPager) mHeaderView.findViewById(R.id.vp_news);
+        mListView.addHeaderView(mHeaderView);
         super.initView(view);
-
-
     }
 
     @Override
