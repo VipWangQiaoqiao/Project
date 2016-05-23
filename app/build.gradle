@@ -38,4 +38,5 @@ dependencies {
     // or 1.4-beta1
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'de.hdodenhof:circleimageview:2.0.0'
+    compile 'com.google.code.gson:gson:2.6.2'
 }
