@@ -1,9 +1,7 @@
 package net.oschina.app.base;
 
-import com.squareup.picasso.Picasso;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.DrawableRes;
 import android.text.Html;
@@ -102,8 +100,8 @@ public class ListBaseAdapter<T extends Entity> extends BaseAdapter {
         return getDataSize();
     }
 
-    public int getDataSizePlus1(){
-        if(hasFooterView()){
+    public int getDataSizePlus1() {
+        if (hasFooterView()) {
             return getDataSize() + 1;
         }
         return getDataSize();
@@ -186,7 +184,7 @@ public class ListBaseAdapter<T extends Entity> extends BaseAdapter {
     @SuppressLint("InflateParams")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (position == getCount() - 1&&hasFooterView()) {// 最后一条
+        if (position == getCount() - 1 && hasFooterView()) {// 最后一条
             // if (position < _data.size()) {
             // position = getCount() - 2; // footview
             // }
@@ -203,35 +201,35 @@ public class ListBaseAdapter<T extends Entity> extends BaseAdapter {
                         .findViewById(R.id.progressbar);
                 TextView text = (TextView) mFooterView.findViewById(R.id.text);
                 switch (getState()) {
-                case STATE_LOAD_MORE:
-                    setFooterViewLoading();
-                    break;
-                case STATE_NO_MORE:
-                    mFooterView.setVisibility(View.VISIBLE);
-                    progress.setVisibility(View.GONE);
-                    text.setVisibility(View.VISIBLE);
-                    text.setText(_loadFinishText);
-                    break;
-                case STATE_EMPTY_ITEM:
-                    progress.setVisibility(View.GONE);
-                    mFooterView.setVisibility(View.VISIBLE);
-                    text.setText(_noDateText);
-                    break;
-                case STATE_NETWORK_ERROR:
-                    mFooterView.setVisibility(View.VISIBLE);
-                    progress.setVisibility(View.GONE);
-                    text.setVisibility(View.VISIBLE);
-                    if (TDevice.hasInternet()) {
-                        text.setText("加载出错了");
-                    } else {
-                        text.setText("没有可用的网络");
-                    }
-                    break;
-                default:
-                    progress.setVisibility(View.GONE);
-                    mFooterView.setVisibility(View.GONE);
-                    text.setVisibility(View.GONE);
-                    break;
+                    case STATE_LOAD_MORE:
+                        setFooterViewLoading();
+                        break;
+                    case STATE_NO_MORE:
+                        mFooterView.setVisibility(View.VISIBLE);
+                        progress.setVisibility(View.GONE);
+                        text.setVisibility(View.VISIBLE);
+                        text.setText(_loadFinishText);
+                        break;
+                    case STATE_EMPTY_ITEM:
+                        progress.setVisibility(View.GONE);
+                        mFooterView.setVisibility(View.VISIBLE);
+                        text.setText(_noDateText);
+                        break;
+                    case STATE_NETWORK_ERROR:
+                        mFooterView.setVisibility(View.VISIBLE);
+                        progress.setVisibility(View.GONE);
+                        text.setVisibility(View.VISIBLE);
+                        if (TDevice.hasInternet()) {
+                            text.setText("加载出错了");
+                        } else {
+                            text.setText("没有可用的网络");
+                        }
+                        break;
+                    default:
+                        progress.setVisibility(View.GONE);
+                        mFooterView.setVisibility(View.GONE);
+                        text.setVisibility(View.GONE);
+                        break;
                 }
                 return mFooterView;
             }
@@ -248,7 +246,7 @@ public class ListBaseAdapter<T extends Entity> extends BaseAdapter {
 
     private LinearLayout mFooterView;
 
-    protected boolean hasFooterView(){
+    protected boolean hasFooterView() {
         return true;
     }
 
@@ -306,30 +304,8 @@ public class ListBaseAdapter<T extends Entity> extends BaseAdapter {
         }
     }
 
-    protected void loadPortrait(ImageView imageView, String url) {
-        if (TextUtils.isEmpty(url)) {
-            setImageRes(imageView, R.drawable.widget_dface);
-            return;
-        }
 
-        Picasso.with(mContext)
-                .load(url)
-                .placeholder(R.drawable.widget_dface)
-                .into(imageView);
-    }
-
-    protected void loadImageForUrl(ImageView imageView, String url, @DrawableRes int placeholderRes) {
-        if (TextUtils.isEmpty(url)) {
-            return;
-        }
-        imageView.setVisibility(View.VISIBLE);
-        Picasso.with(mContext)
-                .load(url)
-                .placeholder(placeholderRes)
-                .into(imageView);
-    }
-
-    protected void setImageRes(ImageView imageRes,@DrawableRes int resId) {
+    protected void setImageRes(ImageView imageRes, @DrawableRes int resId) {
         imageRes.setImageResource(resId);
     }
 
