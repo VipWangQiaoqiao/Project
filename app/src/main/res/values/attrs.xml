@@ -20,11 +20,13 @@
         <attr name="circle_indicator_stroke_width" format="dimension" />
         <attr name="circle_indicator_fill_color" format="color" />
         <attr name="circle_indicator_radius" format="dimension" />
+        <attr name="circle_indicator_indicator_radius" format="dimension" />
     </declare-styleable>
     <declare-styleable name="LinePagerIndicator">
         <attr name="line_indicator_centerHorizontal" format="boolean" />
         <attr name="line_indicator_width" format="dimension" />
         <attr name="line_indicator_height" format="dimension" />
+        <attr name="line_indicator_indicator_height" format="dimension" />
         <attr name="line_indicator_space" format="dimension" />
         <attr name="line_indicator_fill_color" format="color" />
         <attr name="line_indicator_indicator_color" format="color" />

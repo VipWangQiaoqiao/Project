@@ -33,7 +33,8 @@ public class LinePagerIndicator extends View implements PagerIndicator {
     private int mFollowPage;
     private boolean mCenterHorizontal;
     private float mLineWidth;
-    private float mLineStroke;
+    private float mLineHeight;
+    private float mLineIndicatorHeight;
     private float mSpace;
     private boolean mIsFollow;
 
@@ -42,6 +43,7 @@ public class LinePagerIndicator extends View implements PagerIndicator {
         this(context, null);
     }
 
+    @SuppressWarnings("SuspiciousNameCombination")
     public LinePagerIndicator(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -49,14 +51,15 @@ public class LinePagerIndicator extends View implements PagerIndicator {
         mCenterHorizontal = a.getBoolean(R.styleable.LinePagerIndicator_line_indicator_centerHorizontal, true);
         mLineWidth = a.getDimension(R.styleable.LinePagerIndicator_line_indicator_width, 10);
         mSpace = a.getDimension(R.styleable.LinePagerIndicator_line_indicator_space, 5);
-        mLineStroke = a.getDimension(R.styleable.LinePagerIndicator_line_indicator_height, 0);
+        mLineHeight = a.getDimension(R.styleable.LinePagerIndicator_line_indicator_height, 0);
+        mLineIndicatorHeight = a.getDimension(R.styleable.LinePagerIndicator_line_indicator_indicator_height, mLineHeight);
         mPaintFull.setColor(a.getColor(R.styleable.LinePagerIndicator_line_indicator_fill_color, 0x000000));
         mPaintIndicator.setColor(a.getColor(R.styleable.LinePagerIndicator_line_indicator_indicator_color, 0x00ff00));
         mIsFollow = a.getBoolean(R.styleable.LinePagerIndicator_line_indicator_follow, true);
         a.recycle();
 
-        mPaintIndicator.setStrokeWidth(mLineStroke);
-        mPaintFull.setStrokeWidth(mLineStroke);
+        mPaintIndicator.setStrokeWidth(mLineIndicatorHeight > mLineHeight ? mLineIndicatorHeight : mLineHeight);
+        mPaintFull.setStrokeWidth(mLineHeight);
     }
 
     @Override
@@ -98,7 +101,6 @@ public class LinePagerIndicator extends View implements PagerIndicator {
         for (int i = 0; i < count; i++) {
             startX = horizontalOffset + (i * lineWidthAndSpace);////计算下个圆绘制起点偏移量
             stopX = startX + mLineWidth;
-            //canvas.drawLine(startX, verticalOffset, stopX, verticalOffset, (i == mCurrentPage) ? mPaintIndicator : mPaintFull);
             canvas.drawLine(startX, verticalOffset, stopX, verticalOffset, mPaintFull);
         }
 

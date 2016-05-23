@@ -20,6 +20,7 @@ public class CirclePagerIndicator extends View implements PagerIndicator {
     private static final int INVALID_POINTER = -1;
 
     private float mRadius;
+    private float mIndicatorRadius;
     private final Paint mPaintFill = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint mPaintStroke = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint mPaintIndicator = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -51,7 +52,9 @@ public class CirclePagerIndicator extends View implements PagerIndicator {
         mPaintIndicator.setStyle(Paint.Style.FILL);
         mPaintIndicator.setColor(a.getColor(R.styleable.CirclePagerIndicator_circle_indicator_fill_color, 0x0000ff));
         mRadius = a.getDimension(R.styleable.CirclePagerIndicator_circle_indicator_radius, 10);
+        mIndicatorRadius = a.getDimension(R.styleable.CirclePagerIndicator_circle_indicator_indicator_radius, 10);
         mIsFollow = a.getBoolean(R.styleable.CirclePagerIndicator_circle_indicator_follow, true);
+        if (mIndicatorRadius < mRadius) mIndicatorRadius = mRadius;
         a.recycle();
     }
 
@@ -123,7 +126,7 @@ public class CirclePagerIndicator extends View implements PagerIndicator {
         cX = xOffset + cx;
         cY = yOffset;
 
-        canvas.drawCircle(cX, cY, mRadius, mPaintIndicator);
+        canvas.drawCircle(cX, cY, mIndicatorRadius, mPaintIndicator);
     }
 
     @Override
