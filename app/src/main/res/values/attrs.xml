@@ -11,6 +11,12 @@
         <attr name="disableViewPager" format="boolean" />
     </declare-styleable>
 
+    <declare-styleable name="RefreshLayout">
+        <attr name="footer_view_background" format="color" />
+        <attr name="footer_view_text_color" format="color" />
+        <attr name="is_need_footer" format="boolean" />
+    </declare-styleable>
+
     <declare-styleable name="CirclePagerIndicator">
         <attr name="circle_indicator_centerHorizontal" format="boolean" />
         <attr name="circle_indicator_follow" format="boolean" />
