@@ -1052,7 +1052,7 @@ public class OSChinaApi {
     /**
      * 请求资讯列表
      *
-     * @param pageToken 请求数据Token令牌
+     * @param pageToken 请求上下页数据令牌
      * @param handler   AsyncHttpResponseHandler
      */
     public static void getNewsList(String pageToken, AsyncHttpResponseHandler handler) {
@@ -1072,7 +1072,7 @@ public class OSChinaApi {
      * 请求博客列表
      *
      * @param catalog   博客类别 {@link #CATALOG_BLOG_NORMAL, #CATALOG_BLOG_HEAT}
-     * @param pageToken 请求数据Token令牌
+     * @param pageToken 请求上下页数据令牌
      * @param handler   AsyncHttpResponseHandler
      */
     public static void getBlogList(int catalog, String pageToken, AsyncHttpResponseHandler handler) {
@@ -1084,6 +1084,24 @@ public class OSChinaApi {
             params.put("pageToken", pageToken);
         }
 
-        ApiHttpClient.get("action/apiv2/news", params, handler);
+        ApiHttpClient.get("action/apiv2/blog", params, handler);
     }
+
+
+    /**
+     * 请求活动列表
+     *
+     * @param pageToken 请求上下页数据令牌
+     * @param handler   AsyncHttpResponseHandler
+     */
+    public static void getEventList(String pageToken, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        if (!TextUtils.isEmpty(pageToken)) {
+            params.put("pageToken", pageToken);
+        }
+
+        ApiHttpClient.get("action/apiv2/event", params, handler);
+    }
+
+
 }
