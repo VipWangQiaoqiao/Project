@@ -1,5 +1,17 @@
 package net.oschina.app;
 
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Build;
+import android.os.Looper;
+
+import net.oschina.app.util.UIHelper;
+
+import org.kymjs.kjframe.utils.FileUtils;
+import org.kymjs.kjframe.utils.SystemTool;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -10,31 +22,21 @@ import java.net.ConnectException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-import net.oschina.app.util.UIHelper;
-
-import org.kymjs.kjframe.utils.FileUtils;
-import org.kymjs.kjframe.utils.SystemTool;
-
-import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.os.Build;
-import android.os.Looper;
 import cz.msebera.android.httpclient.HttpException;
 
 /**
  * 应用程序异常：用于捕获异常和提示错误信息
- * 
+ *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @author kymjs (kymjs123@gmali.com)
  * @created 2014年9月25日 下午5:34:05
- * 
  */
 @SuppressWarnings("serial")
 public class AppException extends Exception implements UncaughtExceptionHandler {
 
-    /** 定义异常类型 */
+    /**
+     * 定义异常类型
+     */
     public final static byte TYPE_NETWORK = 0x01;
     public final static byte TYPE_SOCKET = 0x02;
     public final static byte TYPE_HTTP_CODE = 0x03;
@@ -49,7 +51,9 @@ public class AppException extends Exception implements UncaughtExceptionHandler 
     // 异常的状态码，这里一般是网络请求的状态码
     private int code;
 
-    /** 系统默认的UncaughtException处理类 */
+    /**
+     * 系统默认的UncaughtException处理类
+     */
     private AppContext mContext;
 
     private AppException(Context context) {
@@ -127,7 +131,7 @@ public class AppException extends Exception implements UncaughtExceptionHandler 
 
     /**
      * 获取APP异常崩溃处理对象
-     * 
+     *
      * @param context
      * @return
      */
@@ -144,7 +148,7 @@ public class AppException extends Exception implements UncaughtExceptionHandler 
 
     /**
      * 自定义异常处理:收集错误信息&发送错误报告
-     * 
+     *
      * @param ex
      * @return true:处理了该异常信息;否则返回false
      */

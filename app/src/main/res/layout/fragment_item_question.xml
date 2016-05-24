@@ -76,7 +76,7 @@
         android:text="14" />
 
     <TextView
-        android:id="@+id/tv_ques_item_answer"
+        android:id="@+id/tv_ques_item_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/tv_ques_item_see"
