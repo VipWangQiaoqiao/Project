@@ -30,7 +30,7 @@ public class GeneralViewPagerFragment extends BaseViewPagerFragment implements
                 getBundle(NewsList.CATALOG_ALL));
         adapter.addTab(title[1], "latest_blog", BlogFragment.class,
                 getBundle(NewsList.CATALOG_WEEK));
-        adapter.addTab(title[2], "Question", QuestionFragment.class,
+        adapter.addTab(title[2], "question", QuestionFragment.class,
                 getBundle(BlogList.CATALOG_LATEST));
         adapter.addTab(title[3], "activity", ActiveFragment.class,
                 getBundle(BlogList.CATALOG_RECOMMEND));

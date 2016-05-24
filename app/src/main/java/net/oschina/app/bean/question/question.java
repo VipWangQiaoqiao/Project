@@ -2,7 +2,7 @@ package net.oschina.app.bean.question;
 
 /**
  * Created by fei on 2016/5/24.
- * desc:  Question bean
+ * desc:  question bean
  */
 public class Question {
 

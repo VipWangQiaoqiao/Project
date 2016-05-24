@@ -15,12 +15,12 @@
  */
 package net.oschina.app.emoji;
 
+import net.oschina.app.R;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import net.oschina.app.R;
 
 /**
  * Emoji在手机上的显示规则
@@ -310,7 +310,7 @@ public enum DisplayRules {
 
     GITHUB81(1, 1, R.drawable.exclamation, ":exclamation:", ":exclamation:"),
 
-    GITHUB82(1, 1, R.drawable.question, ":Question:", ":Question:"),
+    GITHUB82(1, 1, R.drawable.question, ":question:", ":question:"),
 
     GITHUB83(1, 1, R.drawable.grey_exclamation, ":grey_exclamation:",
             ":grey_exclamation:"),

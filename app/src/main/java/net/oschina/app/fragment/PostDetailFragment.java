@@ -61,7 +61,7 @@ public class PostDetailFragment extends CommonDetailFragment<Post> {
         StringBuffer tags = new StringBuffer();
         for (String tag : taglist.getTags()) {
             tags.append(String
-                    .format("<a class='tag' href='http://www.oschina.net/Question/tag/%s' >&nbsp;%s&nbsp;</a>&nbsp;&nbsp;",
+                    .format("<a class='tag' href='http://www.oschina.net/question/tag/%s' >&nbsp;%s&nbsp;</a>&nbsp;&nbsp;",
                             URLEncoder.encode(tag), tag));
         }
         return String.format("<div style='margin-top:10px;'>%s</div>", tags);
@@ -92,7 +92,7 @@ public class PostDetailFragment extends CommonDetailFragment<Post> {
 
     @Override
     protected String getShareUrl() {
-        return  String.format(URLsUtils.URL_MOBILE + "Question/%s_%s", mDetail.getAuthorId(), mId);
+        return  String.format(URLsUtils.URL_MOBILE + "question/%s_%s", mDetail.getAuthorId(), mId);
     }
 
     @Override
