@@ -65,6 +65,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
         super.initWidget(root);
         mListView = (ListView) root.findViewById(R.id.listView);
         mRefreshLayout = (SuperRefreshLayout) root.findViewById(R.id.superRefreshLayout);
+        mRefreshLayout.setSuperRefreshLayoutListener(this);
         mFooterView = LayoutInflater.from(getContext()).inflate(R.layout.layout_list_view_footer, null);
         mFooterText = (TextView) mFooterView.findViewById(R.id.tv_footer);
         mFooterProgressBar = (ProgressBar) mFooterView.findViewById(R.id.pb_footer);
@@ -104,6 +105,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
                 }
             }
         };
+
         //if is the first loading
         if (mBeam == null) {
             mBeam = new PageBean<>();
@@ -155,7 +157,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
     }
 
     protected void onRequestError(int code) {
-
+        setFooterType(TYPE_NET_ERROR);
     }
 
     protected void onRequestFinish() {
