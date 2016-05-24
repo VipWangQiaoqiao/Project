@@ -25,7 +25,7 @@ import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.networkbench.agent.impl.NBSAppAgent;
+//import com.networkbench.agent.impl.NBSAppAgent;
 
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
@@ -126,9 +126,11 @@ public class MainActivity extends AppCompatActivity implements
 
         handleIntent(getIntent());
         // 注册听云的检测分析
+        /*
         NBSAppAgent.setLicenseKey("0ed0cc66c5cb45c0a91c6fa932ca99ac")
                 .withCrashReportEnabled(true).withLocationServiceEnabled(true)
                 .start(this);
+                */
     }
 
     @Override

@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'newlens'
+//apply plugin: 'newlens'
 
 android {
     compileSdkVersion 23
@@ -19,15 +19,23 @@ android {
     }
 }
 
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(':social_sdk_library_project')
+    //compile project(':social_sdk_library_project')
+    compile(name: 'social_sdk_library_project', ext: 'aar')
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.github.chrisbanes.photoview:library:1.2.4'
     compile 'com.loopj.android:android-async-http:1.4.9'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'org.kymjs.kjframe:kjframe:2.6'
-    compile 'com.networkbench.newlens.agent.android:nbs.newlens.agent:2.2.7'
+    //compile 'com.networkbench.newlens.agent.android:nbs.newlens.agent:2.2.7'
     compile 'com.google.zxing:core:3.2.0'
     compile 'com.joanzapata.android:android-iconify:1.0.9'
     compile 'com.makeramen:roundedimageview:2.1.1'
