@@ -4,8 +4,11 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.PersistentCookieStore;
+
 
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.base.BaseApplication;
@@ -342,5 +345,12 @@ public class AppContext extends BaseApplication {
     // 设置夜间模式
     public static void setNightModeSwitch(boolean on) {
         set(KEY_NIGHT_MODE_SWITCH, on);
+    }
+
+    public static Gson createGson() {
+        com.google.gson.GsonBuilder gsonBuilder = new com.google.gson.GsonBuilder();
+        //gsonBuilder.setExclusionStrategies(new SpecificClassExclusionStrategy(null, Model.class));
+        gsonBuilder.setDateFormat("yyyy-MM-dd HH:mm:ss");
+        return gsonBuilder.create();
     }
 }
