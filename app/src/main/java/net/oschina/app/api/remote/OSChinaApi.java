@@ -1031,4 +1031,20 @@ public class OSChinaApi {
         ApiHttpClient.post("action/api/message_pub", params, handler);
     }
 
+
+    public static final int BANNER_CATALOG_NEWS = 1; // 资讯Banner
+    public static final int BANNER_CATALOG_BLOG = 2; // 博客Banner
+    public static final int BANNER_CATALOG_EVENT = 3; // 活动Banner
+
+    /**
+     * 请求Banner列表接口
+     *
+     * @param catalog {@link #BANNER_CATALOG_NEWS, #BANNER_CATALOG_BLOG, #BANNER_CATALOG_EVENT}
+     * @param handler AsyncHttpResponseHandler
+     */
+    public static void banner(int catalog, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("catalog", catalog);
+        ApiHttpClient.get("action/apiv2/banner", params, handler);
+    }
 }
