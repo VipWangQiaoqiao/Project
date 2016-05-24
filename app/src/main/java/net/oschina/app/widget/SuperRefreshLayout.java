@@ -37,7 +37,6 @@ public class SuperRefreshLayout extends SwipeRefreshLayout implements AbsListVie
         this(context, null);
     }
 
-    @SuppressLint("InflateParams")
     public SuperRefreshLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
