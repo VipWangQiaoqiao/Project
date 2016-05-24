@@ -1031,4 +1031,103 @@ public class OSChinaApi {
         ApiHttpClient.post("action/api/message_pub", params, handler);
     }
 
+
+    public static final int CATALOG_BANNER_NEWS = 1; // 资讯Banner
+    public static final int CATALOG_BANNER_BLOG = 2; // 博客Banner
+    public static final int CATALOG_BANNER_EVENT = 3; // 活动Banner
+
+    /**
+     * 请求Banner列表接口
+     *
+     * @param catalog Banner类别 {@link #CATALOG_BANNER_NEWS, #CATALOG_BANNER_BLOG, #CATALOG_BANNER_EVENT}
+     * @param handler AsyncHttpResponseHandler
+     */
+    public static void getBannerList(int catalog, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("catalog", catalog);
+        ApiHttpClient.get("action/apiv2/banner", params, handler);
+    }
+
+
+    /**
+     * 请求资讯列表
+     *
+     * @param pageToken 请求上下页数据令牌
+     * @param handler   AsyncHttpResponseHandler
+     */
+    public static void getNewsList(String pageToken, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        if (!TextUtils.isEmpty(pageToken)) {
+            params.put("pageToken", pageToken);
+        }
+
+        ApiHttpClient.get("action/apiv2/news", params, handler);
+    }
+
+
+    public static final int CATALOG_BLOG_NORMAL = 1; // 最近
+    public static final int CATALOG_BLOG_HEAT = 2; // 最热
+
+    /**
+     * 请求博客列表
+     *
+     * @param catalog   博客类别 {@link #CATALOG_BLOG_NORMAL, #CATALOG_BLOG_HEAT}
+     * @param pageToken 请求上下页数据令牌
+     * @param handler   AsyncHttpResponseHandler
+     */
+    public static void getBlogList(int catalog, String pageToken, AsyncHttpResponseHandler handler) {
+        if (catalog <= 0)
+            catalog = 1;
+        RequestParams params = new RequestParams();
+        params.put("catalog", catalog);
+        if (!TextUtils.isEmpty(pageToken)) {
+            params.put("pageToken", pageToken);
+        }
+
+        ApiHttpClient.get("action/apiv2/blog", params, handler);
+    }
+
+
+    /**
+     * 请求活动列表
+     *
+     * @param pageToken 请求上下页数据令牌
+     * @param handler   AsyncHttpResponseHandler
+     */
+    public static void getEventList(String pageToken, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        if (!TextUtils.isEmpty(pageToken)) {
+            params.put("pageToken", pageToken);
+        }
+
+        ApiHttpClient.get("action/apiv2/event", params, handler);
+    }
+
+
+    public static final int CATALOG_QUESTION_QUESTION = 1; // 提问
+    public static final int CATALOG_QUESTION_SHARE = 2; // 最热
+    public static final int CATALOG_QUESTION_MULTI = 3; // 综合
+    public static final int CATALOG_QUESTION_OCC = 4; // 职业
+    public static final int CATALOG_QUESTION_DEPOT = 5; // 站务
+
+    /**
+     * 请求问答列表
+     *
+     * @param catalog   问答类型  {@link #CATALOG_QUESTION_QUESTION, #CATALOG_QUESTION_SHARE, #CATALOG_QUESTION_MULTI},
+     *                  {@link #CATALOG_QUESTION_OCC, #CATALOG_QUESTION_DEPOT}
+     * @param pageToken 请求上下页数据令牌
+     * @param handler   AsyncHttpResponseHandler
+     */
+    public static void getQuestionList(int catalog, String pageToken, AsyncHttpResponseHandler handler) {
+        if (catalog <= 0)
+            catalog = 1;
+        RequestParams params = new RequestParams();
+        params.put("catalog", catalog);
+        if (!TextUtils.isEmpty(pageToken)) {
+            params.put("pageToken", pageToken);
+        }
+
+        ApiHttpClient.get("action/apiv2/question", params, handler);
+    }
+
 }
