@@ -1104,4 +1104,30 @@ public class OSChinaApi {
     }
 
 
+    public static final int CATALOG_QUESTION_QUESTION = 1; // 提问
+    public static final int CATALOG_QUESTION_SHARE = 2; // 最热
+    public static final int CATALOG_QUESTION_MULTI = 3; // 综合
+    public static final int CATALOG_QUESTION_OCC = 4; // 职业
+    public static final int CATALOG_QUESTION_DEPOT = 5; // 站务
+
+    /**
+     * 请求问答列表
+     *
+     * @param catalog   问答类型  {@link #CATALOG_QUESTION_QUESTION, #CATALOG_QUESTION_SHARE, #CATALOG_QUESTION_MULTI},
+     *                  {@link #CATALOG_QUESTION_OCC, #CATALOG_QUESTION_DEPOT}
+     * @param pageToken 请求上下页数据令牌
+     * @param handler   AsyncHttpResponseHandler
+     */
+    public static void getQuestionList(int catalog, String pageToken, AsyncHttpResponseHandler handler) {
+        if (catalog <= 0)
+            catalog = 1;
+        RequestParams params = new RequestParams();
+        params.put("catalog", catalog);
+        if (!TextUtils.isEmpty(pageToken)) {
+            params.put("pageToken", pageToken);
+        }
+
+        ApiHttpClient.get("action/apiv2/question", params, handler);
+    }
+
 }
