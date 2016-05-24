@@ -12,7 +12,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.base.BaseListAdapter;
-import net.oschina.app.bean.general.ResultBean;
+import net.oschina.app.bean.base.ResultBean;
 import net.oschina.app.widget.SuperRefreshLayout;
 
 import java.lang.reflect.Type;

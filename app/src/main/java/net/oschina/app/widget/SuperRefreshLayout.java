@@ -2,7 +2,6 @@ package net.oschina.app.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -10,8 +9,6 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.AbsListView;
 import android.widget.ListView;
-
-import net.oschina.app.R;
 
 /**
  * Created by huanghaibin
@@ -45,11 +42,6 @@ public class SuperRefreshLayout extends SwipeRefreshLayout implements AbsListVie
         super(context, attrs);
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
         setOnRefreshListener(this);
-        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.RefreshLayout);
-        mTextColor = array.getColor(R.styleable.RefreshLayout_footer_view_text_color, 0xff6c6c6c);
-        mFooterBackground = array.getColor(R.styleable.RefreshLayout_footer_view_background, 0xfff0f0f0);
-        array.recycle();
-
     }
 
     @Override

@@ -4,12 +4,15 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.google.gson.reflect.TypeToken;
+
 import net.oschina.app.R;
 import net.oschina.app.adapter.base.BaseListAdapter;
 import net.oschina.app.adapter.general.NewsAdapter;
 import net.oschina.app.bean.News;
 
 import java.lang.reflect.Type;
+import java.util.List;
 
 /**
  * 资讯界面
@@ -39,6 +42,7 @@ public class NewsFragment extends net.oschina.app.fragment.base.BaseListFragment
 
     @Override
     protected Type getType() {
-        return null;
+        return new TypeToken<List<News>>() {
+        }.getType();
     }
 }
