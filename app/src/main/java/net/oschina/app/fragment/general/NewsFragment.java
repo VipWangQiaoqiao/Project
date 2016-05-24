@@ -9,6 +9,7 @@ import com.google.gson.reflect.TypeToken;
 import net.oschina.app.R;
 import net.oschina.app.adapter.base.BaseListAdapter;
 import net.oschina.app.adapter.general.NewsAdapter;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.News;
 import net.oschina.app.bean.base.PageBean;
 import net.oschina.app.bean.base.ResultBean;
@@ -40,6 +41,7 @@ public class NewsFragment extends BaseListFragment<News> {
     @Override
     protected void requestData() {
         super.requestData();
+        OSChinaApi.getNewsList(mIsRefresh ? mBeam.getPrevPageToken() : mBeam.getNextPageToken(), mHandler);
     }
 
     @Override
