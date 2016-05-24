@@ -1,12 +1,13 @@
 package net.oschina.app.bean.base;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by huanghaibin
  * on 16-5-24.
  */
-public class PageBean<T> {
+public class PageBean<T> implements Serializable {
     private List<T> items;
     private String nextPageToken;
     private String prevPageToken;
@@ -44,7 +45,7 @@ public class PageBean<T> {
         this.pageInfo = pageInfo;
     }
 
-    public static class PageInfo {
+    public static class PageInfo implements Serializable {
         private int totalResults;
         private int resultsPerPage;
 
