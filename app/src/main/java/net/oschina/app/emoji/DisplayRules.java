@@ -15,12 +15,12 @@
  */
 package net.oschina.app.emoji;
 
+import net.oschina.app.R;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import net.oschina.app.R;
 
 /**
  * Emoji在手机上的显示规则
