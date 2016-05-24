@@ -1047,4 +1047,20 @@ public class OSChinaApi {
         params.put("catalog", catalog);
         ApiHttpClient.get("action/apiv2/banner", params, handler);
     }
+
+
+    /**
+     * 请求资讯列表
+     *
+     * @param pageToken 请求数据Token标示
+     * @param handler   AsyncHttpResponseHandler
+     */
+    public static void news(String pageToken, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        if (!TextUtils.isEmpty(pageToken)) {
+            params.put("pageToken", pageToken);
+        }
+
+        ApiHttpClient.get("action/apiv2/news", params, handler);
+    }
 }
