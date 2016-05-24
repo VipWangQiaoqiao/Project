@@ -1,8 +1,12 @@
 package net.oschina.app.adapter.general;
 
+import android.widget.TextView;
+
+import net.oschina.app.R;
 import net.oschina.app.adapter.ViewHolder;
 import net.oschina.app.adapter.base.BaseListAdapter;
 import net.oschina.app.bean.question.Question;
+import net.oschina.app.widget.CircleImageView;
 
 /**
  * Created by fei on 2016/5/24.
@@ -17,11 +21,22 @@ public class QuestionAdapter extends BaseListAdapter<Question> {
 
     @Override
     protected void convert(ViewHolder vh, Question item, int position) {
-
+        CircleImageView face = vh.getView(R.id.iv_ques_item_icon);
+        face.setImageResource(R.drawable.widget_dface);
+        TextView title = vh.getView(R.id.tv_ques_item_title);
+        title.setText(item.getTitle());
+        TextView content = vh.getView(R.id.tv_ques_item_content);
+        content.setText(item.getBody());
+        TextView history = vh.getView(R.id.tv_ques_item_history);
+        history.setText(item.getPubDate());
+        TextView see = vh.getView(R.id.tv_ques_item_see);
+        see.setText(item.getViewCount() + "");
+        TextView answer = vh.getView(R.id.tv_ques_item_comment);
+        answer.setText(item.getCommentCount() + "");
     }
 
     @Override
     protected int getLayoutId(int position, Question item) {
-        return 0;
+        return R.layout.fragment_item_question;
     }
 }

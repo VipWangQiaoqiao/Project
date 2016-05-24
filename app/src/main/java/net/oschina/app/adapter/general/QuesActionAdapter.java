@@ -1,6 +1,7 @@
 package net.oschina.app.adapter.general;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import net.oschina.app.R;
  */
 public class QuesActionAdapter extends BaseAdapter {
 
+    private static final String TAG = "QuesActionAdapter";
     private String[] data;
     private Context context;
 
@@ -25,6 +27,7 @@ public class QuesActionAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
+        Log.d(TAG, "getCount: --->"+data.length);
         return data.length;
     }
 
