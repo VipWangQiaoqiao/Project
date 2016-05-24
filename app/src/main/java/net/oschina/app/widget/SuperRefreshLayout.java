@@ -58,7 +58,7 @@ public class SuperRefreshLayout extends SwipeRefreshLayout implements AbsListVie
 
     @Override
     public void onRefresh() {
-        if (mListener != null && mIsOnLoading) {
+        if (mListener != null && !mIsOnLoading) {
             mListener.onRefreshing();
         }
     }

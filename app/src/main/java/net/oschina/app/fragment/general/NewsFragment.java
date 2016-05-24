@@ -54,9 +54,4 @@ public class NewsFragment extends BaseListFragment<News> {
         return new TypeToken<ResultBean<PageBean<News>>>() {
         }.getType();
     }
-
-    @Override
-    protected void setListData(ResultBean<PageBean<News>> resultBean) {
-        super.setListData(resultBean);
-    }
 }

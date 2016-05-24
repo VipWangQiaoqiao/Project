@@ -9,6 +9,7 @@ import com.google.gson.reflect.TypeToken;
 import net.oschina.app.R;
 import net.oschina.app.adapter.base.BaseListAdapter;
 import net.oschina.app.adapter.general.ActiveAdapter;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Active;
 import net.oschina.app.fragment.base.BaseListFragment;
 
@@ -35,6 +36,12 @@ public class ActiveFragment extends BaseListFragment<Active> {
     @Override
     protected void initData() {
         super.initData();
+    }
+
+    @Override
+    protected void requestData() {
+        super.requestData();
+        OSChinaApi.getEventList(mIsRefresh ? mBeam.getPrevPageToken() : mBeam.getNextPageToken(), mHandler);
     }
 
     @Override
