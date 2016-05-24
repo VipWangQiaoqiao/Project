@@ -12,11 +12,11 @@ import net.oschina.app.adapter.base.BaseListAdapter;
 import net.oschina.app.adapter.general.PostAdapter;
 import net.oschina.app.adapter.general.QuesActionAdapter;
 import net.oschina.app.bean.Post;
+import net.oschina.app.bean.base.PageBean;
 import net.oschina.app.bean.base.ResultBean;
 import net.oschina.app.fragment.base.BaseListFragment;
 
 import java.lang.reflect.Type;
-import java.util.List;
 
 /**
  * 技术问答界面
@@ -70,9 +70,8 @@ public class QuestionFragment extends BaseListFragment<Post> implements AdapterV
     }
 
     @Override
-    protected void setListData(ResultBean<List<Post>> resultBean) {
+    protected void setListData(ResultBean<PageBean<Post>> resultBean) {
         super.setListData(resultBean);
-        Log.d(TAG, "setListData: ------->");
     }
 
     @Override
@@ -87,15 +86,17 @@ public class QuestionFragment extends BaseListFragment<Post> implements AdapterV
         Log.d(TAG, "onRequestFinish: ------------->");
     }
 
+
+
     @Override
-    protected void onRequestSuccess() {
-        super.onRequestSuccess();
+    protected void onRequestSuccess(int code) {
+        super.onRequestSuccess(code);
         Log.d(TAG, "onRequestSuccess: ---------------->");
     }
 
     @Override
-    protected void onRequestError() {
-        super.onRequestError();
+    protected void onRequestError(int code) {
+        super.onRequestError(code);
         Log.d(TAG, "onRequestError: --------------->");
     }
 

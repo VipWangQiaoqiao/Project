@@ -87,6 +87,12 @@ public abstract class BaseListAdapter<T> extends BaseAdapter implements ViewHold
         notifyDataSetChanged();
     }
 
+    public void addItem(int position,List<T> items) {
+        checkListNull();
+        mDatas.addAll(position,items);
+        notifyDataSetChanged();
+    }
+
     public void removeItem(int location) {
         if (mDatas == null || mDatas.isEmpty()) {
             return;
