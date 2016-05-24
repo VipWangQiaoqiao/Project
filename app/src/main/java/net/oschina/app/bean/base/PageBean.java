@@ -44,7 +44,7 @@ public class PageBean<T> {
         this.pageInfo = pageInfo;
     }
 
-    class PageInfo {
+    public static class PageInfo {
         private int totalResults;
         private int resultsPerPage;
 
