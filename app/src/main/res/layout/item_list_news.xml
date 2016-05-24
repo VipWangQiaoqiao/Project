@@ -49,9 +49,14 @@
 
         <TextView
             android:id="@+id/tv_time"
+            android:layout_weight="1"
             style="@style/list_text_info"
             android:layout_marginRight="10dp" />
 
+
+        <IconTextView
+            style="@style/list_text_info"
+            android:text="{fa-comments-o} " />
 
         <TextView
             android:id="@+id/tv_comment_count"

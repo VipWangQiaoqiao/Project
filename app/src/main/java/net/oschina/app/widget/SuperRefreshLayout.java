@@ -2,19 +2,13 @@ package net.oschina.app.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.AbsListView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-
-import net.oschina.app.R;
 
 /**
  * Created by huanghaibin
@@ -24,12 +18,7 @@ import net.oschina.app.R;
 public class SuperRefreshLayout extends SwipeRefreshLayout implements AbsListView.OnScrollListener, SwipeRefreshLayout.OnRefreshListener {
     private ListView mListView;
 
-    private View mFooterView;
-
-    private ProgressBar mProgressBar;
-    private TextView mTextView;
     private int mTouchSlop;
-
 
     private SuperRefreshLayoutListener mListener;
 
@@ -44,27 +33,14 @@ public class SuperRefreshLayout extends SwipeRefreshLayout implements AbsListVie
     private int mTextColor;
     private int mFooterBackground;
 
-    private boolean mIsNeedFooter;
-
     public SuperRefreshLayout(Context context) {
         this(context, null);
     }
 
-    @SuppressLint("InflateParams")
     public SuperRefreshLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
         setOnRefreshListener(this);
-        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.RefreshLayout);
-        mTextColor = array.getColor(R.styleable.RefreshLayout_footer_view_text_color, 0xff6c6c6c);
-        mFooterBackground = array.getColor(R.styleable.RefreshLayout_footer_view_background, 0xfff0f0f0);
-        mIsNeedFooter = array.getBoolean(R.styleable.RefreshLayout_is_need_footer, true);
-        array.recycle();
-
-        mFooterView = LayoutInflater.from(getContext()).inflate(R.layout.layout_list_view_footer, null);
-        mTextView = (TextView) mFooterView.findViewById(R.id.tv_footer);
-        mProgressBar = (ProgressBar) mFooterView.findViewById(R.id.pb_footer);
-        mTextView.setTextColor(mTextColor);
     }
 
     @Override
@@ -82,7 +58,7 @@ public class SuperRefreshLayout extends SwipeRefreshLayout implements AbsListVie
 
     @Override
     public void onRefresh() {
-        if (mListener != null) {
+        if (mListener != null && mIsOnLoading) {
             mListener.onRefreshing();
         }
     }
@@ -107,36 +83,17 @@ public class SuperRefreshLayout extends SwipeRefreshLayout implements AbsListVie
                 mListView = (ListView) childView;
                 // 设置滚动监听器给ListView, 使得滚动的情况下也可以自动加载
                 mListView.setOnScrollListener(this);
-                mFooterView.setBackgroundColor(mFooterBackground);
-                if (mIsNeedFooter) {
-                    mListView.addFooterView(mFooterView);
-                }
             }
         }
     }
 
-    public void onLoadMoreFinish() {
-        this.mProgressBar.setVisibility(GONE);
-        this.mTextView.setText("点击加载更多");
-    }
-
-    public void removeFooterView() {
-        this.mListView.removeFooterView(this.mFooterView);
-    }
 
     public void setCanLoadMore() {
-        this.mProgressBar.setVisibility(VISIBLE);
-        this.mTextView.setText("正在加载...");
         this.mCanLoadMore = true;
     }
 
-    public void setLoadingText(String paramString) {
-        this.mTextView.setText(paramString);
-    }
-
     public void setNoMoreData() {
-        this.mProgressBar.setVisibility(GONE);
-        this.mTextView.setText("没有更多数据了");
+
         this.mCanLoadMore = false;
     }
 
@@ -223,6 +180,7 @@ public class SuperRefreshLayout extends SwipeRefreshLayout implements AbsListVie
      */
     public void onLoadComplete() {
         setIsOnLoading(false);
+        setCanLoadMore();
         setRefreshing(false);
     }
 
