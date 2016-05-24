@@ -7,6 +7,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppConfig;
@@ -178,7 +179,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
             if (AppConfig.isExpiryDate(mTime)) {
                 mBeam.getItems().addAll(0, resultBean.getResult().getItems());
                 mAdapter.addItem(0, resultBean.getResult().getItems());
-            }else {
+            } else {
                 mBeam.setItems(resultBean.getResult().getItems());
                 mAdapter.clear();
                 mAdapter.addItem(mBeam.getItems());
@@ -186,7 +187,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
             mBeam.setNextPageToken(resultBean.getResult().getNextPageToken());
             mBeam.setPrevPageToken(resultBean.getResult().getPrevPageToken());
             CacheManager.saveObject(getActivity(), mBeam, CACHE_NAME);
-        }else {
+        } else {
             mAdapter.addItem(resultBean.getResult().getItems());
         }
     }
