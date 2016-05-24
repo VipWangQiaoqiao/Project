@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="8dp">
+
+    <net.oschina.app.widget.CircleImageView
+        android:id="@+id/iv_ques_item_icon"
+        style="@style/UserFaceImageStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="icon"
+        android:src="@drawable/widget_dface"
+        app:border_color="@color/white"
+        app:border_width="2dip" />
+
+    <TextView
+        android:id="@+id/tv_ques_item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/iv_ques_item_icon"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="2dp"
+        android:layout_marginBottom="32dp"
+        android:layout_marginLeft="4dp"
+        android:layout_toEndOf="@+id/iv_ques_item_icon"
+        android:layout_toRightOf="@+id/iv_ques_item_icon"
+        android:gravity="left|center"
+        android:maxLines="2"
+        android:minLines="1"
+        android:text="@string/pub_tweet_required_album_tip"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@android:color/background_dark" />
+
+    <TextView
+        android:id="@+id/tv_ques_item_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_ques_item_title"
+        android:layout_marginLeft="4dp"
+        android:layout_toEndOf="@+id/iv_ques_item_icon"
+        android:layout_toRightOf="@+id/iv_ques_item_icon"
+        android:gravity="left|center"
+        android:maxLines="2"
+        android:minLines="1"
+        android:paddingLeft="2dp"
+        android:text="@string/pub_tweet_required_album_tip" />
+
+    <TextView
+        android:id="@+id/tv_ques_item_history"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_ques_item_content"
+        android:layout_alignStart="@+id/tv_ques_item_content"
+        android:layout_below="@+id/tv_ques_item_content"
+        android:layout_marginLeft="6dp"
+        android:text="6 hours ago" />
+
+    <TextView
+        android:id="@+id/tv_ques_item_see"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/tv_ques_item_title"
+        android:layout_alignRight="@+id/tv_ques_item_title"
+        android:layout_alignTop="@+id/tv_ques_item_history"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="8dp"
+        android:drawableLeft="@drawable/ic_action_comment"
+        android:drawablePadding="4dp"
+        android:gravity="center"
+        android:text="14" />
+
+    <TextView
+        android:id="@+id/tv_ques_item_answer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tv_ques_item_see"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_toLeftOf="@+id/tv_ques_item_see"
+        android:drawableLeft="@drawable/ic_action_comment"
+        android:drawablePadding="4dp"
+        android:gravity="center"
+        android:text="14" />
+
+
+</RelativeLayout>

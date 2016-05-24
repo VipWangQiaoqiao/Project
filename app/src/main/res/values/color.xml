@@ -90,4 +90,8 @@
     
     <color name="spinner_background">#464646</color>
     <color name="spinner_background_press">#6baf77</color>
+
+    <!--  created by  fei -->
+    <color name="ques_bt_bg">#f6f6f6</color>
+    <color name="ques_bt_text_color">#24cf5f</color>
 </resources>
