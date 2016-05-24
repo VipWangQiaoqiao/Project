@@ -12,16 +12,18 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.base.BaseListAdapter;
+import net.oschina.app.bean.base.PageBean;
 import net.oschina.app.bean.base.ResultBean;
+import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.widget.SuperRefreshLayout;
 
 import java.lang.reflect.Type;
 import java.util.Date;
-import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
 /**
+ * T as the base bean
  * Created by huanghaibin
  * on 16-5-23.
  */
@@ -38,11 +40,11 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
     private ProgressBar mFooterProgressBar;
     private TextView mFooterText;
 
-    //@Bind(R.id.listview)
     protected ListView mListView;
 
-    //@Bind(R.id.superRefreshLayout)
     protected SuperRefreshLayout mRefreshLayout;
+
+    protected EmptyLayout mErrorLayout;
 
     protected BaseListAdapter<T> mAdapter;
     protected boolean mIsRefresh;
@@ -57,6 +59,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
+        mErrorLayout = (EmptyLayout) root.findViewById(R.id.error_layout);
         mListView = (ListView) root.findViewById(R.id.listView);
         mRefreshLayout = (SuperRefreshLayout) root.findViewById(R.id.superRefreshLayout);
         mFooterView = LayoutInflater.from(getContext()).inflate(R.layout.layout_list_view_footer, null);
@@ -76,19 +79,25 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
         mHandler = new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                onRequestError();
+                onRequestError(statusCode);
                 onRequestFinish();
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                onRequestSuccess();
-                ResultBean<List<T>> resultBean = AppContext.createGson().fromJson(responseString, getType());
-                if (resultBean != null)
-                    setListData(resultBean);
-                //// TODO: 16-5-23
-                onComplete();
-                onRequestFinish();
+                try {
+                    ResultBean<PageBean<T>> resultBean = AppContext.createGson().fromJson(responseString, getType());
+                    if (resultBean != null) {
+                        onRequestSuccess(resultBean.getCode());
+                        setListData(resultBean);
+                    }
+                    //// TODO: 16-5-23
+                    onComplete();
+                    onRequestFinish();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    onFailure(statusCode, headers, responseString, e);
+                }
             }
         };
     }
@@ -126,11 +135,11 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
 
     }
 
-    protected void onRequestSuccess() {
+    protected void onRequestSuccess(int code) {
 
     }
 
-    protected void onRequestError() {
+    protected void onRequestError(int code) {
 
     }
 
@@ -142,10 +151,11 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
         mRefreshLayout.onLoadComplete();
     }
 
-    protected void setListData(ResultBean<List<T>> resultBean) {
+    protected void setListData(ResultBean<PageBean<T>> resultBean) {
         if (mIsRefresh)
             mAdapter.clear();
-        mAdapter.addItem(resultBean.getResult());
+        mAdapter.addItem(resultBean.getResult().getItems());
+        mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
     }
 
     @Override
