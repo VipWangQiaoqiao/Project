@@ -1032,17 +1032,17 @@ public class OSChinaApi {
     }
 
 
-    public static final int BANNER_CATALOG_NEWS = 1; // 资讯Banner
-    public static final int BANNER_CATALOG_BLOG = 2; // 博客Banner
-    public static final int BANNER_CATALOG_EVENT = 3; // 活动Banner
+    public static final int CATALOG_BANNER_NEWS = 1; // 资讯Banner
+    public static final int CATALOG_BANNER_BLOG = 2; // 博客Banner
+    public static final int CATALOG_BANNER_EVENT = 3; // 活动Banner
 
     /**
      * 请求Banner列表接口
      *
-     * @param catalog {@link #BANNER_CATALOG_NEWS, #BANNER_CATALOG_BLOG, #BANNER_CATALOG_EVENT}
+     * @param catalog Banner类别 {@link #CATALOG_BANNER_NEWS, #CATALOG_BANNER_BLOG, #CATALOG_BANNER_EVENT}
      * @param handler AsyncHttpResponseHandler
      */
-    public static void banner(int catalog, AsyncHttpResponseHandler handler) {
+    public static void getBannerList(int catalog, AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("catalog", catalog);
         ApiHttpClient.get("action/apiv2/banner", params, handler);
@@ -1052,11 +1052,34 @@ public class OSChinaApi {
     /**
      * 请求资讯列表
      *
-     * @param pageToken 请求数据Token标示
+     * @param pageToken 请求数据Token令牌
      * @param handler   AsyncHttpResponseHandler
      */
-    public static void news(String pageToken, AsyncHttpResponseHandler handler) {
+    public static void getNewsList(String pageToken, AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
+        if (!TextUtils.isEmpty(pageToken)) {
+            params.put("pageToken", pageToken);
+        }
+
+        ApiHttpClient.get("action/apiv2/news", params, handler);
+    }
+
+
+    public static final int CATALOG_BLOG_NORMAL = 1; // 最近
+    public static final int CATALOG_BLOG_HEAT = 2; // 最热
+
+    /**
+     * 请求博客列表
+     *
+     * @param catalog   博客类别 {@link #CATALOG_BLOG_NORMAL, #CATALOG_BLOG_HEAT}
+     * @param pageToken 请求数据Token令牌
+     * @param handler   AsyncHttpResponseHandler
+     */
+    public static void getBlogList(int catalog, String pageToken, AsyncHttpResponseHandler handler) {
+        if (catalog <= 0)
+            catalog = 1;
+        RequestParams params = new RequestParams();
+        params.put("catalog", catalog);
         if (!TextUtils.isEmpty(pageToken)) {
             params.put("pageToken", pageToken);
         }
