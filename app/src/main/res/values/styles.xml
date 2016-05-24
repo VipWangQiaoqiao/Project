@@ -590,4 +590,16 @@
         <item name="android:popupBackground">#343434</item>
     </style>
 
+    <!--Created by fei on 2016/5/19.-->
+    <style name="ques_bt_styles">
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:layout_width">59dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:background">@drawable/ques_bt_bg</item>
+        <item name="android:textColor">@color/ques_bt_text_color</item>
+
+    </style>
+
 </resources>
