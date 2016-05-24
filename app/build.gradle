@@ -19,9 +19,17 @@ android {
     }
 }
 
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(':social_sdk_library_project')
+    //compile project(':social_sdk_library_project')
+    compile(name: 'social_sdk_library_project', ext: 'aar')
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.github.chrisbanes.photoview:library:1.2.4'
     compile 'com.loopj.android:android-async-http:1.4.9'
