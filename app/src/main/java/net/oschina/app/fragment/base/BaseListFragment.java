@@ -98,7 +98,6 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
                         setListData(resultBean);
                     }
                     //// TODO: 16-5-23
-                    onComplete();
                     onRequestFinish();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -161,11 +160,12 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
     }
 
     protected void onRequestFinish() {
-
+        onComplete();
     }
 
     protected void onComplete() {
         mRefreshLayout.onLoadComplete();
+        mIsRefresh = false;
     }
 
     protected void setListData(ResultBean<PageBean<T>> resultBean) {
