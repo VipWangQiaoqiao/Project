@@ -1127,7 +1127,7 @@ public class OSChinaApi {
             params.put("pageToken", pageToken);
         }
 
-        ApiHttpClient.get("action/apiv2/question", params, handler);
+        ApiHttpClient.get("action/apiv2/Question", params, handler);
     }
 
 }

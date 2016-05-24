@@ -32,7 +32,7 @@ public class URLsUtils implements Serializable {
     private final static String URL_TYPE_SOFTWARE = URL_WWW_HOST + URL_SPLITTER
             + "p" + URL_SPLITTER;
     private final static String URL_TYPE_QUESTION = URL_WWW_HOST + URL_SPLITTER
-            + "question" + URL_SPLITTER;
+            + "Question" + URL_SPLITTER;
     private final static String URL_TYPE_BLOG = URL_SPLITTER + "blog"
             + URL_SPLITTER;
     private final static String URL_TYPE_TWEET = URL_SPLITTER + "tweet"
@@ -130,7 +130,7 @@ public class URLsUtils implements Serializable {
                                     URL_TYPE_QUESTION_TAG));
                             urls.setObjType(URL_OBJ_TYPE_QUESTION_TAG);
                         }
-                        // 问答 www.oschina.net/question/12_45738
+                        // 问答 www.oschina.net/Question/12_45738
                         else {
                             objId = parseObjId(path, URL_TYPE_QUESTION);
                             String[] _tmp = objId.split(URL_UNDERLINE);

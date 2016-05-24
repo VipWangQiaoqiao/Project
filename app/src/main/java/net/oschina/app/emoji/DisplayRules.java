@@ -310,7 +310,7 @@ public enum DisplayRules {
 
     GITHUB81(1, 1, R.drawable.exclamation, ":exclamation:", ":exclamation:"),
 
-    GITHUB82(1, 1, R.drawable.question, ":question:", ":question:"),
+    GITHUB82(1, 1, R.drawable.question, ":Question:", ":Question:"),
 
     GITHUB83(1, 1, R.drawable.grey_exclamation, ":grey_exclamation:",
             ":grey_exclamation:"),

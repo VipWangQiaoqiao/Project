@@ -320,6 +320,6 @@ public class EventDetailFragment extends CommonDetailFragment<Post> {
 
     @Override
     protected String getShareUrl() {
-        return String.format(URLsUtils.URL_MOBILE + "question/%s_%s", mDetail.getAuthorId(), mId);
+        return String.format(URLsUtils.URL_MOBILE + "Question/%s_%s", mDetail.getAuthorId(), mId);
     }
 }
