@@ -38,10 +38,8 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
     private ProgressBar mFooterProgressBar;
     private TextView mFooterText;
 
-    //@Bind(R.id.listview)
     protected ListView mListView;
 
-    //@Bind(R.id.superRefreshLayout)
     protected SuperRefreshLayout mRefreshLayout;
 
     protected BaseListAdapter<T> mAdapter;

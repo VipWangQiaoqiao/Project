@@ -10,6 +10,7 @@ import net.oschina.app.R;
 import net.oschina.app.adapter.base.BaseListAdapter;
 import net.oschina.app.adapter.general.NewsAdapter;
 import net.oschina.app.bean.News;
+import net.oschina.app.fragment.base.BaseListFragment;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
 /**
  * 资讯界面
  */
-public class NewsFragment extends net.oschina.app.fragment.base.BaseListFragment<News> {
+public class NewsFragment extends BaseListFragment<News> {
     private View mHeaderView;
 
     private ViewPager vp_news;
@@ -45,4 +46,5 @@ public class NewsFragment extends net.oschina.app.fragment.base.BaseListFragment
         return new TypeToken<List<News>>() {
         }.getType();
     }
+
 }
