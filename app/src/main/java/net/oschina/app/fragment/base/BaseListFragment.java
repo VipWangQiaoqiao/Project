@@ -7,7 +7,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppConfig;
@@ -54,7 +53,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
 
     protected TextHttpResponseHandler mHandler;
 
-    private PageBean<T> mBeam;
+    protected PageBean<T> mBeam;
 
     @Override
     protected int getLayoutId() {
