@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="131dp"
+    android:layout_margin="16dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_item_blog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/widget_repaste_icon"
+        android:drawablePadding="4dp"
+        android:drawingCacheQuality="auto"
+        android:gravity="center|left"
+        android:maxLines="2"
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/blog_title_text_color_light"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/tv_item_blog_body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tv_item_blog_title"
+        android:gravity="center|left"
+        android:text="New Text" />
+
+    <TextView
+        android:id="@+id/tv_item_blog_history"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tv_item_blog_body"
+        android:gravity="center"
+        android:lines="1"
+        android:padding="6dp"
+        android:text="Small Text"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/tv_item_blog_see"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/tv_item_blog_history"
+        android:layout_marginEnd="79dp"
+        android:layout_marginRight="79dp"
+       android:drawableLeft="@drawable/widget_bar_news_nor"
+        android:drawablePadding="4dp"
+        android:gravity="center"
+        android:text="20"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/tv_item_blog_answer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tv_item_blog_see"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:drawableLeft="@drawable/widget_bar_news_nor"
+        android:gravity="center|left"
+        android:text="30"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+</RelativeLayout>

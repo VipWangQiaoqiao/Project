@@ -1,10 +1,12 @@
 package net.oschina.app.bean.question;
 
+import java.io.Serializable;
+
 /**
  * Created by fei on 2016/5/24.
  * desc:  question bean
  */
-public class Question {
+public class Question implements Serializable {
 
     private long id;
     private String title;

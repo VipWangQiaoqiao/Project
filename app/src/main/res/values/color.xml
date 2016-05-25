@@ -93,5 +93,7 @@
 
     <!--  created by  fei -->
     <color name="ques_bt_bg">#f6f6f6</color>
-    <color name="ques_bt_text_color">#24cf5f</color>
+    <color name="ques_bt_text_color_light">#24cf5f</color>
+    <color name="ques_bt_text_color_dark">#6a6a6a</color>
+    <color name="blog_title_text_color_light">#111111</color>
 </resources>

@@ -18,7 +18,7 @@ public class NewsAdapter extends BaseListAdapter<News> {
     protected void convert(ViewHolder vh, News item, int position) {
         vh.setText(R.id.tv_title, item.getTitle());
         vh.setText(R.id.tv_description, item.getBody());
-        vh.setText(R.id.tv_date, item.getPubDate());
+        vh.setText(R.id.tv_time, item.getPubDate());
         vh.setText(R.id.tv_comment_count, String.valueOf(item.getCommentCount()));
     }
 

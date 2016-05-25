@@ -1,16 +1,18 @@
 package net.oschina.app.bean.blog;
 
+import java.io.Serializable;
+
 /**
  * Created by fei on 2016/5/24.
  * desc:   blog bean
  */
-public class Blog {
+public class Blog implements Serializable {
 
     private long id;
     private String title;
     private String body;
     private String author;
-    private String pubDate;
+    private String time;
     private int commentCount;
     private int viewCount;
     private String href;
@@ -51,12 +53,12 @@ public class Blog {
         this.author = author;
     }
 
-    public String getPubDate() {
-        return pubDate;
+    public String getTime() {
+        return time;
     }
 
-    public void setPubDate(String pubDate) {
-        this.pubDate = pubDate;
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public int getCommentCount() {
