@@ -237,6 +237,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
         }
         if (resultBean.getResult().getItems().size() < 10) {
             setFooterType(TYPE_NO_MORE);
+            mRefreshLayout.setNoMoreData();
         }
         if (mAdapter.getDatas().size() > 0) {
             mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
