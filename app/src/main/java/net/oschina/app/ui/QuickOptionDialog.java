@@ -9,10 +9,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
-import android.widget.ImageView;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.SimpleBackPage;
@@ -21,8 +17,6 @@ import net.oschina.app.util.UIHelper;
 
 public class QuickOptionDialog extends Dialog implements
         android.view.View.OnClickListener {
-
-    private ImageView mClose;
 
     public interface OnQuickOptionformClick {
         void onQuickOptionClick(int id);
@@ -49,16 +43,7 @@ public class QuickOptionDialog extends Dialog implements
                 this);
         contentView.findViewById(R.id.ly_quick_option_note).setOnClickListener(
                 this);
-        mClose = (ImageView) contentView.findViewById(R.id.iv_close);
 
-        Animation operatingAnim = AnimationUtils.loadAnimation(getContext(),
-                R.anim.quick_option_close);
-        LinearInterpolator lin = new LinearInterpolator();
-        operatingAnim.setInterpolator(lin);
-
-        mClose.startAnimation(operatingAnim);
-
-        mClose.setOnClickListener(this);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         contentView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -96,9 +81,6 @@ public class QuickOptionDialog extends Dialog implements
     public void onClick(View v) {
         final int id = v.getId();
         switch (id) {
-            case R.id.iv_close:
-                dismiss();
-                break;
             case R.id.ly_quick_option_text:
                 onClickTweetPub(R.id.ly_quick_option_text);
                 break;
