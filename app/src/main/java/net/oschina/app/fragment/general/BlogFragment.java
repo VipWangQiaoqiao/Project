@@ -12,6 +12,7 @@ import net.oschina.app.bean.base.PageBean;
 import net.oschina.app.bean.base.ResultBean;
 import net.oschina.app.bean.blog.Blog;
 import net.oschina.app.fragment.base.BaseListFragment;
+import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;
 
@@ -21,10 +22,12 @@ import java.lang.reflect.Type;
 public class BlogFragment extends BaseListFragment<Blog> {
 
     public static final String BUNDLE_BLOG_TYPE = "BUNDLE_BLOG_TYPE";
+    private static final String TAG = "BlogFragment";
 
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
+        mListView.setOnItemClickListener(this);
     }
 
     @Override
@@ -47,5 +50,14 @@ public class BlogFragment extends BaseListFragment<Blog> {
     protected Type getType() {
         return new TypeToken<ResultBean<PageBean<Blog>>>() {
         }.getType();
+    }
+
+    @Override
+    protected void onItemClick(Blog item, int position) {
+        super.onItemClick(item, position);
+
+        UIHelper.showBlogDetail(getActivity(), (int) item.getId(),
+                item.getCommentCount());
+
     }
 }
