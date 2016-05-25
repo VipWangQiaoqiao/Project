@@ -128,6 +128,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
                 } else {
                     mAdapter.addItem(mBeam.getItems());
                     mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+                    mRefreshLayout.setVisibility(View.VISIBLE);
                     onRefreshing();
                     // not ExpiryDate
 //                    if (!AppConfig.isExpiryDate(AppConfig.getAppConfig(getActivity()).get(CACHE_NAME))) {
