@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.ImageView;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabContentFactory;
 import android.widget.TabHost.TabSpec;
@@ -242,8 +243,11 @@ public class MainActivity extends AppCompatActivity implements
             TabSpec tab = mTabHost.newTabSpec(getString(mainTab.getResName()));
             View indicator = View.inflate(this, R.layout.tab_indicator, null);
             TextView title = (TextView) indicator.findViewById(R.id.tab_title);
+            ImageView icon = (ImageView) indicator.findViewById(R.id.iv_icon);
+
             Drawable drawable = this.getResources().getDrawable(mainTab.getResIcon());
-            title.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
+            icon.setImageDrawable(drawable);
+            //title.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
             if (i == 2) {
                 indicator.setVisibility(View.INVISIBLE);
                 mTabHost.setNoTabChangedTag(getString(mainTab.getResName()));
