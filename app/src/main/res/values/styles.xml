@@ -594,11 +594,13 @@
     <style name="ques_bt_styles">
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:layout_height">32dp</item>
-        <item name="android:layout_width">59dp</item>
+        <item name="android:layout_width">48dp</item>
         <item name="android:layout_marginBottom">10dp</item>
         <item name="android:textSize">13sp</item>
+        <item name="android:layout_marginLeft">4dp</item>
+        <item name="android:layout_marginRight">4dp</item>
         <item name="android:background">@drawable/ques_bt_bg</item>
-        <item name="android:textColor">@color/ques_bt_text_color</item>
+        <item name="android:textColor">@color/ques_bt_text_color_light</item>
 
     </style>
 

@@ -7,7 +7,9 @@ import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.adapter.base.BaseListAdapter;
 import net.oschina.app.adapter.general.BlogAdapter;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.base.PageBean;
+import net.oschina.app.bean.base.ResultBean;
 import net.oschina.app.bean.blog.Blog;
 import net.oschina.app.fragment.base.BaseListFragment;
 
@@ -31,13 +33,19 @@ public class BlogFragment extends BaseListFragment<Blog> {
     }
 
     @Override
+    protected void requestData() {
+        super.requestData();
+        OSChinaApi.getBlogList(OSChinaApi.CATALOG_BLOG_NORMAL, mIsRefresh ? mBeam.getPrevPageToken() : mBeam.getNextPageToken(), mHandler);
+    }
+
+    @Override
     protected BaseListAdapter<Blog> getListAdapter() {
         return new BlogAdapter(this);
     }
 
     @Override
     protected Type getType() {
-        return new TypeToken<PageBean<Blog>>() {
+        return new TypeToken<ResultBean<PageBean<Blog>>>() {
         }.getType();
     }
 }
