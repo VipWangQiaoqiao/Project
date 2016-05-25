@@ -16,7 +16,6 @@ public class ActiveAdapter extends BaseListAdapter<Active> {
 
     @Override
     protected void convert(ViewHolder vh, Active item, int position) {
-
     }
 
     @Override

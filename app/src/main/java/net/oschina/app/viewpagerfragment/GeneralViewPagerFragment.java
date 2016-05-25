@@ -10,7 +10,7 @@ import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.BaseViewPagerFragment;
 import net.oschina.app.bean.BlogList;
 import net.oschina.app.bean.NewsList;
-import net.oschina.app.fragment.general.ActiveFragment;
+import net.oschina.app.fragment.general.EventFragment;
 import net.oschina.app.fragment.general.BlogFragment;
 import net.oschina.app.fragment.general.NewsFragment;
 import net.oschina.app.fragment.general.QuestionFragment;
@@ -32,7 +32,7 @@ public class GeneralViewPagerFragment extends BaseViewPagerFragment implements
                 getBundle(NewsList.CATALOG_WEEK));
         adapter.addTab(title[2], "question", QuestionFragment.class,
                 getBundle(BlogList.CATALOG_LATEST));
-        adapter.addTab(title[3], "activity", ActiveFragment.class,
+        adapter.addTab(title[3], "activity", EventFragment.class,
                 getBundle(BlogList.CATALOG_RECOMMEND));
     }
 

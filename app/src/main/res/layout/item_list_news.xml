@@ -26,6 +26,8 @@
 
         <TextView
             android:id="@+id/tv_title"
+            android:maxLines="2"
+            android:lineSpacingExtra="@dimen/space_5"
             style="@style/list_text_title"
             android:singleLine="true" />
     </LinearLayout>
@@ -38,6 +40,7 @@
         android:layout_marginBottom="@dimen/space_5"
         android:ellipsize="end"
         android:maxLines="2"
+        android:lineSpacingExtra="@dimen/space_5"
         android:textColor="?attr/infoTextColor" />
 
 
