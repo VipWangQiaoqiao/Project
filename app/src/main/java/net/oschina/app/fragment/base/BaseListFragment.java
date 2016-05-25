@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.loopj.android.http.TextHttpResponseHandler;
 
-import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.base.BaseListAdapter;
@@ -73,6 +72,9 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
         super.initWidget(root);
         mListView = (ListView) root.findViewById(R.id.listView);
         mRefreshLayout = (SuperRefreshLayout) root.findViewById(R.id.superRefreshLayout);
+        mRefreshLayout.setColorSchemeResources(
+                R.color.swiperefresh_color1, R.color.swiperefresh_color2,
+                R.color.swiperefresh_color3, R.color.swiperefresh_color4);
         mErrorLayout = (EmptyLayout) root.findViewById(R.id.error_layout);
         mRefreshLayout.setSuperRefreshLayoutListener(this);
         mFooterView = LayoutInflater.from(getContext()).inflate(R.layout.layout_list_view_footer, null);
@@ -233,8 +235,9 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
         } else {
             mAdapter.addItem(resultBean.getResult().getItems());
         }
-        if(mAdapter.getDatas().size() < 10){
+        if (resultBean.getResult().getItems().size() < 10) {
             setFooterType(TYPE_NO_MORE);
+            mRefreshLayout.setNoMoreData();
         }
         if (mAdapter.getDatas().size() > 0) {
             mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
