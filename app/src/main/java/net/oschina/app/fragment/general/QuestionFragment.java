@@ -16,6 +16,7 @@ import net.oschina.app.bean.base.PageBean;
 import net.oschina.app.bean.base.ResultBean;
 import net.oschina.app.bean.question.Question;
 import net.oschina.app.fragment.base.BaseListFragment;
+import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;
 
@@ -33,6 +34,7 @@ public class QuestionFragment extends BaseListFragment<Question> {
     protected void initWidget(View root) {
         super.initWidget(root);
         headView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_main_question_header, null);
+        mListView.setOnItemClickListener(this);
         quesGridView = (GridView) headView.findViewById(R.id.gv_ques);
 
         final int[] positions = {1, 0, 0, 0, 0};
@@ -83,4 +85,10 @@ public class QuestionFragment extends BaseListFragment<Question> {
         super.setListData(resultBean);
     }
 
+    @Override
+    protected void onItemClick(Question item, int position) {
+        super.onItemClick(item, position);
+        UIHelper.showPostDetail(getActivity(), (int) item.getId(),
+                item.getCommentCount());
+    }
 }

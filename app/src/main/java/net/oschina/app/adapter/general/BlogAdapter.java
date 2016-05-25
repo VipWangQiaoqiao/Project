@@ -14,23 +14,33 @@ import net.oschina.app.bean.blog.Blog;
  */
 public class BlogAdapter extends BaseListAdapter<Blog> {
 
+    String[] blogBanner = null;
+
     public BlogAdapter(Callback callback) {
         super(callback);
+        this.blogBanner = callback.getContext().getResources().getStringArray(R.array.blog_item);
     }
 
     @Override
     protected void convert(ViewHolder vh, Blog item, int position) {
+
+        TextView banner = vh.getView(R.id.tv_item_blog_banner);
         TextView title = vh.getView(R.id.tv_item_blog_title);
         TextView content = vh.getView(R.id.tv_item_blog_body);
         TextView history = vh.getView(R.id.tv_item_blog_history);
         TextView see = vh.getView(R.id.tv_item_blog_see);
         TextView answer = vh.getView(R.id.tv_item_blog_answer);
 
+        if (position == 0) {
+            banner.setText(item.getType() == 1 ? blogBanner[0] : blogBanner[1]);
+        } else {
+            banner.setText("");
+        }
         title.setText(item.getTitle());
         content.setText(item.getBody());
         history.setText(item.getTime());
-        see.setText(item.getViewCount()+"");
-        answer.setText(item.getCommentCount()+"");
+        see.setText(item.getViewCount() + "");
+        answer.setText(item.getCommentCount() + "");
 
     }
 
