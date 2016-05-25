@@ -25,8 +25,6 @@ import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 import android.widget.Toast;
 
-//import com.networkbench.agent.impl.NBSAppAgent;
-
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.AppManager;
@@ -46,6 +44,8 @@ import net.oschina.app.widget.MyFragmentTabHost;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+//import com.networkbench.agent.impl.NBSAppAgent;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks,
