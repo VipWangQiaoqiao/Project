@@ -238,8 +238,10 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
         } else {
             mAdapter.addItem(resultBean.getResult().getItems());
         }
-        mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-        mRefreshLayout.setVisibility(View.VISIBLE);
+        if(mAdapter.getDatas().size() > 0){
+            mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+            mRefreshLayout.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
