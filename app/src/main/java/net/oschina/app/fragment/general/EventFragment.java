@@ -8,11 +8,11 @@ import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.R;
 import net.oschina.app.adapter.base.BaseListAdapter;
-import net.oschina.app.adapter.general.ActiveAdapter;
+import net.oschina.app.adapter.general.EventAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.bean.Active;
 import net.oschina.app.bean.base.PageBean;
 import net.oschina.app.bean.base.ResultBean;
+import net.oschina.app.bean.event.Event;
 import net.oschina.app.fragment.base.BaseListFragment;
 
 import java.lang.reflect.Type;
@@ -20,7 +20,7 @@ import java.lang.reflect.Type;
 /**
  * 活动界面
  */
-public class ActiveFragment extends BaseListFragment<Active> {
+public class EventFragment extends BaseListFragment<Event> {
 
     private View mHeaderView;
 
@@ -46,13 +46,13 @@ public class ActiveFragment extends BaseListFragment<Active> {
     }
 
     @Override
-    protected BaseListAdapter<Active> getListAdapter() {
-        return new ActiveAdapter(this);
+    protected BaseListAdapter<Event> getListAdapter() {
+        return new EventAdapter(this);
     }
 
     @Override
     protected Type getType() {
-        return new TypeToken<ResultBean<PageBean<Active>>>() {
+        return new TypeToken<ResultBean<PageBean<Event>>>() {
         }.getType();
     }
 }
