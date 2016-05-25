@@ -16,10 +16,14 @@ import net.oschina.app.adapter.base.BaseListAdapter;
 import net.oschina.app.bean.base.PageBean;
 import net.oschina.app.bean.base.ResultBean;
 import net.oschina.app.cache.CacheManager;
+import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.widget.SuperRefreshLayout;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -34,6 +38,8 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
     protected final String CACHE_NAME = getClass().getName();
     private String mTime;
 
+    protected static ExecutorService mExeService = Executors.newFixedThreadPool(3);
+
     public static final int TYPE_NORMAL = 0;
     public static final int TYPE_LOADING = 1;
     public static final int TYPE_NO_MORE = 2;
@@ -47,6 +53,8 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
     protected ListView mListView;
 
     protected SuperRefreshLayout mRefreshLayout;
+
+    protected EmptyLayout mErrorLayout;
 
     protected BaseListAdapter<T> mAdapter;
     protected boolean mIsRefresh;
@@ -65,6 +73,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
         super.initWidget(root);
         mListView = (ListView) root.findViewById(R.id.listView);
         mRefreshLayout = (SuperRefreshLayout) root.findViewById(R.id.superRefreshLayout);
+        mErrorLayout = (EmptyLayout) root.findViewById(R.id.error_layout);
         mRefreshLayout.setSuperRefreshLayoutListener(this);
         mFooterView = LayoutInflater.from(getContext()).inflate(R.layout.layout_list_view_footer, null);
         mFooterText = (TextView) mFooterView.findViewById(R.id.tv_footer);
@@ -78,7 +87,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
     protected void initData() {
         super.initData();
         //when open this fragment,read the obj
-        mBeam = (PageBean<T>) CacheManager.readObject(getActivity(), CACHE_NAME);
+
         mAdapter = getListAdapter();
         mListView.setAdapter(mAdapter);
 
@@ -106,17 +115,27 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
             }
         };
 
-        //if is the first loading
-        if (mBeam == null) {
-            mBeam = new PageBean<>();
-            onRefreshing();
-        } else {
-            mAdapter.addItem(mBeam.getItems());
-            // not ExpiryDate
-            if (!AppConfig.isExpiryDate(AppConfig.getAppConfig(getActivity()).get(CACHE_NAME))) {
-                onRefreshing();
+
+        mExeService.submit(new Runnable() {
+            @Override
+            public void run() {
+                mBeam = (PageBean<T>) CacheManager.readObject(getActivity(), CACHE_NAME);
+                //if is the first loading
+                if (mBeam == null) {
+                    mBeam = new PageBean<>();
+                    mBeam.setItems(new ArrayList<T>());
+                    onRefreshing();
+                } else {
+                    mAdapter.addItem(mBeam.getItems());
+                    mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+                    onRefreshing();
+                    // not ExpiryDate
+//                    if (!AppConfig.isExpiryDate(AppConfig.getAppConfig(getActivity()).get(CACHE_NAME))) {
+//                        onRefreshing();
+//                    }
+                }
             }
-        }
+        });
     }
 
     @Override
@@ -169,28 +188,57 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
         mIsRefresh = false;
     }
 
+    //    protected void setListData(ResultBean<PageBean<T>> resultBean) {
+//        //is refresh
+//        if (mIsRefresh) {
+//            //cache the time
+//            mTime = resultBean.getTime();
+//            AppConfig.getAppConfig(getActivity()).set(CACHE_NAME, mTime);
+//
+//            //is ExpiryDate
+//            if (AppConfig.isExpiryDate(mTime)) {
+//                mBeam.getItems().addAll(0, resultBean.getResult().getItems());
+//                mAdapter.addItem(0, resultBean.getResult().getItems());
+//            } else {
+//                mBeam.setItems(resultBean.getResult().getItems());
+//                mAdapter.clear();
+//                mAdapter.addItem(mBeam.getItems());
+//            }
+//            mBeam.setNextPageToken(resultBean.getResult().getNextPageToken());
+//            mBeam.setPrevPageToken(resultBean.getResult().getPrevPageToken());
+//            mExeService.submit(new Runnable() {
+//                @Override
+//                public void run() {
+//                    CacheManager.saveObject(getActivity(), mBeam, CACHE_NAME);
+//                }
+//            });
+//        } else {
+//            mAdapter.addItem(resultBean.getResult().getItems());
+//        }
+//        mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+//        mRefreshLayout.setVisibility(View.VISIBLE);
+//    }
     protected void setListData(ResultBean<PageBean<T>> resultBean) {
         //is refresh
         if (mIsRefresh) {
             //cache the time
             mTime = resultBean.getTime();
-            AppConfig.getAppConfig(getActivity()).set(CACHE_NAME, mTime);
-
-            //is ExpiryDate
-            if (AppConfig.isExpiryDate(mTime)) {
-                mBeam.getItems().addAll(0, resultBean.getResult().getItems());
-                mAdapter.addItem(0, resultBean.getResult().getItems());
-            } else {
-                mBeam.setItems(resultBean.getResult().getItems());
-                mAdapter.clear();
-                mAdapter.addItem(mBeam.getItems());
-            }
+            mBeam.setItems(resultBean.getResult().getItems());
+            mAdapter.clear();
+            mAdapter.addItem(mBeam.getItems());
             mBeam.setNextPageToken(resultBean.getResult().getNextPageToken());
             mBeam.setPrevPageToken(resultBean.getResult().getPrevPageToken());
-            CacheManager.saveObject(getActivity(), mBeam, CACHE_NAME);
+            mExeService.submit(new Runnable() {
+                @Override
+                public void run() {
+                    CacheManager.saveObject(getActivity(), mBeam, CACHE_NAME);
+                }
+            });
         } else {
             mAdapter.addItem(resultBean.getResult().getItems());
         }
+        mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+        mRefreshLayout.setVisibility(View.VISIBLE);
     }
 
     @Override

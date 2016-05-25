@@ -11,10 +11,11 @@ import net.oschina.app.adapter.base.BaseListAdapter;
 import net.oschina.app.adapter.general.ActiveAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Active;
+import net.oschina.app.bean.base.PageBean;
+import net.oschina.app.bean.base.ResultBean;
 import net.oschina.app.fragment.base.BaseListFragment;
 
 import java.lang.reflect.Type;
-import java.util.List;
 
 /**
  * 活动界面
@@ -51,7 +52,7 @@ public class ActiveFragment extends BaseListFragment<Active> {
 
     @Override
     protected Type getType() {
-        return new TypeToken<List<Active>>() {
+        return new TypeToken<ResultBean<PageBean<Active>>>() {
         }.getType();
     }
 }
