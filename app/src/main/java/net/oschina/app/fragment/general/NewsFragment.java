@@ -5,6 +5,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -16,9 +17,11 @@ import net.oschina.app.adapter.general.NewsAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Banner;
 import net.oschina.app.bean.News;
+import net.oschina.app.bean.NewsList;
 import net.oschina.app.bean.base.PageBean;
 import net.oschina.app.bean.base.ResultBean;
 import net.oschina.app.fragment.base.BaseListFragment;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.ViewBanner;
 
 import java.lang.reflect.Type;
@@ -76,6 +79,11 @@ public class NewsFragment extends BaseListFragment<News> {
     protected void requestData() {
         super.requestData();
         OSChinaApi.getNewsList(mIsRefresh ? mBeam.getPrevPageToken() : mBeam.getNextPageToken(), mHandler);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
     }
 
     @Override

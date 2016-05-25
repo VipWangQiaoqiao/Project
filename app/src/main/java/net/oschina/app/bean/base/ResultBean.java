@@ -41,4 +41,8 @@ public class ResultBean<T> {
     public void setTime(String time) {
         this.time = time;
     }
+
+    public boolean isSuccess(){
+        return code == 1;
+    }
 }

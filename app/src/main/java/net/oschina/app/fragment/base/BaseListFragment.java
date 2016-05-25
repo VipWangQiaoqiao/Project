@@ -78,6 +78,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
         mFooterView = LayoutInflater.from(getContext()).inflate(R.layout.layout_list_view_footer, null);
         mFooterText = (TextView) mFooterView.findViewById(R.id.tv_footer);
         mFooterProgressBar = (ProgressBar) mFooterView.findViewById(R.id.pb_footer);
+        mListView.setOnItemClickListener(this);
         setFooterType(TYPE_LOADING);
         if (isNeedFooter())
             mListView.addFooterView(mFooterView);
@@ -102,7 +103,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
                     ResultBean<PageBean<T>> resultBean = AppContext.createGson().fromJson(responseString, getType());
-                    if (resultBean != null) {
+                    if (resultBean != null && resultBean.isSuccess()) {
                         onRequestSuccess(resultBean.getCode());
                         setListData(resultBean);
                     }
@@ -159,12 +160,6 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        T item = mAdapter.getItem(position);
-        if (item != null)
-            onItemClick(item, position);
-    }
-
-    protected void onItemClick(T item, int position) {
 
     }
 
@@ -238,9 +233,11 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
         } else {
             mAdapter.addItem(resultBean.getResult().getItems());
         }
-        if(mAdapter.getDatas().size() > 0){
+        if (mAdapter.getDatas().size() > 0) {
             mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             mRefreshLayout.setVisibility(View.VISIBLE);
+        } else {
+            mErrorLayout.setErrorType(EmptyLayout.NODATA);
         }
     }
 
