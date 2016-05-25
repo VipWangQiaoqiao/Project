@@ -41,16 +41,17 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mRoot = inflater.inflate(getLayoutId(), container, false);
-        ButterKnife.bind(this, mRoot);
-        initWidget(mRoot);
+        if (mRoot != null) {
+            ViewGroup parent = (ViewGroup) mRoot.getParent();
+            if (parent != null)
+                parent.removeView(mRoot);
+        } else {
+            mRoot = inflater.inflate(getLayoutId(), container, false);
+            ButterKnife.bind(this, mRoot);
+            initWidget(mRoot);
+            initData();
+        }
         return mRoot;
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initData();
     }
 
     @Override

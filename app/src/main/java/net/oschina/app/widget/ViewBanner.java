@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.RequestManager;
 
@@ -22,13 +23,13 @@ public class ViewBanner extends RelativeLayout implements View.OnClickListener {
     private ImageView iv_banner;
     private TextView tv_title;
 
-    public ViewBanner(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public ViewBanner(Context context) {
+        super(context, null);
         init(context);
     }
 
     private void init(Context context) {
-        LayoutInflater.from(context).inflate(R.layout.view_base_toast, this, true);
+        LayoutInflater.from(context).inflate(R.layout.view_banner, this, true);
         iv_banner = (ImageView) findViewById(R.id.iv_banner);
         tv_title = (TextView) findViewById(R.id.tv_title);
         setOnClickListener(this);
@@ -42,8 +43,6 @@ public class ViewBanner extends RelativeLayout implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (banner != null) {
-            //// TODO: 16-5-23
-        }
+        Toast.makeText(getContext(),banner.getName(),Toast.LENGTH_LONG).show();
     }
 }
