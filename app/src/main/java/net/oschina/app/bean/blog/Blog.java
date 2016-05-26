@@ -12,7 +12,7 @@ public class Blog implements Serializable {
     private String title;
     private String body;
     private String author;
-    private String time;
+    private String pubDate;
     private int commentCount;
     private int viewCount;
     private String href;
@@ -53,12 +53,12 @@ public class Blog implements Serializable {
         this.author = author;
     }
 
-    public String getTime() {
-        return time;
+    public String getPubDate() {
+        return pubDate;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setPubDate(String pubDate) {
+        this.pubDate = pubDate;
     }
 
     public int getCommentCount() {

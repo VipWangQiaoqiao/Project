@@ -28,13 +28,13 @@ public class QuestionFragment extends BaseListFragment<Question> {
     private static final String TAG = "QuestionFragment";
     private GridView quesGridView = null;
     private View headView;
+    private int catalog = 0;
 
 
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
         headView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_main_question_header, null);
-        mListView.setOnItemClickListener(this);
         quesGridView = (GridView) headView.findViewById(R.id.gv_ques);
 
         final int[] positions = {1, 0, 0, 0, 0};
@@ -44,6 +44,8 @@ public class QuestionFragment extends BaseListFragment<Question> {
         quesGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                catalog = (position + 1);
+                requestData();
                 for (int i = 0; i < positions.length; i++) {
                     if (i == position) {
                         positions[position] = 1;
@@ -71,7 +73,7 @@ public class QuestionFragment extends BaseListFragment<Question> {
     @Override
     protected void requestData() {
         super.requestData();
-        OSChinaApi.getQuestionList(OSChinaApi.CATALOG_QUESTION_QUESTION,mIsRefresh ? mBeam.getPrevPageToken() : mBeam.getNextPageToken(), mHandler);
+        OSChinaApi.getQuestionList(catalog, mIsRefresh ? mBeam.getPrevPageToken() : mBeam.getNextPageToken(), mHandler);
     }
 
     @Override
@@ -86,9 +88,10 @@ public class QuestionFragment extends BaseListFragment<Question> {
     }
 
     @Override
-    protected void onItemClick(Question item, int position) {
-        super.onItemClick(item, position);
-        UIHelper.showPostDetail(getActivity(), (int) item.getId(),
-                item.getCommentCount());
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        // super.onItemClick(parent, view, position, id);
+        Question question = mAdapter.getItem(position);
+        UIHelper.showPostDetail(getActivity(), (int) question.getId(),
+                question.getCommentCount());
     }
 }

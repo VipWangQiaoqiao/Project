@@ -38,7 +38,7 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
         }
         title.setText(item.getTitle());
         content.setText(item.getBody());
-        history.setText(item.getTime());
+        history.setText(item.getPubDate());
         see.setText(item.getViewCount() + "");
         answer.setText(item.getCommentCount() + "");
 

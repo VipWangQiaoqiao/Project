@@ -6,7 +6,6 @@ import net.oschina.app.R;
 import net.oschina.app.adapter.ViewHolder;
 import net.oschina.app.adapter.base.BaseListAdapter;
 import net.oschina.app.bean.question.Question;
-import net.oschina.app.widget.CircleImageView;
 
 /**
  * Created by fei on 2016/5/24.
@@ -21,8 +20,8 @@ public class QuestionAdapter extends BaseListAdapter<Question> {
 
     @Override
     protected void convert(ViewHolder vh, Question item, int position) {
-        CircleImageView face = vh.getView(R.id.iv_ques_item_icon);
-        face.setImageResource(R.drawable.widget_dface);
+
+        vh.setPortrait(R.id.iv_ques_item_icon, item.getAuthorPortrait());
         TextView title = vh.getView(R.id.tv_ques_item_title);
         title.setText(item.getTitle());
         TextView content = vh.getView(R.id.tv_ques_item_content);
