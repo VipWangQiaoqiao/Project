@@ -152,7 +152,7 @@ public class AppConfig {
      * @return isExpiryDate true or false
      */
     public static boolean isExpiryDate(String time) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss:SSS");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         try {
             Date date = format.parse(time);
             long delta = new Date().getTime() - date.getTime();
