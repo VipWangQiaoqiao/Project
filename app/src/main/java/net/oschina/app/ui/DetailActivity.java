@@ -82,7 +82,7 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
                 break;
             case DISPLAY_BLOG:
                 actionBarTitle = R.string.actionbar_title_blog;
-                fragment = new BlogDetailFragment();
+                fragment = new net.oschina.app.fragment.general.BlogDetailFragment();
                 break;
             case DISPLAY_SOFTWARE:
                 actionBarTitle = R.string.actionbar_title_software;
