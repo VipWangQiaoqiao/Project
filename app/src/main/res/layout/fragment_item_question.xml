@@ -3,70 +3,68 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="4dp">
+    android:background="@android:color/white">
 
     <net.oschina.app.widget.CircleImageView
         android:id="@+id/iv_ques_item_icon"
         style="@style/UserFaceImageStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="4dp"
+        android:layout_alignParentTop="true"
+        android:layout_margin="16dp"
+        android:layout_marginBottom="40dp"
+        android:layout_marginLeft="16dp"
         android:contentDescription="icon"
-        android:src="@drawable/widget_dface"
-        app:border_color="@color/white"
-        app:border_width="2dp" />
+        android:paddingTop="4dp"
+        android:src="@color/ques_bt_text_color_dark"
+        app:border_color="@color/ques_bt_text_color_dark"
+        app:border_width="1dp" />
 
     <TextView
         android:id="@+id/tv_ques_item_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/iv_ques_item_icon"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_margin="2dp"
-        android:layout_marginLeft="4dp"
+        android:layout_alignTop="@+id/iv_ques_item_icon"
+        android:layout_marginRight="16dp"
         android:layout_toEndOf="@+id/iv_ques_item_icon"
         android:layout_toRightOf="@+id/iv_ques_item_icon"
-        android:gravity="left|center"
+        android:gravity="left|top"
         android:maxLines="2"
-        android:minLines="1"
-        android:paddingBottom="4dp"
         android:paddingTop="4dp"
-        android:text="@string/pub_tweet_required_album_tip"
+        android:text=""
         android:textColor="@android:color/background_dark" />
 
     <TextView
         android:id="@+id/tv_ques_item_content"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_ques_item_title"
+        android:layout_alignStart="@+id/tv_ques_item_title"
         android:layout_below="@+id/tv_ques_item_title"
         android:layout_marginBottom="2dp"
-        android:layout_marginLeft="4dp"
+        android:layout_marginRight="16dp"
         android:layout_marginTop="2dp"
-        android:layout_toEndOf="@+id/iv_ques_item_icon"
-        android:layout_toRightOf="@+id/iv_ques_item_icon"
-        android:gravity="left|center"
+        android:gravity="left"
         android:maxLines="2"
-        android:minLines="1"
         android:paddingBottom="4dp"
-        android:paddingLeft="2dp"
-        android:paddingTop="4dp"
-        android:text="@string/pub_tweet_required_album_tip" />
+        android:text="" />
 
     <TextView
         android:id="@+id/tv_ques_item_history"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tv_ques_item_content"
-        android:layout_alignStart="@+id/tv_ques_item_content"
         android:layout_below="@+id/tv_ques_item_content"
-        android:layout_marginLeft="6dp"
+        android:layout_marginBottom="16dp"
+        android:layout_toEndOf="@+id/iv_ques_item_icon"
+        android:layout_toRightOf="@+id/iv_ques_item_icon"
         android:padding="2dp"
         android:text="6 hours ago"
-        android:textColor="@color/count_text_color_light" />
+        android:textColor="@color/count_text_color_light"
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/tv_ques_item_see"
@@ -82,7 +80,8 @@
         android:gravity="center"
         android:padding="2dp"
         android:text="14"
-        android:textColor="@color/count_text_color_light" />
+        android:textColor="@color/count_text_color_light"
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/tv_ques_item_comment"
@@ -97,7 +96,17 @@
         android:gravity="center"
         android:padding="2dp"
         android:text="14"
-        android:textColor="@color/count_text_color_light" />
+        android:textColor="@color/count_text_color_light"
+        android:textSize="12sp" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignLeft="@+id/iv_ques_item_icon"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/iv_ques_item_icon"
+        android:background="@color/count_text_color_light" />
 
 
 </RelativeLayout>

@@ -1,5 +1,8 @@
 package net.oschina.app.adapter.general;
 
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import net.oschina.app.R;
@@ -31,15 +34,24 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
         TextView history = vh.getView(R.id.tv_item_blog_history);
         TextView see = vh.getView(R.id.tv_item_blog_see);
         TextView answer = vh.getView(R.id.tv_item_blog_answer);
+        View line = vh.getView(R.id.item_blog_line);
 
         if (position == 0) {
             banner.setText(item.getType() == 1 ? blogBanner[0] : blogBanner[1]);
+            banner.setVisibility(View.VISIBLE);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.bottomMargin = 43;
+            params.leftMargin = 43;
+            banner.setLayoutParams(params);
         } else {
-            banner.setText("");
+            banner.setVisibility(View.GONE);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 3);
+            params.leftMargin = 43;
+            line.setLayoutParams(params);
         }
         title.setText(item.getTitle());
         content.setText(item.getBody());
-        history.setText(item.getAuthor() + "\t" + StringUtils.friendly_time(item.getPubDate()));
+        history.setText(item.getAuthor().length() > 9 ? item.getAuthor().substring(0, 9) : item.getAuthor() + "\t" + StringUtils.friendly_time(item.getPubDate()));
         see.setText(item.getViewCount() + "");
         answer.setText(item.getCommentCount() + "");
 
