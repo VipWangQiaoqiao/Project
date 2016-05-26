@@ -53,7 +53,7 @@ public class EventFragment extends BaseListFragment<Event> {
                 try {
                     ResultBean<PageBean<Banner>> resultBean = AppContext.createGson().fromJson(responseString, new TypeToken<ResultBean<PageBean<Banner>>>() {
                     }.getType());
-                    if (resultBean != null) {
+                    if (resultBean != null && resultBean.isSuccess()) {
                         for (Banner banner : resultBean.getResult().getItems()) {
                             ViewEventBanner viewNewsBanner = new ViewEventBanner(getActivity());
                             viewNewsBanner.initData(getImgLoader(), banner);

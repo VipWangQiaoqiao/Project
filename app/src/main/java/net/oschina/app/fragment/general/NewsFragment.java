@@ -54,7 +54,7 @@ public class NewsFragment extends BaseListFragment<News> {
                 try {
                     ResultBean<PageBean<Banner>> resultBean = AppContext.createGson().fromJson(responseString, new TypeToken<ResultBean<PageBean<Banner>>>() {
                     }.getType());
-                    if (resultBean != null) {
+                    if (resultBean != null && resultBean.isSuccess()) {
                         for (Banner banner : resultBean.getResult().getItems()) {
                             ViewNewsBanner viewNewsBanner = new ViewNewsBanner(getActivity());
                             viewNewsBanner.initData(getImgLoader(), banner);
