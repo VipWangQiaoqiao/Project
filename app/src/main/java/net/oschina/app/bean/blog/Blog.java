@@ -1,5 +1,7 @@
 package net.oschina.app.bean.blog;
 
+import com.google.gson.annotations.Expose;
+
 import java.io.Serializable;
 
 /**
@@ -22,6 +24,7 @@ public class Blog implements Serializable {
     private boolean recommend;  //是否推荐
     private boolean original;  //是否原创
     private int type;   //博客类型
+    @Expose
     private int viewType = VIEW_TYPE_DATA; //  界面显示类型 0:常规, 1: 热门 2:最近
 
 
