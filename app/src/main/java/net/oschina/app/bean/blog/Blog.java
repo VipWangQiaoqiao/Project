@@ -7,6 +7,9 @@ import java.io.Serializable;
  * desc:   blog bean
  */
 public class Blog implements Serializable {
+    public static final int VIEW_TYPE_DATA = 0;
+    public static final int VIEW_TYPE_TITLE_HEAT = 1;
+    public static final int VIEW_TYPE_TITLE_NORMAL = 2;
 
     private long id;
     private String title;
@@ -19,6 +22,7 @@ public class Blog implements Serializable {
     private boolean recommend;  //是否推荐
     private boolean original;  //是否原创
     private int type;   //博客类型
+    private int viewType = VIEW_TYPE_DATA; //  界面显示类型 0:常规, 1: 热门 2:最近
 
 
     public long getId() {
@@ -108,4 +112,13 @@ public class Blog implements Serializable {
     public void setType(int type) {
         this.type = type;
     }
+
+    public void setViewType(int viewType) {
+        this.viewType = viewType;
+    }
+
+    public int getViewType() {
+        return viewType;
+    }
 }
+
