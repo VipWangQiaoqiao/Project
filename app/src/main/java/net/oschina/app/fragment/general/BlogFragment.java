@@ -2,6 +2,7 @@ package net.oschina.app.fragment.general;
 
 
 import android.view.View;
+import android.widget.AdapterView;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -24,11 +25,6 @@ public class BlogFragment extends BaseListFragment<Blog> {
     public static final String BUNDLE_BLOG_TYPE = "BUNDLE_BLOG_TYPE";
     private static final String TAG = "BlogFragment";
 
-    @Override
-    protected void initWidget(View root) {
-        super.initWidget(root);
-        mListView.setOnItemClickListener(this);
-    }
 
     @Override
     protected void initData() {
@@ -53,11 +49,10 @@ public class BlogFragment extends BaseListFragment<Blog> {
     }
 
     @Override
-    protected void onItemClick(Blog item, int position) {
-        super.onItemClick(item, position);
-
-        UIHelper.showBlogDetail(getActivity(), (int) item.getId(),
-                item.getCommentCount());
-
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        //super.onItemClick(parent, view, position, id);
+        Blog blog = mAdapter.getItem(position);
+        UIHelper.showBlogDetail(getActivity(), (int) blog.getId(),
+                blog.getCommentCount());
     }
 }
