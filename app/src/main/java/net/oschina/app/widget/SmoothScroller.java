@@ -12,7 +12,7 @@ import java.lang.reflect.Field;
  * on 16-5-26.
  */
 public class SmoothScroller extends Scroller {
-    private int mDuration = 1500; // default time is 1500ms
+    private int mDuration = 1500; //
 
     public SmoothScroller(Context context) {
         super(context);
@@ -30,14 +30,6 @@ public class SmoothScroller extends Scroller {
     @Override
     public void startScroll(int startX, int startY, int dx, int dy) {
         super.startScroll(startX, startY, dx, dy, mDuration);
-    }
-
-    public void setmDuration(int time) {
-        mDuration = time;
-    }
-
-    public int getmDuration() {
-        return mDuration;
     }
 
     public void setViewPagerScroller(ViewPager viewPager, Context context) {

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <net.oschina.app.widget.SuperRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <net.oschina.app.widget.SuperRefreshLayout
         android:id="@+id/superRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -13,8 +13,8 @@
             android:id="@+id/listView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="@color/gray"
-            android:dividerHeight="0.5px" />
+            android:divider="@color/transparent"
+            android:dividerHeight="0dp" />
     </net.oschina.app.widget.SuperRefreshLayout>
 
     <net.oschina.app.ui.empty.EmptyLayout

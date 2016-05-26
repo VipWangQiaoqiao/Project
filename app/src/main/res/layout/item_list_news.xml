@@ -3,15 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/layout_item_bg"
-    android:orientation="vertical"
-    android:padding="@dimen/space_8">
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/ll_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/space_5"
-        android:layout_marginRight="3dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -36,8 +37,9 @@
         android:id="@+id/tv_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ll_title"
         android:layout_marginBottom="@dimen/space_5"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:ellipsize="end"
         android:maxLines="2"
         android:lineSpacingExtra="@dimen/space_5"
@@ -47,7 +49,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
         android:orientation="horizontal">
 
         <TextView
@@ -66,4 +71,7 @@
             style="@style/list_text_info" />
 
     </LinearLayout>
+    <View
+        android:layout_marginLeft="16dp"
+        style="@style/h_line"/>
 </LinearLayout>

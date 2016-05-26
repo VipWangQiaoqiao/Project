@@ -2,48 +2,64 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
-    android:orientation="horizontal">
-   <ImageView
-       android:id="@+id/iv_event"
-       android:layout_gravity="center_vertical"
-       android:contentDescription="@string/app_name"
-       android:layout_width="60dp"
-       android:layout_height="60dp" />
+    android:background="?attr/layout_item_bg"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_marginLeft="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TextView
-            android:id="@+id/tv_event_title"
-            android:maxLines="2"
-            android:lineSpacingExtra="@dimen/space_5"
-            style="@style/list_text_title"
-            android:singleLine="true" />
+   <LinearLayout
+       android:orientation="horizontal"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tv_event_state"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+       <ImageView
+           android:id="@+id/iv_event"
+           android:layout_marginTop="16dp"
+           android:layout_marginBottom="16dp"
+           android:layout_marginLeft="16dp"
+           android:layout_gravity="center_vertical"
+           android:contentDescription="@string/app_name"
+           android:layout_width="60dp"
+           android:layout_height="60dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
+       <LinearLayout
+           android:orientation="vertical"
+           android:layout_marginRight="16dp"
+           android:layout_marginBottom="16dp"
+           android:layout_marginTop="16dp"
+           android:layout_marginLeft="10dp"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent">
+           <TextView
+               android:id="@+id/tv_event_title"
+               android:maxLines="2"
+               android:lineSpacingExtra="@dimen/space_5"
+               style="@style/list_text_title"
+               android:singleLine="true" />
 
-            <TextView
-                android:id="@+id/tv_event_pub_date"
-                android:layout_weight="1"
-                style="@style/list_text_info"
-                android:layout_marginRight="10dp" />
+           <TextView
+               android:id="@+id/tv_event_state"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/tv_event_member"
-                style="@style/list_text_info" />
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="5dp"
+               android:orientation="horizontal">
 
-        </LinearLayout>
-    </LinearLayout>
+               <TextView
+                   android:id="@+id/tv_event_pub_date"
+                   android:layout_weight="1"
+                   style="@style/list_text_info"
+                   android:layout_marginRight="10dp" />
+
+               <TextView
+                   android:id="@+id/tv_event_member"
+                   style="@style/list_text_info" />
+
+           </LinearLayout>
+       </LinearLayout>
+   </LinearLayout>
+    <View
+        android:layout_marginLeft="16dp"
+        style="@style/h_line"/>
 </LinearLayout>
