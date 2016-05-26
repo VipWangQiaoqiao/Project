@@ -92,7 +92,6 @@ public class SuperRefreshLayout extends SwipeRefreshLayout implements AbsListVie
     }
 
     public void setNoMoreData() {
-
         this.mCanLoadMore = false;
     }
 
@@ -122,7 +121,7 @@ public class SuperRefreshLayout extends SwipeRefreshLayout implements AbsListVie
      * @return 是否可以加载更多
      */
     private boolean canLoad() {
-        return isInBottom() && !mIsOnLoading && isPullUp();
+        return isInBottom() && !mIsOnLoading && isPullUp() && mCanLoadMore;
     }
 
     /**
@@ -179,7 +178,6 @@ public class SuperRefreshLayout extends SwipeRefreshLayout implements AbsListVie
      */
     public void onLoadComplete() {
         setIsOnLoading(false);
-        setCanLoadMore();
         setRefreshing(false);
     }
 

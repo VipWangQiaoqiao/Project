@@ -345,7 +345,12 @@ public class UIHelper {
                 showBlogDetail(context, StringUtils.toInt(String.valueOf(newsId)),
                         news.getCommentCount());
                 break;
+            case net.oschina.app.bean.news.News.TYPE_EVENT:
+                showEventDetail(context,
+                        StringUtils.toInt(newsId));
+                break;
             default:
+                showUrlRedirect(context, news.getHref());
                 break;
         }
     }
