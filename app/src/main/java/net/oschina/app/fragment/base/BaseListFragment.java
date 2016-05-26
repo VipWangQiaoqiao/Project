@@ -109,7 +109,6 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
                         onRequestSuccess(resultBean.getCode());
                         setListData(resultBean);
                     }
-                    //// TODO: 16-5-23
                     onRequestFinish();
                 } catch (Exception e) {
                     e.printStackTrace();
