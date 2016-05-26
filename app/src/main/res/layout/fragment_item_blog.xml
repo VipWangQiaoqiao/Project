@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="16dp"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
     android:orientation="vertical">
 
     <TextView
@@ -11,7 +11,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/tv_item_blog_banner"
+        android:layout_below="@+id/item_blog_line"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
         android:drawableLeft="@drawable/widget_repaste_icon"
         android:drawablePadding="4dp"
         android:drawingCacheQuality="auto"
@@ -29,6 +33,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/tv_item_blog_title"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:gravity="center|left"
         android:text="New Text" />
 
@@ -39,17 +46,20 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/tv_item_blog_body"
-        android:gravity="center"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:gravity="left|center"
         android:lines="1"
-        android:padding="6dp"
-        android:text="Small Text"
+        android:text="NNNNN"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/count_text_color_light" />
+        android:textColor="@color/count_text_color_light"
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/tv_item_blog_see"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tv_item_blog_history"
         android:layout_alignTop="@+id/tv_item_blog_history"
         android:layout_marginEnd="23dp"
         android:layout_marginRight="23dp"
@@ -61,34 +71,45 @@
         android:text="20"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/count_text_color_light"
-        android:layout_alignBottom="@+id/tv_item_blog_history" />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/tv_item_blog_answer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tv_item_blog_see"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/tv_item_blog_see"
-        android:layout_marginEnd="23dp"
-        android:layout_marginRight="23dp"
+        android:layout_marginRight="16dp"
         android:drawableLeft="@drawable/ic_comment"
         android:drawablePadding="4dp"
         android:gravity="center|left"
         android:text="30"
         android:textColor="@color/count_text_color_light"
-        android:layout_alignBottom="@+id/tv_item_blog_see" />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/tv_item_blog_banner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:layout_alignLeft="@+id/tv_item_blog_title"
         android:layout_alignParentTop="true"
-        android:paddingBottom="4dp"
-        android:text=""
+        android:layout_alignStart="@+id/tv_item_blog_title"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
+        android:text="最热"
         android:textColor="@color/ques_bt_text_color_dark"
         android:textSize="15sp" />
+
+    <View
+        android:id="@+id/item_blog_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/tv_item_blog_banner"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="16dp"
+        android:background="@color/count_text_color_light" />
 
 </RelativeLayout>
