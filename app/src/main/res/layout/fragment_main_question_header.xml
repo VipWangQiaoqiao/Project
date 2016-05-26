@@ -2,17 +2,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@android:color/white"
     android:orientation="vertical">
 
     <GridView
         android:id="@+id/gv_ques"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:background="@android:color/white"
         android:choiceMode="singleChoice"
         android:focusable="true"
-        android:numColumns="5" />
+        android:numColumns="5"
+        android:scrollbars="none" />
+
+    <TextView
+        android:id="@+id/d_view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/count_text_color_light" />
 
 </LinearLayout>
