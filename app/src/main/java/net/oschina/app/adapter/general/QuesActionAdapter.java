@@ -15,7 +15,6 @@ import net.oschina.app.R;
  */
 public class QuesActionAdapter extends BaseAdapter {
 
-    private static final String TAG = "QuesActionAdapter";
     private String[] data;
     private Context context;
     private int[] positions;

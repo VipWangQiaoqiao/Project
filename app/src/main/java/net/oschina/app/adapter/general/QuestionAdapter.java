@@ -6,6 +6,7 @@ import net.oschina.app.R;
 import net.oschina.app.adapter.ViewHolder;
 import net.oschina.app.adapter.base.BaseListAdapter;
 import net.oschina.app.bean.question.Question;
+import net.oschina.app.util.StringUtils;
 
 /**
  * Created by fei on 2016/5/24.
@@ -27,7 +28,7 @@ public class QuestionAdapter extends BaseListAdapter<Question> {
         TextView content = vh.getView(R.id.tv_ques_item_content);
         content.setText(item.getBody());
         TextView history = vh.getView(R.id.tv_ques_item_history);
-        history.setText(item.getPubDate());
+        history.setText(item.getAuthor() + "\t" + StringUtils.friendly_time(item.getPubDate()));
         TextView see = vh.getView(R.id.tv_ques_item_see);
         see.setText(item.getViewCount() + "");
         TextView answer = vh.getView(R.id.tv_ques_item_comment);

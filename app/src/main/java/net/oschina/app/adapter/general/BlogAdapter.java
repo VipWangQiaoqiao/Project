@@ -6,6 +6,7 @@ import net.oschina.app.R;
 import net.oschina.app.adapter.ViewHolder;
 import net.oschina.app.adapter.base.BaseListAdapter;
 import net.oschina.app.bean.blog.Blog;
+import net.oschina.app.util.StringUtils;
 
 
 /**
@@ -38,7 +39,7 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
         }
         title.setText(item.getTitle());
         content.setText(item.getBody());
-        history.setText(item.getPubDate());
+        history.setText(item.getAuthor() + "\t" + StringUtils.friendly_time(item.getPubDate()));
         see.setText(item.getViewCount() + "");
         answer.setText(item.getCommentCount() + "");
 

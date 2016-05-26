@@ -23,8 +23,6 @@ import java.lang.reflect.Type;
 public class BlogFragment extends BaseListFragment<Blog> {
 
     public static final String BUNDLE_BLOG_TYPE = "BUNDLE_BLOG_TYPE";
-    private static final String TAG = "BlogFragment";
-
 
     @Override
     protected void initData() {
@@ -52,7 +50,9 @@ public class BlogFragment extends BaseListFragment<Blog> {
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //super.onItemClick(parent, view, position, id);
         Blog blog = mAdapter.getItem(position);
-        UIHelper.showBlogDetail(getActivity(), (int) blog.getId(),
-                blog.getCommentCount());
+        if (blog != null) {
+            UIHelper.showBlogDetail(getActivity(), (int) blog.getId(),
+                    blog.getCommentCount());
+        }
     }
 }

@@ -34,7 +34,7 @@ import cz.msebera.android.httpclient.Header;
 public abstract class BaseListFragment<T> extends BaseFragment implements
         SuperRefreshLayout.SuperRefreshLayoutListener, AdapterView.OnItemClickListener, BaseListAdapter.Callback {
 
-    protected final String CACHE_NAME = getClass().getName();
+    protected String CACHE_NAME = getClass().getName();
     private String mTime;
 
     protected static ExecutorService mExeService = Executors.newFixedThreadPool(3);
