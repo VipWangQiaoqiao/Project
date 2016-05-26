@@ -168,6 +168,22 @@ public class UIHelper {
     }
 
     /**
+     * 显示新闻详情
+     *
+     * @param context
+     * @param newsId
+     */
+    public static void showNewsDetail(Context context, long newsId,
+                                      int commentCount) {
+        Intent intent = new Intent(context, DetailActivity.class);
+        intent.putExtra("id", newsId);
+        intent.putExtra("comment_count", commentCount);
+        intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+                DetailActivity.DISPLAY_NEWS);
+        context.startActivity(intent);
+    }
+
+    /**
      * 显示博客详情
      *
      * @param context
@@ -304,6 +320,33 @@ public class UIHelper {
             }
         } else {
             showUrlRedirect(context, url);
+        }
+    }
+
+    /**
+     * 新闻超链接点击跳转
+     *
+     * @param context context
+     */
+    public static void showNewsDetail(Context context, net.oschina.app.bean.news.News news) {
+        long newsId = news.getId();
+        switch (news.getType()) {
+            case net.oschina.app.bean.news.News.TYPE_HREF:
+                showNewsDetail(context, newsId, news.getCommentCount());
+                break;
+            case net.oschina.app.bean.news.News.TYPE_SOFTWARE:
+                showSoftwareDetail(context, String.valueOf(newsId));
+                break;
+            case net.oschina.app.bean.news.News.TYPE_QUESTION:
+                showPostDetail(context, StringUtils.toInt(String.valueOf(newsId)),
+                        news.getCommentCount());
+                break;
+            case net.oschina.app.bean.news.News.TYPE_BLOG:
+                showBlogDetail(context, StringUtils.toInt(String.valueOf(newsId)),
+                        news.getCommentCount());
+                break;
+            default:
+                break;
         }
     }
 
