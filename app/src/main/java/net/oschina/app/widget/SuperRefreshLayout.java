@@ -179,7 +179,6 @@ public class SuperRefreshLayout extends SwipeRefreshLayout implements AbsListVie
      */
     public void onLoadComplete() {
         setIsOnLoading(false);
-        setCanLoadMore();
         setRefreshing(false);
     }
 
