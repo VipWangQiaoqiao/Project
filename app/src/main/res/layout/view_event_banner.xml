@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="184dp"
+    android:padding="10dp"
+    android:minHeight="184dp">
+
+    <ImageView
+        android:id="@+id/iv_event_banner_bg"
+        android:contentDescription="@string/app_name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
+
+    <ImageView
+        android:id="@+id/iv_event_banner_img"
+        android:contentDescription="@string/app_name"
+        android:layout_centerVertical="true"
+        android:layout_width="108dp"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
+
+    <LinearLayout
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/iv_event_banner_img"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/tv_event_banner_title"
+            android:maxLines="3"
+            android:lineSpacingExtra="@dimen/space_5"
+            style="@style/list_text_title"
+            android:textColor="@color/white"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@+id/tv_event_banner_body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll_title"
+            android:layout_marginBottom="@dimen/space_5"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:lineSpacingExtra="@dimen/space_5"
+            android:textColor="?attr/infoTextColor" />
+    </LinearLayout>
+</RelativeLayout>

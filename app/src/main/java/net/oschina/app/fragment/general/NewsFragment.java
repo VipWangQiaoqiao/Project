@@ -16,13 +16,12 @@ import net.oschina.app.adapter.base.BaseListAdapter;
 import net.oschina.app.adapter.general.NewsAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Banner;
-import net.oschina.app.bean.News;
-import net.oschina.app.bean.NewsList;
 import net.oschina.app.bean.base.PageBean;
 import net.oschina.app.bean.base.ResultBean;
+import net.oschina.app.bean.news.News;
 import net.oschina.app.fragment.base.BaseListFragment;
 import net.oschina.app.util.UIHelper;
-import net.oschina.app.widget.ViewBanner;
+import net.oschina.app.widget.ViewNewsBanner;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -38,7 +37,7 @@ public class NewsFragment extends BaseListFragment<News> {
 
     private ViewPager vp_news;
 
-    private List<ViewBanner> banners = new ArrayList<>();
+    private List<ViewNewsBanner> banners = new ArrayList<>();
 
     @Override
     protected void initWidget(View root) {
@@ -53,16 +52,17 @@ public class NewsFragment extends BaseListFragment<News> {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
-                    ResultBean<PageBean<Banner>> resultBean = AppContext.createGson().fromJson(responseString, new TypeToken<ResultBean<PageBean<Banner>>>() {}.getType());
-                    if(resultBean != null){
-                        for(Banner banner : resultBean.getResult().getItems()){
-                            ViewBanner viewBanner = new ViewBanner(getActivity());
-                            viewBanner.initData(getImgLoader(),banner);
-                            banners.add(viewBanner);
+                    ResultBean<PageBean<Banner>> resultBean = AppContext.createGson().fromJson(responseString, new TypeToken<ResultBean<PageBean<Banner>>>() {
+                    }.getType());
+                    if (resultBean != null) {
+                        for (Banner banner : resultBean.getResult().getItems()) {
+                            ViewNewsBanner viewNewsBanner = new ViewNewsBanner(getActivity());
+                            viewNewsBanner.initData(getImgLoader(), banner);
+                            banners.add(viewNewsBanner);
                         }
                         vp_news.setAdapter(new NewsPagerAdapter());
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -83,7 +83,10 @@ public class NewsFragment extends BaseListFragment<News> {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        News news = mAdapter.getItem(position - 1);
+        if (news != null) {
+            UIHelper.showNewsDetail(getActivity(), news);
+        }
     }
 
     @Override

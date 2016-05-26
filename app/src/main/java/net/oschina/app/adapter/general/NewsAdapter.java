@@ -3,7 +3,7 @@ package net.oschina.app.adapter.general;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewHolder;
 import net.oschina.app.adapter.base.BaseListAdapter;
-import net.oschina.app.bean.News;
+import net.oschina.app.bean.news.News;
 
 /**
  * Created by huanghaibin

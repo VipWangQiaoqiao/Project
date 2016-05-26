@@ -1,7 +1,6 @@
 package net.oschina.app.widget;
 
 import android.content.Context;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,18 +17,18 @@ import net.oschina.app.bean.Banner;
  * Created by huanghaibin
  * on 16-5-23.
  */
-public class ViewBanner extends RelativeLayout implements View.OnClickListener {
+public class ViewNewsBanner extends RelativeLayout implements View.OnClickListener {
     private Banner banner;
     private ImageView iv_banner;
     private TextView tv_title;
 
-    public ViewBanner(Context context) {
+    public ViewNewsBanner(Context context) {
         super(context, null);
         init(context);
     }
 
     private void init(Context context) {
-        LayoutInflater.from(context).inflate(R.layout.view_banner, this, true);
+        LayoutInflater.from(context).inflate(R.layout.view_news_banner, this, true);
         iv_banner = (ImageView) findViewById(R.id.iv_banner);
         tv_title = (TextView) findViewById(R.id.tv_title);
         setOnClickListener(this);
