@@ -38,7 +38,9 @@ public abstract class BaseListAdapter<T> extends BaseAdapter implements ViewHold
 
     @Override
     public T getItem(int position) {
-        return mDatas.get(position);
+        if (position >= 0 && position < mDatas.size())
+            return mDatas.get(position);
+        return null;
     }
 
     @Override
@@ -87,9 +89,9 @@ public abstract class BaseListAdapter<T> extends BaseAdapter implements ViewHold
         notifyDataSetChanged();
     }
 
-    public void addItem(int position,List<T> items) {
+    public void addItem(int position, List<T> items) {
         checkListNull();
-        mDatas.addAll(position,items);
+        mDatas.addAll(position, items);
         notifyDataSetChanged();
     }
 
