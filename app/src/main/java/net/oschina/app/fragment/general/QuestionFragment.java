@@ -1,5 +1,7 @@
 package net.oschina.app.fragment.general;
 
+import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -28,8 +30,14 @@ public class QuestionFragment extends BaseListFragment<Question> {
     private static final String TAG = "QuestionFragment";
     private GridView quesGridView = null;
     private View headView;
-    private int catalog = 0;
+    private int catalog = 1;
+    private SparseArray<PageBean<Question>> array = new SparseArray(5);
 
+    private static final String QUES_ASK = "ques_ask";
+    private static final String QUES_SHARE = "ques_share";
+    private static final String QUES_COMPOSITE = "ques_composite";
+    private static final String QUES_PROFESSION = "ques_profession";
+    private static final String QUES_WEBSITE = "ques_website";
 
     @Override
     protected void initWidget(View root) {
@@ -45,7 +53,19 @@ public class QuestionFragment extends BaseListFragment<Question> {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 catalog = (position + 1);
-                requestData();
+                if (array.get(catalog) == null) {
+                    if (!mIsRefresh) {
+                        mIsRefresh = true;
+                    }
+                    requestData();
+                } else {
+                    mBeam = array.get(catalog);
+                    mAdapter.clear();
+                    mAdapter.addItem(mBeam.getItems());
+                    Log.d(TAG, "onItemClick: ----->" + mBeam.toString() + " catalog=" + catalog + " size=" + array.size());
+                    mAdapter.notifyDataSetChanged();
+                }
+
                 for (int i = 0; i < positions.length; i++) {
                     if (i == position) {
                         positions[position] = 1;
@@ -63,6 +83,13 @@ public class QuestionFragment extends BaseListFragment<Question> {
     @Override
     protected void initData() {
         super.initData();
+    }
+
+
+    @Override
+    protected void onRequestSuccess(int code) {
+        super.onRequestSuccess(code);
+        Log.d(TAG, "onRequestSuccess: --->code=" + code);
     }
 
     @Override
@@ -84,14 +111,45 @@ public class QuestionFragment extends BaseListFragment<Question> {
 
     @Override
     protected void setListData(ResultBean<PageBean<Question>> resultBean) {
+        verifyCacheType(resultBean);
         super.setListData(resultBean);
+    }
+
+    /**
+     * verify cache type
+     *
+     * @param resultBean
+     */
+    private void verifyCacheType(ResultBean<PageBean<Question>> resultBean) {
+        array.put(catalog, resultBean.getResult());
+        switch (catalog) {
+            case 1:
+                CACHE_NAME = QUES_ASK;
+                break;
+            case 2:
+                CACHE_NAME = QUES_SHARE;
+                break;
+            case 3:
+                CACHE_NAME = QUES_COMPOSITE;
+                break;
+            case 4:
+                CACHE_NAME = QUES_PROFESSION;
+                break;
+            case 5:
+                CACHE_NAME = QUES_WEBSITE;
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         // super.onItemClick(parent, view, position, id);
-        Question question = mAdapter.getItem(position);
-        UIHelper.showPostDetail(getActivity(), (int) question.getId(),
-                question.getCommentCount());
+        Question question = mAdapter.getItem(position - 1);
+        if (question != null) {
+            UIHelper.showPostDetail(getActivity(), (int) question.getId(),
+                    question.getCommentCount());
+        }
     }
 }

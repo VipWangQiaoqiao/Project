@@ -7,6 +7,7 @@
 
     <net.oschina.app.widget.CircleImageView
         android:id="@+id/iv_ques_item_icon"
+        style="@style/UserFaceImageStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -15,7 +16,6 @@
         android:layout_marginRight="4dp"
         android:contentDescription="icon"
         android:src="@drawable/widget_dface"
-        style="@style/UserFaceImageStyle"
         app:border_color="@color/white"
         app:border_width="2dp" />
 
@@ -65,7 +65,8 @@
         android:layout_below="@+id/tv_ques_item_content"
         android:layout_marginLeft="6dp"
         android:padding="2dp"
-        android:text="6 hours ago" />
+        android:text="6 hours ago"
+        android:textColor="@color/count_text_color_light" />
 
     <TextView
         android:id="@+id/tv_ques_item_see"
@@ -76,11 +77,12 @@
         android:layout_alignTop="@+id/tv_ques_item_history"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="8dp"
-        android:drawableLeft="@drawable/ic_action_comment"
+        android:drawableLeft="@drawable/ic_comment"
         android:drawablePadding="4dp"
         android:gravity="center"
         android:padding="2dp"
-        android:text="14" />
+        android:text="14"
+        android:textColor="@color/count_text_color_light" />
 
     <TextView
         android:id="@+id/tv_ques_item_comment"
@@ -90,11 +92,12 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:layout_toLeftOf="@+id/tv_ques_item_see"
-        android:drawableLeft="@drawable/ic_action_comment"
+        android:drawableLeft="@drawable/ic_view"
         android:drawablePadding="4dp"
         android:gravity="center"
         android:padding="2dp"
-        android:text="14" />
+        android:text="14"
+        android:textColor="@color/count_text_color_light" />
 
 
 </RelativeLayout>

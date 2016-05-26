@@ -9,10 +9,9 @@
         android:id="@+id/tv_item_blog_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/tv_item_blog_answer"
-        android:layout_alignRight="@+id/tv_item_blog_answer"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/tv_item_blog_banner"
-        android:layout_marginTop="19dp"
         android:drawableLeft="@drawable/widget_repaste_icon"
         android:drawablePadding="4dp"
         android:drawingCacheQuality="auto"
@@ -44,34 +43,41 @@
         android:lines="1"
         android:padding="6dp"
         android:text="Small Text"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/count_text_color_light" />
 
     <TextView
         android:id="@+id/tv_item_blog_see"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/tv_item_blog_history"
-        android:layout_marginEnd="79dp"
-        android:layout_marginRight="79dp"
-        android:drawableLeft="@drawable/widget_bar_news_nor"
+        android:layout_marginEnd="23dp"
+        android:layout_marginRight="23dp"
+        android:layout_toLeftOf="@+id/tv_item_blog_answer"
+        android:layout_toStartOf="@+id/tv_item_blog_answer"
+        android:drawableLeft="@drawable/ic_view"
         android:drawablePadding="4dp"
         android:gravity="center"
         android:text="20"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/count_text_color_light"
+        android:layout_alignBottom="@+id/tv_item_blog_history" />
 
     <TextView
         android:id="@+id/tv_item_blog_answer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tv_item_blog_see"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:drawableLeft="@drawable/widget_bar_news_nor"
+        android:layout_alignTop="@+id/tv_item_blog_see"
+        android:layout_marginEnd="23dp"
+        android:layout_marginRight="23dp"
+        android:drawableLeft="@drawable/ic_comment"
+        android:drawablePadding="4dp"
         android:gravity="center|left"
         android:text="30"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textColor="@color/count_text_color_light"
+        android:layout_alignBottom="@+id/tv_item_blog_see" />
 
     <TextView
         android:id="@+id/tv_item_blog_banner"
@@ -80,6 +86,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:paddingBottom="4dp"
         android:text=""
         android:textColor="@color/ques_bt_text_color_dark"
         android:textSize="15sp" />
