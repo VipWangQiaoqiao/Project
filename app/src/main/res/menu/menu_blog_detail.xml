@@ -11,12 +11,6 @@
     <item
         android:id="@+id/action_kit"
         android:orderInCategory="100"
-        android:title="分享"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_seekBar"
-        android:orderInCategory="100"
-        android:title="分享"
+        android:title="举报"
         app:showAsAction="never" />
 </menu>

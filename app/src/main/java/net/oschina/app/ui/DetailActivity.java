@@ -84,7 +84,7 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
             case DISPLAY_BLOG:
                 actionBarTitle = R.string.actionbar_title_blog;
                 fragment = new BlogDetailFragment();
-                BlogDetailActivity.show(this);
+                BlogDetailActivity.show(this, getIntent().getIntExtra("id", 0));
                 finish();
                 break;
             case DISPLAY_SOFTWARE:
