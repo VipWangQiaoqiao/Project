@@ -1,6 +1,5 @@
 package net.oschina.app.fragment.general;
 
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +26,6 @@ import java.lang.reflect.Type;
  */
 public class QuestionFragment extends BaseListFragment<Question> {
 
-    private static final String TAG = "QuestionFragment";
     private GridView quesGridView = null;
     private View headView;
     private int catalog = 1;
@@ -57,14 +55,12 @@ public class QuestionFragment extends BaseListFragment<Question> {
 
                     if (!mIsRefresh) {
                         mIsRefresh = true;
-                        requestData();
                     }
-
+                    requestData();
                 } else {
                     mBeam = array.get(catalog);
                     mAdapter.clear();
                     mAdapter.addItem(mBeam.getItems());
-                    Log.d(TAG, "onItemClick: ----->" + mBeam.toString() + " catalog=" + catalog + " size=" + array.size());
                 }
 
                 for (int i = 0; i < positions.length; i++) {
@@ -85,7 +81,6 @@ public class QuestionFragment extends BaseListFragment<Question> {
     protected void initData() {
         super.initData();
     }
-
 
 
     @Override
