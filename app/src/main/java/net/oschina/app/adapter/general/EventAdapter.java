@@ -19,8 +19,8 @@ public class EventAdapter extends BaseListAdapter<Event> {
     protected void convert(ViewHolder vh, Event item, int position) {
         vh.setText(R.id.tv_event_title, item.getTitle());
         vh.setImageForNet(R.id.iv_event, item.getImg());
-        vh.setText(R.id.tv_event_pub_date, StringUtils.friendly_time(item.getPubDate()));
-        vh.setText(R.id.tv_event_member, item.getApplyCount() + "参与");
+        vh.setText(R.id.tv_event_pub_date, item.getPubDate());
+        vh.setText(R.id.tv_event_member, item.getApplyCount() + "人参与");
         vh.setTextColor(R.id.tv_event_title,mCallback.getContext().getResources().getColor(R.color.day_textColor));
         switch (item.getStatus()) {
             case Event.STATUS_END:
