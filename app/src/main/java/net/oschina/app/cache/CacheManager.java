@@ -1,5 +1,9 @@
 package net.oschina.app.cache;
 
+import android.content.Context;
+
+import net.oschina.app.util.TDevice;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -10,12 +14,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-import net.oschina.app.util.TDevice;
-import android.content.Context;
-
 public class CacheManager {
-
-    // wifi缓存时间为5分钟
+    
+	// wifi缓存时间为5分钟
     private static long wifi_cache_time = 5 * 60 * 1000;
     // 其他网络环境为1小时
     private static long other_cache_time = 60 * 60 * 1000;

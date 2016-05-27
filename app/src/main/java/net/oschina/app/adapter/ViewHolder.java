@@ -180,7 +180,7 @@ public class ViewHolder {
 
     // 设置头像
     public void setPortrait(int viewId, String imgUrl) {
-        setImageForNet(viewId, imgUrl, R.drawable.icon_download);
+        setImageForNet(viewId, imgUrl, R.drawable.widget_dface);
     }
 
     public void setButtonText(int viewId, String text) {

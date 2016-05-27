@@ -17,6 +17,7 @@
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_gravity="top|center"
+            android:layout_marginTop="4dp"
             android:src="@drawable/ic_label_recommend" />
 
         <ImageView
@@ -25,6 +26,7 @@
             android:layout_height="16dp"
             android:layout_gravity="top|center"
             android:layout_marginLeft="4dp"
+            android:layout_marginTop="4dp"
             android:contentDescription="tag"
             android:src="@drawable/ic_label_originate" />
 
@@ -32,8 +34,10 @@
             android:id="@+id/tv_item_blog_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="top"
             android:layout_marginLeft="4dp"
             android:gravity="top"
+            android:lineSpacingExtra="5dp"
             android:maxLines="2"
             android:text="Large Text"
             android:textAppearance="?android:attr/textAppearanceLarge"
@@ -47,6 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="left"
         android:layout_marginBottom="8dp"
+        android:lineSpacingExtra="5dp"
         android:text="New Text" />
 
     <LinearLayout
@@ -79,7 +84,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginEnd="23dp"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="23dp"
             android:gravity="center"
@@ -112,7 +116,8 @@
     <View
         android:id="@+id/textView"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="1px"
+        android:layout_marginBottom="1dp"
         android:layout_marginTop="16dp"
         android:background="@color/count_text_color_light" />
 
