@@ -10,6 +10,15 @@
     <string name="main_tab_name_my">我</string>
     <string name="main_tab_name_explore">发现</string>
 
+    <string name="event_status_end">活动结束</string>
+    <string name="event_status_ing">正在报名</string>
+    <string name="event_status_sing_up">截止报名</string>
+    <string name="event_type_osc">源创会</string>
+    <string name="event_type_tec">技术交流</string>
+    <string name="event_type_other">其他</string>
+    <string name="event_type_outside">站外活动</string>
+
+
     <string name="app_error">应用程序错误</string>
     <string name="app_error_message">很抱歉，小屁孩耍脾气啦。<br />我们会帮你教训一下这个小屁孩！</string>
     <string name="submit_report">打报告去</string>
