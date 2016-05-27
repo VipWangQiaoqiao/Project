@@ -58,17 +58,19 @@
         <TextView
             android:id="@+id/tv_time"
             android:layout_weight="1"
+            android:textSize="12sp"
             style="@style/list_text_info" />
 
 
         <ImageView
-            android:layout_width="10dp"
-            android:layout_height="10dp"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
             android:layout_marginRight="2dip"
             android:contentDescription="@null"
-            android:src="@drawable/ic_comment" />
+            android:src="@drawable/ic_comment_30" />
 
         <TextView
+            android:textSize="12sp"
             android:id="@+id/tv_comment_count"
             style="@style/list_text_info" />
 

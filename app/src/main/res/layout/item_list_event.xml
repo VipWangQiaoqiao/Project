@@ -49,22 +49,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_light"
-                    android:paddingBottom="2dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingTop="2dp" />
+                    android:paddingBottom="1dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="1dp" />
 
                 <TextView
                     android:id="@+id/tv_event_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="5dp"
                     android:background="@drawable/bg_event_type"
                     android:textColor="#9d9d9d"
-                    android:paddingBottom="2dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingTop="2dp" />
+                    android:paddingBottom="1dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="1dp" />
 
             </LinearLayout>
 

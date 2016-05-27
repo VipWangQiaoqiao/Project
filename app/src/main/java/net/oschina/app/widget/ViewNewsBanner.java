@@ -6,12 +6,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.RequestManager;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.Banner;
+import net.oschina.app.util.UIHelper;
 
 /**
  * Created by huanghaibin
@@ -42,6 +42,6 @@ public class ViewNewsBanner extends RelativeLayout implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-        Toast.makeText(getContext(),banner.getName(),Toast.LENGTH_LONG).show();
+        UIHelper.showBannerDetail(getContext(), banner);
     }
 }
