@@ -2,27 +2,20 @@ package net.oschina.app.widget;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.BitmapRequestBuilder;
 import com.bumptech.glide.RequestManager;
-import com.bumptech.glide.load.Transformation;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.Resource;
-import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
-import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.Banner;
-import net.qiujuer.genius.blur.StackBlur;
+import net.oschina.app.util.UIHelper;
 
 /**
  * Created by huanghaibin
@@ -72,6 +65,6 @@ public class ViewEventBanner extends RelativeLayout implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        Toast.makeText(getContext(), banner.getName(), Toast.LENGTH_LONG).show();
+        UIHelper.showBannerDetail(getContext(), banner);
     }
 }

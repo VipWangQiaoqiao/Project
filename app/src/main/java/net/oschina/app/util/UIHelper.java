@@ -36,6 +36,7 @@ import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.Active;
+import net.oschina.app.bean.Banner;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.News;
@@ -360,6 +361,33 @@ public class UIHelper {
                 break;
             default:
                 showUrlRedirect(context, news.getHref());
+                break;
+        }
+    }
+
+    public static void showBannerDetail(Context context, Banner banner) {
+        long newsId = banner.getId();
+        switch (banner.getType()) {
+            case Banner.BANNER_TYPE_URL:
+                showNewsDetail(context, newsId, 0);
+                break;
+            case Banner.BANNER_TYPE_SOHTWARE:
+                showSoftwareDetailById(context, newsId);
+                break;
+            case Banner.BANNER_TYPE_POST:
+                showPostDetail(context, StringUtils.toInt(String.valueOf(newsId)),
+                        0);
+                break;
+            case Banner.BANNER_TYPE_BLOG:
+                showBlogDetail(context, StringUtils.toInt(String.valueOf(newsId)),
+                        0);
+                break;
+            case Banner.BANNER_TYPE_EVENT:
+                showEventDetail(context,
+                        StringUtils.toInt(newsId));
+                break;
+            default:
+                showUrlRedirect(context, banner.getHref());
                 break;
         }
     }
