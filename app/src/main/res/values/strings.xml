@@ -158,7 +158,7 @@
     <string name="actionbar_title_same_city">同城</string>
 
     <!-- 博客区 -->
-    <string name="blog_list_title_heat">热门</string>
+    <string name="blog_list_title_heat">最热</string>
     <string name="blog_list_title_normal">最近</string>
 
     <string name="actionbar_title_blog_area">博客区</string>

@@ -113,9 +113,4 @@
         <item>站务</item>
     </array>
 
-    <array name="blog_item">
-        <item>最热</item>
-        <item>最新</item>
-    </array>
-
 </resources>
