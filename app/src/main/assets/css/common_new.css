@@ -3,8 +3,6 @@ body {
 	word-wrap: break-word;
 	overflow: auto;
 	overflow-x: hidden;
-	padding-left: 10px;
-	padding-right: 10px;
 }
 
 .about {
@@ -89,8 +87,8 @@ a{
 }
 
 .contentstyle {
-	color: #333333;
-	font-size: 16px;
+	color: #111111;
+	font-size: 14px;
 	font-weight: normal;
 }
 
