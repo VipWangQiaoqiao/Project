@@ -1,6 +1,9 @@
 package net.oschina.app.widget;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -8,10 +11,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.BitmapRequestBuilder;
 import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.load.Transformation;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.Resource;
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.Banner;
+import net.qiujuer.genius.blur.StackBlur;
 
 /**
  * Created by huanghaibin
@@ -19,8 +30,8 @@ import net.oschina.app.bean.Banner;
  */
 public class ViewEventBanner extends RelativeLayout implements View.OnClickListener {
     private Banner banner;
-    private ImageView iv_event_banner_img,iv_event_banner_bg;
-    private TextView tv_event_banner_title,tv_event_banner_body,tv_event_pub_date;
+    private ImageView iv_event_banner_img, iv_event_banner_bg;
+    private TextView tv_event_banner_title, tv_event_banner_body, tv_event_pub_date;
 
     public ViewEventBanner(Context context) {
         super(context, null);
@@ -43,11 +54,24 @@ public class ViewEventBanner extends RelativeLayout implements View.OnClickListe
         tv_event_banner_body.setText(banner.getDetail());
         tv_event_pub_date.setText(banner.getPubDate());
         manager.load(banner.getImg()).into(iv_event_banner_img);
-        manager.load(banner.getImg()).into(iv_event_banner_bg);
+
+        BitmapRequestBuilder builder = manager.load(banner.getImg()).asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .error(R.color.list_divider_color);
+        builder.into(
+                new BitmapImageViewTarget(iv_event_banner_bg) {
+                    @Override
+                    protected void setResource(Bitmap resource) {
+
+                        view.setImageBitmap(resource);
+                    }
+                });
+
+
     }
 
     @Override
     public void onClick(View v) {
-        Toast.makeText(getContext(),banner.getName(),Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), banner.getName(), Toast.LENGTH_LONG).show();
     }
 }
