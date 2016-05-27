@@ -9,7 +9,7 @@ public class Banner extends Base {
     private String detail;
     private String img;
     private String href;
-    private String time;
+    private String pubDate;
     private int type;
     private long id;
 
@@ -45,12 +45,12 @@ public class Banner extends Base {
         this.href = href;
     }
 
-    public String getTime() {
-        return time;
+    public String getPubDate() {
+        return pubDate;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setPubDate(String pubDate) {
+        this.pubDate = pubDate;
     }
 
     public int getType() {
