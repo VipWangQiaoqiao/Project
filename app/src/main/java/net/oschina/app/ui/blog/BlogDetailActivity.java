@@ -22,17 +22,21 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.google.gson.reflect.TypeToken;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.bean.Result;
 import net.oschina.app.bean.base.ResultBean;
 import net.oschina.app.bean.blog.BlogDetail;
 import net.oschina.app.util.FontSizeUtils;
 import net.oschina.app.util.ThemeSwitchUtils;
 import net.oschina.app.util.UIHelper;
+import net.oschina.app.util.XmlUtils;
 
+import java.io.ByteArrayInputStream;
 import java.lang.reflect.Type;
 
 import cz.msebera.android.httpclient.Header;
@@ -48,7 +52,7 @@ public class BlogDetailActivity extends AppCompatActivity implements View.OnClic
     private ImageView mIVLabelRecommend;
     private ImageView mIVLabelOriginate;
     private ImageView mIVAuthorPortrait;
-    private Button mBtnFlow;
+    private Button mBtnRelation;
     private EditText mETInput;
 
     private ImageView mIVFlow;
@@ -56,6 +60,9 @@ public class BlogDetailActivity extends AppCompatActivity implements View.OnClic
 
     private LinearLayout mLayAbouts;
     private LinearLayout mLayComments;
+
+    private long mCommentId;
+    private BlogDetail mBlog;
 
     public static void show(Context context, long id) {
         Intent intent = new Intent(context, BlogDetailActivity.class);
@@ -74,7 +81,7 @@ public class BlogDetailActivity extends AppCompatActivity implements View.OnClic
             actionBar.setHomeButtonEnabled(false);
         }
 
-        mId = getIntent().getLongExtra("id", 0);
+        mId = mCommentId = getIntent().getLongExtra("id", 0);
         if (mId == 0)
             finish();
         else {
@@ -117,7 +124,7 @@ public class BlogDetailActivity extends AppCompatActivity implements View.OnClic
         mIVLabelOriginate = (ImageView) findViewById(R.id.iv_label_originate);
         mIVAuthorPortrait = (ImageView) findViewById(R.id.iv_avatar);
 
-        mBtnFlow = (Button) findViewById(R.id.btn_flow);
+        mBtnRelation = (Button) findViewById(R.id.btn_relation);
         mETInput = (EditText) findViewById(R.id.et_input);
 
         mIVFlow = (ImageView) findViewById(R.id.iv_flow);
@@ -134,7 +141,6 @@ public class BlogDetailActivity extends AppCompatActivity implements View.OnClic
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
                     InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-
 
 
                     return true;
@@ -193,6 +199,7 @@ public class BlogDetailActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void handleData(BlogDetail blog) {
+        mBlog = blog;
         String body = getWebViewBody(blog);
         if (mWebView != null) {
             mWebView.loadDataWithBaseURL("", body, "text/html", "UTF-8", "");
@@ -213,11 +220,19 @@ public class BlogDetailActivity extends AppCompatActivity implements View.OnClic
                 getResources().getDrawable(R.drawable.ic_label_reprint));
 
         if (blog.getAuthorRelation() == 3) {
-            mBtnFlow.setEnabled(true);
-            mBtnFlow.setText("关注");
+            mBtnRelation.setEnabled(true);
+            mBtnRelation.setText("关注");
+            mBtnRelation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mBtnRelation.setEnabled(false);
+                    updateRelation();
+                }
+            });
+
         } else {
-            mBtnFlow.setEnabled(false);
-            mBtnFlow.setText("已关注");
+            mBtnRelation.setEnabled(false);
+            mBtnRelation.setText("已关注");
         }
 
         for (BlogDetail.About about : blog.getAbouts()) {
@@ -228,7 +243,7 @@ public class BlogDetailActivity extends AppCompatActivity implements View.OnClic
         }
 
         mTVCommentCount.setText(String.format("评论(%s)", blog.getCommentCount()));
-        for (BlogDetail.Comment comment : blog.getComments()) {
+        for (final BlogDetail.Comment comment : blog.getComments()) {
             View aboutLay = getLayoutInflater().inflate(R.layout.item_blog_detail_comment_lay, mLayComments, true);
             mImgLoader.load(comment.authorPortrait).error(R.drawable.widget_dface)
                     .into(((ImageView) aboutLay.findViewById(R.id.iv_avatar)));
@@ -236,11 +251,12 @@ public class BlogDetailActivity extends AppCompatActivity implements View.OnClic
             ((TextView) aboutLay.findViewById(R.id.tv_name)).setText(comment.author);
             ((TextView) aboutLay.findViewById(R.id.tv_pub_date)).setText(comment.pubDate);
             ((TextView) aboutLay.findViewById(R.id.tv_content)).setText(comment.content);
-
+            final long commentId = comment.id;
             aboutLay.findViewById(R.id.btn_comment).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    mCommentId = commentId;
+                    mETInput.setText(String.format("回复: %s", comment.author));
                 }
             });
         }
@@ -262,5 +278,34 @@ public class BlogDetailActivity extends AppCompatActivity implements View.OnClic
             }
             break;
         }
+    }
+
+
+    private void updateRelation() {
+        int mId = AppContext.getInstance().getLoginUid();
+        OSChinaApi.updateRelation(mId, mBlog.getAuthorId(), 1,
+                new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+                        try {
+                            Result result = XmlUtils.toBean(net.oschina.app.bean.ResultBean.class,
+                                    new ByteArrayInputStream(arg2)).getResult();
+                            if (result.OK()) {
+                                mBtnRelation.setText("已关注");
+                                return;
+                            }
+                            mBtnRelation.setEnabled(true);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            onFailure(arg0, arg1, arg2, e);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+                                          Throwable arg3) {
+                        mBtnRelation.setEnabled(true);
+                    }
+                });
     }
 }

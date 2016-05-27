@@ -298,7 +298,7 @@ public class OSChinaApi {
         ApiHttpClient.get("action/api/userblog_list", params, handler);
     }
 
-    public static void updateRelation(int uid, int hisuid, int newrelation,
+    public static void updateRelation(long uid, long hisuid, int newrelation,
                                       AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("uid", uid);

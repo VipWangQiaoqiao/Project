@@ -45,6 +45,7 @@ public class ImageLoader {
                         .error(error);
                 if (isCenterCrop)
                     builder.centerCrop();
+
                 builder.into(
                         new BitmapImageViewTarget(view) {
                             @Override
