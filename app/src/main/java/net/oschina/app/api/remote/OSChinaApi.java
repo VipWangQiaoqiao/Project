@@ -1089,6 +1089,19 @@ public class OSChinaApi {
 
 
     /**
+     * 请求博客详情
+     *
+     * @param id      博客id
+     * @param handler AsyncHttpResponseHandler
+     */
+    public static void getBlogDetail(long id, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("id", id);
+        ApiHttpClient.get("action/apiv2/blog", params, handler);
+    }
+
+
+    /**
      * 请求活动列表
      *
      * @param pageToken 请求上下页数据令牌
