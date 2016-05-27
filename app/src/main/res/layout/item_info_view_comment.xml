@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:contentDescription="@string/app_name"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_view" />
+
+    <TextView
+        android:id="@+id/tv_info_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:gravity="center_vertical"
+        android:text="0"
+        android:textColor="#9d9d9d"
+        android:textSize="12sp"
+        tools:ignore="HardcodedText"
+        tools:text="234" />
+
+    <ImageView
+        android:layout_width="12dp"
+        android:layout_height="10dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:contentDescription="@string/app_name"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_comment" />
+
+    <TextView
+        android:id="@+id/tv_info_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:text="0"
+        android:textColor="#9d9d9d"
+        android:textSize="12sp"
+        tools:ignore="HardcodedText"
+        tools:text="12" />
+
+</LinearLayout>
