@@ -175,12 +175,16 @@ public class ViewHolder {
     }
 
     public void setImageForNet(int viewId, String imgUrl) {
-        setImageForNet(viewId, imgUrl, R.drawable.icon_download);
+        setImageForNet(viewId, imgUrl, R.drawable.bg_normal);
     }
 
     // 设置头像
     public void setPortrait(int viewId, String imgUrl) {
+<<<<<<< HEAD
         setImageForNet(viewId, imgUrl, R.drawable.widget_dface);
+=======
+        setImageForNet(viewId, imgUrl, R.drawable.bg_normal);
+>>>>>>> f2779f62d0abcea1f9a902b981174d7817660d7e
     }
 
     public void setButtonText(int viewId, String text) {
