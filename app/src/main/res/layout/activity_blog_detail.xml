@@ -6,11 +6,13 @@
     android:layout_height="match_parent"
     tools:context="net.oschina.app.ui.blog.BlogDetailActivity">
 
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/lay_option"
-        android:layout_marginBottom="1px"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:background="@color/white">
 
         <LinearLayout
@@ -83,17 +85,19 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
                         android:layout_marginRight="4dp"
                         android:contentDescription="@string/app_name"
-                        android:src="@color/blue" />
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_label_recommend" />
 
                     <ImageView
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
                         android:contentDescription="@string/app_name"
-                        android:src="@color/blue" />
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_label_originate" />
                 </LinearLayout>
 
 
@@ -117,28 +121,38 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
-                        android:src="@color/blue" />
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:contentDescription="@string/app_name"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_view" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="4dp"
                         android:layout_marginRight="4dp"
-                        android:text="246" />
+                        android:gravity="center_vertical"
+                        android:text="246"
+                        android:textColor="#9d9d9d"
+                        android:textSize="14sp" />
 
                     <ImageView
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
                         android:layout_marginLeft="4dp"
                         android:layout_marginRight="4dp"
-                        android:src="@color/blue" />
+                        android:contentDescription="@string/app_name"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_comment" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="12" />
+                        android:gravity="center_vertical"
+                        android:text="12"
+                        android:textColor="#9d9d9d"
+                        android:textSize="14sp" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -187,7 +201,8 @@
             android:layout_height="22dp"
             android:layout_margin="8dp"
             android:contentDescription="@string/app_name"
-            android:src="@color/blue" />
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_fav_normal" />
 
         <ImageView
             android:id="@+id/iv_share"
@@ -196,7 +211,8 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:contentDescription="@string/app_name"
-            android:src="@color/blue" />
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_share_black_normal" />
 
     </LinearLayout>
 </RelativeLayout>
