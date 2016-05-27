@@ -54,6 +54,7 @@ public class QuestionFragment extends BaseListFragment<Question> {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 catalog = (position + 1);
                 if (array.get(catalog) == null) {
+
                     if (!mIsRefresh) {
                         mIsRefresh = true;
                     }
