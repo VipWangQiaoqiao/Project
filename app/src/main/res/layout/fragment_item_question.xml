@@ -17,42 +17,41 @@
             android:id="@+id/iv_ques_item_icon"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_gravity="top"
             android:paddingTop="4dp"
             android:src="@drawable/widget_dface" />
 
-        <TextView
-            android:id="@+id/tv_ques_item_title"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="16dp"
-            android:gravity="center|left|top"
-            android:lineSpacingExtra="5dp"
-            android:maxLines="2"
-            android:text="title"
-            android:textColor="@android:color/background_dark" />
+            android:layout_height="match_parent"
+            android:layout_marginLeft="4dp"
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tv_ques_item_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="16dp"
+                android:gravity="center|left|top"
+                android:lineSpacingExtra="5dp"
+                android:maxLines="2"
+                android:text="title"
+                android:textColor="@android:color/background_dark" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="54dp"
-        android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_ques_item_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="16dp"
+                android:gravity="left|center"
+                android:lineSpacingExtra="5dp"
+                android:maxLines="2"
+                android:paddingBottom="4dp"
+                android:text="@string/flickr_content" />
 
-        <TextView
-            android:id="@+id/tv_ques_item_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="2dp"
-            android:gravity="left"
-            android:lineSpacingExtra="5dp"
-            android:maxLines="2"
-            android:paddingBottom="4dp"
-            android:text="@string/flickr_content" />
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -68,7 +67,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="54dp"
+            android:layout_marginLeft="56dp"
             android:layout_weight="2"
             android:gravity="left|center"
             android:lines="1"
@@ -81,6 +80,7 @@
             android:id="@+id/imageView"
             android:layout_width="16dp"
             android:layout_height="16dp"
+            android:layout_marginRight="4dp"
             android:contentDescription="tag"
             android:src="@drawable/ic_view" />
 

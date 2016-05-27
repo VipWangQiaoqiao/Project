@@ -16,7 +16,8 @@
             android:id="@+id/iv_item_blog_tag_recommend"
             android:layout_width="16dp"
             android:layout_height="16dp"
-            android:layout_gravity="top|center"
+            android:layout_gravity="top|center|left"
+            android:layout_marginRight="4dp"
             android:layout_marginTop="4dp"
             android:src="@drawable/ic_label_recommend" />
 
@@ -25,7 +26,6 @@
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_gravity="top|center"
-            android:layout_marginLeft="4dp"
             android:layout_marginTop="4dp"
             android:contentDescription="tag"
             android:src="@drawable/ic_label_originate" />
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:layout_marginLeft="4dp"
-            android:gravity="top"
+            android:gravity="top|center|left"
             android:lineSpacingExtra="5dp"
             android:maxLines="2"
             android:text="Large Text"
@@ -51,7 +51,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="left"
         android:layout_marginBottom="8dp"
-        android:layout_marginLeft="2dp"
         android:lineSpacingExtra="5dp"
         android:text="New Text" />
 

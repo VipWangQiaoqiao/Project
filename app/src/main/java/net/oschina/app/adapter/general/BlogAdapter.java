@@ -55,7 +55,7 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
                 title.setText(item.getTitle());
                 content.setText(item.getBody());
                 history.setText(item.getAuthor().length() > 9 ? item.getAuthor().substring(0, 9) : item.getAuthor() + "\t " + StringUtils.friendly_time(item.getPubDate()));
-                see.setText(item.getViewCount() + "");
+                see.setText(String.valueOf(item.getViewCount()));
                 answer.setText(String.valueOf(item.getCommentCount()));
                 break;
         }
@@ -74,6 +74,6 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
 
     @Override
     public int getViewTypeCount() {
-        return 2;
+        return 3;
     }
 }
