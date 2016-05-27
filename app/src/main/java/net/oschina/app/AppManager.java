@@ -119,7 +119,7 @@ public class AppManager {
     public void AppExit() {
         try {
             finishAllActivity();
-            System.exit(0);
+           // System.exit(0);
         } catch (Exception e) {
         }
     }

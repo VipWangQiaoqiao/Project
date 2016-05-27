@@ -9,6 +9,7 @@ import java.io.Serializable;
  * desc:   blog bean
  */
 public class Blog implements Serializable {
+
     public static final int VIEW_TYPE_DATA = 0;
     public static final int VIEW_TYPE_TITLE_HEAT = 1;
     public static final int VIEW_TYPE_TITLE_NORMAL = 2;

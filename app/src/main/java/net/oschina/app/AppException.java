@@ -143,7 +143,7 @@ public class AppException extends Exception implements UncaughtExceptionHandler 
     public void uncaughtException(Thread thread, Throwable ex) {
         ex.printStackTrace();
         if (!handleException(ex)) {
-            System.exit(0);
+            //System.exit(0);
         }
     }
 
