@@ -281,6 +281,15 @@ public class UIHelper {
         context.startActivity(intent);
     }
 
+    public static void showSoftwareDetailById(Context context, long id) {
+        Intent intent = new Intent(context, DetailActivity.class);
+        intent.putExtra("id", id);
+        intent.putExtra("ident", "");
+        intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
+                DetailActivity.DISPLAY_SOFTWARE);
+        context.startActivity(intent);
+    }
+
     /**
      * 新闻超链接点击跳转
      *
@@ -335,7 +344,7 @@ public class UIHelper {
                 showNewsDetail(context, newsId, news.getCommentCount());
                 break;
             case net.oschina.app.bean.news.News.TYPE_SOFTWARE:
-                showSoftwareDetail(context, String.valueOf(newsId));
+                showSoftwareDetailById(context, newsId);
                 break;
             case net.oschina.app.bean.news.News.TYPE_QUESTION:
                 showPostDetail(context, StringUtils.toInt(String.valueOf(newsId)),

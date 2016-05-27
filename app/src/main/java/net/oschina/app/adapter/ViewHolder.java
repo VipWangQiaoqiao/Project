@@ -107,6 +107,12 @@ public class ViewHolder {
         tv.setVisibility(View.VISIBLE);
     }
 
+    public void setTextColor(int viewId, int textColor) {
+        TextView tv = getView(viewId);
+        tv.setTextColor(textColor);
+        tv.setVisibility(View.VISIBLE);
+    }
+
     public void setText(int viewId, Spanned text) {
         if (text == null) return;
         TextView tv = getView(viewId);
@@ -119,6 +125,14 @@ public class ViewHolder {
         TextView tv = getView(viewId);
         tv.setText(textRes);
         tv.setVisibility(View.VISIBLE);
+    }
+
+    public void setText(int viewId, int textRes, int bgRes, int textColor) {
+        TextView tv = getView(viewId);
+        tv.setText(textRes);
+        tv.setVisibility(View.VISIBLE);
+        tv.setBackgroundResource(bgRes);
+        tv.setTextColor(textColor);
     }
 
     public void setText(int viewId, String text, boolean gone) {

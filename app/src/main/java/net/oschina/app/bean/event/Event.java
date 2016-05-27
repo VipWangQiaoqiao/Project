@@ -7,6 +7,15 @@ import java.io.Serializable;
  * on 16-5-25.
  */
 public class Event implements Serializable {
+    public static final int STATUS_END = 1;
+    public static final int STATUS_ING= 2;
+    public static final int STATUS_SING_UP = 3;
+
+    public static final int EVENT_TYPE_OSC = 1;
+    public static final int EVENT_TYPE_TEC = 2;
+    public static final int EVENT_TYPE_OTHER = 3;
+    public static final int EVENT_TYPE_OUTSIDE = 4;
+
     private long id;
     private int applyCount;
     private int status;
