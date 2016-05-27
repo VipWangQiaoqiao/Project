@@ -26,6 +26,7 @@ import net.oschina.app.team.fragment.TeamDiaryDetailFragment;
 import net.oschina.app.team.fragment.TeamDiscussDetailFragment;
 import net.oschina.app.team.fragment.TeamIssueDetailFragment;
 import net.oschina.app.team.fragment.TeamTweetDetailFragment;
+import net.oschina.app.ui.blog.BlogDetailActivity;
 
 /**
  * 详情activity（包括：资讯、博客、软件、问答、动弹）
@@ -82,7 +83,9 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
                 break;
             case DISPLAY_BLOG:
                 actionBarTitle = R.string.actionbar_title_blog;
-                fragment = new net.oschina.app.fragment.general.BlogDetailFragment();
+                fragment = new BlogDetailFragment();
+                BlogDetailActivity.show(this);
+                finish();
                 break;
             case DISPLAY_SOFTWARE:
                 actionBarTitle = R.string.actionbar_title_software;
