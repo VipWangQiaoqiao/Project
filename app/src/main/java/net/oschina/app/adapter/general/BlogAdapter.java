@@ -1,7 +1,5 @@
 package net.oschina.app.adapter.general;
 
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.oschina.app.R;
@@ -36,8 +34,8 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
                 vh.setText(R.id.tv_blog_item_banner, R.string.blog_list_title_normal);
                 break;
             default:
-                ImageView originalTag = vh.getView(R.id.iv_item_blog_tag);
-                ImageView recommendTag = vh.getView(R.id.iv_item_blog_tag_recommend);
+//                ImageView originalTag = vh.getView(R.id.iv_item_blog_tag);
+//                ImageView recommendTag = vh.getView(R.id.iv_item_blog_tag_recommend);
                 TextView title = vh.getView(R.id.tv_item_blog_title);
                 TextView content = vh.getView(R.id.tv_item_blog_body);
                 TextView history = vh.getView(R.id.tv_item_blog_history);
@@ -45,23 +43,27 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
                 TextView answer = vh.getView(R.id.tv_item_blog_answer);
 
                 if (item.isRecommend()) {
-                    recommendTag.setImageResource(R.drawable.ic_label_recommend);
-                    recommendTag.setVisibility(View.VISIBLE);
+                    vh.setImage(R.id.iv_item_blog_tag_recommend,R.drawable.ic_label_recommend);
+                    vh.setVisibility(R.id.iv_item_blog_tag_recommend);
+//                    recommendTag.setImageResource(R.drawable.ic_label_recommend);
+//                    recommendTag.setVisibility(View.VISIBLE);
                 } else {
-                    recommendTag.setVisibility(View.GONE);
+                    vh.setGone(R.id.iv_item_blog_tag_recommend);
                 }
 
                 if (item.isOriginal()) {
-                    originalTag.setImageResource(R.drawable.ic_label_originate);
-                    originalTag.setVisibility(View.VISIBLE);
+                    vh.setImage(R.id.iv_item_blog_tag,R.drawable.ic_label_originate);
+                    vh.setVisibility(R.id.iv_item_blog_tag);
+//                    originalTag.setImageResource(R.drawable.ic_label_originate);
+//                    originalTag.setVisibility(View.VISIBLE);
                 } else {
-                    originalTag.setVisibility(View.GONE);
+                    vh.setGone(R.id.iv_item_blog_tag);
                 }
                 title.setText(item.getTitle());
                 content.setText(item.getBody());
                 history.setText(item.getAuthor().length() > 9 ? item.getAuthor().substring(0, 9) : item.getAuthor() + "\t " + StringUtils.friendly_time(item.getPubDate()));
                 see.setText(item.getViewCount() + "");
-                answer.setText(item.getCommentCount() + "");
+                answer.setText(String.valueOf(item.getCommentCount()));
                 break;
         }
     }

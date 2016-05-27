@@ -17,6 +17,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.base.PageBean;
 import net.oschina.app.bean.base.ResultBean;
 import net.oschina.app.bean.question.Question;
+import net.oschina.app.cache.CacheManager;
 import net.oschina.app.fragment.base.BaseListFragment;
 import net.oschina.app.util.UIHelper;
 
@@ -31,7 +32,7 @@ public class QuestionFragment extends BaseListFragment<Question> {
     private GridView quesGridView = null;
     private View headView;
     private int catalog = 1;
-    private SparseArray<PageBean<Question>> array = new SparseArray(5);
+    private SparseArray<PageBean<Question>> array = new SparseArray<PageBean<Question>>(5);
 
     private static final String QUES_ASK = "ques_ask";
     private static final String QUES_SHARE = "ques_share";
@@ -55,16 +56,24 @@ public class QuestionFragment extends BaseListFragment<Question> {
                 catalog = (position + 1);
                 if (array.get(catalog) == null) {
 
-                    if (!mIsRefresh) {
-                        mIsRefresh = true;
+                    verifyCacheType();
+                    mBeam = (PageBean<Question>) CacheManager.readObject(getActivity(), CACHE_NAME);
+                    if (mBeam != null) {
+                        mAdapter.clear();
+                        mAdapter.addItem(mBeam.getItems());
+                    } else {
+
+                        if (!mIsRefresh) {
+                            mIsRefresh = true;
+                        }
+                        requestData();
                     }
-                    requestData();
+
                 } else {
                     mBeam = array.get(catalog);
                     mAdapter.clear();
                     mAdapter.addItem(mBeam.getItems());
                     Log.d(TAG, "onItemClick: ----->" + mBeam.toString() + " catalog=" + catalog + " size=" + array.size());
-                    mAdapter.notifyDataSetChanged();
                 }
 
                 for (int i = 0; i < positions.length; i++) {
@@ -112,17 +121,16 @@ public class QuestionFragment extends BaseListFragment<Question> {
 
     @Override
     protected void setListData(ResultBean<PageBean<Question>> resultBean) {
-        verifyCacheType(resultBean);
+        array.put(catalog, resultBean.getResult());
+        verifyCacheType();
         super.setListData(resultBean);
     }
 
     /**
      * verify cache type
-     *
-     * @param resultBean
      */
-    private void verifyCacheType(ResultBean<PageBean<Question>> resultBean) {
-        array.put(catalog, resultBean.getResult());
+    private void verifyCacheType() {
+
         switch (catalog) {
             case 1:
                 CACHE_NAME = QUES_ASK;

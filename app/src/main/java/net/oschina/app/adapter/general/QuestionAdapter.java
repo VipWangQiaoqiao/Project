@@ -28,7 +28,7 @@ public class QuestionAdapter extends BaseListAdapter<Question> {
         TextView content = vh.getView(R.id.tv_ques_item_content);
         content.setText(item.getBody());
         TextView history = vh.getView(R.id.tv_ques_item_history);
-        history.setText(item.getAuthor().length() > 9 ? item.getAuthor().substring(0, 9) : item.getAuthor() + "\t" + StringUtils.friendly_time(item.getPubDate()));
+        history.setText(item.getAuthor().length() > 9 ? item.getAuthor().substring(0, 9) : item.getAuthor() + "\t " + StringUtils.friendly_time(item.getPubDate()));
         TextView see = vh.getView(R.id.tv_ques_item_see);
         see.setText(item.getViewCount() + "");
         TextView answer = vh.getView(R.id.tv_ques_item_comment);
