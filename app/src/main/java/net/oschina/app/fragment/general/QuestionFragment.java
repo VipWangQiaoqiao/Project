@@ -17,7 +17,6 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.base.PageBean;
 import net.oschina.app.bean.base.ResultBean;
 import net.oschina.app.bean.question.Question;
-import net.oschina.app.cache.CacheManager;
 import net.oschina.app.fragment.base.BaseListFragment;
 import net.oschina.app.util.UIHelper;
 
@@ -56,16 +55,8 @@ public class QuestionFragment extends BaseListFragment<Question> {
                 catalog = (position + 1);
                 if (array.get(catalog) == null) {
 
-                    verifyCacheType();
-                    mBeam = (PageBean<Question>) CacheManager.readObject(getActivity(), CACHE_NAME);
-                    if (mBeam != null) {
-                        mAdapter.clear();
-                        mAdapter.addItem(mBeam.getItems());
-                    } else {
-
-                        if (!mIsRefresh) {
-                            mIsRefresh = true;
-                        }
+                    if (!mIsRefresh) {
+                        mIsRefresh = true;
                         requestData();
                     }
 
@@ -96,11 +87,6 @@ public class QuestionFragment extends BaseListFragment<Question> {
     }
 
 
-    @Override
-    protected void onRequestSuccess(int code) {
-        super.onRequestSuccess(code);
-        Log.d(TAG, "onRequestSuccess: --->code=" + code);
-    }
 
     @Override
     protected BaseListAdapter<Question> getListAdapter() {

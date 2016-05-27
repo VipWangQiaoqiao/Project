@@ -25,17 +25,14 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
     protected void convert(ViewHolder vh, Blog item, int position) {
 
         switch (getItemViewType(position)) {
-            case Blog.VIEW_TYPE_TITLE_HEAT:
 
+            case Blog.VIEW_TYPE_TITLE_HEAT:
                 vh.setText(R.id.tv_blog_item_banner, R.string.blog_list_title_heat);
                 break;
             case Blog.VIEW_TYPE_TITLE_NORMAL:
-
                 vh.setText(R.id.tv_blog_item_banner, R.string.blog_list_title_normal);
                 break;
             default:
-//                ImageView originalTag = vh.getView(R.id.iv_item_blog_tag);
-//                ImageView recommendTag = vh.getView(R.id.iv_item_blog_tag_recommend);
                 TextView title = vh.getView(R.id.tv_item_blog_title);
                 TextView content = vh.getView(R.id.tv_item_blog_body);
                 TextView history = vh.getView(R.id.tv_item_blog_history);
@@ -43,19 +40,15 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
                 TextView answer = vh.getView(R.id.tv_item_blog_answer);
 
                 if (item.isRecommend()) {
-                    vh.setImage(R.id.iv_item_blog_tag_recommend,R.drawable.ic_label_recommend);
+                    vh.setImage(R.id.iv_item_blog_tag_recommend, R.drawable.ic_label_recommend);
                     vh.setVisibility(R.id.iv_item_blog_tag_recommend);
-//                    recommendTag.setImageResource(R.drawable.ic_label_recommend);
-//                    recommendTag.setVisibility(View.VISIBLE);
                 } else {
                     vh.setGone(R.id.iv_item_blog_tag_recommend);
                 }
 
                 if (item.isOriginal()) {
-                    vh.setImage(R.id.iv_item_blog_tag,R.drawable.ic_label_originate);
+                    vh.setImage(R.id.iv_item_blog_tag, R.drawable.ic_label_originate);
                     vh.setVisibility(R.id.iv_item_blog_tag);
-//                    originalTag.setImageResource(R.drawable.ic_label_originate);
-//                    originalTag.setVisibility(View.VISIBLE);
                 } else {
                     vh.setGone(R.id.iv_item_blog_tag);
                 }
