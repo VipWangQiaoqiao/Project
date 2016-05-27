@@ -65,7 +65,7 @@
                 </LinearLayout>
 
                 <Button
-                    android:id="@+id/btn_flow"
+                    android:id="@+id/btn_relation"
                     android:layout_width="wrap_content"
                     android:layout_height="28dp"
                     android:background="@drawable/ic_bg_btn_blue"
@@ -158,7 +158,6 @@
                 android:orientation="vertical"
                 android:paddingLeft="16dp">
 
-                <include layout="@layout/item_blog_detail_about_lay" />
 
             </LinearLayout>
 
@@ -182,7 +181,6 @@
                 android:orientation="vertical"
                 android:paddingLeft="16dp">
 
-                <include layout="@layout/item_blog_detail_comment_lay" />
 
             </LinearLayout>
         </LinearLayout>
