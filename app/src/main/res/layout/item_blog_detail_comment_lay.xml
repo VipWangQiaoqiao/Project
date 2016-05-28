@@ -15,8 +15,8 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_avatar"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_gravity="center_vertical"
             android:src="@drawable/widget_dface" />
 
@@ -73,6 +73,7 @@
         tools:text="诺灬晓月 你好，想跟你请教个问题：就是你用Echart做的甘特图，那个矩形的颜色是怎么设置，能不能显示进度条啊" />
 
     <View
+        android:id="@+id/line"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginTop="16dp"
