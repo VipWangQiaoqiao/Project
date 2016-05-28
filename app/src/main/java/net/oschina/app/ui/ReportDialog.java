@@ -23,15 +23,15 @@ public class ReportDialog extends CommonDialog implements
     private String[] reasons;
     private int reasonIndex;
     private String mUrl;
-    private int mObjId;
+    private long mObjId;
     private byte mObjType;
 
-    public ReportDialog(Context context, String url, int objId, byte objType) {
+    public ReportDialog(Context context, String url, long objId, byte objType) {
         this(context, R.style.dialog_common, url, objId, objType);
     }
 
     private ReportDialog(Context context, int defStyle, String url,
-                         int objId, byte objType) {
+                         long objId, byte objType) {
         super(context, defStyle);
         this.mUrl = url;
         this.mObjId = objId;

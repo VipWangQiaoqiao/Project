@@ -375,7 +375,7 @@ public class OSChinaApi {
      * @param isPostToMyZone 是否转发到我的空间，０不转发　　１转发到我的空间（注意该功能之对某条动弹进行评论是有效，其他情况下服务器借口可以忽略该参数）
      * @param handler
      */
-    public static void publicComment(int catalog, int id, int uid,
+    public static void publicComment(int catalog, long id, int uid,
                                      String content, int isPostToMyZone, AsyncHttpResponseHandler
                                              handler) {
         RequestParams params = new RequestParams();
@@ -499,7 +499,7 @@ public class OSChinaApi {
      * @param objid 比如是新闻ID 或者问答ID 或者动弹ID
      * @param type  1:软件 2:话题 3:博客 4:新闻 5:代码
      */
-    public static void addFavorite(int uid, int objid, int type,
+    public static void addFavorite(int uid, long objid, int type,
                                    AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
