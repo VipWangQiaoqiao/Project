@@ -55,6 +55,7 @@ import cz.msebera.android.httpclient.Header;
 public class MyInformationFragment extends BaseFragment {
 
     public static final int sChildView = 9; // 在没有加入TeamList控件时rootview有多少子布局
+    private static final String TAG = "MyInformationFragment";
 
     @Bind(R.id.iv_avatar)
     AvatarView mIvAvatar;
@@ -229,6 +230,7 @@ public class MyInformationFragment extends BaseFragment {
         view.findViewById(R.id.rl_team).setOnClickListener(this);
         view.findViewById(R.id.rl_blog).setOnClickListener(this);
         view.findViewById(R.id.rl_feedback).setOnClickListener(this);
+        view.findViewById(R.id.rl_setting).setOnClickListener(this);
         mUserUnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -347,53 +349,59 @@ public class MyInformationFragment extends BaseFragment {
 
     @Override
     public void onClick(View v) {
-        if (mIsWatingLogin) {
-            UIHelper.showLoginActivity(getActivity());
-            return;
+
+        int id = v.getId();
+        if (id == R.id.rl_setting) {
+            UIHelper.showSetting(getActivity());
+        } else {
+            if (mIsWatingLogin) {
+                UIHelper.showLoginActivity(getActivity());
+                return;
+            }
+            switch (id) {
+                case R.id.iv_avatar:
+                    UIHelper.showSimpleBack(getActivity(),
+                            SimpleBackPage.MY_INFORMATION_DETAIL);
+                    break;
+                case R.id.iv_qr_code:
+                    showMyQrCode();
+                    break;
+                case R.id.ly_following:
+                    UIHelper.showFriends(getActivity(), AppContext.getInstance()
+                            .getLoginUid(), 0);
+                    break;
+                case R.id.ly_follower:
+                    UIHelper.showFriends(getActivity(), AppContext.getInstance()
+                            .getLoginUid(), 1);
+                    break;
+                case R.id.ly_favorite:
+                    UIHelper.showUserFavorite(getActivity(), AppContext.getInstance()
+                            .getLoginUid());
+                    break;
+                case R.id.rl_feedback:
+                    UIHelper.showSimpleBack(getActivity(), SimpleBackPage.FEED_BACK);
+                    break;
+                case R.id.rl_message:
+                    UIHelper.showMyMes(getActivity());
+                    setNoticeReaded();
+                    break;
+                case R.id.rl_team:
+                    UIHelper.showTeamMainActivity(getActivity());
+                    break;
+                case R.id.rl_blog:
+                    UIHelper.showUserBlog(getActivity(), AppContext.getInstance()
+                            .getLoginUid());
+                    break;
+                case R.id.rl_user_center:
+                    UIHelper.showUserCenter(getActivity(), AppContext.getInstance()
+                            .getLoginUid(), AppContext.getInstance().getLoginUser()
+                            .getName());
+                    break;
+                default:
+                    break;
+            }
         }
-        final int id = v.getId();
-        switch (id) {
-            case R.id.iv_avatar:
-                UIHelper.showSimpleBack(getActivity(),
-                        SimpleBackPage.MY_INFORMATION_DETAIL);
-                break;
-            case R.id.iv_qr_code:
-                showMyQrCode();
-                break;
-            case R.id.ly_following:
-                UIHelper.showFriends(getActivity(), AppContext.getInstance()
-                        .getLoginUid(), 0);
-                break;
-            case R.id.ly_follower:
-                UIHelper.showFriends(getActivity(), AppContext.getInstance()
-                        .getLoginUid(), 1);
-                break;
-            case R.id.ly_favorite:
-                UIHelper.showUserFavorite(getActivity(), AppContext.getInstance()
-                        .getLoginUid());
-                break;
-            case R.id.rl_feedback:
-                UIHelper.showSimpleBack(getActivity(), SimpleBackPage.FEED_BACK);
-                break;
-            case R.id.rl_message:
-                UIHelper.showMyMes(getActivity());
-                setNoticeReaded();
-                break;
-            case R.id.rl_team:
-                UIHelper.showTeamMainActivity(getActivity());
-                break;
-            case R.id.rl_blog:
-                UIHelper.showUserBlog(getActivity(), AppContext.getInstance()
-                        .getLoginUid());
-                break;
-            case R.id.rl_user_center:
-                UIHelper.showUserCenter(getActivity(), AppContext.getInstance()
-                        .getLoginUid(), AppContext.getInstance().getLoginUser()
-                        .getName());
-                break;
-            default:
-                break;
-        }
+
     }
 
     private void showMyQrCode() {

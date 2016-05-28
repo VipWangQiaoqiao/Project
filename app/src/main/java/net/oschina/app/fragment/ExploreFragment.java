@@ -13,8 +13,8 @@ import net.oschina.app.ui.FindUserActivity;
 import net.oschina.app.ui.ShakeActivity;
 import net.oschina.app.util.UIHelper;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * 发现页面
@@ -25,7 +25,7 @@ import butterknife.Bind;
 
 public class ExploreFragment extends BaseFragment {
 
-    @Bind(R.id.rl_active)
+    @Bind(R.id.rl_soft)
     View mRlActive;
 
     @Bind(R.id.rl_find_osc)
@@ -57,8 +57,9 @@ public class ExploreFragment extends BaseFragment {
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
-            case R.id.rl_active:
-                UIHelper.showMyActive(getActivity());
+            case R.id.rl_soft:
+                UIHelper.showSimpleBack(getActivity(),
+                        SimpleBackPage.OPENSOURCE_SOFTWARE);
                 break;
             case R.id.rl_find_osc:
                 showFindUser();

@@ -14,7 +14,7 @@
             android:layout_marginTop="25dp" />
 
         <LinearLayout
-            android:id="@+id/rl_active"
+            android:id="@+id/rl_soft"
             style="@style/option_item_rl" >
             
             <ImageView 
@@ -25,7 +25,7 @@
             
             <TextView
                 style="@style/option_item_text"
-                android:text="@string/active" />
+                android:text="@string/actionbar_title_softwarelist" />
 
         </LinearLayout>
 

@@ -804,7 +804,7 @@ public class UIHelper {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 // 退出
-                System.exit(-1);
+             //   System.exit(-1);
             }
         }).show();
     }
