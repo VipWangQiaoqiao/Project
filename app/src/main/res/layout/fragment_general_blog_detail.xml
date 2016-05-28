@@ -25,15 +25,15 @@
                 android:background="#fcfcfc"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingBottom="8dp"
+                android:paddingBottom="16dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:paddingTop="8dp">
+                android:paddingTop="16dp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/iv_avatar"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
                     android:src="@drawable/widget_dface" />
 
                 <LinearLayout
@@ -50,7 +50,7 @@
                         android:layout_height="wrap_content"
                         android:text="年轻的小蜜蜂"
                         android:textColor="#111111"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         tools:text="年轻的小蜜蜂" />
 
                     <TextView
@@ -59,18 +59,19 @@
                         android:layout_height="wrap_content"
                         android:text="发表于1天前 (2016-06-24 20:12)"
                         android:textColor="#6a6a6a"
-                        android:textSize="14sp"
+                        android:textSize="12sp"
                         tools:text="发表于1天前 (2016-06-24 20:12)" />
                 </LinearLayout>
 
                 <Button
                     android:id="@+id/btn_relation"
                     android:layout_width="wrap_content"
-                    android:layout_height="28dp"
+                    android:layout_height="24dp"
                     android:background="@drawable/ic_bg_btn_blue"
-                    android:minWidth="52dp"
+                    android:minWidth="48dp"
                     android:text="关注"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <View
@@ -86,8 +87,8 @@
 
                 <ImageView
                     android:id="@+id/iv_label_recommend"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_marginRight="4dp"
                     android:contentDescription="@string/app_name"
                     android:scaleType="fitCenter"
@@ -95,8 +96,8 @@
 
                 <ImageView
                     android:id="@+id/iv_label_originate"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:contentDescription="@string/app_name"
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_label_originate" />
@@ -110,7 +111,8 @@
                 android:orientation="vertical"
                 android:paddingBottom="16dp"
                 android:paddingLeft="16dp"
-                android:paddingRight="16dp">
+                android:paddingRight="16dp"
+                android:paddingTop="8dp">
 
                 <TextView
                     android:id="@+id/tv_title"
@@ -139,6 +141,7 @@
             </FrameLayout>
 
             <TextView
+                android:id="@+id/tv_blog_detail_about"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -147,7 +150,7 @@
                 android:layout_marginTop="8dp"
                 android:text="相关文章"
                 android:textColor="#6a6a6a"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
             <LinearLayout
                 android:id="@+id/lay_blog_detail_about"
@@ -161,7 +164,7 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/tv_comment_count"
+                android:id="@+id/tv_blog_detail_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -170,7 +173,7 @@
                 android:layout_marginTop="8dp"
                 android:text="评论(12)"
                 android:textColor="#6a6a6a"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
             <LinearLayout
                 android:id="@+id/lay_blog_detail_comment"
@@ -217,21 +220,22 @@
             android:imeOptions="actionSend"
             android:inputType="text"
             android:lines="1"
-            android:paddingBottom="4dp"
+            android:paddingBottom="6dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:paddingTop="4dp"
+            android:paddingTop="6dp"
             android:singleLine="true"
+            android:textSize="14sp"
             tools:ignore="RtlHardcoded" />
 
         <ImageView
-            android:id="@+id/iv_flow"
+            android:id="@+id/iv_fav"
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:layout_margin="8dp"
             android:contentDescription="@string/app_name"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_fav_normal" />
+            android:src="@drawable/ic_fav" />
 
         <ImageView
             android:id="@+id/iv_share"
@@ -241,7 +245,7 @@
             android:layout_marginRight="8dp"
             android:contentDescription="@string/app_name"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_share_black_normal" />
+            android:src="@drawable/ic_share_black" />
 
     </LinearLayout>
 </RelativeLayout>
