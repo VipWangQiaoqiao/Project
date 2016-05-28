@@ -7,12 +7,19 @@ package net.oschina.app.contract;
 
 public interface BlogDetailContract {
     interface Operator {
+        // 收藏
         void toFavorite();
 
+        // 分享
         void toShare();
 
+        // 关注
         void toFollow();
 
+        // 举报
+        void toReport();
+
+        // 提交评价
         void toSendComment(long id, String comment);
     }
 

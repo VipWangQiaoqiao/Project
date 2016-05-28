@@ -2,7 +2,7 @@ package net.oschina.app.bean;
 
 /**
  * 举报实体类
- * 
+ *
  * @author 火蚁（http://my.oschina.net/LittleDY）
  * @version 1.0
  * @created 2014-02-13
@@ -12,17 +12,17 @@ public class Report extends Entity {
 
     public static final byte TYPE_QUESTION = 0x02;// 问题
 
-    private int objId;//需要举报的id
+    private long objId;//需要举报的id
     private String url;// 举报的链接地址
     private byte objType;// 举报的类型
     private int reason;// 原因
     private String otherReason;// 其他原因
 
-    public int getObjId() {
+    public long getObjId() {
         return objId;
     }
 
-    public void setObjId(int objId) {
+    public void setObjId(long objId) {
         this.objId = objId;
     }
 

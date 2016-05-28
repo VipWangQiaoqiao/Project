@@ -97,6 +97,7 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
 
         root.findViewById(R.id.iv_share).setOnClickListener(this);
         mIVFav.setOnClickListener(this);
+        mBtnRelation.setOnClickListener(this);
         mETInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
