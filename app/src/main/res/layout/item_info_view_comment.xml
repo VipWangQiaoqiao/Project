@@ -7,8 +7,9 @@
     android:orientation="horizontal">
 
     <ImageView
-        android:layout_width="12dp"
-        android:layout_height="12dp"
+        android:id="@+id/iv_info_view"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
         android:contentDescription="@string/app_name"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_view" />
@@ -27,8 +28,9 @@
         tools:text="234" />
 
     <ImageView
-        android:layout_width="12dp"
-        android:layout_height="10dp"
+        android:id="@+id/iv_info_comment"
+        android:layout_width="16dp"
+        android:layout_height="14dp"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:contentDescription="@string/app_name"
