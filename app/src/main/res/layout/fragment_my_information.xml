@@ -75,17 +75,34 @@
 				style="@style/h_line"/>
 
 			<LinearLayout
-				android:id="@+id/rl_feedback"
+			android:id="@+id/rl_feedback"
+			style="@style/option_item_rl">
+
+			<ImageView
+				style="@style/option_item_img"
+				android:background="@drawable/ic_feedback"
+				android:contentDescription="@null"/>
+
+			<TextView
+				style="@style/option_item_text"
+				android:text="@string/str_feedback"/>
+		</LinearLayout>
+
+			<View
+				style="@style/h_line"/>
+
+			<LinearLayout
+				android:id="@+id/rl_setting"
 				style="@style/option_item_rl">
 
 				<ImageView
 					style="@style/option_item_img"
 					android:background="@drawable/ic_feedback"
-					android:contentDescription="@null"/>
+					android:contentDescription="@null" />
 
 				<TextView
 					style="@style/option_item_text"
-					android:text="@string/str_feedback"/>
+					android:text="@string/actionbar_title_setting"/>
 			</LinearLayout>
 
 			<View

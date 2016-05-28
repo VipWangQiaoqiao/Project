@@ -161,7 +161,6 @@
     <string name="actionbar_title_shake">摇一摇</string>
     <string name="actionbar_title_search">搜索</string>
     <!-- 找人不显示标题 -->
-    <string name="actionbar_title_find_user"></string>
     <string name="actionbar_title_event">活动</string>
     <string name="actionbar_title_event_apply">活动出席人员</string>
     <string name="actionbar_title_same_city">同城</string>
