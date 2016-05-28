@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/white"
@@ -14,19 +15,21 @@
 
         <ImageView
             android:id="@+id/iv_item_blog_tag_recommend"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
             android:layout_gravity="top|center|left"
             android:layout_marginRight="4dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="2dp"
+            android:contentDescription="@string/app_name"
             android:src="@drawable/ic_label_recommend" />
 
         <ImageView
             android:id="@+id/iv_item_blog_tag"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
             android:layout_gravity="top|center"
-            android:layout_marginTop="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="2dp"
             android:contentDescription="tag"
             android:src="@drawable/ic_label_originate" />
 
@@ -35,14 +38,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
-            android:layout_marginLeft="4dp"
-            android:gravity="top|center|left"
-            android:lineSpacingExtra="5dp"
+            android:layout_marginRight="16dp"
+            android:gravity="top"
+            android:lineSpacingExtra="4dp"
             android:maxLines="2"
-            android:text="Large Text"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/blog_title_text_color_light"
-            android:textSize="15sp" />
+            android:textSize="16sp"
+            tools:text="Large Text" />
     </LinearLayout>
 
     <TextView
@@ -51,12 +54,16 @@
         android:layout_height="wrap_content"
         android:layout_gravity="left"
         android:layout_marginBottom="8dp"
-        android:lineSpacingExtra="5dp"
-        android:text="New Text" />
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="4dp"
+        android:lineSpacingExtra="4dp"
+        android:textSize="14sp"
+        tools:text="New Text" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
         android:orientation="horizontal">
 
         <TextView
@@ -67,49 +74,12 @@
             android:layout_weight="2"
             android:gravity="left|center"
             android:lines="1"
-            android:text="NNNNN"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/count_text_color_light"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            tools:text="2012-12-01 22:10" />
 
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_gravity="center|right"
-            android:src="@drawable/ic_view" />
-
-        <TextView
-            android:id="@+id/tv_item_blog_see"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="23dp"
-            android:gravity="center"
-            android:text="20"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/count_text_color_light"
-            android:textSize="12sp" />
-
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_comment_30" />
-
-        <TextView
-            android:id="@+id/tv_item_blog_answer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="16dp"
-            android:gravity="right"
-            android:text="30"
-            android:textColor="@color/count_text_color_light"
-            android:textSize="12sp" />
+        <include layout="@layout/item_info_view_comment" />
 
     </LinearLayout>
 
@@ -117,8 +87,8 @@
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_marginBottom="1dp"
+        android:layout_marginBottom="1px"
         android:layout_marginTop="16dp"
-        android:background="@color/count_text_color_light" />
+        android:background="@color/list_divider_color" />
 
 </LinearLayout>

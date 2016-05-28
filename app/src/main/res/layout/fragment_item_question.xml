@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/white"
@@ -15,41 +16,35 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_ques_item_icon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:paddingTop="4dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:src="@drawable/widget_dface" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="4dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="16dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_ques_item_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="16dp"
-                android:gravity="center|left|top"
-                android:lineSpacingExtra="5dp"
+                android:lineSpacingExtra="4dp"
                 android:maxLines="2"
-                android:text="title"
-                android:textColor="@android:color/background_dark" />
+                android:textColor="@android:color/background_dark"
+                android:textSize="16sp"
+                tools:text="Title" />
 
             <TextView
                 android:id="@+id/tv_ques_item_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="16dp"
-                android:gravity="left|center"
-                android:lineSpacingExtra="5dp"
+                android:lineSpacingExtra="4dp"
                 android:maxLines="2"
-                android:paddingBottom="4dp"
-                android:text="@string/flickr_content" />
+                android:textSize="14sp"
+                tools:text="@string/flickr_content" />
 
         </LinearLayout>
 
@@ -60,6 +55,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        android:layout_marginLeft="44dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal">
 
         <TextView
@@ -67,63 +65,22 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="56dp"
-            android:layout_weight="2"
-            android:gravity="left|center"
+            android:layout_weight="1"
             android:lines="1"
-            android:text="NNNNN"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/count_text_color_light"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            tools:text="2012-12-01 22:10" />
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginRight="4dp"
-            android:contentDescription="tag"
-            android:src="@drawable/ic_view" />
+        <include layout="@layout/item_info_view_comment" />
 
-        <TextView
-            android:id="@+id/tv_ques_item_see"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="23dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="23dp"
-            android:gravity="center"
-            android:text="20"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/count_text_color_light"
-            android:textSize="12sp" />
-
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_gravity="center_horizontal"
-            android:contentDescription="tag"
-            android:src="@drawable/ic_comment_30" />
-
-        <TextView
-            android:id="@+id/tv_ques_item_comment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="16dp"
-            android:gravity="right|center"
-            android:text="30"
-            android:textColor="@color/count_text_color_light"
-            android:textSize="12sp" />
     </LinearLayout>
 
     <View
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_marginBottom="1dp"
-        android:background="@color/count_text_color_light" />
+        android:layout_marginBottom="1px"
+        android:background="@color/list_divider_color" />
 
 </LinearLayout>
