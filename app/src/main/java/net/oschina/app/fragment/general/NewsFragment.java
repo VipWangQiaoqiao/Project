@@ -8,8 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
+
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.base.BaseListAdapter;
@@ -24,6 +26,7 @@ import net.oschina.app.fragment.base.BaseListFragment;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.SmoothScroller;
 import net.oschina.app.widget.ViewNewsBanner;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
