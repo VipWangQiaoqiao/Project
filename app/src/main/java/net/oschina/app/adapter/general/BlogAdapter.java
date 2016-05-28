@@ -36,8 +36,8 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
                 TextView title = vh.getView(R.id.tv_item_blog_title);
                 TextView content = vh.getView(R.id.tv_item_blog_body);
                 TextView history = vh.getView(R.id.tv_item_blog_history);
-                TextView see = vh.getView(R.id.tv_item_blog_see);
-                TextView answer = vh.getView(R.id.tv_item_blog_answer);
+                TextView see = vh.getView(R.id.tv_info_view);
+                TextView answer = vh.getView(R.id.tv_info_comment);
 
                 if (item.isRecommend()) {
                     vh.setImage(R.id.iv_item_blog_tag_recommend, R.drawable.ic_label_recommend);
