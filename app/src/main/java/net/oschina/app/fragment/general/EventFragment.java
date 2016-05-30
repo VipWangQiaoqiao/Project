@@ -134,7 +134,7 @@ public class EventFragment extends BaseListFragment<Event> {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Event event = mAdapter.getItem(position);
+        Event event = mAdapter.getItem(position - 1);
         if (event != null)
             UIHelper.showEventDetail(view.getContext(), Integer.parseInt(String.valueOf(event.getId())));
     }

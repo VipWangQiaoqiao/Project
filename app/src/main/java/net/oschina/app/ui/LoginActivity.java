@@ -137,7 +137,7 @@ public class LoginActivity extends BaseActivity implements IUiListener {
         public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
             LoginUserBean loginUserBean = XmlUtils.toBean(LoginUserBean.class, arg2);
             if (loginUserBean != null) {
-                handleLoginBean(loginUserBean);
+                handleLoginBean(loginUserBean, arg1);
             }
         }
 
@@ -201,6 +201,7 @@ public class LoginActivity extends BaseActivity implements IUiListener {
     }
 
     BroadcastReceiver receiver;
+
     /**
      * 微信登陆
      */
@@ -320,8 +321,7 @@ public class LoginActivity extends BaseActivity implements IUiListener {
     }
 
     /***
-     *
-     * @param catalog 第三方登录的类别
+     * @param catalog    第三方登录的类别
      * @param openIdInfo 第三方的信息
      */
     private void openIdLogin(final String catalog, final String openIdInfo) {
@@ -331,7 +331,7 @@ public class LoginActivity extends BaseActivity implements IUiListener {
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 LoginUserBean loginUserBean = XmlUtils.toBean(LoginUserBean.class, responseBody);
                 if (loginUserBean.getResult().OK()) {
-                    handleLoginBean(loginUserBean);
+                    handleLoginBean(loginUserBean, headers);
                 } else {
                     // 前往绑定或者注册操作
                     Intent intent = new Intent(LoginActivity.this, LoginBindActivityChooseActivity.class);
@@ -373,8 +373,8 @@ public class LoginActivity extends BaseActivity implements IUiListener {
                     return;
                 }
                 LoginUserBean loginUserBean = (LoginUserBean) data.getSerializableExtra(BUNDLE_KEY_LOGINBEAN);
-                if (loginUserBean !=  null) {
-                    handleLoginBean(loginUserBean);
+                if (loginUserBean != null) {
+                    handleLoginBean(loginUserBean, null);
                 }
                 break;
             default:
@@ -383,8 +383,9 @@ public class LoginActivity extends BaseActivity implements IUiListener {
         }
     }
 
+
     // 处理loginBean
-    private void handleLoginBean(LoginUserBean loginUserBean) {
+    private void handleLoginBean(LoginUserBean loginUserBean, Header[] headers) {
         if (loginUserBean.getResult().OK()) {
             AsyncHttpClient client = ApiHttpClient.getHttpClient();
             HttpContext httpContext = client.getHttpContext();
@@ -396,6 +397,20 @@ public class LoginActivity extends BaseActivity implements IUiListener {
                     TLog.log(TAG,
                             "cookie:" + c.getName() + " " + c.getValue());
                     tmpcookies += (c.getName() + "=" + c.getValue()) + ";";
+                }
+                if (TextUtils.isEmpty(tmpcookies)) {
+
+                    if (headers != null) {
+                        for (Header header : headers) {
+                            String key = header.getName();
+                            String value = header.getValue();
+                            if (key.contains("Set-Cookie"))
+                                tmpcookies += value + ";";
+                        }
+                        if (tmpcookies.length() > 0) {
+                            tmpcookies = tmpcookies.substring(0, tmpcookies.length() - 1);
+                        }
+                    }
                 }
                 TLog.log(TAG, "cookies:" + tmpcookies);
                 AppContext.getInstance().setProperty(AppConfig.CONF_COOKIE,
