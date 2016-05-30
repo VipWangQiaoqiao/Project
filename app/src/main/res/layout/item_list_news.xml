@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/layout_item_bg"
@@ -10,72 +11,101 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="6dp"
-        android:layout_marginTop="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/iv_tip"
-            android:layout_gravity="top"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginRight="2dip"
-            android:contentDescription="@null"
-            android:visibility="visible" />
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_gravity="top|center|left"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="2dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_label_recommend" />
 
         <TextView
             android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_marginRight="16dp"
+            android:ellipsize="end"
+            android:gravity="top"
+            android:lineSpacingExtra="4dp"
             android:maxLines="2"
-            android:lineSpacingExtra="@dimen/space_5"
-            style="@style/list_text_title" />
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/blog_title_text_color_light"
+            android:textSize="16sp"
+            tools:text="Large Text" />
+
     </LinearLayout>
 
     <TextView
         android:id="@+id/tv_description"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/space_5"
+        android:layout_gravity="left"
+        android:layout_marginBottom="8dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        android:layout_marginTop="4dp"
         android:ellipsize="end"
+        android:lineSpacingExtra="4dp"
         android:maxLines="2"
-        android:lineSpacingExtra="@dimen/space_5"
-        android:textColor="?attr/infoTextColor" />
+        android:textSize="14sp"
+        tools:text="New Text" />
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tv_time"
-            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="2"
+            android:gravity="left|center"
+            android:lines="1"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/count_text_color_light"
             android:textSize="12sp"
-            style="@style/list_text_info" />
+            tools:text="2012-12-01 22:10"  />
 
 
         <ImageView
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            android:layout_marginRight="2dip"
-            android:contentDescription="@null"
-            android:src="@drawable/ic_comment_30" />
+            android:id="@+id/iv_info_comment"
+            android:layout_width="16dp"
+            android:layout_height="14dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:contentDescription="@string/app_name"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_comment" />
 
         <TextView
-            android:textSize="12sp"
             android:id="@+id/tv_comment_count"
-            style="@style/list_text_info" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="0"
+            android:textColor="#9d9d9d"
+            android:textSize="12sp"
+            tools:ignore="HardcodedText"
+            tools:text="12" />
 
     </LinearLayout>
+
     <View
-        android:layout_marginLeft="16dp"
-        style="@style/h_line"/>
+        style="@style/h_line"
+        android:layout_marginLeft="16dp" />
 </LinearLayout>
