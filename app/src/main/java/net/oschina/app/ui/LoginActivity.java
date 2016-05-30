@@ -399,6 +399,7 @@ public class LoginActivity extends BaseActivity implements IUiListener {
                     tmpcookies += (c.getName() + "=" + c.getValue()) + ";";
                 }
                 if (TextUtils.isEmpty(tmpcookies)) {
+
                     if (headers != null) {
                         for (Header header : headers) {
                             String key = header.getName();
