@@ -14,7 +14,7 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
 	padding-left: 4px;
-	border-left: 3px solid #24cf5f;
+	border-left: 2.5px solid #24cf5f;
 	color: #010101;
 }
 
@@ -42,7 +42,7 @@ pre {
 	font-size: 0.86em;
 	font-family: Arial;
 	border: none;
-	border-left: 3px solid #CFCDD3;
+	border-left: 2.5px solid #CFCDD3;
 	background: #f8f8f8;
 	padding: 8px 6px 6px 6px;
 	line-height: 136%;
