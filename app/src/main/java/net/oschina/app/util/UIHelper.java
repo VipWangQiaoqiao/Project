@@ -168,21 +168,6 @@ public class UIHelper {
         context.startActivity(intent);
     }
 
-    /**
-     * 显示新闻详情
-     *
-     * @param context
-     * @param newsId
-     */
-    public static void showNewsDetail(Context context, long newsId,
-                                      int commentCount) {
-        Intent intent = new Intent(context, DetailActivity.class);
-        intent.putExtra("id", newsId);
-        intent.putExtra("comment_count", commentCount);
-        intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
-                DetailActivity.DISPLAY_NEWS);
-        context.startActivity(intent);
-    }
 
     /**
      * 显示博客详情
@@ -282,15 +267,6 @@ public class UIHelper {
         context.startActivity(intent);
     }
 
-    public static void showSoftwareDetailById(Context context, long id) {
-        Intent intent = new Intent(context, DetailActivity.class);
-        intent.putExtra("id", id);
-        intent.putExtra("ident", "");
-        intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
-                DetailActivity.DISPLAY_SOFTWARE);
-        context.startActivity(intent);
-    }
-
     /**
      * 新闻超链接点击跳转
      *
@@ -342,13 +318,13 @@ public class UIHelper {
         long newsId = news.getId();
         switch (news.getType()) {
             case net.oschina.app.bean.news.News.TYPE_HREF:
-                showNewsDetail(context, newsId, news.getCommentCount());
+                showNewsDetail(context, Integer.parseInt(String.valueOf(newsId)), news.getCommentCount());
                 break;
             case net.oschina.app.bean.news.News.TYPE_SOFTWARE:
-                showSoftwareDetailById(context, newsId);
+                showSoftwareDetailById(context, Integer.parseInt(String.valueOf(newsId)));
                 break;
             case net.oschina.app.bean.news.News.TYPE_QUESTION:
-                showPostDetail(context, StringUtils.toInt(String.valueOf(newsId)),
+                showPostDetail(context,Integer.parseInt(String.valueOf(newsId)),
                         news.getCommentCount());
                 break;
             case net.oschina.app.bean.news.News.TYPE_BLOG:
@@ -369,10 +345,10 @@ public class UIHelper {
         long newsId = banner.getId();
         switch (banner.getType()) {
             case Banner.BANNER_TYPE_URL:
-                showNewsDetail(context, newsId, 0);
+                showNewsDetail(context, Integer.parseInt(String.valueOf(newsId)), 0);
                 break;
             case Banner.BANNER_TYPE_SOHTWARE:
-                showSoftwareDetailById(context, newsId);
+                showSoftwareDetailById(context, Integer.parseInt(String.valueOf(newsId)));
                 break;
             case Banner.BANNER_TYPE_POST:
                 showPostDetail(context, StringUtils.toInt(String.valueOf(newsId)),

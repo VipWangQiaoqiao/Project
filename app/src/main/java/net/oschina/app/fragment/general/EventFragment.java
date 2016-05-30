@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -22,6 +23,7 @@ import net.oschina.app.bean.base.ResultBean;
 import net.oschina.app.bean.event.Event;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.fragment.base.BaseListFragment;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.SmoothScroller;
 import net.oschina.app.widget.ViewEventBanner;
 
@@ -128,6 +130,13 @@ public class EventFragment extends BaseListFragment<Event> {
     protected void requestData() {
         super.requestData();
         OSChinaApi.getEventList(mIsRefresh ? mBeam.getPrevPageToken() : mBeam.getNextPageToken(), mHandler);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Event event = mAdapter.getItem(position);
+        if (event != null)
+            UIHelper.showEventDetail(view.getContext(), Integer.parseInt(String.valueOf(event.getId())));
     }
 
     @Override
