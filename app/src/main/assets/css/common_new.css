@@ -7,13 +7,14 @@ html, body {
 body {
 	word-wrap: break-word;
 	font-size: 15px;
-	line-height: 1.6em;
+	letter-spacing: 1px;
+	line-height: 165%;
 	color: #111111;
 }
 
 h1, h2, h3, h4, h5, h6 {
 	padding-left: 4px;
-	border-left: 2px solid #24cf5f;
+	border-left: 3px solid #24cf5f;
 	color: #010101;
 }
 
@@ -24,24 +25,27 @@ table {
 	border-collapse: none;
 	background: #f8f8f8;
 	font-size: 0.8em;
+	margin-right: 1px;
 }
 
 img {
 	max-width: 100%;
 	margin: 4px 0;
 	background: #fefefe;
+	border: none;
+	box-shadow: none;
 }
 
 pre {
 	margin-top: 1px;
 	margin-bottom: 1px;
-	font-size: 0.8em;
-	line-height: 1.2em;
+	font-size: 0.86em;
 	font-family: Arial;
 	border: none;
-	border-left: 2px solid #CFCDD3;
+	border-left: 3px solid #CFCDD3;
 	background: #f8f8f8;
 	padding: 8px 6px 6px 6px;
+	line-height: 136%;
 	overflow: auto;
 }
 
