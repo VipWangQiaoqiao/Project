@@ -70,6 +70,16 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        WebView view = mWebView;
+        if (view != null) {
+            view.removeAllViews();
+            view.destroy();
+        }
+    }
+
+    @Override
     protected void initWidget(View root) {
         mImgLoader = Glide.with(this);
 

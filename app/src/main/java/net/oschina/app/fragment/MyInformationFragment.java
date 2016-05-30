@@ -230,6 +230,7 @@ public class MyInformationFragment extends BaseFragment {
         view.findViewById(R.id.rl_team).setOnClickListener(this);
         view.findViewById(R.id.rl_blog).setOnClickListener(this);
         view.findViewById(R.id.rl_feedback).setOnClickListener(this);
+        view.findViewById(R.id.rl_info_avtivities).setOnClickListener(this);
         view.findViewById(R.id.rl_setting).setOnClickListener(this);
         mUserUnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -396,6 +397,9 @@ public class MyInformationFragment extends BaseFragment {
                     UIHelper.showUserCenter(getActivity(), AppContext.getInstance()
                             .getLoginUid(), AppContext.getInstance().getLoginUser()
                             .getName());
+                    break;
+                case R.id.rl_info_avtivities:
+                    UIHelper.showSimpleBack(getActivity(), SimpleBackPage.EVENT_LIST);
                     break;
                 default:
                     break;

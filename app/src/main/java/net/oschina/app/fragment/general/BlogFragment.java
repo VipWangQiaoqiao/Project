@@ -14,7 +14,9 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.base.PageBean;
 import net.oschina.app.bean.base.ResultBean;
 import net.oschina.app.bean.blog.Blog;
+import net.oschina.app.cache.CacheManager;
 import net.oschina.app.fragment.base.BaseListFragment;
+import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;
@@ -27,8 +29,9 @@ import cz.msebera.android.httpclient.Header;
  * 博客界面
  */
 public class BlogFragment extends BaseListFragment<Blog> {
-    private boolean mFirst = true;
+
     public static final String BUNDLE_BLOG_TYPE = "BUNDLE_BLOG_TYPE";
+    private boolean isFirst = true;
 
     @Override
     protected void initData() {
@@ -36,14 +39,17 @@ public class BlogFragment extends BaseListFragment<Blog> {
     }
 
     @Override
+    public void onRefreshing() {
+        isFirst = true;
+        super.onRefreshing();
+    }
+
+    @Override
     protected void requestData() {
         super.requestData();
-        if (mFirst) {
-            mFirst = false;
-            OSChinaApi.getBlogList(OSChinaApi.CATALOG_BLOG_HEAT, null, handler);
-        } else {
-            OSChinaApi.getBlogList(OSChinaApi.CATALOG_BLOG_NORMAL, mIsRefresh ? mBeam.getPrevPageToken() : mBeam.getNextPageToken(), mHandler);
-        }
+
+        OSChinaApi.getBlogList(mIsRefresh ? OSChinaApi.CATALOG_BLOG_HEAT : OSChinaApi.CATALOG_BLOG_NORMAL, mIsRefresh ? mBeam.getPrevPageToken() : mBeam.getNextPageToken(), mHandler);
+
     }
 
     @Override
@@ -69,10 +75,50 @@ public class BlogFragment extends BaseListFragment<Blog> {
 
     @Override
     protected void setListData(ResultBean<PageBean<Blog>> resultBean) {
-        if (mFirst || mIsRefresh) {
-            resultBean.getResult().getItems().addAll(0, blogs);
+        //super.setListData(resultBean);
+        //is refresh
+        if (mIsRefresh) {
+            List<Blog> blogs = resultBean.getResult().getItems();
+            Blog blog = new Blog();
+            blog.setViewType(Blog.VIEW_TYPE_TITLE_HEAT);
+            blogs.add(0, blog);
+            mBeam.setItems(blogs);
+            mAdapter.clear();
+            mAdapter.addItem(mBeam.getItems());
+            mRefreshLayout.setCanLoadMore();
+            mIsRefresh = false;
+            OSChinaApi.getBlogList(OSChinaApi.CATALOG_BLOG_NORMAL, null, mHandler);
+        } else {
+            List<Blog> blogs = resultBean.getResult().getItems();
+            if (isFirst) {
+                Blog blog = new Blog();
+                blog.setViewType(Blog.VIEW_TYPE_TITLE_NORMAL);
+                blogs.add(0, blog);
+                isFirst = false;
+                mExeService.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        CacheManager.saveObject(getActivity(), mBeam, CACHE_NAME);
+                    }
+                });
+            }
+            mBeam.setNextPageToken(resultBean.getResult().getNextPageToken());
+            mBeam.setPrevPageToken(resultBean.getResult().getPrevPageToken());
+            mAdapter.addItem(blogs);
         }
-        super.setListData(resultBean);
+
+        if (resultBean.getResult().getItems().size() < 10) {
+            setFooterType(TYPE_NO_MORE);
+            mRefreshLayout.setNoMoreData();
+        }
+        if (mAdapter.getDatas().size() > 0) {
+            mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+            mRefreshLayout.setVisibility(View.VISIBLE);
+        } else {
+            mErrorLayout.setErrorType(EmptyLayout.NODATA);
+        }
+
+
     }
 
 
