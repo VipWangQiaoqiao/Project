@@ -45,15 +45,4 @@
                 android:src="@drawable/ic_nav_add_selector" />
         </FrameLayout>
     </LinearLayout>
-
-    <!-- 左侧侧滑菜单 -->
-
-    <fragment
-        android:id="@+id/navigation_drawer"
-        android:name="net.oschina.app.ui.NavigationDrawerFragment"
-        android:layout_width="@dimen/navigation_drawer_width"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        tools:layout="@layout/fragment_navigation_drawer" />
-
 </android.support.v4.widget.DrawerLayout>
