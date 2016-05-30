@@ -186,7 +186,18 @@
                 android:orientation="vertical"
                 android:paddingLeft="16dp">
 
-
+                <TextView
+                    android:id="@+id/tv_see_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginRight="8dp"
+                    android:gravity="center_horizontal"
+                    android:paddingBottom="16dp"
+                    android:paddingTop="16dp"
+                    android:text="查看更多"
+                    android:textColor="#111111"
+                    android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>
 

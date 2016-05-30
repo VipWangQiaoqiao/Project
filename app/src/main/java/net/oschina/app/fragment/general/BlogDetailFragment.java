@@ -148,6 +148,12 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
                 handleShare();
             }
             break;
+            // 评论列表
+            case R.id.tv_see_comment: {
+                UIHelper.showBlogComment(getActivity(), (int) mId,
+                        (int) mOperator.getBlogDetail().getAuthorId());
+            }
+            break;
         }
     }
 
@@ -212,7 +218,7 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
             final int size = blog.getComments().size();
             int i = 1;
             for (final BlogDetail.Comment comment : blog.getComments()) {
-                View lay = getLayoutInflater(null).inflate(R.layout.item_blog_detail_comment_lay, mLayComments, true);
+                View lay = getLayoutInflater(null).inflate(R.layout.item_blog_detail_comment_lay, null, false);
                 mImgLoader.load(comment.authorPortrait).error(R.drawable.widget_dface)
                         .into(((ImageView) lay.findViewById(R.id.iv_avatar)));
 
@@ -232,7 +238,11 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
                     lay.findViewById(R.id.line).setVisibility(View.INVISIBLE);
                 }
                 i++;
+
+                mLayComments.addView(lay, 0);
             }
+
+            mLayComments.findViewById(R.id.tv_see_comment).setOnClickListener(this);
         } else {
             setGone(R.id.tv_blog_detail_comment);
             mLayComments.setVisibility(View.GONE);

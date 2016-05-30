@@ -173,6 +173,11 @@ public class BlogDetailActivity extends AppCompatActivity implements BlogDetailC
 
 
     @Override
+    public BlogDetail getBlogDetail() {
+        return mBlog;
+    }
+
+    @Override
     public void toFavorite() {
         int uid = check();
         if (uid == 0)
