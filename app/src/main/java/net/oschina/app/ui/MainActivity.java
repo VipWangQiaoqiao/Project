@@ -8,7 +8,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
@@ -54,14 +53,8 @@ public class MainActivity extends AppCompatActivity implements
         OnTouchListener {
 
     private boolean isBackPressed = false;
+    private long mBackPressedTime;
 
-    private DoubleClickExitHelper mDoubleClickExit;
-
-    /**
-     * Fragment managing the behaviors, interactions and presentation of the
-     * navigation drawer.
-     */
-    private NavigationDrawerFragment mNavigationDrawerFragment;
 
     @Bind(android.R.id.tabhost)
     public MyFragmentTabHost mTabHost;
@@ -171,15 +164,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void initView() {
-        mDoubleClickExit = new DoubleClickExitHelper(this);
-        mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
-
-        // Set up the drawer.
-        mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
-
         mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
         if (android.os.Build.VERSION.SDK_INT > 10) {
             mTabHost.getTabWidget().setShowDividers(0);
@@ -199,7 +184,6 @@ public class MainActivity extends AppCompatActivity implements
         NoticeUtils.bindToService(this);
 
         if (AppContext.isFristStart()) {
-            mNavigationDrawerFragment.openDrawerMenu();
             DataCleanManager.cleanInternalCache(AppContext.getInstance());
             AppContext.setFristStart(false);
         }
@@ -279,7 +263,7 @@ public class MainActivity extends AppCompatActivity implements
     public void onNavigationDrawerItemSelected(int position) {
     }
 
-    public void restoreActionBar() {
+    private void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
@@ -291,11 +275,8 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_activity_menu, menu);
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
-            restoreActionBar();
-            return true;
-        }
-        return super.onCreateOptionsMenu(menu);
+        restoreActionBar();
+        return true;
     }
 
     @Override
@@ -378,22 +359,6 @@ public class MainActivity extends AppCompatActivity implements
                 mTabHost.getCurrentTabTag());
     }
 
-
-    /**
-     * 监听返回--是否退出程序
-     */
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if (keyCode == KeyEvent.KEYCODE_BACK) {
-//            // 是否退出应用
-//            if (AppContext.get(AppConfig.KEY_DOUBLE_CLICK_EXIT, true)) {
-//                return mDoubleClickExit.onKeyDown(keyCode, event);
-//            }
-//        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-
     @Override
     public void onBackPressed() {
         if (isBackPressed) {
@@ -408,5 +373,5 @@ public class MainActivity extends AppCompatActivity implements
                 }
             }, 3 * 1000);
         }
-    }//end of onBackPressed()
+    }
 }
