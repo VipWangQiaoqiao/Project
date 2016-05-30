@@ -6,12 +6,12 @@
     android:background="@android:color/white"
     android:orientation="vertical"
     android:paddingLeft="16dp"
-    android:paddingTop="16dp">
+    android:paddingTop="16dp"
+    android:weightSum="1">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -22,15 +22,17 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="16dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_ques_item_title"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                android:ellipsize="end"
                 android:lineSpacingExtra="4dp"
                 android:maxLines="2"
                 android:textColor="@android:color/background_dark"
@@ -39,8 +41,10 @@
 
             <TextView
                 android:id="@+id/tv_ques_item_content"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
                 android:lineSpacingExtra="4dp"
                 android:maxLines="2"
                 android:textSize="14sp"
@@ -57,7 +61,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="44dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:orientation="horizontal">
 
         <TextView
