@@ -9,6 +9,8 @@ import net.oschina.app.bean.blog.BlogDetail;
 
 public interface BlogDetailContract {
     interface Operator {
+        BlogDetail getBlogDetail();
+
         // 收藏
         void toFavorite();
 
