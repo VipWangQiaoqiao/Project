@@ -7,12 +7,12 @@ import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -52,12 +52,10 @@ public class MainActivity extends AppCompatActivity implements
         OnTabChangeListener, BaseViewInterface, View.OnClickListener,
         OnTouchListener {
 
-    private boolean isBackPressed = false;
     private long mBackPressedTime;
 
-
     @Bind(android.R.id.tabhost)
-    public MyFragmentTabHost mTabHost;
+    MyFragmentTabHost mTabHost;
 
     private BadgeView mBvNotice;
 
@@ -361,17 +359,12 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
-        if (isBackPressed) {
+        long curTime = SystemClock.uptimeMillis();
+        if ((curTime - mBackPressedTime) < (3 * 1000)) {
             finish();
         } else {
+            mBackPressedTime = curTime;
             Toast.makeText(this, R.string.tip_double_click_exit, Toast.LENGTH_LONG).show();
-            isBackPressed = true;
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    isBackPressed = false;
-                }
-            }, 3 * 1000);
         }
     }
 }
