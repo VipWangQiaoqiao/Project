@@ -185,7 +185,12 @@ public class BlogDetailActivity extends AppCompatActivity implements BlogDetailC
                     Result res = XmlUtils.toBean(net.oschina.app.bean.ResultBean.class,
                             new ByteArrayInputStream(arg2)).getResult();
                     if (res.OK()) {
-                        mView.toFavoriteOk();
+                        mBlog.setFavorite(!mBlog.isFavorite());
+                        mView.toFavoriteOk(mBlog);
+                        if (mBlog.isFavorite())
+                            AppContext.showToastShort(R.string.add_favorite_success);
+                        else
+                            AppContext.showToastShort(R.string.del_favorite_success);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -196,7 +201,10 @@ public class BlogDetailActivity extends AppCompatActivity implements BlogDetailC
             @Override
             public void onFailure(int arg0, Header[] arg1, byte[] arg2,
                                   Throwable arg3) {
-                AppContext.showToastShort(R.string.add_favorite_faile);
+                if (mBlog.isFavorite())
+                    AppContext.showToastShort(R.string.del_favorite_faile);
+                else
+                    AppContext.showToastShort(R.string.add_favorite_faile);
             }
 
             @Override
@@ -210,8 +218,13 @@ public class BlogDetailActivity extends AppCompatActivity implements BlogDetailC
             }
         };
 
-        OSChinaApi.addFavorite(uid, mId,
-                FavoriteList.TYPE_BLOG, mFavoriteHandler);
+        if (mBlog.isFavorite()) {
+            OSChinaApi.addFavorite(uid, mId,
+                    FavoriteList.TYPE_BLOG, mFavoriteHandler);
+        } else {
+            OSChinaApi.delFavorite(uid, mId,
+                    FavoriteList.TYPE_BLOG, mFavoriteHandler);
+        }
     }
 
     @Override
@@ -261,7 +274,8 @@ public class BlogDetailActivity extends AppCompatActivity implements BlogDetailC
                             Result result = XmlUtils.toBean(net.oschina.app.bean.ResultBean.class,
                                     new ByteArrayInputStream(arg2)).getResult();
                             if (result.OK()) {
-                                mView.toFollowOk();
+                                // 更改用户状态
+                                mView.toFollowOk(mBlog);
                                 return;
                             }
                             AppContext.showToast("关注失败!");

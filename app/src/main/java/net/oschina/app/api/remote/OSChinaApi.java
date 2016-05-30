@@ -508,7 +508,7 @@ public class OSChinaApi {
         ApiHttpClient.post("action/api/favorite_add", params, handler);
     }
 
-    public static void delFavorite(int uid, int objid, int type,
+    public static void delFavorite(int uid, long objid, int type,
                                    AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("uid", uid);

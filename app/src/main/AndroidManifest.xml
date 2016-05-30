@@ -245,7 +245,11 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Transparent" />
-        <activity android:name=".ui.blog.BlogDetailActivity"></activity>
+        <activity
+            android:name=".ui.blog.BlogDetailActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
     </application>
 
 </manifest>

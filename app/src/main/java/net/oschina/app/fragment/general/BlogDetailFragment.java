@@ -24,7 +24,6 @@ import net.oschina.app.R;
 import net.oschina.app.bean.blog.BlogDetail;
 import net.oschina.app.contract.BlogDetailContract;
 import net.oschina.app.fragment.base.BaseFragment;
-import net.oschina.app.util.FontSizeUtils;
 import net.oschina.app.util.UIHelper;
 
 /**
@@ -161,11 +160,7 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
         mId = mCommentId = blog.getId();
 
         String body = getWebViewBody(blog);
-        if (mWebView != null) {
-            mWebView.loadDataWithBaseURL("", body, "text/html", "UTF-8", "");
-            // 显示存储的字体大小
-            mWebView.loadUrl(FontSizeUtils.getSaveFontSize());
-        }
+        mWebView.loadDataWithBaseURL("", body, "text/html", "UTF-8", "");
 
         mTVAuthorName.setText(blog.getAuthor());
         mImgLoader.load(blog.getAuthorPortrait()).error(R.drawable.widget_dface).into(mIVAuthorPortrait);
@@ -189,17 +184,21 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
             mBtnRelation.setText("已关注");
         }
 
+        toFavoriteOk(blog);
+
+
+        setText(R.id.tv_info_view, String.valueOf(blog.getViewCount()));
         if (blog.getAbouts() != null && blog.getAbouts().size() > 0) {
             final int size = blog.getAbouts().size();
             int i = 1;
             for (BlogDetail.About about : blog.getAbouts()) {
-                View aboutLay = getLayoutInflater(null).inflate(R.layout.item_blog_detail_about_lay, mLayAbouts, true);
-                ((TextView) aboutLay.findViewById(R.id.tv_title)).setText(about.title);
-                ((TextView) aboutLay.findViewById(R.id.tv_info_view)).setText(about.viewCount);
-                ((TextView) aboutLay.findViewById(R.id.tv_info_comment)).setText(about.commentCount);
+                View lay = getLayoutInflater(null).inflate(R.layout.item_blog_detail_about_lay, mLayAbouts, true);
+                ((TextView) lay.findViewById(R.id.tv_title)).setText(about.title);
+                ((TextView) lay.findViewById(R.id.tv_info_view)).setText(about.viewCount);
+                ((TextView) lay.findViewById(R.id.tv_info_comment)).setText(about.commentCount);
 
                 if (i == size) {
-                    aboutLay.findViewById(R.id.line).setVisibility(View.INVISIBLE);
+                    lay.findViewById(R.id.line).setVisibility(View.INVISIBLE);
                 }
                 i++;
             }
@@ -208,20 +207,20 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
             mLayAbouts.setVisibility(View.GONE);
         }
 
-        if (blog.getAbouts() != null && blog.getAbouts().size() > 0) {
+        setText(R.id.tv_info_comment, String.valueOf(blog.getCommentCount()));
+        if (blog.getComments() != null && blog.getComments().size() > 0) {
             final int size = blog.getComments().size();
             int i = 1;
-            setText(R.id.tv_blog_detail_comment, String.format("评论(%s)", blog.getCommentCount()));
             for (final BlogDetail.Comment comment : blog.getComments()) {
-                View aboutLay = getLayoutInflater(null).inflate(R.layout.item_blog_detail_comment_lay, mLayComments, true);
+                View lay = getLayoutInflater(null).inflate(R.layout.item_blog_detail_comment_lay, mLayComments, true);
                 mImgLoader.load(comment.authorPortrait).error(R.drawable.widget_dface)
-                        .into(((ImageView) aboutLay.findViewById(R.id.iv_avatar)));
+                        .into(((ImageView) lay.findViewById(R.id.iv_avatar)));
 
-                ((TextView) aboutLay.findViewById(R.id.tv_name)).setText(comment.author);
-                ((TextView) aboutLay.findViewById(R.id.tv_pub_date)).setText(comment.pubDate);
-                ((TextView) aboutLay.findViewById(R.id.tv_content)).setText(comment.content);
+                ((TextView) lay.findViewById(R.id.tv_name)).setText(comment.author);
+                ((TextView) lay.findViewById(R.id.tv_pub_date)).setText(comment.pubDate);
+                ((TextView) lay.findViewById(R.id.tv_content)).setText(comment.content);
                 final long commentId = comment.id;
-                aboutLay.findViewById(R.id.btn_comment).setOnClickListener(new View.OnClickListener() {
+                lay.findViewById(R.id.btn_comment).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         mCommentId = commentId;
@@ -230,7 +229,7 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
                 });
 
                 if (i == size) {
-                    aboutLay.findViewById(R.id.line).setVisibility(View.INVISIBLE);
+                    lay.findViewById(R.id.line).setVisibility(View.INVISIBLE);
                 }
                 i++;
             }
@@ -287,9 +286,11 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
     }
 
     @Override
-    public void toFavoriteOk() {
-        mIVFav.setEnabled(false);
-        mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_faved_normal));
+    public void toFavoriteOk(BlogDetail blogDetail) {
+        if (blogDetail.isFavorite())
+            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_faved_normal));
+        else
+            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_fav_normal));
     }
 
     @Override
@@ -298,7 +299,7 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
     }
 
     @Override
-    public void toFollowOk() {
+    public void toFollowOk(BlogDetail blogDetail) {
         mBtnRelation.setEnabled(false);
         mBtnRelation.setText("已关注");
     }
