@@ -1,5 +1,7 @@
 package net.oschina.app.contract;
 
+import net.oschina.app.bean.blog.BlogDetail;
+
 /**
  * Created by qiujuer
  * on 16/5/28.
@@ -24,11 +26,11 @@ public interface BlogDetailContract {
     }
 
     interface View {
-        void toFavoriteOk();
+        void toFavoriteOk(BlogDetail blogDetail);
 
         void toShareOk();
 
-        void toFollowOk();
+        void toFollowOk(BlogDetail blogDetail);
 
         void toSendCommentOk();
     }

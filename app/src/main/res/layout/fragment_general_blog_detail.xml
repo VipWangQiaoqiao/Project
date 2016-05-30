@@ -174,7 +174,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="8dp"
-                android:text="评论(12)"
+                android:text="评论"
                 android:textColor="#6a6a6a"
                 android:textSize="12sp" />
 

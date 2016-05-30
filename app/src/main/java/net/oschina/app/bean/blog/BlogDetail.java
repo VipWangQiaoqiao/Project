@@ -1,5 +1,7 @@
 package net.oschina.app.bean.blog;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -7,10 +9,13 @@ import java.util.List;
  * Created by qiujuer
  */
 public class BlogDetail extends Blog {
+    private boolean favorite;
     private long authorId;
     private String authorPortrait;
     private int authorRelation;
     private String category;
+    @SerializedName("abstract")
+    private String abstractStr;
     private List<About> abouts;
     private List<Comment> comments;
 
@@ -62,6 +67,22 @@ public class BlogDetail extends Blog {
         this.comments = comments;
     }
 
+    public String getAbstract() {
+        return abstractStr;
+    }
+
+    public void setAbstract(String abstractStr) {
+        this.abstractStr = abstractStr;
+    }
+
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
+
     public static class About implements Serializable {
         public long id;
         public String title;
@@ -79,5 +100,6 @@ public class BlogDetail extends Blog {
         public int appClient;
         public List<Comment> replies;
     }
+
 }
 
