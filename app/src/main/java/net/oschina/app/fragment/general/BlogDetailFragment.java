@@ -25,7 +25,6 @@ import net.oschina.app.bean.blog.BlogDetail;
 import net.oschina.app.contract.BlogDetailContract;
 import net.oschina.app.fragment.base.BaseFragment;
 import net.oschina.app.util.FontSizeUtils;
-import net.oschina.app.util.ThemeSwitchUtils;
 import net.oschina.app.util.UIHelper;
 
 /**
@@ -249,10 +248,9 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
             ".css\">";
 
     private String getWebViewBody(net.oschina.app.bean.blog.BlogDetail blog) {
-        return linkCss + UIHelper.WEB_LOAD_IMAGES +
-                ThemeSwitchUtils.getWebViewBodyString() +
-                UIHelper.setHtmlCotentSupportImagePreview(blog.getBody()) +
-                "</div></body>";
+        return String.format("<!DOCTYPE HTML><html><head>%s</head><body>%s</body></html>",
+                linkCss + UIHelper.WEB_LOAD_IMAGES,
+                UIHelper.setHtmlCotentSupportImagePreview(blog.getBody()));
     }
 
     private void handleKeyDel() {

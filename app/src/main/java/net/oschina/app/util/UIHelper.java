@@ -324,7 +324,7 @@ public class UIHelper {
                 showSoftwareDetailById(context, Integer.parseInt(String.valueOf(newsId)));
                 break;
             case net.oschina.app.bean.news.News.TYPE_QUESTION:
-                showPostDetail(context,Integer.parseInt(String.valueOf(newsId)),
+                showPostDetail(context, Integer.parseInt(String.valueOf(newsId)),
                         news.getCommentCount());
                 break;
             case net.oschina.app.bean.news.News.TYPE_BLOG:
@@ -471,6 +471,12 @@ public class UIHelper {
             // 过滤掉 img标签
             body = body.replaceAll("<\\s*img\\s+([^>]*)\\s*>", "");
         }
+
+        // 过滤table的内部属性
+        body = body.replaceAll("(<table[^>]*?)\\s+border\\s*=\\s*\\S+", "$1");
+        body = body.replaceAll("(<table[^>]*?)\\s+cellspacing\\s*=\\s*\\S+", "$1");
+        body = body.replaceAll("(<table[^>]*?)\\s+cellpadding\\s*=\\s*\\S+", "$1");
+
         return body;
     }
 
@@ -780,7 +786,7 @@ public class UIHelper {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 // 退出
-             //   System.exit(-1);
+                //   System.exit(-1);
             }
         }).show();
     }
