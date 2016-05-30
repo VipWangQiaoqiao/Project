@@ -347,7 +347,7 @@ public class UIHelper {
             case Banner.BANNER_TYPE_URL:
                 showNewsDetail(context, Integer.parseInt(String.valueOf(newsId)), 0);
                 break;
-            case Banner.BANNER_TYPE_SOHTWARE:
+            case Banner.BANNER_TYPE_SOFTWARE:
                 showSoftwareDetailById(context, Integer.parseInt(String.valueOf(newsId)));
                 break;
             case Banner.BANNER_TYPE_POST:
