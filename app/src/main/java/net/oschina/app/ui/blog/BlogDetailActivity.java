@@ -80,8 +80,7 @@ public class BlogDetailActivity extends AppCompatActivity implements BlogDetailC
                     initData();
                 }
             });
-            //initData();
-            showBlog();
+            initData();
         }
     }
 
