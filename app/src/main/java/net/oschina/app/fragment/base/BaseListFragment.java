@@ -32,7 +32,9 @@ import cz.msebera.android.httpclient.Header;
  * on 16-5-23.
  */
 public abstract class BaseListFragment<T> extends BaseFragment implements
-        SuperRefreshLayout.SuperRefreshLayoutListener, AdapterView.OnItemClickListener, BaseListAdapter.Callback {
+        SuperRefreshLayout.SuperRefreshLayoutListener,
+        AdapterView.OnItemClickListener, BaseListAdapter.Callback,
+        View.OnClickListener {
 
     protected String CACHE_NAME = getClass().getName();
     private String mTime;
@@ -82,6 +84,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
         mFooterProgressBar = (ProgressBar) mFooterView.findViewById(R.id.pb_footer);
         mListView.setOnItemClickListener(this);
         setFooterType(TYPE_LOADING);
+        mErrorLayout.setOnLayoutClickListener(this);
         if (isNeedFooter())
             mListView.addFooterView(mFooterView);
     }
@@ -108,6 +111,9 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
                     if (resultBean != null && resultBean.isSuccess()) {
                         onRequestSuccess(resultBean.getCode());
                         setListData(resultBean);
+                    } else {
+                        setFooterType(TYPE_NO_MORE);
+                        //mRefreshLayout.setNoMoreData();
                     }
                     onRequestFinish();
                 } catch (Exception e) {
@@ -135,6 +141,12 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
                 }
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+        onRefreshing();
     }
 
     @Override
@@ -170,6 +182,8 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
 
     protected void onRequestError(int code) {
         setFooterType(TYPE_NET_ERROR);
+        if (mAdapter.getDatas().size() == 0)
+            mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
     }
 
     protected void onRequestFinish() {
@@ -181,36 +195,6 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
         mIsRefresh = false;
     }
 
-    //    protected void setListData(ResultBean<PageBean<T>> resultBean) {
-//        //is refresh
-//        if (mIsRefresh) {
-//            //cache the time
-//            mTime = resultBean.getTime();
-//            AppConfig.getAppConfig(getActivity()).set(CACHE_NAME, mTime);
-//
-//            //is ExpiryDate
-//            if (AppConfig.isExpiryDate(mTime)) {
-//                mBeam.getItems().addAll(0, resultBean.getResult().getItems());
-//                mAdapter.addItem(0, resultBean.getResult().getItems());
-//            } else {
-//                mBeam.setItems(resultBean.getResult().getItems());
-//                mAdapter.clear();
-//                mAdapter.addItem(mBeam.getItems());
-//            }
-//            mBeam.setNextPageToken(resultBean.getResult().getNextPageToken());
-//            mBeam.setPrevPageToken(resultBean.getResult().getPrevPageToken());
-//            mExeService.submit(new Runnable() {
-//                @Override
-//                public void run() {
-//                    CacheManager.saveObject(getActivity(), mBeam, CACHE_NAME);
-//                }
-//            });
-//        } else {
-//            mAdapter.addItem(resultBean.getResult().getItems());
-//        }
-//        mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-//        mRefreshLayout.setVisibility(View.VISIBLE);
-//    }
     protected void setListData(ResultBean<PageBean<T>> resultBean) {
         //is refresh
         if (mIsRefresh) {
@@ -231,13 +215,14 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
         } else {
             mAdapter.addItem(resultBean.getResult().getItems());
         }
-        if (resultBean.getResult().getItems().size() < 10) {
+        if (resultBean.getResult().getItems().size() < 20) {
             setFooterType(TYPE_NO_MORE);
-            mRefreshLayout.setNoMoreData();
+            //mRefreshLayout.setNoMoreData();
         }
         if (mAdapter.getDatas().size() > 0) {
             mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             mRefreshLayout.setVisibility(View.VISIBLE);
+            setFooterType(TYPE_LOADING);
         } else {
             mErrorLayout.setErrorType(EmptyLayout.NODATA);
         }
@@ -257,8 +242,6 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
     }
 
     protected void setFooterType(int type) {
-        if (!mFooterView.isActivated())
-            return;
         switch (type) {
             case TYPE_NORMAL:
             case TYPE_LOADING:

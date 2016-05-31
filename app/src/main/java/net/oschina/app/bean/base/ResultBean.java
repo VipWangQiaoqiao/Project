@@ -42,7 +42,7 @@ public class ResultBean<T> {
         this.time = time;
     }
 
-    public boolean isSuccess(){
-        return code == 1;
+    public boolean isSuccess() {
+        return code == 1 && result != null;
     }
 }
