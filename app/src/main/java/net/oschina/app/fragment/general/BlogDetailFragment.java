@@ -24,6 +24,7 @@ import net.oschina.app.R;
 import net.oschina.app.bean.blog.BlogDetail;
 import net.oschina.app.contract.BlogDetailContract;
 import net.oschina.app.fragment.base.BaseFragment;
+import net.oschina.app.ui.blog.BlogDetailActivity;
 import net.oschina.app.util.UIHelper;
 
 /**
@@ -197,15 +198,23 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
         if (blog.getAbouts() != null && blog.getAbouts().size() > 0) {
             final int size = blog.getAbouts().size();
             int i = 1;
-            for (BlogDetail.About about : blog.getAbouts()) {
+            for (final BlogDetail.About about : blog.getAbouts()) {
                 View lay = getLayoutInflater(null).inflate(R.layout.item_blog_detail_about_lay, mLayAbouts, true);
                 ((TextView) lay.findViewById(R.id.tv_title)).setText(about.title);
-                ((TextView) lay.findViewById(R.id.tv_info_view)).setText(about.viewCount);
-                ((TextView) lay.findViewById(R.id.tv_info_comment)).setText(about.commentCount);
+
+                View layInfo = lay.findViewById(R.id.lay_info_view_comment);
+                ((TextView) layInfo.findViewById(R.id.tv_info_view)).setText(String.valueOf(about.viewCount));
+                ((TextView) layInfo.findViewById(R.id.tv_info_comment)).setText(String.valueOf(about.commentCount));
 
                 if (i == size) {
                     lay.findViewById(R.id.line).setVisibility(View.INVISIBLE);
                 }
+                lay.findViewById(R.id.tv_title).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        BlogDetailActivity.show(getActivity(), about.id);
+                    }
+                });
                 i++;
             }
         } else {
