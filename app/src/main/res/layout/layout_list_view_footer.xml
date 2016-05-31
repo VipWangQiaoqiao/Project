@@ -4,7 +4,7 @@
     android:layout_height="46dp"
     android:gravity="center"
     android:minHeight="46dp"
-    android:background="?attr/layout_item_bg"
+    android:background="@drawable/selector_item_list"
     android:orientation="horizontal">
 
     <ProgressBar
