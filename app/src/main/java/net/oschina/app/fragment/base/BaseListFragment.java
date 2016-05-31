@@ -196,6 +196,8 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
     }
 
     protected void setListData(ResultBean<PageBean<T>> resultBean) {
+        mBeam.setNextPageToken(resultBean.getResult().getNextPageToken());
+        mBeam.setPrevPageToken(resultBean.getResult().getPrevPageToken());
         //is refresh
         if (mIsRefresh) {
             //cache the time
@@ -203,8 +205,6 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
             mBeam.setItems(resultBean.getResult().getItems());
             mAdapter.clear();
             mAdapter.addItem(mBeam.getItems());
-            mBeam.setNextPageToken(resultBean.getResult().getNextPageToken());
-            mBeam.setPrevPageToken(resultBean.getResult().getPrevPageToken());
             mRefreshLayout.setCanLoadMore();
             mExeService.submit(new Runnable() {
                 @Override
