@@ -72,6 +72,7 @@ import net.oschina.app.ui.LoginActivity;
 import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.ui.TweetPubActivity;
+import net.oschina.app.ui.blog.BlogDetailActivity;
 import net.oschina.app.viewpagerfragment.FriendsViewPagerFragment;
 import net.oschina.app.widget.AvatarView;
 
@@ -175,13 +176,8 @@ public class UIHelper {
      * @param context
      * @param blogId
      */
-    public static void showBlogDetail(Context context, int blogId, int count) {
-        Intent intent = new Intent(context, DetailActivity.class);
-        intent.putExtra("id", blogId);
-        intent.putExtra("comment_count", count);
-        intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
-                DetailActivity.DISPLAY_BLOG);
-        context.startActivity(intent);
+    public static void showBlogDetail(Context context, long blogId) {
+        BlogDetailActivity.show(context, blogId);
     }
 
     /**
@@ -298,8 +294,7 @@ public class UIHelper {
                             news.getCommentCount());
                     break;
                 case News.NEWSTYPE_BLOG:
-                    showBlogDetail(context, StringUtils.toInt(objId),
-                            news.getCommentCount());
+                    showBlogDetail(context, Long.valueOf(objId));
                     break;
                 default:
                     break;
@@ -328,8 +323,7 @@ public class UIHelper {
                         news.getCommentCount());
                 break;
             case net.oschina.app.bean.news.News.TYPE_BLOG:
-                showBlogDetail(context, StringUtils.toInt(String.valueOf(newsId)),
-                        news.getCommentCount());
+                showBlogDetail(context, StringUtils.toLong(String.valueOf(newsId)));
                 break;
             case net.oschina.app.bean.news.News.TYPE_EVENT:
                 showEventDetail(context,
@@ -355,8 +349,7 @@ public class UIHelper {
                         0);
                 break;
             case Banner.BANNER_TYPE_BLOG:
-                showBlogDetail(context, StringUtils.toInt(String.valueOf(newsId)),
-                        0);
+                showBlogDetail(context, StringUtils.toLong(String.valueOf(newsId)));
                 break;
             case Banner.BANNER_TYPE_EVENT:
                 showEventDetail(context,
@@ -395,7 +388,7 @@ public class UIHelper {
                     showTweetDetail(context, null, id);
                     break;
                 case Active.CATALOG_BLOG:
-                    showBlogDetail(context, id, active.getCommentCount());
+                    showBlogDetail(context, id);
                     break;
                 default:
                     break;
@@ -557,7 +550,7 @@ public class UIHelper {
                 showTweetDetail(context, null, objId);
                 break;
             case URLsUtils.URL_OBJ_TYPE_BLOG:
-                showBlogDetail(context, objId, 0);
+                showBlogDetail(context, objId);
                 break;
             case URLsUtils.URL_OBJ_TYPE_OTHER:
                 openBrowser(context, objKey);
