@@ -43,7 +43,8 @@ public class BlogFragment extends BaseListFragment<Blog> {
     protected void requestData() {
         super.requestData();
 
-        OSChinaApi.getBlogList(mIsRefresh ? OSChinaApi.CATALOG_BLOG_HEAT : OSChinaApi.CATALOG_BLOG_NORMAL, mIsRefresh ? mBeam.getPrevPageToken() : mBeam.getNextPageToken(), mHandler);
+        OSChinaApi.getBlogList(mIsRefresh ? OSChinaApi.CATALOG_BLOG_NORMAL : OSChinaApi.CATALOG_BLOG_NORMAL,
+                mIsRefresh ? mBeam.getPrevPageToken() : mBeam.getNextPageToken(), mHandler);
 
     }
 
@@ -76,14 +77,14 @@ public class BlogFragment extends BaseListFragment<Blog> {
         if (mIsRefresh) {
             List<Blog> blogs = resultBean.getResult().getItems();
             Blog blog = new Blog();
-            blog.setViewType(Blog.VIEW_TYPE_TITLE_HEAT);
+            blog.setViewType(Blog.VIEW_TYPE_TITLE_NORMAL);
             blogs.add(0, blog);
             mBeam.setItems(blogs);
             mAdapter.clear();
             mAdapter.addItem(mBeam.getItems());
             mRefreshLayout.setCanLoadMore();
             mIsRefresh = false;
-            OSChinaApi.getBlogList(OSChinaApi.CATALOG_BLOG_NORMAL, null, mHandler);
+            //  OSChinaApi.getBlogList(OSChinaApi.CATALOG_BLOG_NORMAL, null, mHandler);
         } else {
             List<Blog> blogs = resultBean.getResult().getItems();
             if (isFirst) {

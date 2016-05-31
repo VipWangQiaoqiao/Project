@@ -31,6 +31,7 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
                 break;
             case Blog.VIEW_TYPE_TITLE_NORMAL:
                 vh.setText(R.id.tv_blog_item_banner, R.string.blog_list_title_normal);
+                vh.setGone(R.id.tv_blog_item_banner);
                 break;
             default:
                 TextView title = vh.getView(R.id.tv_item_blog_title);
