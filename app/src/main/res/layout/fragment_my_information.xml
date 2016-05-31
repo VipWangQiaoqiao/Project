@@ -107,7 +107,7 @@
 
                 <ImageView
                     style="@style/option_item_img"
-                    android:background="@drawable/ic_feedback"
+                    android:background="@drawable/ic_my_setup"
                     android:contentDescription="@null" />
 
                 <TextView
