@@ -36,33 +36,24 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
         AdapterView.OnItemClickListener, BaseListAdapter.Callback,
         View.OnClickListener {
 
-    protected String CACHE_NAME = getClass().getName();
-    private String mTime;
-
-    protected static ExecutorService mExeService = Executors.newFixedThreadPool(3);
-
     public static final int TYPE_NORMAL = 0;
     public static final int TYPE_LOADING = 1;
     public static final int TYPE_NO_MORE = 2;
     public static final int TYPE_ERROR = 3;
     public static final int TYPE_NET_ERROR = 4;
-
+    protected static ExecutorService mExeService = Executors.newFixedThreadPool(3);
+    protected String CACHE_NAME = getClass().getName();
+    protected ListView mListView;
+    protected SuperRefreshLayout mRefreshLayout;
+    protected EmptyLayout mErrorLayout;
+    protected BaseListAdapter<T> mAdapter;
+    protected boolean mIsRefresh;
+    protected TextHttpResponseHandler mHandler;
+    protected PageBean<T> mBean;
+    private String mTime;
     private View mFooterView;
     private ProgressBar mFooterProgressBar;
     private TextView mFooterText;
-
-    protected ListView mListView;
-
-    protected SuperRefreshLayout mRefreshLayout;
-
-    protected EmptyLayout mErrorLayout;
-
-    protected BaseListAdapter<T> mAdapter;
-    protected boolean mIsRefresh;
-
-    protected TextHttpResponseHandler mHandler;
-
-    protected PageBean<T> mBean;
 
     @Override
     protected int getLayoutId() {

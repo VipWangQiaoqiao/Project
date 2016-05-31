@@ -17,10 +17,12 @@
         android:textSize="16sp"
         tools:text="@string/blog_list_title_normal" />
 
+    <!--
     <View
         android:id="@+id/tv_blog_item_line"
         android:layout_width="wrap_content"
         android:layout_height="1px"
         android:layout_marginBottom="1px"
         android:background="@color/list_divider_color" />
+    -->
 </LinearLayout>
