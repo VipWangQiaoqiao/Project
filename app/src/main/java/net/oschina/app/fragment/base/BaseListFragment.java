@@ -196,15 +196,15 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
     }
 
     protected void setListData(ResultBean<PageBean<T>> resultBean) {
-        mBeam.setNextPageToken(resultBean.getResult().getNextPageToken());
-        mBeam.setPrevPageToken(resultBean.getResult().getPrevPageToken());
         //is refresh
+        mBeam.setNextPageToken(resultBean.getResult().getNextPageToken());
         if (mIsRefresh) {
             //cache the time
             mTime = resultBean.getTime();
             mBeam.setItems(resultBean.getResult().getItems());
             mAdapter.clear();
             mAdapter.addItem(mBeam.getItems());
+            mBeam.setPrevPageToken(resultBean.getResult().getPrevPageToken());
             mRefreshLayout.setCanLoadMore();
             mExeService.submit(new Runnable() {
                 @Override
