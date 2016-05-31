@@ -313,7 +313,7 @@ public class BlogDetailActivity extends AppCompatActivity implements BlogDetailC
     }
 
     @Override
-    public void toSendComment(long id, String comment) {
+    public void toSendComment(long id, long authorId, String comment) {
         int uid = check();
         if (uid == 0)
             return;
@@ -357,7 +357,11 @@ public class BlogDetailActivity extends AppCompatActivity implements BlogDetailC
                 hideWaitDialog();
             }
         };
-        OSChinaApi.publicBlogComment(mId, uid, comment, handler);
+
+        if (mId != id)
+            OSChinaApi.replyBlogComment(mId, uid, comment, id, authorId, handler);
+        else
+            OSChinaApi.publicBlogComment(mId, uid, comment, handler);
     }
 
     @Override
