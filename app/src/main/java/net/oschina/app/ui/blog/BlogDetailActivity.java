@@ -115,8 +115,11 @@ public class BlogDetailActivity extends AppCompatActivity implements BlogDetailC
     }
 
     private void showError(int type) {
-        mEmptyLayout.setErrorType(type);
-        mEmptyLayout.setVisibility(View.VISIBLE);
+        EmptyLayout layout = mEmptyLayout;
+        if (layout != null) {
+            layout.setErrorType(type);
+            layout.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initData() {
@@ -148,7 +151,7 @@ public class BlogDetailActivity extends AppCompatActivity implements BlogDetailC
 
 
     private void handleData(BlogDetail blog) {
-        mEmptyLayout.setVisibility(View.INVISIBLE);
+        showError(View.INVISIBLE);
         mBlog = blog;
         showBlog();
     }
@@ -189,8 +192,12 @@ public class BlogDetailActivity extends AppCompatActivity implements BlogDetailC
                     Result res = XmlUtils.toBean(net.oschina.app.bean.ResultBean.class,
                             new ByteArrayInputStream(arg2)).getResult();
                     if (res.OK()) {
+                        BlogDetailContract.View view = mView;
+                        if (view == null)
+                            return;
+
                         mBlog.setFavorite(!mBlog.isFavorite());
-                        mView.toFavoriteOk(mBlog);
+                        view.toFavoriteOk(mBlog);
                         if (mBlog.isFavorite())
                             AppContext.showToastShort(R.string.add_favorite_success);
                         else
@@ -210,7 +217,10 @@ public class BlogDetailActivity extends AppCompatActivity implements BlogDetailC
             @Override
             public void onFailure(int arg0, Header[] arg1, byte[] arg2,
                                   Throwable arg3) {
-                if (mBlog.isFavorite())
+                BlogDetail blogDetail = mBlog;
+                if (blogDetail == null)
+                    return;
+                if (blogDetail.isFavorite())
                     AppContext.showToastShort(R.string.del_favorite_faile);
                 else
                     AppContext.showToastShort(R.string.add_favorite_faile);
@@ -284,7 +294,9 @@ public class BlogDetailActivity extends AppCompatActivity implements BlogDetailC
                                     new ByteArrayInputStream(arg2)).getResult();
                             if (result.OK()) {
                                 // 更改用户状态
-                                mView.toFollowOk(mBlog);
+                                BlogDetailContract.View view = mView;
+                                if (view != null)
+                                    view.toFollowOk(mBlog);
                                 return;
                             }
                             AppContext.showToast("关注失败!");
@@ -331,7 +343,9 @@ public class BlogDetailActivity extends AppCompatActivity implements BlogDetailC
                             new ByteArrayInputStream(arg2));
                     Result res = rsb.getResult();
                     if (res.OK()) {
-                        mView.toSendCommentOk();
+                        BlogDetailContract.View view = mView;
+                        if (view != null)
+                            view.toSendCommentOk();
                     } else {
                         AppContext.showToastShort(res.getErrorMessage());
                     }
@@ -444,5 +458,14 @@ public class BlogDetailActivity extends AppCompatActivity implements BlogDetailC
                 ex.printStackTrace();
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        hideWaitDialog();
+        mEmptyLayout = null;
+        mView = null;
+        mBlog = null;
     }
 }

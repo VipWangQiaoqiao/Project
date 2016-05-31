@@ -18,7 +18,7 @@ import java.io.Serializable;
 
 /**
  * 博客区中单一模块的展示
- * 
+ *
  * @author kymjs(kymjs123@gmail.com)
  */
 public class BlogFragment extends BaseListFragment<Blog> implements
@@ -70,11 +70,10 @@ public class BlogFragment extends BaseListFragment<Blog> implements
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
+                            long id) {
         Blog blog = mAdapter.getItem(position);
         if (blog != null) {
-            UIHelper.showBlogDetail(getActivity(), blog.getId(),
-                    blog.getCommentCount());
+            UIHelper.showBlogDetail(getActivity(), blog.getId());
             // 保存到已读列表
             saveToReadedList(view, BlogList.PREF_READED_BLOG_LIST, blog.getId()
                     + "");

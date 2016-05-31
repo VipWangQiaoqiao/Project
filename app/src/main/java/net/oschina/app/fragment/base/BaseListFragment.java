@@ -1,5 +1,6 @@
 package net.oschina.app.fragment.base;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -114,8 +115,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
             }
         };
 
-
-        mExeService.submit(new Runnable() {
+        mExeService.execute(new Runnable() {
             @Override
             public void run() {
                 mBean = (PageBean<T>) CacheManager.readObject(getActivity(), CACHE_NAME);
@@ -125,10 +125,15 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
                     mBean.setItems(new ArrayList<T>());
                     onRefreshing();
                 } else {
-                    mAdapter.addItem(mBean.getItems());
-                    mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-                    mRefreshLayout.setVisibility(View.VISIBLE);
-                    onRefreshing();
+                    mListView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAdapter.addItem(mBean.getItems());
+                            mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+                            mRefreshLayout.setVisibility(View.VISIBLE);
+                            onRefreshing();
+                        }
+                    });
                 }
             }
         });
@@ -198,7 +203,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
             mAdapter.addItem(mBean.getItems());
             mBean.setPrevPageToken(resultBean.getResult().getPrevPageToken());
             mRefreshLayout.setCanLoadMore();
-            mExeService.submit(new Runnable() {
+            mExeService.execute(new Runnable() {
                 @Override
                 public void run() {
                     CacheManager.saveObject(getActivity(), mBean, CACHE_NAME);

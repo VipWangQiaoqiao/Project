@@ -129,19 +129,11 @@
             </LinearLayout>
 
             <FrameLayout
+                android:id="@+id/lay_webview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/white"
-                android:padding="16dp">
-
-                <WebView
-                    android:id="@+id/webview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="0dp"
-                    android:padding="0dp"
-                    android:scrollbars="vertical" />
-            </FrameLayout>
+                android:padding="16dp"/>
 
             <TextView
                 android:id="@+id/tv_blog_detail_about"

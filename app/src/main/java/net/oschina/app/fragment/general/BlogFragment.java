@@ -14,6 +14,7 @@ import net.oschina.app.bean.base.ResultBean;
 import net.oschina.app.bean.blog.Blog;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.fragment.base.BaseListFragment;
+import net.oschina.app.ui.blog.BlogDetailActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.UIHelper;
 
@@ -61,17 +62,14 @@ public class BlogFragment extends BaseListFragment<Blog> {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //super.onItemClick(parent, view, position, id);
         Blog blog = mAdapter.getItem(position);
         if (blog != null) {
-            UIHelper.showBlogDetail(getActivity(), (int) blog.getId(),
-                    blog.getCommentCount());
+            BlogDetailActivity.show(getActivity(), blog.getId());
         }
     }
 
     @Override
     protected void setListData(ResultBean<PageBean<Blog>> resultBean) {
-        //super.setListData(resultBean);
         //is refresh
         mBean.setNextPageToken(resultBean.getResult().getNextPageToken());
         if (mIsRefresh) {
@@ -92,7 +90,7 @@ public class BlogFragment extends BaseListFragment<Blog> {
                 blog.setViewType(Blog.VIEW_TYPE_TITLE_NORMAL);
                 blogs.add(0, blog);
                 isFirst = false;
-                mExeService.submit(new Runnable() {
+                mExeService.execute(new Runnable() {
                     @Override
                     public void run() {
                         CacheManager.saveObject(getActivity(), mBean, CACHE_NAME);

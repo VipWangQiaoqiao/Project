@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -15,13 +14,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.blog.BlogDetail;
@@ -44,8 +41,6 @@ import java.util.Date;
  */
 
 public class BlogDetailFragment extends BaseFragment implements View.OnClickListener, BlogDetailContract.View {
-    private final static String TAG = BlogDetailFragment.class.getName();
-    private RequestManager mImgLoader;
     private long mId;
     private WebView mWebView;
     private TextView mTVAuthorName;
@@ -82,21 +77,27 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onDestroy() {
         WebView view = mWebView;
         if (view != null) {
+            mWebView = null;
+            view.removeAllViewsInLayout();
+            view.setWebChromeClient(null);
             view.removeAllViews();
             view.destroy();
         }
+        mOperator = null;
+
+        super.onDestroy();
     }
 
     @Override
     protected void initWidget(View root) {
-        mImgLoader = Glide.with(this);
-
-        mWebView = (WebView) root.findViewById(R.id.webview);
-        UIHelper.initWebView(mWebView);
+        WebView webView = new WebView(getActivity());
+        webView.setHorizontalScrollBarEnabled(false);
+        UIHelper.initWebView(webView);
+        ((FrameLayout) root.findViewById(R.id.lay_webview)).addView(webView);
+        mWebView = webView;
 
         mTVAuthorName = (TextView) root.findViewById(R.id.tv_name);
         mTVPubDate = (TextView) root.findViewById(R.id.tv_pub_date);
@@ -112,9 +113,9 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
             mBtnRelation.setElevation(0);
         }
         mETInput = (EditText) root.findViewById(R.id.et_input);
-
         mLayAbouts = (LinearLayout) root.findViewById(R.id.lay_blog_detail_about);
         mLayComments = (LinearLayout) root.findViewById(R.id.lay_blog_detail_comment);
+
 
         root.findViewById(R.id.iv_share).setOnClickListener(this);
         mIVFav.setOnClickListener(this);
@@ -134,7 +135,6 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
         mETInput.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                Log.e(TAG, "onKey:View:" + v.getClass().getSimpleName() + " keyCode:" + keyCode + " KeyEvent:" + event);
                 if (keyCode == KeyEvent.KEYCODE_DEL) {
                     handleKeyDel();
                 }
@@ -182,7 +182,7 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
         mWebView.loadDataWithBaseURL("", body, "text/html", "UTF-8", "");
 
         mTVAuthorName.setText(blog.getAuthor());
-        mImgLoader.load(blog.getAuthorPortrait()).error(R.drawable.widget_dface).into(mIVAuthorPortrait);
+        getImgLoader().load(blog.getAuthorPortrait()).error(R.drawable.widget_dface).into(mIVAuthorPortrait);
 
         mTVPubDate.setText(blog.getPubDate());
         mTVTitle.setText(blog.getTitle());
@@ -239,7 +239,7 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
         if (blog.getComments() != null && blog.getComments().size() > 0) {
             for (final BlogDetail.Comment comment : blog.getComments()) {
                 View lay = getLayoutInflater(null).inflate(R.layout.item_blog_detail_comment_lay, null, false);
-                mImgLoader.load(comment.authorPortrait).error(R.drawable.widget_dface)
+                getImgLoader().load(comment.authorPortrait).error(R.drawable.widget_dface)
                         .into(((ImageView) lay.findViewById(R.id.iv_avatar)));
 
                 ((TextView) lay.findViewById(R.id.tv_name)).setText(comment.author);

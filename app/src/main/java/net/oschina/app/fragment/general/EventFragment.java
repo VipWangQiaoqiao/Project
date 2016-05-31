@@ -71,7 +71,7 @@ public class EventFragment extends BaseListFragment<Event> {
                 vp_event.setCurrentItem(mCurrentItem);
             }
         };
-        mExeService.submit(new Runnable() {
+        mExeService.execute(new Runnable() {
             @Override
             public void run() {
                 final PageBean<Banner> pageBean = (PageBean<Banner>) CacheManager.readObject(getActivity(), EVENT_BANNER);
@@ -163,7 +163,7 @@ public class EventFragment extends BaseListFragment<Event> {
                     final ResultBean<PageBean<Banner>> resultBean = AppContext.createGson().fromJson(responseString, new TypeToken<ResultBean<PageBean<Banner>>>() {
                     }.getType());
                     if (resultBean != null && resultBean.isSuccess()) {
-                        mExeService.submit(new Runnable() {
+                        mExeService.execute(new Runnable() {
                             @Override
                             public void run() {
                                 CacheManager.saveObject(getActivity(), resultBean.getResult(), EVENT_BANNER);

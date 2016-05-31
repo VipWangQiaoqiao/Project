@@ -74,7 +74,7 @@ public class NewsFragment extends BaseListFragment<News> {
             }
         };
 
-        mExeService.submit(new Runnable() {
+        mExeService.execute(new Runnable() {
             @Override
             public void run() {
                 final PageBean<Banner> pageBean = (PageBean<Banner>) CacheManager.readObject(getActivity(), NEWS_BANNER);
@@ -169,7 +169,7 @@ public class NewsFragment extends BaseListFragment<News> {
                     final ResultBean<PageBean<Banner>> resultBean = AppContext.createGson().fromJson(responseString, new TypeToken<ResultBean<PageBean<Banner>>>() {
                     }.getType());
                     if (resultBean != null && resultBean.isSuccess()) {
-                        mExeService.submit(new Runnable() {
+                        mExeService.execute(new Runnable() {
                             @Override
                             public void run() {
                                 CacheManager.saveObject(getActivity(), resultBean.getResult(), NEWS_BANNER);
