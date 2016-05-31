@@ -1,6 +1,6 @@
 package net.oschina.app.fragment.general;
 
-import android.util.SparseArray;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,7 +16,9 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.base.PageBean;
 import net.oschina.app.bean.base.ResultBean;
 import net.oschina.app.bean.question.Question;
+import net.oschina.app.cache.CacheManager;
 import net.oschina.app.fragment.base.BaseListFragment;
+import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;
@@ -26,10 +28,10 @@ import java.lang.reflect.Type;
  */
 public class QuestionFragment extends BaseListFragment<Question> {
 
+    private static final String TAG = "QuestionFragment";
     private GridView quesGridView = null;
     private View headView;
     private int catalog = 1;
-    private SparseArray<PageBean<Question>> array = new SparseArray<PageBean<Question>>(5);
 
     private static final String QUES_ASK = "ques_ask";
     private static final String QUES_SHARE = "ques_share";
@@ -40,7 +42,7 @@ public class QuestionFragment extends BaseListFragment<Question> {
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
-        headView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_main_question_header, null);
+        headView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_main_question_header, null, false);
         quesGridView = (GridView) headView.findViewById(R.id.gv_ques);
 
         final int[] positions = {1, 0, 0, 0, 0};
@@ -51,23 +53,18 @@ public class QuestionFragment extends BaseListFragment<Question> {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 catalog = (position + 1);
-                if (array.get(catalog) == null) {
 
-                    if (!mIsRefresh) {
-                        mIsRefresh = true;
-                    }
-                    requestData();
-                } else {
-                    mBeam = array.get(catalog);
-                    mAdapter.clear();
-                    mAdapter.addItem(mBeam.getItems());
+                if (!mIsRefresh) {
+                    mIsRefresh = true;
                 }
-
+                requestData();
+                positions[position] = 1;
                 for (int i = 0; i < positions.length; i++) {
-                    if (i == position) {
-                        positions[position] = 1;
-                    } else {
-                        positions[i] = 0;
+                    if (i != position) {
+                        if (positions[i] != 0) {
+                            positions[i] = 0;
+                            Log.d(TAG, "postions=" + positions[i] + " ");
+                        }
                     }
                 }
                 quesActionAdapter.notifyDataSetChanged();
@@ -82,6 +79,23 @@ public class QuestionFragment extends BaseListFragment<Question> {
         super.initData();
     }
 
+    @Override
+    protected void onRequestError(int code) {
+        super.onRequestError(code);
+        mExeService.submit(new Runnable() {
+            @Override
+            public void run() {
+                mBeam = (PageBean<Question>) CacheManager.readObject(getActivity(), CACHE_NAME);
+                Log.d(TAG, "onRequestError: --->catalog=" + catalog + " mbean=" + mBeam.toString());
+                if (mBeam != null) {
+                    mAdapter.clear();
+                    mAdapter.addItem(mBeam.getItems());
+                    mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+                    mRefreshLayout.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
 
     @Override
     protected BaseListAdapter<Question> getListAdapter() {
@@ -102,7 +116,6 @@ public class QuestionFragment extends BaseListFragment<Question> {
 
     @Override
     protected void setListData(ResultBean<PageBean<Question>> resultBean) {
-        array.put(catalog, resultBean.getResult());
         verifyCacheType();
         super.setListData(resultBean);
     }

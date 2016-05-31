@@ -11,6 +11,7 @@ import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.ui.FindUserActivity;
 import net.oschina.app.ui.ShakeActivity;
+import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.util.UIHelper;
 
 import butterknife.Bind;
@@ -68,7 +69,9 @@ public class ExploreFragment extends BaseFragment {
                 UIHelper.showSimpleBack(getActivity(), SimpleBackPage.SAME_CITY);
                 break;
             case R.id.rl_activities:
-                UIHelper.showSimpleBack(getActivity(), SimpleBackPage.EVENT_LIST);
+                Bundle bundle=new Bundle();
+                bundle.putInt(SimpleBackActivity.BUNDLE_KEY_ARGS,0);
+                UIHelper.showSimpleBack(getActivity(), SimpleBackPage.EVENT_LIST,bundle);
                 break;
             case R.id.rl_scan:
                 UIHelper.showScanActivity(getActivity());

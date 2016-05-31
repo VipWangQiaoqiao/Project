@@ -42,12 +42,11 @@ public class QuesActionAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder = null;
+        ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.fragment_item_question_grid, parent, false);
             viewHolder.tv_action = (Button) convertView.findViewById(R.id.bt_ques_grid_item);
-            convertView.setTag(position);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();

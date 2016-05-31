@@ -29,6 +29,7 @@ import net.oschina.app.bean.User;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.ui.MainActivity;
 import net.oschina.app.ui.MyQrodeDialog;
+import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -399,7 +400,9 @@ public class MyInformationFragment extends BaseFragment {
                             .getName());
                     break;
                 case R.id.rl_info_avtivities:
-                    UIHelper.showSimpleBack(getActivity(), SimpleBackPage.EVENT_LIST);
+                    Bundle bundle=new Bundle();
+                    bundle.putInt(SimpleBackActivity.BUNDLE_KEY_ARGS,1);
+                    UIHelper.showSimpleBack(getActivity(), SimpleBackPage.EVENT_LIST,bundle);
                     break;
                 default:
                     break;
