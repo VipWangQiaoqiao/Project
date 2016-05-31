@@ -409,8 +409,8 @@ public class OSChinaApi {
         ApiHttpClient.post("action/api/blogcomment_pub", params, handler);
     }
 
-    public static void replyBlogComment(int blog, int uid, String content,
-                                        int reply_id, int objuid, AsyncHttpResponseHandler
+    public static void replyBlogComment(long blog, long uid, String content,
+                                        long reply_id, long objuid, AsyncHttpResponseHandler
                                                 handler) {
         RequestParams params = new RequestParams();
         params.put("blog", blog);

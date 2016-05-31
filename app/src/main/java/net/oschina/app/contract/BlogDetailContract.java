@@ -24,7 +24,7 @@ public interface BlogDetailContract {
         void toReport();
 
         // 提交评价
-        void toSendComment(long id, String comment);
+        void toSendComment(long id, long authorId, String comment);
     }
 
     interface View {

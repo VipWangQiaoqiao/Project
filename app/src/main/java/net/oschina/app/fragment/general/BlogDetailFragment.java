@@ -62,6 +62,7 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
     private LinearLayout mLayComments;
 
     private long mCommentId;
+    private long mCommentAuthorId;
 
     private BlogDetailContract.Operator mOperator;
 
@@ -262,6 +263,7 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
                     @Override
                     public void onClick(View v) {
                         mCommentId = commentId;
+                        mCommentAuthorId = comment.authorId;
                         mETInput.setHint(String.format("回复: %s", comment.author));
                     }
                 });
@@ -313,6 +315,7 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
     private void handleKeyDel() {
         if (mCommentId != mId && TextUtils.isEmpty(mETInput.getText())) {
             mCommentId = mId;
+            mCommentAuthorId = 0;
             mETInput.setHint("评论作者~");
         }
     }
@@ -330,7 +333,7 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
     }
 
     private void handleSendComment() {
-        mOperator.toSendComment(mCommentId, mETInput.getText().toString());
+        mOperator.toSendComment(mCommentId, mCommentAuthorId, mETInput.getText().toString());
     }
 
     @Override
