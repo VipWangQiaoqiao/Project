@@ -134,7 +134,7 @@ public class NewsFragment extends BaseListFragment<News> {
     @Override
     protected void requestData() {
         super.requestData();
-        OSChinaApi.getNewsList(mIsRefresh ? mBeam.getPrevPageToken() : mBeam.getNextPageToken(), mHandler);
+        OSChinaApi.getNewsList(mIsRefresh ? mBean.getPrevPageToken() : mBean.getNextPageToken(), mHandler);
     }
 
     @Override

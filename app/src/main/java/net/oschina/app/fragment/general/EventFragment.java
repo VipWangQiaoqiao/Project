@@ -129,7 +129,7 @@ public class EventFragment extends BaseListFragment<Event> {
     @Override
     protected void requestData() {
         super.requestData();
-        OSChinaApi.getEventList(mIsRefresh ? mBeam.getPrevPageToken() : mBeam.getNextPageToken(), mHandler);
+        OSChinaApi.getEventList(mIsRefresh ? mBean.getPrevPageToken() : mBean.getNextPageToken(), mHandler);
     }
 
     @Override

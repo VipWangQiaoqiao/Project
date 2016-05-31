@@ -62,7 +62,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
 
     protected TextHttpResponseHandler mHandler;
 
-    protected PageBean<T> mBeam;
+    protected PageBean<T> mBean;
 
     @Override
     protected int getLayoutId() {
@@ -127,14 +127,14 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
         mExeService.submit(new Runnable() {
             @Override
             public void run() {
-                mBeam = (PageBean<T>) CacheManager.readObject(getActivity(), CACHE_NAME);
+                mBean = (PageBean<T>) CacheManager.readObject(getActivity(), CACHE_NAME);
                 //if is the first loading
-                if (mBeam == null) {
-                    mBeam = new PageBean<>();
-                    mBeam.setItems(new ArrayList<T>());
+                if (mBean == null) {
+                    mBean = new PageBean<>();
+                    mBean.setItems(new ArrayList<T>());
                     onRefreshing();
                 } else {
-                    mAdapter.addItem(mBeam.getItems());
+                    mAdapter.addItem(mBean.getItems());
                     mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
                     mRefreshLayout.setVisibility(View.VISIBLE);
                     onRefreshing();
@@ -197,19 +197,19 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
 
     protected void setListData(ResultBean<PageBean<T>> resultBean) {
         //is refresh
-        mBeam.setNextPageToken(resultBean.getResult().getNextPageToken());
+        mBean.setNextPageToken(resultBean.getResult().getNextPageToken());
         if (mIsRefresh) {
             //cache the time
             mTime = resultBean.getTime();
-            mBeam.setItems(resultBean.getResult().getItems());
+            mBean.setItems(resultBean.getResult().getItems());
             mAdapter.clear();
-            mAdapter.addItem(mBeam.getItems());
-            mBeam.setPrevPageToken(resultBean.getResult().getPrevPageToken());
+            mAdapter.addItem(mBean.getItems());
+            mBean.setPrevPageToken(resultBean.getResult().getPrevPageToken());
             mRefreshLayout.setCanLoadMore();
             mExeService.submit(new Runnable() {
                 @Override
                 public void run() {
-                    CacheManager.saveObject(getActivity(), mBeam, CACHE_NAME);
+                    CacheManager.saveObject(getActivity(), mBean, CACHE_NAME);
                 }
             });
         } else {

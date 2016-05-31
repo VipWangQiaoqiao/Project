@@ -115,10 +115,10 @@ public class QuestionFragment extends BaseListFragment<Question> {
      */
     private void requestLocalCache() {
         verifyCacheType();
-        mBeam = (PageBean<Question>) CacheManager.readObject(getActivity(), CACHE_NAME);
-        if (mBeam != null) {
+        mBean = (PageBean<Question>) CacheManager.readObject(getActivity(), CACHE_NAME);
+        if (mBean != null) {
             mAdapter.clear();
-            mAdapter.addItem(mBeam.getItems());
+            mAdapter.addItem(mBean.getItems());
             mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             mRefreshLayout.setVisibility(View.VISIBLE);
             mRefreshLayout.setCanLoadMore();
@@ -146,7 +146,7 @@ public class QuestionFragment extends BaseListFragment<Question> {
     protected void requestData() {
         super.requestData();
         verifyCacheType();
-        OSChinaApi.getQuestionList(catalog, mIsRefresh ? mBeam.getPrevPageToken() : mBeam.getNextPageToken(), mHandler);
+        OSChinaApi.getQuestionList(catalog, mIsRefresh ? mBean.getPrevPageToken() : mBean.getNextPageToken(), mHandler);
     }
 
     @Override
