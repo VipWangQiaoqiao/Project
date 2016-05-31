@@ -60,6 +60,16 @@ public abstract class BaseFragment extends Fragment {
         ButterKnife.unbind(this);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RequestManager manager = mImgLoader;
+        if (manager != null)
+            manager.onDestroy();
+        mRoot = null;
+        mBundle = null;
+    }
+
     protected abstract int getLayoutId();
 
     protected void initBundle(Bundle bundle) {
