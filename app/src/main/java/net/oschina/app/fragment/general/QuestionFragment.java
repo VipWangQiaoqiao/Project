@@ -1,6 +1,8 @@
 package net.oschina.app.fragment.general;
 
-import android.util.Log;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -38,63 +40,101 @@ public class QuestionFragment extends BaseListFragment<Question> {
     private static final String QUES_COMPOSITE = "ques_composite";
     private static final String QUES_PROFESSION = "ques_profession";
     private static final String QUES_WEBSITE = "ques_website";
+    private QuesActionAdapter quesActionAdapter;
+    private int[] positions = {1, 0, 0, 0, 0};
+    private ConnectivityManager connectivityManager;
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+    }
 
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
         headView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_main_question_header, null, false);
         quesGridView = (GridView) headView.findViewById(R.id.gv_ques);
-
-        final int[] positions = {1, 0, 0, 0, 0};
-        final QuesActionAdapter quesActionAdapter = new QuesActionAdapter(getActivity(), positions);
+        quesActionAdapter = new QuesActionAdapter(getActivity(), positions);
         quesGridView.setAdapter(quesActionAdapter);
         quesGridView.setItemChecked(0, true);
         quesGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 catalog = (position + 1);
-
                 if (!mIsRefresh) {
                     mIsRefresh = true;
                 }
-                requestData();
-                positions[position] = 1;
-                for (int i = 0; i < positions.length; i++) {
-                    if (i != position) {
-                        if (positions[i] != 0) {
-                            positions[i] = 0;
-                            Log.d(TAG, "postions=" + positions[i] + " ");
-                        }
-                    }
+                updateAction(position);
+                if (positions[position] == 1) {
+                    RequestEventDispatcher();
                 }
-                quesActionAdapter.notifyDataSetChanged();
             }
         });
         mListView.addHeaderView(headView);
 
     }
 
+    /**
+     * According to the distribution network is events
+     */
+    private void RequestEventDispatcher() {
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isAvailable()) {
+            boolean connectedOrConnecting = networkInfo.isConnectedOrConnecting();
+            NetworkInfo.State state = networkInfo.getState();
+            if (connectedOrConnecting && state == NetworkInfo.State.CONNECTED) {
+                requestData();
+            } else {
+                requestLocalCache();
+            }
+        } else {
+            requestLocalCache();
+        }
+    }
+
+    /**
+     * notify action data
+     *
+     * @param position postion
+     */
+    private void updateAction(int position) {
+        for (int i = 0; i < positions.length; i++) {
+            if (i != position) {
+                positions[i] = 0;
+            } else {
+                positions[i] = 1;
+            }
+        }
+        quesActionAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * request local cache
+     */
+    private void requestLocalCache() {
+        verifyCacheType();
+        mBeam = (PageBean<Question>) CacheManager.readObject(getActivity(), CACHE_NAME);
+        if (mBeam != null) {
+            mAdapter.clear();
+            mAdapter.addItem(mBeam.getItems());
+            mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+            mRefreshLayout.setVisibility(View.VISIBLE);
+            mRefreshLayout.setCanLoadMore();
+        }
+    }
+
     @Override
     protected void initData() {
+        CACHE_NAME = QUES_ASK;
         super.initData();
     }
 
     @Override
     protected void onRequestError(int code) {
         super.onRequestError(code);
-        mExeService.submit(new Runnable() {
-            @Override
-            public void run() {
-                mBeam = (PageBean<Question>) CacheManager.readObject(getActivity(), CACHE_NAME);
-                Log.d(TAG, "onRequestError: --->catalog=" + catalog + " mbean=" + mBeam.toString());
-                if (mBeam != null) {
-                    mAdapter.clear();
-                    mAdapter.addItem(mBeam.getItems());
-                    mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-                    mRefreshLayout.setVisibility(View.VISIBLE);
-                }
-            }
-        });
+        requestLocalCache();
     }
 
     @Override
@@ -105,6 +145,7 @@ public class QuestionFragment extends BaseListFragment<Question> {
     @Override
     protected void requestData() {
         super.requestData();
+        verifyCacheType();
         OSChinaApi.getQuestionList(catalog, mIsRefresh ? mBeam.getPrevPageToken() : mBeam.getNextPageToken(), mHandler);
     }
 
@@ -144,6 +185,7 @@ public class QuestionFragment extends BaseListFragment<Question> {
             default:
                 break;
         }
+
     }
 
     @Override
