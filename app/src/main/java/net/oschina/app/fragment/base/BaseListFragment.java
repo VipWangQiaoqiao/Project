@@ -165,6 +165,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
      */
     protected void requestData() {
         onRequestStart();
+        setFooterType(TYPE_LOADING);
     }
 
     @Override
@@ -222,7 +223,6 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
         if (mAdapter.getDatas().size() > 0) {
             mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             mRefreshLayout.setVisibility(View.VISIBLE);
-            setFooterType(TYPE_LOADING);
         } else {
             mErrorLayout.setErrorType(EmptyLayout.NODATA);
         }

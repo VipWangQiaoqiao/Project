@@ -41,6 +41,7 @@ import cz.msebera.android.httpclient.Header;
  */
 public class EventFragment extends BaseListFragment<Event> {
 
+    private boolean isFirst = true;
     private static final String EVENT_BANNER = "event_banner";
     private View mHeaderView;
 
@@ -100,12 +101,14 @@ public class EventFragment extends BaseListFragment<Event> {
     @Override
     protected void initData() {
         super.initData();
+        getBannerList();
     }
 
     @Override
     public void onRefreshing() {
         super.onRefreshing();
-        getBannarList();
+        if (!isFirst)
+            getBannerList();
     }
 
     @Override
@@ -132,6 +135,12 @@ public class EventFragment extends BaseListFragment<Event> {
         }.getType();
     }
 
+    @Override
+    protected void onRequestFinish() {
+        super.onRequestFinish();
+        isFirst = false;
+    }
+
     private void initBanner(PageBean<Banner> result, boolean fromCache) {
         if (fromCache) banners.clear();
         for (Banner banner : result.getItems()) {
@@ -142,7 +151,7 @@ public class EventFragment extends BaseListFragment<Event> {
         pagerAdapter.notifyDataSetChanged();
     }
 
-    private void getBannarList() {
+    private void getBannerList() {
         OSChinaApi.getBannerList(OSChinaApi.CATALOG_BANNER_EVENT, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {

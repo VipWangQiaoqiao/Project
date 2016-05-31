@@ -41,6 +41,8 @@ import cz.msebera.android.httpclient.Header;
  */
 public class NewsFragment extends BaseListFragment<News> {
 
+    private boolean isFirst = true;
+
     private static final String NEWS_BANNER = "news_banner";
 
     private View mHeaderView;
@@ -104,12 +106,14 @@ public class NewsFragment extends BaseListFragment<News> {
     @Override
     protected void initData() {
         super.initData();
+        getBannerList();
     }
 
     @Override
     public void onRefreshing() {
         super.onRefreshing();
-        getBannerList();
+        if (!isFirst)
+            getBannerList();
     }
 
     @Override
@@ -135,6 +139,12 @@ public class NewsFragment extends BaseListFragment<News> {
     protected Type getType() {
         return new TypeToken<ResultBean<PageBean<News>>>() {
         }.getType();
+    }
+
+    @Override
+    protected void onRequestFinish() {
+        super.onRequestFinish();
+        isFirst = false;
     }
 
     private void initBanner(PageBean<Banner> result, boolean fromCache) {
