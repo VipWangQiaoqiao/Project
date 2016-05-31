@@ -3,6 +3,8 @@ package net.oschina.app.fragment.general;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -23,9 +25,11 @@ import com.bumptech.glide.RequestManager;
 import net.oschina.app.R;
 import net.oschina.app.bean.blog.BlogDetail;
 import net.oschina.app.contract.BlogDetailContract;
+import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.fragment.base.BaseFragment;
 import net.oschina.app.ui.blog.BlogDetailActivity;
 import net.oschina.app.util.UIHelper;
+import net.oschina.app.widget.TweetTextView;
 
 /**
  * Created by qiujuer
@@ -196,17 +200,16 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
 
         setText(R.id.tv_info_view, String.valueOf(blog.getViewCount()));
         if (blog.getAbouts() != null && blog.getAbouts().size() > 0) {
-            final int size = blog.getAbouts().size();
             int i = 1;
             for (final BlogDetail.About about : blog.getAbouts()) {
-                View lay = getLayoutInflater(null).inflate(R.layout.item_blog_detail_about_lay, mLayAbouts, true);
+                View lay = getLayoutInflater(null).inflate(R.layout.item_blog_detail_about_lay, null, false);
                 ((TextView) lay.findViewById(R.id.tv_title)).setText(about.title);
 
                 View layInfo = lay.findViewById(R.id.lay_info_view_comment);
                 ((TextView) layInfo.findViewById(R.id.tv_info_view)).setText(String.valueOf(about.viewCount));
                 ((TextView) layInfo.findViewById(R.id.tv_info_comment)).setText(String.valueOf(about.commentCount));
 
-                if (i == size) {
+                if (i == 1) {
                     lay.findViewById(R.id.line).setVisibility(View.INVISIBLE);
                 }
                 lay.findViewById(R.id.tv_title).setOnClickListener(new View.OnClickListener() {
@@ -216,6 +219,8 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
                     }
                 });
                 i++;
+
+                mLayAbouts.addView(lay, 0);
             }
         } else {
             setGone(R.id.tv_blog_detail_about);
@@ -224,8 +229,6 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
 
         setText(R.id.tv_info_comment, String.valueOf(blog.getCommentCount()));
         if (blog.getComments() != null && blog.getComments().size() > 0) {
-            final int size = blog.getComments().size();
-            int i = 1;
             for (final BlogDetail.Comment comment : blog.getComments()) {
                 View lay = getLayoutInflater(null).inflate(R.layout.item_blog_detail_comment_lay, null, false);
                 mImgLoader.load(comment.authorPortrait).error(R.drawable.widget_dface)
@@ -233,7 +236,11 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
 
                 ((TextView) lay.findViewById(R.id.tv_name)).setText(comment.author);
                 ((TextView) lay.findViewById(R.id.tv_pub_date)).setText(comment.pubDate);
-                ((TextView) lay.findViewById(R.id.tv_content)).setText(comment.content);
+
+                Spanned span = Html.fromHtml(TweetTextView.modifyPath(comment.content));
+                span = InputHelper.displayEmoji(getContext().getResources(),
+                        span.toString());
+                ((TextView) lay.findViewById(R.id.tv_content)).setText(span);
                 final long commentId = comment.id;
                 lay.findViewById(R.id.btn_comment).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -242,11 +249,6 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
                         mETInput.setHint(String.format("回复: %s", comment.author));
                     }
                 });
-
-                if (i == size) {
-                    lay.findViewById(R.id.line).setVisibility(View.INVISIBLE);
-                }
-                i++;
 
                 mLayComments.addView(lay, 0);
             }
