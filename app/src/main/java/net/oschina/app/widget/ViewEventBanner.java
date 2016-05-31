@@ -54,7 +54,7 @@ public class ViewEventBanner extends RelativeLayout implements View.OnClickListe
                 .transform(new BitmapTransformation(getContext()) {
                     @Override
                     protected Bitmap transform(BitmapPool pool, Bitmap toTransform, int outWidth, int outHeight) {
-                        toTransform = StackBlur.blur(toTransform, 20, true);
+                        toTransform = StackBlur.blur(toTransform, 25, true);
                         return toTransform;
                     }
 

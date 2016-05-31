@@ -87,31 +87,6 @@ public class NewsFragment extends BaseListFragment<News> {
             }
         });
 
-        OSChinaApi.getBannerList(OSChinaApi.CATALOG_BANNER_NEWS, new TextHttpResponseHandler() {
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                try {
-                    final ResultBean<PageBean<Banner>> resultBean = AppContext.createGson().fromJson(responseString, new TypeToken<ResultBean<PageBean<Banner>>>() {
-                    }.getType());
-                    if (resultBean != null && resultBean.isSuccess()) {
-                        mExeService.submit(new Runnable() {
-                            @Override
-                            public void run() {
-                                CacheManager.saveObject(getActivity(), resultBean.getResult(), NEWS_BANNER);
-                            }
-                        });
-                        initBanner(resultBean.getResult(), false);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
         mSchedule = Executors.newSingleThreadScheduledExecutor();
         mSchedule.scheduleWithFixedDelay(new Runnable() {
             @Override
@@ -129,6 +104,12 @@ public class NewsFragment extends BaseListFragment<News> {
     @Override
     protected void initData() {
         super.initData();
+    }
+
+    @Override
+    public void onRefreshing() {
+        super.onRefreshing();
+        getBannerList();
     }
 
     @Override
@@ -164,6 +145,33 @@ public class NewsFragment extends BaseListFragment<News> {
             banners.add(viewNewsBanner);
         }
         mPagerAdapter.notifyDataSetChanged();
+    }
+
+    private void getBannerList() {
+        OSChinaApi.getBannerList(OSChinaApi.CATALOG_BANNER_NEWS, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                try {
+                    final ResultBean<PageBean<Banner>> resultBean = AppContext.createGson().fromJson(responseString, new TypeToken<ResultBean<PageBean<Banner>>>() {
+                    }.getType());
+                    if (resultBean != null && resultBean.isSuccess()) {
+                        mExeService.submit(new Runnable() {
+                            @Override
+                            public void run() {
+                                CacheManager.saveObject(getActivity(), resultBean.getResult(), NEWS_BANNER);
+                            }
+                        });
+                        initBanner(resultBean.getResult(), false);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private class NewsPagerAdapter extends PagerAdapter {

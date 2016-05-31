@@ -84,30 +84,6 @@ public class EventFragment extends BaseListFragment<Event> {
                 }
             }
         });
-        OSChinaApi.getBannerList(OSChinaApi.CATALOG_BANNER_EVENT, new TextHttpResponseHandler() {
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                try {
-                    final ResultBean<PageBean<Banner>> resultBean = AppContext.createGson().fromJson(responseString, new TypeToken<ResultBean<PageBean<Banner>>>() {
-                    }.getType());
-                    if (resultBean != null && resultBean.isSuccess()) {
-                        mExeService.submit(new Runnable() {
-                            @Override
-                            public void run() {
-                                CacheManager.saveObject(getActivity(), resultBean.getResult(), EVENT_BANNER);
-                            }
-                        });
-                        initBanner(resultBean.getResult(), false);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
 
         mSchedule = Executors.newSingleThreadScheduledExecutor();
         mSchedule.scheduleWithFixedDelay(new Runnable() {
@@ -124,6 +100,12 @@ public class EventFragment extends BaseListFragment<Event> {
     @Override
     protected void initData() {
         super.initData();
+    }
+
+    @Override
+    public void onRefreshing() {
+        super.onRefreshing();
+        getBannarList();
     }
 
     @Override
@@ -158,6 +140,33 @@ public class EventFragment extends BaseListFragment<Event> {
             banners.add(viewNewsBanner);
         }
         pagerAdapter.notifyDataSetChanged();
+    }
+
+    private void getBannarList() {
+        OSChinaApi.getBannerList(OSChinaApi.CATALOG_BANNER_EVENT, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                try {
+                    final ResultBean<PageBean<Banner>> resultBean = AppContext.createGson().fromJson(responseString, new TypeToken<ResultBean<PageBean<Banner>>>() {
+                    }.getType());
+                    if (resultBean != null && resultBean.isSuccess()) {
+                        mExeService.submit(new Runnable() {
+                            @Override
+                            public void run() {
+                                CacheManager.saveObject(getActivity(), resultBean.getResult(), EVENT_BANNER);
+                            }
+                        });
+                        initBanner(resultBean.getResult(), false);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private class EventPagerAdapter extends PagerAdapter {
