@@ -25,15 +25,15 @@ import net.oschina.app.widget.TweetTextView;
 
 import java.util.List;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class CommentAdapter extends ListBaseAdapter<Comment> {
 
-    @SuppressLint({ "InflateParams", "CutPasteId" })
+    @SuppressLint({"InflateParams", "CutPasteId"})
     @Override
     protected View getRealView(int position, View convertView,
-            final ViewGroup parent) {
+                               final ViewGroup parent) {
         ViewHolder vh = null;
         if (convertView == null || convertView.getTag() == null) {
             convertView = getLayoutInflater(parent.getContext()).inflate(
@@ -91,7 +91,7 @@ public class CommentAdapter extends ListBaseAdapter<Comment> {
     }
 
     private void setupReplies(Context context, ViewHolder vh,
-            List<Reply> replies) {
+                              List<Reply> replies) {
         vh.relies.removeAllViews();
         if (replies == null || replies.size() <= 0) {
             vh.relies.setVisibility(View.GONE);

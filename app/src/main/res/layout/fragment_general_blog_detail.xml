@@ -196,7 +196,7 @@
                     android:paddingBottom="16dp"
                     android:paddingTop="16dp"
                     android:text="查看更多"
-                    android:textColor="#111111"
+                    android:textColor="#24cf5f"
                     android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>
