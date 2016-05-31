@@ -1,5 +1,6 @@
 package net.oschina.app.fragment.general;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,8 +29,14 @@ import net.oschina.app.contract.BlogDetailContract;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.fragment.base.BaseFragment;
 import net.oschina.app.ui.blog.BlogDetailActivity;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
+import net.oschina.app.widget.MyLinkMovementMethod;
+import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by qiujuer
@@ -235,12 +242,21 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
                         .into(((ImageView) lay.findViewById(R.id.iv_avatar)));
 
                 ((TextView) lay.findViewById(R.id.tv_name)).setText(comment.author);
-                ((TextView) lay.findViewById(R.id.tv_pub_date)).setText(comment.pubDate);
 
+                TweetTextView content = ((TweetTextView) lay.findViewById(R.id.tv_content));
+
+                content.setMovementMethod(MyLinkMovementMethod.a());
+                content.setFocusable(false);
+                content.setDispatchToParent(true);
+                content.setLongClickable(false);
                 Spanned span = Html.fromHtml(TweetTextView.modifyPath(comment.content));
-                span = InputHelper.displayEmoji(getContext().getResources(),
-                        span.toString());
-                ((TextView) lay.findViewById(R.id.tv_content)).setText(span);
+                span = InputHelper.displayEmoji(getContext().getResources(), span.toString());
+                content.setText(span);
+                MyURLSpan.parseLinkText(content, span);
+
+                ((TextView) lay.findViewById(R.id.tv_pub_date)).setText(
+                        StringUtils.friendly_time(getStrTime(comment.pubDate)));
+
                 final long commentId = comment.id;
                 lay.findViewById(R.id.btn_comment).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -257,6 +273,17 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
         } else {
             setGone(R.id.tv_blog_detail_comment);
             mLayComments.setVisibility(View.GONE);
+        }
+    }
+
+    private static String getStrTime(String cc_time) {
+        try {
+            long lTime = Long.valueOf(cc_time);
+            @SuppressLint("SimpleDateFormat")
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            return sdf.format(new Date(lTime));
+        } catch (Exception e) {
+            return cc_time;
         }
     }
 
