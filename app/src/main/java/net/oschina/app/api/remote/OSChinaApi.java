@@ -400,7 +400,7 @@ public class OSChinaApi {
         ApiHttpClient.post("action/api/comment_reply", params, handler);
     }
 
-    public static void publicBlogComment(int blog, int uid, String content,
+    public static void publicBlogComment(long blog, int uid, String content,
                                          AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("blog", blog);
