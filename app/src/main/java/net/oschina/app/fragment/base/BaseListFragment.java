@@ -36,33 +36,24 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
         AdapterView.OnItemClickListener, BaseListAdapter.Callback,
         View.OnClickListener {
 
-    protected String CACHE_NAME = getClass().getName();
-    private String mTime;
-
-    protected static ExecutorService mExeService = Executors.newFixedThreadPool(3);
-
     public static final int TYPE_NORMAL = 0;
     public static final int TYPE_LOADING = 1;
     public static final int TYPE_NO_MORE = 2;
     public static final int TYPE_ERROR = 3;
     public static final int TYPE_NET_ERROR = 4;
-
+    protected static ExecutorService mExeService = Executors.newFixedThreadPool(3);
+    protected String CACHE_NAME = getClass().getName();
+    protected ListView mListView;
+    protected SuperRefreshLayout mRefreshLayout;
+    protected EmptyLayout mErrorLayout;
+    protected BaseListAdapter<T> mAdapter;
+    protected boolean mIsRefresh;
+    protected TextHttpResponseHandler mHandler;
+    protected PageBean<T> mBean;
+    private String mTime;
     private View mFooterView;
     private ProgressBar mFooterProgressBar;
     private TextView mFooterText;
-
-    protected ListView mListView;
-
-    protected SuperRefreshLayout mRefreshLayout;
-
-    protected EmptyLayout mErrorLayout;
-
-    protected BaseListAdapter<T> mAdapter;
-    protected boolean mIsRefresh;
-
-    protected TextHttpResponseHandler mHandler;
-
-    protected PageBean<T> mBeam;
 
     @Override
     protected int getLayoutId() {
@@ -127,14 +118,14 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
         mExeService.submit(new Runnable() {
             @Override
             public void run() {
-                mBeam = (PageBean<T>) CacheManager.readObject(getActivity(), CACHE_NAME);
+                mBean = (PageBean<T>) CacheManager.readObject(getActivity(), CACHE_NAME);
                 //if is the first loading
-                if (mBeam == null) {
-                    mBeam = new PageBean<>();
-                    mBeam.setItems(new ArrayList<T>());
+                if (mBean == null) {
+                    mBean = new PageBean<>();
+                    mBean.setItems(new ArrayList<T>());
                     onRefreshing();
                 } else {
-                    mAdapter.addItem(mBeam.getItems());
+                    mAdapter.addItem(mBean.getItems());
                     mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
                     mRefreshLayout.setVisibility(View.VISIBLE);
                     onRefreshing();
@@ -197,19 +188,19 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
 
     protected void setListData(ResultBean<PageBean<T>> resultBean) {
         //is refresh
-        mBeam.setNextPageToken(resultBean.getResult().getNextPageToken());
+        mBean.setNextPageToken(resultBean.getResult().getNextPageToken());
         if (mIsRefresh) {
             //cache the time
             mTime = resultBean.getTime();
-            mBeam.setItems(resultBean.getResult().getItems());
+            mBean.setItems(resultBean.getResult().getItems());
             mAdapter.clear();
-            mAdapter.addItem(mBeam.getItems());
-            mBeam.setPrevPageToken(resultBean.getResult().getPrevPageToken());
+            mAdapter.addItem(mBean.getItems());
+            mBean.setPrevPageToken(resultBean.getResult().getPrevPageToken());
             mRefreshLayout.setCanLoadMore();
             mExeService.submit(new Runnable() {
                 @Override
                 public void run() {
-                    CacheManager.saveObject(getActivity(), mBeam, CACHE_NAME);
+                    CacheManager.saveObject(getActivity(), mBean, CACHE_NAME);
                 }
             });
         } else {

@@ -31,15 +31,14 @@ import java.lang.reflect.Type;
 public class QuestionFragment extends BaseListFragment<Question> {
 
     private static final String TAG = "QuestionFragment";
-    private GridView quesGridView = null;
-    private View headView;
-    private int catalog = 1;
-
     private static final String QUES_ASK = "ques_ask";
     private static final String QUES_SHARE = "ques_share";
     private static final String QUES_COMPOSITE = "ques_composite";
     private static final String QUES_PROFESSION = "ques_profession";
     private static final String QUES_WEBSITE = "ques_website";
+    private GridView quesGridView = null;
+    private View headView;
+    private int catalog = 1;
     private QuesActionAdapter quesActionAdapter;
     private int[] positions = {1, 0, 0, 0, 0};
     private ConnectivityManager connectivityManager;
@@ -115,10 +114,10 @@ public class QuestionFragment extends BaseListFragment<Question> {
      */
     private void requestLocalCache() {
         verifyCacheType();
-        mBeam = (PageBean<Question>) CacheManager.readObject(getActivity(), CACHE_NAME);
-        if (mBeam != null) {
+        mBean = (PageBean<Question>) CacheManager.readObject(getActivity(), CACHE_NAME);
+        if (mBean != null) {
             mAdapter.clear();
-            mAdapter.addItem(mBeam.getItems());
+            mAdapter.addItem(mBean.getItems());
             mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             mRefreshLayout.setVisibility(View.VISIBLE);
             mRefreshLayout.setCanLoadMore();
@@ -146,7 +145,7 @@ public class QuestionFragment extends BaseListFragment<Question> {
     protected void requestData() {
         super.requestData();
         verifyCacheType();
-        OSChinaApi.getQuestionList(catalog, mIsRefresh ? mBeam.getPrevPageToken() : mBeam.getNextPageToken(), mHandler);
+        OSChinaApi.getQuestionList(catalog, mIsRefresh ? mBean.getPrevPageToken() : mBean.getNextPageToken(), mHandler);
     }
 
     @Override

@@ -9,14 +9,14 @@ import java.util.Stack;
  *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @created 2014年10月30日 下午6:22:05
- *
  */
 public class AppManager {
 
     private static Stack<Activity> activityStack;
     private static AppManager instance;
 
-    private AppManager() {}
+    private AppManager() {
+    }
 
     /**
      * 单一实例
@@ -26,11 +26,26 @@ public class AppManager {
             instance = new AppManager();
         }
 
-        if(activityStack == null) {
+        if (activityStack == null) {
             activityStack = new Stack<Activity>();
         }
 
         return instance;
+    }
+
+    /**
+     * 获取指定的Activity
+     *
+     * @author kymjs
+     */
+    public static Activity getActivity(Class<?> cls) {
+        if (activityStack != null)
+            for (Activity activity : activityStack) {
+                if (activity.getClass().equals(cls)) {
+                    return activity;
+                }
+            }
+        return null;
     }
 
     /**
@@ -65,6 +80,7 @@ public class AppManager {
             activity.finish();
         }
     }
+
     /**
      * 结束指定的Activity
      */
@@ -73,7 +89,7 @@ public class AppManager {
             activityStack.remove(activity);
         }
     }
-    
+
     /**
      * 结束指定类名的Activity
      */
@@ -92,25 +108,10 @@ public class AppManager {
     public void finishAllActivity() {
         for (int i = 0, size = activityStack.size(); i < size; i++) {
             if (null != activityStack.get(i)) {
-              finishActivity(activityStack.get(i));
+                finishActivity(activityStack.get(i));
             }
         }
         activityStack.clear();
-    }
-
-    /**
-     * 获取指定的Activity
-     *
-     * @author kymjs
-     */
-    public static Activity getActivity(Class<?> cls) {
-        if (activityStack != null)
-            for (Activity activity : activityStack) {
-                if (activity.getClass().equals(cls)) {
-                    return activity;
-                }
-            }
-        return null;
     }
 
     /**
@@ -119,7 +120,7 @@ public class AppManager {
     public void AppExit() {
         try {
             finishAllActivity();
-           // System.exit(0);
+            // System.exit(0);
         } catch (Exception e) {
         }
     }

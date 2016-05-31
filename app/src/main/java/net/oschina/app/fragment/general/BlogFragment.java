@@ -44,7 +44,7 @@ public class BlogFragment extends BaseListFragment<Blog> {
         super.requestData();
 
         OSChinaApi.getBlogList(mIsRefresh ? OSChinaApi.CATALOG_BLOG_NORMAL : OSChinaApi.CATALOG_BLOG_NORMAL,
-                mIsRefresh ? mBeam.getPrevPageToken() : mBeam.getNextPageToken(), mHandler);
+                mIsRefresh ? mBean.getPrevPageToken() : mBean.getNextPageToken(), mHandler);
 
     }
 
@@ -73,15 +73,15 @@ public class BlogFragment extends BaseListFragment<Blog> {
     protected void setListData(ResultBean<PageBean<Blog>> resultBean) {
         //super.setListData(resultBean);
         //is refresh
-        mBeam.setNextPageToken(resultBean.getResult().getNextPageToken());
+        mBean.setNextPageToken(resultBean.getResult().getNextPageToken());
         if (mIsRefresh) {
             List<Blog> blogs = resultBean.getResult().getItems();
             Blog blog = new Blog();
             blog.setViewType(Blog.VIEW_TYPE_TITLE_NORMAL);
             blogs.add(0, blog);
-            mBeam.setItems(blogs);
+            mBean.setItems(blogs);
             mAdapter.clear();
-            mAdapter.addItem(mBeam.getItems());
+            mAdapter.addItem(mBean.getItems());
             mRefreshLayout.setCanLoadMore();
             mIsRefresh = false;
             //  OSChinaApi.getBlogList(OSChinaApi.CATALOG_BLOG_NORMAL, null, mHandler);
@@ -95,11 +95,11 @@ public class BlogFragment extends BaseListFragment<Blog> {
                 mExeService.submit(new Runnable() {
                     @Override
                     public void run() {
-                        CacheManager.saveObject(getActivity(), mBeam, CACHE_NAME);
+                        CacheManager.saveObject(getActivity(), mBean, CACHE_NAME);
                     }
                 });
             }
-            mBeam.setPrevPageToken(resultBean.getResult().getPrevPageToken());
+            mBean.setPrevPageToken(resultBean.getResult().getPrevPageToken());
             mAdapter.addItem(blogs);
         }
 
