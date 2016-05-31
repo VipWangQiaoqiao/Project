@@ -257,6 +257,8 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
     }
 
     protected void setFooterType(int type) {
+        if (!mFooterView.isActivated())
+            return;
         switch (type) {
             case TYPE_NORMAL:
             case TYPE_LOADING:
