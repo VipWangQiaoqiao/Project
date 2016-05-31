@@ -43,8 +43,9 @@ public class SimpleBackActivity extends BaseActivity implements
     @Override
     protected void init(Bundle savedInstanceState) {
         super.init(savedInstanceState);
+        Intent intent = getIntent();
         if (mPageValue == -1) {
-            mPageValue = getIntent().getIntExtra(BUNDLE_KEY_PAGE, 0);
+            mPageValue = intent.getIntExtra(BUNDLE_KEY_PAGE, 0);
         }
         initFromIntent(mPageValue, getIntent());
     }
@@ -75,7 +76,7 @@ public class SimpleBackActivity extends BaseActivity implements
             trans.replace(R.id.container, fragment, TAG);
             trans.commitAllowingStateLoss();
 
-            mFragment = new WeakReference<Fragment>(fragment);
+            mFragment = new WeakReference<>(fragment);
         } catch (Exception e) {
             e.printStackTrace();
             throw new IllegalArgumentException(
