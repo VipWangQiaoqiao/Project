@@ -21,7 +21,6 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Result;
@@ -196,6 +195,11 @@ public class BlogDetailActivity extends AppCompatActivity implements BlogDetailC
                             AppContext.showToastShort(R.string.add_favorite_success);
                         else
                             AppContext.showToastShort(R.string.del_favorite_success);
+                    } else {
+                        if (mBlog.isFavorite())
+                            AppContext.showToastShort(R.string.del_favorite_faile);
+                        else
+                            AppContext.showToastShort(R.string.add_favorite_faile);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -224,10 +228,10 @@ public class BlogDetailActivity extends AppCompatActivity implements BlogDetailC
         };
 
         if (mBlog.isFavorite()) {
-            OSChinaApi.addFavorite(uid, mId,
+            OSChinaApi.delFavorite(uid, mId,
                     FavoriteList.TYPE_BLOG, mFavoriteHandler);
         } else {
-            OSChinaApi.delFavorite(uid, mId,
+            OSChinaApi.addFavorite(uid, mId,
                     FavoriteList.TYPE_BLOG, mFavoriteHandler);
         }
     }
@@ -353,8 +357,7 @@ public class BlogDetailActivity extends AppCompatActivity implements BlogDetailC
                 hideWaitDialog();
             }
         };
-        OSChinaApi.publicComment(CommentList.CATALOG_MESSAGE, mId, uid, comment, 0,
-                handler);
+        OSChinaApi.publicBlogComment(mId, uid, comment, handler);
     }
 
     @Override
