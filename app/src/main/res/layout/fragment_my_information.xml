@@ -101,6 +101,8 @@
                     android:text="@string/actionbar_title_event" />
             </LinearLayout>
 
+            <View style="@style/h_line" />
+
             <LinearLayout
                 android:id="@+id/rl_setting"
                 style="@style/option_item_rl">
