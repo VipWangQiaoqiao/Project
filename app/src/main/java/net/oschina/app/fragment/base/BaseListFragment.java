@@ -1,6 +1,5 @@
 package net.oschina.app.fragment.base;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
