@@ -237,7 +237,7 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
 
         setText(R.id.tv_info_comment, String.valueOf(blog.getCommentCount()));
         if (blog.getComments() != null && blog.getComments().size() > 0) {
-            if (blog.getAbouts().size() < blog.getViewCount()) {
+            if (blog.getComments().size() < blog.getCommentCount()) {
                 setVisibility(R.id.tv_see_comment);
                 mLayComments.findViewById(R.id.tv_see_comment).setOnClickListener(this);
             } else {
