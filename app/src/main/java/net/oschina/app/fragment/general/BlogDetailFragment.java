@@ -76,11 +76,14 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
         return R.layout.fragment_general_blog_detail;
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     public void onDestroy() {
         WebView view = mWebView;
         if (view != null) {
             mWebView = null;
+            view.getSettings().setJavaScriptEnabled(true);
+            view.removeJavascriptInterface("mWebViewImageListener");
             view.removeAllViewsInLayout();
             view.setWebChromeClient(null);
             view.removeAllViews();
@@ -96,6 +99,7 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
         WebView webView = new WebView(getActivity());
         webView.setHorizontalScrollBarEnabled(false);
         UIHelper.initWebView(webView);
+        UIHelper.addWebImageShow(getActivity(), webView);
         ((FrameLayout) root.findViewById(R.id.lay_webview)).addView(webView);
         mWebView = webView;
 
