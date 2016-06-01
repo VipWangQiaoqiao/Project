@@ -124,7 +124,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
                     mBean.setItems(new ArrayList<T>());
                     onRefreshing();
                 } else {
-                    mListView.post(new Runnable() {
+                    mRoot.post(new Runnable() {
                         @Override
                         public void run() {
                             mAdapter.addItem(mBean.getItems());

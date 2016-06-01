@@ -21,12 +21,13 @@
         android:contentDescription="@string/app_name"
         android:scaleType="centerCrop" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
+        android:orientation="vertical"
         android:layout_toRightOf="@+id/iv_event_banner_img">
 
         <TextView
@@ -36,7 +37,6 @@
             android:layout_gravity="top"
             android:layout_marginRight="16dp"
             android:ellipsize="end"
-            android:gravity="top"
             android:lineSpacingExtra="4dp"
             android:maxLines="3"
             android:textAppearance="?android:attr/textAppearanceLarge"
@@ -47,21 +47,14 @@
         <TextView
             android:id="@+id/tv_event_banner_body"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_event_banner_title"
-            android:layout_marginBottom="@dimen/space_5"
+            android:layout_height="match_parent"
+            android:layout_marginTop="12dp"
+            android:gravity="bottom"
             android:ellipsize="end"
-            android:gravity="center_vertical"
-            android:lineSpacingExtra="@dimen/space_5"
-            android:maxLines="3"
+            android:textSize="12sp"
+            android:maxLines="4"
+            android:lineSpacingExtra="4dp"
             android:textColor="@color/white" />
 
-        <TextView
-            android:id="@+id/tv_event_pub_date"
-            style="@style/list_text_info"
-            android:layout_alignParentBottom="true"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:textColor="@color/white" />
-    </RelativeLayout>
+    </LinearLayout>
 </RelativeLayout>
