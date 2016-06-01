@@ -220,7 +220,7 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
                 if (i == 1) {
                     lay.findViewById(R.id.line).setVisibility(View.INVISIBLE);
                 }
-                lay.findViewById(R.id.tv_title).setOnClickListener(new View.OnClickListener() {
+                lay.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         BlogDetailActivity.show(getActivity(), about.id);
@@ -237,6 +237,13 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
 
         setText(R.id.tv_info_comment, String.valueOf(blog.getCommentCount()));
         if (blog.getComments() != null && blog.getComments().size() > 0) {
+            if (blog.getAbouts().size() < blog.getViewCount()) {
+                setVisibility(R.id.tv_see_comment);
+                mLayComments.findViewById(R.id.tv_see_comment).setOnClickListener(this);
+            } else {
+                setGone(R.id.tv_see_comment);
+            }
+
             for (final BlogDetail.Comment comment : blog.getComments()) {
                 View lay = getLayoutInflater(null).inflate(R.layout.item_blog_detail_comment_lay, null, false);
                 getImgLoader().load(comment.authorPortrait).error(R.drawable.widget_dface)
@@ -271,7 +278,7 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
                 mLayComments.addView(lay, 0);
             }
 
-            mLayComments.findViewById(R.id.tv_see_comment).setOnClickListener(this);
+
         } else {
             setGone(R.id.tv_blog_detail_comment);
             mLayComments.setVisibility(View.GONE);
