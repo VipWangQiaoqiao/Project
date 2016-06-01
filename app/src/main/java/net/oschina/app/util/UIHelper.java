@@ -329,6 +329,8 @@ public class UIHelper {
                 showEventDetail(context,
                         StringUtils.toInt(newsId));
                 break;
+            case net.oschina.app.bean.news.News.TYPE_NEWS:
+                //// TODO: 16-6-1  
             default:
                 showUrlRedirect(context, news.getHref());
                 break;
@@ -355,6 +357,7 @@ public class UIHelper {
                 showEventDetail(context,
                         StringUtils.toInt(newsId));
                 break;
+            case Banner.BANNER_TYPE_NEWS:
             default:
                 showUrlRedirect(context, banner.getHref());
                 break;

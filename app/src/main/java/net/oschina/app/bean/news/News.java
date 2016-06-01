@@ -14,6 +14,7 @@ public class News implements Serializable {
     public static final int TYPE_BLOG = 3;
     public static final int TYPE_TRNSLATE = 4;
     public static final int TYPE_EVENT = 5;
+    public static final int TYPE_NEWS = 6;
 
     private long id;
     private int commentCount;
