@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- 日间模式 -->
-    <style name="AppBaseTheme_Light" parent="@style/Theme.AppCompat.Light">
+    <style name="AppBaseTheme_Light" parent="AppBaseTheme_Light.Base" />
+
+    <style name="AppBaseTheme_Light.Base" parent="@style/Theme.AppCompat.Light">
+        <item name="elevation">0dp</item>
         <item name="colorPrimary">@color/day_colorPrimary</item>
         <item name="colorPrimaryDark">@color/day_colorPrimaryDark</item>
         <item name="android:textColorLink">#0b9a27</item>
@@ -23,16 +26,25 @@
         <item name="comment_reply_container_bg">@drawable/day_comment_reply_container_bg</item>
         <item name="message_bg_left">@drawable/chat_from_bg_normal</item>
         <item name="message_bg_right">@drawable/chat_to_bg_normal</item>
-        <item name="quickoption_icon_text_selector">@drawable/day_quickoption_icon_text_selector</item>
-        <item name="quickoption_icon_album_selector">@drawable/day_quickoption_icon_album_selector</item>
-        <item name="quickoption_icon_photo_selector">@drawable/day_quickoption_icon_photo_selector</item>
-        <item name="quickoption_icon_voice_selector">@drawable/day_quickoption_icon_voice_selector</item>
-        <item name="quickoption_icon_scan_selector">@drawable/day_quickoption_icon_scan_selector</item>
-        <item name="quickoption_icon_note_selector">@drawable/day_quickoption_icon_note_selector</item>
+        <item name="quickoption_icon_text_selector">@drawable/day_quickoption_icon_text_selector
+        </item>
+        <item name="quickoption_icon_album_selector">@drawable/day_quickoption_icon_album_selector
+        </item>
+        <item name="quickoption_icon_photo_selector">@drawable/day_quickoption_icon_photo_selector
+        </item>
+        <item name="quickoption_icon_voice_selector">@drawable/day_quickoption_icon_voice_selector
+        </item>
+        <item name="quickoption_icon_scan_selector">@drawable/day_quickoption_icon_scan_selector
+        </item>
+        <item name="quickoption_icon_note_selector">@drawable/day_quickoption_icon_note_selector
+        </item>
+        <item name="actionBarStyle">@style/Theme.App.ActionBar</item>
     </style>
 
     <!-- 夜间模式 -->
-    <style name="AppBaseTheme_Night" parent="@style/Theme.AppCompat">
+    <style name="AppBaseTheme_Night" parent="AppBaseTheme_Night.Base" />
+
+    <style name="AppBaseTheme_Night.Base" parent="@style/Theme.AppCompat">
         <item name="colorPrimary">@color/night_colorPrimary</item>
         <item name="colorPrimaryDark">@color/night_colorPrimaryDark</item>
         <item name="android:textColorLink">@color/night_colorPrimary</item>
@@ -50,12 +62,22 @@
         <item name="comment_reply_container_bg">@drawable/night_comment_reply_container_bg</item>
         <item name="message_bg_left">@drawable/night_chat_from_bg_normal</item>
         <item name="message_bg_right">@drawable/chat_to_bg_pressed</item>
-        <item name="quickoption_icon_text_selector">@drawable/night_quickoption_icon_text_selector</item>
-        <item name="quickoption_icon_album_selector">@drawable/night_quickoption_icon_album_selector</item>
-        <item name="quickoption_icon_photo_selector">@drawable/night_quickoption_icon_photo_selector</item>
-        <item name="quickoption_icon_voice_selector">@drawable/night_quickoption_icon_voice_selector</item>
-        <item name="quickoption_icon_scan_selector">@drawable/night_quickoption_icon_scan_selector</item>
-        <item name="quickoption_icon_note_selector">@drawable/night_quickoption_icon_note_selector</item>
+        <item name="quickoption_icon_text_selector">@drawable/night_quickoption_icon_text_selector
+        </item>
+        <item name="quickoption_icon_album_selector">
+            @drawable/night_quickoption_icon_album_selector
+        </item>
+        <item name="quickoption_icon_photo_selector">
+            @drawable/night_quickoption_icon_photo_selector
+        </item>
+        <item name="quickoption_icon_voice_selector">
+            @drawable/night_quickoption_icon_voice_selector
+        </item>
+        <item name="quickoption_icon_scan_selector">@drawable/night_quickoption_icon_scan_selector
+        </item>
+        <item name="quickoption_icon_note_selector">@drawable/night_quickoption_icon_note_selector
+        </item>
+        <item name="actionBarStyle">@style/Theme.App.ActionBar</item>
     </style>
 
     <!-- 全透明的背景 -->
@@ -66,6 +88,11 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <style name="Theme.App.ActionBar" parent="style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <!-- Support library compatibility -->
+        <item name="elevation">0dp</item>
     </style>
 
 </resources>

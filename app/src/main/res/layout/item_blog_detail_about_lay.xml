@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/item_blog_about_bg_selector"
+    android:paddingLeft="16dp">
 
     <TextView
         android:id="@+id/tv_title"
@@ -15,7 +17,7 @@
         android:paddingRight="16dp"
         android:singleLine="true"
         android:text="使用webpack前端重构感受"
-        android:textColor="@color/text_blog_about_title_selector"
+        android:textColor="#111111"
         android:textSize="14sp"
         tools:ignore="RtlHardcoded,RtlSymmetry"
         tools:text="使用webpack前端重构感受" />

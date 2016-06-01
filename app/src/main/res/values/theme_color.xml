@@ -2,8 +2,8 @@
 <resources>
 
     <!-- day -->
-    <color name="day_colorPrimary">#40AA53</color>
-    <color name="day_colorPrimaryDark">#0b751e</color>
+    <color name="day_colorPrimary">#24cf5f</color>
+    <color name="day_colorPrimaryDark">#40AA53</color>
     <color name="day_textColor">#333333</color>
     <color name="day_infoTextColor">#999999</color>
     <color name="day_layout_bg_normal">#f6f6f6</color>
@@ -14,8 +14,8 @@
     <color name="day_edit_hit_color">#999999</color>
 
     <!-- night -->
-    <color name="night_colorPrimary">#008000</color>
-    <color name="night_colorPrimaryDark">#0b751e</color>
+    <color name="night_colorPrimary">#0b751e</color>
+    <color name="night_colorPrimaryDark">#008000</color>
     <color name="night_textColor">#b3b3b3</color>
     <color name="night_infoTextColor">#666666</color>
     <color name="night_layout_bg_normal">#222222</color>
