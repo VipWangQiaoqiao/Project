@@ -2,12 +2,12 @@
 <resources>
 
     <style name="AppBaseTheme_Light" parent="AppBaseTheme_Light.Base">
-        <item name="android:windowContentOverlay">@null</item>
+
         <item name="android:elevation">0dp</item>
     </style>
 
     <style name="AppBaseTheme_Night" parent="AppBaseTheme_Night.Base">
-        <item name="android:windowContentOverlay">@null</item>
+
         <item name="android:elevation">0dp</item>
     </style>
 
@@ -15,5 +15,12 @@
         <item name="elevation">0dp</item>
         <item name="android:elevation">0dp</item>
         <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="App_ButtonStyle">
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:elevation">0dp</item>
+        <item name="elevation">0dp</item>
+        <item name="android:gravity">center</item>
     </style>
 </resources>
