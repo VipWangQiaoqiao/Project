@@ -36,12 +36,11 @@ import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
 
-
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 
 /**
@@ -59,7 +58,8 @@ public class UserCenterFragment extends BaseFragment implements
 
     @Bind(R.id.lv_user_active)
     ListView mListView;
-    private ImageView mIvAvatar, mIvGender;
+    private ImageView mIvGender;
+    private AvatarView mIvAvatar;
     private TextView mTvName;
     private TextView mTvFollowing;
     private TextView mTvFollower;
@@ -117,6 +117,7 @@ public class UserCenterFragment extends BaseFragment implements
             mState = STATE_NONE;
         }
     };
+
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -182,7 +183,7 @@ public class UserCenterFragment extends BaseFragment implements
         View header = LayoutInflater.from(getActivity()).inflate(
                 R.layout.fragment_user_center_header, null, false);
 
-        mIvAvatar = (ImageView) header.findViewById(R.id.iv_avatar);
+        mIvAvatar = (AvatarView) header.findViewById(R.id.iv_avatar);
         mIvAvatar.setOnClickListener(this);
         mIvGender = (ImageView) header.findViewById(R.id.iv_gender);
         mTvName = (TextView) header.findViewById(R.id.tv_name);

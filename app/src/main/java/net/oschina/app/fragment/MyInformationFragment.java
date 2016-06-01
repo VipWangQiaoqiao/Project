@@ -402,7 +402,7 @@ public class MyInformationFragment extends BaseFragment {
                 case R.id.rl_info_avtivities:
                     Bundle bundle=new Bundle();
                     bundle.putInt(SimpleBackActivity.BUNDLE_KEY_ARGS,1);
-                    UIHelper.showSimpleBack(getActivity(), SimpleBackPage.EVENT_LIST,bundle);
+                    UIHelper.showSimpleBack(getActivity(), SimpleBackPage.MY_EVENT,bundle);
                     break;
                 default:
                     break;

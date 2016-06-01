@@ -138,7 +138,9 @@ public enum SimpleBackPage {
 
     TWEET_LIKE_USER_LIST(41, 0, TweetLikeUsersFragment.class),
 
-    TWEET_TOPIC_LIST(42, 0, TweetsFragment.class);
+    TWEET_TOPIC_LIST(42, 0, TweetsFragment.class),
+
+    MY_EVENT(43, R.string.actionbar_title_my_event, EventViewPagerFragment.class);
 
     private int title;
     private Class<?> clz;

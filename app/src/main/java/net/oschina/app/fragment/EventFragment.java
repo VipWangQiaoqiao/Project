@@ -34,7 +34,6 @@ public class EventFragment extends BaseListFragment<Event> {
 
     public static final String BUNDLE_KEY_EVENT_TYPE = "eventlist_type";
 
-    protected static final String TAG = EventFragment.class.getSimpleName();
     private static final String CACHE_KEY_PREFIX = "eventlist_";
 
     private int event_type;

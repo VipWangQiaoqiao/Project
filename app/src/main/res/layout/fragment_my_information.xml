@@ -17,63 +17,121 @@
             <include layout="@layout/fragment_my_information_head" />
 
             <LinearLayout
-                android:id="@+id/rl_message"
-                style="@style/option_item_rl">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:orientation="vertical">
 
-                <ImageView
-                    style="@style/option_item_img"
-                    android:background="@drawable/icon_my_message"
-                    android:contentDescription="@null" />
+                <LinearLayout
+                    android:id="@+id/rl_message"
+                    style="@style/option_item_rl"
+                    android:background="@android:color/white">
 
-                <TextView
-                    style="@style/option_item_text"
-                    android:text="@string/message" />
+                    <ImageView
+                        style="@style/option_item_img"
+                        android:background="@drawable/icon_my_message"
+                        android:contentDescription="@null" />
 
-                <TextView
-                    android:id="@+id/tv_mes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/space_10"
-                    android:gravity="right" />
+                    <TextView
+                        style="@style/option_item_text"
+                        android:text="@string/message" />
+
+                    <TextView
+                        android:id="@+id/tv_mes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/space_10"
+                        android:gravity="right" />
+                </LinearLayout>
+
+                <View
+                    style="@style/h_line"
+                    android:layout_height="1px"
+                    android:layout_marginBottom="1px"
+                    android:layout_marginLeft="14dp"
+                    android:background="@color/list_divider_color" />
             </LinearLayout>
-
-            <View style="@style/h_line" />
 
             <LinearLayout
-                android:id="@+id/rl_blog"
-                style="@style/option_item_rl">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:orientation="vertical">
 
-                <ImageView
-                    style="@style/option_item_img"
-                    android:background="@drawable/icon_my_blog"
-                    android:contentDescription="@null" />
+                <LinearLayout
+                    android:id="@+id/rl_blog"
+                    style="@style/option_item_rl"
+                    android:background="@android:color/white">
 
-                <TextView
-                    style="@style/option_item_text"
-                    android:text="@string/blog" />
+                    <ImageView
+                        style="@style/option_item_img"
+                        android:background="@drawable/icon_my_blog"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        style="@style/option_item_text"
+                        android:text="@string/blog" />
+                </LinearLayout>
+
+                <View
+                    style="@style/h_line"
+                    android:layout_height="1px"
+                    android:layout_marginBottom="1px"
+                    android:layout_marginLeft="14dp"
+                    android:background="@color/list_divider_color" />
             </LinearLayout>
-
-            <View style="@style/h_line" />
 
             <LinearLayout
-                android:id="@+id/rl_team"
-                style="@style/option_item_rl">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/rl_team"
+                    style="@style/option_item_rl"
+                    android:background="@android:color/white">
+
+                    <ImageView
+                        style="@style/option_item_img"
+                        android:background="@drawable/icon_my_team"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        style="@style/option_item_text"
+                        android:text="@string/team" />
+                </LinearLayout>
+
+                <View
+                    style="@style/h_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginBottom="1px"
+                    android:layout_marginLeft="14dp"
+                    android:background="@color/list_divider_color" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rl_info_avtivities"
+                style="@style/option_item_rl"
+                android:background="@android:color/white">
 
                 <ImageView
                     style="@style/option_item_img"
-                    android:background="@drawable/icon_my_team"
+                    android:background="@drawable/ic_my_event"
                     android:contentDescription="@null" />
 
                 <TextView
                     style="@style/option_item_text"
-                    android:text="@string/team" />
-            </LinearLayout>
+                    android:text="@string/actionbar_title_event" />
 
-            <View style="@style/h_line" />
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/rl_feedback"
-                style="@style/option_item_rl">
+                style="@style/option_item_rl"
+                android:layout_marginTop="18dp"
+                android:background="@android:color/white">
 
                 <ImageView
                     style="@style/option_item_img"
@@ -85,39 +143,35 @@
                     android:text="@string/str_feedback" />
             </LinearLayout>
 
-            <View style="@style/h_line" />
-
             <LinearLayout
-                android:id="@+id/rl_info_avtivities"
-                style="@style/option_item_rl">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:orientation="vertical">
 
-                <ImageView
-                    style="@style/option_item_img"
-                    android:background="@drawable/ic_my_event"
-                    android:contentDescription="@null" />
+                <View
+                    style="@style/h_line"
+                    android:layout_height="1px"
+                    android:layout_marginBottom="1px"
+                    android:layout_marginLeft="14dp"
+                    android:background="@color/list_divider_color" />
 
-                <TextView
-                    style="@style/option_item_text"
-                    android:text="@string/actionbar_title_event" />
+                <LinearLayout
+                    android:id="@+id/rl_setting"
+                    style="@style/option_item_rl"
+                    android:background="@android:color/white">
+
+                    <ImageView
+                        style="@style/option_item_img"
+                        android:background="@drawable/ic_my_setup"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        style="@style/option_item_text"
+                        android:text="@string/actionbar_title_setting" />
+                </LinearLayout>
             </LinearLayout>
 
-            <View style="@style/h_line" />
-
-            <LinearLayout
-                android:id="@+id/rl_setting"
-                style="@style/option_item_rl">
-
-                <ImageView
-                    style="@style/option_item_img"
-                    android:background="@drawable/ic_my_setup"
-                    android:contentDescription="@null" />
-
-                <TextView
-                    style="@style/option_item_text"
-                    android:text="@string/actionbar_title_setting" />
-            </LinearLayout>
-
-            <View style="@style/h_line" />
 
         </LinearLayout>
     </ScrollView>
