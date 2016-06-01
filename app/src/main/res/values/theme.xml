@@ -39,6 +39,15 @@
         <item name="quickoption_icon_note_selector">@drawable/day_quickoption_icon_note_selector
         </item>
         <item name="actionBarStyle">@style/Theme.App.ActionBar</item>
+        <item name="android:windowContentOverlay">@null</item>
+
+        <item name="android:buttonStyle">@style/App_ButtonStyle</item>
+    </style>
+
+    <style name="App_ButtonStyle">
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="elevation">0dp</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <!-- 夜间模式 -->
@@ -78,6 +87,9 @@
         <item name="quickoption_icon_note_selector">@drawable/night_quickoption_icon_note_selector
         </item>
         <item name="actionBarStyle">@style/Theme.App.ActionBar</item>
+        <item name="android:windowContentOverlay">@null</item>
+
+        <item name="android:buttonStyle">@style/App_ButtonStyle</item>
     </style>
 
     <!-- 全透明的背景 -->
