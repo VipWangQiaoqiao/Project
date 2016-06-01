@@ -44,7 +44,7 @@ public class BaseApplication extends Application {
         super.onCreate();
         _context = getApplicationContext();
         _resource = _context.getResources();
-        //LeakCanary.install(this);
+        LeakCanary.install(this);
     }
 
     public static synchronized BaseApplication context() {
