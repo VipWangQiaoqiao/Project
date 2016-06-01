@@ -33,12 +33,10 @@
         <TextView
             android:id="@+id/tv_event_banner_title"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:layout_marginRight="16dp"
             android:ellipsize="end"
-            android:gravity="top"
             android:lineSpacingExtra="4dp"
             android:maxLines="3"
             android:textAppearance="?android:attr/textAppearanceLarge"
@@ -49,14 +47,13 @@
         <TextView
             android:id="@+id/tv_event_banner_body"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_below="@id/tv_event_banner_title"
-            android:layout_marginBottom="@dimen/space_5"
+            android:layout_height="match_parent"
+            android:layout_marginTop="12dp"
+            android:gravity="bottom"
             android:ellipsize="end"
-            android:gravity="center_vertical"
-            android:lineSpacingExtra="@dimen/space_5"
-            android:maxLines="3"
+            android:textSize="12sp"
+            android:maxLines="4"
+            android:lineSpacingExtra="4dp"
             android:textColor="@color/white" />
 
     </LinearLayout>
