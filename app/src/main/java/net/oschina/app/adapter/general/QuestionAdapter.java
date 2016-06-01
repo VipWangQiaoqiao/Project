@@ -23,11 +23,11 @@ public class QuestionAdapter extends BaseListAdapter<Question> {
     @Override
     protected void convert(ViewHolder vh, Question item, int position) {
 
-        vh.setImageForNet(R.id.iv_ques_item_icon, item.getAuthorPortrait(), R.drawable.widget_dface);
+        vh.setImageForNet(R.id.iv_ques_item_icon, item.getAuthorPortrait().trim(), R.drawable.widget_dface);
         TextView title = vh.getView(R.id.tv_ques_item_title);
-        title.setText(item.getTitle());
+        title.setText(item.getTitle().trim());
         TextView content = vh.getView(R.id.tv_ques_item_content);
-        String body = item.getBody().toString().trim();
+        String body = item.getBody().trim();
         if (body.length() > 0 && !body.equals("")) {
             content.setText(body);
             content.setVisibility(View.VISIBLE);
@@ -35,7 +35,8 @@ public class QuestionAdapter extends BaseListAdapter<Question> {
             content.setVisibility(View.GONE);
         }
         TextView history = vh.getView(R.id.tv_ques_item_history);
-        history.setText((item.getAuthor().length() > 9 ? item.getAuthor().substring(0, 9) : item.getAuthor()) + "\t " + StringUtils.friendly_time(item.getPubDate()));
+        String author = item.getAuthor().trim();
+        history.setText((author.length() > 9 ? author.substring(0, 9) : author) + "  " + StringUtils.friendly_time(item.getPubDate().trim()));
         TextView see = vh.getView(R.id.tv_info_view);
         see.setText(item.getViewCount() + "");
         TextView answer = vh.getView(R.id.tv_info_comment);
