@@ -19,20 +19,20 @@ public class EventAdapter extends BaseListAdapter<Event> {
     protected void convert(ViewHolder vh, Event item, int position) {
         vh.setText(R.id.tv_event_title, item.getTitle());
         vh.setImageForNet(R.id.iv_event, item.getImg());
-        vh.setText(R.id.tv_event_pub_date, item.getPubDate());
+        vh.setText(R.id.tv_event_pub_date, item.getEndDate());
         vh.setText(R.id.tv_event_member, item.getApplyCount() + "人参与");
-        vh.setTextColor(R.id.tv_event_title,mCallback.getContext().getResources().getColor(R.color.day_textColor));
+        vh.setTextColor(R.id.tv_event_title, mCallback.getContext().getResources().getColor(R.color.day_textColor));
         switch (item.getStatus()) {
             case Event.STATUS_END:
                 vh.setText(R.id.tv_event_state, R.string.event_status_end, R.drawable.bg_event_end, 0x1a000000);
-                vh.setTextColor(R.id.tv_event_title,mCallback.getContext().getResources().getColor(R.color.light_gray));
+                vh.setTextColor(R.id.tv_event_title, mCallback.getContext().getResources().getColor(R.color.light_gray));
                 break;
             case Event.STATUS_ING:
                 vh.setText(R.id.tv_event_state, R.string.event_status_ing, R.drawable.bg_event_ing, 0xFF24cf5f);
                 break;
             case Event.STATUS_SING_UP:
                 vh.setText(R.id.tv_event_state, R.string.event_status_sing_up, R.drawable.bg_event_end, 0x1a000000);
-                vh.setTextColor(R.id.tv_event_title,mCallback.getContext().getResources().getColor(R.color.light_gray));
+                vh.setTextColor(R.id.tv_event_title, mCallback.getContext().getResources().getColor(R.color.light_gray));
                 break;
         }
         int typeStr = R.string.oscsite;
