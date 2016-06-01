@@ -31,7 +31,6 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
                 break;
             case Blog.VIEW_TYPE_TITLE_NORMAL:
                 vh.setText(R.id.tv_blog_item_banner, R.string.blog_list_title_normal);
-                vh.setGone(R.id.tv_blog_item_banner);
                 break;
             default:
                 TextView title = vh.getView(R.id.tv_item_blog_title);
@@ -53,11 +52,12 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
                 } else {
                     vh.setGone(R.id.iv_item_blog_tag);
                 }
-                title.setText(item.getTitle());
-                content.setText(item.getBody());
-                history.setText((item.getAuthor().length() > 9 ? item.getAuthor().substring(0, 9) : item.getAuthor()) + "\t " + StringUtils.friendly_time(item.getPubDate()));
-                see.setText(String.valueOf(item.getViewCount()));
-                answer.setText(String.valueOf(item.getCommentCount()));
+                title.setText(item.getTitle().trim());
+                content.setText(item.getBody().trim());
+                String author = item.getAuthor().trim();
+                history.setText((author.length() > 9 ? author.substring(0, 9) : author) + "  " + StringUtils.friendly_time(item.getPubDate().trim()));
+                see.setText(item.getViewCount() + "");
+                answer.setText(item.getCommentCount() + "");
                 break;
         }
     }

@@ -1,6 +1,6 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="Widget"></style>
+    <style name="Widget" />
 
     <style name="Widget.ProgressBar">
         <item name="android:indeterminateDrawable">@drawable/progress_medium_holo</item>
