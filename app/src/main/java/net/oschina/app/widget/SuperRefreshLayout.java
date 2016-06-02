@@ -98,7 +98,6 @@ public class SuperRefreshLayout extends SwipeRefreshLayout implements AbsListVie
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         final int action = event.getAction();
-
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 // 按下

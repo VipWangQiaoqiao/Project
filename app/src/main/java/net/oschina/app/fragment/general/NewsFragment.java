@@ -1,19 +1,12 @@
 package net.oschina.app.fragment.general;
 
-import android.os.Handler;
-import android.os.Message;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.R;
 import net.oschina.app.adapter.base.BaseListAdapter;
 import net.oschina.app.adapter.general.NewsAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
@@ -24,15 +17,12 @@ import net.oschina.app.bean.news.News;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.fragment.base.BaseListFragment;
 import net.oschina.app.util.UIHelper;
-import net.oschina.app.widget.SmoothScroller;
 import net.oschina.app.widget.ViewNewsBanner;
+import net.oschina.app.widget.ViewNewsHeader;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -45,60 +35,29 @@ public class NewsFragment extends BaseListFragment<News> {
 
     private static final String NEWS_BANNER = "news_banner";
 
-    private View mHeaderView;
-
-    private ViewPager vp_news;
-
-    private List<ViewNewsBanner> banners = new ArrayList<>();
-
-    private NewsPagerAdapter mPagerAdapter;
-
-    private Handler handler;
-
-    private int mCurrentItem = 0;
-
-    private ScheduledExecutorService mSchedule;
+    private ViewNewsHeader mHeaderView;
 
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
-        mHeaderView = LayoutInflater.from(getActivity()).inflate(R.layout.item_list_news_header, null);
-        vp_news = (ViewPager) mHeaderView.findViewById(R.id.vp_news);
-        mPagerAdapter = new NewsPagerAdapter();
-        vp_news.setAdapter(mPagerAdapter);
-        handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                vp_news.setCurrentItem(mCurrentItem);
-            }
-        };
+        mHeaderView = new ViewNewsHeader(getActivity());
 
         mExeService.execute(new Runnable() {
             @Override
             public void run() {
                 final PageBean<Banner> pageBean = (PageBean<Banner>) CacheManager.readObject(getActivity(), NEWS_BANNER);
                 if (pageBean != null) {
-                    handler.post(new Runnable() {
+                    mRoot.post(new Runnable() {
                         @Override
                         public void run() {
-                            initBanner(pageBean);
+                            mHeaderView.initData(getImgLoader(), pageBean.getItems());
                         }
                     });
                 }
             }
         });
 
-        mSchedule = Executors.newSingleThreadScheduledExecutor();
-        mSchedule.scheduleWithFixedDelay(new Runnable() {
-            @Override
-            public void run() {
-                mCurrentItem = (mCurrentItem + 1) % banners.size();
-                handler.obtainMessage().sendToTarget();
-            }
-        }, 2, 5, TimeUnit.SECONDS);
-
-        new SmoothScroller(getActivity()).setViewPagerScroller(vp_news, getActivity());
+        mHeaderView.setRefreshLayout(mRefreshLayout);
         mListView.addHeaderView(mHeaderView);
         getBannerList();
     }
@@ -141,15 +100,6 @@ public class NewsFragment extends BaseListFragment<News> {
         isFirst = false;
     }
 
-    private void initBanner(PageBean<Banner> result) {
-        banners.clear();
-        for (Banner banner : result.getItems()) {
-            ViewNewsBanner viewNewsBanner = new ViewNewsBanner(getActivity());
-            viewNewsBanner.initData(getImgLoader(), banner);
-            banners.add(viewNewsBanner);
-        }
-        mPagerAdapter.notifyDataSetChanged();
-    }
 
     private void getBannerList() {
         OSChinaApi.getBannerList(OSChinaApi.CATALOG_BANNER_NEWS, new TextHttpResponseHandler() {
@@ -169,7 +119,7 @@ public class NewsFragment extends BaseListFragment<News> {
                                 CacheManager.saveObject(getActivity(), resultBean.getResult(), NEWS_BANNER);
                             }
                         });
-                        initBanner(resultBean.getResult());
+                        mHeaderView.initData(getImgLoader(), resultBean.getResult().getItems());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -178,31 +128,4 @@ public class NewsFragment extends BaseListFragment<News> {
         });
     }
 
-    private class NewsPagerAdapter extends PagerAdapter {
-        @Override
-        public int getCount() {
-            return banners.size();
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
-
-        @Override
-        public int getItemPosition(Object object) {
-            return POSITION_NONE;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView(banners.get(position));
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            container.addView(banners.get(position));
-            return banners.get(position);
-        }
-    }
 }
