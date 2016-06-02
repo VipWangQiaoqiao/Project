@@ -79,7 +79,7 @@ public class EventFragment extends BaseListFragment<Event> {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            initBanner(pageBean, true);
+                            initBanner(pageBean);
                         }
                     });
                 }
@@ -141,8 +141,8 @@ public class EventFragment extends BaseListFragment<Event> {
         isFirst = false;
     }
 
-    private void initBanner(PageBean<Banner> result, boolean fromCache) {
-        if (fromCache) banners.clear();
+    private void initBanner(PageBean<Banner> result) {
+        banners.clear();
         for (Banner banner : result.getItems()) {
             ViewEventBanner viewNewsBanner = new ViewEventBanner(getActivity());
             viewNewsBanner.initData(getImgLoader(), banner);
@@ -169,7 +169,7 @@ public class EventFragment extends BaseListFragment<Event> {
                                 CacheManager.saveObject(getActivity(), resultBean.getResult(), EVENT_BANNER);
                             }
                         });
-                        initBanner(resultBean.getResult(), false);
+                        initBanner(resultBean.getResult());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -189,6 +189,10 @@ public class EventFragment extends BaseListFragment<Event> {
             return view == object;
         }
 
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {

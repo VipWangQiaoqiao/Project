@@ -82,7 +82,7 @@ public class NewsFragment extends BaseListFragment<News> {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            initBanner(pageBean, true);
+                            initBanner(pageBean);
                         }
                     });
                 }
@@ -147,8 +147,8 @@ public class NewsFragment extends BaseListFragment<News> {
         isFirst = false;
     }
 
-    private void initBanner(PageBean<Banner> result, boolean fromCache) {
-        if (fromCache) banners.clear();
+    private void initBanner(PageBean<Banner> result) {
+        banners.clear();
         for (Banner banner : result.getItems()) {
             ViewNewsBanner viewNewsBanner = new ViewNewsBanner(getActivity());
             viewNewsBanner.initData(getImgLoader(), banner);
@@ -175,7 +175,7 @@ public class NewsFragment extends BaseListFragment<News> {
                                 CacheManager.saveObject(getActivity(), resultBean.getResult(), NEWS_BANNER);
                             }
                         });
-                        initBanner(resultBean.getResult(), false);
+                        initBanner(resultBean.getResult());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -195,6 +195,10 @@ public class NewsFragment extends BaseListFragment<News> {
             return view == object;
         }
 
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
