@@ -53,8 +53,8 @@ public class QuestionFragment extends BaseListFragment<Question> {
         super.initWidget(root);
 
         @SuppressLint("InflateParams")
-        View headView;
-        headView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_main_question_header, null, false);
+        View headView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_main_question_header, null, false);
+
         GridView quesGridView = (GridView) headView.findViewById(R.id.gv_ques);
         quesActionAdapter = new QuesActionAdapter(getActivity(), positions);
         quesGridView.setAdapter(quesActionAdapter);
@@ -94,13 +94,15 @@ public class QuestionFragment extends BaseListFragment<Question> {
         }
     }
 
+
     /**
      * notify action data
      *
-     * @param position postion
+     * @param position position
      */
     private void updateAction(int position) {
-        for (int i = 0; i < positions.length; i++) {
+        int len = positions.length;
+        for (int i = 0; i < len; i++) {
             if (i != position) {
                 positions[i] = 0;
             } else {
