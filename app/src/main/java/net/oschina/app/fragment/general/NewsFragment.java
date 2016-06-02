@@ -100,12 +100,6 @@ public class NewsFragment extends BaseListFragment<News> {
 
         new SmoothScroller(getActivity()).setViewPagerScroller(vp_news, getActivity());
         mListView.addHeaderView(mHeaderView);
-
-    }
-
-    @Override
-    protected void initData() {
-        super.initData();
         getBannerList();
     }
 

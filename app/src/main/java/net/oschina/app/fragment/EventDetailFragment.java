@@ -106,7 +106,7 @@ public class EventDetailFragment extends CommonDetailFragment<Post> {
         String author = String.format
                 ("<a class='author' href='http://my.oschina.net/u/%s'>%s</a>", mDetail
                         .getAuthorId(), mDetail.getAuthor());
-        body.append(String.format("<div class='authortime'>%s&nbsp;&nbsp;&nbsp;&nbsp;%s</div>", 
+        body.append(String.format("<div class='authortime'>%s&nbsp;&nbsp;&nbsp;&nbsp;%s</div>",
                 author, time));
         // 添加图片点击放大支持
         body.append(UIHelper.setHtmlCotentSupportImagePreview(mDetail.getBody()));
@@ -120,10 +120,10 @@ public class EventDetailFragment extends CommonDetailFragment<Post> {
         super.executeOnLoadDataSuccess(detail);
         mTvTitle.setText(mDetail.getTitle());
         mTvStartTime.setText(String.format(
-                getString(R.string.event_start_time), mDetail.getEvent()
-                        .getStartTime()));
+                getString(R.string.event_start_time), StringUtils.getDateString(mDetail.getEvent()
+                        .getStartTime())));
         mTvEndTime.setText(String.format(getString(R.string.event_end_time),
-                mDetail.getEvent().getEndTime()));
+                StringUtils.getDateString(mDetail.getEvent().getEndTime())));
         mTvSpot.setText(mDetail.getEvent().getCity() + " "
                 + mDetail.getEvent().getSpot());
 

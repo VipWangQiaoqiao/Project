@@ -23,6 +23,7 @@ import net.oschina.app.bean.base.ResultBean;
 import net.oschina.app.bean.event.Event;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.fragment.base.BaseListFragment;
+import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.SmoothScroller;
 import net.oschina.app.widget.ViewEventBanner;
@@ -96,11 +97,7 @@ public class EventFragment extends BaseListFragment<Event> {
         }, 2, 5, TimeUnit.SECONDS);
         new SmoothScroller(getActivity()).setViewPagerScroller(vp_event, getActivity());
         mListView.addHeaderView(mHeaderView);
-    }
 
-    @Override
-    protected void initData() {
-        super.initData();
         getBannerList();
     }
 
