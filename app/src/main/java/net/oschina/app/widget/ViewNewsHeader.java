@@ -34,6 +34,7 @@ public class ViewNewsHeader extends RelativeLayout implements ViewPager.OnPageCh
     private ScheduledExecutorService mSchedule;
     private int mCurrentItem = 0;
     private Handler handler;
+
     public ViewNewsHeader(Context context) {
         super(context);
         init(context);
@@ -94,7 +95,8 @@ public class ViewNewsHeader extends RelativeLayout implements ViewPager.OnPageCh
 
     @Override
     public void onPageScrollStateChanged(int state) {
-        refreshLayout.setEnabled(state == ViewPager.SCROLL_STATE_IDLE);
+        if (!refreshLayout.isRefreshing())
+            refreshLayout.setEnabled(state == ViewPager.SCROLL_STATE_IDLE);
     }
 
 

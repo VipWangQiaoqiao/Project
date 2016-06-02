@@ -95,7 +95,8 @@ public class ViewEventHeader extends RelativeLayout implements ViewPager.OnPageC
 
     @Override
     public void onPageScrollStateChanged(int state) {
-        refreshLayout.setEnabled(state == ViewPager.SCROLL_STATE_IDLE);
+        if (!refreshLayout.isRefreshing())
+            refreshLayout.setEnabled(state == ViewPager.SCROLL_STATE_IDLE);
     }
 
 
