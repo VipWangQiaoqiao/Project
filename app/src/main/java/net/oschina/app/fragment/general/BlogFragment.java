@@ -96,13 +96,14 @@ public class BlogFragment extends BaseListFragment<Blog> {
                     }
                 });
             }
+            mRefreshLayout.setCanLoadMore();
             mBean.setPrevPageToken(resultBean.getResult().getPrevPageToken());
             mAdapter.addItem(blogs);
         }
 
-        if (resultBean.getResult().getItems().size() < 10) {
+        if (resultBean.getResult().getItems().size() < 20) {
             setFooterType(TYPE_NO_MORE);
-            mRefreshLayout.setNoMoreData();
+            //  mRefreshLayout.setNoMoreData();
         }
         if (mAdapter.getDatas().size() > 0) {
             mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
