@@ -90,15 +90,20 @@ public class BlogDetail extends Blog {
         public int viewCount;
     }
 
-    public static class Comment implements Serializable {
-        public long id;
+    public static class Refer implements Serializable {
         public String author;
+        public String content;
+        @SerializedName(value = "refer", alternate = {"reply"})
+        public Refer refer;
+    }
+
+    public static class Comment extends Refer implements Serializable {
+        public long id;
         public long authorId;
         public String authorPortrait;
-        public String content;
+
         public String pubDate;
         public int appClient;
-        public List<Comment> replies;
     }
 
 }
