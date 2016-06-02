@@ -30,6 +30,7 @@ import java.lang.reflect.Type;
  * 技术问答界面
  */
 public class QuestionFragment extends BaseListFragment<Question> {
+
     private static final String QUES_ASK = "ques_ask";
     private static final String QUES_SHARE = "ques_share";
     private static final String QUES_COMPOSITE = "ques_composite";
@@ -50,7 +51,10 @@ public class QuestionFragment extends BaseListFragment<Question> {
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
-        @SuppressLint("InflateParams") View headView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_main_question_header, null, false);
+
+        @SuppressLint("InflateParams")
+        View headView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_main_question_header, null, false);
+
         GridView quesGridView = (GridView) headView.findViewById(R.id.gv_ques);
         quesActionAdapter = new QuesActionAdapter(getActivity(), positions);
         quesGridView.setAdapter(quesActionAdapter);
@@ -90,13 +94,15 @@ public class QuestionFragment extends BaseListFragment<Question> {
         }
     }
 
+
     /**
      * notify action data
      *
-     * @param position postion
+     * @param position position
      */
     private void updateAction(int position) {
-        for (int i = 0; i < positions.length; i++) {
+        int len = positions.length;
+        for (int i = 0; i < len; i++) {
             if (i != position) {
                 positions[i] = 0;
             } else {
