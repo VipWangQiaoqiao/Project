@@ -1,5 +1,6 @@
 package net.oschina.app.fragment.general;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -30,14 +31,11 @@ import java.lang.reflect.Type;
  */
 public class QuestionFragment extends BaseListFragment<Question> {
 
-    private static final String TAG = "QuestionFragment";
     private static final String QUES_ASK = "ques_ask";
     private static final String QUES_SHARE = "ques_share";
     private static final String QUES_COMPOSITE = "ques_composite";
     private static final String QUES_PROFESSION = "ques_profession";
     private static final String QUES_WEBSITE = "ques_website";
-    private GridView quesGridView = null;
-    private View headView;
     private int catalog = 1;
     private QuesActionAdapter quesActionAdapter;
     private int[] positions = {1, 0, 0, 0, 0};
@@ -53,8 +51,11 @@ public class QuestionFragment extends BaseListFragment<Question> {
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
+
+        @SuppressLint("InflateParams")
+        View headView;
         headView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_main_question_header, null, false);
-        quesGridView = (GridView) headView.findViewById(R.id.gv_ques);
+        GridView quesGridView = (GridView) headView.findViewById(R.id.gv_ques);
         quesActionAdapter = new QuesActionAdapter(getActivity(), positions);
         quesGridView.setAdapter(quesActionAdapter);
         quesGridView.setItemChecked(0, true);
@@ -112,6 +113,7 @@ public class QuestionFragment extends BaseListFragment<Question> {
     /**
      * request local cache
      */
+    @SuppressWarnings("unchecked")
     private void requestLocalCache() {
         verifyCacheType();
         mBean = (PageBean<Question>) CacheManager.readObject(getActivity(), CACHE_NAME);
