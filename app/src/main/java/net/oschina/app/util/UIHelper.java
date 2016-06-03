@@ -313,7 +313,7 @@ public class UIHelper {
         long newsId = news.getId();
         switch (news.getType()) {
             case net.oschina.app.bean.news.News.TYPE_HREF:
-                showNewsDetail(context, Integer.parseInt(String.valueOf(newsId)), news.getCommentCount());
+                showUrlRedirect(context, news.getHref());
                 break;
             case net.oschina.app.bean.news.News.TYPE_SOFTWARE:
                 showSoftwareDetailById(context, Integer.parseInt(String.valueOf(newsId)));
@@ -330,7 +330,8 @@ public class UIHelper {
                         StringUtils.toInt(newsId));
                 break;
             case net.oschina.app.bean.news.News.TYPE_NEWS:
-                //// TODO: 16-6-1  
+                //// TODO: 16-6-1
+                showNewsDetail(context, Integer.parseInt(String.valueOf(newsId)), news.getCommentCount());
             default:
                 showUrlRedirect(context, news.getHref());
                 break;
