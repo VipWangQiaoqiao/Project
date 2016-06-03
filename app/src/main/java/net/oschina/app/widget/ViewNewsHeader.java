@@ -35,7 +35,7 @@ public class ViewNewsHeader extends RelativeLayout implements ViewPager.OnPageCh
     private ScheduledExecutorService mSchedule;
     private int mCurrentItem = 0;
     private boolean isMoving = false;
-    private boolean isTouch = false;
+    private boolean isScroll = false;
     private Handler handler;
 
     public ViewNewsHeader(Context context) {
@@ -70,7 +70,7 @@ public class ViewNewsHeader extends RelativeLayout implements ViewPager.OnPageCh
         mSchedule.scheduleWithFixedDelay(new Runnable() {
             @Override
             public void run() {
-                if (!isMoving) {
+                if (!isMoving && isScroll) {
                     mCurrentItem = (mCurrentItem + 1) % banners.size();
                     handler.obtainMessage().sendToTarget();
                 }
@@ -83,22 +83,16 @@ public class ViewNewsHeader extends RelativeLayout implements ViewPager.OnPageCh
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_UP:
                         isMoving = false;
-                        isTouch = false;
-                        break;
-                    case MotionEvent.ACTION_DOWN:
-                        isTouch = true;
+                        refreshLayout.setEnabled(true);
                         break;
                     case MotionEvent.ACTION_CANCEL:
-                        isTouch = false;
                         isMoving = false;
+                        refreshLayout.setEnabled(true);
                         break;
                     case MotionEvent.ACTION_MOVE:
+                        refreshLayout.setEnabled(false);
                         isMoving = true;
-                        isTouch = true;
                         break;
-                    default:
-                        isMoving = false;
-                        isTouch = false;
                 }
                 return false;
             }
@@ -124,13 +118,15 @@ public class ViewNewsHeader extends RelativeLayout implements ViewPager.OnPageCh
     public void onPageSelected(int position) {
         isMoving = false;
         mCurrentItem = position;
+        refreshLayout.setEnabled(true);
+        isScroll = false;
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
         isMoving = state != ViewPager.SCROLL_STATE_IDLE;
-        if (!refreshLayout.isRefreshing() && !refreshLayout.isMoving() && isTouch)
-            refreshLayout.setEnabled(state == ViewPager.SCROLL_STATE_IDLE);
+        isScroll = state == ViewPager.SCROLL_STATE_IDLE;
+        refreshLayout.setEnabled(state == ViewPager.SCROLL_STATE_IDLE);
     }
 
 
