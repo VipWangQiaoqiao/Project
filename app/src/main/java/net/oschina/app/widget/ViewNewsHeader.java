@@ -90,12 +90,11 @@ public class ViewNewsHeader extends RelativeLayout implements ViewPager.OnPageCh
 
     @Override
     public void onPageSelected(int position) {
-
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
-        if (!refreshLayout.isRefreshing())
+        if (!refreshLayout.isRefreshing() && !refreshLayout.isMoving())
             refreshLayout.setEnabled(state == ViewPager.SCROLL_STATE_IDLE);
     }
 
