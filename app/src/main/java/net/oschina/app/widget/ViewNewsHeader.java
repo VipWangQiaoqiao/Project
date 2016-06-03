@@ -7,6 +7,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -74,6 +75,28 @@ public class ViewNewsHeader extends RelativeLayout implements ViewPager.OnPageCh
                 }
             }
         }, 2, 5, TimeUnit.SECONDS);
+
+        vp_news.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_UP:
+                        isMoving = false;
+                        break;
+                    case MotionEvent.ACTION_DOWN:
+                        break;
+                    case MotionEvent.ACTION_CANCEL:
+                        isMoving = false;
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        isMoving = true;
+                        break;
+                    default:
+                        isMoving = false;
+                }
+                return false;
+            }
+        });
     }
 
     public void initData(RequestManager manager, List<Banner> banners) {
@@ -88,12 +111,13 @@ public class ViewNewsHeader extends RelativeLayout implements ViewPager.OnPageCh
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        isMoving = true;
+        isMoving = mCurrentItem != position;
     }
 
     @Override
     public void onPageSelected(int position) {
         isMoving = false;
+        mCurrentItem = position;
     }
 
     @Override
