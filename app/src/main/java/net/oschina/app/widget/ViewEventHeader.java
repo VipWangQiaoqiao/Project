@@ -7,6 +7,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -35,6 +36,7 @@ public class ViewEventHeader extends RelativeLayout implements ViewPager.OnPageC
     private int mCurrentItem = 0;
     private Handler handler;
     private boolean isMoving = false;
+
     public ViewEventHeader(Context context) {
         super(context);
         init(context);
@@ -73,6 +75,28 @@ public class ViewEventHeader extends RelativeLayout implements ViewPager.OnPageC
                 }
             }
         }, 2, 5, TimeUnit.SECONDS);
+
+        vp_event.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_UP:
+                        isMoving = false;
+                        break;
+                    case MotionEvent.ACTION_DOWN:
+                        break;
+                    case MotionEvent.ACTION_CANCEL:
+                        isMoving = false;
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        isMoving = true;
+                        break;
+                    default:
+                        isMoving = false;
+                }
+                return false;
+            }
+        });
     }
 
     public void initData(RequestManager manager, List<Banner> banners) {
@@ -87,12 +111,13 @@ public class ViewEventHeader extends RelativeLayout implements ViewPager.OnPageC
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        isMoving = true;
+        isMoving = mCurrentItem != position;
     }
 
     @Override
     public void onPageSelected(int position) {
         isMoving = false;
+        mCurrentItem = position;
     }
 
     @Override
