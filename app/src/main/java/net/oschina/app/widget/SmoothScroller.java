@@ -12,7 +12,7 @@ import java.lang.reflect.Field;
  * on 16-5-26.
  */
 public class SmoothScroller extends Scroller {
-    private int mDuration = 1500; //
+    private int mDuration = 1000; //
 
     public SmoothScroller(Context context) {
         super(context);

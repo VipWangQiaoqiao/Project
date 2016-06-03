@@ -36,6 +36,7 @@ public class ViewEventHeader extends RelativeLayout implements ViewPager.OnPageC
     private int mCurrentItem = 0;
     private Handler handler;
     private boolean isMoving = false;
+    private boolean isTouch = false;
 
     public ViewEventHeader(Context context) {
         super(context);
@@ -74,7 +75,7 @@ public class ViewEventHeader extends RelativeLayout implements ViewPager.OnPageC
                     handler.obtainMessage().sendToTarget();
                 }
             }
-        }, 2, 5, TimeUnit.SECONDS);
+        }, 2, 6, TimeUnit.SECONDS);
 
         vp_event.setOnTouchListener(new OnTouchListener() {
             @Override
@@ -82,17 +83,22 @@ public class ViewEventHeader extends RelativeLayout implements ViewPager.OnPageC
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_UP:
                         isMoving = false;
+                        isTouch = false;
                         break;
                     case MotionEvent.ACTION_DOWN:
+                        isTouch = true;
                         break;
                     case MotionEvent.ACTION_CANCEL:
+                        isTouch = false;
                         isMoving = false;
                         break;
                     case MotionEvent.ACTION_MOVE:
                         isMoving = true;
+                        isTouch = true;
                         break;
                     default:
                         isMoving = false;
+                        isTouch = false;
                 }
                 return false;
             }
@@ -123,7 +129,7 @@ public class ViewEventHeader extends RelativeLayout implements ViewPager.OnPageC
     @Override
     public void onPageScrollStateChanged(int state) {
         isMoving = state != ViewPager.SCROLL_STATE_IDLE;
-        if (!refreshLayout.isRefreshing() && !refreshLayout.isMoving())
+        if (!refreshLayout.isRefreshing() && !refreshLayout.isMoving() && isTouch)
             refreshLayout.setEnabled(state == ViewPager.SCROLL_STATE_IDLE);
     }
 
