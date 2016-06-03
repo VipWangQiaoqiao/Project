@@ -34,7 +34,7 @@ public class ViewEventHeader extends RelativeLayout implements ViewPager.OnPageC
     private ScheduledExecutorService mSchedule;
     private int mCurrentItem = 0;
     private Handler handler;
-
+    private boolean isMoving = false;
     public ViewEventHeader(Context context) {
         super(context);
         init(context);
@@ -67,8 +67,10 @@ public class ViewEventHeader extends RelativeLayout implements ViewPager.OnPageC
         mSchedule.scheduleWithFixedDelay(new Runnable() {
             @Override
             public void run() {
-                mCurrentItem = (mCurrentItem + 1) % banners.size();
-                handler.obtainMessage().sendToTarget();
+                if (!isMoving) {
+                    mCurrentItem = (mCurrentItem + 1) % banners.size();
+                    handler.obtainMessage().sendToTarget();
+                }
             }
         }, 2, 5, TimeUnit.SECONDS);
     }
@@ -85,20 +87,20 @@ public class ViewEventHeader extends RelativeLayout implements ViewPager.OnPageC
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+        isMoving = true;
     }
 
     @Override
     public void onPageSelected(int position) {
-
+        isMoving = false;
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
-        if (!refreshLayout.isRefreshing())
+        isMoving = state != ViewPager.SCROLL_STATE_IDLE;
+        if (!refreshLayout.isRefreshing() && !refreshLayout.isMoving())
             refreshLayout.setEnabled(state == ViewPager.SCROLL_STATE_IDLE);
     }
-
 
     private class EventPagerAdapter extends PagerAdapter {
         @Override

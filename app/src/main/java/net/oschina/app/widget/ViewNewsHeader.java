@@ -33,6 +33,7 @@ public class ViewNewsHeader extends RelativeLayout implements ViewPager.OnPageCh
     private SuperRefreshLayout refreshLayout;
     private ScheduledExecutorService mSchedule;
     private int mCurrentItem = 0;
+    private boolean isMoving = false;
     private Handler handler;
 
     public ViewNewsHeader(Context context) {
@@ -67,8 +68,10 @@ public class ViewNewsHeader extends RelativeLayout implements ViewPager.OnPageCh
         mSchedule.scheduleWithFixedDelay(new Runnable() {
             @Override
             public void run() {
-                mCurrentItem = (mCurrentItem + 1) % banners.size();
-                handler.obtainMessage().sendToTarget();
+                if (!isMoving) {
+                    mCurrentItem = (mCurrentItem + 1) % banners.size();
+                    handler.obtainMessage().sendToTarget();
+                }
             }
         }, 2, 5, TimeUnit.SECONDS);
     }
@@ -85,17 +88,18 @@ public class ViewNewsHeader extends RelativeLayout implements ViewPager.OnPageCh
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+        isMoving = true;
     }
 
     @Override
     public void onPageSelected(int position) {
-
+        isMoving = false;
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
-        if (!refreshLayout.isRefreshing())
+        isMoving = state != ViewPager.SCROLL_STATE_IDLE;
+        if (!refreshLayout.isRefreshing() && !refreshLayout.isMoving())
             refreshLayout.setEnabled(state == ViewPager.SCROLL_STATE_IDLE);
     }
 

@@ -31,6 +31,7 @@ public class SuperRefreshLayout extends SwipeRefreshLayout implements AbsListVie
 
     private int mTextColor;
     private int mFooterBackground;
+    private boolean mIsMoving = false;
 
     public SuperRefreshLayout(Context context) {
         this(context, null);
@@ -106,7 +107,11 @@ public class SuperRefreshLayout extends SwipeRefreshLayout implements AbsListVie
 
             case MotionEvent.ACTION_MOVE:
                 // 移动
+                mIsMoving = true;
                 mLastY = (int) event.getRawY();
+                break;
+            case MotionEvent.ACTION_UP:
+                mIsMoving = false;
                 break;
             default:
                 break;
@@ -187,5 +192,9 @@ public class SuperRefreshLayout extends SwipeRefreshLayout implements AbsListVie
      */
     public void setSuperRefreshLayoutListener(SuperRefreshLayoutListener loadListener) {
         mListener = loadListener;
+    }
+
+    public boolean isMoving() {
+        return mIsMoving;
     }
 }
