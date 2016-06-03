@@ -330,8 +330,8 @@ public class UIHelper {
                         StringUtils.toInt(newsId));
                 break;
             case net.oschina.app.bean.news.News.TYPE_NEWS:
-                //// TODO: 16-6-1
                 showNewsDetail(context, Integer.parseInt(String.valueOf(newsId)), news.getCommentCount());
+                break;
             default:
                 showUrlRedirect(context, news.getHref());
                 break;
