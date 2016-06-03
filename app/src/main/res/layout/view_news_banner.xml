@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
         android:contentDescription="@string/app_name"
-        android:scaleType="centerCrop" />
+        android:scaleType="fitXY" />
 
     <TextView
         android:id="@+id/tv_title"
