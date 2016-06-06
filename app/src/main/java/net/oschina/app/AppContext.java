@@ -55,8 +55,11 @@ public class AppContext extends BaseApplication {
         init();
         initLogin();
 
+        /*
+        // AppException 取消
         Thread.setDefaultUncaughtExceptionHandler(AppException
                 .getAppExceptionHandler(this));
+                */
         UIHelper.sendBroadcastForNotice(this);
     }
 
