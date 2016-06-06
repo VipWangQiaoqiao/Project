@@ -19,10 +19,9 @@ import android.view.animation.Animation.AnimationListener;
 
 /**
  * 应用启动界面
- * 
+ *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @created 2014年12月22日 上午11:51:56
- * 
  */
 public class AppStart extends Activity {
 
@@ -49,10 +48,12 @@ public class AppStart extends Activity {
             }
 
             @Override
-            public void onAnimationRepeat(Animation animation) {}
+            public void onAnimationRepeat(Animation animation) {
+            }
 
             @Override
-            public void onAnimationStart(Animation animation) {}
+            public void onAnimationStart(Animation animation) {
+            }
         });
     }
 
@@ -74,8 +75,10 @@ public class AppStart extends Activity {
         KJAsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                for (File file : folder.listFiles()) {
-                    file.delete();
+                if (folder != null && folder.isDirectory()) {
+                    for (File file : folder.listFiles()) {
+                        file.delete();
+                    }
                 }
             }
         });
