@@ -190,7 +190,7 @@ public class ShareDialog extends CommonDialog implements
 
                         @Override
                         public void onComplete(Bundle arg0, SHARE_MEDIA arg1) {
-                            mController.directShare(ShareDialog.this.context, SHARE_MEDIA.SINA, 
+                            mController.directShare(ShareDialog.this.context, SHARE_MEDIA.SINA,
                                     null);
                         }
 

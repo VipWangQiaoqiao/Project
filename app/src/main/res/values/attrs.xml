@@ -26,6 +26,7 @@
         <attr name="circle_indicator_stroke_width" format="dimension" />
         <attr name="circle_indicator_fill_color" format="color" />
         <attr name="circle_indicator_radius" format="dimension" />
+        <attr name="circle_indicator_space" format="dimension" />
         <attr name="circle_indicator_indicator_radius" format="dimension" />
     </declare-styleable>
     <declare-styleable name="LinePagerIndicator">

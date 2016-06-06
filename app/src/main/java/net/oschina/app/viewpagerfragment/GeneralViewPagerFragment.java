@@ -111,7 +111,7 @@ public class GeneralViewPagerFragment extends BaseViewPagerFragment implements
 
         }
 
-        Log.d(TAG, "onTabReselect: ----->" + mViewPager.getCurrentItem());
+        //Log.d(TAG, "onTabReselect: ----->" + mViewPager.getCurrentItem());
 //       Fragment currentFragment = getChildFragmentManager().getFragments()
 //               .get(currentIndex);
 //

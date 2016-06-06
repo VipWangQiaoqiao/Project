@@ -31,7 +31,7 @@ public class CirclePagerIndicator extends View implements PagerIndicator {
     private float mPageOffset;
     private boolean mCenterHorizontal;
     private boolean mIsFollow;
-
+    private float mIndicatorSpace;
 
     public CirclePagerIndicator(Context context) {
         this(context, null);
@@ -52,6 +52,7 @@ public class CirclePagerIndicator extends View implements PagerIndicator {
         mPaintIndicator.setStyle(Paint.Style.FILL);
         mPaintIndicator.setColor(a.getColor(R.styleable.CirclePagerIndicator_circle_indicator_fill_color, 0x0000ff));
         mRadius = a.getDimension(R.styleable.CirclePagerIndicator_circle_indicator_radius, 10);
+        mIndicatorSpace = a.getDimension(R.styleable.CirclePagerIndicator_circle_indicator_space, 20);
         mIndicatorRadius = a.getDimension(R.styleable.CirclePagerIndicator_circle_indicator_indicator_radius, 10);
         mIsFollow = a.getBoolean(R.styleable.CirclePagerIndicator_circle_indicator_follow, true);
         if (mIndicatorRadius < mRadius) mIndicatorRadius = mRadius;
@@ -81,7 +82,7 @@ public class CirclePagerIndicator extends View implements PagerIndicator {
         int paddingRight = getPaddingRight();
         int paddingTop = getPaddingTop();
 
-        final float circleAndSpace = 2 * mRadius + 20;//直径+圆的间隔
+        final float circleAndSpace = 2 * mRadius + mIndicatorSpace;//直径+圆的间隔
         final float yOffset = paddingTop + mRadius;//竖直方向圆心偏移量
         float xOffset = paddingLeft + mRadius;//水平方向圆心偏移量
 
@@ -125,17 +126,18 @@ public class CirclePagerIndicator extends View implements PagerIndicator {
 
         cX = xOffset + cx;
         cY = yOffset;
-
         canvas.drawCircle(cX, cY, mIndicatorRadius, mPaintIndicator);
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
     }
 
     @Override
     public void bindViewPager(ViewPager view) {
         if (mViewPager == view) {
             return;
-        }
-        if (mViewPager != null) {
-            mViewPager.addOnPageChangeListener(null);
         }
         if (view.getAdapter() == null) {
             throw new IllegalStateException("ViewPager does not set adapter");

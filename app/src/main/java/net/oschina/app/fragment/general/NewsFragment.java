@@ -1,5 +1,6 @@
 package net.oschina.app.fragment.general;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,24 +31,23 @@ import cz.msebera.android.httpclient.Header;
  */
 public class NewsFragment extends BaseListFragment<News> implements OnTabReselectListener {
 
-    private static final String TAG = "NewsFragment";
     private boolean isFirst = true;
 
     private static final String NEWS_BANNER = "news_banner";
 
     private ViewNewsHeader mHeaderView;
+    private Handler handler = new Handler();
 
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
         mHeaderView = new ViewNewsHeader(getActivity());
-
         mExeService.execute(new Runnable() {
             @Override
             public void run() {
                 final PageBean<Banner> pageBean = (PageBean<Banner>) CacheManager.readObject(getActivity(), NEWS_BANNER);
                 if (pageBean != null) {
-                    mRoot.post(new Runnable() {
+                    handler.post(new Runnable() {
                         @Override
                         public void run() {
                             mHeaderView.initData(getImgLoader(), pageBean.getItems());
@@ -130,13 +130,13 @@ public class NewsFragment extends BaseListFragment<News> implements OnTabReselec
 
     @Override
     public void onTabReselect() {
-        Log.d(TAG, "onTabReselect: hello news");
 
         if (!isFirst) {
             isFirst = true;
         }
         mIsRefresh = true;
-     //  requestData();
+        //  requestData();
 
+        Log.d("SSS", "onTabReselect: ---->hello blog");
     }
 }
