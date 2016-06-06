@@ -22,21 +22,32 @@ public class QuestionAdapter extends BaseListAdapter<Question> {
 
     @Override
     protected void convert(ViewHolder vh, Question item, int position) {
-
-        vh.setImageForNet(R.id.iv_ques_item_icon, item.getAuthorPortrait().trim(), R.drawable.widget_dface);
+        String authorPortrait = item.getAuthorPortrait();
+        if (authorPortrait != null) {
+            vh.setImageForNet(R.id.iv_ques_item_icon, authorPortrait.trim(), R.drawable.widget_dface);
+        }
         TextView title = vh.getView(R.id.tv_ques_item_title);
-        title.setText(item.getTitle().trim());
+        String title1 = item.getTitle();
+        if (title1 != null) {
+            title.setText(title1.trim());
+        }
         TextView content = vh.getView(R.id.tv_ques_item_content);
-        String body = item.getBody().trim();
-        if (body.length() > 0 && !body.equals("")) {
-            content.setText(body);
-            content.setVisibility(View.VISIBLE);
-        } else {
-            content.setVisibility(View.GONE);
+        String body = item.getBody();
+        if (body != null) {
+            body = body.trim();
+            if (body.length() > 0 && !body.equals("")) {
+                content.setText(body);
+                content.setVisibility(View.VISIBLE);
+            } else {
+                content.setVisibility(View.GONE);
+            }
         }
         TextView history = vh.getView(R.id.tv_ques_item_history);
-        String author = item.getAuthor().trim();
-        history.setText((author.length() > 9 ? author.substring(0, 9) : author) + "  " + StringUtils.friendly_time(item.getPubDate().trim()));
+        String author = item.getAuthor();
+        if (author != null) {
+            author = author.trim();
+            history.setText((author.length() > 9 ? author.substring(0, 9) : author.trim()) + "  " + StringUtils.friendly_time(item.getPubDate().trim()));
+        }
         TextView see = vh.getView(R.id.tv_info_view);
         see.setText(item.getViewCount() + "");
         TextView answer = vh.getView(R.id.tv_info_comment);

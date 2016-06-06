@@ -1,7 +1,7 @@
 package net.oschina.app.viewpagerfragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.View;
 
 import net.oschina.app.R;
@@ -10,8 +10,8 @@ import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.BaseViewPagerFragment;
 import net.oschina.app.bean.BlogList;
 import net.oschina.app.bean.NewsList;
-import net.oschina.app.fragment.general.EventFragment;
 import net.oschina.app.fragment.general.BlogFragment;
+import net.oschina.app.fragment.general.EventFragment;
 import net.oschina.app.fragment.general.NewsFragment;
 import net.oschina.app.fragment.general.QuestionFragment;
 import net.oschina.app.interf.OnTabReselectListener;
@@ -22,10 +22,14 @@ import net.oschina.app.interf.OnTabReselectListener;
 public class GeneralViewPagerFragment extends BaseViewPagerFragment implements
         OnTabReselectListener {
 
+    private static final String TAG = "GeneralViewPagerFragment";
+
+
     @Override
     protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
         String[] title = getResources().getStringArray(
                 R.array.general_viewpage_arrays);
+
         adapter.addTab(title[0], "news", NewsFragment.class,
                 getBundle(NewsList.CATALOG_ALL));
         adapter.addTab(title[1], "latest_blog", BlogFragment.class,
@@ -76,16 +80,45 @@ public class GeneralViewPagerFragment extends BaseViewPagerFragment implements
 
     @Override
     public void onTabReselect() {
-        try {
-            int currentIndex = mViewPager.getCurrentItem();
-            Fragment currentFragment = getChildFragmentManager().getFragments()
-                    .get(currentIndex);
-            if (currentFragment != null
-                    && currentFragment instanceof OnTabReselectListener) {
-                OnTabReselectListener listener = (OnTabReselectListener) currentFragment;
-                listener.onTabReselect();
-            }
-        } catch (NullPointerException e) {
+        int currentIndex = mViewPager.getCurrentItem();
+        switch (currentIndex) {
+            case 0:
+                NewsFragment newsFragment = (NewsFragment) mTabsAdapter.getItem(currentIndex);
+                if (newsFragment != null) {
+                    newsFragment.onTabReselect();
+                }
+                break;
+            case 1:
+                BlogFragment blogFragment = (BlogFragment) mTabsAdapter.getItem(currentIndex);
+                if (blogFragment != null) {
+                    blogFragment.onTabReselect();
+                }
+                break;
+            case 2:
+                QuestionFragment questionFragment = (QuestionFragment) mTabsAdapter.getItem(currentIndex);
+                if (questionFragment != null) {
+                    questionFragment.onTabReselect();
+                }
+                break;
+            case 3:
+                EventFragment eventFragment = (EventFragment) mTabsAdapter.getItem(currentIndex);
+                if (eventFragment != null) {
+                    eventFragment.onTabReselect();
+                }
+                break;
+            default:
+                break;
+
         }
+
+        Log.d(TAG, "onTabReselect: ----->" + mViewPager.getCurrentItem());
+//       Fragment currentFragment = getChildFragmentManager().getFragments()
+//               .get(currentIndex);
+//
+//       if (currentFragment != null
+//                && currentFragment instanceof OnTabReselectListener) {
+//           OnTabReselectListener listener = (OnTabReselectListener) currentFragment;
+//           listener.onTabReselect();
+//        }
     }
 }
