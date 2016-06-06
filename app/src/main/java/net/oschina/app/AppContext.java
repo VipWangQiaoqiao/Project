@@ -5,10 +5,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.PersistentCookieStore;
-
 
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.base.BaseApplication;
@@ -57,8 +55,11 @@ public class AppContext extends BaseApplication {
         init();
         initLogin();
 
+        /*
+        // AppException 取消
         Thread.setDefaultUncaughtExceptionHandler(AppException
                 .getAppExceptionHandler(this));
+                */
         UIHelper.sendBroadcastForNotice(this);
     }
 
@@ -339,7 +340,8 @@ public class AppContext extends BaseApplication {
 
     //夜间模式
     public static boolean getNightModeSwitch() {
-        return getPreferences().getBoolean(KEY_NIGHT_MODE_SWITCH, false);
+        //return getPreferences().getBoolean(KEY_NIGHT_MODE_SWITCH, false);
+        return false;
     }
 
     // 设置夜间模式
