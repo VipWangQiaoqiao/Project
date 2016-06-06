@@ -127,6 +127,30 @@
 
             </LinearLayout>
 
+            <View
+                style="@style/h_line"
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginBottom="1px"
+                android:layout_marginLeft="14dp"
+                android:background="@color/list_divider_color" />
+
+            <LinearLayout
+                android:id="@+id/rl_note_book_avtivities"
+                style="@style/option_item_rl"
+                android:background="@android:color/white">
+
+                <ImageView
+                    style="@style/option_item_img"
+                    android:background="@drawable/icon_my_note"
+                    android:contentDescription="@null" />
+
+                <TextView
+                    style="@style/option_item_text"
+                    android:text="@string/note" />
+
+            </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/rl_feedback"
                 style="@style/option_item_rl"

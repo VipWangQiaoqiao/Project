@@ -233,6 +233,7 @@ public class MyInformationFragment extends BaseFragment {
         view.findViewById(R.id.rl_feedback).setOnClickListener(this);
         view.findViewById(R.id.rl_info_avtivities).setOnClickListener(this);
         view.findViewById(R.id.rl_setting).setOnClickListener(this);
+        view.findViewById(R.id.rl_note_book_avtivities).setOnClickListener(this);
         mUserUnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -400,9 +401,12 @@ public class MyInformationFragment extends BaseFragment {
                             .getName());
                     break;
                 case R.id.rl_info_avtivities:
-                    Bundle bundle=new Bundle();
-                    bundle.putInt(SimpleBackActivity.BUNDLE_KEY_ARGS,1);
-                    UIHelper.showSimpleBack(getActivity(), SimpleBackPage.MY_EVENT,bundle);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(SimpleBackActivity.BUNDLE_KEY_ARGS, 1);
+                    UIHelper.showSimpleBack(getActivity(), SimpleBackPage.MY_EVENT, bundle);
+                    break;
+                case R.id.rl_note_book_avtivities:
+                    UIHelper.showSimpleBack(getActivity(), SimpleBackPage.NOTE);
                     break;
                 default:
                     break;
