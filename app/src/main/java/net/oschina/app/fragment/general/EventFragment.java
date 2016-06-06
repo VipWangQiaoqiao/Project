@@ -1,5 +1,6 @@
 package net.oschina.app.fragment.general;
 
+import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -31,18 +32,18 @@ public class EventFragment extends BaseListFragment<Event> {
     private boolean isFirst = true;
     private static final String EVENT_BANNER = "event_banner";
     private ViewEventHeader mHeaderView;
+    private Handler handler = new Handler();
 
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
         mHeaderView = new ViewEventHeader(getActivity());
-
         mExeService.execute(new Runnable() {
             @Override
             public void run() {
                 final PageBean<Banner> pageBean = (PageBean<Banner>) CacheManager.readObject(getActivity(), EVENT_BANNER);
                 if (pageBean != null) {
-                    mRoot.post(new Runnable() {
+                    handler.post(new Runnable() {
                         @Override
                         public void run() {
                             mHeaderView.initData(getImgLoader(), pageBean.getItems());

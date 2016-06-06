@@ -1,5 +1,6 @@
 package net.oschina.app.fragment.general;
 
+import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -36,18 +37,17 @@ public class NewsFragment extends BaseListFragment<News> {
     private static final String NEWS_BANNER = "news_banner";
 
     private ViewNewsHeader mHeaderView;
-
+    private Handler handler = new Handler();
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
         mHeaderView = new ViewNewsHeader(getActivity());
-
         mExeService.execute(new Runnable() {
             @Override
             public void run() {
                 final PageBean<Banner> pageBean = (PageBean<Banner>) CacheManager.readObject(getActivity(), NEWS_BANNER);
                 if (pageBean != null) {
-                    mRoot.post(new Runnable() {
+                    handler.post(new Runnable() {
                         @Override
                         public void run() {
                             mHeaderView.initData(getImgLoader(), pageBean.getItems());
