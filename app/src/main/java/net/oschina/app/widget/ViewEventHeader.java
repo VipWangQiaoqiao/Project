@@ -36,6 +36,7 @@ public class ViewEventHeader extends RelativeLayout implements ViewPager.OnPageC
     private int mCurrentItem = 0;
     private Handler handler;
     private boolean isMoving = false;
+    private boolean isScroll = false;
 
     public ViewEventHeader(Context context) {
         super(context);
@@ -69,12 +70,12 @@ public class ViewEventHeader extends RelativeLayout implements ViewPager.OnPageC
         mSchedule.scheduleWithFixedDelay(new Runnable() {
             @Override
             public void run() {
-                if (!isMoving) {
+                if (!isMoving && isScroll) {
                     mCurrentItem = (mCurrentItem + 1) % banners.size();
                     handler.obtainMessage().sendToTarget();
                 }
             }
-        }, 2, 5, TimeUnit.SECONDS);
+        }, 2, 6, TimeUnit.SECONDS);
 
         vp_event.setOnTouchListener(new OnTouchListener() {
             @Override
@@ -82,17 +83,15 @@ public class ViewEventHeader extends RelativeLayout implements ViewPager.OnPageC
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_UP:
                         isMoving = false;
-                        break;
-                    case MotionEvent.ACTION_DOWN:
+                        refreshLayout.setEnabled(true);
                         break;
                     case MotionEvent.ACTION_CANCEL:
                         isMoving = false;
                         break;
                     case MotionEvent.ACTION_MOVE:
+                        refreshLayout.setEnabled(false);
                         isMoving = true;
                         break;
-                    default:
-                        isMoving = false;
                 }
                 return false;
             }
@@ -118,13 +117,15 @@ public class ViewEventHeader extends RelativeLayout implements ViewPager.OnPageC
     public void onPageSelected(int position) {
         isMoving = false;
         mCurrentItem = position;
+        refreshLayout.setEnabled(true);
+        isScroll = false;
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
         isMoving = state != ViewPager.SCROLL_STATE_IDLE;
-        if (!refreshLayout.isRefreshing() && !refreshLayout.isMoving())
-            refreshLayout.setEnabled(state == ViewPager.SCROLL_STATE_IDLE);
+        isScroll = state == ViewPager.SCROLL_STATE_IDLE;
+        refreshLayout.setEnabled(state == ViewPager.SCROLL_STATE_IDLE);
     }
 
     private class EventPagerAdapter extends PagerAdapter {
