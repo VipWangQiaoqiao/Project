@@ -114,22 +114,6 @@ public class ViewPageFragmentAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         ViewPageInfo info = mTabs.get(position);
-//        switch (position) {
-//            case 0:
-//                NewsFragment newsFragment = new NewsFragment();
-//                return newsFragment;
-//            case 1:
-//                BlogFragment blogFragment = new BlogFragment();
-//                return blogFragment;
-//            case 2:
-//                QuestionFragment questionFragment = new QuestionFragment();
-//                return questionFragment;
-//            case 3:
-//                EventFragment eventFragment = new EventFragment();
-//                return eventFragment;
-//            default:
-//                return null;
-//        }
         return Fragment.instantiate(mContext, info.clss.getName(), info.args);
     }
 
