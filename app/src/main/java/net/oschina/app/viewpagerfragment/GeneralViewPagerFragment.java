@@ -22,6 +22,12 @@ import net.oschina.app.interf.OnTabReselectListener;
  */
 public class GeneralViewPagerFragment extends BaseViewPagerFragment implements
         OnTabReselectListener {
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
     @Override
     protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
         String[] title = getResources().getStringArray(
