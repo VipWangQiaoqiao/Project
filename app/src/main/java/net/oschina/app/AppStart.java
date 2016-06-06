@@ -1,14 +1,5 @@
 package net.oschina.app;
 
-import java.io.File;
-
-import net.oschina.app.ui.MainActivity;
-import net.oschina.app.util.TDevice;
-
-import org.kymjs.kjframe.http.KJAsyncTask;
-import org.kymjs.kjframe.utils.FileUtils;
-import org.kymjs.kjframe.utils.PreferenceHelper;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,12 +8,20 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 
+import net.oschina.app.ui.MainActivity;
+import net.oschina.app.util.TDevice;
+
+import org.kymjs.kjframe.http.KJAsyncTask;
+import org.kymjs.kjframe.utils.FileUtils;
+import org.kymjs.kjframe.utils.PreferenceHelper;
+
+import java.io.File;
+
 /**
  * 应用启动界面
- * 
+ *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @created 2014年12月22日 上午11:51:56
- * 
  */
 public class AppStart extends Activity {
 
@@ -49,10 +48,12 @@ public class AppStart extends Activity {
             }
 
             @Override
-            public void onAnimationRepeat(Animation animation) {}
+            public void onAnimationRepeat(Animation animation) {
+            }
 
             @Override
-            public void onAnimationStart(Animation animation) {}
+            public void onAnimationStart(Animation animation) {
+            }
         });
     }
 
@@ -71,14 +72,20 @@ public class AppStart extends Activity {
 
     private void cleanImageCache() {
         final File folder = FileUtils.getSaveFolder("OSChina/imagecache");
-        KJAsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                for (File file : folder.listFiles()) {
-                    file.delete();
+        File[] files = folder.listFiles();
+
+        if (files != null && files.length > 0) {
+
+            KJAsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    for (File file : folder.listFiles()) {
+                        file.delete();
+                    }
                 }
-            }
-        });
+            });
+
+        }
     }
 
     /**

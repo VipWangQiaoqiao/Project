@@ -1,12 +1,13 @@
 package net.oschina.app.fragment.general;
 
 
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 
+import net.oschina.app.R;
 import net.oschina.app.adapter.base.BaseListAdapter;
 import net.oschina.app.adapter.general.BlogAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
@@ -19,9 +20,7 @@ import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.ui.blog.BlogDetailActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 
-import java.io.Serializable;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,10 +29,9 @@ import java.util.List;
 public class BlogFragment extends BaseListFragment<Blog> implements OnTabReselectListener {
 
     public static final String BUNDLE_BLOG_TYPE = "BUNDLE_BLOG_TYPE";
-    private static final String TAG = "BlogFragment";
-    private static final String HISTORY_BEAN = "history_bean";
+
+    public static final String HISTORY_BLOG = "history_blog";
     private boolean isFirst = true;
-    private List<Blog> isHistoryBlogs = new ArrayList<>(10);
 
     @Override
     protected void initData() {
@@ -51,7 +49,7 @@ public class BlogFragment extends BaseListFragment<Blog> implements OnTabReselec
         super.requestData();
 
         OSChinaApi.getBlogList(mIsRefresh ? OSChinaApi.CATALOG_BLOG_HEAT : OSChinaApi.CATALOG_BLOG_NORMAL,
-                mIsRefresh ? mBean.getPrevPageToken() : mBean.getNextPageToken(), mHandler);
+                (mIsRefresh ? (mBean != null ? mBean.getPrevPageToken() : null) : (mBean != null ? mBean.getNextPageToken() : null)), mHandler);
 
     }
 
@@ -68,36 +66,19 @@ public class BlogFragment extends BaseListFragment<Blog> implements OnTabReselec
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
         Blog blog = mAdapter.getItem(position);
         if (blog != null) {
-
             BlogDetailActivity.show(getActivity(), blog.getId());
-            blog.setIsHistory(1);
-            mAdapter.updateItem(position, blog);
-            isHistoryBlogs.add(blog);
+            TextView title = (TextView) view.findViewById(R.id.tv_item_blog_title);
+            TextView content = (TextView) view.findViewById(R.id.tv_item_blog_body);
 
-            CACHE_NAME = HISTORY_BEAN;
-            CacheManager.saveObject(getActivity(), (Serializable) isHistoryBlogs, CACHE_NAME);
+            updateTextColor(title, content);
+            saveToReadedList(BlogFragment.HISTORY_BLOG, blog.getId() + "");
 
         }
     }
 
-
-    @SuppressWarnings("unchecked")
-    private long HistoryPosition(int id) {
-        long tempId = -1;
-
-        List<Blog> blogs = (List<Blog>) CacheManager.readObject(getActivity(), HISTORY_BEAN);
-        if (blogs != null && !blogs.isEmpty()) {
-            for (Blog b : blogs) {
-                if (b.getId() == id && b.getIsHistory() == 1) {
-                    return b.getId();
-                }
-            }
-        }
-
-        return tempId;
-    }
 
     @Override
     protected void setListData(ResultBean<PageBean<Blog>> resultBean) {
@@ -107,6 +88,7 @@ public class BlogFragment extends BaseListFragment<Blog> implements OnTabReselec
             List<Blog> blogs = resultBean.getResult().getItems();
             Blog blog = new Blog();
             blog.setViewType(Blog.VIEW_TYPE_TITLE_HEAT);
+
             blogs.add(0, blog);
             mBean.setItems(blogs);
             mAdapter.clear();
@@ -128,10 +110,12 @@ public class BlogFragment extends BaseListFragment<Blog> implements OnTabReselec
                     }
                 });
             }
+
             mRefreshLayout.setCanLoadMore();
             mBean.setPrevPageToken(resultBean.getResult().getPrevPageToken());
             mAdapter.addItem(blogs);
         }
+
 
         if (resultBean.getResult().getItems().size() < 20) {
             setFooterType(TYPE_NO_MORE);
@@ -153,8 +137,5 @@ public class BlogFragment extends BaseListFragment<Blog> implements OnTabReselec
             isFirst = true;
         }
         mIsRefresh = true;
-        //  requestData();
-
-        Log.d(TAG, "onTabReselect: ---->hello blog");
     }
 }

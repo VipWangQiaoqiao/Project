@@ -176,6 +176,33 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
 
     }
 
+    /**
+     * save readed list
+     *
+     * @param fileName fileName
+     * @param key      key
+     */
+    protected void saveToReadedList(String fileName, String key) {
+
+        // 放入已读列表
+        AppContext.putReadedPostList(fileName, key, "true");
+    }
+
+    /**
+     * update textColor
+     *
+     * @param title   title
+     * @param content content
+     */
+    protected void updateTextColor(TextView title, TextView content) {
+        if (title != null) {
+            title.setTextColor(getResources().getColor(R.color.count_text_color_light));
+        }
+        if (content != null) {
+            content.setTextColor(getResources().getColor(R.color.count_text_color_light));
+        }
+    }
+
     protected void onRequestError(int code) {
         setFooterType(TYPE_NET_ERROR);
         if (mAdapter.getDatas().size() == 0)

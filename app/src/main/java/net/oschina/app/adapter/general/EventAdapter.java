@@ -1,9 +1,11 @@
 package net.oschina.app.adapter.general;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewHolder;
 import net.oschina.app.adapter.base.BaseListAdapter;
 import net.oschina.app.bean.event.Event;
+import net.oschina.app.fragment.general.EventFragment;
 import net.oschina.app.util.StringUtils;
 
 /**
@@ -21,7 +23,9 @@ public class EventAdapter extends BaseListAdapter<Event> {
         vh.setImageForNet(R.id.iv_event, item.getImg());
         vh.setText(R.id.tv_event_pub_date, StringUtils.getDateString(item.getStartDate()));
         vh.setText(R.id.tv_event_member, item.getApplyCount() + "人参与");
-        vh.setTextColor(R.id.tv_event_title, mCallback.getContext().getResources().getColor(R.color.day_textColor));
+        vh.setTextColor(R.id.tv_event_title,
+                AppContext.isOnReadedPostList(EventFragment.HISTORY_EVENT, item.getId() + "") ?
+                        (mCallback.getContext().getResources().getColor(R.color.count_text_color_light)) : (mCallback.getContext().getResources().getColor(R.color.day_textColor)));
         switch (item.getStatus()) {
             case Event.STATUS_END:
                 vh.setText(R.id.tv_event_state, R.string.event_status_end, R.drawable.bg_event_end, 0x1a000000);

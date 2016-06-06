@@ -2,10 +2,12 @@ package net.oschina.app.adapter.general;
 
 import android.widget.TextView;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewHolder;
 import net.oschina.app.adapter.base.BaseListAdapter;
 import net.oschina.app.bean.blog.Blog;
+import net.oschina.app.fragment.general.BlogFragment;
 import net.oschina.app.util.StringUtils;
 
 import java.util.List;
@@ -16,8 +18,6 @@ import java.util.List;
  * desc:
  */
 public class BlogAdapter extends BaseListAdapter<Blog> {
-
-    private static final String TAG = "BlogAdapter";
 
     public BlogAdapter(Callback callback) {
         super(callback);
@@ -59,10 +59,13 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
                 if (title1 != null) {
                     title.setText(title1.trim());
                 }
-                int isHistory = item.getIsHistory();
-                if (isHistory == 1) {
+
+                if (AppContext.isOnReadedPostList(BlogFragment.HISTORY_BLOG, item.getId() + "")) {
                     title.setTextColor(mCallback.getContext().getResources().getColor(R.color.count_text_color_light));
                     content.setTextColor(mCallback.getContext().getResources().getColor(R.color.count_text_color_light));
+                } else {
+                    title.setTextColor(mCallback.getContext().getResources().getColor(R.color.blog_title_text_color_light));
+                    content.setTextColor(mCallback.getContext().getResources().getColor(R.color.ques_bt_text_color_dark));
                 }
 
                 String body = item.getBody();
@@ -78,6 +81,7 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
 
                 see.setText(item.getViewCount() + "");
                 answer.setText(item.getCommentCount() + "");
+
                 break;
         }
     }

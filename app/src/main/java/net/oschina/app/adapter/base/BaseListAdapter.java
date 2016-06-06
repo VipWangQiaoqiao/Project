@@ -43,6 +43,9 @@ public abstract class BaseListAdapter<T> extends BaseAdapter implements ViewHold
         return null;
     }
 
+
+
+
     @Override
     public long getItemId(int position) {
         return position;

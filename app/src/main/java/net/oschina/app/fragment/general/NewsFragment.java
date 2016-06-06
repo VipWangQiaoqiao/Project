@@ -4,11 +4,13 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
+import net.oschina.app.R;
 import net.oschina.app.adapter.base.BaseListAdapter;
 import net.oschina.app.adapter.general.NewsAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
@@ -31,6 +33,7 @@ import cz.msebera.android.httpclient.Header;
  */
 public class NewsFragment extends BaseListFragment<News> implements OnTabReselectListener {
 
+    public static final String HISTORY_NEWS = "history_news";
     private boolean isFirst = true;
 
     private static final String NEWS_BANNER = "news_banner";
@@ -80,6 +83,11 @@ public class NewsFragment extends BaseListFragment<News> implements OnTabReselec
         News news = mAdapter.getItem(position - 1);
         if (news != null) {
             UIHelper.showNewsDetail(getActivity(), news);
+            TextView title = (TextView) view.findViewById(R.id.tv_title);
+            TextView content = (TextView) view.findViewById(R.id.tv_description);
+            updateTextColor(title, content);
+            saveToReadedList(HISTORY_NEWS, news.getId() + "");
+
         }
     }
 
