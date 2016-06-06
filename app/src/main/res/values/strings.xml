@@ -248,6 +248,7 @@
     <string name="message">我的消息</string>
     <string name="team">我的团队</string>
     <string name="note">便签</string>
+    <string name="my_note">我的便签</string>
     <string name="str_feedback">反馈</string>
     <string name="bookmarks">收藏夹</string>
     <string name="user_score">积分</string>

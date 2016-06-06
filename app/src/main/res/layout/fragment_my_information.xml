@@ -147,7 +147,7 @@
 
                 <TextView
                     style="@style/option_item_text"
-                    android:text="@string/note" />
+                    android:text="@string/my_note" />
 
             </LinearLayout>
 
