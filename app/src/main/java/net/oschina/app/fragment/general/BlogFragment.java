@@ -19,7 +19,9 @@ import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.ui.blog.BlogDetailActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,7 +31,9 @@ public class BlogFragment extends BaseListFragment<Blog> implements OnTabReselec
 
     public static final String BUNDLE_BLOG_TYPE = "BUNDLE_BLOG_TYPE";
     private static final String TAG = "BlogFragment";
+    private static final String HISTORY_BEAN = "history_bean";
     private boolean isFirst = true;
+    private List<Blog> isHistoryBlogs = new ArrayList<>(10);
 
     @Override
     protected void initData() {
@@ -66,8 +70,33 @@ public class BlogFragment extends BaseListFragment<Blog> implements OnTabReselec
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Blog blog = mAdapter.getItem(position);
         if (blog != null) {
+
             BlogDetailActivity.show(getActivity(), blog.getId());
+            blog.setIsHistory(1);
+            mAdapter.updateItem(position, blog);
+            isHistoryBlogs.add(blog);
+
+            CACHE_NAME = HISTORY_BEAN;
+            CacheManager.saveObject(getActivity(), (Serializable) isHistoryBlogs, CACHE_NAME);
+
         }
+    }
+
+
+    @SuppressWarnings("unchecked")
+    private long HistoryPosition(int id) {
+        long tempId = -1;
+
+        List<Blog> blogs = (List<Blog>) CacheManager.readObject(getActivity(), HISTORY_BEAN);
+        if (blogs != null && !blogs.isEmpty()) {
+            for (Blog b : blogs) {
+                if (b.getId() == id && b.getIsHistory() == 1) {
+                    return b.getId();
+                }
+            }
+        }
+
+        return tempId;
     }
 
     @Override
@@ -124,7 +153,7 @@ public class BlogFragment extends BaseListFragment<Blog> implements OnTabReselec
             isFirst = true;
         }
         mIsRefresh = true;
-      //  requestData();
+        //  requestData();
 
         Log.d(TAG, "onTabReselect: ---->hello blog");
     }
