@@ -17,6 +17,29 @@ android {
     lintOptions {
         abortOnError false
     }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    splits{
+        abi{
+            enable true
+            reset()
+            include 'armeabi'
+            universalApk true
+        }
+    }
+
+    buildTypes {
+        all {
+            ndk {
+                abiFilters "armeabi"
+            }
+        }
+    }
 }
 
 

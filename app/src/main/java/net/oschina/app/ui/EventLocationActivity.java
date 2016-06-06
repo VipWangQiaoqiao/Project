@@ -68,7 +68,11 @@ public class EventLocationActivity extends BaseActivity implements
 	}
 
 	protected void onCreate(Bundle savedInstanceState) {
-		SDKInitializer.initialize(getApplicationContext());
+		try {
+			SDKInitializer.initialize(getApplication());
+		}catch (Exception e){
+			e.printStackTrace();
+		}
 		super.onCreate(savedInstanceState);
 	}
 
