@@ -24,6 +24,7 @@ android {
         }
     }
 
+    /*
     splits{
         abi{
             enable true
@@ -40,6 +41,8 @@ android {
             }
         }
     }
+    */
+
     signingConfigs {
         all {
             storeFile file("oschina.keystore")

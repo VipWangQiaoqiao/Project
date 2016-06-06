@@ -132,12 +132,11 @@
         <activity
             android:name=".ui.FindUserActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.EventLocationActivity" />
         <activity
             android:name=".ui.LoginActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="登录"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.LoginBindActivityChooseActivity"
             android:label="登录"

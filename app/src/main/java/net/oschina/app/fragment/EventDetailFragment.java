@@ -49,11 +49,8 @@ public class EventDetailFragment extends CommonDetailFragment<Post> {
     @Bind(R.id.tv_event_end_time)
     TextView mTvEndTime;
 
-    @Bind(R.id.tv_event_spot)
-    TextView mTvSpot;
-
-    @Bind(R.id.rl_event_location)
-    View mLocation;
+    @Bind(R.id.tv_event_location)
+    TextView mTvLocation;
 
     @Bind(R.id.bt_event_attend)
     Button mBtAttend;// 出席人员
@@ -69,7 +66,6 @@ public class EventDetailFragment extends CommonDetailFragment<Post> {
     @Override
     public void initView(View view) {
         super.initView(view);
-        mLocation.setOnClickListener(this);
         mBtAttend.setOnClickListener(this);
         mBtEventApply.setOnClickListener(this);
     }
@@ -124,8 +120,9 @@ public class EventDetailFragment extends CommonDetailFragment<Post> {
                         .getStartTime())));
         mTvEndTime.setText(String.format(getString(R.string.event_end_time),
                 StringUtils.getDateString(mDetail.getEvent().getEndTime())));
-        mTvSpot.setText(mDetail.getEvent().getCity() + " "
-                + mDetail.getEvent().getSpot());
+
+        mTvLocation.setText(String.format(getString(R.string.event_location), mDetail.getEvent().getCity() + " "
+                + mDetail.getEvent().getSpot()));
 
         // 站外活动
         if (mDetail.getEvent().getCategory() == 4) {
@@ -217,10 +214,6 @@ public class EventDetailFragment extends CommonDetailFragment<Post> {
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
-            case R.id.rl_event_location:
-                UIHelper.showEventLocation(getActivity(), mDetail.getEvent()
-                        .getCity(), mDetail.getEvent().getSpot());
-                break;
             case R.id.bt_event_attend:
                 showEventApplies();
                 break;

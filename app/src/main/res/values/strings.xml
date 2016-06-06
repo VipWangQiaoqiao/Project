@@ -296,6 +296,7 @@
 
     <string name="event_start_time">开始：%s</string>
     <string name="event_end_time">结束：%s</string>
+    <string name="event_location">位置：%s</string>
 
     <string name="report">举报</string>
     <string name="report_link">链接地址</string>
