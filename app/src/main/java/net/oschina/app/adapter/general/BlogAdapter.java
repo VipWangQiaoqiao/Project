@@ -17,6 +17,8 @@ import java.util.List;
  */
 public class BlogAdapter extends BaseListAdapter<Blog> {
 
+    private static final String TAG = "BlogAdapter";
+
     public BlogAdapter(Callback callback) {
         super(callback);
     }
@@ -56,6 +58,11 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
                 String title1 = item.getTitle();
                 if (title1 != null) {
                     title.setText(title1.trim());
+                }
+                int isHistory = item.getIsHistory();
+                if (isHistory == 1) {
+                    title.setTextColor(mCallback.getContext().getResources().getColor(R.color.count_text_color_light));
+                    content.setTextColor(mCallback.getContext().getResources().getColor(R.color.count_text_color_light));
                 }
 
                 String body = item.getBody();
