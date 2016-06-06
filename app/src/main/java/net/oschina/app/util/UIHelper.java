@@ -67,7 +67,6 @@ import net.oschina.app.team.fragment.TeamActiveFragment;
 import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.team.ui.TeamNewIssueActivity;
 import net.oschina.app.ui.DetailActivity;
-import net.oschina.app.ui.EventLocationActivity;
 import net.oschina.app.ui.LoginActivity;
 import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.ui.SimpleBackActivity;
@@ -1048,19 +1047,6 @@ public class UIHelper {
         args.putParcelable(Comment.BUNDLE_KEY_COMMENT, replyComment);
         intent.putExtras(args);
         context.sendBroadcast(intent);
-    }
-
-    /**
-     * 显示活动地址地图信息
-     *
-     * @param context
-     */
-    public static void showEventLocation(Context context, String city,
-                                         String location) {
-        Intent intent = new Intent(context, EventLocationActivity.class);
-        intent.putExtra("city", city);
-        intent.putExtra("location", location);
-        context.startActivity(intent);
     }
 
     public static void showCreateNewIssue(Context context, Team team,
