@@ -1,6 +1,7 @@
 package net.oschina.app.fragment.general;
 
 
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -14,6 +15,7 @@ import net.oschina.app.bean.base.ResultBean;
 import net.oschina.app.bean.blog.Blog;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.fragment.base.BaseListFragment;
+import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.ui.blog.BlogDetailActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 
@@ -23,9 +25,10 @@ import java.util.List;
 /**
  * 博客界面
  */
-public class BlogFragment extends BaseListFragment<Blog> {
+public class BlogFragment extends BaseListFragment<Blog> implements OnTabReselectListener {
 
     public static final String BUNDLE_BLOG_TYPE = "BUNDLE_BLOG_TYPE";
+    private static final String TAG = "BlogFragment";
     private boolean isFirst = true;
 
     @Override
@@ -114,4 +117,15 @@ public class BlogFragment extends BaseListFragment<Blog> {
 
     }
 
+    @Override
+    public void onTabReselect() {
+
+        if (!isFirst) {
+            isFirst = true;
+        }
+        mIsRefresh = true;
+      //  requestData();
+
+        Log.d(TAG, "onTabReselect: ---->hello blog");
+    }
 }

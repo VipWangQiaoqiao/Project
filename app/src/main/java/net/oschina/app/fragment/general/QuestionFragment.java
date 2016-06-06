@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,6 +22,7 @@ import net.oschina.app.bean.base.ResultBean;
 import net.oschina.app.bean.question.Question;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.fragment.base.BaseListFragment;
+import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.UIHelper;
 
@@ -29,13 +31,14 @@ import java.lang.reflect.Type;
 /**
  * 技术问答界面
  */
-public class QuestionFragment extends BaseListFragment<Question> {
+public class QuestionFragment extends BaseListFragment<Question> implements OnTabReselectListener {
 
     private static final String QUES_ASK = "ques_ask";
     private static final String QUES_SHARE = "ques_share";
     private static final String QUES_COMPOSITE = "ques_composite";
     private static final String QUES_PROFESSION = "ques_profession";
     private static final String QUES_WEBSITE = "ques_website";
+    private static final String TAG = "QuestionFragment";
     private int catalog = 1;
     private QuesActionAdapter quesActionAdapter;
     private int[] positions = {1, 0, 0, 0, 0};
@@ -199,5 +202,12 @@ public class QuestionFragment extends BaseListFragment<Question> {
             UIHelper.showPostDetail(getActivity(), (int) question.getId(),
                     question.getCommentCount());
         }
+    }
+
+    @Override
+    public void onTabReselect() {
+        Log.d(TAG, "onTabReselect: ----->hello question");
+        //verifyCacheType();
+        //requestData();
     }
 }

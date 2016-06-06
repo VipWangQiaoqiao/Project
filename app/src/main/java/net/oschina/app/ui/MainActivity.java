@@ -48,7 +48,6 @@ import butterknife.ButterKnife;
 //import com.networkbench.agent.impl.NBSAppAgent;
 
 public class MainActivity extends AppCompatActivity implements
-        NavigationDrawerFragment.NavigationDrawerCallbacks,
         OnTabChangeListener, BaseViewInterface, View.OnClickListener,
         OnTouchListener {
 
@@ -78,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements
                     ((MyInformationFragment) fragment).setNotice();
                 } else {
                     if (activeCount > 0) {
-                        mBvNotice.setText(String.format("%d", activeCount));
+                        mBvNotice.setText(String.format("%s", activeCount + ""));
                         mBvNotice.show();
                     } else {
                         mBvNotice.hide();
@@ -217,9 +216,10 @@ public class MainActivity extends AppCompatActivity implements
     public void initData() {
     }
 
+    @SuppressWarnings("deprecation")
     private void initTabs() {
         MainTab[] tabs = MainTab.values();
-        final int size = tabs.length;
+        int size = tabs.length;
         for (int i = 0; i < size; i++) {
             MainTab mainTab = tabs[i];
             TabSpec tab = mTabHost.newTabSpec(getString(mainTab.getResName()));
@@ -257,10 +257,7 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    @Override
-    public void onNavigationDrawerItemSelected(int position) {
-    }
-
+    @SuppressWarnings("deprecation")
     private void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -284,7 +281,6 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.search:
                 UIHelper.showSimpleBack(this, SimpleBackPage.SEARCH);
                 break;
-
             default:
                 break;
         }
