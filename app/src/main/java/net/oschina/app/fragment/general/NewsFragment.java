@@ -1,6 +1,7 @@
 package net.oschina.app.fragment.general;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -17,20 +18,18 @@ import net.oschina.app.bean.base.ResultBean;
 import net.oschina.app.bean.news.News;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.fragment.base.BaseListFragment;
+import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.util.UIHelper;
-import net.oschina.app.widget.ViewNewsBanner;
 import net.oschina.app.widget.ViewNewsHeader;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
 /**
  * 资讯界面
  */
-public class NewsFragment extends BaseListFragment<News> {
+public class NewsFragment extends BaseListFragment<News> implements OnTabReselectListener {
 
     private boolean isFirst = true;
 
@@ -38,6 +37,7 @@ public class NewsFragment extends BaseListFragment<News> {
 
     private ViewNewsHeader mHeaderView;
     private Handler handler = new Handler();
+
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
@@ -128,4 +128,15 @@ public class NewsFragment extends BaseListFragment<News> {
         });
     }
 
+    @Override
+    public void onTabReselect() {
+
+        if (!isFirst) {
+            isFirst = true;
+        }
+        mIsRefresh = true;
+        //  requestData();
+
+        Log.d("SSS", "onTabReselect: ---->hello blog");
+    }
 }
