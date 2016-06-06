@@ -16,12 +16,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#50000000"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
         app:circle_indicator_centerHorizontal="true"
-        app:circle_indicator_color="@color/gray"
-        app:circle_indicator_fill_color="@color/white"
+        app:circle_indicator_color="@color/white"
+        app:circle_indicator_fill_color="@color/main_green"
         app:circle_indicator_indicator_radius="3dp"
         app:circle_indicator_radius="2dp" />
 </RelativeLayout>
