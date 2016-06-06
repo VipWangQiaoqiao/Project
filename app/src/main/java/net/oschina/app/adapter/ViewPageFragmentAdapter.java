@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.util.ArrayMap;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import net.oschina.app.R;
 import net.oschina.app.widget.PagerSlidingTabStrip;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 @SuppressLint("Recycle")
 public class ViewPageFragmentAdapter extends FragmentStatePagerAdapter {
@@ -24,6 +26,7 @@ public class ViewPageFragmentAdapter extends FragmentStatePagerAdapter {
     protected PagerSlidingTabStrip mPagerStrip;
     private final ViewPager mViewPager;
     public ArrayList<ViewPageInfo> mTabs = new ArrayList<ViewPageInfo>();
+    private Map<String, Fragment> mFragments = new ArrayMap<>();
 
     public ViewPageFragmentAdapter(FragmentManager fm,
                                    PagerSlidingTabStrip pageStrip, ViewPager pager) {
@@ -84,6 +87,12 @@ public class ViewPageFragmentAdapter extends FragmentStatePagerAdapter {
         if (index >= mTabs.size()) {
             index = mTabs.size() - 1;
         }
+
+        ViewPageInfo info = mTabs.get(index);
+        // 清理缓存
+        if (mFragments.containsKey(info.tag))
+            mFragments.remove(info.tag);
+
         mTabs.remove(index);
         mPagerStrip.removeTab(index, 1);
         notifyDataSetChanged();
@@ -96,6 +105,7 @@ public class ViewPageFragmentAdapter extends FragmentStatePagerAdapter {
         if (mTabs.isEmpty()) {
             return;
         }
+        mFragments.clear();
         mPagerStrip.removeAllTab();
         mTabs.clear();
         notifyDataSetChanged();
@@ -114,23 +124,15 @@ public class ViewPageFragmentAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         ViewPageInfo info = mTabs.get(position);
-//        switch (position) {
-//            case 0:
-//                NewsFragment newsFragment = new NewsFragment();
-//                return newsFragment;
-//            case 1:
-//                BlogFragment blogFragment = new BlogFragment();
-//                return blogFragment;
-//            case 2:
-//                QuestionFragment questionFragment = new QuestionFragment();
-//                return questionFragment;
-//            case 3:
-//                EventFragment eventFragment = new EventFragment();
-//                return eventFragment;
-//            default:
-//                return null;
-//        }
-        return Fragment.instantiate(mContext, info.clss.getName(), info.args);
+
+        Fragment fragment = mFragments.get(info.tag);
+        if (fragment == null) {
+            fragment = Fragment.instantiate(mContext, info.clss.getName(), info.args);
+            // 避免重复创建而进行缓存
+            mFragments.put(info.tag, fragment);
+        }
+
+        return fragment;
     }
 
     @Override
