@@ -20,7 +20,7 @@ import net.oschina.app.util.UIHelper;
 public class ViewNewsBanner extends RelativeLayout implements View.OnClickListener {
     private Banner banner;
     private ImageView iv_banner;
-    private TextView tv_title;
+    //private TextView tv_title;
 
     public ViewNewsBanner(Context context) {
         super(context, null);
@@ -30,18 +30,22 @@ public class ViewNewsBanner extends RelativeLayout implements View.OnClickListen
     private void init(Context context) {
         LayoutInflater.from(context).inflate(R.layout.view_news_banner, this, true);
         iv_banner = (ImageView) findViewById(R.id.iv_banner);
-        tv_title = (TextView) findViewById(R.id.tv_title);
+        //tv_title = (TextView) findViewById(R.id.tv_title);
         setOnClickListener(this);
     }
 
     public void initData(RequestManager manager, Banner banner) {
         this.banner = banner;
-        tv_title.setText(banner.getName());
+        //tv_title.setText(banner.getName());
         manager.load(banner.getImg()).into(iv_banner);
     }
 
     @Override
     public void onClick(View v) {
         UIHelper.showBannerDetail(getContext(), banner);
+    }
+
+    public String getTitle() {
+        return banner.getName();
     }
 }

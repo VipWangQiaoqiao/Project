@@ -12,16 +12,16 @@
         android:contentDescription="@string/app_name"
         android:scaleType="fitXY" />
 
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:background="@drawable/banner_linear_bg"
-        android:layout_alignParentBottom="true"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:singleLine="true"
-        android:text="周五乱弹 — 饿的时候只有一个饼！还是画的"
-        android:textColor="@color/white" />
+    <!--<TextView-->
+        <!--android:id="@+id/tv_title"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:background="@drawable/banner_linear_bg"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:paddingLeft="16dp"-->
+        <!--android:paddingRight="16dp"-->
+        <!--android:singleLine="true"-->
+        <!--android:text="周五乱弹 — 饿的时候只有一个饼！还是画的"-->
+        <!--android:textColor="@color/white" />-->
 </RelativeLayout>

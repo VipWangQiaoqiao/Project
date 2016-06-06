@@ -162,9 +162,6 @@ public class LinePagerIndicator extends View implements PagerIndicator {
         if (mViewPager == viewPager) {
             return;
         }
-        if (mViewPager != null) {
-            mViewPager.addOnPageChangeListener(null);
-        }
         if (viewPager.getAdapter() == null) {
             throw new IllegalStateException("ViewPager does not set adapter");
         }
