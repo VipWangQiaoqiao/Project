@@ -7,7 +7,7 @@
     <string name="main_tab_name_tweet">动弹</string>
     <string name="main_tab_name_quick">快速</string>
     <string name="main_tab_name_question">问答</string>
-    <string name="main_tab_name_my">我</string>
+    <string name="main_tab_name_my">我的</string>
     <string name="main_tab_name_explore">发现</string>
 
     <string name="event_status_end">活动结束</string>
@@ -161,7 +161,7 @@
     <string name="actionbar_title_shake">摇一摇</string>
     <string name="actionbar_title_search">搜索</string>
     <!-- 找人不显示标题 -->
-    <string name="actionbar_title_event">活动</string>
+    <string name="actionbar_title_event">我的活动</string>
     <string name="actionbar_title_my_event">我的活动</string>
     <string name="actionbar_title_event_apply">活动出席人员</string>
     <string name="actionbar_title_same_city">同城</string>
@@ -242,11 +242,11 @@
     <string name="fans_count">新粉丝(%s) </string>
     <string name="like_count">收到赞(%s) </string>
 
-    <string name="blog">博客</string>
+    <string name="blog">我的博客</string>
     <string name="information">资料</string>
     <string name="qrcode">二维码</string>
-    <string name="message">消息</string>
-    <string name="team">团队</string>
+    <string name="message">我的消息</string>
+    <string name="team">我的团队</string>
     <string name="note">便签</string>
     <string name="str_feedback">反馈</string>
     <string name="bookmarks">收藏夹</string>

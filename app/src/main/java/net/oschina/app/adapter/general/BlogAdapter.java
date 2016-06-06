@@ -52,10 +52,23 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
                 } else {
                     vh.setGone(R.id.iv_item_blog_tag);
                 }
-                title.setText(item.getTitle().trim());
-                content.setText(item.getBody().trim());
-                String author = item.getAuthor().trim();
-                history.setText((author.length() > 9 ? author.substring(0, 9) : author) + "  " + StringUtils.friendly_time(item.getPubDate().trim()));
+
+                String title1 = item.getTitle();
+                if (title1 != null) {
+                    title.setText(title1.trim());
+                }
+
+                String body = item.getBody();
+                if (body != null) {
+                    content.setText(body.trim());
+                }
+
+                String author = item.getAuthor();
+                if (author != null) {
+                    author = author.trim();
+                    history.setText((author.length() > 9 ? author.substring(0, 9) : author) + "  " + StringUtils.friendly_time(item.getPubDate().trim()));
+                }
+
                 see.setText(item.getViewCount() + "");
                 answer.setText(item.getCommentCount() + "");
                 break;

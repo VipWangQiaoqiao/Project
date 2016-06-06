@@ -1,8 +1,10 @@
 package net.oschina.app.fragment.general;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,6 +22,7 @@ import net.oschina.app.bean.base.ResultBean;
 import net.oschina.app.bean.question.Question;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.fragment.base.BaseListFragment;
+import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.UIHelper;
 
@@ -28,16 +31,14 @@ import java.lang.reflect.Type;
 /**
  * 技术问答界面
  */
-public class QuestionFragment extends BaseListFragment<Question> {
+public class QuestionFragment extends BaseListFragment<Question> implements OnTabReselectListener {
 
-    private static final String TAG = "QuestionFragment";
     private static final String QUES_ASK = "ques_ask";
     private static final String QUES_SHARE = "ques_share";
     private static final String QUES_COMPOSITE = "ques_composite";
     private static final String QUES_PROFESSION = "ques_profession";
     private static final String QUES_WEBSITE = "ques_website";
-    private GridView quesGridView = null;
-    private View headView;
+    private static final String TAG = "QuestionFragment";
     private int catalog = 1;
     private QuesActionAdapter quesActionAdapter;
     private int[] positions = {1, 0, 0, 0, 0};
@@ -53,8 +54,11 @@ public class QuestionFragment extends BaseListFragment<Question> {
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
-        headView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_main_question_header, null, false);
-        quesGridView = (GridView) headView.findViewById(R.id.gv_ques);
+
+        @SuppressLint("InflateParams")
+        View headView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_main_question_header, null, false);
+
+        GridView quesGridView = (GridView) headView.findViewById(R.id.gv_ques);
         quesActionAdapter = new QuesActionAdapter(getActivity(), positions);
         quesGridView.setAdapter(quesActionAdapter);
         quesGridView.setItemChecked(0, true);
@@ -93,13 +97,15 @@ public class QuestionFragment extends BaseListFragment<Question> {
         }
     }
 
+
     /**
      * notify action data
      *
-     * @param position postion
+     * @param position position
      */
     private void updateAction(int position) {
-        for (int i = 0; i < positions.length; i++) {
+        int len = positions.length;
+        for (int i = 0; i < len; i++) {
             if (i != position) {
                 positions[i] = 0;
             } else {
@@ -112,6 +118,7 @@ public class QuestionFragment extends BaseListFragment<Question> {
     /**
      * request local cache
      */
+    @SuppressWarnings("unchecked")
     private void requestLocalCache() {
         verifyCacheType();
         mBean = (PageBean<Question>) CacheManager.readObject(getActivity(), CACHE_NAME);
@@ -195,5 +202,12 @@ public class QuestionFragment extends BaseListFragment<Question> {
             UIHelper.showPostDetail(getActivity(), (int) question.getId(),
                     question.getCommentCount());
         }
+    }
+
+    @Override
+    public void onTabReselect() {
+        Log.d(TAG, "onTabReselect: ----->hello question");
+        //verifyCacheType();
+        //requestData();
     }
 }

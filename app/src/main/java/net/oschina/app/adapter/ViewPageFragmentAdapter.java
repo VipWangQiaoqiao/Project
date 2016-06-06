@@ -1,9 +1,5 @@
 package net.oschina.app.adapter;
 
-import java.util.ArrayList;
-
-import net.oschina.app.R;
-import net.oschina.app.widget.PagerSlidingTabStrip;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
@@ -16,16 +12,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import net.oschina.app.R;
+import net.oschina.app.widget.PagerSlidingTabStrip;
+
+import java.util.ArrayList;
+
 @SuppressLint("Recycle")
 public class ViewPageFragmentAdapter extends FragmentStatePagerAdapter {
 
     private final Context mContext;
     protected PagerSlidingTabStrip mPagerStrip;
     private final ViewPager mViewPager;
-    private final ArrayList<ViewPageInfo> mTabs = new ArrayList<ViewPageInfo>();
+    public ArrayList<ViewPageInfo> mTabs = new ArrayList<ViewPageInfo>();
 
     public ViewPageFragmentAdapter(FragmentManager fm,
-            PagerSlidingTabStrip pageStrip, ViewPager pager) {
+                                   PagerSlidingTabStrip pageStrip, ViewPager pager) {
         super(fm);
         mContext = pager.getContext();
         mPagerStrip = pageStrip;
@@ -70,9 +71,8 @@ public class ViewPageFragmentAdapter extends FragmentStatePagerAdapter {
 
     /**
      * 移除一个tab
-     * 
-     * @param index
-     *            备注：如果index小于0，则从第一个开始删 如果大于tab的数量值则从最后一个开始删除
+     *
+     * @param index 备注：如果index小于0，则从第一个开始删 如果大于tab的数量值则从最后一个开始删除
      */
     public void remove(int index) {
         if (mTabs.isEmpty()) {
@@ -114,6 +114,22 @@ public class ViewPageFragmentAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         ViewPageInfo info = mTabs.get(position);
+//        switch (position) {
+//            case 0:
+//                NewsFragment newsFragment = new NewsFragment();
+//                return newsFragment;
+//            case 1:
+//                BlogFragment blogFragment = new BlogFragment();
+//                return blogFragment;
+//            case 2:
+//                QuestionFragment questionFragment = new QuestionFragment();
+//                return questionFragment;
+//            case 3:
+//                EventFragment eventFragment = new EventFragment();
+//                return eventFragment;
+//            default:
+//                return null;
+//        }
         return Fragment.instantiate(mContext, info.clss.getName(), info.args);
     }
 

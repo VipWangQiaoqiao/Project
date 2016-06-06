@@ -2,13 +2,18 @@ package net.oschina.app.fragment.general;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.RectF;
+import android.graphics.drawable.ShapeDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
@@ -31,6 +36,8 @@ import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
+import net.qiujuer.genius.ui.Ui;
+import net.qiujuer.genius.ui.drawable.shape.BorderShape;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -174,6 +181,7 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void initData() {
         BlogDetail blog = (BlogDetail) mBundle.getSerializable("key");
@@ -209,12 +217,14 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
 
         toFavoriteOk(blog);
 
-
+        final LayoutInflater inflater = getLayoutInflater(null);
         setText(R.id.tv_info_view, String.valueOf(blog.getViewCount()));
         if (blog.getAbouts() != null && blog.getAbouts().size() > 0) {
             int i = 1;
             for (final BlogDetail.About about : blog.getAbouts()) {
-                View lay = getLayoutInflater(null).inflate(R.layout.item_blog_detail_about_lay, null, false);
+                if (about == null)
+                    continue;
+                @SuppressLint("InflateParams") View lay = inflater.inflate(R.layout.lay_blog_detail_about, null, false);
                 ((TextView) lay.findViewById(R.id.tv_title)).setText(about.title);
 
                 View layInfo = lay.findViewById(R.id.lay_info_view_comment);
@@ -248,23 +258,25 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
                 setGone(R.id.tv_see_comment);
             }
 
+            final Resources resources = getResources();
             for (final BlogDetail.Comment comment : blog.getComments()) {
-                View lay = getLayoutInflater(null).inflate(R.layout.item_blog_detail_comment_lay, null, false);
+                if (comment == null)
+                    continue;
+
+                @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_blog_detail_comment, null, false);
                 getImgLoader().load(comment.authorPortrait).error(R.drawable.widget_dface)
                         .into(((ImageView) lay.findViewById(R.id.iv_avatar)));
 
                 ((TextView) lay.findViewById(R.id.tv_name)).setText(comment.author);
 
                 TweetTextView content = ((TweetTextView) lay.findViewById(R.id.tv_content));
+                formatHtml(resources, content, comment.content);
 
-                content.setMovementMethod(MyLinkMovementMethod.a());
-                content.setFocusable(false);
-                content.setDispatchToParent(true);
-                content.setLongClickable(false);
-                Spanned span = Html.fromHtml(TweetTextView.modifyPath(comment.content));
-                span = InputHelper.displayEmoji(getContext().getResources(), span.toString());
-                content.setText(span);
-                MyURLSpan.parseLinkText(content, span);
+                if (comment.refer != null) {
+                    // 最多5层
+                    View view = getReferLayout(comment.refer, inflater, 5);
+                    lay.addView(view, lay.indexOfChild(content));
+                }
 
                 ((TextView) lay.findViewById(R.id.tv_pub_date)).setText(
                         StringUtils.friendly_time(getStrTime(comment.pubDate)));
@@ -287,6 +299,31 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
             setGone(R.id.tv_blog_detail_comment);
             mLayComments.setVisibility(View.GONE);
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    private View getReferLayout(BlogDetail.Refer refer, LayoutInflater inflater, int count) {
+        final Context context = getContext();
+
+        @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_blog_detail_comment_refer, null, false);
+        ShapeDrawable drawable = new ShapeDrawable(new BorderShape(new RectF(Ui.dipToPx(getContext(), 1), 0, 0, 0)));
+        drawable.getPaint().setColor(0xffd7d6da);
+        lay.findViewById(R.id.lay_blog_detail_comment_refer).setBackgroundDrawable(drawable);
+
+        TextView textView = ((TextView) lay.findViewById(R.id.tv_blog_detail_comment_refer));
+        drawable = new ShapeDrawable(new BorderShape(new RectF(0, 0, 0, 1)));
+        drawable.getPaint().setColor(0xffd7d6da);
+        textView.setBackgroundDrawable(drawable);
+
+        formatHtml(context.getResources(), textView, refer.author + ":<br>" + refer.content);
+
+
+        if (refer.refer != null && (--count) > 0) {
+            View view = getReferLayout(refer.refer, inflater, count);
+            lay.addView(view, lay.indexOfChild(textView));
+        }
+
+        return lay;
     }
 
     private static String getStrTime(String cc_time) {
@@ -347,6 +384,7 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
         mOperator.toSendComment(mCommentId, mCommentAuthorId, mETInput.getText().toString());
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void toFavoriteOk(BlogDetail blogDetail) {
         if (blogDetail.isFavorite())
@@ -370,5 +408,21 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
     public void toSendCommentOk() {
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
         mETInput.setText("");
+    }
+
+    private static void formatHtml(Resources resources, TextView textView, String str) {
+        textView.setMovementMethod(MyLinkMovementMethod.a());
+        textView.setFocusable(false);
+        textView.setLongClickable(false);
+
+        if (textView instanceof TweetTextView) {
+            ((TweetTextView) textView).setDispatchToParent(true);
+        }
+
+        str = TweetTextView.modifyPath(str);
+        Spanned span = Html.fromHtml(str);
+        span = InputHelper.displayEmoji(resources, span.toString());
+        textView.setText(span);
+        MyURLSpan.parseLinkText(textView, span);
     }
 }
