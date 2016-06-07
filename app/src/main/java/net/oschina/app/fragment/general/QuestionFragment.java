@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,8 +21,6 @@ import net.oschina.app.bean.base.PageBean;
 import net.oschina.app.bean.base.ResultBean;
 import net.oschina.app.bean.question.Question;
 import net.oschina.app.cache.CacheManager;
-import net.oschina.app.fragment.base.BaseListFragment;
-import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.UIHelper;
 
@@ -33,7 +30,7 @@ import java.util.ArrayList;
 /**
  * 技术问答界面
  */
-public class QuestionFragment extends BaseListFragment<Question> implements OnTabReselectListener {
+public class QuestionFragment extends GeneralListFragment<Question> {
 
     public static final String QUES_ASK = "ques_ask";
     public static final String QUES_SHARE = "ques_share";
@@ -216,12 +213,5 @@ public class QuestionFragment extends BaseListFragment<Question> implements OnTa
             saveToReadedList(CACHE_NAME, question.getId() + "");
 
         }
-    }
-
-    @Override
-    public void onTabReselect() {
-        Log.d(TAG, "onTabReselect: ----->hello question");
-        //verifyCacheType();
-        //requestData();
     }
 }

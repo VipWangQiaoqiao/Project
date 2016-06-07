@@ -72,17 +72,23 @@ public class AppStart extends Activity {
 
     private void cleanImageCache() {
         final File folder = FileUtils.getSaveFolder("OSChina/imagecache");
+
         File[] files = folder.listFiles();
 
         if (files != null && files.length > 0) {
 
+
             KJAsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
-                    for (File file : folder.listFiles()) {
-                        file.delete();
+                    if (folder.isDirectory()) {
+
+                        for (File file : folder.listFiles()) {
+                            file.delete();
+                        }
                     }
                 }
+
             });
 
         }

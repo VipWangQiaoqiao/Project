@@ -6,6 +6,7 @@ import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.BaseViewPagerFragment;
 import net.oschina.app.bean.TweetsList;
 import net.oschina.app.fragment.TweetsFragment;
+import net.oschina.app.fragment.general.GeneralListFragment;
 import net.oschina.app.interf.OnTabReselectListener;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -51,6 +52,12 @@ public class TweetsViewPagerFragment extends BaseViewPagerFragment implements
 
     @Override
     public void onTabReselect() {
+        Fragment fragment = mTabsAdapter.getItem(mViewPager.getCurrentItem());
+        if (fragment != null && fragment instanceof OnTabReselectListener) {
+            ((OnTabReselectListener) fragment).onTabReselect();
+        }
+
+        /*
         try {
             int currentIndex = mViewPager.getCurrentItem();
             Fragment currentFragment = getChildFragmentManager().getFragments()
@@ -62,5 +69,6 @@ public class TweetsViewPagerFragment extends BaseViewPagerFragment implements
             }
         } catch (NullPointerException e) {
         }
+        */
     }
 }

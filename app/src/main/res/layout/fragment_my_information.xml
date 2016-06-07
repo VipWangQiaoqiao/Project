@@ -25,7 +25,7 @@
                 <LinearLayout
                     android:id="@+id/rl_message"
                     style="@style/option_item_rl"
-                    android:background="@android:color/white">
+                    android:background="@drawable/selector_item_list">
 
                     <ImageView
                         style="@style/option_item_img"
@@ -61,7 +61,7 @@
                 <LinearLayout
                     android:id="@+id/rl_blog"
                     style="@style/option_item_rl"
-                    android:background="@android:color/white">
+                    android:background="@drawable/selector_item_list">
 
                     <ImageView
                         style="@style/option_item_img"
@@ -90,7 +90,7 @@
                 <LinearLayout
                     android:id="@+id/rl_team"
                     style="@style/option_item_rl"
-                    android:background="@android:color/white">
+                    android:background="@drawable/selector_item_list">
 
                     <ImageView
                         style="@style/option_item_img"
@@ -114,7 +114,7 @@
             <LinearLayout
                 android:id="@+id/rl_info_avtivities"
                 style="@style/option_item_rl"
-                android:background="@android:color/white">
+                android:background="@drawable/selector_item_list">
 
                 <ImageView
                     style="@style/option_item_img"
@@ -138,7 +138,7 @@
             <LinearLayout
                 android:id="@+id/rl_note_book_avtivities"
                 style="@style/option_item_rl"
-                android:background="@android:color/white">
+                android:background="@drawable/selector_item_list">
 
                 <ImageView
                     style="@style/option_item_img"
@@ -147,7 +147,7 @@
 
                 <TextView
                     style="@style/option_item_text"
-                    android:text="@string/note" />
+                    android:text="@string/my_note" />
 
             </LinearLayout>
 
@@ -155,7 +155,7 @@
                 android:id="@+id/rl_feedback"
                 style="@style/option_item_rl"
                 android:layout_marginTop="18dp"
-                android:background="@android:color/white">
+                android:background="@drawable/selector_item_list">
 
                 <ImageView
                     style="@style/option_item_img"
@@ -183,7 +183,7 @@
                 <LinearLayout
                     android:id="@+id/rl_setting"
                     style="@style/option_item_rl"
-                    android:background="@android:color/white">
+                    android:background="@drawable/selector_item_list">
 
                     <ImageView
                         style="@style/option_item_img"

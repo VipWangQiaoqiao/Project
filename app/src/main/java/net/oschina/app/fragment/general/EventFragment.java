@@ -1,6 +1,5 @@
 package net.oschina.app.fragment.general;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
@@ -18,8 +17,6 @@ import net.oschina.app.bean.base.PageBean;
 import net.oschina.app.bean.base.ResultBean;
 import net.oschina.app.bean.event.Event;
 import net.oschina.app.cache.CacheManager;
-import net.oschina.app.fragment.base.BaseListFragment;
-import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.ViewEventHeader;
 
@@ -30,7 +27,7 @@ import cz.msebera.android.httpclient.Header;
 /**
  * 活动界面
  */
-public class EventFragment extends BaseListFragment<Event> implements OnTabReselectListener {
+public class EventFragment extends GeneralListFragment<Event> {
 
     private static final String TAG = "EventFragment";
     private boolean isFirst = true;
@@ -133,12 +130,4 @@ public class EventFragment extends BaseListFragment<Event> implements OnTabResel
         });
     }
 
-    @Override
-    public void onTabReselect() {
-        Log.d(TAG, "onTabReselect: ---->hello event");
-        if (!isFirst) {
-            isFirst = true;
-        }
-        //  requestData();
-    }
 }
