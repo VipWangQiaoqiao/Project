@@ -357,7 +357,7 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
             ".css\">";
 
     private String getWebViewBody(net.oschina.app.bean.blog.BlogDetail blog) {
-        return String.format("<!DOCTYPE HTML><html><head>%s</head><body>%s</body></html>",
+        return String.format("<!DOCTYPE HTML><html><head>%s</head><body><div class=\"body-content\">%s</div></body></html>",
                 linkCss + UIHelper.WEB_LOAD_IMAGES,
                 UIHelper.setHtmlCotentSupportImagePreview(blog.getBody()));
     }
