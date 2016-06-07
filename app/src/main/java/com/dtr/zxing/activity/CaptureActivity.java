@@ -15,7 +15,6 @@
  */
 package com.dtr.zxing.activity;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -23,7 +22,6 @@ import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.text.ClipboardManager;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -52,7 +50,6 @@ import net.oschina.app.base.BaseActivity;
 import net.oschina.app.bean.BarCode;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.SingInResult;
-import net.oschina.app.fragment.ExploreFragment;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
@@ -60,11 +57,8 @@ import net.oschina.app.util.XmlUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * This activity opens the camera and does the actual scanning on a background
@@ -76,7 +70,7 @@ import pub.devrel.easypermissions.EasyPermissions;
  * @author Sean Owen
  */
 public final class CaptureActivity extends BaseActivity implements
-        SurfaceHolder.Callback, EasyPermissions.PermissionCallbacks {
+        SurfaceHolder.Callback {
 
     private static final String TAG = CaptureActivity.class.getSimpleName();
 
@@ -124,7 +118,7 @@ public final class CaptureActivity extends BaseActivity implements
 
     @Override
     protected void onResume() {
-        cameraTask();
+
         super.onResume();
     }
 
@@ -554,68 +548,4 @@ public final class CaptureActivity extends BaseActivity implements
 
     }
 
-    @Override
-    public void onPermissionsGranted(int requestCode, List<String> perms) {
-
-        cameraManager = new CameraManager(getApplication());
-
-        handler = null;
-
-        if (isHasSurface) {
-            // The activity was paused but not stopped, so the surface still
-            // exists. Therefore
-            // surfaceCreated() won't be called, so init the camera here.
-            initCamera(scanPreview.getHolder());
-        } else {
-            // Install the callback and wait for surfaceCreated() to init the
-            // camera.
-            scanPreview.getHolder().addCallback(this);
-        }
-
-        inactivityTimer.onResume();
-    }
-
-    @Override
-    public void onPermissionsDenied(int requestCode, List<String> perms) {
-        EasyPermissions.checkDeniedPermissionsNeverAskAgain(this,
-                getString(R.string.str_request_camera_message),
-                R.string.str_action_submic, R.string.str_action_cancle, perms);
-
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        // EasyPermissions handles the request result.
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-    }
-
-    @AfterPermissionGranted(ExploreFragment.CAMERA_PERM)
-    private void cameraTask() {
-        if (EasyPermissions.hasPermissions(this, Manifest.permission.CAMERA)) {
-            // Have permission, do the thing!
-            cameraManager = new CameraManager(getApplication());
-
-            handler = null;
-
-            if (isHasSurface) {
-                // The activity was paused but not stopped, so the surface still
-                // exists. Therefore
-                // surfaceCreated() won't be called, so init the camera here.
-                initCamera(scanPreview.getHolder());
-            } else {
-                // Install the callback and wait for surfaceCreated() to init the
-                // camera.
-                scanPreview.getHolder().addCallback(this);
-            }
-
-            inactivityTimer.onResume();
-
-        } else {
-            // Request one permission
-            EasyPermissions.requestPermissions(this, getString(R.string.str_request_camera_message),
-                    ExploreFragment.CAMERA_PERM, Manifest.permission.CAMERA);
-        }
-    }
 }
