@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -24,18 +25,20 @@ import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 /**
  * 技术问答界面
  */
 public class QuestionFragment extends GeneralListFragment<Question> {
 
-    private static final String QUES_ASK = "ques_ask";
-    private static final String QUES_SHARE = "ques_share";
-    private static final String QUES_COMPOSITE = "ques_composite";
-    private static final String QUES_PROFESSION = "ques_profession";
-    private static final String QUES_WEBSITE = "ques_website";
-    private static final String TAG = "QuestionFragment";
+    public static final String QUES_ASK = "ques_ask";
+    public static final String QUES_SHARE = "ques_share";
+    public static final String QUES_COMPOSITE = "ques_composite";
+    public static final String QUES_PROFESSION = "ques_profession";
+    public static final String QUES_WEBSITE = "ques_website";
+    public static final String TAG = "QuestionFragment";
+
     private int catalog = 1;
     private QuesActionAdapter quesActionAdapter;
     private int[] positions = {1, 0, 0, 0, 0};
@@ -63,12 +66,13 @@ public class QuestionFragment extends GeneralListFragment<Question> {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 catalog = (position + 1);
+                ((QuestionAdapter) mAdapter).setActionPosition(position + 1);
                 if (!mIsRefresh) {
                     mIsRefresh = true;
                 }
                 updateAction(position);
                 if (positions[position] == 1) {
-                    RequestEventDispatcher();
+                    requestEventDispatcher();
                 }
             }
         });
@@ -79,7 +83,7 @@ public class QuestionFragment extends GeneralListFragment<Question> {
     /**
      * According to the distribution network is events
      */
-    private void RequestEventDispatcher() {
+    private void requestEventDispatcher() {
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isAvailable()) {
             boolean connectedOrConnecting = networkInfo.isConnectedOrConnecting();
@@ -125,6 +129,10 @@ public class QuestionFragment extends GeneralListFragment<Question> {
             mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             mRefreshLayout.setVisibility(View.VISIBLE);
             mRefreshLayout.setCanLoadMore();
+        } else {
+            mBean = new PageBean<>();
+            mBean.setItems(new ArrayList<Question>());
+            onRefreshing();
         }
     }
 
@@ -149,7 +157,7 @@ public class QuestionFragment extends GeneralListFragment<Question> {
     protected void requestData() {
         super.requestData();
         verifyCacheType();
-        OSChinaApi.getQuestionList(catalog, mIsRefresh ? mBean.getPrevPageToken() : mBean.getNextPageToken(), mHandler);
+        OSChinaApi.getQuestionList(catalog, mIsRefresh ? (mBean != null ? mBean.getPrevPageToken() : null) : (mBean != null ? mBean.getNextPageToken() : null), mHandler);
     }
 
     @Override
@@ -198,6 +206,12 @@ public class QuestionFragment extends GeneralListFragment<Question> {
         if (question != null) {
             UIHelper.showPostDetail(getActivity(), (int) question.getId(),
                     question.getCommentCount());
+            TextView title = (TextView) view.findViewById(R.id.tv_ques_item_title);
+            TextView content = (TextView) view.findViewById(R.id.tv_ques_item_content);
+            updateTextColor(title, content);
+            verifyCacheType();
+            saveToReadedList(CACHE_NAME, question.getId() + "");
+
         }
     }
 }

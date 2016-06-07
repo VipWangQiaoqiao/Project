@@ -2,11 +2,13 @@ package net.oschina.app.fragment.general;
 
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
+import net.oschina.app.R;
 import net.oschina.app.adapter.base.BaseListAdapter;
 import net.oschina.app.adapter.general.EventAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
@@ -31,6 +33,7 @@ public class EventFragment extends GeneralListFragment<Event> {
     private boolean isFirst = true;
     private static final String EVENT_BANNER = "event_banner";
     private ViewEventHeader mHeaderView;
+    public static final String HISTORY_EVENT = "history_event";
 
     @Override
     protected void initWidget(View root) {
@@ -75,8 +78,12 @@ public class EventFragment extends GeneralListFragment<Event> {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Event event = mAdapter.getItem(position - 1);
-        if (event != null)
+        if (event != null) {
             UIHelper.showEventDetail(view.getContext(), Integer.parseInt(String.valueOf(event.getId())));
+            TextView title = (TextView) view.findViewById(R.id.tv_event_title);
+            updateTextColor(title, null);
+            saveToReadedList(HISTORY_EVENT, event.getId() + "");
+        }
     }
 
     @Override
@@ -122,4 +129,5 @@ public class EventFragment extends GeneralListFragment<Event> {
             }
         });
     }
+
 }

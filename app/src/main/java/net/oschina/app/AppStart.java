@@ -1,6 +1,12 @@
 package net.oschina.app;
 
-import java.io.File;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 
 import net.oschina.app.ui.MainActivity;
 import net.oschina.app.util.TDevice;
@@ -9,13 +15,7 @@ import org.kymjs.kjframe.http.KJAsyncTask;
 import org.kymjs.kjframe.utils.FileUtils;
 import org.kymjs.kjframe.utils.PreferenceHelper;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
+import java.io.File;
 
 /**
  * 应用启动界面
@@ -72,16 +72,26 @@ public class AppStart extends Activity {
 
     private void cleanImageCache() {
         final File folder = FileUtils.getSaveFolder("OSChina/imagecache");
-        KJAsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                if (folder != null && folder.isDirectory()) {
-                    for (File file : folder.listFiles()) {
-                        file.delete();
+
+        File[] files = folder.listFiles();
+
+        if (files != null && files.length > 0) {
+
+
+            KJAsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    if (folder.isDirectory()) {
+
+                        for (File file : folder.listFiles()) {
+                            file.delete();
+                        }
                     }
                 }
-            }
-        });
+
+            });
+
+        }
     }
 
     /**
