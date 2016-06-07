@@ -12,6 +12,12 @@ body {
 	color: #111111;
 }
 
+.body-content{
+    box-pack: justify;
+    text-justify: inter-ideograph;
+    text-align: justify;
+}
+
 h1, h2, h3, h4, h5, h6 {
 	color: #010101;
 }

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="150dp"
-    android:background="@color/ques_bt_text_color_light"
+    android:background="@drawable/bg_my"
     android:orientation="vertical">
 
     <LinearLayout
