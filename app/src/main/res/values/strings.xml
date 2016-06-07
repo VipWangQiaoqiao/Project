@@ -334,6 +334,9 @@
     <string name="select_friends_max_tips">最多只能选%1$d个好友哦</string>
     <string name="str_feedback_error">程序错误</string>
     <string name="str_feedback_function">功能建议</string>
+    <string name="str_request_camera_message">请求获取相机权限</string>
+    <string name="str_action_submic">确定</string>
+    <string name="str_action_cancle">取消</string>
 
 
     <string name="pub_tweet_required_camera_tip">在设置-应用-开源中国权限中允许拍摄照片，以正常使用发动弹功能</string>
