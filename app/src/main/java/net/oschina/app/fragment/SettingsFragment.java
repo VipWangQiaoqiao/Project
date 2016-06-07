@@ -24,8 +24,8 @@ import org.kymjs.kjframe.http.HttpConfig;
 
 import java.io.File;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * 系统设置界面

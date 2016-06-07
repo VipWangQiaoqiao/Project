@@ -29,6 +29,7 @@ import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.AppManager;
 import net.oschina.app.R;
+import net.oschina.app.base.BaseApplication;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.SimpleBackPage;
@@ -355,12 +356,20 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
-        long curTime = SystemClock.uptimeMillis();
-        if ((curTime - mBackPressedTime) < (3 * 1000)) {
-            finish();
+
+        boolean isDoubleClick = BaseApplication.get(AppConfig.KEY_DOUBLE_CLICK_EXIT, false);
+
+        if (isDoubleClick) {
+            long curTime = SystemClock.uptimeMillis();
+            if ((curTime - mBackPressedTime) < (3 * 1000)) {
+                finish();
+            } else {
+                mBackPressedTime = curTime;
+                Toast.makeText(this, R.string.tip_double_click_exit, Toast.LENGTH_LONG).show();
+            }
         } else {
-            mBackPressedTime = curTime;
-            Toast.makeText(this, R.string.tip_double_click_exit, Toast.LENGTH_LONG).show();
+            finish();
         }
+
     }
 }
