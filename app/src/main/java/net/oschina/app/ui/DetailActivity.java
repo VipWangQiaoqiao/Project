@@ -1,10 +1,13 @@
 package net.oschina.app.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.view.KeyEvent;
 import android.view.View;
+
+import com.umeng.socialize.sso.UMSsoHandler;
 
 import net.oschina.app.R;
 import net.oschina.app.base.BaseActivity;
@@ -233,5 +236,16 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
                 .setCustomAnimations(R.anim.footer_menu_slide_in,
                         R.anim.footer_menu_slide_out)
                 .replace(R.id.emoji_keyboard, toolFragment).commit();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (currentFragment instanceof CommonDetailFragment) {
+            UMSsoHandler ssoHandler = ((CommonDetailFragment) currentFragment).getDialog().getController().getConfig().getSsoHandler(requestCode);
+            if (ssoHandler != null) {
+                ssoHandler.authorizeCallBack(requestCode, resultCode, data);
+            }
+        }
     }
 }

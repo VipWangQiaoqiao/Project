@@ -223,4 +223,8 @@ public class ShareDialog extends CommonDialog implements
         }
         return canShare;
     }
+
+    public UMSocialService getController() {
+        return mController;
+    }
 }

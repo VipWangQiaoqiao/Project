@@ -76,6 +76,7 @@ public class FindUserActivity extends BaseActivity implements AdapterView.OnItem
         TextView textView = (TextView) mSearchView
                 .findViewById(R.id.search_src_text);
         textView.setTextColor(Color.WHITE);
+        textView.setHintTextColor(0x90ffffff);
 
         mSearchView
                 .setOnQueryTextListener(new SearchView.OnQueryTextListener() {

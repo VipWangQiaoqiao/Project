@@ -17,6 +17,7 @@ import android.view.View;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
+import com.umeng.socialize.sso.UMSsoHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -49,6 +50,7 @@ public class BlogDetailActivity extends AppCompatActivity implements BlogDetailC
     private EmptyLayout mEmptyLayout;
     private BlogDetail mBlog;
     private BlogDetailContract.View mView;
+    private ShareDialog dialog;
 
     public static void show(Context context, long id) {
         Intent intent = new Intent(context, BlogDetailActivity.class);
@@ -270,7 +272,10 @@ public class BlogDetailActivity extends AppCompatActivity implements BlogDetailC
             AppContext.showToast("内容加载失败...");
             return;
         }
-        final ShareDialog dialog = new ShareDialog(this);
+
+        if(dialog == null){
+           dialog = new ShareDialog(this);
+        }
         dialog.setCancelable(true);
         dialog.setCanceledOnTouchOutside(true);
         dialog.setTitle(R.string.share_to);
@@ -461,11 +466,22 @@ public class BlogDetailActivity extends AppCompatActivity implements BlogDetailC
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMSsoHandler ssoHandler = dialog.getController().getConfig().getSsoHandler(requestCode);
+        if (ssoHandler != null) {
+            ssoHandler.authorizeCallBack(requestCode, resultCode, data);
+        }
+
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         hideWaitDialog();
         mEmptyLayout = null;
         mView = null;
         mBlog = null;
+        dialog = null;
     }
 }
