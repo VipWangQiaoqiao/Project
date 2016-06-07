@@ -605,13 +605,19 @@ public class TweetPubActivity extends BaseActivity implements EasyPermissions.Pe
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
+
     @Override
-    public void onPermissionsGranted(List<String> perms) {
+    public boolean shouldShowRequestPermissionRationale(String permission) {
+        return false;
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
 
     }
 
     @Override
-    public void onPermissionsDenied(List<String> perms) {
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
         int tipres = R.string.pub_tweet_required_album_tip;
         if (perms.get(0).equals(Manifest.permission.CAMERA)) {
             tipres = R.string.pub_tweet_required_camera_tip;
@@ -632,11 +638,6 @@ public class TweetPubActivity extends BaseActivity implements EasyPermissions.Pe
                     }
                 },
                 null).show();
-    }
 
-
-    @Override
-    public boolean shouldShowRequestPermissionRationale(String permission) {
-        return false;
     }
 }
