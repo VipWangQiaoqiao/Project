@@ -5,6 +5,13 @@ package net.oschina.app.bean.base;
  * on 16-5-23.
  */
 public class ResultBean<T> {
+    public static final int RESULT_SUCCESS = 1;
+    public static final int RESULT_UNKNOW = 0;
+    public static final int RESULT_ERROR = -1;
+    public static final int RESULT_NOT_FIND = 404;
+    public static final int RESULT_NOT_LOGIN = 201;
+    public static final int RESULT_TOKEN_EXPRIED = 202;
+    public static final int RESULT_NOT_PERMISSION = 203;
     private T result;
     private int code;
     private String message;
@@ -43,6 +50,6 @@ public class ResultBean<T> {
     }
 
     public boolean isSuccess() {
-        return code == 1 && result != null;
+        return code == RESULT_SUCCESS && result != null;
     }
 }
