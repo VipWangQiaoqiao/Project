@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="150dp"
-    android:background="@drawable/user_center_bg"
+    android:background="@color/ques_bt_text_color_light"
     android:orientation="vertical">
 
     <LinearLayout
@@ -11,14 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:orientation="vertical"
-        android:visibility="visible" >
+        android:visibility="visible">
 
         <RelativeLayout
             android:id="@+id/rl_user_center"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:clickable="true" >
+            android:clickable="true">
 
             <net.oschina.app.widget.AvatarView
                 android:id="@+id/iv_avatar"
@@ -60,20 +60,20 @@
                 android:src="@drawable/icon_qr_code" />
         </RelativeLayout>
 
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="3px"
-            android:background="#18be40" />
+        <!--    <View
+                 android:layout_width="wrap_content"
+                 android:layout_height="3px"
+                 android:background="#18be40" />-->
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/ly_score"
-                style="@style/uset_information_ll" >
+                style="@style/uset_information_ll">
 
                 <TextView
                     android:id="@+id/tv_score"
@@ -86,7 +86,7 @@
 
             <LinearLayout
                 android:id="@+id/ly_favorite"
-                style="@style/uset_information_ll" >
+                style="@style/uset_information_ll">
 
                 <TextView
                     android:id="@+id/tv_favorite"
@@ -99,7 +99,7 @@
 
             <LinearLayout
                 android:id="@+id/ly_following"
-                style="@style/uset_information_ll" >
+                style="@style/uset_information_ll">
 
                 <TextView
                     android:id="@+id/tv_following"
@@ -112,7 +112,7 @@
 
             <LinearLayout
                 android:id="@+id/ly_follower"
-                style="@style/uset_information_ll" >
+                style="@style/uset_information_ll">
 
                 <TextView
                     android:id="@+id/tv_follower"
@@ -130,7 +130,7 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:orientation="vertical"
-        android:visibility="gone" >
+        android:visibility="gone">
 
         <net.oschina.app.widget.CircleImageView
             android:id="@+id/iv_avatar1"
