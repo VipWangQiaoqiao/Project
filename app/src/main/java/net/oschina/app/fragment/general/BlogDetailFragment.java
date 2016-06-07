@@ -196,7 +196,9 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
         mTVAuthorName.setText(blog.getAuthor());
         getImgLoader().load(blog.getAuthorPortrait()).error(R.drawable.widget_dface).into(mIVAuthorPortrait);
 
-        mTVPubDate.setText(blog.getPubDate());
+        String time = String.format("%s (%s)", StringUtils.friendly_time(getStrTime(blog.getPubDate())), blog.getPubDate());
+        mTVPubDate.setText(time);
+
         mTVTitle.setText(blog.getTitle());
 
 
@@ -364,7 +366,7 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
         if (mCommentId != mId && TextUtils.isEmpty(mETInput.getText())) {
             mCommentId = mId;
             mCommentAuthorId = 0;
-            mETInput.setHint("评论作者~");
+            mETInput.setHint("发表评论");
         }
     }
 

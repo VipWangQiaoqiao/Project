@@ -219,7 +219,7 @@
             android:layout_marginTop="8dp"
             android:layout_weight="1"
             android:background="@drawable/ic_bg_edit"
-            android:hint="评论"
+            android:hint="发表评论"
             android:imeOptions="actionSend"
             android:inputType="text"
             android:lines="1"
