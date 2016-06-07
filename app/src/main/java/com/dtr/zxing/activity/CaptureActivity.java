@@ -52,7 +52,6 @@ import net.oschina.app.base.BaseActivity;
 import net.oschina.app.bean.BarCode;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.SingInResult;
-import net.oschina.app.fragment.ExploreFragment;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
@@ -102,29 +101,27 @@ public final class CaptureActivity extends BaseActivity implements
         setContentView(R.layout.activity_qr_scan);
 
         scanPreview = (SurfaceView) findViewById(R.id.capture_preview);
-        scanContainer = (RelativeLayout) findViewById(R.id.capture_container);
-        scanCropView = (RelativeLayout) findViewById(R.id.capture_crop_view);
-        scanLine = (ImageView) findViewById(R.id.capture_scan_line);
-        mFlash = (ImageView) findViewById(R.id.capture_flash);
-        mFlash.setOnClickListener(this);
+        // Install the callback and wait for surfaceCreated() to init the
+        // camera.
+        scanPreview.getHolder().addCallback(this);
 
-        inactivityTimer = new InactivityTimer(this);
-        beepManager = new BeepManager(this);
-
-        TranslateAnimation animation = new TranslateAnimation(
-                Animation.RELATIVE_TO_PARENT, 0.0f,
-                Animation.RELATIVE_TO_PARENT, 0.0f,
-                Animation.RELATIVE_TO_PARENT, 0.0f,
-                Animation.RELATIVE_TO_PARENT, 0.9f);
-        animation.setDuration(4500);
-        animation.setRepeatCount(-1);
-        animation.setRepeatMode(Animation.RESTART);
-        scanLine.startAnimation(animation);
+        cameraTask();
     }
 
     @Override
     protected void onResume() {
-        cameraTask();
+        if (scanPreview != null) {
+            handler = null;
+            if (isHasSurface) {
+                // The activity was paused but not stopped, so the surface still
+                // exists. Therefore
+                // surfaceCreated() won't be called, so init the camera here.
+                initCamera(scanPreview.getHolder());
+            }
+        }
+        if (inactivityTimer != null) {
+            inactivityTimer.onResume();
+        }
         super.onResume();
     }
 
@@ -134,19 +131,26 @@ public final class CaptureActivity extends BaseActivity implements
             handler.quitSynchronously();
             handler = null;
         }
-        inactivityTimer.onPause();
-        beepManager.close();
-        if (cameraManager != null)
+        if (inactivityTimer != null) {
+            inactivityTimer.onPause();
+        }
+        if (beepManager != null) {
+            beepManager.close();
+        }
+        if (cameraManager != null) {
             cameraManager.closeDriver();
-        if (!isHasSurface) {
-            scanPreview.getHolder().removeCallback(this);
         }
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
-        inactivityTimer.shutdown();
+        if (inactivityTimer != null) {
+            inactivityTimer.shutdown();
+        }
+        if (scanPreview != null) {
+            scanPreview.getHolder().removeCallback(this);
+        }
         super.onDestroy();
     }
 
@@ -163,26 +167,21 @@ public final class CaptureActivity extends BaseActivity implements
     @SuppressLint("NewApi")
     @Override
     protected boolean hasActionBar() {
-
         if (android.os.Build.VERSION.SDK_INT >= 11) {
             getSupportActionBar().hide();
             return true;
         } else {
             return false;
         }
-
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         if (holder == null) {
-            Log.e(TAG,
-                    "*** WARNING *** surfaceCreated() gave us a null surface!");
+            Log.e(TAG, "*** WARNING *** surfaceCreated() gave us a null surface!");
         }
-        if (!isHasSurface) {
-            isHasSurface = true;
-            initCamera(holder);
-        }
+        isHasSurface = true;
+        initCamera(holder);
     }
 
     @Override
@@ -193,7 +192,7 @@ public final class CaptureActivity extends BaseActivity implements
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width,
                                int height) {
-
+        // Doing
     }
 
     /**
@@ -208,12 +207,12 @@ public final class CaptureActivity extends BaseActivity implements
         beepManager.playBeepSoundAndVibrate();
 
         // 通过这种方式可以获取到扫描的图片
-//	bundle.putInt("width", mCropRect.width());
-//	bundle.putInt("height", mCropRect.height());
-//	bundle.putString("result", rawResult.getText());
-//
-//	startActivity(new Intent(CaptureActivity.this, ResultActivity.class)
-//		.putExtras(bundle));
+        //	bundle.putInt("width", mCropRect.width());
+        //	bundle.putInt("height", mCropRect.height());
+        //	bundle.putString("result", rawResult.getText());
+        //
+        //	startActivity(new Intent(CaptureActivity.this, ResultActivity.class)
+        //		.putExtras(bundle));
 
         handler.postDelayed(new Runnable() {
 
@@ -405,6 +404,9 @@ public final class CaptureActivity extends BaseActivity implements
     }
 
     private void initCamera(SurfaceHolder surfaceHolder) {
+        if(cameraManager==null)
+            return;
+
         if (surfaceHolder == null) {
             throw new IllegalStateException("No SurfaceHolder provided");
         }
@@ -468,6 +470,7 @@ public final class CaptureActivity extends BaseActivity implements
     /**
      * 初始化截取的矩形区域
      */
+    @SuppressWarnings("SuspiciousNameCombination")
     private void initCrop() {
         int cameraWidth = cameraManager.getCameraResolution().y;
         int cameraHeight = cameraManager.getCameraResolution().x;
@@ -528,8 +531,8 @@ public final class CaptureActivity extends BaseActivity implements
 
     private boolean flag;
 
-    protected void light() {
-        if (flag == true) {
+    private void light() {
+        if (flag) {
             flag = false;
             // 开闪光灯
             cameraManager.openLight();
@@ -544,35 +547,39 @@ public final class CaptureActivity extends BaseActivity implements
 
     @Override
     public void initView() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void initData() {
-        // TODO Auto-generated method stub
-
     }
+
+    private void initCamera() {
+        scanContainer = (RelativeLayout) findViewById(R.id.capture_container);
+        scanCropView = (RelativeLayout) findViewById(R.id.capture_crop_view);
+        scanLine = (ImageView) findViewById(R.id.capture_scan_line);
+        mFlash = (ImageView) findViewById(R.id.capture_flash);
+        mFlash.setOnClickListener(this);
+
+        inactivityTimer = new InactivityTimer(this);
+        beepManager = new BeepManager(this);
+
+        TranslateAnimation animation = new TranslateAnimation(
+                Animation.RELATIVE_TO_PARENT, 0.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f,
+                Animation.RELATIVE_TO_PARENT, 0.9f);
+        animation.setDuration(4500);
+        animation.setRepeatCount(-1);
+        animation.setRepeatMode(Animation.RESTART);
+        scanLine.startAnimation(animation);
+
+        cameraManager = new CameraManager(getApplication());
+    }
+
 
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
-
-        cameraManager = new CameraManager(getApplication());
-
-        handler = null;
-
-        if (isHasSurface) {
-            // The activity was paused but not stopped, so the surface still
-            // exists. Therefore
-            // surfaceCreated() won't be called, so init the camera here.
-            initCamera(scanPreview.getHolder());
-        } else {
-            // Install the callback and wait for surfaceCreated() to init the
-            // camera.
-            scanPreview.getHolder().addCallback(this);
-        }
-
-        inactivityTimer.onResume();
+        // initCamera();
     }
 
     @Override
@@ -580,7 +587,7 @@ public final class CaptureActivity extends BaseActivity implements
         EasyPermissions.checkDeniedPermissionsNeverAskAgain(this,
                 getString(R.string.str_request_camera_message),
                 R.string.str_action_submic, R.string.str_action_cancle, perms);
-
+        finish();
     }
 
     @Override
@@ -591,31 +598,19 @@ public final class CaptureActivity extends BaseActivity implements
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
-    @AfterPermissionGranted(ExploreFragment.CAMERA_PERM)
+
+    private static final int CAMERA_PERM = 1;
+
+    @AfterPermissionGranted(CAMERA_PERM)
     private void cameraTask() {
-        if (EasyPermissions.hasPermissions(this, Manifest.permission.CAMERA)) {
-            // Have permission, do the thing!
-            cameraManager = new CameraManager(getApplication());
-
-            handler = null;
-
-            if (isHasSurface) {
-                // The activity was paused but not stopped, so the surface still
-                // exists. Therefore
-                // surfaceCreated() won't be called, so init the camera here.
-                initCamera(scanPreview.getHolder());
-            } else {
-                // Install the callback and wait for surfaceCreated() to init the
-                // camera.
-                scanPreview.getHolder().addCallback(this);
-            }
-
-            inactivityTimer.onResume();
-
+        String[] perms = {Manifest.permission.CAMERA, Manifest.permission.VIBRATE};
+        if (EasyPermissions.hasPermissions(this, perms)) {
+            initCamera();
         } else {
             // Request one permission
-            EasyPermissions.requestPermissions(this, getString(R.string.str_request_camera_message),
-                    ExploreFragment.CAMERA_PERM, Manifest.permission.CAMERA);
+            EasyPermissions.requestPermissions(this,
+                    getResources().getString(R.string.str_request_camera_message),
+                    CAMERA_PERM, perms);
         }
     }
 }
