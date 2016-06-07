@@ -1,6 +1,8 @@
 package net.oschina.app.widget;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -19,6 +21,9 @@ import net.oschina.app.widget.indicator.CirclePagerIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by huanghaibin
@@ -31,6 +36,12 @@ public class ViewNewsHeader extends RelativeLayout implements ViewPager.OnPageCh
     private SuperRefreshLayout refreshLayout;
     private CirclePagerIndicator indicator;
     private TextView tv_news_title;
+    private ScheduledExecutorService mSchedule;
+    private int mCurrentItem = 0;
+    private Handler handler;
+    private boolean isMoving = false;
+    private boolean isScroll = false;
+
 
     public ViewNewsHeader(Context context) {
         super(context);
@@ -54,21 +65,42 @@ public class ViewNewsHeader extends RelativeLayout implements ViewPager.OnPageCh
         adapter = new NewsPagerAdapter();
         vp_news.setAdapter(adapter);
         indicator.bindViewPager(vp_news);
-        new SmoothScroller(getContext()).setViewPagerScroller(vp_news, getContext());
+        new SmoothScroller(getContext()).bingViewPager(vp_news);
         vp_news.addOnPageChangeListener(this);
+
+        handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                vp_news.setCurrentItem(mCurrentItem);
+            }
+        };
+        mSchedule = Executors.newSingleThreadScheduledExecutor();
+        mSchedule.scheduleWithFixedDelay(new Runnable() {
+            @Override
+            public void run() {
+                if (!isMoving && !isScroll) {
+                    mCurrentItem = (mCurrentItem + 1) % banners.size();
+                    handler.obtainMessage().sendToTarget();
+                }
+            }
+        }, 2, 4, TimeUnit.SECONDS);
 
         vp_news.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_UP:
+                        isMoving = false;
                         refreshLayout.setEnabled(true);
                         break;
                     case MotionEvent.ACTION_CANCEL:
+                        isMoving = false;
                         refreshLayout.setEnabled(true);
                         break;
                     case MotionEvent.ACTION_MOVE:
                         refreshLayout.setEnabled(false);
+                        isMoving = true;
                         break;
                 }
                 return false;
@@ -89,16 +121,22 @@ public class ViewNewsHeader extends RelativeLayout implements ViewPager.OnPageCh
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        isMoving = mCurrentItem != position;
     }
 
     @Override
     public void onPageSelected(int position) {
+        isMoving = false;
+        mCurrentItem = position;
         refreshLayout.setEnabled(true);
+        isScroll = false;
         tv_news_title.setText(banners.get(position).getTitle());
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
+        isMoving = state != ViewPager.SCROLL_STATE_IDLE;
+        isScroll = state != ViewPager.SCROLL_STATE_IDLE;
         refreshLayout.setEnabled(state == ViewPager.SCROLL_STATE_IDLE);
     }
 
