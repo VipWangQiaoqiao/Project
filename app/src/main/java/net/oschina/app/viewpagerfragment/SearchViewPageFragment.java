@@ -66,6 +66,7 @@ public class SearchViewPageFragment extends BaseViewPagerFragment {
 		mSearchView.setQueryHint("搜索");
 		TextView textView = (TextView) mSearchView.findViewById(R.id.search_src_text);
 		textView.setTextColor(Color.WHITE);
+		textView.setHintTextColor(0x90ffffff);
 		
 		mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 			

@@ -64,6 +64,8 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
 
     private AsyncTask<String, Void, T> mCacheTask;
 
+    private ShareDialog mDialog;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,6 +118,7 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
     @Override
     public void onDestroyView() {
         recycleWebView();
+        mDialog = null;
         super.onDestroyView();
     }
 
@@ -439,12 +442,13 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
             AppContext.showToast("内容加载失败...");
             return;
         }
-        final ShareDialog dialog = new ShareDialog(getActivity());
-        dialog.setCancelable(true);
-        dialog.setCanceledOnTouchOutside(true);
-        dialog.setTitle(R.string.share_to);
-        dialog.setShareInfo(getShareTitle(), getShareContent(), getShareUrl());
-        dialog.show();
+        if (mDialog == null)
+            mDialog = new ShareDialog(getActivity());
+        mDialog.setCancelable(true);
+        mDialog.setCanceledOnTouchOutside(true);
+        mDialog.setTitle(R.string.share_to);
+        mDialog.setShareInfo(getShareTitle(), getShareContent(), getShareUrl());
+        mDialog.show();
     }
 
     // 显示评论列表
@@ -577,4 +581,8 @@ public abstract class CommonDetailFragment<T extends Serializable> extends BaseF
     protected abstract void updateFavoriteChanged(int newFavoritedState);
 
     protected abstract int getCommentCount();
+
+    public ShareDialog getDialog() {
+        return mDialog;
+    }
 }

@@ -24,6 +24,7 @@ import com.umeng.socialize.controller.UMSocialService;
 import com.umeng.socialize.controller.listener.SocializeListeners;
 import com.umeng.socialize.exception.SocializeException;
 import com.umeng.socialize.sso.SinaSsoHandler;
+import com.umeng.socialize.sso.UMSsoHandler;
 
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
@@ -31,6 +32,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseActivity;
+import net.oschina.app.base.CommonDetailFragment;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.LoginUserBean;
 import net.oschina.app.bean.OpenIdCatalog;
@@ -63,6 +65,7 @@ public class LoginActivity extends BaseActivity implements IUiListener {
     public static final int REQUEST_CODE_INIT = 0;
     private static final String BUNDLE_KEY_REQUEST_CODE = "BUNDLE_KEY_REQUEST_CODE";
     protected static final String TAG = LoginActivity.class.getSimpleName();
+    private UMSocialService mController;
 
     @Bind(R.id.et_username)
     EditText mEtUserName;
@@ -73,6 +76,12 @@ public class LoginActivity extends BaseActivity implements IUiListener {
     private final int requestCode = REQUEST_CODE_INIT;
     private String mUserName = "";
     private String mPassword = "";
+
+    private static final int LOGIN_TYPE_SINA = 1;
+    private static final int LOGIN_TYPE_QQ = 2;
+    private static final int LOGIN_TYPE_WX = 3;
+
+    private int loginType;
 
     @Override
     protected int getLayoutId() {
@@ -195,6 +204,7 @@ public class LoginActivity extends BaseActivity implements IUiListener {
      * QQ登陆
      */
     private void qqLogin() {
+        loginType = LOGIN_TYPE_QQ;
         Tencent mTencent = Tencent.createInstance(AppConfig.APP_QQ_KEY,
                 this);
         mTencent.login(this, "all", this);
@@ -206,6 +216,7 @@ public class LoginActivity extends BaseActivity implements IUiListener {
      * 微信登陆
      */
     private void wxLogin() {
+        loginType = LOGIN_TYPE_WX;
         IWXAPI api = WXAPIFactory.createWXAPI(this, Constants.WEICHAT_APPID, false);
         api.registerApp(Constants.WEICHAT_APPID);
 
@@ -242,7 +253,9 @@ public class LoginActivity extends BaseActivity implements IUiListener {
      * 新浪登录
      */
     private void sinaLogin() {
-        final UMSocialService mController = UMServiceFactory.getUMSocialService("com.umeng.login");
+        if (mController == null)
+            mController = UMServiceFactory.getUMSocialService("com.umeng.login");
+        loginType = LOGIN_TYPE_SINA;
         SinaSsoHandler sinaSsoHandler = new SinaSsoHandler();
         mController.getConfig().setSsoHandler(sinaSsoHandler);
         mController.doOauthVerify(this, SHARE_MEDIA.SINA,
@@ -367,20 +380,27 @@ public class LoginActivity extends BaseActivity implements IUiListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case REQUEST_CODE_OPENID:
-                if (data == null) {
-                    return;
-                }
-                LoginUserBean loginUserBean = (LoginUserBean) data.getSerializableExtra(BUNDLE_KEY_LOGINBEAN);
-                if (loginUserBean != null) {
-                    handleLoginBean(loginUserBean, null);
-                }
-                break;
-            default:
-
-                break;
+        if (loginType == LOGIN_TYPE_SINA) {
+            UMSsoHandler ssoHandler = mController.getConfig().getSsoHandler(requestCode);
+            if (ssoHandler != null) {
+                ssoHandler.authorizeCallBack(requestCode, resultCode, data);
+            }
+        } else {
+            switch (requestCode) {
+                case REQUEST_CODE_OPENID:
+                    if (data == null) {
+                        return;
+                    }
+                    LoginUserBean loginUserBean = (LoginUserBean) data.getSerializableExtra(BUNDLE_KEY_LOGINBEAN);
+                    if (loginUserBean != null) {
+                        handleLoginBean(loginUserBean, null);
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
+
     }
 
 
