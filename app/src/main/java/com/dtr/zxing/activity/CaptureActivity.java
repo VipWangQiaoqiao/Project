@@ -15,6 +15,7 @@
  */
 package com.dtr.zxing.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -22,6 +23,7 @@ import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.text.ClipboardManager;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -33,7 +35,6 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import cz.msebera.android.httpclient.Header;
 
 import com.dtr.zxing.camera.CameraManager;
 import com.dtr.zxing.decode.DecodeThread;
@@ -51,14 +52,19 @@ import net.oschina.app.base.BaseActivity;
 import net.oschina.app.bean.BarCode;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.SingInResult;
+import net.oschina.app.fragment.ExploreFragment;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
-
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * This activity opens the camera and does the actual scanning on a background
@@ -70,7 +76,7 @@ import java.lang.reflect.Field;
  * @author Sean Owen
  */
 public final class CaptureActivity extends BaseActivity implements
-        SurfaceHolder.Callback {
+        SurfaceHolder.Callback, EasyPermissions.PermissionCallbacks {
 
     private static final String TAG = CaptureActivity.class.getSimpleName();
 
@@ -86,16 +92,6 @@ public final class CaptureActivity extends BaseActivity implements
     private ImageView mFlash;
 
     private Rect mCropRect = null;
-
-    public Handler getHandler() {
-        return handler;
-    }
-
-    public CameraManager getCameraManager() {
-        return cameraManager;
-    }
-
-    private boolean isHasSurface = false;
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -126,6 +122,44 @@ public final class CaptureActivity extends BaseActivity implements
         scanLine.startAnimation(animation);
     }
 
+    @Override
+    protected void onResume() {
+        cameraTask();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        if (handler != null) {
+            handler.quitSynchronously();
+            handler = null;
+        }
+        inactivityTimer.onPause();
+        beepManager.close();
+        if (cameraManager != null)
+            cameraManager.closeDriver();
+        if (!isHasSurface) {
+            scanPreview.getHolder().removeCallback(this);
+        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        inactivityTimer.shutdown();
+        super.onDestroy();
+    }
+
+    public Handler getHandler() {
+        return handler;
+    }
+
+    public CameraManager getCameraManager() {
+        return cameraManager;
+    }
+
+    private boolean isHasSurface = false;
+
     @SuppressLint("NewApi")
     @Override
     protected boolean hasActionBar() {
@@ -137,56 +171,6 @@ public final class CaptureActivity extends BaseActivity implements
             return false;
         }
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        // CameraManager must be initialized here, not in onCreate(). This is
-        // necessary because we don't
-        // want to open the camera driver and measure the screen size if we're
-        // going to show the help on
-        // first launch. That led to bugs where the scanning rectangle was the
-        // wrong size and partially
-        // off screen.
-        cameraManager = new CameraManager(getApplication());
-
-        handler = null;
-
-        if (isHasSurface) {
-            // The activity was paused but not stopped, so the surface still
-            // exists. Therefore
-            // surfaceCreated() won't be called, so init the camera here.
-            initCamera(scanPreview.getHolder());
-        } else {
-            // Install the callback and wait for surfaceCreated() to init the
-            // camera.
-            scanPreview.getHolder().addCallback(this);
-        }
-
-        inactivityTimer.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        if (handler != null) {
-            handler.quitSynchronously();
-            handler = null;
-        }
-        inactivityTimer.onPause();
-        beepManager.close();
-        cameraManager.closeDriver();
-        if (!isHasSurface) {
-            scanPreview.getHolder().removeCallback(this);
-        }
-        super.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
-        inactivityTimer.shutdown();
-        super.onDestroy();
     }
 
     @Override
@@ -568,5 +552,70 @@ public final class CaptureActivity extends BaseActivity implements
     public void initData() {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+
+        cameraManager = new CameraManager(getApplication());
+
+        handler = null;
+
+        if (isHasSurface) {
+            // The activity was paused but not stopped, so the surface still
+            // exists. Therefore
+            // surfaceCreated() won't be called, so init the camera here.
+            initCamera(scanPreview.getHolder());
+        } else {
+            // Install the callback and wait for surfaceCreated() to init the
+            // camera.
+            scanPreview.getHolder().addCallback(this);
+        }
+
+        inactivityTimer.onResume();
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        EasyPermissions.checkDeniedPermissionsNeverAskAgain(this,
+                getString(R.string.str_request_camera_message),
+                R.string.str_action_submic, R.string.str_action_cancle, perms);
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // EasyPermissions handles the request result.
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @AfterPermissionGranted(ExploreFragment.CAMERA_PERM)
+    private void cameraTask() {
+        if (EasyPermissions.hasPermissions(this, Manifest.permission.CAMERA)) {
+            // Have permission, do the thing!
+            cameraManager = new CameraManager(getApplication());
+
+            handler = null;
+
+            if (isHasSurface) {
+                // The activity was paused but not stopped, so the surface still
+                // exists. Therefore
+                // surfaceCreated() won't be called, so init the camera here.
+                initCamera(scanPreview.getHolder());
+            } else {
+                // Install the callback and wait for surfaceCreated() to init the
+                // camera.
+                scanPreview.getHolder().addCallback(this);
+            }
+
+            inactivityTimer.onResume();
+
+        } else {
+            // Request one permission
+            EasyPermissions.requestPermissions(this, getString(R.string.str_request_camera_message),
+                    ExploreFragment.CAMERA_PERM, Manifest.permission.CAMERA);
+        }
     }
 }

@@ -108,6 +108,7 @@ public class QuickOptionDialog extends Dialog implements
         dismiss();
     }
 
+
     private void onClickTweetPub(int id) {
         int type = -1;
         switch (id) {
