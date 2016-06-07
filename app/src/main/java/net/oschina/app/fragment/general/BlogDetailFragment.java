@@ -53,6 +53,7 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
     private TextView mTVAuthorName;
     private TextView mTVPubDate;
     private TextView mTVTitle;
+    private TextView mTVAbstract;
     private ImageView mIVLabelRecommend;
     private ImageView mIVLabelOriginate;
     private ImageView mIVAuthorPortrait;
@@ -62,6 +63,7 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
 
     private LinearLayout mLayAbouts;
     private LinearLayout mLayComments;
+    private LinearLayout mLayAbstract;
 
     private long mCommentId;
     private long mCommentAuthorId;
@@ -113,6 +115,7 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
         mTVAuthorName = (TextView) root.findViewById(R.id.tv_name);
         mTVPubDate = (TextView) root.findViewById(R.id.tv_pub_date);
         mTVTitle = (TextView) root.findViewById(R.id.tv_title);
+        mTVAbstract = (TextView) root.findViewById(R.id.tv_blog_detail_abstract);
 
         mIVLabelRecommend = (ImageView) root.findViewById(R.id.iv_label_recommend);
         mIVLabelOriginate = (ImageView) root.findViewById(R.id.iv_label_originate);
@@ -124,8 +127,10 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
             mBtnRelation.setElevation(0);
         }
         mETInput = (EditText) root.findViewById(R.id.et_input);
+
         mLayAbouts = (LinearLayout) root.findViewById(R.id.lay_blog_detail_about);
         mLayComments = (LinearLayout) root.findViewById(R.id.lay_blog_detail_comment);
+        mLayAbstract = (LinearLayout) root.findViewById(R.id.lay_blog_detail_abstract);
 
 
         root.findViewById(R.id.iv_share).setOnClickListener(this);
@@ -201,6 +206,12 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
 
         mTVTitle.setText(blog.getTitle());
 
+        if (TextUtils.isEmpty(blog.getAbstract())) {
+            mLayAbstract.setVisibility(View.GONE);
+        } else {
+            mTVAbstract.setText(blog.getAbstract());
+            mLayAbstract.setVisibility(View.VISIBLE);
+        }
 
         mIVLabelRecommend.setVisibility(blog.isRecommend() ? View.VISIBLE : View.GONE);
         mIVLabelOriginate.setImageDrawable(blog.isOriginal() ?
