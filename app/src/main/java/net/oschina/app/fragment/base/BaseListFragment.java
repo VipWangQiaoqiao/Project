@@ -99,7 +99,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
                     ResultBean<PageBean<T>> resultBean = AppContext.createGson().fromJson(responseString, getType());
-                    if (resultBean != null && resultBean.isSuccess()) {
+                    if (resultBean != null && resultBean.isSuccess() && resultBean.getResult().getItems() != null) {
                         onRequestSuccess(resultBean.getCode());
                         setListData(resultBean);
                     } else {
