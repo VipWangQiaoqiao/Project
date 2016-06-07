@@ -1,5 +1,6 @@
 package net.oschina.app.fragment.general;
 
+import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
@@ -29,11 +30,11 @@ import cz.msebera.android.httpclient.Header;
  */
 public class EventFragment extends GeneralListFragment<Event> {
 
-    private static final String TAG = "EventFragment";
     private boolean isFirst = true;
     private static final String EVENT_BANNER = "event_banner";
     private ViewEventHeader mHeaderView;
     public static final String HISTORY_EVENT = "history_event";
+    private Handler handler = new Handler();
 
     @Override
     protected void initWidget(View root) {
@@ -45,7 +46,7 @@ public class EventFragment extends GeneralListFragment<Event> {
             public void run() {
                 final PageBean<Banner> pageBean = (PageBean<Banner>) CacheManager.readObject(getActivity(), EVENT_BANNER);
                 if (pageBean != null) {
-                    mRoot.post(new Runnable() {
+                    handler.post(new Runnable() {
                         @Override
                         public void run() {
                             mHeaderView.initData(getImgLoader(), pageBean.getItems());

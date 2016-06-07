@@ -12,7 +12,7 @@ import java.lang.reflect.Field;
  * on 16-5-26.
  */
 public class SmoothScroller extends Scroller {
-    private int mDuration = 1000; //
+    private int mDuration = 1200; //
 
     public SmoothScroller(Context context) {
         super(context);
@@ -32,7 +32,7 @@ public class SmoothScroller extends Scroller {
         super.startScroll(startX, startY, dx, dy, mDuration);
     }
 
-    public void setViewPagerScroller(ViewPager viewPager, Context context) {
+    public void bingViewPager(ViewPager viewPager) {
         try {
             Field mScroller = null;
             mScroller = ViewPager.class.getDeclaredField("mScroller");
