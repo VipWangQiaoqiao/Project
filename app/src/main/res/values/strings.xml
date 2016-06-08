@@ -341,4 +341,6 @@
 
     <string name="pub_tweet_required_camera_tip">在设置-应用-开源中国权限中允许拍摄照片，以正常使用发动弹功能</string>
     <string name="pub_tweet_required_album_tip">在设置-应用-开源中国权限中允许访问你设备上的照片，以正常使用发动弹功能</string>
+
+    <string name="permissions_camera_error">相机无法完成初始化,请正确授权。</string>
 </resources>

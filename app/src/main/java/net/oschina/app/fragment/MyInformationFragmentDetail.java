@@ -1,5 +1,6 @@
 package net.oschina.app.fragment;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,11 +11,13 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -41,11 +44,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cz.msebera.android.httpclient.Header;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * 登录用户信息详情
@@ -54,7 +60,7 @@ import cz.msebera.android.httpclient.Header;
  * @version 创建时间：2015年1月6日 上午10:33:18
  */
 
-public class MyInformationFragmentDetail extends BaseFragment {
+public class MyInformationFragmentDetail extends BaseFragment implements EasyPermissions.PermissionCallbacks {
 
     public static final int ACTION_TYPE_ALBUM = 0;
     public static final int ACTION_TYPE_PHOTO = 1;
@@ -99,7 +105,7 @@ public class MyInformationFragmentDetail extends BaseFragment {
         @Override
         public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
             mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-            MyInformation  user = XmlUtils.toBean(MyInformation.class,
+            MyInformation user = XmlUtils.toBean(MyInformation.class,
                     new ByteArrayInputStream(arg2));
             if (user != null && user.getUser() != null) {
                 mUser = user.getUser();
@@ -177,7 +183,7 @@ public class MyInformationFragmentDetail extends BaseFragment {
                 startImagePick();
                 break;
             case ACTION_TYPE_PHOTO:
-                startTakePhoto();
+                startTakePhotoByPermissions();
                 break;
             default:
                 break;
@@ -393,5 +399,45 @@ public class MyInformationFragmentDetail extends BaseFragment {
                 uploadNewPhoto();
                 break;
         }
+    }
+
+    private static final int CAMERA_PERM = 1;
+
+    @AfterPermissionGranted(CAMERA_PERM)
+    private void startTakePhotoByPermissions() {
+        String[] perms = {Manifest.permission.CAMERA};
+        if (EasyPermissions.hasPermissions(this.getContext(), perms)) {
+            try {
+                startTakePhoto();
+            } catch (Exception e) {
+                Toast.makeText(this.getContext(), R.string.permissions_camera_error, Toast.LENGTH_LONG).show();
+            }
+        } else {
+            // Request one permission
+            EasyPermissions.requestPermissions(this,
+                    getResources().getString(R.string.str_request_camera_message),
+                    CAMERA_PERM, perms);
+        }
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+        try {
+            startTakePhoto();
+        } catch (Exception e) {
+            Toast.makeText(this.getContext(), R.string.permissions_camera_error, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        Toast.makeText(this.getContext(), R.string.permissions_camera_error, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // EasyPermissions handles the request result.
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 }
