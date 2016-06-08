@@ -32,11 +32,11 @@ public class NewsAdapter extends BaseListAdapter<News> {
         vh.setText(R.id.tv_description, item.getBody());
         vh.setText(R.id.tv_time, StringUtils.friendly_time(item.getPubDate()));
         vh.setText(R.id.tv_comment_count, String.valueOf(item.getCommentCount()));
-        if (item.isRecommend()) {
-            vh.setImage(R.id.iv_tip, R.drawable.ic_label_new);
-            vh.setVisibility(R.id.iv_tip);
-        } else {
-            vh.setGone(R.id.iv_tip);
+        if(StringUtils.isToday(item.getPubDate())){
+            vh.setImage(R.id.iv_today, R.drawable.ic_label_today);
+            vh.setVisibility(R.id.iv_today);
+        }else {
+            vh.setGone(R.id.iv_today);
         }
     }
 
