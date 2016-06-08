@@ -432,7 +432,7 @@ public final class CaptureActivity extends BaseActivity implements
     }
 
     private void displayFrameworkBugMessageAndExit() {
-        Toast.makeText(this, "相机无法完成初始化,请正确授权。", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.permissions_camera_error, Toast.LENGTH_LONG).show();
     }
 
     public void restartPreviewAfterDelay(long delayMS) {
@@ -559,15 +559,16 @@ public final class CaptureActivity extends BaseActivity implements
 
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
-        // initCamera();
+        if (perms != null && perms.size() == 2) {
+            initCamera();
+        }else{
+            displayFrameworkBugMessageAndExit();
+        }
     }
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
-        EasyPermissions.checkDeniedPermissionsNeverAskAgain(this,
-                getString(R.string.str_request_camera_message),
-                R.string.str_action_submic, R.string.str_action_cancle, perms);
-        finish();
+        displayFrameworkBugMessageAndExit();
     }
 
     @Override
