@@ -105,6 +105,11 @@ public class NewsFragment extends GeneralListFragment<News> {
         isFirst = false;
     }
 
+    @Override
+    protected void setListData(ResultBean<PageBean<News>> resultBean) {
+        ((NewsAdapter)mAdapter).setSystemTime(resultBean.getTime());
+        super.setListData(resultBean);
+    }
 
     private void getBannerList() {
         OSChinaApi.getBannerList(OSChinaApi.CATALOG_BANNER_NEWS, new TextHttpResponseHandler() {
