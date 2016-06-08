@@ -17,7 +17,6 @@ package com.dtr.zxing.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Rect;
@@ -35,6 +34,7 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.dtr.zxing.camera.CameraManager;
 import com.dtr.zxing.decode.DecodeThread;
@@ -404,7 +404,7 @@ public final class CaptureActivity extends BaseActivity implements
     }
 
     private void initCamera(SurfaceHolder surfaceHolder) {
-        if(cameraManager==null)
+        if (cameraManager == null)
             return;
 
         if (surfaceHolder == null) {
@@ -425,36 +425,14 @@ public final class CaptureActivity extends BaseActivity implements
             }
 
             initCrop();
-        } catch (IOException ioe) {
-            Log.w(TAG, ioe);
-            displayFrameworkBugMessageAndExit();
-        } catch (RuntimeException e) {
+        } catch (IOException | RuntimeException e) {
             Log.w(TAG, "Unexpected error initializing camera", e);
             displayFrameworkBugMessageAndExit();
         }
     }
 
     private void displayFrameworkBugMessageAndExit() {
-        // camera error
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.app_name));
-        builder.setMessage("相机打开出错，请稍后重试");
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-
-        });
-        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                finish();
-            }
-        });
-        builder.show();
+        Toast.makeText(this, "相机无法完成初始化,请正确授权。", Toast.LENGTH_LONG).show();
     }
 
     public void restartPreviewAfterDelay(long delayMS) {
@@ -518,12 +496,10 @@ public final class CaptureActivity extends BaseActivity implements
 
     @Override
     public void onClick(View v) {
-        // TODO Auto-generated method stub
         switch (v.getId()) {
             case R.id.capture_flash:
                 light();
                 break;
-
             default:
                 break;
         }
@@ -532,16 +508,20 @@ public final class CaptureActivity extends BaseActivity implements
     private boolean flag;
 
     private void light() {
-        if (flag) {
-            flag = false;
-            // 开闪光灯
-            cameraManager.openLight();
-            mFlash.setBackgroundResource(R.drawable.flash_open);
-        } else {
-            flag = true;
-            // 关闪光灯
-            cameraManager.offLight();
-            mFlash.setBackgroundResource(R.drawable.flash_default);
+        try {
+            if (flag) {
+                flag = false;
+                // 开闪光灯
+                cameraManager.openLight();
+                mFlash.setBackgroundResource(R.drawable.flash_open);
+            } else {
+                flag = true;
+                // 关闪光灯
+                cameraManager.offLight();
+                mFlash.setBackgroundResource(R.drawable.flash_default);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
