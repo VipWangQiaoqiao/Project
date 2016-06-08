@@ -15,6 +15,7 @@
  */
 package com.dtr.zxing.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -22,6 +23,7 @@ import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.text.ClipboardManager;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -57,8 +59,11 @@ import net.oschina.app.util.XmlUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * This activity opens the camera and does the actual scanning on a background
@@ -70,7 +75,7 @@ import cz.msebera.android.httpclient.Header;
  * @author Sean Owen
  */
 public final class CaptureActivity extends BaseActivity implements
-        SurfaceHolder.Callback {
+        SurfaceHolder.Callback, EasyPermissions.PermissionCallbacks {
 
     private static final String TAG = CaptureActivity.class.getSimpleName();
 
@@ -105,9 +110,6 @@ public final class CaptureActivity extends BaseActivity implements
 
     @Override
     protected void onResume() {
-<<<<<<< HEAD
-
-=======
         if (scanPreview != null) {
             handler = null;
             if (isHasSurface) {
@@ -120,7 +122,6 @@ public final class CaptureActivity extends BaseActivity implements
         if (inactivityTimer != null) {
             inactivityTimer.onResume();
         }
->>>>>>> 2c3b6c731de6d8d0a31aee76a2a2cba5f819e8d9
         super.onResume();
     }
 
@@ -552,8 +553,6 @@ public final class CaptureActivity extends BaseActivity implements
     public void initData() {
     }
 
-<<<<<<< HEAD
-=======
     private void initCamera() {
         scanContainer = (RelativeLayout) findViewById(R.id.capture_container);
         scanCropView = (RelativeLayout) findViewById(R.id.capture_crop_view);
@@ -614,5 +613,4 @@ public final class CaptureActivity extends BaseActivity implements
                     CAMERA_PERM, perms);
         }
     }
->>>>>>> 2c3b6c731de6d8d0a31aee76a2a2cba5f819e8d9
 }
