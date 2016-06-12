@@ -331,6 +331,9 @@ public class UIHelper {
             case net.oschina.app.bean.news.News.TYPE_NEWS:
                 showNewsDetail(context, Integer.parseInt(String.valueOf(newsId)), news.getCommentCount());
                 break;
+            case net.oschina.app.bean.news.News.TYPE_TRNSLATE:
+                showNewsDetail(context, Integer.parseInt(String.valueOf(newsId)), news.getCommentCount());
+                break;
             default:
                 showUrlRedirect(context, news.getHref());
                 break;

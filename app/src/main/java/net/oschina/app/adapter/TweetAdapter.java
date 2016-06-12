@@ -27,10 +27,8 @@ import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.ImageUtils;
-import net.oschina.app.util.KJAnimations;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.TypefaceUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.MyLinkMovementMethod;
@@ -60,12 +58,14 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         AvatarView face;
         @Bind(R.id.iv_tweet_image)
         ImageView image;
-        @Bind(R.id.tv_like_state)
-        TextView tvLikeState;
+        @Bind(R.id.iv_like_state)
+        ImageView ivLikeState;
         @Bind(R.id.tv_del)
         TextView del;
         @Bind(R.id.tv_likeusers)
         TextView likeUsers;
+        @Bind(R.id.tv_tweet_like_count)
+        TextView tv_tweet_like_count;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
@@ -99,7 +99,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         context = parent.getContext();
         final ViewHolder vh;
         if (convertView == null || convertView.getTag() == null) {
-            convertView = View.inflate(context, R.layout.list_cell_tweet, null);
+            convertView = View.inflate(context, R.layout.item_list_tweet, null);
             vh = new ViewHolder(convertView);
             convertView.setTag(vh);
         } else {
@@ -127,6 +127,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         vh.content.setFocusable(false);
         vh.content.setDispatchToParent(true);
         vh.content.setLongClickable(false);
+        vh.tv_tweet_like_count.setText(String.valueOf(tweet.getLikeCount()));
 
         Spanned span = Html.fromHtml(tweet.getBody().trim());
 
@@ -164,9 +165,9 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         tweet.setLikeUsers(context, vh.likeUsers, true);
 
         if (tweet.getLikeUser() == null) {
-            vh.tvLikeState.setVisibility(View.GONE);
+            vh.ivLikeState.setVisibility(View.GONE);
         } else {
-            vh.tvLikeState.setOnClickListener(new OnClickListener() {
+            vh.ivLikeState.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (AppContext.getInstance().isLogin()) {
@@ -179,14 +180,14 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             });
         }
 
-        TypefaceUtils.setTypeface(vh.tvLikeState);
-        if (tweet.getIsLike() == 1) {
-            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
-                    .day_colorPrimary));
-        } else {
-            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
-                    .gray));
-        }
+//        TypefaceUtils.setTypeface(vh.tvLikeState);
+//        if (tweet.getIsLike() == 1) {
+//            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
+//                    .day_colorPrimary));
+//        } else {
+//            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
+//                    .gray));
+//        }
         PlatfromUtil.setPlatFromString(vh.platform, tweet.getAppclient());
         return convertView;
     }
@@ -200,17 +201,20 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             }
             OSChinaApi.pubUnLikeTweet(tweet.getId(), tweet.getAuthorid(),
                     handler);
-            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
-                    .gray));
+//            vh.ivLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
+//                    .gray));
+            vh.ivLikeState.setImageResource(R.drawable.ic_thumbup_normal);
         } else {
-            vh.tvLikeState.setAnimation(KJAnimations.getScaleAnimation(1.5f, 300));
+            //vh.tvLikeState.setAnimation(KJAnimations.getScaleAnimation(1.5f, 300));
             tweet.getLikeUser().add(0, AppContext.getInstance().getLoginUser());
             OSChinaApi.pubLikeTweet(tweet.getId(), tweet.getAuthorid(), handler);
-            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
-                    .day_colorPrimary));
+//            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
+//                    .day_colorPrimary));
+            vh.ivLikeState.setImageResource(R.drawable.ic_thumbup_actived);
             tweet.setIsLike(1);
             tweet.setLikeCount(tweet.getLikeCount() + 1);
         }
+        vh.tv_tweet_like_count.setText(String.valueOf(tweet.getLikeCount()));
         tweet.setLikeUsers(context, vh.likeUsers, true);
     }
 
