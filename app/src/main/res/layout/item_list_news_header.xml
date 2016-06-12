@@ -33,8 +33,10 @@
 
         <net.oschina.app.widget.indicator.CirclePagerIndicator
             android:id="@+id/indicator"
-            android:layout_width="60dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
             app:circle_indicator_centerHorizontal="true"
