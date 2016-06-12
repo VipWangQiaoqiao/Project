@@ -16,7 +16,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -284,7 +283,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
     /***
      * 自动刷新的时间
-     * <p/>
+     * <p>
      * 默认：自动刷新的时间为半天时间
      *
      * @return

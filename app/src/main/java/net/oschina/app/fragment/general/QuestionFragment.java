@@ -29,6 +29,8 @@ import java.util.ArrayList;
 
 /**
  * 技术问答界面
+ * <p>
+ * desc
  */
 public class QuestionFragment extends GeneralListFragment<Question> {
 

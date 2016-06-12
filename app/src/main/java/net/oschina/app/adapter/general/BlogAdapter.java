@@ -8,6 +8,7 @@ import net.oschina.app.adapter.ViewHolder;
 import net.oschina.app.adapter.base.BaseListAdapter;
 import net.oschina.app.bean.blog.Blog;
 import net.oschina.app.fragment.general.BlogFragment;
+import net.oschina.app.fragment.general.UserBlogFragment;
 import net.oschina.app.util.StringUtils;
 
 import java.util.List;
@@ -19,8 +20,14 @@ import java.util.List;
  */
 public class BlogAdapter extends BaseListAdapter<Blog> {
 
+    private boolean isUserBlog;
+
     public BlogAdapter(Callback callback) {
         super(callback);
+    }
+
+    public void setUserBlog(boolean userBlog) {
+        isUserBlog = userBlog;
     }
 
     @Override
@@ -60,7 +67,13 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
                     title.setText(title1.trim());
                 }
 
-                if (AppContext.isOnReadedPostList(BlogFragment.HISTORY_BLOG, item.getId() + "")) {
+                String cacheName = BlogFragment.HISTORY_BLOG;
+
+                if (isUserBlog) {
+                    cacheName = UserBlogFragment.HISTORY_BLOG;
+                }
+
+                if (AppContext.isOnReadedPostList(cacheName, item.getId() + "")) {
                     title.setTextColor(mCallback.getContext().getResources().getColor(R.color.count_text_color_light));
                     content.setTextColor(mCallback.getContext().getResources().getColor(R.color.count_text_color_light));
                 } else {
