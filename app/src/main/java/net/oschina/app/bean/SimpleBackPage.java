@@ -18,8 +18,8 @@ import net.oschina.app.fragment.SoftWareTweetsFrament;
 import net.oschina.app.fragment.TweetLikeUsersFragment;
 import net.oschina.app.fragment.TweetRecordFragment;
 import net.oschina.app.fragment.TweetsFragment;
-import net.oschina.app.fragment.UserBlogFragment;
 import net.oschina.app.fragment.UserCenterFragment;
+import net.oschina.app.fragment.general.UserBlogFragment;
 import net.oschina.app.team.fragment.NoteBookFragment;
 import net.oschina.app.team.fragment.NoteEditFragment;
 import net.oschina.app.team.fragment.TeamActiveFragment;
@@ -56,7 +56,7 @@ public enum SimpleBackPage {
     USER_CENTER(5, R.string.actionbar_title_user_center,
             UserCenterFragment.class),
 
-    USER_BLOG(6, R.string.actionbar_title_user_blog, UserBlogFragment.class),
+    USER_BLOG(6, R.string.actionbar_title_user_blog,UserBlogFragment.class),
 
     MY_INFORMATION(7, R.string.actionbar_title_my_information,
             MyInformationFragment.class),
