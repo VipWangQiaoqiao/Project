@@ -3,6 +3,8 @@ package net.oschina.app.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,6 +17,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.ui.dialog.ImageMenuDialog;
+import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.TouchImageView;
@@ -22,6 +25,8 @@ import net.oschina.app.widget.TouchImageView;
 import org.kymjs.kjframe.Core;
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
 import org.kymjs.kjframe.http.HttpConfig;
+
+import java.io.IOException;
 
 /**
  * 图片预览界面
@@ -116,9 +121,18 @@ public class OSCPhotosActivity extends BaseActivity {
     private void saveImg() {
         final String filePath = AppConfig.DEFAULT_SAVE_IMAGE_PATH
                 + getFileName(mImageUrl);
-        Core.getKJBitmap().saveImage(this, mImageUrl, filePath);
-        AppContext.showToastShort(getString(R.string.tip_save_image_suc,
-                filePath));
+
+        Drawable drawable = mTouchImageView.getDrawable();
+        if (drawable != null && drawable instanceof BitmapDrawable) {
+            Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+            try {
+                ImageUtils.saveImageToSD(this, filePath, bitmap, 100);
+                AppContext.showToastShort(getString(R.string.tip_save_image_suc) + filePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        //Core.getKJBitmap().saveImage(this, mImageUrl, filePath);
     }
 
     private String getFileName(String imgUrl) {
