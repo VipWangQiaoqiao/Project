@@ -1102,10 +1102,8 @@ public class OSChinaApi {
         if (!TextUtils.isEmpty(pageToken)) {
             params.put("pageToken", pageToken);
         }
-        if (userId > 0) {
-            params.put("userId", userId);
-        }
-
+        if (userId <= 0) return;
+        params.put("userId", userId);
         ApiHttpClient.get("action/apiv2/blog", params, handler);
     }
 
