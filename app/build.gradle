@@ -9,8 +9,8 @@ android {
         applicationId "net.oschina.app"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 261
-        versionName "2.6.1 Beta (1606071151)"
+        versionCode 262
+        versionName "2.6.2 (1606121626)"
     }
 
     // 移除lint检查的error
