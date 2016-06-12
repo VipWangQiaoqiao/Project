@@ -17,8 +17,6 @@ import net.oschina.app.R;
  */
 @SuppressWarnings("unused")
 public class CirclePagerIndicator extends View implements PagerIndicator {
-    private static final int INVALID_POINTER = -1;
-
     private float mRadius;
     private float mIndicatorRadius;
     private final Paint mPaintFill = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -129,10 +127,6 @@ public class CirclePagerIndicator extends View implements PagerIndicator {
         canvas.drawCircle(cX, cY, mIndicatorRadius, mPaintIndicator);
     }
 
-    @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
-    }
 
     @Override
     public void bindViewPager(ViewPager view) {
@@ -166,6 +160,7 @@ public class CirclePagerIndicator extends View implements PagerIndicator {
     @Override
     public void notifyDataSetChanged() {
         invalidate();
+        requestLayout();
     }
 
     @Override
@@ -209,36 +204,36 @@ public class CirclePagerIndicator extends View implements PagerIndicator {
     }
 
     private int measureWidth(int measureSpec) {
-        int result;
+        int width;
         int specMode = MeasureSpec.getMode(measureSpec);
         int specSize = MeasureSpec.getSize(measureSpec);
 
         if ((specMode == MeasureSpec.EXACTLY) || (mViewPager == null)) {
-            result = specSize;
+            width = specSize;
         } else {
             final int count = mViewPager.getAdapter().getCount();
-            result = (int) (getPaddingLeft() + getPaddingRight()
-                    + (count * 2 * mRadius) + (count - 1) * mRadius + 1);
+            width = (int) (getPaddingLeft() + getPaddingRight()
+                    + (count * 2 * mRadius) + (mIndicatorRadius - mRadius) * 2 + (count - 1) * mIndicatorSpace);
             if (specMode == MeasureSpec.AT_MOST) {
-                result = Math.min(result, specSize);
+                width = Math.min(width, specSize);
             }
         }
-        return result;
+        return width;
     }
 
     private int measureHeight(int measureSpec) {
-        int result;
+        int height;
         int specMode = MeasureSpec.getMode(measureSpec);
         int specSize = MeasureSpec.getSize(measureSpec);
 
         if (specMode == MeasureSpec.EXACTLY) {
-            result = specSize;
+            height = specSize;
         } else {
-            result = (int) (2 * mRadius + getPaddingTop() + getPaddingBottom() + 1);
+            height = (int) (2 * mRadius + getPaddingTop() + getPaddingBottom() + 1);
             if (specMode == MeasureSpec.AT_MOST) {
-                result = Math.min(result, specSize);
+                height = Math.min(height, specSize);
             }
         }
-        return result;
+        return height;
     }
 }

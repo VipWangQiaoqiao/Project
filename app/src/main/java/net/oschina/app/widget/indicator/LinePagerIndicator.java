@@ -18,7 +18,6 @@ import net.oschina.app.R;
  */
 @SuppressWarnings("unused")
 public class LinePagerIndicator extends View implements PagerIndicator {
-    private static final int INVALID_POINTER = -1;
 
     //绘制Line的画笔
     private final Paint mPaintFull = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -126,35 +125,35 @@ public class LinePagerIndicator extends View implements PagerIndicator {
 
 
     private int measureWidth(int measureSpec) {
-        float result;
+        float width;
         int specMode = MeasureSpec.getMode(measureSpec);
         int specSize = MeasureSpec.getSize(measureSpec);
 
         if ((specMode == MeasureSpec.EXACTLY) || (mViewPager == null)) {
-            result = specSize;
+            width = specSize;
         } else {
             final int count = mViewPager.getAdapter().getCount();
-            result = getPaddingLeft() + getPaddingRight() + (count * mLineWidth) + ((count - 1) * mSpace);
+            width = getPaddingLeft() + getPaddingRight() + (count * mLineWidth) + ((count - 1) * mSpace);
             if (specMode == MeasureSpec.AT_MOST) {
-                result = Math.min(result, specSize);
+                width = Math.min(width, specSize);
             }
         }
-        return (int) Math.ceil(result);
+        return (int) Math.ceil(width);
     }
 
     private int measureHeight(int measureSpec) {
-        float result;
+        float height;
         int specMode = MeasureSpec.getMode(measureSpec);
         int specSize = MeasureSpec.getSize(measureSpec);
         if (specMode == MeasureSpec.EXACTLY) {
-            result = specSize;
+            height = specSize;
         } else {
-            result = mPaintIndicator.getStrokeWidth() + getPaddingTop() + getPaddingBottom();
+            height = mPaintIndicator.getStrokeWidth() + getPaddingTop() + getPaddingBottom();
             if (specMode == MeasureSpec.AT_MOST) {
-                result = Math.min(result, specSize);
+                height = Math.min(height, specSize);
             }
         }
-        return (int) Math.ceil(result);
+        return (int) Math.ceil(height);
     }
 
     @Override
