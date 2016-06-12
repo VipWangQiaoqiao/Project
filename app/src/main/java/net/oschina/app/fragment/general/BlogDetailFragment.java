@@ -264,6 +264,7 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
 
         setText(R.id.tv_info_comment, String.valueOf(blog.getCommentCount()));
         if (blog.getComments() != null && blog.getComments().size() > 0) {
+
             if (blog.getComments().size() < blog.getCommentCount()) {
                 setVisibility(R.id.tv_see_comment);
                 mLayComments.findViewById(R.id.tv_see_comment).setOnClickListener(this);
@@ -373,11 +374,21 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
                 UIHelper.setHtmlCotentSupportImagePreview(blog.getBody()));
     }
 
+    private boolean mInputDoubleEmpty = false;
+
     private void handleKeyDel() {
-        if (mCommentId != mId && TextUtils.isEmpty(mETInput.getText())) {
-            mCommentId = mId;
-            mCommentAuthorId = 0;
-            mETInput.setHint("发表评论");
+        if (mCommentId != mId) {
+            if (TextUtils.isEmpty(mETInput.getText())) {
+                if (mInputDoubleEmpty) {
+                    mCommentId = mId;
+                    mCommentAuthorId = 0;
+                    mETInput.setHint("发表评论");
+                } else {
+                    mInputDoubleEmpty = true;
+                }
+            } else {
+                mInputDoubleEmpty = false;
+            }
         }
     }
 
