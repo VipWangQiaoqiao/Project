@@ -10,7 +10,7 @@
         android:id="@+id/ll_user_container"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:background="@drawable/user_center_bg"
+        android:background="@drawable/bg_my"
         android:orientation="vertical"
         android:visibility="visible" >
 
