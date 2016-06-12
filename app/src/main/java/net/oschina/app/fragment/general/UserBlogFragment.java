@@ -15,6 +15,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.base.PageBean;
 import net.oschina.app.bean.base.ResultBean;
 import net.oschina.app.bean.blog.Blog;
+import net.oschina.app.fragment.base.BaseListFragment;
 import net.oschina.app.ui.blog.BlogDetailActivity;
 
 import java.lang.reflect.Type;
@@ -22,8 +23,7 @@ import java.lang.reflect.Type;
 /**
  * 博客界面
  */
-public class UserBlogFragment extends GeneralListFragment<Blog> {
-
+public class UserBlogFragment extends BaseListFragment<Blog> {
 
     public static final String HISTORY_BLOG = "history_my_blog";
     public static final String USER_ID = "user_id";
@@ -33,7 +33,9 @@ public class UserBlogFragment extends GeneralListFragment<Blog> {
     protected void initBundle(Bundle bundle) {
         super.initBundle(bundle);
         userId = bundle.getInt(USER_ID, 0);
+        // mIsRefresh = false;
     }
+
 
     @Override
     protected void requestData() {
