@@ -1087,6 +1087,28 @@ public class OSChinaApi {
         ApiHttpClient.get("action/apiv2/blog", params, handler);
     }
 
+    /**
+     * 请求用户自己的博客列表
+     *
+     * @param catalog   博客类别 {@link #CATALOG_BLOG_NORMAL, #CATALOG_BLOG_HEAT}
+     * @param pageToken 请求上下页数据令牌
+     * @param handler   AsyncHttpResponseHandler
+     */
+    public static void getUserBlogList(int catalog, String pageToken, int userId, AsyncHttpResponseHandler handler) {
+        if (catalog <= 0)
+            catalog = 1;
+        RequestParams params = new RequestParams();
+        params.put("catalog", catalog);
+        if (!TextUtils.isEmpty(pageToken)) {
+            params.put("pageToken", pageToken);
+        }
+        if (userId > 0) {
+            params.put("userId", userId);
+        }
+
+        ApiHttpClient.get("action/apiv2/blog", params, handler);
+    }
+
 
     /**
      * 请求博客详情
@@ -1143,4 +1165,6 @@ public class OSChinaApi {
         ApiHttpClient.get("action/apiv2/question", params, handler);
     }
 
+    public static void getBlogListForUser(int catalogBlogNormal, Object p1) {
+    }
 }

@@ -50,6 +50,7 @@ import net.oschina.app.fragment.FriendsFragment;
 import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
+import net.oschina.app.fragment.general.UserBlogFragment;
 import net.oschina.app.interf.ICallbackResult;
 import net.oschina.app.interf.OnWebViewImageListener;
 import net.oschina.app.service.DownloadService;
@@ -842,7 +843,7 @@ public class UIHelper {
      */
     public static void showUserBlog(Context context, int uid) {
         Bundle args = new Bundle();
-        args.putInt(BaseListFragment.BUNDLE_KEY_CATALOG, uid);
+        args.putInt(UserBlogFragment.USER_ID, uid);
         showSimpleBack(context, SimpleBackPage.USER_BLOG, args);
     }
 
