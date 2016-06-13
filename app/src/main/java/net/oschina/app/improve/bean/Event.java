@@ -16,17 +16,17 @@ public class Event implements Serializable {
     public static final int EVENT_TYPE_OTHER = 3;
     public static final int EVENT_TYPE_OUTSIDE = 4;
 
-    private long id;
-    private int applyCount;
-    private int status;
-    private int type;
-    private String title;
-    private String body;
-    private String img;
-    private String startDate;
-    private String endDate;
-    private String pubDate;
-    private String href;
+    protected long id;
+    protected int applyCount;
+    protected int status;
+    protected int type;
+    protected String title;
+    protected String body;
+    protected String img;
+    protected String startDate;
+    protected String endDate;
+    protected String pubDate;
+    protected String href;
 
     public long getId() {
         return id;
