@@ -23,6 +23,7 @@ import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetsList;
 import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.ui.tweet.TweetDetailActivity;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
@@ -163,6 +164,7 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
         Tweet tweet = mAdapter.getItem(position);
         if (tweet != null) {
             UIHelper.showTweetDetail(view.getContext(), null, tweet.getId());
+//            TweetDetailActivity.show(getContext(), tweet);
         }
     }
 
