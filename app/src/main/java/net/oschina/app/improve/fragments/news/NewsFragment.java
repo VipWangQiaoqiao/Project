@@ -1,4 +1,4 @@
-package net.oschina.app.fragment.general;
+package net.oschina.app.improve.fragments.news;
 
 import android.os.Handler;
 import android.view.View;
@@ -14,10 +14,11 @@ import net.oschina.app.adapter.base.BaseListAdapter;
 import net.oschina.app.adapter.general.NewsAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Banner;
-import net.oschina.app.bean.base.PageBean;
-import net.oschina.app.bean.base.ResultBean;
-import net.oschina.app.bean.news.News;
 import net.oschina.app.cache.CacheManager;
+import net.oschina.app.improve.bean.News;
+import net.oschina.app.improve.bean.base.PageBean;
+import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.fragments.base.BaseGeneralListFragment;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.ViewNewsHeader;
 
@@ -28,7 +29,7 @@ import cz.msebera.android.httpclient.Header;
 /**
  * 资讯界面
  */
-public class NewsFragment extends GeneralListFragment<News> {
+public class NewsFragment extends BaseGeneralListFragment<News> {
 
     public static final String HISTORY_NEWS = "history_news";
     private boolean isFirst = true;
@@ -107,7 +108,7 @@ public class NewsFragment extends GeneralListFragment<News> {
 
     @Override
     protected void setListData(ResultBean<PageBean<News>> resultBean) {
-        ((NewsAdapter)mAdapter).setSystemTime(resultBean.getTime());
+        ((NewsAdapter) mAdapter).setSystemTime(resultBean.getTime());
         super.setListData(resultBean);
     }
 

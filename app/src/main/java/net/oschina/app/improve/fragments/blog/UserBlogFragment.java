@@ -1,4 +1,4 @@
-package net.oschina.app.fragment.general;
+package net.oschina.app.improve.fragments.blog;
 
 
 import android.os.Bundle;
@@ -12,11 +12,11 @@ import net.oschina.app.R;
 import net.oschina.app.adapter.base.BaseListAdapter;
 import net.oschina.app.adapter.general.BlogAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.bean.base.PageBean;
-import net.oschina.app.bean.base.ResultBean;
-import net.oschina.app.bean.blog.Blog;
-import net.oschina.app.fragment.base.BaseListFragment;
-import net.oschina.app.ui.blog.BlogDetailActivity;
+import net.oschina.app.improve.activities.BlogDetailActivity;
+import net.oschina.app.improve.bean.Blog;
+import net.oschina.app.improve.bean.base.PageBean;
+import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.fragments.base.BaseListFragment;
 
 import java.lang.reflect.Type;
 

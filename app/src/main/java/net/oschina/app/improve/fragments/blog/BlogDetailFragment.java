@@ -1,4 +1,4 @@
-package net.oschina.app.fragment.general;
+package net.oschina.app.improve.fragments.blog;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -26,11 +26,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.oschina.app.R;
-import net.oschina.app.bean.blog.BlogDetail;
-import net.oschina.app.contract.BlogDetailContract;
 import net.oschina.app.emoji.InputHelper;
-import net.oschina.app.fragment.base.BaseFragment;
-import net.oschina.app.ui.blog.BlogDetailActivity;
+import net.oschina.app.improve.activities.BlogDetailActivity;
+import net.oschina.app.improve.bean.BlogDetail;
+import net.oschina.app.improve.contract.BlogDetailContract;
+import net.oschina.app.improve.fragments.base.BaseFragment;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.MyLinkMovementMethod;
@@ -368,7 +368,7 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
             + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/css/common_new" +
             ".css\">";
 
-    private String getWebViewBody(net.oschina.app.bean.blog.BlogDetail blog) {
+    private String getWebViewBody(BlogDetail blog) {
         return String.format("<!DOCTYPE HTML><html><head>%s</head><body><div class=\"body-content\">%s</div></body></html>",
                 linkCss + UIHelper.WEB_LOAD_IMAGES,
                 UIHelper.setHtmlCotentSupportImagePreview(blog.getBody()));

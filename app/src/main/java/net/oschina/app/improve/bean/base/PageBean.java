@@ -1,4 +1,4 @@
-package net.oschina.app.bean.base;
+package net.oschina.app.improve.bean.base;
 
 import java.io.Serializable;
 import java.util.List;

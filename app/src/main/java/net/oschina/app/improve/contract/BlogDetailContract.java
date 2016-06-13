@@ -1,6 +1,6 @@
-package net.oschina.app.contract;
+package net.oschina.app.improve.contract;
 
-import net.oschina.app.bean.blog.BlogDetail;
+import net.oschina.app.improve.bean.BlogDetail;
 
 /**
  * Created by qiujuer

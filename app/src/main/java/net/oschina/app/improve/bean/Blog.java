@@ -1,4 +1,4 @@
-package net.oschina.app.bean.blog;
+package net.oschina.app.improve.bean;
 
 import com.google.gson.annotations.Expose;
 

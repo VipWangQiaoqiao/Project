@@ -1,4 +1,4 @@
-package net.oschina.app.fragment.base;
+package net.oschina.app.improve.fragments.base;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +12,9 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.base.BaseListAdapter;
-import net.oschina.app.bean.base.PageBean;
-import net.oschina.app.bean.base.ResultBean;
 import net.oschina.app.cache.CacheManager;
+import net.oschina.app.improve.bean.base.PageBean;
+import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.widget.SuperRefreshLayout;
 

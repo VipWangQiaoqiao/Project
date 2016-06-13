@@ -1,4 +1,4 @@
-package net.oschina.app.ui.blog;
+package net.oschina.app.improve.activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -25,10 +25,10 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Result;
-import net.oschina.app.bean.base.ResultBean;
-import net.oschina.app.bean.blog.BlogDetail;
-import net.oschina.app.contract.BlogDetailContract;
-import net.oschina.app.fragment.general.BlogDetailFragment;
+import net.oschina.app.improve.bean.BlogDetail;
+import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.contract.BlogDetailContract;
+import net.oschina.app.improve.fragments.blog.BlogDetailFragment;
 import net.oschina.app.ui.ReportDialog;
 import net.oschina.app.ui.ShareDialog;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -273,8 +273,8 @@ public class BlogDetailActivity extends AppCompatActivity implements BlogDetailC
             return;
         }
 
-        if(dialog == null){
-           dialog = new ShareDialog(this);
+        if (dialog == null) {
+            dialog = new ShareDialog(this);
         }
         dialog.setCancelable(true);
         dialog.setCanceledOnTouchOutside(true);
