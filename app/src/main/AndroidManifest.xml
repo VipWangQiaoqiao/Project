@@ -255,18 +255,15 @@
             android:label="博客详情"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-<<<<<<< HEAD
 
         <activity
             android:name=".improve.activities.QuestionDetailActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:label="问答详情"
-=======
+            android:label="问答详情" />
         <activity
             android:name=".ui.tweet.TweetDetailActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:label="博客详情"
->>>>>>> 272dde80c60a41011847ebe0c0c1fa5b47c11f34
+            android:label="动弹详情"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
     </application>
