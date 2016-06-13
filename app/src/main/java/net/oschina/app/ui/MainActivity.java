@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void initView() {
-        mTitle = getTitle();
+        mTitle = getResources().getString(R.string.main_tab_name_news);
         mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
         if (android.os.Build.VERSION.SDK_INT > 10) {
             mTabHost.getTabWidget().setShowDividers(0);
@@ -303,6 +303,7 @@ public class MainActivity extends AppCompatActivity implements
             mBvNotice.setText("");
             mBvNotice.hide();
         }
+        mTitle = tabId;
         supportInvalidateOptionsMenu();
     }
 
