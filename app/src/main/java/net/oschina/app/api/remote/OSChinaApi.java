@@ -1163,6 +1163,16 @@ public class OSChinaApi {
         ApiHttpClient.get("action/apiv2/question", params, handler);
     }
 
-    public static void getBlogListForUser(int catalogBlogNormal, Object p1) {
+    /**
+     * 请求问答详情
+     *
+     * @param id      问答id
+     * @param handler AsyncHttpResponseHandler
+     */
+    public static void getQuestionDetail(long id, AsyncHttpResponseHandler handler) {
+        if (id <= 0) return;
+        RequestParams params = new RequestParams();
+        params.put("id", id);
+        ApiHttpClient.get("action/apiv2/blog", params, handler);
     }
 }

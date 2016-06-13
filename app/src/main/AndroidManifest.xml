@@ -171,7 +171,7 @@
         <activity
             android:name="com.dtr.zxing.activity.CaptureActivity"
             android:label="@string/actionbar_title_qr_scan"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.ShakeActivity"
             android:label="@string/actionbar_title_shake"
@@ -215,7 +215,7 @@
 
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="53cb520c56240bbd7d076ce5"></meta-data>
+            android:value="53cb520c56240bbd7d076ce5" />
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="pIbgtjFevz8LlkbNsYUNl4Qp" />
@@ -223,7 +223,7 @@
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
-            android:process=":remote"></service>
+            android:process=":remote" />
 
         <!-- ############ QQ空间和QQ SSO授权的Activity注册 ############ -->
         <activity
@@ -255,10 +255,15 @@
             android:label="博客详情"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <activity
+            android:name=".improve.activities.QuestionDetailActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="问答详情" />
         <activity
             android:name=".ui.tweet.TweetDetailActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:label="博客详情"
+            android:label="动弹详情"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
     </application>

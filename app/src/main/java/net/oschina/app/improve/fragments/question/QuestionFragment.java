@@ -209,6 +209,7 @@ public class QuestionFragment extends BaseGeneralListFragment<Question> {
         if (question != null) {
             UIHelper.showPostDetail(getActivity(), (int) question.getId(),
                     question.getCommentCount());
+            //QuestionDetailActivity.show(getActivity(),question.getId());
             TextView title = (TextView) view.findViewById(R.id.tv_ques_item_title);
             TextView content = (TextView) view.findViewById(R.id.tv_ques_item_content);
             updateTextColor(title, content);
