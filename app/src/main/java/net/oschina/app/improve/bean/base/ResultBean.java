@@ -1,4 +1,4 @@
-package net.oschina.app.bean.base;
+package net.oschina.app.improve.bean.base;
 
 /**
  * Created by huanghaibin

@@ -4,8 +4,8 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewHolder;
 import net.oschina.app.adapter.base.BaseListAdapter;
-import net.oschina.app.bean.news.News;
-import net.oschina.app.fragment.general.NewsFragment;
+import net.oschina.app.improve.bean.News;
+import net.oschina.app.improve.fragments.news.NewsFragment;
 import net.oschina.app.util.StringUtils;
 
 /**

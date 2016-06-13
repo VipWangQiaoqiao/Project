@@ -10,11 +10,11 @@ import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.BaseViewPagerFragment;
 import net.oschina.app.bean.BlogList;
 import net.oschina.app.bean.NewsList;
-import net.oschina.app.fragment.general.BlogFragment;
-import net.oschina.app.fragment.general.EventFragment;
-import net.oschina.app.fragment.general.GeneralListFragment;
-import net.oschina.app.fragment.general.NewsFragment;
-import net.oschina.app.fragment.general.QuestionFragment;
+import net.oschina.app.improve.fragments.blog.BlogFragment;
+import net.oschina.app.improve.fragments.event.EventFragment;
+import net.oschina.app.improve.fragments.base.BaseGeneralListFragment;
+import net.oschina.app.improve.fragments.news.NewsFragment;
+import net.oschina.app.improve.fragments.question.QuestionFragment;
 import net.oschina.app.interf.OnTabReselectListener;
 
 /**
@@ -84,8 +84,8 @@ public class GeneralViewPagerFragment extends BaseViewPagerFragment implements
     @Override
     public void onTabReselect() {
         Fragment fragment = mTabsAdapter.getItem(mViewPager.getCurrentItem());
-        if (fragment != null && fragment instanceof GeneralListFragment) {
-            ((GeneralListFragment) fragment).onTabReselect();
+        if (fragment != null && fragment instanceof BaseGeneralListFragment) {
+            ((BaseGeneralListFragment) fragment).onTabReselect();
         }
     }
 }

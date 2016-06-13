@@ -250,7 +250,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Transparent" />
         <activity
-            android:name=".ui.blog.BlogDetailActivity"
+            android:name=".improve.activities.BlogDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="博客详情"
             android:screenOrientation="portrait"

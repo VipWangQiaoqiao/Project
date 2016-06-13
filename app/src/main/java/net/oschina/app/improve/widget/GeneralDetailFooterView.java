@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
-import net.oschina.app.bean.blog.BlogDetail;
+import net.oschina.app.improve.bean.BlogDetail;
 
 import java.util.List;
 

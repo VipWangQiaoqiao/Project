@@ -6,9 +6,9 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewHolder;
 import net.oschina.app.adapter.base.BaseListAdapter;
-import net.oschina.app.bean.blog.Blog;
-import net.oschina.app.fragment.general.BlogFragment;
-import net.oschina.app.fragment.general.UserBlogFragment;
+import net.oschina.app.improve.bean.Blog;
+import net.oschina.app.improve.fragments.blog.BlogFragment;
+import net.oschina.app.improve.fragments.blog.UserBlogFragment;
 import net.oschina.app.util.StringUtils;
 
 import java.util.List;

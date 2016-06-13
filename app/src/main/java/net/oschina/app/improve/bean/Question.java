@@ -1,4 +1,4 @@
-package net.oschina.app.bean.question;
+package net.oschina.app.improve.bean;
 
 import java.io.Serializable;
 

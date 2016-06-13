@@ -1,6 +1,5 @@
-package net.oschina.app.fragment.general;
+package net.oschina.app.improve.fragments.base;
 
-import net.oschina.app.fragment.base.BaseListFragment;
 import net.oschina.app.interf.OnTabReselectListener;
 
 /**
@@ -8,7 +7,7 @@ import net.oschina.app.interf.OnTabReselectListener;
  * on 16/6/6.
  */
 
-public abstract class GeneralListFragment<T> extends BaseListFragment<T> implements OnTabReselectListener {
+public abstract class BaseGeneralListFragment<T> extends BaseListFragment<T> implements OnTabReselectListener {
     @Override
     public void onTabReselect() {
         mListView.setSelection(0);

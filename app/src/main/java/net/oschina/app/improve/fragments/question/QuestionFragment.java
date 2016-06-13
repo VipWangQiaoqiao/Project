@@ -1,4 +1,4 @@
-package net.oschina.app.fragment.general;
+package net.oschina.app.improve.fragments.question;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -17,10 +17,11 @@ import net.oschina.app.adapter.base.BaseListAdapter;
 import net.oschina.app.adapter.general.QuesActionAdapter;
 import net.oschina.app.adapter.general.QuestionAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.bean.base.PageBean;
-import net.oschina.app.bean.base.ResultBean;
-import net.oschina.app.bean.question.Question;
 import net.oschina.app.cache.CacheManager;
+import net.oschina.app.improve.bean.Question;
+import net.oschina.app.improve.bean.base.PageBean;
+import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.fragments.base.BaseGeneralListFragment;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.UIHelper;
 
@@ -32,7 +33,7 @@ import java.util.ArrayList;
  * <p>
  * desc
  */
-public class QuestionFragment extends GeneralListFragment<Question> {
+public class QuestionFragment extends BaseGeneralListFragment<Question> {
 
     public static final String QUES_ASK = "ques_ask";
     public static final String QUES_SHARE = "ques_share";
