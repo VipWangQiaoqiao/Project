@@ -46,7 +46,8 @@
                 android:layout_marginTop="4dp"
                 android:ellipsize="end"
                 android:lineSpacingExtra="4dp"
-                android:maxLines="2"
+                android:maxLines="3"
+                android:minLines="1"
                 android:textSize="14sp"
                 tools:text="@string/flickr_content" />
 

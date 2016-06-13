@@ -6,7 +6,6 @@ import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.BaseViewPagerFragment;
 import net.oschina.app.bean.TweetsList;
 import net.oschina.app.fragment.TweetsFragment;
-import net.oschina.app.fragment.general.GeneralListFragment;
 import net.oschina.app.interf.OnTabReselectListener;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

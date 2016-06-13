@@ -4,8 +4,8 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewHolder;
 import net.oschina.app.adapter.base.BaseListAdapter;
-import net.oschina.app.bean.event.Event;
-import net.oschina.app.fragment.general.EventFragment;
+import net.oschina.app.improve.bean.Event;
+import net.oschina.app.improve.fragments.event.EventFragment;
 import net.oschina.app.util.StringUtils;
 
 /**

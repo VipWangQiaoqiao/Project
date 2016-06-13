@@ -283,7 +283,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
 
     /***
      * 自动刷新的时间
-     * <p/>
+     * <p>
      * 默认：自动刷新的时间为半天时间
      *
      * @return

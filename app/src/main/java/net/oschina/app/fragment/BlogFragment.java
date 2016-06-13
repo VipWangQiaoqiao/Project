@@ -65,6 +65,7 @@ public class BlogFragment extends BaseListFragment<Blog> implements
 
     @Override
     protected void sendRequestData() {
+
         OSChinaApi.getBlogList(blogType, mCurrentPage, mHandler);
     }
 

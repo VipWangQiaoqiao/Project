@@ -55,8 +55,7 @@ import cz.msebera.android.httpclient.Header;
  */
 public class MyInformationFragment extends BaseFragment {
 
-    public static final int sChildView = 9; // 在没有加入TeamList控件时rootview有多少子布局
-    private static final String TAG = "MyInformationFragment";
+    // public static final int sChildView = 9; // 在没有加入TeamList控件时rootview有多少子布局
 
     @Bind(R.id.iv_avatar)
     AvatarView mIvAvatar;
@@ -305,7 +304,7 @@ public class MyInformationFragment extends BaseFragment {
         private final WeakReference<Context> mContext;
 
         private CacheTask(Context context) {
-            mContext = new WeakReference<Context>(context);
+            mContext = new WeakReference<>(context);
         }
 
         @Override

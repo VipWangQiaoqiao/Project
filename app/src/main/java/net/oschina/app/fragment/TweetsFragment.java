@@ -83,6 +83,11 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
     }
 
     @Override
+    protected int getLayoutId() {
+        return R.layout.fragment_tweets;
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (mCatalog > 0) {

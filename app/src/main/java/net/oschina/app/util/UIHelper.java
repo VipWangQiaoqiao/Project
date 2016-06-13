@@ -50,6 +50,7 @@ import net.oschina.app.fragment.FriendsFragment;
 import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
+import net.oschina.app.improve.fragments.blog.UserBlogFragment;
 import net.oschina.app.interf.ICallbackResult;
 import net.oschina.app.interf.OnWebViewImageListener;
 import net.oschina.app.service.DownloadService;
@@ -71,7 +72,7 @@ import net.oschina.app.ui.LoginActivity;
 import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.ui.TweetPubActivity;
-import net.oschina.app.ui.blog.BlogDetailActivity;
+import net.oschina.app.improve.activities.BlogDetailActivity;
 import net.oschina.app.viewpagerfragment.FriendsViewPagerFragment;
 import net.oschina.app.widget.AvatarView;
 
@@ -308,27 +309,30 @@ public class UIHelper {
      *
      * @param context context
      */
-    public static void showNewsDetail(Context context, net.oschina.app.bean.news.News news) {
+    public static void showNewsDetail(Context context, net.oschina.app.improve.bean.News news) {
         long newsId = news.getId();
         switch (news.getType()) {
-            case net.oschina.app.bean.news.News.TYPE_HREF:
+            case net.oschina.app.improve.bean.News.TYPE_HREF:
                 showUrlRedirect(context, news.getHref());
                 break;
-            case net.oschina.app.bean.news.News.TYPE_SOFTWARE:
+            case net.oschina.app.improve.bean.News.TYPE_SOFTWARE:
                 showSoftwareDetailById(context, Integer.parseInt(String.valueOf(newsId)));
                 break;
-            case net.oschina.app.bean.news.News.TYPE_QUESTION:
+            case net.oschina.app.improve.bean.News.TYPE_QUESTION:
                 showPostDetail(context, Integer.parseInt(String.valueOf(newsId)),
                         news.getCommentCount());
                 break;
-            case net.oschina.app.bean.news.News.TYPE_BLOG:
+            case net.oschina.app.improve.bean.News.TYPE_BLOG:
                 showBlogDetail(context, StringUtils.toLong(String.valueOf(newsId)));
                 break;
-            case net.oschina.app.bean.news.News.TYPE_EVENT:
+            case net.oschina.app.improve.bean.News.TYPE_EVENT:
                 showEventDetail(context,
                         StringUtils.toInt(newsId));
                 break;
-            case net.oschina.app.bean.news.News.TYPE_NEWS:
+            case net.oschina.app.improve.bean.News.TYPE_NEWS:
+                showNewsDetail(context, Integer.parseInt(String.valueOf(newsId)), news.getCommentCount());
+                break;
+            case net.oschina.app.improve.bean.News.TYPE_TRNSLATE:
                 showNewsDetail(context, Integer.parseInt(String.valueOf(newsId)), news.getCommentCount());
                 break;
             default:
@@ -842,7 +846,7 @@ public class UIHelper {
      */
     public static void showUserBlog(Context context, int uid) {
         Bundle args = new Bundle();
-        args.putInt(BaseListFragment.BUNDLE_KEY_CATALOG, uid);
+        args.putInt(UserBlogFragment.USER_ID, uid);
         showSimpleBack(context, SimpleBackPage.USER_BLOG, args);
     }
 

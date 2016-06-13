@@ -106,7 +106,7 @@ public class SynchronizeController {
         }
         jsonData.append("]}");
 
-        KJLoger.debug("==" + jsonData.toString());
+//        KJLoger.debug("==" + jsonData.toString());
 
         AsyncHttpClient client = ApiHttpClient.getHttpClient();
         client.addHeader("Content-Type", "application/json; charset=UTF-8");
