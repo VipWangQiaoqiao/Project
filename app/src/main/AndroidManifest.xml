@@ -255,6 +255,12 @@
             android:label="博客详情"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.tweet.TweetDetailActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="博客详情"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
     </application>
 
 </manifest>

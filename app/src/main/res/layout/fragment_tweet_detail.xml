@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--detail header-->
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFF"
+            app:elevation="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/lay_12"
+                android:orientation="vertical"
+                app:layout_scrollFlags="scroll|enterAlways">
+
+                <!--portrait and nick-->
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <net.oschina.app.widget.CircleImageView
+                        android:id="@+id/iv_portrait"
+                        android:layout_width="@dimen/size_48"
+                        android:layout_height="@dimen/size_48" />
+
+                    <TextView
+                        android:id="@+id/tv_nick"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_gravity="center"
+                        tools:text="李大神"
+                        android:textSize="18sp"
+                        android:textColor="#111111"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <!--content-->
+                <TextView
+                    android:id="@+id/tv_content"
+                    android:lineSpacingMultiplier="1.25"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="#222"
+                    tools:text="犹豫毁一生踌躇穷三代。投身互联网，成就好未来。巴林的狗尾草Java毁一生C#穷三代，若要好前程，置身IT外。 到底谁说的有道理"/>
+
+                <ImageView
+                    android:id="@+id/iv_small_img"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="8dp"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:contentDescription="@null" />
+
+                <TextView
+                    android:id="@+id/tv_like_users"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <!--bottom info-->
+                <RelativeLayout
+                    android:layout_marginTop="@dimen/lay_8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv_time"
+                        tools:text="6分钟前"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/tv_client"
+                        tools:text="Android"
+                        android:visibility="gone"
+                        tools:visibility="visible"
+                        android:layout_marginLeft="@dimen/lay_8"
+                        android:layout_marginStart="@dimen/lay_8"
+                        android:layout_toRightOf="@id/tv_time"
+                        android:layout_toEndOf="@id/tv_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <ImageView
+                        android:id="@+id/iv_comment"
+                        android:layout_toLeftOf="@id/tv_comment_count"
+                        android:layout_toStartOf="@id/tv_comment_count"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:contentDescription="@string/app_name"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_comment" />
+
+                    <TextView
+                        android:id="@+id/tv_comment_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:text="0"
+                        android:textColor="#9d9d9d"
+                        android:textSize="12sp"
+                        tools:ignore="HardcodedText"
+                        tools:text="12" />
+
+                    <ImageView
+                        android:id="@+id/iv_thumbup"
+                        android:layout_toLeftOf="@id/iv_comment"
+                        android:layout_toStartOf="@id/iv_comment"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:contentDescription="@string/app_name"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_thumbup_normal" />
+                </RelativeLayout>
+            </LinearLayout>
+        </android.support.design.widget.AppBarLayout>
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+    </android.support.design.widget.CoordinatorLayout>
+
+    <LinearLayout
+        android:id="@+id/lay_option"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp">
+
+        <EditText
+            android:id="@+id/et_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/ic_bg_edit"
+            android:hint="发表评论"
+            android:imeOptions="actionSend"
+            android:inputType="text"
+            android:lines="1"
+            android:paddingBottom="6dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="6dp"
+            android:singleLine="true"
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
+
+        <ImageView
+            android:id="@+id/iv_emoji"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_margin="8dp"
+            android:contentDescription="@string/app_name"
+            android:scaleType="fitCenter"
+            android:src="@drawable/btn_emoji_selector" />
+    </LinearLayout>
+</RelativeLayout>
