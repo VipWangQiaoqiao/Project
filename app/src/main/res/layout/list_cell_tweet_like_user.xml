@@ -3,24 +3,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/fill_wrap"
     android:orientation="vertical"
-    android:paddingTop="12dp"
-    android:paddingBottom="12dp"
-    android:layout_marginLeft="16dp">
+    android:background="@drawable/selector_item_list">
 
     <LinearLayout
         android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <net.oschina.app.widget.AvatarView
             android:id="@+id/iv_avatar"
-            style="@style/user_face_image"
-            android:layout_marginRight="10dp"/>
+            style="@style/user_face_image"/>
 
         <TextView
             android:id="@+id/tv_name"
             style="@style/wrap_wrap"
-            android:textSize="15sp"
+            android:textSize="16sp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
             android:layout_gravity="center"
             android:textStyle="bold"
             android:textColor="?attr/textColor"
@@ -33,6 +35,8 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:background="@color/list_divider_color" />
 
 </LinearLayout>

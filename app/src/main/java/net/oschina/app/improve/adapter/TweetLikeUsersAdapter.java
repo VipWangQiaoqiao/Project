@@ -2,6 +2,7 @@ package net.oschina.app.improve.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +38,11 @@ public class TweetLikeUsersAdapter extends BaseRecyclerAdapter<User>{
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, User item, int position) {
         LikeUsersHolderView h = (LikeUsersHolderView)holder;
-        reqManager.load(item.getPortrait()).into(h.ivPortrait);
+        if (TextUtils.isEmpty(item.getPortrait())){
+            h.ivPortrait.setImageResource(R.drawable.widget_dface);
+        }else{
+            reqManager.load(item.getPortrait()).into(h.ivPortrait);
+        }
         h.tvName.setText(item.getName());
     }
 

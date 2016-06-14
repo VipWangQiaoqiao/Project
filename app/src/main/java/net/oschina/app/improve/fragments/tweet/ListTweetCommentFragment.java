@@ -15,6 +15,7 @@ import net.oschina.app.bean.User;
 import net.oschina.app.improve.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.adapter.TweetCommentAdapter;
 import net.oschina.app.improve.adapter.TweetLikeUsersAdapter;
+import net.oschina.app.improve.contract.TweetDetailContract;
 import net.oschina.app.improve.fragments.base.BaseRecyclerViewFragment;
 import net.oschina.app.util.XmlUtils;
 
@@ -26,25 +27,28 @@ import cz.msebera.android.httpclient.Header;
 /**
  * Created by thanatos on 16/6/13.
  */
-public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>{
+public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>
+        implements TweetCommentAdapter.OnClickReplyCallback, TweetCommentAdapter.OnClickPortraitCallback, TweetDetailContract.CmnView {
 
-    public static final String BUNDLE_KEY_TWEET_ID = "BUNDLE_KEY_TWEET_ID";
-
-    private int tid;
+    private TweetDetailContract.Operator mOperator;
     private int pageNum = 0;
     private AsyncHttpResponseHandler reqHandler;
+
+    public static ListTweetCommentFragment instantiate(TweetDetailContract.Operator operator){
+        ListTweetCommentFragment fragment = new ListTweetCommentFragment();
+        fragment.mOperator = operator;
+        return fragment;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        tid = getArguments().getInt(BUNDLE_KEY_TWEET_ID, 0);
-
         reqHandler = new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 CommentList data = XmlUtils.toBean(CommentList.class, responseBody);
                 setListData(data.getList());
+                mOperator.getTweetDetail().setCommentCount(String.valueOf(data.getList().size()));
                 onRequestSuccess(1);
                 onRequestFinish();
             }
@@ -58,7 +62,10 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>{
 
     @Override
     protected BaseRecyclerAdapter<Comment> getRecyclerAdapter() {
-        return new TweetCommentAdapter(getContext());
+        TweetCommentAdapter adapter = new TweetCommentAdapter(getContext());
+        adapter.setOnClickReplyCallback(this);
+        adapter.setOnClickPortraitCallback(this);
+        return adapter;
     }
 
     @Override
@@ -83,7 +90,7 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>{
     }
 
     private void requestData(int pageNum){
-        OSChinaApi.getCommentList(tid, 3, pageNum, reqHandler);
+        OSChinaApi.getCommentList(mOperator.getTweetDetail().getId(), 3, pageNum, reqHandler);
     }
 
     private void setListData(List<Comment> comments){
@@ -98,5 +105,20 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>{
         if (comments.size() < 20) {
             mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
         }
+    }
+
+    @Override
+    public void onReplyOther(Comment comment) {
+        mOperator.toReply(comment);
+    }
+
+    @Override
+    public void onClickPortrait(int oid) {
+        mOperator.toUserHome(oid);
+    }
+
+    @Override
+    public void onCommentSuccess(Comment comment) {
+        onRefreshing();
     }
 }

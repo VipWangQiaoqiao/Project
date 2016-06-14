@@ -21,7 +21,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/lay_12"
+                android:padding="@dimen/lay_16"
                 android:orientation="vertical"
                 app:layout_scrollFlags="scroll|enterAlways">
 
@@ -33,6 +33,7 @@
 
                     <net.oschina.app.widget.CircleImageView
                         android:id="@+id/iv_portrait"
+                        tools:src="@drawable/widget_dface"
                         android:layout_width="@dimen/size_48"
                         android:layout_height="@dimen/size_48" />
 
@@ -41,8 +42,8 @@
                         android:layout_weight="1"
                         android:layout_width="0dp"
                         android:layout_gravity="center"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginStart="4dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
                         tools:text="李大神"
                         android:textSize="16sp"
                         android:textColor="#111111"
