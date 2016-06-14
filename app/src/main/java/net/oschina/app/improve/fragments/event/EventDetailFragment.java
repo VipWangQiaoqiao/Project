@@ -135,7 +135,7 @@ public class EventDetailFragment extends BaseFragment implements
                 break;
         }
         tv_event_type.setText(String.format("类型：%s", getResources().getString(typeStr)));
-        tv_fav.setText(getResources().getString(getApplyStatusStrId(mDetail.getApplyStatus())));
+        tv_apply_status.setText(getResources().getString(getApplyStatusStrId(mDetail.getApplyStatus())));
         UIHelper.initWebView(wv_event_detail);
         UIHelper.addWebImageShow(getActivity(), wv_event_detail);
         wv_event_detail.loadDataWithBaseURL("", getWebViewBody(mDetail), "text/html", "UTF-8", "");
