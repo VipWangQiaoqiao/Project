@@ -62,8 +62,8 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         ImageView ivLikeState;
         @Bind(R.id.tv_del)
         TextView del;
-        //        @Bind(R.id.tv_likeusers)
-//        TextView likeUsers;
+        @Bind(R.id.tv_likeusers)
+        TextView likeUsers;
         @Bind(R.id.tv_tweet_like_count)
         TextView tv_tweet_like_count;
 
@@ -162,7 +162,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             });
         }
 
-        //tweet.setLikeUsers(context, vh.likeUsers, true);
+        tweet.setLikeUsers(context, vh.likeUsers, true);
 
         if (tweet.getLikeUser() == null) {
             vh.ivLikeState.setVisibility(View.GONE);
@@ -213,7 +213,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             tweet.setLikeCount(tweet.getLikeCount() + 1);
         }
         vh.tv_tweet_like_count.setText(String.valueOf(tweet.getLikeCount()));
-        //tweet.setLikeUsers(context, vh.likeUsers, true);
+        tweet.setLikeUsers(context, vh.likeUsers, true);
     }
 
     private void optionDel(Context context, final Tweet tweet, final int position) {

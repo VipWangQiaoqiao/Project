@@ -64,14 +64,15 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/pic_bg" />
 
-            <!--<TextView-->
-                <!--android:id="@+id/tv_likeusers"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginTop="@dimen/lay_8"-->
-                <!--android:textColor="?attr/infoTextColor"-->
-                <!--android:textSize="12sp"-->
-                <!--tools:text="咪咪" />-->
+            <TextView
+                android:id="@+id/tv_likeusers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/lay_8"
+                android:textColor="?attr/infoTextColor"
+                android:textSize="12sp"
+                android:visibility="gone"
+                tools:text="咪咪" />
 
             <LinearLayout
                 android:id="@+id/ll_info"

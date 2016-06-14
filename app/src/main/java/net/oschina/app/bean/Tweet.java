@@ -256,6 +256,7 @@ public class Tweet extends Entity implements Parcelable {
             likeUser.setVisibility(View.GONE);
             likeUser.setText("");
         }
+        likeUser.setVisibility(View.GONE);
     }
 
     /**
