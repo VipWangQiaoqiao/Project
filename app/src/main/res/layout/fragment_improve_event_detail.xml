@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical">
+    android:background="@color/white">
 
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nsv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_scrollFlags="scroll|enterAlways">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,8 +33,8 @@
                     android:layout_marginRight="16dp"
                     android:layout_marginTop="16dp"
                     android:contentDescription="@string/app_name"
-                    android:src="@drawable/qr_scan_mask"
-                    android:scaleType="fitXY" />
+                    android:scaleType="fitXY"
+                    android:src="@drawable/qr_scan_mask" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -88,7 +90,6 @@
                         android:layout_marginBottom="@dimen/lay_4"
                         android:layout_marginTop="@dimen/lay_4"
                         android:layout_weight="1"
-                        android:singleLine="true"
                         android:textColor="@color/white"
                         android:textSize="14sp"
                         tools:text="费用：免费" />
@@ -141,8 +142,8 @@
                 android:paddingTop="@dimen/lay_12">
 
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_marginLeft="@dimen/lay_16"
                     android:layout_marginRight="@dimen/lay_16"
                     android:src="@drawable/ic__calendar" />
@@ -174,8 +175,8 @@
                 android:paddingTop="@dimen/lay_12">
 
                 <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_marginLeft="@dimen/lay_16"
                     android:layout_marginRight="@dimen/lay_16"
                     android:src="@drawable/ic_location" />
@@ -202,20 +203,35 @@
             <WebView
                 android:id="@+id/wv_event_detail"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"></WebView>
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/lay_12"
+                android:layout_marginLeft="@dimen/lay_16"
+                android:layout_marginRight="@dimen/lay_16"
+                android:layout_marginTop="@dimen/lay_12" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
     <View
         style="@style/h_line"
-        android:layout_height="1px" />
+        android:layout_height="1dp"
+        app:layout_anchor="@+id/ll_operate"
+        app:layout_anchorGravity="top"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_scrollFlags="scroll|enterAlways" />
 
     <LinearLayout
+        android:id="@+id/ll_operate"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:orientation="horizontal">
+        android:background="@color/white"
+        android:orientation="horizontal"
+        app:layout_anchor="@+id/nsv"
+        app:layout_anchorGravity="bottom"
+        app:layout_behavior="net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior"
+        app:layout_scrollFlags="scroll|enterAlways">
 
         <LinearLayout
+            android:id="@+id/ll_fav"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -223,6 +239,7 @@
             android:orientation="horizontal">
 
             <ImageView
+                android:id="@+id/iv_fav"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:src="@drawable/ic_faved_normal" />
@@ -233,12 +250,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/lay_16"
                 android:layout_marginRight="@dimen/lay_16"
+                android:text="已收藏"
                 android:textColor="@color/text_dark"
-                android:textSize="16sp"
-                tools:text="已收藏" />
+                android:textSize="16sp" />
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_sign"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -251,13 +269,14 @@
                 android:src="@drawable/ic_user_add" />
 
             <TextView
+                android:id="@+id/tv_apply_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/lay_16"
                 android:layout_marginRight="@dimen/lay_16"
+                android:text="报名"
                 android:textColor="@color/text_dark"
-                android:textSize="16sp"
-                tools:text="报名" />
+                android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

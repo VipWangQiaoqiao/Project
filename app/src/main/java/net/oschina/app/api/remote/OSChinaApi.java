@@ -1136,6 +1136,31 @@ public class OSChinaApi {
         ApiHttpClient.get("action/apiv2/event", params, handler);
     }
 
+    /**
+     * 请求活动详情
+     *
+     * @param id      id
+     * @param handler handler
+     */
+    public static void getEventDetail(long id, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("id", id);
+        ApiHttpClient.get("action/apiv2/event", params, handler);
+    }
+
+    /**
+     * 更改收藏状态
+     *
+     * @param id      id
+     * @param type    type
+     * @param handler handler
+     */
+    public static void getFavReverse(long id, int type, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("id", id);
+        params.put("type", type);
+        ApiHttpClient.get("action/apiv2/favorite_reverse", params, handler);
+    }
 
     public static final int CATALOG_QUESTION_QUESTION = 1; // 提问
     public static final int CATALOG_QUESTION_SHARE = 2; // 最热

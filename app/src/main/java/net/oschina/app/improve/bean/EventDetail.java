@@ -4,7 +4,14 @@ package net.oschina.app.improve.bean;
  * Created by huanghaibin
  * on 16-6-13.
  */
-public class EventDetail extends Event{
+public class EventDetail extends Event {
+    public static final int APPLY_STATUS_UN_SIGN = -1;
+    public static final int APPLY_STATUS_AUDIT = 0;
+    public static final int APPLY_STATUS_CONFIRMED = 1;
+    public static final int APPLY_STATUS_PRESENTED = 2;
+    public static final int APPLY_STATUS_CANCELED = 3;
+    public static final int APPLY_STATUS_REFUSED = 4;
+
     private String author;
     private int authorId;
     private String authorPortrait;
@@ -16,6 +23,7 @@ public class EventDetail extends Event{
     private String costDesc;
     private boolean favorite;
     private EventRemark remark;
+    private int applyStatus;
 
     public String getAuthor() {
         return author;
@@ -105,7 +113,15 @@ public class EventDetail extends Event{
         this.remark = remark;
     }
 
-    private static class EventRemark{
+    public int getApplyStatus() {
+        return applyStatus;
+    }
+
+    public void setApplyStatus(int applyStatus) {
+        this.applyStatus = applyStatus;
+    }
+
+    public static class EventRemark {
         private String tip;
         private String select;
 
