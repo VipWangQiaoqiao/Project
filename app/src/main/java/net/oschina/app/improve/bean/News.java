@@ -16,15 +16,16 @@ public class News implements Serializable {
     public static final int TYPE_EVENT = 5;
     public static final int TYPE_NEWS = 6;
 
-    private long id;
-    private int commentCount;
-    private int type;
-    private boolean recommend;
-    private String title;
-    private String body;
-    private String author;
-    private String href;
-    private String pubDate;
+    protected long id;
+    protected int commentCount;
+    protected int type;
+    protected boolean recommend;
+    protected String title;
+    protected String body;
+    protected String author;
+    protected String href;
+    protected String pubDate;
+    protected int viewCount;
 
     public String getPubDate() {
         return pubDate;
@@ -96,5 +97,13 @@ public class News implements Serializable {
 
     public void setHref(String href) {
         this.href = href;
+    }
+
+    public int getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(int viewCount) {
+        this.viewCount = viewCount;
     }
 }

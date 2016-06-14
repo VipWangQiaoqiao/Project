@@ -3,23 +3,21 @@ package net.oschina.app.improve.fragments.event;
 import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.R;
 import net.oschina.app.adapter.base.BaseListAdapter;
 import net.oschina.app.adapter.general.EventAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Banner;
 import net.oschina.app.cache.CacheManager;
+import net.oschina.app.improve.activities.EventDetailActivity;
 import net.oschina.app.improve.bean.Event;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.fragments.base.BaseGeneralListFragment;
-import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.ViewEventHeader;
 
 import java.lang.reflect.Type;
@@ -80,12 +78,8 @@ public class EventFragment extends BaseGeneralListFragment<Event> {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Event event = mAdapter.getItem(position - 1);
-        if (event != null) {
-            UIHelper.showEventDetail(view.getContext(), Integer.parseInt(String.valueOf(event.getId())));
-            TextView title = (TextView) view.findViewById(R.id.tv_event_title);
-            updateTextColor(title, null);
-            saveToReadedList(HISTORY_EVENT, event.getId() + "");
-        }
+        if (event != null)
+            EventDetailActivity.show(getActivity(), event.getId());
     }
 
     @Override

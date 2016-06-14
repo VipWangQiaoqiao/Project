@@ -18,6 +18,14 @@
     <string name="event_type_other">其他</string>
     <string name="event_type_outside">站外活动</string>
 
+    <string name="event_apply_status_un_sign">未报名</string>
+    <string name="event_apply_status_audit">审核中</string>
+    <string name="event_apply_status_confirmed">已经确认</string>
+    <string name="event_apply_status_presented">已经出席</string>
+    <string name="event_apply_status_canceled">已取消</string>
+    <string name="event_apply_status_refused">已拒绝</string>
+    <string name="event_is_fav">已收藏</string>
+    <string name="event_un_fav">添加收藏</string>
 
     <string name="app_error">应用程序错误</string>
     <string name="app_error_message">很抱歉，小屁孩耍脾气啦。<br />我们会帮你教训一下这个小屁孩！</string>

@@ -181,13 +181,11 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         }
 
 //        TypefaceUtils.setTypeface(vh.tvLikeState);
-//        if (tweet.getIsLike() == 1) {
-//            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
-//                    .day_colorPrimary));
-//        } else {
-//            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
-//                    .gray));
-//        }
+        if (tweet.getIsLike() == 1) {
+            vh.ivLikeState.setImageResource(R.drawable.ic_thumbup_actived);
+        } else {
+            vh.ivLikeState.setImageResource(R.drawable.ic_thumbup_normal);
+        }
         PlatfromUtil.setPlatFromString(vh.platform, tweet.getAppclient());
         return convertView;
     }

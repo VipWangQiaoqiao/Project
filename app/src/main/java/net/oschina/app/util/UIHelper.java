@@ -50,6 +50,7 @@ import net.oschina.app.fragment.FriendsFragment;
 import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
+import net.oschina.app.improve.activities.EventDetailActivity;
 import net.oschina.app.improve.fragments.blog.UserBlogFragment;
 import net.oschina.app.interf.ICallbackResult;
 import net.oschina.app.interf.OnWebViewImageListener;
@@ -358,8 +359,7 @@ public class UIHelper {
                 showBlogDetail(context, StringUtils.toLong(String.valueOf(newsId)));
                 break;
             case Banner.BANNER_TYPE_EVENT:
-                showEventDetail(context,
-                        StringUtils.toInt(newsId));
+                EventDetailActivity.show(context,newsId);
                 break;
             case Banner.BANNER_TYPE_NEWS:
             default:
