@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_blog_detail"
     android:layout_width="match_parent"
@@ -7,12 +8,15 @@
     android:background="#f9f9f9">
 
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/lay_nsv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/lay_option"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentTop="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_scrollFlags="scroll|enterAlways">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -176,22 +180,21 @@
 
     </android.support.v4.widget.NestedScrollView>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_above="@+id/lay_option"
-        android:background="@color/list_divider_color" />
-
     <LinearLayout
         android:id="@+id/lay_option"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_gravity="end|bottom"
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="8dp"
-        android:paddingRight="8dp">
+        android:paddingRight="8dp"
+        app:layout_anchor="@id/lay_nsv"
+        app:layout_anchorGravity="bottom"
+        app:layout_behavior="net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior"
+        app:layout_scrollFlags="scroll|enterAlways">
 
         <EditText
             android:id="@+id/et_input"
@@ -235,4 +238,13 @@
             android:src="@drawable/ic_share_black" />
 
     </LinearLayout>
-</RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/list_divider_color"
+        app:layout_anchor="@id/lay_option"
+        app:layout_anchorGravity="top"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_scrollFlags="scroll|enterAlways" />
+</android.support.design.widget.CoordinatorLayout>
