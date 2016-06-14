@@ -33,6 +33,7 @@ public class NewsAdapter extends BaseListAdapter<News> {
         vh.setText(R.id.tv_description, item.getBody());
         vh.setText(R.id.tv_time, StringUtils.friendly_time(item.getPubDate()));
         vh.setText(R.id.tv_comment_count, String.valueOf(item.getCommentCount()));
+        vh.setText(R.id.tv_view_count,String.valueOf(item.getViewCount()));
         if(StringUtils.isSameDay(systemTime,item.getPubDate())){
             vh.setImage(R.id.iv_today, R.drawable.ic_label_today);
             vh.setVisibility(R.id.iv_today);
