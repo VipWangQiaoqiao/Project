@@ -20,8 +20,8 @@
 
     <string name="event_apply_status_un_sign">未报名</string>
     <string name="event_apply_status_audit">审核中</string>
-    <string name="event_apply_status_confirmed">已经确认</string>
-    <string name="event_apply_status_presented">已经出席</string>
+    <string name="event_apply_status_confirmed">已确认</string>
+    <string name="event_apply_status_presented">已出席</string>
     <string name="event_apply_status_canceled">已取消</string>
     <string name="event_apply_status_refused">已拒绝</string>
     <string name="event_is_fav">已收藏</string>
