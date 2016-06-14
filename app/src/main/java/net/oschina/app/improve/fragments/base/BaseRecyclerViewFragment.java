@@ -51,6 +51,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(this);
         mRefreshLayout.setSuperRefreshLayoutListener(this);
+        mAdapter.setState(BaseRecyclerAdapter.STATE_HIDE, false);
         mRecyclerView.setLayoutManager(getLayoutManager());
         mRefreshLayout.setColorSchemeResources(
                 R.color.swiperefresh_color1, R.color.swiperefresh_color2,

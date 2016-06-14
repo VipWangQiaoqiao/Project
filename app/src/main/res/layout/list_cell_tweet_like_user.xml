@@ -2,22 +2,37 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/fill_wrap"
-    android:background="?attr/layout_item_bg"
-    android:gravity="center|left"
-    android:orientation="horizontal"
-    android:padding="@dimen/space_15">
+    android:orientation="vertical"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp"
+    android:layout_marginLeft="16dp">
 
-    <net.oschina.app.widget.AvatarView
-        android:id="@+id/iv_avatar"
-        style="@style/user_face_image"
-        android:layout_marginRight="10dp"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tv_name"
-        style="@style/wrap_wrap"
-        android:textSize="15sp"
-        android:textStyle="bold"
-        android:textColor="?attr/textColor"
-        tools:text="用户名" />
+        <net.oschina.app.widget.AvatarView
+            android:id="@+id/iv_avatar"
+            style="@style/user_face_image"
+            android:layout_marginRight="10dp"/>
+
+        <TextView
+            android:id="@+id/tv_name"
+            style="@style/wrap_wrap"
+            android:textSize="15sp"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:textColor="?attr/textColor"
+            tools:text="用户名" />
+    </LinearLayout>
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="16dp"
+        android:background="@color/list_divider_color" />
 
 </LinearLayout>
