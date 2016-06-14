@@ -6,6 +6,7 @@
 
     <net.oschina.app.improve.widget.RecyclerRefreshLayout
         android:id="@+id/refreshLayout"
+        android:background="#FFF"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

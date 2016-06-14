@@ -9,6 +9,8 @@ import net.oschina.app.base.BaseViewPagerFragment;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.bean.TweetLikeList;
 import net.oschina.app.fragment.TweetLikeUsersFragment;
+import net.oschina.app.improve.fragments.tweet.ListTweetCommentFragment;
+import net.oschina.app.improve.fragments.tweet.ListTweetLikeUsersFragment;
 import net.oschina.app.util.UIHelper;
 
 /**
@@ -39,10 +41,13 @@ public class TweetDetailViewPagerFragment extends BaseViewPagerFragment{
 
     @Override
     protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
-        Bundle bundle = new Bundle();
-        bundle.putInt(BaseListFragment.BUNDLE_KEY_CATALOG, tid);
+        Bundle b1 = new Bundle();
+        b1.putInt(ListTweetLikeUsersFragment.BUNDLE_KEY_TWEET_ID, tid);
 
-        adapter.addTab(String.format("赞(%s)", upCount), "up", TweetLikeUsersFragment.class, bundle);
-        adapter.addTab(String.format("评论(%s)", cmmCount), "comment", TweetLikeUsersFragment.class, bundle);
+        Bundle b2 = new Bundle();
+        b2.putInt(ListTweetCommentFragment.BUNDLE_KEY_TWEET_ID, tid);
+
+        adapter.addTab(String.format("赞(%s)", upCount), "up", ListTweetLikeUsersFragment.class, b1);
+        adapter.addTab(String.format("评论(%s)", cmmCount), "comment", ListTweetCommentFragment.class, b2);
     }
 }

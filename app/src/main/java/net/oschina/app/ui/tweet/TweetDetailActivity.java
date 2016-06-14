@@ -18,6 +18,7 @@ import com.bumptech.glide.RequestManager;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.Tweet;
+import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.viewpagerfragment.TweetDetailViewPagerFragment;
@@ -44,7 +45,6 @@ public class TweetDetailActivity extends AppCompatActivity{
     @Bind(R.id.tv_client) TextView tvClient;
     @Bind(R.id.iv_thumbup) ImageView ivThumbup;
     @Bind(R.id.iv_comment) ImageView ivComment;
-    @Bind(R.id.tv_like_users) TextView tvLikeUsers;
     @Bind(R.id.tv_comment_count) TextView tvCmnCount;
 
     private Tweet tweet;
@@ -64,11 +64,17 @@ public class TweetDetailActivity extends AppCompatActivity{
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null){
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeButtonEnabled(true);
+            actionBar.setHomeButtonEnabled(false);
             actionBar.setTitle("动弹详情");
         }
         initData();
         initView();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return super.onSupportNavigateUp();
     }
 
     private void initData(){
@@ -84,7 +90,7 @@ public class TweetDetailActivity extends AppCompatActivity{
 
         reqManager.load(tweet.getPortrait()).into(ivPortrait);
         tvNick.setText(tweet.getAuthor());
-        tvContent.setText(tweet.getBody());
+        tvContent.setText(InputHelper.displayEmoji(getResources(), tweet.getBody()));
         tvTime.setText(StringUtils.friendly_time(tweet.getPubDate()));
         tvCmnCount.setText(tweet.getCommentCount());
         PlatfromUtil.setPlatFromString(tvClient, tweet.getAppclient());
@@ -99,12 +105,6 @@ public class TweetDetailActivity extends AppCompatActivity{
         } else {
             ivThumbup.setImageResource(R.drawable.ic_thumbup_normal);
         }
-
-        if (tweet.getLikeUser() != null && !tweet.getLikeUser().isEmpty()){
-            tvLikeUsers.setVisibility(View.VISIBLE);
-            tweet.setLikeUsers(this, tvLikeUsers, false);
-        }
-
 
         Bundle bundle = new Bundle();
         bundle.putInt(TweetDetailViewPagerFragment.BUNDLE_KEY_TWEET_ID, tweet.getId());

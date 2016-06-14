@@ -39,6 +39,7 @@ public class PlatfromUtil {
                 tv.setVisibility(View.GONE);
         }
         String platFromStr = AppContext.getInstance().getResources().getString(resId);
-        TypefaceUtils.setTypeFaceWithText(tv, R.string.fa_mobile, platFromStr);
+        tv.setText(platFromStr);
+//        TypefaceUtils.setTypeFaceWithText(tv, R.string.fa_mobile, platFromStr);
     }
 }

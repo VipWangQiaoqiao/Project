@@ -35,8 +35,8 @@ public class TweetLikeUsersFragment extends BaseListFragment<User> {
     public void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-        BaseActivity activity = (BaseActivity) getActivity();
-        activity.setActionBarTitle("动弹点赞列表");
+//        BaseActivity activity = (BaseActivity) getActivity();
+//        activity.setActionBarTitle("动弹点赞列表");
     }
     
     @Override
