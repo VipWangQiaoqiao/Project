@@ -1,11 +1,32 @@
 package net.oschina.app.improve.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.RectF;
+import android.graphics.drawable.ShapeDrawable;
 import android.support.annotation.Nullable;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.bumptech.glide.RequestManager;
+
+import net.oschina.app.R;
+import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.bean.BlogDetail;
+import net.oschina.app.util.StringUtils;
+import net.oschina.app.widget.MyLinkMovementMethod;
+import net.oschina.app.widget.MyURLSpan;
+import net.oschina.app.widget.TweetTextView;
+import net.qiujuer.genius.ui.Ui;
+import net.qiujuer.genius.ui.drawable.shape.BorderShape;
 
 import java.util.List;
 
@@ -15,24 +36,170 @@ import java.util.List;
  */
 
 public class GeneralDetailFooterView extends LinearLayout {
+    private LinearLayout mLayAbouts;
+    private LinearLayout mLayComments;
 
     public GeneralDetailFooterView(Context context) {
         super(context);
+        init();
     }
 
     public GeneralDetailFooterView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        init();
     }
 
     public GeneralDetailFooterView(Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        init();
     }
 
-    public void addAbout(List<BlogDetail.About> abouts) {
+    private void init() {
+        setOrientation(VERTICAL);
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        inflater.inflate(R.layout.lay_general_detail_footer, this, true);
 
+        mLayAbouts = (LinearLayout) findViewById(R.id.lay_blog_detail_about);
+        mLayComments = (LinearLayout) findViewById(R.id.lay_blog_detail_comment);
     }
 
-    public void addComment(List<BlogDetail.Comment> comments) {
+    public interface OnAboutClickListener {
+        void onClick(View view, BlogDetail.About about);
+    }
 
+    public interface OnCommentClickListener {
+        void onClick(View view, BlogDetail.Comment about);
+    }
+
+    public void setAbout(List<BlogDetail.About> abouts, final OnAboutClickListener onAboutClickListener) {
+        final LayoutInflater inflater = LayoutInflater.from(getContext());
+        if (abouts != null && abouts.size() > 0) {
+            boolean clearLine = true;
+            for (final BlogDetail.About about : abouts) {
+                if (about == null)
+                    continue;
+                @SuppressLint("InflateParams") View lay = inflater.inflate(R.layout.lay_blog_detail_about, null, false);
+                ((TextView) lay.findViewById(R.id.tv_title)).setText(about.title);
+
+                View layInfo = lay.findViewById(R.id.lay_info_view_comment);
+                ((TextView) layInfo.findViewById(R.id.tv_info_view)).setText(String.valueOf(about.viewCount));
+                ((TextView) layInfo.findViewById(R.id.tv_info_comment)).setText(String.valueOf(about.commentCount));
+
+                if (clearLine) {
+                    clearLine = false;
+                    lay.findViewById(R.id.line).setVisibility(View.INVISIBLE);
+                }
+
+                lay.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onAboutClickListener.onClick(v, about);
+                    }
+                });
+
+                mLayAbouts.addView(lay, 0);
+            }
+        } else {
+            findViewById(R.id.tv_blog_detail_about).setVisibility(View.GONE);
+            mLayAbouts.setVisibility(View.GONE);
+        }
+    }
+
+    public void setComment(List<BlogDetail.Comment> comments, int commentTotal, RequestManager imageLoader, final OnCommentClickListener onCommentClickListener, OnClickListener seeMoreListener) {
+        if (comments != null && comments.size() > 0) {
+
+            if (comments.size() < commentTotal) {
+                findViewById(R.id.tv_see_comment).setVisibility(View.GONE);
+                mLayComments.findViewById(R.id.tv_see_comment).setOnClickListener(seeMoreListener);
+            } else {
+                findViewById(R.id.tv_see_comment).setVisibility(View.GONE);
+            }
+
+            final Resources resources = getResources();
+            final LayoutInflater inflater = LayoutInflater.from(getContext());
+
+            boolean clearLine = true;
+            for (final BlogDetail.Comment comment : comments) {
+                if (comment == null)
+                    continue;
+
+                @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_blog_detail_comment, null, false);
+                imageLoader.load(comment.authorPortrait).error(R.drawable.widget_dface)
+                        .into(((ImageView) lay.findViewById(R.id.iv_avatar)));
+
+                ((TextView) lay.findViewById(R.id.tv_name)).setText(comment.author);
+
+                if (clearLine) {
+                    clearLine = false;
+                    lay.findViewById(R.id.line).setVisibility(View.INVISIBLE);
+                }
+
+                TweetTextView content = ((TweetTextView) lay.findViewById(R.id.tv_content));
+                formatHtml(resources, content, comment.content);
+
+                if (comment.refer != null) {
+                    // 最多5层
+                    View view = getReferLayout(comment.refer, inflater, 5);
+                    lay.addView(view, lay.indexOfChild(content));
+                }
+
+                ((TextView) lay.findViewById(R.id.tv_pub_date)).setText(
+                        StringUtils.friendly_time(comment.pubDate));
+
+                lay.findViewById(R.id.btn_comment).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onCommentClickListener.onClick(v, comment);
+                    }
+                });
+
+                mLayComments.addView(lay, 0);
+            }
+        } else {
+            findViewById(R.id.tv_blog_detail_comment).setVisibility(View.GONE);
+            mLayComments.setVisibility(View.GONE);
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    private View getReferLayout(BlogDetail.Refer refer, LayoutInflater inflater, int count) {
+        final Context context = getContext();
+
+        @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_blog_detail_comment_refer, null, false);
+        ShapeDrawable drawable = new ShapeDrawable(new BorderShape(new RectF(Ui.dipToPx(getContext(), 1), 0, 0, 0)));
+        drawable.getPaint().setColor(0xffd7d6da);
+        lay.findViewById(R.id.lay_blog_detail_comment_refer).setBackgroundDrawable(drawable);
+
+        TextView textView = ((TextView) lay.findViewById(R.id.tv_blog_detail_comment_refer));
+        drawable = new ShapeDrawable(new BorderShape(new RectF(0, 0, 0, 1)));
+        drawable.getPaint().setColor(0xffd7d6da);
+        textView.setBackgroundDrawable(drawable);
+
+        formatHtml(context.getResources(), textView, refer.author + ":<br>" + refer.content);
+
+
+        if (refer.refer != null && (--count) > 0) {
+            View view = getReferLayout(refer.refer, inflater, count);
+            lay.addView(view, lay.indexOfChild(textView));
+        }
+
+        return lay;
+    }
+
+
+    private static void formatHtml(Resources resources, TextView textView, String str) {
+        textView.setMovementMethod(MyLinkMovementMethod.a());
+        textView.setFocusable(false);
+        textView.setLongClickable(false);
+
+        if (textView instanceof TweetTextView) {
+            ((TweetTextView) textView).setDispatchToParent(true);
+        }
+
+        str = TweetTextView.modifyPath(str);
+        Spanned span = Html.fromHtml(str);
+        span = InputHelper.displayEmoji(resources, span.toString());
+        textView.setText(span);
+        MyURLSpan.parseLinkText(textView, span);
     }
 }
