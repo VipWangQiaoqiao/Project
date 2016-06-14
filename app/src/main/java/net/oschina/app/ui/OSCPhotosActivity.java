@@ -127,7 +127,7 @@ public class OSCPhotosActivity extends BaseActivity {
             Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
             try {
                 ImageUtils.saveImageToSD(this, filePath, bitmap, 100);
-                AppContext.showToastShort(getString(R.string.tip_save_image_suc) + filePath);
+                AppContext.showToastShort(getString(R.string.tip_save_image_suc));
             } catch (IOException e) {
                 e.printStackTrace();
             }
