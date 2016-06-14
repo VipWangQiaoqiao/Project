@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -25,18 +26,18 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Comment;
-import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.Tweet;
-import net.oschina.app.bean.User;
+import net.oschina.app.emoji.EmojiKeyboardFragment;
+import net.oschina.app.emoji.Emojicon;
 import net.oschina.app.emoji.InputHelper;
+import net.oschina.app.emoji.OnEmojiClickListener;
 import net.oschina.app.improve.contract.TweetDetailContract;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.PlatfromUtil;
+import net.oschina.app.util.SimpleTextWatcher;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
-import net.oschina.app.util.XmlUtils;
 import net.oschina.app.viewpagerfragment.TweetDetailViewPagerFragment;
-import net.oschina.app.viewpagerfragment.TweetsViewPagerFragment;
 import net.oschina.app.widget.CircleImageView;
 
 import java.io.Serializable;
@@ -54,16 +55,29 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
 
     public static final String BUNDLE_KEY_TWEET = "BUNDLE_KEY_TWEET";
 
-    @Bind(R.id.iv_portrait) CircleImageView ivPortrait;
-    @Bind(R.id.tv_nick) TextView tvNick;
-    @Bind(R.id.iv_small_img) ImageView ivSmallImg;
-    @Bind(R.id.tv_content) TextView tvContent;
-    @Bind(R.id.tv_time) TextView tvTime;
-    @Bind(R.id.tv_client) TextView tvClient;
-    @Bind(R.id.iv_thumbup) ImageView ivThumbup;
-    @Bind(R.id.iv_comment) ImageView ivComment;
-    @Bind(R.id.tv_comment_count) TextView tvCmnCount;
-    @Bind(R.id.et_input) EditText etInput;
+    @Bind(R.id.iv_portrait)
+    CircleImageView ivPortrait;
+    @Bind(R.id.tv_nick)
+    TextView tvNick;
+    @Bind(R.id.iv_small_img)
+    ImageView ivSmallImg;
+    @Bind(R.id.tv_content)
+    TextView tvContent;
+    @Bind(R.id.tv_time)
+    TextView tvTime;
+    @Bind(R.id.tv_client)
+    TextView tvClient;
+    @Bind(R.id.iv_thumbup)
+    ImageView ivThumbup;
+    @Bind(R.id.iv_comment)
+    ImageView ivComment;
+    @Bind(R.id.tv_comment_count)
+    TextView tvCmnCount;
+    @Bind(R.id.et_input)
+    EditText etInput;
+
+    @Bind(R.id.iv_emoji)
+    ImageView ivEmoji;
 
     private Tweet tweet;
     private Comment reply;
@@ -75,7 +89,9 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
     private TweetDetailContract.CmnView mCmnView;
     private TweetDetailContract.ThumbupView mThumbupView;
 
-    public static void show(Context context, Tweet tweet){
+    private final EmojiKeyboardFragment keyboardFragment = new EmojiKeyboardFragment();
+
+    public static void show(Context context, Tweet tweet) {
         Intent intent = new Intent(context, TweetDetailActivity.class);
         intent.putExtra(BUNDLE_KEY_TWEET, (Serializable) tweet);
         context.startActivity(intent);
@@ -88,13 +104,45 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
         ButterKnife.bind(this);
 
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null){
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeButtonEnabled(false);
             actionBar.setTitle("动弹详情");
         }
         initData();
         initView();
+
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.emoji_keyboard_fragment, keyboardFragment)
+                .commit();
+
+        keyboardFragment.setOnEmojiClickListener(new OnEmojiClickListener() {
+            @Override
+            public void onEmojiClick(Emojicon v) {
+                InputHelper.input2OSC(etInput, v);
+            }
+
+            @Override
+            public void onDeleteButtonClick(View v) {
+                InputHelper.backspace(etInput);
+            }
+        });
+        etInput.addTextChangedListener(new SimpleTextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                super.afterTextChanged(s);
+                if ("@".equals(s.toString())) {
+                    //toSelectFriends();
+                }
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+
+            }
+        });
     }
 
     @Override
@@ -103,9 +151,9 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
         return super.onSupportNavigateUp();
     }
 
-    private void initData(){
+    private void initData() {
         tweet = (Tweet) getIntent().getSerializableExtra(BUNDLE_KEY_TWEET);
-        if (tweet == null){
+        if (tweet == null) {
             Toast.makeText(this, "对象没找到", Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -116,7 +164,7 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
                 ivThumbup.setImageResource(isUped ? R.drawable.ic_thumbup_normal : R.drawable.ic_thumbup_actived);
                 mThumbupView.onLikeSuccess(!isUped, null);
                 isUped = !isUped;
-                if (dialog != null){
+                if (dialog != null) {
                     dialog.dismiss();
                     dialog = null;
                 }
@@ -125,7 +173,7 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 Toast.makeText(TweetDetailActivity.this, isUped ? "取消失败" : "点赞失败", Toast.LENGTH_SHORT).show();
-                if (dialog != null){
+                if (dialog != null) {
                     dialog.dismiss();
                     dialog = null;
                 }
@@ -139,7 +187,7 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
                 tvCmnCount.setText(String.valueOf(tweet.getCommentCount()));
                 etInput.setHint("发表评论");
                 etInput.setText(null);
-                if (dialog != null){
+                if (dialog != null) {
                     dialog.dismiss();
                     dialog = null;
                 }
@@ -148,7 +196,7 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 Toast.makeText(TweetDetailActivity.this, "评论失败", Toast.LENGTH_SHORT).show();
-                if (dialog != null){
+                if (dialog != null) {
                     dialog.dismiss();
                     dialog = null;
                 }
@@ -156,7 +204,7 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
         };
     }
 
-    private void initView(){
+    private void initView() {
         RequestManager reqManager = Glide.with(this);
 
         reqManager.load(tweet.getPortrait()).into(ivPortrait);
@@ -166,7 +214,7 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
         tvCmnCount.setText(tweet.getCommentCount());
         PlatfromUtil.setPlatFromString(tvClient, tweet.getAppclient());
 
-        if (!TextUtils.isEmpty(tweet.getImgSmall())){
+        if (!TextUtils.isEmpty(tweet.getImgSmall())) {
             ivSmallImg.setVisibility(View.VISIBLE);
             reqManager.load(tweet.getImgSmall()).into(ivSmallImg);
         }
@@ -206,31 +254,45 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, frag)
                 .commitAllowingStateLoss();
+
+
+        ivEmoji.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!keyboardFragment.isShow()) {// emoji隐藏中
+                    keyboardFragment.showEmojiKeyBoard();
+                    keyboardFragment.hideSoftKeyboard();
+                } else {
+                    keyboardFragment.hideEmojiKeyBoard();
+                    keyboardFragment.showSoftKeyboard(etInput);
+                }
+            }
+        });
     }
 
-    private void onClickSend(){
-        if (TextUtils.isEmpty(etInput.getText().toString().replaceAll("[ \\s\\n]+", ""))){
+    private void onClickSend() {
+        if (TextUtils.isEmpty(etInput.getText().toString().replaceAll("[ \\s\\n]+", ""))) {
             Toast.makeText(this, "请输入文字", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (!AppContext.getInstance().isLogin()){
+        if (!AppContext.getInstance().isLogin()) {
             UIHelper.showLoginActivity(this);
             return;
         }
 
-        this.dialog  = DialogHelp.getWaitDialog(this, "正在发表评论...");
+        this.dialog = DialogHelp.getWaitDialog(this, "正在发表评论...");
         this.dialog.show();
 
-        if (reply == null){
+        if (reply == null) {
             OSChinaApi.publicComment(3, tweet.getId(), AppContext.getInstance().getLoginUid(),
                     etInput.getText().toString(), 1, cmnHandler);
-        }else{
+        } else {
             OSChinaApi.replyComment(tweet.getId(), 3, reply.getId(), reply.getAuthorId(),
                     AppContext.getInstance().getLoginUid(), etInput.getText().toString(), cmnHandler);
         }
     }
 
-    private void onClickDelete(){
+    private void onClickDelete() {
         if (!TextUtils.isEmpty(etInput.getText().toString())) return;
         if (this.reply == null) return;
         reply = null;
@@ -253,12 +315,13 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
 
     }
 
-    @OnClick(R.id.iv_thumbup) void onClickThumbup(){
-        this.dialog  = DialogHelp.getWaitDialog(this, "正在提交请求...");
+    @OnClick(R.id.iv_thumbup)
+    void onClickThumbup() {
+        this.dialog = DialogHelp.getWaitDialog(this, "正在提交请求...");
         this.dialog.show();
-        if (!isUped){
+        if (!isUped) {
             OSChinaApi.pubLikeTweet(tweet.getId(), tweet.getAuthorid(), upHandler);
-        }else{
+        } else {
             OSChinaApi.pubUnLikeTweet(tweet.getId(), tweet.getAuthorid(), upHandler);
         }
     }
