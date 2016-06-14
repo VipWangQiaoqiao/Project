@@ -261,7 +261,7 @@
             android:configChanges="keyboardHidden|orientation"
             android:label="问答详情" />
         <activity
-            android:name=".ui.tweet.TweetDetailActivity"
+            android:name=".improve.activities.TweetDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="动弹详情"
             android:screenOrientation="portrait"

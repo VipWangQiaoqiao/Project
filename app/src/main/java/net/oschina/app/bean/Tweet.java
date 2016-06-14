@@ -85,6 +85,7 @@ public class Tweet extends Entity implements Parcelable {
         imageFilePath = dest.readString();
         audioPath = dest.readString();
         isLike = dest.readInt();
+        likeCount = dest.readInt();
     }
 
     public String getAttach() {
@@ -228,6 +229,7 @@ public class Tweet extends Entity implements Parcelable {
         dest.writeString(imageFilePath);
         dest.writeString(audioPath);
         dest.writeInt(isLike);
+        dest.writeInt(likeCount);
     }
 
     public static final Parcelable.Creator<Tweet> CREATOR = new Creator<Tweet>() {
