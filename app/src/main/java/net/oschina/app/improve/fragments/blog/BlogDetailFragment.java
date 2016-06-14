@@ -2,18 +2,11 @@ package net.oschina.app.improve.fragments.blog;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.RectF;
-import android.graphics.drawable.ShapeDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
@@ -26,21 +19,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.oschina.app.R;
-import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.activities.BlogDetailActivity;
 import net.oschina.app.improve.bean.BlogDetail;
 import net.oschina.app.improve.contract.BlogDetailContract;
 import net.oschina.app.improve.fragments.base.BaseFragment;
+import net.oschina.app.improve.widget.GeneralDetailFooterView;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
-import net.oschina.app.widget.MyLinkMovementMethod;
-import net.oschina.app.widget.MyURLSpan;
-import net.oschina.app.widget.TweetTextView;
-import net.qiujuer.genius.ui.Ui;
-import net.qiujuer.genius.ui.drawable.shape.BorderShape;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by qiujuer
@@ -61,8 +46,8 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
     private Button mBtnRelation;
     private EditText mETInput;
 
-    private LinearLayout mLayAbouts;
-    private LinearLayout mLayComments;
+    private GeneralDetailFooterView mFooter;
+
     private LinearLayout mLayAbstract;
 
     private long mCommentId;
@@ -126,10 +111,9 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mBtnRelation.setElevation(0);
         }
-        mETInput = (EditText) root.findViewById(R.id.et_input);
 
-        mLayAbouts = (LinearLayout) root.findViewById(R.id.lay_blog_detail_about);
-        mLayComments = (LinearLayout) root.findViewById(R.id.lay_blog_detail_comment);
+        mFooter = (GeneralDetailFooterView) root.findViewById(R.id.lay_detail_footer);
+        mETInput = (EditText) root.findViewById(R.id.et_input);
         mLayAbstract = (LinearLayout) root.findViewById(R.id.lay_blog_detail_abstract);
 
 
@@ -201,7 +185,7 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
         mTVAuthorName.setText(blog.getAuthor());
         getImgLoader().load(blog.getAuthorPortrait()).error(R.drawable.widget_dface).into(mIVAuthorPortrait);
 
-        String time = String.format("%s (%s)", StringUtils.friendly_time(getStrTime(blog.getPubDate())), blog.getPubDate());
+        String time = String.format("%s (%s)", StringUtils.friendly_time(blog.getPubDate()), blog.getPubDate());
         mTVPubDate.setText(time);
 
         mTVTitle.setText(blog.getTitle());
@@ -230,127 +214,26 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
 
         toFavoriteOk(blog);
 
-        final LayoutInflater inflater = getLayoutInflater(null);
         setText(R.id.tv_info_view, String.valueOf(blog.getViewCount()));
-        if (blog.getAbouts() != null && blog.getAbouts().size() > 0) {
-            int i = 1;
-            for (final BlogDetail.About about : blog.getAbouts()) {
-                if (about == null)
-                    continue;
-                @SuppressLint("InflateParams") View lay = inflater.inflate(R.layout.lay_blog_detail_about, null, false);
-                ((TextView) lay.findViewById(R.id.tv_title)).setText(about.title);
-
-                View layInfo = lay.findViewById(R.id.lay_info_view_comment);
-                ((TextView) layInfo.findViewById(R.id.tv_info_view)).setText(String.valueOf(about.viewCount));
-                ((TextView) layInfo.findViewById(R.id.tv_info_comment)).setText(String.valueOf(about.commentCount));
-
-                if (i == 1) {
-                    lay.findViewById(R.id.line).setVisibility(View.INVISIBLE);
-                }
-                lay.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        BlogDetailActivity.show(getActivity(), about.id);
-                    }
-                });
-                i++;
-
-                mLayAbouts.addView(lay, 0);
-            }
-        } else {
-            setGone(R.id.tv_blog_detail_about);
-            mLayAbouts.setVisibility(View.GONE);
-        }
-
         setText(R.id.tv_info_comment, String.valueOf(blog.getCommentCount()));
-        if (blog.getComments() != null && blog.getComments().size() > 0) {
 
-            if (blog.getComments().size() < blog.getCommentCount()) {
-                setVisibility(R.id.tv_see_comment);
-                mLayComments.findViewById(R.id.tv_see_comment).setOnClickListener(this);
-            } else {
-                setGone(R.id.tv_see_comment);
+        mFooter.setAbout(blog.getAbouts(), new GeneralDetailFooterView.OnAboutClickListener() {
+            @Override
+            public void onClick(View view, BlogDetail.About about) {
+                BlogDetailActivity.show(getActivity(), about.id);
             }
+        });
 
-            final Resources resources = getResources();
-            for (final BlogDetail.Comment comment : blog.getComments()) {
-                if (comment == null)
-                    continue;
-
-                @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_blog_detail_comment, null, false);
-                getImgLoader().load(comment.authorPortrait).error(R.drawable.widget_dface)
-                        .into(((ImageView) lay.findViewById(R.id.iv_avatar)));
-
-                ((TextView) lay.findViewById(R.id.tv_name)).setText(comment.author);
-
-                TweetTextView content = ((TweetTextView) lay.findViewById(R.id.tv_content));
-                formatHtml(resources, content, comment.content);
-
-                if (comment.refer != null) {
-                    // 最多5层
-                    View view = getReferLayout(comment.refer, inflater, 5);
-                    lay.addView(view, lay.indexOfChild(content));
-                }
-
-                ((TextView) lay.findViewById(R.id.tv_pub_date)).setText(
-                        StringUtils.friendly_time(getStrTime(comment.pubDate)));
-
-                final long commentId = comment.id;
-                lay.findViewById(R.id.btn_comment).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mCommentId = commentId;
-                        mCommentAuthorId = comment.authorId;
-                        mETInput.setHint(String.format("回复: %s", comment.author));
-                    }
-                });
-
-                mLayComments.addView(lay, 0);
+        mFooter.setComment(blog.getComments(), blog.getCommentCount(), getImgLoader(), new GeneralDetailFooterView.OnCommentClickListener() {
+            @Override
+            public void onClick(View view, BlogDetail.Comment comment) {
+                mCommentId = comment.id;
+                mCommentAuthorId = comment.authorId;
+                mETInput.setHint(String.format("回复: %s", comment.author));
             }
+        }, this);
 
-
-        } else {
-            setGone(R.id.tv_blog_detail_comment);
-            mLayComments.setVisibility(View.GONE);
-        }
     }
-
-    @SuppressWarnings("deprecation")
-    private View getReferLayout(BlogDetail.Refer refer, LayoutInflater inflater, int count) {
-        final Context context = getContext();
-
-        @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_blog_detail_comment_refer, null, false);
-        ShapeDrawable drawable = new ShapeDrawable(new BorderShape(new RectF(Ui.dipToPx(getContext(), 1), 0, 0, 0)));
-        drawable.getPaint().setColor(0xffd7d6da);
-        lay.findViewById(R.id.lay_blog_detail_comment_refer).setBackgroundDrawable(drawable);
-
-        TextView textView = ((TextView) lay.findViewById(R.id.tv_blog_detail_comment_refer));
-        drawable = new ShapeDrawable(new BorderShape(new RectF(0, 0, 0, 1)));
-        drawable.getPaint().setColor(0xffd7d6da);
-        textView.setBackgroundDrawable(drawable);
-
-        formatHtml(context.getResources(), textView, refer.author + ":<br>" + refer.content);
-
-
-        if (refer.refer != null && (--count) > 0) {
-            View view = getReferLayout(refer.refer, inflater, count);
-            lay.addView(view, lay.indexOfChild(textView));
-        }
-
-        return lay;
-    }
-
-    private static String getStrTime(String cc_time) {
-        try {
-            long lTime = Long.valueOf(cc_time);
-            @SuppressLint("SimpleDateFormat")
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            return sdf.format(new Date(lTime));
-        } catch (Exception e) {
-            return cc_time;
-        }
-    }
-
 
     private final static String linkCss = "<script type=\"text/javascript\" " +
             "src=\"file:///android_asset/shCore.js\"></script>"
@@ -432,21 +315,5 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
     public void toSendCommentOk() {
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
         mETInput.setText("");
-    }
-
-    private static void formatHtml(Resources resources, TextView textView, String str) {
-        textView.setMovementMethod(MyLinkMovementMethod.a());
-        textView.setFocusable(false);
-        textView.setLongClickable(false);
-
-        if (textView instanceof TweetTextView) {
-            ((TweetTextView) textView).setDispatchToParent(true);
-        }
-
-        str = TweetTextView.modifyPath(str);
-        Spanned span = Html.fromHtml(str);
-        span = InputHelper.displayEmoji(resources, span.toString());
-        textView.setText(span);
-        MyURLSpan.parseLinkText(textView, span);
     }
 }
