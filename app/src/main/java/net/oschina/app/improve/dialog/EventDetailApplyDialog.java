@@ -74,7 +74,8 @@ public class EventDetailApplyDialog extends CommonDialog implements
             mTvRemarksSelected.setVisibility(View.VISIBLE);
 
             mTvRemarksSelected.setOnClickListener(this);
-            mTvRemarksSelected.setText(mEvent.getRemark().getSelect().split(",")[0]);
+            String[] selects = mEvent.getRemark().getSelect().split(",");
+            mTvRemarksSelected.setText(selects.length > 0 ? selects[0] : mEvent.getRemark().getSelect());
         }
     }
 
