@@ -412,6 +412,8 @@ public class TweetPubActivity extends BaseActivity implements EasyPermissions.Pe
                     new FileInputStream(path), 512, 512);
 
             setImageFromBitmap(bitmap);
+            // 本地图片在这里销毁
+            bitmap.recycle();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -431,7 +433,8 @@ public class TweetPubActivity extends BaseActivity implements EasyPermissions.Pe
         // 压缩小图片用于界面显示
         Bitmap minBitmap = ImageUtils.zoomBitmap(bitmap, 100, 100);
         // 销毁之前的图片
-        bitmap.recycle();
+        // 这里销毁会导致动弹界面图片无法重新预览,KJ框架问题
+        // bitmap.recycle();
 
         mIvImage.setImageBitmap(minBitmap);
         mLyImage.setVisibility(View.VISIBLE);
