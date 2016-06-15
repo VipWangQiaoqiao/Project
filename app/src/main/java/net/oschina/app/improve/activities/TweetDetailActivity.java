@@ -13,7 +13,9 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.WebView;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,11 +33,13 @@ import net.oschina.app.emoji.EmojiKeyboardFragment;
 import net.oschina.app.emoji.Emojicon;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.emoji.OnEmojiClickListener;
+import net.oschina.app.improve.behavior.KeyboardActionDelegation;
 import net.oschina.app.improve.contract.TweetDetailContract;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.SimpleTextWatcher;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.ThemeSwitchUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.viewpagerfragment.TweetDetailViewPagerFragment;
 import net.oschina.app.widget.CircleImageView;
@@ -59,10 +63,8 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
     CircleImageView ivPortrait;
     @Bind(R.id.tv_nick)
     TextView tvNick;
-    @Bind(R.id.iv_small_img)
-    ImageView ivSmallImg;
-    @Bind(R.id.tv_content)
-    TextView tvContent;
+    @Bind(R.id.webview)
+    WebView mWebview;
     @Bind(R.id.tv_time)
     TextView tvTime;
     @Bind(R.id.tv_client)
@@ -75,9 +77,10 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
     TextView tvCmnCount;
     @Bind(R.id.et_input)
     EditText etInput;
-
     @Bind(R.id.iv_emoji)
     ImageView ivEmoji;
+    @Bind(R.id.emoji_keyboard_fragment)
+    FrameLayout mEmojiPanelLayout;
 
     private Tweet tweet;
     private Comment reply;
@@ -89,7 +92,8 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
     private TweetDetailContract.CmnView mCmnView;
     private TweetDetailContract.ThumbupView mThumbupView;
 
-    private final EmojiKeyboardFragment keyboardFragment = new EmojiKeyboardFragment();
+    private final EmojiKeyboardFragment mKeyboardFragment = new EmojiKeyboardFragment();
+    private KeyboardActionDelegation mKADelegation;
 
     public static void show(Context context, Tweet tweet) {
         Intent intent = new Intent(context, TweetDetailActivity.class);
@@ -114,13 +118,15 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
 
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.emoji_keyboard_fragment, keyboardFragment)
+                .replace(R.id.emoji_keyboard_fragment, mKeyboardFragment)
                 .commit();
 
-        keyboardFragment.setOnEmojiClickListener(new OnEmojiClickListener() {
+        mKADelegation = KeyboardActionDelegation.delegation(this, etInput, ivEmoji, mEmojiPanelLayout);
+
+        mKeyboardFragment.setOnEmojiClickListener(new OnEmojiClickListener() {
             @Override
             public void onEmojiClick(Emojicon v) {
-                InputHelper.input2OSC(etInput, v);
+                mKADelegation.onEmotionItemSelected(v);
             }
 
             @Override
@@ -138,8 +144,7 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before,
-                                      int count) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
             }
         });
@@ -209,15 +214,11 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
 
         reqManager.load(tweet.getPortrait()).into(ivPortrait);
         tvNick.setText(tweet.getAuthor());
-        tvContent.setText(InputHelper.displayEmoji(getResources(), tweet.getBody()));
         tvTime.setText(StringUtils.friendly_time(tweet.getPubDate()));
         tvCmnCount.setText(tweet.getCommentCount());
         PlatfromUtil.setPlatFromString(tvClient, tweet.getAppclient());
 
-        if (!TextUtils.isEmpty(tweet.getImgSmall())) {
-            ivSmallImg.setVisibility(View.VISIBLE);
-            reqManager.load(tweet.getImgSmall()).into(ivSmallImg);
-        }
+        fillWebViewBody();
 
         if (tweet.getIsLike() == 1) {
             ivThumbup.setImageResource(R.drawable.ic_thumbup_actived);
@@ -259,15 +260,51 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
         ivEmoji.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!keyboardFragment.isShow()) {// emoji隐藏中
-                    keyboardFragment.showEmojiKeyBoard();
-                    keyboardFragment.hideSoftKeyboard();
+                if (!mKeyboardFragment.isShow()) {// emoji隐藏中
+                    mKeyboardFragment.showEmojiKeyBoard();
+                    mKeyboardFragment.hideSoftKeyboard();
                 } else {
-                    keyboardFragment.hideEmojiKeyBoard();
-                    keyboardFragment.showSoftKeyboard(etInput);
+                    mKeyboardFragment.hideEmojiKeyBoard();
+                    mKeyboardFragment.showSoftKeyboard(etInput);
                 }
             }
         });
+    }
+
+    /**
+     * 填充webview内容
+     */
+    private void fillWebViewBody() {
+        StringBuffer body = new StringBuffer();
+        body.append(ThemeSwitchUtils.getWebViewBodyString());
+        body.append(UIHelper.WEB_STYLE + UIHelper.WEB_LOAD_IMAGES);
+
+        StringBuilder tweetbody = new StringBuilder(tweet.getBody());
+
+        String tweetBody = TextUtils.isEmpty(tweet.getImgSmall())
+                ? tweetbody.toString()
+                : tweetbody.toString() + "<br/><img src=\"" + tweet.getImgSmall() + "\">";
+        body.append(setHtmlCotentSupportImagePreview(tweetBody));
+
+        UIHelper.addWebImageShow(this, mWebview);
+        // 封尾
+        body.append("</div></body>");
+        mWebview.loadDataWithBaseURL(null, body.toString(), "text/html",
+                "utf-8", null);
+    }
+
+    /**
+     * 添加图片放大支持
+     *
+     * @param body
+     * @return
+     */
+    private String setHtmlCotentSupportImagePreview(String body) {
+        // 过滤掉 img标签的width,height属性
+        body = body.replaceAll("(<img[^>]*?)\\s+width\\s*=\\s*\\S+", "$1");
+        body = body.replaceAll("(<img[^>]*?)\\s+height\\s*=\\s*\\S+", "$1");
+        return body.replaceAll("(<img[^>]+src=\")(\\S+)\"",
+                "$1$2\" onClick=\"javascript:mWebViewImageListener.showImagePreview('" + tweet.getImgBig() + "')\"");
     }
 
     private void onClickSend() {
@@ -324,5 +361,15 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
         } else {
             OSChinaApi.pubUnLikeTweet(tweet.getId(), tweet.getAuthorid(), upHandler);
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode){
+            case KeyEvent.KEYCODE_BACK:
+                if (!mKADelegation.onTurnBack()) return true;
+                break;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

@@ -66,16 +66,13 @@ public class EmojiKeyboardFragment extends Fragment implements
                 });
 
         // content必须放在bottom下面初始化
-        mEmojiContent = (LinearLayout) rootView
-                .findViewById(R.id.emoji_content);
+        mEmojiContent = (LinearLayout) rootView.findViewById(R.id.emoji_content);
         mEmojiPager = (ViewPager) mEmojiContent.findViewById(R.id.emoji_pager);
-        adapter = new EmojiPagerAdapter(getFragmentManager(),
-                EMOJI_TAB_CONTENT, listener);
+        adapter = new EmojiPagerAdapter(getChildFragmentManager(), EMOJI_TAB_CONTENT, listener);
         mEmojiPager.setAdapter(adapter);
         mEmojiContent.setVisibility(View.VISIBLE);
 
-        mKeyboardHelper = new SoftKeyboardStateHelper(getActivity().getWindow()
-                .getDecorView());
+        mKeyboardHelper = new SoftKeyboardStateHelper(getActivity().getWindow().getDecorView());
         mKeyboardHelper.addSoftKeyboardStateListener(this);
     }
 

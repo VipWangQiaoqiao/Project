@@ -232,9 +232,9 @@ public class TweetDetailFragment extends
 
         StringBuilder tweetbody = new StringBuilder(mTweet.getBody());
 
-        String tweetBody = TextUtils.isEmpty(mTweet.getImgSmall()) ? tweetbody
-                .toString() : tweetbody.toString() + "<br/><img src=\""
-                + mTweet.getImgSmall() + "\">";
+        String tweetBody = TextUtils.isEmpty(mTweet.getImgSmall())
+                ? tweetbody.toString()
+                : tweetbody.toString() + "<br/><img src=\"" + mTweet.getImgSmall() + "\">";
         body.append(setHtmlCotentSupportImagePreview(tweetBody));
 
         UIHelper.addWebImageShow(getActivity(), mContent);
