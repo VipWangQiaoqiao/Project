@@ -70,6 +70,8 @@ public class TweetCommentAdapter extends BaseRecyclerAdapter<Comment> {
         }
     }
 
+
+
     private View.OnClickListener getOnReplyClickListener(){
         if (onReplyClickListener == null){
             onReplyClickListener = new View.OnClickListener() {

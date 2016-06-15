@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Xml;
 import android.view.KeyEvent;
 import android.view.View;
@@ -78,8 +79,6 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
     ImageView ivThumbup;
     @Bind(R.id.iv_comment)
     ImageView ivComment;
-    @Bind(R.id.tv_comment_count)
-    TextView tvCmnCount;
     @Bind(R.id.et_input)
     EditText etInput;
     @Bind(R.id.iv_emoji)
@@ -105,6 +104,17 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
     private TweetDetailViewPagerFragment mTweetDetailViewPagerFrag;
     private KeyboardActionDelegation mKADelegation;
     private View.OnClickListener onPortraitClickListener;
+
+    private final static String linkCss = "" +
+            "<script type=\"text/javascript\" src=\"file:///android_asset/shCore.js\"></script>"
+            + "<script type=\"text/javascript\" src=\"file:///android_asset/brush.js\"></script>"
+            + "<script type=\"text/javascript\" src=\"file:///android_asset/client.js\"></script>"
+            + "<script type=\"text/javascript\" src=\"file:///android_asset/detail_page.js\"></script>"
+            + "<script type=\"text/javascript\">SyntaxHighlighter.all();</script>"
+            + "<script type=\"text/javascript\">function showImagePreview(var url){window.location.url= url;}</script>"
+            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/shThemeDefault.css\">"
+            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/shCore.css\">"
+            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/css/common_new.css\">";
 
     public static void show(Context context, Tweet tweet) {
         Intent intent = new Intent(context, TweetDetailActivity.class);
@@ -145,6 +155,8 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
                 InputHelper.backspace(etInput);
             }
         });
+
+        mKeyboardFragment.setDelegate(true);
         etInput.addTextChangedListener(new SimpleTextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
@@ -206,7 +218,6 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 mCmnView.onCommentSuccess(null);
-                tvCmnCount.setText(String.valueOf(tweet.getCommentCount()));
                 reply = null; // 清除
                 etInput.setHint("发表评论");
                 etInput.setText(null);
@@ -245,12 +256,6 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
 
     private void initView() {
         fillDetailView();
-
-        if (tweet.getIsLike() == 1) {
-            ivThumbup.setImageResource(R.drawable.ic_thumbup_actived);
-        } else {
-            ivThumbup.setImageResource(R.drawable.ic_thumbup_normal);
-        }
 
         etInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -296,12 +301,21 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
     private void fillDetailView(){
         RequestManager reqManager = Glide.with(this);
 
-        reqManager.load(tweet.getPortrait()).into(ivPortrait);
+        if (TextUtils.isEmpty(tweet.getPortrait())){
+            ivPortrait.setImageResource(R.drawable.widget_dface);
+        }else{
+            reqManager.load(tweet.getPortrait()).into(ivPortrait);
+        }
         ivPortrait.setOnClickListener(getOnPortraitClickListener());
         tvNick.setText(tweet.getAuthor());
         tvTime.setText(StringUtils.friendly_time(tweet.getPubDate()));
-        tvCmnCount.setText(tweet.getCommentCount());
         PlatfromUtil.setPlatFromString(tvClient, tweet.getAppclient());
+
+        if (tweet.getIsLike() == 1) {
+            ivThumbup.setImageResource(R.drawable.ic_thumbup_actived);
+        } else {
+            ivThumbup.setImageResource(R.drawable.ic_thumbup_normal);
+        }
 
         fillWebViewBody();
     }
@@ -339,22 +353,6 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
         return body.replaceAll("(<img[^>]+src=\")(\\S+)\"",
                 "$1$2\" onClick=\"javascript:mWebViewImageListener.showImagePreview('" + tweet.getImgBig() + "')\"");
     }
-
-    private final static String linkCss = "<script type=\"text/javascript\" " +
-            "src=\"file:///android_asset/shCore.js\"></script>"
-            + "<script type=\"text/javascript\" src=\"file:///android_asset/brush.js\"></script>"
-            + "<script type=\"text/javascript\" src=\"file:///android_asset/client.js\"></script>"
-            + "<script type=\"text/javascript\" src=\"file:///android_asset/detail_page" +
-            ".js\"></script>"
-            + "<script type=\"text/javascript\">SyntaxHighlighter.all();</script>"
-            + "<script type=\"text/javascript\">function showImagePreview(var url){window" +
-            ".location.url= url;}</script>"
-            + "<link rel=\"stylesheet\" type=\"text/css\" " +
-            "href=\"file:///android_asset/shThemeDefault.css\">"
-            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/shCore" +
-            ".css\">"
-            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/css/common_new" +
-            ".css\">";
 
     private View.OnClickListener getOnPortraitClickListener(){
         if (onPortraitClickListener == null){
