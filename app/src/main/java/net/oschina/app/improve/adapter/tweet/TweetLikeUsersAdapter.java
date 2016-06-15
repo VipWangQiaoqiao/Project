@@ -12,8 +12,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
 import net.oschina.app.R;
+import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.User;
 import net.oschina.app.improve.adapter.base.BaseRecyclerAdapter;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.AvatarView;
 
 import butterknife.Bind;
@@ -25,6 +27,7 @@ import butterknife.ButterKnife;
 public class TweetLikeUsersAdapter extends BaseRecyclerAdapter<User> {
 
     private RequestManager reqManager;
+    private View.OnClickListener onPortraitClickListener;
 
     public TweetLikeUsersAdapter(Context context) {
         super(context, ONLY_FOOTER);
@@ -39,12 +42,28 @@ public class TweetLikeUsersAdapter extends BaseRecyclerAdapter<User> {
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, User item, int position) {
         LikeUsersHolderView h = (LikeUsersHolderView)holder;
+        h.ivPortrait.setTag(null);
         if (TextUtils.isEmpty(item.getPortrait())){
             h.ivPortrait.setImageResource(R.drawable.widget_dface);
         }else{
             reqManager.load(item.getPortrait()).into(h.ivPortrait);
         }
+        h.ivPortrait.setTag(item);
+        h.ivPortrait.setOnClickListener(getOnPortraitClickListener());
         h.tvName.setText(item.getName());
+    }
+
+    private View.OnClickListener getOnPortraitClickListener(){
+        if (onPortraitClickListener == null){
+            onPortraitClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    User user = (User) v.getTag();
+                    UIHelper.showUserCenter(mContext, user.getId(), user.getName());
+                }
+            };
+        }
+        return onPortraitClickListener;
     }
 
     public static final class LikeUsersHolderView extends RecyclerView.ViewHolder{
@@ -56,4 +75,5 @@ public class TweetLikeUsersAdapter extends BaseRecyclerAdapter<User> {
             ButterKnife.bind(this, view);
         }
     }
+
 }

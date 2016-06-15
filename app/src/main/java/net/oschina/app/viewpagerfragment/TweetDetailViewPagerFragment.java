@@ -24,7 +24,7 @@ import net.oschina.app.improve.fragments.tweet.ListTweetLikeUsersFragment;
  * Created by thanatos on 16/6/12.
  */
 public class TweetDetailViewPagerFragment extends Fragment
-        implements TweetDetailContract.CmnView, TweetDetailContract.ThumbupView{
+        implements TweetDetailContract.CmnView, TweetDetailContract.ThumbupView, TweetDetailContract.AgencyView{
 
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
@@ -120,5 +120,19 @@ public class TweetDetailViewPagerFragment extends Fragment
         if (mThumbupView != null) mThumbupView.onLikeSuccess(isUp, user);
         TabLayout.Tab tab = mTabLayout.getTabAt(0);
         if (tab != null) tab.setText(String.format("赞(%s)", mOperator.getTweetDetail().getLikeCount()));
+    }
+
+    @Override
+    public void resetLikeCount(int count) {
+        mOperator.getTweetDetail().setLikeCount(count);
+        TabLayout.Tab tab = mTabLayout.getTabAt(0);
+        if (tab != null) tab.setText(String.format("赞(%s)", count));
+    }
+
+    @Override
+    public void resetCmnCount(int count) {
+        mOperator.getTweetDetail().setCommentCount(String.valueOf(count));
+        TabLayout.Tab tab = mTabLayout.getTabAt(1);
+        if (tab != null) tab.setText(String.format("评论(%s)", count));
     }
 }

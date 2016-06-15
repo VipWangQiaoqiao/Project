@@ -28,4 +28,10 @@ public interface TweetDetailContract {
         void onLikeSuccess(boolean isUp, User user);
     }
 
+    interface AgencyView{
+        void resetLikeCount(int count);
+
+        void resetCmnCount(int count);
+    }
+
 }

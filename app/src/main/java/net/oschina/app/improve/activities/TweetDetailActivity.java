@@ -5,10 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.util.Xml;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -29,6 +31,8 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Tweet;
+import net.oschina.app.bean.TweetDetail;
+import net.oschina.app.bean.TweetsList;
 import net.oschina.app.emoji.EmojiKeyboardFragment;
 import net.oschina.app.emoji.Emojicon;
 import net.oschina.app.emoji.InputHelper;
@@ -41,6 +45,7 @@ import net.oschina.app.util.SimpleTextWatcher;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.ThemeSwitchUtils;
 import net.oschina.app.util.UIHelper;
+import net.oschina.app.util.XmlUtils;
 import net.oschina.app.viewpagerfragment.TweetDetailViewPagerFragment;
 import net.oschina.app.widget.CircleImageView;
 
@@ -81,6 +86,8 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
     ImageView ivEmoji;
     @Bind(R.id.emoji_keyboard_fragment)
     FrameLayout mEmojiPanelLayout;
+    @Bind(R.id.layout_coordinator)
+    CoordinatorLayout mCoordinatorLayout;
 
     private Tweet tweet;
     private Comment reply;
@@ -92,6 +99,7 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
 
     private TweetDetailContract.CmnView mCmnView;
     private TweetDetailContract.ThumbupView mThumbupView;
+    private TweetDetailContract.AgencyView mAgencyView;
 
     private final EmojiKeyboardFragment mKeyboardFragment = new EmojiKeyboardFragment();
     private TweetDetailViewPagerFragment mTweetDetailViewPagerFrag;
@@ -158,6 +166,12 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
         return super.onSupportNavigateUp();
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(BUNDLE_KEY_TWEET, tweet);
+    }
+
     private void initData() {
         tweet = (Tweet) getIntent().getSerializableExtra(BUNDLE_KEY_TWEET);
         if (tweet == null) {
@@ -209,21 +223,26 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
                 }
             }
         };
+
+        OSChinaApi.getTweetDetail(tweet.getId(), new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                TweetDetail data = XmlUtils.toBean(TweetDetail.class, responseBody);
+                tweet = data.getTweet();
+                mAgencyView.resetCmnCount(Integer.valueOf(tweet.getCommentCount()));
+                mAgencyView.resetLikeCount(tweet.getLikeCount());
+                fillDetailView();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+            }
+        });
     }
 
     private void initView() {
-        RequestManager reqManager = Glide.with(this);
-
-        reqManager.load(tweet.getPortrait()).into(ivPortrait);
-        tvNick.setText(tweet.getAuthor());
-        tvTime.setText(StringUtils.friendly_time(tweet.getPubDate()));
-        tvCmnCount.setText(tweet.getCommentCount());
-        PlatfromUtil.setPlatFromString(tvClient, tweet.getAppclient());
-
-        UIHelper.initWebView(mWebview);
-        mWebview.loadUrl("file:///android_asset/detail_page.html");
-
-        fillWebViewBody();
+        fillDetailView();
 
         if (tweet.getIsLike() == 1) {
             ivThumbup.setImageResource(R.drawable.ic_thumbup_actived);
@@ -253,13 +272,35 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
             }
         });
 
+        mCoordinatorLayout.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) return;
+                if (mKADelegation == null) return;
+                mKADelegation.onTurnBack();
+            }
+        });
+
 
         mTweetDetailViewPagerFrag = TweetDetailViewPagerFragment.instantiate(this);
         mCmnView = mTweetDetailViewPagerFrag;
         mThumbupView = mTweetDetailViewPagerFrag;
+        mAgencyView = mTweetDetailViewPagerFrag;
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, mTweetDetailViewPagerFrag)
                 .commitAllowingStateLoss();
+    }
+
+    private void fillDetailView(){
+        RequestManager reqManager = Glide.with(this);
+
+        reqManager.load(tweet.getPortrait()).into(ivPortrait);
+        tvNick.setText(tweet.getAuthor());
+        tvTime.setText(StringUtils.friendly_time(tweet.getPubDate()));
+        tvCmnCount.setText(tweet.getCommentCount());
+        PlatfromUtil.setPlatFromString(tvClient, tweet.getAppclient());
+
+        fillWebViewBody();
     }
 
     /**
