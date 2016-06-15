@@ -1,9 +1,9 @@
-package net.oschina.app.adapter.general;
+package net.oschina.app.improve.adapter.general;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewHolder;
-import net.oschina.app.adapter.base.BaseListAdapter;
+import net.oschina.app.improve.adapter.base.BaseListAdapter;
 import net.oschina.app.improve.bean.Event;
 import net.oschina.app.improve.fragments.event.EventFragment;
 import net.oschina.app.util.StringUtils;

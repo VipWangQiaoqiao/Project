@@ -1,4 +1,4 @@
-package net.oschina.app.improve.adapter;
+package net.oschina.app.improve.adapter.tweet;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +13,7 @@ import com.bumptech.glide.RequestManager;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.User;
+import net.oschina.app.improve.adapter.base.BaseRecyclerAdapter;
 import net.oschina.app.widget.AvatarView;
 
 import butterknife.Bind;
@@ -21,7 +22,7 @@ import butterknife.ButterKnife;
 /**
  * Created by thanatos on 16/6/13.
  */
-public class TweetLikeUsersAdapter extends BaseRecyclerAdapter<User>{
+public class TweetLikeUsersAdapter extends BaseRecyclerAdapter<User> {
 
     private RequestManager reqManager;
 

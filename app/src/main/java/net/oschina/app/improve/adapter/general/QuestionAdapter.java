@@ -1,4 +1,4 @@
-package net.oschina.app.adapter.general;
+package net.oschina.app.improve.adapter.general;
 
 import android.view.View;
 import android.widget.TextView;
@@ -6,7 +6,7 @@ import android.widget.TextView;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewHolder;
-import net.oschina.app.adapter.base.BaseListAdapter;
+import net.oschina.app.improve.adapter.base.BaseListAdapter;
 import net.oschina.app.improve.bean.Question;
 import net.oschina.app.improve.fragments.question.QuestionFragment;
 import net.oschina.app.util.StringUtils;
