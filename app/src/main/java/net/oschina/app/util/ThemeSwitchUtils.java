@@ -35,7 +35,7 @@ public class ThemeSwitchUtils {
         if (AppContext.getNightModeSwitch()) {
             return "<body class='night'><div class='contentstyle' id='article_body'>";
         } else {
-            return "<body ><div class='contentstyle' id='article_body'>";
+            return "<body style='background-color: #FFF'><div class='contentstyle' id='article_body' >";
         }
     }
 }
