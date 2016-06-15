@@ -319,7 +319,6 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
         body.append(setHtmlCotentSupportImagePreview(tweetBody));
 
         UIHelper.addWebImageShow(this, mWebview);
-        // 封尾
         body.append("</div></body>");
         mWebview.loadDataWithBaseURL(null, body.toString(), "text/html", "utf-8", null);
     }
