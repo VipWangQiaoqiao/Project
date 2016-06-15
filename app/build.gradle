@@ -42,15 +42,6 @@ android {
         }
     }
     */
-
-    signingConfigs {
-        all {
-            storeFile file("oschina.keystore")
-            storePassword "oschina123"
-            keyAlias "oschina"
-            keyPassword "oschina123"
-        }
-    }
 }
 
 
