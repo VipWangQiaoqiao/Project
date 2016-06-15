@@ -1,4 +1,4 @@
-package net.oschina.app.improve.adapter;
+package net.oschina.app.improve.adapter.base;
 
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;

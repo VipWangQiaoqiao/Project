@@ -8,8 +8,8 @@ import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.adapter.base.BaseListAdapter;
-import net.oschina.app.adapter.general.EventAdapter;
+import net.oschina.app.improve.adapter.base.BaseListAdapter;
+import net.oschina.app.improve.adapter.general.EventAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Banner;
 import net.oschina.app.cache.CacheManager;

@@ -218,6 +218,9 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
         tvCmnCount.setText(tweet.getCommentCount());
         PlatfromUtil.setPlatFromString(tvClient, tweet.getAppclient());
 
+        UIHelper.initWebView(mWebview);
+        mWebview.loadUrl("file:///android_asset/detail_page.html");
+
         fillWebViewBody();
 
         if (tweet.getIsLike() == 1) {
