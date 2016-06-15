@@ -11,7 +11,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
-import net.oschina.app.adapter.base.BaseListAdapter;
+import net.oschina.app.improve.adapter.base.BaseListAdapter;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;

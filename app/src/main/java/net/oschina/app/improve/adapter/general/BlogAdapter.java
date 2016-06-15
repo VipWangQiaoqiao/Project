@@ -1,11 +1,11 @@
-package net.oschina.app.adapter.general;
+package net.oschina.app.improve.adapter.general;
 
 import android.widget.TextView;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewHolder;
-import net.oschina.app.adapter.base.BaseListAdapter;
+import net.oschina.app.improve.adapter.base.BaseListAdapter;
 import net.oschina.app.improve.bean.Blog;
 import net.oschina.app.improve.fragments.blog.BlogFragment;
 import net.oschina.app.improve.fragments.blog.UserBlogFragment;

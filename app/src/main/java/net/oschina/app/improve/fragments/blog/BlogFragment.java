@@ -8,8 +8,8 @@ import android.widget.TextView;
 import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.R;
-import net.oschina.app.adapter.base.BaseListAdapter;
-import net.oschina.app.adapter.general.BlogAdapter;
+import net.oschina.app.improve.adapter.base.BaseListAdapter;
+import net.oschina.app.improve.adapter.general.BlogAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.improve.activities.BlogDetailActivity;
