@@ -233,9 +233,9 @@
             android:layout_height="22dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
+            android:src="@drawable/share_ic_selector"
             android:contentDescription="@string/app_name"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_share_black" />
+            android:scaleType="fitCenter" />
 
     </LinearLayout>
 

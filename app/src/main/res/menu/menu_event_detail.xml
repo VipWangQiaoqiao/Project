@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:osc="http://schemas.android.com/apk/res-auto" >
+    xmlns:osc="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/team_new_issue"
-        android:icon="@drawable/ic_share_black"
+        android:id="@+id/menu_event_share"
+        android:icon="@drawable/share_bt_selector"
         android:title="@string/share_to"
         android:visible="true"
-        osc:showAsAction="always"/>
+        osc:showAsAction="always" />
 
 </menu>
