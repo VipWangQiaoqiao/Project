@@ -47,7 +47,6 @@ public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<User> i
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 TweetLikeUserList data = XmlUtils.toBean(TweetLikeUserList.class, responseBody);
                 setListData(data.getList());
-                mOperator.getTweetDetail().setLikeCount(data.getList().size());
                 onRequestSuccess(1);
                 onRequestFinish();
             }

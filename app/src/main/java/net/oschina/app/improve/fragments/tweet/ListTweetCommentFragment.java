@@ -25,7 +25,7 @@ import cz.msebera.android.httpclient.Header;
  * Created by thanatos on 16/6/13.
  */
 public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>
-        implements TweetCommentAdapter.OnClickReplyCallback, TweetCommentAdapter.OnClickPortraitCallback, TweetDetailContract.CmnView {
+        implements TweetCommentAdapter.OnClickReplyCallback, TweetDetailContract.CmnView {
 
     private TweetDetailContract.Operator mOperator;
     private int pageNum = 0;
@@ -45,7 +45,6 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 CommentList data = XmlUtils.toBean(CommentList.class, responseBody);
                 setListData(data.getList());
-                mOperator.getTweetDetail().setCommentCount(String.valueOf(data.getList().size()));
                 onRequestSuccess(1);
                 onRequestFinish();
             }
@@ -61,7 +60,6 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>
     protected BaseRecyclerAdapter<Comment> getRecyclerAdapter() {
         TweetCommentAdapter adapter = new TweetCommentAdapter(getContext());
         adapter.setOnClickReplyCallback(this);
-        adapter.setOnClickPortraitCallback(this);
         return adapter;
     }
 
@@ -107,11 +105,6 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>
     @Override
     public void onReplyOther(Comment comment) {
         mOperator.toReply(comment);
-    }
-
-    @Override
-    public void onClickPortrait(int oid) {
-        mOperator.toUserHome(oid);
     }
 
     @Override

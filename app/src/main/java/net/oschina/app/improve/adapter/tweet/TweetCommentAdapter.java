@@ -18,6 +18,7 @@ import net.oschina.app.bean.Comment;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.adapter.base.BaseRecyclerAdapter;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.CircleImageView;
 import net.oschina.app.widget.TweetTextView;
 
@@ -33,7 +34,6 @@ public class TweetCommentAdapter extends BaseRecyclerAdapter<Comment> {
     private View.OnClickListener onReplyClickListener;
     private View.OnClickListener onPortraitClickListener;
     private OnClickReplyCallback onClickReplyCallback;
-    private OnClickPortraitCallback onClickPortraitCallback;
 
     public TweetCommentAdapter(Context context) {
         super(context, ONLY_FOOTER);
@@ -89,9 +89,8 @@ public class TweetCommentAdapter extends BaseRecyclerAdapter<Comment> {
             onPortraitClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (onClickPortraitCallback == null) return;
                     Comment comment = (Comment) v.getTag();
-                    onClickPortraitCallback.onClickPortrait(comment.getAuthorId());
+                    UIHelper.showUserCenter(mContext, comment.getAuthorId(), comment.getAuthor());
                 }
             };
         }
@@ -115,15 +114,8 @@ public class TweetCommentAdapter extends BaseRecyclerAdapter<Comment> {
         onClickReplyCallback = callback;
     }
 
-    public void setOnClickPortraitCallback(OnClickPortraitCallback callback){
-        onClickPortraitCallback = callback;
-    }
-
     public interface OnClickReplyCallback{
         void onReplyOther(Comment comment);
     }
 
-    public interface OnClickPortraitCallback{
-        void onClickPortrait(int oid);
-    }
 }
