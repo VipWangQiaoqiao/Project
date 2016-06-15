@@ -104,6 +104,7 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
     private final EmojiKeyboardFragment mKeyboardFragment = new EmojiKeyboardFragment();
     private TweetDetailViewPagerFragment mTweetDetailViewPagerFrag;
     private KeyboardActionDelegation mKADelegation;
+    private View.OnClickListener onPortraitClickListener;
 
     public static void show(Context context, Tweet tweet) {
         Intent intent = new Intent(context, TweetDetailActivity.class);
@@ -206,6 +207,7 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 mCmnView.onCommentSuccess(null);
                 tvCmnCount.setText(String.valueOf(tweet.getCommentCount()));
+                reply = null; // 清除
                 etInput.setHint("发表评论");
                 etInput.setText(null);
                 if (dialog != null) {
@@ -295,6 +297,7 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
         RequestManager reqManager = Glide.with(this);
 
         reqManager.load(tweet.getPortrait()).into(ivPortrait);
+        ivPortrait.setOnClickListener(getOnPortraitClickListener());
         tvNick.setText(tweet.getAuthor());
         tvTime.setText(StringUtils.friendly_time(tweet.getPubDate()));
         tvCmnCount.setText(tweet.getCommentCount());
@@ -336,6 +339,18 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
         body = body.replaceAll("(<img[^>]*?)\\s+height\\s*=\\s*\\S+", "$1");
         return body.replaceAll("(<img[^>]+src=\")(\\S+)\"",
                 "$1$2\" onClick=\"javascript:mWebViewImageListener.showImagePreview('" + tweet.getImgBig() + "')\"");
+    }
+
+    private View.OnClickListener getOnPortraitClickListener(){
+        if (onPortraitClickListener == null){
+            onPortraitClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    UIHelper.showUserCenter(TweetDetailActivity.this, tweet.getAuthorid(), tweet.getAuthor());
+                }
+            };
+        }
+        return onPortraitClickListener;
     }
 
     private void onClickSend() {
@@ -383,11 +398,6 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
     public void toReply(Comment comment) {
         this.reply = comment;
         etInput.setHint("回复@ " + comment.getAuthor());
-    }
-
-    @Override
-    public void toUserHome(int oid) {
-
     }
 
     @OnClick(R.id.iv_thumbup)
