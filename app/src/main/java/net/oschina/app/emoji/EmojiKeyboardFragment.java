@@ -30,6 +30,8 @@ public class EmojiKeyboardFragment extends Fragment implements
     private OnEmojiClickListener listener;
     public static int EMOJI_TAB_CONTENT;
 
+    private boolean isDelegate;
+
     private SoftKeyboardStateHelper mKeyboardHelper;
 
     @Override
@@ -115,7 +117,9 @@ public class EmojiKeyboardFragment extends Fragment implements
      */
     public void hideEmojiKeyBoard() {
         mEmojiBottom.setVisibility(View.GONE);
-        //mEmojiContent.setVisibility(View.GONE);
+        if(!isDelegate){
+            mEmojiContent.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -152,7 +156,9 @@ public class EmojiKeyboardFragment extends Fragment implements
     @Override
     public void onSoftKeyboardOpened(int keyboardHeightInPx) {
         mEmojiBottom.setVisibility(View.GONE);
-        //mEmojiContent.setVisibility(View.GONE);
+        if(!isDelegate){
+            mEmojiContent.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -162,5 +168,9 @@ public class EmojiKeyboardFragment extends Fragment implements
     public void onStop() {
         super.onStop();
         hideSoftKeyboard();
+    }
+
+    public void setDelegate(boolean delegate) {
+        isDelegate = delegate;
     }
 }

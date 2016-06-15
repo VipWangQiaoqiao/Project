@@ -39,9 +39,9 @@ import net.oschina.app.R;
 import net.oschina.app.emoji.SoftKeyboardStateHelper.SoftKeyboardStateListener;
 
 /**
- * 
+ *
  * @author kymjs (http://www.kymjs.com)
- * 
+ *
  */
 public class KJEmojiFragment extends Fragment implements
         SoftKeyboardStateListener {
@@ -157,7 +157,7 @@ public class KJEmojiFragment extends Fragment implements
 
     /**
      * 底部栏点击事件监听器
-     * 
+     *
      * @param index
      * @return
      */
