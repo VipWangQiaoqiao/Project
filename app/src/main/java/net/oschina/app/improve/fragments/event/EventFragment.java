@@ -3,11 +3,13 @@ package net.oschina.app.improve.fragments.event;
 import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
+import net.oschina.app.R;
 import net.oschina.app.adapter.base.BaseListAdapter;
 import net.oschina.app.adapter.general.EventAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
@@ -78,8 +80,12 @@ public class EventFragment extends BaseGeneralListFragment<Event> {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Event event = mAdapter.getItem(position - 1);
-        if (event != null)
+        if (event != null) {
             EventDetailActivity.show(getActivity(), event.getId());
+            TextView title = (TextView) view.findViewById(R.id.tv_event_title);
+            updateTextColor(title, null);
+            saveToReadedList(HISTORY_EVENT, event.getId() + "");
+        }
     }
 
     @Override
