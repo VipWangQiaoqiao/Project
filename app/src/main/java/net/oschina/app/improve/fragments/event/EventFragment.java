@@ -9,18 +9,13 @@ import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
-<<<<<<< HEAD
 import net.oschina.app.R;
-import net.oschina.app.adapter.base.BaseListAdapter;
-import net.oschina.app.adapter.general.EventAdapter;
-=======
-import net.oschina.app.improve.adapter.base.BaseListAdapter;
-import net.oschina.app.improve.adapter.general.EventAdapter;
->>>>>>> 1bc8348b85a44da4493121783170993efaeb7f28
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Banner;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.improve.activities.EventDetailActivity;
+import net.oschina.app.improve.adapter.base.BaseListAdapter;
+import net.oschina.app.improve.adapter.general.EventAdapter;
 import net.oschina.app.improve.bean.Event;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
@@ -48,6 +43,7 @@ public class EventFragment extends BaseGeneralListFragment<Event> {
         mHeaderView = new ViewEventHeader(getActivity());
 
         mExeService.execute(new Runnable() {
+            @SuppressWarnings("unchecked")
             @Override
             public void run() {
                 final PageBean<Banner> pageBean = (PageBean<Banner>) CacheManager.readObject(getActivity(), EVENT_BANNER);
