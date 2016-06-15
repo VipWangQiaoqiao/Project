@@ -240,8 +240,7 @@ public class TweetDetailFragment extends
         UIHelper.addWebImageShow(getActivity(), mContent);
         // 封尾
         body.append("</div></body>");
-        mContent.loadDataWithBaseURL(null, body.toString(), "text/html",
-                "utf-8", null);
+        mContent.loadDataWithBaseURL(null, body.toString(), "text/html", "utf-8", null);
     }
 
     /**
