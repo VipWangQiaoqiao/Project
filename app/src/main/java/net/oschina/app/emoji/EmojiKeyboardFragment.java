@@ -84,7 +84,7 @@ public class EmojiKeyboardFragment extends Fragment implements
 
     /**
      * 底部栏点击事件监听器
-     * 
+     *
      * @param index
      * @return
      */
