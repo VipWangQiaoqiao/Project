@@ -1,10 +1,8 @@
 package net.oschina.app.improve.fragments.event;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
@@ -12,15 +10,12 @@ import android.widget.TextView;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
-import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.EventApplyData;
 import net.oschina.app.improve.bean.Event;
 import net.oschina.app.improve.bean.EventDetail;
 import net.oschina.app.improve.contract.EventDetailContract;
 import net.oschina.app.improve.dialog.EventDetailApplyDialog;
 import net.oschina.app.improve.fragments.base.BaseFragment;
-import net.oschina.app.ui.EventApplyDialog;
-import net.oschina.app.ui.dialog.DialogControl;
 import net.oschina.app.util.UIHelper;
 
 import butterknife.Bind;
@@ -103,7 +98,7 @@ public class EventDetailFragment extends BaseFragment implements
         tv_event_author.setText(String.format("发起人：%s", mDetail.getAuthor()));
         tv_event_member.setText(String.format("%s人参与", mDetail.getApplyCount()));
         tv_event_cost_desc.setText(String.format("费用：%s", mDetail.getCostDesc()));
-        tv_event_location.setText(mDetail.getLocation());
+        tv_event_location.setText(mDetail.getSpot());
         tv_event_pub_time.setText(mDetail.getPubDate());
         getImgLoader().load(mDetail.getImg()).into(iv_event_img);
         iv_fav.setImageResource(mDetail.isFavorite() ? R.drawable.ic_faved_normal : R.drawable.ic_fav_normal);

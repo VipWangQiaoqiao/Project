@@ -197,6 +197,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
+            android:background="@color/white"
             android:layout_gravity="bottom" />
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

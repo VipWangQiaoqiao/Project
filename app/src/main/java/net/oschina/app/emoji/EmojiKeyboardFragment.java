@@ -35,10 +35,16 @@ public class EmojiKeyboardFragment extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater,
             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        mRootView = (LinearLayout) inflater.inflate(R.layout.frag_keyboard,
-                container, false);
-        initWidget(mRootView);
+
+        if (null != mRootView) {
+            ViewGroup parent = (ViewGroup) mRootView.getParent();
+            if (null != parent) {
+                parent.removeView(mRootView);
+            }
+        }else {
+            mRootView = (LinearLayout) inflater.inflate(R.layout.frag_keyboard, container,false);
+            initWidget(mRootView);
+        }
         return mRootView;
     }
 
@@ -78,8 +84,8 @@ public class EmojiKeyboardFragment extends Fragment implements
 
     /**
      * 底部栏点击事件监听器
-     * 
-     * @param indexfff
+     *
+     * @param index
      * @return
      */
     private OnClickListener getBottomBarClickListener(final int index) {
@@ -109,7 +115,7 @@ public class EmojiKeyboardFragment extends Fragment implements
      */
     public void hideEmojiKeyBoard() {
         mEmojiBottom.setVisibility(View.GONE);
-        mEmojiContent.setVisibility(View.GONE);
+        //mEmojiContent.setVisibility(View.GONE);
     }
 
     /**
@@ -146,7 +152,7 @@ public class EmojiKeyboardFragment extends Fragment implements
     @Override
     public void onSoftKeyboardOpened(int keyboardHeightInPx) {
         mEmojiBottom.setVisibility(View.GONE);
-        mEmojiContent.setVisibility(View.GONE);
+        //mEmojiContent.setVisibility(View.GONE);
     }
 
     @Override
