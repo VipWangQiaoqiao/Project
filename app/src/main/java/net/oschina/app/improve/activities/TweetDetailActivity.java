@@ -312,7 +312,7 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
     private void fillWebViewBody() {
         StringBuffer body = new StringBuffer();
         body.append(ThemeSwitchUtils.getWebViewBodyString());
-        body.append(UIHelper.WEB_STYLE + UIHelper.WEB_LOAD_IMAGES);
+        body.append(linkCss + UIHelper.WEB_LOAD_IMAGES);
 
         StringBuilder tweetbody = new StringBuilder(tweet.getBody());
 
@@ -322,7 +322,6 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
         body.append(setHtmlCotentSupportImagePreview(tweetBody));
 
         UIHelper.addWebImageShow(this, mWebview);
-        // 封尾
         body.append("</div></body>");
         mWebview.loadDataWithBaseURL(null, body.toString(), "text/html", "utf-8", null);
     }
@@ -340,6 +339,22 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
         return body.replaceAll("(<img[^>]+src=\")(\\S+)\"",
                 "$1$2\" onClick=\"javascript:mWebViewImageListener.showImagePreview('" + tweet.getImgBig() + "')\"");
     }
+
+    private final static String linkCss = "<script type=\"text/javascript\" " +
+            "src=\"file:///android_asset/shCore.js\"></script>"
+            + "<script type=\"text/javascript\" src=\"file:///android_asset/brush.js\"></script>"
+            + "<script type=\"text/javascript\" src=\"file:///android_asset/client.js\"></script>"
+            + "<script type=\"text/javascript\" src=\"file:///android_asset/detail_page" +
+            ".js\"></script>"
+            + "<script type=\"text/javascript\">SyntaxHighlighter.all();</script>"
+            + "<script type=\"text/javascript\">function showImagePreview(var url){window" +
+            ".location.url= url;}</script>"
+            + "<link rel=\"stylesheet\" type=\"text/css\" " +
+            "href=\"file:///android_asset/shThemeDefault.css\">"
+            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/shCore" +
+            ".css\">"
+            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/css/common_new" +
+            ".css\">";
 
     private View.OnClickListener getOnPortraitClickListener(){
         if (onPortraitClickListener == null){

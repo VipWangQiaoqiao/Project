@@ -8,6 +8,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
@@ -23,7 +27,11 @@ import net.oschina.app.improve.bean.EventDetail;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.contract.EventDetailContract;
 import net.oschina.app.improve.fragments.event.EventDetailFragment;
+import net.oschina.app.ui.ShareDialog;
 import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.HTMLUtil;
+import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.URLsUtils;
 import net.oschina.app.util.XmlUtils;
 
 import java.io.ByteArrayInputStream;
@@ -42,6 +50,7 @@ public class EventDetailActivity extends AppCompatActivity implements EventDetai
     private EventDetail mDetail;
     private EventDetailContract.View mView;
     private ProgressDialog mDialog;
+    private ShareDialog dialog;
 
     public static void show(Context context, long id) {
         Intent intent = new Intent(context, EventDetailActivity.class);
@@ -60,6 +69,57 @@ public class EventDetailActivity extends AppCompatActivity implements EventDetai
         }
         initView();
         initData();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_event_detail, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_event_share) {
+            toShare();
+        }
+        return true;
+    }
+
+
+    public void toShare() {
+        String content;
+        String url;
+        String title;
+        if (mId != 0 && mDetail != null) {
+            url = String.format(URLsUtils.URL_MOBILE + "event/%s", mId);
+            if (mDetail.getBody().length() > 55) {
+                content = HTMLUtil.delHTMLTag(mDetail.getBody().trim());
+                if (content.length() > 55)
+                    content = StringUtils.getSubString(0, 55, content);
+            } else {
+                content = HTMLUtil.delHTMLTag(mDetail.getBody().trim());
+            }
+            title = mDetail.getTitle();
+
+            if (TextUtils.isEmpty(url) || TextUtils.isEmpty(content) || TextUtils.isEmpty(title)) {
+                AppContext.showToast("内容加载失败...");
+                return;
+            }
+        } else {
+            AppContext.showToast("内容加载失败...");
+            return;
+        }
+
+        if (dialog == null) {
+            dialog = new ShareDialog(this);
+        }
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.setTitle(R.string.share_to);
+        dialog.setShareInfo(title, content, url);
+        dialog.show();
     }
 
     private void initView() {
