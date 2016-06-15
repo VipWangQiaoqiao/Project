@@ -86,6 +86,7 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
     private Comment reply;
     private boolean isUped;
     private Dialog dialog;
+    private boolean mLastIsEmpty = true;
     private AsyncHttpResponseHandler upHandler;
     private AsyncHttpResponseHandler cmnHandler;
 
@@ -93,6 +94,7 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
     private TweetDetailContract.ThumbupView mThumbupView;
 
     private final EmojiKeyboardFragment mKeyboardFragment = new EmojiKeyboardFragment();
+    private TweetDetailViewPagerFragment mTweetDetailViewPagerFrag;
     private KeyboardActionDelegation mKADelegation;
 
     public static void show(Context context, Tweet tweet) {
@@ -252,26 +254,12 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
         });
 
 
-        TweetDetailViewPagerFragment frag = TweetDetailViewPagerFragment.instantiate(this);
-        mCmnView = frag;
-        mThumbupView = frag;
+        mTweetDetailViewPagerFrag = TweetDetailViewPagerFragment.instantiate(this);
+        mCmnView = mTweetDetailViewPagerFrag;
+        mThumbupView = mTweetDetailViewPagerFrag;
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, frag)
+                .replace(R.id.fragment_container, mTweetDetailViewPagerFrag)
                 .commitAllowingStateLoss();
-
-
-        ivEmoji.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!mKeyboardFragment.isShow()) {// emoji隐藏中
-                    mKeyboardFragment.showEmojiKeyBoard();
-                    mKeyboardFragment.hideSoftKeyboard();
-                } else {
-                    mKeyboardFragment.hideEmojiKeyBoard();
-                    mKeyboardFragment.showSoftKeyboard(etInput);
-                }
-            }
-        });
     }
 
     /**
@@ -292,8 +280,7 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
         UIHelper.addWebImageShow(this, mWebview);
         // 封尾
         body.append("</div></body>");
-        mWebview.loadDataWithBaseURL(null, body.toString(), "text/html",
-                "utf-8", null);
+        mWebview.loadDataWithBaseURL(null, body.toString(), "text/html", "utf-8", null);
     }
 
     /**
@@ -333,7 +320,14 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
     }
 
     private void onClickDelete() {
-        if (!TextUtils.isEmpty(etInput.getText().toString())) return;
+        if (!TextUtils.isEmpty(etInput.getText().toString())) {
+            mLastIsEmpty = false;
+            return;
+        }
+        if (TextUtils.isEmpty(etInput.getText().toString()) && !mLastIsEmpty){
+            mLastIsEmpty = true;
+            return;
+        }
         if (this.reply == null) return;
         reply = null;
         etInput.setHint("发表评论");

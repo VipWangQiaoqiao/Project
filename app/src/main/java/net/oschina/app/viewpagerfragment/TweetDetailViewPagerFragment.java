@@ -100,6 +100,7 @@ public class TweetDetailViewPagerFragment extends Fragment
                 }
             });
             mTabLayout.setupWithViewPager(mViewPager);
+            mViewPager.setCurrentItem(1);
         }else{
             mViewPager.setAdapter(mAdapter);
         }
