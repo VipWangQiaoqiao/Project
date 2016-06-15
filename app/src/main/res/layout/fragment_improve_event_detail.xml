@@ -222,8 +222,10 @@
     <LinearLayout
         android:id="@+id/ll_operate"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:background="@color/white"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
         android:orientation="horizontal"
         app:layout_anchor="@+id/nsv"
         app:layout_anchorGravity="bottom"
@@ -240,8 +242,10 @@
 
             <ImageView
                 android:id="@+id/iv_fav"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
                 android:src="@drawable/ic_faved_normal" />
 
             <TextView
@@ -252,7 +256,7 @@
                 android:layout_marginRight="@dimen/lay_16"
                 android:text="已收藏"
                 android:textColor="@color/text_dark"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -264,8 +268,10 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
                 android:src="@drawable/ic_user_add" />
 
             <TextView
@@ -276,7 +282,7 @@
                 android:layout_marginRight="@dimen/lay_16"
                 android:text="报名"
                 android:textColor="@color/text_dark"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>
