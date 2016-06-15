@@ -1,4 +1,4 @@
-package net.oschina.app.adapter.base;
+package net.oschina.app.improve.adapter.base;
 
 import android.content.Context;
 import android.view.LayoutInflater;
