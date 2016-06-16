@@ -28,8 +28,10 @@ import android.widget.Toast;
 import net.oschina.app.R;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.activities.BlogDetailActivity;
-import net.oschina.app.improve.bean.QuestionDetail;
-import net.oschina.app.improve.contract.QuestionDetailContract;
+import net.oschina.app.improve.bean.NewsDetail;
+import net.oschina.app.improve.bean.simple.About;
+import net.oschina.app.improve.bean.simple.Comment;
+import net.oschina.app.improve.contract.NewsDetailContract;
 import net.oschina.app.improve.fragments.base.BaseFragment;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
@@ -47,7 +49,7 @@ import java.util.Date;
  * on 16/5/26.
  */
 
-public class NewsDetailFragment extends BaseFragment implements View.OnClickListener, QuestionDetailContract.View {
+public class NewsDetailFragment extends BaseFragment implements View.OnClickListener, NewsDetailContract.View {
     private long mId;
     private WebView mWebView;
     private TextView mTVAuthorName;
@@ -68,10 +70,10 @@ public class NewsDetailFragment extends BaseFragment implements View.OnClickList
     private long mCommentId;
     private long mCommentAuthorId;
 
-    private QuestionDetailContract.Operator mOperator;
+    private NewsDetailContract.Operator mOperator;
 
 
-    public static NewsDetailFragment instantiate(QuestionDetailContract.Operator operator, QuestionDetail detail) {
+    public static NewsDetailFragment instantiate(NewsDetailContract.Operator operator, NewsDetail detail) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("key", detail);
         NewsDetailFragment fragment = new NewsDetailFragment();
@@ -178,71 +180,71 @@ public class NewsDetailFragment extends BaseFragment implements View.OnClickList
             }
             break;
             // 评论列表
-            case R.id.tv_see_comment: {
-                UIHelper.showBlogComment(getActivity(), (int) mId,
-                        (int) mOperator.getQuestionDetail().getAuthorId());
-            }
-            break;
+            //case R.id.tv_see_comment: {
+            // UIHelper.showBlogComment(getActivity(), (int) mId,
+            //  (int) mOperator.getNewsDetail().getId());
+            //   }
+            // break;
         }
     }
 
     @SuppressWarnings("deprecation")
     @Override
     protected void initData() {
-        QuestionDetail questionDetail = (QuestionDetail) mBundle.getSerializable("key");
-        if (questionDetail == null)
+        NewsDetail newsDetail = (NewsDetail) mBundle.getSerializable("key");
+        if (newsDetail == null)
             return;
 
-        mId = mCommentId = questionDetail.getId();
+        mId = mCommentId = newsDetail.getId();
 
-        String body = getWebViewBody(questionDetail);
+        String body = getWebViewBody(newsDetail);
         mWebView.loadDataWithBaseURL("", body, "text/html", "UTF-8", "");
 
-        mTVAuthorName.setText(questionDetail.getAuthor());
-        getImgLoader().load(questionDetail.getAuthorPortrait()).error(R.drawable.widget_dface).into(mIVAuthorPortrait);
+        mTVAuthorName.setText(newsDetail.getAuthor());
+        getImgLoader().load(newsDetail.getAuthorPortrait()).error(R.drawable.widget_dface).into(mIVAuthorPortrait);
 
-        String time = String.format("%s (%s)", StringUtils.friendly_time(getStrTime(questionDetail.getPubDate())), questionDetail.getPubDate());
+        String time = String.format("%s (%s)", StringUtils.friendly_time(getStrTime(newsDetail.getPubDate())), newsDetail.getPubDate());
         mTVPubDate.setText(time);
 
-        mTVTitle.setText(questionDetail.getTitle());
-
-        if (TextUtils.isEmpty(questionDetail.getAbstract())) {
-            mLayAbstract.setVisibility(View.GONE);
-        } else {
-            mTVAbstract.setText(questionDetail.getAbstract());
-            mLayAbstract.setVisibility(View.VISIBLE);
-        }
+        mTVTitle.setText(newsDetail.getTitle());
+//
+//        if (TextUtils.isEmpty(newsDetail.getAbstract())) {
+//            mLayAbstract.setVisibility(View.GONE);
+//        } else {
+//            mTVAbstract.setText(newsDetail.getAbstract());
+//            mLayAbstract.setVisibility(View.VISIBLE);
+//        }
 
         mIVLabelRecommend.setVisibility(/*questionDetail.isRecommend() ?*/ View.VISIBLE /*: View.GONE*/);
         mIVLabelOriginate.setImageDrawable(/*questionDetail.isOriginal() ?
                 getResources().getDrawable(R.drawable.ic_label_originate) :*/
                 getResources().getDrawable(R.drawable.ic_label_reprint));
 
-        if (questionDetail.getAuthorRelation() == 3) {
-            mBtnRelation.setEnabled(true);
-            mBtnRelation.setText("关注");
-            mBtnRelation.setOnClickListener(this);
+//        if (newsDetail.getAuthorRelation() == 3) {
+//            mBtnRelation.setEnabled(true);
+//            mBtnRelation.setText("关注");
+//            mBtnRelation.setOnClickListener(this);
+//
+//        } else {
+//            mBtnRelation.setEnabled(false);
+//            mBtnRelation.setText("已关注");
+//        }
 
-        } else {
-            mBtnRelation.setEnabled(false);
-            mBtnRelation.setText("已关注");
-        }
-
-        toFavoriteOk(questionDetail);
+        toFavoriteOk(newsDetail);
 
         final LayoutInflater inflater = getLayoutInflater(null);
-        setText(R.id.tv_info_view, String.valueOf(questionDetail.getViewCount()));
-        if (questionDetail.getAbouts() != null && questionDetail.getAbouts().size() > 0) {
+        setText(R.id.tv_info_view, String.valueOf(newsDetail.getViewCount()));
+        if (newsDetail.getAbouts() != null && newsDetail.getAbouts().size() > 0) {
             int i = 1;
-            for (final QuestionDetail.About about : questionDetail.getAbouts()) {
+            for (final About about : newsDetail.getAbouts()) {
                 if (about == null)
                     continue;
                 @SuppressLint("InflateParams") View lay = inflater.inflate(R.layout.lay_blog_detail_about, null, false);
-                ((TextView) lay.findViewById(R.id.tv_title)).setText(about.title);
+                ((TextView) lay.findViewById(R.id.tv_title)).setText(about.getTitle());
 
                 View layInfo = lay.findViewById(R.id.lay_info_view_comment);
-                ((TextView) layInfo.findViewById(R.id.tv_info_view)).setText(String.valueOf(about.viewCount));
-                ((TextView) layInfo.findViewById(R.id.tv_info_comment)).setText(String.valueOf(about.commentCount));
+                ((TextView) layInfo.findViewById(R.id.tv_info_view)).setText(String.valueOf(about.getViewCount()));
+                ((TextView) layInfo.findViewById(R.id.tv_info_comment)).setText(String.valueOf(about.getCommentCount()));
 
                 if (i == 1) {
                     lay.findViewById(R.id.line).setVisibility(View.INVISIBLE);
@@ -250,7 +252,7 @@ public class NewsDetailFragment extends BaseFragment implements View.OnClickList
                 lay.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        BlogDetailActivity.show(getActivity(), about.id);
+                        BlogDetailActivity.show(getActivity(), about.getId());
                     }
                 });
                 i++;
@@ -262,10 +264,10 @@ public class NewsDetailFragment extends BaseFragment implements View.OnClickList
             mLayAbouts.setVisibility(View.GONE);
         }
 
-        setText(R.id.tv_info_comment, String.valueOf(questionDetail.getCommentCount()));
-        if (questionDetail.getComments() != null && questionDetail.getComments().size() > 0) {
+        setText(R.id.tv_info_comment, String.valueOf(newsDetail.getCommentCount()));
+        if (newsDetail.getComments() != null && newsDetail.getComments().size() > 0) {
 
-            if (questionDetail.getComments().size() < questionDetail.getCommentCount()) {
+            if (newsDetail.getComments().size() < newsDetail.getCommentCount()) {
                 setVisibility(R.id.tv_see_comment);
                 mLayComments.findViewById(R.id.tv_see_comment).setOnClickListener(this);
             } else {
@@ -273,35 +275,35 @@ public class NewsDetailFragment extends BaseFragment implements View.OnClickList
             }
 
             final Resources resources = getResources();
-            for (final QuestionDetail.Comment comment : questionDetail.getComments()) {
+            for (final Comment comment : newsDetail.getComments()) {
                 if (comment == null)
                     continue;
 
                 @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_blog_detail_comment, null, false);
-                getImgLoader().load(comment.authorPortrait).error(R.drawable.widget_dface)
+                getImgLoader().load(comment.getAuthorPortrait()).error(R.drawable.widget_dface)
                         .into(((ImageView) lay.findViewById(R.id.iv_avatar)));
 
-                ((TextView) lay.findViewById(R.id.tv_name)).setText(comment.author);
+                ((TextView) lay.findViewById(R.id.tv_name)).setText(comment.getAuthor());
 
                 TweetTextView content = ((TweetTextView) lay.findViewById(R.id.tv_content));
-                formatHtml(resources, content, comment.content);
+                formatHtml(resources, content, comment.getContent());
 
-                if (comment.refer != null) {
+                if (comment.getRefer() != null) {
                     // 最多5层
-                    View view = getReferLayout(comment.refer, inflater, 5);
+                    View view = getReferLayout(comment.getRefer(), inflater, 5);
                     lay.addView(view, lay.indexOfChild(content));
                 }
 
                 ((TextView) lay.findViewById(R.id.tv_pub_date)).setText(
-                        StringUtils.friendly_time(getStrTime(comment.pubDate)));
+                        StringUtils.friendly_time(getStrTime(comment.getPubDate())));
 
-                final long commentId = comment.id;
+                final long commentId = comment.getId();
                 lay.findViewById(R.id.btn_comment).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         mCommentId = commentId;
-                        mCommentAuthorId = comment.authorId;
-                        mETInput.setHint(String.format("回复: %s", comment.author));
+                        mCommentAuthorId = comment.getAuthorId();
+                        mETInput.setHint(String.format("回复: %s", comment.getAuthor()));
                     }
                 });
 
@@ -316,7 +318,7 @@ public class NewsDetailFragment extends BaseFragment implements View.OnClickList
     }
 
     @SuppressWarnings("deprecation")
-    private View getReferLayout(QuestionDetail.Refer refer, LayoutInflater inflater, int count) {
+    private View getReferLayout(Comment.Refer refer, LayoutInflater inflater, int count) {
         final Context context = getContext();
 
         @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_blog_detail_comment_refer, null, false);
@@ -368,10 +370,10 @@ public class NewsDetailFragment extends BaseFragment implements View.OnClickList
             + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/css/common_new" +
             ".css\">";
 
-    private String getWebViewBody(QuestionDetail questionDetail) {
+    private String getWebViewBody(NewsDetail newsDetail) {
         return String.format("<!DOCTYPE HTML><html><head>%s</head><body><div class=\"body-content\">%s</div></body></html>",
                 linkCss + UIHelper.WEB_LOAD_IMAGES,
-                UIHelper.setHtmlCotentSupportImagePreview(questionDetail.getBody()));
+                UIHelper.setHtmlCotentSupportImagePreview(newsDetail.getBody()));
     }
 
     private boolean mInputDoubleEmpty = false;
@@ -410,8 +412,8 @@ public class NewsDetailFragment extends BaseFragment implements View.OnClickList
 
     @SuppressWarnings("deprecation")
     @Override
-    public void toFavoriteOk(QuestionDetail questionDetail) {
-        if (questionDetail.isFavorite())
+    public void toFavoriteOk(NewsDetail newsDetail) {
+        if (newsDetail.isFavorite())
             mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_faved_normal));
         else
             mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_fav_normal));
@@ -423,11 +425,10 @@ public class NewsDetailFragment extends BaseFragment implements View.OnClickList
     }
 
     @Override
-    public void toFollowOk(QuestionDetail questionDetail) {
+    public void toFollowOk(NewsDetail newsDetail) {
         mBtnRelation.setEnabled(false);
         mBtnRelation.setText("已关注");
     }
-
 
     @Override
     public void toSendCommentOk() {

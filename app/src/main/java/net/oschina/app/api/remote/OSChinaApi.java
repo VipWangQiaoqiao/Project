@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.AppException;
@@ -1064,6 +1065,19 @@ public class OSChinaApi {
         ApiHttpClient.get("action/apiv2/news", params, handler);
     }
 
+    /**
+     * 请求资讯详情
+     *
+     * @param id      请求该资讯详情页
+     * @param handler AsyncHttpResponseHandler
+     */
+    public static void getNewsDetail(long id, AsyncHttpResponseHandler handler) {
+        if (id <= 0) return;
+        RequestParams params = new RequestParams();
+        params.put("id", id);
+        ApiHttpClient.get("action/apiv2/news", params, handler);
+    }
+
 
     public static final int CATALOG_BLOG_NORMAL = 1; // 最近
     public static final int CATALOG_BLOG_HEAT = 2; // 最热
@@ -1198,6 +1212,13 @@ public class OSChinaApi {
         if (id <= 0) return;
         RequestParams params = new RequestParams();
         params.put("id", id);
-        ApiHttpClient.get("action/apiv2/blog", params, handler);
+        ApiHttpClient.get("action/apiv2/question", params, handler);
+    }
+
+    public static void getComments(long id, TextHttpResponseHandler handler) {
+        if (id <= 0) return;
+        RequestParams params = new RequestParams();
+        params.put("id", id);
+        ApiHttpClient.get("action/apiv2/comment", params, handler);
     }
 }

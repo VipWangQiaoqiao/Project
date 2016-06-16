@@ -25,10 +25,11 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Result;
-import net.oschina.app.improve.bean.QuestionDetail;
+import net.oschina.app.improve.bean.NewsDetail;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.contract.QuestionDetailContract;
-import net.oschina.app.improve.fragments.question.QuestionDetailFragment;
+import net.oschina.app.improve.bean.simple.Comment;
+import net.oschina.app.improve.contract.NewsDetailContract;
+import net.oschina.app.improve.fragments.news.NewsDetailFragment;
 import net.oschina.app.ui.ReportDialog;
 import net.oschina.app.ui.ShareDialog;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -42,6 +43,7 @@ import net.oschina.app.util.XmlUtils;
 
 import java.io.ByteArrayInputStream;
 import java.lang.reflect.Type;
+import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -49,13 +51,14 @@ import cz.msebera.android.httpclient.Header;
  * Created by fei on 2016/6/13.
  * desc:   news detail  module
  */
-public class NewsDetailActivity extends AppCompatActivity implements QuestionDetailContract.Operator {
+public class NewsDetailActivity extends AppCompatActivity implements NewsDetailContract.Operator {
 
     private long mId;
     private EmptyLayout mEmptyLayout;
-    private QuestionDetail mQuestion;
-    private QuestionDetailContract.View mView;
+    private NewsDetail newsDetail;
+    private NewsDetailContract.View mView;
     private ShareDialog dialog;
+    private List<Comment> comments;
 
     public static void show(Context context, long id) {
         Intent intent = new Intent(context, NewsDetailActivity.class);
@@ -113,7 +116,7 @@ public class NewsDetailActivity extends AppCompatActivity implements QuestionDet
     }
 
     private void showBlog() {
-        QuestionDetailFragment fragment = QuestionDetailFragment.instantiate(this, mQuestion);
+        NewsDetailFragment fragment = NewsDetailFragment.instantiate(this, newsDetail);
         FragmentTransaction trans = getSupportFragmentManager()
                 .beginTransaction();
         trans.replace(R.id.lay_container, fragment);
@@ -130,7 +133,7 @@ public class NewsDetailActivity extends AppCompatActivity implements QuestionDet
     }
 
     private void initData() {
-        OSChinaApi.getQuestionDetail(mId, new TextHttpResponseHandler() {
+        OSChinaApi.getNewsDetail(mId, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 showError(EmptyLayout.NETWORK_ERROR);
@@ -139,10 +142,10 @@ public class NewsDetailActivity extends AppCompatActivity implements QuestionDet
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
-                    Type type = new TypeToken<ResultBean<QuestionDetail>>() {
+                    Type type = new TypeToken<ResultBean<NewsDetail>>() {
                     }.getType();
 
-                    ResultBean<QuestionDetail> resultBean = AppContext.createGson().fromJson(responseString, type);
+                    ResultBean<NewsDetail> resultBean = AppContext.createGson().fromJson(responseString, type);
                     if (resultBean != null && resultBean.isSuccess()) {
                         handleData(resultBean.getResult());
                         return;
@@ -156,15 +159,50 @@ public class NewsDetailActivity extends AppCompatActivity implements QuestionDet
         });
     }
 
+    /**
+     * 获取评论列表
+     *
+     * @param id 当前资讯的id
+     * @return 返回资讯列表
+     */
+    private void getComments(long id) {
 
-    private void handleData(QuestionDetail questionDetail) {
+        OSChinaApi.getComments(mId, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                showError(EmptyLayout.NETWORK_ERROR);
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                try {
+                    Type type = new TypeToken<ResultBean<List<Comment>>>() {
+                    }.getType();
+
+                    ResultBean<List<Comment>> resultBean = AppContext.createGson().fromJson(responseString, type);
+                    if (resultBean != null && resultBean.isSuccess()) {
+                        List<Comment> commentList = resultBean.getResult();
+                        if (commentList != null && !commentList.isEmpty()) {
+                            comments = commentList;
+                        }
+                    }
+                    showError(EmptyLayout.NODATA);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    onFailure(statusCode, headers, responseString, e);
+                }
+            }
+        });
+    }
+
+    private void handleData(NewsDetail newsDetail) {
         showError(View.INVISIBLE);
-        mQuestion = questionDetail;
+        this.newsDetail = newsDetail;
         showBlog();
     }
 
     private int check() {
-        if (mId == 0 || mQuestion == null) {
+        if (mId == 0 || newsDetail == null) {
             AppContext.showToast("数据加载中...");
             return 0;
         }
@@ -181,8 +219,8 @@ public class NewsDetailActivity extends AppCompatActivity implements QuestionDet
     }
 
     @Override
-    public QuestionDetail getQuestionDetail() {
-        return mQuestion;
+    public NewsDetail getNewsDetail() {
+        return newsDetail;
     }
 
     @Override
@@ -198,18 +236,18 @@ public class NewsDetailActivity extends AppCompatActivity implements QuestionDet
                     Result res = XmlUtils.toBean(net.oschina.app.bean.ResultBean.class,
                             new ByteArrayInputStream(arg2)).getResult();
                     if (res.OK()) {
-                        QuestionDetailContract.View view = mView;
+                        NewsDetailContract.View view = mView;
                         if (view == null)
                             return;
 
-                        mQuestion.setFavorite(!mQuestion.isFavorite());
-                        view.toFavoriteOk(mQuestion);
-                        if (mQuestion.isFavorite())
+                        newsDetail.setFavorite(!newsDetail.isFavorite());
+                        view.toFavoriteOk(newsDetail);
+                        if (newsDetail.isFavorite())
                             AppContext.showToastShort(R.string.add_favorite_success);
                         else
                             AppContext.showToastShort(R.string.del_favorite_success);
                     } else {
-                        if (mQuestion.isFavorite())
+                        if (newsDetail.isFavorite())
                             AppContext.showToastShort(R.string.del_favorite_faile);
                         else
                             AppContext.showToastShort(R.string.add_favorite_faile);
@@ -223,10 +261,10 @@ public class NewsDetailActivity extends AppCompatActivity implements QuestionDet
             @Override
             public void onFailure(int arg0, Header[] arg1, byte[] arg2,
                                   Throwable arg3) {
-                QuestionDetail questionDetail = mQuestion;
-                if (questionDetail == null)
+                NewsDetail detail = newsDetail;
+                if (detail == null)
                     return;
-                if (questionDetail.isFavorite())
+                if (detail.isFavorite())
                     AppContext.showToastShort(R.string.del_favorite_faile);
                 else
                     AppContext.showToastShort(R.string.add_favorite_faile);
@@ -243,7 +281,7 @@ public class NewsDetailActivity extends AppCompatActivity implements QuestionDet
             }
         };
 
-        if (mQuestion.isFavorite()) {
+        if (newsDetail.isFavorite()) {
             OSChinaApi.delFavorite(uid, mId,
                     FavoriteList.TYPE_BLOG, mFavoriteHandler);
         } else {
@@ -257,16 +295,16 @@ public class NewsDetailActivity extends AppCompatActivity implements QuestionDet
         String content;
         String url;
         String title;
-        if (mId != 0 && mQuestion != null) {
+        if (mId != 0 && newsDetail != null) {
             url = String.format(URLsUtils.URL_MOBILE + "blog/%s", mId);
-            if (mQuestion.getBody().length() > 55) {
-                content = HTMLUtil.delHTMLTag(mQuestion.getBody().trim());
+            if (newsDetail.getBody().length() > 55) {
+                content = HTMLUtil.delHTMLTag(newsDetail.getBody().trim());
                 if (content.length() > 55)
                     content = StringUtils.getSubString(0, 55, content);
             } else {
-                content = HTMLUtil.delHTMLTag(mQuestion.getBody().trim());
+                content = HTMLUtil.delHTMLTag(newsDetail.getBody().trim());
             }
-            title = mQuestion.getTitle();
+            title = newsDetail.getTitle();
 
             if (TextUtils.isEmpty(url) || TextUtils.isEmpty(content) || TextUtils.isEmpty(title)) {
                 AppContext.showToast("内容加载失败...");
@@ -294,7 +332,7 @@ public class NewsDetailActivity extends AppCompatActivity implements QuestionDet
             return;
 
         // 只关注不可取消
-        OSChinaApi.updateRelation(uid, mQuestion.getAuthorId(), 1,
+        OSChinaApi.updateRelation(uid, newsDetail.getAuthorId(), 1,
                 new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
@@ -303,9 +341,9 @@ public class NewsDetailActivity extends AppCompatActivity implements QuestionDet
                                     new ByteArrayInputStream(arg2)).getResult();
                             if (result.OK()) {
                                 // 更改用户状态
-                                QuestionDetailContract.View view = mView;
+                                NewsDetailContract.View view = mView;
                                 if (view != null)
-                                    view.toFollowOk(mQuestion);
+                                    view.toFollowOk(newsDetail);
                                 return;
                             }
                             AppContext.showToast("关注失败!");
@@ -352,7 +390,7 @@ public class NewsDetailActivity extends AppCompatActivity implements QuestionDet
                             new ByteArrayInputStream(arg2));
                     Result res = (Result) rsb.getResult();
                     if (res.OK()) {
-                        QuestionDetailContract.View view = mView;
+                        NewsDetailContract.View view = mView;
                         if (view != null)
                             view.toSendCommentOk();
                     } else {
@@ -485,7 +523,7 @@ public class NewsDetailActivity extends AppCompatActivity implements QuestionDet
         hideWaitDialog();
         mEmptyLayout = null;
         mView = null;
-        mQuestion = null;
+        newsDetail = null;
         dialog = null;
     }
 }

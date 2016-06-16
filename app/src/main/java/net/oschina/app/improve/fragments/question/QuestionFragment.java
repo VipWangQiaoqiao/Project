@@ -13,11 +13,11 @@ import android.widget.TextView;
 import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.R;
+import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.cache.CacheManager;
 import net.oschina.app.improve.adapter.base.BaseListAdapter;
 import net.oschina.app.improve.adapter.general.QuesActionAdapter;
 import net.oschina.app.improve.adapter.general.QuestionAdapter;
-import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.cache.CacheManager;
 import net.oschina.app.improve.bean.Question;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
@@ -30,7 +30,7 @@ import java.util.ArrayList;
 
 /**
  * 技术问答界面
- * <p>
+ * <p/>
  * desc
  */
 public class QuestionFragment extends BaseGeneralListFragment<Question> {
@@ -207,15 +207,13 @@ public class QuestionFragment extends BaseGeneralListFragment<Question> {
         // super.onItemClick(parent, view, position, id);
         Question question = mAdapter.getItem(position - 1);
         if (question != null) {
-            UIHelper.showPostDetail(getActivity(), (int) question.getId(),
-                    question.getCommentCount());
-            //QuestionDetailActivity.show(getActivity(),question.getId());
+            UIHelper.showPostDetail(getActivity(), (int) question.getId(), question.getCommentCount());
+            // QuestionDetailActivity.show(getActivity(), question.getId());
             TextView title = (TextView) view.findViewById(R.id.tv_ques_item_title);
             TextView content = (TextView) view.findViewById(R.id.tv_ques_item_content);
             updateTextColor(title, content);
             verifyCacheType();
             saveToReadedList(CACHE_NAME, question.getId() + "");
-
         }
     }
 }

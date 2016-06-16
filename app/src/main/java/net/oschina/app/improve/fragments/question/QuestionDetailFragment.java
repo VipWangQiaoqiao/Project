@@ -3,23 +3,17 @@ package net.oschina.app.improve.fragments.question;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.RectF;
-import android.graphics.drawable.ShapeDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,7 +21,6 @@ import android.widget.Toast;
 
 import net.oschina.app.R;
 import net.oschina.app.emoji.InputHelper;
-import net.oschina.app.improve.activities.BlogDetailActivity;
 import net.oschina.app.improve.bean.QuestionDetail;
 import net.oschina.app.improve.contract.QuestionDetailContract;
 import net.oschina.app.improve.fragments.base.BaseFragment;
@@ -36,8 +29,6 @@ import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
 import net.oschina.app.widget.TweetTextView;
-import net.qiujuer.genius.ui.Ui;
-import net.qiujuer.genius.ui.drawable.shape.BorderShape;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -82,7 +73,7 @@ public class QuestionDetailFragment extends BaseFragment implements View.OnClick
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_general_blog_detail;
+        return R.layout.fragment_general_question_detail;
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -109,33 +100,26 @@ public class QuestionDetailFragment extends BaseFragment implements View.OnClick
         webView.setHorizontalScrollBarEnabled(false);
         UIHelper.initWebView(webView);
         UIHelper.addWebImageShow(getActivity(), webView);
-        ((FrameLayout) root.findViewById(R.id.lay_webview)).addView(webView);
-        mWebView = webView;
+        // ((FrameLayout) root.findViewById(R.id.lay_webview)).addView(webView);
+        //mWebView = webView;
 
-        mTVAuthorName = (TextView) root.findViewById(R.id.tv_name);
-        mTVPubDate = (TextView) root.findViewById(R.id.tv_pub_date);
-        mTVTitle = (TextView) root.findViewById(R.id.tv_title);
-        mTVAbstract = (TextView) root.findViewById(R.id.tv_blog_detail_abstract);
+        mTVAuthorName = (TextView) root.findViewById(R.id.tv_ques_detail_author);
+        mTVPubDate = (TextView) root.findViewById(R.id.tv_ques_detail_pub_date);
+        mTVTitle = (TextView) root.findViewById(R.id.tv_ques_detail_title);
+        //mTVAbstract = (TextView) root.findViewById(R.id.tv_blog_detail_abstract);
 
-        mIVLabelRecommend = (ImageView) root.findViewById(R.id.iv_label_recommend);
-        mIVLabelOriginate = (ImageView) root.findViewById(R.id.iv_label_originate);
-        mIVAuthorPortrait = (ImageView) root.findViewById(R.id.iv_avatar);
-        mIVFav = (ImageView) root.findViewById(R.id.iv_fav);
+        // mIVLabelRecommend = (ImageView) root.findViewById(R.id.iv_label_recommend);
+        //mIVLabelOriginate = (ImageView) root.findViewById(R.id.iv_label_originate);
+        // mIVAuthorPortrait = (ImageView) root.findViewById(R.id.iv_avatar);
+        // mIVFav = (ImageView) root.findViewById(R.id.iv_fav);
 
-        mBtnRelation = (Button) root.findViewById(R.id.btn_relation);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mBtnRelation.setElevation(0);
-        }
+        // mBtnRelation = (Button) root.findViewById(R.id.btn_relation);
+
         mETInput = (EditText) root.findViewById(R.id.et_input);
 
-        mLayAbouts = (LinearLayout) root.findViewById(R.id.lay_blog_detail_about);
-        mLayComments = (LinearLayout) root.findViewById(R.id.lay_blog_detail_comment);
-        mLayAbstract = (LinearLayout) root.findViewById(R.id.lay_blog_detail_abstract);
-
-
         root.findViewById(R.id.iv_share).setOnClickListener(this);
-        mIVFav.setOnClickListener(this);
-        mBtnRelation.setOnClickListener(this);
+//        mIVFav.setOnClickListener(this);
+//        mBtnRelation.setOnClickListener(this);
         mETInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -196,149 +180,18 @@ public class QuestionDetailFragment extends BaseFragment implements View.OnClick
         mId = mCommentId = questionDetail.getId();
 
         String body = getWebViewBody(questionDetail);
-        mWebView.loadDataWithBaseURL("", body, "text/html", "UTF-8", "");
 
         mTVAuthorName.setText(questionDetail.getAuthor());
-        getImgLoader().load(questionDetail.getAuthorPortrait()).error(R.drawable.widget_dface).into(mIVAuthorPortrait);
 
         String time = String.format("%s (%s)", StringUtils.friendly_time(getStrTime(questionDetail.getPubDate())), questionDetail.getPubDate());
         mTVPubDate.setText(time);
 
         mTVTitle.setText(questionDetail.getTitle());
 
-        if (TextUtils.isEmpty(questionDetail.getAbstract())) {
-            mLayAbstract.setVisibility(View.GONE);
-        } else {
-            mTVAbstract.setText(questionDetail.getAbstract());
-            mLayAbstract.setVisibility(View.VISIBLE);
-        }
-
-        mIVLabelRecommend.setVisibility(/*questionDetail.isRecommend() ?*/ View.VISIBLE /*: View.GONE*/);
-        mIVLabelOriginate.setImageDrawable(/*questionDetail.isOriginal() ?
-                getResources().getDrawable(R.drawable.ic_label_originate) :*/
-                getResources().getDrawable(R.drawable.ic_label_reprint));
-
-        if (questionDetail.getAuthorRelation() == 3) {
-            mBtnRelation.setEnabled(true);
-            mBtnRelation.setText("关注");
-            mBtnRelation.setOnClickListener(this);
-
-        } else {
-            mBtnRelation.setEnabled(false);
-            mBtnRelation.setText("已关注");
-        }
-
         toFavoriteOk(questionDetail);
 
-        final LayoutInflater inflater = getLayoutInflater(null);
-        setText(R.id.tv_info_view, String.valueOf(questionDetail.getViewCount()));
-        if (questionDetail.getAbouts() != null && questionDetail.getAbouts().size() > 0) {
-            int i = 1;
-            for (final QuestionDetail.About about : questionDetail.getAbouts()) {
-                if (about == null)
-                    continue;
-                @SuppressLint("InflateParams") View lay = inflater.inflate(R.layout.lay_blog_detail_about, null, false);
-                ((TextView) lay.findViewById(R.id.tv_title)).setText(about.title);
-
-                View layInfo = lay.findViewById(R.id.lay_info_view_comment);
-                ((TextView) layInfo.findViewById(R.id.tv_info_view)).setText(String.valueOf(about.viewCount));
-                ((TextView) layInfo.findViewById(R.id.tv_info_comment)).setText(String.valueOf(about.commentCount));
-
-                if (i == 1) {
-                    lay.findViewById(R.id.line).setVisibility(View.INVISIBLE);
-                }
-                lay.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        BlogDetailActivity.show(getActivity(), about.id);
-                    }
-                });
-                i++;
-
-                mLayAbouts.addView(lay, 0);
-            }
-        } else {
-            setGone(R.id.tv_blog_detail_about);
-            mLayAbouts.setVisibility(View.GONE);
-        }
-
-        setText(R.id.tv_info_comment, String.valueOf(questionDetail.getCommentCount()));
-        if (questionDetail.getComments() != null && questionDetail.getComments().size() > 0) {
-
-            if (questionDetail.getComments().size() < questionDetail.getCommentCount()) {
-                setVisibility(R.id.tv_see_comment);
-                mLayComments.findViewById(R.id.tv_see_comment).setOnClickListener(this);
-            } else {
-                setGone(R.id.tv_see_comment);
-            }
-
-            final Resources resources = getResources();
-            for (final QuestionDetail.Comment comment : questionDetail.getComments()) {
-                if (comment == null)
-                    continue;
-
-                @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_blog_detail_comment, null, false);
-                getImgLoader().load(comment.authorPortrait).error(R.drawable.widget_dface)
-                        .into(((ImageView) lay.findViewById(R.id.iv_avatar)));
-
-                ((TextView) lay.findViewById(R.id.tv_name)).setText(comment.author);
-
-                TweetTextView content = ((TweetTextView) lay.findViewById(R.id.tv_content));
-                formatHtml(resources, content, comment.content);
-
-                if (comment.refer != null) {
-                    // 最多5层
-                    View view = getReferLayout(comment.refer, inflater, 5);
-                    lay.addView(view, lay.indexOfChild(content));
-                }
-
-                ((TextView) lay.findViewById(R.id.tv_pub_date)).setText(
-                        StringUtils.friendly_time(getStrTime(comment.pubDate)));
-
-                final long commentId = comment.id;
-                lay.findViewById(R.id.btn_comment).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mCommentId = commentId;
-                        mCommentAuthorId = comment.authorId;
-                        mETInput.setHint(String.format("回复: %s", comment.author));
-                    }
-                });
-
-                mLayComments.addView(lay, 0);
-            }
-
-
-        } else {
-            setGone(R.id.tv_blog_detail_comment);
-            mLayComments.setVisibility(View.GONE);
-        }
     }
 
-    @SuppressWarnings("deprecation")
-    private View getReferLayout(QuestionDetail.Refer refer, LayoutInflater inflater, int count) {
-        final Context context = getContext();
-
-        @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_blog_detail_comment_refer, null, false);
-        ShapeDrawable drawable = new ShapeDrawable(new BorderShape(new RectF(Ui.dipToPx(getContext(), 1), 0, 0, 0)));
-        drawable.getPaint().setColor(0xffd7d6da);
-        lay.findViewById(R.id.lay_blog_detail_comment_refer).setBackgroundDrawable(drawable);
-
-        TextView textView = ((TextView) lay.findViewById(R.id.tv_blog_detail_comment_refer));
-        drawable = new ShapeDrawable(new BorderShape(new RectF(0, 0, 0, 1)));
-        drawable.getPaint().setColor(0xffd7d6da);
-        textView.setBackgroundDrawable(drawable);
-
-        formatHtml(context.getResources(), textView, refer.author + ":<br>" + refer.content);
-
-
-        if (refer.refer != null && (--count) > 0) {
-            View view = getReferLayout(refer.refer, inflater, count);
-            lay.addView(view, lay.indexOfChild(textView));
-        }
-
-        return lay;
-    }
 
     private static String getStrTime(String cc_time) {
         try {
@@ -411,10 +264,7 @@ public class QuestionDetailFragment extends BaseFragment implements View.OnClick
     @SuppressWarnings("deprecation")
     @Override
     public void toFavoriteOk(QuestionDetail questionDetail) {
-        if (questionDetail.isFavorite())
-            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_faved_normal));
-        else
-            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_fav_normal));
+
     }
 
     @Override
