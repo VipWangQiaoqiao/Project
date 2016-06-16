@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -20,6 +21,7 @@ import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -87,6 +89,10 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
     FrameLayout mEmojiPanelLayout;
     @Bind(R.id.layout_coordinator)
     CoordinatorLayout mCoordinatorLayout;
+    @Bind(R.id.lay_option_wrap)
+    LinearLayout mOptionWrapLayout;
+    @Bind(R.id.fragment_container)
+    FrameLayout mFrameLayout;
 
     private Tweet tweet;
     private Comment reply;
@@ -409,6 +415,9 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
 
     @Override
     public void toReply(Comment comment) {
+        mCoordinatorLayout.onStartNestedScroll(mFrameLayout, null, ViewCompat.SCROLL_AXIS_VERTICAL);
+        mCoordinatorLayout.onNestedPreScroll(mOptionWrapLayout, 0, -1, new int[2]);
+        mCoordinatorLayout.onStopNestedScroll(null);
         this.reply = comment;
         etInput.setHint("回复@ " + comment.getAuthor());
     }

@@ -61,13 +61,8 @@ public class TweetCommentAdapter extends BaseRecyclerAdapter<Comment> {
         h.tvContent.setText(InputHelper.displayEmoji(mContext.getResources(), item.getContent()));
         h.tvTime.setText(StringUtils.friendly_time(item.getPubDate()));
 
-        if (AppContext.getInstance().isLogin() && AppContext.getInstance().getLoginUid() == item.getAuthorId()){
-            h.btnReply.setVisibility(View.GONE);
-        }else{
-            h.btnReply.setVisibility(View.VISIBLE);
-            h.btnReply.setTag(item);
-            h.btnReply.setOnClickListener(getOnReplyClickListener());
-        }
+        h.btnReply.setTag(item);
+        h.btnReply.setOnClickListener(getOnReplyClickListener());
     }
 
 
