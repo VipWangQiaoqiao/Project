@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Xml;
 import android.view.KeyEvent;
 import android.view.View;
@@ -19,6 +21,7 @@ import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -78,8 +81,6 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
     ImageView ivThumbup;
     @Bind(R.id.iv_comment)
     ImageView ivComment;
-    @Bind(R.id.tv_comment_count)
-    TextView tvCmnCount;
     @Bind(R.id.et_input)
     EditText etInput;
     @Bind(R.id.iv_emoji)
@@ -88,6 +89,10 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
     FrameLayout mEmojiPanelLayout;
     @Bind(R.id.layout_coordinator)
     CoordinatorLayout mCoordinatorLayout;
+    @Bind(R.id.lay_option_wrap)
+    LinearLayout mOptionWrapLayout;
+    @Bind(R.id.fragment_container)
+    FrameLayout mFrameLayout;
 
     private Tweet tweet;
     private Comment reply;
@@ -104,6 +109,18 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
     private final EmojiKeyboardFragment mKeyboardFragment = new EmojiKeyboardFragment();
     private TweetDetailViewPagerFragment mTweetDetailViewPagerFrag;
     private KeyboardActionDelegation mKADelegation;
+    private View.OnClickListener onPortraitClickListener;
+
+    private final static String linkCss = "" +
+            "<script type=\"text/javascript\" src=\"file:///android_asset/shCore.js\"></script>"
+            + "<script type=\"text/javascript\" src=\"file:///android_asset/brush.js\"></script>"
+            + "<script type=\"text/javascript\" src=\"file:///android_asset/client.js\"></script>"
+            + "<script type=\"text/javascript\" src=\"file:///android_asset/detail_page.js\"></script>"
+            + "<script type=\"text/javascript\">SyntaxHighlighter.all();</script>"
+            + "<script type=\"text/javascript\">function showImagePreview(var url){window.location.url= url;}</script>"
+            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/shThemeDefault.css\">"
+            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/shCore.css\">"
+            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/css/common_new.css\">";
 
     public static void show(Context context, Tweet tweet) {
         Intent intent = new Intent(context, TweetDetailActivity.class);
@@ -144,6 +161,8 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
                 InputHelper.backspace(etInput);
             }
         });
+
+        mKeyboardFragment.setDelegate(true);
         etInput.addTextChangedListener(new SimpleTextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
@@ -205,7 +224,7 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 mCmnView.onCommentSuccess(null);
-                tvCmnCount.setText(String.valueOf(tweet.getCommentCount()));
+                reply = null; // 清除
                 etInput.setHint("发表评论");
                 etInput.setText(null);
                 if (dialog != null) {
@@ -243,12 +262,6 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
 
     private void initView() {
         fillDetailView();
-
-        if (tweet.getIsLike() == 1) {
-            ivThumbup.setImageResource(R.drawable.ic_thumbup_actived);
-        } else {
-            ivThumbup.setImageResource(R.drawable.ic_thumbup_normal);
-        }
 
         etInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -294,11 +307,21 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
     private void fillDetailView(){
         RequestManager reqManager = Glide.with(this);
 
-        reqManager.load(tweet.getPortrait()).into(ivPortrait);
+        if (TextUtils.isEmpty(tweet.getPortrait())){
+            ivPortrait.setImageResource(R.drawable.widget_dface);
+        }else{
+            reqManager.load(tweet.getPortrait()).into(ivPortrait);
+        }
+        ivPortrait.setOnClickListener(getOnPortraitClickListener());
         tvNick.setText(tweet.getAuthor());
         tvTime.setText(StringUtils.friendly_time(tweet.getPubDate()));
-        tvCmnCount.setText(tweet.getCommentCount());
         PlatfromUtil.setPlatFromString(tvClient, tweet.getAppclient());
+
+        if (tweet.getIsLike() == 1) {
+            ivThumbup.setImageResource(R.drawable.ic_thumbup_actived);
+        } else {
+            ivThumbup.setImageResource(R.drawable.ic_thumbup_normal);
+        }
 
         fillWebViewBody();
     }
@@ -337,21 +360,17 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
                 "$1$2\" onClick=\"javascript:mWebViewImageListener.showImagePreview('" + tweet.getImgBig() + "')\"");
     }
 
-    private final static String linkCss = "<script type=\"text/javascript\" " +
-            "src=\"file:///android_asset/shCore.js\"></script>"
-            + "<script type=\"text/javascript\" src=\"file:///android_asset/brush.js\"></script>"
-            + "<script type=\"text/javascript\" src=\"file:///android_asset/client.js\"></script>"
-            + "<script type=\"text/javascript\" src=\"file:///android_asset/detail_page" +
-            ".js\"></script>"
-            + "<script type=\"text/javascript\">SyntaxHighlighter.all();</script>"
-            + "<script type=\"text/javascript\">function showImagePreview(var url){window" +
-            ".location.url= url;}</script>"
-            + "<link rel=\"stylesheet\" type=\"text/css\" " +
-            "href=\"file:///android_asset/shThemeDefault.css\">"
-            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/shCore" +
-            ".css\">"
-            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/css/common_new" +
-            ".css\">";
+    private View.OnClickListener getOnPortraitClickListener(){
+        if (onPortraitClickListener == null){
+            onPortraitClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    UIHelper.showUserCenter(TweetDetailActivity.this, tweet.getAuthorid(), tweet.getAuthor());
+                }
+            };
+        }
+        return onPortraitClickListener;
+    }
 
     private void onClickSend() {
         if (TextUtils.isEmpty(etInput.getText().toString().replaceAll("[ \\s\\n]+", ""))) {
@@ -396,13 +415,11 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
 
     @Override
     public void toReply(Comment comment) {
+        mCoordinatorLayout.onStartNestedScroll(mFrameLayout, null, ViewCompat.SCROLL_AXIS_VERTICAL);
+        mCoordinatorLayout.onNestedPreScroll(mOptionWrapLayout, 0, -1, new int[2]);
+        mCoordinatorLayout.onStopNestedScroll(null);
         this.reply = comment;
         etInput.setHint("回复@ " + comment.getAuthor());
-    }
-
-    @Override
-    public void toUserHome(int oid) {
-
     }
 
     @OnClick(R.id.iv_thumbup)

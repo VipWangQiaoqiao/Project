@@ -16,8 +16,6 @@ public interface TweetDetailContract {
         Tweet getTweetDetail();
 
         void toReply(Comment comment);
-
-        void toUserHome(int oid);
     }
 
     interface CmnView {

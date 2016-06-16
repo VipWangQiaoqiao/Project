@@ -14,6 +14,7 @@ import net.oschina.app.improve.adapter.base.BaseRecyclerAdapter;
 import net.oschina.app.improve.adapter.tweet.TweetLikeUsersAdapter;
 import net.oschina.app.improve.contract.TweetDetailContract;
 import net.oschina.app.improve.fragments.base.BaseRecyclerViewFragment;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
 import java.lang.reflect.Type;
@@ -22,6 +23,7 @@ import java.util.List;
 import cz.msebera.android.httpclient.Header;
 
 /**
+ * 动弹详情, 点赞列表
  * Created by thanatos on 16/6/13.
  */
 public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<User> implements TweetDetailContract.ThumbupView{
@@ -82,6 +84,13 @@ public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<User> i
     protected void onRequestSuccess(int code) {
         super.onRequestSuccess(code);
         ++pageNum;
+    }
+
+    @Override
+    public void onItemClick(int position, long itemId) {
+        super.onItemClick(position, itemId);
+        User user = mAdapter.getItem(position);
+        UIHelper.showUserCenter(getContext(), user.getId(), user.getName());
     }
 
     private void requestData(int pageNum){

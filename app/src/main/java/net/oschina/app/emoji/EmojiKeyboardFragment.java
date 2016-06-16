@@ -2,6 +2,7 @@ package net.oschina.app.emoji;
 
 import net.oschina.app.R;
 import net.oschina.app.emoji.SoftKeyboardStateHelper.SoftKeyboardStateListener;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -36,15 +37,15 @@ public class EmojiKeyboardFragment extends Fragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater,
-            @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         if (null != mRootView) {
             ViewGroup parent = (ViewGroup) mRootView.getParent();
             if (null != parent) {
                 parent.removeView(mRootView);
             }
-        }else {
-            mRootView = (LinearLayout) inflater.inflate(R.layout.frag_keyboard, container,false);
+        } else {
+            mRootView = (LinearLayout) inflater.inflate(R.layout.frag_keyboard, container, false);
             initWidget(mRootView);
         }
         return mRootView;
@@ -116,9 +117,9 @@ public class EmojiKeyboardFragment extends Fragment implements
      * 隐藏Emoji并显示软键盘
      */
     public void hideEmojiKeyBoard() {
-        mEmojiBottom.setVisibility(View.GONE);
-        if(!isDelegate){
+        if (!isDelegate) {
             mEmojiContent.setVisibility(View.GONE);
+            mEmojiBottom.setVisibility(View.GONE);
         }
     }
 
@@ -155,14 +156,15 @@ public class EmojiKeyboardFragment extends Fragment implements
      */
     @Override
     public void onSoftKeyboardOpened(int keyboardHeightInPx) {
-        mEmojiBottom.setVisibility(View.GONE);
-        if(!isDelegate){
+        if (!isDelegate) {
             mEmojiContent.setVisibility(View.GONE);
+            mEmojiBottom.setVisibility(View.GONE);
         }
     }
 
     @Override
-    public void onSoftKeyboardClosed() {}
+    public void onSoftKeyboardClosed() {
+    }
 
     @Override
     public void onStop() {
