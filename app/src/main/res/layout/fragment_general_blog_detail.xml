@@ -170,8 +170,13 @@
                 android:paddingRight="16dp"
                 android:paddingTop="8dp" />
 
-            <net.oschina.app.improve.widget.GeneralDetailFooterView
-                android:id="@+id/lay_detail_footer"
+            <net.oschina.app.improve.widget.DetailAboutView
+                android:id="@+id/lay_detail_about"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <net.oschina.app.improve.widget.DetailCommentView
+                android:id="@+id/lay_detail_comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
