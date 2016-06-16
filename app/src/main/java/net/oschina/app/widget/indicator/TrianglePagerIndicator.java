@@ -7,6 +7,8 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
+import java.util.List;
+
 /**
  * Created by huanghaibin
  * on 16-6-15.
@@ -16,12 +18,18 @@ public class TrianglePagerIndicator extends LinearLayout implements PagerIndicat
     private static final int MAX_TRIANGLE_WIDTH = 130;
     private static final int MAX_TRIANGLE_HEIGHT = 50;
 
+    private static final int TEXT_COLOR_NORMAL = 0xFFF6F6F6;
+    private static final int TEXT_COLOR_SELECT = 0x00000000;
+    private static final int INDICATOR_COLOR_NORMAL = 0xFFF6F6F6;
+    private static final int INDICATOR_COLOR_SELECT = 0x00000000;
+
     private Paint mPaint = new Paint();
     private Path mPath = new Path();
 
     private int mTriangleWidth;
     private int mTriangleHeight;
 
+    private List<String> tabTitles;
 
     public TrianglePagerIndicator(Context context) {
         super(context);
