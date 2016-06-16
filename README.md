@@ -1,5 +1,16 @@
 # OSChina Android [客户端](http://www.oschina.net/app/)
 
+##历史分支
+
+
+编号 | 标签名 | 发布版本 | 备注
+------- | ------- | ------- | ------- 
+1 | [v2.6.2](http://git.oschina.net/oschina/android-app/tree/v2.6.2/)  |v2.6.2(1606121625)| 当前最新版 
+2 | [v2.4](http://git.oschina.net/oschina/android-app/tree/v2.4/) | -- | -- |
+3 | [v2.3](http://git.oschina.net/oschina/android-app/tree/v2.3/) | -- | 迁移到AndroidStudio |
+4 | [v2.2.1](http://git.oschina.net/oschina/android-app/tree/v2.2.1/) | -- | Eclipse可用 |
+
+
 ##写在前面的话
 从2.3版本开始，项目已经完成了gradle化，完全迁移到了android studio，如果想使用eclipse进行该项目的学习，可以clone [tag v2.2.1](http://git.oschina.net/oschina/android-app/tree/v2.2.1/)，不过需要注意的是，eclipse需要按照开发环境中提到的：进行butterknife注解设置
 
@@ -45,3 +56,4 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
