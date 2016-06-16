@@ -22,11 +22,11 @@ import com.umeng.socialize.sso.UMSsoHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Result;
 import net.oschina.app.improve.bean.BlogDetail;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.bean.simple.UserRelation;
 import net.oschina.app.improve.contract.BlogDetailContract;
 import net.oschina.app.improve.fragments.blog.BlogDetailFragment;
 import net.oschina.app.ui.ReportDialog;
@@ -186,39 +186,11 @@ public class BlogDetailActivity extends AppCompatActivity implements BlogDetailC
         int uid = check();
         if (uid == 0)
             return;
-
-        AsyncHttpResponseHandler mFavoriteHandler = new AsyncHttpResponseHandler() {
+        showWaitDialog(R.string.progress_submit);
+        OSChinaApi.getFavReverse(mBlog.getId(), 3, new TextHttpResponseHandler() {
             @Override
-            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-                try {
-                    Result res = XmlUtils.toBean(net.oschina.app.bean.ResultBean.class,
-                            new ByteArrayInputStream(arg2)).getResult();
-                    if (res.OK()) {
-                        BlogDetailContract.View view = mView;
-                        if (view == null)
-                            return;
-
-                        mBlog.setFavorite(!mBlog.isFavorite());
-                        view.toFavoriteOk(mBlog);
-                        if (mBlog.isFavorite())
-                            AppContext.showToastShort(R.string.add_favorite_success);
-                        else
-                            AppContext.showToastShort(R.string.del_favorite_success);
-                    } else {
-                        if (mBlog.isFavorite())
-                            AppContext.showToastShort(R.string.del_favorite_faile);
-                        else
-                            AppContext.showToastShort(R.string.add_favorite_faile);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    onFailure(arg0, arg1, arg2, e);
-                }
-            }
-
-            @Override
-            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                                  Throwable arg3) {
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                hideWaitDialog();
                 BlogDetail blogDetail = mBlog;
                 if (blogDetail == null)
                     return;
@@ -229,23 +201,27 @@ public class BlogDetailActivity extends AppCompatActivity implements BlogDetailC
             }
 
             @Override
-            public void onStart() {
-                showWaitDialog(R.string.progress_submit);
-            }
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                try {
+                    Type type = new TypeToken<ResultBean<BlogDetail>>() {
+                    }.getType();
 
-            @Override
-            public void onFinish() {
-                hideWaitDialog();
+                    ResultBean<BlogDetail> resultBean = AppContext.createGson().fromJson(responseString, type);
+                    if (resultBean != null && resultBean.isSuccess()) {
+                        mBlog.setFavorite(!mBlog.isFavorite());
+                        mView.toFavoriteOk(mBlog);
+                        if (mBlog.isFavorite())
+                            AppContext.showToastShort(R.string.add_favorite_success);
+                        else
+                            AppContext.showToastShort(R.string.del_favorite_success);
+                    }
+                    hideWaitDialog();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    onFailure(statusCode, headers, responseString, e);
+                }
             }
-        };
-
-        if (mBlog.isFavorite()) {
-            OSChinaApi.delFavorite(uid, mId,
-                    FavoriteList.TYPE_BLOG, mFavoriteHandler);
-        } else {
-            OSChinaApi.addFavorite(uid, mId,
-                    FavoriteList.TYPE_BLOG, mFavoriteHandler);
-        }
+        });
     }
 
     @Override
@@ -288,45 +264,38 @@ public class BlogDetailActivity extends AppCompatActivity implements BlogDetailC
         int uid = check();
         if (uid == 0)
             return;
+        showWaitDialog(R.string.progress_submit);
+        OSChinaApi.addUserRelationReverse(Long.parseLong(String.valueOf(uid)), new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                AppContext.showToast("关注失败!");
+                hideWaitDialog();
+            }
 
-        // 只关注不可取消
-        OSChinaApi.updateRelation(uid, mBlog.getAuthorId(), 1,
-                new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-                        try {
-                            Result result = XmlUtils.toBean(net.oschina.app.bean.ResultBean.class,
-                                    new ByteArrayInputStream(arg2)).getResult();
-                            if (result.OK()) {
-                                // 更改用户状态
-                                BlogDetailContract.View view = mView;
-                                if (view != null)
-                                    view.toFollowOk(mBlog);
-                                return;
-                            }
-                            AppContext.showToast("关注失败!");
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            onFailure(arg0, arg1, arg2, e);
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                try {
+                    Type type = new TypeToken<ResultBean<UserRelation>>() {
+                    }.getType();
+
+                    ResultBean<UserRelation> resultBean = AppContext.createGson().fromJson(responseString, type);
+                    if (resultBean != null && resultBean.isSuccess()) {
+                        mBlog.setAuthorRelation(resultBean.getResult().getRelation());
+                        mView.toFollowOk(mBlog);
+                        if (mBlog.getAuthorRelation() >= 3) {
+                            AppContext.showToast("取消关注成功");
+                        } else {
+                            AppContext.showToast("关注成功");
                         }
                     }
-
-                    @Override
-                    public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                                          Throwable arg3) {
-                        AppContext.showToast("关注失败!");
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        hideWaitDialog();
-                    }
-
-                    @Override
-                    public void onStart() {
-                        showWaitDialog(R.string.progress_submit);
-                    }
-                });
+                    hideWaitDialog();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    onFailure(statusCode, headers, responseString, e);
+                }
+                hideWaitDialog();
+            }
+        });
     }
 
     @Override

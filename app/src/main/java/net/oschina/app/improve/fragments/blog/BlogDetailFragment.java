@@ -202,16 +202,7 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
                 getResources().getDrawable(R.drawable.ic_label_originate) :
                 getResources().getDrawable(R.drawable.ic_label_reprint));
 
-        if (blog.getAuthorRelation() == 3) {
-            mBtnRelation.setEnabled(true);
-            mBtnRelation.setText("关注");
-            mBtnRelation.setOnClickListener(this);
-
-        } else {
-            mBtnRelation.setEnabled(false);
-            mBtnRelation.setText("已关注");
-        }
-
+        toFollowOk(blog);
         toFavoriteOk(blog);
 
         setText(R.id.tv_info_view, String.valueOf(blog.getViewCount()));
@@ -307,8 +298,11 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
 
     @Override
     public void toFollowOk(BlogDetail blogDetail) {
-        mBtnRelation.setEnabled(false);
-        mBtnRelation.setText("已关注");
+        if(blogDetail.getAuthorRelation() <= 2){
+            mBtnRelation.setText("已关注");
+        }else {
+            mBtnRelation.setText("关注");
+        }
     }
 
     @Override
