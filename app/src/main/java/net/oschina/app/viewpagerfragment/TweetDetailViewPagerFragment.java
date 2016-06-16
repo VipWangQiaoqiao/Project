@@ -66,7 +66,7 @@ public class TweetDetailViewPagerFragment extends Fragment
             final ListTweetLikeUsersFragment mCmnFrag = ListTweetLikeUsersFragment.instantiate(mOperator);
             mThumbupView = mCmnFrag;
 
-            final ListTweetCommentFragment mThumbupFrag = ListTweetCommentFragment.instantiate(mOperator);
+            final ListTweetCommentFragment mThumbupFrag = ListTweetCommentFragment.instantiate(mOperator, this);
             mCmnView = mThumbupFrag;
 
             mViewPager.setAdapter(mAdapter = new FragmentStatePagerAdapter(getChildFragmentManager()) {

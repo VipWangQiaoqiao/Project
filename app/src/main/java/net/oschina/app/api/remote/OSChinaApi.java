@@ -1176,6 +1176,18 @@ public class OSChinaApi {
         ApiHttpClient.get("action/apiv2/favorite_reverse", params, handler);
     }
 
+    /**
+     * 更改关注状态（关注／取消关注）
+     *
+     * @param id      id
+     * @param handler handler
+     */
+    public static void addUserRelationReverse(long id, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("id", id);
+        ApiHttpClient.get("action/apiv2/user_relation_reverse", params, handler);
+    }
+
     public static final int CATALOG_QUESTION_QUESTION = 1; // 提问
     public static final int CATALOG_QUESTION_SHARE = 2; // 最热
     public static final int CATALOG_QUESTION_MULTI = 3; // 综合
