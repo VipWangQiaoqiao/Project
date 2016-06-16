@@ -35,21 +35,20 @@ import java.util.List;
  * on 16/6/12.
  */
 
-public class GeneralDetailFooterView extends LinearLayout {
-    private LinearLayout mLayAbouts;
+public class DetailCommentView extends LinearLayout {
     private LinearLayout mLayComments;
 
-    public GeneralDetailFooterView(Context context) {
+    public DetailCommentView(Context context) {
         super(context);
         init();
     }
 
-    public GeneralDetailFooterView(Context context, @Nullable AttributeSet attrs) {
+    public DetailCommentView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public GeneralDetailFooterView(Context context, @Nullable AttributeSet attrs, int defStyle) {
+    public DetailCommentView(Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
     }
@@ -57,52 +56,13 @@ public class GeneralDetailFooterView extends LinearLayout {
     private void init() {
         setOrientation(VERTICAL);
         LayoutInflater inflater = LayoutInflater.from(getContext());
-        inflater.inflate(R.layout.lay_general_detail_footer, this, true);
+        inflater.inflate(R.layout.lay_detail_comment_layout, this, true);
 
-        mLayAbouts = (LinearLayout) findViewById(R.id.lay_blog_detail_about);
         mLayComments = (LinearLayout) findViewById(R.id.lay_blog_detail_comment);
-    }
-
-    public interface OnAboutClickListener {
-        void onClick(View view, BlogDetail.About about);
     }
 
     public interface OnCommentClickListener {
         void onClick(View view, BlogDetail.Comment about);
-    }
-
-    public void setAbout(List<BlogDetail.About> abouts, final OnAboutClickListener onAboutClickListener) {
-        final LayoutInflater inflater = LayoutInflater.from(getContext());
-        if (abouts != null && abouts.size() > 0) {
-            boolean clearLine = true;
-            for (final BlogDetail.About about : abouts) {
-                if (about == null)
-                    continue;
-                @SuppressLint("InflateParams") View lay = inflater.inflate(R.layout.lay_blog_detail_about, null, false);
-                ((TextView) lay.findViewById(R.id.tv_title)).setText(about.title);
-
-                View layInfo = lay.findViewById(R.id.lay_info_view_comment);
-                ((TextView) layInfo.findViewById(R.id.tv_info_view)).setText(String.valueOf(about.viewCount));
-                ((TextView) layInfo.findViewById(R.id.tv_info_comment)).setText(String.valueOf(about.commentCount));
-
-                if (clearLine) {
-                    clearLine = false;
-                    lay.findViewById(R.id.line).setVisibility(View.INVISIBLE);
-                }
-
-                lay.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        onAboutClickListener.onClick(v, about);
-                    }
-                });
-
-                mLayAbouts.addView(lay, 0);
-            }
-        } else {
-            findViewById(R.id.tv_blog_detail_about).setVisibility(View.GONE);
-            mLayAbouts.setVisibility(View.GONE);
-        }
     }
 
     public void setComment(List<BlogDetail.Comment> comments, int commentTotal, RequestManager imageLoader, final OnCommentClickListener onCommentClickListener, OnClickListener seeMoreListener) {
@@ -156,8 +116,7 @@ public class GeneralDetailFooterView extends LinearLayout {
                 mLayComments.addView(lay, 0);
             }
         } else {
-            findViewById(R.id.tv_blog_detail_comment).setVisibility(View.GONE);
-            mLayComments.setVisibility(View.GONE);
+            setVisibility(View.GONE);
         }
     }
 
