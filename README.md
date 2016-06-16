@@ -1,11 +1,12 @@
 # OSChina Android [客户端](http://www.oschina.net/app/)
 
+**源代码请切换置对应的分支，master分支中今后不再放源代码。**
+
 ##历史分支
 
-
 编号 | 标签名 | 发布版本 | 备注
-------- | ------- | ------- | ------- 
-1 | [v2.6.2](http://git.oschina.net/oschina/android-app/tree/v2.6.2/)  |v2.6.2(1606121625)| 当前最新版 
+------- | ------- | ------- | -------
+1 | [v2.6.2](http://git.oschina.net/oschina/android-app/tree/v2.6.2/)  |v2.6.2(1606121625)| 当前最新版
 2 | [v2.4](http://git.oschina.net/oschina/android-app/tree/v2.4/) | -- | -- |
 3 | [v2.3](http://git.oschina.net/oschina/android-app/tree/v2.3/) | -- | 迁移到AndroidStudio |
 4 | [v2.2.1](http://git.oschina.net/oschina/android-app/tree/v2.2.1/) | -- | Eclipse可用 |
@@ -37,7 +38,7 @@
   * 网络图片加载库 **KJFrameForAndroid** http://git.oschina.net/kymjs/KJFrameForAndroid  
   * XML解析库 **xstream** http://xstream.codehaus.org/  
 2. 源码依赖  
-  * **PhotoView-library** ：用于图片预览界面展示 
+  * **PhotoView-library** ：用于图片预览界面展示
   * **UmengShareLib** ：用于分享到第三方平台
 
 ##开源协议
@@ -56,4 +57,3 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-
