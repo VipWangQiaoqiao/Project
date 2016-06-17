@@ -23,7 +23,8 @@ import net.oschina.app.improve.activities.BlogDetailActivity;
 import net.oschina.app.improve.bean.BlogDetail;
 import net.oschina.app.improve.contract.BlogDetailContract;
 import net.oschina.app.improve.fragments.base.BaseFragment;
-import net.oschina.app.improve.widget.GeneralDetailFooterView;
+import net.oschina.app.improve.widget.DetailAboutView;
+import net.oschina.app.improve.widget.DetailCommentView;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 
@@ -46,7 +47,8 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
     private Button mBtnRelation;
     private EditText mETInput;
 
-    private GeneralDetailFooterView mFooter;
+    private DetailAboutView mAbouts;
+    private DetailCommentView mComments;
 
     private LinearLayout mLayAbstract;
 
@@ -112,7 +114,8 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
             mBtnRelation.setElevation(0);
         }
 
-        mFooter = (GeneralDetailFooterView) root.findViewById(R.id.lay_detail_footer);
+        mAbouts = (DetailAboutView) root.findViewById(R.id.lay_detail_about);
+        mComments = (DetailCommentView) root.findViewById(R.id.lay_detail_comment);
         mETInput = (EditText) root.findViewById(R.id.et_input);
         mLayAbstract = (LinearLayout) root.findViewById(R.id.lay_blog_detail_abstract);
 
@@ -208,14 +211,14 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
         setText(R.id.tv_info_view, String.valueOf(blog.getViewCount()));
         setText(R.id.tv_info_comment, String.valueOf(blog.getCommentCount()));
 
-        mFooter.setAbout(blog.getAbouts(), new GeneralDetailFooterView.OnAboutClickListener() {
+        mAbouts.setAbout(blog.getAbouts(), new DetailAboutView.OnAboutClickListener() {
             @Override
             public void onClick(View view, BlogDetail.About about) {
                 BlogDetailActivity.show(getActivity(), about.id);
             }
         });
 
-        mFooter.setComment(blog.getComments(), blog.getCommentCount(), getImgLoader(), new GeneralDetailFooterView.OnCommentClickListener() {
+        mComments.setComment(blog.getComments(), blog.getCommentCount(), getImgLoader(), new DetailCommentView.OnCommentClickListener() {
             @Override
             public void onClick(View view, BlogDetail.Comment comment) {
                 mCommentId = comment.id;
@@ -298,9 +301,9 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
 
     @Override
     public void toFollowOk(BlogDetail blogDetail) {
-        if(blogDetail.getAuthorRelation() <= 2){
+        if (blogDetail.getAuthorRelation() <= 2) {
             mBtnRelation.setText("已关注");
-        }else {
+        } else {
             mBtnRelation.setText("关注");
         }
     }
