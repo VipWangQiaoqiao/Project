@@ -265,7 +265,7 @@ public class BlogDetailActivity extends AppCompatActivity implements BlogDetailC
         if (uid == 0)
             return;
         showWaitDialog(R.string.progress_submit);
-        OSChinaApi.addUserRelationReverse(Long.parseLong(String.valueOf(uid)), new TextHttpResponseHandler() {
+        OSChinaApi.addUserRelationReverse(mBlog.getAuthorId(), new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 AppContext.showToast("关注失败!");
