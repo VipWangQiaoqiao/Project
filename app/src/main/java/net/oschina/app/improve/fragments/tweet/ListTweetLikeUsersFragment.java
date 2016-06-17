@@ -2,7 +2,9 @@ package net.oschina.app.improve.fragments.tweet;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -58,6 +60,20 @@ public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<User> i
                 Log.e("oschina", error.getMessage());
             }
         };
+    }
+
+    @Override
+    protected void initWidget(View root) {
+        super.initWidget(root);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING){
+                    mOperator.onScroll();
+                }
+            }
+        });
     }
 
     @Override

@@ -16,6 +16,8 @@ public interface TweetDetailContract {
         Tweet getTweetDetail();
 
         void toReply(Comment comment);
+
+        void onScroll();
     }
 
     interface CmnView {

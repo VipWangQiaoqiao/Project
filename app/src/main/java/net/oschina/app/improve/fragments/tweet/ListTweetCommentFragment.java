@@ -4,7 +4,9 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
@@ -71,6 +73,20 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>
                 Log.e("oschina", error.getMessage());
             }
         };
+    }
+
+    @Override
+    protected void initWidget(View root) {
+        super.initWidget(root);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING){
+                    mOperator.onScroll();
+                }
+            }
+        });
     }
 
     @Override
