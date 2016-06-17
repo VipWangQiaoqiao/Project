@@ -218,6 +218,10 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
             }
         });
 
+
+        //mComments.show(blog.getId(), 3, getImgLoader());
+
+
         mComments.setComment(blog.getComments(), blog.getCommentCount(), getImgLoader(), new DetailCommentView.OnCommentClickListener() {
             @Override
             public void onClick(View view, BlogDetail.Comment comment) {
