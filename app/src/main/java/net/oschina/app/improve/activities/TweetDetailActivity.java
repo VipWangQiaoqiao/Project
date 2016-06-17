@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Xml;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -99,6 +100,7 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
     private boolean isUped;
     private Dialog dialog;
     private boolean mLastIsEmpty = true;
+    private RequestManager reqManager;
     private AsyncHttpResponseHandler upHandler;
     private AsyncHttpResponseHandler cmnHandler;
 
@@ -137,7 +139,6 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeButtonEnabled(false);
             actionBar.setTitle("动弹详情");
         }
         initData();
@@ -189,6 +190,13 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(BUNDLE_KEY_TWEET, tweet);
+    }
+
+    private RequestManager getReqManager(){
+        if (reqManager == null){
+            reqManager = Glide.with(this);
+        }
+        return reqManager;
     }
 
     private void initData() {
@@ -285,15 +293,15 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
             }
         });
 
-        mCoordinatorLayout.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        mCoordinatorLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) return;
-                if (mKADelegation == null) return;
-                mKADelegation.onTurnBack();
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN){
+                    if (mKADelegation != null) mKADelegation.onTurnBack();
+                }
+                return false;
             }
         });
-
 
         mTweetDetailViewPagerFrag = TweetDetailViewPagerFragment.instantiate(this);
         mCmnView = mTweetDetailViewPagerFrag;
@@ -305,12 +313,10 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
     }
 
     private void fillDetailView(){
-        RequestManager reqManager = Glide.with(this);
-
         if (TextUtils.isEmpty(tweet.getPortrait())){
             ivPortrait.setImageResource(R.drawable.widget_dface);
         }else{
-            reqManager.load(tweet.getPortrait()).into(ivPortrait);
+            getReqManager().load(tweet.getPortrait()).into(ivPortrait);
         }
         ivPortrait.setOnClickListener(getOnPortraitClickListener());
         tvNick.setText(tweet.getAuthor());
@@ -420,6 +426,11 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
         mCoordinatorLayout.onStopNestedScroll(null);
         this.reply = comment;
         etInput.setHint("回复@ " + comment.getAuthor());
+    }
+
+    @Override
+    public void onScroll() {
+        if (mKADelegation != null) mKADelegation.onTurnBack();
     }
 
     @OnClick(R.id.iv_thumbup)
