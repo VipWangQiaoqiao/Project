@@ -27,6 +27,14 @@ public class FloatingAutoHideDownBehavior extends CoordinatorLayout.Behavior<Vie
     public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, View child, View target, int dx, int dy, int[] consumed) {
         super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed);
         float mPreTranslationY = dy + child.getTranslationY();
+        if (mPreTranslationY <=0){
+            child.setTranslationY(0);
+            mIsAnimatingOut = true;
+        }
+        if (mPreTranslationY >= child.getHeight()){
+            child.setTranslationY(child.getHeight());
+            mIsAnimatingOut = false;
+        }
         if (mPreTranslationY>0 && mPreTranslationY<child.getHeight()) {
             child.setTranslationY(mPreTranslationY);
             mIsAnimatingOut = dy > 0;
@@ -44,7 +52,7 @@ public class FloatingAutoHideDownBehavior extends CoordinatorLayout.Behavior<Vie
     @Override
     public void onStopNestedScroll(CoordinatorLayout coordinatorLayout, View child, View target) {
         super.onStopNestedScroll(coordinatorLayout, child, target);
-        if (child.getTranslationY() <= 0 || child.getTranslationY() >= child.getHeight()) return;
+        if (child.getTranslationY() == 0 || child.getTranslationY() == child.getHeight()) return;
 
         if (mIsAnimatingOut){
             animateOut(child);
