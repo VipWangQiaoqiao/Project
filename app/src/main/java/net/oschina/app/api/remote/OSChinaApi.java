@@ -1227,10 +1227,23 @@ public class OSChinaApi {
         ApiHttpClient.get("action/apiv2/question", params, handler);
     }
 
-    public static void getComments(long id, TextHttpResponseHandler handler) {
+    /**
+     * 请求评论详情
+     *
+     * @param id      评论Id
+     * @param handler AsyncHttpResponseHandler
+     */
+    public static void getComment(long id, TextHttpResponseHandler handler) {
         if (id <= 0) return;
         RequestParams params = new RequestParams();
         params.put("id", id);
+        ApiHttpClient.get("action/apiv2/comment", params, handler);
+    }
+
+    public static void getComments(long sourceId, int type, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        params.put("type", type);
         ApiHttpClient.get("action/apiv2/comment", params, handler);
     }
 }
