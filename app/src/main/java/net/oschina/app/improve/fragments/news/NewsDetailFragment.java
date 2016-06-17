@@ -203,8 +203,10 @@ public class NewsDetailFragment extends BaseFragment implements View.OnClickList
         mTVAuthorName.setText(newsDetail.getAuthor());
         getImgLoader().load(newsDetail.getAuthorPortrait()).error(R.drawable.widget_dface).into(mIVAuthorPortrait);
 
-        String time = String.format("%s (%s)", StringUtils.friendly_time(getStrTime(newsDetail.getPubDate())), newsDetail.getPubDate());
-        mTVPubDate.setText(time);
+        if (newsDetail.getPubDate() != null) {
+            String time = String.format("%s (%s)", StringUtils.friendly_time(getStrTime(newsDetail.getPubDate().trim())), newsDetail.getPubDate().trim());
+            mTVPubDate.setText(time);
+        }
 
         mTVTitle.setText(newsDetail.getTitle());
 //
@@ -371,9 +373,13 @@ public class NewsDetailFragment extends BaseFragment implements View.OnClickList
             ".css\">";
 
     private String getWebViewBody(NewsDetail newsDetail) {
-        return String.format("<!DOCTYPE HTML><html><head>%s</head><body><div class=\"body-content\">%s</div></body></html>",
-                linkCss + UIHelper.WEB_LOAD_IMAGES,
-                UIHelper.setHtmlCotentSupportImagePreview(newsDetail.getBody()));
+        if (newsDetail.getBody() != null) {
+            return String.format("<!DOCTYPE HTML><html><head>%s</head><body><div class=\"body-content\">%s</div></body></html>",
+                    linkCss + UIHelper.WEB_LOAD_IMAGES,
+                    UIHelper.setHtmlCotentSupportImagePreview(newsDetail.getBody()));
+        } else {
+            return null;
+        }
     }
 
     private boolean mInputDoubleEmpty = false;
