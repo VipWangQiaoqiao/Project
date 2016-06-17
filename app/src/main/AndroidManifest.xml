@@ -270,7 +270,6 @@
             android:label="动弹详情"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-
         <activity
             android:name=".improve.activities.EventDetailActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -281,6 +280,11 @@
             android:name=".improve.activities.NewsDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="资讯详情"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".improve.activities.PostAnswerDetailActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="问答答案详情"
             android:screenOrientation="portrait" />
     </application>
 
