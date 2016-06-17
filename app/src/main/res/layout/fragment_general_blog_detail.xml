@@ -52,7 +52,6 @@
                         android:id="@+id/tv_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="年轻的小蜜蜂"
                         android:textColor="#111111"
                         android:textSize="14sp"
                         tools:text="年轻的小蜜蜂" />
@@ -61,7 +60,6 @@
                         android:id="@+id/tv_pub_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="发表于1天前 (2016-06-24 20:12)"
                         android:textColor="#6a6a6a"
                         android:textSize="12sp"
                         tools:text="发表于1天前 (2016-06-24 20:12)" />
@@ -238,9 +236,9 @@
             android:layout_height="22dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:src="@drawable/share_ic_selector"
             android:contentDescription="@string/app_name"
-            android:scaleType="fitCenter" />
+            android:scaleType="fitCenter"
+            android:src="@drawable/share_ic_selector" />
 
     </LinearLayout>
 

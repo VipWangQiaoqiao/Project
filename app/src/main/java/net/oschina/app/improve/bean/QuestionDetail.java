@@ -1,8 +1,5 @@
 package net.oschina.app.improve.bean;
 
-import com.google.gson.annotations.SerializedName;
-
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -11,70 +8,8 @@ import java.util.List;
 public class QuestionDetail extends Question {
 
     private boolean favorite;
-    private long authorId;
-    private String authorPortrait;
-    private int authorRelation;
-    private String category;
-    @SerializedName("abstract")
-    private String abstractStr;
-    private List<About> abouts;
-    private List<Comment> comments;
-
-    public long getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(long authorId) {
-        this.authorId = authorId;
-    }
-
-    public String getAuthorPortrait() {
-        return authorPortrait;
-    }
-
-    public void setAuthorPortrait(String authorPortrait) {
-        this.authorPortrait = authorPortrait;
-    }
-
-    public int getAuthorRelation() {
-        return authorRelation;
-    }
-
-    public void setAuthorRelation(int authorRelation) {
-        this.authorRelation = authorRelation;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public List<About> getAbouts() {
-        return abouts;
-    }
-
-    public void setAbouts(List<About> abouts) {
-        this.abouts = abouts;
-    }
-
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
-    public String getAbstract() {
-        return abstractStr;
-    }
-
-    public void setAbstract(String abstractStr) {
-        this.abstractStr = abstractStr;
-    }
+    private String href;
+    private List<String> tags;
 
     public boolean isFavorite() {
         return favorite;
@@ -84,28 +19,21 @@ public class QuestionDetail extends Question {
         this.favorite = favorite;
     }
 
-    public static class About implements Serializable {
-        public long id;
-        public String title;
-        public int commentCount;
-        public int viewCount;
+    public String getHref() {
+        return href;
     }
 
-    public static class Refer implements Serializable {
-        public String author;
-        public String content;
-        @SerializedName(value = "refer", alternate = {"reply"})
-        public Refer refer;
+    public void setHref(String href) {
+        this.href = href;
     }
 
-    public static class Comment extends Refer implements Serializable {
-        public long id;
-        public long authorId;
-        public String authorPortrait;
 
-        public String pubDate;
-        public int appClient;
+    public List<String> getTags() {
+        return tags;
     }
 
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
 }
 
