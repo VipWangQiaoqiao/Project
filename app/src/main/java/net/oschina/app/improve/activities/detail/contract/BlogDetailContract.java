@@ -1,4 +1,4 @@
-package net.oschina.app.improve.contract;
+package net.oschina.app.improve.activities.detail.contract;
 
 import net.oschina.app.improve.bean.BlogDetail;
 
@@ -8,7 +8,7 @@ import net.oschina.app.improve.bean.BlogDetail;
  */
 
 public interface BlogDetailContract {
-    interface Operator {
+    interface Operator extends DetailContract.Operator<BlogDetail> {
         BlogDetail getBlogDetail();
 
         // 收藏
@@ -27,10 +27,8 @@ public interface BlogDetailContract {
         void toSendComment(long id, long authorId, String comment);
     }
 
-    interface View {
+    interface View extends DetailContract.View {
         void toFavoriteOk(BlogDetail blogDetail);
-
-        void toShareOk();
 
         void toFollowOk(BlogDetail blogDetail);
 

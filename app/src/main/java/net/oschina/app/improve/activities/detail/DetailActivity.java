@@ -5,6 +5,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -15,6 +18,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Report;
 import net.oschina.app.improve.activities.BaseBackActivity;
+import net.oschina.app.improve.activities.detail.contract.DetailContract;
 import net.oschina.app.ui.ReportDialog;
 import net.oschina.app.ui.ShareDialog;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -29,9 +33,10 @@ import cz.msebera.android.httpclient.Header;
  * on 16/6/20.
  */
 
-public abstract class DetailActivity<Data> extends BaseBackActivity implements DetailOption {
+public abstract class DetailActivity<Data, DataView extends DetailContract.View> extends BaseBackActivity implements DetailContract.Operator<Data> {
     protected long mDataId;
     protected Data mData;
+    protected DataView mView;
     protected EmptyLayout mEmptyLayout;
     private ProgressDialog mDialog;
     private ShareDialog mShareDialog;
@@ -86,6 +91,27 @@ public abstract class DetailActivity<Data> extends BaseBackActivity implements D
             layout.setErrorType(type);
             layout.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_detail, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.menu_report) {
+            toReport();
+        } else if (id == R.id.menu_scroll_comment) {
+            DataView view = mView;
+            if (view != null) {
+                view.scrollToComment();
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public ProgressDialog showWaitDialog(int messageId) {
