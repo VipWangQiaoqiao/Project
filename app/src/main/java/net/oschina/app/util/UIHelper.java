@@ -73,7 +73,7 @@ import net.oschina.app.ui.LoginActivity;
 import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.ui.TweetPubActivity;
-import net.oschina.app.improve.activities.BlogDetailActivity;
+import net.oschina.app.improve.activities.detail.BlogDetailActivity;
 import net.oschina.app.viewpagerfragment.FriendsViewPagerFragment;
 import net.oschina.app.widget.AvatarView;
 
