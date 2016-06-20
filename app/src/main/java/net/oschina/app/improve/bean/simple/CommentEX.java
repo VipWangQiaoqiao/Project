@@ -8,13 +8,27 @@ import java.io.Serializable;
  * 评论实体增强,适用于:问答模块
  */
 public class CommentEX extends Comment {
-    private int score;
+
+    public static final int VOTE_STATE_DEFAULT = 0;
+    public static final int VOTE_STATE_UP = 1;
+    public static final int VOTE_STATE_DOWN = 2;
+
+    private int voteCount;
     private boolean best;
+    private int voteState;
     private Reply[] replies;
 
     public static class Reply implements Serializable {
         public String author;
         public String content;
+    }
+
+    public int getVoteState() {
+        return voteState;
+    }
+
+    public void setVoteState(int voteState) {
+        this.voteState = voteState;
     }
 
     public Reply[] getReplies() {
@@ -25,12 +39,12 @@ public class CommentEX extends Comment {
         this.replies = replies;
     }
 
-    public int getScore() {
-        return score;
+    public int getVoteCount() {
+        return voteCount;
     }
 
-    public void setScore(int score) {
-        this.score = score;
+    public void setVoteCount(int voteCount) {
+        this.voteCount = voteCount;
     }
 
     public boolean isBest() {
