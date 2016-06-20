@@ -1,13 +1,9 @@
 package net.oschina.app.improve.activities.detail;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -21,9 +17,8 @@ import net.oschina.app.bean.Result;
 import net.oschina.app.improve.bean.BlogDetail;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.UserRelation;
-import net.oschina.app.improve.contract.BlogDetailContract;
+import net.oschina.app.improve.activities.detail.contract.BlogDetailContract;
 import net.oschina.app.improve.fragments.blog.BlogDetailFragment;
-import net.oschina.app.ui.ReportDialog;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
@@ -35,9 +30,7 @@ import java.lang.reflect.Type;
 
 import cz.msebera.android.httpclient.Header;
 
-public class BlogDetailActivity extends DetailActivity<BlogDetail> implements BlogDetailContract.Operator {
-    private BlogDetailContract.View mView;
-
+public class BlogDetailActivity extends DetailActivity<BlogDetail,BlogDetailContract.View> implements BlogDetailContract.Operator {
     public static void show(Context context, long id) {
         Intent intent = new Intent(context, BlogDetailActivity.class);
         intent.putExtra("id", id);
@@ -74,21 +67,6 @@ public class BlogDetailActivity extends DetailActivity<BlogDetail> implements Bl
                 }
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_blog_detail, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_report) {
-            toReport();
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

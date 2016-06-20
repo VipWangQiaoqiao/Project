@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -21,9 +22,9 @@ import android.widget.Toast;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.activities.detail.BlogDetailActivity;
+import net.oschina.app.improve.activities.detail.contract.BlogDetailContract;
 import net.oschina.app.improve.bean.BlogDetail;
 import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
-import net.oschina.app.improve.contract.BlogDetailContract;
 import net.oschina.app.improve.fragments.base.BaseFragment;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.improve.widget.DetailCommentView;
@@ -59,7 +60,7 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
     @Bind(R.id.fragment_blog_detail)
     CoordinatorLayout mLayCoordinator;
     @Bind(R.id.lay_nsv)
-    View mLayContent;
+    NestedScrollView mLayContent;
     @Bind(R.id.lay_option)
     View mLayBottom;
 
@@ -311,11 +312,6 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
     }
 
     @Override
-    public void toShareOk() {
-        (Toast.makeText(getContext(), "分享成功", Toast.LENGTH_LONG)).show();
-    }
-
-    @Override
     public void toFollowOk(BlogDetail blogDetail) {
         if (blogDetail.getAuthorRelation() <= 2) {
             mBtnRelation.setText("已关注");
@@ -328,5 +324,10 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
     public void toSendCommentOk() {
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
         mETInput.setText("");
+    }
+
+    @Override
+    public void scrollToComment() {
+        mLayContent.scrollTo(0, mComments.getTop());
     }
 }
