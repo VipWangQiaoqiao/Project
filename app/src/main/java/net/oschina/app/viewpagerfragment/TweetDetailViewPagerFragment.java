@@ -1,5 +1,6 @@
 package net.oschina.app.viewpagerfragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,6 +8,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,8 @@ import net.oschina.app.bean.User;
 import net.oschina.app.improve.contract.TweetDetailContract;
 import net.oschina.app.improve.fragments.tweet.ListTweetCommentFragment;
 import net.oschina.app.improve.fragments.tweet.ListTweetLikeUsersFragment;
+
+import java.util.Date;
 
 /**
  * 赞 | 评论
@@ -32,20 +36,16 @@ public class TweetDetailViewPagerFragment extends Fragment
     private TweetDetailContract.ThumbupView mThumbupView;
     protected FragmentStatePagerAdapter mAdapter;
     private TweetDetailContract.Operator mOperator;
+    private long time = new Date().getTime();
 
     public static TweetDetailViewPagerFragment instantiate(TweetDetailContract.Operator operator){
-        TweetDetailViewPagerFragment fragment = new TweetDetailViewPagerFragment();
-        fragment.mOperator = operator;
-        return fragment;
+        return new TweetDetailViewPagerFragment();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (mOperator.getTweetDetail().getId() <= 0){
-            Toast.makeText(getContext(), "参数获取异常", Toast.LENGTH_SHORT).show();
-            getActivity().finish();
-        }
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mOperator = (TweetDetailContract.Operator) activity;
     }
 
     @Nullable
@@ -62,7 +62,6 @@ public class TweetDetailViewPagerFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
 
         if (mAdapter == null){
-
             final ListTweetLikeUsersFragment mCmnFrag = ListTweetLikeUsersFragment.instantiate(mOperator);
             mThumbupView = mCmnFrag;
 

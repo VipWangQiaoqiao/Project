@@ -51,6 +51,7 @@ import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
 import net.oschina.app.improve.activities.EventDetailActivity;
+import net.oschina.app.improve.activities.TweetDetailActivity;
 import net.oschina.app.improve.fragments.blog.UserBlogFragment;
 import net.oschina.app.interf.ICallbackResult;
 import net.oschina.app.interf.OnWebViewImageListener;
@@ -73,7 +74,7 @@ import net.oschina.app.ui.LoginActivity;
 import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.ui.TweetPubActivity;
-import net.oschina.app.improve.activities.BlogDetailActivity;
+import net.oschina.app.improve.activities.detail.BlogDetailActivity;
 import net.oschina.app.viewpagerfragment.FriendsViewPagerFragment;
 import net.oschina.app.widget.AvatarView;
 
@@ -392,7 +393,10 @@ public class UIHelper {
                     showPostDetail(context, id, active.getCommentCount());
                     break;
                 case Active.CATALOG_TWEET:
-                    showTweetDetail(context, null, id);
+                    Tweet tweet = new Tweet();
+                    tweet.setId(id);
+                    TweetDetailActivity.show(context, tweet);
+//                    showTweetDetail(context, null, id);
                     break;
                 case Active.CATALOG_BLOG:
                     showBlogDetail(context, id);

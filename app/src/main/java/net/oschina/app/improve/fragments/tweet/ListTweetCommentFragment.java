@@ -1,5 +1,6 @@
 package net.oschina.app.improve.fragments.tweet;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -54,6 +55,12 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>
         fragment.mOperator = operator;
         fragment.mAgencyView = mAgencyView;
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mOperator = (TweetDetailContract.Operator) activity;
     }
 
     @Override

@@ -19,7 +19,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="@dimen/lay_16"
-            app:layout_scrollFlags="scroll|enterAlways">
+            app:layout_scrollFlags="scroll|snap">
 
             <!--portrait and nick-->
             <LinearLayout

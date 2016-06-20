@@ -20,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.oschina.app.R;
-import net.oschina.app.improve.activities.BlogDetailActivity;
+import net.oschina.app.improve.activities.detail.BlogDetailActivity;
 import net.oschina.app.improve.bean.BlogDetail;
 import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.contract.BlogDetailContract;
