@@ -1,5 +1,6 @@
 package net.oschina.app.improve.contract;
 
+import net.oschina.app.improve.activities.detail.contract.DetailContract;
 import net.oschina.app.improve.bean.SoftwareDetail;
 
 /**
@@ -9,7 +10,7 @@ import net.oschina.app.improve.bean.SoftwareDetail;
  */
 
 public interface SoftDetailContract {
-    interface Operator {
+    interface Operator extends DetailContract.Operator<SoftwareDetail>{
         SoftwareDetail getSoftwareDetail();
 
         // 收藏
@@ -28,7 +29,7 @@ public interface SoftDetailContract {
         void toSendComment(long id, long authorId, String comment);
     }
 
-    interface View {
+    interface View extends DetailContract.View {
         void toFavoriteOk(SoftwareDetail softwareDetail);
 
         void toShareOk();

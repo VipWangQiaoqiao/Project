@@ -324,4 +324,9 @@ public class SoftWareDetailFragment extends BaseFragment implements View.OnClick
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
         mETInput.setText("");
     }
+
+    @Override
+    public void scrollToComment() {
+
+    }
 }

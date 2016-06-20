@@ -32,7 +32,7 @@ import java.lang.reflect.Type;
 
 import cz.msebera.android.httpclient.Header;
 
-public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail> implements SoftDetailContract.Operator {
+public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail,SoftDetailContract.View> implements SoftDetailContract.Operator {
     private SoftDetailContract.View mView;
 
     public static void show(Context context, long id) {
