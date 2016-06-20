@@ -28,7 +28,7 @@ import android.widget.Toast;
 
 import net.oschina.app.R;
 import net.oschina.app.emoji.InputHelper;
-import net.oschina.app.improve.activities.detail.BlogDetailActivity;
+import net.oschina.app.improve.detail.activities.BlogDetailActivity;
 import net.oschina.app.improve.bean.NewsDetail;
 import net.oschina.app.improve.bean.Software;
 import net.oschina.app.improve.bean.simple.About;

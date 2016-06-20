@@ -1,4 +1,4 @@
-package net.oschina.app.improve.activities.detail;
+package net.oschina.app.improve.detail.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,8 +17,8 @@ import net.oschina.app.bean.Result;
 import net.oschina.app.improve.bean.BlogDetail;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.UserRelation;
-import net.oschina.app.improve.activities.detail.contract.BlogDetailContract;
-import net.oschina.app.improve.fragments.blog.BlogDetailFragment;
+import net.oschina.app.improve.detail.contract.BlogDetailContract;
+import net.oschina.app.improve.detail.fragments.BlogDetailFragment;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
@@ -76,7 +76,6 @@ public class BlogDetailActivity extends DetailActivity<BlogDetail,BlogDetailCont
                 .beginTransaction();
         trans.replace(R.id.lay_container, fragment);
         trans.commitAllowingStateLoss();
-        mView = fragment;
     }
 
 

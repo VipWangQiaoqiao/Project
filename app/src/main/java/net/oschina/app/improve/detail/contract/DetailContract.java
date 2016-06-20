@@ -1,4 +1,4 @@
-package net.oschina.app.improve.activities.detail.contract;
+package net.oschina.app.improve.detail.contract;
 
 /**
  * Created by JuQiu
@@ -6,12 +6,14 @@ package net.oschina.app.improve.activities.detail.contract;
  */
 
 public interface DetailContract {
-    interface Operator<Data> {
+    interface Operator<Data, DataView extends View> {
         // 获取当前数据
         Data getData();
 
         // 举报
         void toReport();
+
+        void setDataView(DataView view);
     }
 
     interface View {

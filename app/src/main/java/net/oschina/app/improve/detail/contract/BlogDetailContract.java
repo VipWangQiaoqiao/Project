@@ -1,4 +1,4 @@
-package net.oschina.app.improve.activities.detail.contract;
+package net.oschina.app.improve.detail.contract;
 
 import net.oschina.app.improve.bean.BlogDetail;
 
@@ -8,7 +8,7 @@ import net.oschina.app.improve.bean.BlogDetail;
  */
 
 public interface BlogDetailContract {
-    interface Operator extends DetailContract.Operator<BlogDetail> {
+    interface Operator extends DetailContract.Operator<BlogDetail, View> {
         BlogDetail getBlogDetail();
 
         // 收藏

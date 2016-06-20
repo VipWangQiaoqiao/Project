@@ -1,4 +1,4 @@
-package net.oschina.app.improve.fragments.blog;
+package net.oschina.app.improve.detail.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -21,11 +21,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.oschina.app.R;
-import net.oschina.app.improve.activities.detail.BlogDetailActivity;
-import net.oschina.app.improve.activities.detail.contract.BlogDetailContract;
 import net.oschina.app.improve.bean.BlogDetail;
 import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
-import net.oschina.app.improve.fragments.base.BaseFragment;
+import net.oschina.app.improve.detail.activities.BlogDetailActivity;
+import net.oschina.app.improve.detail.contract.BlogDetailContract;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.improve.widget.DetailCommentView;
 import net.oschina.app.util.StringUtils;
@@ -38,7 +37,9 @@ import butterknife.Bind;
  * on 16/5/26.
  */
 
-public class BlogDetailFragment extends BaseFragment implements View.OnClickListener, BlogDetailContract.View {
+public class BlogDetailFragment
+        extends DetailFragment<BlogDetail, BlogDetailContract.View, BlogDetailContract.Operator>
+        implements BlogDetailContract.View, View.OnClickListener {
     private long mId;
     private WebView mWebView;
     private TextView mTVAuthorName;
@@ -67,15 +68,12 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
     private long mCommentId;
     private long mCommentAuthorId;
 
-    private BlogDetailContract.Operator mOperator;
 
-
-    public static BlogDetailFragment instantiate(BlogDetailContract.Operator operator, BlogDetail detail) {
+    public static BlogDetailFragment instantiate(BlogDetail detail) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("key", detail);
         BlogDetailFragment fragment = new BlogDetailFragment();
         fragment.setArguments(bundle);
-        fragment.mOperator = operator;
         return fragment;
     }
 

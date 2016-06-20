@@ -4,7 +4,7 @@
     android:id="@+id/activity_blog_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="net.oschina.app.improve.activities.detail.BlogDetailActivity">
+    tools:context="net.oschina.app.improve.detail.activities.BlogDetailActivity">
 
     <net.oschina.app.ui.empty.EmptyLayout
         android:id="@+id/lay_error"
