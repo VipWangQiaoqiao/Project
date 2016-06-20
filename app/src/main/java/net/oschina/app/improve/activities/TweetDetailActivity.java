@@ -6,13 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.util.Log;
-import android.util.Xml;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -36,11 +33,11 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetDetail;
-import net.oschina.app.bean.TweetsList;
 import net.oschina.app.emoji.EmojiKeyboardFragment;
 import net.oschina.app.emoji.Emojicon;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.emoji.OnEmojiClickListener;
+import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.behavior.KeyboardActionDelegation;
 import net.oschina.app.improve.contract.TweetDetailContract;
 import net.oschina.app.util.DialogHelp;
@@ -192,8 +189,8 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
         outState.putSerializable(BUNDLE_KEY_TWEET, tweet);
     }
 
-    private RequestManager getReqManager(){
-        if (reqManager == null){
+    private RequestManager getReqManager() {
+        if (reqManager == null) {
             reqManager = Glide.with(this);
         }
         return reqManager;
@@ -255,8 +252,13 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 TweetDetail data = XmlUtils.toBean(TweetDetail.class, responseBody);
+                if (data == null || data.getTweet() == null) {
+                    AppContext.showToast(R.string.tweet_detail_data_null);
+                    finish();
+                    return;
+                }
                 tweet = data.getTweet();
-                mAgencyView.resetCmnCount(Integer.valueOf(tweet.getCommentCount()));
+                mAgencyView.resetCmnCount(tweet.getCommentCount() != null ? Integer.valueOf(tweet.getCommentCount()) : 0);
                 mAgencyView.resetLikeCount(tweet.getLikeCount());
                 fillDetailView();
             }
@@ -296,7 +298,7 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
         mCoordinatorLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN){
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     if (mKADelegation != null) mKADelegation.onTurnBack();
                 }
                 return false;
@@ -312,10 +314,10 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
                 .commitAllowingStateLoss();
     }
 
-    private void fillDetailView(){
-        if (TextUtils.isEmpty(tweet.getPortrait())){
+    private void fillDetailView() {
+        if (TextUtils.isEmpty(tweet.getPortrait())) {
             ivPortrait.setImageResource(R.drawable.widget_dface);
-        }else{
+        } else {
             getReqManager().load(tweet.getPortrait()).into(ivPortrait);
         }
         ivPortrait.setOnClickListener(getOnPortraitClickListener());
@@ -366,8 +368,8 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
                 "$1$2\" onClick=\"javascript:mWebViewImageListener.showImagePreview('" + tweet.getImgBig() + "')\"");
     }
 
-    private View.OnClickListener getOnPortraitClickListener(){
-        if (onPortraitClickListener == null){
+    private View.OnClickListener getOnPortraitClickListener() {
+        if (onPortraitClickListener == null) {
             onPortraitClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -405,7 +407,7 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
             mLastIsEmpty = false;
             return;
         }
-        if (TextUtils.isEmpty(etInput.getText().toString()) && !mLastIsEmpty){
+        if (TextUtils.isEmpty(etInput.getText().toString()) && !mLastIsEmpty) {
             mLastIsEmpty = true;
             return;
         }
@@ -421,9 +423,7 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
 
     @Override
     public void toReply(Comment comment) {
-        mCoordinatorLayout.onStartNestedScroll(mFrameLayout, null, ViewCompat.SCROLL_AXIS_VERTICAL);
-        mCoordinatorLayout.onNestedPreScroll(mOptionWrapLayout, 0, -1, new int[2]);
-        mCoordinatorLayout.onStopNestedScroll(null);
+        FloatingAutoHideDownBehavior.showBottomLayout(mCoordinatorLayout, mFrameLayout, mOptionWrapLayout);
         this.reply = comment;
         etInput.setHint("回复@ " + comment.getAuthor());
     }
@@ -446,7 +446,7 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode){
+        switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
                 if (!mKADelegation.onTurnBack()) return true;
                 break;
