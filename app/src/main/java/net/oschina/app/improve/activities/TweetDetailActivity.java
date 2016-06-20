@@ -106,7 +106,6 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
     private TweetDetailContract.AgencyView mAgencyView;
 
     private final EmojiKeyboardFragment mKeyboardFragment = new EmojiKeyboardFragment();
-    private TweetDetailViewPagerFragment mTweetDetailViewPagerFrag;
     private KeyboardActionDelegation mKADelegation;
     private View.OnClickListener onPortraitClickListener;
 
@@ -270,6 +269,12 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("oschina", "------------------on Activity Destroy------------------");
+    }
+
     private void initView() {
         fillDetailView();
 
@@ -305,26 +310,27 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
             }
         });
 
-        mTweetDetailViewPagerFrag = TweetDetailViewPagerFragment.instantiate(this);
+        TweetDetailViewPagerFragment mTweetDetailViewPagerFrag = TweetDetailViewPagerFragment.instantiate(this);
         mCmnView = mTweetDetailViewPagerFrag;
         mThumbupView = mTweetDetailViewPagerFrag;
         mAgencyView = mTweetDetailViewPagerFrag;
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, mTweetDetailViewPagerFrag)
-                .commitAllowingStateLoss();
+                .commit();
     }
 
-    private void fillDetailView() {
-        if (TextUtils.isEmpty(tweet.getPortrait())) {
+    private void fillDetailView(){
+        // 有可能穿入的tweet只有id这一个值
+        if (TextUtils.isEmpty(tweet.getPortrait())){
             ivPortrait.setImageResource(R.drawable.widget_dface);
         } else {
             getReqManager().load(tweet.getPortrait()).into(ivPortrait);
         }
         ivPortrait.setOnClickListener(getOnPortraitClickListener());
         tvNick.setText(tweet.getAuthor());
-        tvTime.setText(StringUtils.friendly_time(tweet.getPubDate()));
+        if (!TextUtils.isEmpty(tweet.getPubDate()))
+            tvTime.setText(StringUtils.friendly_time(tweet.getPubDate()));
         PlatfromUtil.setPlatFromString(tvClient, tweet.getAppclient());
-
         if (tweet.getIsLike() == 1) {
             ivThumbup.setImageResource(R.drawable.ic_thumbup_actived);
         } else {
@@ -338,6 +344,7 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
      * 填充webview内容
      */
     private void fillWebViewBody() {
+        if (TextUtils.isEmpty(tweet.getBody())) return;
         StringBuffer body = new StringBuffer();
         body.append(ThemeSwitchUtils.getWebViewBodyString());
         body.append(linkCss + UIHelper.WEB_LOAD_IMAGES);
