@@ -192,7 +192,7 @@ public class NewsDetailFragment extends BaseFragment implements View.OnClickList
     @SuppressWarnings("deprecation")
     @Override
     protected void initData() {
-        NewsDetail newsDetail = (NewsDetail) mBundle.getSerializable("key");
+        final NewsDetail newsDetail = (NewsDetail) mBundle.getSerializable("key");
         if (newsDetail == null)
             return;
 
@@ -273,14 +273,14 @@ public class NewsDetailFragment extends BaseFragment implements View.OnClickList
             ImageView ivCommentCount = (ImageView) lay.findViewById(R.id.iv_info_comment);
             ivCommentCount.setVisibility(View.GONE);
             View layInfo = lay.findViewById(R.id.lay_info_view_comment);
-            ((TextView) layInfo.findViewById(R.id.tv_info_view)).setText(2 + "");
+            (layInfo.findViewById(R.id.tv_info_view)).setVisibility(View.GONE);
             (layInfo.findViewById(R.id.tv_info_comment)).setVisibility(View.GONE);
 
             lay.findViewById(R.id.line).setVisibility(View.INVISIBLE);
             lay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //   BlogDetailActivity.show(getActivity(), about.getId());
+                    //software.show(getActivity(), newsDetail.getId());
                 }
             });
 
