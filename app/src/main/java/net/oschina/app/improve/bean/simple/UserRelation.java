@@ -1,10 +1,12 @@
 package net.oschina.app.improve.bean.simple;
 
+import java.io.Serializable;
+
 /**
  * Created by huanghaibin
  * on 16-6-16.
  */
-public class UserRelation {
+public class UserRelation implements Serializable {
     private int relation;
     private String author;
     private long authorId;

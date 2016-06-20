@@ -73,7 +73,7 @@ public class QuestionDetailFragment extends BaseFragment implements View.OnClick
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_general_question_detail;
+        return R.layout.activity_post_answer_detail;
     }
 
     @SuppressLint("SetJavaScriptEnabled")

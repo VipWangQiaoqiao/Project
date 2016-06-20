@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,7 @@ import net.oschina.app.R;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.activities.BlogDetailActivity;
 import net.oschina.app.improve.bean.NewsDetail;
+import net.oschina.app.improve.bean.Software;
 import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.contract.NewsDetailContract;
@@ -50,12 +52,12 @@ import java.util.Date;
  */
 
 public class NewsDetailFragment extends BaseFragment implements View.OnClickListener, NewsDetailContract.View {
+    private static final String TAG = "NewsDetailFragment";
     private long mId;
     private WebView mWebView;
     private TextView mTVAuthorName;
     private TextView mTVPubDate;
     private TextView mTVTitle;
-    private TextView mTVAbstract;
     private ImageView mIVLabelRecommend;
     private ImageView mIVLabelOriginate;
     private ImageView mIVAuthorPortrait;
@@ -84,7 +86,7 @@ public class NewsDetailFragment extends BaseFragment implements View.OnClickList
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_general_blog_detail;
+        return R.layout.fragment_general_news_detail;
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -117,7 +119,6 @@ public class NewsDetailFragment extends BaseFragment implements View.OnClickList
         mTVAuthorName = (TextView) root.findViewById(R.id.tv_name);
         mTVPubDate = (TextView) root.findViewById(R.id.tv_pub_date);
         mTVTitle = (TextView) root.findViewById(R.id.tv_title);
-        mTVAbstract = (TextView) root.findViewById(R.id.tv_blog_detail_abstract);
 
         mIVLabelRecommend = (ImageView) root.findViewById(R.id.iv_label_recommend);
         mIVLabelOriginate = (ImageView) root.findViewById(R.id.iv_label_originate);
@@ -209,34 +210,27 @@ public class NewsDetailFragment extends BaseFragment implements View.OnClickList
         }
 
         mTVTitle.setText(newsDetail.getTitle());
-//
-//        if (TextUtils.isEmpty(newsDetail.getAbstract())) {
-//            mLayAbstract.setVisibility(View.GONE);
-//        } else {
-//            mTVAbstract.setText(newsDetail.getAbstract());
-//            mLayAbstract.setVisibility(View.VISIBLE);
-//        }
 
-        mIVLabelRecommend.setVisibility(/*questionDetail.isRecommend() ?*/ View.VISIBLE /*: View.GONE*/);
-        mIVLabelOriginate.setImageDrawable(/*questionDetail.isOriginal() ?
-                getResources().getDrawable(R.drawable.ic_label_originate) :*/
-                getResources().getDrawable(R.drawable.ic_label_reprint));
+        mIVLabelRecommend.setVisibility(View.VISIBLE);
+        mIVLabelOriginate.setImageDrawable(getResources().getDrawable(R.drawable.ic_label_reprint));
 
-//        if (newsDetail.getAuthorRelation() == 3) {
-//            mBtnRelation.setEnabled(true);
-//            mBtnRelation.setText("关注");
-//            mBtnRelation.setOnClickListener(this);
-//
-//        } else {
-//            mBtnRelation.setEnabled(false);
-//            mBtnRelation.setText("已关注");
-//        }
+        //这个地方，貌似没有这个相互关注关系字段，所以先用favorite
+        if (newsDetail.isFavorite()) {
+            mBtnRelation.setEnabled(true);
+            mBtnRelation.setText("关注");
+            mBtnRelation.setOnClickListener(this);
+        } else {
+            mBtnRelation.setEnabled(false);
+            mBtnRelation.setText("已关注");
+        }
 
         toFavoriteOk(newsDetail);
-
-        final LayoutInflater inflater = getLayoutInflater(null);
         setText(R.id.tv_info_view, String.valueOf(newsDetail.getViewCount()));
+
+        LayoutInflater inflater = getLayoutInflater(null);
+        Log.d(TAG, "initData: ---->" + newsDetail.getAbouts().size());
         if (newsDetail.getAbouts() != null && newsDetail.getAbouts().size() > 0) {
+
             int i = 1;
             for (final About about : newsDetail.getAbouts()) {
                 if (about == null)
@@ -265,6 +259,37 @@ public class NewsDetailFragment extends BaseFragment implements View.OnClickList
             setGone(R.id.tv_blog_detail_about);
             mLayAbouts.setVisibility(View.GONE);
         }
+
+        Software software = newsDetail.getSoftware();
+        if (software != null) {
+            setVisibility(R.id.tv_blog_detail_about);
+            mLayAbouts.setVisibility(View.VISIBLE);
+            setText(R.id.tv_blog_detail_about, "软件资讯");
+
+            View lay = inflater.inflate(R.layout.lay_blog_detail_about, null, false);
+            ((TextView) lay.findViewById(R.id.tv_title)).setText(software.getName());
+            ImageView ivViewCount = (ImageView) lay.findViewById(R.id.iv_info_view);
+            ivViewCount.setVisibility(View.GONE);
+            ImageView ivCommentCount = (ImageView) lay.findViewById(R.id.iv_info_comment);
+            ivCommentCount.setVisibility(View.GONE);
+            View layInfo = lay.findViewById(R.id.lay_info_view_comment);
+            ((TextView) layInfo.findViewById(R.id.tv_info_view)).setText(2 + "");
+            (layInfo.findViewById(R.id.tv_info_comment)).setVisibility(View.GONE);
+
+            lay.findViewById(R.id.line).setVisibility(View.INVISIBLE);
+            lay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //   BlogDetailActivity.show(getActivity(), about.getId());
+                }
+            });
+
+            mLayAbouts.addView(lay, 0);
+        } else {
+            setGone(R.id.tv_blog_detail_about);
+            mLayAbouts.setVisibility(View.GONE);
+        }
+
 
         setText(R.id.tv_info_comment, String.valueOf(newsDetail.getCommentCount()));
         if (newsDetail.getComments() != null && newsDetail.getComments().size() > 0) {
@@ -317,6 +342,7 @@ public class NewsDetailFragment extends BaseFragment implements View.OnClickList
             setGone(R.id.tv_blog_detail_comment);
             mLayComments.setVisibility(View.GONE);
         }
+
     }
 
     @SuppressWarnings("deprecation")

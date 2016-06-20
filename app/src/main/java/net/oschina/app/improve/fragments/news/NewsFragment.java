@@ -1,6 +1,7 @@
 package net.oschina.app.improve.fragments.news;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
@@ -13,8 +14,6 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Banner;
 import net.oschina.app.cache.CacheManager;
-import net.oschina.app.improve.activities.BlogDetailActivity;
-import net.oschina.app.improve.activities.EventDetailActivity;
 import net.oschina.app.improve.activities.NewsDetailActivity;
 import net.oschina.app.improve.adapter.base.BaseListAdapter;
 import net.oschina.app.improve.adapter.general.NewsAdapter;
@@ -22,7 +21,6 @@ import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.fragments.base.BaseGeneralListFragment;
-import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.ViewNewsHeader;
 
 import java.lang.reflect.Type;
@@ -35,6 +33,7 @@ import cz.msebera.android.httpclient.Header;
 public class NewsFragment extends BaseGeneralListFragment<News> {
 
     public static final String HISTORY_NEWS = "history_news";
+    private static final String TAG = "NewsFragment";
     // private static final String TAG = "NewsFragment";
     private boolean isFirst = true;
 
@@ -86,32 +85,36 @@ public class NewsFragment extends BaseGeneralListFragment<News> {
         News news = mAdapter.getItem(position - 1);
         if (news != null) {
             // UIHelper.showNewsDetail(getActivity(), news);
-            // Log.d(TAG, "onItemClick: ------>type==" + news.getType());
+            Log.d(TAG, "onItemClick: ------>type==" + news.getType() + " id=" + news.getId());
             switch (news.getType()) {
                 case 0:
                     //新闻链接
-                    UIHelper.showUrlRedirect(getActivity(), news.getHref());
+                  //  UIHelper.showUrlRedirect(getActivity(), news.getHref());
                     break;
                 case 1:
                     //软件推荐
                     break;
                 case 2:
                     //问答
+                   // QuestionDetailActivity.show(getActivity(),news.getId());
                     break;
                 case 3:
                     //博客
-                    BlogDetailActivity.show(getActivity(), news.getId());
+                   // BlogDetailActivity.show(getActivity(), news.getId());
+                    break;
+                case 4:
+                    //4.翻译
+                   // UIHelper.showNewsDetail(getActivity(), news);
                     break;
                 case 5:
                     //活动
-                    EventDetailActivity.show(getActivity(), news.getId());
+                    //EventDetailActivity.show(getActivity(), news.getId());
                     break;
                 default:
-                    //4.翻译  6.资讯
+                    //6.资讯
                     NewsDetailActivity.show(getActivity(), news.getId());
                     break;
             }
-
 
             TextView title = (TextView) view.findViewById(R.id.tv_title);
             TextView content = (TextView) view.findViewById(R.id.tv_description);

@@ -1,9 +1,11 @@
 package net.oschina.app.improve.bean;
 
+import com.google.gson.annotations.Expose;
+
 import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.bean.simple.Comment;
+import net.oschina.app.improve.bean.simple.UserRelation;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -17,6 +19,9 @@ public class NewsDetail extends News {
     private String authorPortrait;
     private List<About> abouts;
     private Software software;
+    @Expose
+    private UserRelation userRelation;
+    @Expose
     private List<Comment> comments;
 
     public boolean isFavorite() {
@@ -69,6 +74,15 @@ public class NewsDetail extends News {
         this.software = software;
     }
 
+
+    public UserRelation getUserRelation() {
+        return userRelation;
+    }
+
+    public void setUserRelation(UserRelation userRelation) {
+        this.userRelation = userRelation;
+    }
+
     public List<Comment> getComments() {
         return comments;
     }
@@ -77,33 +91,4 @@ public class NewsDetail extends News {
         this.comments = comments;
     }
 
-    public static class Software implements Serializable {
-        private long id;
-        private String name;
-        private String href;
-
-        public long getId() {
-            return id;
-        }
-
-        public void setId(long id) {
-            this.id = id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getHref() {
-            return href;
-        }
-
-        public void setHref(String href) {
-            this.href = href;
-        }
-    }
 }
