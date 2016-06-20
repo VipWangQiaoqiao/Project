@@ -12,7 +12,7 @@ import net.oschina.app.improve.adapter.base.BaseListAdapter;
 import net.oschina.app.improve.adapter.general.BlogAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.cache.CacheManager;
-import net.oschina.app.improve.activities.detail.BlogDetailActivity;
+import net.oschina.app.improve.detail.activities.BlogDetailActivity;
 import net.oschina.app.improve.bean.Blog;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;

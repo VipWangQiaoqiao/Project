@@ -29,7 +29,7 @@ import net.oschina.app.team.fragment.TeamDiaryDetailFragment;
 import net.oschina.app.team.fragment.TeamDiscussDetailFragment;
 import net.oschina.app.team.fragment.TeamIssueDetailFragment;
 import net.oschina.app.team.fragment.TeamTweetDetailFragment;
-import net.oschina.app.improve.activities.detail.BlogDetailActivity;
+import net.oschina.app.improve.detail.activities.BlogDetailActivity;
 
 /**
  * 详情activity（包括：资讯、博客、软件、问答、动弹）

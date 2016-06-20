@@ -1,6 +1,6 @@
 package net.oschina.app.improve.contract;
 
-import net.oschina.app.improve.activities.detail.contract.DetailContract;
+import net.oschina.app.improve.detail.contract.DetailContract;
 import net.oschina.app.improve.bean.SoftwareDetail;
 
 /**
@@ -10,7 +10,7 @@ import net.oschina.app.improve.bean.SoftwareDetail;
  */
 
 public interface SoftDetailContract {
-    interface Operator extends DetailContract.Operator<SoftwareDetail>{
+    interface Operator extends DetailContract.Operator<SoftwareDetail, View> {
         SoftwareDetail getSoftwareDetail();
 
         // 收藏
