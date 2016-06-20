@@ -26,7 +26,7 @@ public class HTMLUtil {
 
 		return htmlStr.trim(); // 返回文本字符串
 	}
-	
+
 	/**
 	 * 基本功能：替换标记以正常显示
 	 * @param input
