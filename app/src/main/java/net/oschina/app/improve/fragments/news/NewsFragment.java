@@ -14,7 +14,10 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Banner;
 import net.oschina.app.cache.CacheManager;
+<<<<<<< HEAD
 import net.oschina.app.improve.activities.NewsDetailActivity;
+=======
+>>>>>>> abe4578331590b74f4ed00126f67ac52d3a7e916
 import net.oschina.app.improve.adapter.base.BaseListAdapter;
 import net.oschina.app.improve.adapter.general.NewsAdapter;
 import net.oschina.app.improve.bean.News;
@@ -33,8 +36,12 @@ import cz.msebera.android.httpclient.Header;
 public class NewsFragment extends BaseGeneralListFragment<News> {
 
     public static final String HISTORY_NEWS = "history_news";
+<<<<<<< HEAD
     private static final String TAG = "NewsFragment";
     // private static final String TAG = "NewsFragment";
+=======
+    public static final String NEWS_SYSTEM_TIME = "news_system_time";
+>>>>>>> abe4578331590b74f4ed00126f67ac52d3a7e916
     private boolean isFirst = true;
 
     private static final String NEWS_BANNER = "news_banner";
@@ -55,6 +62,7 @@ public class NewsFragment extends BaseGeneralListFragment<News> {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
+                            ((NewsAdapter) mAdapter).setSystemTime(AppContext.get(NEWS_SYSTEM_TIME, null));
                             mHeaderView.initData(getImgLoader(), pageBean.getItems());
                         }
                     });
@@ -84,6 +92,7 @@ public class NewsFragment extends BaseGeneralListFragment<News> {
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         News news = mAdapter.getItem(position - 1);
         if (news != null) {
+<<<<<<< HEAD
             // UIHelper.showNewsDetail(getActivity(), news);
             Log.d(TAG, "onItemClick: ------>type==" + news.getType() + " id=" + news.getId());
             switch (news.getType()) {
@@ -116,6 +125,9 @@ public class NewsFragment extends BaseGeneralListFragment<News> {
                     break;
             }
 
+=======
+            UIHelper.showNewsDetail(getActivity(), news);
+>>>>>>> abe4578331590b74f4ed00126f67ac52d3a7e916
             TextView title = (TextView) view.findViewById(R.id.tv_title);
             TextView content = (TextView) view.findViewById(R.id.tv_description);
             updateTextColor(title, content);
@@ -144,6 +156,7 @@ public class NewsFragment extends BaseGeneralListFragment<News> {
     @Override
     protected void setListData(ResultBean<PageBean<News>> resultBean) {
         ((NewsAdapter) mAdapter).setSystemTime(resultBean.getTime());
+        AppContext.set(NEWS_SYSTEM_TIME, resultBean.getTime());
         super.setListData(resultBean);
     }
 
