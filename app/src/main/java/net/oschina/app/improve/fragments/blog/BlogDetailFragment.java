@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -21,12 +22,15 @@ import android.widget.Toast;
 import net.oschina.app.R;
 import net.oschina.app.improve.activities.BlogDetailActivity;
 import net.oschina.app.improve.bean.BlogDetail;
+import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.contract.BlogDetailContract;
 import net.oschina.app.improve.fragments.base.BaseFragment;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.improve.widget.DetailCommentView;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
+
+import butterknife.Bind;
 
 /**
  * Created by qiujuer
@@ -51,6 +55,13 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
     private DetailCommentView mComments;
 
     private LinearLayout mLayAbstract;
+
+    @Bind(R.id.fragment_blog_detail)
+    CoordinatorLayout mLayCoordinator;
+    @Bind(R.id.lay_nsv)
+    View mLayContent;
+    @Bind(R.id.lay_option)
+    View mLayBottom;
 
     private long mCommentId;
     private long mCommentAuthorId;
@@ -225,6 +236,7 @@ public class BlogDetailFragment extends BaseFragment implements View.OnClickList
         mComments.setComment(blog.getComments(), blog.getCommentCount(), getImgLoader(), new DetailCommentView.OnCommentClickListener() {
             @Override
             public void onClick(View view, BlogDetail.Comment comment) {
+                FloatingAutoHideDownBehavior.showBottomLayout(mLayCoordinator, mLayContent, mLayBottom);
                 mCommentId = comment.id;
                 mCommentAuthorId = comment.authorId;
                 mETInput.setHint(String.format("回复: %s", comment.author));
