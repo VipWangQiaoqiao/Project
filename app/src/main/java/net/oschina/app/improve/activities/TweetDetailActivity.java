@@ -110,7 +110,7 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
     private KeyboardActionDelegation mKADelegation;
     private View.OnClickListener onPortraitClickListener;
 
-    private final static String linkCss = "" +
+    public final static String linkCss = "" +
             "<script type=\"text/javascript\" src=\"file:///android_asset/shCore.js\"></script>"
             + "<script type=\"text/javascript\" src=\"file:///android_asset/brush.js\"></script>"
             + "<script type=\"text/javascript\" src=\"file:///android_asset/client.js\"></script>"
@@ -270,12 +270,6 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
         });
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d("oschina", "------------------on Activity Destroy------------------");
-    }
-
     private void initView() {
         fillDetailView();
 
@@ -346,7 +340,7 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
      */
     private void fillWebViewBody() {
         if (TextUtils.isEmpty(tweet.getBody())) return;
-        StringBuffer body = new StringBuffer();
+        StringBuilder body = new StringBuilder();
         body.append(ThemeSwitchUtils.getWebViewBodyString());
         body.append(linkCss + UIHelper.WEB_LOAD_IMAGES);
 
@@ -355,7 +349,7 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
         String tweetBody = TextUtils.isEmpty(tweet.getImgSmall())
                 ? tweetbody.toString()
                 : tweetbody.toString() + "<br/><img src=\"" + tweet.getImgSmall() + "\">";
-        body.append(setHtmlCotentSupportImagePreview(tweetBody));
+        body.append(setHtmlContentSupportImagePreview(tweetBody));
 
         UIHelper.addWebImageShow(this, mWebview);
         body.append("</div></body>");
@@ -368,7 +362,7 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
      * @param body
      * @return
      */
-    private String setHtmlCotentSupportImagePreview(String body) {
+    private String setHtmlContentSupportImagePreview(String body) {
         // 过滤掉 img标签的width,height属性
         body = body.replaceAll("(<img[^>]*?)\\s+width\\s*=\\s*\\S+", "$1");
         body = body.replaceAll("(<img[^>]*?)\\s+height\\s*=\\s*\\S+", "$1");
