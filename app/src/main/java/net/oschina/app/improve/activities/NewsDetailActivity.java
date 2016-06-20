@@ -115,7 +115,7 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
         return super.onOptionsItemSelected(item);
     }
 
-    private void showBlog() {
+    private void showNews() {
         NewsDetailFragment fragment = NewsDetailFragment.instantiate(this, newsDetail);
         FragmentTransaction trans = getSupportFragmentManager()
                 .beginTransaction();
@@ -163,7 +163,6 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
      * 获取评论列表
      *
      * @param id 当前资讯的id
-     * @return 返回资讯列表
      */
     private void getComments(long id) {
 
@@ -198,7 +197,7 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
     private void handleData(NewsDetail newsDetail) {
         showError(View.INVISIBLE);
         this.newsDetail = newsDetail;
-        showBlog();
+        showNews();
     }
 
     private int check() {
@@ -331,7 +330,7 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
         if (uid == 0)
             return;
 
-        // 只关注不可取消
+        // 请求关注状态
         OSChinaApi.updateRelation(uid, newsDetail.getAuthorId(), 1,
                 new AsyncHttpResponseHandler() {
                     @Override
