@@ -13,7 +13,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Banner;
 import net.oschina.app.cache.CacheManager;
-import net.oschina.app.improve.activities.BlogDetailActivity;
+import net.oschina.app.improve.activities.detail.BlogDetailActivity;
 import net.oschina.app.improve.activities.EventDetailActivity;
 import net.oschina.app.improve.activities.NewsDetailActivity;
 import net.oschina.app.improve.adapter.base.BaseListAdapter;
