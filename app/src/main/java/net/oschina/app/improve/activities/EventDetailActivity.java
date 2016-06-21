@@ -129,7 +129,7 @@ public class EventDetailActivity extends AppCompatActivity implements EventDetai
                         new ByteArrayInputStream(responseBody)).getResult();
                 if (rs.OK()) {
                     AppContext.showToast("报名成功");
-
+                    mDetail.setApplyStatus(0);
                     mView.toSignUpOk(mDetail);
                 } else {
                     AppContext.showToast(rs.getErrorMessage());
