@@ -279,7 +279,7 @@
             android:label="资讯详情"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".improve.activities.PostAnswerDetailActivity"
+            android:name=".improve.activities.QuestionAnswerDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="问答答案详情"
             android:screenOrientation="portrait" />
