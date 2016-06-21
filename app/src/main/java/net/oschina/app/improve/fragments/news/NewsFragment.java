@@ -21,7 +21,6 @@ import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.fragments.base.BaseGeneralListFragment;
-import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.ViewNewsHeader;
 
 import java.lang.reflect.Type;
@@ -126,7 +125,7 @@ public class NewsFragment extends BaseGeneralListFragment<News> {
             }
 
 
-            UIHelper.showNewsDetail(getActivity(), news);
+            //UIHelper.showNewsDetail(getActivity(), news);
 
             TextView title = (TextView) view.findViewById(R.id.tv_title);
             TextView content = (TextView) view.findViewById(R.id.tv_description);
