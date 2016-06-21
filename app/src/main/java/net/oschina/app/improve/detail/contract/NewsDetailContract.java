@@ -16,7 +16,7 @@ public interface NewsDetailContract {
         void toShare();
 
         // 关注
-        void toFollow();
+       // void toFollow();
 
         // 举报
         void toReport();
@@ -28,7 +28,7 @@ public interface NewsDetailContract {
     interface View extends DetailContract.View {
         void toFavoriteOk(NewsDetail newsDetail);
 
-        void toFollowOk(NewsDetail newsDetail);
+        //void toFollowOk(NewsDetail newsDetail);
 
         void toSendCommentOk();
     }

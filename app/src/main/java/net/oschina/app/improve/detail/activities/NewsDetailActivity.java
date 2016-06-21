@@ -18,12 +18,9 @@ import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Result;
 import net.oschina.app.improve.bean.NewsDetail;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.detail.contract.NewsDetailContract;
 import net.oschina.app.improve.detail.fragments.DetailFragment;
 import net.oschina.app.improve.detail.fragments.NewsDetailFragment;
-import net.oschina.app.ui.ShareDialog;
-import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.URLsUtils;
@@ -31,7 +28,6 @@ import net.oschina.app.util.XmlUtils;
 
 import java.io.ByteArrayInputStream;
 import java.lang.reflect.Type;
-import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -40,13 +36,6 @@ import cz.msebera.android.httpclient.Header;
  * desc:   news detail  module
  */
 public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailContract.View> implements NewsDetailContract.Operator {
-
-    private long mId;
-    private EmptyLayout mEmptyLayout;
-    private NewsDetail newsDetail;
-    private NewsDetailContract.View mView;
-    private ShareDialog dialog;
-    private List<Comment> comments;
 
     public static void show(Context context, long id) {
         Intent intent = new Intent(context, NewsDetailActivity.class);
@@ -83,9 +72,8 @@ public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailCon
     }
 
 
-
     @Override
-     void requestData() {
+    void requestData() {
 
         OSChinaApi.getNewsDetail(getDataId(), getRequestHandler());
 
@@ -101,43 +89,6 @@ public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailCon
         return new TypeToken<ResultBean<NewsDetail>>() {
         }.getType();
     }
-
-
-    /**
-     * 获取评论列表
-     *
-     * @param id 当前资讯的id
-     */
-    private void getComments(long id) {
-
-        OSChinaApi.getComments(mId, 6, new TextHttpResponseHandler() {
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                showError(EmptyLayout.NETWORK_ERROR);
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                try {
-                    Type type = new TypeToken<ResultBean<List<Comment>>>() {
-                    }.getType();
-
-                    ResultBean<List<Comment>> resultBean = AppContext.createGson().fromJson(responseString, type);
-                    if (resultBean != null && resultBean.isSuccess()) {
-                        List<Comment> commentList = resultBean.getResult();
-                        if (commentList != null && !commentList.isEmpty()) {
-                            comments = commentList;
-                        }
-                    }
-                    showError(EmptyLayout.NODATA);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    onFailure(statusCode, headers, responseString, e);
-                }
-            }
-        });
-    }
-
 
     @Override
     public void toFavorite() {
@@ -208,10 +159,6 @@ public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailCon
         }
     }
 
-    @Override
-    public void toFollow() {
-
-    }
 
     @Override
     public void toSendComment(long id, long authorId, String comment) {
@@ -277,9 +224,4 @@ public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailCon
         toReport(getDataId(), getData().getHref(), Report.TYPE_QUESTION);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mView = null;
-    }
 }

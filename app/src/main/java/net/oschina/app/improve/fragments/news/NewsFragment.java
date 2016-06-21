@@ -14,11 +14,14 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Banner;
 import net.oschina.app.cache.CacheManager;
+import net.oschina.app.improve.activities.EventDetailActivity;
 import net.oschina.app.improve.adapter.base.BaseListAdapter;
 import net.oschina.app.improve.adapter.general.NewsAdapter;
 import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.detail.activities.BlogDetailActivity;
+import net.oschina.app.improve.detail.activities.NewsDetailActivity;
 import net.oschina.app.improve.fragments.base.BaseGeneralListFragment;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.ViewNewsHeader;
@@ -96,10 +99,11 @@ public class NewsFragment extends BaseGeneralListFragment<News> {
             switch (news.getType()) {
                 case 0:
                     //新闻链接
-                    //  UIHelper.showUrlRedirect(getActivity(), news.getHref());
+                    UIHelper.showUrlRedirect(getActivity(), news.getHref());
                     break;
                 case 1:
                     //软件推荐
+                    UIHelper.showSoftwareDetailById(getActivity(), (int) news.getId());
                     break;
                 case 2:
                     //问答
@@ -107,23 +111,21 @@ public class NewsFragment extends BaseGeneralListFragment<News> {
                     break;
                 case 3:
                     //博客
-                    // BlogDetailActivity.show(getActivity(), news.getId());
+                    BlogDetailActivity.show(getActivity(), news.getId());
                     break;
                 case 4:
                     //4.翻译
-                    // UIHelper.showNewsDetail(getActivity(), news);
+                    NewsDetailActivity.show(getActivity(), news.getId());
                     break;
                 case 5:
                     //活动
-                    //EventDetailActivity.show(getActivity(), news.getId());
+                    EventDetailActivity.show(getActivity(), news.getId());
                     break;
                 default:
                     //6.资讯
-                    //  NewsDetailActivity.show(getActivity(), news.getId());
+                    NewsDetailActivity.show(getActivity(), news.getId());
                     break;
             }
-
-            UIHelper.showNewsDetail(getActivity(), news);
 
             TextView title = (TextView) view.findViewById(R.id.tv_title);
             TextView content = (TextView) view.findViewById(R.id.tv_description);
