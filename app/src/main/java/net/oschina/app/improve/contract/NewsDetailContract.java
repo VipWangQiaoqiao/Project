@@ -1,13 +1,14 @@
 package net.oschina.app.improve.contract;
 
 import net.oschina.app.improve.bean.NewsDetail;
+import net.oschina.app.improve.detail.contract.DetailContract;
 
 /**
  * Created by fei on 2016/6/13.
  * desc:
  */
 public interface NewsDetailContract {
-    interface Operator {
+    interface Operator extends DetailContract.Operator<NewsDetail, View> {
         NewsDetail getNewsDetail();
 
         // 收藏
@@ -26,7 +27,7 @@ public interface NewsDetailContract {
         void toSendComment(long id, long authorId, String comment);
     }
 
-    interface View {
+    interface View extends DetailContract.View {
         void toFavoriteOk(NewsDetail newsDetail);
 
         void toShareOk();

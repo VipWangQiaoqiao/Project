@@ -28,12 +28,12 @@ import android.widget.Toast;
 
 import net.oschina.app.R;
 import net.oschina.app.emoji.InputHelper;
-import net.oschina.app.improve.detail.activities.BlogDetailActivity;
 import net.oschina.app.improve.bean.NewsDetail;
 import net.oschina.app.improve.bean.Software;
 import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.contract.NewsDetailContract;
+import net.oschina.app.improve.detail.activities.BlogDetailActivity;
 import net.oschina.app.improve.fragments.base.BaseFragment;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
@@ -53,6 +53,21 @@ import java.util.Date;
 
 public class NewsDetailFragment extends BaseFragment implements View.OnClickListener, NewsDetailContract.View {
     private static final String TAG = "NewsDetailFragment";
+    private final static String linkCss = "<script type=\"text/javascript\" " +
+            "src=\"file:///android_asset/shCore.js\"></script>"
+            + "<script type=\"text/javascript\" src=\"file:///android_asset/brush.js\"></script>"
+            + "<script type=\"text/javascript\" src=\"file:///android_asset/client.js\"></script>"
+            + "<script type=\"text/javascript\" src=\"file:///android_asset/detail_page" +
+            ".js\"></script>"
+            + "<script type=\"text/javascript\">SyntaxHighlighter.all();</script>"
+            + "<script type=\"text/javascript\">function showImagePreview(var url){window" +
+            ".location.url= url;}</script>"
+            + "<link rel=\"stylesheet\" type=\"text/css\" " +
+            "href=\"file:///android_asset/shThemeDefault.css\">"
+            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/shCore" +
+            ".css\">"
+            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/css/common_new" +
+            ".css\">";
     private long mId;
     private WebView mWebView;
     private TextView mTVAuthorName;
@@ -64,24 +79,47 @@ public class NewsDetailFragment extends BaseFragment implements View.OnClickList
     private ImageView mIVFav;
     private Button mBtnRelation;
     private EditText mETInput;
-
     private LinearLayout mLayAbouts;
     private LinearLayout mLayComments;
     private LinearLayout mLayAbstract;
-
     private long mCommentId;
     private long mCommentAuthorId;
-
     private NewsDetailContract.Operator mOperator;
+    private boolean mInputDoubleEmpty = false;
 
-
-    public static NewsDetailFragment instantiate(NewsDetailContract.Operator operator, NewsDetail detail) {
+    public static NewsDetailFragment instantiate(NewsDetail detail) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("key", detail);
         NewsDetailFragment fragment = new NewsDetailFragment();
         fragment.setArguments(bundle);
-        fragment.mOperator = operator;
         return fragment;
+    }
+
+    private static String getStrTime(String cc_time) {
+        try {
+            long lTime = Long.valueOf(cc_time);
+            @SuppressLint("SimpleDateFormat")
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            return sdf.format(new Date(lTime));
+        } catch (Exception e) {
+            return cc_time;
+        }
+    }
+
+    private static void formatHtml(Resources resources, TextView textView, String str) {
+        textView.setMovementMethod(MyLinkMovementMethod.a());
+        textView.setFocusable(false);
+        textView.setLongClickable(false);
+
+        if (textView instanceof TweetTextView) {
+            ((TweetTextView) textView).setDispatchToParent(true);
+        }
+
+        str = TweetTextView.modifyPath(str);
+        Spanned span = Html.fromHtml(str);
+        span = InputHelper.displayEmoji(resources, span.toString());
+        textView.setText(span);
+        MyURLSpan.parseLinkText(textView, span);
     }
 
     @Override
@@ -370,34 +408,6 @@ public class NewsDetailFragment extends BaseFragment implements View.OnClickList
         return lay;
     }
 
-    private static String getStrTime(String cc_time) {
-        try {
-            long lTime = Long.valueOf(cc_time);
-            @SuppressLint("SimpleDateFormat")
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            return sdf.format(new Date(lTime));
-        } catch (Exception e) {
-            return cc_time;
-        }
-    }
-
-
-    private final static String linkCss = "<script type=\"text/javascript\" " +
-            "src=\"file:///android_asset/shCore.js\"></script>"
-            + "<script type=\"text/javascript\" src=\"file:///android_asset/brush.js\"></script>"
-            + "<script type=\"text/javascript\" src=\"file:///android_asset/client.js\"></script>"
-            + "<script type=\"text/javascript\" src=\"file:///android_asset/detail_page" +
-            ".js\"></script>"
-            + "<script type=\"text/javascript\">SyntaxHighlighter.all();</script>"
-            + "<script type=\"text/javascript\">function showImagePreview(var url){window" +
-            ".location.url= url;}</script>"
-            + "<link rel=\"stylesheet\" type=\"text/css\" " +
-            "href=\"file:///android_asset/shThemeDefault.css\">"
-            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/shCore" +
-            ".css\">"
-            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/css/common_new" +
-            ".css\">";
-
     private String getWebViewBody(NewsDetail newsDetail) {
         if (newsDetail.getBody() != null) {
             return String.format("<!DOCTYPE HTML><html><head>%s</head><body><div class=\"body-content\">%s</div></body></html>",
@@ -407,8 +417,6 @@ public class NewsDetailFragment extends BaseFragment implements View.OnClickList
             return null;
         }
     }
-
-    private boolean mInputDoubleEmpty = false;
 
     private void handleKeyDel() {
         if (mCommentId != mId) {
@@ -468,19 +476,8 @@ public class NewsDetailFragment extends BaseFragment implements View.OnClickList
         mETInput.setText("");
     }
 
-    private static void formatHtml(Resources resources, TextView textView, String str) {
-        textView.setMovementMethod(MyLinkMovementMethod.a());
-        textView.setFocusable(false);
-        textView.setLongClickable(false);
+    @Override
+    public void scrollToComment() {
 
-        if (textView instanceof TweetTextView) {
-            ((TweetTextView) textView).setDispatchToParent(true);
-        }
-
-        str = TweetTextView.modifyPath(str);
-        Spanned span = Html.fromHtml(str);
-        span = InputHelper.displayEmoji(resources, span.toString());
-        textView.setText(span);
-        MyURLSpan.parseLinkText(textView, span);
     }
 }
