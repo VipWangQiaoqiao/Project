@@ -71,7 +71,7 @@ public class BlogDetailActivity extends DetailActivity<BlogDetail,BlogDetailCont
 
     @Override
     protected void showView() {
-        BlogDetailFragment fragment = BlogDetailFragment.instantiate(this, mData);
+        BlogDetailFragment fragment = BlogDetailFragment.instantiate(mData);
         FragmentTransaction trans = getSupportFragmentManager()
                 .beginTransaction();
         trans.replace(R.id.lay_container, fragment);
