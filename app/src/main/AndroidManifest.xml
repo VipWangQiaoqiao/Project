@@ -283,7 +283,12 @@
             android:configChanges="keyboardHidden|orientation"
             android:label="问答答案详情"
             android:screenOrientation="portrait" />
-        <activity android:name=".improve.activities.CommentActivity"></activity>
+        <activity android:name=".improve.activities.CommentActivity" />
+        <activity
+            android:name=".improve.comment.CommentsActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="评论列表"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

@@ -19,10 +19,13 @@ import android.widget.Toast;
 import net.oschina.app.R;
 import net.oschina.app.improve.bean.BlogDetail;
 import net.oschina.app.improve.bean.simple.About;
+import net.oschina.app.improve.bean.simple.Comment;
+import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
+import net.oschina.app.improve.comment.CommentsView;
+import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.activities.BlogDetailActivity;
 import net.oschina.app.improve.detail.contract.BlogDetailContract;
 import net.oschina.app.improve.widget.DetailAboutView;
-import net.oschina.app.improve.widget.DetailCommentView;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 
@@ -34,6 +37,7 @@ import butterknife.OnClick;
  * on 16/5/26.
  */
 
+@SuppressWarnings("WeakerAccess")
 public class BlogDetailFragment
         extends DetailFragment<BlogDetail, BlogDetailContract.View, BlogDetailContract.Operator>
         implements BlogDetailContract.View, View.OnClickListener {
@@ -68,7 +72,7 @@ public class BlogDetailFragment
     @Bind(R.id.lay_detail_about)
     DetailAboutView mAbouts;
     @Bind(R.id.lay_detail_comment)
-    DetailCommentView mComments;
+    CommentsView mComments;
     @Bind(R.id.lay_blog_detail_abstract)
     LinearLayout mLayAbstract;
 
@@ -135,7 +139,7 @@ public class BlogDetailFragment
             }
             break;
             // 评论列表
-            case R.id.tv_see_comment: {
+            case R.id.tv_see_more_comment: {
                 UIHelper.showBlogComment(getActivity(), (int) mId,
                         (int) mOperator.getData().getAuthorId());
             }
@@ -188,21 +192,15 @@ public class BlogDetailFragment
         });
 
 
-        //mComments.show(blog.getId(), 3, getImgLoader());
-
-        /*
-        mComments.setComment(blog.getComments(), blog.getCommentCount(), getImgLoader(), new DetailCommentView.OnCommentClickListener() {
+        mComments.init(blog.getId(), 3, blog.getCommentCount(), getImgLoader(), new OnCommentClickListener() {
             @Override
-            public void onClick(View view, BlogDetail.Comment comment) {
+            public void onClick(View view, Comment comment) {
                 FloatingAutoHideDownBehavior.showBottomLayout(mLayCoordinator, mLayContent, mLayBottom);
-                mCommentId = comment.id;
-                mCommentAuthorId = comment.authorId;
-                mETInput.setHint(String.format("回复: %s", comment.author));
+                mCommentId = comment.getId();
+                mCommentAuthorId = comment.getAuthorId();
+                mETInput.setHint(String.format("回复: %s", comment.getAuthor()));
             }
-        }, this);
-
-        */
-
+        });
     }
 
     private boolean mInputDoubleEmpty = false;
