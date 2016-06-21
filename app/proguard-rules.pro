@@ -63,8 +63,8 @@
 -dontwarn com.umeng.socialize.sso.**
 -keep class com.umeng.socialize.sso.** { *; }
 
-
-
+-dontwarn android.widget.**
+-keep class android.widget.** {*;}
 
 #-libraryjars libs/library-2.4.0.jar
 #-libraryjars libs/locSDK_3.1.jar
