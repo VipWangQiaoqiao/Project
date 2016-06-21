@@ -172,7 +172,7 @@ public class DetailCommentViewNew extends LinearLayout {
 
     public void show(long id, int type, RequestManager imageLoader) {
         mImageLoader = imageLoader;
-        OSChinaApi.getComments(id, type, new TextHttpResponseHandler() {
+        OSChinaApi.getComments(id, type, null, null, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
 

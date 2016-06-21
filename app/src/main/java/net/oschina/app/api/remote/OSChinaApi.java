@@ -1241,10 +1241,33 @@ public class OSChinaApi {
         ApiHttpClient.get("action/apiv2/comment", params, handler);
     }
 
-    public static void getComments(long sourceId, int type, TextHttpResponseHandler handler) {
+    public static final int COMMENT_SOFT = 1; // 软件推荐-不支持
+    public static final int COMMENT_QUESTION = 2; // 讨论区帖子
+    public static final int COMMENT_BLOG = 3; // 博客
+    public static final int COMMENT_TRANSLATION = 4; // 翻译文章
+    public static final int COMMENT_EVENT = 5; // 活动类型
+    public static final int COMMENT_NEWS = 6; // 资讯类型
+
+    /**
+     * 请求评论列表
+     *
+     * @param sourceId  目标Id，该sourceId为资讯、博客、问答等文章的Id
+     * @param type      问答类型  {@link #COMMENT_SOFT, #COMMENT_QUESTION, #COMMENT_BLOG},
+     *                  {@link #COMMENT_TRANSLATION, #COMMENT_EVENT, #COMMENT_NEWS}
+     * @param parts     请求的数据节点 parts="refer,reply"
+     * @param pageToken 请求上下页数据令牌
+     * @param handler   AsyncHttpResponseHandler
+     */
+    public static void getComments(long sourceId, int type, String parts, String pageToken, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("sourceId", sourceId);
         params.put("type", type);
+        if (!TextUtils.isEmpty(parts)) {
+            params.put("parts", parts);
+        }
+        if (!TextUtils.isEmpty(pageToken)) {
+            params.put("pageToken", pageToken);
+        }
         ApiHttpClient.get("action/apiv2/comment", params, handler);
     }
 }
