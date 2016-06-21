@@ -208,10 +208,6 @@ public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailCon
         }
     }
 
-    @Override
-    public void toFollow() {
-
-    }
 
     @Override
     public void toSendComment(long id, long authorId, String comment) {
@@ -277,9 +273,4 @@ public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailCon
         toReport(getDataId(), getData().getHref(), Report.TYPE_QUESTION);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mView = null;
-    }
 }

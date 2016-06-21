@@ -19,8 +19,8 @@ import net.oschina.app.improve.adapter.general.NewsAdapter;
 import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.detail.activities.NewsDetailActivity;
 import net.oschina.app.improve.fragments.base.BaseGeneralListFragment;
-import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.ViewNewsHeader;
 
 import java.lang.reflect.Type;
@@ -91,7 +91,7 @@ public class NewsFragment extends BaseGeneralListFragment<News> {
         News news = mAdapter.getItem(position - 1);
         if (news != null) {
 
-            // UIHelper.showNewsDetail(getActivity(), news);
+           // UIHelper.showNewsDetail(getActivity(), news);
             Log.d(TAG, "onItemClick: ------>type==" + news.getType() + " id=" + news.getId());
             switch (news.getType()) {
                 case 0:
@@ -115,15 +115,13 @@ public class NewsFragment extends BaseGeneralListFragment<News> {
                     break;
                 case 5:
                     //活动
-                    //EventDetailActivity.show(getActivity(), news.getId());
+                   // EventDetailActivity.show(getActivity(), news.getId());
                     break;
                 default:
                     //6.资讯
-                    //  NewsDetailActivity.show(getActivity(), news.getId());
+                    NewsDetailActivity.show(getActivity(), news.getId());
                     break;
             }
-
-            UIHelper.showNewsDetail(getActivity(), news);
 
             TextView title = (TextView) view.findViewById(R.id.tv_title);
             TextView content = (TextView) view.findViewById(R.id.tv_description);

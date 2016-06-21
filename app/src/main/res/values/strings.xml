@@ -358,4 +358,6 @@
     <string name="state_not_more">没有更多数据</string>
     <string name="state_load_error">加载失败</string>
     <string name="state_refreshing">正在刷新</string>
+
+    <string name="lable_software">相关软件</string>
 </resources>
