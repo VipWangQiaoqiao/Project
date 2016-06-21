@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.oschina.app.R;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.BlogDetail;
 import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.bean.simple.Comment;
@@ -192,7 +193,7 @@ public class BlogDetailFragment
         });
 
 
-        mComments.init(blog.getId(), 3, blog.getCommentCount(), getImgLoader(), new OnCommentClickListener() {
+        mComments.init(blog.getId(), OSChinaApi.COMMENT_BLOG, blog.getCommentCount(), getImgLoader(), new OnCommentClickListener() {
             @Override
             public void onClick(View view, Comment comment) {
                 FloatingAutoHideDownBehavior.showBottomLayout(mLayCoordinator, mLayContent, mLayBottom);
