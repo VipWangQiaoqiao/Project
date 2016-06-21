@@ -161,7 +161,7 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail,SoftDe
             }
             break;
             // 评论列表
-            case R.id.tv_see_comment: {
+            case R.id.tv_see_more_comment: {
                 UIHelper.showBlogComment(getActivity(), (int) mId,
                         (int) mOperator.getData().getAuthorId());
             }
