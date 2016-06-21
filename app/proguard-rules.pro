@@ -31,6 +31,8 @@
 # Application classes that will be serialized/deserialized over Gson
 -keep class net.oschina.app.improve.bean.** { *; }
 
+-keepattributes EnclosingMethod
+
 ##---------------End: proguard configuration for Gson  ----------
 
 -keep class net.oschina.app.** { *; }

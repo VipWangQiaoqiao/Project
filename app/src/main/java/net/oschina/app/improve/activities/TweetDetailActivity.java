@@ -42,6 +42,7 @@ import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.behavior.KeyboardActionDelegation;
 import net.oschina.app.improve.contract.TweetDetailContract;
 import net.oschina.app.util.DialogHelp;
+import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.SimpleTextWatcher;
 import net.oschina.app.util.StringUtils;
@@ -110,17 +111,6 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
     private KeyboardActionDelegation mKADelegation;
     private View.OnClickListener onPortraitClickListener;
 
-    public final static String linkCss = "" +
-            "<script type=\"text/javascript\" src=\"file:///android_asset/shCore.js\"></script>"
-            + "<script type=\"text/javascript\" src=\"file:///android_asset/brush.js\"></script>"
-            + "<script type=\"text/javascript\" src=\"file:///android_asset/client.js\"></script>"
-            + "<script type=\"text/javascript\" src=\"file:///android_asset/detail_page.js\"></script>"
-            + "<script type=\"text/javascript\">SyntaxHighlighter.all();</script>"
-            + "<script type=\"text/javascript\">function showImagePreview(var url){window.location.url= url;}</script>"
-            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/shThemeDefault.css\">"
-            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/shCore.css\">"
-            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/css/common_new.css\">";
-
     public static void show(Context context, Tweet tweet) {
         Intent intent = new Intent(context, TweetDetailActivity.class);
         intent.putExtra(BUNDLE_KEY_TWEET, (Serializable) tweet);
@@ -161,6 +151,8 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
         });
 
         mKeyboardFragment.setDelegate(true);
+
+        // TODO to select friends when input @ character
         etInput.addTextChangedListener(new SimpleTextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
@@ -175,6 +167,8 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
 
             }
         });
+
+        // TODO resolve voice
     }
 
     @Override
@@ -340,34 +334,10 @@ public class TweetDetailActivity extends AppCompatActivity implements TweetDetai
      */
     private void fillWebViewBody() {
         if (TextUtils.isEmpty(tweet.getBody())) return;
-        StringBuilder body = new StringBuilder();
-        body.append(ThemeSwitchUtils.getWebViewBodyString());
-        body.append(linkCss + UIHelper.WEB_LOAD_IMAGES);
-
-        StringBuilder tweetbody = new StringBuilder(tweet.getBody());
-
-        String tweetBody = TextUtils.isEmpty(tweet.getImgSmall())
-                ? tweetbody.toString()
-                : tweetbody.toString() + "<br/><img src=\"" + tweet.getImgSmall() + "\">";
-        body.append(setHtmlContentSupportImagePreview(tweetBody));
-
+        String html = tweet.getBody() + "<br/><img src=\"" + tweet.getImgSmall() + "\" data-url=\""+ tweet.getImgBig() +"\"/>";
+        html = HTMLUtil.setupWebContent(html, false, true);
         UIHelper.addWebImageShow(this, mWebview);
-        body.append("</div></body>");
-        mWebview.loadDataWithBaseURL(null, body.toString(), "text/html", "utf-8", null);
-    }
-
-    /**
-     * 添加图片放大支持
-     *
-     * @param body
-     * @return
-     */
-    private String setHtmlContentSupportImagePreview(String body) {
-        // 过滤掉 img标签的width,height属性
-        body = body.replaceAll("(<img[^>]*?)\\s+width\\s*=\\s*\\S+", "$1");
-        body = body.replaceAll("(<img[^>]*?)\\s+height\\s*=\\s*\\S+", "$1");
-        return body.replaceAll("(<img[^>]+src=\")(\\S+)\"",
-                "$1$2\" onClick=\"javascript:mWebViewImageListener.showImagePreview('" + tweet.getImgBig() + "')\"");
+        mWebview.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
     }
 
     private View.OnClickListener getOnPortraitClickListener() {

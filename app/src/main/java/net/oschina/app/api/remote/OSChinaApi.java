@@ -1233,10 +1233,11 @@ public class OSChinaApi {
      * @param id      评论Id
      * @param handler AsyncHttpResponseHandler
      */
-    public static void getComment(long id, TextHttpResponseHandler handler) {
+    public static void getComment(long id, int type, TextHttpResponseHandler handler) {
         if (id <= 0) return;
         RequestParams params = new RequestParams();
         params.put("id", id);
+        params.put("type", type);
         ApiHttpClient.get("action/apiv2/comment", params, handler);
     }
 

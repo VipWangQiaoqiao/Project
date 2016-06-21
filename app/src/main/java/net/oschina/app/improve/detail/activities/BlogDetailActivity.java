@@ -2,7 +2,6 @@ package net.oschina.app.improve.detail.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 
 import com.google.gson.reflect.TypeToken;
@@ -19,7 +18,7 @@ import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.UserRelation;
 import net.oschina.app.improve.detail.contract.BlogDetailContract;
 import net.oschina.app.improve.detail.fragments.BlogDetailFragment;
-import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.improve.detail.fragments.DetailFragment;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.URLsUtils;
@@ -30,7 +29,7 @@ import java.lang.reflect.Type;
 
 import cz.msebera.android.httpclient.Header;
 
-public class BlogDetailActivity extends DetailActivity<BlogDetail,BlogDetailContract.View> implements BlogDetailContract.Operator {
+public class BlogDetailActivity extends DetailActivity<BlogDetail, BlogDetailContract.View> implements BlogDetailContract.Operator {
     public static void show(Context context, long id) {
         Intent intent = new Intent(context, BlogDetailActivity.class);
         intent.putExtra("id", id);
@@ -38,50 +37,19 @@ public class BlogDetailActivity extends DetailActivity<BlogDetail,BlogDetailCont
     }
 
     @Override
-    protected int getContentView() {
-        return R.layout.activity_blog_detail;
-    }
-
-    protected void requestData() {
-        OSChinaApi.getBlogDetail(getDataId(), new TextHttpResponseHandler() {
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                throwable.printStackTrace();
-                showError(EmptyLayout.NETWORK_ERROR);
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                try {
-                    Type type = new TypeToken<ResultBean<BlogDetail>>() {
-                    }.getType();
-
-                    ResultBean<BlogDetail> resultBean = AppContext.createGson().fromJson(responseString, type);
-                    if (resultBean != null && resultBean.isSuccess()) {
-                        handleData(resultBean.getResult());
-                        return;
-                    }
-                    showError(EmptyLayout.NODATA);
-                } catch (Exception e) {
-                    onFailure(statusCode, headers, responseString, e);
-                }
-            }
-        });
+    void requestData() {
+        OSChinaApi.getBlogDetail(getDataId(), getRequestHandler());
     }
 
     @Override
-    protected void showView() {
-        BlogDetailFragment fragment = BlogDetailFragment.instantiate(mData);
-        FragmentTransaction trans = getSupportFragmentManager()
-                .beginTransaction();
-        trans.replace(R.id.lay_container, fragment);
-        trans.commitAllowingStateLoss();
+    Class<? extends DetailFragment> getDataViewFragment() {
+        return BlogDetailFragment.class;
     }
 
-
     @Override
-    public BlogDetail getBlogDetail() {
-        return getData();
+    Type getDataType() {
+        return new TypeToken<ResultBean<BlogDetail>>() {
+        }.getType();
     }
 
     @Override
@@ -254,7 +222,7 @@ public class BlogDetailActivity extends DetailActivity<BlogDetail,BlogDetailCont
         int uid = requestCheck();
         if (uid == 0)
             return;
-        toReport(getDataId(),getData().getHref(),Report.TYPE_QUESTION);
+        toReport(getDataId(), getData().getHref(), Report.TYPE_QUESTION);
     }
 
 
