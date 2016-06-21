@@ -84,7 +84,7 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
         return mData;
     }
 
-    void handleData(Data data) {
+    public void handleData(Data data) {
         showError(View.INVISIBLE);
         mData = data;
         showView();
@@ -156,7 +156,7 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
         dialog.show();
     }
 
-    void toReport(long id, String href, byte reportType) {
+    public void toReport(long id, String href, byte reportType) {
         final ReportDialog dialog = new ReportDialog(this, href, id, reportType);
         dialog.setCancelable(true);
         dialog.setTitle(R.string.report);
@@ -235,7 +235,7 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
      *
      * @return 返回当前登录用户, 未登录或者未通过检查返回0
      */
-    int requestCheck() {
+    public int requestCheck() {
         if (mDataId == 0 || mData == null) {
             AppContext.showToast("数据加载中...");
             return 0;
