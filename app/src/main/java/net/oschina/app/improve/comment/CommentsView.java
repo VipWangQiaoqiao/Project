@@ -72,7 +72,7 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
         mSeeMore.setVisibility(View.GONE);
         setVisibility(GONE);
 
-        OSChinaApi.getComments(id, type, new TextHttpResponseHandler() {
+        OSChinaApi.getComments(id, type, "refer,reply", null, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 if (throwable != null)
