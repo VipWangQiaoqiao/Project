@@ -20,7 +20,7 @@ import com.bumptech.glide.RequestManager;
 
 import net.oschina.app.R;
 import net.oschina.app.emoji.InputHelper;
-import net.oschina.app.improve.bean.BlogDetail;
+import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.MyURLSpan;
@@ -62,10 +62,10 @@ public class DetailCommentView extends LinearLayout {
     }
 
     public interface OnCommentClickListener {
-        void onClick(View view, BlogDetail.Comment about);
+        void onClick(View view, Comment about);
     }
 
-    public void setComment(List<BlogDetail.Comment> comments, int commentTotal, RequestManager imageLoader, final OnCommentClickListener onCommentClickListener, OnClickListener seeMoreListener) {
+    public void setComment(List<Comment> comments, int commentTotal, RequestManager imageLoader, final OnCommentClickListener onCommentClickListener, OnClickListener seeMoreListener) {
         if (comments != null && comments.size() > 0) {
 
             if (comments.size() < commentTotal) {
@@ -79,15 +79,15 @@ public class DetailCommentView extends LinearLayout {
             final LayoutInflater inflater = LayoutInflater.from(getContext());
 
             boolean clearLine = true;
-            for (final BlogDetail.Comment comment : comments) {
+            for (final Comment comment : comments) {
                 if (comment == null)
                     continue;
 
                 @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_blog_detail_comment, null, false);
-                imageLoader.load(comment.authorPortrait).error(R.drawable.widget_dface)
+                imageLoader.load(comment.getAuthorPortrait()).error(R.drawable.widget_dface)
                         .into(((ImageView) lay.findViewById(R.id.iv_avatar)));
 
-                ((TextView) lay.findViewById(R.id.tv_name)).setText(comment.author);
+                ((TextView) lay.findViewById(R.id.tv_name)).setText(comment.getAuthor());
 
                 if (clearLine) {
                     clearLine = false;
@@ -95,16 +95,16 @@ public class DetailCommentView extends LinearLayout {
                 }
 
                 TweetTextView content = ((TweetTextView) lay.findViewById(R.id.tv_content));
-                formatHtml(resources, content, comment.content);
+                formatHtml(resources, content, comment.getContent());
 
-                if (comment.refer != null) {
+                if (comment.getRefer() != null) {
                     // 最多5层
-                    View view = getReferLayout(comment.refer, inflater, 5);
+                    View view = getReferLayout(comment.getRefer(), inflater, 5);
                     lay.addView(view, lay.indexOfChild(content));
                 }
 
                 ((TextView) lay.findViewById(R.id.tv_pub_date)).setText(
-                        StringUtils.friendly_time(comment.pubDate));
+                        StringUtils.friendly_time(comment.getPubDate()));
 
                 lay.findViewById(R.id.btn_comment).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -121,7 +121,7 @@ public class DetailCommentView extends LinearLayout {
     }
 
     @SuppressWarnings("deprecation")
-    private View getReferLayout(BlogDetail.Refer refer, LayoutInflater inflater, int count) {
+    private View getReferLayout(Comment.Refer refer, LayoutInflater inflater, int count) {
         final Context context = getContext();
 
         @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_blog_detail_comment_refer, null, false);

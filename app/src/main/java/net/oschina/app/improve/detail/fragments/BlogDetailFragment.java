@@ -1,6 +1,5 @@
 package net.oschina.app.improve.detail.fragments;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,10 +10,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,7 +19,7 @@ import android.widget.Toast;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.bean.BlogDetail;
-import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
+import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.detail.activities.BlogDetailActivity;
 import net.oschina.app.improve.detail.contract.BlogDetailContract;
 import net.oschina.app.improve.widget.DetailAboutView;
@@ -31,6 +28,7 @@ import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 
 /**
  * Created by qiujuer
@@ -40,23 +38,40 @@ import butterknife.Bind;
 public class BlogDetailFragment
         extends DetailFragment<BlogDetail, BlogDetailContract.View, BlogDetailContract.Operator>
         implements BlogDetailContract.View, View.OnClickListener {
+
     private long mId;
-    private WebView mWebView;
-    private TextView mTVAuthorName;
-    private TextView mTVPubDate;
-    private TextView mTVTitle;
-    private TextView mTVAbstract;
-    private ImageView mIVLabelRecommend;
-    private ImageView mIVLabelOriginate;
-    private ImageView mIVAuthorPortrait;
-    private ImageView mIVFav;
-    private Button mBtnRelation;
-    private EditText mETInput;
+    private long mCommentId;
+    private long mCommentAuthorId;
 
-    private DetailAboutView mAbouts;
-    private DetailCommentView mComments;
+    @Bind(R.id.tv_name)
+    TextView mTVAuthorName;
+    @Bind(R.id.tv_pub_date)
+    TextView mTVPubDate;
+    @Bind(R.id.tv_title)
+    TextView mTVTitle;
 
-    private LinearLayout mLayAbstract;
+    @Bind(R.id.tv_blog_detail_abstract)
+    TextView mTVAbstract;
+    @Bind(R.id.iv_label_recommend)
+    ImageView mIVLabelRecommend;
+    @Bind(R.id.iv_label_originate)
+    ImageView mIVLabelOriginate;
+    @Bind(R.id.iv_avatar)
+    ImageView mIVAuthorPortrait;
+    @Bind(R.id.iv_fav)
+    ImageView mIVFav;
+    @Bind(R.id.btn_relation)
+    Button mBtnRelation;
+
+    @Bind(R.id.et_input)
+    EditText mETInput;
+
+    @Bind(R.id.lay_detail_about)
+    DetailAboutView mAbouts;
+    @Bind(R.id.lay_detail_comment)
+    DetailCommentView mComments;
+    @Bind(R.id.lay_blog_detail_abstract)
+    LinearLayout mLayAbstract;
 
     @Bind(R.id.fragment_blog_detail)
     CoordinatorLayout mLayCoordinator;
@@ -64,9 +79,6 @@ public class BlogDetailFragment
     NestedScrollView mLayContent;
     @Bind(R.id.lay_option)
     View mLayBottom;
-
-    private long mCommentId;
-    private long mCommentAuthorId;
 
 
     public static BlogDetailFragment instantiate(BlogDetail detail) {
@@ -82,57 +94,13 @@ public class BlogDetailFragment
         return R.layout.fragment_general_blog_detail;
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
-    @Override
-    public void onDestroy() {
-        WebView view = mWebView;
-        if (view != null) {
-            mWebView = null;
-            view.getSettings().setJavaScriptEnabled(true);
-            view.removeJavascriptInterface("mWebViewImageListener");
-            view.removeAllViewsInLayout();
-            view.setWebChromeClient(null);
-            view.removeAllViews();
-            view.destroy();
-        }
-        mOperator = null;
-
-        super.onDestroy();
-    }
-
     @Override
     protected void initWidget(View root) {
-        WebView webView = new WebView(getActivity());
-        webView.setHorizontalScrollBarEnabled(false);
-        UIHelper.initWebView(webView);
-        UIHelper.addWebImageShow(getActivity(), webView);
-        ((FrameLayout) root.findViewById(R.id.lay_webview)).addView(webView);
-        mWebView = webView;
-
-        mTVAuthorName = (TextView) root.findViewById(R.id.tv_name);
-        mTVPubDate = (TextView) root.findViewById(R.id.tv_pub_date);
-        mTVTitle = (TextView) root.findViewById(R.id.tv_title);
-        mTVAbstract = (TextView) root.findViewById(R.id.tv_blog_detail_abstract);
-
-        mIVLabelRecommend = (ImageView) root.findViewById(R.id.iv_label_recommend);
-        mIVLabelOriginate = (ImageView) root.findViewById(R.id.iv_label_originate);
-        mIVAuthorPortrait = (ImageView) root.findViewById(R.id.iv_avatar);
-        mIVFav = (ImageView) root.findViewById(R.id.iv_fav);
-
-        mBtnRelation = (Button) root.findViewById(R.id.btn_relation);
+        super.initWidget(root);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mBtnRelation.setElevation(0);
         }
 
-        mAbouts = (DetailAboutView) root.findViewById(R.id.lay_detail_about);
-        mComments = (DetailCommentView) root.findViewById(R.id.lay_detail_comment);
-        mETInput = (EditText) root.findViewById(R.id.et_input);
-        mLayAbstract = (LinearLayout) root.findViewById(R.id.lay_blog_detail_abstract);
-
-
-        root.findViewById(R.id.iv_share).setOnClickListener(this);
-        mIVFav.setOnClickListener(this);
-        mBtnRelation.setOnClickListener(this);
         mETInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -145,6 +113,7 @@ public class BlogDetailFragment
                 return false;
             }
         });
+
         mETInput.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -156,6 +125,7 @@ public class BlogDetailFragment
         });
     }
 
+    @OnClick({R.id.iv_share, R.id.iv_fav, R.id.btn_relation})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -223,15 +193,15 @@ public class BlogDetailFragment
 
         mAbouts.setAbout(blog.getAbouts(), new DetailAboutView.OnAboutClickListener() {
             @Override
-            public void onClick(View view, BlogDetail.About about) {
-                BlogDetailActivity.show(getActivity(), about.id);
+            public void onClick(View view, About about) {
+                BlogDetailActivity.show(getActivity(), about.getId());
             }
         });
 
 
         //mComments.show(blog.getId(), 3, getImgLoader());
 
-
+        /*
         mComments.setComment(blog.getComments(), blog.getCommentCount(), getImgLoader(), new DetailCommentView.OnCommentClickListener() {
             @Override
             public void onClick(View view, BlogDetail.Comment comment) {
@@ -241,6 +211,8 @@ public class BlogDetailFragment
                 mETInput.setHint(String.format("回复: %s", comment.author));
             }
         }, this);
+
+        */
 
     }
 
