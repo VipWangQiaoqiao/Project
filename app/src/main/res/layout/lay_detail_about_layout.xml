@@ -14,8 +14,8 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="8dp"
-        android:text="相关文章"
-        android:textColor="#6a6a6a"
+        android:text="相关推荐"
+        android:textColor="@color/ques_bt_text_color_dark"
         android:textSize="12sp" />
 
     <LinearLayout
