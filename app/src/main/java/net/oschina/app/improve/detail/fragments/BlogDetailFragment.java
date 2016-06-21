@@ -2,7 +2,6 @@ package net.oschina.app.improve.detail.fragments;
 
 import android.content.Context;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
@@ -80,15 +79,6 @@ public class BlogDetailFragment
     @Bind(R.id.lay_option)
     View mLayBottom;
 
-
-    public static BlogDetailFragment instantiate(BlogDetail detail) {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("key", detail);
-        BlogDetailFragment fragment = new BlogDetailFragment();
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_general_blog_detail;
@@ -147,7 +137,7 @@ public class BlogDetailFragment
             // 评论列表
             case R.id.tv_see_comment: {
                 UIHelper.showBlogComment(getActivity(), (int) mId,
-                        (int) mOperator.getBlogDetail().getAuthorId());
+                        (int) mOperator.getData().getAuthorId());
             }
             break;
         }
@@ -156,14 +146,13 @@ public class BlogDetailFragment
     @SuppressWarnings("deprecation")
     @Override
     protected void initData() {
-        BlogDetail blog = (BlogDetail) mBundle.getSerializable("key");
+        BlogDetail blog = mOperator.getData();
         if (blog == null)
             return;
 
         mId = mCommentId = blog.getId();
 
-        String body = getWebViewBody(blog);
-        mWebView.loadDataWithBaseURL("", body, "text/html", "UTF-8", "");
+        setBodyContent(blog.getBody());
 
         mTVAuthorName.setText(blog.getAuthor());
         getImgLoader().load(blog.getAuthorPortrait()).error(R.drawable.widget_dface).into(mIVAuthorPortrait);
@@ -214,28 +203,6 @@ public class BlogDetailFragment
 
         */
 
-    }
-
-    private final static String linkCss = "<script type=\"text/javascript\" " +
-            "src=\"file:///android_asset/shCore.js\"></script>"
-            + "<script type=\"text/javascript\" src=\"file:///android_asset/brush.js\"></script>"
-            + "<script type=\"text/javascript\" src=\"file:///android_asset/client.js\"></script>"
-            + "<script type=\"text/javascript\" src=\"file:///android_asset/detail_page" +
-            ".js\"></script>"
-            + "<script type=\"text/javascript\">SyntaxHighlighter.all();</script>"
-            + "<script type=\"text/javascript\">function showImagePreview(var url){window" +
-            ".location.url= url;}</script>"
-            + "<link rel=\"stylesheet\" type=\"text/css\" " +
-            "href=\"file:///android_asset/shThemeDefault.css\">"
-            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/shCore" +
-            ".css\">"
-            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/css/common_new" +
-            ".css\">";
-
-    private String getWebViewBody(BlogDetail blog) {
-        return String.format("<!DOCTYPE HTML><html><head>%s</head><body><div class=\"body-content\">%s</div></body></html>",
-                linkCss + UIHelper.WEB_LOAD_IMAGES,
-                UIHelper.setHtmlCotentSupportImagePreview(blog.getBody()));
     }
 
     private boolean mInputDoubleEmpty = false;

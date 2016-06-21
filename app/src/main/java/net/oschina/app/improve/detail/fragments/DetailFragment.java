@@ -2,13 +2,16 @@ package net.oschina.app.improve.detail.fragments;
 
 import android.content.Context;
 import android.support.annotation.IdRes;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.detail.contract.DetailContract;
 import net.oschina.app.improve.fragments.base.BaseFragment;
+import net.oschina.app.improve.utils.HtmlUtil;
 import net.oschina.app.util.UIHelper;
 
 /**
@@ -43,12 +46,24 @@ public abstract class DetailFragment<Data, DataView extends DetailContract.View,
         webView.setHorizontalScrollBarEnabled(false);
         UIHelper.initWebView(webView);
         UIHelper.addWebImageShow(getActivity(), webView);
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                Operator operator = mOperator;
+                if (operator != null) {
+                    operator.hideLoading();
+                    Log.e("TAG", "WebViewClient.onPageFinished:" + url);
+                }
+            }
+        });
+
+
         ((ViewGroup) mRoot.findViewById(layId)).addView(webView);
         mWebView = webView;
     }
 
-    void setBodyContent(String body){
-
+    void setBodyContent(String body) {
+        HtmlUtil.initDetailView(mWebView, body);
     }
 
     @Override
@@ -65,7 +80,6 @@ public abstract class DetailFragment<Data, DataView extends DetailContract.View,
         }
         mOperator = null;
 
-        super.onDestroy();
         super.onDestroy();
     }
 }

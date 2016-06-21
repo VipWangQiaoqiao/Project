@@ -4,12 +4,15 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.umeng.socialize.sso.UMSsoHandler;
 
@@ -18,13 +21,17 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Report;
 import net.oschina.app.improve.activities.BaseBackActivity;
+import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.detail.contract.DetailContract;
+import net.oschina.app.improve.detail.fragments.DetailFragment;
 import net.oschina.app.ui.ReportDialog;
 import net.oschina.app.ui.ShareDialog;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
+
+import java.lang.reflect.Type;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -40,6 +47,19 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
     protected EmptyLayout mEmptyLayout;
     private ProgressDialog mDialog;
     private ShareDialog mShareDialog;
+
+    public long getDataId() {
+        return mDataId;
+    }
+
+    public Data getData() {
+        return mData;
+    }
+
+    @Override
+    protected int getContentView() {
+        return R.layout.activity_blog_detail;
+    }
 
     @Override
     public void setDataView(DataView view) {
@@ -72,22 +92,79 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
         requestData();
     }
 
-    protected abstract void requestData();
-
-    protected abstract void showView();
-
-    public long getDataId() {
-        return mDataId;
+    @Override
+    public void hideLoading() {
+        mEmptyLayout.setVisibility(View.GONE);
+        findViewById(R.id.lay_container).setVisibility(View.VISIBLE);
     }
 
-    public Data getData() {
-        return mData;
+    /**
+     * 请求数据
+     */
+    abstract void requestData();
+
+    /**
+     * 获取显示界面的Fragment
+     *
+     * @return 继承自DetailFragment
+     */
+    abstract Class<? extends DetailFragment> getDataViewFragment();
+
+    /**
+     * 得到JSON解析的数据Type
+     *
+     * @return Type
+     */
+    abstract Type getDataType();
+
+    AsyncHttpResponseHandler getRequestHandler() {
+        return new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                throwable.printStackTrace();
+                showError(EmptyLayout.NETWORK_ERROR);
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                if (!handleData(responseString))
+                    showError(EmptyLayout.NODATA);
+            }
+        };
     }
 
-    void handleData(Data data) {
-        showError(View.INVISIBLE);
-        mData = data;
-        showView();
+    @SuppressWarnings("TryWithIdenticalCatches")
+    void handleView() {
+        try {
+            Fragment fragment = getDataViewFragment().newInstance();
+            FragmentTransaction trans = getSupportFragmentManager()
+                    .beginTransaction();
+            trans.replace(R.id.lay_container, fragment);
+            trans.commitAllowingStateLoss();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    boolean handleData(String responseString) {
+        ResultBean<Data> result;
+        try {
+            Type type = getDataType();
+            result = AppContext.createGson().fromJson(responseString, type);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        if (result.isSuccess()) {
+            mData = result.getResult();
+            handleView();
+            return true;
+        }
+
+        return false;
     }
 
     void showError(int type) {
@@ -156,7 +233,7 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
         dialog.show();
     }
 
-    void toReport(long id, String href, byte reportType) {
+    protected void toReport(long id, String href, byte reportType) {
         final ReportDialog dialog = new ReportDialog(this, href, id, reportType);
         dialog.setCancelable(true);
         dialog.setTitle(R.string.report);
@@ -228,7 +305,6 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
             }
         }
     }
-
 
     /**
      * 检查当前数据,并检查网络状况
