@@ -27,7 +27,6 @@ public class FloatingAutoHideDownBehavior extends CoordinatorLayout.Behavior<Vie
     @Override
     public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, View child, View target, int dx, int dy, int[] consumed) {
         super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed);
-        Log.d("oschina", "onNestedPreScroll");
         float mPreTranslationY = dy + child.getTranslationY();
         if (mPreTranslationY <= 0) {
             child.setTranslationY(0);
@@ -42,14 +41,6 @@ public class FloatingAutoHideDownBehavior extends CoordinatorLayout.Behavior<Vie
             mIsAnimatingOut = dy > 0;
         }
     }
-
-    @Override
-    public void onNestedScroll(CoordinatorLayout coordinatorLayout, View child, View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
-        super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
-        Log.d("oschina", "onNestedScroll");
-    }
-
-
 
     @Override
     public boolean onStartNestedScroll(final CoordinatorLayout coordinatorLayout, final View child,

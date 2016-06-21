@@ -166,7 +166,7 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
      */
     private void getComments(long id) {
 
-        OSChinaApi.getComment(mId, new TextHttpResponseHandler() {
+        OSChinaApi.getComments(mId, 6, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 showError(EmptyLayout.NETWORK_ERROR);

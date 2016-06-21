@@ -162,4 +162,36 @@ public class HTMLUtil {
 		matcherForTag.appendTail(sb);
 		return sb.toString();
 	}
+
+	public static String setupWebContent(String content, boolean isShowHighlight, boolean isShowImagePreview){
+		if (isShowImagePreview){
+			Pattern pattern = Pattern.compile("<img[^>]+src\\s*=\\s*[\"\']([^\"\']*)[\"\'](\\s*data-url\\s*=\\s*[\"\']([^\"\']*)[\"\'])*");
+			Matcher matcher = pattern.matcher(content);
+			if (matcher.find()){
+				String snippet = String.format(
+						"<img src=\"%s\" onClick=\"javascript:mWebViewImageListener.showImagePreview('%s')\"",
+						matcher.group(1),
+						matcher.group(3) == null ? matcher.group(1) : matcher.group(3));
+				content = content.replace(matcher.group(0), snippet);
+			}
+		}
+		return String.format(
+            "<!DOCTYPE html>"
+            + "<html>"
+                + "<head>"
+                    + (isShowHighlight ? "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/css/shCore.css\">" : "")
+                    + (isShowHighlight ? "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/css/shThemeDefault.css\">" : "")
+                    + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/css/common_new.css\">"
+                + "</head>"
+                + "<body>"
+                    + "<div style='contentstyle' id='article_id'>"
+                        + "%s"
+                    + "</div>"
+                    + (isShowHighlight ? "<script type=\"text/javascript\" src=\"file:///android_asset/shCore.js\"></script>" : "")
+                    + (isShowHighlight ? "<script type=\"text/javascript\" src=\"file:///android_asset/brush.js\"></script>" : "")
+                    + (isShowHighlight ? "<script type=\"text/javascript\">SyntaxHighlighter.all();</script>" : "")
+                + "</body>"
+            + "</html>"
+            , content);
+	}
 }
