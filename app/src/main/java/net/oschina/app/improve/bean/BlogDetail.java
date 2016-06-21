@@ -2,7 +2,8 @@ package net.oschina.app.improve.bean;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
+import net.oschina.app.improve.bean.simple.About;
+
 import java.util.List;
 
 /**
@@ -17,7 +18,6 @@ public class BlogDetail extends Blog {
     @SerializedName("abstract")
     private String abstractStr;
     private List<About> abouts;
-    private List<Comment> comments;
 
     public long getAuthorId() {
         return authorId;
@@ -59,14 +59,6 @@ public class BlogDetail extends Blog {
         this.abouts = abouts;
     }
 
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
     public String getAbstract() {
         return abstractStr;
     }
@@ -82,29 +74,5 @@ public class BlogDetail extends Blog {
     public void setFavorite(boolean favorite) {
         this.favorite = favorite;
     }
-
-    public static class About implements Serializable {
-        public long id;
-        public String title;
-        public int commentCount;
-        public int viewCount;
-    }
-
-    public static class Refer implements Serializable {
-        public String author;
-        public String content;
-        @SerializedName(value = "refer", alternate = {"reply"})
-        public Refer refer;
-    }
-
-    public static class Comment extends Refer implements Serializable {
-        public long id;
-        public long authorId;
-        public String authorPortrait;
-
-        public String pubDate;
-        public int appClient;
-    }
-
 }
 

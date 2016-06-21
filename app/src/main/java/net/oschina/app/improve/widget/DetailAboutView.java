@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.oschina.app.R;
-import net.oschina.app.improve.bean.BlogDetail;
+import net.oschina.app.improve.bean.simple.About;
 
 import java.util.List;
 
@@ -45,19 +45,19 @@ public class DetailAboutView extends LinearLayout {
         mLayAbouts = (LinearLayout) findViewById(R.id.lay_blog_detail_about);
     }
 
-    public void setAbout(List<BlogDetail.About> abouts, final OnAboutClickListener onAboutClickListener) {
+    public void setAbout(List<About> abouts, final OnAboutClickListener onAboutClickListener) {
         final LayoutInflater inflater = LayoutInflater.from(getContext());
         if (abouts != null && abouts.size() > 0) {
             boolean clearLine = true;
-            for (final BlogDetail.About about : abouts) {
+            for (final About about : abouts) {
                 if (about == null)
                     continue;
                 @SuppressLint("InflateParams") View lay = inflater.inflate(R.layout.lay_blog_detail_about, null, false);
-                ((TextView) lay.findViewById(R.id.tv_title)).setText(about.title);
+                ((TextView) lay.findViewById(R.id.tv_title)).setText(about.getTitle());
 
                 View layInfo = lay.findViewById(R.id.lay_info_view_comment);
-                ((TextView) layInfo.findViewById(R.id.tv_info_view)).setText(String.valueOf(about.viewCount));
-                ((TextView) layInfo.findViewById(R.id.tv_info_comment)).setText(String.valueOf(about.commentCount));
+                ((TextView) layInfo.findViewById(R.id.tv_info_view)).setText(String.valueOf(about.getViewCount()));
+                ((TextView) layInfo.findViewById(R.id.tv_info_comment)).setText(String.valueOf(about.getCommentCount()));
 
                 if (clearLine) {
                     clearLine = false;
@@ -79,6 +79,6 @@ public class DetailAboutView extends LinearLayout {
     }
 
     public interface OnAboutClickListener {
-        void onClick(View view, BlogDetail.About about);
+        void onClick(View view, About about);
     }
 }
