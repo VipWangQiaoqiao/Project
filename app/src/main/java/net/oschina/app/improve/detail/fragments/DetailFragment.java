@@ -17,6 +17,7 @@ public abstract class DetailFragment<Data, DataView extends DetailContract.View,
         return mOperator;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void onAttach(Context context) {
         this.mOperator = (Operator) context;
