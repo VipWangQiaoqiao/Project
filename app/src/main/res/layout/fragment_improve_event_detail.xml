@@ -161,7 +161,7 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/ic__calendar" />
+                    android:src="@drawable/ic_ticket" />
 
                 <TextView
                     android:id="@+id/tv_event_cost_desc"
