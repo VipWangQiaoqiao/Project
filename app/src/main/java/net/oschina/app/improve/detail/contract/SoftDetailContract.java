@@ -1,6 +1,5 @@
-package net.oschina.app.improve.contract;
+package net.oschina.app.improve.detail.contract;
 
-import net.oschina.app.improve.detail.contract.DetailContract;
 import net.oschina.app.improve.bean.SoftwareDetail;
 
 /**
@@ -11,7 +10,6 @@ import net.oschina.app.improve.bean.SoftwareDetail;
 
 public interface SoftDetailContract {
     interface Operator extends DetailContract.Operator<SoftwareDetail, View> {
-        SoftwareDetail getSoftwareDetail();
 
         // 收藏
         void toFavorite();
@@ -31,8 +29,6 @@ public interface SoftDetailContract {
 
     interface View extends DetailContract.View {
         void toFavoriteOk(SoftwareDetail softwareDetail);
-
-        void toShareOk();
 
         void toFollowOk(SoftwareDetail softwareDetail);
 

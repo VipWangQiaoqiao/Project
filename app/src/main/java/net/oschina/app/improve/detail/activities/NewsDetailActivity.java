@@ -16,49 +16,56 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Result;
-import net.oschina.app.improve.bean.BlogDetail;
-import net.oschina.app.improve.bean.SoftwareDetail;
+import net.oschina.app.improve.bean.NewsDetail;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.bean.simple.UserRelation;
-import net.oschina.app.improve.detail.contract.SoftDetailContract;
+import net.oschina.app.improve.bean.simple.Comment;
+import net.oschina.app.improve.detail.contract.NewsDetailContract;
 import net.oschina.app.improve.detail.fragments.DetailFragment;
-import net.oschina.app.improve.detail.fragments.SoftWareDetailFragment;
+import net.oschina.app.improve.detail.fragments.NewsDetailFragment;
+import net.oschina.app.ui.ShareDialog;
+import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.HTMLUtil;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.URLsUtils;
 import net.oschina.app.util.XmlUtils;
 
 import java.io.ByteArrayInputStream;
 import java.lang.reflect.Type;
+import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
-public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftDetailContract.View> implements SoftDetailContract.Operator {
-    private SoftDetailContract.View mView;
+/**
+ * Created by fei on 2016/6/13.
+ * desc:   news detail  module
+ */
+public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailContract.View> implements NewsDetailContract.Operator {
+
+    private long mId;
+    private EmptyLayout mEmptyLayout;
+    private NewsDetail newsDetail;
+    private NewsDetailContract.View mView;
+    private ShareDialog dialog;
+    private List<Comment> comments;
 
     public static void show(Context context, long id) {
-        Intent intent = new Intent(context, SoftwareDetailActivity.class);
+        Intent intent = new Intent(context, NewsDetailActivity.class);
         intent.putExtra("id", id);
         context.startActivity(intent);
     }
+
 
     @Override
     protected int getContentView() {
         return R.layout.activity_blog_detail;
     }
 
-    protected void requestData() {
-        OSChinaApi.getBlogDetail(getDataId(), getRequestHandler());
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return super.onSupportNavigateUp();
     }
 
-    @Override
-    Class<? extends DetailFragment> getDataViewFragment() {
-        return SoftWareDetailFragment.class;
-    }
-
-    @Override
-    Type getDataType() {
-        return new TypeToken<ResultBean<SoftwareDetail>>() {
-        }.getType();
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -75,20 +82,77 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
         return super.onOptionsItemSelected(item);
     }
 
+
+
+    @Override
+     void requestData() {
+
+        OSChinaApi.getNewsDetail(getDataId(), getRequestHandler());
+
+    }
+
+    @Override
+    Class<? extends DetailFragment> getDataViewFragment() {
+        return NewsDetailFragment.class;
+    }
+
+    @Override
+    Type getDataType() {
+        return new TypeToken<ResultBean<NewsDetail>>() {
+        }.getType();
+    }
+
+
+    /**
+     * 获取评论列表
+     *
+     * @param id 当前资讯的id
+     */
+    private void getComments(long id) {
+
+        OSChinaApi.getComments(mId, 6, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                showError(EmptyLayout.NETWORK_ERROR);
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                try {
+                    Type type = new TypeToken<ResultBean<List<Comment>>>() {
+                    }.getType();
+
+                    ResultBean<List<Comment>> resultBean = AppContext.createGson().fromJson(responseString, type);
+                    if (resultBean != null && resultBean.isSuccess()) {
+                        List<Comment> commentList = resultBean.getResult();
+                        if (commentList != null && !commentList.isEmpty()) {
+                            comments = commentList;
+                        }
+                    }
+                    showError(EmptyLayout.NODATA);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    onFailure(statusCode, headers, responseString, e);
+                }
+            }
+        });
+    }
+
+
     @Override
     public void toFavorite() {
         int uid = requestCheck();
         if (uid == 0)
             return;
         showWaitDialog(R.string.progress_submit);
-        final SoftwareDetail softwareDetail = getData();
+        final NewsDetail newsDetail = getData();
         OSChinaApi.getFavReverse(getDataId(), 3, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 hideWaitDialog();
-                if (softwareDetail == null)
+                if (newsDetail == null)
                     return;
-                if (softwareDetail.isFavorite())
+                if (newsDetail.isFavorite())
                     AppContext.showToastShort(R.string.del_favorite_faile);
                 else
                     AppContext.showToastShort(R.string.add_favorite_faile);
@@ -97,14 +161,14 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
-                    Type type = new TypeToken<ResultBean<BlogDetail>>() {
+                    Type type = new TypeToken<ResultBean<NewsDetail>>() {
                     }.getType();
 
-                    ResultBean<BlogDetail> resultBean = AppContext.createGson().fromJson(responseString, type);
+                    ResultBean<NewsDetail> resultBean = AppContext.createGson().fromJson(responseString, type);
                     if (resultBean != null && resultBean.isSuccess()) {
-                        softwareDetail.setFavorite(!softwareDetail.isFavorite());
-                        mView.toFavoriteOk(softwareDetail);
-                        if (softwareDetail.isFavorite())
+                        newsDetail.setFavorite(!newsDetail.isFavorite());
+                        mView.toFavoriteOk(newsDetail);
+                        if (newsDetail.isFavorite())
                             AppContext.showToastShort(R.string.add_favorite_success);
                         else
                             AppContext.showToastShort(R.string.del_favorite_success);
@@ -124,21 +188,21 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
             String content;
 
             String url = String.format(URLsUtils.URL_MOBILE + "blog/%s", getDataId());
-            final SoftwareDetail softwareDetail = getData();
-            //  if (softwareDetail.getBody().length() > 55) {
-            //  content = HTMLUtil.delHTMLTag(softwareDetail.getBody().trim());
-            //    if (content.length() > 55)
-            //      content = StringUtils.getSubString(0, 55, content);
-            //    } else {
-            //    content = HTMLUtil.delHTMLTag(softwareDetail.getBody().trim());
-            //   }
-            //  String title = softwareDetail.getTitle();
+            final NewsDetail newsDetail = getData();
+            if (newsDetail.getBody().length() > 55) {
+                content = HTMLUtil.delHTMLTag(newsDetail.getBody().trim());
+                if (content.length() > 55)
+                    content = StringUtils.getSubString(0, 55, content);
+            } else {
+                content = HTMLUtil.delHTMLTag(newsDetail.getBody().trim());
+            }
+            String title = newsDetail.getTitle();
 
-            //   if (TextUtils.isEmpty(url) || TextUtils.isEmpty(content) || TextUtils.isEmpty(title)) {
-            AppContext.showToast("内容加载失败...");
-            //     return;
-            //   }
-            //   toShare(title, content, url);
+            if (TextUtils.isEmpty(url) || TextUtils.isEmpty(content) || TextUtils.isEmpty(title)) {
+                AppContext.showToast("内容加载失败...");
+                return;
+            }
+            toShare(title, content, url);
         } else {
             AppContext.showToast("内容加载失败...");
         }
@@ -146,42 +210,7 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
 
     @Override
     public void toFollow() {
-        int uid = requestCheck();
-        if (uid == 0)
-            return;
-        showWaitDialog(R.string.progress_submit);
-        final SoftwareDetail softwareDetail = getData();
-        OSChinaApi.addUserRelationReverse(softwareDetail.getAuthorId(), new TextHttpResponseHandler() {
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                AppContext.showToast("关注失败!");
-                hideWaitDialog();
-            }
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                try {
-                    Type type = new TypeToken<ResultBean<UserRelation>>() {
-                    }.getType();
-
-                    ResultBean<UserRelation> resultBean = AppContext.createGson().fromJson(responseString, type);
-                    if (resultBean != null && resultBean.isSuccess()) {
-                        //  softwareDetail.setAuthorRelation(resultBean.getResult().getRelation());
-                        mView.toFollowOk(softwareDetail);
-                        // if (softwareDetail.getAuthorRelation() >= 3) {
-                        //   AppContext.showToast("取消关注成功");
-                        //   } else {
-                        //    AppContext.showToast("关注成功");
-                        //  }
-                    }
-                    hideWaitDialog();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    onFailure(statusCode, headers, responseString, e);
-                }
-                hideWaitDialog();
-            }
-        });
     }
 
     @Override
@@ -203,7 +232,7 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
                             new ByteArrayInputStream(arg2));
                     Result res = rsb.getResult();
                     if (res.OK()) {
-                        SoftDetailContract.View view = mView;
+                        NewsDetailContract.View view = mView;
                         if (view != null)
                             view.toSendCommentOk();
                     } else {
@@ -247,7 +276,6 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
             return;
         toReport(getDataId(), getData().getHref(), Report.TYPE_QUESTION);
     }
-
 
     @Override
     protected void onDestroy() {

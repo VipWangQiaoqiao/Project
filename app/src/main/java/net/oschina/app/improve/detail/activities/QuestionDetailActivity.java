@@ -1,4 +1,4 @@
-package net.oschina.app.improve.activities;
+package net.oschina.app.improve.detail.activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -27,8 +27,8 @@ import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Result;
 import net.oschina.app.improve.bean.QuestionDetail;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.contract.QuestionDetailContract;
-import net.oschina.app.improve.fragments.question.QuestionDetailFragment;
+import net.oschina.app.improve.detail.contract.QuestionDetailContract;
+import net.oschina.app.improve.detail.fragments.QuestionDetailFragment;
 import net.oschina.app.ui.ReportDialog;
 import net.oschina.app.ui.ShareDialog;
 import net.oschina.app.ui.empty.EmptyLayout;

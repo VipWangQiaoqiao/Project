@@ -8,14 +8,14 @@ import android.widget.TextView;
 import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.R;
-import net.oschina.app.improve.adapter.base.BaseListAdapter;
-import net.oschina.app.improve.adapter.general.BlogAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.cache.CacheManager;
-import net.oschina.app.improve.detail.activities.BlogDetailActivity;
+import net.oschina.app.improve.adapter.base.BaseListAdapter;
+import net.oschina.app.improve.adapter.general.BlogAdapter;
 import net.oschina.app.improve.bean.Blog;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.detail.activities.BlogDetailActivity;
 import net.oschina.app.improve.fragments.base.BaseGeneralListFragment;
 import net.oschina.app.ui.empty.EmptyLayout;
 
@@ -30,12 +30,8 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
     public static final String BUNDLE_BLOG_TYPE = "BUNDLE_BLOG_TYPE";
 
     public static final String HISTORY_BLOG = "history_blog";
+    private static final String TAG = "BlogFragment";
     private boolean isFirst = true;
-
-    @Override
-    protected void initData() {
-        super.initData();
-    }
 
     @Override
     public void onRefreshing() {
@@ -48,7 +44,7 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
         super.requestData();
 
         OSChinaApi.getBlogList(mIsRefresh ? OSChinaApi.CATALOG_BLOG_HEAT : OSChinaApi.CATALOG_BLOG_NORMAL,
-                (mIsRefresh ? (mBean != null ? mBean.getPrevPageToken() : null) : (mBean != null ? mBean.getNextPageToken() : null)), mHandler);
+                null, mHandler);
 
     }
 
@@ -118,7 +114,7 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
 
         if (resultBean.getResult().getItems().size() < 20) {
             setFooterType(TYPE_NO_MORE);
-            // mRefreshLayout.setNoMoreData();
+            mRefreshLayout.setNoMoreData();
         }
         if (mAdapter.getDatas().size() > 0) {
             mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
