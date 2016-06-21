@@ -10,6 +10,8 @@ public interface DetailContract {
         // 获取当前数据
         Data getData();
 
+        void hideLoading();
+
         // 举报
         void toReport();
 
