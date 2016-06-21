@@ -224,11 +224,4 @@ public class BlogDetailActivity extends DetailActivity<BlogDetail, BlogDetailCon
             return;
         toReport(getDataId(), getData().getHref(), Report.TYPE_QUESTION);
     }
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mView = null;
-    }
 }
