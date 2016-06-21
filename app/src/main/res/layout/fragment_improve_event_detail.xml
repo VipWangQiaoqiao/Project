@@ -81,16 +81,6 @@
                         android:textSize="14sp"
                         tools:text="类型：技术交流" />
 
-                    <TextView
-                        android:id="@+id/tv_event_cost_desc"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/lay_4"
-                        android:layout_marginTop="@dimen/lay_4"
-                        android:textColor="@color/white"
-                        android:textSize="14sp"
-                        tools:text="费用：免费" />
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
@@ -141,8 +131,6 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginLeft="@dimen/lay_16"
-                    android:layout_marginRight="@dimen/lay_16"
                     android:src="@drawable/ic__calendar" />
 
                 <TextView
@@ -150,10 +138,39 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginRight="16dp"
+                    android:layout_marginLeft="@dimen/lay_16"
                     android:textColor="@color/text_dark"
                     android:textSize="16sp"
                     tools:text="2016-07-13:12:61" />
+            </LinearLayout>
+
+            <View
+                style="@style/h_line"
+                android:layout_height="1px"
+                android:layout_marginLeft="@dimen/lay_16" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/lay_8"
+                android:paddingLeft="@dimen/lay_16"
+                android:paddingRight="@dimen/lay_16"
+                android:paddingTop="@dimen/lay_8">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_ticket" />
+
+                <TextView
+                    android:id="@+id/tv_event_cost_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/lay_16"
+                    android:textColor="@color/text_dark"
+                    android:textSize="14sp"
+                    tools:text="免费" />
             </LinearLayout>
 
             <View
@@ -173,7 +190,7 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginLeft="@dimen/lay_16"
+
                     android:layout_marginRight="@dimen/lay_16"
                     android:src="@drawable/ic_location" />
 
@@ -182,7 +199,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginRight="16dp"
                     android:lineSpacingExtra="4dp"
                     android:textColor="@color/text_dark"
                     android:textSize="16sp"

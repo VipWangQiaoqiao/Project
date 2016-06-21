@@ -194,6 +194,7 @@ public class EventDetailFragment extends BaseFragment implements
     @Override
     public void toSignUpOk(EventDetail detail) {
         mDetail = detail;
+        tv_apply_status.setText(getResources().getString(getApplyStatusStrId(mDetail.getApplyStatus())));
         mEventApplyDialog.dismiss();
     }
 
