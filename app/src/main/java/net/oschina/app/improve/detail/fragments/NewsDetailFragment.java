@@ -20,6 +20,7 @@ import net.oschina.app.improve.detail.contract.NewsDetailContract;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.improve.widget.DetailCommentView;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.UIHelper;
 
 /**
  * Created by qiujuer
@@ -99,18 +100,15 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         switch (v.getId()) {
             // 相关软件
             case R.id.lay_detail_software:
-
-
+                UIHelper.showSoftwareDetailById(getActivity(), (int) mOperator.getData().getSoftware().getId());
                 break;
             // 收藏
             case R.id.iv_fav:
                 handleFavorite();
-
                 break;
             // 分享
             case R.id.iv_share:
                 handleShare();
-
                 break;
             default:
                 break;
