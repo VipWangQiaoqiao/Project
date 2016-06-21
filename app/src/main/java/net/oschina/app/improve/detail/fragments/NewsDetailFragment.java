@@ -1,13 +1,18 @@
-package net.oschina.app.improve.fragments.software;
+package net.oschina.app.improve.detail.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.RectF;
+import android.graphics.drawable.ShapeDrawable;
 import android.os.Build;
-import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
+import android.text.Html;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
@@ -20,64 +25,83 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.oschina.app.R;
-import net.oschina.app.improve.bean.SoftwareDetail;
-import net.oschina.app.improve.contract.SoftDetailContract;
-import net.oschina.app.improve.fragments.base.BaseFragment;
+import net.oschina.app.emoji.InputHelper;
+import net.oschina.app.improve.bean.NewsDetail;
+import net.oschina.app.improve.bean.simple.About;
+import net.oschina.app.improve.bean.simple.Comment;
+import net.oschina.app.improve.detail.activities.BlogDetailActivity;
+import net.oschina.app.improve.detail.contract.NewsDetailContract;
 import net.oschina.app.improve.widget.DetailAboutView;
-import net.oschina.app.improve.widget.DetailCommentView;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
-
-import butterknife.Bind;
+import net.oschina.app.widget.MyLinkMovementMethod;
+import net.oschina.app.widget.MyURLSpan;
+import net.oschina.app.widget.TweetTextView;
+import net.qiujuer.genius.ui.Ui;
+import net.qiujuer.genius.ui.drawable.shape.BorderShape;
 
 /**
- * Created by fei on 2016/6/20.
- * desc:  software detail module
+ * Created by qiujuer
+ * on 16/5/26.
  */
-public class SoftWareDetailFragment extends BaseFragment implements View.OnClickListener, SoftDetailContract.View {
+
+public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailContract.View, NewsDetailContract.Operator> implements View.OnClickListener, NewsDetailContract.View {
+    private static final String TAG = "NewsDetailFragment";
+    private final static String linkCss = "<script type=\"text/javascript\" " +
+            "src=\"file:///android_asset/shCore.js\"></script>"
+            + "<script type=\"text/javascript\" src=\"file:///android_asset/brush.js\"></script>"
+            + "<script type=\"text/javascript\" src=\"file:///android_asset/client.js\"></script>"
+            + "<script type=\"text/javascript\" src=\"file:///android_asset/detail_page" +
+            ".js\"></script>"
+            + "<script type=\"text/javascript\">SyntaxHighlighter.all();</script>"
+            + "<script type=\"text/javascript\">function showImagePreview(var url){window" +
+            ".location.url= url;}</script>"
+            + "<link rel=\"stylesheet\" type=\"text/css\" " +
+            "href=\"file:///android_asset/shThemeDefault.css\">"
+            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/shCore" +
+            ".css\">"
+            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/css/common_new" +
+            ".css\">";
     private long mId;
     private WebView mWebView;
     private TextView mTVAuthorName;
     private TextView mTVPubDate;
     private TextView mTVTitle;
-    private TextView mTVAbstract;
     private ImageView mIVLabelRecommend;
     private ImageView mIVLabelOriginate;
     private ImageView mIVAuthorPortrait;
     private ImageView mIVFav;
     private Button mBtnRelation;
     private EditText mETInput;
-
-    private DetailAboutView mAbouts;
-    private DetailCommentView mComments;
-
+    private LinearLayout mLayAbouts;
+    private LinearLayout mLayComments;
     private LinearLayout mLayAbstract;
-
-    @Bind(R.id.fragment_blog_detail)
-    CoordinatorLayout mLayCoordinator;
-    @Bind(R.id.lay_nsv)
-    View mLayContent;
-    @Bind(R.id.lay_option)
-    View mLayBottom;
-
     private long mCommentId;
     private long mCommentAuthorId;
+    private NewsDetailContract.Operator mOperator;
+    private boolean mInputDoubleEmpty = false;
+    private DetailAboutView mAbouts;
 
-    private SoftDetailContract.Operator mOperator;
 
+    private static void formatHtml(Resources resources, TextView textView, String str) {
+        textView.setMovementMethod(MyLinkMovementMethod.a());
+        textView.setFocusable(false);
+        textView.setLongClickable(false);
 
-    public static SoftWareDetailFragment instantiate(SoftDetailContract.Operator operator, SoftwareDetail detail) {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("key", detail);
-        SoftWareDetailFragment fragment = new SoftWareDetailFragment();
-        fragment.setArguments(bundle);
-        fragment.mOperator = operator;
-        return fragment;
+        if (textView instanceof TweetTextView) {
+            ((TweetTextView) textView).setDispatchToParent(true);
+        }
+
+        str = TweetTextView.modifyPath(str);
+        Spanned span = Html.fromHtml(str);
+        span = InputHelper.displayEmoji(resources, span.toString());
+        textView.setText(span);
+        MyURLSpan.parseLinkText(textView, span);
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_general_blog_detail;
+        return R.layout.fragment_general_news_detail;
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -110,7 +134,6 @@ public class SoftWareDetailFragment extends BaseFragment implements View.OnClick
         mTVAuthorName = (TextView) root.findViewById(R.id.tv_name);
         mTVPubDate = (TextView) root.findViewById(R.id.tv_pub_date);
         mTVTitle = (TextView) root.findViewById(R.id.tv_title);
-        mTVAbstract = (TextView) root.findViewById(R.id.tv_blog_detail_abstract);
 
         mIVLabelRecommend = (ImageView) root.findViewById(R.id.iv_label_recommend);
         mIVLabelOriginate = (ImageView) root.findViewById(R.id.iv_label_originate);
@@ -121,10 +144,10 @@ public class SoftWareDetailFragment extends BaseFragment implements View.OnClick
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mBtnRelation.setElevation(0);
         }
-
-        mAbouts = (DetailAboutView) root.findViewById(R.id.lay_detail_about);
-        mComments = (DetailCommentView) root.findViewById(R.id.lay_detail_comment);
         mETInput = (EditText) root.findViewById(R.id.et_input);
+
+        mLayAbouts = (LinearLayout) root.findViewById(R.id.lay_blog_detail_about);
+        mLayComments = (LinearLayout) root.findViewById(R.id.lay_blog_detail_comment);
         mLayAbstract = (LinearLayout) root.findViewById(R.id.lay_blog_detail_abstract);
 
 
@@ -173,96 +196,75 @@ public class SoftWareDetailFragment extends BaseFragment implements View.OnClick
             }
             break;
             // 评论列表
-            case R.id.tv_see_comment: {
-                UIHelper.showBlogComment(getActivity(), (int) mId,
-                        (int) mOperator.getSoftwareDetail().getAuthorId());
-            }
-            break;
+            //case R.id.tv_see_comment: {
+            // UIHelper.showBlogComment(getActivity(), (int) mId,
+            //  (int) mOperator.getNewsDetail().getId());
+            //   }
+            // break;
         }
     }
 
     @SuppressWarnings("deprecation")
     @Override
     protected void initData() {
-        SoftwareDetail softwareDetail = (SoftwareDetail) mBundle.getSerializable("key");
-        if (softwareDetail == null)
+        NewsDetail newsDetail = mOperator.getData();
+        if (newsDetail == null)
             return;
 
-        mId = mCommentId = softwareDetail.getId();
+        mId = mCommentId = newsDetail.getId();
 
-        String body = getWebViewBody(softwareDetail);
-        mWebView.loadDataWithBaseURL("", body, "text/html", "UTF-8", "");
+        setBodyContent(newsDetail.getBody());
 
-        mTVAuthorName.setText(softwareDetail.getAuthor());
-        getImgLoader().load(softwareDetail.getAuthorPortrait()).error(R.drawable.widget_dface).into(mIVAuthorPortrait);
+        mTVAuthorName.setText(newsDetail.getAuthor());
+        getImgLoader().load(newsDetail.getAuthorPortrait()).error(R.drawable.widget_dface).into(mIVAuthorPortrait);
 
-        String time = String.format("%s (%s)", StringUtils.friendly_time(softwareDetail.getPubDate()), softwareDetail.getPubDate());
+        String time = String.format("%s (%s)", StringUtils.friendly_time(newsDetail.getPubDate()), newsDetail.getPubDate());
         mTVPubDate.setText(time);
 
-        mTVTitle.setText(softwareDetail.getName());
+        mTVTitle.setText(newsDetail.getTitle());
+        mLayAbstract.setVisibility(View.GONE);
 
-       // if (TextUtils.isEmpty(softwareDetail.getAbstract())) {
-            mLayAbstract.setVisibility(View.GONE);
-      //  } else {
-         //   mTVAbstract.setText(softwareDetail.getAbstract());
-            mLayAbstract.setVisibility(View.VISIBLE);
-     //   }
-
-        mIVLabelRecommend.setVisibility( View.VISIBLE );
+        mIVLabelRecommend.setVisibility(View.VISIBLE);
         mIVLabelOriginate.setImageDrawable(getResources().getDrawable(R.drawable.ic_label_reprint));
 
-        toFollowOk(softwareDetail);
-        toFavoriteOk(softwareDetail);
+        toFollowOk(newsDetail);
+        toFavoriteOk(newsDetail);
 
-        setText(R.id.tv_info_view, String.valueOf(softwareDetail.getViewCount()));
-        setText(R.id.tv_info_comment, String.valueOf(softwareDetail.getCommentCount()));
+        setText(R.id.tv_info_view, String.valueOf(newsDetail.getViewCount()));
+        setText(R.id.tv_info_comment, String.valueOf(newsDetail.getCommentCount()));
 
-        //mAbouts.setAbout(softwareDetail.getAbouts(), new DetailAboutView.OnAboutClickListener() {
-         //   @Override
-         //   public void onClick(View view, BlogDetail.About about) {
-           //     BlogDetailActivity.show(getActivity(), about.id);
-          //  }
-      //  });
-
-
-        //mComments.show(blog.getId(), 3, getImgLoader());
-
-
-//        mComments.setComment(softwareDetail.getViewCount(), softwareDetail.getCommentCount(), getImgLoader(), new DetailCommentView.OnCommentClickListener() {
-//            @Override
-//            public void onClick(View view, BlogDetail.Comment comment) {
-//                FloatingAutoHideDownBehavior.showBottomLayout(mLayCoordinator, mLayContent, mLayBottom);
-//                mCommentId = comment.id;
-//                mCommentAuthorId = comment.authorId;
-//                mETInput.setHint(String.format("回复: %s", comment.author));
-//            }
-//        }, this);
-
+        mAbouts.setAbout(newsDetail.getAbouts(), new DetailAboutView.OnAboutClickListener() {
+            @Override
+            public void onClick(View view, About about) {
+                BlogDetailActivity.show(getActivity(), about.getId());
+            }
+        });
     }
 
-    private final static String linkCss = "<script type=\"text/javascript\" " +
-            "src=\"file:///android_asset/shCore.js\"></script>"
-            + "<script type=\"text/javascript\" src=\"file:///android_asset/brush.js\"></script>"
-            + "<script type=\"text/javascript\" src=\"file:///android_asset/client.js\"></script>"
-            + "<script type=\"text/javascript\" src=\"file:///android_asset/detail_page" +
-            ".js\"></script>"
-            + "<script type=\"text/javascript\">SyntaxHighlighter.all();</script>"
-            + "<script type=\"text/javascript\">function showImagePreview(var url){window" +
-            ".location.url= url;}</script>"
-            + "<link rel=\"stylesheet\" type=\"text/css\" " +
-            "href=\"file:///android_asset/shThemeDefault.css\">"
-            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/shCore" +
-            ".css\">"
-            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/css/common_new" +
-            ".css\">";
+    @SuppressWarnings("deprecation")
+    private View getReferLayout(Comment.Refer refer, LayoutInflater inflater, int count) {
+        final Context context = getContext();
 
-    private String getWebViewBody(SoftwareDetail softwareDetail) {
-        return String.format("<!DOCTYPE HTML><html><head>%s</head><body><div class=\"body-content\">%s</div></body></html>",
-                linkCss + UIHelper.WEB_LOAD_IMAGES,
-                UIHelper.setHtmlCotentSupportImagePreview(softwareDetail.toString()));
+        @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_blog_detail_comment_refer, null, false);
+        ShapeDrawable drawable = new ShapeDrawable(new BorderShape(new RectF(Ui.dipToPx(getContext(), 1), 0, 0, 0)));
+        drawable.getPaint().setColor(0xffd7d6da);
+        lay.findViewById(R.id.lay_blog_detail_comment_refer).setBackgroundDrawable(drawable);
+
+        TextView textView = ((TextView) lay.findViewById(R.id.tv_blog_detail_comment_refer));
+        drawable = new ShapeDrawable(new BorderShape(new RectF(0, 0, 0, 1)));
+        drawable.getPaint().setColor(0xffd7d6da);
+        textView.setBackgroundDrawable(drawable);
+
+        formatHtml(context.getResources(), textView, refer.author + ":<br>" + refer.content);
+
+
+        if (refer.refer != null && (--count) > 0) {
+            View view = getReferLayout(refer.refer, inflater, count);
+            lay.addView(view, lay.indexOfChild(textView));
+        }
+
+        return lay;
     }
-
-    private boolean mInputDoubleEmpty = false;
 
     private void handleKeyDel() {
         if (mCommentId != mId) {
@@ -298,25 +300,17 @@ public class SoftWareDetailFragment extends BaseFragment implements View.OnClick
 
     @SuppressWarnings("deprecation")
     @Override
-    public void toFavoriteOk(SoftwareDetail softwareDetail) {
-        if (softwareDetail.isFavorite())
+    public void toFavoriteOk(NewsDetail newsDetail) {
+        if (newsDetail.isFavorite())
             mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_faved_normal));
         else
             mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_fav_normal));
     }
 
     @Override
-    public void toShareOk() {
-        (Toast.makeText(getContext(), "分享成功", Toast.LENGTH_LONG)).show();
-    }
-
-    @Override
-    public void toFollowOk(SoftwareDetail softwareDetail) {
-        //if (softwareDetail.getAuthorRelation() <= 2) {
-            mBtnRelation.setText("已关注");
-       // } else {
-            mBtnRelation.setText("关注");
-      //  }
+    public void toFollowOk(NewsDetail newsDetail) {
+        mBtnRelation.setEnabled(false);
+        mBtnRelation.setText("已关注");
     }
 
     @Override

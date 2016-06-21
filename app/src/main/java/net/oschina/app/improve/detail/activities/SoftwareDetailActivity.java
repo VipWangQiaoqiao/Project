@@ -2,7 +2,6 @@ package net.oschina.app.improve.detail.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,9 +20,9 @@ import net.oschina.app.improve.bean.BlogDetail;
 import net.oschina.app.improve.bean.SoftwareDetail;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.UserRelation;
-import net.oschina.app.improve.contract.SoftDetailContract;
-import net.oschina.app.improve.fragments.software.SoftWareDetailFragment;
-import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.improve.detail.contract.SoftDetailContract;
+import net.oschina.app.improve.detail.fragments.DetailFragment;
+import net.oschina.app.improve.detail.fragments.SoftWareDetailFragment;
 import net.oschina.app.util.URLsUtils;
 import net.oschina.app.util.XmlUtils;
 
@@ -32,7 +31,7 @@ import java.lang.reflect.Type;
 
 import cz.msebera.android.httpclient.Header;
 
-public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail,SoftDetailContract.View> implements SoftDetailContract.Operator {
+public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftDetailContract.View> implements SoftDetailContract.Operator {
     private SoftDetailContract.View mView;
 
     public static void show(Context context, long id) {
@@ -47,30 +46,18 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail,SoftDe
     }
 
     protected void requestData() {
-        OSChinaApi.getBlogDetail(getDataId(), new TextHttpResponseHandler() {
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                throwable.printStackTrace();
-                showError(EmptyLayout.NETWORK_ERROR);
-            }
+        OSChinaApi.getBlogDetail(getDataId(), getRequestHandler());
+    }
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                try {
-                    Type type = new TypeToken<ResultBean<BlogDetail>>() {
-                    }.getType();
+    @Override
+    Class<? extends DetailFragment> getDataViewFragment() {
+        return SoftWareDetailFragment.class;
+    }
 
-                    ResultBean<SoftwareDetail> resultBean = AppContext.createGson().fromJson(responseString, type);
-                    if (resultBean != null && resultBean.isSuccess()) {
-                        handleData(resultBean.getResult());
-                        return;
-                    }
-                    showError(EmptyLayout.NODATA);
-                } catch (Exception e) {
-                    onFailure(statusCode, headers, responseString, e);
-                }
-            }
-        });
+    @Override
+    Type getDataType() {
+        return new TypeToken<ResultBean<SoftwareDetail>>() {
+        }.getType();
     }
 
     @Override
@@ -86,22 +73,6 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail,SoftDe
             toReport();
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void showView() {
-        SoftWareDetailFragment fragment = SoftWareDetailFragment.instantiate(this, mData);
-        FragmentTransaction trans = getSupportFragmentManager()
-                .beginTransaction();
-        trans.replace(R.id.lay_container, fragment);
-        trans.commitAllowingStateLoss();
-        mView = fragment;
-    }
-
-
-    @Override
-    public SoftwareDetail getSoftwareDetail() {
-        return getData();
     }
 
     @Override
@@ -195,13 +166,13 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail,SoftDe
 
                     ResultBean<UserRelation> resultBean = AppContext.createGson().fromJson(responseString, type);
                     if (resultBean != null && resultBean.isSuccess()) {
-                      //  softwareDetail.setAuthorRelation(resultBean.getResult().getRelation());
+                        //  softwareDetail.setAuthorRelation(resultBean.getResult().getRelation());
                         mView.toFollowOk(softwareDetail);
-                       // if (softwareDetail.getAuthorRelation() >= 3) {
-                         //   AppContext.showToast("取消关注成功");
-                     //   } else {
+                        // if (softwareDetail.getAuthorRelation() >= 3) {
+                        //   AppContext.showToast("取消关注成功");
+                        //   } else {
                         //    AppContext.showToast("关注成功");
-                     //  }
+                        //  }
                     }
                     hideWaitDialog();
                 } catch (Exception e) {
@@ -232,7 +203,7 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail,SoftDe
                             new ByteArrayInputStream(arg2));
                     Result res = rsb.getResult();
                     if (res.OK()) {
-                       SoftDetailContract.View view = mView;
+                        SoftDetailContract.View view = mView;
                         if (view != null)
                             view.toSendCommentOk();
                     } else {

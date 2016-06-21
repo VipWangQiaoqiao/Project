@@ -148,12 +148,7 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
         }
     }
 
-<<<<<<< HEAD
-    public void handleData(Data data) {
-        showError(View.INVISIBLE);
-        mData = data;
-        showView();
-=======
+
     boolean handleData(String responseString) {
         ResultBean<Data> result;
         try {
@@ -171,7 +166,7 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
         }
 
         return false;
->>>>>>> 651b890079664176eb0a4ee1e24a369cc05443e6
+
     }
 
     void showError(int type) {
@@ -240,11 +235,8 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
         dialog.show();
     }
 
-<<<<<<< HEAD
-    public void toReport(long id, String href, byte reportType) {
-=======
     protected void toReport(long id, String href, byte reportType) {
->>>>>>> 651b890079664176eb0a4ee1e24a369cc05443e6
+
         final ReportDialog dialog = new ReportDialog(this, href, id, reportType);
         dialog.setCancelable(true);
         dialog.setTitle(R.string.report);

@@ -1,7 +1,6 @@
-package net.oschina.app.improve.contract;
+package net.oschina.app.improve.detail.contract;
 
 import net.oschina.app.improve.bean.NewsDetail;
-import net.oschina.app.improve.detail.contract.DetailContract;
 
 /**
  * Created by fei on 2016/6/13.
@@ -9,7 +8,6 @@ import net.oschina.app.improve.detail.contract.DetailContract;
  */
 public interface NewsDetailContract {
     interface Operator extends DetailContract.Operator<NewsDetail, View> {
-        NewsDetail getNewsDetail();
 
         // 收藏
         void toFavorite();
@@ -29,8 +27,6 @@ public interface NewsDetailContract {
 
     interface View extends DetailContract.View {
         void toFavoriteOk(NewsDetail newsDetail);
-
-        void toShareOk();
 
         void toFollowOk(NewsDetail newsDetail);
 

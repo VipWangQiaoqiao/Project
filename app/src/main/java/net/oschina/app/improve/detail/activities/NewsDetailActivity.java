@@ -1,13 +1,11 @@
-package net.oschina.app.improve.activities;
+package net.oschina.app.improve.detail.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -21,9 +19,9 @@ import net.oschina.app.bean.Result;
 import net.oschina.app.improve.bean.NewsDetail;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.Comment;
-import net.oschina.app.improve.contract.NewsDetailContract;
-import net.oschina.app.improve.detail.activities.DetailActivity;
-import net.oschina.app.improve.fragments.news.NewsDetailFragment;
+import net.oschina.app.improve.detail.contract.NewsDetailContract;
+import net.oschina.app.improve.detail.fragments.DetailFragment;
+import net.oschina.app.improve.detail.fragments.NewsDetailFragment;
 import net.oschina.app.ui.ShareDialog;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.HTMLUtil;
@@ -84,56 +82,26 @@ public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailCon
         return super.onOptionsItemSelected(item);
     }
 
-    private void showError(int type) {
-        EmptyLayout layout = mEmptyLayout;
-        if (layout != null) {
-            layout.setErrorType(type);
-            layout.setVisibility(View.VISIBLE);
-        }
-    }
 
 
     @Override
-    protected void requestData() {
+     void requestData() {
 
-        OSChinaApi.getNewsDetail(mId, new TextHttpResponseHandler() {
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                throwable.printStackTrace();
-                showError(EmptyLayout.NETWORK_ERROR);
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                try {
-                    Type type = new TypeToken<ResultBean<NewsDetail>>() {
-                    }.getType();
-
-                    ResultBean<NewsDetail> resultBean = AppContext.createGson().fromJson(responseString, type);
-                    if (resultBean != null && resultBean.isSuccess()) {
-                        handleData(resultBean.getResult());
-                        return;
-                    }
-                    showError(EmptyLayout.NODATA);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    onFailure(statusCode, headers, responseString, e);
-                }
-            }
-        });
+        OSChinaApi.getNewsDetail(getDataId(), getRequestHandler());
 
     }
 
     @Override
-    protected void showView() {
-
-        NewsDetailFragment fragment = NewsDetailFragment.instantiate(mData);
-        FragmentTransaction trans = getSupportFragmentManager()
-                .beginTransaction();
-        trans.replace(R.id.lay_container, fragment);
-        trans.commitAllowingStateLoss();
-
+    Class<? extends DetailFragment> getDataViewFragment() {
+        return NewsDetailFragment.class;
     }
+
+    @Override
+    Type getDataType() {
+        return new TypeToken<ResultBean<NewsDetail>>() {
+        }.getType();
+    }
+
 
     /**
      * 获取评论列表
@@ -170,10 +138,6 @@ public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailCon
         });
     }
 
-    @Override
-    public NewsDetail getNewsDetail() {
-        return getData();
-    }
 
     @Override
     public void toFavorite() {
