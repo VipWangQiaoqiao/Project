@@ -61,18 +61,16 @@ public class DetailCommentView extends LinearLayout {
         mLayComments = (LinearLayout) findViewById(R.id.lay_blog_detail_comment);
     }
 
-    public interface OnCommentClickListener {
-        void onClick(View view, Comment about);
-    }
+
 
     public void setComment(List<Comment> comments, int commentTotal, RequestManager imageLoader, final OnCommentClickListener onCommentClickListener, OnClickListener seeMoreListener) {
         if (comments != null && comments.size() > 0) {
 
             if (comments.size() < commentTotal) {
-                findViewById(R.id.tv_see_comment).setVisibility(View.GONE);
-                mLayComments.findViewById(R.id.tv_see_comment).setOnClickListener(seeMoreListener);
+                findViewById(R.id.tv_see_more_comment).setVisibility(View.GONE);
+                mLayComments.findViewById(R.id.tv_see_more_comment).setOnClickListener(seeMoreListener);
             } else {
-                findViewById(R.id.tv_see_comment).setVisibility(View.GONE);
+                findViewById(R.id.tv_see_more_comment).setVisibility(View.GONE);
             }
 
             final Resources resources = getResources();
@@ -160,5 +158,9 @@ public class DetailCommentView extends LinearLayout {
         span = InputHelper.displayEmoji(resources, span.toString());
         textView.setText(span);
         MyURLSpan.parseLinkText(textView, span);
+    }
+
+    public interface OnCommentClickListener {
+        void onClick(View view, Comment about);
     }
 }

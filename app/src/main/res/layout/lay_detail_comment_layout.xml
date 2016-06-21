@@ -14,7 +14,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="8dp"
-        android:text="评论"
+        android:text="相关评论"
         android:textColor="#6a6a6a"
         android:textSize="12sp" />
 
@@ -28,7 +28,7 @@
         tools:ignore="RtlSymmetry">
 
         <TextView
-            android:id="@+id/tv_see_comment"
+            android:id="@+id/tv_see_more_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
