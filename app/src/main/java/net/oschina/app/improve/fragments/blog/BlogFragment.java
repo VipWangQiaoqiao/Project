@@ -43,9 +43,11 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
     protected void requestData() {
         super.requestData();
 
-        OSChinaApi.getBlogList(mIsRefresh ? OSChinaApi.CATALOG_BLOG_HEAT : OSChinaApi.CATALOG_BLOG_NORMAL,
-                null, mHandler);
-
+        if (mIsRefresh) {
+            OSChinaApi.getBlogList(OSChinaApi.CATALOG_BLOG_HEAT, null, mHandler);
+        } else {
+            OSChinaApi.getBlogList(OSChinaApi.CATALOG_BLOG_NORMAL, mBean == null ? null : mBean.getNextPageToken(), mHandler);
+        }
     }
 
     @Override
