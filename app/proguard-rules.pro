@@ -65,8 +65,9 @@
 
 -dontwarn android.widget.**
 -keep class android.widget.** {*;}
--keep class android.support.v7.widget.**{*;}
+
 -dontwarn android.support.v7.widget.**
+-keep class android.support.v7.widget.**{*;}
 
 #-libraryjars libs/library-2.4.0.jar
 #-libraryjars libs/locSDK_3.1.jar
