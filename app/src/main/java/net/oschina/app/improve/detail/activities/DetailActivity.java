@@ -196,6 +196,15 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
         if (item != null) {
             View action = item.getActionView();
             if (action != null) {
+                action.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DataView view = mView;
+                        if (view != null) {
+                            view.scrollToComment();
+                        }
+                    }
+                });
                 mCommentCountView = (TextView) action.findViewById(R.id.tv_comment_count);
             }
         }
@@ -207,11 +216,6 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
         int id = item.getItemId();
         if (id == R.id.menu_report) {
             toReport();
-        } else if (id == R.id.menu_scroll_comment) {
-            DataView view = mView;
-            if (view != null) {
-                view.scrollToComment();
-            }
         }
         return super.onOptionsItemSelected(item);
     }
