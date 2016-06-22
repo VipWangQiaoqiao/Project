@@ -138,7 +138,7 @@ public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailCon
         if (getDataId() != 0 && getData() != null) {
             String content;
 
-            String url = String.format(URLsUtils.URL_MOBILE + "blog/%s", getDataId());
+            String url = String.format(URLsUtils.URL_MOBILE + "news/%s", getDataId());
             final NewsDetail newsDetail = getData();
             if (newsDetail.getBody().length() > 55) {
                 content = HTMLUtil.delHTMLTag(newsDetail.getBody().trim());

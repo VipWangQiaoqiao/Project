@@ -1,6 +1,8 @@
 package net.oschina.app.improve.detail.fragments;
 
 import android.content.Context;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -12,13 +14,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.oschina.app.R;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.NewsDetail;
 import net.oschina.app.improve.bean.Software;
 import net.oschina.app.improve.bean.simple.About;
+import net.oschina.app.improve.bean.simple.Comment;
+import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
+import net.oschina.app.improve.comment.CommentsView;
+import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.activities.NewsDetailActivity;
 import net.oschina.app.improve.detail.contract.NewsDetailContract;
 import net.oschina.app.improve.widget.DetailAboutView;
-import net.oschina.app.improve.widget.DetailCommentView;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 
@@ -27,7 +33,8 @@ import net.oschina.app.util.UIHelper;
  * on 16/5/26.
  */
 
-public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailContract.View, NewsDetailContract.Operator> implements View.OnClickListener, NewsDetailContract.View {
+public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailContract.View, NewsDetailContract.Operator>
+        implements View.OnClickListener, NewsDetailContract.View, OnCommentClickListener {
 
     private static final String TAG = "NewsDetailFragment";
     private long mId;
@@ -40,9 +47,12 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
     private long mCommentId;
     private long mCommentAuthorId;
     private boolean mInputDoubleEmpty = false;
-    private DetailAboutView mAbouts;
-    private DetailCommentView mLayComments;
     private DetailAboutView mSoft;
+    private DetailAboutView mAbouts;
+    private CommentsView mComments;
+    private CoordinatorLayout mLayCoordinator;
+    private NestedScrollView mLayContent;
+    private View mLayBottom;
 
 
     @Override
@@ -59,16 +69,22 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         mTVPubDate = (TextView) root.findViewById(R.id.tv_pub_date);
         mTVTitle = (TextView) root.findViewById(R.id.tv_title);
 
-
         mIVAuthorPortrait = (ImageView) root.findViewById(R.id.iv_avatar);
         mIVFav = (ImageView) root.findViewById(R.id.iv_fav);
 
         mETInput = (EditText) root.findViewById(R.id.et_input);
 
         mAbouts = (DetailAboutView) root.findViewById(R.id.lay_detail_about);
-        mLayComments = (DetailCommentView) root.findViewById(R.id.lay_detail_comment);
 
         mSoft = (DetailAboutView) root.findViewById(R.id.lay_detail_software);
+
+        mComments = (CommentsView) root.findViewById(R.id.lay_detail_comment);
+
+        mLayCoordinator = (CoordinatorLayout) root.findViewById(R.id.fragment_blog_detail);
+
+        mLayContent = (NestedScrollView) root.findViewById(R.id.lay_nsv);
+
+        mLayBottom = root.findViewById(R.id.lay_option);
 
         root.findViewById(R.id.iv_share).setOnClickListener(this);
         mIVFav.setOnClickListener(this);
@@ -121,7 +137,6 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         }
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     protected void initData() {
         NewsDetail newsDetail = mOperator.getData();
@@ -168,6 +183,9 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
                 NewsDetailActivity.show(getActivity(), about.getId());
             }
         });
+
+
+        mComments.init(newsDetail.getId(), OSChinaApi.COMMENT_NEWS, newsDetail.getCommentCount(), getImgLoader(), this);
     }
 
     private void handleKeyDel() {
@@ -199,7 +217,6 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         mOperator.toSendComment(mCommentId, mCommentAuthorId, mETInput.getText().toString());
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void toFavoriteOk(NewsDetail newsDetail) {
         if (newsDetail.isFavorite())
@@ -217,6 +234,15 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
 
     @Override
     public void scrollToComment() {
+        mLayContent.scrollTo(0, mComments.getTop());
+    }
 
+    @Override
+    public void onClick(View view, Comment comment) {
+
+        FloatingAutoHideDownBehavior.showBottomLayout(mLayCoordinator, mLayContent, mLayBottom);
+        mCommentId = comment.getId();
+        mCommentAuthorId = comment.getAuthorId();
+        mETInput.setHint(String.format("回复: %s", comment.getAuthor()));
     }
 }

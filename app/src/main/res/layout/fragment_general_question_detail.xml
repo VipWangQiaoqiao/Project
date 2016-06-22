@@ -72,17 +72,15 @@
                     tools:text="New Text" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_ques_detail_content"
+            <FrameLayout
+                android:id="@+id/lay_webview"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="4dp"
-                android:textSize="18sp"
-                tools:text="HDFS主要用作存储，我看到许多人结合web 使用HDFS做图片或者视频的存储，我就有一个疑问HDFS用于存储，请问它与FTP或者市面流行的存储系统的优缺点？" />
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:paddingBottom="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="8dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -123,17 +121,10 @@
                 <include layout="@layout/item_info_view_comment" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_ques_detail_answer_count"
+            <net.oschina.app.improve.comment.CommentsView
+                android:id="@+id/lay_detail_comment"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/ques_detail_bg_color"
-                android:paddingBottom="8dp"
-                android:paddingLeft="16dp"
-                android:paddingTop="8dp"
-                android:textColor="@color/ques_bt_text_color_dark"
-                android:textSize="16sp"
-                tools:text="回答(12)" />
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
