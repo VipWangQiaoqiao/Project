@@ -12,6 +12,7 @@ import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 
 /**
+ * 滚动时隐藏的Behavior
  * Created by thanatos on 16/2/17.
  */
 public class FloatingAutoHideDownBehavior extends CoordinatorLayout.Behavior<View> {
@@ -21,7 +22,6 @@ public class FloatingAutoHideDownBehavior extends CoordinatorLayout.Behavior<Vie
 
     public FloatingAutoHideDownBehavior(Context context, AttributeSet attrs) {
         super();
-
     }
 
     @Override
@@ -94,8 +94,8 @@ public class FloatingAutoHideDownBehavior extends CoordinatorLayout.Behavior<Vie
      * 点击内容栏唤起底部操作区域
      *
      * @param coordinatorLayout 外部CoordinatorLayout
-     * @param contentView       中间浏览区域
-     * @param bottomView        底部操作区域
+     * @param contentView       滚动区域
+     * @param bottomView        滚动时隐藏底部区域
      */
     public static void showBottomLayout(CoordinatorLayout coordinatorLayout, View contentView, View bottomView) {
         coordinatorLayout.onStartNestedScroll(contentView, null, ViewCompat.SCROLL_AXIS_VERTICAL);

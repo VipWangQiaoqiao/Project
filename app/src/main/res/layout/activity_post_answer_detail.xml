@@ -100,90 +100,42 @@
             android:background="#6A6A6A"/>
     </android.support.design.widget.AppBarLayout>
 
-
     <android.support.v4.widget.NestedScrollView
-        android:padding="16dp"
-        android:background="#FFF"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <WebView
-            android:id="@+id/webview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </android.support.v4.widget.NestedScrollView>
-
-    <LinearLayout
-        android:orientation="vertical"
-        app:layout_behavior="net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior"
-        android:layout_gravity="bottom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="#DCDCDC"/>
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-            android:orientation="horizontal"
-            android:padding="16dp"
+            android:id="@+id/layout_container"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:baselineAligned="false">
+            android:layout_height="match_parent">
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:gravity="center_horizontal"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/tv_comment"
-                    android:drawableLeft="@drawable/ic_comment_40"
-                    android:drawableStart="@drawable/ic_comment_40"
-                    android:drawablePadding="8dp"
-                    tools:text="评论 (99)"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
+            <WebView
+                android:id="@+id/webview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/tv_favorite"
-                    android:drawableLeft="@drawable/ic_fav"
-                    android:drawableStart="@drawable/ic_fav"
-                    android:gravity="center_vertical"
-                    android:text="收藏"
-                    android:drawablePadding="8dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#6A6A6A"/>
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/tv_share"
-                    android:drawableLeft="@drawable/share_ic_selector"
-                    android:drawableStart="@drawable/share_ic_selector"
-                    android:gravity="center_vertical"
-                    android:text="分享"
-                    android:drawablePadding="8dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
+            <TextView
+                android:id="@+id/tv_comment_count"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                tools:text="评论(98)"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#6A6A6A"/>
         </LinearLayout>
-    </LinearLayout>
-
+    </android.support.v4.widget.NestedScrollView>
 
 </android.support.design.widget.CoordinatorLayout>

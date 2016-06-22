@@ -167,7 +167,7 @@ public class HTMLUtil {
 		if (isShowImagePreview){
 			Pattern pattern = Pattern.compile("<img[^>]+src\\s*=\\s*[\"\']([^\"\']*)[\"\'](\\s*data-url\\s*=\\s*[\"\']([^\"\']*)[\"\'])*");
 			Matcher matcher = pattern.matcher(content);
-			if (matcher.find()){
+			while(matcher.find()){
 				String snippet = String.format(
 						"<img src=\"%s\" onClick=\"javascript:mWebViewImageListener.showImagePreview('%s')\"",
 						matcher.group(1),
