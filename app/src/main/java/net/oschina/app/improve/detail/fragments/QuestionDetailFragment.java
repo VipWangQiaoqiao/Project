@@ -33,6 +33,7 @@ import java.util.List;
 
 public class QuestionDetailFragment extends DetailFragment<QuestionDetail, QuestionDetailContract.View, QuestionDetailContract.Operator>
         implements View.OnClickListener, QuestionDetailContract.View, OnCommentClickListener {
+    private static final String TAG = "QuestionDetailFragment";
     private long mId;
     private TextView mTVAuthorName;
     private TextView mTVPubDate;
@@ -47,9 +48,6 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
     private View mLayBottom;
     private TextView mTvTagOne;
     private TextView mTvTagTwo;
-    private TextView mTvContent;
-    private TextView mTvViewCount;
-    private TextView mTvCommentCount;
     private ImageView mIVFav;
 
 
@@ -66,9 +64,6 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         mTVTitle = (TextView) root.findViewById(R.id.tv_ques_detail_title);
         mTvTagOne = (TextView) root.findViewById(R.id.tv_ques_detail_tag1);
         mTvTagTwo = (TextView) root.findViewById(R.id.tv_ques_detail_tag2);
-        // mTvContent = (TextView) root.findViewById(R.id.tv_ques_detail_content);
-        mTvViewCount = (TextView) root.findViewById(R.id.tv_info_view);
-        mTvCommentCount = (TextView) root.findViewById(R.id.tv_info_comment);
 
         mIVFav = (ImageView) root.findViewById(R.id.iv_fav);
 
@@ -109,11 +104,6 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            // 关注按钮
-            // case R.id.btn_relation: {
-            // handleRelation();
-            //   }
-            // break;
             // 收藏
             case R.id.iv_fav:
                 handleFavorite();
