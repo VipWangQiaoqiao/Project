@@ -114,6 +114,12 @@ public class CommentExsView extends LinearLayout implements View.OnClickListener
                     clearLine = false;
                     lay.findViewById(R.id.line).setVisibility(View.INVISIBLE);
                 }
+                lay.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onItemClick(v, comment);
+                    }
+                });
             }
         } else {
             setVisibility(View.GONE);
@@ -152,6 +158,10 @@ public class CommentExsView extends LinearLayout implements View.OnClickListener
             setVisibility(VISIBLE);
         }
         return lay;
+    }
+
+    void onItemClick(View view, CommentEX comment) {
+        QuestionAnswerDetailActivity.show(getContext(), comment);
     }
 
     @Override
