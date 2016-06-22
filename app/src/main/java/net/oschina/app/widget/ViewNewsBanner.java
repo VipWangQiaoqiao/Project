@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.bumptech.glide.RequestManager;
 
@@ -42,8 +41,13 @@ public class ViewNewsBanner extends RelativeLayout implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-        UIHelper.showBannerDetail(getContext(), banner);
+        if (banner != null) {
+            int type = banner.getType();
+            long id = banner.getId();
+            UIHelper.showDetail(getContext(), type, id);
+        }
     }
+
 
     public String getTitle() {
         return banner.getName();

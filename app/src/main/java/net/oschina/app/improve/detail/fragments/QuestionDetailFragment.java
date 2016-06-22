@@ -17,7 +17,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.QuestionDetail;
 import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
-import net.oschina.app.improve.comment.CommentsView;
+import net.oschina.app.improve.comment.CommentExsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.QuestionDetailContract;
 import net.oschina.app.util.StringUtils;
@@ -41,7 +41,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
     private long mCommentId;
     private long mCommentAuthorId;
-    private CommentsView mComments;
+    private CommentExsView mComments;
     private CoordinatorLayout mLayCoordinator;
     private View mLayContent;
     private View mLayBottom;
@@ -72,7 +72,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
         mIVFav = (ImageView) root.findViewById(R.id.iv_fav);
 
-        mComments = (CommentsView) root.findViewById(R.id.lay_detail_comment);
+        mComments = (CommentExsView) root.findViewById(R.id.lay_detail_comment);
 
         mLayCoordinator = (CoordinatorLayout) root.findViewById(R.id.activity_blog_detail);
 

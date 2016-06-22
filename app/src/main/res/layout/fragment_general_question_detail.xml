@@ -121,7 +121,7 @@
                 <include layout="@layout/item_info_view_comment" />
             </LinearLayout>
 
-            <net.oschina.app.improve.comment.CommentsView
+            <net.oschina.app.improve.comment.CommentExsView
                 android:id="@+id/lay_detail_comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

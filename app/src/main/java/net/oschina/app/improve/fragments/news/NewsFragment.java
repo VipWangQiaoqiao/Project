@@ -1,7 +1,6 @@
 package net.oschina.app.improve.fragments.news;
 
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
@@ -14,15 +13,11 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Banner;
 import net.oschina.app.cache.CacheManager;
-import net.oschina.app.improve.detail.activities.EventDetailActivity;
 import net.oschina.app.improve.adapter.base.BaseListAdapter;
 import net.oschina.app.improve.adapter.general.NewsAdapter;
 import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.detail.activities.BlogDetailActivity;
-import net.oschina.app.improve.detail.activities.NewsDetailActivity;
-import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
 import net.oschina.app.improve.fragments.base.BaseGeneralListFragment;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.ViewNewsHeader;
@@ -94,41 +89,9 @@ public class NewsFragment extends BaseGeneralListFragment<News> {
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         News news = mAdapter.getItem(position - 1);
         if (news != null) {
-
-            // UIHelper.showNewsDetail(getActivity(), news);
-            Log.d(TAG, "onItemClick: ------>type==" + news.getType() + " id=" + news.getId());
-            switch (news.getType()) {
-                case 0:
-                    //新闻链接
-                   // UIHelper.showUrlRedirect(getActivity(), news.getHref());
-                    NewsDetailActivity.show(getActivity(), news.getId());
-                    break;
-                case 1:
-                    //软件推荐
-                    UIHelper.showSoftwareDetailById(getActivity(), (int) news.getId());
-                    break;
-                case 2:
-                    //问答
-                     QuestionDetailActivity.show(getActivity(),news.getId());
-                    break;
-                case 3:
-                    //博客
-                    BlogDetailActivity.show(getActivity(), news.getId());
-                    break;
-                case 4:
-                    //4.翻译
-                    NewsDetailActivity.show(getActivity(), news.getId());
-                    break;
-                case 5:
-                    //活动
-                    EventDetailActivity.show(getActivity(), news.getId());
-                    break;
-                default:
-                    //6.资讯
-                    NewsDetailActivity.show(getActivity(), news.getId());
-                    break;
-            }
-
+            int type = news.getType();
+            long newsId = news.getId();
+            UIHelper.showDetail(getActivity(), type, newsId);
             TextView title = (TextView) view.findViewById(R.id.tv_title);
             TextView content = (TextView) view.findViewById(R.id.tv_description);
             updateTextColor(title, content);
