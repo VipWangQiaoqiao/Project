@@ -5,8 +5,6 @@
 
     <item
         android:id="@+id/menu_scroll_comment"
-        android:actionLayout="@layout/lay_menu_action_comment"
-        android:enabled="false"
         android:orderInCategory="100"
         android:title="评论"
         app:actionLayout="@layout/lay_menu_action_comment"
