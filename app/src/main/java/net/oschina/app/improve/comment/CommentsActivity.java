@@ -214,7 +214,7 @@ public class CommentsActivity extends BaseBackActivity {
         @Override
         protected RecyclerView.ViewHolder onCreateDefaultViewHolder(ViewGroup parent, int type) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            View view = inflater.inflate(R.layout.lay_blog_detail_comment, parent, false);
+            View view = inflater.inflate(R.layout.lay_comment_item, parent, false);
 
             final CommentHolder holder = new CommentHolder(view);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
