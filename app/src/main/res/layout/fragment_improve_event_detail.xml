@@ -211,14 +211,11 @@
                 android:layout_height="1px"
                 android:layout_marginLeft="@dimen/lay_16" />
 
-            <WebView
-                android:id="@+id/wv_event_detail"
+            <FrameLayout
+                android:id="@+id/lay_webview"
+                android:padding="@dimen/lay_16"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/lay_12"
-                android:layout_marginLeft="@dimen/lay_16"
-                android:layout_marginRight="@dimen/lay_16"
-                android:layout_marginTop="@dimen/lay_12" />
+                android:layout_height="match_parent"/>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 

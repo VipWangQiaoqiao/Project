@@ -269,7 +269,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".improve.activities.EventDetailActivity"
+            android:name=".improve.detail.activities.EventDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="活动详情"
             android:screenOrientation="portrait" />

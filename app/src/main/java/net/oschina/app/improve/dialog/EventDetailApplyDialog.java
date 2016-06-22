@@ -27,13 +27,8 @@ public class EventDetailApplyDialog extends CommonDialog implements
     @Bind(R.id.et_name)
     EditText mName;
 
-    //    @Bind(R.id.tv_gender)
-//    TextView mGender;
     @Bind(R.id.rb_male)
     RadioButton rb_male;
-
-    @Bind(R.id.rb_female)
-    RadioButton rb_female;
 
     private String[] genders;
 
@@ -116,7 +111,6 @@ public class EventDetailApplyDialog extends CommonDialog implements
 
     public EventApplyData getApplyData() {
         String name = mName.getText().toString();
-//        String gender = mGender.getText().toString();
         String gender = genders[rb_male.isChecked() ? 0 : 1];
         String phone = mMobile.getText().toString();
         String company = mCompany.getText().toString();

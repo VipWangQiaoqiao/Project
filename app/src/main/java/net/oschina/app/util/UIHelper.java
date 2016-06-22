@@ -50,7 +50,7 @@ import net.oschina.app.fragment.FriendsFragment;
 import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
-import net.oschina.app.improve.activities.EventDetailActivity;
+import net.oschina.app.improve.detail.activities.EventDetailActivity;
 import net.oschina.app.improve.activities.TweetDetailActivity;
 import net.oschina.app.improve.fragments.blog.UserBlogFragment;
 import net.oschina.app.interf.ICallbackResult;
