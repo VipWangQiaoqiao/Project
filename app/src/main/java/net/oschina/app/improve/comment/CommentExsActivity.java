@@ -156,6 +156,7 @@ public class CommentExsActivity extends BaseBackActivity {
         private TextView mDate;
         private TweetTextView mContent;
         private LinearLayout mRefers;
+        private ImageView btn_comment,iv_best_comment;
 
         CommentHolder(View itemView) {
             super(itemView);
@@ -163,7 +164,8 @@ public class CommentExsActivity extends BaseBackActivity {
             mAvatar = (ImageView) itemView.findViewById(R.id.iv_avatar);
             mName = (TextView) itemView.findViewById(R.id.tv_name);
             mDate = (TextView) itemView.findViewById(R.id.tv_pub_date);
-
+            btn_comment = (ImageView)itemView.findViewById(R.id.btn_comment);
+            iv_best_comment = (ImageView)itemView.findViewById(R.id.iv_best_answer);
             mContent = ((TweetTextView) itemView.findViewById(R.id.tv_content));
             mRefers = ((LinearLayout) itemView.findViewById(R.id.lay_refer));
         }
@@ -214,7 +216,7 @@ public class CommentExsActivity extends BaseBackActivity {
         @Override
         protected RecyclerView.ViewHolder onCreateDefaultViewHolder(ViewGroup parent, int type) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            View view = inflater.inflate(R.layout.lay_blog_detail_comment, parent, false);
+            View view = inflater.inflate(R.layout.lay_comment_ex, parent, false);
 
             final CommentHolder holder = new CommentHolder(view);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -237,6 +239,13 @@ public class CommentExsActivity extends BaseBackActivity {
                 RequestManager requestManager = getImageLoader();
                 if (requestManager != null)
                     commentHolder.setData(item, requestManager);
+                if(item.isBest()){
+                    commentHolder.btn_comment.setVisibility(View.GONE);
+                    commentHolder.iv_best_comment.setVisibility(View.VISIBLE);
+                }else {
+                    commentHolder.btn_comment.setVisibility(View.VISIBLE);
+                    commentHolder.iv_best_comment.setVisibility(View.GONE);
+                }
             }
         }
     }

@@ -128,7 +128,7 @@ public class CommentExsView extends LinearLayout implements View.OnClickListener
 
     public ViewGroup addComment(final CommentEX comment, RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
-        @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_blog_detail_comment, null, false);
+        @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_ex, null, false);
         imageLoader.load(comment.getAuthorPortrait()).error(R.drawable.widget_dface)
                 .into(((ImageView) lay.findViewById(R.id.iv_avatar)));
 
@@ -146,12 +146,20 @@ public class CommentExsView extends LinearLayout implements View.OnClickListener
         ((TextView) lay.findViewById(R.id.tv_pub_date)).setText(
                 StringUtils.friendly_time(comment.getPubDate()));
 
-        lay.findViewById(R.id.btn_comment).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onCommentClickListener.onClick(v, comment);
-            }
-        });
+        ImageView btn_comment = (ImageView)lay.findViewById(R.id.btn_comment);
+        if(comment.isBest()){
+            lay.findViewById(R.id.iv_best_answer).setVisibility(VISIBLE);
+            btn_comment.setVisibility(GONE);
+        }else {
+            btn_comment.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onCommentClickListener.onClick(v, comment);
+                }
+            });
+        }
+
+
 
         mLayComments.addView(lay, 0);
         if (getVisibility() != VISIBLE) {
