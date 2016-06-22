@@ -110,7 +110,6 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-            android:id="@+id/layout_container"
             android:orientation="vertical"
             android:background="#FFF"
             android:layout_width="match_parent"
@@ -143,6 +142,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="@color/list_divider_color"/>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:id="@+id/layout_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 

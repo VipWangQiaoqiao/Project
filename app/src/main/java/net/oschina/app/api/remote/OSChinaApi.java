@@ -1289,6 +1289,6 @@ public class OSChinaApi {
             params.put("referId", referId);
         if (replyId > 0)
             params.put("replyId", replyId);
-        ApiHttpClient.get("action/apiv2/comment", params, handler);
+        ApiHttpClient.post("action/apiv2/comment_pub", params, handler);
     }
 }
