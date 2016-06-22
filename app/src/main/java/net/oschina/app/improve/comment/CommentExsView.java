@@ -169,7 +169,7 @@ public class CommentExsView extends LinearLayout implements View.OnClickListener
     }
 
     void onItemClick(View view, CommentEX comment) {
-        QuestionAnswerDetailActivity.show(getContext(), comment);
+        QuestionAnswerDetailActivity.show(getContext(), comment, mId);
     }
 
     @Override

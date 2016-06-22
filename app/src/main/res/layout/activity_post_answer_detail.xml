@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -15,6 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:background="#FAFAFA"
             android:padding="16dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -97,10 +99,12 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#6A6A6A"/>
+            android:background="@color/list_divider_color"/>
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/layout_scroll"
+        android:background="#FFF"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -108,6 +112,7 @@
         <LinearLayout
             android:id="@+id/layout_container"
             android:orientation="vertical"
+            android:background="#FFF"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -119,22 +124,25 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="#6A6A6A"/>
+                android:background="@color/list_divider_color"/>
 
             <TextView
                 android:id="@+id/tv_comment_count"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:paddingTop="8dp"
+                android:textSize="16sp"
                 android:paddingBottom="8dp"
+                android:textColor="#6A6A6A"
                 tools:text="评论(98)"
+                android:background="#FAFAFA"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="#6A6A6A"/>
+                android:background="@color/list_divider_color"/>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
