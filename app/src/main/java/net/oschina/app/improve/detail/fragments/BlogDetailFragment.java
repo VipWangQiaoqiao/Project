@@ -157,6 +157,7 @@ public class BlogDetailFragment
 
         mId = mCommentId = blog.getId();
 
+        setCommentCount(blog.getCommentCount());
         setBodyContent(blog.getBody());
 
         mTVAuthorName.setText(blog.getAuthor());
