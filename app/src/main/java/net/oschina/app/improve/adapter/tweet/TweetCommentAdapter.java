@@ -95,11 +95,11 @@ public class TweetCommentAdapter extends BaseRecyclerAdapter<Comment> {
     }
 
     public static final class TweetCommentHolderView extends RecyclerView.ViewHolder{
-        @Bind(R.id.iv_avatar) CircleImageView ivPortrait;
-        @Bind(R.id.tv_name) TextView tvName;
-        @Bind(R.id.tv_pub_date) TextView tvTime;
-        @Bind(R.id.btn_comment) ImageView btnReply;
-        @Bind(R.id.tv_content) TweetTextView tvContent;
+        @Bind(R.id.iv_avatar) public CircleImageView ivPortrait;
+        @Bind(R.id.tv_name) public TextView tvName;
+        @Bind(R.id.tv_pub_date) public TextView tvTime;
+        @Bind(R.id.btn_comment) public ImageView btnReply;
+        @Bind(R.id.tv_content) public TweetTextView tvContent;
 
         public TweetCommentHolderView(View view) {
             super(view);
