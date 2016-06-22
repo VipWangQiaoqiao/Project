@@ -21,9 +21,9 @@ import net.oschina.app.improve.adapter.general.QuestionAdapter;
 import net.oschina.app.improve.bean.Question;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
 import net.oschina.app.improve.fragments.base.BaseGeneralListFragment;
 import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -207,8 +207,8 @@ public class QuestionFragment extends BaseGeneralListFragment<Question> {
         // super.onItemClick(parent, view, position, id);
         Question question = mAdapter.getItem(position - 1);
         if (question != null) {
-            UIHelper.showPostDetail(getActivity(), (int) question.getId(), question.getCommentCount());
-            // QuestionDetailActivity.show(getActivity(), question.getId());
+            // UIHelper.showPostDetail(getActivity(), (int) question.getId(), question.getCommentCount());
+            QuestionDetailActivity.show(getActivity(), question.getId());
             TextView title = (TextView) view.findViewById(R.id.tv_ques_item_title);
             TextView content = (TextView) view.findViewById(R.id.tv_ques_item_content);
             updateTextColor(title, content);

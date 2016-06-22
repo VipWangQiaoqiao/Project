@@ -7,8 +7,7 @@ import net.oschina.app.improve.bean.QuestionDetail;
  * desc:
  */
 public interface QuestionDetailContract {
-    interface Operator {
-        QuestionDetail getQuestionDetail();
+    interface Operator extends DetailContract.Operator<QuestionDetail, View> {
 
         // 收藏
         void toFavorite();
@@ -17,7 +16,7 @@ public interface QuestionDetailContract {
         void toShare();
 
         // 关注
-        void toFollow();
+       // void toFollow();
 
         // 举报
         void toReport();
@@ -26,12 +25,11 @@ public interface QuestionDetailContract {
         void toSendComment(long id, long authorId, String comment);
     }
 
-    interface View {
+    interface View extends DetailContract.View {
         void toFavoriteOk(QuestionDetail questionDetail);
 
-        void toShareOk();
 
-        void toFollowOk(QuestionDetail questionDetail);
+      //  void toFollowOk(QuestionDetail questionDetail);
 
         void toSendCommentOk();
     }

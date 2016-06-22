@@ -1,125 +1,90 @@
 package net.oschina.app.improve.detail.fragments;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.Resources;
-import android.os.Bundle;
-import android.text.Html;
-import android.text.Spanned;
+import android.support.design.widget.CoordinatorLayout;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.webkit.WebView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import net.oschina.app.R;
-import net.oschina.app.emoji.InputHelper;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.QuestionDetail;
+import net.oschina.app.improve.bean.simple.Comment;
+import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
+import net.oschina.app.improve.comment.CommentsView;
+import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.QuestionDetailContract;
-import net.oschina.app.improve.fragments.base.BaseFragment;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
-import net.oschina.app.widget.MyLinkMovementMethod;
-import net.oschina.app.widget.MyURLSpan;
-import net.oschina.app.widget.TweetTextView;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.List;
 
 /**
- * Created by qiujuer
+ * Created by fei
  * on 16/5/26.
+ * desc:
  */
 
-public class QuestionDetailFragment extends BaseFragment implements View.OnClickListener, QuestionDetailContract.View {
+public class QuestionDetailFragment extends DetailFragment<QuestionDetail, QuestionDetailContract.View, QuestionDetailContract.Operator>
+        implements View.OnClickListener, QuestionDetailContract.View, OnCommentClickListener {
+    private static final String TAG = "QuestionDetailFragment";
     private long mId;
-    private WebView mWebView;
     private TextView mTVAuthorName;
     private TextView mTVPubDate;
     private TextView mTVTitle;
-    private TextView mTVAbstract;
-    private ImageView mIVLabelRecommend;
-    private ImageView mIVLabelOriginate;
     private ImageView mIVAuthorPortrait;
-    private ImageView mIVFav;
-    private Button mBtnRelation;
     private EditText mETInput;
-
-    private LinearLayout mLayAbouts;
-    private LinearLayout mLayComments;
-    private LinearLayout mLayAbstract;
 
     private long mCommentId;
     private long mCommentAuthorId;
+    private CommentsView mComments;
+    private CoordinatorLayout mLayCoordinator;
+    private View mLayContent;
+    private View mLayBottom;
+    private TextView mTvTagOne;
+    private TextView mTvTagTwo;
+    private TextView mTvContent;
+    private TextView mTvViewCount;
+    private TextView mTvCommentCount;
+    private ImageView mIVFav;
 
-    private QuestionDetailContract.Operator mOperator;
-
-
-    public static QuestionDetailFragment instantiate(QuestionDetailContract.Operator operator, QuestionDetail detail) {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("key", detail);
-        QuestionDetailFragment fragment = new QuestionDetailFragment();
-        fragment.setArguments(bundle);
-        fragment.mOperator = operator;
-        return fragment;
-    }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_post_answer_detail;
-    }
-
-    @SuppressLint("SetJavaScriptEnabled")
-    @Override
-    public void onDestroy() {
-        WebView view = mWebView;
-        if (view != null) {
-            mWebView = null;
-            view.getSettings().setJavaScriptEnabled(true);
-            view.removeJavascriptInterface("mWebViewImageListener");
-            view.removeAllViewsInLayout();
-            view.setWebChromeClient(null);
-            view.removeAllViews();
-            view.destroy();
-        }
-        mOperator = null;
-
-        super.onDestroy();
+        return R.layout.fragment_general_question_detail;
     }
 
     @Override
     protected void initWidget(View root) {
-        WebView webView = new WebView(getActivity());
-        webView.setHorizontalScrollBarEnabled(false);
-        UIHelper.initWebView(webView);
-        UIHelper.addWebImageShow(getActivity(), webView);
-        // ((FrameLayout) root.findViewById(R.id.lay_webview)).addView(webView);
-        //mWebView = webView;
-
+        super.initWidget(root);
         mTVAuthorName = (TextView) root.findViewById(R.id.tv_ques_detail_author);
         mTVPubDate = (TextView) root.findViewById(R.id.tv_ques_detail_pub_date);
         mTVTitle = (TextView) root.findViewById(R.id.tv_ques_detail_title);
-        //mTVAbstract = (TextView) root.findViewById(R.id.tv_blog_detail_abstract);
+        mTvTagOne = (TextView) root.findViewById(R.id.tv_ques_detail_tag1);
+        mTvTagTwo = (TextView) root.findViewById(R.id.tv_ques_detail_tag2);
+        // mTvContent = (TextView) root.findViewById(R.id.tv_ques_detail_content);
+        mTvViewCount = (TextView) root.findViewById(R.id.tv_info_view);
+        mTvCommentCount = (TextView) root.findViewById(R.id.tv_info_comment);
 
-        // mIVLabelRecommend = (ImageView) root.findViewById(R.id.iv_label_recommend);
-        //mIVLabelOriginate = (ImageView) root.findViewById(R.id.iv_label_originate);
-        // mIVAuthorPortrait = (ImageView) root.findViewById(R.id.iv_avatar);
-        // mIVFav = (ImageView) root.findViewById(R.id.iv_fav);
+        mIVFav = (ImageView) root.findViewById(R.id.iv_fav);
 
-        // mBtnRelation = (Button) root.findViewById(R.id.btn_relation);
+        mComments = (CommentsView) root.findViewById(R.id.lay_detail_comment);
+
+        mLayCoordinator = (CoordinatorLayout) root.findViewById(R.id.fragment_blog_detail);
+
+        mLayContent = root.findViewById(R.id.lay_nsv);
+
+        mLayBottom = root.findViewById(R.id.lay_option);
 
         mETInput = (EditText) root.findViewById(R.id.et_input);
 
         root.findViewById(R.id.iv_share).setOnClickListener(this);
-//        mIVFav.setOnClickListener(this);
-//        mBtnRelation.setOnClickListener(this);
         mETInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -147,84 +112,67 @@ public class QuestionDetailFragment extends BaseFragment implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             // 关注按钮
-            case R.id.btn_relation: {
-                handleRelation();
-            }
-            break;
+            // case R.id.btn_relation: {
+            // handleRelation();
+            //   }
+            // break;
             // 收藏
-            case R.id.iv_fav: {
+            case R.id.iv_fav:
                 handleFavorite();
-            }
-            break;
+                break;
             // 分享
-            case R.id.iv_share: {
+            case R.id.iv_share:
                 handleShare();
-            }
-            break;
+                break;
             // 评论列表
-            case R.id.tv_see_more_comment: {
+            case R.id.tv_see_more_comment:
                 UIHelper.showBlogComment(getActivity(), (int) mId,
-                        (int) mOperator.getQuestionDetail().getAuthorId());
-            }
-            break;
+                        (int) mOperator.getData().getAuthorId());
+                break;
         }
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     protected void initData() {
-        QuestionDetail questionDetail = (QuestionDetail) mBundle.getSerializable("key");
+
+        QuestionDetail questionDetail = mOperator.getData();
         if (questionDetail == null)
             return;
 
         mId = mCommentId = questionDetail.getId();
 
-        String body = getWebViewBody(questionDetail);
+        String body = questionDetail.getBody();
 
-        mTVAuthorName.setText(questionDetail.getAuthor());
+        setBodyContent(body);
 
-        String time = String.format("%s (%s)", StringUtils.friendly_time(getStrTime(questionDetail.getPubDate())), questionDetail.getPubDate());
+        mTVAuthorName.setText(questionDetail.getAuthor().trim());
+
+        List<String> tags = questionDetail.getTags();
+        if (tags == null || tags.isEmpty()) {
+            mTvTagOne.setVisibility(View.GONE);
+            mTvTagTwo.setVisibility(View.GONE);
+        } else {
+            mTvTagOne.setText(tags.get(0));
+            mTvTagOne.setVisibility(View.VISIBLE);
+            mTvTagTwo.setText(tags.get(1));
+            mTvTagTwo.setVisibility(View.VISIBLE);
+        }
+
+        String time = String.format("%s (%s)", StringUtils.friendly_time(questionDetail.getPubDate()), questionDetail.getPubDate());
         mTVPubDate.setText(time);
 
         mTVTitle.setText(questionDetail.getTitle());
 
         toFavoriteOk(questionDetail);
 
-    }
+        setText(R.id.tv_info_view, String.valueOf(questionDetail.getViewCount()));
+        setText(R.id.tv_info_comment, String.valueOf(questionDetail.getCommentCount()));
 
+        TextView lable = (TextView) mComments.getChildAt(0);
+        lable.setText(String.format("%s (%d)", "回答", questionDetail.getCommentCount()));
 
-    private static String getStrTime(String cc_time) {
-        try {
-            long lTime = Long.valueOf(cc_time);
-            @SuppressLint("SimpleDateFormat")
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            return sdf.format(new Date(lTime));
-        } catch (Exception e) {
-            return cc_time;
-        }
-    }
+        mComments.init(questionDetail.getId(), OSChinaApi.COMMENT_QUESTION, questionDetail.getCommentCount(), getImgLoader(), this);
 
-
-    private final static String linkCss = "<script type=\"text/javascript\" " +
-            "src=\"file:///android_asset/shCore.js\"></script>"
-            + "<script type=\"text/javascript\" src=\"file:///android_asset/brush.js\"></script>"
-            + "<script type=\"text/javascript\" src=\"file:///android_asset/client.js\"></script>"
-            + "<script type=\"text/javascript\" src=\"file:///android_asset/detail_page" +
-            ".js\"></script>"
-            + "<script type=\"text/javascript\">SyntaxHighlighter.all();</script>"
-            + "<script type=\"text/javascript\">function showImagePreview(var url){window" +
-            ".location.url= url;}</script>"
-            + "<link rel=\"stylesheet\" type=\"text/css\" " +
-            "href=\"file:///android_asset/shThemeDefault.css\">"
-            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/shCore" +
-            ".css\">"
-            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/css/common_new" +
-            ".css\">";
-
-    private String getWebViewBody(QuestionDetail questionDetail) {
-        return String.format("<!DOCTYPE HTML><html><head>%s</head><body><div class=\"body-content\">%s</div></body></html>",
-                linkCss + UIHelper.WEB_LOAD_IMAGES,
-                UIHelper.setHtmlCotentSupportImagePreview(questionDetail.getBody()));
     }
 
     private boolean mInputDoubleEmpty = false;
@@ -245,9 +193,6 @@ public class QuestionDetailFragment extends BaseFragment implements View.OnClick
         }
     }
 
-    private void handleRelation() {
-        mOperator.toFollow();
-    }
 
     private void handleFavorite() {
         mOperator.toFavorite();
@@ -261,21 +206,14 @@ public class QuestionDetailFragment extends BaseFragment implements View.OnClick
         mOperator.toSendComment(mCommentId, mCommentAuthorId, mETInput.getText().toString());
     }
 
-    @SuppressWarnings("deprecation")
+
     @Override
     public void toFavoriteOk(QuestionDetail questionDetail) {
+        if (questionDetail.isFavorite())
+            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_faved_normal));
+        else
+            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_fav_normal));
 
-    }
-
-    @Override
-    public void toShareOk() {
-        (Toast.makeText(getContext(), "分享成功", Toast.LENGTH_LONG)).show();
-    }
-
-    @Override
-    public void toFollowOk(QuestionDetail questionDetail) {
-        mBtnRelation.setEnabled(false);
-        mBtnRelation.setText("已关注");
     }
 
 
@@ -285,19 +223,19 @@ public class QuestionDetailFragment extends BaseFragment implements View.OnClick
         mETInput.setText("");
     }
 
-    private static void formatHtml(Resources resources, TextView textView, String str) {
-        textView.setMovementMethod(MyLinkMovementMethod.a());
-        textView.setFocusable(false);
-        textView.setLongClickable(false);
 
-        if (textView instanceof TweetTextView) {
-            ((TweetTextView) textView).setDispatchToParent(true);
-        }
-
-        str = TweetTextView.modifyPath(str);
-        Spanned span = Html.fromHtml(str);
-        span = InputHelper.displayEmoji(resources, span.toString());
-        textView.setText(span);
-        MyURLSpan.parseLinkText(textView, span);
+    @Override
+    public void scrollToComment() {
+        mLayContent.scrollTo(0, mComments.getTop());
     }
+
+    @Override
+    public void onClick(View view, Comment comment) {
+
+        FloatingAutoHideDownBehavior.showBottomLayout(mLayCoordinator, mLayContent, mLayBottom);
+        mCommentId = comment.getId();
+        mCommentAuthorId = comment.getAuthorId();
+        mETInput.setHint(String.format("回复: %s", comment.getAuthor()));
+    }
+
 }
