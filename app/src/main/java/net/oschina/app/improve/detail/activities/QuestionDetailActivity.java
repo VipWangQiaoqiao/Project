@@ -65,7 +65,7 @@ public class QuestionDetailActivity extends DetailActivity<QuestionDetail, Quest
             return;
         showWaitDialog(R.string.progress_submit);
         final QuestionDetail questionDetail = getData();
-        OSChinaApi.getFavReverse(getDataId(), 3, new TextHttpResponseHandler() {
+        OSChinaApi.getFavReverse(getDataId(), 2, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 hideWaitDialog();

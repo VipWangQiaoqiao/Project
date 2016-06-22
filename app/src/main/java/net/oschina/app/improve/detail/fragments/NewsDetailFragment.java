@@ -70,6 +70,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
 
         mIVAuthorPortrait = (ImageView) root.findViewById(R.id.iv_avatar);
         mIVFav = (ImageView) root.findViewById(R.id.iv_fav);
+        mIVFav.setOnClickListener(this);
 
         mETInput = (EditText) root.findViewById(R.id.et_input);
 
