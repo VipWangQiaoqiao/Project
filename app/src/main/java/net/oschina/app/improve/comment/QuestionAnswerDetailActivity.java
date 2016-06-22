@@ -159,9 +159,12 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity{
         });
 
         if (comment.getReplies() != null){
+            mLayoutContainer.removeAllViews();
+            replies.clear();
             Collections.addAll(replies, comment.getReplies());
-            for (int i=0; i<comment.getReplies().length; i++){
-                appendComment(i, comment.getReplies()[i]);
+            Collections.reverse(replies); // 反转集合, 最新的评论在集合后面
+            for (int i=0; i<replies.size(); i++){
+                appendComment(i, replies.get(i));
             }
         }
 
@@ -188,7 +191,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity{
         holder.tvContent.setText(reply.getContent());
         holder.btnReply.setTag(reply);
         holder.btnReply.setOnClickListener(getOnReplyButtonClickListener());
-        mLayoutContainer.addView(view);
+        mLayoutContainer.addView(view, 0);
     }
 
     private View.OnClickListener getOnReplyButtonClickListener(){
@@ -222,6 +225,8 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity{
                 if (result.isSuccess()){
                     replies.add(result.getResult());
                     tvCmnCount.setText("评论 ("+ replies.size() +")");
+                    mDelegation.getInputView().setHint("发表评论");
+                    mDelegation.getInputView().setText(null);
                     appendComment(replies.size() -1, result.getResult());
                 }else{
                     Toast.makeText(QuestionAnswerDetailActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
@@ -239,7 +244,6 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity{
             public void onSuccess(int statusCode, Header[] headers, String respStr) {
                 ResultBean<CommentEX> result = AppContext.createGson().fromJson(respStr,
                         new TypeToken<ResultBean<CommentEX>>(){}.getType());
-                Log.d("oschina", "-------------------\n" + respStr + "\n--------------");
                 if (result.isSuccess()){
                     CommentEX cmn = result.getResult();
                     if (cmn != null && cmn.getId() > 0){
