@@ -76,7 +76,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
         mComments = (CommentsView) root.findViewById(R.id.lay_detail_comment);
 
-        mLayCoordinator = (CoordinatorLayout) root.findViewById(R.id.fragment_blog_detail);
+        mLayCoordinator = (CoordinatorLayout) root.findViewById(R.id.activity_blog_detail);
 
         mLayContent = root.findViewById(R.id.lay_nsv);
 
@@ -152,10 +152,17 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
             mTvTagOne.setVisibility(View.GONE);
             mTvTagTwo.setVisibility(View.GONE);
         } else {
-            mTvTagOne.setText(tags.get(0));
-            mTvTagOne.setVisibility(View.VISIBLE);
-            mTvTagTwo.setText(tags.get(1));
-            mTvTagTwo.setVisibility(View.VISIBLE);
+            int size = tags.size();
+            if (size == 1) {
+                mTvTagOne.setText(tags.get(0));
+                mTvTagOne.setVisibility(View.VISIBLE);
+                mTvTagTwo.setVisibility(View.INVISIBLE);
+            } else {
+                mTvTagOne.setText(tags.get(0));
+                mTvTagOne.setVisibility(View.VISIBLE);
+                mTvTagTwo.setText(tags.get(1));
+                mTvTagTwo.setVisibility(View.VISIBLE);
+            }
         }
 
         String time = String.format("%s (%s)", StringUtils.friendly_time(questionDetail.getPubDate()), questionDetail.getPubDate());

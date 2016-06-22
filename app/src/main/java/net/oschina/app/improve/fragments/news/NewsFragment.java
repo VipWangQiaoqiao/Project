@@ -100,7 +100,8 @@ public class NewsFragment extends BaseGeneralListFragment<News> {
             switch (news.getType()) {
                 case 0:
                     //新闻链接
-                    UIHelper.showUrlRedirect(getActivity(), news.getHref());
+                   // UIHelper.showUrlRedirect(getActivity(), news.getHref());
+                    NewsDetailActivity.show(getActivity(), news.getId());
                     break;
                 case 1:
                     //软件推荐
