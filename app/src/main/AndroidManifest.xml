@@ -154,7 +154,8 @@
         <activity
             android:name=".ui.SimpleBackActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|stateUnchanged" />
         <activity
             android:name=".team.ui.TeamMainActivity"
             android:screenOrientation="portrait" />
