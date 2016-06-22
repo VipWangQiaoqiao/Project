@@ -64,7 +64,7 @@ public class StringUtils {
     public static Date toDate(String sdate, SimpleDateFormat dateFormater) {
         try {
             return dateFormater.parse(sdate);
-        } catch (ParseException e) {
+        } catch (Exception e) {
             return null;
         }
     }

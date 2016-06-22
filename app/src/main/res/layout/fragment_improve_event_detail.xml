@@ -169,6 +169,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/lay_16"
                     android:textColor="@color/text_dark"
+                    android:lineSpacingExtra="4dp"
                     android:textSize="14sp"
                     tools:text="免费" />
             </LinearLayout>

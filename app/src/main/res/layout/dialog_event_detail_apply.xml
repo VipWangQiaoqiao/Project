@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/lay_16"
+    android:paddingLeft="@dimen/lay_16"
+    android:paddingRight="@dimen/lay_16"
+    android:paddingTop="@dimen/lay_16">
+
+    <TextView
+        android:layout_marginTop="0dp"
+        style="@style/dialog_event_apply_text"
+        android:text="姓名* " />
+
+    <EditText
+        android:id="@+id/et_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_bg_edit"
+        android:padding="@dimen/lay_4"
+        android:textSize="14sp" />
+
+    <TextView
+        style="@style/dialog_event_apply_text"
+        android:text="性别* " />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_male"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="男" />
+
+        <RadioButton
+            android:id="@+id/rb_female"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="女" />
+    </RadioGroup>
+
+    <TextView
+        style="@style/dialog_event_apply_text"
+        android:text="电话* " />
+
+    <EditText
+        android:id="@+id/et_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_bg_edit"
+        android:inputType="phone"
+        android:textSize="14sp"
+        android:padding="@dimen/lay_4" />
+
+    <View
+        style="@style/h_line"
+        android:layout_height="1px"
+        android:layout_marginTop="@dimen/lay_12" />
+
+    <TextView
+        style="@style/dialog_event_apply_text"
+        android:text="单位名称* " />
+
+    <EditText
+        android:id="@+id/et_company"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_bg_edit"
+        android:textSize="14sp"
+        android:padding="@dimen/lay_4" />
+
+    <TextView
+        style="@style/dialog_event_apply_text"
+        android:text="职业名称* " />
+
+    <EditText
+        android:id="@+id/et_job"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_bg_edit"
+        android:textSize="14sp"
+        android:padding="@dimen/lay_4" />
+
+    <TextView
+        android:id="@+id/tv_remarks_tip"
+        style="@style/dialog_event_apply_text"
+        android:text="备注"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_remarks_selecte"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_2"
+        android:drawableRight="@drawable/ic_item_goto_right_tip"
+        android:gravity="center_vertical"
+        android:padding="@dimen/space_8"
+        android:textColor="@color/main_black"
+        android:textSize="@dimen/text_size_12"
+        android:visibility="gone" />
+</LinearLayout>

@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import net.oschina.app.AppContext;
@@ -26,8 +27,13 @@ public class EventDetailApplyDialog extends CommonDialog implements
     @Bind(R.id.et_name)
     EditText mName;
 
-    @Bind(R.id.tv_gender)
-    TextView mGender;
+    //    @Bind(R.id.tv_gender)
+//    TextView mGender;
+    @Bind(R.id.rb_male)
+    RadioButton rb_male;
+
+    @Bind(R.id.rb_female)
+    RadioButton rb_female;
 
     private String[] genders;
 
@@ -54,7 +60,7 @@ public class EventDetailApplyDialog extends CommonDialog implements
 
     private EventDetailApplyDialog(Context context, int defStyle, EventDetail event) {
         super(context, defStyle);
-        View shareView = View.inflate(context, R.layout.dialog_event_apply, null);
+        View shareView = View.inflate(context, R.layout.dialog_event_detail_apply, null);
         ButterKnife.bind(this, shareView);
         setContent(shareView, 0);
         this.mEvent = event;
@@ -64,9 +70,7 @@ public class EventDetailApplyDialog extends CommonDialog implements
     private void initView() {
         genders = getContext().getResources().getStringArray(R.array.gender);
 
-        mGender.setText(genders[0]);
-
-        mGender.setOnClickListener(this);
+        rb_male.setChecked(true);
 
         if (mEvent.getRemark() != null) {
             mTvRemarksTip.setVisibility(View.VISIBLE);
@@ -87,9 +91,6 @@ public class EventDetailApplyDialog extends CommonDialog implements
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
-            case R.id.tv_gender:
-                selectGender();
-                break;
             case R.id.tv_remarks_selecte:
                 selectRemarkSelect();
                 break;
@@ -98,20 +99,6 @@ public class EventDetailApplyDialog extends CommonDialog implements
         }
     }
 
-    private void selectGender() {
-        String gender = mGender.getText().toString();
-        for (String gender1 : genders) {
-            if (gender1.equals(gender)) {
-                break;
-            }
-        }
-        DialogHelp.getSelectDialog(getContext(), genders, new OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                mGender.setText(genders[i]);
-            }
-        }).show();
-    }
 
     private void selectRemarkSelect() {
         List<String> stringList = Arrays.asList(mEvent.getRemark().getSelect().split(","));
@@ -129,7 +116,8 @@ public class EventDetailApplyDialog extends CommonDialog implements
 
     public EventApplyData getApplyData() {
         String name = mName.getText().toString();
-        String gender = mGender.getText().toString();
+//        String gender = mGender.getText().toString();
+        String gender = genders[rb_male.isChecked() ? 0 : 1];
         String phone = mMobile.getText().toString();
         String company = mCompany.getText().toString();
         String job = mJob.getText().toString();
