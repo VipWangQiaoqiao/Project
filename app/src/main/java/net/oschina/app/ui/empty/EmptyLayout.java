@@ -5,12 +5,12 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.util.TDevice;
+import net.qiujuer.genius.ui.widget.Loading;
 
 public class EmptyLayout extends LinearLayout implements
         android.view.View.OnClickListener {// , ISkinUIObserver {
@@ -22,7 +22,7 @@ public class EmptyLayout extends LinearLayout implements
     public static final int NODATA_ENABLE_CLICK = 5;
     public static final int NO_LOGIN = 6;
 
-    private ProgressBar animProgress;
+    private Loading mLoading;
     private boolean clickEnable = true;
     private final Context context;
     public ImageView img;
@@ -48,7 +48,7 @@ public class EmptyLayout extends LinearLayout implements
         img = (ImageView) view.findViewById(R.id.img_error_layout);
         tv = (TextView) view.findViewById(R.id.tv_error_layout);
         RelativeLayout mLayout = (RelativeLayout) view.findViewById(R.id.pageerrLayout);
-        animProgress = (ProgressBar) view.findViewById(R.id.animProgress);
+        mLoading = (Loading) view.findViewById(R.id.animProgress);
         setBackgroundColor(-1);
         setOnClickListener(this);
         img.setOnClickListener(new View.OnClickListener() {
@@ -123,9 +123,8 @@ public class EmptyLayout extends LinearLayout implements
 
     /**
      * 新添设置背景
-     * 
+     *
      * @author 火蚁 2015-1-27 下午2:14:00
-     * 
      */
     public void setErrorImag(int imgResource) {
         try {
@@ -137,51 +136,56 @@ public class EmptyLayout extends LinearLayout implements
     public void setErrorType(int i) {
         setVisibility(View.VISIBLE);
         switch (i) {
-        case NETWORK_ERROR:
-            mErrorState = NETWORK_ERROR;
-            // img.setBackgroundDrawable(SkinsUtil.getDrawable(context,"pagefailed_bg"));
-            if (TDevice.hasInternet()) {
-                tv.setText(R.string.error_view_load_error_click_to_refresh);
-                img.setBackgroundResource(R.drawable.pagefailed_bg);
-            } else {
-                tv.setText(R.string.error_view_network_error_click_to_refresh);
-                img.setBackgroundResource(R.drawable.page_icon_network);
-            }
-            img.setVisibility(View.VISIBLE);
-            animProgress.setVisibility(View.GONE);
-            clickEnable = true;
-            break;
-        case NETWORK_LOADING:
-            mErrorState = NETWORK_LOADING;
-            // animProgress.setBackgroundDrawable(SkinsUtil.getDrawable(context,"loadingpage_bg"));
-            animProgress.setVisibility(View.VISIBLE);
-            img.setVisibility(View.GONE);
-            tv.setText(R.string.error_view_loading);
-            clickEnable = false;
-            break;
-        case NODATA:
-            mErrorState = NODATA;
-            // img.setBackgroundDrawable(SkinsUtil.getDrawable(context,"page_icon_empty"));
-            img.setBackgroundResource(R.drawable.page_icon_empty);
-            img.setVisibility(View.VISIBLE);
-            animProgress.setVisibility(View.GONE);
-            setTvNoDataContent();
-            clickEnable = true;
-            break;
-        case HIDE_LAYOUT:
-            setVisibility(View.GONE);
-            break;
-        case NODATA_ENABLE_CLICK:
-            mErrorState = NODATA_ENABLE_CLICK;
-            img.setBackgroundResource(R.drawable.page_icon_empty);
-            // img.setBackgroundDrawable(SkinsUtil.getDrawable(context,"page_icon_empty"));
-            img.setVisibility(View.VISIBLE);
-            animProgress.setVisibility(View.GONE);
-            setTvNoDataContent();
-            clickEnable = true;
-            break;
-        default:
-            break;
+            case NETWORK_ERROR:
+                mErrorState = NETWORK_ERROR;
+                // img.setBackgroundDrawable(SkinsUtil.getDrawable(context,"pagefailed_bg"));
+                if (TDevice.hasInternet()) {
+                    tv.setText(R.string.error_view_load_error_click_to_refresh);
+                    img.setBackgroundResource(R.drawable.pagefailed_bg);
+                } else {
+                    tv.setText(R.string.error_view_network_error_click_to_refresh);
+                    img.setBackgroundResource(R.drawable.page_icon_network);
+                }
+                img.setVisibility(View.VISIBLE);
+                mLoading.stop();
+                mLoading.setVisibility(View.GONE);
+                clickEnable = true;
+                break;
+            case NETWORK_LOADING:
+                mErrorState = NETWORK_LOADING;
+                // mLoading.setBackgroundDrawable(SkinsUtil.getDrawable(context,"loadingpage_bg"));
+                mLoading.setVisibility(View.VISIBLE);
+                mLoading.start();
+                img.setVisibility(View.GONE);
+                tv.setText(R.string.error_view_loading);
+                clickEnable = false;
+                break;
+            case NODATA:
+                mErrorState = NODATA;
+                // img.setBackgroundDrawable(SkinsUtil.getDrawable(context,"page_icon_empty"));
+                img.setBackgroundResource(R.drawable.page_icon_empty);
+                img.setVisibility(View.VISIBLE);
+                mLoading.stop();
+                mLoading.setVisibility(View.GONE);
+                setTvNoDataContent();
+                clickEnable = true;
+                break;
+            case HIDE_LAYOUT:
+                mLoading.stop();
+                setVisibility(View.GONE);
+                break;
+            case NODATA_ENABLE_CLICK:
+                mErrorState = NODATA_ENABLE_CLICK;
+                img.setBackgroundResource(R.drawable.page_icon_empty);
+                // img.setBackgroundDrawable(SkinsUtil.getDrawable(context,"page_icon_empty"));
+                img.setVisibility(View.VISIBLE);
+                mLoading.stop();
+                mLoading.setVisibility(View.GONE);
+                setTvNoDataContent();
+                clickEnable = true;
+                break;
+            default:
+                break;
         }
     }
 
