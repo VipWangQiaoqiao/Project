@@ -20,7 +20,6 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.activities.BaseBackActivity;
-import net.oschina.app.improve.activities.QuestionAnswerDetailActivity;
 import net.oschina.app.improve.adapter.base.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
