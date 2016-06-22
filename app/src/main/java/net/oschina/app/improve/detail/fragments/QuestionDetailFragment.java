@@ -33,12 +33,10 @@ import java.util.List;
 
 public class QuestionDetailFragment extends DetailFragment<QuestionDetail, QuestionDetailContract.View, QuestionDetailContract.Operator>
         implements View.OnClickListener, QuestionDetailContract.View, OnCommentClickListener {
-    private static final String TAG = "QuestionDetailFragment";
     private long mId;
     private TextView mTVAuthorName;
     private TextView mTVPubDate;
     private TextView mTVTitle;
-    private ImageView mIVAuthorPortrait;
     private EditText mETInput;
 
     private long mCommentId;
@@ -214,6 +212,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
     }
 
 
+    @SuppressWarnings("deprecation")
     @Override
     public void toFavoriteOk(QuestionDetail questionDetail) {
         if (questionDetail.isFavorite())
