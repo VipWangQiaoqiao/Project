@@ -145,31 +145,34 @@ public class EventDetailFragment extends BaseFragment implements
                 break;
             case R.id.ll_sign:
                 if (mDetail.getApplyStatus() == EventDetail.APPLY_STATUS_UN_SIGN) {
-                    if (mEventApplyDialog == null) {
-                        mEventApplyDialog = new EventDetailApplyDialog(getActivity(), mDetail);
-                        mEventApplyDialog.setCanceledOnTouchOutside(true);
-                        mEventApplyDialog.setCancelable(true);
-                        mEventApplyDialog.setTitle("活动报名");
-                        mEventApplyDialog.setCanceledOnTouchOutside(true);
-                        mEventApplyDialog.setNegativeButton(R.string.cancle, null);
-                        mEventApplyDialog.setPositiveButton(R.string.ok,
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface d, int which) {
-                                        EventApplyData data;
-                                        if ((data = mEventApplyDialog.getApplyData()) != null) {
-                                            data.setEvent(Integer.parseInt(String.valueOf(mDetail.getId())));
-                                            data.setUser(AppContext.getInstance()
-                                                    .getLoginUid());
-                                            mOperator.toSignUp(data);
+                    if (AppContext.getInstance().isLogin()) {
+                        if (mEventApplyDialog == null) {
+                            mEventApplyDialog = new EventDetailApplyDialog(getActivity(), mDetail);
+                            mEventApplyDialog.setCanceledOnTouchOutside(true);
+                            mEventApplyDialog.setCancelable(true);
+                            mEventApplyDialog.setTitle("活动报名");
+                            mEventApplyDialog.setCanceledOnTouchOutside(true);
+                            mEventApplyDialog.setNegativeButton(R.string.cancle, null);
+                            mEventApplyDialog.setPositiveButton(R.string.ok,
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface d, int which) {
+                                            EventApplyData data;
+                                            if ((data = mEventApplyDialog.getApplyData()) != null) {
+                                                data.setEvent(Integer.parseInt(String.valueOf(mDetail.getId())));
+                                                data.setUser(AppContext.getInstance()
+                                                        .getLoginUid());
+                                                mOperator.toSignUp(data);
+                                            }
+
                                         }
-
-                                    }
-                                });
+                                    });
+                        }
+                        mEventApplyDialog.show();
+                    } else {
+                        UIHelper.showLoginActivity(getActivity());
                     }
-                    mEventApplyDialog.show();
                 }
-
                 break;
         }
     }
