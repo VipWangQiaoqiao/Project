@@ -71,12 +71,10 @@ public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailCon
             return;
         showWaitDialog(R.string.progress_submit);
         final NewsDetail newsDetail = getData();
-        OSChinaApi.getFavReverse(getDataId(), 3, new TextHttpResponseHandler() {
+        OSChinaApi.getFavReverse(getDataId(),6, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 hideWaitDialog();
-                if (newsDetail == null)
-                    return;
                 if (newsDetail.isFavorite())
                     AppContext.showToastShort(R.string.del_favorite_faile);
                 else

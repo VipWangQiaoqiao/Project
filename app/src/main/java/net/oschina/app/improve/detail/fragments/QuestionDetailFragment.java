@@ -32,7 +32,7 @@ import java.util.List;
  */
 
 public class QuestionDetailFragment extends DetailFragment<QuestionDetail, QuestionDetailContract.View, QuestionDetailContract.Operator>
-        implements View.OnClickListener, QuestionDetailContract.View, OnCommentClickListener {
+        implements View.OnClickListener, QuestionDetailContract.View {
     private static final String TAG = "QuestionDetailFragment";
     private long mId;
     private TextView mTVAuthorName;
@@ -68,6 +68,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         mTvTagThree = (TextView) root.findViewById(R.id.tv_ques_detail_tag3);
 
         mIVFav = (ImageView) root.findViewById(R.id.iv_fav);
+        mIVFav.setOnClickListener(this);
 
         mComments = (CommentExsView) root.findViewById(R.id.lay_detail_comment);
 
@@ -182,7 +183,16 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         TextView lable = (TextView) mComments.getChildAt(0);
         lable.setText(String.format("%s (%d)", "回答", questionDetail.getCommentCount()));
 
-        mComments.init(questionDetail.getId(), OSChinaApi.COMMENT_QUESTION, questionDetail.getCommentCount(), getImgLoader(), this);
+        mComments.init(questionDetail.getId(), OSChinaApi.COMMENT_QUESTION, questionDetail.getCommentCount(), getImgLoader(), new OnCommentClickListener() {
+            @Override
+            public void onClick(View view, Comment comment) {
+
+                FloatingAutoHideDownBehavior.showBottomLayout(mLayCoordinator, mLayContent, mLayBottom);
+                mCommentId = comment.getId();
+                mCommentAuthorId = comment.getAuthorId();
+                mETInput.setHint(String.format("回复: %s", comment.getAuthor()));
+            }
+        });
 
     }
 
@@ -225,7 +235,6 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
             mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_faved_normal));
         else
             mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_fav_normal));
-
     }
 
 
@@ -241,13 +250,5 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         mLayContent.scrollTo(0, mComments.getTop());
     }
 
-    @Override
-    public void onClick(View view, Comment comment) {
-
-        FloatingAutoHideDownBehavior.showBottomLayout(mLayCoordinator, mLayContent, mLayBottom);
-        mCommentId = comment.getId();
-        mCommentAuthorId = comment.getAuthorId();
-        mETInput.setHint(String.format("回复: %s", comment.getAuthor()));
-    }
 
 }
