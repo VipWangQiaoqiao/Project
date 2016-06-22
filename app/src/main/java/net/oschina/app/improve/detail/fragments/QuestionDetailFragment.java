@@ -48,6 +48,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
     private View mLayBottom;
     private TextView mTvTagOne;
     private TextView mTvTagTwo;
+    private TextView mTvTagThree;
     private ImageView mIVFav;
 
 
@@ -64,6 +65,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         mTVTitle = (TextView) root.findViewById(R.id.tv_ques_detail_title);
         mTvTagOne = (TextView) root.findViewById(R.id.tv_ques_detail_tag1);
         mTvTagTwo = (TextView) root.findViewById(R.id.tv_ques_detail_tag2);
+        mTvTagThree = (TextView) root.findViewById(R.id.tv_ques_detail_tag3);
 
         mIVFav = (ImageView) root.findViewById(R.id.iv_fav);
 
@@ -131,6 +133,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
         String body = questionDetail.getBody();
 
+        setCommentCount(questionDetail.getCommentCount());
         setBodyContent(body);
 
         mTVAuthorName.setText(questionDetail.getAuthor().trim());
@@ -139,17 +142,30 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         if (tags == null || tags.isEmpty()) {
             mTvTagOne.setVisibility(View.GONE);
             mTvTagTwo.setVisibility(View.GONE);
+            mTvTagThree.setVisibility(View.GONE);
         } else {
+
             int size = tags.size();
             if (size == 1) {
                 mTvTagOne.setText(tags.get(0));
                 mTvTagOne.setVisibility(View.VISIBLE);
-                mTvTagTwo.setVisibility(View.INVISIBLE);
-            } else {
+                mTvTagTwo.setVisibility(View.GONE);
+                mTvTagThree.setVisibility(View.GONE);
+            }
+            if (size == 2) {
                 mTvTagOne.setText(tags.get(0));
                 mTvTagOne.setVisibility(View.VISIBLE);
                 mTvTagTwo.setText(tags.get(1));
                 mTvTagTwo.setVisibility(View.VISIBLE);
+                mTvTagThree.setVisibility(View.GONE);
+            }
+            if (size >= 3) {
+                mTvTagOne.setText(tags.get(0));
+                mTvTagOne.setVisibility(View.VISIBLE);
+                mTvTagTwo.setText(tags.get(1));
+                mTvTagTwo.setVisibility(View.VISIBLE);
+                mTvTagThree.setText(tags.get(2));
+                mTvTagThree.setVisibility(View.VISIBLE);
             }
         }
 

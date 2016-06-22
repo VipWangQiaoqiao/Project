@@ -144,6 +144,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
 
         mId = mCommentId = newsDetail.getId();
 
+        setCommentCount(newsDetail.getCommentCount());
         setBodyContent(newsDetail.getBody());
 
         mTVAuthorName.setText(newsDetail.getAuthor());
