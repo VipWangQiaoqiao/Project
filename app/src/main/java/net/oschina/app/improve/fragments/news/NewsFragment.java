@@ -22,6 +22,7 @@ import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.detail.activities.BlogDetailActivity;
 import net.oschina.app.improve.detail.activities.NewsDetailActivity;
+import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
 import net.oschina.app.improve.fragments.base.BaseGeneralListFragment;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.ViewNewsHeader;
@@ -107,7 +108,7 @@ public class NewsFragment extends BaseGeneralListFragment<News> {
                     break;
                 case 2:
                     //问答
-                    // QuestionDetailActivity.show(getActivity(),news.getId());
+                     QuestionDetailActivity.show(getActivity(),news.getId());
                     break;
                 case 3:
                     //博客
