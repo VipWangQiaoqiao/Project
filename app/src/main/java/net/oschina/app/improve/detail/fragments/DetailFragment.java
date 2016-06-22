@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.detail.contract.DetailContract;
@@ -64,6 +65,12 @@ public abstract class DetailFragment<Data, DataView extends DetailContract.View,
 
     void setBodyContent(String body) {
         HtmlUtil.initDetailView(mWebView, body);
+    }
+
+    void setCommentCount(int count) {
+        if(mOperator!=null){
+            mOperator.setCommentCount(count);
+        }
     }
 
     @Override
