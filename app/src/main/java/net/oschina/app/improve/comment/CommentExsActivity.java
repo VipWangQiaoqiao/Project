@@ -251,6 +251,6 @@ public class CommentExsActivity extends BaseBackActivity {
     }
 
     private void onItemClick(CommentEX comment) {
-        QuestionAnswerDetailActivity.show(this, comment);
+        QuestionAnswerDetailActivity.show(this, comment, mId);
     }
 }

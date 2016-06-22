@@ -164,6 +164,10 @@ public class HTMLUtil {
 	}
 
 	public static String setupWebContent(String content, boolean isShowHighlight, boolean isShowImagePreview){
+		return setupWebContent(content, isShowHighlight, isShowImagePreview, null);
+	}
+
+	public static String setupWebContent(String content, boolean isShowHighlight, boolean isShowImagePreview, String style){
 		if (isShowImagePreview){
 			Pattern pattern = Pattern.compile("<img[^>]+src\\s*=\\s*[\"\']([^\"\']*)[\"\'](\\s*data-url\\s*=\\s*[\"\']([^\"\']*)[\"\'])*");
 			Matcher matcher = pattern.matcher(content);
@@ -184,7 +188,7 @@ public class HTMLUtil {
                     + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/css/common_new.css\">"
                 + "</head>"
                 + "<body>"
-                    + "<div style='contentstyle' id='article_id'>"
+                    + "<div class='contentstyle' id='article_id' style='%s'>"
                         + "%s"
                     + "</div>"
                     + (isShowHighlight ? "<script type=\"text/javascript\" src=\"file:///android_asset/shCore.js\"></script>" : "")
@@ -192,6 +196,6 @@ public class HTMLUtil {
                     + (isShowHighlight ? "<script type=\"text/javascript\">SyntaxHighlighter.all();</script>" : "")
                 + "</body>"
             + "</html>"
-            , content);
+            , style == null ? "" : style, content);
 	}
 }
