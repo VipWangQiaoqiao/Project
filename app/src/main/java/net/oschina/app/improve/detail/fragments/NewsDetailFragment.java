@@ -170,6 +170,8 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
             ((TextView) child.findViewById(R.id.tv_title)).setText(software.getName());
             View layInfo = child.findViewById(R.id.lay_info_view_comment);
             layInfo.setVisibility(View.GONE);
+            View line = child.findViewById(R.id.line);
+            line.setVisibility(View.GONE);
             mSoft.addView(child, 1);
             mSoft.setVisibility(View.VISIBLE);
             mSoft.setOnClickListener(this);
