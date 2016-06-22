@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -41,10 +42,12 @@ import cz.msebera.android.httpclient.Header;
  */
 
 public abstract class DetailActivity<Data, DataView extends DetailContract.View> extends BaseBackActivity implements DetailContract.Operator<Data, DataView> {
-    protected long mDataId;
-    protected Data mData;
-    protected DataView mView;
-    protected EmptyLayout mEmptyLayout;
+    long mDataId;
+    Data mData;
+    DataView mView;
+    EmptyLayout mEmptyLayout;
+    TextView mCommentCountView;
+
     private ProgressDialog mDialog;
     private ShareDialog mShareDialog;
 
@@ -178,9 +181,24 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
     }
 
     @Override
+    public void setCommentCount(int count) {
+        final TextView view = mCommentCountView;
+        if (view != null) {
+            view.setText(count + "");
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_detail, menu);
+        MenuItem item = menu.findItem(R.id.menu_scroll_comment);
+        if (item != null) {
+            View action = item.getActionView();
+            if (action != null) {
+                mCommentCountView = (TextView) action.findViewById(R.id.tv_comment_count);
+            }
+        }
         return true;
     }
 

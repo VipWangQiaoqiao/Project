@@ -15,7 +15,11 @@ public interface DetailContract {
         // 举报
         void toReport();
 
+        // 回写布局View
         void setDataView(DataView view);
+
+        // 回写顶部评论数
+        void setCommentCount(int count);
     }
 
     interface View {
