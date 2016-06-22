@@ -2,6 +2,9 @@ package net.oschina.app.improve.detail.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -31,8 +34,6 @@ import cz.msebera.android.httpclient.Header;
  */
 public class EventDetailActivity extends DetailActivity<EventDetail, EventDetailContract.View> implements EventDetailContract.Operator {
 
-    private long mId;
-
     public static void show(Context context, long id) {
         Intent intent = new Intent(context, EventDetailActivity.class);
         intent.putExtra("id", id);
@@ -41,13 +42,12 @@ public class EventDetailActivity extends DetailActivity<EventDetail, EventDetail
 
     @Override
     protected void initData() {
-        mId = getIntent().getLongExtra("id", 0);
         super.initData();
     }
 
     @Override
     void requestData() {
-        OSChinaApi.getEventDetail(mId, getRequestHandler());
+        OSChinaApi.getEventDetail(mDataId, getRequestHandler());
     }
 
     @Override
@@ -67,11 +67,29 @@ public class EventDetailActivity extends DetailActivity<EventDetail, EventDetail
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.share_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_share) {
+            final EventDetail detail = getData();
+            if (detail != null){
+                toShare(detail.getTitle(),detail.getBody(),detail.getHref());
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void toFav() {
         if (!isLogin())
             return;
         final EventDetail mDetail = getData();
-        OSChinaApi.getFavReverse(mId, 5, new TextHttpResponseHandler() {
+        OSChinaApi.getFavReverse(mDataId, 5, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 hideWaitDialog();
