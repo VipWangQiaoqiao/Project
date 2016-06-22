@@ -52,7 +52,7 @@ public abstract class DetailFragment<Data, DataView extends DetailContract.View,
             public void onPageFinished(WebView view, String url) {
                 Operator operator = mOperator;
                 if (operator != null) {
-                    operator.hideLoading();
+                    //operator.hideLoading();
                     Log.e("TAG", "WebViewClient.onPageFinished:" + url);
                 }
             }
