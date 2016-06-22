@@ -1,14 +1,7 @@
-package net.oschina.app.improve.activities;
+package net.oschina.app.improve.detail.activities;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -21,9 +14,9 @@ import net.oschina.app.bean.EventApplyData;
 import net.oschina.app.bean.Result;
 import net.oschina.app.improve.bean.EventDetail;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.contract.EventDetailContract;
-import net.oschina.app.improve.fragments.event.EventDetailFragment;
-import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.improve.detail.contract.EventDetailContract;
+import net.oschina.app.improve.detail.fragments.DetailFragment;
+import net.oschina.app.improve.detail.fragments.EventDetailFragment;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
@@ -36,13 +29,9 @@ import cz.msebera.android.httpclient.Header;
  * Created by huanghaibin
  * on 16-6-13.
  */
-public class EventDetailActivity extends AppCompatActivity implements EventDetailContract.Operator {
+public class EventDetailActivity extends DetailActivity<EventDetail, EventDetailContract.View> implements EventDetailContract.Operator {
 
-    private EmptyLayout mEmptyLayout;
     private long mId;
-    private EventDetail mDetail;
-    private EventDetailContract.View mView;
-    private ProgressDialog mDialog;
 
     public static void show(Context context, long id) {
         Intent intent = new Intent(context, EventDetailActivity.class);
@@ -51,42 +40,41 @@ public class EventDetailActivity extends AppCompatActivity implements EventDetai
     }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_improve_event_detail);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeButtonEnabled(false);
-        }
-        initView();
-        initData();
-    }
-
-    private void initView() {
-        mEmptyLayout = (EmptyLayout) findViewById(R.id.lay_error);
-        mEmptyLayout.setOnLayoutClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-                getEventDetail();
-            }
-        });
-    }
-
-    private void initData() {
+    protected void initData() {
         mId = getIntent().getLongExtra("id", 0);
-        getEventDetail();
+        super.initData();
+    }
+
+    @Override
+    void requestData() {
+        OSChinaApi.getEventDetail(mId, getRequestHandler());
+    }
+
+    @Override
+    Class<? extends DetailFragment> getDataViewFragment() {
+        return EventDetailFragment.class;
+    }
+
+    @Override
+    Type getDataType() {
+        return new TypeToken<ResultBean<EventDetail>>() {
+        }.getType();
+    }
+
+    @Override
+    public void toReport() {
+
     }
 
     @Override
     public void toFav() {
         if (!isLogin())
             return;
+        final EventDetail mDetail = getData();
         OSChinaApi.getFavReverse(mId, 5, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                getWaitDialog().dismiss();
+                hideWaitDialog();
                 if (mDetail.isFavorite())
                     AppContext.showToastShort(R.string.del_favorite_faile);
                 else
@@ -112,7 +100,7 @@ public class EventDetailActivity extends AppCompatActivity implements EventDetai
                     e.printStackTrace();
                     onFailure(statusCode, headers, responseString, e);
                 }
-                getWaitDialog().dismiss();
+                hideWaitDialog();
             }
         });
     }
@@ -121,7 +109,8 @@ public class EventDetailActivity extends AppCompatActivity implements EventDetai
     public void toSignUp(EventApplyData data) {
         if (!isLogin())
             return;
-        getWaitDialog().show();
+        final EventDetail mDetail = getData();
+        showWaitDialog(R.string.progress_submit);
         OSChinaApi.eventApply(data, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -134,56 +123,14 @@ public class EventDetailActivity extends AppCompatActivity implements EventDetai
                 } else {
                     AppContext.showToast(rs.getErrorMessage());
                 }
-                getWaitDialog().dismiss();
+                hideWaitDialog();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                getWaitDialog().dismiss();
+                hideWaitDialog();
             }
         });
-    }
-
-    private void getEventDetail() {
-        OSChinaApi.getEventDetail(mId, new TextHttpResponseHandler() {
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                mEmptyLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                try {
-                    Type type = new TypeToken<ResultBean<EventDetail>>() {
-                    }.getType();
-
-                    ResultBean<EventDetail> resultBean = AppContext.createGson().fromJson(responseString, type);
-                    if (resultBean != null && resultBean.isSuccess()) {
-                        mDetail = resultBean.getResult();
-                        showEventDetail();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    onFailure(statusCode, headers, responseString, e);
-                }
-            }
-        });
-    }
-
-    private void showEventDetail() {
-        EventDetailFragment fragment = EventDetailFragment.instantiate(this, mDetail);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.lay_container, fragment);
-        transaction.commitAllowingStateLoss();
-        mView = fragment;
-    }
-
-    public ProgressDialog getWaitDialog() {
-        if (mDialog == null) {
-            mDialog = new ProgressDialog(this);
-            mDialog.setMessage(getResources().getString(R.string.progress_submit));
-        }
-        return mDialog;
     }
 
     private boolean isLogin() {

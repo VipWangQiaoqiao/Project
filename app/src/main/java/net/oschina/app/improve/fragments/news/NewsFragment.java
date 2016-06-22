@@ -14,7 +14,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Banner;
 import net.oschina.app.cache.CacheManager;
-import net.oschina.app.improve.activities.EventDetailActivity;
+import net.oschina.app.improve.detail.activities.EventDetailActivity;
 import net.oschina.app.improve.adapter.base.BaseListAdapter;
 import net.oschina.app.improve.adapter.general.NewsAdapter;
 import net.oschina.app.improve.bean.News;
