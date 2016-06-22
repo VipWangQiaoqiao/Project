@@ -77,7 +77,7 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Log.e("oschina", error.getMessage());
+                Log.d("oschina", error.getMessage() == null ? "位置原因" : error.getMessage());
             }
         };
     }

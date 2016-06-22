@@ -118,7 +118,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <LinearLayout
+    <!--<LinearLayout
         android:id="@+id/lay_option_wrap"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -188,5 +188,5 @@
             android:visibility="gone"
             android:background="@color/white"
             android:layout_gravity="bottom" />
-    </LinearLayout>
+    </LinearLayout>-->
 </android.support.design.widget.CoordinatorLayout>
