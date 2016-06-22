@@ -65,6 +65,11 @@ public abstract class DetailFragment<Data, DataView extends DetailContract.View,
 
     void setBodyContent(String body) {
         HtmlUtil.initDetailView(mWebView, body);
+        Operator operator = mOperator;
+        if (operator != null) {
+            operator.hideLoading();
+            Log.e("TAG", "WebViewClient.onPageFinished:dd");
+        }
     }
 
     void setCommentCount(int count) {
