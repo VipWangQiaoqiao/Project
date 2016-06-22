@@ -9,8 +9,8 @@
     android:paddingTop="@dimen/lay_16">
 
     <TextView
-        android:layout_marginTop="0dp"
         style="@style/dialog_event_apply_text"
+        android:layout_marginTop="0dp"
         android:text="姓名* " />
 
     <EditText
@@ -18,7 +18,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/ic_bg_edit"
-        android:padding="@dimen/lay_4"
+        android:maxLines="1"
+        android:paddingBottom="@dimen/lay_8"
+        android:paddingLeft="@dimen/lay_12"
+        android:paddingRight="@dimen/lay_12"
+        android:paddingTop="@dimen/lay_8"
         android:textSize="14sp" />
 
     <TextView
@@ -55,8 +59,12 @@
         android:layout_height="wrap_content"
         android:background="@drawable/ic_bg_edit"
         android:inputType="phone"
-        android:textSize="14sp"
-        android:padding="@dimen/lay_4" />
+        android:maxLines="1"
+        android:paddingBottom="@dimen/lay_8"
+        android:paddingLeft="@dimen/lay_12"
+        android:paddingRight="@dimen/lay_12"
+        android:paddingTop="@dimen/lay_8"
+        android:textSize="14sp" />
 
     <View
         style="@style/h_line"
@@ -72,8 +80,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/ic_bg_edit"
-        android:textSize="14sp"
-        android:padding="@dimen/lay_4" />
+        android:maxLines="1"
+        android:paddingBottom="@dimen/lay_8"
+        android:paddingLeft="@dimen/lay_12"
+        android:paddingRight="@dimen/lay_12"
+        android:paddingTop="@dimen/lay_8"
+        android:textSize="14sp" />
 
     <TextView
         style="@style/dialog_event_apply_text"
@@ -84,8 +96,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/ic_bg_edit"
-        android:textSize="14sp"
-        android:padding="@dimen/lay_4" />
+        android:maxLines="1"
+        android:paddingBottom="@dimen/lay_8"
+        android:paddingLeft="@dimen/lay_12"
+        android:paddingRight="@dimen/lay_12"
+        android:paddingTop="@dimen/lay_8"
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/tv_remarks_tip"
