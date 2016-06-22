@@ -1,5 +1,6 @@
 package net.oschina.app.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import net.oschina.app.R;
 import net.oschina.app.base.BaseActivity;
@@ -21,6 +23,7 @@ import net.oschina.app.util.UIHelper;
 
 import java.lang.ref.WeakReference;
 
+
 public class SimpleBackActivity extends BaseActivity implements
         OnSendClickListener {
 
@@ -29,6 +32,17 @@ public class SimpleBackActivity extends BaseActivity implements
     private static final String TAG = "FLAG_TAG";
     protected WeakReference<Fragment> mFragment;
     protected int mPageValue = -1;
+
+    @Override
+    public void startActivity(Intent intent) {
+        View view = getCurrentFocus();
+        if (view != null) {
+            view.clearFocus();
+            InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            manager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+        super.startActivity(intent);
+    }
 
     @Override
     protected int getLayoutId() {
