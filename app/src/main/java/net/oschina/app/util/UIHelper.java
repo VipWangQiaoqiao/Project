@@ -50,8 +50,11 @@ import net.oschina.app.fragment.FriendsFragment;
 import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
-import net.oschina.app.improve.detail.activities.EventDetailActivity;
 import net.oschina.app.improve.activities.TweetDetailActivity;
+import net.oschina.app.improve.detail.activities.BlogDetailActivity;
+import net.oschina.app.improve.detail.activities.EventDetailActivity;
+import net.oschina.app.improve.detail.activities.NewsDetailActivity;
+import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
 import net.oschina.app.improve.fragments.blog.UserBlogFragment;
 import net.oschina.app.interf.ICallbackResult;
 import net.oschina.app.interf.OnWebViewImageListener;
@@ -74,7 +77,6 @@ import net.oschina.app.ui.LoginActivity;
 import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.ui.TweetPubActivity;
-import net.oschina.app.improve.detail.activities.BlogDetailActivity;
 import net.oschina.app.viewpagerfragment.FriendsViewPagerFragment;
 import net.oschina.app.widget.AvatarView;
 
@@ -307,38 +309,41 @@ public class UIHelper {
     }
 
     /**
-     * 新闻超链接点击跳转
+     * show detail  method
      *
      * @param context context
+     * @param type    type
+     * @param id      id
      */
-    public static void showNewsDetail(Context context, net.oschina.app.improve.bean.News news) {
-        long newsId = news.getId();
-        switch (news.getType()) {
-            case net.oschina.app.improve.bean.News.TYPE_HREF:
-                showUrlRedirect(context, news.getHref());
+    public static void showDetail(Context context, int type, long id) {
+        switch (type) {
+            case 0:
+                //新闻链接
+                NewsDetailActivity.show(context, id);
                 break;
-            case net.oschina.app.improve.bean.News.TYPE_SOFTWARE:
-                showSoftwareDetailById(context, Integer.parseInt(String.valueOf(newsId)));
+            case 1:
+                //软件推荐
+                UIHelper.showSoftwareDetailById(context, (int) id);
                 break;
-            case net.oschina.app.improve.bean.News.TYPE_QUESTION:
-                showPostDetail(context, Integer.parseInt(String.valueOf(newsId)),
-                        news.getCommentCount());
+            case 2:
+                //问答
+                QuestionDetailActivity.show(context, id);
                 break;
-            case net.oschina.app.improve.bean.News.TYPE_BLOG:
-                showBlogDetail(context, StringUtils.toLong(String.valueOf(newsId)));
+            case 3:
+                //博客
+                BlogDetailActivity.show(context, id);
                 break;
-            case net.oschina.app.improve.bean.News.TYPE_EVENT:
-                showEventDetail(context,
-                        StringUtils.toInt(newsId));
+            case 4:
+                //4.翻译
+                NewsDetailActivity.show(context, id);
                 break;
-            case net.oschina.app.improve.bean.News.TYPE_NEWS:
-                showNewsDetail(context, Integer.parseInt(String.valueOf(newsId)), news.getCommentCount());
-                break;
-            case net.oschina.app.improve.bean.News.TYPE_TRNSLATE:
-                showNewsDetail(context, Integer.parseInt(String.valueOf(newsId)), news.getCommentCount());
+            case 5:
+                //活动
+                EventDetailActivity.show(context, id);
                 break;
             default:
-                showUrlRedirect(context, news.getHref());
+                //6.资讯
+                NewsDetailActivity.show(context, id);
                 break;
         }
     }
@@ -360,7 +365,7 @@ public class UIHelper {
                 showBlogDetail(context, StringUtils.toLong(String.valueOf(newsId)));
                 break;
             case Banner.BANNER_TYPE_EVENT:
-                EventDetailActivity.show(context,newsId);
+                EventDetailActivity.show(context, newsId);
                 break;
             case Banner.BANNER_TYPE_NEWS:
             default:
