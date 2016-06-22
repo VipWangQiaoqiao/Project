@@ -3,9 +3,6 @@ package net.oschina.app.improve.detail.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -23,7 +20,6 @@ import net.oschina.app.improve.bean.simple.UserRelation;
 import net.oschina.app.improve.detail.contract.SoftDetailContract;
 import net.oschina.app.improve.detail.fragments.DetailFragment;
 import net.oschina.app.improve.detail.fragments.SoftWareDetailFragment;
-import net.oschina.app.util.URLsUtils;
 import net.oschina.app.util.XmlUtils;
 
 import java.io.ByteArrayInputStream;
@@ -32,6 +28,7 @@ import java.lang.reflect.Type;
 import cz.msebera.android.httpclient.Header;
 
 public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftDetailContract.View> implements SoftDetailContract.Operator {
+
     private SoftDetailContract.View mView;
 
     public static void show(Context context, long id) {
@@ -60,20 +57,6 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
         }.getType();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_blog_detail, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_report) {
-            toReport();
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void toFavorite() {
@@ -120,28 +103,7 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
 
     @Override
     public void toShare() {
-        if (getDataId() != 0 && getData() != null) {
-            String content;
 
-            String url = String.format(URLsUtils.URL_MOBILE + "blog/%s", getDataId());
-            final SoftwareDetail softwareDetail = getData();
-            //  if (softwareDetail.getBody().length() > 55) {
-            //  content = HTMLUtil.delHTMLTag(softwareDetail.getBody().trim());
-            //    if (content.length() > 55)
-            //      content = StringUtils.getSubString(0, 55, content);
-            //    } else {
-            //    content = HTMLUtil.delHTMLTag(softwareDetail.getBody().trim());
-            //   }
-            //  String title = softwareDetail.getTitle();
-
-            //   if (TextUtils.isEmpty(url) || TextUtils.isEmpty(content) || TextUtils.isEmpty(title)) {
-            AppContext.showToast("内容加载失败...");
-            //     return;
-            //   }
-            //   toShare(title, content, url);
-        } else {
-            AppContext.showToast("内容加载失败...");
-        }
     }
 
     @Override
@@ -246,12 +208,5 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
         if (uid == 0)
             return;
         toReport(getDataId(), getData().getHref(), Report.TYPE_QUESTION);
-    }
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mView = null;
     }
 }

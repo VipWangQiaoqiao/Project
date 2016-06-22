@@ -36,7 +36,6 @@ import net.oschina.app.util.UIHelper;
 public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailContract.View, NewsDetailContract.Operator>
         implements View.OnClickListener, NewsDetailContract.View, OnCommentClickListener {
 
-    private static final String TAG = "NewsDetailFragment";
     private long mId;
     private TextView mTVAuthorName;
     private TextView mTVPubDate;
@@ -217,6 +216,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         mOperator.toSendComment(mCommentId, mCommentAuthorId, mETInput.getText().toString());
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void toFavoriteOk(NewsDetail newsDetail) {
         if (newsDetail.isFavorite())
