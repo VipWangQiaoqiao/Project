@@ -108,7 +108,7 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                mEmptyLayout.setVisibility(View.GONE);
+                mEmptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             }
 
             @Override
