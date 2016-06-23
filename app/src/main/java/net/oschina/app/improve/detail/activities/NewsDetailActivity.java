@@ -34,12 +34,21 @@ import cz.msebera.android.httpclient.Header;
  */
 public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailContract.View> implements NewsDetailContract.Operator {
 
-    public static void show(Context context, long id) {
+
+    private static int tempType = 6;
+
+    /**
+     * show news detail
+     *
+     * @param context context
+     * @param id      id
+     */
+    public static void show(Context context, int type, long id) {
         Intent intent = new Intent(context, NewsDetailActivity.class);
+        tempType = type;
         intent.putExtra("id", id);
         context.startActivity(intent);
     }
-
 
     @Override
     protected int getContentView() {
@@ -48,9 +57,7 @@ public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailCon
 
     @Override
     void requestData() {
-
-        OSChinaApi.getNewsDetail(getDataId(), getRequestHandler());
-
+        OSChinaApi.getNewsDetail(getDataId(), tempType != 4 ? "news" : "translation", getRequestHandler());
     }
 
     @Override
@@ -71,7 +78,7 @@ public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailCon
             return;
         showWaitDialog(R.string.progress_submit);
         final NewsDetail newsDetail = getData();
-        OSChinaApi.getFavReverse(getDataId(),6, new TextHttpResponseHandler() {
+        OSChinaApi.getFavReverse(getDataId(), 6, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 hideWaitDialog();

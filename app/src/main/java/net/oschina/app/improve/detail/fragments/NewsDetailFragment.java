@@ -139,7 +139,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
 
     @Override
     protected void initData() {
-        NewsDetail newsDetail = mOperator.getData();
+        final NewsDetail newsDetail = mOperator.getData();
         if (newsDetail == null)
             return;
 
@@ -183,7 +183,8 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         mAbouts.setAbout(newsDetail.getAbouts(), new DetailAboutView.OnAboutClickListener() {
             @Override
             public void onClick(View view, About about) {
-                NewsDetailActivity.show(getActivity(), about.getId());
+                int type = newsDetail.getType();
+                NewsDetailActivity.show(getActivity(),type,about.getId());
             }
         });
 
