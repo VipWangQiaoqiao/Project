@@ -13,13 +13,15 @@
         android:layout_marginBottom="4dp"
         android:layout_marginTop="16dp"
         android:orientation="horizontal"
-        android:paddingRight="16dp">
+        android:paddingRight="8dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_avatar"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_gravity="center_vertical"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="2dp"
             android:src="@drawable/widget_dface" />
 
         <LinearLayout
@@ -52,9 +54,12 @@
 
         <ImageView
             android:id="@+id/btn_comment"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:contentDescription="@string/app_name"
+            android:paddingBottom="18dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="8dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_comment_30" />
     </LinearLayout>
