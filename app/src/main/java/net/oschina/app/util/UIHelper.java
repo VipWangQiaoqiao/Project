@@ -417,10 +417,10 @@ public class UIHelper {
     @SuppressLint({"JavascriptInterface", "SetJavaScriptEnabled"})
     public static void initWebView(WebView webView) {
         WebSettings settings = webView.getSettings();
-        settings.setDefaultFontSize(15);
+        settings.setDefaultFontSize(14);
         settings.setJavaScriptEnabled(true);
-        settings.setSupportZoom(true);
-        settings.setBuiltInZoomControls(true);
+        settings.setSupportZoom(false);
+        settings.setBuiltInZoomControls(false);
         int sysVersion = Build.VERSION.SDK_INT;
         if (sysVersion >= 11) {
             settings.setDisplayZoomControls(false);
@@ -428,7 +428,7 @@ public class UIHelper {
             ZoomButtonsController zbc = new ZoomButtonsController(webView);
             zbc.getZoomControls().setVisibility(View.GONE);
         }
-        webView.setWebViewClient(UIHelper.getWebViewClient());
+        //webView.setWebViewClient(UIHelper.getWebViewClient());
     }
 
     /**

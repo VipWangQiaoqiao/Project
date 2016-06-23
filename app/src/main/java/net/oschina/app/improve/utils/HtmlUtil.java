@@ -1,8 +1,11 @@
 package net.oschina.app.improve.utils;
 
+import android.graphics.Bitmap;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import net.oschina.app.util.HTMLUtil;
+import net.oschina.app.util.UIHelper;
 
 /**
  * Created by JuQiu
@@ -25,9 +28,48 @@ public final class HtmlUtil {
 
     public static final String WEB_LOAD_IMAGES = "<script type=\"text/javascript\"> var allImgUrls = getAllImgSrc(document.body.innerHTML);</script>";
 
-    public static final void initDetailView(WebView webView, String content) {
+    public static void initWebView(WebView webView) {
+        webView.setHorizontalScrollBarEnabled(false);
+        UIHelper.initWebView(webView);
+        UIHelper.addWebImageShow(webView.getContext(), webView);
+    }
+
+    public static void initWebViewDetailData(WebView webView, String content, Runnable finishCallback) {
         //String body = String.format(HTML_FRAME, HtmlUtil.TITLE_DETAIL + HtmlUtil.WEB_LOAD_IMAGES, content);
         String body = HTMLUtil.setupWebContent(content, true, true);
+        webView.setWebViewClient(new WebClient(finishCallback));
         webView.loadDataWithBaseURL("", body, "text/html", "UTF-8", "");
+    }
+
+    private static class WebClient extends WebViewClient implements Runnable {
+        private Runnable mFinishCallback;
+        private boolean mDone = false;
+
+        WebClient(Runnable finishCallback) {
+            super();
+            mFinishCallback = finishCallback;
+        }
+
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
+            mDone = false;
+            // 当webview加载2秒后强制回馈完成
+            view.postDelayed(this, 2800);
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+            run();
+        }
+
+        @Override
+        public synchronized void run() {
+            if (!mDone) {
+                mDone = true;
+                mFinishCallback.run();
+            }
+        }
     }
 }
