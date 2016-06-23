@@ -202,7 +202,15 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
     public void setCommentCount(int count) {
         final TextView view = mCommentCountView;
         if (view != null) {
-            view.setText(count + "");
+            String str;
+            if (count < 1000)
+                str = String.valueOf(count);
+            else if (count < 10000) {
+                str = String.format("%sK", (Math.round(count * 0.01f) * 0.1f));
+            } else {
+                str = String.format("%sW", (Math.round(count * 0.001f) * 0.1f));
+            }
+            view.setText(str);
         }
     }
 
