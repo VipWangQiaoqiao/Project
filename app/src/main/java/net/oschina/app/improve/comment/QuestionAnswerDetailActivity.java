@@ -1,5 +1,6 @@
 package net.oschina.app.improve.comment;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,8 +31,10 @@ import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.bean.simple.CommentEX;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
+import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
 import java.util.ArrayList;
@@ -67,6 +72,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity{
     private long sid;
     private CommentEX comment;
     private CommentEX.Reply reply;
+    private View mVoteDialogView;
     private List<CommentEX.Reply> replies = new ArrayList<>();
     private KeyboardInputDelegation mDelegation;
     private TextHttpResponseHandler onSendCommentHandler;
@@ -180,6 +186,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity{
 
     private void appendComment(int i, CommentEX.Reply reply){
         View view = LayoutInflater.from(this).inflate(R.layout.list_item_tweet_comment, mLayoutContainer, false);
+        view.setBackgroundDrawable(getResources().getDrawable(R.drawable.selector_item_list));
         TweetCommentAdapter.TweetCommentHolderView holder = new TweetCommentAdapter.TweetCommentHolderView(view);
         holder.tvName.setText(reply.getAuthor());
         if (TextUtils.isEmpty(reply.getAuthorPortrait())){
@@ -257,8 +264,36 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity{
         });
     }
 
-    @OnClick(R.id.layout_vote) void onClickVote(){
+    private View getVoteDialogView(){
+        if(mVoteDialogView == null){
+            mVoteDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_question_comment_detail_vote, null, false);
+            mVoteDialogView.findViewById(R.id.btn_vote_up).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(QuestionAnswerDetailActivity.this, "顶他", Toast.LENGTH_SHORT).show();
+                }
+            });
+            mVoteDialogView.findViewById(R.id.btn_vote_down).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(QuestionAnswerDetailActivity.this, "踩他", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }else{
+            ViewGroup view = (ViewGroup) mVoteDialogView.getParent();
+            view.removeView(mVoteDialogView);
+        }
+        return mVoteDialogView;
+    }
 
+    @OnClick(R.id.layout_vote) void onClickVote(){
+        Dialog dialog = DialogHelp.getDialog(this)
+                .setView(getVoteDialogView())
+                .create();
+        /*WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+        params.width = (int) TDevice.dpToPixel(250f);
+        dialog.getWindow().setAttributes(params);*/
+        dialog.show();
     }
 
 

@@ -360,4 +360,6 @@
     <string name="state_refreshing">正在刷新</string>
 
     <string name="lable_software">相关软件</string>
+    <string name="vote_up">顶</string>
+    <string name="vote_down">踩</string>
 </resources>
