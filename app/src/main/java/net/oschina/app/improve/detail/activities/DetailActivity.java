@@ -223,7 +223,9 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
                         }
                     }
                 });
-                mCommentCountView = (TextView) action.findViewById(R.id.tv_comment_count);
+                View tv = action.findViewById(R.id.tv_comment_count);
+                if (tv != null)
+                    mCommentCountView = (TextView) tv;
             }
         }
         return true;
