@@ -319,7 +319,7 @@ public class UIHelper {
         switch (type) {
             case 0:
                 //新闻链接
-                NewsDetailActivity.show(context, id);
+                NewsDetailActivity.show(context, 0, id);
                 break;
             case 1:
                 //软件推荐
@@ -335,7 +335,7 @@ public class UIHelper {
                 break;
             case 4:
                 //4.翻译
-                NewsDetailActivity.show(context, id);
+                 NewsDetailActivity.show(context, 4, id);
                 break;
             case 5:
                 //活动
@@ -343,7 +343,7 @@ public class UIHelper {
                 break;
             default:
                 //6.资讯
-                NewsDetailActivity.show(context, id);
+                NewsDetailActivity.show(context, 6, id);
                 break;
         }
     }
