@@ -2,18 +2,14 @@ package net.oschina.app.improve.detail.fragments;
 
 import android.content.Context;
 import android.support.annotation.IdRes;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.detail.contract.DetailContract;
 import net.oschina.app.improve.fragments.base.BaseFragment;
 import net.oschina.app.improve.utils.HtmlUtil;
-import net.oschina.app.util.UIHelper;
 
 /**
  * Created by JuQiu
@@ -44,37 +40,44 @@ public abstract class DetailFragment<Data, DataView extends DetailContract.View,
 
     void initWebView(@IdRes int layId) {
         WebView webView = new WebView(getActivity());
-        webView.setHorizontalScrollBarEnabled(false);
-        UIHelper.initWebView(webView);
-        UIHelper.addWebImageShow(getActivity(), webView);
-        webView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                Operator operator = mOperator;
-                if (operator != null) {
-                    //operator.hideLoading();
-                    Log.e("TAG", "WebViewClient.onPageFinished:" + url);
-                }
-            }
-        });
-
-
+        HtmlUtil.initWebView(webView);
         ((ViewGroup) mRoot.findViewById(layId)).addView(webView);
         mWebView = webView;
     }
 
     void setBodyContent(String body) {
-        HtmlUtil.initDetailView(mWebView, body);
-        Operator operator = mOperator;
-        if (operator != null) {
-            operator.hideLoading();
-            Log.e("TAG", "WebViewClient.onPageFinished:dd");
-        }
+        HtmlUtil.initWebViewDetailData(mWebView, body, new Runnable() {
+            @Override
+            public void run() {
+                Operator operator = mOperator;
+                if (operator != null) {
+                    operator.hideLoading();
+                }
+            }
+        });
     }
 
     void setCommentCount(int count) {
-        if(mOperator!=null){
+        if (mOperator != null) {
             mOperator.setCommentCount(count);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        WebView webView = mWebView;
+        if (webView != null) {
+            webView.onResume();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        WebView webView = mWebView;
+        if (webView != null) {
+            webView.onPause();
         }
     }
 
@@ -88,6 +91,7 @@ public abstract class DetailFragment<Data, DataView extends DetailContract.View,
             view.removeAllViewsInLayout();
             view.setWebChromeClient(null);
             view.removeAllViews();
+            view.clearCache(true);
             view.destroy();
         }
         mOperator = null;
