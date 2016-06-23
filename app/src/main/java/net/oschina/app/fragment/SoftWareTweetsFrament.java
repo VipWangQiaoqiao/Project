@@ -15,6 +15,7 @@ import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetsList;
+import net.oschina.app.improve.activities.TweetDetailActivity;
 import net.oschina.app.service.ServerTaskUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
@@ -31,6 +32,11 @@ public class SoftWareTweetsFrament extends BaseListFragment<Tweet> implements
     private static final String CACHE_KEY_PREFIX = "software_tweet_list";
 
     private int mId;
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.fragment_software_tweets;
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -94,7 +100,8 @@ public class SoftWareTweetsFrament extends BaseListFragment<Tweet> implements
         if (tweet == null) {
             return;
         }
-        UIHelper.showTweetDetail(parent.getContext(), tweet, tweet.getId());
+//        UIHelper.showTweetDetail(parent.getContext(), tweet, tweet.getId());
+        TweetDetailActivity.show(getActivity(),tweet);
     }
 
     private void handleComment(String text) {
