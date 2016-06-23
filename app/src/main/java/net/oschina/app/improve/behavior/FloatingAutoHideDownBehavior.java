@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 
+import net.oschina.app.util.TDevice;
+
 /**
  * 滚动时隐藏的Behavior
  * Created by thanatos on 16/2/17.
@@ -45,6 +47,10 @@ public class FloatingAutoHideDownBehavior extends CoordinatorLayout.Behavior<Vie
     @Override
     public boolean onStartNestedScroll(final CoordinatorLayout coordinatorLayout, final View child,
                                        final View directTargetChild, final View target, final int nestedScrollAxes) {
+        // 滑动时隐藏软键盘
+        Log.e("TAG", "hideSoftKeyboard");
+        TDevice.hideSoftKeyboard(coordinatorLayout);
+
         // Ensure we react to vertical scrolling
         return nestedScrollAxes == ViewCompat.SCROLL_AXIS_VERTICAL
                 || super.onStartNestedScroll(coordinatorLayout, child, directTargetChild, target, nestedScrollAxes);
@@ -53,6 +59,7 @@ public class FloatingAutoHideDownBehavior extends CoordinatorLayout.Behavior<Vie
     @Override
     public void onStopNestedScroll(CoordinatorLayout coordinatorLayout, View child, View target) {
         super.onStopNestedScroll(coordinatorLayout, child, target);
+
         if (child.getTranslationY() == 0 || child.getTranslationY() == child.getHeight()) return;
 
         if (mIsAnimatingOut) {
@@ -97,9 +104,19 @@ public class FloatingAutoHideDownBehavior extends CoordinatorLayout.Behavior<Vie
      * @param contentView       滚动区域
      * @param bottomView        滚动时隐藏底部区域
      */
-    public static void showBottomLayout(CoordinatorLayout coordinatorLayout, View contentView, View bottomView) {
-        coordinatorLayout.onStartNestedScroll(contentView, null, ViewCompat.SCROLL_AXIS_VERTICAL);
-        coordinatorLayout.onNestedPreScroll(bottomView, 0, -1, new int[2]);
-        coordinatorLayout.onStopNestedScroll(null);
+    public static void showBottomLayout(CoordinatorLayout coordinatorLayout, View contentView, final View bottomView) {
+        //coordinatorLayout.onStartNestedScroll(contentView, null, ViewCompat.SCROLL_AXIS_VERTICAL);
+        //coordinatorLayout.onNestedPreScroll(bottomView, 0, -1, new int[2]);
+        //coordinatorLayout.onStopNestedScroll(null);
+        bottomView.animate()
+                .translationY(0)
+                .setInterpolator(INTERPOLATOR)
+                .setDuration(200)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        bottomView.setTranslationY(0);
+                    }
+                });
     }
 }

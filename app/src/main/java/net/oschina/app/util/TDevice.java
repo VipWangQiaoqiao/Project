@@ -1,15 +1,5 @@
 package net.oschina.app.util;
 
-import java.io.File;
-import java.lang.reflect.Field;
-import java.text.NumberFormat;
-import java.util.List;
-import java.util.UUID;
-
-import net.oschina.app.AppContext;
-import net.oschina.app.R;
-import net.oschina.app.base.BaseApplication;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
@@ -39,6 +29,16 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+
+import net.oschina.app.AppContext;
+import net.oschina.app.R;
+import net.oschina.app.base.BaseApplication;
+
+import java.io.File;
+import java.lang.reflect.Field;
+import java.text.NumberFormat;
+import java.util.List;
+import java.util.UUID;
 
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class TDevice {
@@ -257,14 +257,6 @@ public class TDevice {
             view.setPadding(view.getWidth(), 0, 0, 0);
     }
 
-    public static void hideSoftKeyboard(View view) {
-        if (view == null)
-            return;
-        ((InputMethodManager) BaseApplication.context().getSystemService(
-                Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(
-                view.getWindowToken(), 0);
-    }
-
     public static boolean isLandscape() {
         boolean flag;
         if (BaseApplication.context().getResources().getConfiguration().orientation == 2)
@@ -303,14 +295,52 @@ public class TDevice {
             view.setPadding(0, 0, 0, 0);
     }
 
+    public static void hideSoftKeyboard(View view) {
+        if (view == null)
+            return;
+        Context context = view.getContext();
+        if (context != null && context instanceof Activity) {
+            Activity activity = ((Activity) context);
+            View focusView = activity.getCurrentFocus();
+            if (focusView != null) {
+                /*
+                if (focusView.isFocusable()) {
+                    focusView.setFocusable(false);
+                    focusView.setFocusable(true);
+                }
+                */
+                if (focusView.isFocused()) {
+                    focusView.clearFocus();
+                }
+                InputMethodManager manager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                manager.hideSoftInputFromWindow(focusView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                manager.hideSoftInputFromInputMethod(focusView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        }
+    }
+
     public static void showSoftKeyboard(Dialog dialog) {
         dialog.getWindow().setSoftInputMode(4);
     }
 
     public static void showSoftKeyboard(View view) {
+        if (view == null)
+            return;
+        /*
         ((InputMethodManager) BaseApplication.context().getSystemService(
                 Context.INPUT_METHOD_SERVICE)).showSoftInput(view,
                 InputMethodManager.SHOW_FORCED);
+        */
+        if (!view.isFocusable())
+            view.setFocusable(true);
+        if (!view.isFocusableInTouchMode())
+            view.setFocusableInTouchMode(true);
+        if (!view.isFocused()) {
+            view.requestFocus();
+        }
+        InputMethodManager inputMethodManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.showSoftInput(view, 0);
+        inputMethodManager.showSoftInputFromInputMethod(view.getWindowToken(), 0);
     }
 
     public static void toogleSoftKeyboard(View view) {

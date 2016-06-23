@@ -1,13 +1,11 @@
 package net.oschina.app.improve.detail.fragments;
 
-import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,6 +20,7 @@ import net.oschina.app.improve.comment.CommentExsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.QuestionDetailContract;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
 import java.util.List;
@@ -33,8 +32,7 @@ import java.util.List;
  */
 
 public class QuestionDetailFragment extends DetailFragment<QuestionDetail, QuestionDetailContract.View, QuestionDetailContract.Operator>
-        implements View.OnClickListener, QuestionDetailContract.View {
-    private static final String TAG = "QuestionDetailFragment";
+        implements View.OnClickListener, QuestionDetailContract.View, OnCommentClickListener {
     private long mId;
     private TextView mTVAuthorName;
     private TextView mTVPubDate;
@@ -87,8 +85,6 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                     handleSendComment();
                     return true;
                 }
@@ -185,16 +181,8 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         TextView lable = (TextView) mComments.getChildAt(0);
         lable.setText(String.format("%s (%d)", "回答", questionDetail.getCommentCount()));
 
-        mComments.init(questionDetail.getId(), OSChinaApi.COMMENT_QUESTION, questionDetail.getCommentCount(), getImgLoader(), new OnCommentClickListener() {
-            @Override
-            public void onClick(View view, Comment comment) {
-
-                FloatingAutoHideDownBehavior.showBottomLayout(mLayCoordinator, mLayContent, mLayBottom);
-                mCommentId = comment.getId();
-                mCommentAuthorId = comment.getAuthorId();
-                mETInput.setHint(String.format("回复: %s", comment.getAuthor()));
-            }
-        });
+        mComments.init(questionDetail.getId(), OSChinaApi.COMMENT_QUESTION,
+                questionDetail.getCommentCount(), getImgLoader(), this);
 
     }
 
@@ -226,6 +214,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
     }
 
     private void handleSendComment() {
+        TDevice.hideSoftKeyboard(mETInput);
         mOperator.toSendComment(mCommentId, mCommentAuthorId, mETInput.getText().toString());
     }
 
@@ -246,4 +235,12 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         mETInput.setText("");
     }
 
+    @Override
+    public void onClick(View view, Comment comment) {
+        FloatingAutoHideDownBehavior.showBottomLayout(mLayCoordinator, mLayContent, mLayBottom);
+        mCommentId = comment.getId();
+        mCommentAuthorId = comment.getAuthorId();
+        mETInput.setHint(String.format("回复: %s", comment.getAuthor()));
+        TDevice.showSoftKeyboard(mETInput);
+    }
 }

@@ -26,6 +26,7 @@ import net.oschina.app.improve.detail.activities.NewsDetailActivity;
 import net.oschina.app.improve.detail.contract.NewsDetailContract;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
 /**
@@ -91,8 +92,6 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                     handleSendComment();
                     return true;
                 }
@@ -217,6 +216,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
     }
 
     private void handleSendComment() {
+        TDevice.hideSoftKeyboard(mETInput);
         mOperator.toSendComment(mCommentId, mCommentAuthorId, mETInput.getText().toString());
     }
 
@@ -229,7 +229,6 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
             mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_fav_normal));
     }
 
-
     @Override
     public void toSendCommentOk() {
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
@@ -238,18 +237,10 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
 
     @Override
     public void onClick(View view, Comment comment) {
-
         FloatingAutoHideDownBehavior.showBottomLayout(mLayCoordinator, mLayContent, mLayBottom);
         mCommentId = comment.getId();
         mCommentAuthorId = comment.getAuthorId();
         mETInput.setHint(String.format("回复: %s", comment.getAuthor()));
-        mETInput.setFocusable(true);
-        mETInput.setFocusableInTouchMode(true);
-        mETInput.requestFocus();
-        InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.showSoftInput(mETInput, 0);
-        inputMethodManager.showSoftInputFromInputMethod(mETInput.getWindowToken(), 0);
+        TDevice.showSoftKeyboard(mETInput);
     }
-
-
 }

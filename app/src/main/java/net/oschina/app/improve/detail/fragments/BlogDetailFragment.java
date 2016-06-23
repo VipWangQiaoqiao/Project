@@ -1,6 +1,5 @@
 package net.oschina.app.improve.detail.fragments;
 
-import android.content.Context;
 import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
@@ -8,7 +7,6 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -28,6 +26,7 @@ import net.oschina.app.improve.detail.activities.BlogDetailActivity;
 import net.oschina.app.improve.detail.contract.BlogDetailContract;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
 import butterknife.Bind;
@@ -41,7 +40,7 @@ import butterknife.OnClick;
 @SuppressWarnings("WeakerAccess")
 public class BlogDetailFragment
         extends DetailFragment<BlogDetail, BlogDetailContract.View, BlogDetailContract.Operator>
-        implements BlogDetailContract.View, View.OnClickListener {
+        implements BlogDetailContract.View, View.OnClickListener, OnCommentClickListener {
 
     private long mId;
     private long mCommentId;
@@ -103,8 +102,6 @@ public class BlogDetailFragment
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                     handleSendComment();
                     return true;
                 }
@@ -196,16 +193,7 @@ public class BlogDetailFragment
             }
         });
 
-
-        mComments.init(blog.getId(), OSChinaApi.COMMENT_BLOG, blog.getCommentCount(), getImgLoader(), new OnCommentClickListener() {
-            @Override
-            public void onClick(View view, Comment comment) {
-                FloatingAutoHideDownBehavior.showBottomLayout(mLayCoordinator, mLayContent, mLayBottom);
-                mCommentId = comment.getId();
-                mCommentAuthorId = comment.getAuthorId();
-                mETInput.setHint(String.format("回复: %s", comment.getAuthor()));
-            }
-        });
+        mComments.init(blog.getId(), OSChinaApi.COMMENT_BLOG, blog.getCommentCount(), getImgLoader(), this);
     }
 
     private boolean mInputDoubleEmpty = false;
@@ -239,6 +227,7 @@ public class BlogDetailFragment
     }
 
     private void handleSendComment() {
+        TDevice.hideSoftKeyboard(mETInput);
         mOperator.toSendComment(mCommentId, mCommentAuthorId, mETInput.getText().toString());
     }
 
@@ -264,5 +253,14 @@ public class BlogDetailFragment
     public void toSendCommentOk() {
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
         mETInput.setText("");
+    }
+
+    @Override
+    public void onClick(View view, Comment comment) {
+        FloatingAutoHideDownBehavior.showBottomLayout(mLayCoordinator, mLayContent, mLayBottom);
+        mCommentId = comment.getId();
+        mCommentAuthorId = comment.getAuthorId();
+        mETInput.setHint(String.format("回复: %s", comment.getAuthor()));
+        TDevice.showSoftKeyboard(mETInput);
     }
 }
