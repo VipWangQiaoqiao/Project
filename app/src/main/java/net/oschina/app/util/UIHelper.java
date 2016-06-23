@@ -315,11 +315,12 @@ public class UIHelper {
      * @param type    type
      * @param id      id
      */
-    public static void showDetail(Context context, int type, long id) {
+    public static void showDetail(Context context, int type, long id,String href) {
         switch (type) {
             case 0:
                 //新闻链接
-                NewsDetailActivity.show(context, 0, id);
+                showUrlRedirect(context, href);
+               // NewsDetailActivity.show(context, 0, id);
                 break;
             case 1:
                 //软件推荐
