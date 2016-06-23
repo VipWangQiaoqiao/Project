@@ -61,7 +61,7 @@ public abstract class BaseRecyclerViewActivity<T> extends BaseBackActivity imple
         mHandler = new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-
+                onLoadingFailure();
             }
 
             @Override
@@ -69,6 +69,7 @@ public abstract class BaseRecyclerViewActivity<T> extends BaseBackActivity imple
                 try {
                     ResultBean<PageBean<T>> resultBean = AppContext.createGson().fromJson(responseString, getType());
                     if (resultBean != null && resultBean.isSuccess()) {
+                        onLoadingSuccess();
                         setListData(resultBean);
                     }
                 } catch (Exception e) {
@@ -80,13 +81,13 @@ public abstract class BaseRecyclerViewActivity<T> extends BaseBackActivity imple
             @Override
             public void onStart() {
                 super.onStart();
+                onLoadingStart();
             }
 
             @Override
             public void onFinish() {
                 super.onFinish();
-                mRefreshLayout.onComplete();
-                mIsRefresh = false;
+                onLoadingFinish();
             }
         };
 
@@ -138,6 +139,24 @@ public abstract class BaseRecyclerViewActivity<T> extends BaseBackActivity imple
             mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, false);
         }
     }
+
+    protected void onLoadingStart(){
+
+    }
+
+    protected void onLoadingSuccess(){
+
+    }
+
+    protected void onLoadingFinish(){
+        mRefreshLayout.onComplete();
+        mIsRefresh = false;
+    }
+
+    protected void onLoadingFailure(){
+
+    }
+
 
     protected RecyclerView.LayoutManager getLayoutManager() {
         return new LinearLayoutManager(this);
