@@ -92,6 +92,9 @@ public class BlogDetailFragment
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
+
+        registerScroller(mLayContent, mComments);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mBtnRelation.setElevation(0);
         }
@@ -261,10 +264,5 @@ public class BlogDetailFragment
     public void toSendCommentOk() {
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
         mETInput.setText("");
-    }
-
-    @Override
-    public void scrollToComment() {
-        mLayContent.scrollTo(0, mComments.getTop());
     }
 }

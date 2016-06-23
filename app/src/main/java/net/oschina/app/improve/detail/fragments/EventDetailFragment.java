@@ -115,11 +115,6 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
         setBodyContent(mDetail.getBody());
     }
 
-    @Override
-    public void scrollToComment() {
-
-    }
-
     @OnClick({R.id.ll_fav, R.id.ll_sign})
     @Override
     public void onClick(View v) {
