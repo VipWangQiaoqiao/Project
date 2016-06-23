@@ -85,8 +85,11 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
         mEmptyLayout.setOnLayoutClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mEmptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
-                requestData();
+                EmptyLayout emptyLayout = mEmptyLayout;
+                if (emptyLayout != null && emptyLayout.getErrorState() != EmptyLayout.HIDE_LAYOUT) {
+                    emptyLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+                    requestData();
+                }
             }
         });
     }
@@ -99,6 +102,9 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
 
     @Override
     public void hideLoading() {
+        final EmptyLayout emptyLayout = mEmptyLayout;
+        if (emptyLayout == null)
+            return;
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.anim_alpha_to_hide);
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -108,7 +114,7 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                mEmptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+                emptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             }
 
             @Override
@@ -116,7 +122,7 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
 
             }
         });
-        mEmptyLayout.startAnimation(animation);
+        emptyLayout.startAnimation(animation);
     }
 
     /**
@@ -143,11 +149,15 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 throwable.printStackTrace();
+                if (isDestroy())
+                    return;
                 showError(EmptyLayout.NETWORK_ERROR);
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                if (isDestroy())
+                    return;
                 if (!handleData(responseString))
                     showError(EmptyLayout.NODATA);
             }
@@ -165,6 +175,8 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -194,7 +206,6 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
         EmptyLayout layout = mEmptyLayout;
         if (layout != null) {
             layout.setErrorType(type);
-            layout.setVisibility(View.VISIBLE);
         }
     }
 

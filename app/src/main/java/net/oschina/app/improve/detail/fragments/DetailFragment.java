@@ -19,8 +19,8 @@ import net.oschina.app.improve.utils.HtmlUtil;
  */
 
 public abstract class DetailFragment<Data, DataView extends DetailContract.View, Operator extends DetailContract.Operator<Data, DataView>> extends BaseFragment implements DetailContract.View {
-    protected Operator mOperator;
-    protected WebView mWebView;
+    Operator mOperator;
+    WebView mWebView;
     private NestedScrollView mScrollView;
     private View mScrollTargetView;
 
@@ -144,13 +144,7 @@ public abstract class DetailFragment<Data, DataView extends DetailContract.View,
         WebView view = mWebView;
         if (view != null) {
             mWebView = null;
-            view.getSettings().setJavaScriptEnabled(false);
-            view.removeJavascriptInterface("mWebViewImageListener");
-            view.removeAllViewsInLayout();
-            view.setWebChromeClient(null);
-            view.removeAllViews();
-            view.clearCache(true);
-            view.destroy();
+            HtmlUtil.destroyWebView(view);
         }
 
         mScrollTargetView = null;

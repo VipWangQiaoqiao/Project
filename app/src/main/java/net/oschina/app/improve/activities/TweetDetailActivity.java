@@ -7,7 +7,6 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebView;
@@ -32,6 +31,7 @@ import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.viewpagerfragment.TweetDetailViewPagerFragment;
@@ -52,17 +52,29 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
 
     public static final String BUNDLE_KEY_TWEET = "BUNDLE_KEY_TWEET";
 
-    @Bind(R.id.iv_portrait) CircleImageView ivPortrait;
-    @Bind(R.id.tv_nick) TextView tvNick;
-    @Bind(R.id.webview) WebView mWebview;
-    @Bind(R.id.tv_time) TextView tvTime;
-    @Bind(R.id.tv_client) TextView tvClient;
-    @Bind(R.id.iv_thumbup) ImageView ivThumbup;
-    @Bind(R.id.layout_coordinator) CoordinatorLayout mCoordinatorLayout;
-    @Bind(R.id.fragment_container) FrameLayout mFrameLayout;
-    @Bind(R.id.tweet_img_record) ImageView mImgRecord;
-    @Bind(R.id.tweet_tv_record) TextView mSecondRecord;
-    @Bind(R.id.tweet_bg_record) RelativeLayout mRecordLayout;
+
+    @Bind(R.id.iv_portrait)
+    CircleImageView ivPortrait;
+    @Bind(R.id.tv_nick)
+    TextView tvNick;
+    @Bind(R.id.webview)
+    WebView mWebview;
+    @Bind(R.id.tv_time)
+    TextView tvTime;
+    @Bind(R.id.tv_client)
+    TextView tvClient;
+    @Bind(R.id.iv_thumbup)
+    ImageView ivThumbup;
+    @Bind(R.id.layout_coordinator)
+    CoordinatorLayout mCoordinatorLayout;
+    @Bind(R.id.fragment_container)
+    FrameLayout mFrameLayout;
+    @Bind(R.id.tweet_img_record)
+    ImageView mImgRecord;
+    @Bind(R.id.tweet_tv_record)
+    TextView mSecondRecord;
+    @Bind(R.id.tweet_bg_record)
+    RelativeLayout mRecordLayout;
 
     EditText mViewInput;
 
@@ -222,7 +234,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
                 .commit();
     }
 
-    private void resolveVoice(){
+    private void resolveVoice() {
         if (TextUtils.isEmpty(tweet.getAttach())) return;
         mRecordLayout.setVisibility(View.VISIBLE);
         final AnimationDrawable drawable = (AnimationDrawable) mImgRecord.getBackground();
@@ -248,18 +260,18 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
         });
     }
 
-    private RecordButtonUtil getRecordUtil(){
-        if (mRecordUtil == null){
-            mRecordUtil  = new RecordButtonUtil();
+    private RecordButtonUtil getRecordUtil() {
+        if (mRecordUtil == null) {
+            mRecordUtil = new RecordButtonUtil();
         }
         return mRecordUtil;
     }
 
-    private void fillDetailView(){
+    private void fillDetailView() {
         // 有可能穿入的tweet只有id这一个值
-        if(isDestroy())
+        if (isDestroy())
             return;
-        if (TextUtils.isEmpty(tweet.getPortrait())){
+        if (TextUtils.isEmpty(tweet.getPortrait())) {
             ivPortrait.setImageResource(R.drawable.widget_dface);
         } else {
             getImageLoader().load(tweet.getPortrait()).into(ivPortrait);
@@ -283,7 +295,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
      */
     private void fillWebViewBody() {
         if (TextUtils.isEmpty(tweet.getBody())) return;
-        String html = tweet.getBody() + "<br/><img src=\"" + tweet.getImgSmall() + "\" data-url=\""+ tweet.getImgBig() +"\"/>";
+        String html = tweet.getBody() + "<br/><img src=\"" + tweet.getImgSmall() + "\" data-url=\"" + tweet.getImgBig() + "\"/>";
         html = HTMLUtil.setupWebContent(html, false, true);
         UIHelper.addWebImageShow(this, mWebview);
         mWebview.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
@@ -311,6 +323,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
         mDelegation.notifyWrapper();
         this.reply = comment;
         mViewInput.setHint("回复@ " + comment.getAuthor());
+        TDevice.showSoftKeyboard(mViewInput);
     }
 
     @Override
@@ -318,7 +331,8 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
         if (mDelegation != null) mDelegation.onTurnBack();
     }
 
-    @OnClick(R.id.iv_thumbup) void onClickThumbup() {
+    @OnClick(R.id.iv_thumbup)
+    void onClickThumbUp() {
         this.dialog = DialogHelp.getWaitDialog(this, "正在提交请求...");
         this.dialog.show();
         if (!isUped) {
