@@ -186,7 +186,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity{
 
     private void appendComment(int i, CommentEX.Reply reply){
         View view = LayoutInflater.from(this).inflate(R.layout.list_item_tweet_comment, mLayoutContainer, false);
-        view.setBackgroundDrawable(getResources().getDrawable(R.drawable.selector_item_list));
+//        view.setBackgroundDrawable(getResources().getDrawable(R.drawable.selector_item_list));
         TweetCommentAdapter.TweetCommentHolderView holder = new TweetCommentAdapter.TweetCommentHolderView(view);
         holder.tvName.setText(reply.getAuthor());
         if (TextUtils.isEmpty(reply.getAuthorPortrait())){
@@ -290,10 +290,10 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity{
         Dialog dialog = DialogHelp.getDialog(this)
                 .setView(getVoteDialogView())
                 .create();
-        /*WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
-        params.width = (int) TDevice.dpToPixel(250f);
-        dialog.getWindow().setAttributes(params);*/
         dialog.show();
+        WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+        params.width = (int) TDevice.dpToPixel(260f);
+        dialog.getWindow().setAttributes(params);
     }
 
 
