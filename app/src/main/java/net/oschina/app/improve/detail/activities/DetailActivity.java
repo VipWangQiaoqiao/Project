@@ -11,6 +11,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -97,8 +99,24 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
 
     @Override
     public void hideLoading() {
-        mEmptyLayout.setVisibility(View.GONE);
-        findViewById(R.id.lay_container).setVisibility(View.VISIBLE);
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.anim_alpha_to_hide);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                mEmptyLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        mEmptyLayout.startAnimation(animation);
     }
 
     /**
@@ -196,6 +214,15 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
         if (item != null) {
             View action = item.getActionView();
             if (action != null) {
+                action.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DataView view = mView;
+                        if (view != null) {
+                            view.scrollToComment();
+                        }
+                    }
+                });
                 mCommentCountView = (TextView) action.findViewById(R.id.tv_comment_count);
             }
         }
@@ -207,11 +234,6 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
         int id = item.getItemId();
         if (id == R.id.menu_report) {
             toReport();
-        } else if (id == R.id.menu_scroll_comment) {
-            DataView view = mView;
-            if (view != null) {
-                view.scrollToComment();
-            }
         }
         return super.onOptionsItemSelected(item);
     }

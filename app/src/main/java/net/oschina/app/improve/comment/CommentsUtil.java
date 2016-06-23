@@ -31,7 +31,7 @@ final class CommentsUtil {
     static View getReferLayout(LayoutInflater inflater, Comment.Refer refer, int count) {
         Context context = inflater.getContext();
         @SuppressLint("InflateParams")
-        ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_blog_detail_comment_refer, null, false);
+        ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_item_refer, null, false);
         ShapeDrawable drawable = new ShapeDrawable(new BorderShape(new RectF(Ui.dipToPx(context, 1), 0, 0, 0)));
         drawable.getPaint().setColor(0xffd7d6da);
         lay.findViewById(R.id.lay_blog_detail_comment_refer).setBackgroundDrawable(drawable);

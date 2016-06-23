@@ -81,7 +81,7 @@ public class DetailCommentView extends LinearLayout {
                 if (comment == null)
                     continue;
 
-                @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_blog_detail_comment, null, false);
+                @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_item, null, false);
                 imageLoader.load(comment.getAuthorPortrait()).error(R.drawable.widget_dface)
                         .into(((ImageView) lay.findViewById(R.id.iv_avatar)));
 
@@ -122,7 +122,7 @@ public class DetailCommentView extends LinearLayout {
     private View getReferLayout(Comment.Refer refer, LayoutInflater inflater, int count) {
         final Context context = getContext();
 
-        @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_blog_detail_comment_refer, null, false);
+        @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_item_refer, null, false);
         ShapeDrawable drawable = new ShapeDrawable(new BorderShape(new RectF(Ui.dipToPx(getContext(), 1), 0, 0, 0)));
         drawable.getPaint().setColor(0xffd7d6da);
         lay.findViewById(R.id.lay_blog_detail_comment_refer).setBackgroundDrawable(drawable);

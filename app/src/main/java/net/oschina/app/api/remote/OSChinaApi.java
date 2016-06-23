@@ -1270,4 +1270,25 @@ public class OSChinaApi {
         }
         ApiHttpClient.get("action/apiv2/comment", params, handler);
     }
+
+    /**
+     * 发表评论
+     * @param sid 文章id
+     * @param referId 引用的评论的id
+     * @param replyId 回复的评论的id
+     * @param type 文章类型 1:软件推荐, 2:问答帖子, 3:博客, 4:翻译文章, 5:活动, 6:资讯
+     * @param content 内容
+     * @param handler 你懂得
+     */
+    public static void publicComment(long sid, long referId, long replyId, int type, String content, TextHttpResponseHandler handler){
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sid);
+        params.put("type", type);
+        params.put("content", content);
+        if (referId > 0)
+            params.put("referId", referId);
+        if (replyId > 0)
+            params.put("replyId", replyId);
+        ApiHttpClient.post("action/apiv2/comment_pub", params, handler);
+    }
 }

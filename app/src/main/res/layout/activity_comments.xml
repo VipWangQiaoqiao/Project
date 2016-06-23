@@ -4,6 +4,7 @@
     android:id="@+id/activity_comments"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context="net.oschina.app.improve.comment.CommentsActivity">
 
     <net.oschina.app.improve.widget.RecyclerRefreshLayout
@@ -16,8 +17,6 @@
             android:id="@+id/lay_blog_detail_comment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
-            android:paddingLeft="16dp"
             tools:ignore="RtlSymmetry" />
     </net.oschina.app.improve.widget.RecyclerRefreshLayout>
 </android.support.design.widget.CoordinatorLayout>

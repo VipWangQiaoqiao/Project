@@ -141,7 +141,7 @@ public class DetailCommentViewNew extends LinearLayout {
         @Override
         public CommentHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            View view = inflater.inflate(R.layout.lay_blog_detail_comment, parent, false);
+            View view = inflater.inflate(R.layout.lay_comment_item, parent, false);
 
             final CommentHolder holder = new CommentHolder(view);
             holder.itemView.setOnClickListener(new OnClickListener() {
@@ -209,7 +209,7 @@ public class DetailCommentViewNew extends LinearLayout {
 
     @SuppressWarnings("deprecation")
     private static View getReferLayout(Context context, Comment.Refer refer, LayoutInflater inflater, int count) {
-        @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_blog_detail_comment_refer, null, false);
+        @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_item_refer, null, false);
         ShapeDrawable drawable = new ShapeDrawable(new BorderShape(new RectF(Ui.dipToPx(context, 1), 0, 0, 0)));
         drawable.getPaint().setColor(0xffd7d6da);
         lay.findViewById(R.id.lay_blog_detail_comment_refer).setBackgroundDrawable(drawable);

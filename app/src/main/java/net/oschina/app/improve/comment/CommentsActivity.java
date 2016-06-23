@@ -169,6 +169,7 @@ public class CommentsActivity extends BaseBackActivity {
         }
 
         void setData(Comment comment, RequestManager imageLoader) {
+            itemView.setTag(comment);
 
             if (comment.getAuthorPortrait() != null)
                 imageLoader.load(comment.getAuthorPortrait()).error(R.drawable.widget_dface)
@@ -188,6 +189,13 @@ public class CommentsActivity extends BaseBackActivity {
             }
         }
 
+        Comment getData() {
+            Object o = itemView.getTag();
+            if (o != null)
+                return (Comment) o;
+            else
+                return null;
+        }
     }
 
     private class Adapter extends BaseRecyclerAdapter<Comment> {
@@ -206,8 +214,20 @@ public class CommentsActivity extends BaseBackActivity {
         @Override
         protected RecyclerView.ViewHolder onCreateDefaultViewHolder(ViewGroup parent, int type) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            View view = inflater.inflate(R.layout.lay_blog_detail_comment, parent, false);
-            return new CommentHolder(view);
+            View view = inflater.inflate(R.layout.lay_comment_item, parent, false);
+
+            final CommentHolder holder = new CommentHolder(view);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Comment comment = holder.getData();
+                    if (comment != null) {
+                        onItemClick(holder.getData());
+                    }
+                }
+            });
+
+            return holder;
         }
 
         @Override

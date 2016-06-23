@@ -66,6 +66,16 @@
                     android:id="@+id/tv_ques_detail_tag2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="6dp"
+                    android:background="@drawable/ques_bt_bg"
+                    android:padding="6dp"
+                    android:textColor="@color/count_text_color_light"
+                    tools:text="New Text" />
+
+                <TextView
+                    android:id="@+id/tv_ques_detail_tag3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/ques_bt_bg"
                     android:padding="6dp"
                     android:textColor="@color/count_text_color_light"
@@ -124,7 +134,8 @@
             <net.oschina.app.improve.comment.CommentExsView
                 android:id="@+id/lay_detail_comment"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:background="@color/ques_detail_bg_color" />
 
         </LinearLayout>
 
