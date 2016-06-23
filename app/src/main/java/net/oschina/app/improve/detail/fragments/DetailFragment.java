@@ -98,11 +98,16 @@ public abstract class DetailFragment<Data, DataView extends DetailContract.View,
                         } else {
                             nestedScrollView.fullScroll(View.FOCUS_UP);
                         }
+                        mScrollYPoint = curY;
                     } else {
                         // 当前在评论之前
                         nestedScrollView.smoothScrollTo(0, mScrollYPoint);
+                        if (mScrollYPoint < curY) {
+                            mScrollYPoint = -1;
+                        } else {
+                            mScrollYPoint = 0;
+                        }
                     }
-                    mScrollYPoint = curY;
                 }
             } else {
                 if (mScrollYPoint == -1) {
