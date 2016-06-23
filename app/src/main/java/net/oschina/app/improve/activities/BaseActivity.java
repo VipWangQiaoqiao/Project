@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 
 public abstract class BaseActivity extends AppCompatActivity {
     protected RequestManager mImageLoader;
+    private boolean mIsDestroy;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,5 +54,15 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (mImageLoader == null)
             mImageLoader = Glide.with(this);
         return mImageLoader;
+    }
+
+    @Override
+    protected void onDestroy() {
+        mIsDestroy = true;
+        super.onDestroy();
+    }
+
+    public boolean isDestroy() {
+        return mIsDestroy;
     }
 }

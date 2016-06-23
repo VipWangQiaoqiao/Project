@@ -215,6 +215,8 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
 
     private void fillDetailView(){
         // 有可能穿入的tweet只有id这一个值
+        if(isDestroy())
+            return;
         if (TextUtils.isEmpty(tweet.getPortrait())){
             ivPortrait.setImageResource(R.drawable.widget_dface);
         } else {
