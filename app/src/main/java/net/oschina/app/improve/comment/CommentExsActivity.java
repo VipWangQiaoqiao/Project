@@ -3,6 +3,7 @@ package net.oschina.app.improve.comment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,7 +24,9 @@ import net.oschina.app.improve.activities.BaseBackActivity;
 import net.oschina.app.improve.adapter.base.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.bean.simple.CommentEX;
+import net.oschina.app.improve.behavior.KeyboardInputDelegation;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
 import net.oschina.app.widget.TweetTextView;
 
@@ -45,7 +48,13 @@ public class CommentExsActivity extends BaseBackActivity {
     @Bind(R.id.lay_blog_detail_comment)
     RecyclerView mLayComments;
 
+    @Bind(R.id.activity_comments)
+    CoordinatorLayout mCoorLayout;
+
     private Adapter mAdapter;
+    private CommentEX reply;
+    private KeyboardInputDelegation mDelegation;
+    private View.OnClickListener onReplyBtnClickListener;
 
     public static void show(Context context, long id, int type) {
         Intent intent = new Intent(context, CommentExsActivity.class);
@@ -74,6 +83,21 @@ public class CommentExsActivity extends BaseBackActivity {
 
         mAdapter = new Adapter(this);
         mLayComments.setAdapter(mAdapter);
+
+        mDelegation = KeyboardInputDelegation.delegation(this, mCoorLayout, mRefreshLayout);
+        mDelegation.setAdapter(new KeyboardInputDelegation.KeyboardInputAdapter() {
+            @Override
+            public void onSubmit(TextView v, String content) {
+
+            }
+
+            @Override
+            public void onFinalBackSpace(View v) {
+                if (reply == null) return;
+                reply = null;
+                mDelegation.getInputView().setHint("发表评论");
+            }
+        });
     }
 
     @Override
@@ -150,6 +174,21 @@ public class CommentExsActivity extends BaseBackActivity {
         mAdapter.notifyDataSetChanged();
     }
 
+    public View.OnClickListener getReplyBtnClickListener(){
+        if (onReplyBtnClickListener == null){
+            onReplyBtnClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CommentEX comment = (CommentEX) v.getTag();
+                    mDelegation.getInputView().setHint("@" + comment.getAuthor() + " :");
+                    reply = comment;
+                    mDelegation.notifyWrapper();
+                }
+            };
+        }
+        return onReplyBtnClickListener;
+    }
+
     private static class CommentHolder extends RecyclerView.ViewHolder {
         private ImageView mAvatar;
         private TextView mName;
@@ -170,7 +209,7 @@ public class CommentExsActivity extends BaseBackActivity {
             mRefers = ((LinearLayout) itemView.findViewById(R.id.lay_refer));
         }
 
-        void setData(CommentEX comment, RequestManager imageLoader) {
+        void setData(CommentEX comment, RequestManager imageLoader, View.OnClickListener l) {
             if (comment.getAuthorPortrait() != null)
                 imageLoader.load(comment.getAuthorPortrait()).error(R.drawable.widget_dface)
                         .into((mAvatar));
@@ -187,6 +226,9 @@ public class CommentExsActivity extends BaseBackActivity {
                 View view = CommentsUtil.getReferLayout(LayoutInflater.from(mRefers.getContext()), comment.getRefer(), 5);
                 mRefers.addView(view);
             }
+
+            btn_comment.setTag(comment);
+            btn_comment.setOnClickListener(l);
         }
     }
 
@@ -216,7 +258,7 @@ public class CommentExsActivity extends BaseBackActivity {
                 CommentHolder commentHolder = (CommentHolder) holder;
                 RequestManager requestManager = getImageLoader();
                 if (requestManager != null)
-                    commentHolder.setData(item, requestManager);
+                    commentHolder.setData(item, requestManager, getReplyBtnClickListener());
                 if(item.isBest()){
                     commentHolder.btn_comment.setVisibility(View.GONE);
                     commentHolder.iv_best_comment.setVisibility(View.VISIBLE);

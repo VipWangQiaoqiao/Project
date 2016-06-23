@@ -14,7 +14,7 @@ import net.oschina.app.bean.TweetLikeUserList;
 import net.oschina.app.bean.User;
 import net.oschina.app.improve.adapter.base.BaseRecyclerAdapter;
 import net.oschina.app.improve.adapter.tweet.TweetLikeUsersAdapter;
-import net.oschina.app.improve.contract.TweetDetailContract;
+import net.oschina.app.improve.detail.contract.TweetDetailContract;
 import net.oschina.app.improve.fragments.base.BaseRecyclerViewFragment;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;

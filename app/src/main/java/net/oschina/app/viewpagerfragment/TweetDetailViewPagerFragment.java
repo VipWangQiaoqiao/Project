@@ -1,23 +1,20 @@
 package net.oschina.app.viewpagerfragment;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.User;
-import net.oschina.app.improve.contract.TweetDetailContract;
+import net.oschina.app.improve.detail.contract.TweetDetailContract;
 import net.oschina.app.improve.fragments.tweet.ListTweetCommentFragment;
 import net.oschina.app.improve.fragments.tweet.ListTweetLikeUsersFragment;
 

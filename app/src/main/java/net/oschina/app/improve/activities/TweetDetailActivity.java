@@ -3,15 +3,18 @@ package net.oschina.app.improve.activities;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +27,7 @@ import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetDetail;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
-import net.oschina.app.improve.contract.TweetDetailContract;
+import net.oschina.app.improve.detail.contract.TweetDetailContract;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.PlatfromUtil;
@@ -33,6 +36,7 @@ import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.viewpagerfragment.TweetDetailViewPagerFragment;
 import net.oschina.app.widget.CircleImageView;
+import net.oschina.app.widget.RecordButtonUtil;
 
 import java.io.Serializable;
 
@@ -56,6 +60,9 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
     @Bind(R.id.iv_thumbup) ImageView ivThumbup;
     @Bind(R.id.layout_coordinator) CoordinatorLayout mCoordinatorLayout;
     @Bind(R.id.fragment_container) FrameLayout mFrameLayout;
+    @Bind(R.id.tweet_img_record) ImageView mImgRecord;
+    @Bind(R.id.tweet_tv_record) TextView mSecondRecord;
+    @Bind(R.id.tweet_bg_record) RelativeLayout mRecordLayout;
 
     EditText mViewInput;
 
@@ -63,6 +70,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
     private Comment reply;
     private Dialog dialog;
     private boolean isUped;
+    private RecordButtonUtil mRecordUtil;
     private AsyncHttpResponseHandler upHandler;
     private AsyncHttpResponseHandler cmnHandler;
 
@@ -201,6 +209,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
         // TODO to select friends when input @ character
 
         // TODO resolve voice
+        resolveVoice();
 
         fillDetailView();
 
@@ -211,6 +220,39 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, mTweetDetailViewPagerFrag)
                 .commit();
+    }
+
+    private void resolveVoice(){
+        if (TextUtils.isEmpty(tweet.getAttach())) return;
+        mRecordLayout.setVisibility(View.VISIBLE);
+        final AnimationDrawable drawable = (AnimationDrawable) mImgRecord.getBackground();
+        mRecordLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (tweet == null) return;
+                getRecordUtil().startPlay(tweet.getAttach(), mSecondRecord);
+            }
+        });
+        getRecordUtil().setOnPlayListener(new RecordButtonUtil.OnPlayListener() {
+            @Override
+            public void stopPlay() {
+                drawable.stop();
+                mImgRecord.setBackgroundDrawable(drawable.getFrame(0));
+            }
+
+            @Override
+            public void starPlay() {
+                drawable.start();
+                mImgRecord.setBackgroundDrawable(drawable);
+            }
+        });
+    }
+
+    private RecordButtonUtil getRecordUtil(){
+        if (mRecordUtil == null){
+            mRecordUtil  = new RecordButtonUtil();
+        }
+        return mRecordUtil;
     }
 
     private void fillDetailView(){

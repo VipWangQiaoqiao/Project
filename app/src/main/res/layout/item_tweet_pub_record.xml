@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f9f9f9" >
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#f9f9f9">
 
     <EditText
         android:id="@+id/tweet_edit_record"
@@ -35,7 +36,8 @@
         android:layout_below="@+id/tweet_edit_record"
         android:layout_marginTop="14dp"
         android:padding="3dp"
-        android:visibility="gone" >
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <ImageView
             android:id="@+id/tweet_img_layout"
