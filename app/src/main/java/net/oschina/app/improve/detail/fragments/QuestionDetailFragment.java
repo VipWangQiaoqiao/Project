@@ -2,6 +2,7 @@ package net.oschina.app.improve.detail.fragments;
 
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -44,7 +45,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
     private long mCommentAuthorId;
     private CommentExsView mComments;
     private CoordinatorLayout mLayCoordinator;
-    private View mLayContent;
+    private NestedScrollView mLayContent;
     private View mLayBottom;
     private TextView mTvTagOne;
     private TextView mTvTagTwo;
@@ -60,6 +61,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
+
         mTVAuthorName = (TextView) root.findViewById(R.id.tv_ques_detail_author);
         mTVPubDate = (TextView) root.findViewById(R.id.tv_ques_detail_pub_date);
         mTVTitle = (TextView) root.findViewById(R.id.tv_ques_detail_title);
@@ -71,10 +73,10 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         mIVFav.setOnClickListener(this);
 
         mComments = (CommentExsView) root.findViewById(R.id.lay_detail_comment);
-
         mLayCoordinator = (CoordinatorLayout) root.findViewById(R.id.activity_blog_detail);
+        mLayContent = (NestedScrollView) root.findViewById(R.id.lay_nsv);
 
-        mLayContent = root.findViewById(R.id.lay_nsv);
+        registerScroller(mLayContent, mComments);
 
         mLayBottom = root.findViewById(R.id.lay_option);
 
@@ -243,12 +245,5 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
         mETInput.setText("");
     }
-
-
-    @Override
-    public void scrollToComment() {
-        mLayContent.scrollTo(0, mComments.getTop());
-    }
-
 
 }

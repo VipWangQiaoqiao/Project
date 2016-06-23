@@ -75,14 +75,13 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         mETInput = (EditText) root.findViewById(R.id.et_input);
 
         mAbouts = (DetailAboutView) root.findViewById(R.id.lay_detail_about);
-
         mSoft = (DetailAboutView) root.findViewById(R.id.lay_detail_software);
-
         mComments = (CommentsView) root.findViewById(R.id.lay_detail_comment);
 
         mLayCoordinator = (CoordinatorLayout) root.findViewById(R.id.fragment_blog_detail);
-
         mLayContent = (NestedScrollView) root.findViewById(R.id.lay_nsv);
+
+        registerScroller(mLayContent, mComments);
 
         mLayBottom = root.findViewById(R.id.lay_option);
 
@@ -184,7 +183,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
             @Override
             public void onClick(View view, About about) {
                 int type = newsDetail.getType();
-                NewsDetailActivity.show(getActivity(),type,about.getId());
+                NewsDetailActivity.show(getActivity(), type, about.getId());
             }
         });
 
@@ -238,16 +237,19 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
     }
 
     @Override
-    public void scrollToComment() {
-        mLayContent.scrollTo(0, mComments.getTop());
-    }
-
-    @Override
     public void onClick(View view, Comment comment) {
 
         FloatingAutoHideDownBehavior.showBottomLayout(mLayCoordinator, mLayContent, mLayBottom);
         mCommentId = comment.getId();
         mCommentAuthorId = comment.getAuthorId();
         mETInput.setHint(String.format("回复: %s", comment.getAuthor()));
+        mETInput.setFocusable(true);
+        mETInput.setFocusableInTouchMode(true);
+        mETInput.requestFocus();
+        InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.showSoftInput(mETInput, 0);
+        inputMethodManager.showSoftInputFromInputMethod(mETInput.getWindowToken(), 0);
     }
+
+
 }

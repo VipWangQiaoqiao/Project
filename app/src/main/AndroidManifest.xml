@@ -273,28 +273,32 @@
             android:name=".improve.detail.activities.EventDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="活动详情"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".improve.detail.activities.NewsDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="资讯详情"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".improve.comment.QuestionAnswerDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="问答答案详情"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".improve.comment.CommentsActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="评论列表"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".improve.comment.CommentExsActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="评论列表"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
     </application>
 
 </manifest>

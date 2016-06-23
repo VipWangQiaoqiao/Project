@@ -34,7 +34,7 @@ public class NewsFragment extends BaseGeneralListFragment<News> {
 
     public static final String HISTORY_NEWS = "history_news";
 
-    // private static final String TAG = "NewsFragment";
+    //private static final String TAG = "NewsFragment";
 
     public static final String NEWS_SYSTEM_TIME = "news_system_time";
 
@@ -93,7 +93,7 @@ public class NewsFragment extends BaseGeneralListFragment<News> {
             if (type == 4) {
                 UIHelper.showNewsDetail(getContext(), (int) newsId, news.getCommentCount());
             } else {
-                UIHelper.showDetail(getActivity(), type, newsId);
+                UIHelper.showDetail(getActivity(), type, newsId, news.getHref());
             }
             TextView title = (TextView) view.findViewById(R.id.tv_title);
             TextView content = (TextView) view.findViewById(R.id.tv_description);
