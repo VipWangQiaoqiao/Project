@@ -15,7 +15,6 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
-import net.oschina.app.api.OperationResponseHandler;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.CommentList;
@@ -23,7 +22,7 @@ import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.improve.adapter.base.BaseRecyclerAdapter;
 import net.oschina.app.improve.adapter.tweet.TweetCommentAdapter;
-import net.oschina.app.improve.contract.TweetDetailContract;
+import net.oschina.app.improve.detail.contract.TweetDetailContract;
 import net.oschina.app.improve.fragments.base.BaseRecyclerViewFragment;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
@@ -31,7 +30,6 @@ import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
-import java.io.ByteArrayInputStream;
 import java.lang.reflect.Type;
 import java.util.List;
 

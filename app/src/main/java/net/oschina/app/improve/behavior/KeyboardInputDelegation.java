@@ -140,14 +140,14 @@ public class KeyboardInputDelegation {
                     mInputAdapter.onBackSpace(v);
                     if (!TextUtils.isEmpty(mViewInput.getText().toString())){
                         isLastEmpty = false;
-                        return true;
+                        return false;
                     }
                     if (TextUtils.isEmpty(mViewInput.getText().toString()) && !isLastEmpty){
                         isLastEmpty = true;
-                        return true;
+                        return false;
                     }
                     mInputAdapter.onFinalBackSpace(v);
-                    return true;
+                    return false;
                 }
                 return false;
             }
