@@ -34,11 +34,21 @@ public final class HtmlUtil {
         UIHelper.addWebImageShow(webView.getContext(), webView);
     }
 
+    public static void destroyWebView(WebView webView) {
+        webView.getSettings().setJavaScriptEnabled(false);
+        webView.removeJavascriptInterface("mWebViewImageListener");
+        webView.removeAllViewsInLayout();
+        webView.setWebViewClient(null);
+        webView.removeAllViews();
+        //webView.clearCache(true);
+        webView.destroy();
+    }
+
     public static void initWebViewDetailData(WebView webView, String content, Runnable finishCallback) {
         //String body = String.format(HTML_FRAME, HtmlUtil.TITLE_DETAIL + HtmlUtil.WEB_LOAD_IMAGES, content);
         String body = HTMLUtil.setupWebContent(content, true, true);
         webView.setWebViewClient(new WebClient(finishCallback));
-        webView.loadDataWithBaseURL("", body, "text/html", "UTF-8", "");
+        webView.loadData(body, "text/html", "UTF-8");
     }
 
     private static class WebClient extends WebViewClient implements Runnable {
