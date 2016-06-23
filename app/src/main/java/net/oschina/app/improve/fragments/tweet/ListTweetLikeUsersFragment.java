@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
@@ -29,7 +28,7 @@ import cz.msebera.android.httpclient.Header;
  * 动弹详情, 点赞列表
  * Created by thanatos on 16/6/13.
  */
-public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<User> implements TweetDetailContract.ThumbupView{
+public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<User> implements TweetDetailContract.ThumbupView {
 
     public static final String BUNDLE_KEY_TWEET_ID = "BUNDLE_KEY_TWEET_ID";
 
@@ -37,7 +36,7 @@ public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<User> i
     private TweetDetailContract.Operator mOperator;
     private AsyncHttpResponseHandler reqHandler;
 
-    public static ListTweetLikeUsersFragment instantiate(TweetDetailContract.Operator operator){
+    public static ListTweetLikeUsersFragment instantiate(TweetDetailContract.Operator operator) {
         return new ListTweetLikeUsersFragment();
     }
 
@@ -62,7 +61,7 @@ public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<User> i
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Log.e("oschina", error.getMessage());
+
             }
         };
     }
@@ -74,7 +73,7 @@ public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<User> i
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_DRAGGING){
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
                     mOperator.onScroll();
                 }
             }
@@ -88,7 +87,8 @@ public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<User> i
 
     @Override
     protected Type getType() {
-        return new TypeToken<TweetLikeUserList>() {}.getType();
+        return new TypeToken<TweetLikeUserList>() {
+        }.getType();
     }
 
     @Override
@@ -114,11 +114,11 @@ public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<User> i
         UIHelper.showUserCenter(getContext(), user.getId(), user.getName());
     }
 
-    private void requestData(int pageNum){
+    private void requestData(int pageNum) {
         OSChinaApi.getTweetLikeList(mOperator.getTweetDetail().getId(), pageNum, reqHandler);
     }
 
-    private void setListData(List<User> users){
+    private void setListData(List<User> users) {
         if (mIsRefresh) {
             //cache the time
             mAdapter.clear();
