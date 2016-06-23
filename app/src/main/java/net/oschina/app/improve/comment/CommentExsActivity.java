@@ -160,7 +160,6 @@ public class CommentExsActivity extends BaseBackActivity {
 
         CommentHolder(View itemView) {
             super(itemView);
-
             mAvatar = (ImageView) itemView.findViewById(R.id.iv_avatar);
             mName = (TextView) itemView.findViewById(R.id.tv_name);
             mDate = (TextView) itemView.findViewById(R.id.tv_pub_date);
@@ -171,7 +170,6 @@ public class CommentExsActivity extends BaseBackActivity {
         }
 
         void setData(CommentEX comment, RequestManager imageLoader) {
-            itemView.setTag(comment);
 
             if (comment.getAuthorPortrait() != null)
                 imageLoader.load(comment.getAuthorPortrait()).error(R.drawable.widget_dface)
@@ -191,13 +189,6 @@ public class CommentExsActivity extends BaseBackActivity {
             }
         }
 
-        CommentEX getData() {
-            Object o = itemView.getTag();
-            if (o != null)
-                return (CommentEX) o;
-            else
-                return null;
-        }
     }
 
     private class Adapter extends BaseRecyclerAdapter<CommentEX> {
@@ -217,19 +208,7 @@ public class CommentExsActivity extends BaseBackActivity {
         protected RecyclerView.ViewHolder onCreateDefaultViewHolder(ViewGroup parent, int type) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
             View view = inflater.inflate(R.layout.lay_comment_ex, parent, false);
-
-            final CommentHolder holder = new CommentHolder(view);
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    CommentEX comment = holder.getData();
-                    if (comment != null) {
-                        onItemClick(holder.getData());
-                    }
-                }
-            });
-
-            return holder;
+            return  new CommentHolder(view);
         }
 
         @Override
