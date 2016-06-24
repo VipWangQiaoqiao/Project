@@ -12,6 +12,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.improve.adapter.base.BaseListAdapter;
 import net.oschina.app.improve.adapter.general.BlogAdapter;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.Blog;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
@@ -100,7 +101,7 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
                 blog.setViewType(Blog.VIEW_TYPE_TITLE_NORMAL);
                 blogs.add(0, blog);
                 isFirst = false;
-                mExeService.execute(new Runnable() {
+                AppOperator.runOnThread(new Runnable() {
                     @Override
                     public void run() {
                         CacheManager.saveObject(getActivity(), mBean, CACHE_NAME);

@@ -15,6 +15,7 @@ import net.oschina.app.bean.Banner;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.improve.adapter.base.BaseListAdapter;
 import net.oschina.app.improve.adapter.general.NewsAdapter;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
@@ -49,7 +50,7 @@ public class NewsFragment extends BaseGeneralListFragment<News> {
     protected void initWidget(View root) {
         super.initWidget(root);
         mHeaderView = new ViewNewsHeader(getActivity());
-        mExeService.execute(new Runnable() {
+        AppOperator.runOnThread(new Runnable() {
             @SuppressWarnings("unchecked")
             @Override
             public void run() {
@@ -139,7 +140,7 @@ public class NewsFragment extends BaseGeneralListFragment<News> {
                     final ResultBean<PageBean<Banner>> resultBean = AppContext.createGson().fromJson(responseString, new TypeToken<ResultBean<PageBean<Banner>>>() {
                     }.getType());
                     if (resultBean != null && resultBean.isSuccess()) {
-                        mExeService.execute(new Runnable() {
+                        AppOperator.runOnThread(new Runnable() {
                             @Override
                             public void run() {
                                 CacheManager.saveObject(getActivity(), resultBean.getResult(), NEWS_BANNER);

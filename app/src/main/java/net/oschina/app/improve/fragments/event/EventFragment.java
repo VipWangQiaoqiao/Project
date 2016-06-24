@@ -13,12 +13,13 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Banner;
 import net.oschina.app.cache.CacheManager;
-import net.oschina.app.improve.detail.activities.EventDetailActivity;
 import net.oschina.app.improve.adapter.base.BaseListAdapter;
 import net.oschina.app.improve.adapter.general.EventAdapter;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.Event;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.detail.activities.EventDetailActivity;
 import net.oschina.app.improve.fragments.base.BaseGeneralListFragment;
 import net.oschina.app.widget.ViewEventHeader;
 
@@ -42,7 +43,7 @@ public class EventFragment extends BaseGeneralListFragment<Event> {
         super.initWidget(root);
         mHeaderView = new ViewEventHeader(getActivity());
 
-        mExeService.execute(new Runnable() {
+        AppOperator.runOnThread(new Runnable() {
             @SuppressWarnings("unchecked")
             @Override
             public void run() {
@@ -118,7 +119,7 @@ public class EventFragment extends BaseGeneralListFragment<Event> {
                     final ResultBean<PageBean<Banner>> resultBean = AppContext.createGson().fromJson(responseString, new TypeToken<ResultBean<PageBean<Banner>>>() {
                     }.getType());
                     if (resultBean != null && resultBean.isSuccess()) {
-                        mExeService.execute(new Runnable() {
+                        AppOperator.runOnThread(new Runnable() {
                             @Override
                             public void run() {
                                 CacheManager.saveObject(getActivity(), resultBean.getResult(), EVENT_BANNER);

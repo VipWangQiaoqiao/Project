@@ -11,8 +11,9 @@ import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
-import net.oschina.app.improve.adapter.base.BaseListAdapter;
 import net.oschina.app.cache.CacheManager;
+import net.oschina.app.improve.adapter.base.BaseListAdapter;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -21,8 +22,6 @@ import net.oschina.app.widget.SuperRefreshLayout;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -41,7 +40,6 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
     public static final int TYPE_NO_MORE = 2;
     public static final int TYPE_ERROR = 3;
     public static final int TYPE_NET_ERROR = 4;
-    protected static ExecutorService mExeService = Executors.newFixedThreadPool(3);
     protected String CACHE_NAME = getClass().getName();
     protected ListView mListView;
     protected SuperRefreshLayout mRefreshLayout;
@@ -114,7 +112,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
             }
         };
 
-        mExeService.execute(new Runnable() {
+        AppOperator.runOnThread(new Runnable() {
             @Override
             public void run() {
                 mBean = (PageBean<T>) CacheManager.readObject(getActivity(), CACHE_NAME);
@@ -229,7 +227,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
             mAdapter.addItem(mBean.getItems());
             mBean.setPrevPageToken(resultBean.getResult().getPrevPageToken());
             mRefreshLayout.setCanLoadMore();
-            mExeService.execute(new Runnable() {
+            AppOperator.runOnThread(new Runnable() {
                 @Override
                 public void run() {
                     CacheManager.saveObject(getActivity(), mBean, CACHE_NAME);
