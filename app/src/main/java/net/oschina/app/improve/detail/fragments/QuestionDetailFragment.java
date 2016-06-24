@@ -19,6 +19,7 @@ import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.comment.CommentExsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.QuestionDetailContract;
+import net.oschina.app.improve.widget.FlowLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -46,9 +47,9 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
     private NestedScrollView mLayContent;
     private View mLayBottom;
     private TextView mTvTagOne;
-    private TextView mTvTagTwo;
-    private TextView mTvTagThree;
+
     private ImageView mIVFav;
+    private FlowLayout mFlowLayout;
 
 
     @Override
@@ -63,9 +64,10 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         mTVAuthorName = (TextView) root.findViewById(R.id.tv_ques_detail_author);
         mTVPubDate = (TextView) root.findViewById(R.id.tv_ques_detail_pub_date);
         mTVTitle = (TextView) root.findViewById(R.id.tv_ques_detail_title);
-        mTvTagOne = (TextView) root.findViewById(R.id.tv_ques_detail_tag1);
-        mTvTagTwo = (TextView) root.findViewById(R.id.tv_ques_detail_tag2);
-        mTvTagThree = (TextView) root.findViewById(R.id.tv_ques_detail_tag3);
+
+        mFlowLayout = (FlowLayout) root.findViewById(R.id.ques_detail_flow);
+        mTvTagOne = (TextView) root.findViewById(R.id.tv_ques_detail_tag);
+
 
         mIVFav = (ImageView) root.findViewById(R.id.iv_fav);
         mIVFav.setOnClickListener(this);
@@ -138,35 +140,16 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         mTVAuthorName.setText(questionDetail.getAuthor().trim());
 
         List<String> tags = questionDetail.getTags();
-        if (tags == null || tags.isEmpty()) {
-            mTvTagOne.setVisibility(View.GONE);
-            mTvTagTwo.setVisibility(View.GONE);
-            mTvTagThree.setVisibility(View.GONE);
-        } else {
 
-            int size = tags.size();
-            if (size == 1) {
-                mTvTagOne.setText(tags.get(0));
-                mTvTagOne.setVisibility(View.VISIBLE);
-                mTvTagTwo.setVisibility(View.GONE);
-                mTvTagThree.setVisibility(View.GONE);
-            }
-            if (size == 2) {
-                mTvTagOne.setText(tags.get(0));
-                mTvTagOne.setVisibility(View.VISIBLE);
-                mTvTagTwo.setText(tags.get(1));
-                mTvTagTwo.setVisibility(View.VISIBLE);
-                mTvTagThree.setVisibility(View.GONE);
-            }
-            if (size >= 3) {
-                mTvTagOne.setText(tags.get(0));
-                mTvTagOne.setVisibility(View.VISIBLE);
-                mTvTagTwo.setText(tags.get(1));
-                mTvTagTwo.setVisibility(View.VISIBLE);
-                mTvTagThree.setText(tags.get(2));
-                mTvTagThree.setVisibility(View.VISIBLE);
+        // mFlowLayout.removeAllViews();
+        if (tags != null && !tags.isEmpty()) {
+            for (String tag : tags) {
+                TextView tvTag = (TextView) getActivity().getLayoutInflater().inflate(R.layout.flowlayout_item, mFlowLayout, false);
+                tvTag.setText(tag.trim());
+                mFlowLayout.addView(tvTag);
             }
         }
+
 
         String time = String.format("%s (%s)", StringUtils.friendly_time(questionDetail.getPubDate()), questionDetail.getPubDate());
         mTVPubDate.setText(time);

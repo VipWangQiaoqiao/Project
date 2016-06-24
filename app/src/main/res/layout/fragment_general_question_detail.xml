@@ -43,44 +43,16 @@
                 android:textSize="22sp"
                 tools:text="HDFS用于存储，请问它与FTP或者市面流行的存储系统的优缺点？" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <net.oschina.app.improve.widget.FlowLayout
+                android:id="@+id/ques_detail_flow"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="4dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tv_ques_detail_tag1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="6dp"
-                    android:background="@drawable/ques_bt_bg"
-                    android:padding="6dp"
-                    android:textColor="@color/count_text_color_light"
-                    tools:text="New Text" />
-
-                <TextView
-                    android:id="@+id/tv_ques_detail_tag2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="6dp"
-                    android:background="@drawable/ques_bt_bg"
-                    android:padding="6dp"
-                    android:textColor="@color/count_text_color_light"
-                    tools:text="New Text" />
-
-                <TextView
-                    android:id="@+id/tv_ques_detail_tag3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/ques_bt_bg"
-                    android:padding="6dp"
-                    android:textColor="@color/count_text_color_light"
-                    tools:text="New Text" />
-            </LinearLayout>
+                app:horizontalSpace="8dp"
+                app:verticalSpace="8dp" />
 
             <FrameLayout
                 android:id="@+id/lay_webview"
@@ -109,7 +81,6 @@
                     android:gravity="left|center"
                     android:lines="1"
                     android:maxEms="10"
-                    android:singleLine="true"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/count_text_color_light"
                     android:textSize="12sp"
@@ -171,7 +142,6 @@
             android:paddingBottom="6dp"
             android:paddingLeft="8dp"
             android:paddingTop="6dp"
-            android:singleLine="true"
             android:textSize="14sp"
             tools:ignore="RtlHardcoded" />
 
