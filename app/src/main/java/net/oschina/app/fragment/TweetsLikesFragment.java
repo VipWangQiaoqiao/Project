@@ -20,6 +20,7 @@ import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetLike;
 import net.oschina.app.bean.TweetLikeList;
 import net.oschina.app.bean.TweetsList;
+import net.oschina.app.improve.activities.TweetDetailActivity;
 import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.UIHelper;
@@ -100,7 +101,8 @@ public class TweetsLikesFragment extends BaseListFragment<TweetLike> {
         TweetLike tweetLike = mAdapter.getItem(position);
         if (tweetLike != null) {
             Tweet tweet = tweetLike.getTweet();
-            UIHelper.showTweetDetail(view.getContext(), null, tweet.getId());
+//            UIHelper.showTweetDetail(view.getContext(), null, tweet.getId());
+            TweetDetailActivity.show(getActivity(), tweet);
         }
     }
 
