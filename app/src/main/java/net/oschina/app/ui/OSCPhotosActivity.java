@@ -11,11 +11,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
-import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
-import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
-
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -26,7 +21,6 @@ import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.TouchImageView;
-import net.qiujuer.genius.blur.StackBlur;
 
 import org.kymjs.kjframe.Core;
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
