@@ -7,6 +7,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebView;
@@ -17,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import net.oschina.app.AppContext;
@@ -183,6 +185,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
     }
 
     protected void initWidget() {
+        Log.d("oschina", "----------------Glide on Activity " + Glide.with(this) + "---------------");
         mDelegation = KeyboardInputDelegation.delegation(this, mCoordinatorLayout, mFrameLayout);
         mDelegation.showEmoji(getSupportFragmentManager());
         mDelegation.setAdapter(new KeyboardInputDelegation.KeyboardInputAdapter() {

@@ -3,6 +3,7 @@ package net.oschina.app.improve.adapter.tweet;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class TweetCommentAdapter extends BaseRecyclerAdapter<Comment> {
     public TweetCommentAdapter(Context context) {
         super(context, ONLY_FOOTER);
         reqManager = Glide.with(context);
+        Log.d("oschina", "----------------Glide on Adapter " + Glide.with(context) + "---------------");
     }
 
     @Override
@@ -52,7 +54,11 @@ public class TweetCommentAdapter extends BaseRecyclerAdapter<Comment> {
         if (TextUtils.isEmpty(item.getPortrait())){
             h.ivPortrait.setImageResource(R.drawable.widget_dface);
         }else{
-            reqManager.load(item.getPortrait()).into(h.ivPortrait);
+            reqManager
+                    .load(item.getPortrait())
+                    .placeholder(mContext.getResources().getDrawable(R.drawable.widget_dface))
+                    .error(mContext.getResources().getDrawable(R.drawable.widget_dface))
+                    .into(h.ivPortrait);
         }
         h.ivPortrait.setTag(item);
         h.ivPortrait.setOnClickListener(getOnPortraitClickListener());
