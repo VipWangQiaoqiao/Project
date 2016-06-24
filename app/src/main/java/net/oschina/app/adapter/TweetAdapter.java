@@ -157,7 +157,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             vh.image.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    OSCPhotosActivity.showImagePrivew(context, tweet.getImgBig());
+                    OSCPhotosActivity.showImagePreview(context, tweet.getImgBig());
                 }
             });
         }

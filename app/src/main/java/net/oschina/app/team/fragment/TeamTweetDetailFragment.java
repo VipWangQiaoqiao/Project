@@ -186,7 +186,7 @@ public class TeamTweetDetailFragment extends
         pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OSCPhotosActivity.showImagePrivew(aty, realUrl);
+                OSCPhotosActivity.showImagePreview(aty, realUrl);
             }
         });
     }
