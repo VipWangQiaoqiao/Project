@@ -6,12 +6,11 @@ import android.support.v4.widget.NestedScrollView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.detail.contract.DetailContract;
 import net.oschina.app.improve.fragments.base.BaseFragment;
-import net.oschina.app.improve.utils.HtmlUtil;
+import net.oschina.app.improve.widget.OWebView;
 
 /**
  * Created by JuQiu
@@ -20,7 +19,7 @@ import net.oschina.app.improve.utils.HtmlUtil;
 
 public abstract class DetailFragment<Data, DataView extends DetailContract.View, Operator extends DetailContract.Operator<Data, DataView>> extends BaseFragment implements DetailContract.View {
     Operator mOperator;
-    WebView mWebView;
+    OWebView mWebView;
     private NestedScrollView mScrollView;
     private View mScrollTargetView;
 
@@ -43,14 +42,13 @@ public abstract class DetailFragment<Data, DataView extends DetailContract.View,
     }
 
     void initWebView(@IdRes int layId) {
-        WebView webView = new WebView(getActivity());
-        HtmlUtil.initWebView(webView);
+        OWebView webView = new OWebView(getActivity());
         ((ViewGroup) mRoot.findViewById(layId)).addView(webView);
         mWebView = webView;
     }
 
     void setBodyContent(String body) {
-        HtmlUtil.initWebViewDetailData(mWebView, body, new Runnable() {
+        mWebView.loadDetailDataAsync(body, new Runnable() {
             @Override
             public void run() {
                 Operator operator = mOperator;
@@ -124,7 +122,7 @@ public abstract class DetailFragment<Data, DataView extends DetailContract.View,
     @Override
     public void onResume() {
         super.onResume();
-        WebView webView = mWebView;
+        OWebView webView = mWebView;
         if (webView != null) {
             webView.onResume();
         }
@@ -133,7 +131,7 @@ public abstract class DetailFragment<Data, DataView extends DetailContract.View,
     @Override
     public void onPause() {
         super.onPause();
-        WebView webView = mWebView;
+        OWebView webView = mWebView;
         if (webView != null) {
             webView.onPause();
         }
@@ -141,10 +139,10 @@ public abstract class DetailFragment<Data, DataView extends DetailContract.View,
 
     @Override
     public void onDestroy() {
-        WebView view = mWebView;
+        OWebView view = mWebView;
         if (view != null) {
             mWebView = null;
-            HtmlUtil.destroyWebView(view);
+            view.destroy();
         }
 
         mScrollTargetView = null;
