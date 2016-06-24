@@ -48,7 +48,7 @@ public final class HtmlUtil {
         //String body = String.format(HTML_FRAME, HtmlUtil.TITLE_DETAIL + HtmlUtil.WEB_LOAD_IMAGES, content);
         String body = HTMLUtil.setupWebContent(content, true, true);
         webView.setWebViewClient(new WebClient(finishCallback));
-        webView.loadData(body, "text/html", "UTF-8");
+        webView.loadDataWithBaseURL("", body, "text/html", "UTF-8", "");
     }
 
     private static class WebClient extends WebViewClient implements Runnable {

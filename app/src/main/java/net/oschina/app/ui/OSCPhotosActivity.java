@@ -25,6 +25,7 @@ import net.oschina.app.widget.TouchImageView;
 import org.kymjs.kjframe.Core;
 import org.kymjs.kjframe.bitmap.BitmapCallBack;
 import org.kymjs.kjframe.http.HttpConfig;
+import org.kymjs.kjframe.utils.DensityUtils;
 
 import java.io.IOException;
 
@@ -150,6 +151,7 @@ public class OSCPhotosActivity extends BaseActivity {
         HttpConfig.sCookie = ApiHttpClient.getCookie(AppContext.getInstance());
         new Core.Builder()
                 .view(mHeaderImageView)
+                .size(DensityUtils.getScreenW(mHeaderImageView.getContext()), 2048)
                 .url(imageUrl)
                 .errorBitmapRes(R.drawable.load_img_error)
                 .bitmapCallBack(new BitmapCallBack() {
