@@ -8,7 +8,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +27,6 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.activities.BaseBackActivity;
 import net.oschina.app.improve.adapter.tweet.TweetCommentAdapter;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.bean.simple.CommentEX;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
 import net.oschina.app.util.DialogHelp;
@@ -38,8 +36,6 @@ import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -117,7 +113,11 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity{
         if (TextUtils.isEmpty(comment.getAuthorPortrait())){
             ivPortrait.setImageResource(R.drawable.widget_dface);
         }else{
-            getImageLoader().load(comment.getAuthorPortrait()).into(ivPortrait);
+            getImageLoader()
+                    .load(comment.getAuthorPortrait())
+                    .placeholder(getResources().getDrawable(R.drawable.widget_dface))
+                    .error(getResources().getDrawable(R.drawable.widget_dface))
+                    .into(ivPortrait);
         }
 
         // nick
@@ -186,16 +186,19 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity{
 
     private void appendComment(int i, CommentEX.Reply reply){
         View view = LayoutInflater.from(this).inflate(R.layout.list_item_tweet_comment, mLayoutContainer, false);
-//        view.setBackgroundDrawable(getResources().getDrawable(R.drawable.selector_item_list));
         TweetCommentAdapter.TweetCommentHolderView holder = new TweetCommentAdapter.TweetCommentHolderView(view);
         holder.tvName.setText(reply.getAuthor());
         if (TextUtils.isEmpty(reply.getAuthorPortrait())){
             holder.ivPortrait.setImageResource(R.drawable.widget_dface);
         }else{
-            getImageLoader().load(reply.getAuthorPortrait()).into(holder.ivPortrait);
+            getImageLoader()
+                    .load(reply.getAuthorPortrait())
+                    .placeholder(getResources().getDrawable(R.drawable.widget_dface))
+                    .error(getResources().getDrawable(R.drawable.widget_dface))
+                    .into(holder.ivPortrait);
         }
         holder.tvTime.setText(String.format("%s楼  %s", i+1, StringUtils.friendly_time(reply.getPubDate())));
-        holder.tvContent.setText(reply.getContent());
+        CommentsUtil.formatHtml(getResources(), holder.tvContent, reply.getContent());
         holder.btnReply.setTag(reply);
         holder.btnReply.setOnClickListener(getOnReplyButtonClickListener());
         mLayoutContainer.addView(view, 0);
@@ -241,7 +244,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity{
             }
         };
 
-        OSChinaApi.getComment(comment.getId(), 2, new TextHttpResponseHandler() {
+        OSChinaApi.getComment(comment.getId(), comment.getAuthorId(), 2, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String respStr, Throwable throwable) {
                 Toast.makeText(QuestionAnswerDetailActivity.this, "请求失败", Toast.LENGTH_SHORT).show();

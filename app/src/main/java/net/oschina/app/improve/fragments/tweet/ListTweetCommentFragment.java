@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -64,6 +65,8 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("oschina", "----------------Glide on Fragment " + Glide.with(this) + "|---------------");
+        Log.d("oschina", "----------------Glide on Fragment " + Glide.with(getContext()) + "|---------------");
         reqHandler = new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
