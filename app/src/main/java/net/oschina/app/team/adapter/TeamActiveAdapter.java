@@ -143,7 +143,7 @@ public class TeamActiveAdapter extends ListBaseAdapter<TeamActive> {
         pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OSCPhotosActivity.showImagePrivew(context, url);
+                OSCPhotosActivity.showImagePreview(context, url);
             }
         });
     }

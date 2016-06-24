@@ -229,7 +229,7 @@ public class MessageDetailAdapter extends ListBaseAdapter<MessageDetail> {
         void viewImage(View v) {
             if (v.getTag() != null) {
                 String url = (String) v.getTag();
-                OSCPhotosActivity.showImagePrivew(v.getContext(), url);
+                OSCPhotosActivity.showImagePreview(v.getContext(), url);
             }
         }
 

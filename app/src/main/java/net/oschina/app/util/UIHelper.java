@@ -444,7 +444,7 @@ public class UIHelper {
             @JavascriptInterface
             public void showImagePreview(String bigImageUrl) {
                 if (bigImageUrl != null && !StringUtils.isEmpty(bigImageUrl)) {
-                    OSCPhotosActivity.showImagePrivew(cxt, bigImageUrl);
+                    OSCPhotosActivity.showImagePreview(cxt, bigImageUrl);
                 }
             }
         }, "mWebViewImageListener");
@@ -530,7 +530,7 @@ public class UIHelper {
                 JSONObject json = new JSONObject(realUrl);
                 int idx = json.optInt("index");
                 String[] urls = json.getString("urls").split(",");
-                OSCPhotosActivity.showImagePrivew(context, urls[0]);
+                OSCPhotosActivity.showImagePreview(context, urls[0]);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -590,7 +590,7 @@ public class UIHelper {
     public static void openBrowser(Context context, String url) {
 
         if (StringUtils.isImgUrl(url)) {
-            OSCPhotosActivity.showImagePrivew(context, url);
+            OSCPhotosActivity.showImagePreview(context, url);
             return;
         }
 
@@ -871,7 +871,7 @@ public class UIHelper {
             return;
         }
         String url = AvatarView.getLargeAvatar(avatarUrl);
-        OSCPhotosActivity.showImagePrivew(context, url);
+        OSCPhotosActivity.showImagePreview(context, url);
     }
 
     /**

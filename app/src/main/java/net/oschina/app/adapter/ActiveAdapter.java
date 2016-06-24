@@ -172,7 +172,7 @@ public class ActiveAdapter extends ListBaseAdapter {
         vh.pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OSCPhotosActivity.showImagePrivew(parent.getContext(), getOriginalUrl(item.getTweetimage()));
+                OSCPhotosActivity.showImagePreview(parent.getContext(), getOriginalUrl(item.getTweetimage()));
             }
         });
     }

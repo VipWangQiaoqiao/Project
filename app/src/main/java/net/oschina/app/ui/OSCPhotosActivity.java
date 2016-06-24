@@ -5,27 +5,28 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
-import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.ui.dialog.ImageMenuDialog;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.TouchImageView;
-
-import org.kymjs.kjframe.Core;
-import org.kymjs.kjframe.bitmap.BitmapCallBack;
-import org.kymjs.kjframe.http.HttpConfig;
-import org.kymjs.kjframe.utils.DensityUtils;
 
 import java.io.IOException;
 
@@ -38,10 +39,11 @@ public class OSCPhotosActivity extends BaseActivity {
     private TouchImageView mTouchImageView;
     private ProgressBar mProgressBar;
     private ImageView mOption;
+    private AsyncTask<Void, Void, Bitmap> task;
     private String mImageUrl;
 
-    public static void showImagePrivew(Context context,
-                                       String imageUrl) {
+    public static void showImagePreview(Context context,
+                                        String imageUrl) {
         Intent intent = new Intent(context, OSCPhotosActivity.class);
         intent.putExtra(BUNDLE_KEY_IMAGES, imageUrl);
         context.startActivity(intent);
@@ -49,6 +51,9 @@ public class OSCPhotosActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_browse);
         mImageUrl = getIntent().getStringExtra(BUNDLE_KEY_IMAGES);
@@ -147,22 +152,16 @@ public class OSCPhotosActivity extends BaseActivity {
     /**
      * Load the item's thumbnail image into our {@link ImageView}.
      */
-    private void loadImage(final ImageView mHeaderImageView, String imageUrl) {
-        HttpConfig.sCookie = ApiHttpClient.getCookie(AppContext.getInstance());
-        new Core.Builder()
-                .view(mHeaderImageView)
-                .size(DensityUtils.getScreenW(mHeaderImageView.getContext()), 2048)
-                .url(imageUrl)
-                .errorBitmapRes(R.drawable.load_img_error)
-                .bitmapCallBack(new BitmapCallBack() {
-                    @Override
-                    public void onSuccess(Bitmap bitmap) {
-                        super.onSuccess(bitmap);
-                        mProgressBar.setVisibility(View.GONE);
-                        mTouchImageView.setVisibility(View.VISIBLE);
-                        mOption.setVisibility(View.VISIBLE);
-                    }
-                }).doTask();
+    private void loadImage(final ImageView mHeaderImageView, final String imageUrl) {
+        Glide.with(this).load(imageUrl).asBitmap().into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                mHeaderImageView.setImageBitmap(resource);
+                mProgressBar.setVisibility(View.GONE);
+                mHeaderImageView.setVisibility(View.VISIBLE);
+                mOption.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     @Override
