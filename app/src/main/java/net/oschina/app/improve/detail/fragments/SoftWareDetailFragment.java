@@ -2,7 +2,6 @@ package net.oschina.app.improve.detail.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -65,7 +64,7 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail,SoftDe
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_general_blog_detail;
+        return R.layout.fragment_general_soft_detail;
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -105,10 +104,6 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail,SoftDe
         mIVAuthorPortrait = (ImageView) root.findViewById(R.id.iv_avatar);
         mIVFav = (ImageView) root.findViewById(R.id.iv_fav);
 
-        mBtnRelation = (Button) root.findViewById(R.id.btn_relation);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mBtnRelation.setElevation(0);
-        }
 
         mAbouts = (DetailAboutView) root.findViewById(R.id.lay_detail_about);
         mComments = (DetailCommentView) root.findViewById(R.id.lay_detail_comment);
@@ -175,12 +170,7 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail,SoftDe
         SoftwareDetail softwareDetail = mOperator.getData();
         if (softwareDetail == null)
             return;
-
         mId = mCommentId = softwareDetail.getId();
-
-        String body = getWebViewBody(softwareDetail);
-        mWebView.loadDataWithBaseURL("", body, "text/html", "UTF-8", "");
-
         mTVAuthorName.setText(softwareDetail.getAuthor());
         getImgLoader().load(softwareDetail.getAuthorPortrait()).error(R.drawable.widget_dface).into(mIVAuthorPortrait);
 
@@ -226,28 +216,6 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail,SoftDe
 //            }
 //        }, this);
 
-    }
-
-    private final static String linkCss = "<script type=\"text/javascript\" " +
-            "src=\"file:///android_asset/shCore.js\"></script>"
-            + "<script type=\"text/javascript\" src=\"file:///android_asset/brush.js\"></script>"
-            + "<script type=\"text/javascript\" src=\"file:///android_asset/client.js\"></script>"
-            + "<script type=\"text/javascript\" src=\"file:///android_asset/detail_page" +
-            ".js\"></script>"
-            + "<script type=\"text/javascript\">SyntaxHighlighter.all();</script>"
-            + "<script type=\"text/javascript\">function showImagePreview(var url){window" +
-            ".location.url= url;}</script>"
-            + "<link rel=\"stylesheet\" type=\"text/css\" " +
-            "href=\"file:///android_asset/shThemeDefault.css\">"
-            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/shCore" +
-            ".css\">"
-            + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/css/common_new" +
-            ".css\">";
-
-    private String getWebViewBody(SoftwareDetail softwareDetail) {
-        return String.format("<!DOCTYPE HTML><html><head>%s</head><body><div class=\"body-content\">%s</div></body></html>",
-                linkCss + UIHelper.WEB_LOAD_IMAGES,
-                UIHelper.setHtmlCotentSupportImagePreview(softwareDetail.toString()));
     }
 
     private boolean mInputDoubleEmpty = false;
@@ -308,8 +276,4 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail,SoftDe
         mETInput.setText("");
     }
 
-    @Override
-    public void scrollToComment() {
-
-    }
 }
