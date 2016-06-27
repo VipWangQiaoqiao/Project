@@ -45,6 +45,7 @@ public abstract class DetailFragment<Data, DataView extends DetailContract.View,
         OWebView webView = new OWebView(getActivity());
         ((ViewGroup) mRoot.findViewById(layId)).addView(webView);
         mWebView = webView;
+        mWebView.setClickable(false);
     }
 
     void setBodyContent(String body) {
