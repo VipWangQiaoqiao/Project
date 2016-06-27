@@ -153,8 +153,8 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity{
                     UIHelper.showLoginActivity(QuestionAnswerDetailActivity.this);
                     return;
                 }
-                OSChinaApi.publicComment(sid, -1, reply == null ? -1 : reply.getId(),
-                        reply == null ? -1 : reply.getAuthorId(), 2, content, onSendCommentHandler);
+                OSChinaApi.publicComment(sid, -1, reply == null ? comment.getId() : reply.getId(),
+                        reply == null ? comment.getAuthorId() : reply.getAuthorId(), 2, content, onSendCommentHandler);
             }
 
             @Override
