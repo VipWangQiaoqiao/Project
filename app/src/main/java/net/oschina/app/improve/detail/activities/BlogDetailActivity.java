@@ -3,7 +3,6 @@ package net.oschina.app.improve.detail.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -163,7 +162,7 @@ public class BlogDetailActivity extends DetailActivity<BlogDetail, BlogDetailCon
     }
 
     @Override
-    public void toSendComment(long id, long authorId, long replyId, String comment) {
+    public void toSendComment(long id, long commentId, long commentAuthorId, String comment) {
         int uid = requestCheck();
         if (uid == 0)
             return;
@@ -173,7 +172,14 @@ public class BlogDetailActivity extends DetailActivity<BlogDetail, BlogDetailCon
             return;
         }
 
-        OSChinaApi.publicComment(id, replyId,0, authorId, 3, comment, new TextHttpResponseHandler() {
+        OSChinaApi.pubBlogComment(id, commentId, commentAuthorId, comment, new TextHttpResponseHandler() {
+
+            @Override
+            public void onStart() {
+                super.onStart();
+                showWaitDialog(R.string.progress_submit);
+            }
+
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 AppContext.showToast("评论失败!");
@@ -187,7 +193,6 @@ public class BlogDetailActivity extends DetailActivity<BlogDetail, BlogDetailCon
                     }.getType();
 
                     ResultBean<Comment> resultBean = AppContext.createGson().fromJson(responseString, type);
-                    Log.d(TAG, "onSuccess: ----->" + resultBean.getCode());
                     if (resultBean.isSuccess()) {
                         Comment respComment = resultBean.getResult();
                         if (respComment != null) {

@@ -23,7 +23,7 @@ public interface BlogDetailContract {
         void toReport();
 
         // 提交评价
-        void toSendComment(long id, long authorId, long replyId, String comment);
+        void toSendComment(long id, long commentId, long commentAuthorId, String comment);
     }
 
     interface View extends DetailContract.View {
