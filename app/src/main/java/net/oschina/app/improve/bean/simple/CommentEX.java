@@ -1,7 +1,5 @@
 package net.oschina.app.improve.bean.simple;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
 
 /**
@@ -18,8 +16,7 @@ public class CommentEX extends Comment {
     private int voteCount;
     private boolean best;
     private int voteState;
-    @SerializedName("reply")
-    private Reply[] replies;
+    private Reply[] reply;
 
     public static class Reply implements Serializable {
         private long id;
@@ -86,12 +83,12 @@ public class CommentEX extends Comment {
         this.voteState = voteState;
     }
 
-    public Reply[] getReplies() {
-        return replies;
+    public Reply[] getReply() {
+        return reply;
     }
 
-    public void setReplies(Reply[] replies) {
-        this.replies = replies;
+    public void setReply(Reply[] reply) {
+        this.reply = reply;
     }
 
     public int getVoteCount() {

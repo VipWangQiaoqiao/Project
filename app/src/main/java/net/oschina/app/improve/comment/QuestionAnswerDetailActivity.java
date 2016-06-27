@@ -139,7 +139,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity{
         // vote count
         tvVoteCount.setText(String.valueOf(comment.getVoteCount()));
 
-        tvCmnCount.setText("评论 ("+ (comment.getReplies() == null ? 0 : comment.getReplies().length) +")");
+        tvCmnCount.setText("评论 ("+ (comment.getReply() == null ? 0 : comment.getReply().length) +")");
 
         mDelegation = KeyboardInputDelegation.delegation(this, mCoorLayout, mScrollView);
         mDelegation.setAdapter(new KeyboardInputDelegation.KeyboardInputAdapter() {
@@ -165,10 +165,10 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity{
             }
         });
 
-        if (comment.getReplies() != null){
+        if (comment.getReply() != null){
             mLayoutContainer.removeAllViews();
             replies.clear();
-            Collections.addAll(replies, comment.getReplies());
+            Collections.addAll(replies, comment.getReply());
             Collections.reverse(replies); // 反转集合, 最新的评论在集合后面
             for (int i=0; i<replies.size(); i++){
                 appendComment(i, replies.get(i));

@@ -3,18 +3,18 @@ package net.oschina.app.improve.detail.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Report;
-import net.oschina.app.bean.Result;
 import net.oschina.app.improve.bean.BlogDetail;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.bean.simple.UserRelation;
 import net.oschina.app.improve.detail.contract.BlogDetailContract;
 import net.oschina.app.improve.detail.fragments.BlogDetailFragment;
@@ -22,14 +22,15 @@ import net.oschina.app.improve.detail.fragments.DetailFragment;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.URLsUtils;
-import net.oschina.app.util.XmlUtils;
 
-import java.io.ByteArrayInputStream;
 import java.lang.reflect.Type;
 
 import cz.msebera.android.httpclient.Header;
 
 public class BlogDetailActivity extends DetailActivity<BlogDetail, BlogDetailContract.View> implements BlogDetailContract.Operator {
+
+    private static final String TAG = "BlogDetailActivity";
+
     public static void show(Context context, long id) {
         Intent intent = new Intent(context, BlogDetailActivity.class);
         intent.putExtra("id", id);
@@ -162,7 +163,7 @@ public class BlogDetailActivity extends DetailActivity<BlogDetail, BlogDetailCon
     }
 
     @Override
-    public void toSendComment(long id, long authorId, String comment) {
+    public void toSendComment(long id, long authorId, long replyId, String comment) {
         int uid = requestCheck();
         if (uid == 0)
             return;
@@ -172,49 +173,38 @@ public class BlogDetailActivity extends DetailActivity<BlogDetail, BlogDetailCon
             return;
         }
 
-        AsyncHttpResponseHandler handler = new AsyncHttpResponseHandler() {
+        OSChinaApi.publicComment(id, replyId,0, authorId, 3, comment, new TextHttpResponseHandler() {
             @Override
-            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-                try {
-                    net.oschina.app.bean.ResultBean rsb = XmlUtils.toBean(net.oschina.app.bean.ResultBean.class,
-                            new ByteArrayInputStream(arg2));
-                    Result res = rsb.getResult();
-                    if (res.OK()) {
-                        BlogDetailContract.View view = mView;
-                        if (view != null)
-                            view.toSendCommentOk();
-                    } else {
-                        AppContext.showToastShort(res.getErrorMessage());
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    onFailure(arg0, arg1, arg2, e);
-                }
-            }
-
-            @Override
-            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                                  Throwable arg3) {
-                AppContext.showToastShort(R.string.comment_publish_faile);
-            }
-
-            @Override
-            public void onStart() {
-                showWaitDialog(R.string.progress_submit);
-            }
-
-            @Override
-            public void onFinish() {
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                AppContext.showToast("评论失败!");
                 hideWaitDialog();
             }
-        };
 
-        long dataId = getDataId();
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                try {
+                    Type type = new TypeToken<ResultBean<Comment>>() {
+                    }.getType();
 
-        if (dataId != id)
-            OSChinaApi.replyBlogComment(dataId, uid, comment, id, authorId, handler);
-        else
-            OSChinaApi.publicBlogComment(dataId, uid, comment, handler);
+                    ResultBean<Comment> resultBean = AppContext.createGson().fromJson(responseString, type);
+                    Log.d(TAG, "onSuccess: ----->" + resultBean.getCode());
+                    if (resultBean.isSuccess()) {
+                        Comment respComment = resultBean.getResult();
+                        if (respComment != null) {
+                            BlogDetailContract.View view = mView;
+                            if (view != null) {
+                                view.toSendCommentOk(respComment);
+                            }
+                        }
+                    }
+                    hideWaitDialog();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    onFailure(statusCode, headers, responseString, e);
+                }
+                hideWaitDialog();
+            }
+        });
     }
 
     @Override

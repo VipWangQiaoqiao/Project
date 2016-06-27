@@ -1,6 +1,7 @@
 package net.oschina.app.improve.detail.contract;
 
 import net.oschina.app.improve.bean.BlogDetail;
+import net.oschina.app.improve.bean.simple.Comment;
 
 /**
  * Created by qiujuer
@@ -22,7 +23,7 @@ public interface BlogDetailContract {
         void toReport();
 
         // 提交评价
-        void toSendComment(long id, long authorId, String comment);
+        void toSendComment(long id, long authorId, long replyId, String comment);
     }
 
     interface View extends DetailContract.View {
@@ -30,6 +31,6 @@ public interface BlogDetailContract {
 
         void toFollowOk(BlogDetail blogDetail);
 
-        void toSendCommentOk();
+        void toSendCommentOk(Comment comment);
     }
 }
