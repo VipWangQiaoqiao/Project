@@ -258,7 +258,6 @@ public class BlogDetailFragment
 
     @Override
     public void onClick(View view, Comment comment) {
-
         FloatingAutoHideDownBehavior.showBottomLayout(mLayCoordinator, mLayContent, mLayBottom);
         mCommentId = comment.getId();
         mCommentAuthorId = comment.getAuthorId();

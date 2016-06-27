@@ -1298,4 +1298,18 @@ public class OSChinaApi {
         ApiHttpClient.post("action/apiv2/comment_pub", params, handler);
     }
 
+
+    /**
+     * 发布博客评论
+     *
+     * @see {{@link #publicComment(int, long, int, String, int, AsyncHttpResponseHandler)}}
+     */
+    public static void pubBlogComment(long sid, long commentId, long commentAuthorId, String comment, TextHttpResponseHandler handler) {
+        if (commentId == 0 || commentId == sid) {
+            commentId = 0;
+            commentAuthorId = 0;
+        }
+
+        publicComment(sid, 0, commentId, commentAuthorId, 3, comment, handler);
+    }
 }
