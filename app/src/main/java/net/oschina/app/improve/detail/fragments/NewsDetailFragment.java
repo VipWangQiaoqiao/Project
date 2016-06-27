@@ -1,13 +1,11 @@
 package net.oschina.app.improve.detail.fragments;
 
-import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -149,7 +147,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         mTVAuthorName.setText(newsDetail.getAuthor());
         getImgLoader().load(newsDetail.getAuthorPortrait()).error(R.drawable.widget_dface).into(mIVAuthorPortrait);
 
-        String time = String.format("%s (%s)", StringUtils.friendly_time(newsDetail.getPubDate()), newsDetail.getPubDate());
+        String time = String.format("%s", StringUtils.friendly_time(newsDetail.getPubDate()));
         mTVPubDate.setText(time);
 
         mTVTitle.setText(newsDetail.getTitle());

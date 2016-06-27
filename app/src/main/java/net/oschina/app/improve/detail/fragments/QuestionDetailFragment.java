@@ -151,7 +151,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         }
 
 
-        String time = String.format("%s (%s)", StringUtils.friendly_time(questionDetail.getPubDate()), questionDetail.getPubDate());
+        String time = String.format("%s", StringUtils.friendly_time(questionDetail.getPubDate()));
         mTVPubDate.setText(time);
 
         mTVTitle.setText(questionDetail.getTitle());
