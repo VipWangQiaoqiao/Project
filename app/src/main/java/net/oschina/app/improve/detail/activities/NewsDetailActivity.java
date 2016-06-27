@@ -29,7 +29,6 @@ import cz.msebera.android.httpclient.Header;
  * desc:   news detail  module
  */
 public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailContract.View> implements NewsDetailContract.Operator {
-    private static final String TAG = "NewsDetailActivity";
     private static int tempType = 6;
 
     /**
@@ -43,6 +42,10 @@ public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailCon
         tempType = type;
         intent.putExtra("id", id);
         context.startActivity(intent);
+    }
+
+    int getType(){
+        return 6;
     }
 
     @Override
@@ -73,7 +76,7 @@ public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailCon
             return;
         showWaitDialog(R.string.progress_submit);
         final NewsDetail newsDetail = getData();
-        OSChinaApi.getFavReverse(getDataId(), 6, new TextHttpResponseHandler() {
+        OSChinaApi.getFavReverse(getDataId(), tempType, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 hideWaitDialog();
@@ -144,7 +147,7 @@ public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailCon
             AppContext.showToastShort(R.string.tip_comment_content_empty);
             return;
         }
-        OSChinaApi.publishComment(id, commentId, 0, commentAuthorId, getData().getType(), comment, new TextHttpResponseHandler() {
+        OSChinaApi.publishComment(id, commentId, 0, commentAuthorId, tempType, comment, new TextHttpResponseHandler() {
 
             @Override
             public void onStart() {
