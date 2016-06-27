@@ -20,9 +20,6 @@ public interface SoftDetailContract {
         // 关注
         void toFollow();
 
-        // 举报
-        void toReport();
-
         // 提交评价
         void toSendComment(long id, long authorId, String comment);
     }

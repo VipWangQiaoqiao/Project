@@ -2,8 +2,6 @@ package net.oschina.app.improve.detail.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.google.gson.reflect.TypeToken;
@@ -40,6 +38,7 @@ public class EventDetailActivity extends DetailActivity<EventDetail, EventDetail
         context.startActivity(intent);
     }
 
+
     @Override
     protected void initData() {
         super.initData();
@@ -62,23 +61,16 @@ public class EventDetailActivity extends DetailActivity<EventDetail, EventDetail
     }
 
     @Override
-    public void toReport() {
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.share_menu, menu);
-        return true;
+    int getOptionsMenuId() {
+        return R.menu.menu_detail_share;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_share) {
             final EventDetail detail = getData();
-            if (detail != null){
-                toShare(detail.getTitle(),detail.getBody(),detail.getHref());
+            if (detail != null) {
+                toShare(detail.getTitle(), detail.getBody(), detail.getHref());
             }
         }
         return super.onOptionsItemSelected(item);

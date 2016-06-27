@@ -225,10 +225,14 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
         }
     }
 
+    int getOptionsMenuId() {
+        return R.menu.menu_detail;
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_detail, menu);
+        inflater.inflate(getOptionsMenuId(), menu);
         MenuItem item = menu.findItem(R.id.menu_scroll_comment);
         if (item != null) {
             View action = item.getActionView();
@@ -248,15 +252,6 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
             }
         }
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.menu_report) {
-            toReport();
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     public ProgressDialog showWaitDialog(int messageId) {

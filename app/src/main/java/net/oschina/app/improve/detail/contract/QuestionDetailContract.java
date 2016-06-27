@@ -16,9 +16,6 @@ public interface QuestionDetailContract {
         // 分享
         void toShare();
 
-        // 关注
-       // void toFollow();
-
         // 举报
         void toReport();
 
@@ -28,9 +25,6 @@ public interface QuestionDetailContract {
 
     interface View extends DetailContract.View {
         void toFavoriteOk(QuestionDetail questionDetail);
-
-
-      //  void toFollowOk(QuestionDetail questionDetail);
 
         void toSendCommentOk(CommentEX commentEX);
     }

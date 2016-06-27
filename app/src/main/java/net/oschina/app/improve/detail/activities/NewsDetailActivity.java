@@ -10,7 +10,6 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.bean.Report;
 import net.oschina.app.improve.bean.NewsDetail;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.Comment;
@@ -30,8 +29,6 @@ import cz.msebera.android.httpclient.Header;
  * desc:   news detail  module
  */
 public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailContract.View> implements NewsDetailContract.Operator {
-
-
     private static final String TAG = "NewsDetailActivity";
     private static int tempType = 6;
 
@@ -187,13 +184,4 @@ public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailCon
         });
 
     }
-
-    @Override
-    public void toReport() {
-        int uid = requestCheck();
-        if (uid == 0)
-            return;
-        toReport(getDataId(), getData().getHref(), Report.TYPE_QUESTION);
-    }
-
 }
