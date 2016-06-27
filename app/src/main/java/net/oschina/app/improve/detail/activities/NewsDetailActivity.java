@@ -147,7 +147,7 @@ public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailCon
             AppContext.showToastShort(R.string.tip_comment_content_empty);
             return;
         }
-        OSChinaApi.publishComment(id, commentId, 0, commentAuthorId, getData().getType(), comment, new TextHttpResponseHandler() {
+        OSChinaApi.publishComment(id, commentId, 0, commentAuthorId, 6, comment, new TextHttpResponseHandler() {
 
             @Override
             public void onStart() {
