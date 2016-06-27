@@ -153,7 +153,8 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity{
                     UIHelper.showLoginActivity(QuestionAnswerDetailActivity.this);
                     return;
                 }
-                OSChinaApi.publicComment(sid, -1, -1, 2, content, onSendCommentHandler);
+                OSChinaApi.publicComment(sid, -1, reply == null ? -1 : reply.getId(),
+                        reply == null ? -1 : reply.getAuthorId(), 2, content, onSendCommentHandler);
             }
 
             @Override
@@ -235,6 +236,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity{
                 if (result.isSuccess()){
                     replies.add(result.getResult());
                     tvCmnCount.setText("评论 ("+ replies.size() +")");
+                    reply = null;
                     mDelegation.getInputView().setHint("发表评论");
                     mDelegation.getInputView().setText(null);
                     appendComment(replies.size() -1, result.getResult());
