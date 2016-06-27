@@ -35,6 +35,8 @@ import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.cache.DataCleanManager;
 import net.oschina.app.fragment.MyInformationFragment;
+import net.oschina.app.improve.bean.simple.CommentEX;
+import net.oschina.app.improve.comment.QuestionAnswerDetailActivity;
 import net.oschina.app.interf.BaseViewInterface;
 import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.service.NoticeUtils;

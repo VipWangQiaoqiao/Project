@@ -61,7 +61,8 @@ public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<User> i
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
+                mRefreshLayout.onComplete();
+                mAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_ERROR, true);
             }
         };
     }

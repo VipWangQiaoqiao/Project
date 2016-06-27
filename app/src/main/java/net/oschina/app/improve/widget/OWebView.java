@@ -189,7 +189,7 @@ public class OWebView extends WebView {
         public synchronized void run() {
             if (!mDone) {
                 mDone = true;
-                mFinishCallback.run();
+                if (mFinishCallback != null) mFinishCallback.run();
             }
         }
 

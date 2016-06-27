@@ -29,6 +29,7 @@ import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetDetail;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
 import net.oschina.app.improve.detail.contract.TweetDetailContract;
+import net.oschina.app.improve.widget.OWebView;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.PlatfromUtil;
@@ -60,7 +61,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
     @Bind(R.id.tv_nick)
     TextView tvNick;
     @Bind(R.id.webview)
-    WebView mWebview;
+    OWebView mWebview;
     @Bind(R.id.tv_time)
     TextView tvTime;
     @Bind(R.id.tv_client)
@@ -185,7 +186,6 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
     }
 
     protected void initWidget() {
-        Log.d("oschina", "----------------Glide on Activity " + Glide.with(this) + "---------------");
         mDelegation = KeyboardInputDelegation.delegation(this, mCoordinatorLayout, mFrameLayout);
         mDelegation.showEmoji(getSupportFragmentManager());
         mDelegation.setAdapter(new KeyboardInputDelegation.KeyboardInputAdapter() {
@@ -223,7 +223,6 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
 
         // TODO to select friends when input @ character
 
-        // TODO resolve voice
         resolveVoice();
 
         fillDetailView();
@@ -277,7 +276,11 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
         if (TextUtils.isEmpty(tweet.getPortrait())) {
             ivPortrait.setImageResource(R.drawable.widget_dface);
         } else {
-            getImageLoader().load(tweet.getPortrait()).into(ivPortrait);
+            getImageLoader()
+                    .load(tweet.getPortrait())
+                    .placeholder(getResources().getDrawable(R.drawable.widget_dface))
+                    .error(getResources().getDrawable(R.drawable.widget_dface))
+                    .into(ivPortrait);
         }
         ivPortrait.setOnClickListener(getOnPortraitClickListener());
         tvNick.setText(tweet.getAuthor());
@@ -300,8 +303,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
         if (TextUtils.isEmpty(tweet.getBody())) return;
         String html = tweet.getBody() + "<br/><img src=\"" + tweet.getImgSmall() + "\" data-url=\"" + tweet.getImgBig() + "\"/>";
         html = HTMLUtil.setupWebContent(html, false, true);
-        UIHelper.addWebImageShow(this, mWebview);
-        mWebview.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
+        mWebview.loadDetailDataAsync(html, null);
     }
 
     private View.OnClickListener getOnPortraitClickListener() {
