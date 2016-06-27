@@ -1,5 +1,6 @@
 package net.oschina.app.improve.widget;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -19,6 +20,7 @@ import net.oschina.app.interf.OnWebViewImageListener;
 import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
+import net.oschina.app.util.UIHelper;
 
 /**
  * Created by JuQiu
@@ -52,6 +54,7 @@ public class OWebView extends WebView {
         init();
     }
 
+    @SuppressLint({"AddJavascriptInterface", "SetJavaScriptEnabled"})
     private void init() {
         setHorizontalScrollBarEnabled(false);
 
@@ -62,19 +65,21 @@ public class OWebView extends WebView {
         settings.setDisplayZoomControls(false);
         settings.setJavaScriptEnabled(true);
 
-        addJavascriptInterface(new OnWebViewImageListener() {
-            @Override
-            @JavascriptInterface
-            public void showImagePreview(String bigImageUrl) {
-                if (bigImageUrl != null && !StringUtils.isEmpty(bigImageUrl)) {
-                    OSCPhotosActivity.showImagePreview(getContext(), bigImageUrl);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            addJavascriptInterface(new OnWebViewImageListener() {
+                @Override
+                @JavascriptInterface
+                public void showImagePreview(String bigImageUrl) {
+                    if (bigImageUrl != null && !StringUtils.isEmpty(bigImageUrl)) {
+                        OSCPhotosActivity.showImagePreview(getContext(), bigImageUrl);
+                    }
                 }
-            }
-        }, "mWebViewImageListener");
+            }, "mWebViewImageListener");
+        }
     }
 
     public void loadDetailDataAsync(final String content, Runnable finishCallback) {
-        this.setWebViewClient(new PageFinishedWebClient(finishCallback));
+        this.setWebViewClient(new OWebClient(finishCallback));
         Context context = getContext();
         if (context != null && context instanceof Activity) {
             final Activity activity = (Activity) context;
@@ -157,11 +162,11 @@ public class OWebView extends WebView {
                 , (css == null ? "" : css), content);
     }
 
-    private static class PageFinishedWebClient extends WebViewClient implements Runnable {
+    private static class OWebClient extends WebViewClient implements Runnable {
         private Runnable mFinishCallback;
         private boolean mDone = false;
 
-        PageFinishedWebClient(Runnable finishCallback) {
+        OWebClient(Runnable finishCallback) {
             super();
             mFinishCallback = finishCallback;
         }
@@ -186,6 +191,12 @@ public class OWebView extends WebView {
                 mDone = true;
                 mFinishCallback.run();
             }
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            UIHelper.showUrlRedirect(view.getContext(), url);
+            return true;
         }
     }
 }
