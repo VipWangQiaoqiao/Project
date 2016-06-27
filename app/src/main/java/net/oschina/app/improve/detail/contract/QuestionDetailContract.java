@@ -1,6 +1,7 @@
 package net.oschina.app.improve.detail.contract;
 
 import net.oschina.app.improve.bean.QuestionDetail;
+import net.oschina.app.improve.bean.simple.CommentEX;
 
 /**
  * Created by fei on 2016/6/13.
@@ -22,7 +23,7 @@ public interface QuestionDetailContract {
         void toReport();
 
         // 提交评价
-        void toSendComment(long id, long authorId, String comment);
+        void toSendComment(long id, long commentId, long commentAuthorId, String comment);
     }
 
     interface View extends DetailContract.View {
@@ -31,6 +32,6 @@ public interface QuestionDetailContract {
 
       //  void toFollowOk(QuestionDetail questionDetail);
 
-        void toSendCommentOk();
+        void toSendCommentOk(CommentEX commentEX);
     }
 }

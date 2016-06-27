@@ -5,25 +5,22 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 import com.google.gson.reflect.TypeToken;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Report;
-import net.oschina.app.bean.Result;
 import net.oschina.app.improve.bean.QuestionDetail;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.bean.simple.CommentEX;
 import net.oschina.app.improve.detail.contract.QuestionDetailContract;
 import net.oschina.app.improve.detail.fragments.DetailFragment;
 import net.oschina.app.improve.detail.fragments.QuestionDetailFragment;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.URLsUtils;
-import net.oschina.app.util.XmlUtils;
 
-import java.io.ByteArrayInputStream;
 import java.lang.reflect.Type;
 
 import cz.msebera.android.httpclient.Header;
@@ -129,7 +126,7 @@ public class QuestionDetailActivity extends DetailActivity<QuestionDetail, Quest
 
 
     @Override
-    public void toSendComment(long id, long authorId, String comment) {
+    public void toSendComment(long id, long commentId, long commentAuthorId, String comment) {
         int uid = requestCheck();
         if (uid == 0)
             return;
@@ -139,49 +136,44 @@ public class QuestionDetailActivity extends DetailActivity<QuestionDetail, Quest
             return;
         }
 
-        AsyncHttpResponseHandler handler = new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-                try {
-                    net.oschina.app.bean.ResultBean rsb = XmlUtils.toBean(net.oschina.app.bean.ResultBean.class,
-                            new ByteArrayInputStream(arg2));
-                    Result res = rsb.getResult();
-                    if (res.OK()) {
-                        QuestionDetailContract.View view = mView;
-                        if (view != null)
-                            view.toSendCommentOk();
-                    } else {
-                        AppContext.showToastShort(res.getErrorMessage());
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    onFailure(arg0, arg1, arg2, e);
-                }
-            }
-
-            @Override
-            public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                                  Throwable arg3) {
-                AppContext.showToastShort(R.string.comment_publish_faile);
-            }
+        OSChinaApi.publishComment(id, commentId, 0, commentAuthorId, 2, comment, new TextHttpResponseHandler() {
 
             @Override
             public void onStart() {
+                super.onStart();
                 showWaitDialog(R.string.progress_submit);
             }
 
             @Override
-            public void onFinish() {
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                AppContext.showToast("评论失败!");
                 hideWaitDialog();
             }
-        };
 
-        long dataId = getDataId();
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                try {
+                    Type type = new TypeToken<ResultBean<CommentEX>>() {
+                    }.getType();
 
-        if (dataId != id)
-            OSChinaApi.replyBlogComment(dataId, uid, comment, id, authorId, handler);
-        else
-            OSChinaApi.publicBlogComment(dataId, uid, comment, handler);
+                    ResultBean<CommentEX> resultBean = AppContext.createGson().fromJson(responseString, type);
+                    if (resultBean.isSuccess()) {
+                        CommentEX respComment = resultBean.getResult();
+                        if (respComment != null) {
+                            QuestionDetailContract.View view = mView;
+                            if (view != null) {
+                                view.toSendCommentOk(respComment);
+                            }
+                        }
+                    }
+                    hideWaitDialog();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    onFailure(statusCode, headers, responseString, e);
+                }
+                hideWaitDialog();
+            }
+        });
     }
 
     @Override
