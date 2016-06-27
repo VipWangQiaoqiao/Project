@@ -215,7 +215,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
 
     private void handleSendComment() {
         TDevice.hideSoftKeyboard(mETInput);
-        mOperator.toSendComment(mCommentId, mCommentAuthorId, mETInput.getText().toString());
+        mOperator.toSendComment(mId,mCommentId, mCommentAuthorId, mETInput.getText().toString());
     }
 
     @SuppressWarnings("deprecation")
@@ -228,9 +228,10 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
     }
 
     @Override
-    public void toSendCommentOk() {
+    public void toSendCommentOk(Comment comment) {
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
         mETInput.setText("");
+        mComments.addComment(comment,getImgLoader(),this);
     }
 
     @Override

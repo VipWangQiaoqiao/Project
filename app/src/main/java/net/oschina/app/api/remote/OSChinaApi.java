@@ -1283,8 +1283,8 @@ public class OSChinaApi {
      * @param content 内容
      * @param handler 你懂得
      */
-    public static void publicComment(long sid, long referId, long replyId, long oid,
-                                     int type, String content, TextHttpResponseHandler handler) {
+    public static void publishComment(long sid, long referId, long replyId, long oid,
+                                      int type, String content, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("sourceId", sid);
         params.put("type", type);
@@ -1310,6 +1310,6 @@ public class OSChinaApi {
             commentAuthorId = 0;
         }
 
-        publicComment(sid, 0, commentId, commentAuthorId, 3, comment, handler);
+        publishComment(sid, 0, commentId, commentAuthorId, 3, comment, handler);
     }
 }

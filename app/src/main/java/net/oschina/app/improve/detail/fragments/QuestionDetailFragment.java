@@ -15,6 +15,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.QuestionDetail;
 import net.oschina.app.improve.bean.simple.Comment;
+import net.oschina.app.improve.bean.simple.CommentEX;
 import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.comment.CommentExsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
@@ -198,7 +199,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
     private void handleSendComment() {
         TDevice.hideSoftKeyboard(mETInput);
-        mOperator.toSendComment(mCommentId, mCommentAuthorId, mETInput.getText().toString());
+        mOperator.toSendComment(mId,mCommentId, mCommentAuthorId, mETInput.getText().toString());
     }
 
 
@@ -213,9 +214,10 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
 
     @Override
-    public void toSendCommentOk() {
+    public void toSendCommentOk(CommentEX commentEX) {
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
         mETInput.setText("");
+        mComments.addComment(commentEX,getImgLoader(),this);
     }
 
     @Override
