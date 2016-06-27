@@ -5,6 +5,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/ques_bt_bg"
+    android:maxLines="1"
+    android:minLines="1"
     android:padding="6dp"
     android:textColor="@color/count_text_color_light"
     tools:text="New Text" />

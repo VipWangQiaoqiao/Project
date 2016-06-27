@@ -31,7 +31,7 @@ import butterknife.Bind;
  * Created by fei on 2016/6/20.
  * desc:  software detail module
  */
-public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail,SoftDetailContract.View,SoftDetailContract.Operator> implements View.OnClickListener, SoftDetailContract.View {
+public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftDetailContract.View, SoftDetailContract.Operator> implements View.OnClickListener, SoftDetailContract.View {
     private long mId;
     private WebView mWebView;
     private TextView mTVAuthorName;
@@ -174,19 +174,19 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail,SoftDe
         mTVAuthorName.setText(softwareDetail.getAuthor());
         getImgLoader().load(softwareDetail.getAuthorPortrait()).error(R.drawable.widget_dface).into(mIVAuthorPortrait);
 
-        String time = String.format("%s (%s)", StringUtils.friendly_time(softwareDetail.getPubDate()), softwareDetail.getPubDate());
+        String time = String.format("%s", StringUtils.friendly_time(softwareDetail.getPubDate()));
         mTVPubDate.setText(time);
 
         mTVTitle.setText(softwareDetail.getName());
 
-       // if (TextUtils.isEmpty(softwareDetail.getAbstract())) {
-            mLayAbstract.setVisibility(View.GONE);
-      //  } else {
-         //   mTVAbstract.setText(softwareDetail.getAbstract());
-            mLayAbstract.setVisibility(View.VISIBLE);
-     //   }
+        // if (TextUtils.isEmpty(softwareDetail.getAbstract())) {
+        mLayAbstract.setVisibility(View.GONE);
+        //  } else {
+        //   mTVAbstract.setText(softwareDetail.getAbstract());
+        mLayAbstract.setVisibility(View.VISIBLE);
+        //   }
 
-        mIVLabelRecommend.setVisibility( View.VISIBLE );
+        mIVLabelRecommend.setVisibility(View.VISIBLE);
         mIVLabelOriginate.setImageDrawable(getResources().getDrawable(R.drawable.ic_label_reprint));
 
         toFollowOk(softwareDetail);
@@ -196,11 +196,11 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail,SoftDe
         setText(R.id.tv_info_comment, String.valueOf(softwareDetail.getCommentCount()));
 
         //mAbouts.setAbout(softwareDetail.getAbouts(), new DetailAboutView.OnAboutClickListener() {
-         //   @Override
-         //   public void onClick(View view, BlogDetail.About about) {
-           //     BlogDetailActivity.show(getActivity(), about.id);
-          //  }
-      //  });
+        //   @Override
+        //   public void onClick(View view, BlogDetail.About about) {
+        //     BlogDetailActivity.show(getActivity(), about.id);
+        //  }
+        //  });
 
 
         //mComments.show(blog.getId(), 3, getImgLoader());
@@ -264,10 +264,10 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail,SoftDe
     @Override
     public void toFollowOk(SoftwareDetail softwareDetail) {
         //if (softwareDetail.getAuthorRelation() <= 2) {
-            mBtnRelation.setText("已关注");
-       // } else {
-            mBtnRelation.setText("关注");
-      //  }
+        mBtnRelation.setText("已关注");
+        // } else {
+        mBtnRelation.setText("关注");
+        //  }
     }
 
     @Override
