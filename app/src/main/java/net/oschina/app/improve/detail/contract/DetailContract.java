@@ -12,9 +12,6 @@ public interface DetailContract {
 
         void hideLoading();
 
-        // 举报
-        void toReport();
-
         // 回写布局View
         void setDataView(DataView view);
 

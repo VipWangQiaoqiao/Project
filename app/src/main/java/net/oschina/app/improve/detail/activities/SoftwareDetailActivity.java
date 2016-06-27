@@ -11,7 +11,6 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Result;
 import net.oschina.app.improve.bean.BlogDetail;
 import net.oschina.app.improve.bean.SoftwareDetail;
@@ -28,9 +27,6 @@ import java.lang.reflect.Type;
 import cz.msebera.android.httpclient.Header;
 
 public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftDetailContract.View> implements SoftDetailContract.Operator {
-
-    private SoftDetailContract.View mView;
-
     public static void show(Context context, long id) {
         Intent intent = new Intent(context, SoftwareDetailActivity.class);
         intent.putExtra("id", id);
@@ -200,13 +196,5 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
             OSChinaApi.replyBlogComment(dataId, uid, comment, id, authorId, handler);
         else
             OSChinaApi.publicBlogComment(dataId, uid, comment, handler);
-    }
-
-    @Override
-    public void toReport() {
-        int uid = requestCheck();
-        if (uid == 0)
-            return;
-        toReport(getDataId(), getData().getHref(), Report.TYPE_QUESTION);
     }
 }

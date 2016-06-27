@@ -16,12 +16,6 @@ public interface NewsDetailContract {
         // 分享
         void toShare();
 
-        // 关注
-       // void toFollow();
-
-        // 举报
-        void toReport();
-
         // 提交评价
         void toSendComment(long id, long commentId, long commentAuthorId, String comment);
     }

@@ -15,14 +15,14 @@ import android.view.View;
  * <p><a href="http://www.happycodeboy.com">LeonLee Blog</a></p>
  *
  * @author 李文龙(LeonLee)
- *
- * 索引界面
+ *         <p>
+ *         索引界面
  */
 public class IndexView extends View {
 
     private static final String DEFAULT_INDEX = "☆ABCDEFGHIJKLMNOPQRSTUVWXYZ#";
 
-    private static final int[] ATTRS = new int[] {
+    private static final int[] ATTRS = new int[]{
             android.R.attr.textSize,
             android.R.attr.textColor,
     };
@@ -71,12 +71,12 @@ public class IndexView extends View {
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
-        if(indexLetters == null || indexLetters.length == 0) {
+        if (indexLetters == null || indexLetters.length == 0) {
             return;
         }
 
         final int width = getWidth();
-        if(!isInitItemHeight) {
+        if (!isInitItemHeight) {
             final int height = getHeight() - getPaddingTop() - getPaddingBottom();
             itemHeight = height / indexLetters.length;
             final Paint.FontMetricsInt fontMetrics = paint.getFontMetricsInt();
@@ -86,7 +86,7 @@ public class IndexView extends View {
         }
 
         int x;
-        for(int i = 0; i < indexLetters.length; i ++) {
+        for (int i = 0; i < indexLetters.length; i++) {
             String indexStr = String.valueOf(indexLetters[i]);
             x = (int) ((width - paint.measureText(indexStr)) * 0.5);
             canvas.drawText(indexStr, x, offsetY + itemHeight * i, paint);
@@ -95,7 +95,7 @@ public class IndexView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if(itemHeight == 0) {
+        if (itemHeight == 0) {
             return false;
         }
         int action = MotionEventCompat.getActionMasked(event);
@@ -129,6 +129,7 @@ public class IndexView extends View {
 
     public interface OnIndexTouchListener {
         public void onIndexTouchMove(char indexLeter);
+
         public void onIndexTouchUp();
     }
 }

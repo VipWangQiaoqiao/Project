@@ -9,4 +9,10 @@
         android:title="评论"
         app:actionLayout="@layout/lay_menu_action_comment"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_report"
+        android:orderInCategory="100"
+        android:title="举报"
+        app:showAsAction="never" />
 </menu>
