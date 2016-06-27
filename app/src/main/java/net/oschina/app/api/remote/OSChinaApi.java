@@ -1278,6 +1278,7 @@ public class OSChinaApi {
      * @param sid     文章id
      * @param referId 引用的评论的id
      * @param replyId 回复的评论的id
+     * @param oid     引用、回复的发布者id
      * @param type    文章类型 1:软件推荐, 2:问答帖子, 3:博客, 4:翻译文章, 5:活动, 6:资讯
      * @param content 内容
      * @param handler 你懂得
@@ -1296,4 +1297,5 @@ public class OSChinaApi {
             params.put("reAuthorId", oid);
         ApiHttpClient.post("action/apiv2/comment_pub", params, handler);
     }
+
 }

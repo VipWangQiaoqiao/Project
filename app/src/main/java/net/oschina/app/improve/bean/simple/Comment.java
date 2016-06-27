@@ -21,6 +21,7 @@ public class Comment implements Serializable {
     public static class Refer implements Serializable {
         public String author;
         public String content;
+        public String pubDate;
         public Refer refer;
     }
 

@@ -228,7 +228,7 @@ public class BlogDetailFragment
 
     private void handleSendComment() {
         TDevice.hideSoftKeyboard(mETInput);
-        mOperator.toSendComment(mCommentId, mCommentAuthorId, mETInput.getText().toString());
+        mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mETInput.getText().toString().trim());
     }
 
     @SuppressWarnings("deprecation")
@@ -250,13 +250,15 @@ public class BlogDetailFragment
     }
 
     @Override
-    public void toSendCommentOk() {
+    public void toSendCommentOk(Comment comment) {
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
         mETInput.setText("");
+        mComments.addComment(comment, getImgLoader(), this);
     }
 
     @Override
     public void onClick(View view, Comment comment) {
+
         FloatingAutoHideDownBehavior.showBottomLayout(mLayCoordinator, mLayContent, mLayBottom);
         mCommentId = comment.getId();
         mCommentAuthorId = comment.getAuthorId();
