@@ -22,17 +22,26 @@ public class CommentEX extends Comment {
     private Reply[] replies;
 
     public static class Reply implements Serializable {
-        private String authorId;
+        private long id;
+        private long authorId;
         private String author;
         private String content;
         private String authorPortrait;
         private String pubDate;
 
-        public String getAuthorId() {
+        public long getId() {
+            return id;
+        }
+
+        public void setId(long id) {
+            this.id = id;
+        }
+
+        public long getAuthorId() {
             return authorId;
         }
 
-        public void setAuthorId(String authorId) {
+        public void setAuthorId(long authorId) {
             this.authorId = authorId;
         }
 
