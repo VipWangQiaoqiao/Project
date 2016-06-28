@@ -452,22 +452,6 @@ public class UIHelper {
         }, "mWebViewImageListener");
     }
 
-    /**
-     * 获取webviewClient对象
-     *
-     * @return
-     */
-    public static WebViewClient getWebViewClient() {
-
-        return new WebViewClient() {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                showUrlRedirect(view.getContext(), url);
-                return true;
-            }
-        };
-    }
-
     public static String setHtmlCotentSupportImagePreview(String body) {
         // 读取用户设置：是否加载文章图片--默认有wifi下始终加载图片
         if (AppContext.get(AppConfig.KEY_LOAD_IMAGE, true)
