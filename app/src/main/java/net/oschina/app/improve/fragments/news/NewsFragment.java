@@ -91,11 +91,7 @@ public class NewsFragment extends BaseGeneralListFragment<News> {
         if (news != null) {
             int type = news.getType();
             long newsId = news.getId();
-            if (type == 4) {
-                UIHelper.showNewsDetail(getContext(), (int) newsId, news.getCommentCount());
-            } else {
-                UIHelper.showDetail(getActivity(), type, newsId, news.getHref());
-            }
+            UIHelper.showDetail(getActivity(), type, newsId, news.getHref());
             TextView title = (TextView) view.findViewById(R.id.tv_title);
             TextView content = (TextView) view.findViewById(R.id.tv_description);
             updateTextColor(title, content);

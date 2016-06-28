@@ -10,12 +10,12 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.improve.bean.NewsDetail;
+import net.oschina.app.improve.bean.TranslationDetail;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.Comment;
-import net.oschina.app.improve.detail.contract.NewsDetailContract;
+import net.oschina.app.improve.detail.contract.TranslateDetailContract;
 import net.oschina.app.improve.detail.fragments.DetailFragment;
-import net.oschina.app.improve.detail.fragments.NewsDetailFragment;
+import net.oschina.app.improve.detail.fragments.TranslationDetailFragment;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.URLsUtils;
@@ -28,7 +28,7 @@ import cz.msebera.android.httpclient.Header;
  * Created by fei on 2016/6/13.
  * desc:   news detail  module
  */
-public class TranslateDetailActivity extends DetailActivity<NewsDetail, NewsDetailContract.View> implements NewsDetailContract.Operator {
+public class TranslateDetailActivity extends DetailActivity<TranslationDetail, TranslateDetailContract.View> implements TranslateDetailContract.Operator {
 
     /**
      * show news detail
@@ -58,12 +58,12 @@ public class TranslateDetailActivity extends DetailActivity<NewsDetail, NewsDeta
 
     @Override
     Class<? extends DetailFragment> getDataViewFragment() {
-        return NewsDetailFragment.class;
+        return TranslationDetailFragment.class;
     }
 
     @Override
     Type getDataType() {
-        return new TypeToken<ResultBean<NewsDetail>>() {
+        return new TypeToken<ResultBean<TranslationDetail>>() {
         }.getType();
     }
 
@@ -73,12 +73,12 @@ public class TranslateDetailActivity extends DetailActivity<NewsDetail, NewsDeta
         if (uid == 0)
             return;
         showWaitDialog(R.string.progress_submit);
-        final NewsDetail newsDetail = getData();
+        final TranslationDetail translationDetail = getData();
         OSChinaApi.getFavReverse(getDataId(), getType(), new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 hideWaitDialog();
-                if (newsDetail.isFavorite())
+                if (translationDetail.isFavorite())
                     AppContext.showToastShort(R.string.del_favorite_faile);
                 else
                     AppContext.showToastShort(R.string.add_favorite_faile);
@@ -87,14 +87,14 @@ public class TranslateDetailActivity extends DetailActivity<NewsDetail, NewsDeta
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
-                    Type type = new TypeToken<ResultBean<NewsDetail>>() {
+                    Type type = new TypeToken<ResultBean<TranslationDetail>>() {
                     }.getType();
 
-                    ResultBean<NewsDetail> resultBean = AppContext.createGson().fromJson(responseString, type);
+                    ResultBean<TranslationDetail> resultBean = AppContext.createGson().fromJson(responseString, type);
                     if (resultBean != null && resultBean.isSuccess()) {
-                        newsDetail.setFavorite(!newsDetail.isFavorite());
-                        mView.toFavoriteOk(newsDetail);
-                        if (newsDetail.isFavorite())
+                        translationDetail.setFavorite(!translationDetail.isFavorite());
+                        mView.toFavoriteOk(translationDetail);
+                        if (translationDetail.isFavorite())
                             AppContext.showToastShort(R.string.add_favorite_success);
                         else
                             AppContext.showToastShort(R.string.del_favorite_success);
@@ -113,16 +113,16 @@ public class TranslateDetailActivity extends DetailActivity<NewsDetail, NewsDeta
         if (getDataId() != 0 && getData() != null) {
             String content;
 
-            String url = String.format(URLsUtils.URL_MOBILE + "news/%s", getDataId());
-            final NewsDetail newsDetail = getData();
-            if (newsDetail.getBody().length() > 55) {
-                content = HTMLUtil.delHTMLTag(newsDetail.getBody().trim());
+            String url = String.format(URLsUtils.URL_MOBILE + "translation/%s", getDataId());
+            final TranslationDetail translationDetail = getData();
+            if (translationDetail.getBody().length() > 55) {
+                content = HTMLUtil.delHTMLTag(translationDetail.getBody().trim());
                 if (content.length() > 55)
                     content = StringUtils.getSubString(0, 55, content);
             } else {
-                content = HTMLUtil.delHTMLTag(newsDetail.getBody().trim());
+                content = HTMLUtil.delHTMLTag(translationDetail.getBody().trim());
             }
-            String title = newsDetail.getTitle();
+            String title = translationDetail.getTitle();
 
             if (TextUtils.isEmpty(url) || TextUtils.isEmpty(content) || TextUtils.isEmpty(title)) {
                 AppContext.showToast("内容加载失败...");
@@ -169,7 +169,7 @@ public class TranslateDetailActivity extends DetailActivity<NewsDetail, NewsDeta
                     if (resultBean.isSuccess()) {
                         Comment respComment = resultBean.getResult();
                         if (respComment != null) {
-                            NewsDetailContract.View view = mView;
+                            TranslateDetailContract.View view = mView;
                             if (view != null) {
                                 view.toSendCommentOk(respComment);
                             }

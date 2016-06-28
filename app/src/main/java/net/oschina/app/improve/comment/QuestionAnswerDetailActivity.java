@@ -117,6 +117,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
         }
     }
 
+    @SuppressWarnings("deprecation")
     protected void initWidget() {
         // portrait
         if (TextUtils.isEmpty(comment.getAuthorPortrait())) {
@@ -192,6 +193,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
         mWebView.loadDetailDataAsync(comment.getContent(), null);
     }
 
+    @SuppressWarnings("deprecation")
     private void appendComment(int i, CommentEX.Reply reply) {
         View view = LayoutInflater.from(this).inflate(R.layout.list_item_tweet_comment, mLayoutContainer, false);
         TweetCommentAdapter.TweetCommentHolderView holder = new TweetCommentAdapter.TweetCommentHolderView(view);
