@@ -3,7 +3,6 @@ package net.oschina.app.improve.detail.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -11,12 +10,13 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.bean.Tweet;
 import net.oschina.app.improve.bean.SoftwareDetail;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.detail.contract.SoftDetailContract;
 import net.oschina.app.improve.detail.fragments.DetailFragment;
 import net.oschina.app.improve.detail.fragments.SoftWareDetailFragment;
+import net.oschina.app.service.ServerTaskUtils;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.URLsUtils;
@@ -32,6 +32,7 @@ import cz.msebera.android.httpclient.Header;
 public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftDetailContract.View> implements SoftDetailContract.Operator {
 
     public static final String TAG = "SoftwareDetailActivity";
+    private static final int MAX_TEXT_LENGTH = 160;
 
     /**
      * show news detail
@@ -146,46 +147,62 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
             return;
         }
 
-        OSChinaApi.publishComment(id, commentId, 0, commentAuthorId, 1, comment, new TextHttpResponseHandler() {
+        if (comment.length() > MAX_TEXT_LENGTH) {
+            AppContext.showToastShort(R.string.tip_content_too_long);
+            return;
+        }
 
 
-            @Override
-            public void onStart() {
-                super.onStart();
-                showWaitDialog(R.string.progress_submit);
-            }
+        Tweet tweet = new Tweet();
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                AppContext.showToast("评论失败!");
-                hideWaitDialog();
-            }
+        tweet.setAuthorid(AppContext.getInstance().getLoginUid());
+        tweet.setBody(comment);
+        ServerTaskUtils.pubTweet(this, tweet);
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                try {
-                    Type type = new TypeToken<ResultBean<Comment>>() {
-                    }.getType();
+        mView.toSendCommentOk(null);
 
-                    ResultBean<Comment> resultBean = AppContext.createGson().fromJson(responseString, type);
-                    Log.d(TAG, "onSuccess: ------>" + resultBean.getCode());
-                    if (resultBean.isSuccess()) {
-                        Comment respComment = resultBean.getResult();
-                        if (respComment != null) {
-                            SoftDetailContract.View view = mView;
-                            if (view != null) {
-                                view.toSendCommentOk(respComment);
-                            }
-                        }
-                    }
-                    hideWaitDialog();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    onFailure(statusCode, headers, responseString, e);
-                }
-                hideWaitDialog();
-            }
-        });
+
+
+//        OSChinaApi.publishComment(id, commentId, 0, commentAuthorId, 1, comment, new TextHttpResponseHandler() {
+//
+//
+//            @Override
+//            public void onStart() {
+//                super.onStart();
+//                showWaitDialog(R.string.progress_submit);
+//            }
+//
+//            @Override
+//            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+//                AppContext.showToast("评论失败!");
+//                hideWaitDialog();
+//            }
+//
+//            @Override
+//            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+//                try {
+//                    Type type = new TypeToken<ResultBean<Comment>>() {
+//                    }.getType();
+//
+//                    ResultBean<Comment> resultBean = AppContext.createGson().fromJson(responseString, type);
+//                    Log.d(TAG, "onSuccess: ------>" + resultBean.getCode());
+//                    if (resultBean.isSuccess()) {
+//                        Comment respComment = resultBean.getResult();
+//                        if (respComment != null) {
+//                            SoftDetailContract.View view = mView;
+//                            if (view != null) {
+//                                view.toSendCommentOk(respComment);
+//                            }
+//                        }
+//                    }
+//                    hideWaitDialog();
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    onFailure(statusCode, headers, responseString, e);
+//                }
+//                hideWaitDialog();
+//            }
+//        });
 
     }
 }

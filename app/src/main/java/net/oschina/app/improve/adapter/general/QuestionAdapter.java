@@ -27,6 +27,7 @@ public class QuestionAdapter extends BaseListAdapter<Question> {
         super(callback);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void convert(ViewHolder vh, Question item, int position) {
         String authorPortrait = item.getAuthorPortrait();
