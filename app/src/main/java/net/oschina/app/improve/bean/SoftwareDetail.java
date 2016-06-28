@@ -2,6 +2,8 @@ package net.oschina.app.improve.bean;
 
 import net.oschina.app.improve.bean.simple.About;
 
+import java.util.List;
+
 /**
  * Created by fei on 2016/6/20.
  * desc:
@@ -25,7 +27,7 @@ public class SoftwareDetail extends Software {
     private int commentCount; //评论量，实际是动弹量
     private int viewCount;//浏览量
     private boolean favorite;//是否收藏
-    private About abouts;  //相关推荐
+    private List<About> abouts;  //相关推荐
 
     public String getExtName() {
         return extName;
@@ -164,11 +166,11 @@ public class SoftwareDetail extends Software {
         this.favorite = favorite;
     }
 
-    public About getAbouts() {
+    public List<About> getAbouts() {
         return abouts;
     }
 
-    public void setAbouts(About abouts) {
+    public void setAbouts(List<About> abouts) {
         this.abouts = abouts;
     }
 }

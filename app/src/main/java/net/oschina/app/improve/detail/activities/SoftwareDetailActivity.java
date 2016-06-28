@@ -3,6 +3,7 @@ package net.oschina.app.improve.detail.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -29,6 +30,8 @@ import cz.msebera.android.httpclient.Header;
  * desc:   news detail  module
  */
 public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftDetailContract.View> implements SoftDetailContract.Operator {
+
+    public static final String TAG = "SoftwareDetailActivity";
 
     /**
      * show news detail
@@ -145,6 +148,7 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
 
         OSChinaApi.publishComment(id, commentId, 0, commentAuthorId, 1, comment, new TextHttpResponseHandler() {
 
+
             @Override
             public void onStart() {
                 super.onStart();
@@ -164,10 +168,11 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
                     }.getType();
 
                     ResultBean<Comment> resultBean = AppContext.createGson().fromJson(responseString, type);
+                    Log.d(TAG, "onSuccess: ------>" + resultBean.getCode());
                     if (resultBean.isSuccess()) {
                         Comment respComment = resultBean.getResult();
                         if (respComment != null) {
-                           SoftDetailContract.View view = mView;
+                            SoftDetailContract.View view = mView;
                             if (view != null) {
                                 view.toSendCommentOk(respComment);
                             }

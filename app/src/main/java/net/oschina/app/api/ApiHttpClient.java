@@ -19,11 +19,9 @@ public class ApiHttpClient {
     public final static String HOST = "www.oschina.net";
     private static String API_URL = "http://www.oschina.net/%s";
     //    public final static String HOST = "192.168.1.58:8080";
-<<<<<<< HEAD
     // private static String API_URL = "http://192.168.1.15:8000/%s";
-=======
     //private static String API_URL = "http://192.168.1.15:8000/%s";
->>>>>>> 4d57be93f712c96ab33ae9f032e9df4d02baf7a8
+
     public static final String DELETE = "DELETE";
     public static final String GET = "GET";
     public static final String POST = "POST";

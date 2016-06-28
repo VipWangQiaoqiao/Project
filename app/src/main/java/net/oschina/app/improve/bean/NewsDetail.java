@@ -12,7 +12,7 @@ import java.util.List;
  * Created by fei on 2016/6/13.
  * desc:
  */
-public class SoftWare extends News {
+public class NewsDetail extends News {
 
     private boolean favorite;
     private long authorId;

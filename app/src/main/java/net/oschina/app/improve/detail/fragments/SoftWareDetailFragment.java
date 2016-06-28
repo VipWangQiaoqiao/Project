@@ -1,124 +1,95 @@
 package net.oschina.app.improve.detail.fragments;
 
-import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import net.oschina.app.R;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.SoftwareDetail;
+import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.bean.simple.Comment;
+import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
+import net.oschina.app.improve.comment.CommentsView;
+import net.oschina.app.improve.comment.OnCommentClickListener;
+import net.oschina.app.improve.detail.activities.NewsDetailActivity;
 import net.oschina.app.improve.detail.contract.SoftDetailContract;
 import net.oschina.app.improve.widget.DetailAboutView;
-import net.oschina.app.improve.widget.DetailCommentView;
-import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 
 /**
  * Created by fei on 2016/6/20.
  * desc:  software detail module
  */
-public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftDetailContract.View, SoftDetailContract.Operator> implements View.OnClickListener, SoftDetailContract.View {
+public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftDetailContract.View, SoftDetailContract.Operator>
+        implements View.OnClickListener, SoftDetailContract.View, OnCommentClickListener {
+
     private long mId;
-    private WebView mWebView;
-    private TextView mTVAuthorName;
-    private TextView mTVPubDate;
-    private TextView mTVTitle;
-    private TextView mTVAbstract;
-    private ImageView mIVLabelRecommend;
-    private ImageView mIVLabelOriginate;
-    private ImageView mIVAuthorPortrait;
-    private ImageView mIVFav;
-    private Button mBtnRelation;
-    private EditText mETInput;
 
-    private DetailAboutView mAbouts;
-    private DetailCommentView mComments;
+    @Bind(R.id.tv_software_name)
+    TextView tvName;
+    @Bind(R.id.iv_software_icon)
+    ImageView ivIcon;
+    @Bind(R.id.tv_software_body)
+    TextView tvBody;
 
-    private LinearLayout mLayAbstract;
+    @Bind(R.id.bt_software_home)
+    Button btWebsite;
+    @Bind(R.id.bt_software_document)
+    Button btDocument;
+
+
+    @Bind(R.id.lay_detail_about)
+    DetailAboutView mAbouts;
+    @Bind(R.id.lay_detail_comment)
+    CommentsView mComments;
 
     @Bind(R.id.fragment_blog_detail)
     CoordinatorLayout mLayCoordinator;
     @Bind(R.id.lay_nsv)
-    View mLayContent;
+    NestedScrollView mLayContent;
+
     @Bind(R.id.lay_option)
-    View mLayBottom;
+    LinearLayout mLayBottom;
+    @Bind(R.id.et_input)
+    EditText mETInput;
+    @Bind(R.id.iv_fav)
+    ImageView mIVFav;
+    @Bind(R.id.iv_share)
+    ImageView ivShare;
+
 
     private long mCommentId;
     private long mCommentAuthorId;
-
-    private SoftDetailContract.Operator mOperator;
 
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_general_soft_detail;
     }
 
-    @Override
-    public void onDestroy() {
-        WebView view = mWebView;
-        if (view != null) {
-            mWebView = null;
-            view.getSettings().setJavaScriptEnabled(true);
-            view.removeJavascriptInterface("mWebViewImageListener");
-            view.removeAllViewsInLayout();
-            view.setWebChromeClient(null);
-            view.removeAllViews();
-            view.destroy();
-        }
-        mOperator = null;
-
-        super.onDestroy();
-    }
 
     @Override
     protected void initWidget(View root) {
-        WebView webView = new WebView(getActivity());
-        webView.setHorizontalScrollBarEnabled(false);
-        UIHelper.initWebView(webView);
-        UIHelper.addWebImageShow(getActivity(), webView);
-        ((FrameLayout) root.findViewById(R.id.lay_webview)).addView(webView);
-        mWebView = webView;
+        super.initWidget(root);
 
-        mTVAuthorName = (TextView) root.findViewById(R.id.tv_name);
-        mTVPubDate = (TextView) root.findViewById(R.id.tv_pub_date);
-        mTVTitle = (TextView) root.findViewById(R.id.tv_title);
-        mTVAbstract = (TextView) root.findViewById(R.id.tv_blog_detail_abstract);
-
-        mIVLabelRecommend = (ImageView) root.findViewById(R.id.iv_label_recommend);
-        mIVLabelOriginate = (ImageView) root.findViewById(R.id.iv_label_originate);
-        mIVAuthorPortrait = (ImageView) root.findViewById(R.id.iv_avatar);
-        mIVFav = (ImageView) root.findViewById(R.id.iv_fav);
-
-
-        mAbouts = (DetailAboutView) root.findViewById(R.id.lay_detail_about);
-        mComments = (DetailCommentView) root.findViewById(R.id.lay_detail_comment);
-        mETInput = (EditText) root.findViewById(R.id.et_input);
-        mLayAbstract = (LinearLayout) root.findViewById(R.id.lay_blog_detail_abstract);
-
-
-        root.findViewById(R.id.iv_share).setOnClickListener(this);
-        mIVFav.setOnClickListener(this);
-        mBtnRelation.setOnClickListener(this);
+        registerScroller(mLayContent, mComments);
         mETInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                     handleSendComment();
                     return true;
                 }
@@ -136,54 +107,62 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
         });
     }
 
+    @OnClick({R.id.iv_share, R.id.iv_fav, R.id.bt_software_home, R.id.bt_software_document, R.id.tv_see_more_comment})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            // 收藏
-            case R.id.iv_fav: {
-                handleFavorite();
-            }
-            break;
-            // 分享
-            case R.id.iv_share: {
+            case R.id.iv_share:
+                // 分享
                 handleShare();
-            }
-            break;
+                break;
+            case R.id.iv_fav:
+                // 收藏
+                handleFavorite();
+                break;
+            case R.id.bt_software_home:
+                //进入官网
+                UIHelper.showUrlRedirect(getActivity(), mOperator.getData().getHomePage());
+                break;
+            case R.id.bt_software_document:
+                //软件文档
+                UIHelper.showUrlRedirect(getActivity(), mOperator.getData().getDocument());
+                break;
             // 评论列表
-            case R.id.tv_see_more_comment: {
+            case R.id.tv_see_more_comment:
                 UIHelper.showBlogComment(getActivity(), (int) mId,
                         (int) mOperator.getData().getAuthorId());
-            }
-            break;
+                break;
+            default:
+                break;
         }
     }
 
     @SuppressWarnings("deprecation")
     @Override
     protected void initData() {
-        SoftwareDetail softwareDetail = mOperator.getData();
+
+        final SoftwareDetail softwareDetail = mOperator.getData();
         if (softwareDetail == null)
             return;
         mId = mCommentId = softwareDetail.getId();
-        mTVAuthorName.setText(softwareDetail.getAuthor());
-        getImgLoader().load(softwareDetail.getAuthorPortrait()).error(R.drawable.widget_dface).into(mIVAuthorPortrait);
 
-        String time = String.format("%s (%s)", StringUtils.friendly_time(softwareDetail.getPubDate()), softwareDetail.getPubDate());
-        mTVPubDate.setText(time);
+        tvName.setText(softwareDetail.getName().trim());
+        tvBody.setText(softwareDetail.getBody().trim());
 
-        mTVTitle.setText(softwareDetail.getName());
-
-        mLayAbstract.setVisibility(View.VISIBLE);
-
-        mIVLabelRecommend.setVisibility(View.VISIBLE);
-        mIVLabelOriginate.setImageDrawable(getResources().getDrawable(R.drawable.ic_label_reprint));
+        setCommentCount(softwareDetail.getCommentCount());
+        setBodyContent(softwareDetail.getBody());
+        getImgLoader().load(softwareDetail.getLogo()).error(R.drawable.widget_dface).into(ivIcon);
 
         toFavoriteOk(softwareDetail);
 
-        setText(R.id.tv_info_view, String.valueOf(softwareDetail.getViewCount()));
-        setText(R.id.tv_info_comment, String.valueOf(softwareDetail.getCommentCount()));
+        mAbouts.setAbout(softwareDetail.getAbouts(), new DetailAboutView.OnAboutClickListener() {
+            @Override
+            public void onClick(View view, About about) {
+                NewsDetailActivity.show(getActivity(), about.getId());
+            }
+        });
 
-
+        mComments.init(softwareDetail.getId(), OSChinaApi.COMMENT_NEWS, softwareDetail.getCommentCount(), getImgLoader(), this);
     }
 
     private boolean mInputDoubleEmpty = false;
@@ -204,6 +183,7 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
         }
     }
 
+
     private void handleFavorite() {
         mOperator.toFavorite();
     }
@@ -213,6 +193,7 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
     }
 
     private void handleSendComment() {
+        TDevice.hideSoftKeyboard(mETInput);
         mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mETInput.getText().toString());
     }
 
@@ -229,5 +210,15 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
     public void toSendCommentOk(Comment comment) {
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
         mETInput.setText("");
+        mComments.addComment(comment, getImgLoader(), this);
+    }
+
+    @Override
+    public void onClick(View view, Comment comment) {
+        FloatingAutoHideDownBehavior.showBottomLayout(mLayCoordinator, mLayContent, mLayBottom);
+        mCommentId = comment.getId();
+        mCommentAuthorId = comment.getAuthorId();
+        mETInput.setHint(String.format("回复: %s", comment.getAuthor()));
+        TDevice.showSoftKeyboard(mETInput);
     }
 }

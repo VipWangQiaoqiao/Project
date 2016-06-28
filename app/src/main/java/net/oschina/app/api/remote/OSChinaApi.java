@@ -1231,20 +1231,6 @@ public class OSChinaApi {
         ApiHttpClient.get("action/apiv2/question", params, handler);
     }
 
-
-    /**
-     * 获取软件详情
-     *
-     * @param id      id
-     * @param handler handler
-     */
-    public static void getSoftDetail(long id, AsyncHttpResponseHandler handler) {
-        if (id <= 0) return;
-        RequestParams params = new RequestParams();
-        params.put("id", id);
-        ApiHttpClient.get("action/apiv2/software", params, handler);
-    }
-
     /**
      * 请求评论详情
      *
