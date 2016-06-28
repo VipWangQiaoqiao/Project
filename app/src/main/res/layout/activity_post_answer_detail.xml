@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_coordinator"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
-        app:elevation="0dp"
-        android:background="#FCFCFC"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#FCFCFC"
+        app:elevation="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:background="#FAFAFA"
+            android:orientation="horizontal"
             android:padding="16dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -65,26 +65,26 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginEnd="8dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:orientation="vertical">
 
                     <ImageView
                         android:id="@+id/iv_vote_up"
-                        android:src="@drawable/selector_vote_up"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:contentDescription="@null" />
+                        android:contentDescription="@null"
+                        android:src="@drawable/selector_vote_up" />
 
                     <ImageView
                         android:id="@+id/iv_vote_down"
-                        android:src="@drawable/selector_vote_down"
-                        android:layout_marginTop="4dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:contentDescription="@null" />
+                        android:layout_marginTop="4dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/selector_vote_down" />
                 </LinearLayout>
 
                 <TextView
@@ -99,55 +99,62 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/list_divider_color"/>
+            android:background="@color/list_divider_color" />
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/layout_scroll"
-        android:background="#FFF"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#FFF"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-            android:orientation="vertical"
-            android:background="#FFF"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="#FFF"
+            android:orientation="vertical">
 
-            <WebView
-                android:id="@+id/webview"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <net.oschina.app.improve.widget.OWebView
+                    android:id="@+id/webview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:ignore="WebViewLayout" />
+            </FrameLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/list_divider_color"/>
+                android:background="@color/list_divider_color" />
 
             <TextView
                 android:id="@+id/tv_comment_count"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FAFAFA"
+                android:paddingBottom="8dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:paddingTop="8dp"
-                android:textSize="16sp"
-                android:paddingBottom="8dp"
                 android:textColor="#6A6A6A"
-                tools:text="评论(98)"
-                android:background="#FAFAFA"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:textSize="16sp"
+                tools:text="评论(98)" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/list_divider_color"/>
+                android:background="@color/list_divider_color" />
 
             <LinearLayout
-                android:orientation="vertical"
                 android:id="@+id/layout_container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 

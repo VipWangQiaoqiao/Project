@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,8 +28,8 @@ import net.oschina.app.improve.adapter.tweet.TweetCommentAdapter;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.CommentEX;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
+import net.oschina.app.improve.widget.OWebView;
 import net.oschina.app.util.DialogHelp;
-import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -48,22 +47,33 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * 问答的评论详情
  * Created by thanatos on 16/6/16.
  */
-public class QuestionAnswerDetailActivity extends BaseBackActivity{
+public class QuestionAnswerDetailActivity extends BaseBackActivity {
 
     public static final String BUNDLE_KEY = "BUNDLE_KEY";
     public static final String BUNDLE_ARTICLE_KEY = "BUNDLE_ARTICLE_KEY";
 
-    @Bind(R.id.iv_portrait) CircleImageView ivPortrait;
-    @Bind(R.id.tv_nick) TextView tvNick;
-    @Bind(R.id.tv_time) TextView tvTime;
-    @Bind(R.id.iv_vote_up) ImageView ivVoteUp;
-    @Bind(R.id.iv_vote_down) ImageView ivVoteDown;
-    @Bind(R.id.tv_up_count) TextView tvVoteCount;
-    @Bind(R.id.webview) WebView mWebView;
-    @Bind(R.id.tv_comment_count) TextView tvCmnCount;
-    @Bind(R.id.layout_container) LinearLayout mLayoutContainer;
-    @Bind(R.id.layout_coordinator) CoordinatorLayout mCoorLayout;
-    @Bind(R.id.layout_scroll) NestedScrollView mScrollView;
+    @Bind(R.id.iv_portrait)
+    CircleImageView ivPortrait;
+    @Bind(R.id.tv_nick)
+    TextView tvNick;
+    @Bind(R.id.tv_time)
+    TextView tvTime;
+    @Bind(R.id.iv_vote_up)
+    ImageView ivVoteUp;
+    @Bind(R.id.iv_vote_down)
+    ImageView ivVoteDown;
+    @Bind(R.id.tv_up_count)
+    TextView tvVoteCount;
+    @Bind(R.id.webview)
+    OWebView mWebView;
+    @Bind(R.id.tv_comment_count)
+    TextView tvCmnCount;
+    @Bind(R.id.layout_container)
+    LinearLayout mLayoutContainer;
+    @Bind(R.id.layout_coordinator)
+    CoordinatorLayout mCoorLayout;
+    @Bind(R.id.layout_scroll)
+    NestedScrollView mScrollView;
 
     private long sid;
     private CommentEX comment;
@@ -75,12 +85,11 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity{
     private View.OnClickListener onReplyButtonClickListener;
 
     /**
-     *
      * @param context context
      * @param comment comment
-     * @param sid 文章id
+     * @param sid     文章id
      */
-    public static void show(Context context, CommentEX comment, long sid){
+    public static void show(Context context, CommentEX comment, long sid) {
         Intent intent = new Intent(context, QuestionAnswerDetailActivity.class);
         intent.putExtra(BUNDLE_KEY, comment);
         intent.putExtra(BUNDLE_ARTICLE_KEY, sid);
@@ -103,16 +112,16 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity{
     protected void initWindow() {
         super.initWindow();
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null){
+        if (actionBar != null) {
             actionBar.setTitle("返回");
         }
     }
 
-    protected void initWidget(){
+    protected void initWidget() {
         // portrait
-        if (TextUtils.isEmpty(comment.getAuthorPortrait())){
+        if (TextUtils.isEmpty(comment.getAuthorPortrait())) {
             ivPortrait.setImageResource(R.drawable.widget_dface);
-        }else{
+        } else {
             getImageLoader()
                     .load(comment.getAuthorPortrait())
                     .placeholder(getResources().getDrawable(R.drawable.widget_dface))
@@ -128,7 +137,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity{
             tvTime.setText(StringUtils.friendly_time(comment.getPubDate()));
 
         // vote state
-        switch (comment.getVoteState()){
+        switch (comment.getVoteState()) {
             case CommentEX.VOTE_STATE_UP:
                 ivVoteUp.setSelected(true);
                 break;
@@ -139,7 +148,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity{
         // vote count
         tvVoteCount.setText(String.valueOf(comment.getVoteCount()));
 
-        tvCmnCount.setText("评论 ("+ (comment.getReply() == null ? 0 : comment.getReply().length) +")");
+        tvCmnCount.setText("评论 (" + (comment.getReply() == null ? 0 : comment.getReply().length) + ")");
 
         mDelegation = KeyboardInputDelegation.delegation(this, mCoorLayout, mScrollView);
         mDelegation.setAdapter(new KeyboardInputDelegation.KeyboardInputAdapter() {
@@ -165,12 +174,12 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity{
             }
         });
 
-        if (comment.getReply() != null){
+        if (comment.getReply() != null) {
             mLayoutContainer.removeAllViews();
             replies.clear();
             Collections.addAll(replies, comment.getReply());
             Collections.reverse(replies); // 反转集合, 最新的评论在集合后面
-            for (int i=0; i<replies.size(); i++){
+            for (int i = 0; i < replies.size(); i++) {
                 appendComment(i, replies.get(i));
             }
         }
@@ -178,35 +187,33 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity{
         fillWebView();
     }
 
-    private void fillWebView(){
+    private void fillWebView() {
         if (TextUtils.isEmpty(comment.getContent())) return;
-        String html = HTMLUtil.setupWebContent(comment.getContent(), true, true, "padding: 16px");
-        UIHelper.addWebImageShow(this, mWebView);
-        mWebView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
+        mWebView.loadDetailDataAsync(comment.getContent(), null);
     }
 
-    private void appendComment(int i, CommentEX.Reply reply){
+    private void appendComment(int i, CommentEX.Reply reply) {
         View view = LayoutInflater.from(this).inflate(R.layout.list_item_tweet_comment, mLayoutContainer, false);
         TweetCommentAdapter.TweetCommentHolderView holder = new TweetCommentAdapter.TweetCommentHolderView(view);
         holder.tvName.setText(reply.getAuthor());
-        if (TextUtils.isEmpty(reply.getAuthorPortrait())){
+        if (TextUtils.isEmpty(reply.getAuthorPortrait())) {
             holder.ivPortrait.setImageResource(R.drawable.widget_dface);
-        }else{
+        } else {
             getImageLoader()
                     .load(reply.getAuthorPortrait())
                     .placeholder(getResources().getDrawable(R.drawable.widget_dface))
                     .error(getResources().getDrawable(R.drawable.widget_dface))
                     .into(holder.ivPortrait);
         }
-        holder.tvTime.setText(String.format("%s楼  %s", i+1, StringUtils.friendly_time(reply.getPubDate())));
+        holder.tvTime.setText(String.format("%s楼  %s", i + 1, StringUtils.friendly_time(reply.getPubDate())));
         CommentsUtil.formatHtml(getResources(), holder.tvContent, reply.getContent());
         holder.btnReply.setTag(reply);
         holder.btnReply.setOnClickListener(getOnReplyButtonClickListener());
         mLayoutContainer.addView(view, 0);
     }
 
-    private View.OnClickListener getOnReplyButtonClickListener(){
-        if (onReplyButtonClickListener == null){
+    private View.OnClickListener getOnReplyButtonClickListener() {
+        if (onReplyButtonClickListener == null) {
             onReplyButtonClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -220,7 +227,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity{
         return onReplyButtonClickListener;
     }
 
-    protected void initData(){
+    protected void initData() {
         onSendCommentHandler = new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -231,16 +238,17 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity{
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 ResultBean<CommentEX.Reply> result = AppContext.createGson().fromJson(
                         responseString,
-                        new TypeToken<ResultBean<CommentEX.Reply>>(){}.getType()
+                        new TypeToken<ResultBean<CommentEX.Reply>>() {
+                        }.getType()
                 );
-                if (result.isSuccess()){
+                if (result.isSuccess()) {
                     replies.add(result.getResult());
-                    tvCmnCount.setText("评论 ("+ replies.size() +")");
+                    tvCmnCount.setText("评论 (" + replies.size() + ")");
                     reply = null;
                     mDelegation.getInputView().setHint("发表评论");
                     mDelegation.getInputView().setText(null);
-                    appendComment(replies.size() -1, result.getResult());
-                }else{
+                    appendComment(replies.size() - 1, result.getResult());
+                } else {
                     Toast.makeText(QuestionAnswerDetailActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -255,10 +263,11 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity{
             @Override
             public void onSuccess(int statusCode, Header[] headers, String respStr) {
                 ResultBean<CommentEX> result = AppContext.createGson().fromJson(respStr,
-                        new TypeToken<ResultBean<CommentEX>>(){}.getType());
-                if (result.isSuccess()){
+                        new TypeToken<ResultBean<CommentEX>>() {
+                        }.getType());
+                if (result.isSuccess()) {
                     CommentEX cmn = result.getResult();
-                    if (cmn != null && cmn.getId() > 0){
+                    if (cmn != null && cmn.getId() > 0) {
                         comment = cmn;
                         initWidget();
                         return;
@@ -269,8 +278,8 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity{
         });
     }
 
-    private View getVoteDialogView(){
-        if(mVoteDialogView == null){
+    private View getVoteDialogView() {
+        if (mVoteDialogView == null) {
             mVoteDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_question_comment_detail_vote, null, false);
             mVoteDialogView.findViewById(R.id.btn_vote_up).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -284,14 +293,15 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity{
                     Toast.makeText(QuestionAnswerDetailActivity.this, "踩他", Toast.LENGTH_SHORT).show();
                 }
             });
-        }else{
+        } else {
             ViewGroup view = (ViewGroup) mVoteDialogView.getParent();
             view.removeView(mVoteDialogView);
         }
         return mVoteDialogView;
     }
 
-    @OnClick(R.id.layout_vote) void onClickVote(){
+    @OnClick(R.id.layout_vote)
+    void onClickVote() {
         Dialog dialog = DialogHelp.getDialog(this)
                 .setView(getVoteDialogView())
                 .create();
@@ -301,5 +311,13 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity{
         dialog.getWindow().setAttributes(params);
     }
 
-
+    @Override
+    protected void onDestroy() {
+        final OWebView webView = mWebView;
+        if (webView != null) {
+            mWebView = null;
+            webView.destroy();
+        }
+        super.onDestroy();
+    }
 }
