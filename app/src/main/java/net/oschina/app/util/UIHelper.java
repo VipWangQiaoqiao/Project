@@ -27,7 +27,6 @@ import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ZoomButtonsController;
 
 import com.dtr.zxing.activity.CaptureActivity;
@@ -55,6 +54,8 @@ import net.oschina.app.improve.detail.activities.BlogDetailActivity;
 import net.oschina.app.improve.detail.activities.EventDetailActivity;
 import net.oschina.app.improve.detail.activities.NewsDetailActivity;
 import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
+import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
+import net.oschina.app.improve.detail.activities.TranslateDetailActivity;
 import net.oschina.app.improve.fragments.blog.UserBlogFragment;
 import net.oschina.app.interf.ICallbackResult;
 import net.oschina.app.interf.OnWebViewImageListener;
@@ -315,16 +316,17 @@ public class UIHelper {
      * @param type    type
      * @param id      id
      */
-    public static void showDetail(Context context, int type, long id,String href) {
+    public static void showDetail(Context context, int type, long id, String href) {
         switch (type) {
             case 0:
                 //新闻链接
                 showUrlRedirect(context, href);
-               // NewsDetailActivity.show(context, 0, id);
+                // NewsDetailActivity.show(context, 0, id);
                 break;
             case 1:
                 //软件推荐
-                UIHelper.showSoftwareDetailById(context, (int) id);
+                SoftwareDetailActivity.show(context, id);
+                //UIHelper.showSoftwareDetailById(context, (int) id);
                 break;
             case 2:
                 //问答
@@ -336,7 +338,7 @@ public class UIHelper {
                 break;
             case 4:
                 //4.翻译
-                 NewsDetailActivity.show(context, 4, id);
+                TranslateDetailActivity.show(context, id);
                 break;
             case 5:
                 //活动
@@ -344,7 +346,7 @@ public class UIHelper {
                 break;
             default:
                 //6.资讯
-                NewsDetailActivity.show(context, 6, id);
+                NewsDetailActivity.show(context, id);
                 break;
         }
     }

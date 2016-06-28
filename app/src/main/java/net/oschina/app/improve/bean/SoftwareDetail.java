@@ -2,6 +2,8 @@ package net.oschina.app.improve.bean;
 
 import net.oschina.app.improve.bean.simple.About;
 
+import java.util.List;
+
 /**
  * Created by fei on 2016/6/20.
  * desc:
@@ -10,6 +12,7 @@ public class SoftwareDetail extends Software {
 
     private String extName; //软件别名
     private String logo;//logo，有null的情况哦
+    private String body; //软件资讯内容
     private String author;//发布者
     private long authorId;//发布者id
     private String authorPortrait;//用户头像url
@@ -24,7 +27,7 @@ public class SoftwareDetail extends Software {
     private int commentCount; //评论量，实际是动弹量
     private int viewCount;//浏览量
     private boolean favorite;//是否收藏
-    private About abouts;  //相关推荐
+    private List<About> abouts;  //相关推荐
 
     public String getExtName() {
         return extName;
@@ -40,6 +43,15 @@ public class SoftwareDetail extends Software {
 
     public void setLogo(String logo) {
         this.logo = logo;
+    }
+
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
     }
 
     public String getAuthor() {
@@ -154,11 +166,11 @@ public class SoftwareDetail extends Software {
         this.favorite = favorite;
     }
 
-    public About getAbouts() {
+    public List<About> getAbouts() {
         return abouts;
     }
 
-    public void setAbouts(About abouts) {
+    public void setAbouts(List<About> abouts) {
         this.abouts = abouts;
     }
 }

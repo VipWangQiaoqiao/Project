@@ -7,80 +7,6 @@
     android:layout_height="match_parent"
     android:background="#f9f9f9">
 
-    <LinearLayout
-        android:id="@+id/lay_option"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="end|bottom"
-        android:background="@android:color/white"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingLeft="40dp"
-        app:layout_anchor="@id/lay_nsv"
-        app:layout_anchorGravity="bottom"
-        app:layout_behavior="net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior"
-        app:layout_scrollFlags="scroll|enterAlways">
-
-        <TextView
-            android:id="@+id/et_input"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="24dp"
-            android:layout_marginTop="8dp"
-            android:drawableLeft="@drawable/ic_comment_40"
-            android:drawablePadding="8dp"
-            android:lines="1"
-            android:textSize="14sp"
-            tools:ignore="RtlHardcoded"
-            tools:text="评论 (20)" />
-
-
-        <ImageView
-            android:id="@+id/iv_fav"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="8dp"
-            android:contentDescription="@string/app_name"
-            android:src="@drawable/ic_fav" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="收藏 (30)" />
-
-        <ImageView
-            android:id="@+id/iv_share"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginLeft="32dp"
-            android:contentDescription="@string/app_name"
-            android:paddingRight="8dp"
-            android:src="@drawable/share_ic_selector" />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|center"
-            android:text="分享" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/list_divider_color"
-        app:layout_anchor="@id/lay_option"
-        app:layout_anchorGravity="top"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_scrollFlags="scroll|enterAlways" />
-
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/lay_nsv"
         android:layout_width="match_parent"
@@ -113,13 +39,6 @@
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_label_recommend" />
 
-                <ImageView
-                    android:id="@+id/iv_label_originate"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:contentDescription="@string/app_name"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_label_originate" />
             </LinearLayout>
 
             <LinearLayout
@@ -133,7 +52,7 @@
                 android:paddingRight="16dp">
 
                 <ImageView
-                    android:id="@+id/iv_avatar"
+                    android:id="@+id/iv_software_icon"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_marginRight="8dp"
@@ -142,7 +61,7 @@
                     tools:contentDescription="icon" />
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/tv_software_name"
                     android:layout_width="match_parent"
                     android:layout_height="43dp"
                     android:ellipsize="end"
@@ -174,55 +93,60 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="16dp"
                     android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/button2"
+                        android:id="@+id/bt_software_home"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        tools:text="软件官网"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="30dp"
+                        android:background="@drawable/bt_software_bg"
+                        android:drawableLeft="@drawable/ic_website"
+                        android:drawablePadding="8dp"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:minLines="1"
+                        android:paddingBottom="12dp"
+                        android:paddingLeft="40dp"
+                        android:paddingRight="40dp"
+                        android:paddingTop="12dp"
                         android:textColor="@android:color/black"
-                        android:textSize="15sp" />
+                        android:textSize="18sp"
+                        tools:text="软件官网" />
 
                     <Button
-                        android:id="@+id/button3"
+                        android:id="@+id/bt_software_document"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        tools:text="软件文档"
+                        android:layout_gravity="center"
+                        android:background="@drawable/bt_software_bg"
+                        android:drawableLeft="@drawable/ic_documents"
+                        android:drawablePadding="6dp"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:minLines="1"
+                        android:paddingBottom="12dp"
+                        android:paddingLeft="40dp"
+                        android:paddingRight="40dp"
+                        android:paddingTop="12dp"
                         android:textColor="@android:color/black"
-                        android:textSize="15sp" />
+                        android:textSize="18sp"
+                        tools:text="软件文档" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/lay_blog_detail_abstract"
+                <TextView
+                    android:id="@+id/tv_software_body"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:maxLines="6"
+                    android:textColor="#6a6a6a"
+                    android:textSize="14sp"
+                    tools:text="在Google IO大会中不仅仅带来了Android Studio 2.2预览版，同时带给我们一个依赖约束的库。 简单来说，她是相对布局的升级版本，但是区别与相对布局更加强调约束。何为约束，即控件之间的关系。" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1px"
-                        android:layout_marginBottom="16dp"
-                        android:layout_marginTop="16dp"
-                        android:background="@color/list_divider_color" />
-
-                    <TextView
-                        android:id="@+id/tv_blog_detail_abstract"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="6"
-                        android:textColor="#6a6a6a"
-                        android:textSize="14sp"
-                        tools:text="在Google IO大会中不仅仅带来了Android Studio 2.2预览版，同时带给我们一个依赖约束的库。 简单来说，她是相对布局的升级版本，但是区别与相对布局更加强调约束。何为约束，即控件之间的关系。" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1px"
-                        android:layout_marginTop="16dp"
-                        android:background="@color/list_divider_color" />
-                </LinearLayout>
             </LinearLayout>
 
             <FrameLayout
@@ -240,7 +164,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <net.oschina.app.improve.widget.DetailCommentView
+            <net.oschina.app.improve.comment.CommentsView
                 android:id="@+id/lay_detail_comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -248,4 +172,70 @@
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
+
+
+    <LinearLayout
+        android:id="@+id/lay_option"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="end|bottom"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="8dp"
+        app:layout_anchor="@id/lay_nsv"
+        app:layout_anchorGravity="bottom"
+        app:layout_behavior="net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior"
+        app:layout_scrollFlags="scroll|enterAlways">
+
+        <EditText
+            android:id="@+id/et_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/ic_bg_edit"
+            android:hint="发表评论"
+            android:imeOptions="actionSend"
+            android:inputType="text"
+            android:lines="1"
+            android:paddingBottom="6dp"
+            android:paddingLeft="8dp"
+            android:paddingTop="6dp"
+            android:singleLine="true"
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
+
+
+        <ImageView
+            android:id="@+id/iv_fav"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:contentDescription="@string/app_name"
+            android:paddingLeft="16dp"
+            android:paddingRight="8dp"
+            android:src="@drawable/ic_fav" />
+
+        <ImageView
+            android:id="@+id/iv_share"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:contentDescription="@string/app_name"
+            android:paddingLeft="8dp"
+            android:paddingRight="16dp"
+            android:src="@drawable/share_ic_selector" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/list_divider_color"
+        app:layout_anchor="@id/lay_option"
+        app:layout_anchorGravity="top"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_scrollFlags="scroll|enterAlways" />
 </android.support.design.widget.CoordinatorLayout>

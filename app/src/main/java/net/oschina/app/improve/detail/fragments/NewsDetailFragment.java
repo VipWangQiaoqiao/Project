@@ -21,6 +21,7 @@ import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.comment.CommentsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.activities.NewsDetailActivity;
+import net.oschina.app.improve.detail.activities.TranslateDetailActivity;
 import net.oschina.app.improve.detail.contract.NewsDetailContract;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.util.StringUtils;
@@ -180,7 +181,11 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
             @Override
             public void onClick(View view, About about) {
                 int type = newsDetail.getType();
-                NewsDetailActivity.show(getActivity(), type, about.getId());
+                if (type == 6) {
+                    NewsDetailActivity.show(getActivity(), about.getId());
+                } else if (type == 4) {
+                    TranslateDetailActivity.show(getActivity(), about.getId());
+                }
             }
         });
 
@@ -215,7 +220,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
 
     private void handleSendComment() {
         TDevice.hideSoftKeyboard(mETInput);
-        mOperator.toSendComment(mId,mCommentId, mCommentAuthorId, mETInput.getText().toString());
+        mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mETInput.getText().toString());
     }
 
     @SuppressWarnings("deprecation")
@@ -231,7 +236,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
     public void toSendCommentOk(Comment comment) {
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
         mETInput.setText("");
-        mComments.addComment(comment,getImgLoader(),this);
+        mComments.addComment(comment, getImgLoader(), this);
     }
 
     @Override

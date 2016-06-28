@@ -1065,6 +1065,11 @@ public class OSChinaApi {
         ApiHttpClient.get("action/apiv2/news", params, handler);
     }
 
+
+    public static final String CATALOG_NEWS_DETAIL = "news";
+    public static final String CATALOG_TRANSLATE_DETAIL = "translation";
+    public static final String CATALOG_SOFTWARE_DETAIL = "software";
+
     /**
      * 请求资讯详情
      *
@@ -1077,7 +1082,6 @@ public class OSChinaApi {
         params.put("id", id);
         ApiHttpClient.get("action/apiv2/" + type, params, handler);
     }
-
 
     public static final int CATALOG_BLOG_NORMAL = 1; // 最近
     public static final int CATALOG_BLOG_HEAT = 2; // 最热
@@ -1312,4 +1316,5 @@ public class OSChinaApi {
 
         publishComment(sid, 0, commentId, commentAuthorId, 3, comment, handler);
     }
+
 }

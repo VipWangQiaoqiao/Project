@@ -1,6 +1,7 @@
 package net.oschina.app.improve.detail.contract;
 
 import net.oschina.app.improve.bean.SoftwareDetail;
+import net.oschina.app.improve.bean.simple.Comment;
 
 /**
  * Created by fei
@@ -17,18 +18,14 @@ public interface SoftDetailContract {
         // 分享
         void toShare();
 
-        // 关注
-        void toFollow();
-
         // 提交评价
-        void toSendComment(long id, long authorId, String comment);
+        void toSendComment(long id, long commentId, long commentAuthorId, String comment);
     }
 
     interface View extends DetailContract.View {
         void toFavoriteOk(SoftwareDetail softwareDetail);
 
-        void toFollowOk(SoftwareDetail softwareDetail);
 
-        void toSendCommentOk();
+        void toSendCommentOk(Comment comment);
     }
 }
