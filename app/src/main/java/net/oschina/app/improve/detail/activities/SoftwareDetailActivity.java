@@ -34,6 +34,11 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
     public static final String TAG = "SoftwareDetailActivity";
     private static final int MAX_TEXT_LENGTH = 160;
 
+    @Override
+    int getOptionsMenuId() {
+        return 0;
+    }
+
     /**
      * show news detail
      *
@@ -160,7 +165,6 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
         ServerTaskUtils.pubTweet(this, tweet);
 
         mView.toSendCommentOk(null);
-
 
 
 //        OSChinaApi.publishComment(id, commentId, 0, commentAuthorId, 1, comment, new TextHttpResponseHandler() {
