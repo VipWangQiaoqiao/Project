@@ -96,45 +96,42 @@
                     android:layout_marginTop="16dp"
                     android:orientation="horizontal">
 
-                    <Button
+                    <TextView
                         android:id="@+id/bt_software_home"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginLeft="2dp"
-                        android:layout_marginRight="30dp"
+                        android:layout_marginRight="20dp"
                         android:background="@drawable/bt_software_bg"
                         android:drawableLeft="@drawable/ic_website"
                         android:drawablePadding="8dp"
-                        android:gravity="center"
                         android:maxLines="1"
                         android:minLines="1"
                         android:paddingBottom="12dp"
-                        android:paddingLeft="40dp"
-                        android:paddingRight="40dp"
+                        android:paddingLeft="32dp"
+                        android:paddingRight="32dp"
                         android:paddingTop="12dp"
+                        android:text="软件官网"
                         android:textColor="@android:color/black"
-                        android:textSize="18sp"
-                        tools:text="软件官网" />
+                        android:textSize="16sp" />
 
-                    <Button
+                    <TextView
                         android:id="@+id/bt_software_document"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:background="@drawable/bt_software_bg"
                         android:drawableLeft="@drawable/ic_documents"
-                        android:drawablePadding="6dp"
-                        android:gravity="center"
+                        android:drawablePadding="8dp"
                         android:maxLines="1"
                         android:minLines="1"
                         android:paddingBottom="12dp"
-                        android:paddingLeft="40dp"
-                        android:paddingRight="40dp"
+                        android:paddingLeft="32dp"
+                        android:paddingRight="32dp"
                         android:paddingTop="12dp"
+                        android:text="软件文档"
                         android:textColor="@android:color/black"
-                        android:textSize="18sp"
-                        tools:text="软件文档" />
+                        android:textSize="16sp" />
                 </LinearLayout>
 
                 <TextView
@@ -159,6 +156,162 @@
                 android:paddingRight="16dp"
                 android:paddingTop="8dp" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:orientation="horizontal"
+                android:paddingBottom="12dp"
+                android:paddingTop="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="20dp"
+                    android:maxLines="1"
+                    android:minLines="1"
+                    android:text="软件作者："
+                    android:textColor="@color/count_text_color_light"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_software_authorName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:maxLines="1"
+                    android:minLines="1"
+                    android:textColor="@color/ques_bt_text_color_light"
+                    android:textSize="16sp"
+                    tools:text="so_white" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:orientation="horizontal"
+                android:paddingBottom="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="20dp"
+                    android:maxLines="1"
+                    android:minLines="1"
+                    android:text="开源协议："
+                    android:textColor="@color/count_text_color_light"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_software_law"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:maxLines="1"
+                    android:minLines="1"
+                    android:textColor="@color/count_text_color_light"
+                    android:textSize="16sp"
+                    tools:text="Apache" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:orientation="horizontal"
+                android:paddingBottom="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="20dp"
+                    android:maxLines="1"
+                    android:minLines="1"
+                    android:text="开发语言："
+                    android:textColor="@color/count_text_color_light"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_software_language"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:maxLines="1"
+                    android:minLines="1"
+                    android:textColor="@color/count_text_color_light"
+                    android:textSize="16sp"
+                    tools:text="Java" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:orientation="horizontal"
+                android:paddingBottom="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="20dp"
+                    android:maxLines="1"
+                    android:minLines="1"
+                    android:text="操作系统："
+                    android:textColor="@color/count_text_color_light"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_software_system"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:maxLines="1"
+                    android:minLines="1"
+                    android:textColor="@color/count_text_color_light"
+                    android:textSize="16sp"
+                    tools:text="Lin" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:orientation="horizontal"
+                android:paddingBottom="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="20dp"
+                    android:maxLines="1"
+                    android:minLines="1"
+                    android:text="收录时间："
+                    android:textColor="@color/count_text_color_light"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_software_record_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:maxLines="1"
+                    android:minLines="1"
+                    android:textColor="@color/count_text_color_light"
+                    android:textSize="16sp"
+                    tools:text="2015-01-12" />
+            </LinearLayout>
+
             <net.oschina.app.improve.widget.DetailAboutView
                 android:id="@+id/lay_detail_about"
                 android:layout_width="match_parent"
@@ -168,7 +321,6 @@
                 android:id="@+id/lay_detail_comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>

@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,17 +38,32 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
 
     private long mId;
 
-    @Bind(R.id.tv_software_name)
-    TextView tvName;
+    @Bind(R.id.iv_label_recommend)
+    ImageView ivRecomment;
+
     @Bind(R.id.iv_software_icon)
     ImageView ivIcon;
+    @Bind(R.id.tv_software_name)
+    TextView tvName;
+
+    @Bind(R.id.bt_software_home)
+    TextView btWebsite;
+    @Bind(R.id.bt_software_document)
+    TextView btDocument;
+
     @Bind(R.id.tv_software_body)
     TextView tvBody;
 
-    @Bind(R.id.bt_software_home)
-    Button btWebsite;
-    @Bind(R.id.bt_software_document)
-    Button btDocument;
+    @Bind(R.id.tv_software_authorName)
+    TextView tvAuthor;
+    @Bind(R.id.tv_software_law)
+    TextView tvLicense;
+    @Bind(R.id.tv_software_language)
+    TextView tvLanguage;
+    @Bind(R.id.tv_software_system)
+    TextView tvSystem;
+    @Bind(R.id.tv_software_record_time)
+    TextView tvRecordTime;
 
 
     @Bind(R.id.lay_detail_about)
@@ -127,11 +141,6 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
                 //软件文档
                 UIHelper.showUrlRedirect(getActivity(), mOperator.getData().getDocument());
                 break;
-            // 评论列表
-            case R.id.tv_see_more_comment:
-                UIHelper.showBlogComment(getActivity(), (int) mId,
-                        (int) mOperator.getData().getAuthorId());
-                break;
             default:
                 break;
         }
@@ -146,8 +155,19 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
             return;
         mId = mCommentId = softwareDetail.getId();
 
+        if (softwareDetail.isRecommend()) {
+            ivRecomment.setVisibility(View.VISIBLE);
+        } else {
+            ivRecomment.setVisibility(View.INVISIBLE);
+        }
         tvName.setText(softwareDetail.getName().trim());
         tvBody.setText(softwareDetail.getBody().trim());
+
+        tvAuthor.setText(softwareDetail.getAuthor().trim());
+        tvLicense.setText(softwareDetail.getLicense().trim());
+        tvLanguage.setText(softwareDetail.getLanguage().trim());
+        tvSystem.setText(softwareDetail.getSupportOS());
+        tvRecordTime.setText(softwareDetail.getCollectionDate().trim());
 
         setCommentCount(softwareDetail.getCommentCount());
         setBodyContent(softwareDetail.getBody());
@@ -162,7 +182,7 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
             }
         });
 
-        mComments.init(softwareDetail.getId(), OSChinaApi.COMMENT_NEWS, softwareDetail.getCommentCount(), getImgLoader(), this);
+        mComments.init(softwareDetail.getId(), OSChinaApi.COMMENT_SOFT, softwareDetail.getCommentCount(), getImgLoader(), this);
     }
 
     private boolean mInputDoubleEmpty = false;

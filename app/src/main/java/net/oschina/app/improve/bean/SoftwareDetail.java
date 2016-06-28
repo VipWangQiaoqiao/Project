@@ -27,6 +27,7 @@ public class SoftwareDetail extends Software {
     private int commentCount; //评论量，实际是动弹量
     private int viewCount;//浏览量
     private boolean favorite;//是否收藏
+    private boolean recommend;//是否推荐
     private List<About> abouts;  //相关推荐
 
     public String getExtName() {
@@ -164,6 +165,14 @@ public class SoftwareDetail extends Software {
 
     public void setFavorite(boolean favorite) {
         this.favorite = favorite;
+    }
+
+    public boolean isRecommend() {
+        return recommend;
+    }
+
+    public void setRecommend(boolean recommend) {
+        this.recommend = recommend;
     }
 
     public List<About> getAbouts() {
