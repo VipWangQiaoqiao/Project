@@ -112,7 +112,10 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
 
         setCommentCount(softwareDetail.getCommentCount());
         setBodyContent(softwareDetail.getBody());
-        getImgLoader().load(softwareDetail.getLogo()).error(R.color.gray).into(ivIcon);
+        getImgLoader().load(softwareDetail.getLogo())
+                .error(R.drawable.logo_software_default)
+                .placeholder(R.drawable.logo_software_default)
+                .into(ivIcon);
 
         toFavoriteOk(softwareDetail);
 
@@ -141,9 +144,9 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
     @Override
     public void toFavoriteOk(SoftwareDetail softwareDetail) {
         if (softwareDetail.isFavorite())
-            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_faved_normal));
+            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_faved));
         else
-            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_fav_normal));
+            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_fav));
     }
 
     @Override

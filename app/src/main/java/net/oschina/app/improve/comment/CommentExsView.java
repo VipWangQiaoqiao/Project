@@ -114,12 +114,6 @@ public class CommentExsView extends LinearLayout implements View.OnClickListener
                     clearLine = false;
                     lay.findViewById(R.id.line).setVisibility(View.INVISIBLE);
                 }
-                lay.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        onItemClick(v, comment);
-                    }
-                });
             }
         } else {
             setVisibility(View.GONE);
@@ -146,11 +140,11 @@ public class CommentExsView extends LinearLayout implements View.OnClickListener
         ((TextView) lay.findViewById(R.id.tv_pub_date)).setText(
                 StringUtils.friendly_time(comment.getPubDate()));
 
-        ImageView btn_comment = (ImageView)lay.findViewById(R.id.btn_comment);
-        if(comment.isBest()){
+        ImageView btn_comment = (ImageView) lay.findViewById(R.id.btn_comment);
+        if (comment.isBest()) {
             lay.findViewById(R.id.iv_best_answer).setVisibility(VISIBLE);
             btn_comment.setVisibility(GONE);
-        }else {
+        } else {
             btn_comment.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -159,12 +153,17 @@ public class CommentExsView extends LinearLayout implements View.OnClickListener
             });
         }
 
-
-
         mLayComments.addView(lay, 0);
         if (getVisibility() != VISIBLE) {
             setVisibility(VISIBLE);
         }
+
+        lay.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onItemClick(v, comment);
+            }
+        });
         return lay;
     }
 

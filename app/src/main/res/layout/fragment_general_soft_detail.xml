@@ -326,7 +326,7 @@
                 android:layout_width="@dimen/size_20"
                 android:layout_height="@dimen/size_20"
                 android:contentDescription="@string/app_name"
-                android:src="@drawable/ic_comment_30" />
+                android:src="@drawable/ic_comment_40_selector" />
 
             <TextView
                 android:id="@+id/lay_option_fav_text"
