@@ -28,7 +28,7 @@ import cz.msebera.android.httpclient.Header;
  * Created by fei on 2016/6/13.
  * desc:   news detail  module
  */
-public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailContract.View> implements NewsDetailContract.Operator {
+public class TranslateDetailActivity extends DetailActivity<NewsDetail, NewsDetailContract.View> implements NewsDetailContract.Operator {
 
     /**
      * show news detail
@@ -36,14 +36,14 @@ public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailCon
      * @param context context
      * @param id      id
      */
-    public static void show(Context context,long id) {
-        Intent intent = new Intent(context, NewsDetailActivity.class);
+    public static void show(Context context, long id) {
+        Intent intent = new Intent(context, TranslateDetailActivity.class);
         intent.putExtra("id", id);
         context.startActivity(intent);
     }
 
-    int getType(){
-        return 6;
+    int getType() {
+        return 4;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailCon
 
     @Override
     void requestData() {
-        OSChinaApi.getNewsDetail(getDataId(),OSChinaApi.CATALOG_NEWS_DETAIL, getRequestHandler());
+        OSChinaApi.getNewsDetail(getDataId(), OSChinaApi.CATALOG_TRANSLATE_DETAIL, getRequestHandler());
     }
 
     @Override
@@ -74,7 +74,7 @@ public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailCon
             return;
         showWaitDialog(R.string.progress_submit);
         final NewsDetail newsDetail = getData();
-        OSChinaApi.getFavReverse(getDataId(),getType(), new TextHttpResponseHandler() {
+        OSChinaApi.getFavReverse(getDataId(), getType(), new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 hideWaitDialog();

@@ -55,6 +55,7 @@ import net.oschina.app.improve.detail.activities.BlogDetailActivity;
 import net.oschina.app.improve.detail.activities.EventDetailActivity;
 import net.oschina.app.improve.detail.activities.NewsDetailActivity;
 import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
+import net.oschina.app.improve.detail.activities.TranslateDetailActivity;
 import net.oschina.app.improve.fragments.blog.UserBlogFragment;
 import net.oschina.app.interf.ICallbackResult;
 import net.oschina.app.interf.OnWebViewImageListener;
@@ -336,7 +337,7 @@ public class UIHelper {
                 break;
             case 4:
                 //4.翻译
-                 NewsDetailActivity.show(context, 4, id);
+                 TranslateDetailActivity.show(context,id);
                 break;
             case 5:
                 //活动
@@ -344,7 +345,7 @@ public class UIHelper {
                 break;
             default:
                 //6.资讯
-                NewsDetailActivity.show(context, 6, id);
+                NewsDetailActivity.show(context,id);
                 break;
         }
     }

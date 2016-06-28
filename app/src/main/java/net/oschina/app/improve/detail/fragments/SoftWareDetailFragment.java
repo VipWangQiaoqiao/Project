@@ -174,17 +174,12 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
         mTVAuthorName.setText(softwareDetail.getAuthor());
         getImgLoader().load(softwareDetail.getAuthorPortrait()).error(R.drawable.widget_dface).into(mIVAuthorPortrait);
 
-        String time = String.format("%s", StringUtils.friendly_time(softwareDetail.getPubDate()));
+        String time = String.format("%s (%s)", StringUtils.friendly_time(softwareDetail.getPubDate()), softwareDetail.getPubDate());
         mTVPubDate.setText(time);
 
         mTVTitle.setText(softwareDetail.getName());
 
-        // if (TextUtils.isEmpty(softwareDetail.getAbstract())) {
-        mLayAbstract.setVisibility(View.GONE);
-        //  } else {
-        //   mTVAbstract.setText(softwareDetail.getAbstract());
         mLayAbstract.setVisibility(View.VISIBLE);
-        //   }
 
         mIVLabelRecommend.setVisibility(View.VISIBLE);
         mIVLabelOriginate.setImageDrawable(getResources().getDrawable(R.drawable.ic_label_reprint));
@@ -195,26 +190,6 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
         setText(R.id.tv_info_view, String.valueOf(softwareDetail.getViewCount()));
         setText(R.id.tv_info_comment, String.valueOf(softwareDetail.getCommentCount()));
 
-        //mAbouts.setAbout(softwareDetail.getAbouts(), new DetailAboutView.OnAboutClickListener() {
-        //   @Override
-        //   public void onClick(View view, BlogDetail.About about) {
-        //     BlogDetailActivity.show(getActivity(), about.id);
-        //  }
-        //  });
-
-
-        //mComments.show(blog.getId(), 3, getImgLoader());
-
-
-//        mComments.setComment(softwareDetail.getViewCount(), softwareDetail.getCommentCount(), getImgLoader(), new DetailCommentView.OnCommentClickListener() {
-//            @Override
-//            public void onClick(View view, BlogDetail.Comment comment) {
-//                FloatingAutoHideDownBehavior.showBottomLayout(mLayCoordinator, mLayContent, mLayBottom);
-//                mCommentId = comment.id;
-//                mCommentAuthorId = comment.authorId;
-//                mETInput.setHint(String.format("回复: %s", comment.author));
-//            }
-//        }, this);
 
     }
 
