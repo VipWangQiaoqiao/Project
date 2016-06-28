@@ -113,13 +113,6 @@
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_label_recommend" />
 
-                <ImageView
-                    android:id="@+id/iv_label_originate"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:contentDescription="@string/app_name"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_label_originate" />
             </LinearLayout>
 
             <LinearLayout
@@ -133,7 +126,7 @@
                 android:paddingRight="16dp">
 
                 <ImageView
-                    android:id="@+id/iv_avatar"
+                    android:id="@+id/iv_software_icon"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_marginRight="8dp"
@@ -142,7 +135,7 @@
                     tools:contentDescription="icon" />
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/tv_software_name"
                     android:layout_width="match_parent"
                     android:layout_height="43dp"
                     android:ellipsize="end"
@@ -177,52 +170,34 @@
                     android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/button2"
+                        android:id="@+id/bt_software_home"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        tools:text="软件官网"
                         android:textColor="@android:color/black"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        tools:text="软件官网" />
 
                     <Button
-                        android:id="@+id/button3"
+                        android:id="@+id/bt_software_document"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        tools:text="软件文档"
                         android:textColor="@android:color/black"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        tools:text="软件文档" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/lay_blog_detail_abstract"
+                <TextView
+                    android:id="@+id/tv_blog_detail_abstract"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:maxLines="6"
+                    android:textColor="#6a6a6a"
+                    android:textSize="14sp"
+                    tools:text="在Google IO大会中不仅仅带来了Android Studio 2.2预览版，同时带给我们一个依赖约束的库。 简单来说，她是相对布局的升级版本，但是区别与相对布局更加强调约束。何为约束，即控件之间的关系。" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1px"
-                        android:layout_marginBottom="16dp"
-                        android:layout_marginTop="16dp"
-                        android:background="@color/list_divider_color" />
-
-                    <TextView
-                        android:id="@+id/tv_blog_detail_abstract"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="6"
-                        android:textColor="#6a6a6a"
-                        android:textSize="14sp"
-                        tools:text="在Google IO大会中不仅仅带来了Android Studio 2.2预览版，同时带给我们一个依赖约束的库。 简单来说，她是相对布局的升级版本，但是区别与相对布局更加强调约束。何为约束，即控件之间的关系。" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1px"
-                        android:layout_marginTop="16dp"
-                        android:background="@color/list_divider_color" />
-                </LinearLayout>
             </LinearLayout>
 
             <FrameLayout

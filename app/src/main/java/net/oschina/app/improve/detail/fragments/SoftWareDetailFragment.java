@@ -1,6 +1,5 @@
 package net.oschina.app.improve.detail.fragments;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.text.TextUtils;
@@ -19,6 +18,7 @@ import android.widget.Toast;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.bean.SoftwareDetail;
+import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.detail.contract.SoftDetailContract;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.improve.widget.DetailCommentView;
@@ -67,7 +67,6 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
         return R.layout.fragment_general_soft_detail;
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
     @Override
     public void onDestroy() {
         WebView view = mWebView;
@@ -140,11 +139,6 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            // 关注按钮
-            case R.id.btn_relation: {
-                handleRelation();
-            }
-            break;
             // 收藏
             case R.id.iv_fav: {
                 handleFavorite();
@@ -184,7 +178,6 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
         mIVLabelRecommend.setVisibility(View.VISIBLE);
         mIVLabelOriginate.setImageDrawable(getResources().getDrawable(R.drawable.ic_label_reprint));
 
-        toFollowOk(softwareDetail);
         toFavoriteOk(softwareDetail);
 
         setText(R.id.tv_info_view, String.valueOf(softwareDetail.getViewCount()));
@@ -211,10 +204,6 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
         }
     }
 
-    private void handleRelation() {
-        mOperator.toFollow();
-    }
-
     private void handleFavorite() {
         mOperator.toFavorite();
     }
@@ -224,7 +213,7 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
     }
 
     private void handleSendComment() {
-        mOperator.toSendComment(mCommentId, mCommentAuthorId, mETInput.getText().toString());
+        mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mETInput.getText().toString());
     }
 
     @SuppressWarnings("deprecation")
@@ -237,18 +226,8 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
     }
 
     @Override
-    public void toFollowOk(SoftwareDetail softwareDetail) {
-        //if (softwareDetail.getAuthorRelation() <= 2) {
-        mBtnRelation.setText("已关注");
-        // } else {
-        mBtnRelation.setText("关注");
-        //  }
-    }
-
-    @Override
-    public void toSendCommentOk() {
+    public void toSendCommentOk(Comment comment) {
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
         mETInput.setText("");
     }
-
 }

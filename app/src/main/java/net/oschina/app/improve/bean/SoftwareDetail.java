@@ -10,6 +10,7 @@ public class SoftwareDetail extends Software {
 
     private String extName; //软件别名
     private String logo;//logo，有null的情况哦
+    private String body; //软件资讯内容
     private String author;//发布者
     private long authorId;//发布者id
     private String authorPortrait;//用户头像url
@@ -40,6 +41,15 @@ public class SoftwareDetail extends Software {
 
     public void setLogo(String logo) {
         this.logo = logo;
+    }
+
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
     }
 
     public String getAuthor() {

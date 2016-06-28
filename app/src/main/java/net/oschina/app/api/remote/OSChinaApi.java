@@ -1068,6 +1068,7 @@ public class OSChinaApi {
 
     public static final String CATALOG_NEWS_DETAIL = "news";
     public static final String CATALOG_TRANSLATE_DETAIL = "translation";
+    public static final String CATALOG_SOFTWARE_DETAIL = "software";
 
     /**
      * 请求资讯详情
@@ -1230,6 +1231,20 @@ public class OSChinaApi {
         ApiHttpClient.get("action/apiv2/question", params, handler);
     }
 
+
+    /**
+     * 获取软件详情
+     *
+     * @param id      id
+     * @param handler handler
+     */
+    public static void getSoftDetail(long id, AsyncHttpResponseHandler handler) {
+        if (id <= 0) return;
+        RequestParams params = new RequestParams();
+        params.put("id", id);
+        ApiHttpClient.get("action/apiv2/software", params, handler);
+    }
+
     /**
      * 请求评论详情
      *
@@ -1315,4 +1330,5 @@ public class OSChinaApi {
 
         publishComment(sid, 0, commentId, commentAuthorId, 3, comment, handler);
     }
+
 }

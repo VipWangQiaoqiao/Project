@@ -316,16 +316,17 @@ public class UIHelper {
      * @param type    type
      * @param id      id
      */
-    public static void showDetail(Context context, int type, long id,String href) {
+    public static void showDetail(Context context, int type, long id, String href) {
         switch (type) {
             case 0:
                 //新闻链接
                 showUrlRedirect(context, href);
-               // NewsDetailActivity.show(context, 0, id);
+                // NewsDetailActivity.show(context, 0, id);
                 break;
             case 1:
                 //软件推荐
-                UIHelper.showSoftwareDetailById(context, (int) id);
+                SoftwareDetailActivity.show(context, id);
+                //UIHelper.showSoftwareDetailById(context, (int) id);
                 break;
             case 2:
                 //问答
@@ -337,7 +338,7 @@ public class UIHelper {
                 break;
             case 4:
                 //4.翻译
-                 TranslateDetailActivity.show(context,id);
+                TranslateDetailActivity.show(context, id);
                 break;
             case 5:
                 //活动
@@ -345,7 +346,7 @@ public class UIHelper {
                 break;
             default:
                 //6.资讯
-                NewsDetailActivity.show(context,id);
+                NewsDetailActivity.show(context, id);
                 break;
         }
     }

@@ -281,6 +281,7 @@
             android:label="资讯详情"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+
         <activity
             android:name=".improve.comment.QuestionAnswerDetailActivity"
             android:configChanges="keyboardHidden|orientation"
