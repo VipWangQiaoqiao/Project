@@ -43,7 +43,6 @@ public abstract class DetailFragment<Data, DataView extends DetailContract.View,
 
     void initWebView(@IdRes int layId) {
         OWebView webView = new OWebView(getActivity());
-        webView.setClickable(false);
         ((ViewGroup) mRoot.findViewById(layId)).addView(webView);
         mWebView = webView;
     }
