@@ -231,8 +231,11 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        int menuId = getOptionsMenuId();
+        if (menuId <= 0)
+            return false;
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(getOptionsMenuId(), menu);
+        inflater.inflate(menuId, menu);
         MenuItem item = menu.findItem(R.id.menu_scroll_comment);
         if (item != null) {
             View action = item.getActionView();
