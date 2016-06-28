@@ -59,6 +59,9 @@ public class OWebView extends WebView {
 
     @SuppressLint({"AddJavascriptInterface", "SetJavaScriptEnabled"})
     private void init() {
+        setClickable(false);
+        setFocusable(false);
+
         setHorizontalScrollBarEnabled(false);
 
         WebSettings settings = getSettings();
