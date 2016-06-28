@@ -22,6 +22,9 @@ import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Created by JuQiu
  * on 16/6/24.
@@ -101,6 +104,30 @@ public class OWebView extends WebView {
         }
     }
 
+
+    public void loadTweetDataAsync(final String content, Runnable finishCallback) {
+        this.setWebViewClient(new OWebClient(finishCallback));
+        Context context = getContext();
+        if (context != null && context instanceof Activity) {
+            final Activity activity = (Activity) context;
+            AppOperator.runOnThread(new Runnable() {
+                @Override
+                public void run() {
+                    final String body = setupWebContent(content, "");
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //loadData(body, "text/html; charset=UTF-8", null);
+                            loadDataWithBaseURL("", body, "text/html", "UTF-8", "");
+                        }
+                    });
+                }
+            });
+        } else {
+            Log.e(OWebView.class.getName(), "loadDetailDataAsync error, the Context isn't ok");
+        }
+    }
+
     @Override
     public void destroy() {
         setWebViewClient(null);
@@ -115,6 +142,37 @@ public class OWebView extends WebView {
         //clearCache(true);
 
         super.destroy();
+    }
+
+    private static String setupWebContent(String content, String style) {
+        if (AppContext.get(AppConfig.KEY_LOAD_IMAGE, true)
+                || TDevice.isWifiOpen()) {
+            Pattern pattern = Pattern.compile("<img[^>]+src\\s*=\\s*[\"\']([^\"\']*)[\"\'](\\s*data-url\\s*=\\s*[\"\']([^\"\']*)[\"\'])*");
+            Matcher matcher = pattern.matcher(content);
+            while (matcher.find()) {
+                String snippet = String.format(
+                        "<img src=\"%s\" onClick=\"javascript:mWebViewImageListener.showImagePreview('%s')\"",
+                        matcher.group(1),
+                        matcher.group(3) == null ? matcher.group(1) : matcher.group(3));
+                content = content.replace(matcher.group(0), snippet);
+            }
+        } else {
+            // 过滤掉 img标签
+            content = content.replaceAll("<\\s*img\\s+([^>]*)\\s*>", "");
+        }
+        return String.format(
+                "<!DOCTYPE html>"
+                        + "<html>"
+                        + "<head>"
+                        + "<link rel=\"stylesheet\" type=\"text/css\" href=\"file:///android_asset/css/common_new.css\">"
+                        + "</head>"
+                        + "<body>"
+                        + "<div class='contentstyle' id='article_id' style='%s'>"
+                        + "%s"
+                        + "</div>"
+                        + "</body>"
+                        + "</html>"
+                , style == null ? "" : style, content);
     }
 
     private static String setupWebContent(String content, boolean isShowHighlight, boolean isShowImagePreview, String css) {
