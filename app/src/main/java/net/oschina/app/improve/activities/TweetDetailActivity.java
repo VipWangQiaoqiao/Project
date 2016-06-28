@@ -7,10 +7,8 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -18,7 +16,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import net.oschina.app.AppContext;
@@ -31,7 +28,6 @@ import net.oschina.app.improve.behavior.KeyboardInputDelegation;
 import net.oschina.app.improve.detail.contract.TweetDetailContract;
 import net.oschina.app.improve.widget.OWebView;
 import net.oschina.app.util.DialogHelp;
-import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -302,8 +298,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
     private void fillWebViewBody() {
         if (TextUtils.isEmpty(tweet.getBody())) return;
         String html = tweet.getBody() + "<br/><img src=\"" + tweet.getImgSmall() + "\" data-url=\"" + tweet.getImgBig() + "\"/>";
-        html = HTMLUtil.setupWebContent(html, false, true);
-        mWebview.loadDetailDataAsync(html, null);
+        mWebview.loadTweetDataAsync(html, null);
     }
 
     private View.OnClickListener getOnPortraitClickListener() {
