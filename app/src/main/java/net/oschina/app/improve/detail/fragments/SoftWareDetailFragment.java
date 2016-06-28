@@ -214,7 +214,7 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
 
     private void handleSendComment() {
         TDevice.hideSoftKeyboard(mETInput);
-        mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mETInput.getText().toString());
+        mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mETInput.getText().toString().trim());
     }
 
     @SuppressWarnings("deprecation")
@@ -230,7 +230,7 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
     public void toSendCommentOk(Comment comment) {
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
         mETInput.setText("");
-        mComments.addComment(comment, getImgLoader(), this);
+        //mComments.addComment(comment, getImgLoader(), this);
     }
 
     @Override

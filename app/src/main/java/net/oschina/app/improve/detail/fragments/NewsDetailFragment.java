@@ -21,12 +21,12 @@ import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.comment.CommentsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.activities.NewsDetailActivity;
+import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.improve.detail.activities.TranslateDetailActivity;
 import net.oschina.app.improve.detail.contract.NewsDetailContract;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
-import net.oschina.app.util.UIHelper;
 
 /**
  * Created by qiujuer
@@ -113,7 +113,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         switch (v.getId()) {
             // 相关软件
             case R.id.lay_detail_software:
-                UIHelper.showSoftwareDetailById(getActivity(), (int) mOperator.getData().getSoftware().getId());
+                SoftwareDetailActivity.show(getActivity(),mOperator.getData().getSoftware().getId());
                 break;
             // 收藏
             case R.id.iv_fav:
