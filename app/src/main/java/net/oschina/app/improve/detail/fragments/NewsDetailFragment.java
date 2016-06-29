@@ -22,7 +22,6 @@ import net.oschina.app.improve.comment.CommentsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.activities.NewsDetailActivity;
 import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
-import net.oschina.app.improve.detail.activities.TranslateDetailActivity;
 import net.oschina.app.improve.detail.contract.NewsDetailContract;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.util.StringUtils;
@@ -113,7 +112,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         switch (v.getId()) {
             // 相关软件
             case R.id.lay_detail_software:
-                SoftwareDetailActivity.show(getActivity(),mOperator.getData().getSoftware().getId());
+                SoftwareDetailActivity.show(getActivity(), mOperator.getData().getSoftware().getId());
                 break;
             // 收藏
             case R.id.iv_fav:
@@ -180,12 +179,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         mAbouts.setAbout(newsDetail.getAbouts(), new DetailAboutView.OnAboutClickListener() {
             @Override
             public void onClick(View view, About about) {
-                int type = newsDetail.getType();
-                if (type == 6) {
-                    NewsDetailActivity.show(getActivity(), about.getId());
-                } else if (type == 4) {
-                    TranslateDetailActivity.show(getActivity(), about.getId());
-                }
+                NewsDetailActivity.show(getActivity(), about.getId());
             }
         });
 
