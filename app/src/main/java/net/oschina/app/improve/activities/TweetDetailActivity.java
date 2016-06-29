@@ -9,6 +9,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -147,6 +148,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
                     dialog.dismiss();
                     dialog = null;
                 }
+                TDevice.hideSoftKeyboard(mDelegation.getInputView());
             }
 
             @Override
@@ -340,6 +342,10 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
         } else {
             OSChinaApi.pubUnLikeTweet(tweet.getId(), tweet.getAuthorid(), upHandler);
         }
+    }
+
+    @OnClick(R.id.iv_comment) void onClickComment(){
+        TDevice.showSoftKeyboard(mViewInput);
     }
 
     @Override
