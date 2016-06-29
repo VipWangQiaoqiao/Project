@@ -291,11 +291,26 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
             View.OnClickListener listener = new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
+                    final int opt = (int)v.getTag();
+                    switch (opt){
+                        case CommentEX.VOTE_STATE_UP:
+                            if (ivVoteDown.isSelected()){
+                                Toast.makeText(QuestionAnswerDetailActivity.this, "你已经踩过了", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            break;
+                        case CommentEX.VOTE_STATE_DOWN:
+                            if (ivVoteUp.isSelected()){
+                                Toast.makeText(QuestionAnswerDetailActivity.this, "你已经顶过了", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            break;
+                    }
                     if (!AppContext.getInstance().isLogin()){
                         UIHelper.showLoginActivity(QuestionAnswerDetailActivity.this);
                         return;
                     }
-                    OSChinaApi.questionVote(sid, comment.getId(), (int)v.getTag(), new TextHttpResponseHandler() {
+                    OSChinaApi.questionVote(sid, comment.getId(), opt, new TextHttpResponseHandler() {
                         @Override
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                             Log.d("oschina", "-------------------\n" + responseString + "\n-------------------");
@@ -312,6 +327,14 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                                 comment.setVoteCount(result.getResult().getVoteCount());
                                 tvVoteCount.setText(String.valueOf(result.getResult().getVoteCount()));
                                 v.setSelected(!v.isSelected());
+                                switch (opt){
+                                    case CommentEX.VOTE_STATE_UP:
+                                        ivVoteUp.setSelected(!ivVoteUp.isSelected());
+                                        break;
+                                    case CommentEX.VOTE_STATE_DOWN:
+                                        ivVoteDown.setSelected(!ivVoteDown.isSelected());
+                                        break;
+                                }
                                 Toast.makeText(QuestionAnswerDetailActivity.this, "操作成功", Toast.LENGTH_SHORT).show();
                             }else{
                                 Toast.makeText(QuestionAnswerDetailActivity.this, "操作失败", Toast.LENGTH_SHORT).show();
