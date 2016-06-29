@@ -148,8 +148,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
                     dialog.dismiss();
                     dialog = null;
                 }
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(mDelegation.getInputView().getWindowToken(), 0);
+                TDevice.hideSoftKeyboard(mDelegation.getInputView());
             }
 
             @Override

@@ -8,7 +8,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,7 +78,8 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
     NestedScrollView mScrollView;
 
     private long sid;
-    private Dialog dialog;
+    private Dialog mVoteDialog;
+    private Dialog mWaitingDialog;
     private CommentEX comment;
     private CommentEX.Reply reply;
     private View mVoteDialogView;
@@ -167,6 +167,10 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                     UIHelper.showLoginActivity(QuestionAnswerDetailActivity.this);
                     return;
                 }
+
+                mWaitingDialog = DialogHelp.getWaitDialog(QuestionAnswerDetailActivity.this, "正在发表评论...");
+                mWaitingDialog.show();
+
                 OSChinaApi.publishComment(sid, -1, comment.getId(), comment.getAuthorId(), 2, content, onSendCommentHandler);
             }
 
@@ -238,6 +242,10 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 Toast.makeText(QuestionAnswerDetailActivity.this, "评论失败", Toast.LENGTH_SHORT).show();
+                if (mWaitingDialog != null){
+                    mWaitingDialog.dismiss();
+                    mWaitingDialog = null;
+                }
             }
 
             @Override
@@ -257,8 +265,13 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                 } else {
                     Toast.makeText(QuestionAnswerDetailActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(mDelegation.getInputView().getWindowToken(), 0);
+
+                if (mWaitingDialog != null){
+                    mWaitingDialog.dismiss();
+                    mWaitingDialog = null;
+                }
+
+                TDevice.hideSoftKeyboard(mDelegation.getInputView());
             }
         };
 
@@ -316,7 +329,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                         @Override
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                             Toast.makeText(QuestionAnswerDetailActivity.this, "操作失败", Toast.LENGTH_SHORT).show();
-                            if (dialog != null) dialog.dismiss();
+                            if (mVoteDialog != null) mVoteDialog.dismiss();
                         }
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, String responseString) {
@@ -339,7 +352,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                             }else{
                                 Toast.makeText(QuestionAnswerDetailActivity.this, "操作失败", Toast.LENGTH_SHORT).show();
                             }
-                            if (dialog != null) dialog.dismiss();
+                            if (mVoteDialog != null) mVoteDialog.dismiss();
                         }
                     });
                 }
@@ -372,13 +385,13 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
     }
 
     @OnClick(R.id.layout_vote) void onClickVote(){
-        dialog = DialogHelp.getDialog(this)
+        mVoteDialog = DialogHelp.getDialog(this)
                 .setView(getVoteDialogView())
                 .create();
-        dialog.show();
-        WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+        mVoteDialog.show();
+        WindowManager.LayoutParams params = mVoteDialog.getWindow().getAttributes();
         params.width = (int) TDevice.dpToPixel(260f);
-        dialog.getWindow().setAttributes(params);
+        mVoteDialog.getWindow().setAttributes(params);
     }
 
     public static class VoteViewHolder{
