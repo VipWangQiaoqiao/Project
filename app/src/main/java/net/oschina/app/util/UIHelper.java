@@ -164,14 +164,17 @@ public class UIHelper {
      * @param context
      * @param newsId
      */
-    public static void showNewsDetail(Context context, int newsId,
+    public static void showNewsDetail(Context context, long newsId,
                                       int commentCount) {
+        /*
         Intent intent = new Intent(context, DetailActivity.class);
         intent.putExtra("id", newsId);
         intent.putExtra("comment_count", commentCount);
         intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
                 DetailActivity.DISPLAY_NEWS);
         context.startActivity(intent);
+        */
+        NewsDetailActivity.show(context, newsId);
     }
 
 
@@ -191,13 +194,16 @@ public class UIHelper {
      * @param context
      * @param postId
      */
-    public static void showPostDetail(Context context, int postId, int count) {
+    public static void showPostDetail(Context context, long postId, int count) {
+        /*
         Intent intent = new Intent(context, DetailActivity.class);
         intent.putExtra("id", postId);
         intent.putExtra("comment_count", count);
         intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
                 DetailActivity.DISPLAY_POST);
         context.startActivity(intent);
+        */
+        QuestionDetailActivity.show(context, postId);
     }
 
     /**
@@ -206,12 +212,15 @@ public class UIHelper {
      * @param context
      * @param eventId
      */
-    public static void showEventDetail(Context context, int eventId) {
+    public static void showEventDetail(Context context, long eventId) {
+        /*
         Intent intent = new Intent(context, DetailActivity.class);
         intent.putExtra("id", eventId);
         intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
                 DetailActivity.DISPLAY_EVENT);
         context.startActivity(intent);
+        */
+        EventDetailActivity.show(context, eventId);
     }
 
     /**
@@ -232,10 +241,10 @@ public class UIHelper {
      * @param context context
      * @param tweetid 动弹的id
      */
-    public static void showTweetDetail(Context context, Tweet tweet, int tweetid) {
+    public static void showTweetDetail(Context context, Tweet tweet, long tweetid) {
         Intent intent = new Intent(context, DetailActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putInt("tweet_id", tweetid);
+        bundle.putInt("tweet_id", (int) tweetid);
         bundle.putInt(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
                 DetailActivity.DISPLAY_TWEET);
         if (tweet != null) {
@@ -260,12 +269,15 @@ public class UIHelper {
     }
 
     public static void showSoftwareDetailById(Context context, int id) {
+        /*
         Intent intent = new Intent(context, DetailActivity.class);
         intent.putExtra("id", id);
         intent.putExtra("ident", "");
         intent.putExtra(DetailActivity.BUNDLE_KEY_DISPLAY_TYPE,
                 DetailActivity.DISPLAY_SOFTWARE);
         context.startActivity(intent);
+        */
+        SoftwareDetailActivity.show(context, id);
     }
 
     /**
@@ -320,7 +332,7 @@ public class UIHelper {
         switch (type) {
             case 0:
                 //新闻链接
-                showUrlRedirect(context, href);
+                showUrlRedirect(context, id, href);
                 // NewsDetailActivity.show(context, 0, id);
                 break;
             case 1:
@@ -495,17 +507,12 @@ public class UIHelper {
         }
     }
 
-    /**
-     * url跳转
-     *
-     * @param context
-     * @param url
-     */
-    public static void showUrlRedirect(Context context, String url) {
+    private static void showUrlRedirect(Context context, long id, String url) {
         if (url == null)
             return;
         if (url.contains("city.oschina.net/")) {
-            int id = StringUtils.toInt(url.substring(url.lastIndexOf('/') + 1));
+            if (id == 0)
+                id = StringUtils.toInt(url.substring(url.lastIndexOf('/') + 1));
             UIHelper.showEventDetail(context, id);
             return;
         }
@@ -524,15 +531,25 @@ public class UIHelper {
         }
         URLsUtils urls = URLsUtils.parseURL(url);
         if (urls != null) {
-            showLinkRedirect(context, urls.getObjType(), urls.getObjId(),
-                    urls.getObjKey());
+            showLinkRedirect(context, urls.getObjType(), id == 0 ? urls.getObjId() : id, urls.getObjKey());
         } else {
             openBrowser(context, url);
         }
     }
 
+
+    /**
+     * url跳转
+     *
+     * @param context
+     * @param url
+     */
+    public static void showUrlRedirect(Context context, String url) {
+        showUrlRedirect(context, 0, url);
+    }
+
     public static void showLinkRedirect(Context context, int objType,
-                                        int objId, String objKey) {
+                                        long objId, String objKey) {
         switch (objType) {
             case URLsUtils.URL_OBJ_TYPE_NEWS:
                 showNewsDetail(context, objId, -1);
@@ -822,14 +839,14 @@ public class UIHelper {
      * @param hisuid
      * @param hisname
      */
-    public static void showUserCenter(Context context, int hisuid,
+    public static void showUserCenter(Context context, long hisuid,
                                       String hisname) {
         if (hisuid == 0 && hisname.equalsIgnoreCase("匿名")) {
             AppContext.showToast("提醒你，该用户为非会员");
             return;
         }
         Bundle args = new Bundle();
-        args.putInt("his_id", hisuid);
+        args.putInt("his_id", (int) hisuid);
         args.putString("his_name", hisname);
         showSimpleBack(context, SimpleBackPage.USER_CENTER, args);
     }

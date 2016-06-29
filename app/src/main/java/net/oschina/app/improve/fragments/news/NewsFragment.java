@@ -96,7 +96,6 @@ public class NewsFragment extends BaseGeneralListFragment<News> {
             TextView content = (TextView) view.findViewById(R.id.tv_description);
             updateTextColor(title, content);
             saveToReadedList(HISTORY_NEWS, news.getId() + "");
-
         }
     }
 
