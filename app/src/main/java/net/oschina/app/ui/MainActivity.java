@@ -315,11 +315,7 @@ public class MainActivity extends AppCompatActivity implements
         switch (id) {
             // 点击了快速操作按钮
             case R.id.quick_option_iv:
-//                showQuickOption();
-                CommentEX comment = new CommentEX();
-                comment.setId(47111L);
-                comment.setAuthorId(99667L);
-                QuestionAnswerDetailActivity.show(this, comment, 15504L);
+                showQuickOption();
                 break;
             default:
                 break;
