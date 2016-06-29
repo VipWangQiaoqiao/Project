@@ -138,7 +138,9 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         setCommentCount(questionDetail.getCommentCount());
         setBodyContent(body);
 
-        mTVAuthorName.setText(questionDetail.getAuthor().trim());
+        String author = questionDetail.getAuthor();
+        if (!TextUtils.isEmpty(author))
+            mTVAuthorName.setText(author);
 
         List<String> tags = questionDetail.getTags();
 
@@ -146,7 +148,8 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         if (tags != null && !tags.isEmpty()) {
             for (String tag : tags) {
                 TextView tvTag = (TextView) getActivity().getLayoutInflater().inflate(R.layout.flowlayout_item, mFlowLayout, false);
-                tvTag.setText(tag.trim());
+                if (!TextUtils.isEmpty(tag))
+                    tvTag.setText(tag);
                 mFlowLayout.addView(tvTag);
             }
         }
@@ -155,7 +158,9 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         String time = String.format("%s", StringUtils.friendly_time(questionDetail.getPubDate()));
         mTVPubDate.setText(time);
 
-        mTVTitle.setText(questionDetail.getTitle());
+        String title = questionDetail.getTitle();
+        if (!TextUtils.isEmpty(title))
+            mTVTitle.setText(title);
 
         toFavoriteOk(questionDetail);
 
@@ -174,7 +179,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
     private void handleKeyDel() {
         if (mCommentId != mId) {
-            if (TextUtils.isEmpty(mETInput.getText())) {
+            if (TextUtils.isEmpty(mETInput.getText().toString().trim())) {
                 if (mInputDoubleEmpty) {
                     mCommentId = mId;
                     mCommentAuthorId = 0;
@@ -199,7 +204,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
     private void handleSendComment() {
         TDevice.hideSoftKeyboard(mETInput);
-        mOperator.toSendComment(mId,mCommentId, mCommentAuthorId, mETInput.getText().toString());
+        mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mETInput.getText().toString().trim());
     }
 
 
@@ -217,7 +222,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
     public void toSendCommentOk(CommentEX commentEX) {
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
         mETInput.setText("");
-        mComments.addComment(commentEX,getImgLoader(),this);
+        mComments.addComment(commentEX, getImgLoader(), this);
     }
 
     @Override
