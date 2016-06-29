@@ -8,6 +8,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ import java.util.Collections;
 import java.util.List;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cz.msebera.android.httpclient.Header;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -76,6 +78,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
     NestedScrollView mScrollView;
 
     private long sid;
+    private Dialog dialog;
     private CommentEX comment;
     private CommentEX.Reply reply;
     private View mVoteDialogView;
@@ -163,8 +166,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                     UIHelper.showLoginActivity(QuestionAnswerDetailActivity.this);
                     return;
                 }
-                OSChinaApi.publishComment(sid, -1, reply == null ? comment.getId() : reply.getId(),
-                        reply == null ? comment.getAuthorId() : reply.getAuthorId(), 2, content, onSendCommentHandler);
+                OSChinaApi.publishComment(sid, -1, comment.getId(), comment.getAuthorId(), 2, content, onSendCommentHandler);
             }
 
             @Override
@@ -221,7 +223,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                 public void onClick(View v) {
                     CommentEX.Reply reply = (CommentEX.Reply) v.getTag();
                     mDelegation.notifyWrapper();
-                    mDelegation.getInputView().setHint("@" + reply.getAuthor() + " ");
+                    mDelegation.getInputView().setText("回复 @" + reply.getAuthor() + " :");
                     QuestionAnswerDetailActivity.this.reply = reply;
                 }
             };
@@ -238,6 +240,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                Log.d("oschina", "-----------------\n" + responseString + "\n------------------");
                 ResultBean<CommentEX.Reply> result = AppContext.createGson().fromJson(
                         responseString,
                         new TypeToken<ResultBean<CommentEX.Reply>>() {
@@ -264,6 +267,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String respStr) {
+                Log.d("oschina", "-----------------\n" + respStr + "\n------------------");
                 ResultBean<CommentEX> result = AppContext.createGson().fromJson(respStr,
                         new TypeToken<ResultBean<CommentEX>>() {
                         }.getType());
@@ -283,34 +287,118 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
     private View getVoteDialogView() {
         if (mVoteDialogView == null) {
             mVoteDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_question_comment_detail_vote, null, false);
-            mVoteDialogView.findViewById(R.id.btn_vote_up).setOnClickListener(new View.OnClickListener() {
+            final VoteViewHolder holder = new VoteViewHolder(mVoteDialogView);
+            holder.mVoteUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(QuestionAnswerDetailActivity.this, "顶他", Toast.LENGTH_SHORT).show();
+                    if (holder.mVoteDown.isSelected()){
+                        Toast.makeText(QuestionAnswerDetailActivity.this, "你已经踩过了", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    OSChinaApi.questionVote(sid, comment.getId(), CommentEX.VOTE_STATE_UP, new TextHttpResponseHandler() {
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                            Log.d("oschina", "-------------------\n" + responseString + "\n-------------------");
+                            Toast.makeText(QuestionAnswerDetailActivity.this,
+                                    holder.mVoteUp.isSelected() ? "取消顶失败" : "顶失败", Toast.LENGTH_SHORT).show();
+                            if (dialog != null) dialog.dismiss();
+                        }
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                            Log.d("oschina", "-------------------\n" + responseString + "\n-------------------");
+                            ResultBean<CommentEX> result = AppContext.createGson().fromJson(
+                                    responseString, new TypeToken<ResultBean<CommentEX>>(){}.getType());
+                            if (result.isSuccess()){
+                                comment.setVoteState(CommentEX.VOTE_STATE_UP);
+                                comment.setVoteCount(result.getResult().getVoteCount());
+                                tvVoteCount.setText(String.valueOf(result.getResult().getVoteCount()));
+                                ivVoteUp.setSelected(true);
+                                Toast.makeText(QuestionAnswerDetailActivity.this,
+                                        holder.mVoteUp.isSelected() ? "取消顶成功" : "顶成功", Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(QuestionAnswerDetailActivity.this,
+                                        holder.mVoteUp.isSelected() ? "取消顶失败" : "顶失败", Toast.LENGTH_SHORT).show();
+                            }
+                            if (dialog != null) dialog.dismiss();
+                        }
+                    });
                 }
             });
-            mVoteDialogView.findViewById(R.id.btn_vote_down).setOnClickListener(new View.OnClickListener() {
+            holder.mVoteDown.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(QuestionAnswerDetailActivity.this, "踩他", Toast.LENGTH_SHORT).show();
+                    if (holder.mVoteUp.isSelected()){
+                        Toast.makeText(QuestionAnswerDetailActivity.this, "你已经顶过了", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    OSChinaApi.questionVote(sid, comment.getId(), CommentEX.VOTE_STATE_DOWN, new TextHttpResponseHandler() {
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                            Toast.makeText(QuestionAnswerDetailActivity.this,
+                                    holder.mVoteDown.isSelected() ? "取消踩失败" : "踩失败", Toast.LENGTH_SHORT).show();
+                            if (dialog != null) dialog.dismiss();
+                        }
+
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                            ResultBean<CommentEX> result = AppContext.createGson().fromJson(
+                                    responseString, new TypeToken<ResultBean<CommentEX>>(){}.getType());
+                            if (result.isSuccess()){
+                                comment.setVoteState(CommentEX.VOTE_STATE_DOWN);
+                                comment.setVoteCount(result.getResult().getVoteCount());
+                                tvVoteCount.setText(String.valueOf(result.getResult().getVoteCount()));
+                                ivVoteDown.setSelected(true);
+                                Toast.makeText(QuestionAnswerDetailActivity.this,
+                                        holder.mVoteDown.isSelected() ? "取消踩成功" : "踩成功", Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(QuestionAnswerDetailActivity.this,
+                                        holder.mVoteDown.isSelected() ? "取消踩失败" : "踩失败", Toast.LENGTH_SHORT).show();
+                            }
+                            if (dialog != null) dialog.dismiss();
+                        }
+                    });
                 }
             });
-        } else {
+            mVoteDialogView.setTag(holder);
+        }else{
             ViewGroup view = (ViewGroup) mVoteDialogView.getParent();
             view.removeView(mVoteDialogView);
+        }
+        VoteViewHolder holder = (VoteViewHolder) mVoteDialogView.getTag();
+        switch (comment.getVoteState()){
+            default:
+                holder.mVoteUp.setSelected(false);
+                holder.mVoteDown.setSelected(false);
+                break;
+            case CommentEX.VOTE_STATE_UP:
+                holder.mVoteDown.setSelected(false);
+                holder.mVoteUp.setSelected(true);
+                break;
+            case CommentEX.VOTE_STATE_DOWN:
+                holder.mVoteUp.setSelected(false);
+                holder.mVoteDown.setSelected(true);
+                break;
         }
         return mVoteDialogView;
     }
 
-    @OnClick(R.id.layout_vote)
-    void onClickVote() {
-        Dialog dialog = DialogHelp.getDialog(this)
+    @OnClick(R.id.layout_vote) void onClickVote(){
+        dialog = DialogHelp.getDialog(this)
                 .setView(getVoteDialogView())
                 .create();
         dialog.show();
         WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
         params.width = (int) TDevice.dpToPixel(260f);
         dialog.getWindow().setAttributes(params);
+    }
+
+    public static class VoteViewHolder{
+        @Bind(R.id.btn_vote_up) TextView mVoteUp;
+        @Bind(R.id.btn_vote_down) TextView mVoteDown;
+
+        public VoteViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 
     @Override
@@ -322,4 +410,6 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
         }
         super.onDestroy();
     }
+
+
 }

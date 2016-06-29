@@ -90,7 +90,10 @@ public class TweetDetailViewPagerFragment extends Fragment
                         case 0:
                             return String.format("赞(%s)", mOperator.getTweetDetail().getLikeCount());
                         case 1:
-                            return String.format("评论(%s)", mOperator.getTweetDetail().getCommentCount());
+                            return String.format("评论(%s)",
+                                    mOperator.getTweetDetail().getCommentCount() == null
+                                            ? 0
+                                            : mOperator.getTweetDetail().getCommentCount());
                     }
                     return null;
                 }
