@@ -342,6 +342,10 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
         }
     }
 
+    @OnClick(R.id.iv_comment) void onClickComment(){
+        TDevice.showSoftKeyboard(mViewInput);
+    }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {

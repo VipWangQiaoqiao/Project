@@ -225,6 +225,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                     mDelegation.notifyWrapper();
                     mDelegation.getInputView().setText("回复 @" + reply.getAuthor() + " :");
                     QuestionAnswerDetailActivity.this.reply = reply;
+                    TDevice.showSoftKeyboard(mDelegation.getInputView());
                 }
             };
         }
