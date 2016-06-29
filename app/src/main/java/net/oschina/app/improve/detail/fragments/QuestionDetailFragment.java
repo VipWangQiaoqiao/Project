@@ -198,7 +198,6 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
     }
 
     private void handleSendComment() {
-        TDevice.hideSoftKeyboard(mETInput);
         mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mETInput.getText().toString().trim());
     }
 
@@ -218,5 +217,6 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
         mETInput.setText("");
         mComments.addComment(commentEX, getImgLoader(), null);
+        TDevice.hideSoftKeyboard(mETInput);
     }
 }

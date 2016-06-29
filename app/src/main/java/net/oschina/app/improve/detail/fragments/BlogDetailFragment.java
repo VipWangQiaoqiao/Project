@@ -228,7 +228,6 @@ public class BlogDetailFragment
     }
 
     private void handleSendComment() {
-        TDevice.hideSoftKeyboard(mETInput);
         mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mETInput.getText().toString().trim());
     }
 
@@ -255,6 +254,7 @@ public class BlogDetailFragment
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
         mETInput.setText("");
         mComments.addComment(comment, getImgLoader(), this);
+        TDevice.hideSoftKeyboard(mETInput);
     }
 
     @Override

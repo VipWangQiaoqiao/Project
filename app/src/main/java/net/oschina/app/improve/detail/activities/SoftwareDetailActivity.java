@@ -28,10 +28,6 @@ import cz.msebera.android.httpclient.Header;
  * desc:   news detail  module
  */
 public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftDetailContract.View> implements SoftDetailContract.Operator {
-
-    public static final String TAG = "SoftwareDetailActivity";
-    private static final int MAX_TEXT_LENGTH = 160;
-
     @Override
     int getOptionsMenuId() {
         return 0;
@@ -136,52 +132,5 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
         } else {
             AppContext.showToast("内容加载失败...");
         }
-    }
-
-
-    @Override
-    public void toSendComment(long id, long commentId, long commentAuthorId, String comment) {
-
-//        OSChinaApi.publishComment(id, commentId, 0, commentAuthorId, 1, comment, new TextHttpResponseHandler() {
-//
-//
-//            @Override
-//            public void onStart() {
-//                super.onStart();
-//                showWaitDialog(R.string.progress_submit);
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-//                AppContext.showToast("评论失败!");
-//                hideWaitDialog();
-//            }
-//
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-//                try {
-//                    Type type = new TypeToken<ResultBean<Comment>>() {
-//                    }.getType();
-//
-//                    ResultBean<Comment> resultBean = AppContext.createGson().fromJson(responseString, type);
-//                    Log.d(TAG, "onSuccess: ------>" + resultBean.getCode());
-//                    if (resultBean.isSuccess()) {
-//                        Comment respComment = resultBean.getResult();
-//                        if (respComment != null) {
-//                            SoftDetailContract.View view = mView;
-//                            if (view != null) {
-//                                view.toSendCommentOk(respComment);
-//                            }
-//                        }
-//                    }
-//                    hideWaitDialog();
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    onFailure(statusCode, headers, responseString, e);
-//                }
-//                hideWaitDialog();
-//            }
-//        });
-
     }
 }
