@@ -9,6 +9,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -147,6 +148,8 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
                     dialog.dismiss();
                     dialog = null;
                 }
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(mDelegation.getInputView().getWindowToken(), 0);
             }
 
             @Override
