@@ -28,6 +28,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.util.TextUtils;
 
 /**
  * Created by JuQiu
@@ -107,7 +108,7 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
 
             boolean clearLine = true;
             for (final Comment comment : comments) {
-                if (comment == null)
+                if (comment == null || comment.getId() == 0 || TextUtils.isEmpty(comment.getAuthor()))
                     continue;
                 ViewGroup lay = addComment(comment, imageLoader, onCommentClickListener);
                 if (clearLine) {
