@@ -39,7 +39,6 @@ public class TweetCommentAdapter extends BaseRecyclerAdapter<Comment> {
     public TweetCommentAdapter(Context context) {
         super(context, ONLY_FOOTER);
         reqManager = Glide.with(context);
-        Log.d("oschina", "----------------Glide on Adapter " + Glide.with(context) + "---------------");
     }
 
     @Override

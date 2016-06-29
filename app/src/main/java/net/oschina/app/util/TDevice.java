@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -298,24 +299,28 @@ public class TDevice {
     public static void hideSoftKeyboard(View view) {
         if (view == null)
             return;
+        View focusView = null;
+        if (view instanceof EditText)
+            focusView = view;
         Context context = view.getContext();
         if (context != null && context instanceof Activity) {
             Activity activity = ((Activity) context);
-            View focusView = activity.getCurrentFocus();
-            if (focusView != null) {
+            focusView = activity.getCurrentFocus();
+        }
+
+        if (focusView != null) {
                 /*
                 if (focusView.isFocusable()) {
                     focusView.setFocusable(false);
                     focusView.setFocusable(true);
                 }
                 */
-                if (focusView.isFocused()) {
-                    focusView.clearFocus();
-                }
-                InputMethodManager manager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-                manager.hideSoftInputFromWindow(focusView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                manager.hideSoftInputFromInputMethod(focusView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            if (focusView.isFocused()) {
+                focusView.clearFocus();
             }
+            InputMethodManager manager = (InputMethodManager) focusView.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            manager.hideSoftInputFromWindow(focusView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            manager.hideSoftInputFromInputMethod(focusView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
 

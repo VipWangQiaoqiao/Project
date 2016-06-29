@@ -65,8 +65,6 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("oschina", "----------------Glide on Fragment " + Glide.with(this) + "|---------------");
-        Log.d("oschina", "----------------Glide on Fragment " + Glide.with(getContext()) + "|---------------");
         reqHandler = new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -74,6 +72,8 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>
                 setListData(data.getList());
                 onRequestSuccess(1);
                 onRequestFinish();
+                if (mAdapter.getCount() < 20 && mAgencyView != null)
+                    mAgencyView.resetCmnCount(mAdapter.getCount());
             }
 
             @Override

@@ -30,14 +30,16 @@ import cz.msebera.android.httpclient.Header;
  */
 public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<User> implements TweetDetailContract.ThumbupView {
 
-    public static final String BUNDLE_KEY_TWEET_ID = "BUNDLE_KEY_TWEET_ID";
-
     private int pageNum = 0;
     private TweetDetailContract.Operator mOperator;
+    private TweetDetailContract.AgencyView mAgencyView;
     private AsyncHttpResponseHandler reqHandler;
 
-    public static ListTweetLikeUsersFragment instantiate(TweetDetailContract.Operator operator) {
-        return new ListTweetLikeUsersFragment();
+    public static ListTweetLikeUsersFragment instantiate(TweetDetailContract.Operator operator, TweetDetailContract.AgencyView mAgencyView) {
+        ListTweetLikeUsersFragment fragment = new ListTweetLikeUsersFragment();
+        fragment.mOperator = operator;
+        fragment.mAgencyView = mAgencyView;
+        return fragment;
     }
 
     @Override
@@ -57,6 +59,8 @@ public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<User> i
                 setListData(data.getList());
                 onRequestSuccess(1);
                 onRequestFinish();
+                if (mAdapter.getCount() < 20 && mAgencyView != null)
+                    mAgencyView.resetLikeCount(mAdapter.getCount());
             }
 
             @Override

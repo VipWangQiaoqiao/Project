@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
@@ -148,6 +149,8 @@ public class OWebView extends WebView {
     }
 
     private static String setupWebContent(String content, String style) {
+        if (TextUtils.isEmpty(content) || TextUtils.isEmpty(content.trim()))
+            return "";
         if (AppContext.get(AppConfig.KEY_LOAD_IMAGE, true)
                 || TDevice.isWifiOpen()) {
             Pattern pattern = Pattern.compile("<img[^>]+src\\s*=\\s*[\"\']([^\"\']*)[\"\'](\\s*data-url\\s*=\\s*[\"\']([^\"\']*)[\"\'])*");
@@ -179,6 +182,9 @@ public class OWebView extends WebView {
     }
 
     private static String setupWebContent(String content, boolean isShowHighlight, boolean isShowImagePreview, String css) {
+        if (TextUtils.isEmpty(content) || TextUtils.isEmpty(content.trim()))
+            return "";
+
         // 读取用户设置：是否加载文章图片--默认有wifi下始终加载图片
         if (AppContext.get(AppConfig.KEY_LOAD_IMAGE, true)
                 || TDevice.isWifiOpen()) {
