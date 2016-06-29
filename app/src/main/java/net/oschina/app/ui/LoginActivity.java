@@ -168,6 +168,7 @@ public class LoginActivity extends BaseActivity implements IUiListener {
         data.putExtra(BUNDLE_KEY_REQUEST_CODE, requestCode);
         setResult(RESULT_OK, data);
         this.sendBroadcast(new Intent(Constants.INTENT_ACTION_USER_CHANGE));
+        TDevice.hideSoftKeyboard(getWindow().getDecorView());
         finish();
     }
 
