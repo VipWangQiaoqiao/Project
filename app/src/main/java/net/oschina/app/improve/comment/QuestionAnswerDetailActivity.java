@@ -240,7 +240,6 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                Log.d("oschina", "-----------------\n" + responseString + "\n------------------");
                 ResultBean<CommentEX.Reply> result = AppContext.createGson().fromJson(
                         responseString,
                         new TypeToken<ResultBean<CommentEX.Reply>>() {
@@ -267,7 +266,6 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String respStr) {
-                Log.d("oschina", "-----------------\n" + respStr + "\n------------------");
                 ResultBean<CommentEX> result = AppContext.createGson().fromJson(respStr,
                         new TypeToken<ResultBean<CommentEX>>() {
                         }.getType());
@@ -313,13 +311,11 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                     OSChinaApi.questionVote(sid, comment.getId(), opt, new TextHttpResponseHandler() {
                         @Override
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                            Log.d("oschina", "-------------------\n" + responseString + "\n-------------------");
                             Toast.makeText(QuestionAnswerDetailActivity.this, "操作失败", Toast.LENGTH_SHORT).show();
                             if (dialog != null) dialog.dismiss();
                         }
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                            Log.d("oschina", "-------------------\n" + responseString + "\n-------------------");
                             ResultBean<CommentEX> result = AppContext.createGson().fromJson(
                                     responseString, new TypeToken<ResultBean<CommentEX>>(){}.getType());
                             if (result.isSuccess()){

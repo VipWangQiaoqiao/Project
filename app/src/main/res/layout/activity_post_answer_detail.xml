@@ -55,7 +55,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:background="#6A6A6A" />
+                android:background="#D2D2D2" />
 
             <LinearLayout
                 android:id="@+id/layout_vote"

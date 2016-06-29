@@ -115,7 +115,7 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>
 
     @Override
     public void onLoadMore() {
-        requestData(pageNum + 1);
+        requestData(pageNum);
     }
 
     @Override
@@ -126,6 +126,7 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>
     @Override
     protected void onRequestSuccess(int code) {
         super.onRequestSuccess(code);
+        if(mIsRefresh) pageNum = 0;
         ++pageNum;
     }
 
