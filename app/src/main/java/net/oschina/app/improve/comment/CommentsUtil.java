@@ -32,7 +32,7 @@ final class CommentsUtil {
         Context context = inflater.getContext();
         @SuppressLint("InflateParams")
         ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_item_refer, null, false);
-        ShapeDrawable drawable = new ShapeDrawable(new BorderShape(new RectF(Ui.dipToPx(context, 1), 0, 0, 0)));
+        ShapeDrawable drawable = new ShapeDrawable(new BorderShape(new RectF(Ui.dipToPx(context.getResources(), 1), 0, 0, 0)));
         drawable.getPaint().setColor(0xffd7d6da);
         lay.findViewById(R.id.lay_blog_detail_comment_refer).setBackgroundDrawable(drawable);
 
