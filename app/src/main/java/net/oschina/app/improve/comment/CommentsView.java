@@ -113,6 +113,10 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
                 mSeeMore.setOnClickListener(this);
             }
 
+            if (getVisibility() != VISIBLE) {
+                setVisibility(VISIBLE);
+            }
+
             boolean clearLine = true;
             for (final Comment comment : comments) {
                 if (comment == null || comment.getId() == 0 || TextUtils.isEmpty(comment.getAuthor()))
@@ -129,6 +133,10 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
     }
 
     public ViewGroup addComment(final Comment comment, RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
+        if (getVisibility() != VISIBLE) {
+            setVisibility(VISIBLE);
+        }
+
         return addComment(true, comment, imageLoader, onCommentClickListener);
     }
 
@@ -164,9 +172,6 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
         else
             mLayComments.addView(lay);
 
-        if (getVisibility() != VISIBLE) {
-            setVisibility(VISIBLE);
-        }
         return lay;
     }
 

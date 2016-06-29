@@ -113,6 +113,10 @@ public class CommentExsView extends LinearLayout implements View.OnClickListener
                 mSeeMore.setOnClickListener(this);
             }
 
+            if (getVisibility() != VISIBLE) {
+                setVisibility(VISIBLE);
+            }
+
             boolean clearLine = true;
             for (final CommentEX comment : comments) {
                 if (comment == null || comment.getId() == 0 || TextUtils.isEmpty(comment.getAuthor()))
@@ -129,6 +133,11 @@ public class CommentExsView extends LinearLayout implements View.OnClickListener
     }
 
     public ViewGroup addComment(final CommentEX comment, RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
+
+        if (getVisibility() != VISIBLE) {
+            setVisibility(VISIBLE);
+        }
+
         return addComment(true, comment, imageLoader, onCommentClickListener);
     }
 
@@ -170,9 +179,6 @@ public class CommentExsView extends LinearLayout implements View.OnClickListener
             mLayComments.addView(lay, 0);
         else
             mLayComments.addView(lay);
-        if (getVisibility() != VISIBLE) {
-            setVisibility(VISIBLE);
-        }
 
         lay.setOnClickListener(new OnClickListener() {
             @Override
