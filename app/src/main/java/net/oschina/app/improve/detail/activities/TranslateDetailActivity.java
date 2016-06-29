@@ -145,7 +145,7 @@ public class TranslateDetailActivity extends DetailActivity<TranslationDetail, T
             AppContext.showToastShort(R.string.tip_comment_content_empty);
             return;
         }
-        OSChinaApi.publishComment(id, commentId, 0, commentAuthorId, getType(), comment, new TextHttpResponseHandler() {
+        OSChinaApi.pubTranslateComment(id, commentId, commentAuthorId, comment, new TextHttpResponseHandler() {
 
             @Override
             public void onStart() {

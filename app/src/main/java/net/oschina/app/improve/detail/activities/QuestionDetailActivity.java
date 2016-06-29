@@ -150,7 +150,7 @@ public class QuestionDetailActivity extends DetailActivity<QuestionDetail, Quest
             return;
         }
 
-        OSChinaApi.publishComment(id, commentId, 0, commentAuthorId, 2, comment, new TextHttpResponseHandler() {
+        OSChinaApi.pubQuestionComment(id, commentId, commentAuthorId, comment, new TextHttpResponseHandler() {
 
             @Override
             public void onStart() {
