@@ -29,7 +29,7 @@ import net.oschina.app.util.XmlUtils;
 import java.io.InputStream;
 import java.io.Serializable;
 
-public class SoftwareForTweetsFrament extends BaseListFragment<Tweet> implements
+public class SoftWareForTweetsFragment extends BaseListFragment<Tweet> implements
         OnItemLongClickListener {
 
     public static final String BUNDLE_KEY_ID = "BUNDLE_KEY_ID";
