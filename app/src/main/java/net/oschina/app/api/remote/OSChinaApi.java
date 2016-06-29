@@ -1317,4 +1317,18 @@ public class OSChinaApi {
         publishComment(sid, 0, commentId, commentAuthorId, 3, comment, handler);
     }
 
+    /**
+     * 问答的回答, 顶\踩
+     * @param sid source id 问答的id
+     * @param cid 回答的id
+     * @param opt 操作类型 0:取消, 1:顶, 2:踩
+     * @param handler
+     */
+    public static void questionVote(long sid, long cid, int opt, TextHttpResponseHandler handler){
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sid);
+        params.put("commentId", cid);
+        params.put("voteOpt", opt);
+        ApiHttpClient.post("action/apiv2/question_vote", params, handler);
+    }
 }

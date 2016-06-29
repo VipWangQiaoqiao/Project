@@ -22,7 +22,7 @@
 
         <TextView
             android:id="@+id/btn_vote_up"
-            android:drawableTop="@drawable/ic_vote_up_big_normal"
+            android:drawableTop="@drawable/selector_full_vote_up"
             android:gravity="center_horizontal"
             android:drawablePadding="4dp"
             android:text="@string/vote_up"
@@ -32,7 +32,7 @@
 
         <TextView
             android:id="@+id/btn_vote_down"
-            android:drawableTop="@drawable/ic_vote_down_big_normal"
+            android:drawableTop="@drawable/selector_full_vote_down"
             android:gravity="center_horizontal"
             android:drawablePadding="4dp"
             android:text="@string/vote_down"

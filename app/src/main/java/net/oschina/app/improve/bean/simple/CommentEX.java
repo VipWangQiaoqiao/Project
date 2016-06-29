@@ -1,5 +1,7 @@
 package net.oschina.app.improve.bean.simple;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
@@ -13,6 +15,7 @@ public class CommentEX extends Comment {
     public static final int VOTE_STATE_UP = 1;
     public static final int VOTE_STATE_DOWN = 2;
 
+    @SerializedName("vote")
     private int voteCount;
     private boolean best;
     private int voteState;
