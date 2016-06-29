@@ -3,12 +3,10 @@ package net.oschina.app.improve.detail.fragments;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.bean.SoftwareDetail;
 import net.oschina.app.improve.bean.simple.About;
-import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.improve.detail.contract.SoftDetailContract;
 import net.oschina.app.improve.widget.DetailAboutView;
@@ -147,10 +145,5 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
             mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_faved));
         else
             mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_fav));
-    }
-
-    @Override
-    public void toSendCommentOk(Comment comment) {
-        Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG).show();
     }
 }
