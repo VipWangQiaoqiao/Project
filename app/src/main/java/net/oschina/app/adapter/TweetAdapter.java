@@ -60,8 +60,8 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         ImageView image;
         @Bind(R.id.iv_like_state)
         ImageView ivLikeState;
-        @Bind(R.id.tv_del)
-        TextView del;
+//        @Bind(R.id.tv_del)
+//        TextView del;
         @Bind(R.id.tv_likeusers)
         TextView likeUsers;
         @Bind(R.id.tv_tweet_like_count)
@@ -107,17 +107,17 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         }
         final Tweet tweet = mDatas.get(position);
 
-        if (tweet.getAuthorid() == AppContext.getInstance().getLoginUid()) {
-            vh.del.setVisibility(View.VISIBLE);
-            vh.del.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    optionDel(context, tweet, position);
-                }
-            });
-        } else {
-            vh.del.setVisibility(View.GONE);
-        }
+//        if (tweet.getAuthorid() == AppContext.getInstance().getLoginUid()) {
+//            vh.del.setVisibility(View.VISIBLE);
+//            vh.del.setOnClickListener(new OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    optionDel(context, tweet, position);
+//                }
+//            });
+//        } else {
+//            vh.del.setVisibility(View.GONE);
+//        }
 
         vh.face.setUserInfo(tweet.getAuthorid(), tweet.getAuthor());
         vh.face.setAvatarUrl(tweet.getPortrait());
@@ -216,6 +216,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         tweet.setLikeUsers(context, vh.likeUsers, true);
     }
 
+    @SuppressWarnings("unused")
     private void optionDel(Context context, final Tweet tweet, final int position) {
 
         DialogHelp.getConfirmDialog(context, "确定删除吗?", new DialogInterface.OnClickListener() {
