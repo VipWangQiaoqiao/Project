@@ -157,6 +157,7 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
         mSoft.setVisibility(View.GONE);
         mAbouts.setVisibility(View.GONE);
 
+        mComments.setTitle(String.format("评论(%s)", translationDetail.getCommentCount()));
         mComments.init(translationDetail.getId(), OSChinaApi.COMMENT_TRANSLATION, translationDetail.getCommentCount(), getImgLoader(), this);
     }
 

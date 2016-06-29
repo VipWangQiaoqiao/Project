@@ -38,6 +38,7 @@ import cz.msebera.android.httpclient.util.TextUtils;
 public class CommentsView extends LinearLayout implements View.OnClickListener {
     private long mId;
     private int mType;
+    private TextView mTitle;
     private TextView mSeeMore;
     private LinearLayout mLayComments;
 
@@ -61,9 +62,15 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         inflater.inflate(R.layout.lay_detail_comment_layout, this, true);
 
-        //mTitle = (TextView) findViewById(R.id.tv_blog_detail_comment);
+        mTitle = (TextView) findViewById(R.id.tv_blog_detail_comment);
         mLayComments = (LinearLayout) findViewById(R.id.lay_blog_detail_comment);
         mSeeMore = (TextView) findViewById(R.id.tv_see_more_comment);
+    }
+
+    public void setTitle(String title) {
+        if (!android.text.TextUtils.isEmpty(title)) {
+            mTitle.setText(title);
+        }
     }
 
     public void init(long id, int type, final int commentTotal, final RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {

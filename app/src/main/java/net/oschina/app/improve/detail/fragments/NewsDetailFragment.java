@@ -184,6 +184,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         });
 
 
+        mComments.setTitle(String.format("评论(%s)", newsDetail.getCommentCount()));
         mComments.init(newsDetail.getId(), OSChinaApi.COMMENT_NEWS, newsDetail.getCommentCount(), getImgLoader(), this);
     }
 
