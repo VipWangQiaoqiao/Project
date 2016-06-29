@@ -98,7 +98,7 @@ public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<User> i
 
     @Override
     public void onLoadMore() {
-        requestData(pageNum + 1);
+        requestData(pageNum);
     }
 
     @Override
@@ -109,6 +109,7 @@ public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<User> i
     @Override
     protected void onRequestSuccess(int code) {
         super.onRequestSuccess(code);
+        if(mIsRefresh) pageNum = 0;
         ++pageNum;
     }
 

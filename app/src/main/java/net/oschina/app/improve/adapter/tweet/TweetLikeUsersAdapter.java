@@ -12,14 +12,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
 import net.oschina.app.R;
-import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.User;
 import net.oschina.app.improve.adapter.base.BaseRecyclerAdapter;
 import net.oschina.app.util.UIHelper;
-import net.oschina.app.widget.AvatarView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by thanatos on 16/6/13.
@@ -47,6 +46,7 @@ public class TweetLikeUsersAdapter extends BaseRecyclerAdapter<User> {
             h.ivPortrait.setImageResource(R.drawable.widget_dface);
         }else{
             reqManager.load(item.getPortrait())
+                    .asBitmap()
                     .placeholder(mContext.getResources().getDrawable(R.drawable.widget_dface))
                     .error(mContext.getResources().getDrawable(R.drawable.widget_dface))
                     .into(h.ivPortrait);
@@ -70,7 +70,7 @@ public class TweetLikeUsersAdapter extends BaseRecyclerAdapter<User> {
     }
 
     public static final class LikeUsersHolderView extends RecyclerView.ViewHolder{
-        @Bind(R.id.iv_avatar) AvatarView ivPortrait;
+        @Bind(R.id.iv_avatar) CircleImageView ivPortrait;
         @Bind(R.id.tv_name) TextView tvName;
 
         public LikeUsersHolderView(View view) {
