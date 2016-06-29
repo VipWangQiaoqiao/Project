@@ -117,7 +117,7 @@ public class CommentExsView extends LinearLayout implements View.OnClickListener
             for (final CommentEX comment : comments) {
                 if (comment == null || comment.getId() == 0 || TextUtils.isEmpty(comment.getAuthor()))
                     continue;
-                ViewGroup lay = addComment(comment, imageLoader, onCommentClickListener);
+                ViewGroup lay = addComment(false, comment, imageLoader, onCommentClickListener);
                 if (clearLine) {
                     clearLine = false;
                     lay.findViewById(R.id.line).setVisibility(View.INVISIBLE);
@@ -129,6 +129,10 @@ public class CommentExsView extends LinearLayout implements View.OnClickListener
     }
 
     public ViewGroup addComment(final CommentEX comment, RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
+        return addComment(true, comment, imageLoader, onCommentClickListener);
+    }
+
+    private ViewGroup addComment(boolean first, final CommentEX comment, RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_item_ex, null, false);
         imageLoader.load(comment.getAuthorPortrait()).error(R.drawable.widget_dface)
@@ -162,8 +166,10 @@ public class CommentExsView extends LinearLayout implements View.OnClickListener
                 });
             }
         }
-
-        mLayComments.addView(lay, 0);
+        if (first)
+            mLayComments.addView(lay, 0);
+        else
+            mLayComments.addView(lay);
         if (getVisibility() != VISIBLE) {
             setVisibility(VISIBLE);
         }
