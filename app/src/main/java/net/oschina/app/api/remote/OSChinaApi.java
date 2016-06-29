@@ -1304,6 +1304,49 @@ public class OSChinaApi {
 
 
     /**
+     * 发表资讯评论
+     *
+     * @see {{@link #publicComment(int, long, int, String, int, AsyncHttpResponseHandler)}}
+     */
+    public static void pubNewsComment(long sid, long commentId, long commentAuthorId, String comment, TextHttpResponseHandler handler) {
+
+        if (commentId == 0 || commentId == sid) {
+            commentId = 0;
+            commentAuthorId = 0;
+        }
+        publishComment(sid, 0, commentId, commentAuthorId, 6, comment, handler);
+    }
+
+    /**
+     * 发表资讯评论
+     *
+     * @see {{@link #publicComment(int, long, int, String, int, AsyncHttpResponseHandler)}}
+     */
+    public static void pubQuestionComment(long sid, long commentId, long commentAuthorId, String comment, TextHttpResponseHandler handler) {
+
+        if (commentId == 0 || commentId == sid) {
+            commentId = 0;
+            commentAuthorId = 0;
+        }
+        publishComment(sid, 0, commentId, commentAuthorId, 2, comment, handler);
+    }
+
+
+    /**
+     * 发表翻译评论
+     *
+     * @see {{@link #publicComment(int, long, int, String, int, AsyncHttpResponseHandler)}}
+     */
+    public static void pubTranslateComment(long sid, long commentId, long commentAuthorId, String comment, TextHttpResponseHandler handler) {
+
+        if (commentId == 0 || commentId == sid) {
+            commentId = 0;
+            commentAuthorId = 0;
+        }
+        publishComment(sid, 0, commentId, commentAuthorId, 4, comment, handler);
+    }
+
+    /**
      * 发布博客评论
      *
      * @see {{@link #publicComment(int, long, int, String, int, AsyncHttpResponseHandler)}}
@@ -1319,12 +1362,13 @@ public class OSChinaApi {
 
     /**
      * 问答的回答, 顶\踩
-     * @param sid source id 问答的id
-     * @param cid 回答的id
-     * @param opt 操作类型 0:取消, 1:顶, 2:踩
+     *
+     * @param sid     source id 问答的id
+     * @param cid     回答的id
+     * @param opt     操作类型 0:取消, 1:顶, 2:踩
      * @param handler
      */
-    public static void questionVote(long sid, long cid, int opt, TextHttpResponseHandler handler){
+    public static void questionVote(long sid, long cid, int opt, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("sourceId", sid);
         params.put("commentId", cid);
