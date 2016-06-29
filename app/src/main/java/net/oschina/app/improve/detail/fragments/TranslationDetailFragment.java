@@ -157,6 +157,7 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
         mSoft.setVisibility(View.GONE);
         mAbouts.setVisibility(View.GONE);
 
+        mComments.setTitle(String.format("评论(%s)", translationDetail.getCommentCount()));
         mComments.init(translationDetail.getId(), OSChinaApi.COMMENT_TRANSLATION, translationDetail.getCommentCount(), getImgLoader(), this);
     }
 
@@ -186,7 +187,6 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
     }
 
     private void handleSendComment() {
-        TDevice.hideSoftKeyboard(mETInput);
         mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mETInput.getText().toString());
     }
 
@@ -205,6 +205,7 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
         mETInput.setText("");
         mComments.addComment(comment, getImgLoader(), this);
+        TDevice.hideSoftKeyboard(mETInput);
     }
 
     @Override

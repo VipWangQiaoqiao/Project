@@ -173,8 +173,8 @@ public class CommentsActivity extends BaseBackActivity {
         mAdapter.notifyDataSetChanged();
     }
 
-    public View.OnClickListener getReplyBtnClickListener(){
-        if (onReplyBtnClickListener == null){
+    public View.OnClickListener getReplyBtnClickListener() {
+        if (onReplyBtnClickListener == null) {
             onReplyBtnClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

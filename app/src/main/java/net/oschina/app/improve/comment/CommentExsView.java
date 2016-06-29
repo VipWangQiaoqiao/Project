@@ -28,6 +28,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.util.TextUtils;
 
 /**
  * Created by JuQiu
@@ -37,6 +38,7 @@ import cz.msebera.android.httpclient.Header;
 public class CommentExsView extends LinearLayout implements View.OnClickListener {
     private long mId;
     private int mType;
+    private TextView mTitle;
     private TextView mSeeMore;
     private LinearLayout mLayComments;
 
@@ -60,9 +62,15 @@ public class CommentExsView extends LinearLayout implements View.OnClickListener
         LayoutInflater inflater = LayoutInflater.from(getContext());
         inflater.inflate(R.layout.lay_detail_comment_layout, this, true);
 
-        //mTitle = (TextView) findViewById(R.id.tv_blog_detail_comment);
+        mTitle = (TextView) findViewById(R.id.tv_blog_detail_comment);
         mLayComments = (LinearLayout) findViewById(R.id.lay_blog_detail_comment);
         mSeeMore = (TextView) findViewById(R.id.tv_see_more_comment);
+    }
+
+    public void setTitle(String title) {
+        if (!android.text.TextUtils.isEmpty(title)) {
+            mTitle.setText(title);
+        }
     }
 
     public void init(long id, int type, final int commentTotal, final RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
@@ -107,9 +115,9 @@ public class CommentExsView extends LinearLayout implements View.OnClickListener
 
             boolean clearLine = true;
             for (final CommentEX comment : comments) {
-                if (comment == null)
+                if (comment == null || comment.getId() == 0 || TextUtils.isEmpty(comment.getAuthor()))
                     continue;
-                ViewGroup lay = addComment(comment, imageLoader, onCommentClickListener);
+                ViewGroup lay = addComment(false, comment, imageLoader, onCommentClickListener);
                 if (clearLine) {
                     clearLine = false;
                     lay.findViewById(R.id.line).setVisibility(View.INVISIBLE);
@@ -121,6 +129,10 @@ public class CommentExsView extends LinearLayout implements View.OnClickListener
     }
 
     public ViewGroup addComment(final CommentEX comment, RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
+        return addComment(true, comment, imageLoader, onCommentClickListener);
+    }
+
+    private ViewGroup addComment(boolean first, final CommentEX comment, RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_item_ex, null, false);
         imageLoader.load(comment.getAuthorPortrait()).error(R.drawable.widget_dface)
@@ -145,15 +157,19 @@ public class CommentExsView extends LinearLayout implements View.OnClickListener
             lay.findViewById(R.id.iv_best_answer).setVisibility(VISIBLE);
             btn_comment.setVisibility(GONE);
         } else {
-            btn_comment.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onCommentClickListener.onClick(v, comment);
-                }
-            });
+            if (onCommentClickListener != null) {
+                btn_comment.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onCommentClickListener.onClick(v, comment);
+                    }
+                });
+            }
         }
-
-        mLayComments.addView(lay, 0);
+        if (first)
+            mLayComments.addView(lay, 0);
+        else
+            mLayComments.addView(lay);
         if (getVisibility() != VISIBLE) {
             setVisibility(VISIBLE);
         }

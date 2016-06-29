@@ -1,8 +1,5 @@
 package net.oschina.app.emoji;
 
-import net.oschina.app.R;
-import net.oschina.app.emoji.SoftKeyboardStateHelper.SoftKeyboardStateListener;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,6 +13,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
+
+import net.oschina.app.R;
+import net.oschina.app.emoji.SoftKeyboardStateHelper.SoftKeyboardStateListener;
 
 public class EmojiKeyboardFragment extends Fragment implements
         SoftKeyboardStateListener {
@@ -54,7 +54,7 @@ public class EmojiKeyboardFragment extends Fragment implements
     private void initWidget(View rootView) {
         // bottom
         mEmojiBottom = (RadioGroup) rootView.findViewById(R.id.emoji_bottom);
-        mEmojiBottom.setVisibility(View.VISIBLE);
+        //mEmojiBottom.setVisibility(View.VISIBLE);
         EMOJI_TAB_CONTENT = mEmojiBottom.getChildCount() - 1; // 减一是因为有一个删除按钮
         mEmojiTabs = new View[EMOJI_TAB_CONTENT];
         if (EMOJI_TAB_CONTENT <= 1) { // 只有一个分类的时候就不显示了
@@ -79,7 +79,7 @@ public class EmojiKeyboardFragment extends Fragment implements
         mEmojiPager = (ViewPager) mEmojiContent.findViewById(R.id.emoji_pager);
         adapter = new EmojiPagerAdapter(getChildFragmentManager(), EMOJI_TAB_CONTENT, listener);
         mEmojiPager.setAdapter(adapter);
-        mEmojiContent.setVisibility(View.VISIBLE);
+        //mEmojiContent.setVisibility(View.VISIBLE);
 
         mKeyboardHelper = new SoftKeyboardStateHelper(getActivity().getWindow().getDecorView());
         mKeyboardHelper.addSoftKeyboardStateListener(this);

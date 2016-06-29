@@ -84,7 +84,8 @@
 
         <LinearLayout
             android:id="@+id/ly_quick_option_note"
-            style="@style/quick_option_item">
+            style="@style/quick_option_item"
+            android:visibility="gone">
 
             <ImageView
                 style="@style/quick_option_img"
