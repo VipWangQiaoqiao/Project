@@ -288,19 +288,18 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
         if (mVoteDialogView == null) {
             mVoteDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_question_comment_detail_vote, null, false);
             final VoteViewHolder holder = new VoteViewHolder(mVoteDialogView);
-            holder.mVoteUp.setOnClickListener(new View.OnClickListener() {
+            View.OnClickListener listener = new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    if (holder.mVoteDown.isSelected()){
-                        Toast.makeText(QuestionAnswerDetailActivity.this, "你已经踩过了", Toast.LENGTH_SHORT).show();
+                public void onClick(final View v) {
+                    if (!AppContext.getInstance().isLogin()){
+                        UIHelper.showLoginActivity(QuestionAnswerDetailActivity.this);
                         return;
                     }
-                    OSChinaApi.questionVote(sid, comment.getId(), CommentEX.VOTE_STATE_UP, new TextHttpResponseHandler() {
+                    OSChinaApi.questionVote(sid, comment.getId(), (int)v.getTag(), new TextHttpResponseHandler() {
                         @Override
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                             Log.d("oschina", "-------------------\n" + responseString + "\n-------------------");
-                            Toast.makeText(QuestionAnswerDetailActivity.this,
-                                    holder.mVoteUp.isSelected() ? "取消顶失败" : "顶失败", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(QuestionAnswerDetailActivity.this, "操作失败", Toast.LENGTH_SHORT).show();
                             if (dialog != null) dialog.dismiss();
                         }
                         @Override
@@ -309,56 +308,23 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                             ResultBean<CommentEX> result = AppContext.createGson().fromJson(
                                     responseString, new TypeToken<ResultBean<CommentEX>>(){}.getType());
                             if (result.isSuccess()){
-                                comment.setVoteState(CommentEX.VOTE_STATE_UP);
+                                comment.setVoteState(result.getResult().getVoteState());
                                 comment.setVoteCount(result.getResult().getVoteCount());
                                 tvVoteCount.setText(String.valueOf(result.getResult().getVoteCount()));
-                                ivVoteUp.setSelected(true);
-                                Toast.makeText(QuestionAnswerDetailActivity.this,
-                                        holder.mVoteUp.isSelected() ? "取消顶成功" : "顶成功", Toast.LENGTH_SHORT).show();
+                                v.setSelected(!v.isSelected());
+                                Toast.makeText(QuestionAnswerDetailActivity.this, "操作成功", Toast.LENGTH_SHORT).show();
                             }else{
-                                Toast.makeText(QuestionAnswerDetailActivity.this,
-                                        holder.mVoteUp.isSelected() ? "取消顶失败" : "顶失败", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(QuestionAnswerDetailActivity.this, "操作失败", Toast.LENGTH_SHORT).show();
                             }
                             if (dialog != null) dialog.dismiss();
                         }
                     });
                 }
-            });
-            holder.mVoteDown.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (holder.mVoteUp.isSelected()){
-                        Toast.makeText(QuestionAnswerDetailActivity.this, "你已经顶过了", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    OSChinaApi.questionVote(sid, comment.getId(), CommentEX.VOTE_STATE_DOWN, new TextHttpResponseHandler() {
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                            Toast.makeText(QuestionAnswerDetailActivity.this,
-                                    holder.mVoteDown.isSelected() ? "取消踩失败" : "踩失败", Toast.LENGTH_SHORT).show();
-                            if (dialog != null) dialog.dismiss();
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                            ResultBean<CommentEX> result = AppContext.createGson().fromJson(
-                                    responseString, new TypeToken<ResultBean<CommentEX>>(){}.getType());
-                            if (result.isSuccess()){
-                                comment.setVoteState(CommentEX.VOTE_STATE_DOWN);
-                                comment.setVoteCount(result.getResult().getVoteCount());
-                                tvVoteCount.setText(String.valueOf(result.getResult().getVoteCount()));
-                                ivVoteDown.setSelected(true);
-                                Toast.makeText(QuestionAnswerDetailActivity.this,
-                                        holder.mVoteDown.isSelected() ? "取消踩成功" : "踩成功", Toast.LENGTH_SHORT).show();
-                            }else {
-                                Toast.makeText(QuestionAnswerDetailActivity.this,
-                                        holder.mVoteDown.isSelected() ? "取消踩失败" : "踩失败", Toast.LENGTH_SHORT).show();
-                            }
-                            if (dialog != null) dialog.dismiss();
-                        }
-                    });
-                }
-            });
+            };
+            holder.mVoteUp.setTag(CommentEX.VOTE_STATE_UP);
+            holder.mVoteDown.setTag(CommentEX.VOTE_STATE_DOWN);
+            holder.mVoteUp.setOnClickListener(listener);
+            holder.mVoteDown.setOnClickListener(listener);
             mVoteDialogView.setTag(holder);
         }else{
             ViewGroup view = (ViewGroup) mVoteDialogView.getParent();
@@ -371,8 +337,8 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                 holder.mVoteDown.setSelected(false);
                 break;
             case CommentEX.VOTE_STATE_UP:
-                holder.mVoteDown.setSelected(false);
                 holder.mVoteUp.setSelected(true);
+                holder.mVoteDown.setSelected(false);
                 break;
             case CommentEX.VOTE_STATE_DOWN:
                 holder.mVoteUp.setSelected(false);

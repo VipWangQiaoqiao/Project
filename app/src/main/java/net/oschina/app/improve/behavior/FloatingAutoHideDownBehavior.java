@@ -48,7 +48,6 @@ public class FloatingAutoHideDownBehavior extends CoordinatorLayout.Behavior<Vie
     public boolean onStartNestedScroll(final CoordinatorLayout coordinatorLayout, final View child,
                                        final View directTargetChild, final View target, final int nestedScrollAxes) {
         // 滑动时隐藏软键盘
-        Log.e("TAG", "hideSoftKeyboard");
         TDevice.hideSoftKeyboard(coordinatorLayout);
 
         // Ensure we react to vertical scrolling
