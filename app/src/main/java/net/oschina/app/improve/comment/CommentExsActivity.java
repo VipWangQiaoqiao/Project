@@ -24,7 +24,6 @@ import net.oschina.app.improve.activities.BaseBackActivity;
 import net.oschina.app.improve.adapter.base.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.bean.simple.CommentEX;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
@@ -174,8 +173,8 @@ public class CommentExsActivity extends BaseBackActivity {
         mAdapter.notifyDataSetChanged();
     }
 
-    public View.OnClickListener getReplyBtnClickListener(){
-        if (onReplyBtnClickListener == null){
+    public View.OnClickListener getReplyBtnClickListener() {
+        if (onReplyBtnClickListener == null) {
             onReplyBtnClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -195,7 +194,7 @@ public class CommentExsActivity extends BaseBackActivity {
         private TextView mDate;
         private TweetTextView mContent;
         private LinearLayout mRefers;
-        private ImageView btn_comment,iv_best_comment;
+        private ImageView btn_comment, iv_best_comment;
 
         CommentHolder(View itemView) {
             super(itemView);
@@ -203,8 +202,8 @@ public class CommentExsActivity extends BaseBackActivity {
             mAvatar = (ImageView) itemView.findViewById(R.id.iv_avatar);
             mName = (TextView) itemView.findViewById(R.id.tv_name);
             mDate = (TextView) itemView.findViewById(R.id.tv_pub_date);
-            btn_comment = (ImageView)itemView.findViewById(R.id.btn_comment);
-            iv_best_comment = (ImageView)itemView.findViewById(R.id.iv_best_answer);
+            btn_comment = (ImageView) itemView.findViewById(R.id.btn_comment);
+            iv_best_comment = (ImageView) itemView.findViewById(R.id.iv_best_answer);
             mContent = ((TweetTextView) itemView.findViewById(R.id.tv_content));
             mRefers = ((LinearLayout) itemView.findViewById(R.id.lay_refer));
         }
@@ -228,7 +227,8 @@ public class CommentExsActivity extends BaseBackActivity {
             }
 
             btn_comment.setTag(comment);
-            btn_comment.setOnClickListener(l);
+            if (l != null)
+                btn_comment.setOnClickListener(l);
         }
     }
 
@@ -249,7 +249,7 @@ public class CommentExsActivity extends BaseBackActivity {
         protected RecyclerView.ViewHolder onCreateDefaultViewHolder(ViewGroup parent, int type) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
             View view = inflater.inflate(R.layout.lay_comment_item_ex, parent, false);
-            return  new CommentHolder(view);
+            return new CommentHolder(view);
         }
 
         @Override
@@ -258,11 +258,11 @@ public class CommentExsActivity extends BaseBackActivity {
                 CommentHolder commentHolder = (CommentHolder) holder;
                 RequestManager requestManager = getImageLoader();
                 if (requestManager != null)
-                    commentHolder.setData(item, requestManager, getReplyBtnClickListener());
-                if(item.isBest()){
+                    commentHolder.setData(item, requestManager, null);
+                if (item.isBest()) {
                     commentHolder.btn_comment.setVisibility(View.GONE);
                     commentHolder.iv_best_comment.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     commentHolder.btn_comment.setVisibility(View.VISIBLE);
                     commentHolder.iv_best_comment.setVisibility(View.GONE);
                 }

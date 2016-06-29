@@ -14,11 +14,8 @@ import android.widget.Toast;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.QuestionDetail;
-import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.bean.simple.CommentEX;
-import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.comment.CommentExsView;
-import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.QuestionDetailContract;
 import net.oschina.app.improve.widget.FlowLayout;
 import net.oschina.app.util.StringUtils;
@@ -34,7 +31,7 @@ import java.util.List;
  */
 
 public class QuestionDetailFragment extends DetailFragment<QuestionDetail, QuestionDetailContract.View, QuestionDetailContract.Operator>
-        implements View.OnClickListener, QuestionDetailContract.View, OnCommentClickListener {
+        implements View.OnClickListener, QuestionDetailContract.View {
     private long mId;
     private TextView mTVAuthorName;
     private TextView mTVPubDate;
@@ -171,7 +168,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         lable.setText(String.format("%s (%d)", "回答", questionDetail.getCommentCount()));
 
         mComments.init(questionDetail.getId(), OSChinaApi.COMMENT_QUESTION,
-                questionDetail.getCommentCount(), getImgLoader(), this);
+                questionDetail.getCommentCount(), getImgLoader(), null);
 
     }
 
@@ -222,15 +219,6 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
     public void toSendCommentOk(CommentEX commentEX) {
         (Toast.makeText(getContext(), "评论成功", Toast.LENGTH_LONG)).show();
         mETInput.setText("");
-        mComments.addComment(commentEX, getImgLoader(), this);
-    }
-
-    @Override
-    public void onClick(View view, Comment comment) {
-        FloatingAutoHideDownBehavior.showBottomLayout(mLayCoordinator, mLayContent, mLayBottom);
-        mCommentId = comment.getId();
-        mCommentAuthorId = comment.getAuthorId();
-        mETInput.setHint(String.format("回复: %s", comment.getAuthor()));
-        TDevice.showSoftKeyboard(mETInput);
+        mComments.addComment(commentEX, getImgLoader(), null);
     }
 }
