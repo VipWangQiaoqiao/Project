@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -42,11 +43,11 @@ public class KeyboardInputDelegation {
 
     private KeyboardActionDelegation mActionDelegation;
 
-    private KeyboardInputDelegation(Context context){
+    private KeyboardInputDelegation(Context context) {
         this.context = context;
     }
 
-    public static KeyboardInputDelegation delegation(Context context, CoordinatorLayout mCoorLayout, View mScrollerView){
+    public static KeyboardInputDelegation delegation(Context context, CoordinatorLayout mCoorLayout, View mScrollerView) {
         KeyboardInputDelegation delegator = new KeyboardInputDelegation(context);
         View view = LayoutInflater.from(context).inflate(R.layout.view_input_wrap, mCoorLayout, false);
         delegator.setWrapperView(view);
@@ -56,16 +57,14 @@ public class KeyboardInputDelegation {
         return delegator;
     }
 
-    public void showEmoji(FragmentManager fragManager){
+    public void showEmoji(FragmentManager fragManager) {
         if (mKeyboardFrame == null)
             mKeyboardFrame = (FrameLayout) mWrapperView.findViewById(R.id.emoji_keyboard_fragment);
         if (mViewEmoji == null)
             mViewEmoji = (ImageView) mWrapperView.findViewById(R.id.iv_emoji);
         mViewEmoji.setVisibility(View.VISIBLE);
 
-        mActionDelegation = KeyboardActionDelegation.delegation(context, mViewInput, mViewEmoji, mKeyboardFrame);
-
-        EmojiKeyboardFragment mKeyboardFragment = new EmojiKeyboardFragment();
+        final EmojiKeyboardFragment mKeyboardFragment = new EmojiKeyboardFragment();
         mKeyboardFragment.setDelegate(true);
         mKeyboardFragment.setOnEmojiClickListener(new OnEmojiClickListener() {
             @Override
@@ -91,36 +90,48 @@ public class KeyboardInputDelegation {
         fragManager.beginTransaction()
                 .replace(R.id.emoji_keyboard_fragment, mKeyboardFragment)
                 .commit();
+
+        mActionDelegation = KeyboardActionDelegation.delegation(context, mViewInput, mViewEmoji, mKeyboardFrame, new KeyboardActionDelegation.OnActionChangeListener() {
+            @Override
+            public void onHideEmotionPanel(KeyboardActionDelegation delegation) {
+                mKeyboardFragment.hideEmojiKeyBoard();
+            }
+
+            @Override
+            public void onShowEmotionPanel(KeyboardActionDelegation delegation) {
+                mKeyboardFragment.showEmojiKeyBoard();
+            }
+        });
     }
 
-    public void showShare(View.OnClickListener l){
+    public void showShare(View.OnClickListener l) {
         if (mViewShare == null)
             mViewShare = (ImageView) mWrapperView.findViewById(R.id.iv_share);
         if (l != null) mViewShare.setOnClickListener(l);
         mViewShare.setVisibility(View.VISIBLE);
     }
 
-    public void showFavor(View.OnClickListener l){
+    public void showFavor(View.OnClickListener l) {
         if (mViewFavor == null)
             mViewFavor = (ImageView) mWrapperView.findViewById(R.id.iv_fav);
         if (l != null) mViewFavor.setOnClickListener(l);
         mViewFavor.setVisibility(View.VISIBLE);
     }
 
-    private void setWrapperView(View view){
+    private void setWrapperView(View view) {
         this.mWrapperView = view;
         mViewInput = (EditText) this.mWrapperView.findViewById(R.id.et_input);
     }
 
-    private void setCoorLayout(CoordinatorLayout view){
+    private void setCoorLayout(CoordinatorLayout view) {
         this.mCoorLayout = view;
     }
 
-    private void setScrollerView(View view){
+    private void setScrollerView(View view) {
         this.mScrollerView = view;
     }
 
-    public void setAdapter(final KeyboardInputAdapter mInputAdapter){
+    public void setAdapter(final KeyboardInputAdapter mInputAdapter) {
         mViewInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -138,11 +149,11 @@ public class KeyboardInputDelegation {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_DEL) {
                     mInputAdapter.onBackSpace(v);
-                    if (!TextUtils.isEmpty(mViewInput.getText().toString())){
+                    if (!TextUtils.isEmpty(mViewInput.getText().toString())) {
                         isLastEmpty = false;
                         return false;
                     }
-                    if (TextUtils.isEmpty(mViewInput.getText().toString()) && !isLastEmpty){
+                    if (TextUtils.isEmpty(mViewInput.getText().toString()) && !isLastEmpty) {
                         isLastEmpty = true;
                         return false;
                     }
@@ -154,11 +165,11 @@ public class KeyboardInputDelegation {
         });
     }
 
-    public EditText getInputView(){
+    public EditText getInputView() {
         return mViewInput;
     }
 
-    public void notifyWrapper(){
+    public void notifyWrapper() {
         FloatingAutoHideDownBehavior.showBottomLayout(mCoorLayout, mScrollerView, mWrapperView);
     }
 
@@ -166,13 +177,17 @@ public class KeyboardInputDelegation {
         return mActionDelegation == null || mActionDelegation.onTurnBack();
     }
 
-    public void onBackSpace(){
+    public void onBackSpace() {
 
     }
 
-    public static abstract class KeyboardInputAdapter{
+    public static abstract class KeyboardInputAdapter {
         public abstract void onSubmit(TextView v, String content);
-        public void onBackSpace(View v){}
-        public void onFinalBackSpace(View v){}
+
+        public void onBackSpace(View v) {
+        }
+
+        public void onFinalBackSpace(View v) {
+        }
     }
 }

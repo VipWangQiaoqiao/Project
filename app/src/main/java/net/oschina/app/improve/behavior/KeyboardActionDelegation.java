@@ -17,7 +17,6 @@ import net.oschina.app.emoji.InputHelper;
  * Created by thanatos on 3/4/16.
  */
 public class KeyboardActionDelegation {
-
     private ImageView mBtnEmotion;
     private EditText mInput;
     private Context mContext;
@@ -25,16 +24,25 @@ public class KeyboardActionDelegation {
 
     private boolean isShowSoftInput;
 
-    private KeyboardActionDelegation(Context context, EditText input, ImageView button, ViewGroup view){
+    // 事件回馈
+    private OnActionChangeListener mOnActionChangeListener;
+
+    private KeyboardActionDelegation(Context context, EditText input, ImageView button, ViewGroup view, OnActionChangeListener listener) {
         this.mBtnEmotion = button;
         this.mInput = input;
         this.mContext = context;
         this.mEmotionPanel = view;
+        this.mOnActionChangeListener = listener;
         init();
     }
 
-    public static KeyboardActionDelegation delegation(Context context, EditText input, ImageView button, ViewGroup view){
-        return new KeyboardActionDelegation(context, input, button, view);
+    public static KeyboardActionDelegation delegation(Context context, EditText input, ImageView button, ViewGroup view) {
+        return new KeyboardActionDelegation(context, input, button, view, null);
+    }
+
+
+    public static KeyboardActionDelegation delegation(Context context, EditText input, ImageView button, ViewGroup view, OnActionChangeListener listener) {
+        return new KeyboardActionDelegation(context, input, button, view, listener);
     }
 
     /**
@@ -44,9 +52,9 @@ public class KeyboardActionDelegation {
         mInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus){
+                if (hasFocus) {
                     hideEmotionPanel();
-                }else{
+                } else {
                     hideSoftKeyboard();
                 }
             }
@@ -79,6 +87,11 @@ public class KeyboardActionDelegation {
             @Override
             public void run() {
                 mEmotionPanel.setVisibility(View.VISIBLE);
+
+                OnActionChangeListener listener = mOnActionChangeListener;
+                if (listener != null) {
+                    listener.onShowEmotionPanel(KeyboardActionDelegation.this);
+                }
             }
         }, 300);
     }
@@ -91,7 +104,7 @@ public class KeyboardActionDelegation {
      * 隐藏软键盘
      */
     private void hideSoftKeyboard() {
-        ((InputMethodManager)mContext.getSystemService(Context.INPUT_METHOD_SERVICE))
+        ((InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE))
                 .hideSoftInputFromWindow(mInput.getWindowToken(), 0);
         isShowSoftInput = false;
     }
@@ -102,13 +115,18 @@ public class KeyboardActionDelegation {
     private void hideEmotionPanel() {
         mEmotionPanel.setVisibility(View.GONE);
         mBtnEmotion.setSelected(false);
+
+        OnActionChangeListener listener = mOnActionChangeListener;
+        if (listener != null) {
+            listener.onHideEmotionPanel(this);
+        }
     }
 
-    public boolean isShowSoftInput(){
+    public boolean isShowSoftInput() {
         return isShowSoftInput;
     }
 
-    public void onEmotionItemSelected(Emojicon emotion){
+    public void onEmotionItemSelected(Emojicon emotion) {
         if (mInput == null || emotion == null) {
             return;
         }
@@ -124,6 +142,7 @@ public class KeyboardActionDelegation {
 
     /**
      * 当使用回退键时
+     *
      * @return
      */
     public boolean onTurnBack() {
@@ -136,5 +155,11 @@ public class KeyboardActionDelegation {
             return false;
         }
         return true;
+    }
+
+    public interface OnActionChangeListener {
+        void onHideEmotionPanel(KeyboardActionDelegation delegation);
+
+        void onShowEmotionPanel(KeyboardActionDelegation delegation);
     }
 }
