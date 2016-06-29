@@ -193,6 +193,7 @@ public class BlogDetailFragment
             }
         });
 
+        mComments.setTitle(String.format("评论(%s)", blog.getCommentCount()));
         mComments.init(blog.getId(), OSChinaApi.COMMENT_BLOG, blog.getCommentCount(), getImgLoader(), this);
     }
 

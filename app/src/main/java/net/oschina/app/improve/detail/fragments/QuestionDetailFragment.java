@@ -164,9 +164,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         setText(R.id.tv_info_view, String.valueOf(questionDetail.getViewCount()));
         setText(R.id.tv_info_comment, String.valueOf(questionDetail.getCommentCount()));
 
-        TextView lable = (TextView) mComments.getChildAt(0);
-        lable.setText(String.format("%s (%d)", "回答", questionDetail.getCommentCount()));
-
+        mComments.setTitle(String.format("回答(%s)", questionDetail.getCommentCount()));
         mComments.init(questionDetail.getId(), OSChinaApi.COMMENT_QUESTION,
                 questionDetail.getCommentCount(), getImgLoader(), null);
 
