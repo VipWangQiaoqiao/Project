@@ -46,7 +46,10 @@ public class TweetLikeUsersAdapter extends BaseRecyclerAdapter<User> {
         if (TextUtils.isEmpty(item.getPortrait())){
             h.ivPortrait.setImageResource(R.drawable.widget_dface);
         }else{
-            reqManager.load(item.getPortrait()).into(h.ivPortrait);
+            reqManager.load(item.getPortrait())
+                    .placeholder(mContext.getResources().getDrawable(R.drawable.widget_dface))
+                    .error(mContext.getResources().getDrawable(R.drawable.widget_dface))
+                    .into(h.ivPortrait);
         }
         h.ivPortrait.setTag(item);
         h.ivPortrait.setOnClickListener(getOnPortraitClickListener());
