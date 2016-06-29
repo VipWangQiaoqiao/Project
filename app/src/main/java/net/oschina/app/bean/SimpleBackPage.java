@@ -20,6 +20,7 @@ import net.oschina.app.fragment.TweetRecordFragment;
 import net.oschina.app.fragment.TweetsFragment;
 import net.oschina.app.fragment.UserCenterFragment;
 import net.oschina.app.improve.fragments.blog.UserBlogFragment;
+import net.oschina.app.improve.fragments.tweet.SoftwareForTweetsFrament;
 import net.oschina.app.team.fragment.NoteBookFragment;
 import net.oschina.app.team.fragment.NoteEditFragment;
 import net.oschina.app.team.fragment.TeamActiveFragment;
@@ -56,7 +57,7 @@ public enum SimpleBackPage {
     USER_CENTER(5, R.string.actionbar_title_user_center,
             UserCenterFragment.class),
 
-    USER_BLOG(6, R.string.actionbar_title_user_blog,UserBlogFragment.class),
+    USER_BLOG(6, R.string.actionbar_title_user_blog, UserBlogFragment.class),
 
     MY_INFORMATION(7, R.string.actionbar_title_my_information,
             MyInformationFragment.class),
@@ -140,7 +141,9 @@ public enum SimpleBackPage {
 
     TWEET_TOPIC_LIST(42, 0, TweetsFragment.class),
 
-    MY_EVENT(43, R.string.actionbar_title_my_event, EventViewPagerFragment.class);
+    MY_EVENT(43, R.string.actionbar_title_my_event, EventViewPagerFragment.class),
+
+    SOFTWARE_TWEETS_NEW(44, R.string.actionbar_title_softtweet, SoftwareForTweetsFrament.class);
 
     private int title;
     private Class<?> clz;

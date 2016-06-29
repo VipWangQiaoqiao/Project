@@ -57,6 +57,7 @@ import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
 import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.improve.detail.activities.TranslateDetailActivity;
 import net.oschina.app.improve.fragments.blog.UserBlogFragment;
+import net.oschina.app.improve.fragments.tweet.SoftwareForTweetsFrament;
 import net.oschina.app.interf.ICallbackResult;
 import net.oschina.app.interf.OnWebViewImageListener;
 import net.oschina.app.service.DownloadService;
@@ -699,6 +700,18 @@ public class UIHelper {
         Bundle args = new Bundle();
         args.putInt(SoftWareTweetsFrament.BUNDLE_KEY_ID, id);
         showSimpleBack(context, SimpleBackPage.SOFTWARE_TWEETS, args);
+    }
+
+    /**
+     * show new software tweet dlist
+     *
+     * @param context  context
+     * @param id id
+     */
+    public static void showSoftwareTweets(Context context, int id) {
+        Bundle args = new Bundle();
+        args.putInt(SoftwareForTweetsFrament.BUNDLE_KEY_ID, id);
+        showSimpleBack(context, SimpleBackPage.SOFTWARE_TWEETS_NEW, args);
     }
 
     public static void showBlogComment(Context context, int id, int ownerId) {

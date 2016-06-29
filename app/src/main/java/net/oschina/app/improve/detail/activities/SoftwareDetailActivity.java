@@ -10,13 +10,11 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.bean.Tweet;
 import net.oschina.app.improve.bean.SoftwareDetail;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.detail.contract.SoftDetailContract;
 import net.oschina.app.improve.detail.fragments.DetailFragment;
 import net.oschina.app.improve.detail.fragments.SoftWareDetailFragment;
-import net.oschina.app.service.ServerTaskUtils;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.URLsUtils;
@@ -143,29 +141,6 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
 
     @Override
     public void toSendComment(long id, long commentId, long commentAuthorId, String comment) {
-        int uid = requestCheck();
-        if (uid == 0)
-            return;
-
-        if (TextUtils.isEmpty(comment)) {
-            AppContext.showToastShort(R.string.tip_comment_content_empty);
-            return;
-        }
-
-        if (comment.length() > MAX_TEXT_LENGTH) {
-            AppContext.showToastShort(R.string.tip_content_too_long);
-            return;
-        }
-
-
-        Tweet tweet = new Tweet();
-
-        tweet.setAuthorid(AppContext.getInstance().getLoginUid());
-        tweet.setBody(comment);
-        ServerTaskUtils.pubTweet(this, tweet);
-
-        mView.toSendCommentOk(null);
-
 
 //        OSChinaApi.publishComment(id, commentId, 0, commentAuthorId, 1, comment, new TextHttpResponseHandler() {
 //
