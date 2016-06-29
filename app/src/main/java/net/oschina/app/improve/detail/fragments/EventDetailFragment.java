@@ -124,7 +124,7 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
                 break;
             case R.id.ll_sign:
                 final EventDetail mDetail = mOperator.getData();
-                if (mDetail.getApplyStatus() == EventDetail.APPLY_STATUS_UN_SIGN) {
+                if (mDetail.getApplyStatus() == EventDetail.APPLY_STATUS_UN_SIGN && mDetail.getStatus() == Event.STATUS_ING) {
                     if (AppContext.getInstance().isLogin()) {
                         if (mEventApplyDialog == null) {
                             mEventApplyDialog = new EventDetailApplyDialog(getActivity(), mDetail);
