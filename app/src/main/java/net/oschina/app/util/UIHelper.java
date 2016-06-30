@@ -334,7 +334,6 @@ public class UIHelper {
             case 0:
                 //新闻链接
                 showUrlRedirect(context, id, href);
-                // NewsDetailActivity.show(context, 0, id);
                 break;
             case 1:
                 //软件推荐
@@ -509,8 +508,13 @@ public class UIHelper {
     }
 
     private static void showUrlRedirect(Context context, long id, String url) {
-        if (url == null)
+        if (url == null) {
+            if (id != 0) {
+                NewsDetailActivity.show(context, id);
+            }
             return;
+        }
+
         if (url.contains("city.oschina.net/")) {
             if (id == 0)
                 id = StringUtils.toInt(url.substring(url.lastIndexOf('/') + 1));

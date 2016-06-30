@@ -17,12 +17,10 @@ import android.widget.Toast;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.BlogDetail;
-import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.comment.CommentsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
-import net.oschina.app.improve.detail.activities.BlogDetailActivity;
 import net.oschina.app.improve.detail.contract.BlogDetailContract;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.util.StringUtils;
@@ -186,12 +184,7 @@ public class BlogDetailFragment
         setText(R.id.tv_info_view, String.valueOf(blog.getViewCount()));
         setText(R.id.tv_info_comment, String.valueOf(blog.getCommentCount()));
 
-        mAbouts.setAbout(blog.getAbouts(), new DetailAboutView.OnAboutClickListener() {
-            @Override
-            public void onClick(View view, About about) {
-                BlogDetailActivity.show(getActivity(), about.getId());
-            }
-        });
+        mAbouts.setAbout(blog.getAbouts(), 3);
 
         mComments.setTitle(String.format("评论(%s)", blog.getCommentCount()));
         mComments.init(blog.getId(), OSChinaApi.COMMENT_BLOG, blog.getCommentCount(), getImgLoader(), this);

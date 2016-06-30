@@ -6,8 +6,6 @@ import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.bean.SoftwareDetail;
-import net.oschina.app.improve.bean.simple.About;
-import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.improve.detail.contract.SoftDetailContract;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.util.UIHelper;
@@ -117,12 +115,7 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
 
         toFavoriteOk(softwareDetail);
 
-        mAbouts.setAbout(softwareDetail.getAbouts(), new DetailAboutView.OnAboutClickListener() {
-            @Override
-            public void onClick(View view, About about) {
-                SoftwareDetailActivity.show(getActivity(), about.getId());
-            }
-        });
+        mAbouts.setAbout(softwareDetail.getAbouts(), 1);
     }
 
     @Override

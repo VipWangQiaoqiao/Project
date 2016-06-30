@@ -11,6 +11,7 @@ public class About implements Serializable {
     private long id;
     private String title;
     private int commentCount;
+    private int type;
     private int viewCount;
 
     public long getId() {
@@ -35,6 +36,14 @@ public class About implements Serializable {
 
     public void setCommentCount(int commentCount) {
         this.commentCount = commentCount;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public int getViewCount() {
