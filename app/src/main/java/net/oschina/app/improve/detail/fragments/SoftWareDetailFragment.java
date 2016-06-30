@@ -1,5 +1,6 @@
 package net.oschina.app.improve.detail.fragments;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -98,13 +99,15 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
         } else {
             ivRecomment.setVisibility(View.INVISIBLE);
         }
-        tvName.setText(softwareDetail.getName().trim());
+        tvName.setText(softwareDetail.getName());
 
-        tvAuthor.setText(softwareDetail.getAuthor().trim());
-        tvLicense.setText(softwareDetail.getLicense().trim());
-        tvLanguage.setText(softwareDetail.getLanguage().trim());
+        String author = softwareDetail.getAuthor();
+        tvAuthor.setText(TextUtils.isEmpty(author) ? "匿名" : author.trim());
+        String license = softwareDetail.getLicense();
+        tvLicense.setText(TextUtils.isEmpty(license) ? "无" : license.trim());
+        tvLanguage.setText(softwareDetail.getLanguage());
         tvSystem.setText(softwareDetail.getSupportOS());
-        tvRecordTime.setText(softwareDetail.getCollectionDate().trim());
+        tvRecordTime.setText(softwareDetail.getCollectionDate());
 
         setCommentCount(softwareDetail.getCommentCount());
         setBodyContent(softwareDetail.getBody());
