@@ -195,9 +195,9 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
     @Override
     public void toFavoriteOk(TranslationDetail translationDetail) {
         if (translationDetail.isFavorite())
-            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_faved_normal));
+            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_faved));
         else
-            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_fav_normal));
+            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_fav));
     }
 
     @Override

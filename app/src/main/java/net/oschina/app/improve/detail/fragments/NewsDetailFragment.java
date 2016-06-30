@@ -221,9 +221,9 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
     @Override
     public void toFavoriteOk(NewsDetail newsDetail) {
         if (newsDetail.isFavorite())
-            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_faved_normal));
+            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_faved));
         else
-            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_fav_normal));
+            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_fav));
     }
 
     @Override

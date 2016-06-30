@@ -206,9 +206,9 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
     @Override
     public void toFavoriteOk(QuestionDetail questionDetail) {
         if (questionDetail.isFavorite())
-            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_faved_normal));
+            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_faved));
         else
-            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_fav_normal));
+            mIVFav.setImageDrawable(getResources().getDrawable(R.drawable.ic_fav));
     }
 
 
