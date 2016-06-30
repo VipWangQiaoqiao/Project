@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -40,16 +39,16 @@ import cz.msebera.android.httpclient.Header;
  * Created by thanatos on 16/6/13.
  */
 public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>
-        implements TweetCommentAdapter.OnClickReplyCallback, TweetDetailContract.CmnView, BaseRecyclerAdapter.OnItemLongClickListener {
+        implements TweetCommentAdapter.OnClickReplyCallback, TweetDetailContract.ICmnView, BaseRecyclerAdapter.OnItemLongClickListener {
 
     private TweetDetailContract.Operator mOperator;
-    private TweetDetailContract.AgencyView mAgencyView;
+    private TweetDetailContract.IAgencyView mAgencyView;
     private int pageNum = 0;
     private int mDeleteIndex = 0;
     private Dialog mDeleteDialog;
     private AsyncHttpResponseHandler reqHandler;
 
-    public static ListTweetCommentFragment instantiate(TweetDetailContract.Operator operator, TweetDetailContract.AgencyView mAgencyView) {
+    public static ListTweetCommentFragment instantiate(TweetDetailContract.Operator operator, TweetDetailContract.IAgencyView mAgencyView) {
         ListTweetCommentFragment fragment = new ListTweetCommentFragment();
         fragment.mOperator = operator;
         fragment.mAgencyView = mAgencyView;

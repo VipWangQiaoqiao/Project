@@ -20,15 +20,15 @@ public interface TweetDetailContract {
         void onScroll();
     }
 
-    interface CmnView {
+    interface ICmnView {
         void onCommentSuccess(Comment comment);
     }
 
-    interface ThumbupView {
+    interface IThumbupView {
         void onLikeSuccess(boolean isUp, User user);
     }
 
-    interface AgencyView{
+    interface IAgencyView {
         void resetLikeCount(int count);
 
         void resetCmnCount(int count);

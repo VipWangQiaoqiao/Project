@@ -84,9 +84,9 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
     private AsyncHttpResponseHandler publishAdmireHandler;
     private AsyncHttpResponseHandler publishCommentHandler;
 
-    private TweetDetailContract.CmnView mCmnView;
-    private TweetDetailContract.ThumbupView mThumbupView;
-    private TweetDetailContract.AgencyView mAgencyView;
+    private TweetDetailContract.ICmnView mCmnViewImp;
+    private TweetDetailContract.IThumbupView mThumbupViewImp;
+    private TweetDetailContract.IAgencyView mAgencyViewImp;
 
     private KeyboardInputDelegation mDelegation;
     private View.OnClickListener onPortraitClickListener;
@@ -117,7 +117,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 ivThumbup.setSelected(!ivThumbup.isSelected());
-                mThumbupView.onLikeSuccess(ivThumbup.isSelected(), null);
+                mThumbupViewImp.onLikeSuccess(ivThumbup.isSelected(), null);
                 dismissDialog();
             }
 
@@ -131,7 +131,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
         publishCommentHandler = new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                mCmnView.onCommentSuccess(null);
+                mCmnViewImp.onCommentSuccess(null);
                 reply = null; // 清除
                 mViewInput.setHint("发表评论");
                 mViewInput.setText(null);
@@ -156,8 +156,8 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
                     return;
                 }
                 tweet = data.getTweet();
-                mAgencyView.resetCmnCount(tweet.getCommentCount() != null ? Integer.valueOf(tweet.getCommentCount()) : 0);
-                mAgencyView.resetLikeCount(tweet.getLikeCount());
+                mAgencyViewImp.resetCmnCount(tweet.getCommentCount() != null ? Integer.valueOf(tweet.getCommentCount()) : 0);
+                mAgencyViewImp.resetLikeCount(tweet.getLikeCount());
                 fillDetailView();
             }
 
@@ -211,9 +211,9 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
         fillDetailView();
 
         TweetDetailViewPagerFragment mTweetDetailViewPagerFrag = TweetDetailViewPagerFragment.instantiate(this);
-        mCmnView = mTweetDetailViewPagerFrag;
-        mThumbupView = mTweetDetailViewPagerFrag;
-        mAgencyView = mTweetDetailViewPagerFrag;
+        mCmnViewImp = mTweetDetailViewPagerFrag;
+        mThumbupViewImp = mTweetDetailViewPagerFrag;
+        mAgencyViewImp = mTweetDetailViewPagerFrag;
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, mTweetDetailViewPagerFrag)
                 .commit();
@@ -267,6 +267,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
         } else {
             getImageLoader()
                     .load(tweet.getPortrait())
+                    .asBitmap()
                     .placeholder(getResources().getDrawable(R.drawable.widget_dface))
                     .error(getResources().getDrawable(R.drawable.widget_dface))
                     .into(ivPortrait);

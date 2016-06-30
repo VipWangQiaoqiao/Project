@@ -28,14 +28,14 @@ import cz.msebera.android.httpclient.Header;
  * 动弹详情, 点赞列表
  * Created by thanatos on 16/6/13.
  */
-public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<User> implements TweetDetailContract.ThumbupView {
+public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<User> implements TweetDetailContract.IThumbupView {
 
     private int pageNum = 0;
     private TweetDetailContract.Operator mOperator;
-    private TweetDetailContract.AgencyView mAgencyView;
+    private TweetDetailContract.IAgencyView mAgencyView;
     private AsyncHttpResponseHandler reqHandler;
 
-    public static ListTweetLikeUsersFragment instantiate(TweetDetailContract.Operator operator, TweetDetailContract.AgencyView mAgencyView) {
+    public static ListTweetLikeUsersFragment instantiate(TweetDetailContract.Operator operator, TweetDetailContract.IAgencyView mAgencyView) {
         ListTweetLikeUsersFragment fragment = new ListTweetLikeUsersFragment();
         fragment.mOperator = operator;
         fragment.mAgencyView = mAgencyView;
