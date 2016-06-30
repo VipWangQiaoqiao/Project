@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.bean.simple.About;
+import net.oschina.app.util.UIHelper;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ import java.util.List;
  */
 
 public class DetailAboutView extends LinearLayout {
+    private int mDefaultType;
     private LinearLayout mLayAbouts;
 
     public DetailAboutView(Context context) {
@@ -45,7 +47,8 @@ public class DetailAboutView extends LinearLayout {
         mLayAbouts = (LinearLayout) findViewById(R.id.lay_blog_detail_about);
     }
 
-    public void setAbout(List<About> abouts, final OnAboutClickListener onAboutClickListener) {
+    public void setAbout(List<About> abouts, int defaultType) {
+        this.mDefaultType = defaultType;
         final LayoutInflater inflater = LayoutInflater.from(getContext());
         if (abouts != null && abouts.size() > 0) {
             boolean clearLine = true;
@@ -67,7 +70,11 @@ public class DetailAboutView extends LinearLayout {
                 lay.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        onAboutClickListener.onClick(v, about);
+                        int type = mDefaultType;
+                        if (about.getType() != 0) {
+                            type = about.getType();
+                        }
+                        UIHelper.showDetail(v.getContext(), type, about.getId(), null);
                     }
                 });
 
@@ -76,9 +83,5 @@ public class DetailAboutView extends LinearLayout {
         } else {
             setVisibility(View.GONE);
         }
-    }
-
-    public interface OnAboutClickListener {
-        void onClick(View view, About about);
     }
 }

@@ -15,12 +15,10 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.NewsDetail;
 import net.oschina.app.improve.bean.Software;
-import net.oschina.app.improve.bean.simple.About;
 import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.comment.CommentsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
-import net.oschina.app.improve.detail.activities.NewsDetailActivity;
 import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.improve.detail.contract.NewsDetailContract;
 import net.oschina.app.improve.widget.DetailAboutView;
@@ -175,14 +173,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
             mSoft.setVisibility(View.GONE);
         }
 
-
-        mAbouts.setAbout(newsDetail.getAbouts(), new DetailAboutView.OnAboutClickListener() {
-            @Override
-            public void onClick(View view, About about) {
-                NewsDetailActivity.show(getActivity(), about.getId());
-            }
-        });
-
+        mAbouts.setAbout(newsDetail.getAbouts(), 6);
 
         mComments.setTitle(String.format("评论(%s)", newsDetail.getCommentCount()));
         mComments.init(newsDetail.getId(), OSChinaApi.COMMENT_NEWS, newsDetail.getCommentCount(), getImgLoader(), this);
