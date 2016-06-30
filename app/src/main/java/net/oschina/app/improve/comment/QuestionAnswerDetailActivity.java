@@ -130,6 +130,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
         } else {
             getImageLoader()
                     .load(comment.getAuthorPortrait())
+                    .asBitmap()
                     .placeholder(getResources().getDrawable(R.drawable.widget_dface))
                     .error(getResources().getDrawable(R.drawable.widget_dface))
                     .into(ivPortrait);
@@ -211,6 +212,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
         } else {
             getImageLoader()
                     .load(reply.getAuthorPortrait())
+                    .asBitmap()
                     .placeholder(getResources().getDrawable(R.drawable.widget_dface))
                     .error(getResources().getDrawable(R.drawable.widget_dface))
                     .into(holder.ivPortrait);
