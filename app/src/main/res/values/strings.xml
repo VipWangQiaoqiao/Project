@@ -18,7 +18,7 @@
     <string name="event_type_other">其他</string>
     <string name="event_type_outside">站外活动</string>
 
-    <string name="event_apply_status_un_sign">未报名</string>
+    <string name="event_apply_status_un_sign">我要报名</string>
     <string name="event_apply_status_audit">审核中</string>
     <string name="event_apply_status_confirmed">已确认</string>
     <string name="event_apply_status_presented">已出席</string>
