@@ -139,7 +139,7 @@
                     android:layout_toStartOf="@id/iv_comment"
                     android:contentDescription="@string/app_name"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_thumbup_normal" />
+                    android:src="@drawable/selector_thumb" />
             </RelativeLayout>
         </LinearLayout>
     </android.support.design.widget.AppBarLayout>

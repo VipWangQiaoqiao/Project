@@ -9,7 +9,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -81,10 +80,9 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
     private Tweet tweet;
     private Comment reply;
     private Dialog dialog;
-    private boolean isUped;
     private RecordButtonUtil mRecordUtil;
-    private AsyncHttpResponseHandler upHandler;
-    private AsyncHttpResponseHandler cmnHandler;
+    private AsyncHttpResponseHandler publishAdmireHandler;
+    private AsyncHttpResponseHandler publishCommentHandler;
 
     private TweetDetailContract.CmnView mCmnView;
     private TweetDetailContract.ThumbupView mThumbupView;
@@ -115,49 +113,36 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
     }
 
     protected void initData() {
-        upHandler = new AsyncHttpResponseHandler() {
+        publishAdmireHandler = new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                ivThumbup.setImageResource(isUped ? R.drawable.ic_thumbup_normal : R.drawable.ic_thumbup_actived);
-                mThumbupView.onLikeSuccess(!isUped, null);
-                isUped = !isUped;
-                if (dialog != null) {
-                    dialog.dismiss();
-                    dialog = null;
-                }
+                ivThumbup.setSelected(!ivThumbup.isSelected());
+                mThumbupView.onLikeSuccess(ivThumbup.isSelected(), null);
+                dismissDialog();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Toast.makeText(TweetDetailActivity.this, isUped ? "取消失败" : "点赞失败", Toast.LENGTH_SHORT).show();
-                if (dialog != null) {
-                    dialog.dismiss();
-                    dialog = null;
-                }
+                Toast.makeText(TweetDetailActivity.this, ivThumbup.isSelected() ? "取消失败" : "点赞失败", Toast.LENGTH_SHORT).show();
+                dismissDialog();
             }
         };
 
-        cmnHandler = new AsyncHttpResponseHandler() {
+        publishCommentHandler = new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 mCmnView.onCommentSuccess(null);
                 reply = null; // 清除
                 mViewInput.setHint("发表评论");
                 mViewInput.setText(null);
-                if (dialog != null) {
-                    dialog.dismiss();
-                    dialog = null;
-                }
+                dismissDialog();
                 TDevice.hideSoftKeyboard(mDelegation.getInputView());
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 Toast.makeText(TweetDetailActivity.this, "评论失败", Toast.LENGTH_SHORT).show();
-                if (dialog != null) {
-                    dialog.dismiss();
-                    dialog = null;
-                }
+                dismissDialog();
             }
         };
 
@@ -178,7 +163,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
+                Toast.makeText(TweetDetailActivity.this, "获取失败", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -203,10 +188,10 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
 
                 if (TweetDetailActivity.this.reply == null) {
                     OSChinaApi.publicComment(3, tweet.getId(), AppContext.getInstance().getLoginUid(),
-                            v.getText().toString(), 1, cmnHandler);
+                            v.getText().toString(), 1, publishCommentHandler);
                 } else {
                     OSChinaApi.replyComment(tweet.getId(), 3, reply.getId(), reply.getAuthorId(),
-                            AppContext.getInstance().getLoginUid(), v.getText().toString(), cmnHandler);
+                            AppContext.getInstance().getLoginUid(), v.getText().toString(), publishCommentHandler);
                 }
             }
 
@@ -267,6 +252,12 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
         return mRecordUtil;
     }
 
+    private void dismissDialog(){
+        if (dialog == null) return;
+        dialog.dismiss();
+        dialog = null;
+    }
+
     private void fillDetailView() {
         // 有可能穿入的tweet只有id这一个值
         if (isDestroy())
@@ -286,9 +277,9 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
             tvTime.setText(StringUtils.friendly_time(tweet.getPubDate()));
         PlatfromUtil.setPlatFromString(tvClient, tweet.getAppclient());
         if (tweet.getIsLike() == 1) {
-            ivThumbup.setImageResource(R.drawable.ic_thumbup_actived);
+            ivThumbup.setSelected(true);
         } else {
-            ivThumbup.setImageResource(R.drawable.ic_thumbup_normal);
+            ivThumbup.setSelected(false);
         }
 
         fillWebViewBody();
@@ -333,14 +324,13 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
         if (mDelegation != null) mDelegation.onTurnBack();
     }
 
-    @OnClick(R.id.iv_thumbup)
-    void onClickThumbUp() {
+    @OnClick(R.id.iv_thumbup) void onClickThumbUp() {
         this.dialog = DialogHelp.getWaitDialog(this, "正在提交请求...");
         this.dialog.show();
-        if (!isUped) {
-            OSChinaApi.pubLikeTweet(tweet.getId(), tweet.getAuthorid(), upHandler);
+        if (!ivThumbup.isSelected()) {
+            OSChinaApi.pubLikeTweet(tweet.getId(), tweet.getAuthorid(), publishAdmireHandler);
         } else {
-            OSChinaApi.pubUnLikeTweet(tweet.getId(), tweet.getAuthorid(), upHandler);
+            OSChinaApi.pubUnLikeTweet(tweet.getId(), tweet.getAuthorid(), publishAdmireHandler);
         }
     }
 
