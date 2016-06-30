@@ -30,6 +30,13 @@
             android:layout_weight="1"
             android:layout_height="wrap_content" />
 
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content"/>
+
         <TextView
             android:id="@+id/btn_vote_down"
             android:drawableTop="@drawable/selector_full_vote_down"
