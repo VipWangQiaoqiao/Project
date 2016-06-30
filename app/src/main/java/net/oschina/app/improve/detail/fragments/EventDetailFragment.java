@@ -3,6 +3,7 @@ package net.oschina.app.improve.detail.fragments;
 import android.content.DialogInterface;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.oschina.app.AppContext;
@@ -25,11 +26,17 @@ import butterknife.OnClick;
 public class EventDetailFragment extends DetailFragment<EventDetail, EventDetailContract.View, EventDetailContract.Operator> implements
         View.OnClickListener, EventDetailContract.View {
 
+    @Bind(R.id.ll_sign)
+    LinearLayout ll_sign;
+
     @Bind(R.id.iv_event_img)
     ImageView iv_event_img;
 
     @Bind(R.id.iv_fav)
     ImageView iv_fav;
+
+    @Bind(R.id.iv_sign)
+    ImageView iv_sign;
 
     @Bind(R.id.tv_event_title)
     TextView tv_event_title;
@@ -81,7 +88,7 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
         tv_event_location.setText(mDetail.getSpot());
         tv_event_pub_time.setText(mDetail.getPubDate());
         getImgLoader().load(mDetail.getImg()).into(iv_event_img);
-        iv_fav.setImageResource(mDetail.isFavorite() ? R.drawable.ic_faved_normal : R.drawable.ic_fav_normal);
+        iv_fav.setImageResource(mDetail.isFavorite() ? R.drawable.ic_faved : R.drawable.ic_fav);
         tv_fav.setText(mDetail.isFavorite() ? getResources().getString(R.string.event_is_fav) : getResources().getString(R.string.event_un_fav));
         switch (mDetail.getStatus()) {
             case Event.STATUS_END:
@@ -112,6 +119,9 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
         tv_event_type.setText(String.format("类型：%s", getResources().getString(typeStr)));
         tv_apply_status.setText(getResources().getString(getApplyStatusStrId(mDetail.getApplyStatus())));
 
+        if(mDetail.getApplyStatus() != EventDetail.APPLY_STATUS_UN_SIGN){
+            setSignUnEnable();
+        }
         setBodyContent(mDetail.getBody());
     }
 
@@ -166,7 +176,7 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
     public void toFavOk(EventDetail detail) {
         mOperator.getData().setFavorite(detail.isFavorite());
         final EventDetail mDetail = mOperator.getData();
-        iv_fav.setImageResource(mDetail.isFavorite() ? R.drawable.ic_faved_normal : R.drawable.ic_fav_normal);
+        iv_fav.setImageResource(mDetail.isFavorite() ? R.drawable.ic_faved : R.drawable.ic_fav);
         tv_fav.setText(mDetail.isFavorite() ? getResources().getString(R.string.event_is_fav) : getResources().getString(R.string.event_un_fav));
     }
 
@@ -180,6 +190,7 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
         mOperator.getData().setApplyStatus(detail.getApplyStatus());
         final EventDetail mDetail = mOperator.getData();
         tv_apply_status.setText(getResources().getString(getApplyStatusStrId(mDetail.getApplyStatus())));
+        setSignUnEnable();
         mEventApplyDialog.dismiss();
     }
 
@@ -206,5 +217,11 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
                 break;
         }
         return strId;
+    }
+
+    private void setSignUnEnable(){
+        tv_apply_status.setEnabled(false);
+        ll_sign.setEnabled(false);
+        iv_sign.setEnabled(false);
     }
 }

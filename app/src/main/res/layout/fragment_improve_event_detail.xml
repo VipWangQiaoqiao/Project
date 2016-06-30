@@ -20,7 +20,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="184dp"
                 android:background="@color/main_green"
                 android:orientation="horizontal">
 
@@ -233,8 +233,6 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="horizontal"
-        android:paddingBottom="4dp"
-        android:paddingTop="4dp"
         app:layout_anchor="@+id/nsv"
         app:layout_anchorGravity="bottom"
         app:layout_behavior="net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior"
@@ -246,6 +244,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp"
+            android:background="@drawable/selector_event_fav"
             android:orientation="horizontal">
 
             <ImageView
@@ -254,7 +255,7 @@
                 android:layout_height="22dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
-                android:src="@drawable/ic_faved_normal" />
+                android:src="@drawable/ic_fav" />
 
             <TextView
                 android:id="@+id/tv_fav"
@@ -262,7 +263,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/lay_16"
                 android:layout_marginRight="@dimen/lay_16"
-                android:text="已收藏"
+                android:text="未收藏"
                 android:textColor="@color/text_dark"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -273,14 +274,16 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
+            android:background="@drawable/selector_event_sign"
             android:orientation="horizontal">
 
             <ImageView
+                android:id="@+id/iv_sign"
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
-                android:src="@drawable/ic_user_add" />
+                android:src="@drawable/selector_sign" />
 
             <TextView
                 android:id="@+id/tv_apply_status"
@@ -288,8 +291,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/lay_16"
                 android:layout_marginRight="@dimen/lay_16"
-                android:text="报名"
-                android:textColor="@color/text_dark"
+                android:text="我要报名"
+                android:textColor="@color/text_sign_selector"
                 android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
