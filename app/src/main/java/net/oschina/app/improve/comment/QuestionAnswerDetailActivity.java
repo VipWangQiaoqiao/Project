@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -313,12 +314,16 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                                 Toast.makeText(QuestionAnswerDetailActivity.this, "你已经踩过了", Toast.LENGTH_SHORT).show();
                                 return;
                             }
+                            holder.mVoteUp.setVisibility(View.GONE);
+                            holder.mProgressBar.setVisibility(View.VISIBLE);
                             break;
                         case CommentEX.VOTE_STATE_DOWN:
                             if (ivVoteUp.isSelected()){
                                 Toast.makeText(QuestionAnswerDetailActivity.this, "你已经顶过了", Toast.LENGTH_SHORT).show();
                                 return;
                             }
+                            holder.mVoteDown.setVisibility(View.GONE);
+                            holder.mProgressBar.setVisibility(View.VISIBLE);
                             break;
                     }
                     if (!AppContext.getInstance().isLogin()){
@@ -329,7 +334,18 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                         @Override
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                             Toast.makeText(QuestionAnswerDetailActivity.this, "操作失败", Toast.LENGTH_SHORT).show();
-                            if (mVoteDialog != null) mVoteDialog.dismiss();
+                            if (mVoteDialog != null && mVoteDialog.isShowing()){
+                                switch (opt){
+                                    case CommentEX.VOTE_STATE_UP:
+                                        holder.mVoteUp.setVisibility(View.VISIBLE);
+                                        holder.mProgressBar.setVisibility(View.GONE);
+                                        break;
+                                    case CommentEX.VOTE_STATE_DOWN:
+                                        holder.mVoteDown.setVisibility(View.VISIBLE);
+                                        holder.mProgressBar.setVisibility(View.GONE);
+                                        break;
+                                }
+                            }
                         }
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, String responseString) {
@@ -367,6 +383,9 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
             view.removeView(mVoteDialogView);
         }
         VoteViewHolder holder = (VoteViewHolder) mVoteDialogView.getTag();
+        holder.mVoteDown.setVisibility(View.VISIBLE);
+        holder.mVoteUp.setVisibility(View.VISIBLE);
+        holder.mProgressBar.setVisibility(View.GONE);
         switch (comment.getVoteState()){
             default:
                 holder.mVoteUp.setSelected(false);
@@ -397,6 +416,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
     public static class VoteViewHolder{
         @Bind(R.id.btn_vote_up) TextView mVoteUp;
         @Bind(R.id.btn_vote_down) TextView mVoteDown;
+        @Bind(R.id.progress) ProgressBar mProgressBar;
 
         public VoteViewHolder(View view) {
             ButterKnife.bind(this, view);
