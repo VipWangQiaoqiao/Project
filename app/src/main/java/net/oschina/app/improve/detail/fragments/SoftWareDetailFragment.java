@@ -99,7 +99,10 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
         } else {
             ivRecomment.setVisibility(View.INVISIBLE);
         }
-        tvName.setText(softwareDetail.getName());
+
+        String name = softwareDetail.getName();
+        String extName = softwareDetail.getExtName();
+        tvName.setText(String.format("%s%s", name, (TextUtils.isEmpty(extName)) ? "" : " " + extName.trim()));
 
         String author = softwareDetail.getAuthor();
         tvAuthor.setText(TextUtils.isEmpty(author) ? "匿名" : author.trim());
