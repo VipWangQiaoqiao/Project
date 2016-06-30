@@ -50,6 +50,10 @@
     @butterknife.* <methods>;
 }
 
+-keep public class net.oschina.app.R$* {
+ public static final int *;
+}
+
 -dontwarn com.thoughtworks.xstream.**
 -keep class com.thoughtworks.xstream.** { *; }
 
@@ -62,16 +66,35 @@
 -dontwarn com.squareup.leakcanary.DisplayLeakService
 -keep class com.squareup.leakcanary.DisplayLeakService
 
--dontwarn com.umeng.socialize.sso.**
--keep class com.umeng.socialize.sso.** { *; }
-
 -dontwarn android.widget.**
 -keep class android.widget.** {*;}
 
 -dontwarn android.support.v7.widget.**
 -keep class android.support.v7.widget.**{*;}
 
-#-libraryjars libs/library-2.4.0.jar
-#-libraryjars libs/locSDK_3.1.jar
-#-libraryjars libs/pinyin4j-2.5.0.jar
-#-libraryjars libs/xstream-1.4.7.jar
+-dontshrink
+-dontoptimize
+-dontwarn com.google.android.maps.**
+-dontwarn android.webkit.WebView
+-dontwarn com.umeng.**
+-dontwarn com.tencent.weibo.sdk.**
+
+-keepattributes Exceptions,InnerClasses,Signature
+-keepattributes *Annotation*
+-keepattributes SourceFile,LineNumberTable
+
+-keep public interface com.tencent.**
+-keep public interface com.umeng.socialize.**
+-keep public interface com.umeng.socialize.sensor.**
+-keep public interface com.umeng.scrshot.**
+
+-keep public class com.umeng.socialize.* {*;}
+-keep public class javax.**
+-keep public class android.webkit.**
+
+-keep class com.umeng.scrshot.**
+-keep public class com.tencent.** {*;}
+-keep class com.umeng.socialize.sensor.**
+
+-keep class com.tencent.mm.sdk.modelmsg.WXMediaMessage {*;}
+-keep class com.tencent.mm.sdk.modelmsg.** implements com.tencent.mm.sdk.modelmsg.WXMediaMessage$IMediaObject {*;}
