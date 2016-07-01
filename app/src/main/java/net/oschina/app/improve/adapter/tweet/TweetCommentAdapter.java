@@ -30,9 +30,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class TweetCommentAdapter extends BaseRecyclerAdapter<Comment> {
 
     private RequestManager reqManager;
-    private View.OnClickListener onReplyClickListener;
     private View.OnClickListener onPortraitClickListener;
-    private OnClickReplyCallback onClickReplyCallback;
 
     public TweetCommentAdapter(Context context) {
         super(context, ONLY_FOOTER);
@@ -64,25 +62,6 @@ public class TweetCommentAdapter extends BaseRecyclerAdapter<Comment> {
         h.tvName.setText(item.getAuthor());
         h.tvContent.setText(InputHelper.displayEmoji(mContext.getResources(), item.getContent()));
         h.tvTime.setText(StringUtils.friendly_time(item.getPubDate()));
-
-        h.btnReply.setTag(item);
-        h.btnReply.setOnClickListener(getOnReplyClickListener());
-    }
-
-
-
-    private View.OnClickListener getOnReplyClickListener(){
-        if (onReplyClickListener == null){
-            onReplyClickListener = new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (onClickReplyCallback == null) return;
-                    Comment comment = (Comment) v.getTag();
-                    onClickReplyCallback.onReplyOther(comment);
-                }
-            };
-        }
-        return onReplyClickListener;
     }
 
     private View.OnClickListener getOnPortraitClickListener(){
@@ -109,14 +88,6 @@ public class TweetCommentAdapter extends BaseRecyclerAdapter<Comment> {
             super(view);
             ButterKnife.bind(this, view);
         }
-    }
-
-    public void setOnClickReplyCallback(OnClickReplyCallback callback){
-        onClickReplyCallback = callback;
-    }
-
-    public interface OnClickReplyCallback{
-        void onReplyOther(Comment comment);
     }
 
 }

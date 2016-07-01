@@ -39,7 +39,7 @@ import cz.msebera.android.httpclient.Header;
  * Created by thanatos on 16/6/13.
  */
 public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>
-        implements TweetCommentAdapter.OnClickReplyCallback, TweetDetailContract.ICmnView, BaseRecyclerAdapter.OnItemLongClickListener {
+        implements TweetDetailContract.ICmnView, BaseRecyclerAdapter.OnItemLongClickListener {
 
     private TweetDetailContract.Operator mOperator;
     private TweetDetailContract.IAgencyView mAgencyView;
@@ -101,7 +101,7 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>
     @Override
     protected BaseRecyclerAdapter<Comment> getRecyclerAdapter() {
         TweetCommentAdapter adapter = new TweetCommentAdapter(getContext());
-        adapter.setOnClickReplyCallback(this);
+        adapter.setOnItemClickListener(this);
         adapter.setOnItemLongClickListener(this);
         return adapter;
     }
@@ -148,13 +148,14 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>
     }
 
     @Override
-    public void onReplyOther(Comment comment) {
-        mOperator.toReply(comment);
+    public void onCommentSuccess(Comment comment) {
+        onRefreshing();
     }
 
     @Override
-    public void onCommentSuccess(Comment comment) {
-        onRefreshing();
+    public void onItemClick(int position, long itemId) {
+        super.onItemClick(position, itemId);
+        mOperator.toReply(mAdapter.getItem(position));
     }
 
     @Override
