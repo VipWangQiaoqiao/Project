@@ -231,7 +231,8 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                 public void onClick(View v) {
                     CommentEX.Reply reply = (CommentEX.Reply) v.getTag();
                     mDelegation.notifyWrapper();
-                    mDelegation.getInputView().setText("回复 @" + reply.getAuthor() + " :");
+                    mDelegation.getInputView().setText("回复 @" + reply.getAuthor() + " : ");
+                    mDelegation.getInputView().setSelection(mDelegation.getInputView().getText().length());
                     QuestionAnswerDetailActivity.this.reply = reply;
                     TDevice.showSoftKeyboard(mDelegation.getInputView());
                 }
