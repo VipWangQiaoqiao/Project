@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/fill_wrap"
     android:orientation="vertical"
-    android:background="@drawable/selector_item_list">
+    android:background="@drawable/ic_bg_item_selector">
 
     <LinearLayout
         android:orientation="horizontal"
