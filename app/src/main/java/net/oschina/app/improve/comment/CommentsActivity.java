@@ -97,6 +97,9 @@ public class CommentsActivity extends BaseBackActivity {
                 mDelegation.getInputView().setHint("发表评论");
             }
         });
+        mRefreshLayout.setColorSchemeResources(
+                R.color.swiperefresh_color1, R.color.swiperefresh_color2,
+                R.color.swiperefresh_color3, R.color.swiperefresh_color4);
     }
 
     @Override
@@ -130,7 +133,7 @@ public class CommentsActivity extends BaseBackActivity {
         OSChinaApi.getComments(mId, mType, "refer", token, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-
+                mAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_ERROR,true);
             }
 
             @Override
@@ -235,7 +238,7 @@ public class CommentsActivity extends BaseBackActivity {
 
         Adapter(Context context) {
             super(context, ONLY_FOOTER);
-            mState = STATE_LOADING;
+            mState = STATE_HIDE;
             setOnItemClickListener(new OnItemClickListener() {
                 @Override
                 public void onItemClick(int position, long itemId) {
