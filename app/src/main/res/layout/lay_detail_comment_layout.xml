@@ -29,6 +29,8 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="vertical"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
         tools:ignore="RtlSymmetry" />
 
     <TextView
