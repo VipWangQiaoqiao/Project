@@ -22,10 +22,7 @@
             android:layout_height="wrap_content"
             android:background="?attr/windows_bg">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="?attr/lineColor" />
+
 
             <net.oschina.app.widget.MyFragmentTabHost
                 android:id="@android:id/tabhost"
