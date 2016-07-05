@@ -178,7 +178,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
                 if (mInputDoubleEmpty) {
                     mCommentId = mId;
                     mCommentAuthorId = 0;
-                    mETInput.setHint("发表评论");
+                    mETInput.setHint("我要回答");
                 } else {
                     mInputDoubleEmpty = true;
                 }

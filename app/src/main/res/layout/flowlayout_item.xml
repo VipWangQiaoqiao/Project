@@ -7,8 +7,12 @@
     android:background="@drawable/ques_bt_bg"
     android:maxLines="1"
     android:minLines="1"
-    android:padding="6dp"
+    android:paddingBottom="2dp"
+    android:paddingLeft="4dp"
+    android:paddingRight="4dp"
+    android:paddingTop="2dp"
     android:textColor="@color/count_text_color_light"
+    android:textSize="12sp"
     tools:text="New Text" />
 
 
