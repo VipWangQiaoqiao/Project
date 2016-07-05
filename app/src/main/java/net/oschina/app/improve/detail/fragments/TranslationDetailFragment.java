@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,12 +43,12 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
     private long mCommentId;
     private long mCommentAuthorId;
     private boolean mInputDoubleEmpty = false;
-    private DetailAboutView mSoft;
     private DetailAboutView mAbouts;
     private CommentsView mComments;
     private CoordinatorLayout mLayCoordinator;
     private NestedScrollView mLayContent;
     private View mLayBottom;
+    private LinearLayout mAboutSoftware;
 
 
     @Override
@@ -71,7 +72,7 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
         mETInput = (EditText) root.findViewById(R.id.et_input);
 
         mAbouts = (DetailAboutView) root.findViewById(R.id.lay_detail_about);
-        mSoft = (DetailAboutView) root.findViewById(R.id.lay_detail_software);
+        mAboutSoftware = (LinearLayout) root.findViewById(R.id.lay_about_software);
         mComments = (CommentsView) root.findViewById(R.id.lay_detail_comment);
 
         mLayCoordinator = (CoordinatorLayout) root.findViewById(R.id.fragment_blog_detail);
@@ -108,9 +109,9 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
     public void onClick(View v) {
         switch (v.getId()) {
             // 相关软件
-            case R.id.lay_detail_software:
-                // SoftwareDetailActivity.show(getActivity(), mOperator.getData().getSoftware().getId());
-                break;
+            // case R.id.lay_about_software:
+            // SoftwareDetailActivity.show(getActivity(), mOperator.getData().getSoftware().getId());
+            // break;
             // 收藏
             case R.id.iv_fav:
                 handleFavorite();
@@ -154,7 +155,7 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
         setText(R.id.tv_info_view, String.valueOf(translationDetail.getViewCount()));
         setText(R.id.tv_info_comment, String.valueOf(translationDetail.getCommentCount()));
 
-        mSoft.setVisibility(View.GONE);
+        mAboutSoftware.setVisibility(View.GONE);
         mAbouts.setVisibility(View.GONE);
 
         mComments.setTitle(String.format("评论 (%s)", translationDetail.getCommentCount()));

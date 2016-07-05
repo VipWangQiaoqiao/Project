@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,12 +44,13 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
     private long mCommentId;
     private long mCommentAuthorId;
     private boolean mInputDoubleEmpty = false;
-    private DetailAboutView mSoft;
     private DetailAboutView mAbouts;
     private CommentsView mComments;
     private CoordinatorLayout mLayCoordinator;
     private NestedScrollView mLayContent;
     private View mLayBottom;
+    private TextView mAbhoutSoftwareTitle;
+    private LinearLayout mAboutSoftware;
 
 
     @Override
@@ -72,7 +74,8 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         mETInput = (EditText) root.findViewById(R.id.et_input);
 
         mAbouts = (DetailAboutView) root.findViewById(R.id.lay_detail_about);
-        mSoft = (DetailAboutView) root.findViewById(R.id.lay_detail_software);
+        mAboutSoftware = (LinearLayout) root.findViewById(R.id.lay_about_software);
+        mAbhoutSoftwareTitle = (TextView) root.findViewById(R.id.tv_about_software_title);
         mComments = (CommentsView) root.findViewById(R.id.lay_detail_comment);
 
         mLayCoordinator = (CoordinatorLayout) root.findViewById(R.id.fragment_blog_detail);
@@ -109,7 +112,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
     public void onClick(View v) {
         switch (v.getId()) {
             // 相关软件
-            case R.id.lay_detail_software:
+            case R.id.lay_about_software:
                 SoftwareDetailActivity.show(getActivity(), mOperator.getData().getSoftware().getId());
                 break;
             // 收藏
@@ -158,19 +161,10 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         Software software = newsDetail.getSoftware();
         if (software != null) {
 
-            TextView lable = (TextView) mSoft.getChildAt(0);
-            lable.setText(getResources().getString(R.string.lable_software));
-            View child = getActivity().getLayoutInflater().inflate(R.layout.lay_blog_detail_about, mSoft, false);
-            ((TextView) child.findViewById(R.id.tv_title)).setText(software.getName());
-            View layInfo = child.findViewById(R.id.lay_info_view_comment);
-            layInfo.setVisibility(View.GONE);
-            View line = child.findViewById(R.id.line);
-            line.setVisibility(View.GONE);
-            mSoft.addView(child, 2);
-            mSoft.setVisibility(View.VISIBLE);
-            mSoft.setOnClickListener(this);
+            mAboutSoftware.setOnClickListener(this);
+            mAbhoutSoftwareTitle.setText(software.getName());
         } else {
-            mSoft.setVisibility(View.GONE);
+            mAboutSoftware.setVisibility(View.GONE);
         }
 
         mAbouts.setAbout(newsDetail.getAbouts(), 6);
