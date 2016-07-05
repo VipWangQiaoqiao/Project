@@ -3,13 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
+    android:descendantFocusability="afterDescendants"
     android:orientation="vertical"
     android:paddingTop="2dp">
 
     <ImageView
         android:id="@+id/iv_icon"
         android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_height="22dp"
         android:layout_centerHorizontal="true"
         android:src="@drawable/tab_icon_new" />
 
@@ -19,6 +20,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/iv_icon"
         android:layout_centerHorizontal="true"
+        android:clickable="false"
+        android:focusable="false"
         android:gravity="center"
         android:textColor="@color/primarybar_txt"
         android:textSize="12sp"
@@ -32,6 +35,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignRight="@id/tab_title"
         android:layout_alignTop="@id/tab_title"
-        android:layout_marginLeft="1dip" />
+        android:layout_marginLeft="1dip"
+        android:clickable="false"
+        android:focusable="false" />
 
 </RelativeLayout>
