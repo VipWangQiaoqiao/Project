@@ -359,6 +359,7 @@
     <string name="state_load_error">加载失败</string>
     <string name="state_refreshing">正在刷新</string>
 
+    <string name="lable_about_title">相关文章</string>
     <string name="lable_software">相关软件</string>
     <string name="vote_up">顶</string>
     <string name="vote_down">踩</string>

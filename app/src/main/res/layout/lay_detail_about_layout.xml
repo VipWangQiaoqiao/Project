@@ -18,10 +18,20 @@
         android:textColor="@color/ques_bt_text_color_dark"
         android:textSize="12sp" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/list_divider_color" />
+
     <LinearLayout
         android:id="@+id/lay_blog_detail_about"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="vertical" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/list_divider_color" />
 </merge>

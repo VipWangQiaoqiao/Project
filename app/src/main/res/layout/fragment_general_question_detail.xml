@@ -24,10 +24,7 @@
             android:background="@android:color/white"
             android:orientation="vertical"
             android:paddingBottom="16dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
             android:paddingTop="16dp">
-
 
             <TextView
                 android:id="@+id/tv_ques_detail_title"
@@ -40,6 +37,8 @@
                 android:lineSpacingExtra="4dp"
                 android:maxLines="2"
                 android:minLines="1"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
                 android:textColor="@color/blog_title_text_color_light"
                 android:textSize="22sp"
                 tools:text="HDFS用于存储，请问它与FTP或者市面流行的存储系统的优缺点？" />
@@ -48,6 +47,8 @@
                 android:id="@+id/ques_detail_flow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
                 app:horizontalSpace="8dp"
                 app:verticalSpace="8dp" />
 
@@ -57,7 +58,9 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="8dp"
                 android:background="@color/white"
-                android:paddingBottom="16dp" />
+                android:paddingBottom="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -96,6 +99,11 @@
 
                 <include layout="@layout/item_info_view_comment" />
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/list_divider_color" />
 
             <net.oschina.app.improve.comment.CommentExsView
                 android:id="@+id/lay_detail_comment"

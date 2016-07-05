@@ -166,7 +166,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
             layInfo.setVisibility(View.GONE);
             View line = child.findViewById(R.id.line);
             line.setVisibility(View.GONE);
-            mSoft.addView(child, 1);
+            mSoft.addView(child, 2);
             mSoft.setVisibility(View.VISIBLE);
             mSoft.setOnClickListener(this);
         } else {

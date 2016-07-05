@@ -117,14 +117,15 @@ public class CommentExsView extends LinearLayout implements View.OnClickListener
                 setVisibility(VISIBLE);
             }
 
-            boolean clearLine = true;
+            int clearLine = comments.size() - 1;
             for (final CommentEX comment : comments) {
                 if (comment == null || comment.getId() == 0 || TextUtils.isEmpty(comment.getAuthor()))
                     continue;
                 ViewGroup lay = addComment(false, comment, imageLoader, onCommentClickListener);
-                if (clearLine) {
-                    clearLine = false;
+                if (clearLine <= 0) {
                     lay.findViewById(R.id.line).setVisibility(View.INVISIBLE);
+                } else {
+                    clearLine--;
                 }
             }
         } else {

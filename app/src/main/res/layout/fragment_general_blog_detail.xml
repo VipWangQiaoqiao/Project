@@ -147,6 +147,7 @@
                         android:id="@+id/tv_blog_detail_abstract"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:lineSpacingExtra="4dp"
                         android:maxLines="6"
                         android:textColor="#6a6a6a"
                         android:textSize="14sp"
@@ -169,6 +170,11 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:paddingTop="8dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/list_divider_color" />
 
             <net.oschina.app.improve.widget.DetailAboutView
                 android:id="@+id/lay_detail_about"

@@ -23,6 +23,7 @@ import java.util.List;
 public class DetailAboutView extends LinearLayout {
     private int mDefaultType;
     private LinearLayout mLayAbouts;
+    private TextView mTitle;
 
     public DetailAboutView(Context context) {
         super(context);
@@ -42,9 +43,19 @@ public class DetailAboutView extends LinearLayout {
     private void init() {
         setOrientation(VERTICAL);
         LayoutInflater inflater = LayoutInflater.from(getContext());
-        inflater.inflate(R.layout.lay_detail_about_layout, this, true);
+        View inflate = inflater.inflate(R.layout.lay_detail_about_layout, this, true);
 
+        mTitle = (TextView) inflate.findViewById(R.id.tv_blog_detail_about);
         mLayAbouts = (LinearLayout) findViewById(R.id.lay_blog_detail_about);
+    }
+
+    /**
+     * set title
+     *
+     * @param title string
+     */
+    public void setTitle(String title) {
+        mTitle.setText(title);
     }
 
     public void setAbout(List<About> abouts, int defaultType) {
