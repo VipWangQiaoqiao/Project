@@ -187,7 +187,7 @@ public class BlogDetailFragment
 
         mAbouts.setAbout(blog.getAbouts(), 3);
 
-        mComments.setTitle(String.format("评论(%s)", blog.getCommentCount()));
+        mComments.setTitle(String.format("评论 (%s)", blog.getCommentCount()));
         mComments.init(blog.getId(), OSChinaApi.COMMENT_BLOG, blog.getCommentCount(), getImgLoader(), this);
     }
 

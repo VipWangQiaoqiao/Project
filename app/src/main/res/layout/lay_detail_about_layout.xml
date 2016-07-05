@@ -16,7 +16,7 @@
         android:layout_marginTop="8dp"
         android:text="相关推荐"
         android:textColor="@color/ques_bt_text_color_dark"
-        android:textSize="12sp" />
+        android:textSize="14sp" />
 
     <View
         android:layout_width="match_parent"
