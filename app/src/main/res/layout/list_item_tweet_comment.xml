@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
-    android:background="@drawable/selector_item_list"
+    android:background="@drawable/ic_bg_item_selector"
     android:orientation="vertical">
 
     <LinearLayout
