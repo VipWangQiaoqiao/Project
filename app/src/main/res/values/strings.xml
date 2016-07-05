@@ -25,7 +25,7 @@
     <string name="event_apply_status_canceled">已取消</string>
     <string name="event_apply_status_refused">已拒绝</string>
     <string name="event_is_fav">已收藏</string>
-    <string name="event_un_fav">添加收藏</string>
+    <string name="event_un_fav">收藏</string>
 
     <string name="app_error">应用程序错误</string>
     <string name="app_error_message">很抱歉，小屁孩耍脾气啦。<br />我们会帮你教训一下这个小屁孩！</string>

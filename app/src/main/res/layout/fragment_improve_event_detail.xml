@@ -113,7 +113,7 @@
                             android:paddingTop="2dp"
                             android:singleLine="true"
                             android:textColor="@color/white"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             tools:text="正在报名" />
                     </LinearLayout>
                 </LinearLayout>
@@ -191,7 +191,6 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-
                     android:layout_marginRight="@dimen/lay_16"
                     android:src="@drawable/ic_location" />
 
@@ -210,6 +209,17 @@
                 style="@style/h_line"
                 android:layout_height="1px"
                 android:layout_marginLeft="@dimen/lay_16" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/lay_16"
+                android:textColor="#111111"
+                android:lineSpacingExtra="4dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:textSize="16sp"
+                android:text="活动介绍:" />
 
             <FrameLayout
                 android:id="@+id/lay_webview"
@@ -263,7 +273,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/lay_16"
                 android:layout_marginRight="@dimen/lay_16"
-                android:text="未收藏"
+                android:text="收藏"
                 android:textColor="@color/text_dark"
                 android:textSize="14sp" />
         </LinearLayout>
