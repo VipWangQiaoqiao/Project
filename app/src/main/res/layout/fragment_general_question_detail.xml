@@ -24,6 +24,8 @@
             android:background="@android:color/white"
             android:orientation="vertical"
             android:paddingBottom="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             android:paddingTop="16dp">
 
 
@@ -32,8 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginBottom="8dp"
                 android:ellipsize="end"
                 android:gravity="center|left"
                 android:lineSpacingExtra="4dp"
@@ -47,10 +48,6 @@
                 android:id="@+id/ques_detail_flow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="4dp"
                 app:horizontalSpace="8dp"
                 app:verticalSpace="8dp" />
 
@@ -58,11 +55,9 @@
                 android:id="@+id/lay_webview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
                 android:background="@color/white"
-                android:paddingBottom="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingTop="8dp" />
+                android:paddingBottom="16dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -135,7 +130,7 @@
             android:layout_marginTop="8dp"
             android:layout_weight="1"
             android:background="@drawable/ic_bg_edit"
-            android:hint="发表评论"
+            android:hint="我要回答"
             android:imeOptions="actionSend"
             android:inputType="text"
             android:lines="1"
