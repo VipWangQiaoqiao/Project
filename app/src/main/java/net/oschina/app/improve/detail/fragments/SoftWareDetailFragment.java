@@ -126,7 +126,7 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
 
     @Override
     void setCommentCount(int count) {
-        mCommentText.setText(String.format("评论(%s)", count));
+        mCommentText.setText(String.format("评论 (%s)", count));
     }
 
     private void handleFavorite() {

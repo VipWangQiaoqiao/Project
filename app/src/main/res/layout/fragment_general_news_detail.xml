@@ -124,6 +124,10 @@
                 android:paddingRight="16dp"
                 android:paddingTop="8dp" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/list_divider_color" />
 
             <net.oschina.app.improve.widget.DetailAboutView
                 android:id="@+id/lay_detail_software"

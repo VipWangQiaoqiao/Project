@@ -166,7 +166,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
             layInfo.setVisibility(View.GONE);
             View line = child.findViewById(R.id.line);
             line.setVisibility(View.GONE);
-            mSoft.addView(child, 1);
+            mSoft.addView(child, 2);
             mSoft.setVisibility(View.VISIBLE);
             mSoft.setOnClickListener(this);
         } else {
@@ -175,7 +175,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
 
         mAbouts.setAbout(newsDetail.getAbouts(), 6);
 
-        mComments.setTitle(String.format("评论(%s)", newsDetail.getCommentCount()));
+        mComments.setTitle(String.format("评论 (%s)", newsDetail.getCommentCount()));
         mComments.init(newsDetail.getId(), OSChinaApi.COMMENT_NEWS, newsDetail.getCommentCount(), getImgLoader(), this);
     }
 

@@ -90,6 +90,7 @@ public class BlogDetailFragment
     protected void initWidget(View root) {
         super.initWidget(root);
 
+        mAbouts.setTitle(getString(R.string.lable_about_title));
         registerScroller(mLayContent, mComments);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -186,7 +187,7 @@ public class BlogDetailFragment
 
         mAbouts.setAbout(blog.getAbouts(), 3);
 
-        mComments.setTitle(String.format("评论(%s)", blog.getCommentCount()));
+        mComments.setTitle(String.format("评论 (%s)", blog.getCommentCount()));
         mComments.init(blog.getId(), OSChinaApi.COMMENT_BLOG, blog.getCommentCount(), getImgLoader(), this);
     }
 
