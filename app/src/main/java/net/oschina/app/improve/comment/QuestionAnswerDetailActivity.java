@@ -310,6 +310,10 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
             View.OnClickListener listener = new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
+                    if (!AppContext.getInstance().isLogin()){
+                        UIHelper.showLoginActivity(QuestionAnswerDetailActivity.this);
+                        return;
+                    }
                     final int opt = (int)v.getTag();
                     switch (opt){
                         case CommentEX.VOTE_STATE_UP:
@@ -328,10 +332,6 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                             holder.mVoteDown.setVisibility(View.GONE);
                             holder.mProgressBar.setVisibility(View.VISIBLE);
                             break;
-                    }
-                    if (!AppContext.getInstance().isLogin()){
-                        UIHelper.showLoginActivity(QuestionAnswerDetailActivity.this);
-                        return;
                     }
                     OSChinaApi.questionVote(sid, comment.getId(), opt, new TextHttpResponseHandler() {
                         @Override
@@ -369,7 +369,8 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                                 }
                                 Toast.makeText(QuestionAnswerDetailActivity.this, "操作成功", Toast.LENGTH_SHORT).show();
                             }else{
-                                Toast.makeText(QuestionAnswerDetailActivity.this, "操作失败", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(QuestionAnswerDetailActivity.this, TextUtils.isEmpty(result.getMessage())
+                                        ? "操作失败" : result.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                             if (mVoteDialog != null) mVoteDialog.dismiss();
                         }
@@ -393,14 +394,20 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
             default:
                 holder.mVoteUp.setSelected(false);
                 holder.mVoteDown.setSelected(false);
+                holder.mVoteUp.setText("顶");
+                holder.mVoteDown.setText("踩");
                 break;
             case CommentEX.VOTE_STATE_UP:
                 holder.mVoteUp.setSelected(true);
                 holder.mVoteDown.setSelected(false);
+                holder.mVoteUp.setText("已顶");
+                holder.mVoteDown.setText("踩");
                 break;
             case CommentEX.VOTE_STATE_DOWN:
                 holder.mVoteUp.setSelected(false);
                 holder.mVoteDown.setSelected(true);
+                holder.mVoteUp.setText("顶");
+                holder.mVoteDown.setText("已踩");
                 break;
         }
         return mVoteDialogView;
