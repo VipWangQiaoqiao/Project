@@ -1,5 +1,11 @@
 package net.oschina.app.improve.adapter.general;
 
+import android.graphics.drawable.Drawable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ImageSpan;
+import android.widget.TextView;
+
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewHolder;
@@ -14,14 +20,15 @@ import net.oschina.app.util.StringUtils;
  */
 public class NewsAdapter extends BaseListAdapter<News> {
     private String systemTime;
+
     public NewsAdapter(Callback callback) {
         super(callback);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void convert(ViewHolder vh, News item, int position) {
-        vh.setText(R.id.tv_title, item.getTitle());
-
+        //    vh.setText(R.id.tv_title, item.getTitle());
         if (AppContext.isOnReadedPostList(NewsFragment.HISTORY_NEWS, item.getId() + "")) {
             vh.setTextColor(R.id.tv_title, mCallback.getContext().getResources().getColor(R.color.count_text_color_light));
             vh.setTextColor(R.id.tv_description, mCallback.getContext().getResources().getColor(R.color.count_text_color_light));
@@ -33,12 +40,22 @@ public class NewsAdapter extends BaseListAdapter<News> {
         vh.setText(R.id.tv_description, item.getBody());
         vh.setText(R.id.tv_time, StringUtils.friendly_time(item.getPubDate()));
         vh.setText(R.id.tv_comment_count, String.valueOf(item.getCommentCount()));
-        vh.setText(R.id.tv_view_count,String.valueOf(item.getViewCount()));
-        if(StringUtils.isSameDay(systemTime,item.getPubDate())){
-            vh.setImage(R.id.iv_today, R.drawable.ic_label_today);
-            vh.setVisibility(R.id.iv_today);
-        }else {
-            vh.setGone(R.id.iv_today);
+        vh.setText(R.id.tv_view_count, String.valueOf(item.getViewCount()));
+
+        TextView title = vh.getView(R.id.tv_title);
+        if (StringUtils.isSameDay(systemTime, item.getPubDate())) {
+
+            String text = "[icon] " + item.getTitle();
+            Drawable drawable = mCallback.getContext().getResources().getDrawable(R.drawable.ic_label_today);
+            drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+            ImageSpan imageSpan = new ImageSpan(drawable, ImageSpan.ALIGN_BOTTOM);
+
+            SpannableString spannable = new SpannableString(text);
+            spannable.setSpan(imageSpan, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            title.setText(spannable);
+            title.setTextSize(16.0f);
+        } else {
+            title.setText(item.getTitle());
         }
     }
 
