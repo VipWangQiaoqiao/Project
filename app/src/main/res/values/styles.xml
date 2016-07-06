@@ -271,7 +271,7 @@
 
     <style name="dialog_title" parent="@style/fullline_view">
         <item name="android:textSize">@dimen/text_large_primary_size</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:textStyle">normal</item>
         <item name="android:textColor">@color/text_dark</item>
         <item name="android:gravity">center_vertical</item>
     </style>

@@ -218,7 +218,7 @@
                 android:lineSpacingExtra="4dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:text="活动介绍:" />
 
             <FrameLayout
