@@ -150,7 +150,7 @@
                 android:paddingRight="16dp"
                 android:paddingTop="8dp"
                 android:textColor="#6A6A6A"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 tools:text="评论(98)" />
 
             <View
