@@ -40,7 +40,7 @@ public class NewsAdapter extends BaseListAdapter<News> {
         vh.setText(R.id.tv_description, item.getBody());
         vh.setText(R.id.tv_time, StringUtils.friendly_time(item.getPubDate()));
         vh.setText(R.id.tv_comment_count, String.valueOf(item.getCommentCount()));
-        vh.setText(R.id.tv_view_count, String.valueOf(item.getViewCount()));
+        //vh.setText(R.id.tv_view_count, String.valueOf(item.getViewCount()));
 
         TextView title = vh.getView(R.id.tv_title);
         if (StringUtils.isSameDay(systemTime, item.getPubDate())) {
