@@ -1,5 +1,9 @@
 package net.oschina.app.improve.adapter.general;
 
+import android.graphics.drawable.Drawable;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ImageSpan;
 import android.widget.TextView;
 
 import net.oschina.app.AppContext;
@@ -30,6 +34,7 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
         isUserBlog = userBlog;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void convert(ViewHolder vh, Blog item, int position) {
 
@@ -48,24 +53,27 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
                 TextView see = vh.getView(R.id.tv_info_view);
                 TextView answer = vh.getView(R.id.tv_info_comment);
 
-                if (item.isRecommend()) {
-                    vh.setImage(R.id.iv_item_blog_tag_recommend, R.drawable.ic_label_recommend);
-                    vh.setVisibility(R.id.iv_item_blog_tag_recommend);
-                } else {
-                    vh.setGone(R.id.iv_item_blog_tag_recommend);
-                }
+                String text = "";
+
+                SpannableStringBuilder spannable = new SpannableStringBuilder(text);
 
                 if (item.isOriginal()) {
-                    vh.setImage(R.id.iv_item_blog_tag, R.drawable.ic_label_originate);
-                    vh.setVisibility(R.id.iv_item_blog_tag);
-                } else {
-                    vh.setGone(R.id.iv_item_blog_tag);
+                    spannable.append("[icon] ");
+                    Drawable originate = mCallback.getContext().getResources().getDrawable(R.drawable.ic_label_originate);
+                    originate.setBounds(0, 0, originate.getIntrinsicWidth(), originate.getIntrinsicHeight());
+                    ImageSpan imageSpan = new ImageSpan(originate, ImageSpan.ALIGN_BOTTOM);
+                    spannable.setSpan(imageSpan, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 }
 
-                String title1 = item.getTitle();
-                if (title1 != null) {
-                    title.setText(title1.trim());
+                if (item.isRecommend()) {
+                    spannable.append("[icon] ");
+                    Drawable recommend = mCallback.getContext().getResources().getDrawable(R.drawable.ic_label_recommend);
+                    recommend.setBounds(0, 0, recommend.getIntrinsicWidth(), recommend.getIntrinsicHeight());
+                    ImageSpan imageSpan = new ImageSpan(recommend, ImageSpan.ALIGN_BOTTOM);
+                    spannable.setSpan(imageSpan, 7, 13, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 }
+
+                title.setText(spannable.append(item.getTitle()));
 
                 String cacheName = BlogFragment.HISTORY_BLOG;
 

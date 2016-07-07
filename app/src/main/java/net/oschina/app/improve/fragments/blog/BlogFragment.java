@@ -31,7 +31,6 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
     public static final String BUNDLE_BLOG_TYPE = "BUNDLE_BLOG_TYPE";
 
     public static final String HISTORY_BLOG = "history_blog";
-    private static final String TAG = "BlogFragment";
     private boolean isFirst = true;
 
     @Override

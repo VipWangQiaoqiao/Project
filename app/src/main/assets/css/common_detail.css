@@ -1,4 +1,5 @@
 html, body {
+	font-family: -apple-system, "Helvetica Neue", Helvetica, "Nimbus Sans L", Arial, "Liberation Sans", "PingFang SC", "Hiragino Sans GB", "Source Han Sans CN", "Source Han Sans SC", "Microsoft YaHei", "Wenquanyi Micro Hei", "WenQuanYi Zen Hei", "ST Heiti", SimHei, "WenQuanYi Zen Hei Sharp", sans-serif;
 	padding: 0px;
 	margin: 0px;
 	overflow-x: hidden;
@@ -6,8 +7,7 @@ html, body {
 
 body {
 	word-wrap: break-word;
-	font-size: 15px;
-	letter-spacing: 1px;
+	font-size: 16px;
 	line-height: 165%;
 	color: #111111;
 }
@@ -19,7 +19,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-	color: #010101;
+	line-height: 1.2em;
 }
 
 table {
@@ -51,6 +51,8 @@ pre {
 	padding: 8px 6px 6px 6px;
 	line-height: 140%;
 	overflow: auto;
+    word-wrap: break-word; 
+    word-break:break-all;
 }
 
 a {

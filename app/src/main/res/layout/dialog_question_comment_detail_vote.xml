@@ -9,7 +9,7 @@
 
     <TextView
         android:text="为这个答案投票"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textColor="#6A6A6A"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
