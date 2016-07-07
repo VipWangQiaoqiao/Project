@@ -536,7 +536,7 @@ public class UIHelper {
         }
         URLsUtils urls = URLsUtils.parseURL(url);
         if (urls != null) {
-            showLinkRedirect(context, urls.getObjType(), id == 0 ? urls.getObjId() : id, urls.getObjKey());
+            showLinkRedirect(context, urls.getObjType(), urls.getObjId() != 0 ? urls.getObjId() : id, urls.getObjKey());
         } else {
             openBrowser(context, url);
         }
