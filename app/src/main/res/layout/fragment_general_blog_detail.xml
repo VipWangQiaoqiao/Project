@@ -190,6 +190,7 @@
 
     </android.support.v4.widget.NestedScrollView>
 
+
     <LinearLayout
         android:id="@+id/lay_option"
         android:layout_width="match_parent"
@@ -202,6 +203,7 @@
         android:paddingLeft="8dp"
         app:layout_anchor="@id/lay_nsv"
         app:layout_anchorGravity="bottom"
+
         app:layout_behavior="net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior"
         app:layout_scrollFlags="scroll|enterAlways">
 
@@ -254,4 +256,6 @@
         app:layout_anchorGravity="top"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_scrollFlags="scroll|enterAlways" />
+
+
 </android.support.design.widget.CoordinatorLayout>

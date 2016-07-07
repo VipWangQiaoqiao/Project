@@ -5,11 +5,11 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
-import android.view.animation.LinearInterpolator;
 
 import net.oschina.app.util.TDevice;
 
@@ -18,9 +18,9 @@ import net.oschina.app.util.TDevice;
  * Created by thanatos on 16/2/17.
  */
 public class FloatingAutoHideDownBehavior extends CoordinatorLayout.Behavior<View> {
-
-    private static final Interpolator INTERPOLATOR = new LinearInterpolator();
+    private static final Interpolator INTERPOLATOR = new DecelerateInterpolator();
     private boolean mIsAnimatingOut = false;
+    private boolean mIsScrollToBottom = false;
 
     public FloatingAutoHideDownBehavior(Context context, AttributeSet attrs) {
         super();
@@ -29,20 +29,66 @@ public class FloatingAutoHideDownBehavior extends CoordinatorLayout.Behavior<Vie
     @Override
     public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, View child, View target, int dx, int dy, int[] consumed) {
         super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed);
-        float mPreTranslationY = dy + child.getTranslationY();
-        if (mPreTranslationY <= 0) {
-            child.setTranslationY(0);
-            mIsAnimatingOut = true;
-        }
-        if (mPreTranslationY >= child.getHeight()) {
-            child.setTranslationY(child.getHeight());
-            mIsAnimatingOut = false;
-        }
-        if (mPreTranslationY > 0 && mPreTranslationY < child.getHeight()) {
-            child.setTranslationY(mPreTranslationY);
-            mIsAnimatingOut = dy > 0;
+
+        if (!mIsScrollToBottom) {
+            float mPreTranslationY = dy + child.getTranslationY();
+            if (mPreTranslationY <= 0) {
+                child.setTranslationY(0);
+                mIsAnimatingOut = true;
+            }
+            if (mPreTranslationY >= child.getHeight()) {
+                child.setTranslationY(child.getHeight());
+                mIsAnimatingOut = false;
+            }
+            if (mPreTranslationY > 0 && mPreTranslationY < child.getHeight()) {
+                child.setTranslationY(mPreTranslationY);
+                mIsAnimatingOut = dy > 0;
+            }
         }
     }
+
+    @Override
+    public boolean layoutDependsOn(CoordinatorLayout parent, final View child, View dependency) {
+        if (child != null && dependency != null && dependency instanceof NestedScrollView) {
+            NestedScrollView s = (NestedScrollView) dependency;
+            if (s.getChildCount() > 0) {
+                View view = s.getChildAt(s.getChildCount() - 1);
+                view.setPadding(view.getPaddingLeft(),
+                        view.getPaddingTop(),
+                        view.getPaddingRight(),
+                        view.getPaddingBottom() + child.getHeight());
+            }
+
+            s.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                    if (v.getChildCount() > 0) {
+                        // Grab the last child placed in the ScrollView, we need it to determinate the bottom position.
+                        View view = v.getChildAt(v.getChildCount() - 1);
+                        // Calculate the scrolldiff
+                        int diff = (view.getBottom() - (v.getHeight() + scrollY));
+                        // if diff is zero, then the bottom has been reached
+                        if (diff == 0) {
+                            // notify that we have reached the bottom
+                            animateIn(child);
+                            mIsScrollToBottom = true;
+                        } else {
+                            mIsScrollToBottom = false;
+                        }
+                    }
+                }
+            });
+        }
+        return super.layoutDependsOn(parent, child, dependency);
+    }
+
+    @Override
+    public void onNestedScroll(final CoordinatorLayout coordinatorLayout, final View child,
+                               final View target, final int dxConsumed, final int dyConsumed,
+                               final int dxUnconsumed, final int dyUnconsumed) {
+        super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
+    }
+
 
     @Override
     public boolean onStartNestedScroll(final CoordinatorLayout coordinatorLayout, final View child,
