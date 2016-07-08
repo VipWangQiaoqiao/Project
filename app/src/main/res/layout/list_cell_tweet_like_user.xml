@@ -24,7 +24,6 @@
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:layout_gravity="center"
-            android:textStyle="bold"
             android:textColor="?attr/textColor"
             tools:text="用户名" />
     </LinearLayout>
