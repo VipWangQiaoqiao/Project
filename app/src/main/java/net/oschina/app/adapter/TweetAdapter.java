@@ -164,21 +164,17 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
 
         tweet.setLikeUsers(context, vh.likeUsers, true);
 
-        if (tweet.getLikeUser() == null) {
-            vh.ivLikeState.setVisibility(View.GONE);
-        } else {
-            vh.ivLikeState.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (AppContext.getInstance().isLogin()) {
-                        updateLikeState(vh, tweet);
-                    } else {
-                        AppContext.showToast("先登陆再赞~");
-                        UIHelper.showLoginActivity(context);
-                    }
+        vh.ivLikeState.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (AppContext.getInstance().isLogin()) {
+                    updateLikeState(vh, tweet);
+                } else {
+                    AppContext.showToast("先登陆再赞~");
+                    UIHelper.showLoginActivity(context);
                 }
-            });
-        }
+            }
+        });
 
 //        TypefaceUtils.setTypeface(vh.tvLikeState);
         if (tweet.getIsLike() == 1) {
