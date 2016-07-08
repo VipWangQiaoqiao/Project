@@ -59,6 +59,7 @@
                     android:id="@+id/tv_software_name"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/size_40"
+                    android:gravity="center_vertical"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/lay_12"
                     android:ellipsize="end"
@@ -67,7 +68,7 @@
                     android:minLines="1"
                     android:textColor="#111111"
                     android:textSize="16sp"
-                    tools:text="在Google IO大会中不仅仅带来了Android Studio 2.2预览版，同时带给我们一个依赖约束的库。 简单来说，她是相对布局的升级版本，但是区别与相对布局更加强调约束。何为约束，即控件之间的关系。" />
+                    tools:text="在Google IO大会中不仅仅带来了间的" />
 
             </LinearLayout>
 
