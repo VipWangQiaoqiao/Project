@@ -6,17 +6,16 @@
 
 编号 | 标签名 | 发布版本 | 备注
 ------- | ------- | ------- | -------
-1 | [v2.6.2](http://git.oschina.net/oschina/android-app/tree/v2.6.2/)  |v2.6.2(1606121625)| 当前最新版
-2 | [v2.4](http://git.oschina.net/oschina/android-app/tree/v2.4/) | -- | -- |
-3 | [v2.3](http://git.oschina.net/oschina/android-app/tree/v2.3/) | -- | 迁移到AndroidStudio |
-4 | [v2.2.1](http://git.oschina.net/oschina/android-app/tree/v2.2.1/) | -- | Eclipse可用 |
+1 | [v2.6.3](http://git.oschina.net/oschina/android-app/tree/v2.6.3/)  |v2.6.3 (1607081128)| 当前最新版  
+2 | [v2.6.2](http://git.oschina.net/oschina/android-app/tree/v2.6.2/)  |v2.6.2(1606121625)|   
+3 | [v2.4](http://git.oschina.net/oschina/android-app/tree/v2.4/) | -- | -- |
+4 | [v2.3](http://git.oschina.net/oschina/android-app/tree/v2.3/) | -- | 迁移到AndroidStudio |
+5 | [v2.2.1](http://git.oschina.net/oschina/android-app/tree/v2.2.1/) | -- | Eclipse可用 |
 
-
-##写在前面的话
-从2.3版本开始，项目已经完成了gradle化，完全迁移到了android studio，如果想使用eclipse进行该项目的学习，可以clone [tag v2.2.1](http://git.oschina.net/oschina/android-app/tree/v2.2.1/)，不过需要注意的是，eclipse需要按照开发环境中提到的：进行butterknife注解设置
 
 ##开发环境
-由于使用了较多的Eclipse项目Library，项目目前使用的是Eclipse。需要提示的是，由于butterknife注解特性，Eclipse需要开启注解功能，详细方法参考[这里](http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2015/0102/2247.html)。对于使用Android Studio的开发者，可能你们需要等待一段时间，项目目前正在Gradle化。当然，我们也欢迎由你来转换项目并通过PullRequest提交给我们，充分发挥社区化协作的优势。  
+从2.3版本开始，项目已经完成了Gradle化，完全迁移到了Android Studio，如果想使用Eclipse进行该项目的学习，可以clone [tag v2.2.1](http://git.oschina.net/oschina/android-app/tree/v2.2.1/)，不过需要注意的是，Eclipse需要按照开发环境中提到的：进行Butterknife注解设置，详细方法参考[这里](http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2015/0102/2247.html)
+
 
 ##项目简述
 1. 底部导航  
@@ -41,22 +40,33 @@
   * **PhotoView-library** ：用于图片预览界面展示
   * **UmengShareLib** ：用于分享到第三方平台
 
+
+##支持开源
+
+通过以下方式对我们的项目进行支持：
+
+1. 发现bug、确认bug、并通过**详细描述(什么操作？什么情况？什么手机？什么系统？)提出issue**
+2. 如果有时间，你还可以提出Pull Request
+3. 赞助开发小组童鞋们喝杯咖啡(支付宝扫描如下图片完成支付)
+
+![支付宝](http://git.oschina.net/uploads/qrcode/qrcode_alipay_146312694382.png)
+
 ##开源协议
- 
+
 	The MIT License (MIT)
-	
+
 	Copyright (c) 2016 OSChina.net
-	
+
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
 	in the Software without restriction, including without limitation the rights
 	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 	copies of the Software, and to permit persons to whom the Software is
 	furnished to do so, subject to the following conditions:
-	
+
 	The above copyright notice and this permission notice shall be included in all
 	copies or substantial portions of the Software.
-	
+
 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -64,7 +74,3 @@
 	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 	SOFTWARE.
-	
-	
-
-
