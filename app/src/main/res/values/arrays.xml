@@ -113,4 +113,10 @@
         <item>站务</item>
     </array>
 
+    <array name="blog_item">
+        <item>最新推荐</item>
+        <item>本周热门</item>
+        <item>最新博客</item>
+    </array>
+
 </resources>

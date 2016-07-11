@@ -1083,8 +1083,9 @@ public class OSChinaApi {
         ApiHttpClient.get("action/apiv2/" + type, params, handler);
     }
 
-    public static final int CATALOG_BLOG_NORMAL = 1; // 最近
+    public static final int CATALOG_BLOG_NORMAL = 1; // 最新
     public static final int CATALOG_BLOG_HEAT = 2; // 最热
+    public static final int CATALOG_BLOG_RECOMMEND = 3;//推荐
 
     /**
      * 请求博客列表

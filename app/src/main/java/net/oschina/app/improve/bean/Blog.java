@@ -1,7 +1,5 @@
 package net.oschina.app.improve.bean;
 
-import com.google.gson.annotations.Expose;
-
 import java.io.Serializable;
 
 /**
@@ -9,10 +7,6 @@ import java.io.Serializable;
  * desc:   blog bean
  */
 public class Blog implements Serializable {
-
-    public static final int VIEW_TYPE_DATA = 0;
-    public static final int VIEW_TYPE_TITLE_HEAT = 1;
-    public static final int VIEW_TYPE_TITLE_NORMAL = 2;
 
     private long id;
     private String title;
@@ -24,11 +18,7 @@ public class Blog implements Serializable {
     private String href;
     private boolean recommend;  //是否推荐
     private boolean original;  //是否原创
-    private int type;   //博客类型
-
-    @Expose
-    private int viewType = VIEW_TYPE_DATA; //  界面显示类型 0:常规, 1: 热门 2:最近
-
+    private int type;   //博客类型 1:常规, 2: 热门 3:最近
 
     public long getId() {
         return id;
@@ -118,12 +108,5 @@ public class Blog implements Serializable {
         this.type = type;
     }
 
-    public void setViewType(int viewType) {
-        this.viewType = viewType;
-    }
-
-    public int getViewType() {
-        return viewType;
-    }
 }
 
