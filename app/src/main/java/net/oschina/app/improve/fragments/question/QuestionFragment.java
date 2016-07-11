@@ -40,7 +40,6 @@ public class QuestionFragment extends BaseGeneralListFragment<Question> {
     public static final String QUES_COMPOSITE = "ques_composite";
     public static final String QUES_PROFESSION = "ques_profession";
     public static final String QUES_WEBSITE = "ques_website";
-    public static final String TAG = "QuestionFragment";
 
     private int catalog = 1;
     private QuesActionAdapter quesActionAdapter;

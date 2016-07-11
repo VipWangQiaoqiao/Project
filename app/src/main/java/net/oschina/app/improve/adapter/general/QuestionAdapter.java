@@ -1,5 +1,6 @@
 package net.oschina.app.improve.adapter.general;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -43,7 +44,7 @@ public class QuestionAdapter extends BaseListAdapter<Question> {
         String body = item.getBody();
         if (body != null) {
             body = body.trim();
-            if (body.length() > 0 && !body.equals("")) {
+            if (!TextUtils.isEmpty(body)) {
                 content.setText(body);
                 content.setVisibility(View.VISIBLE);
             } else {

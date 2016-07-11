@@ -601,7 +601,15 @@
         <item name="android:layout_marginRight">4dp</item>
         <item name="android:background">@drawable/ques_bt_bg</item>
         <item name="android:textColor">@color/ques_bt_text_color_light</item>
+    </style>
 
+    <style name="blog_bt_styles" parent="@style/ques_bt_styles">
+        <item name="android:layout_height">25dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_width">wrap_content</item>
     </style>
 
 </resources>

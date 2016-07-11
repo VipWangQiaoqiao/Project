@@ -3,7 +3,9 @@ package net.oschina.app.improve.adapter.general;
 import android.graphics.drawable.Drawable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.ImageSpan;
+import android.view.View;
 import android.widget.TextView;
 
 import net.oschina.app.AppContext;
@@ -15,8 +17,6 @@ import net.oschina.app.improve.fragments.blog.BlogFragment;
 import net.oschina.app.improve.fragments.blog.UserBlogFragment;
 import net.oschina.app.util.StringUtils;
 
-import java.util.List;
-
 
 /**
  * Created by fei on 2016/5/24.
@@ -25,6 +25,11 @@ import java.util.List;
 public class BlogAdapter extends BaseListAdapter<Blog> {
 
     private boolean isUserBlog;
+    private int actionPosition = 0;
+
+    public void setActionPosition(int actionPosition) {
+        this.actionPosition = actionPosition;
+    }
 
     public BlogAdapter(Callback callback) {
         super(callback);
@@ -38,16 +43,8 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
     @Override
     protected void convert(ViewHolder vh, Blog item, int position) {
 
-        switch (getItemViewType(position)) {
 
-            case Blog.VIEW_TYPE_TITLE_HEAT:
-                vh.setText(R.id.tv_blog_item_banner, R.string.blog_list_title_heat);
-                break;
-            case Blog.VIEW_TYPE_TITLE_NORMAL:
-                vh.setText(R.id.tv_blog_item_banner, R.string.blog_list_title_normal);
-                break;
-            default:
-                TextView title = vh.getView(R.id.tv_item_blog_title);
+        TextView title = vh.getView(R.id.tv_item_blog_title);
                 TextView content = vh.getView(R.id.tv_item_blog_body);
                 TextView history = vh.getView(R.id.tv_item_blog_history);
                 TextView see = vh.getView(R.id.tv_info_view);
@@ -60,7 +57,9 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
                 if (item.isOriginal()) {
                     spannable.append("[icon] ");
                     Drawable originate = mCallback.getContext().getResources().getDrawable(R.drawable.ic_label_originate);
-                    originate.setBounds(0, 0, originate.getIntrinsicWidth(), originate.getIntrinsicHeight());
+                    if (originate != null) {
+                        originate.setBounds(0, 0, originate.getIntrinsicWidth(), originate.getIntrinsicHeight());
+                    }
                     ImageSpan imageSpan = new ImageSpan(originate, ImageSpan.ALIGN_BOTTOM);
                     spannable.setSpan(imageSpan, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 }
@@ -68,14 +67,16 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
                 if (item.isRecommend()) {
                     spannable.append("[icon] ");
                     Drawable recommend = mCallback.getContext().getResources().getDrawable(R.drawable.ic_label_recommend);
-                    recommend.setBounds(0, 0, recommend.getIntrinsicWidth(), recommend.getIntrinsicHeight());
+                    if (recommend != null) {
+                        recommend.setBounds(0, 0, recommend.getIntrinsicWidth(), recommend.getIntrinsicHeight());
+                    }
                     ImageSpan imageSpan = new ImageSpan(recommend, ImageSpan.ALIGN_BOTTOM);
                     spannable.setSpan(imageSpan, 7, 13, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 }
 
-                title.setText(spannable.append(item.getTitle()));
+        title.setText(spannable.append(item.getTitle()));
 
-                String cacheName = BlogFragment.HISTORY_BLOG;
+        String cacheName = verifyFileName();
 
                 if (isUserBlog) {
                     cacheName = UserBlogFragment.HISTORY_BLOG;
@@ -89,37 +90,55 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
                     content.setTextColor(mCallback.getContext().getResources().getColor(R.color.ques_bt_text_color_dark));
                 }
 
-                String body = item.getBody();
-                if (body != null) {
-                    content.setText(body.trim());
-                }
+        String body = item.getBody();
+        if (!TextUtils.isEmpty(body)) {
+            body = body.trim();
+            if (!TextUtils.isEmpty(body)) {
+                content.setText(body);
+                content.setVisibility(View.VISIBLE);
+            } else {
+                content.setVisibility(View.GONE);
+            }
+        }
 
-                String author = item.getAuthor();
-                if (author != null) {
+        String author = item.getAuthor();
+        if (!TextUtils.isEmpty(author)) {
                     author = author.trim();
-                    history.setText((author.length() > 9 ? author.substring(0, 9) : author) + "  " + StringUtils.friendly_time(item.getPubDate().trim()));
+            history.setText((author.length() > 9 ? author.substring(0, 9) : author) +
+                    "  " + StringUtils.friendly_time(item.getPubDate().trim()));
                 }
 
                 see.setText(item.getViewCount() + "");
                 answer.setText(item.getCommentCount() + "");
-
-                break;
-        }
     }
 
     @Override
     protected int getLayoutId(int position, Blog item) {
-        return item.getViewType() == Blog.VIEW_TYPE_DATA ? R.layout.fragment_item_blog : R.layout.fragment_item_blog_line;
+        return /**item.getViewType() == Blog.VIEW_TYPE_DATA ? **/R.layout.fragment_item_blog; //: R.layout.fragment_item_blog_line;
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        List<Blog> datas = getDatas();
-        return datas.get(position).getViewType();
+
+    private String verifyFileName() {
+        switch (actionPosition) {
+            case 1:
+                return BlogFragment.BLOG_NORMAL;
+            case 2:
+                return BlogFragment.BLOG_HEAT;
+            case 3:
+                return BlogFragment.BLOG_RECOMMEND;
+            default:
+                return BlogFragment.BLOG_NORMAL;
+        }
     }
 
-    @Override
+//    @Override
+//    public int getItemViewType(int position) {
+//        List<Blog> datas = getDatas();
+//        return datas.get(position).getViewType();
+//    }
+
+   /* @Override
     public int getViewTypeCount() {
         return 3;
-    }
+    }*/
 }

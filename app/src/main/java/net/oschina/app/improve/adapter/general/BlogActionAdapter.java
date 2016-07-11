@@ -13,15 +13,15 @@ import net.oschina.app.R;
  * Created by fei on 2016/5/24.
  * desc:
  */
-public class QuesActionAdapter extends BaseAdapter {
+public class BlogActionAdapter extends BaseAdapter {
 
     private String[] data;
     private Context context;
     private int[] positions;
 
-    public QuesActionAdapter(Context context, int[] positions) {
+    public BlogActionAdapter(Context context, int[] positions) {
         this.context = context;
-        this.data = context.getResources().getStringArray(R.array.ques_item);
+        this.data = context.getResources().getStringArray(R.array.blog_item);
         this.positions = positions;
     }
 
@@ -46,8 +46,8 @@ public class QuesActionAdapter extends BaseAdapter {
         ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.fragment_item_question_grid, parent, false);
-            viewHolder.tv_action = (Button) convertView.findViewById(R.id.bt_ques_grid_item);
+            convertView = LayoutInflater.from(context).inflate(R.layout.fragment_item_blog_grid, parent, false);
+            viewHolder.tv_action = (Button) convertView.findViewById(R.id.bt_blog_grid_item);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
