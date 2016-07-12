@@ -314,6 +314,25 @@
             android:label="评论列表"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <activity
+            android:name=".improve.detail.activities.SchemeUrlActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="WebUrl"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <intent-filter>
+                <data
+                    android:host="www.oschina.net"
+                    android:path="/launch/app"
+                    android:scheme="oscapp" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
