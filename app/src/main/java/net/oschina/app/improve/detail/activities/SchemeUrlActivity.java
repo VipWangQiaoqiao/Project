@@ -37,7 +37,6 @@ public class SchemeUrlActivity extends BaseBackActivity {
                 Pattern pattern = Pattern.compile("([^&?]*)");
                 Matcher matcher = pattern.matcher(metaData);
                 while (matcher.find()) {
-                    Log.e("groud", matcher.group());
                     String group = matcher.group();
                     if (!group.contains("www.oschina.net")) {
                         String[] param = group.split("=");
