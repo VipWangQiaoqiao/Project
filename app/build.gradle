@@ -1,21 +1,43 @@
 apply plugin: 'com.android.application'
-//apply plugin: 'newlens'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '23.0.3'
+
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        applicationId "net.oschina.app"
-        minSdkVersion 15
-        targetSdkVersion 23
-        versionCode 263
-        versionName "2.6.3 (1607081128)"
+        applicationId     rootProject.ext.applicationId
+        minSdkVersion     rootProject.ext.minSdkVersion
+        targetSdkVersion  rootProject.ext.targetSdkVersion
+        versionCode       rootProject.ext.versionCode
+        versionName       rootProject.ext.versionName
     }
 
-    // 移除lint检查的error
-    lintOptions {
-        abortOnError false
+    // rename the apk with the version name
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            output.outputFile = new File(
+                    output.outputFile.parent + "/${variant.buildType.name}",
+                    "osc-android-${variant.versionName}-${variant.productFlavors[0].name}-${variant.buildType.name}.apk".toLowerCase())
+        }
+    }
+
+    //signing files settings
+    signingConfigs {
+
+        debug {
+            storeFile file(RELEASE_STORE_FILE)
+            storePassword RELEASE_STORE_PASSWORD
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_KEY_PASSWORD
+        }
+
+        release {
+            storeFile file(RELEASE_STORE_FILE)
+            storePassword RELEASE_STORE_PASSWORD
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_KEY_PASSWORD
+        }
     }
 
     sourceSets {
@@ -24,14 +46,56 @@ android {
         }
     }
 
+    // 移除lint检查的error
+    lintOptions {
+        abortOnError false
+    }
+
+
+    //build type setting
     buildTypes {
-        all {
+
+        debug {
+            zipAlignEnabled false
+            minifyEnabled false
+        }
+
+        release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            zipAlignEnabled true
+        }
+    }
+
+    //product flavors
+    productFlavors {
+
+        oschina {
+            manifestPlaceholders = [UMENG_CHANNEL: "oschina"]
+        }
+
+        google {
+
+            manifestPlaceholders = [UMENG_CHANNEL: "google"]
+        }
+
+        tencent {
+            manifestPlaceholders = [UMENG_CHANNEL: "tentcent"]
+        }
+
+        wandoujia {
+            manifestPlaceholders = [UMENG_CHANNEL: "wandoujia"]
+        }
+
+        xiaomi {
+            manifestPlaceholders = [UMENG_CHANNEL: "xiaomi"]
+        }
+
+        huawei {
+            manifestPlaceholders = [UMENG_CHANNEL: "huawei"]
         }
     }
 }
-
 
 repositories {
     flatDir {
@@ -41,11 +105,7 @@ repositories {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    //compile project(':social_sdk_library_project')
     compile(name: 'social_sdk_library_project', ext: 'aar')
-    //compile 'com.networkbench.newlens.agent.android:nbs.newlens.agent:2.2.7'
-    // or 1.4-beta1
-    // or 1.4-beta1
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
     compile 'com.android.support:recyclerview-v7:23.4.0'
@@ -63,6 +123,7 @@ dependencies {
     compile 'net.qiujuer.genius:blur:2.0.0'
     compile 'net.qiujuer.genius:res:2.0.0-beta6'
     compile 'net.qiujuer.genius:ui:2.0.0-beta6'
+
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
 }
