@@ -1,4 +1,4 @@
-package net.oschina.app.improve.adapter.general;
+package net.oschina.app.improve.general.adapter;
 
 import android.graphics.drawable.Drawable;
 import android.text.SpannableString;
@@ -11,7 +11,7 @@ import net.oschina.app.R;
 import net.oschina.app.adapter.ViewHolder;
 import net.oschina.app.improve.adapter.base.BaseListAdapter;
 import net.oschina.app.improve.bean.News;
-import net.oschina.app.improve.fragments.news.NewsFragment;
+import net.oschina.app.improve.general.fragments.NewsFragment;
 import net.oschina.app.util.StringUtils;
 
 /**

@@ -1,4 +1,4 @@
-package net.oschina.app.improve.adapter.general;
+package net.oschina.app.improve.general.adapter;
 
 import android.text.TextUtils;
 import android.view.View;
@@ -9,7 +9,7 @@ import net.oschina.app.R;
 import net.oschina.app.adapter.ViewHolder;
 import net.oschina.app.improve.adapter.base.BaseListAdapter;
 import net.oschina.app.improve.bean.Question;
-import net.oschina.app.improve.fragments.question.QuestionFragment;
+import net.oschina.app.improve.general.fragments.QuestionFragment;
 import net.oschina.app.util.StringUtils;
 
 /**

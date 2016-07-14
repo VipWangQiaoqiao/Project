@@ -56,7 +56,7 @@ import net.oschina.app.improve.detail.activities.NewsDetailActivity;
 import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
 import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.improve.detail.activities.TranslateDetailActivity;
-import net.oschina.app.improve.fragments.blog.UserBlogFragment;
+import net.oschina.app.improve.user.UserBlogFragment;
 import net.oschina.app.improve.tweet.fragments.SoftWareForTweetsFragment;
 import net.oschina.app.interf.ICallbackResult;
 import net.oschina.app.interf.OnWebViewImageListener;

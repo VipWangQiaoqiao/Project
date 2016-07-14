@@ -1,5 +1,4 @@
-package net.oschina.app.improve.fragments.blog;
-
+package net.oschina.app.improve.general.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -17,59 +16,59 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.improve.adapter.base.BaseListAdapter;
-import net.oschina.app.improve.adapter.general.BlogActionAdapter;
-import net.oschina.app.improve.adapter.general.BlogAdapter;
-import net.oschina.app.improve.bean.Blog;
+import net.oschina.app.improve.bean.Question;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.detail.activities.BlogDetailActivity;
+import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
 import net.oschina.app.improve.fragments.base.BaseGeneralListFragment;
+import net.oschina.app.improve.general.adapter.QuesActionAdapter;
+import net.oschina.app.improve.general.adapter.QuestionAdapter;
 import net.oschina.app.ui.empty.EmptyLayout;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
- * 博客界面
+ * 技术问答界面
+ * <p/>
+ * desc
  */
-public class BlogFragment extends BaseGeneralListFragment<Blog> {
+public class QuestionFragment extends BaseGeneralListFragment<Question> {
 
-    public static final String BUNDLE_BLOG_TYPE = "BUNDLE_BLOG_TYPE";
+    public static final String QUES_ASK = "ques_ask";
+    public static final String QUES_SHARE = "ques_share";
+    public static final String QUES_COMPOSITE = "ques_composite";
+    public static final String QUES_PROFESSION = "ques_profession";
+    public static final String QUES_WEBSITE = "ques_website";
 
-    public static final String BLOG_NORMAL = "blog_normal";
-    public static final String BLOG_HEAT = "blog_heat";
-    public static final String BLOG_RECOMMEND = "blog_recommend";
-
-    private int[] positions = {1, 0, 0};
+    private int catalog = 1;
+    private QuesActionAdapter quesActionAdapter;
+    private int[] positions = {1, 0, 0, 0, 0};
     private ConnectivityManager connectivityManager;
-    private BlogActionAdapter actionAdapter;
-    private int catalog = 3;
 
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
     }
-
 
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
 
         @SuppressLint("InflateParams")
-        View headView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_main_blog_header, null, false);
+        View headView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_main_question_header, null, false);
 
         GridView quesGridView = (GridView) headView.findViewById(R.id.gv_ques);
-        actionAdapter = new BlogActionAdapter(getActivity(), positions);
-        quesGridView.setAdapter(actionAdapter);
+        quesActionAdapter = new QuesActionAdapter(getActivity(), positions);
+        quesGridView.setAdapter(quesActionAdapter);
         quesGridView.setItemChecked(0, true);
         quesGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                displacementCatalog(position);
-                ((BlogAdapter) mAdapter).setActionPosition(position + 1);
+                catalog = (position + 1);
+                ((QuestionAdapter) mAdapter).setActionPosition(position + 1);
                 if (!mIsRefresh) {
                     mIsRefresh = true;
                 }
@@ -81,28 +80,6 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
         });
         mListView.addHeaderView(headView);
 
-    }
-
-    /**
-     * displacement Catalog  type
-     *
-     * @param position position
-     */
-    private void displacementCatalog(int position) {
-        switch (position) {
-            case 0:
-                catalog = 3;
-                break;
-            case 1:
-                catalog = 2;
-                break;
-            case 2:
-                catalog = 1;
-                break;
-            default:
-                catalog = 3;
-                break;
-        }
     }
 
     /**
@@ -138,7 +115,7 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
                 positions[i] = 1;
             }
         }
-        actionAdapter.notifyDataSetChanged();
+        quesActionAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -147,7 +124,7 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
     @SuppressWarnings("unchecked")
     private void requestLocalCache() {
         verifyCacheType();
-        mBean = (PageBean<Blog>) CacheManager.readObject(getActivity(), CACHE_NAME);
+        mBean = (PageBean<Question>) CacheManager.readObject(getActivity(), CACHE_NAME);
         if (mBean != null) {
             mAdapter.clear();
             mAdapter.addItem(mBean.getItems());
@@ -156,36 +133,14 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
             mRefreshLayout.setCanLoadMore();
         } else {
             mBean = new PageBean<>();
-            mBean.setItems(new ArrayList<Blog>());
+            mBean.setItems(new ArrayList<Question>());
             onRefreshing();
         }
     }
 
-    /**
-     * verify cache type
-     */
-    private void verifyCacheType() {
-
-        switch (catalog) {
-            case 1:
-                CACHE_NAME = BLOG_NORMAL;
-                break;
-            case 2:
-                CACHE_NAME = BLOG_HEAT;
-                break;
-            case 3:
-                CACHE_NAME = BLOG_RECOMMEND;
-                break;
-            default:
-                CACHE_NAME = BLOG_NORMAL;
-                break;
-        }
-
-    }
-
     @Override
     protected void initData() {
-        CACHE_NAME = BLOG_NORMAL;
+        CACHE_NAME = QUES_ASK;
         super.initData();
     }
 
@@ -195,47 +150,69 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
         requestLocalCache();
     }
 
+    @Override
+    protected BaseListAdapter<Question> getListAdapter() {
+        return new QuestionAdapter(this);
+    }
 
     @Override
     protected void requestData() {
         super.requestData();
         verifyCacheType();
-        OSChinaApi.getBlogList(catalog, mIsRefresh ? (mBean != null ? mBean.getPrevPageToken() : null) : (mBean != null ? mBean.getNextPageToken() : null), mHandler);
-
-    }
-
-
-    @Override
-    protected BaseListAdapter<Blog> getListAdapter() {
-        return new BlogAdapter(this);
+        OSChinaApi.getQuestionList(catalog, mIsRefresh ? (mBean != null ? mBean.getPrevPageToken() : null) : (mBean != null ? mBean.getNextPageToken() : null), mHandler);
     }
 
     @Override
     protected Type getType() {
-        return new TypeToken<ResultBean<PageBean<Blog>>>() {
+        return new TypeToken<ResultBean<PageBean<Question>>>() {
         }.getType();
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-        Blog blog = mAdapter.getItem(position - 1);
-        if (blog != null) {
-            BlogDetailActivity.show(getActivity(), blog.getId());
-            TextView title = (TextView) view.findViewById(R.id.tv_item_blog_title);
-            TextView content = (TextView) view.findViewById(R.id.tv_item_blog_body);
-            updateTextColor(title, content);
-            verifyCacheType();
-            saveToReadedList(CACHE_NAME, blog.getId() + "");
-        }
-
-    }
-
-
-    @Override
-    protected void setListData(ResultBean<PageBean<Blog>> resultBean) {
+    protected void setListData(ResultBean<PageBean<Question>> resultBean) {
         verifyCacheType();
         super.setListData(resultBean);
     }
 
+    /**
+     * verify cache type
+     */
+    private void verifyCacheType() {
+
+        switch (catalog) {
+            case 1:
+                CACHE_NAME = QUES_ASK;
+                break;
+            case 2:
+                CACHE_NAME = QUES_SHARE;
+                break;
+            case 3:
+                CACHE_NAME = QUES_COMPOSITE;
+                break;
+            case 4:
+                CACHE_NAME = QUES_PROFESSION;
+                break;
+            case 5:
+                CACHE_NAME = QUES_WEBSITE;
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        // super.onItemClick(parent, view, position, id);
+        Question question = mAdapter.getItem(position - 1);
+        if (question != null) {
+            // UIHelper.showPostDetail(getActivity(), (int) question.getId(), question.getCommentCount());
+            QuestionDetailActivity.show(getActivity(), question.getId());
+            TextView title = (TextView) view.findViewById(R.id.tv_ques_item_title);
+            TextView content = (TextView) view.findViewById(R.id.tv_ques_item_content);
+            updateTextColor(title, content);
+            verifyCacheType();
+            saveToReadedList(CACHE_NAME, question.getId() + "");
+        }
+    }
 }
