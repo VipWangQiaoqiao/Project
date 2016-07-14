@@ -174,8 +174,8 @@ public class MyInformationFragment extends BaseFragment {
             int activeCount = atmeCount + reviewCount + msgCount + newFansCount + newLikeCount;//
             // 信息总数
             if (activeCount > 0) {
-                mMesCount.setText(String.format("%d", activeCount));
                 mMesCount.show();
+                mMesCount.setText(" ");
             } else {
                 mMesCount.hide();
             }
@@ -229,10 +229,10 @@ public class MyInformationFragment extends BaseFragment {
         view.findViewById(R.id.rl_message).setOnClickListener(this);
         view.findViewById(R.id.rl_team).setOnClickListener(this);
         view.findViewById(R.id.rl_blog).setOnClickListener(this);
-        view.findViewById(R.id.rl_feedback).setOnClickListener(this);
+        //view.findViewById(R.id.rl_feedback).setOnClickListener(this);
         view.findViewById(R.id.rl_info_avtivities).setOnClickListener(this);
         view.findViewById(R.id.rl_setting).setOnClickListener(this);
-        view.findViewById(R.id.rl_note_book_avtivities).setOnClickListener(this);
+        // view.findViewById(R.id.rl_note_book_avtivities).setOnClickListener(this);
         mUserUnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -253,8 +253,7 @@ public class MyInformationFragment extends BaseFragment {
             return;
         mIvAvatar.setAvatarUrl(mInfo.getPortrait());
         mTvName.setText(mInfo.getName());
-        mIvGender
-                .setImageResource(StringUtils.toInt(mInfo.getGender()) != 2 ? R.drawable
+        mIvGender.setImageResource(StringUtils.toInt(mInfo.getGender()) != 2 ? R.drawable
                         .userinfo_icon_male
                         : R.drawable.userinfo_icon_female);
         mTvScore.setText(String.valueOf(mInfo.getScore()));
@@ -380,12 +379,12 @@ public class MyInformationFragment extends BaseFragment {
                     UIHelper.showUserFavorite(getActivity(), AppContext.getInstance()
                             .getLoginUid());
                     break;
-                case R.id.rl_feedback:
-                    UIHelper.showSimpleBack(getActivity(), SimpleBackPage.FEED_BACK);
-                    break;
+                //  case R.id.rl_feedback:
+                //  UIHelper.showSimpleBack(getActivity(), SimpleBackPage.FEED_BACK);
+                // break;
                 case R.id.rl_message:
                     UIHelper.showMyMes(getActivity());
-                    setNoticeReaded();
+                    //setNoticeReaded();
                     break;
                 case R.id.rl_team:
                     UIHelper.showTeamMainActivity(getActivity());
@@ -404,9 +403,9 @@ public class MyInformationFragment extends BaseFragment {
                     bundle.putInt(SimpleBackActivity.BUNDLE_KEY_ARGS, 1);
                     UIHelper.showSimpleBack(getActivity(), SimpleBackPage.MY_EVENT, bundle);
                     break;
-                case R.id.rl_note_book_avtivities:
-                    UIHelper.showSimpleBack(getActivity(), SimpleBackPage.NOTE);
-                    break;
+                //   case R.id.rl_note_book_avtivities:
+                //   UIHelper.showSimpleBack(getActivity(), SimpleBackPage.NOTE);
+                //    break;
                 default:
                     break;
             }
@@ -424,7 +423,7 @@ public class MyInformationFragment extends BaseFragment {
     }
 
     private void setNoticeReaded() {
-        mMesCount.setText("");
+        mMesCount.setText(" ");
         mMesCount.hide();
     }
 

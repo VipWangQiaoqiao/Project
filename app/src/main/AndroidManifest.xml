@@ -51,7 +51,7 @@
         tools:replace="android:allowBackup">
 
         //channel setting
-        <meta-data android:name="UMENG_CHANNEL" android:value="${UMENG_CHANNEL}"></meta-data>
+        <meta-data android:name="UMENG_CHANNEL" android:value="${UMENG_CHANNEL}"/>
 
         <activity
             android:name=".AppStart"

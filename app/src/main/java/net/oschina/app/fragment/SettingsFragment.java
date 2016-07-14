@@ -13,6 +13,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.AppManager;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
+import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.FileUtil;
 import net.oschina.app.util.MethodsCompat;
@@ -77,6 +78,7 @@ public class SettingsFragment extends BaseFragment {
         view.findViewById(R.id.rl_double_click_exit).setOnClickListener(this);
         view.findViewById(R.id.rl_about).setOnClickListener(this);
         view.findViewById(R.id.rl_exit).setOnClickListener(this);
+        view.findViewById(R.id.rl_feedback).setOnClickListener(this);
 
         if (!AppContext.getInstance().isLogin()) {
             mTvExit.setText("退出");
@@ -140,6 +142,9 @@ public class SettingsFragment extends BaseFragment {
                 break;
             case R.id.rl_double_click_exit:
                 mTbDoubleClickExit.toggle();
+                break;
+            case R.id.rl_feedback:
+                UIHelper.showSimpleBack(getActivity(), SimpleBackPage.FEED_BACK);
                 break;
             case R.id.rl_about:
                 UIHelper.showAboutOSC(getActivity());
