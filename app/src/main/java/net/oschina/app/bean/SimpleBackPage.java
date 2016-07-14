@@ -69,7 +69,7 @@ public enum SimpleBackPage {
     OPENSOURCE_SOFTWARE(10, R.string.actionbar_title_softwarelist,
             OpensourceSoftwareFragment.class),
 
-    MY_FRIENDS(11, R.string.actionbar_title_my_friends,
+    MY_FOLLOWING(11, R.string.following,
             FriendsViewPagerFragment.class),
 
     QUESTION_TAG(12, R.string.actionbar_title_question,
@@ -143,7 +143,10 @@ public enum SimpleBackPage {
 
     MY_EVENT(43, R.string.actionbar_title_my_event, EventViewPagerFragment.class),
 
-    SOFTWARE_TWEETS_NEW(44, R.string.actionbar_title_softtweet, SoftWareForTweetsFragment.class);
+    SOFTWARE_TWEETS_NEW(44, R.string.actionbar_title_softtweet, SoftWareForTweetsFragment.class),
+
+    MY_FOLLOWER(45, R.string.follower,
+            FriendsViewPagerFragment.class);
 
     private int title;
     private Class<?> clz;
