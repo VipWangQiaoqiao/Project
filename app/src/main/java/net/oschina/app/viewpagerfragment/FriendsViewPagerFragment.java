@@ -1,13 +1,13 @@
 package net.oschina.app.viewpagerfragment;
 
-import net.oschina.app.R;
+import android.os.Bundle;
+import android.view.View;
+
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.BaseViewPagerFragment;
 import net.oschina.app.bean.FriendsList;
 import net.oschina.app.fragment.FriendsFragment;
-import android.os.Bundle;
-import android.view.View;
 
 /**
  * 关注、粉丝viewpager页面
@@ -18,30 +18,33 @@ import android.view.View;
 public class FriendsViewPagerFragment extends BaseViewPagerFragment {
 	
 	public static final String BUNDLE_KEY_TABIDX = "BUNDLE_KEY_TABIDX";
-	
-	private int mInitTabIdx;
-	
-	private int mUid;
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+
+    private int mInitTabIdx;
+
+    private int mUid;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 		Bundle args = getArguments();
 		mInitTabIdx = args.getInt(BUNDLE_KEY_TABIDX, 0);
-		mUid = args.getInt(FriendsFragment.BUNDLE_KEY_UID, 0);
-	}
-	
-	@Override
-	protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
-		String[] title = getResources().getStringArray(R.array.friends_viewpage_arrays);
-		adapter.addTab(title[0], "follower", FriendsFragment.class, getBundle(FriendsList.TYPE_FOLLOWER));
-		adapter.addTab(title[1], "following", FriendsFragment.class, getBundle(FriendsList.TYPE_FANS));
-		
-		mViewPager.setCurrentItem(mInitTabIdx);
-	}
-	
-	private Bundle getBundle(int catalog) {
-		Bundle bundle = new Bundle();
+        mUid = args.getInt(FriendsFragment.BUNDLE_KEY_UID, 0);
+    }
+
+    @Override
+    protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
+		//String[] title = getResources().getStringArray(R.array.friends_viewpage_arrays);
+        if (mInitTabIdx == 0) {
+            adapter.addTab(null, "follower", FriendsFragment.class, getBundle(FriendsList.TYPE_FOLLOWER));
+        } else {
+            adapter.addTab(null, "following", FriendsFragment.class, getBundle(FriendsList.TYPE_FANS));
+        }
+
+        mViewPager.setCurrentItem(mInitTabIdx);
+    }
+
+    private Bundle getBundle(int catalog) {
+        Bundle bundle = new Bundle();
 		bundle.putInt(BaseListFragment.BUNDLE_KEY_CATALOG, catalog);
 		bundle.putInt(FriendsFragment.BUNDLE_KEY_UID, mUid);
 		return bundle;

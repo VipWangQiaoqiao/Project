@@ -161,7 +161,6 @@
     <string name="actionbar_title_user_blog">用户博客列表</string>
     <string name="actionbar_title_user_favorite">用户收藏</string>
     <string name="actionbar_title_my_information">我的资料</string>
-    <string name="actionbar_title_my_friends">关注/粉丝</string>
     <string name="actionbar_title_setting">设置</string>
     <string name="actionbar_title_setting_notification">新消息提醒</string>
     <string name="actionbar_title_about_osc">关于开源中国</string>

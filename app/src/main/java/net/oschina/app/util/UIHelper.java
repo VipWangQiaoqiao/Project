@@ -952,7 +952,11 @@ public class UIHelper {
         Bundle args = new Bundle();
         args.putInt(FriendsViewPagerFragment.BUNDLE_KEY_TABIDX, tabIdx);
         args.putInt(FriendsFragment.BUNDLE_KEY_UID, uid);
-        showSimpleBack(context, SimpleBackPage.MY_FRIENDS, args);
+        if (tabIdx == 0) {
+            showSimpleBack(context, SimpleBackPage.MY_FOLLOWING, args);
+        } else {
+            showSimpleBack(context, SimpleBackPage.MY_FOLLOWER, args);
+        }
     }
 
     /**
