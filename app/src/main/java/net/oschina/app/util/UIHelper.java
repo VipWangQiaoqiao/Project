@@ -49,6 +49,7 @@ import net.oschina.app.fragment.FriendsFragment;
 import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
+import net.oschina.app.improve.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.activities.TweetDetailActivity;
 import net.oschina.app.improve.detail.activities.BlogDetailActivity;
 import net.oschina.app.improve.detail.activities.EventDetailActivity;
@@ -858,6 +859,10 @@ public class UIHelper {
      */
     public static void showUserCenter(Context context, long hisuid,
                                       String hisname) {
+        if (false){
+            OtherUserHomeActivity.show(context, null);
+            return;
+        }
         if (hisuid == 0 && hisname.equalsIgnoreCase("匿名")) {
             AppContext.showToast("提醒你，该用户为非会员");
             return;
