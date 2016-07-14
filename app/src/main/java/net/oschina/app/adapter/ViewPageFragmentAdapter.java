@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -54,12 +55,14 @@ public class ViewPageFragmentAdapter extends FragmentStatePagerAdapter {
             return;
         }
 
+        if (!TextUtils.isEmpty(info.title)) {
         // 加入tab title
         View v = LayoutInflater.from(mContext).inflate(
                 R.layout.base_viewpage_fragment_tab_item, null, false);
         TextView title = (TextView) v.findViewById(R.id.tab_title);
         title.setText(info.title);
         mPagerStrip.addTab(v);
+        }
 
         mTabs.add(info);
         notifyDataSetChanged();
