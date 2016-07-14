@@ -354,8 +354,8 @@
     </style>
 
     <style name="option_item_img">
-        <item name="android:layout_width">28dp</item>
-        <item name="android:layout_height">28dp</item>
+        <item name="android:layout_width">20dp</item>
+        <item name="android:layout_height">20dp</item>
         <item name="android:layout_marginRight">@dimen/space_10</item>
     </style>
 
@@ -450,16 +450,16 @@
         <item name="android:clickable">true</item>
         <item name="android:gravity">center_horizontal</item>
         <item name="android:background">@drawable/my_infomation_option_item_background</item>
+        <item name="android:paddingBottom">8dp</item>
         <item name="android:orientation">vertical</item>
-        <item name="android:padding">@dimen/space_4</item>
     </style>
 
     <style name="user_formation_text">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">@dimen/space_2</item>
         <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">@dimen/text_size_11</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
     <style name="user_formation_info" parent="@style/user_formation_text">

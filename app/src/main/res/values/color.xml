@@ -99,4 +99,7 @@
     <color name="count_text_color_light">#9d9d9d</color>
     <color name="ques_detail_bg_color">#f9f9f9</color>
     <color name="software_bt_bg_color">#d6d6d6</color>
+    <color name="user_info_bg_color">#20B955</color>
+    <color name="user_info_line_color">#6FDA93</color>
+    <color name="user_info_item_bg_color">#F5F5F5</color>
 </resources>

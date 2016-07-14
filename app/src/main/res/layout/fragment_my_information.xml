@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/layout_item_bg">
@@ -19,8 +20,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/white"
                 android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/list_divider_color" />
 
                 <LinearLayout
                     android:id="@+id/rl_message"
@@ -29,8 +35,8 @@
 
                     <ImageView
                         style="@style/option_item_img"
-                        android:background="@drawable/icon_my_message"
-                        android:contentDescription="@null" />
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_my_messege" />
 
                     <TextView
                         style="@style/option_item_text"
@@ -40,16 +46,23 @@
                         android:id="@+id/tv_mes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/space_10"
-                        android:gravity="right" />
-                </LinearLayout>
+                        android:layout_marginRight="4dp" />
 
-                <View
-                    style="@style/h_line"
-                    android:layout_height="1px"
-                    android:layout_marginBottom="1px"
-                    android:layout_marginLeft="14dp"
-                    android:background="@color/list_divider_color" />
+                    <View
+                        android:id="@+id/view_content"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="4dp"
+                        android:layout_weight="1"
+                        tools:text="111" />
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_arrow_right" />
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -58,6 +71,12 @@
                 android:background="@android:color/white"
                 android:orientation="vertical">
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginLeft="46dp"
+                    android:background="@color/list_divider_color" />
+
                 <LinearLayout
                     android:id="@+id/rl_blog"
                     style="@style/option_item_rl"
@@ -65,19 +84,25 @@
 
                     <ImageView
                         style="@style/option_item_img"
-                        android:background="@drawable/icon_my_blog"
-                        android:contentDescription="@null" />
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_my_blog" />
 
                     <TextView
                         style="@style/option_item_text"
+                        android:layout_weight="1"
                         android:text="@string/blog" />
+
+                    <ImageView
+                        android:id="@+id/imageView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_arrow_right" />
                 </LinearLayout>
 
                 <View
                     style="@style/h_line"
                     android:layout_height="1px"
-                    android:layout_marginBottom="1px"
-                    android:layout_marginLeft="14dp"
+                    android:layout_marginLeft="46dp"
                     android:background="@color/list_divider_color" />
             </LinearLayout>
 
@@ -94,20 +119,26 @@
 
                     <ImageView
                         style="@style/option_item_img"
-                        android:background="@drawable/icon_my_team"
-                        android:contentDescription="@null" />
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_my_team" />
 
                     <TextView
                         style="@style/option_item_text"
+                        android:layout_weight="1"
                         android:text="@string/team" />
+
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_arrow_right" />
                 </LinearLayout>
 
                 <View
                     style="@style/h_line"
                     android:layout_width="match_parent"
                     android:layout_height="1px"
-                    android:layout_marginBottom="1px"
-                    android:layout_marginLeft="14dp"
+                    android:layout_marginLeft="46dp"
                     android:background="@color/list_divider_color" />
             </LinearLayout>
 
@@ -118,12 +149,19 @@
 
                 <ImageView
                     style="@style/option_item_img"
-                    android:background="@drawable/ic_my_event"
-                    android:contentDescription="@null" />
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_my_event" />
 
                 <TextView
                     style="@style/option_item_text"
+                    android:layout_weight="1"
                     android:text="@string/actionbar_title_event" />
+
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_arrow_right" />
 
             </LinearLayout>
 
@@ -132,68 +170,36 @@
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:layout_marginBottom="1px"
-                android:layout_marginLeft="14dp"
                 android:background="@color/list_divider_color" />
-
-            <LinearLayout
-                android:id="@+id/rl_note_book_avtivities"
-                style="@style/option_item_rl"
-                android:background="@drawable/selector_item_list"
-                android:visibility="gone">
-
-                <ImageView
-                    style="@style/option_item_img"
-                    android:background="@drawable/icon_my_note"
-                    android:contentDescription="@null" />
-
-                <TextView
-                    style="@style/option_item_text"
-                    android:text="@string/my_note" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/rl_feedback"
-                style="@style/option_item_rl"
-                android:layout_marginTop="18dp"
-                android:background="@drawable/selector_item_list">
-
-                <ImageView
-                    style="@style/option_item_img"
-                    android:background="@drawable/ic_feedback"
-                    android:contentDescription="@null" />
-
-                <TextView
-                    style="@style/option_item_text"
-                    android:text="@string/str_feedback" />
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="16dp"
                 android:background="@android:color/white"
                 android:orientation="vertical">
 
-                <View
-                    style="@style/h_line"
-                    android:layout_height="1px"
-                    android:layout_marginBottom="1px"
-                    android:layout_marginLeft="14dp"
-                    android:background="@color/list_divider_color" />
 
                 <LinearLayout
                     android:id="@+id/rl_setting"
                     style="@style/option_item_rl"
-                    android:background="@drawable/selector_item_list">
+                    android:background="@drawable/user_info_item_action_bg">
 
                     <ImageView
                         style="@style/option_item_img"
-                        android:background="@drawable/ic_my_setup"
-                        android:contentDescription="@null" />
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_my_setting" />
 
                     <TextView
                         style="@style/option_item_text"
+                        android:layout_weight="1"
                         android:text="@string/actionbar_title_setting" />
+
+                    <ImageView
+                        android:id="@+id/imageView6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_arrow_right" />
                 </LinearLayout>
             </LinearLayout>
 
