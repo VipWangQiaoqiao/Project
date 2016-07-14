@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -25,11 +24,11 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.improve.activities.BaseBackActivity;
-import net.oschina.app.improve.adapter.tweet.TweetCommentAdapter;
+import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.CommentEX;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
+import net.oschina.app.improve.tweet.adapter.TweetCommentAdapter;
 import net.oschina.app.improve.widget.OWebView;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.StringUtils;
@@ -246,7 +245,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 Toast.makeText(QuestionAnswerDetailActivity.this, "评论失败", Toast.LENGTH_SHORT).show();
-                if (mWaitingDialog != null){
+                if (mWaitingDialog != null) {
                     mWaitingDialog.dismiss();
                     mWaitingDialog = null;
                 }
@@ -270,7 +269,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                     Toast.makeText(QuestionAnswerDetailActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
                 }
 
-                if (mWaitingDialog != null){
+                if (mWaitingDialog != null) {
                     mWaitingDialog.dismiss();
                     mWaitingDialog = null;
                 }
@@ -310,14 +309,14 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
             View.OnClickListener listener = new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-                    if (!AppContext.getInstance().isLogin()){
+                    if (!AppContext.getInstance().isLogin()) {
                         UIHelper.showLoginActivity(QuestionAnswerDetailActivity.this);
                         return;
                     }
-                    final int opt = (int)v.getTag();
-                    switch (opt){
+                    final int opt = (int) v.getTag();
+                    switch (opt) {
                         case CommentEX.VOTE_STATE_UP:
-                            if (ivVoteDown.isSelected()){
+                            if (ivVoteDown.isSelected()) {
                                 Toast.makeText(QuestionAnswerDetailActivity.this, "你已经踩过了", Toast.LENGTH_SHORT).show();
                                 return;
                             }
@@ -325,7 +324,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                             holder.mProgressBar.setVisibility(View.VISIBLE);
                             break;
                         case CommentEX.VOTE_STATE_DOWN:
-                            if (ivVoteUp.isSelected()){
+                            if (ivVoteUp.isSelected()) {
                                 Toast.makeText(QuestionAnswerDetailActivity.this, "你已经顶过了", Toast.LENGTH_SHORT).show();
                                 return;
                             }
@@ -337,8 +336,8 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                         @Override
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                             Toast.makeText(QuestionAnswerDetailActivity.this, "操作失败", Toast.LENGTH_SHORT).show();
-                            if (mVoteDialog != null && mVoteDialog.isShowing()){
-                                switch (opt){
+                            if (mVoteDialog != null && mVoteDialog.isShowing()) {
+                                switch (opt) {
                                     case CommentEX.VOTE_STATE_UP:
                                         holder.mVoteUp.setVisibility(View.VISIBLE);
                                         holder.mProgressBar.setVisibility(View.GONE);
@@ -350,16 +349,18 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                                 }
                             }
                         }
+
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, String responseString) {
                             ResultBean<CommentEX> result = AppContext.createGson().fromJson(
-                                    responseString, new TypeToken<ResultBean<CommentEX>>(){}.getType());
-                            if (result.isSuccess()){
+                                    responseString, new TypeToken<ResultBean<CommentEX>>() {
+                                    }.getType());
+                            if (result.isSuccess()) {
                                 comment.setVoteState(result.getResult().getVoteState());
                                 comment.setVoteCount(result.getResult().getVoteCount());
                                 tvVoteCount.setText(String.valueOf(result.getResult().getVoteCount()));
                                 v.setSelected(!v.isSelected());
-                                switch (opt){
+                                switch (opt) {
                                     case CommentEX.VOTE_STATE_UP:
                                         ivVoteUp.setSelected(!ivVoteUp.isSelected());
                                         break;
@@ -368,7 +369,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                                         break;
                                 }
                                 Toast.makeText(QuestionAnswerDetailActivity.this, "操作成功", Toast.LENGTH_SHORT).show();
-                            }else{
+                            } else {
                                 Toast.makeText(QuestionAnswerDetailActivity.this, TextUtils.isEmpty(result.getMessage())
                                         ? "操作失败" : result.getMessage(), Toast.LENGTH_SHORT).show();
                             }
@@ -382,7 +383,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
             holder.mVoteUp.setOnClickListener(listener);
             holder.mVoteDown.setOnClickListener(listener);
             mVoteDialogView.setTag(holder);
-        }else{
+        } else {
             ViewGroup view = (ViewGroup) mVoteDialogView.getParent();
             view.removeView(mVoteDialogView);
         }
@@ -390,7 +391,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
         holder.mVoteDown.setVisibility(View.VISIBLE);
         holder.mVoteUp.setVisibility(View.VISIBLE);
         holder.mProgressBar.setVisibility(View.GONE);
-        switch (comment.getVoteState()){
+        switch (comment.getVoteState()) {
             default:
                 holder.mVoteUp.setSelected(false);
                 holder.mVoteDown.setSelected(false);
@@ -413,7 +414,8 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
         return mVoteDialogView;
     }
 
-    @OnClick(R.id.layout_vote) void onClickVote(){
+    @OnClick(R.id.layout_vote)
+    void onClickVote() {
         mVoteDialog = DialogHelp.getDialog(this)
                 .setView(getVoteDialogView())
                 .create();
@@ -423,10 +425,13 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
         mVoteDialog.getWindow().setAttributes(params);
     }
 
-    public static class VoteViewHolder{
-        @Bind(R.id.btn_vote_up) TextView mVoteUp;
-        @Bind(R.id.btn_vote_down) TextView mVoteDown;
-        @Bind(R.id.progress) ProgressBar mProgressBar;
+    public static class VoteViewHolder {
+        @Bind(R.id.btn_vote_up)
+        TextView mVoteUp;
+        @Bind(R.id.btn_vote_down)
+        TextView mVoteDown;
+        @Bind(R.id.progress)
+        ProgressBar mProgressBar;
 
         public VoteViewHolder(View view) {
             ButterKnife.bind(this, view);

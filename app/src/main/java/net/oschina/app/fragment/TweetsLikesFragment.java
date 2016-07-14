@@ -20,7 +20,7 @@ import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetLike;
 import net.oschina.app.bean.TweetLikeList;
 import net.oschina.app.bean.TweetsList;
-import net.oschina.app.improve.activities.TweetDetailActivity;
+import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.UIHelper;

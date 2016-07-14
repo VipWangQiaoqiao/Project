@@ -49,15 +49,16 @@ import net.oschina.app.fragment.FriendsFragment;
 import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
-import net.oschina.app.improve.activities.TweetDetailActivity;
+import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.detail.activities.BlogDetailActivity;
 import net.oschina.app.improve.detail.activities.EventDetailActivity;
 import net.oschina.app.improve.detail.activities.NewsDetailActivity;
 import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
 import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.improve.detail.activities.TranslateDetailActivity;
-import net.oschina.app.improve.fragments.blog.UserBlogFragment;
-import net.oschina.app.improve.fragments.tweet.SoftWareForTweetsFragment;
+import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
+import net.oschina.app.improve.tweet.fragments.SoftWareForTweetsFragment;
+import net.oschina.app.improve.user.fragments.UserBlogFragment;
 import net.oschina.app.interf.ICallbackResult;
 import net.oschina.app.interf.OnWebViewImageListener;
 import net.oschina.app.service.DownloadService;
@@ -858,6 +859,10 @@ public class UIHelper {
      */
     public static void showUserCenter(Context context, long hisuid,
                                       String hisname) {
+        if (false) {
+            OtherUserHomeActivity.show(context, null);
+            return;
+        }
         if (hisuid == 0 && hisname.equalsIgnoreCase("匿名")) {
             AppContext.showToast("提醒你，该用户为非会员");
             return;

@@ -20,8 +20,8 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.improve.activities.BaseBackActivity;
-import net.oschina.app.improve.adapter.base.BaseRecyclerAdapter;
+import net.oschina.app.improve.base.activities.BaseBackActivity;
+import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.Comment;
@@ -133,7 +133,7 @@ public class CommentsActivity extends BaseBackActivity {
         OSChinaApi.getComments(mId, mType, "refer", token, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                mAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_ERROR,true);
+                mAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_ERROR, true);
             }
 
             @Override

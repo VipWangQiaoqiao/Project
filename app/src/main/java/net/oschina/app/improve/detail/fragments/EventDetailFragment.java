@@ -119,7 +119,7 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
         tv_event_type.setText(String.format("类型：%s", getResources().getString(typeStr)));
         tv_apply_status.setText(getResources().getString(getApplyStatusStrId(mDetail.getApplyStatus())));
 
-        if(mDetail.getApplyStatus() != EventDetail.APPLY_STATUS_UN_SIGN){
+        if (mDetail.getApplyStatus() != EventDetail.APPLY_STATUS_UN_SIGN) {
             setSignUnEnable();
         }
         setBodyContent(mDetail.getBody());
@@ -219,7 +219,7 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
         return strId;
     }
 
-    private void setSignUnEnable(){
+    private void setSignUnEnable() {
         tv_apply_status.setEnabled(false);
         ll_sign.setEnabled(false);
         iv_sign.setEnabled(false);

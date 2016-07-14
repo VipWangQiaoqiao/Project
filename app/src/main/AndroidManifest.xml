@@ -271,7 +271,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".improve.activities.TweetDetailActivity"
+            android:name=".improve.tweet.activities.TweetDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="动弹详情"
             android:screenOrientation="portrait"
@@ -313,12 +313,6 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".improve.comment.CommentExsActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:label="评论列表"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity
             android:name=".improve.detail.activities.SchemeUrlActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="WebUrl"
@@ -338,7 +332,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".improve.activities.TweetPublishActivity"
+            android:name=".improve.tweet.activities.TweetPublishActivity"
             android:label="弹一弹"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -363,6 +357,12 @@
                 <data android:mimeType="image/*" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".improve.user.activities.OtherUserHomeActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="用户主页"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Base" />
     </application>
 
 </manifest>
