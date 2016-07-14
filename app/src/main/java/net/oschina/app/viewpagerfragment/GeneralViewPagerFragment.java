@@ -10,11 +10,11 @@ import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.BaseViewPagerFragment;
 import net.oschina.app.bean.BlogList;
 import net.oschina.app.bean.NewsList;
-import net.oschina.app.improve.fragments.blog.BlogFragment;
-import net.oschina.app.improve.fragments.event.EventFragment;
-import net.oschina.app.improve.fragments.base.BaseGeneralListFragment;
-import net.oschina.app.improve.fragments.news.NewsFragment;
-import net.oschina.app.improve.fragments.question.QuestionFragment;
+import net.oschina.app.improve.general.fragments.BlogFragment;
+import net.oschina.app.improve.general.fragments.EventFragment;
+import net.oschina.app.improve.base.fragments.BaseGeneralListFragment;
+import net.oschina.app.improve.general.fragments.NewsFragment;
+import net.oschina.app.improve.general.fragments.QuestionFragment;
 import net.oschina.app.interf.OnTabReselectListener;
 
 /**

@@ -8,8 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import net.oschina.app.R;
+import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.detail.contract.DetailContract;
-import net.oschina.app.improve.fragments.base.BaseFragment;
 import net.oschina.app.improve.widget.OWebView;
 
 /**
