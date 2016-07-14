@@ -3,7 +3,7 @@ package net.oschina.app.improve.general.adapter;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewHolder;
-import net.oschina.app.improve.adapter.base.BaseListAdapter;
+import net.oschina.app.improve.base.adapter.BaseListAdapter;
 import net.oschina.app.improve.bean.Event;
 import net.oschina.app.improve.general.fragments.EventFragment;
 import net.oschina.app.util.StringUtils;

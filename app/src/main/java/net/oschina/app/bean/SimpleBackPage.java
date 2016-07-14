@@ -19,7 +19,7 @@ import net.oschina.app.fragment.TweetLikeUsersFragment;
 import net.oschina.app.fragment.TweetRecordFragment;
 import net.oschina.app.fragment.TweetsFragment;
 import net.oschina.app.fragment.UserCenterFragment;
-import net.oschina.app.improve.user.UserBlogFragment;
+import net.oschina.app.improve.user.fragments.UserBlogFragment;
 import net.oschina.app.improve.tweet.fragments.SoftWareForTweetsFragment;
 import net.oschina.app.team.fragment.NoteBookFragment;
 import net.oschina.app.team.fragment.NoteEditFragment;

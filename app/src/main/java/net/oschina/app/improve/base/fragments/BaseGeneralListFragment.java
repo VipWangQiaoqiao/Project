@@ -1,4 +1,4 @@
-package net.oschina.app.improve.fragments.base;
+package net.oschina.app.improve.base.fragments;
 
 import net.oschina.app.interf.OnTabReselectListener;
 

@@ -13,7 +13,7 @@ import com.bumptech.glide.RequestManager;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.User;
-import net.oschina.app.improve.adapter.base.BaseRecyclerAdapter;
+import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.util.UIHelper;
 
 import butterknife.Bind;

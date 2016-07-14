@@ -1,4 +1,4 @@
-package net.oschina.app.improve.fragments.base;
+package net.oschina.app.improve.base.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

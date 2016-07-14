@@ -1,85 +1,96 @@
-package net.oschina.app.improve.fragments.base;
+package net.oschina.app.improve.base.activities;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
-import net.oschina.app.improve.adapter.base.BaseRecyclerAdapter;
+import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
 
 import java.lang.reflect.Type;
 
+import butterknife.Bind;
 import cz.msebera.android.httpclient.Header;
 
-
 /**
- * 基本列表类，重写getLayoutId()自定义界面
  * Created by huanghaibin_dev
- * on 2016/4/12.
+ * on 16-6-23.
  */
-@SuppressWarnings("unused")
-public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implements RecyclerRefreshLayout.SuperRefreshLayoutListener,
-        BaseRecyclerAdapter.OnItemClickListener {
+@SuppressWarnings("All")
+public abstract class BaseRecyclerViewActivity<T> extends BaseBackActivity implements
+        BaseRecyclerAdapter.OnItemClickListener, RecyclerRefreshLayout.SuperRefreshLayoutListener {
+
+    @Bind(R.id.refreshLayout)
+    RecyclerRefreshLayout mRefreshLayout;
+
+    @Bind(R.id.recyclerView)
+    RecyclerView mRecyclerView;
+
     protected BaseRecyclerAdapter<T> mAdapter;
-    protected RecyclerView mRecyclerView;
-    protected RecyclerRefreshLayout mRefreshLayout;
-    protected boolean mIsRefresh;
+
     protected TextHttpResponseHandler mHandler;
+
     protected PageBean<T> mBean;
 
+    protected boolean mIsRefresh;
+
     @Override
-    public int getLayoutId() {
-        return R.layout.fragment_base_recycler_view;
+    protected int getContentView() {
+        return R.layout.activity_base_recycler;
     }
 
     @Override
-    protected void initWidget(View root) {
-        mRecyclerView = (RecyclerView) root.findViewById(R.id.recyclerView);
-        mRefreshLayout = (RecyclerRefreshLayout) root.findViewById(R.id.refreshLayout);
-    }
-
-    @Override
-    public void initData() {
+    protected void initWidget() {
+        super.initWidget();
         mAdapter = getRecyclerAdapter();
-        mAdapter.setState(BaseRecyclerAdapter.STATE_HIDE, false);
+        mRecyclerView.setLayoutManager(getLayoutManager());
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(this);
-        mRefreshLayout.setSuperRefreshLayoutListener(this);
-        mAdapter.setState(BaseRecyclerAdapter.STATE_HIDE, false);
-        mRecyclerView.setLayoutManager(getLayoutManager());
+        mRefreshLayout.setRefreshing(true);
         mRefreshLayout.setColorSchemeResources(
                 R.color.swiperefresh_color1, R.color.swiperefresh_color2,
                 R.color.swiperefresh_color3, R.color.swiperefresh_color4);
+    }
 
-
+    @Override
+    protected void initData() {
+        super.initData();
+        mBean = new PageBean<>();
         mHandler = new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                //onRequestError(statusCode);
-                onRequestFinish();
+                onLoadingFailure();
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
                     ResultBean<PageBean<T>> resultBean = AppContext.createGson().fromJson(responseString, getType());
-                    if (resultBean != null && resultBean.isSuccess() && resultBean.getResult().getItems() != null) {
-                        onRequestSuccess(resultBean.getCode());
+                    if (resultBean != null && resultBean.isSuccess()) {
+                        onLoadingSuccess();
                         setListData(resultBean);
-                    } else {
-                        mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
                     }
-                    onRequestFinish();
                 } catch (Exception e) {
                     e.printStackTrace();
                     onFailure(statusCode, headers, responseString, e);
                 }
+            }
+
+            @Override
+            public void onStart() {
+                super.onStart();
+                onLoadingStart();
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                onLoadingFinish();
             }
         };
 
@@ -87,14 +98,13 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
             @Override
             public void run() {
                 mRefreshLayout.setRefreshing(true);
-                onRefreshing();
             }
         });
     }
 
     @Override
     public void onItemClick(int position, long itemId) {
-
+        onItemClick(mAdapter.getItem(position), position);
     }
 
     @Override
@@ -103,50 +113,59 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
         requestData();
     }
 
+    @Override
+    public void onLoadMore() {
+        requestData();
+    }
+
+    protected void onItemClick(T item, int position) {
+
+    }
 
     protected void requestData() {
-    }
 
-    protected void onRequestStart() {
-
-    }
-
-    protected void onRequestSuccess(int code) {
-
-    }
-
-    protected void onRequestFinish() {
-        onComplete();
-    }
-
-    protected void onComplete() {
-        mRefreshLayout.onComplete();
-        mIsRefresh = false;
     }
 
     protected void setListData(ResultBean<PageBean<T>> resultBean) {
-        //is refresh
         mBean.setNextPageToken(resultBean.getResult().getNextPageToken());
         if (mIsRefresh) {
-            //cache the time
             mBean.setItems(resultBean.getResult().getItems());
             mAdapter.clear();
             mAdapter.addAll(mBean.getItems());
             mBean.setPrevPageToken(resultBean.getResult().getPrevPageToken());
             mRefreshLayout.setCanLoadMore(true);
+
         } else {
             mAdapter.addAll(resultBean.getResult().getItems());
         }
         if (resultBean.getResult().getItems().size() < 20) {
-            mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
+            mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, false);
         }
     }
 
-    protected RecyclerView.LayoutManager getLayoutManager() {
-        return new LinearLayoutManager(getActivity());
+    protected void onLoadingStart() {
+
     }
 
-    protected abstract BaseRecyclerAdapter<T> getRecyclerAdapter();
+    protected void onLoadingSuccess() {
+
+    }
+
+    protected void onLoadingFinish() {
+        mRefreshLayout.onComplete();
+        mIsRefresh = false;
+    }
+
+    protected void onLoadingFailure() {
+
+    }
+
+
+    protected RecyclerView.LayoutManager getLayoutManager() {
+        return new LinearLayoutManager(this);
+    }
 
     protected abstract Type getType();
+
+    protected abstract BaseRecyclerAdapter<T> getRecyclerAdapter();
 }

@@ -15,7 +15,7 @@ import com.bumptech.glide.RequestManager;
 import net.oschina.app.R;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.emoji.InputHelper;
-import net.oschina.app.improve.adapter.base.BaseRecyclerAdapter;
+import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.TweetTextView;

@@ -358,7 +358,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".improve.activities.OtherUserHomeActivity"
+            android:name=".improve.user.activities.OtherUserHomeActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="用户主页"
             android:screenOrientation="portrait"

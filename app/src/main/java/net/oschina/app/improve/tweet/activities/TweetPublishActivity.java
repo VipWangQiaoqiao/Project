@@ -1,7 +1,7 @@
 package net.oschina.app.improve.tweet.activities;
 
 import net.oschina.app.R;
-import net.oschina.app.improve.activities.BaseBackActivity;
+import net.oschina.app.improve.base.activities.BaseBackActivity;
 
 public class TweetPublishActivity extends BaseBackActivity {
     @Override

@@ -1,15 +1,11 @@
-package net.oschina.app.improve.activities;
+package net.oschina.app.improve.user.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,15 +19,14 @@ import net.oschina.app.R;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Active;
-import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.User;
 import net.oschina.app.bean.UserInformation;
-import net.oschina.app.improve.adapter.base.BaseRecyclerAdapter;
-import net.oschina.app.improve.adapter.user.UserActiveAdapter;
+import net.oschina.app.improve.base.activities.BaseRecyclerViewActivity;
+import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
+import net.oschina.app.improve.user.adapter.UserActiveAdapter;
 import net.oschina.app.util.XmlUtils;
 
 import java.lang.reflect.Type;
-import java.util.List;
 
 import butterknife.Bind;
 import cz.msebera.android.httpclient.Header;
@@ -41,23 +36,30 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * 别的用户的主页
  * Created by thanatos on 16/7/13.
  */
-public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active>{
+public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> {
 
     public static final String KEY_BUNDLE = "KEY_BUNDLE_IN_OTHER_USER_HOME";
 
-    @Bind(R.id.toolbar) Toolbar mToolbar;
-    @Bind(R.id.iv_portrait) CircleImageView mPortrait;
-    @Bind(R.id.tv_nick) TextView mNick;
-    @Bind(R.id.tv_summary) TextView mSummary;
-    @Bind(R.id.tv_score) TextView mScore;
-    @Bind(R.id.tv_count_follow) TextView mCountFollow;
-    @Bind(R.id.tv_count_fans) TextView mCountFans;
+    @Bind(R.id.toolbar)
+    Toolbar mToolbar;
+    @Bind(R.id.iv_portrait)
+    CircleImageView mPortrait;
+    @Bind(R.id.tv_nick)
+    TextView mNick;
+    @Bind(R.id.tv_summary)
+    TextView mSummary;
+    @Bind(R.id.tv_score)
+    TextView mScore;
+    @Bind(R.id.tv_count_follow)
+    TextView mCountFollow;
+    @Bind(R.id.tv_count_fans)
+    TextView mCountFans;
 
     private User user;
     private int pageNum = 0;
     private TextHttpResponseHandler mUserInfoHandler;
 
-    public static void show(Context context, User user){
+    public static void show(Context context, User user) {
 //        if (user == null) return;
         Intent intent = new Intent(context, OtherUserHomeActivity.class);
         intent.putExtra(KEY_BUNDLE, user);
@@ -82,7 +84,7 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active>{
         mToolbar.setSubtitle("");
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null){
+        if (actionBar != null) {
             actionBar.setHomeButtonEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
@@ -110,11 +112,11 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active>{
         onRefreshing();
         // temporary usage, changing it util new api come up
         RequestParams params = new RequestParams();
-        if (AppContext.getInstance().isLogin()){
+        if (AppContext.getInstance().isLogin()) {
             params.put("uid", AppContext.getInstance().getLoginUid());
         }
         params.put("hisuid", user.getId());
-        if (!TextUtils.isEmpty(user.getName())){
+        if (!TextUtils.isEmpty(user.getName())) {
             params.put("hisname", user.getName());
         }
         params.put("pageIndex", 0);
@@ -161,7 +163,8 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active>{
 
     @Override
     protected Type getType() {
-        return new TypeToken<Active>(){}.getType();
+        return new TypeToken<Active>() {
+        }.getType();
     }
 
     @Override

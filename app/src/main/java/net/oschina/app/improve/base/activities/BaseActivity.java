@@ -1,4 +1,4 @@
-package net.oschina.app.improve.activities;
+package net.oschina.app.improve.base.activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

@@ -13,13 +13,13 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Banner;
 import net.oschina.app.cache.CacheManager;
-import net.oschina.app.improve.adapter.base.BaseListAdapter;
 import net.oschina.app.improve.app.AppOperator;
+import net.oschina.app.improve.base.adapter.BaseListAdapter;
+import net.oschina.app.improve.base.fragments.BaseGeneralListFragment;
 import net.oschina.app.improve.bean.Event;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.detail.activities.EventDetailActivity;
-import net.oschina.app.improve.fragments.base.BaseGeneralListFragment;
 import net.oschina.app.improve.general.adapter.EventAdapter;
 import net.oschina.app.widget.ViewEventHeader;
 

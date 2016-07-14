@@ -1,4 +1,4 @@
-package net.oschina.app.improve.user;
+package net.oschina.app.improve.user.fragments;
 
 
 import android.os.Bundle;
@@ -9,14 +9,14 @@ import android.widget.TextView;
 import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.R;
-import net.oschina.app.improve.adapter.base.BaseListAdapter;
-import net.oschina.app.improve.general.adapter.BlogAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.improve.detail.activities.BlogDetailActivity;
+import net.oschina.app.improve.base.adapter.BaseListAdapter;
+import net.oschina.app.improve.base.fragments.BaseListFragment;
 import net.oschina.app.improve.bean.Blog;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.fragments.base.BaseListFragment;
+import net.oschina.app.improve.detail.activities.BlogDetailActivity;
+import net.oschina.app.improve.general.adapter.BlogAdapter;
 
 import java.lang.reflect.Type;
 

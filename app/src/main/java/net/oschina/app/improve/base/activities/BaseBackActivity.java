@@ -1,4 +1,4 @@
-package net.oschina.app.improve.activities;
+package net.oschina.app.improve.base.activities;
 
 import android.support.v7.app.ActionBar;
 

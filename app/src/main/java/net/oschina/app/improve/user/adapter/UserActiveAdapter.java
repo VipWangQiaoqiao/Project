@@ -1,4 +1,4 @@
-package net.oschina.app.improve.adapter.user;
+package net.oschina.app.improve.user.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -19,7 +19,7 @@ import android.widget.TextView;
 import net.oschina.app.R;
 import net.oschina.app.bean.Active;
 import net.oschina.app.emoji.InputHelper;
-import net.oschina.app.improve.adapter.base.BaseRecyclerAdapter;
+import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.util.BitmapHelper;
 import net.oschina.app.util.ImageUtils;
@@ -41,13 +41,13 @@ import butterknife.ButterKnife;
 /**
  * Created by thanatos on 16/7/14.
  */
-public class UserActiveAdapter extends BaseRecyclerAdapter<Active>{
+public class UserActiveAdapter extends BaseRecyclerAdapter<Active> {
 
     private final static String AT_HOST_PRE = "http://my.oschina.net";
     private final static String MAIN_HOST = "http://www.oschina.net";
     private Bitmap recordBitmap;
     private int rectSize;
-    
+
     public UserActiveAdapter(Context context, int mode) {
         super(context, mode);
     }
@@ -180,18 +180,29 @@ public class UserActiveAdapter extends BaseRecyclerAdapter<Active>{
         return url.replaceAll("_thumb", "");
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder{
-        @Bind(R.id.tv_name) TextView name;
-        @Bind(R.id.tv_from) TextView from;
-        @Bind(R.id.tv_time) TextView time;
-        @Bind(R.id.tv_action) TextView action;
-        @Bind(R.id.tv_action_name) TextView actionName;
-        @Bind(R.id.tv_comment_count) TextView commentCount;
-        @Bind(R.id.tv_body) TweetTextView body;
-        @Bind(R.id.tv_reply) TweetTextView reply;
-        @Bind(R.id.iv_pic) ImageView pic;
-        @Bind(R.id.ly_reply) View lyReply;
-        @Bind(R.id.iv_avatar) AvatarView avatar;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        @Bind(R.id.tv_name)
+        TextView name;
+        @Bind(R.id.tv_from)
+        TextView from;
+        @Bind(R.id.tv_time)
+        TextView time;
+        @Bind(R.id.tv_action)
+        TextView action;
+        @Bind(R.id.tv_action_name)
+        TextView actionName;
+        @Bind(R.id.tv_comment_count)
+        TextView commentCount;
+        @Bind(R.id.tv_body)
+        TweetTextView body;
+        @Bind(R.id.tv_reply)
+        TweetTextView reply;
+        @Bind(R.id.iv_pic)
+        ImageView pic;
+        @Bind(R.id.ly_reply)
+        View lyReply;
+        @Bind(R.id.iv_avatar)
+        AvatarView avatar;
 
         public ViewHolder(View view) {
             super(view);

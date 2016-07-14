@@ -1,4 +1,4 @@
-package net.oschina.app.improve.adapter.base;
+package net.oschina.app.improve.base.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -42,8 +42,6 @@ public abstract class BaseListAdapter<T> extends BaseAdapter implements ViewHold
             return mDatas.get(position);
         return null;
     }
-
-
 
 
     @Override

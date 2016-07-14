@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import net.oschina.app.R;
-import net.oschina.app.improve.activities.BaseBackActivity;
+import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.ui.MainActivity;
 import net.oschina.app.util.UIHelper;
 

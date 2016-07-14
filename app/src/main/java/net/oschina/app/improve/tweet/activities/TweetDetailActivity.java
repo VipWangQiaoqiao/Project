@@ -24,7 +24,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetDetail;
-import net.oschina.app.improve.activities.BaseBackActivity;
+import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
 import net.oschina.app.improve.widget.OWebView;
