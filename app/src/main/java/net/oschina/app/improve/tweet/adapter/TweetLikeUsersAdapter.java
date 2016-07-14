@@ -1,4 +1,4 @@
-package net.oschina.app.improve.adapter.tweet;
+package net.oschina.app.improve.tweet.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -40,11 +40,11 @@ public class TweetLikeUsersAdapter extends BaseRecyclerAdapter<User> {
 
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, User item, int position) {
-        LikeUsersHolderView h = (LikeUsersHolderView)holder;
+        LikeUsersHolderView h = (LikeUsersHolderView) holder;
         h.ivPortrait.setTag(null);
-        if (TextUtils.isEmpty(item.getPortrait())){
+        if (TextUtils.isEmpty(item.getPortrait())) {
             h.ivPortrait.setImageResource(R.drawable.widget_dface);
-        }else{
+        } else {
             reqManager.load(item.getPortrait())
                     .asBitmap()
                     .placeholder(mContext.getResources().getDrawable(R.drawable.widget_dface))
@@ -56,8 +56,8 @@ public class TweetLikeUsersAdapter extends BaseRecyclerAdapter<User> {
         h.tvName.setText(item.getName());
     }
 
-    private View.OnClickListener getOnPortraitClickListener(){
-        if (onPortraitClickListener == null){
+    private View.OnClickListener getOnPortraitClickListener() {
+        if (onPortraitClickListener == null) {
             onPortraitClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -69,9 +69,11 @@ public class TweetLikeUsersAdapter extends BaseRecyclerAdapter<User> {
         return onPortraitClickListener;
     }
 
-    public static final class LikeUsersHolderView extends RecyclerView.ViewHolder{
-        @Bind(R.id.iv_avatar) CircleImageView ivPortrait;
-        @Bind(R.id.tv_name) TextView tvName;
+    public static final class LikeUsersHolderView extends RecyclerView.ViewHolder {
+        @Bind(R.id.iv_avatar)
+        CircleImageView ivPortrait;
+        @Bind(R.id.tv_name)
+        TextView tvName;
 
         public LikeUsersHolderView(View view) {
             super(view);

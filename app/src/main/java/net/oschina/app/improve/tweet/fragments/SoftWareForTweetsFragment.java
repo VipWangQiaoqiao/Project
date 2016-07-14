@@ -1,4 +1,4 @@
-package net.oschina.app.improve.fragments.tweet;
+package net.oschina.app.improve.tweet.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -20,7 +20,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetsList;
-import net.oschina.app.improve.activities.TweetDetailActivity;
+import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.service.ServerTaskUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;

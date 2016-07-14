@@ -14,9 +14,9 @@ import android.view.ViewGroup;
 import net.oschina.app.R;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.User;
-import net.oschina.app.improve.detail.contract.TweetDetailContract;
-import net.oschina.app.improve.fragments.tweet.ListTweetCommentFragment;
-import net.oschina.app.improve.fragments.tweet.ListTweetLikeUsersFragment;
+import net.oschina.app.improve.tweet.contract.TweetDetailContract;
+import net.oschina.app.improve.tweet.fragments.ListTweetCommentFragment;
+import net.oschina.app.improve.tweet.fragments.ListTweetLikeUsersFragment;
 
 /**
  * 赞 | 评论

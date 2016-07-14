@@ -1,4 +1,4 @@
-package net.oschina.app.improve.activities;
+package net.oschina.app.improve.tweet.activities;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -24,8 +24,9 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetDetail;
+import net.oschina.app.improve.activities.BaseBackActivity;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
-import net.oschina.app.improve.detail.contract.TweetDetailContract;
+import net.oschina.app.improve.tweet.contract.TweetDetailContract;
 import net.oschina.app.improve.widget.OWebView;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.PlatfromUtil;
@@ -45,7 +46,8 @@ import cz.msebera.android.httpclient.Header;
 
 /**
  * 动弹详情
- * Created by thanatos on 16/6/13.
+ * Created by thanatos
+ * on 16/6/13.
  */
 public class TweetDetailActivity extends BaseBackActivity implements TweetDetailContract.Operator {
 
@@ -252,7 +254,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
         return mRecordUtil;
     }
 
-    private void dismissDialog(){
+    private void dismissDialog() {
         if (dialog == null) return;
         dialog.dismiss();
         dialog = null;
@@ -325,7 +327,8 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
         if (mDelegation != null) mDelegation.onTurnBack();
     }
 
-    @OnClick(R.id.iv_thumbup) void onClickThumbUp() {
+    @OnClick(R.id.iv_thumbup)
+    void onClickThumbUp() {
         this.dialog = DialogHelp.getWaitDialog(this, "正在提交请求...");
         this.dialog.show();
         if (!ivThumbup.isSelected()) {
@@ -335,7 +338,8 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
         }
     }
 
-    @OnClick(R.id.iv_comment) void onClickComment(){
+    @OnClick(R.id.iv_comment)
+    void onClickComment() {
         TDevice.showSoftKeyboard(mViewInput);
     }
 

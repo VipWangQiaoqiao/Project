@@ -1,4 +1,4 @@
-package net.oschina.app.improve.detail.contract;
+package net.oschina.app.improve.tweet.contract;
 
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Tweet;

@@ -1,4 +1,4 @@
-package net.oschina.app.improve.fragments.tweet;
+package net.oschina.app.improve.tweet.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -13,9 +13,9 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.TweetLikeUserList;
 import net.oschina.app.bean.User;
 import net.oschina.app.improve.adapter.base.BaseRecyclerAdapter;
-import net.oschina.app.improve.adapter.tweet.TweetLikeUsersAdapter;
-import net.oschina.app.improve.detail.contract.TweetDetailContract;
 import net.oschina.app.improve.fragments.base.BaseRecyclerViewFragment;
+import net.oschina.app.improve.tweet.adapter.TweetLikeUsersAdapter;
+import net.oschina.app.improve.tweet.contract.TweetDetailContract;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
@@ -26,7 +26,8 @@ import cz.msebera.android.httpclient.Header;
 
 /**
  * 动弹详情, 点赞列表
- * Created by thanatos on 16/6/13.
+ * Created by thanatos
+ * on 16/6/13.
  */
 public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<User> implements TweetDetailContract.IThumbupView {
 
@@ -109,7 +110,7 @@ public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<User> i
     @Override
     protected void onRequestSuccess(int code) {
         super.onRequestSuccess(code);
-        if(mIsRefresh) pageNum = 0;
+        if (mIsRefresh) pageNum = 0;
         ++pageNum;
     }
 

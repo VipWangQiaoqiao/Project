@@ -271,7 +271,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".improve.activities.TweetDetailActivity"
+            android:name=".improve.tweet.activities.TweetDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="动弹详情"
             android:screenOrientation="portrait"

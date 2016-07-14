@@ -1,4 +1,4 @@
-package net.oschina.app.improve.adapter.tweet;
+package net.oschina.app.improve.tweet.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -25,7 +25,8 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * Created by thanatos on 16/6/13.
+ * Created by thanatos
+ * on 16/6/13.
  */
 public class TweetCommentAdapter extends BaseRecyclerAdapter<Comment> {
 
@@ -44,11 +45,11 @@ public class TweetCommentAdapter extends BaseRecyclerAdapter<Comment> {
 
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Comment item, int position) {
-        TweetCommentHolderView h = (TweetCommentHolderView)holder;
+        TweetCommentHolderView h = (TweetCommentHolderView) holder;
         h.ivPortrait.setTag(null);
-        if (TextUtils.isEmpty(item.getPortrait())){
+        if (TextUtils.isEmpty(item.getPortrait())) {
             h.ivPortrait.setImageResource(R.drawable.widget_dface);
-        }else{
+        } else {
             reqManager
                     .load(item.getPortrait())
                     .asBitmap()
@@ -64,8 +65,8 @@ public class TweetCommentAdapter extends BaseRecyclerAdapter<Comment> {
         h.tvTime.setText(StringUtils.friendly_time(item.getPubDate()));
     }
 
-    private View.OnClickListener getOnPortraitClickListener(){
-        if (onPortraitClickListener == null){
+    private View.OnClickListener getOnPortraitClickListener() {
+        if (onPortraitClickListener == null) {
             onPortraitClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -77,12 +78,17 @@ public class TweetCommentAdapter extends BaseRecyclerAdapter<Comment> {
         return onPortraitClickListener;
     }
 
-    public static final class TweetCommentHolderView extends RecyclerView.ViewHolder{
-        @Bind(R.id.iv_avatar) public CircleImageView ivPortrait;
-        @Bind(R.id.tv_name) public TextView tvName;
-        @Bind(R.id.tv_pub_date) public TextView tvTime;
-        @Bind(R.id.btn_comment) public ImageView btnReply;
-        @Bind(R.id.tv_content) public TweetTextView tvContent;
+    public static final class TweetCommentHolderView extends RecyclerView.ViewHolder {
+        @Bind(R.id.iv_avatar)
+        public CircleImageView ivPortrait;
+        @Bind(R.id.tv_name)
+        public TextView tvName;
+        @Bind(R.id.tv_pub_date)
+        public TextView tvTime;
+        @Bind(R.id.btn_comment)
+        public ImageView btnReply;
+        @Bind(R.id.tv_content)
+        public TweetTextView tvContent;
 
         public TweetCommentHolderView(View view) {
             super(view);

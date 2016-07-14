@@ -1,4 +1,4 @@
-package net.oschina.app.improve.fragments.tweet;
+package net.oschina.app.improve.tweet.fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -21,9 +21,9 @@ import net.oschina.app.bean.CommentList;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.improve.adapter.base.BaseRecyclerAdapter;
-import net.oschina.app.improve.adapter.tweet.TweetCommentAdapter;
-import net.oschina.app.improve.detail.contract.TweetDetailContract;
 import net.oschina.app.improve.fragments.base.BaseRecyclerViewFragment;
+import net.oschina.app.improve.tweet.adapter.TweetCommentAdapter;
+import net.oschina.app.improve.tweet.contract.TweetDetailContract;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
@@ -36,7 +36,8 @@ import java.util.List;
 import cz.msebera.android.httpclient.Header;
 
 /**
- * Created by thanatos on 16/6/13.
+ * Created by thanatos
+ * on 16/6/13.
  */
 public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>
         implements TweetDetailContract.ICmnView, BaseRecyclerAdapter.OnItemLongClickListener {
@@ -91,7 +92,7 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_DRAGGING){
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
                     mOperator.onScroll();
                 }
             }
@@ -125,7 +126,7 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>
     @Override
     protected void onRequestSuccess(int code) {
         super.onRequestSuccess(code);
-        if(mIsRefresh) pageNum = 0;
+        if (mIsRefresh) pageNum = 0;
         ++pageNum;
     }
 
@@ -198,7 +199,7 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>
                                 mDeleteDialog = null;
                             }
                             mAdapter.removeItem(mDeleteIndex);
-                            int count = Integer.valueOf(mOperator.getTweetDetail().getCommentCount()) -1;
+                            int count = Integer.valueOf(mOperator.getTweetDetail().getCommentCount()) - 1;
                             mOperator.getTweetDetail().setCommentCount(String.valueOf(count)); // Bean就这样写的,我也不知道为什么!!!!
                             mAgencyView.resetCmnCount(count);
                         } else {
