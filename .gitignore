@@ -121,7 +121,7 @@ tmp/
 
 # TeXlipse plugin
 .texlipseXml version="1.0" encoding="UTF-8"?>
-gradle.properties
+/gradle.properties
 sign.properties
 
 captures/*
