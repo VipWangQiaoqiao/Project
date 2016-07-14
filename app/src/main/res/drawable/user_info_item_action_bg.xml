@@ -3,7 +3,7 @@
 
     <item android:state_pressed="true">
         <shape>
-            <solid android:color="@color/list_divider_color" />
+            <solid android:color="#fcfcfc" />
             <stroke android:width="1px" android:color="@color/list_divider_color" />
         </shape>
     </item>
