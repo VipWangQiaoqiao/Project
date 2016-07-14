@@ -29,8 +29,7 @@
 
                 <LinearLayout
                     android:id="@+id/rl_message"
-                    style="@style/option_item_rl"
-                    android:background="@drawable/selector_item_list">
+                    style="@style/option_item_rl">
 
                     <ImageView
                         style="@style/option_item_img"
@@ -77,8 +76,7 @@
 
                 <LinearLayout
                     android:id="@+id/rl_blog"
-                    style="@style/option_item_rl"
-                    android:background="@drawable/selector_item_list">
+                    style="@style/option_item_rl">
 
                     <ImageView
                         style="@style/option_item_img"
@@ -112,8 +110,7 @@
 
                 <LinearLayout
                     android:id="@+id/rl_team"
-                    style="@style/option_item_rl"
-                    android:background="@drawable/selector_item_list">
+                    style="@style/option_item_rl">
 
                     <ImageView
                         style="@style/option_item_img"
@@ -142,8 +139,7 @@
 
             <LinearLayout
                 android:id="@+id/rl_info_avtivities"
-                style="@style/option_item_rl"
-                android:background="@drawable/selector_item_list">
+                style="@style/option_item_rl">
 
                 <ImageView
                     style="@style/option_item_img"
