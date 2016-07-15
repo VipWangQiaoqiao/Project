@@ -5,11 +5,11 @@
     <item
         android:title="私信"
         android:id="@+id/menu_pm"
-        app:showAsAction="always"
-        android:icon="@drawable/btn_pm_normal"/>
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/selector_user_pm"/>
     <item
         android:title="关注"
         android:id="@+id/menu_follow"
-        app:showAsAction="always"
-        android:icon="@drawable/btn_following_normal"/>
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/selector_user_follow"/>
 </menu>

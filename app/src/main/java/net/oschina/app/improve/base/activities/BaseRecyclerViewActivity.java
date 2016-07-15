@@ -47,7 +47,7 @@ public abstract class BaseRecyclerViewActivity<T> extends BaseBackActivity imple
     @Override
     protected void initWidget() {
         super.initWidget();
-        mAdapter = getRecyclerAdapter();
+        mAdapter = mAdapter == null ? getRecyclerAdapter() : mAdapter;
         mRecyclerView.setLayoutManager(getLayoutManager());
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(this);
