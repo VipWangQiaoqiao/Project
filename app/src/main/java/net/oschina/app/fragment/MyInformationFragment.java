@@ -56,7 +56,7 @@ import cz.msebera.android.httpclient.Header;
 public class MyInformationFragment extends BaseFragment {
 
     // public static final int sChildView = 9; // 在没有加入TeamList控件时rootview有多少子布局
-
+    private static BadgeView mMesCount;
     @Bind(R.id.iv_avatar)
     AvatarView mIvAvatar;
     @Bind(R.id.iv_gender)
@@ -81,37 +81,9 @@ public class MyInformationFragment extends BaseFragment {
     View mUserContainer;
     @Bind(R.id.rl_user_unlogin)
     View mUserUnLogin;
-
-    private static BadgeView mMesCount;
-
     private boolean mIsWatingLogin;
 
     private User mInfo;
-    private AsyncTask<String, Void, User> mCacheTask;
-
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            switch (action) {
-                case Constants.INTENT_ACTION_LOGOUT:
-                    if (mErrorLayout != null) {
-                        mIsWatingLogin = true;
-                        steupUser();
-                        mMesCount.hide();
-                    }
-                    break;
-                case Constants.INTENT_ACTION_USER_CHANGE:
-                    requestData(true);
-                    break;
-                case Constants.INTENT_ACTION_NOTICE:
-                    setNotice();
-                    break;
-            }
-        }
-    };
-
     private final AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
         @Override
         public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
@@ -137,14 +109,41 @@ public class MyInformationFragment extends BaseFragment {
                               Throwable arg3) {
         }
     };
+    private AsyncTask<String, Void, User> mCacheTask;
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            switch (action) {
+                case Constants.INTENT_ACTION_LOGOUT:
+                    if (mErrorLayout != null) {
+                        mIsWatingLogin = true;
+                        steupUser();
+                        mMesCount.hide();
+                    }
+                    break;
+                case Constants.INTENT_ACTION_USER_CHANGE:
+                    requestData(true);
+                    break;
+                case Constants.INTENT_ACTION_NOTICE:
+                    setNotice();
+                    break;
+            }
+        }
+    };
+
+    @SuppressWarnings("deprecation")
     private void steupUser() {
+
         if (mIsWatingLogin) {
             mUserContainer.setVisibility(View.GONE);
             mUserUnLogin.setVisibility(View.VISIBLE);
+            //   layUserinfo.setVisibility(View.GONE);
         } else {
             mUserContainer.setVisibility(View.VISIBLE);
             mUserUnLogin.setVisibility(View.GONE);
+            //layUserinfo.setVisibility(View.VISIBLE);
         }
     }
 
@@ -254,8 +253,8 @@ public class MyInformationFragment extends BaseFragment {
         mIvAvatar.setAvatarUrl(mInfo.getPortrait());
         mTvName.setText(mInfo.getName());
         mIvGender.setImageResource(StringUtils.toInt(mInfo.getGender()) != 2 ? R.drawable
-                        .userinfo_icon_male
-                        : R.drawable.userinfo_icon_female);
+                .userinfo_icon_male
+                : R.drawable.userinfo_icon_female);
         mTvScore.setText(String.valueOf(mInfo.getScore()));
         mTvFavorite.setText(String.valueOf(mInfo.getFavoritecount()));
         mTvFollowing.setText(String.valueOf(mInfo.getFollowers()));
@@ -297,55 +296,6 @@ public class MyInformationFragment extends BaseFragment {
 
     private String getCacheKey() {
         return "my_information" + AppContext.getInstance().getLoginUid();
-    }
-
-    private class CacheTask extends AsyncTask<String, Void, User> {
-        private final WeakReference<Context> mContext;
-
-        private CacheTask(Context context) {
-            mContext = new WeakReference<>(context);
-        }
-
-        @Override
-        protected User doInBackground(String... params) {
-            Serializable seri = CacheManager.readObject(mContext.get(),
-                    params[0]);
-            if (seri == null) {
-                return null;
-            } else {
-                return (User) seri;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(User info) {
-            super.onPostExecute(info);
-            if (info != null) {
-                mInfo = info;
-                // mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-                // } else {
-                // mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-                fillUI();
-            }
-        }
-    }
-
-    private class SaveCacheTask extends AsyncTask<Void, Void, Void> {
-        private final WeakReference<Context> mContext;
-        private final Serializable seri;
-        private final String key;
-
-        private SaveCacheTask(Context context, Serializable seri, String key) {
-            mContext = new WeakReference<>(context);
-            this.seri = seri;
-            this.key = key;
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            CacheManager.saveObject(mContext.get(), seri, key);
-            return null;
-        }
     }
 
     @Override
@@ -425,6 +375,55 @@ public class MyInformationFragment extends BaseFragment {
     private void setNoticeReaded() {
         mMesCount.setText(" ");
         mMesCount.hide();
+    }
+
+    private class CacheTask extends AsyncTask<String, Void, User> {
+        private final WeakReference<Context> mContext;
+
+        private CacheTask(Context context) {
+            mContext = new WeakReference<>(context);
+        }
+
+        @Override
+        protected User doInBackground(String... params) {
+            Serializable seri = CacheManager.readObject(mContext.get(),
+                    params[0]);
+            if (seri == null) {
+                return null;
+            } else {
+                return (User) seri;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(User info) {
+            super.onPostExecute(info);
+            if (info != null) {
+                mInfo = info;
+                // mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+                // } else {
+                // mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+                fillUI();
+            }
+        }
+    }
+
+    private class SaveCacheTask extends AsyncTask<Void, Void, Void> {
+        private final WeakReference<Context> mContext;
+        private final Serializable seri;
+        private final String key;
+
+        private SaveCacheTask(Context context, Serializable seri, String key) {
+            mContext = new WeakReference<>(context);
+            this.seri = seri;
+            this.key = key;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            CacheManager.saveObject(mContext.get(), seri, key);
+            return null;
+        }
     }
 
 }
