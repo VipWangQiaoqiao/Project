@@ -334,6 +334,7 @@
         <activity
             android:name=".improve.tweet.activities.TweetPublishActivity"
             android:label="弹一弹"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
