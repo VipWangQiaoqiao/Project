@@ -50,7 +50,6 @@ import net.oschina.app.fragment.FriendsFragment;
 import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
-import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.detail.activities.BlogDetailActivity;
 import net.oschina.app.improve.detail.activities.EventDetailActivity;
 import net.oschina.app.improve.detail.activities.NewsDetailActivity;
@@ -58,7 +57,9 @@ import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
 import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.improve.detail.activities.TranslateDetailActivity;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
+import net.oschina.app.improve.tweet.activities.TweetPublishActivity;
 import net.oschina.app.improve.tweet.fragments.SoftWareForTweetsFragment;
+import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.user.fragments.UserBlogFragment;
 import net.oschina.app.interf.ICallbackResult;
 import net.oschina.app.interf.OnWebViewImageListener;
@@ -684,8 +685,21 @@ public class UIHelper {
         context.startActivity(intent);
     }
 
-    public static void showTweetActivity(Context context, int actionType, Bundle bundle) {
+    public static void showTweetActivity1(Context context, int actionType, Bundle bundle) {
         Intent intent = new Intent(context, TweetPubActivity.class);
+        intent.putExtra(TweetPubActivity.ACTION_TYPE, actionType);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+        context.startActivity(intent);
+    }
+
+    public static void showTweetActivity(Context context, int actionType, Bundle bundle) {
+        if (true) {
+            showTweetActivity1(context, actionType, bundle);
+            return;
+        }
+        Intent intent = new Intent(context, TweetPublishActivity.class);
         intent.putExtra(TweetPubActivity.ACTION_TYPE, actionType);
         if (bundle != null) {
             intent.putExtras(bundle);
