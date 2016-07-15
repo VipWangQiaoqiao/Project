@@ -26,10 +26,10 @@ public abstract class BaseRecyclerViewActivity<T> extends BaseBackActivity imple
         BaseRecyclerAdapter.OnItemClickListener, RecyclerRefreshLayout.SuperRefreshLayoutListener {
 
     @Bind(R.id.refreshLayout)
-    RecyclerRefreshLayout mRefreshLayout;
+    protected RecyclerRefreshLayout mRefreshLayout;
 
     @Bind(R.id.recyclerView)
-    RecyclerView mRecyclerView;
+    protected RecyclerView mRecyclerView;
 
     protected BaseRecyclerAdapter<T> mAdapter;
 
