@@ -1,0 +1,149 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context="net.oschina.app.improve.tweet.fragments.TweetPublishFragment">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/lay_nsv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_scrollFlags="scroll|enterAlways">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/lay_32"
+                android:paddingLeft="@dimen/lay_16"
+                android:paddingRight="@dimen/lay_16"
+                android:paddingTop="@dimen/lay_16">
+
+                <EditText
+                    android:id="@+id/edit_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:gravity="start|left|top"
+                    android:hint="今天想动弹什么?"
+                    android:minHeight="@dimen/size_92"
+                    android:textColor="#111111"
+                    android:textSize="@dimen/font_16" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_gravity="right"
+                    android:layout_weight="1"
+                    android:text="12" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_images"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/lay_16"
+                    android:layout_marginTop="@dimen/lay_16"
+                    android:paddingLeft="@dimen/lay_12"
+                    android:paddingRight="@dimen/lay_12"
+                    app:layout_anchor="@id/lay_nsv"
+                    app:layout_anchorGravity="bottom"
+                    app:layout_scrollFlags="scroll|enterAlways" />
+            </LinearLayout>
+
+        </android.support.design.widget.AppBarLayout>
+
+
+
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <LinearLayout
+        android:id="@+id/lay_option"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/list_divider_color" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_44"
+            android:gravity="center_horizontal"
+            android:weightSum="4">
+
+            <net.qiujuer.genius.ui.widget.ImageView
+                android:id="@+id/iv_picture"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:contentDescription="@string/app_name"
+                android:paddingBottom="@dimen/lay_12"
+                android:paddingTop="@dimen/lay_12"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_tweet_picture_normal"
+                app:gTouchColor="@color/main_touch"
+                app:gTouchCornerRadius="0dp"
+                app:gTouchEffect="ripple" />
+
+            <net.qiujuer.genius.ui.widget.ImageView
+                android:id="@+id/iv_mention"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:contentDescription="@string/app_name"
+                android:paddingBottom="@dimen/lay_12"
+                android:paddingTop="@dimen/lay_12"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_tweet_mention_normal"
+                app:gTouchColor="@color/main_touch"
+                app:gTouchCornerRadius="0dp"
+                app:gTouchEffect="ripple" />
+
+            <net.qiujuer.genius.ui.widget.ImageView
+                android:id="@+id/iv_tag"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:contentDescription="@string/app_name"
+                android:paddingBottom="@dimen/lay_12"
+                android:paddingTop="@dimen/lay_12"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_tweet_topic_normal"
+                app:gTouchColor="@color/main_touch"
+                app:gTouchCornerRadius="0dp"
+                app:gTouchEffect="ripple" />
+
+            <net.qiujuer.genius.ui.widget.ImageView
+                android:id="@+id/iv_emoji"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:contentDescription="@string/app_name"
+                android:paddingBottom="@dimen/lay_12"
+                android:paddingTop="@dimen/lay_12"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_tweet_expression_normal"
+                app:gTouchColor="@color/main_touch"
+                app:gTouchCornerRadius="0dp"
+                app:gTouchEffect="ripple" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

@@ -26,7 +26,7 @@
     <color name="transparent">#00000000</color>
     <color name="window_background">#EBEBEB</color>
 
-    <color name="main_touch">#4024cf5f</color>
+    <color name="main_touch">@color/black_alpha_32</color>
 
     <color name="comment_yellow">#FFFFEE</color>
 
