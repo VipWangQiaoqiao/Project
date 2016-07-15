@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include layout="@layout/fragment_my_information_head" />
+            <include layout="@layout/fragment_my_information_head"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
