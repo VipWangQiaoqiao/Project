@@ -1,37 +1,45 @@
 package net.oschina.app.improve.user.activities;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
-import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Active;
-import net.oschina.app.bean.ActiveList;
+import net.oschina.app.bean.Result;
+import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.User;
 import net.oschina.app.bean.UserInformation;
 import net.oschina.app.improve.base.activities.BaseRecyclerViewActivity;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.user.adapter.UserActiveAdapter;
 import net.oschina.app.improve.widget.SolarSystemView;
+import net.oschina.app.util.DialogHelp;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
+import java.io.ByteArrayInputStream;
 import java.lang.reflect.Type;
 import java.util.List;
 
@@ -43,7 +51,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * 别的用户的主页
  * Created by thanatos on 16/7/13.
  */
-public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> {
+public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> implements View.OnClickListener{
 
     public static final String KEY_BUNDLE = "KEY_BUNDLE_IN_OTHER_USER_HOME";
 
@@ -55,6 +63,12 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> {
     @Bind(R.id.tv_count_follow) TextView mCountFollow;
     @Bind(R.id.tv_count_fans) TextView mCountFans;
     @Bind(R.id.view_solar_system) SolarSystemView mSolarSystem;
+    @Bind(R.id.layout_appbar) AppBarLayout mLayoutAppBar;
+    @Bind(R.id.iv_logo_portrait) CircleImageView mLogoPortrait;
+    @Bind(R.id.tv_logo_nick) TextView mLogoNick;
+//    @Bind(R.id.iv_gender) ImageView mGenderImage;
+
+    private MenuItem mFollowMenu;
 
     private User user;
     private int pageNum = 0;
@@ -92,6 +106,26 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        mLayoutAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int mScrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (mScrollRange == -1) {
+                    mScrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (mScrollRange + verticalOffset == 0) {
+                    mLogoNick.setVisibility(View.VISIBLE);
+                    mLogoPortrait.setVisibility(View.VISIBLE);
+                    isShow = true;
+                } else if(isShow) {
+                    mLogoNick.setVisibility(View.GONE);
+                    mLogoPortrait.setVisibility(View.GONE);
+                    isShow = false;
+                }
+            }
+        });
 
         mPortrait.post(new Runnable() {
             @Override
@@ -107,6 +141,7 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> {
                 float y = mPortrait.getY();
                 float px = x + mPortrait.getWidth() / 2;
                 float py = y + mPortrait.getHeight() / 2 + mStatusBarHeight;
+                int radius = (int) (mSolarSystem.getHeight() - py + 50);
 
                 SolarSystemView.Planet planet1 = new SolarSystemView.Planet();
                 planet1.setClockwise(true);
@@ -114,8 +149,8 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> {
                 planet1.setColor(0XFF24e28e);
                 planet1.setTrackWidth(2);
                 planet1.setSelfRadius(6);
-                planet1.setAngleRate(0.01F);
-                planet1.setRadius(140);
+                planet1.setAngleRate(0.015F);
+                planet1.setRadius(radius / 4);
                 planet1.setOriginAngle(0);
 
                 SolarSystemView.Planet planet2 = new SolarSystemView.Planet();
@@ -125,7 +160,7 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> {
                 planet2.setTrackWidth(2);
                 planet2.setSelfRadius(6);
                 planet2.setAngleRate(0.02F);
-                planet2.setRadius(240);
+                planet2.setRadius(radius / 4 * 2);
                 planet2.setOriginAngle(0);
 
                 SolarSystemView.Planet planet3 = new SolarSystemView.Planet();
@@ -134,8 +169,8 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> {
                 planet3.setColor(0XFF24e28e);
                 planet3.setTrackWidth(2);
                 planet3.setSelfRadius(6);
-                planet3.setAngleRate(0.03F);
-                planet3.setRadius(380);
+                planet3.setAngleRate(0.01F);
+                planet3.setRadius(radius / 4 * 3);
                 planet3.setOriginAngle(0);
 
                 SolarSystemView.Planet planet4 = new SolarSystemView.Planet();
@@ -145,9 +180,8 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> {
                 planet4.setTrackWidth(2);
                 planet4.setSelfRadius(6);
                 planet4.setAngleRate(0.02F);
-                planet4.setRadius(500);
+                planet4.setRadius(radius);
                 planet4.setOriginAngle(0);
-
 
                 mSolarSystem.addPlanets(planet1);
                 mSolarSystem.addPlanets(planet2);
@@ -166,12 +200,51 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> {
                 .placeholder(R.drawable.widget_dface)
                 .error(R.drawable.widget_dface)
                 .into(mPortrait);
+        getImageLoader()
+                .load(user.getPortrait())
+                .asBitmap()
+                .placeholder(R.drawable.widget_dface)
+                .error(R.drawable.widget_dface)
+                .into(mLogoPortrait);
+        mLogoNick.setText(user.getName());
         mNick.setText(user.getName());
         // TODO summary
         mScore.setText(String.format("积分 %s", user.getScore()));
         mCountFans.setText(String.format("粉丝 %s", user.getFans()));
         mCountFollow.setText(String.format("关注 %s", user.getFollowers()));
 
+        /*if (!TextUtils.isEmpty(user.getGender())){
+            if (user.getGender().equals("2") || user.getGender().equals("女")){
+                mGenderImage.setImageResource(R.drawable.ic_female);
+            }else{
+                mGenderImage.setImageResource(R.drawable.ic_male);
+            }
+        }*/
+
+        if (mFollowMenu != null){
+            switch (user.getRelation()) {
+                case User.RELATION_TYPE_BOTH:
+                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_following_botn));
+                    break;
+                case User.RELATION_TYPE_FANS_HIM:
+                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_following));
+                    break;
+                case User.RELATION_TYPE_FANS_ME:
+                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
+                    break;
+                case User.RELATION_TYPE_NULL:
+                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
+                    break;
+                default:
+                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
+            }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        outState.putSerializable(KEY_BUNDLE, user);
     }
 
     @Override
@@ -229,6 +302,7 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_other_user, menu);
+        mFollowMenu = menu.getItem(1);
         return true;
     }
 
@@ -263,5 +337,113 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> {
     @Override
     protected BaseRecyclerAdapter<Active> getRecyclerAdapter() {
         return new UserActiveAdapter(this, BaseRecyclerAdapter.ONLY_FOOTER);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.tv_count_follow:
+                UIHelper.showFriends(this, user.getId(), 0);
+                break;
+            case R.id.tv_count_fans:
+                UIHelper.showFriends(this, user.getId(), 1);
+                break;
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_pm:
+                if (user.getId() == AppContext.getInstance().getLoginUid()) {
+                    AppContext.showToast("不能给自己发送留言:)");
+                    return true;
+                }
+                if (!AppContext.getInstance().isLogin()) {
+                    UIHelper.showLoginActivity(this);
+                    return true;
+                }
+                UIHelper.showMessageDetail(this, user.getId(), user.getName());
+                break;
+            case R.id.menu_follow:
+                // 判断登录
+                final AppContext ac = AppContext.getInstance();
+                if (!AppContext.getInstance().isLogin()) {
+                    UIHelper.showLoginActivity(this);
+                    return true;
+                }
+                String dialogTitle = "";
+                int relationAction = 0;
+                switch (user.getRelation()) {
+                    case User.RELATION_TYPE_BOTH:
+                        dialogTitle = "确定取消互粉吗？";
+                        relationAction = User.RELATION_ACTION_DELETE;
+                        break;
+                    case User.RELATION_TYPE_FANS_HIM:
+                        dialogTitle = "确定取消关注吗？";
+                        relationAction = User.RELATION_ACTION_DELETE;
+                        break;
+                    case User.RELATION_TYPE_FANS_ME:
+                        dialogTitle = "确定关注Ta吗？";
+                        relationAction = User.RELATION_ACTION_ADD;
+                        break;
+                    case User.RELATION_TYPE_NULL:
+                        dialogTitle = "确定关注Ta吗？";
+                        relationAction = User.RELATION_ACTION_ADD;
+                        break;
+                }
+                final int ra = relationAction;
+                DialogHelp.getConfirmDialog(this, dialogTitle, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        OSChinaApi.updateRelation(AppContext.getInstance().getLoginUid(), user.getId(), ra, new AsyncHttpResponseHandler() {
+                                @Override
+                                public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+                                    try {
+                                        Result result = XmlUtils.toBean(ResultBean.class, new ByteArrayInputStream(arg2)).getResult();
+                                        if (result.OK()) {
+                                            switch (user.getRelation()) {
+                                                case User.RELATION_TYPE_BOTH:
+                                                    item.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
+                                                    user.setRelation(User.RELATION_TYPE_FANS_ME);
+                                                    break;
+                                                case User.RELATION_TYPE_FANS_HIM:
+                                                    item.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
+                                                    user.setRelation(User.RELATION_TYPE_NULL);
+                                                    break;
+                                                case User.RELATION_TYPE_FANS_ME:
+                                                    item.setIcon(getResources().getDrawable(R.drawable.selector_user_following_botn));
+                                                    user.setRelation(User.RELATION_TYPE_BOTH);
+                                                    break;
+                                                case User.RELATION_TYPE_NULL:
+                                                    item.setIcon(getResources().getDrawable(R.drawable.selector_user_following));
+                                                    user.setRelation(User.RELATION_TYPE_FANS_HIM);
+                                                    break;
+                                            }
+                                            Toast.makeText(OtherUserHomeActivity.this, "操作成功", Toast.LENGTH_SHORT).show();
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        onFailure(arg0, arg1, arg2, e);
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(int arg0, Header[] arg1, byte[] arg2, Throwable arg3) {
+                                    Toast.makeText(OtherUserHomeActivity.this, "操作失败", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                    }
+                }).show();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemClick(int position, long itemId) {
+        Active active = mAdapter.getItem(position);
+        if (active == null) return;
+        UIHelper.showActiveRedirect(this, active);
     }
 }

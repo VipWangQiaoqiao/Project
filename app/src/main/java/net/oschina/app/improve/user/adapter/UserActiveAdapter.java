@@ -100,7 +100,7 @@ public class UserActiveAdapter extends BaseRecyclerAdapter<Active> {
             vh.replyContent.setLongClickable(false);
             Spanned span = UIHelper.parseActiveReply(reply.objectName,
                     reply.objectBody);
-            vh.replyContent.setText(span);//
+            vh.replyContent.setText(span);
             MyURLSpan.parseLinkText(vh.replyContent, span);
             vh.replyContent.setVisibility(TextView.VISIBLE);
         } else {
@@ -159,7 +159,6 @@ public class UserActiveAdapter extends BaseRecyclerAdapter<Active> {
         @Bind(R.id.tv_nick) TextView nick;
         @Bind(R.id.tv_time) TextView time;
         @Bind(R.id.tv_action) TextView action;
-        @Bind(R.id.tv_action_name) TextView actionName;
         @Bind(R.id.tv_comment_count) TextView commentCount;
         @Bind(R.id.tv_content) TweetTextView content;
         @Bind(R.id.tv_reply) TweetTextView replyContent;
