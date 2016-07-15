@@ -24,7 +24,7 @@
         <item name="android:gravity">center</item>
     </style>
 
-    <style name="AppTheme.Base" parent="AppBaseTheme_Light">
+    <style name="AppTheme.Base" parent="AppBaseTheme_Light.Base">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowTranslucentStatus">true</item>

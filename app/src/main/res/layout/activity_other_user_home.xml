@@ -20,13 +20,13 @@
             android:fitsSystemWindows="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <ImageView
-                android:id="@+id/image"
+            <net.oschina.app.improve.widget.SolarSystemView
+                android:id="@+id/view_solar_system"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
-                android:background="#123456"
+                android:background="?attr/colorPrimary"
                 app:layout_collapseMode="parallax"
                 app:layout_collapseParallaxMultiplier="0.7"
                 android:contentDescription="@null" />
@@ -116,7 +116,7 @@
                 android:id="@+id/toolbar"
                 app:layout_collapseMode="pin"
                 android:layout_height="?attr/actionBarSize"
-                android:layout_width="match_parent"/>
+                android:layout_width="match_parent" />
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 

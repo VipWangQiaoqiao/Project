@@ -24,6 +24,7 @@
 
     <TextView
         android:id="@+id/tv_time"
+        tools:text="4个小时前"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -40,6 +41,7 @@
 
         <TextView
             android:id="@+id/tv_action"
+            tools:text="更新的动态"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/space_10"
@@ -49,6 +51,7 @@
 
         <TextView
             android:id="@+id/tv_action_name"
+            tools:text="Action Name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/main_gray"
@@ -57,6 +60,7 @@
 
     <net.oschina.app.widget.TweetTextView
         android:id="@+id/tv_body"
+        tools:text="TweetTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/ly_action"
@@ -86,7 +90,7 @@
             android:focusableInTouchMode="false"
             android:gravity="center_vertical"
             android:padding="@dimen/space_4"
-            tools:text="内容"
+            tools:text="\@Someone Reply Content"
             android:textColor="?attr/textColor"
             android:textSize="@dimen/text_size_13" />
     </LinearLayout>

@@ -43,6 +43,7 @@ import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.ShakeObject;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.bean.Tweet;
+import net.oschina.app.bean.User;
 import net.oschina.app.fragment.BrowserFragment;
 import net.oschina.app.fragment.CommentFrament;
 import net.oschina.app.fragment.FriendsFragment;
@@ -859,18 +860,14 @@ public class UIHelper {
      */
     public static void showUserCenter(Context context, long hisuid,
                                       String hisname) {
-        if (false) {
-            OtherUserHomeActivity.show(context, null);
-            return;
-        }
         if (hisuid == 0 && hisname.equalsIgnoreCase("匿名")) {
             AppContext.showToast("提醒你，该用户为非会员");
             return;
         }
-        Bundle args = new Bundle();
-        args.putInt("his_id", (int) hisuid);
-        args.putString("his_name", hisname);
-        showSimpleBack(context, SimpleBackPage.USER_CENTER, args);
+        User user = new User();
+        user.setId((int) hisuid);
+        user.setName(hisname);
+        OtherUserHomeActivity.show(context, user);
     }
 
     /**
