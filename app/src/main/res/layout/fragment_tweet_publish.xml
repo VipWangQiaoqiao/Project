@@ -21,10 +21,9 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingLeft="@dimen/lay_16"
-                android:paddingRight="@dimen/lay_16"
+                android:padding="@dimen/lay_16"
                 app:layout_scrollFlags="scroll|enterAlways">
 
                 <EditText
@@ -36,7 +35,6 @@
                     android:hint="今天想动弹什么?"
                     android:minLines="4"
                     android:paddingBottom="@dimen/lay_32"
-                    android:paddingTop="@dimen/lay_16"
                     android:textColor="#111111"
                     android:textSize="@dimen/font_16" />
 
@@ -53,11 +51,11 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_images"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/lay_16"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/lay_12"
             android:paddingLeft="@dimen/lay_12"
             android:paddingRight="@dimen/lay_12"
-            android:paddingTop="@dimen/lay_16"
+            android:paddingTop="@dimen/lay_12"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
