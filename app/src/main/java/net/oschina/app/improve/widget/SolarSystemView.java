@@ -88,14 +88,14 @@ public class SolarSystemView extends ImageView{
     }
 
     public static class Planet{
-        private int mRadius;
-        private int mSelfRadius;
-        private int mTrackWidth;
-        private int mColor;
-        private int mTrackColor;
-        private float mAngleRate;
-        private int mOriginAngle;
-        private boolean isClockwise;
+        private int mRadius = 100;
+        private int mSelfRadius = 6;
+        private int mTrackWidth = 2;
+        private int mColor = 0XFF24E28E;
+        private int mTrackColor = 0XFF24E28E;
+        private float mAngleRate = 0.01F;
+        private int mOriginAngle = 0;
+        private boolean isClockwise = true;
 
         public int getRadius() {
             return mRadius;
