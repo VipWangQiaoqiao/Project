@@ -104,4 +104,5 @@
     <color name="user_info_bg_color">#20B955</color>
     <color name="user_info_line_color">#6FDA93</color>
     <color name="user_info_item_bg_color">#F5F5F5</color>
+    <color name="user_info_line_bg">#FF6FDA93</color>
 </resources>

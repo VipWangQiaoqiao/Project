@@ -11,39 +11,27 @@ import java.util.List;
 @SuppressWarnings("All")
 public class ImageConfig {
 
-    private int selectCount;
-    private SelectMode selectMode;
-    private MediaMode mediaMode;
+    private int mSelectCount;
+    private SelectMode mSelectMode;
+    private MediaMode mMediaMode;
     private ArrayList<String> mSelectedmage;
-    private ImageLoaderListener loaderListener;
-    private SelectedCallBack callBack;
+    private ImageLoaderListener mLoaderListener;
+    private SelectedCallBack mCallBack;
 
     private ImageConfig() {
 
     }
 
     public int getSelectCount() {
-        return selectCount;
-    }
-
-    public void setSelectCount(int selectCount) {
-        this.selectCount = selectCount;
+        return mSelectCount;
     }
 
     public SelectMode getSelectMode() {
-        return selectMode;
-    }
-
-    public void setSelectMode(SelectMode selectMode) {
-        this.selectMode = selectMode;
+        return mSelectMode;
     }
 
     public MediaMode getMediaMode() {
-        return mediaMode;
-    }
-
-    public void setMediaMode(MediaMode mediaMode) {
-        this.mediaMode = mediaMode;
+        return mMediaMode;
     }
 
     public ArrayList<String> getSelectedImage() {
@@ -51,44 +39,36 @@ public class ImageConfig {
     }
 
     public ImageLoaderListener getLoaderListener() {
-        return loaderListener;
-    }
-
-    public void setLoaderListener(ImageLoaderListener loaderListener) {
-        this.loaderListener = loaderListener;
+        return mLoaderListener;
     }
 
     public SelectedCallBack getCallBack() {
-        return callBack;
-    }
-
-    public void setCallBack(SelectedCallBack callBack) {
-        this.callBack = callBack;
+        return mCallBack;
     }
 
     public static ImageConfig Build() {
         ImageConfig config = new ImageConfig();
-        config.mediaMode = MediaMode.ONLY_IMAGE_MODE;
+        config.mMediaMode = MediaMode.ONLY_IMAGE_MODE;
         return config;
     }
 
     public ImageConfig selectCount(int count) {
-        this.selectCount = count;
+        this.mSelectCount = count;
         return this;
     }
 
     public ImageConfig selectMode(SelectMode mode) {
-        this.selectMode = mode;
+        this.mSelectMode = mode;
         return this;
     }
 
     public ImageConfig mediaMode(MediaMode mode) {
-        this.mediaMode = mode;
+        this.mMediaMode = mode;
         return this;
     }
 
     public ImageConfig loaderListener(ImageLoaderListener listener) {
-        this.loaderListener = listener;
+        this.mLoaderListener = listener;
         return this;
     }
 
@@ -102,7 +82,7 @@ public class ImageConfig {
     }
 
     public ImageConfig callBack(SelectedCallBack callBack) {
-        this.callBack = callBack;
+        this.mCallBack = callBack;
         return this;
     }
 

@@ -1,96 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:id="@+id/user_container"
-             android:layout_width="match_parent"
-             android:layout_height="200dp"
-             android:background="@drawable/bg_my">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/user_container"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:background="@drawable/bg_my">
 
     <LinearLayout
         android:id="@+id/ll_user_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <RelativeLayout
-            android:id="@+id/rl_user_center"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center_vertical"
-            android:layout_weight="2"
-            android:background="@drawable/bg_my"
-            android:clickable="true">
+            android:layout_weight="2">
 
-            <net.oschina.app.widget.AvatarView
-                android:id="@+id/iv_avatar"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="14dp"
-                android:contentDescription="@null"
-                android:src="@drawable/widget_dface"
-                app:border_color="@color/white"
-                app:border_width="2dip"/>
-
-            <TextView
-                android:id="@+id/tv_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/iv_avatar"
-                android:layout_alignTop="@+id/iv_avatar"
-                android:layout_marginLeft="12dp"
-                android:layout_toEndOf="@+id/iv_avatar"
-                android:layout_toRightOf="@+id/iv_avatar"
-                android:gravity="center_vertical"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_size_18"
-                tools:text="uname"/>
-
-            <ImageView
-                android:id="@+id/iv_qr_code"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="14dp"
-                android:clickable="true"
-                android:src="@drawable/btn_qrcode"/>
-
-            <!--   <TextView
-                   android:id="@+id/tv_tweet"
-                   style="@style/user_formation_info"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:layout_alignBottom="@+id/iv_avatar"
-                   android:layout_alignLeft="@+id/tv_name"
-                   android:layout_alignStart="@+id/tv_name"
-                   android:gravity="center_vertical"
-                   android:padding="2dp"
-                   android:text="动弹: 3000"
-                   android:visibility="gone" />   -->
-
-            <ImageView
-                android:id="@+id/iv_gender"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/iv_avatar"
-                android:layout_toLeftOf="@+id/tv_name"
-                android:layout_toStartOf="@+id/tv_name"
-                android:src="@drawable/userinfo_icon_male"/>
-
-            <View
-                android:id="@+id/textView2"
+            <net.oschina.app.improve.widget.SolarSystemView
+                android:id="@+id/view_solar_system"
                 android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:background="@color/user_info_line_color"/>
+                android:layout_height="match_parent"
+                android:background="@color/user_info_bg_color"
+                android:contentDescription="@null"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.7" />
 
-        </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/rl_user_center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="57dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="16dp">
+
+                    <net.oschina.app.widget.AvatarView
+                        android:id="@+id/iv_avatar"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:contentDescription="@null"
+                        android:src="@drawable/widget_dface"
+                        app:border_color="@color/white"
+                        app:border_width="2dip" />
+
+                    <ImageView
+                        android:id="@+id/iv_gender"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/iv_avatar"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        app:srcCompat="@drawable/userinfo_icon_female" />
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="13dp"
+                    android:layout_marginStart="13dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_18"
+                    tools:text="uname" />
+
+                <ImageView
+                    android:id="@+id/iv_qr_code"
+                    android:layout_width="28dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="14dp"
+                    android:clickable="true"
+                    android:contentDescription="@string/information"
+                    android:src="@drawable/btn_qrcode" />
+
+                <!--   <TextView
+                       android:id="@+id/tv_tweet"
+                       style="@style/user_formation_info"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_alignBottom="@+id/iv_avatar"
+                       android:layout_alignLeft="@+id/tv_name"
+                       android:layout_alignStart="@+id/tv_name"
+                       android:gravity="center_vertical"
+                       android:padding="2dp"
+                       android:text="动弹: 3000"
+                       android:visibility="gone" />   -->
+
+            </LinearLayout>
+
+        </FrameLayout>
 
         <LinearLayout
             android:id="@+id/lay_about_info"
@@ -105,11 +115,11 @@
 
                 <TextView
                     android:id="@+id/tv_score"
-                    style="@style/user_formation_text"/>
+                    style="@style/user_formation_text" />
 
                 <TextView
                     style="@style/user_formation_info"
-                    android:text="@string/user_score"/>
+                    android:text="@string/user_score" />
             </LinearLayout>
 
             <LinearLayout
@@ -118,11 +128,11 @@
 
                 <TextView
                     android:id="@+id/tv_favorite"
-                    style="@style/user_formation_text"/>
+                    style="@style/user_formation_text" />
 
                 <TextView
                     style="@style/user_formation_info"
-                    android:text="@string/favorite"/>
+                    android:text="@string/favorite" />
             </LinearLayout>
 
             <LinearLayout
@@ -131,11 +141,11 @@
 
                 <TextView
                     android:id="@+id/tv_following"
-                    style="@style/user_formation_text"/>
+                    style="@style/user_formation_text" />
 
                 <TextView
                     style="@style/user_formation_info"
-                    android:text="@string/following"/>
+                    android:text="@string/following" />
             </LinearLayout>
 
             <LinearLayout
@@ -144,11 +154,11 @@
 
                 <TextView
                     android:id="@+id/tv_follower"
-                    style="@style/user_formation_text"/>
+                    style="@style/user_formation_text" />
 
                 <TextView
                     style="@style/user_formation_info"
-                    android:text="@string/follower"/>
+                    android:text="@string/follower" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -169,7 +179,7 @@
             android:contentDescription="@null"
             android:src="@drawable/widget_dface"
             app:border_color="@color/white"
-            app:border_width="3dip"/>
+            app:border_width="3dip" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -179,7 +189,7 @@
             android:layout_marginTop="@dimen/space_5"
             android:text="@string/my_information_unlogin_tips"
             android:textColor="@color/white"
-            android:textSize="@dimen/text_size_18"/>
+            android:textSize="@dimen/text_size_18" />
     </RelativeLayout>
 
 </FrameLayout>

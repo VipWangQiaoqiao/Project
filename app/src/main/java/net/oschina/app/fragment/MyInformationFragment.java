@@ -4,6 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Paint;
+import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -27,6 +33,7 @@ import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.bean.User;
 import net.oschina.app.cache.CacheManager;
+import net.oschina.app.improve.widget.SolarSystemView;
 import net.oschina.app.ui.MainActivity;
 import net.oschina.app.ui.MyQrodeDialog;
 import net.oschina.app.ui.SimpleBackActivity;
@@ -37,6 +44,7 @@ import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.BadgeView;
+import net.qiujuer.genius.ui.drawable.shape.BorderShape;
 
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
@@ -81,6 +89,14 @@ public class MyInformationFragment extends BaseFragment {
     View mUserContainer;
     @Bind(R.id.rl_user_unlogin)
     View mUserUnLogin;
+    @Bind(R.id.view_solar_system)
+    SolarSystemView mSolarSystem;
+    @Bind(R.id.rl_user_center)
+    LinearLayout mLayUserCenter;
+    @Bind(R.id.lay_about_info)
+    LinearLayout mLayAboutInfo;
+    //  @Bind(R.id.user_container)
+    //FrameLayout mLoginOutContainer;
     private boolean mIsWatingLogin;
 
     private User mInfo;
@@ -245,6 +261,60 @@ public class MyInformationFragment extends BaseFragment {
         mMesCount.setGravity(Gravity.CENTER);
         mMesCount.setBackgroundResource(R.drawable.notification_bg);
         mQrCode.setOnClickListener(this);
+
+        initBackgroudColor();
+
+        initSolar();
+    }
+
+    /**
+     * init solar view
+     */
+    private void initSolar() {
+        mLayUserCenter.post(new Runnable() {
+            @Override
+            public void run() {
+
+                int width = mLayUserCenter.getWidth();
+                int height = mLayUserCenter.getHeight() + 50;
+
+                float px = width >> 1;
+                float py = height;
+                int radius = (width >> 1) - 20;
+
+                SolarSystemView.Planet planet1 = new SolarSystemView.Planet();
+                planet1.setClockwise(false);
+                planet1.setAngleRate(0.03F);
+                planet1.setRadius(radius / 3);
+
+                SolarSystemView.Planet planet2 = new SolarSystemView.Planet();
+                planet2.setClockwise(true);
+                planet2.setAngleRate(0.04F);
+                planet2.setRadius(radius / 3 * 2);
+
+                SolarSystemView.Planet planet3 = new SolarSystemView.Planet();
+                planet3.setClockwise(false);
+                planet3.setAngleRate(0.05F);
+                planet3.setRadius(radius);
+
+                mSolarSystem.addPlanets(planet1);
+                mSolarSystem.addPlanets(planet2);
+                mSolarSystem.addPlanets(planet3);
+                mSolarSystem.setPivotPoint(px, py);
+            }
+        });
+    }
+
+    /**
+     * init layout backgroudColor
+     */
+    @SuppressWarnings("deprecation")
+    private void initBackgroudColor() {
+        ShapeDrawable lineDrawable = new ShapeDrawable(new BorderShape(new RectF(0, 1, 0, 0)));
+        Paint paint = lineDrawable.getPaint();
+        paint.setColor(getResources().getColor(R.color.user_info_line_bg));
+        LayerDrawable background = new LayerDrawable(new Drawable[]{mLayAboutInfo.getBackground(), lineDrawable});
+        mLayAboutInfo.setBackgroundDrawable(background);
     }
 
     private void fillUI() {
