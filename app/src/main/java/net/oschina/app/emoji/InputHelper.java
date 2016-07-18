@@ -19,11 +19,16 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.view.KeyEvent;
 import android.widget.EditText;
 
 import net.oschina.app.R;
+import net.oschina.app.util.TDevice;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author kymjs (http://www.kymjs.com)
@@ -55,60 +60,27 @@ public class InputHelper {
      * (I'm drunk, I go home)
      */
     public static Spannable displayEmoji(Resources res, CharSequence s) {
-        CharSequence tempStr = " " + s; //莫名其妙就加个空格干嘛,真的是没事做哦
-        String str = tempStr.toString().trim(); //变成字符串之前去掉空格
-        Spannable spannable;
-
-        if (tempStr instanceof Spannable) {
-            spannable = (Spannable) tempStr;
-        } else {
-            // 构建文字span
-            spannable = new SpannableString(str);
-        }
+        String str = s.toString().trim();
+        Spannable spannable = new SpannableString(str);
 
         if (!str.contains(":") && !str.contains("[")) {
             return spannable;
         }
 
-        for (int i = 0; i < str.length(); i++) {
-            int index1 = str.indexOf("[", i);
-            int length1 = str.indexOf("]", index1 + 1);
-            int index2 = str.indexOf(":", i);
-            int length2 = str.indexOf(":", index2 + 1);
-            int bound = (int) res.getDimension(R.dimen.space_20);
-
-            try {
-                if (index1 > 0) {
-                    String emojiStr = str.substring(index1, length1 + "]".length());
-                    int resId = getEmojiResId(emojiStr);
-                    if (resId > 0) {
-                        // 构建图片span
-                        Drawable drawable = res.getDrawable(resId);
-
-                        drawable.setBounds(0, 20, bound, bound + 20);
-                        ImageSpan span = new ImageSpan(drawable,
-                                ImageSpan.ALIGN_BASELINE);
-                        spannable.setSpan(span, index1, length1 + "]".length(),
-                                Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-                    }
-                }
-                if (index2 > 0) {
-                    String emojiStr2 = str
-                            .substring(index2, length2 + ":".length());
-                    int resId2 = getEmojiResId(emojiStr2);
-                    if (resId2 > 0) {
-                        Drawable emojiDrawable = res.getDrawable(resId2);
-                        emojiDrawable.setBounds(0, 0, bound, bound);
-                        // 构建图片span
-                        ImageSpan imageSpan = new ImageSpan(emojiDrawable, str);
-                        spannable.setSpan(imageSpan, index2,
-                                length2 + ":".length(),
-                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    }
-                }
-            } catch (Exception e) {
-            }
+        Pattern pattern = Pattern.compile("(\\[[^\\[\\]:\\s\\n]+\\])|(:[^:\\[\\]\\s\\n]+:)");
+        Matcher matcher = pattern.matcher(str);
+        while (matcher.find()){
+            String emojiStr = matcher.group();
+            if (TextUtils.isEmpty(emojiStr)) continue;
+            int resId = getEmojiResId(emojiStr);
+            if (resId <= 0) continue;
+            Drawable drawable = res.getDrawable(resId);
+            if (drawable == null) continue;
+            drawable.setBounds(0, 0, 40, 40);
+            ImageSpan span = new ImageSpan(drawable, ImageSpan.ALIGN_BOTTOM);
+            spannable.setSpan(span, matcher.start(), matcher.end(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         }
+
         return spannable;
     }
 

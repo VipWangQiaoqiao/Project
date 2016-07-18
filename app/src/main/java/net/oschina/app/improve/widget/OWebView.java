@@ -159,7 +159,7 @@ public class OWebView extends WebView {
             Matcher matcher = pattern.matcher(content);
             while (matcher.find()) {
                 String snippet = String.format(
-                        "<img src=\"%s\" onClick=\"javascript:mWebViewImageListener.showImagePreview('%s')\"",
+                        "<img style=\"vertical-align: bottom;\" src=\"%s\" onClick=\"javascript:mWebViewImageListener.showImagePreview('%s')\"",
                         matcher.group(1),
                         matcher.group(3) == null ? matcher.group(1) : matcher.group(3));
                 content = content.replace(matcher.group(0), snippet);
