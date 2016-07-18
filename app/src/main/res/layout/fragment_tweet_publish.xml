@@ -48,7 +48,7 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.v7.widget.RecyclerView
+        <net.oschina.app.improve.tweet.widget.TweetPicturesPreviewer
             android:id="@+id/recycler_images"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
