@@ -140,5 +140,13 @@
                 app:gTouchCornerRadius="0dp"
                 app:gTouchEffect="ripple" />
         </LinearLayout>
+
+        <View style="@style/h_line" />
+
+        <FrameLayout
+            android:id="@+id/lay_emoji_keyboard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom" />
     </LinearLayout>
 </FrameLayout>

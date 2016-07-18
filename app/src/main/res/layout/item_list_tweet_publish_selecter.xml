@@ -13,7 +13,7 @@
         android:clickable="true"
         android:contentDescription="@string/app_name"
         android:padding="0dp"
-        app:gTouchColor="@color/white_alpha_48"
+        app:gTouchColor="@color/black_alpha_48"
         app:gTouchCornerRadius="0dp"
         app:gTouchEffect="ripple" />
 

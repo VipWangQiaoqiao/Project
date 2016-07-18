@@ -101,6 +101,10 @@ public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectIma
         }
     }
 
+    public void clear(){
+        mModels.clear();
+    }
+
     public void add(Model model) {
         if (mModels.size() >= MAX_SIZE)
             return;
