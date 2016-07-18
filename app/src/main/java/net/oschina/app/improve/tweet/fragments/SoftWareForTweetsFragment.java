@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,8 +28,7 @@ import net.oschina.app.util.XmlUtils;
 import java.io.InputStream;
 import java.io.Serializable;
 
-public class SoftWareForTweetsFragment extends BaseListFragment<Tweet> implements
-        OnItemLongClickListener {
+public class SoftWareForTweetsFragment extends BaseListFragment<Tweet> {
 
     public static final String BUNDLE_KEY_ID = "BUNDLE_KEY_ID";
     //protected static final String TAG = SoftwareForTweetsFrament.class.getSimpleName();
@@ -118,7 +116,6 @@ public class SoftWareForTweetsFragment extends BaseListFragment<Tweet> implement
                 return false;
             }
         });
-        mListView.setOnItemLongClickListener(this);
     }
 
     private boolean mInputDoubleEmpty = false;
@@ -191,9 +188,4 @@ public class SoftWareForTweetsFragment extends BaseListFragment<Tweet> implement
         ServerTaskUtils.pubSoftWareTweet(getActivity(), tweet, mId);
     }
 
-    @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view,
-                                   int position, long id) {
-        return true;
-    }
 }
