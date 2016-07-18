@@ -13,6 +13,8 @@ public interface ISelectImageContract {
     }
 
     interface View {
+        void onSelectComplete();
+
         void onOpenCameraSuccess();
 
         void onReadExternalStorageSuccess();

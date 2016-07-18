@@ -88,7 +88,9 @@ public class ImageGalleryActivity extends AppCompatActivity implements ViewPager
             ImagePreviewView view = new ImagePreviewView(ImageGalleryActivity.this);
             view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
-            mConfig.getLoaderListener().displayImage(view, mConfig.getSelectedImage().get(position));
+            if (mConfig.getLoaderListener() != null) {
+                mConfig.getLoaderListener().displayImage(view, mConfig.getSelectedImage().get(position));
+            }
             container.addView(view);
             return view;
         }
