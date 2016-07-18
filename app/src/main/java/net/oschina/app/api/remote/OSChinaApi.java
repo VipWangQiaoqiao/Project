@@ -1378,6 +1378,28 @@ public class OSChinaApi {
     }
 
     /**
+     * 上传图片接口
+     * http://doc.oschina.net/app_v2?t=105508
+     *
+     * @param token     上传口令，单次口令最多上传9张图片。
+     * @param imagePath 图片地址
+     * @param handler   回调
+     */
+    public static void uploadImage(String token, String imagePath, TextHttpResponseHandler handler) {
+        if (TextUtils.isEmpty(imagePath))
+            throw new NullPointerException("imagePath is not null.");
+        RequestParams params = new RequestParams();
+        if (!TextUtils.isEmpty(token))
+            params.put("token", token);
+        try {
+            params.put("resource", new File(imagePath));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        ApiHttpClient.post("action/api/resource_image", params, handler);
+    }
+
+    /**
      * 发布动弹
      * 链接 http://doc.oschina.net/app_v2?t=105522
      *
