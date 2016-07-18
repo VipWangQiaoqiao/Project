@@ -6,17 +6,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.WindowManager;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 
 public class TweetPublishActivity extends BaseBackActivity {
-
-    private static final int MAX_TEXT_LENGTH = 160;
-    private static final int SELECT_FRIENDS_REEQUEST_CODE = 100;
-    private static final String TEXT_SOFTWARE = "#请输入软件名#";
-
     public static final String ACTION_TYPE = "action_type";
     public static final int ACTION_TYPE_ALBUM = 0;
     public static final int ACTION_TYPE_PHOTO = 1;
@@ -46,6 +42,8 @@ public class TweetPublishActivity extends BaseBackActivity {
                 .beginTransaction();
         trans.replace(R.id.activity_tweet_publish, fragment);
         trans.commitAllowingStateLoss();
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
     @Override
@@ -64,6 +62,8 @@ public class TweetPublishActivity extends BaseBackActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_send) {
+
+
             return true;
         } else {
             return super.onOptionsItemSelected(item);

@@ -1,14 +1,17 @@
 package net.oschina.app.improve.tweet.adapter;
 
+import android.content.Context;
+import android.os.Vibrator;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.bumptech.glide.RequestManager;
 
 import net.oschina.app.R;
-import net.oschina.app.improve.tweet.adapter.holder.TweetSelectImageHolder;
+import net.oschina.app.improve.tweet.widget.TweetPicturesPreviewerItemTouchCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +20,7 @@ import java.util.List;
  * Created by JuQiu
  * on 16/7/15.
  */
-public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectImageHolder> {
+public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectImageAdapter.TweetSelectImageHolder> implements TweetPicturesPreviewerItemTouchCallback.ItemTouchHelperAdapter {
     private final int MAX_SIZE = 9;
     private final int TYPE_NONE = 0;
     private final int TYPE_ADD = 1;
@@ -42,15 +45,13 @@ public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectIma
 
     @Override
     public TweetSelectImageHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_tweet_publish_selecter, parent, false);
         if (viewType == TYPE_NONE) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_tweet_publish_selecter, parent, false);
-            return TweetSelectImageHolder.create(view, new View.OnClickListener() {
+            return new TweetSelectImageHolder(view, new TweetSelectImageHolder.HolderListener() {
                 @Override
-                public void onClick(View v) {
+                public void onDelete(Model model) {
                     Callback callback = mCallback;
-                    Object obj = v.getTag();
-                    if (callback != null && obj != null && obj instanceof Model) {
-                        Model model = (Model) obj;
+                    if (callback != null) {
                         int pos = mModels.indexOf(model);
                         if (pos == -1)
                             return;
@@ -58,10 +59,18 @@ public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectIma
                         notifyItemRemoved(pos);
                     }
                 }
+
+                @Override
+                public void onDrag(TweetSelectImageHolder holder) {
+                    Callback callback = mCallback;
+                    if (callback != null) {
+                        // Start a drag whenever the handle view it touched
+                        mCallback.onStartDrag(holder);
+                    }
+                }
             });
         } else {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_tweet_publish_selecter, parent, false);
-            return TweetSelectImageHolder.createByMore(view, new View.OnClickListener() {
+            return new TweetSelectImageHolder(view, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Callback callback = mCallback;
@@ -74,7 +83,7 @@ public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectIma
     }
 
     @Override
-    public void onBindViewHolder(TweetSelectImageHolder holder, int position) {
+    public void onBindViewHolder(final TweetSelectImageHolder holder, int position) {
         int size = mModels.size();
         if (size >= MAX_SIZE || size != position) {
             Model model = mModels.get(position);
@@ -92,6 +101,10 @@ public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectIma
         }
     }
 
+    public void clear(){
+        mModels.clear();
+    }
+
     public void add(Model model) {
         if (mModels.size() >= MAX_SIZE)
             return;
@@ -100,6 +113,34 @@ public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectIma
 
     public void add(String path) {
         add(new Model(path));
+    }
+
+    @Override
+    public boolean onItemMove(int fromPosition, int toPosition) {
+        //Collections.swap(mModels, fromPosition, toPosition);
+        if (fromPosition == toPosition)
+            return false;
+
+        if (fromPosition < toPosition) {
+            Model fromModel = mModels.get(fromPosition);
+            Model toModel = mModels.get(toPosition);
+
+            mModels.remove(fromPosition);
+            mModels.add(mModels.indexOf(toModel) + 1, fromModel);
+        } else {
+            Model fromModel = mModels.get(fromPosition);
+            mModels.remove(fromPosition);
+            mModels.add(toPosition, fromModel);
+        }
+
+        notifyItemMoved(fromPosition, toPosition);
+        return true;
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+        mModels.remove(position);
+        notifyItemRemoved(position);
     }
 
     public static class Model {
@@ -115,5 +156,92 @@ public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectIma
         void onLoadMoreClick();
 
         RequestManager getImgLoader();
+
+        /**
+         * Called when a view is requesting a start of a drag.
+         *
+         * @param viewHolder The holder of the view to drag.
+         */
+        void onStartDrag(RecyclerView.ViewHolder viewHolder);
     }
+
+    /**
+     * TweetSelectImageHolder
+     */
+    static class TweetSelectImageHolder extends RecyclerView.ViewHolder implements TweetPicturesPreviewerItemTouchCallback.ItemTouchHelperViewHolder {
+        private ImageView mImage;
+        private ImageView mDelete;
+        private HolderListener mListener;
+
+        private TweetSelectImageHolder(View itemView, HolderListener listener) {
+            super(itemView);
+            mListener = listener;
+            mImage = (ImageView) itemView.findViewById(R.id.iv_content);
+            mDelete = (ImageView) itemView.findViewById(R.id.iv_delete);
+
+            mDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Object obj = v.getTag();
+                    final HolderListener holderListener = mListener;
+                    if (holderListener != null && obj != null && obj instanceof TweetSelectImageAdapter.Model) {
+                        holderListener.onDelete((TweetSelectImageAdapter.Model) obj);
+                    }
+                }
+            });
+            mImage.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    final HolderListener holderListener = mListener;
+                    if (holderListener != null) {
+                        holderListener.onDrag(TweetSelectImageHolder.this);
+                    }
+                    return true;
+                }
+            });
+        }
+
+        private TweetSelectImageHolder(View itemView, View.OnClickListener clickListener) {
+            super(itemView);
+
+            mImage = (ImageView) itemView.findViewById(R.id.iv_content);
+            mDelete = (ImageView) itemView.findViewById(R.id.iv_delete);
+
+            mDelete.setVisibility(View.GONE);
+            mImage.setImageResource(R.drawable.ic_tweet_add);
+            mImage.setOnClickListener(clickListener);
+        }
+
+        public void bind(int position, TweetSelectImageAdapter.Model model, RequestManager loader) {
+            mDelete.setTag(model);
+            loader.load(model.path)
+                    .centerCrop()
+                    .into(mImage);
+        }
+
+        @Override
+        public void onItemSelected() {
+            try {
+                Vibrator vibrator = (Vibrator) itemView.getContext().getSystemService(Context.VIBRATOR_SERVICE);
+                vibrator.vibrate(20);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onItemClear() {
+
+        }
+
+        /**
+         * Holder 与Adapter之间的桥梁
+         */
+        interface HolderListener {
+            void onDelete(TweetSelectImageAdapter.Model model);
+
+            void onDrag(TweetSelectImageHolder holder);
+        }
+    }
+
 }
