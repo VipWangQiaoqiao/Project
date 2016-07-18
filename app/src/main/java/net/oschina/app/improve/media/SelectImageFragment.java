@@ -155,8 +155,10 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
                 if (image.isSelect()) {
                     mSelectedImage.add(image);
                 }
-            } else {
-                Toast.makeText(getActivity(), "最多只能选择 " + mConfig.getSelectCount() + " 张照片", Toast.LENGTH_LONG).show();
+            } else if(image.isSelect()){
+                mSelectedImage.remove(image);
+            }else {
+                Toast.makeText(getActivity(), "最多只能选择 " + mConfig.getSelectCount() + " 张照片", Toast.LENGTH_SHORT).show();
             }
 
         } else {
