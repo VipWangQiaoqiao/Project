@@ -365,6 +365,19 @@
             android:label="用户主页"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
+
+        <activity
+            android:name=".improve.media.SelectImageActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="选择图片"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".improve.media.ImageGalleryActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="图片预览"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Dialog.NoTitle.Translucent" />
     </application>
 
 </manifest>

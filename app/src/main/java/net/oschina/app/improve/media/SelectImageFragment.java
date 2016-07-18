@@ -132,12 +132,6 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
                 }
             }
         });
-        mImageAdapter.setOnItemLongClickListener(new BaseRecyclerAdapter.OnItemLongClickListener() {
-            @Override
-            public void onLongClick(int position, long itemId) {
-                handleResult();
-            }
-        });
 
         btn_preview.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,10 +167,18 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
     }
 
     private void handleResult() {
-        if (mConfig.getCallBack() != null) {
+        if (mConfig.getCallBack() != null && mSelectedImage.size() != 0) {
             mConfig.getCallBack().doBack(CommonUtil.toArrayList(mSelectedImage));
             getActivity().finish();
         }
+    }
+
+    /**
+     * 完成选择
+     */
+    @Override
+    public void onSelectComplete() {
+        handleResult();
     }
 
     /**
