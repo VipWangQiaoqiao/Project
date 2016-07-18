@@ -43,4 +43,9 @@
         <attr name="verticalSpace" format="dimension" />
         <attr name="horizontalSpace" format="dimension" />
     </declare-styleable>
+
+    <declare-styleable name="FlowImageLayout">
+        <attr name="flow_vertical_space" format="dimension" />
+        <attr name="flow_horizontal_space" format="dimension" />
+    </declare-styleable>
 </resources>
