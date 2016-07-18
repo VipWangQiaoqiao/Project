@@ -38,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <!--<RelativeLayout
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
@@ -58,13 +58,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:contentDescription="@null" />
-                </RelativeLayout>-->
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/iv_portrait"
-                    android:src="@drawable/widget_dface"
-                    android:layout_marginTop="?attr/actionBarSize"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp" />
+                </RelativeLayout>
 
                 <TextView
                     android:id="@+id/tv_nick"

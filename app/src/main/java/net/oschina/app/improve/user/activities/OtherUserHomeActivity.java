@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -66,7 +67,7 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> impl
     @Bind(R.id.layout_appbar) AppBarLayout mLayoutAppBar;
     @Bind(R.id.iv_logo_portrait) CircleImageView mLogoPortrait;
     @Bind(R.id.tv_logo_nick) TextView mLogoNick;
-//    @Bind(R.id.iv_gender) ImageView mGenderImage;
+    @Bind(R.id.iv_gender) ImageView mGenderImage;
 
     private MenuItem mFollowMenu;
 
@@ -75,7 +76,7 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> impl
     private AsyncHttpResponseHandler mActivesHandler;
 
     public static void show(Context context, User user) {
-//        if (user == null) return;
+        if (user == null) return;
         Intent intent = new Intent(context, OtherUserHomeActivity.class);
         intent.putExtra(KEY_BUNDLE, user);
         context.startActivity(intent);
@@ -139,49 +140,30 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> impl
                 }
                 float x = mPortrait.getX();
                 float y = mPortrait.getY();
-                float px = x + mPortrait.getWidth() / 2;
-                float py = y + mPortrait.getHeight() / 2 + mStatusBarHeight;
+                ViewGroup parent = (ViewGroup) mPortrait.getParent();
+                float px = x + parent.getX() + mPortrait.getWidth() / 2;
+                float py = y + parent.getY() + mPortrait.getHeight() / 2 + mStatusBarHeight;
                 int radius = (int) (mSolarSystem.getHeight() - py + 50);
 
                 SolarSystemView.Planet planet1 = new SolarSystemView.Planet();
                 planet1.setClockwise(true);
-                planet1.setTrackColor(0XFF24e28e);
-                planet1.setColor(0XFF24e28e);
-                planet1.setTrackWidth(2);
-                planet1.setSelfRadius(6);
                 planet1.setAngleRate(0.015F);
                 planet1.setRadius(radius / 4);
-                planet1.setOriginAngle(0);
 
                 SolarSystemView.Planet planet2 = new SolarSystemView.Planet();
                 planet2.setClockwise(false);
-                planet2.setTrackColor(0XFF24e28e);
-                planet2.setColor(0XFF24e28e);
-                planet2.setTrackWidth(2);
-                planet2.setSelfRadius(6);
                 planet2.setAngleRate(0.02F);
                 planet2.setRadius(radius / 4 * 2);
-                planet2.setOriginAngle(0);
 
                 SolarSystemView.Planet planet3 = new SolarSystemView.Planet();
                 planet3.setClockwise(true);
-                planet3.setTrackColor(0XFF24e28e);
-                planet3.setColor(0XFF24e28e);
-                planet3.setTrackWidth(2);
-                planet3.setSelfRadius(6);
                 planet3.setAngleRate(0.01F);
                 planet3.setRadius(radius / 4 * 3);
-                planet3.setOriginAngle(0);
 
                 SolarSystemView.Planet planet4 = new SolarSystemView.Planet();
                 planet4.setClockwise(false);
-                planet4.setTrackColor(0XFF24e28e);
-                planet4.setColor(0XFF24e28e);
-                planet4.setTrackWidth(2);
-                planet4.setSelfRadius(6);
                 planet4.setAngleRate(0.02F);
                 planet4.setRadius(radius);
-                planet4.setOriginAngle(0);
 
                 mSolarSystem.addPlanets(planet1);
                 mSolarSystem.addPlanets(planet2);
@@ -213,13 +195,13 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> impl
         mCountFans.setText(String.format("粉丝 %s", user.getFans()));
         mCountFollow.setText(String.format("关注 %s", user.getFollowers()));
 
-        /*if (!TextUtils.isEmpty(user.getGender())){
+        if (!TextUtils.isEmpty(user.getGender())){
             if (user.getGender().equals("2") || user.getGender().equals("女")){
                 mGenderImage.setImageResource(R.drawable.ic_female);
             }else{
                 mGenderImage.setImageResource(R.drawable.ic_male);
             }
-        }*/
+        }
 
         if (mFollowMenu != null){
             switch (user.getRelation()) {
