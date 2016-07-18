@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
+
 import net.oschina.app.R;
 import net.oschina.app.improve.media.config.ImageConfig;
 import net.oschina.app.improve.media.contract.ISelectImageContract;
@@ -22,7 +23,7 @@ import pub.devrel.easypermissions.EasyPermissions;
  * on 2016/7/13.
  */
 @SuppressWarnings("All")
-public class ImageActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks, ISelectImageContract.Operator {
+public class SelectImageActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks, ISelectImageContract.Operator {
     private static ImageConfig mConfig;
     private final int RC_CAMERA_PERM = 0x03;
     private final int RC_EXTERNAL_STORAGE = 0x04;
@@ -30,7 +31,7 @@ public class ImageActivity extends AppCompatActivity implements EasyPermissions.
     private ISelectImageContract.View mView;
 
     public static void showImage(Activity activity, ImageConfig config) {
-        Intent intent = new Intent(activity, ImageActivity.class);
+        Intent intent = new Intent(activity, SelectImageActivity.class);
         mConfig = config;
         activity.startActivity(intent);
     }
@@ -117,6 +118,7 @@ public class ImageActivity extends AppCompatActivity implements EasyPermissions.
     @Override
     protected void onDestroy() {
         mConfig = null;
+        mView = null;
         super.onDestroy();
     }
 }

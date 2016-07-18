@@ -15,6 +15,7 @@ import android.widget.TextView;
 import net.oschina.app.R;
 import net.oschina.app.improve.media.config.ImageConfig;
 
+
 /**
  * Created by huanghaibin_dev
  * on 2016/7/11.
@@ -87,7 +88,7 @@ public class ImageGalleryActivity extends AppCompatActivity implements ViewPager
             ImagePreviewView view = new ImagePreviewView(ImageGalleryActivity.this);
             view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
-            mConfig.getLoaderListener().displayImage(view, mConfig.getSelectedImage().get(position).getPath());
+            mConfig.getLoaderListener().displayImage(view, mConfig.getSelectedImage().get(position));
             container.addView(view);
             return view;
         }

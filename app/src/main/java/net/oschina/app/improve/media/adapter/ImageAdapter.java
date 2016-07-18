@@ -10,7 +10,9 @@ import android.widget.ImageView;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.media.bean.Image;
+import net.oschina.app.improve.media.config.ImageConfig;
 import net.oschina.app.improve.media.config.ImageLoaderListener;
+
 
 /**
  * Created by huanghaibin_dev
@@ -18,6 +20,7 @@ import net.oschina.app.improve.media.config.ImageLoaderListener;
  */
 public class ImageAdapter extends BaseRecyclerAdapter<Image> {
     private ImageLoaderListener loader;
+    private ImageConfig.SelectMode selectMode;
 
     public ImageAdapter(Context context) {
         super(context, NEITHER);
@@ -43,6 +46,7 @@ public class ImageAdapter extends BaseRecyclerAdapter<Image> {
         if (getItemViewType(position) == 1) {
             ImageViewHolder h = (ImageViewHolder) holder;
             h.cb_selected.setChecked(item.isSelect());
+            h.cb_selected.setVisibility(selectMode == ImageConfig.SelectMode.SINGLE_MODE ? View.GONE : View.VISIBLE);
             if (loader != null) {
                 loader.displayImage(h.iv_image, item.getPath());
             }
@@ -68,5 +72,13 @@ public class ImageAdapter extends BaseRecyclerAdapter<Image> {
             iv_image = (ImageView) itemView.findViewById(R.id.iv_image);
             cb_selected = (CheckBox) itemView.findViewById(R.id.cb_selected);
         }
+    }
+
+    public ImageConfig.SelectMode getSelectMode() {
+        return selectMode;
+    }
+
+    public void setSelectMode(ImageConfig.SelectMode selectMode) {
+        this.selectMode = selectMode;
     }
 }
