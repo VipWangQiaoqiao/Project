@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/ic_bg_item_selector"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/lay_12"
+        android:layout_marginLeft="@dimen/lay_16"
+        android:layout_marginRight="@dimen/lay_16"
+        android:layout_marginTop="@dimen/lay_16"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <net.oschina.app.widget.AvatarView
+            android:id="@+id/iv_tweet_face"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:clickable="true"
+            android:src="@drawable/widget_dface" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/lay_8"
+            android:orientation="vertical"
+            tools:ignore="RtlHardcoded">
+
+            <TextView
+                android:id="@+id/tv_tweet_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/blog_title_text_color_light"
+                android:textSize="16sp"
+                tools:text="Large Text" />
+
+            <net.oschina.app.widget.TweetTextView
+                android:id="@+id/tweet_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/lay_8"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="@dimen/font_4"
+                android:textColor="?attr/textColor"
+                android:textSize="14sp"
+                tools:text="最近研究了这个项目，学习rx系列,修复了楼主的bug 主要原因在mainActivity里面资讯fragment的构建" />
+
+            <net.oschina.app.improve.widget.FlowLayout
+                android:id="@+id/fl_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:horizontalSpace="8dp"
+                app:verticalSpace="8dp" />
+
+            <LinearLayout
+                android:id="@+id/ll_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/lay_8"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_tweet_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:lines="1"
+                        android:singleLine="true"
+                        android:textColor="#9d9d9d"
+                        android:textSize="@dimen/font_12"
+                        tools:text="6分钟" />
+
+                    <TextView
+                        android:id="@+id/tv_tweet_platform"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/space_4"
+                        android:layout_marginRight="@dimen/space_4"
+                        android:gravity="center"
+                        android:lines="1"
+                        android:singleLine="true"
+                        android:textColor="#9d9d9d"
+                        android:textSize="@dimen/font_12"
+                        tools:text="iPhone" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/iv_like_state"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginLeft="@dimen/space_4"
+                        android:clickable="true"
+                        android:contentDescription="@string/app_name"
+                        android:padding="@dimen/space_4"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_thumbup_normal"
+                        tools:ignore="RtlHardcoded" />
+
+                    <TextView
+                        android:id="@+id/tv_tweet_like_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:textColor="#9d9d9d"
+                        android:textSize="@dimen/font_12"
+                        tools:text="12" />
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginLeft="@dimen/space_8"
+                        android:contentDescription="@string/app_name"
+                        android:padding="@dimen/space_4"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_comment_30" />
+
+                    <TextView
+                        android:id="@+id/tv_tweet_comment_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:textColor="#9d9d9d"
+                        android:textSize="@dimen/font_12"
+                        tools:text="12" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        style="@style/h_line"
+        android:layout_marginLeft="16dp" />
+</LinearLayout>

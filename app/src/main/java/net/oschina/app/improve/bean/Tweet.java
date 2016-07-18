@@ -1,0 +1,174 @@
+package net.oschina.app.improve.bean;
+
+import net.oschina.app.improve.bean.simple.Author;
+
+import java.io.Serializable;
+
+/**
+ * Created by huanghaibin_dev
+ * on 2016/7/18.
+ */
+public class Tweet implements Serializable{
+    private long id;
+    private String content;
+    private int appClient;
+    private int commentCount;
+    private int likeCount;
+    private boolean liked;
+    private String pubDate;
+    private Author author;
+    private Code code;
+    private Audio[] audio;
+    private Image[] images;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public int getAppClient() {
+        return appClient;
+    }
+
+    public void setAppClient(int appClient) {
+        this.appClient = appClient;
+    }
+
+    public int getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(int commentCount) {
+        this.commentCount = commentCount;
+    }
+
+    public int getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    public boolean isLiked() {
+        return liked;
+    }
+
+    public void setLiked(boolean liked) {
+        this.liked = liked;
+    }
+
+    public String getPubDate() {
+        return pubDate;
+    }
+
+    public void setPubDate(String pubDate) {
+        this.pubDate = pubDate;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
+
+    public Code getCode() {
+        return code;
+    }
+
+    public void setCode(Code code) {
+        this.code = code;
+    }
+
+    public Audio[] getAudio() {
+        return audio;
+    }
+
+    public void setAudio(Audio[] audio) {
+        this.audio = audio;
+    }
+
+    public Image[] getImages() {
+        return images;
+    }
+
+    public void setImages(Image[] images) {
+        this.images = images;
+    }
+
+    public static class Code implements Serializable{
+        private String brush;
+        private String conent;
+
+        public String getBrush() {
+            return brush;
+        }
+
+        public void setBrush(String brush) {
+            this.brush = brush;
+        }
+
+        public String getConent() {
+            return conent;
+        }
+
+        public void setConent(String conent) {
+            this.conent = conent;
+        }
+    }
+
+    public static class Audio implements Serializable{
+        private String href;
+        private long timeSpan;
+
+        public String getHref() {
+            return href;
+        }
+
+        public void setHref(String href) {
+            this.href = href;
+        }
+
+        public long getTimeSpan() {
+            return timeSpan;
+        }
+
+        public void setTimeSpan(long timeSpan) {
+            this.timeSpan = timeSpan;
+        }
+    }
+
+    public static class Image implements Serializable{
+        public String getThumb() {
+            return thumb;
+        }
+
+        public void setThumb(String thumb) {
+            this.thumb = thumb;
+        }
+
+        public String getHref() {
+            return href;
+        }
+
+        public void setHref(String href) {
+            this.href = href;
+        }
+
+        private String thumb;
+        private String href;
+    }
+}

@@ -345,7 +345,7 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
                         images.add(image);
 
                         //如果是新拍的照片
-                        if (mCamImageName != null && mCamImageName.equals(image.getName())) {
+                        if (mCamImageName != null && mCamImageName.toLowerCase().equals(image.getName().toLowerCase())) {
                             image.setSelect(true);
                             image.setExist(true);
                             mSelectedImage.add(image);
@@ -399,7 +399,6 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
                     if (mConfig != null && mConfig.getSelectMode() == ImageConfig.SelectMode.SINGLE_MODE && mCamImageName != null) {
                         handleResult();
                     }
-                    mCamImageName = null;
                 }
             }
         }
