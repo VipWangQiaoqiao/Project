@@ -1376,4 +1376,25 @@ public class OSChinaApi {
         params.put("voteOpt", opt);
         ApiHttpClient.post("action/apiv2/question_vote", params, handler);
     }
+
+    /**
+     * 发布动弹
+     * 链接 http://doc.oschina.net/app_v2?t=105522
+     *
+     * @param content     内容
+     * @param imagesToken 图片token
+     * @param audioToken  语音token
+     * @param handler     回调
+     */
+    public static void pubTweet(String content, String imagesToken, String audioToken, TextHttpResponseHandler handler) {
+        if (TextUtils.isEmpty(content))
+            throw new NullPointerException("content is not null.");
+        RequestParams params = new RequestParams();
+        params.put("content", content);
+        if (!TextUtils.isEmpty(imagesToken))
+            params.put("images", imagesToken);
+        if (!TextUtils.isEmpty(audioToken))
+            params.put("audio", audioToken);
+        ApiHttpClient.post("action/apiv2/tweet", params, handler);
+    }
 }
