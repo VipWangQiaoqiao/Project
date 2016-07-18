@@ -58,7 +58,7 @@ public class TweetPublishFragment extends BaseFragment implements TweetSelectIma
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
         mLayImages.setLayoutManager(layoutManager);
         mLayImages.setAdapter(mImageAdapter);
-        //mLayImages.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        mLayImages.setOverScrollMode(View.OVER_SCROLL_NEVER);
     }
 
     @Override

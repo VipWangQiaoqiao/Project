@@ -1,6 +1,7 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -8,26 +9,22 @@
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/lay_44">
 
         <android.support.design.widget.AppBarLayout
-            android:id="@+id/lay_nsv"
+            android:id="@+id/layout_appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:layout_scrollFlags="scroll|enterAlways">
+            android:background="@null"
+            app:elevation="0dp">
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingBottom="@dimen/lay_32"
-                android:paddingLeft="@dimen/lay_16"
-                android:paddingRight="@dimen/lay_16"
-                android:paddingTop="@dimen/lay_16">
+                android:padding="@dimen/lay_16"
+                app:layout_scrollFlags="scroll|enterAlways">
 
                 <EditText
                     android:id="@+id/edit_content"
@@ -36,33 +33,30 @@
                     android:background="@null"
                     android:gravity="start|left|top"
                     android:hint="今天想动弹什么?"
-                    android:minHeight="@dimen/size_92"
+                    android:minLines="4"
+                    android:paddingBottom="@dimen/lay_32"
                     android:textColor="#111111"
                     android:textSize="@dimen/font_16" />
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_gravity="right"
-                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|right"
                     android:text="12" />
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recycler_images"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/lay_16"
-                    android:layout_marginTop="@dimen/lay_16"
-                    android:paddingLeft="@dimen/lay_12"
-                    android:paddingRight="@dimen/lay_12"
-                    app:layout_anchor="@id/lay_nsv"
-                    app:layout_anchorGravity="bottom"
-                    app:layout_scrollFlags="scroll|enterAlways" />
-            </LinearLayout>
+            </FrameLayout>
 
         </android.support.design.widget.AppBarLayout>
 
-
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_images"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/lay_12"
+            android:paddingLeft="@dimen/lay_12"
+            android:paddingRight="@dimen/lay_12"
+            android:paddingTop="@dimen/lay_12"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
     </android.support.design.widget.CoordinatorLayout>
@@ -71,7 +65,8 @@
         android:id="@+id/lay_option"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
         android:orientation="vertical">
 
         <View
@@ -146,4 +141,4 @@
                 app:gTouchEffect="ripple" />
         </LinearLayout>
     </LinearLayout>
-</RelativeLayout>
+</FrameLayout>
