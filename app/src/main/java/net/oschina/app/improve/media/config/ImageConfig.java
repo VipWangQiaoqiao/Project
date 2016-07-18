@@ -1,8 +1,6 @@
 package net.oschina.app.improve.media.config;
 
-
-import net.oschina.app.improve.media.bean.Image;
-
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,7 +14,7 @@ public class ImageConfig {
     private int selectCount;
     private SelectMode selectMode;
     private MediaMode mediaMode;
-    private List<Image> selectedImage;
+    private ArrayList<String> mSelectedmage;
     private ImageLoaderListener loaderListener;
     private SelectedCallBack callBack;
 
@@ -48,12 +46,8 @@ public class ImageConfig {
         this.mediaMode = mediaMode;
     }
 
-    public List<Image> getSelectedImage() {
-        return selectedImage;
-    }
-
-    public void setSelectedImage(List<Image> selectedImage) {
-        this.selectedImage = selectedImage;
+    public ArrayList<String> getSelectedImage() {
+        return mSelectedmage;
     }
 
     public ImageLoaderListener getLoaderListener() {
@@ -74,7 +68,6 @@ public class ImageConfig {
 
     public static ImageConfig Build() {
         ImageConfig config = new ImageConfig();
-        // config.selectMode(SelectMode.SINGLE_MODE);
         config.mediaMode = MediaMode.ONLY_IMAGE_MODE;
         return config;
     }
@@ -99,8 +92,12 @@ public class ImageConfig {
         return this;
     }
 
-    public ImageConfig selectedImages(List<Image> images) {
-        this.selectedImage = images;
+    public ImageConfig selectedImages(List<String> images) {
+        if (images != null) {
+            if (mSelectedmage == null) mSelectedmage = new ArrayList<>();
+            mSelectedmage.clear();
+            mSelectedmage.addAll(images);
+        }
         return this;
     }
 

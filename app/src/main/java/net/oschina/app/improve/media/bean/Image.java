@@ -7,7 +7,7 @@ import java.io.Serializable;
  * on 2016/7/11.
  */
 
-public class Image implements Serializable{
+public class Image implements Serializable {
     private int id;
     private String path;
     private String thumbPath;
@@ -16,6 +16,7 @@ public class Image implements Serializable{
     private String folderName;
     private String name;
     private long date;
+
     public int getId() {
         return id;
     }
@@ -78,5 +79,13 @@ public class Image implements Serializable{
 
     public void setDate(long date) {
         this.date = date;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Image) {
+            return this.path.equals(((Image) o).getPath());
+        }
+        return false;
     }
 }

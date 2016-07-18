@@ -7,8 +7,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -36,16 +34,13 @@ import net.oschina.app.improve.media.config.ImageConfig;
 import net.oschina.app.improve.media.contract.ISelectImageContract;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
  * Created by huanghaibin_dev
  * on 2016/7/15.
  */
-
 public class SelectImageFragment extends Fragment implements ISelectImageContract.View {
     private View mRootView;
     private RecyclerView rv_image;
@@ -55,7 +50,6 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
     private ImageFolderAdapter mImageFolderAdapter;
     private ImageAdapter mImageAdapter;
 
-    private List<ImageFolder> mImageFolders = new ArrayList<>();
     private List<Image> mSelectedImage;
     private static ImageConfig mConfig;
 
@@ -96,6 +90,7 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
         rv_image.setLayoutManager(new GridLayoutManager(getActivity(), 4));
         rv_image.addItemDecoration(new SpaceGridItemDecoration(4));
         mImageAdapter = new ImageAdapter(getActivity());
+        mImageAdapter.setSelectMode(mConfig.getSelectMode());
         mImageFolderAdapter = new ImageFolderAdapter(getActivity());
         if (mConfig == null) mConfig = ImageConfig.Build();
         mImageAdapter.setLoader(mConfig.getLoaderListener());
@@ -104,6 +99,17 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
 
     private void initData() {
         mSelectedImage = new ArrayList<>();
+        if (mConfig.getSelectMode() == ImageConfig.SelectMode.MULTI_MODE) {
+            if (mConfig.getSelectedImage() != null && mConfig.getSelectedImage().size() != 0) {
+                for (String s : mConfig.getSelectedImage()) {
+                    Image image = new Image();
+                    image.setExist(true);
+                    image.setSelect(true);
+                    image.setPath(s);
+                    mSelectedImage.add(image);
+                }
+            }
+        }
 
         btn_folder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,7 +142,7 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
         btn_preview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImageGalleryActivity.showActivity(getActivity(), mConfig.selectedImages(mSelectedImage), 0);
+                ImageGalleryActivity.showActivity(getActivity(), mConfig.selectedImages(CommonUtil.toArrayList(mSelectedImage)), 0);
             }
         });
         getActivity().getSupportLoaderManager().initLoader(0, null, mCursorLoader);
@@ -144,6 +150,7 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
 
     private void handleImage(int position) {
         Image image = mImageAdapter.getItem(position);
+        image.setExist(true);
         if (mConfig.getSelectMode() == ImageConfig.SelectMode.MULTI_MODE) {
             if (mSelectedImage.size() != mConfig.getSelectCount()) {
                 if (image.isSelect()) {
@@ -167,7 +174,7 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
 
     private void handleResult() {
         if (mConfig.getCallBack() != null) {
-            mConfig.getCallBack().doBack(mSelectedImage);
+            mConfig.getCallBack().doBack(CommonUtil.toArrayList(mSelectedImage));
             getActivity().finish();
         }
     }
@@ -210,19 +217,16 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
             mFolderPopupWindow.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(final int position, long itemId) {
-
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mImageAdapter.clear();
-                            if (mConfig != null && mConfig.getMediaMode() == ImageConfig.MediaMode.HAVE_CAM_MODE) {
-                                Image cam = new Image();
-                                mImageAdapter.addItem(cam);
-                            }
-                            mImageAdapter.addAll(mImageFolderAdapter.getItem(position).getImages());
-                            mFolderPopupWindow.dismiss();
+                    mImageAdapter.clear();
+                    if (mConfig != null && mConfig.getMediaMode() == ImageConfig.MediaMode.HAVE_CAM_MODE) {
+                        if (position != 0) {
+                            Image cam = new Image();
+                            mImageAdapter.addItem(cam);
                         }
-                    }, 100);
+                    }
+                    mImageAdapter.addAll(mImageFolderAdapter.getItem(position).getImages());
+                    rv_image.scrollToPosition(0);
+                    mFolderPopupWindow.dismiss();
                 }
             });
         }
@@ -236,10 +240,8 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
         // 判断是否挂载了SD卡
         mCamImageName = null;
         String savePath = "";
-        String storageState = Environment.getExternalStorageState();
-        if (storageState.equals(Environment.MEDIA_MOUNTED)) {
-            savePath = Environment.getExternalStorageDirectory()
-                    .getAbsolutePath() + "/DCIM/Camera/";
+        if (CommonUtil.hasSDCard()) {
+            savePath = CommonUtil.getCameraPath();
             File saveDir = new File(savePath);
             if (!saveDir.exists()) {
                 saveDir.mkdirs();
@@ -252,8 +254,7 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
             return;
         }
 
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        mCamImageName = "IMG_" + timeStamp + ".jpg";// 照片命名
+        mCamImageName = CommonUtil.getSaveImageFullName();
         File out = new File(savePath, mCamImageName);
         Uri uri = Uri.fromFile(out);
 
@@ -303,11 +304,18 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
             if (data != null) {
-                List<Image> images = new ArrayList<>();
+                ArrayList<Image> images = new ArrayList<>();
                 if (mConfig != null && mConfig.getMediaMode() == ImageConfig.MediaMode.HAVE_CAM_MODE) {
                     Image cam = new Image();
                     images.add(cam);
                 }
+                List<ImageFolder> imageFolders = new ArrayList<>();
+
+                ImageFolder defaultFolder = new ImageFolder();
+                defaultFolder.setName("全部照片");
+                defaultFolder.setPath("");
+                imageFolders.add(defaultFolder);
+
                 int count = data.getCount();
                 if (count > 0) {
                     data.moveToFirst();
@@ -331,13 +339,14 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
                         //如果是新拍的照片
                         if (mCamImageName != null && mCamImageName.equals(image.getName())) {
                             image.setSelect(true);
+                            image.setExist(true);
                             mSelectedImage.add(image);
                         }
 
                         //如果是被选中的图片
                         if (mSelectedImage.size() > 0) {
                             for (Image i : mSelectedImage) {
-                                if (i.getName().equals(image.getName())) {
+                                if (i.getPath().equals(image.getPath())) {
                                     image.setSelect(true);
                                     image.setExist(true);
                                 }
@@ -349,22 +358,24 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
                         ImageFolder folder = new ImageFolder();
                         folder.setName(folderFile.getName());
                         folder.setPath(folderFile.getAbsolutePath());
-                        if (!mImageFolders.contains(folder)) {
+                        if (!imageFolders.contains(folder)) {
                             ArrayList<Image> imageList = new ArrayList<>();
                             imageList.add(image);
                             folder.setImages(imageList);
-                            mImageFolders.add(folder);
+                            imageFolders.add(folder);
                         } else {
                             // 更新
-                            ImageFolder f = mImageFolders.get(mImageFolders.indexOf(folder));
+                            ImageFolder f = imageFolders.get(imageFolders.indexOf(folder));
                             f.getImages().add(image);
                         }
 
 
                     } while (data.moveToNext());
+
                     mImageAdapter.resetItem(images);
-                    mImageFolderAdapter.resetItem(mImageFolders);
-                    mCamImageName = null;
+                    defaultFolder.setImages(images);
+                    mImageFolderAdapter.resetItem(imageFolders);
+
                     List<Image> rs = new ArrayList<>();
                     if (mSelectedImage.size() > 0) {
                         for (Image i : mSelectedImage) {
@@ -374,7 +385,13 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
                         }
                     }
                     mSelectedImage.removeAll(rs);
+
                     btn_preview.setText("预览(" + mSelectedImage.size() + ")");
+
+                    if (mConfig != null && mConfig.getSelectMode() == ImageConfig.SelectMode.SINGLE_MODE && mCamImageName != null) {
+                        handleResult();
+                    }
+                    mCamImageName = null;
                 }
             }
         }
@@ -383,5 +400,12 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
         public void onLoaderReset(Loader<Cursor> loader) {
 
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        mOperator = null;
+        mConfig = null;
+        super.onDestroy();
     }
 }
