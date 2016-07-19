@@ -643,6 +643,19 @@ public class OSChinaApi {
         ApiHttpClient.get("action/api/software_tweet_list", params, handler);
     }
 
+    /**
+     * get software tweet list
+     *
+     * @param tag     software tag
+     * @param handler handler
+     */
+    public static void getSoftwareTweetList(String tag, AsyncHttpResponseHandler handler) {
+        if (!TextUtils.isEmpty(tag)) return;
+        RequestParams params = new RequestParams();
+        params.put("tag", tag);
+        ApiHttpClient.get("/action/apiv2/tweets", params, handler);
+    }
+
     public static void checkUpdate(AsyncHttpResponseHandler handler) {
         ApiHttpClient.get("MobileAppVersion.xml", handler);
     }
