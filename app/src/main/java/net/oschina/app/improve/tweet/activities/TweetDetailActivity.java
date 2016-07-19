@@ -11,34 +11,35 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Comment;
-import net.oschina.app.bean.Tweet;
-import net.oschina.app.bean.TweetDetail;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
+import net.oschina.app.improve.bean.Tweet;
+import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
+import net.oschina.app.improve.comment.CommentsUtil;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
-import net.oschina.app.improve.widget.OWebView;
+import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
-import net.oschina.app.util.XmlUtils;
 import net.oschina.app.viewpagerfragment.TweetDetailViewPagerFragment;
 import net.oschina.app.widget.CircleImageView;
 import net.oschina.app.widget.RecordButtonUtil;
-
-import java.io.Serializable;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -53,13 +54,10 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
 
     public static final String BUNDLE_KEY_TWEET = "BUNDLE_KEY_TWEET";
 
-
     @Bind(R.id.iv_portrait)
     CircleImageView ivPortrait;
     @Bind(R.id.tv_nick)
     TextView tvNick;
-    @Bind(R.id.webview)
-    OWebView mWebview;
     @Bind(R.id.tv_time)
     TextView tvTime;
     @Bind(R.id.tv_client)
@@ -76,6 +74,10 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
     TextView mSecondRecord;
     @Bind(R.id.tweet_bg_record)
     RelativeLayout mRecordLayout;
+    @Bind(R.id.tv_content)
+    TextView mContent;
+    @Bind(R.id.layout_grid)
+    GridLayout mLayoutGrid;
 
     EditText mViewInput;
 
@@ -84,7 +86,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
     private Dialog dialog;
     private RecordButtonUtil mRecordUtil;
     private AsyncHttpResponseHandler publishAdmireHandler;
-    private AsyncHttpResponseHandler publishCommentHandler;
+    private TextHttpResponseHandler publishCommentHandler;
 
     private TweetDetailContract.ICmnView mCmnViewImp;
     private TweetDetailContract.IThumbupView mThumbupViewImp;
@@ -93,9 +95,15 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
     private KeyboardInputDelegation mDelegation;
     private View.OnClickListener onPortraitClickListener;
 
-    public static void show(Context context, Tweet tweet) {
+    @Deprecated
+    public static void show(Context context, net.oschina.app.bean.Tweet tweet) {
+        // TODO 全部使用新接口后删除此方法
+        Toast.makeText(context, "请用新的接口", Toast.LENGTH_SHORT).show();
+    }
+
+    public static void show(Context context, Tweet tweet){
         Intent intent = new Intent(context, TweetDetailActivity.class);
-        intent.putExtra(BUNDLE_KEY_TWEET, (Serializable) tweet);
+        intent.putExtra(BUNDLE_KEY_TWEET, tweet);
         context.startActivity(intent);
     }
 
@@ -115,6 +123,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
     }
 
     protected void initData() {
+        // TODO 请使用新接口
         publishAdmireHandler = new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -130,9 +139,16 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
             }
         };
 
-        publishCommentHandler = new AsyncHttpResponseHandler() {
+        // TODO 请使用新接口
+        publishCommentHandler = new TextHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Toast.makeText(TweetDetailActivity.this, "评论失败", Toast.LENGTH_SHORT).show();
+                dismissDialog();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 mCmnViewImp.onCommentSuccess(null);
                 reply = null; // 清除
                 mViewInput.setHint("发表评论");
@@ -140,32 +156,31 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
                 dismissDialog();
                 TDevice.hideSoftKeyboard(mDelegation.getInputView());
             }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Toast.makeText(TweetDetailActivity.this, "评论失败", Toast.LENGTH_SHORT).show();
-                dismissDialog();
-            }
         };
 
-        OSChinaApi.getTweetDetail(tweet.getId(), new AsyncHttpResponseHandler() {
+        OSChinaApi.getTweetDetail(tweet.getId(), new TextHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                TweetDetail data = XmlUtils.toBean(TweetDetail.class, responseBody);
-                if (data == null || data.getTweet() == null) {
-                    AppContext.showToast(R.string.tweet_detail_data_null);
-                    finish();
-                    return;
-                }
-                tweet = data.getTweet();
-                mAgencyViewImp.resetCmnCount(tweet.getCommentCount() != null ? Integer.valueOf(tweet.getCommentCount()) : 0);
-                mAgencyViewImp.resetLikeCount(tweet.getLikeCount());
-                fillDetailView();
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Toast.makeText(TweetDetailActivity.this, "获取数据失败", Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Toast.makeText(TweetDetailActivity.this, "获取失败", Toast.LENGTH_SHORT).show();
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                ResultBean<Tweet> result = AppContext.createGson().fromJson(
+                        responseString, new TypeToken<ResultBean<Tweet>>(){}.getType());
+                if (result.isSuccess()){
+                    if (result.getResult() == null){
+                        AppContext.showToast(R.string.tweet_detail_data_null);
+                        finish();
+                        return;
+                    }
+                    tweet = result.getResult();
+                    mAgencyViewImp.resetCmnCount(tweet.getCommentCount());
+                    mAgencyViewImp.resetLikeCount(tweet.getLikeCount());
+                    fillDetailView();
+                }else{
+                    onFailure(500, headers, "妈的智障", null);
+                }
             }
         });
     }
@@ -184,17 +199,9 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
                     UIHelper.showLoginActivity(TweetDetailActivity.this);
                     return;
                 }
-
-                TweetDetailActivity.this.dialog = DialogHelp.getWaitDialog(TweetDetailActivity.this, "正在发表评论...");
-                TweetDetailActivity.this.dialog.show();
-
-                if (TweetDetailActivity.this.reply == null) {
-                    OSChinaApi.publicComment(3, tweet.getId(), AppContext.getInstance().getLoginUid(),
-                            v.getText().toString(), 1, publishCommentHandler);
-                } else {
-                    OSChinaApi.replyComment(tweet.getId(), 3, reply.getId(), reply.getAuthorId(),
-                            AppContext.getInstance().getLoginUid(), v.getText().toString(), publishCommentHandler);
-                }
+                dialog = DialogHelp.getWaitDialog(TweetDetailActivity.this, "正在发表评论...");
+                dialog.show();
+                OSChinaApi.pubTweetComment(tweet.getId(), content, reply == null ? 0 : reply.getId(), publishCommentHandler);
             }
 
             @Override
@@ -222,14 +229,14 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
     }
 
     private void resolveVoice() {
-        if (TextUtils.isEmpty(tweet.getAttach())) return;
+        if (tweet.getAudio() == null || tweet.getAudio().length == 0) return;
         mRecordLayout.setVisibility(View.VISIBLE);
         final AnimationDrawable drawable = (AnimationDrawable) mImgRecord.getBackground();
         mRecordLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (tweet == null) return;
-                getRecordUtil().startPlay(tweet.getAttach(), mSecondRecord);
+                getRecordUtil().startPlay(tweet.getAudio()[0].getHref(), mSecondRecord);
             }
         });
         getRecordUtil().setOnPlayListener(new RecordButtonUtil.OnPlayListener() {
@@ -261,40 +268,64 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
     }
 
     private void fillDetailView() {
-        // 有可能穿入的tweet只有id这一个值
+        // 有可能传入的tweet只有id这一个值
         if (isDestroy())
             return;
-        if (TextUtils.isEmpty(tweet.getPortrait())) {
-            ivPortrait.setImageResource(R.drawable.widget_dface);
-        } else {
-            getImageLoader()
-                    .load(tweet.getPortrait())
-                    .asBitmap()
-                    .placeholder(getResources().getDrawable(R.drawable.widget_dface))
-                    .error(getResources().getDrawable(R.drawable.widget_dface))
-                    .into(ivPortrait);
+        if (tweet.getAuthor() != null){
+            if (TextUtils.isEmpty(tweet.getAuthor().getPortrait())) {
+                ivPortrait.setImageResource(R.drawable.widget_dface);
+            } else {
+                getImageLoader()
+                        .load(tweet.getAuthor().getPortrait())
+                        .asBitmap()
+                        .placeholder(getResources().getDrawable(R.drawable.widget_dface))
+                        .error(getResources().getDrawable(R.drawable.widget_dface))
+                        .into(ivPortrait);
+            }
+            ivPortrait.setOnClickListener(getOnPortraitClickListener());
+            tvNick.setText(tweet.getAuthor().getName());
         }
-        ivPortrait.setOnClickListener(getOnPortraitClickListener());
-        tvNick.setText(tweet.getAuthor());
         if (!TextUtils.isEmpty(tweet.getPubDate()))
             tvTime.setText(StringUtils.friendly_time(tweet.getPubDate()));
-        PlatfromUtil.setPlatFromString(tvClient, tweet.getAppclient());
-        if (tweet.getIsLike() == 1) {
+        PlatfromUtil.setPlatFromString(tvClient, tweet.getAppClient());
+        if (tweet.isLiked()) {
             ivThumbup.setSelected(true);
         } else {
             ivThumbup.setSelected(false);
         }
-
-        fillWebViewBody();
-    }
-
-    /**
-     * 填充webview内容
-     */
-    private void fillWebViewBody() {
-        if (TextUtils.isEmpty(tweet.getBody())) return;
-        String html = tweet.getBody() + "<br/><img src=\"" + tweet.getImgSmall() + "\" data-url=\"" + tweet.getImgBig() + "\"/>";
-        mWebview.loadTweetDataAsync(html, null);
+        if (!TextUtils.isEmpty(tweet.getContent())){
+            CommentsUtil.formatHtml(getResources(), mContent, tweet.getContent());
+        }
+        if (tweet.getImages() != null && tweet.getImages().length > 0){
+            mLayoutGrid.setVisibility(View.VISIBLE);
+            final View.OnClickListener l = new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    String mImageUrl = (String) v.getTag();
+                    OSCPhotosActivity.showImagePreview(TweetDetailActivity.this, mImageUrl);
+                }
+            };
+            for (int i = 0; i < tweet.getImages().length; i++){
+                ImageView mImage = new ImageView(this);
+                GridLayout.LayoutParams mParams = new GridLayout.LayoutParams();
+                mParams.setMargins(0, (int) TDevice.dpToPixel(8), (int) TDevice.dpToPixel(8), 0);
+                mParams.width = (int) TDevice.dpToPixel(80);
+                mParams.height = (int) TDevice.dpToPixel(80);
+                mImage.setLayoutParams(mParams);
+                mImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                mLayoutGrid.addView(mImage);
+                getImageLoader()
+                        .load("http://static.oschina.net/uploads/img/201607/17070619_o9t1.png")
+                        .asBitmap()
+                        .placeholder(R.drawable.ic_default_image)
+                        .error(R.drawable.ic_default_image)
+                        .into(mImage);
+                mImage.setTag(tweet.getImages()[i].getHref());
+                mImage.setOnClickListener(l);
+            }
+        }else {
+            mLayoutGrid.setVisibility(View.GONE);
+        }
     }
 
     private View.OnClickListener getOnPortraitClickListener() {
@@ -302,7 +333,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
             onPortraitClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    UIHelper.showUserCenter(TweetDetailActivity.this, tweet.getAuthorid(), tweet.getAuthor());
+                    UIHelper.showUserCenter(TweetDetailActivity.this, tweet.getAuthor().getId(), tweet.getAuthor().getName());
                 }
             };
         }
@@ -332,9 +363,9 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
         this.dialog = DialogHelp.getWaitDialog(this, "正在提交请求...");
         this.dialog.show();
         if (!ivThumbup.isSelected()) {
-            OSChinaApi.pubLikeTweet(tweet.getId(), tweet.getAuthorid(), publishAdmireHandler);
+            OSChinaApi.pubLikeTweet((int) tweet.getId(), (int) tweet.getAuthor().getId(), publishAdmireHandler);
         } else {
-            OSChinaApi.pubUnLikeTweet(tweet.getId(), tweet.getAuthorid(), publishAdmireHandler);
+            OSChinaApi.pubUnLikeTweet((int) tweet.getId(), (int) tweet.getAuthor().getId(), publishAdmireHandler);
         }
     }
 

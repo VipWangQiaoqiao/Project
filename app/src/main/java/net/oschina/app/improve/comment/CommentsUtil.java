@@ -26,9 +26,9 @@ import net.qiujuer.genius.ui.drawable.shape.BorderShape;
  * on 16/6/21.
  */
 
-final class CommentsUtil {
+public final class CommentsUtil {
     @SuppressWarnings("deprecation")
-    static View getReferLayout(LayoutInflater inflater, Comment.Refer refer, int count) {
+    public static View getReferLayout(LayoutInflater inflater, Comment.Refer refer, int count) {
         Context context = inflater.getContext();
         @SuppressLint("InflateParams")
         ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_item_refer, null, false);
@@ -51,7 +51,7 @@ final class CommentsUtil {
         return lay;
     }
 
-    static void formatHtml(Resources resources, TextView textView, String str) {
+    public static void formatHtml(Resources resources, TextView textView, String str) {
         textView.setMovementMethod(MyLinkMovementMethod.a());
         textView.setFocusable(false);
         textView.setLongClickable(false);
