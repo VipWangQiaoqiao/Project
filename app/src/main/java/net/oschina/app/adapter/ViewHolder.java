@@ -174,6 +174,11 @@ public class ViewHolder {
         ImageLoader.loadImage(loader, iv, imgUrl, emptyRes);
     }
 
+    public void setImageForNet(ImageView iv, String imgUrl, int emptyRes) {
+        RequestManager loader = mCaller.getImgLoader();
+        ImageLoader.loadImage(loader, iv, imgUrl, emptyRes);
+    }
+
     public void setImageForNet(int viewId, String imgUrl) {
         setImageForNet(viewId, imgUrl, R.drawable.bg_normal);
     }
