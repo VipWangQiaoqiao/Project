@@ -37,8 +37,6 @@ public class TweetPicturesPreviewer extends RecyclerView implements TweetSelectI
     private RequestManager mCurImageLoader;
     private RequestManager mGlobeImageLoader;
 
-    private ArrayList<String> mPaths = new ArrayList<>();
-
     public TweetPicturesPreviewer(Context context) {
         super(context);
         init();
@@ -71,7 +69,6 @@ public class TweetPicturesPreviewer extends RecyclerView implements TweetSelectI
     }
 
     private void set(ArrayList<String> paths) {
-        mPaths = paths;
         mImageAdapter.clear();
         for (String path : paths) {
             mImageAdapter.add(path);
@@ -98,7 +95,7 @@ public class TweetPicturesPreviewer extends RecyclerView implements TweetSelectI
         config.selectMode(ImageConfig.SelectMode.MULTI_MODE);
         config.selectCount(9);
         config.mediaMode(ImageConfig.MediaMode.HAVE_CAM_MODE);
-        config.selectedImages(mPaths);
+        config.selectedImages(mImageAdapter.getPaths());
 
         SelectImageActivity.showImage((Activity) getContext(), config);
 
@@ -120,5 +117,9 @@ public class TweetPicturesPreviewer extends RecyclerView implements TweetSelectI
     @Override
     public void onStartDrag(ViewHolder viewHolder) {
         mItemTouchHelper.startDrag(viewHolder);
+    }
+
+    public ArrayList<String> getPaths() {
+        return mImageAdapter.getPaths();
     }
 }

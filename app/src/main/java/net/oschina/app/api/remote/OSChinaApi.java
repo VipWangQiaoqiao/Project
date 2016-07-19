@@ -1391,4 +1391,171 @@ public class OSChinaApi {
         params.put("voteOpt", opt);
         ApiHttpClient.post("action/apiv2/question_vote", params, handler);
     }
+
+    /**
+     * 上传图片接口
+     * http://doc.oschina.net/app_v2?t=105508
+     *
+     * @param token     上传口令，单次口令最多上传9张图片。
+     * @param imagePath 图片地址
+     * @param handler   回调
+     */
+    public static void uploadImage(String token, String imagePath, TextHttpResponseHandler handler) {
+        if (TextUtils.isEmpty(imagePath))
+            throw new NullPointerException("imagePath is not null.");
+        RequestParams params = new RequestParams();
+        if (!TextUtils.isEmpty(token))
+            params.put("token", token);
+        try {
+            params.put("resource", new File(imagePath));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        ApiHttpClient.post("action/api/resource_image", params, handler);
+    }
+
+    /**
+     * 发布动弹
+     * 链接 http://doc.oschina.net/app_v2?t=105522
+     *
+     * @param content     内容
+     * @param imagesToken 图片token
+     * @param audioToken  语音token
+     * @param handler     回调
+     */
+    public static void pubTweet(String content, String imagesToken, String audioToken, TextHttpResponseHandler handler) {
+        if (TextUtils.isEmpty(content))
+            throw new NullPointerException("content is not null.");
+        RequestParams params = new RequestParams();
+        params.put("content", content);
+        if (!TextUtils.isEmpty(imagesToken))
+            params.put("images", imagesToken);
+        if (!TextUtils.isEmpty(audioToken))
+            params.put("audio", audioToken);
+        ApiHttpClient.post("action/apiv2/tweet", params, handler);
+    }
+
+    /**
+     * 请求用户动弹列表
+     *
+     * @param authorId  用户id
+     * @param pageToken pageToken
+     * @param handler   回调
+     */
+    public static void getUserTweetList(long authorId, String pageToken, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("authorId", authorId);
+        if (!TextUtils.isEmpty(pageToken))
+            params.put("pageToken", pageToken);
+        ApiHttpClient.get("action/apiv2/tweets", params, handler);
+    }
+
+    /**
+     * 请求热门最新动弹列表
+     *
+     * @param type      type类型，1: 最新、2: 热门
+     * @param pageToken pageToken
+     * @param handler   回调
+     */
+    public static void getTweetList(int type, String pageToken, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("authorId", type);
+        if (!TextUtils.isEmpty(pageToken))
+            params.put("pageToken", pageToken);
+        ApiHttpClient.get("action/apiv2/tweets", params, handler);
+    }
+
+    /**
+     * 请求话题动弹列表
+     *
+     * @param tag       话题动弹
+     * @param pageToken pageToken
+     * @param handler   回调
+     */
+    public static void getTagTweetList(String tag, String pageToken, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("authorId", tag);
+        if (!TextUtils.isEmpty(pageToken))
+            params.put("pageToken", pageToken);
+        ApiHttpClient.get("action/apiv2/tweets", params, handler);
+    }
+
+    /**
+     * 请求动弹详情
+     *
+     * @param id      动弹id
+     * @param handler 回调
+     */
+    public static void getTweetDetail(long id, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("id", id);
+        ApiHttpClient.get("action/apiv2/tweet", params, handler);
+    }
+
+    /**
+     * 请求动弹评论列表
+     *
+     * @param sourceId 动弹id
+     * @param handler  回调
+     */
+    public static void getTweetCommentList(long sourceId, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        ApiHttpClient.get("action/apiv2/tweet_comments", params, handler);
+    }
+
+    /**
+     * 请求动弹点赞列表
+     *
+     * @param sourceId 动弹id
+     * @param handler  回调
+     */
+    public static void getTweetLikeList(long sourceId, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        ApiHttpClient.get("action/apiv2/tweet_likes", params, handler);
+    }
+
+
+    /**
+     * 发表动弹评论列表
+     *
+     * @param sourceId 动弹id
+     * @param content  内容
+     * @param replyId  回复的用户id
+     * @param handler  回调
+     */
+    public static void pubTweetComment(long sourceId, String content, long replyId, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        params.put("content", content);
+        params.put("replyId", replyId);
+        ApiHttpClient.post("action/apiv2/tweet_comment", params, handler);
+    }
+
+    /**
+     * 更改动弹点赞状态
+     *
+     * @param sourceId 动弹id
+     * @param handler  回调
+     */
+    public static void reverseTweetLike(long sourceId, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        ApiHttpClient.get("action/apiv2/tweet_like_reverse", params, handler);
+    }
+
+    /**
+     * 删除动弹评论
+     *
+     * @param sourceId  动弹id
+     * @param commentId 评论id
+     * @param handler   回调
+     */
+    public static void deleteTweetComment(long sourceId, long commentId, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        params.put("commentId", commentId);
+        ApiHttpClient.get("action/apiv2/tweet_comment_delete", params, handler);
+    }
 }

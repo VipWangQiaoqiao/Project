@@ -125,9 +125,9 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
                     if (position != 0) {
                         handleImage(position);
                     } else {
-                        if(mSelectedImage.size() < mConfig.getSelectCount()){
+                        if (mSelectedImage.size() < mConfig.getSelectCount()) {
                             mOperator.requestCamera();
-                        }else {
+                        } else {
                             Toast.makeText(getActivity(), "最多只能选择 " + mConfig.getSelectCount() + " 张照片", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -149,22 +149,20 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
     private void handleImage(int position) {
         Image image = mImageAdapter.getItem(position);
         image.setExist(true);
+        //如果是多选模式
         if (mConfig.getSelectMode() == ImageConfig.SelectMode.MULTI_MODE) {
-            if (mSelectedImage.size() != mConfig.getSelectCount()) {
-                if (image.isSelect()) {
-                    mSelectedImage.remove(image);
-                }
-                image.setSelect(!image.isSelect());
-                mImageAdapter.updateItem(position);
-                if (image.isSelect()) {
-                    mSelectedImage.add(image);
-                }
-            } else if(image.isSelect()){
+            if (image.isSelect()) {
+                image.setSelect(false);
                 mSelectedImage.remove(image);
-            }else {
-                Toast.makeText(getActivity(), "最多只能选择 " + mConfig.getSelectCount() + " 张照片", Toast.LENGTH_SHORT).show();
+            } else {
+                if (mSelectedImage.size() == mConfig.getSelectCount()) {
+                    Toast.makeText(getActivity(), "最多只能选择 " + mConfig.getSelectCount() + " 张照片", Toast.LENGTH_SHORT).show();
+                } else {
+                    image.setSelect(true);
+                    mSelectedImage.add(image);
+                    mImageAdapter.updateItem(position);
+                }
             }
-
         } else {
             mSelectedImage.add(image);
             handleResult();

@@ -101,7 +101,7 @@ public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectIma
         }
     }
 
-    public void clear(){
+    public void clear() {
         mModels.clear();
     }
 
@@ -113,6 +113,14 @@ public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectIma
 
     public void add(String path) {
         add(new Model(path));
+    }
+
+    public ArrayList<String> getPaths() {
+        ArrayList<String> paths = new ArrayList<>();
+        for (Model model : mModels) {
+            paths.add(model.path);
+        }
+        return paths;
     }
 
     @Override
