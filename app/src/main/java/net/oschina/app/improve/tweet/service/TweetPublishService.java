@@ -1,16 +1,21 @@
 package net.oschina.app.improve.tweet.service;
 
 import android.app.IntentService;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Handler;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.resource.ImageResource;
 
@@ -34,18 +39,16 @@ public class TweetPublishService extends IntentService {
     // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     private static final String ACTION_PUBLISH = "net.oschina.app.improve.tweet.service.action.PUBLISH";
 
-    private static final String EXTRA_CONTENT = "net.oschina.app.improve.tweet.service.extra.CONtENT";
+    private static final String EXTRA_CONTENT = "net.oschina.app.improve.tweet.service.extra.CONTENT";
     private static final String EXTRA_IMAGES = "net.oschina.app.improve.tweet.service.extra.IMAGES";
+    private static final String EXTRA_ID = "net.oschina.app.improve.tweet.service.extra.ID";
 
     public TweetPublishService() {
         super("TweetPublishService");
     }
 
     /**
-     * Starts this service to perform action Foo with the given parameters. If
-     * the service is already performing a task this action will be queued.
-     *
-     * @see IntentService
+     * 发起动弹发布服务
      */
     public static void startActionPublish(Context context, String content, List<String> images) {
         Intent intent = new Intent(context, TweetPublishService.class);
@@ -72,113 +75,197 @@ public class TweetPublishService extends IntentService {
     }
 
     /**
-     * Handle action Foo in the provided background thread with the provided
-     * parameters.
+     * 发布动弹,在后台服务中进行
      */
     private void handleActionPublish(String content, String[] images) {
-        if (images == null) {
-            publish(content, null);
-        } else {
-            uploadImageAndPublish(content, images);
-        }
-    }
-
-
-    private void publish(final String content, final String imageToken) {
-        OSChinaApi.pubTweet(content, imageToken, null, new LopperResponseHandler() {
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                log("发送动弹失败~");
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                log("发送动弹成功~");
-            }
-        });
-    }
-
-    private void uploadImageAndPublish(final String content, final String[] paths) {
-        AppOperator.runOnThread(new Runnable() {
-            @Override
-            public void run() {
-                String[] uploadPaths = saveImageToCache(paths);
-                if (uploadPaths == null) {
-                    log("图片压缩存储失败~");
-                    return;
-                }
-                uploadImages(0, null, uploadPaths, new UploadImageCallback() {
-                    @Override
-                    public void onDone(String token) {
-                        publish(content, token);
-                    }
-                });
-            }
-        });
+        Operator operator = new Operator(content, images);
+        operator.notifyMsg(getString(R.string.tweet_publishing));
+        operator.run();
     }
 
     interface UploadImageCallback {
-        void onDone(String token);
+        void onUploadImageDone();
     }
 
-    private void uploadImages(final int index, final String token, final String[] paths, final UploadImageCallback runnable) {
-        if (index < 0 || index >= paths.length) {
-            runnable.onDone(token);
-            return;
+    /**
+     * 发布动弹执行者
+     */
+    private class Operator implements UploadImageCallback, Runnable {
+        private final int id = (int) System.currentTimeMillis();
+        private final String content;
+        private String[] images;
+
+        private int index;
+        private String token;
+
+        Operator(String content, String[] images) {
+            this.content = content;
+            this.images = images;
         }
-        String path = paths[index];
 
-        log("发送图片: token:" + token + " path:" + path);
+        /**
+         * 上传图片
+         *
+         * @param index    上次图片的坐标
+         * @param token    上传Token
+         * @param paths    上传的路径数组
+         * @param runnable 完全上传完成时回调
+         */
+        private void uploadImages(final int index, final String token, final String[] paths, final UploadImageCallback runnable) {
+            this.token = token;
 
-        OSChinaApi.uploadImage(token, path, new LopperResponseHandler() {
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-
-                uploadImages(index, token, paths, runnable);
+            if (index < 0 || index >= paths.length) {
+                runnable.onUploadImageDone();
+                return;
             }
+            String path = paths[index];
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                Type type = new TypeToken<ResultBean<ImageResource>>() {
-                }.getType();
-                ResultBean<ImageResource> resultBean = new Gson().fromJson(responseString, type);
-                if (resultBean.isSuccess()) {
-                    String token = resultBean.getResult().getToken();
-                    log("发送图片成功~" + token);
-                    uploadImages(index + 1, token, paths, runnable);
-                } else {
-                    log("发送图片失败~ " + resultBean.getCode() + " " + resultBean.getMessage());
+            notifyMsg("发送图片: token:" + token + " path:" + path);
+
+            OSChinaApi.uploadImage(token, path, new LopperResponseHandler() {
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+
+                    uploadImages(index, token, paths, runnable);
+                }
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                    Type type = new TypeToken<ResultBean<ImageResource>>() {
+                    }.getType();
+                    ResultBean<ImageResource> resultBean = new Gson().fromJson(responseString, type);
+                    if (resultBean.isSuccess()) {
+                        String token = resultBean.getResult().getToken();
+                        notifyMsg("发送图片成功~" + token);
+                        uploadImages(index + 1, token, paths, runnable);
+                    } else {
+                        notifyMsg("发送图片失败~ " + resultBean.getCode() + " " + resultBean.getMessage());
+                    }
+                }
+            });
+
+        }
+
+        private String getCachePath() {
+            return String.format("%s/Pictures/%s", getCacheDir().getAbsolutePath(), id);
+        }
+
+        /**
+         * 保存文件到缓存中
+         *
+         * @param paths 原始路径
+         * @return 返回存储后的路径
+         */
+        private String[] saveImageToCache(String[] paths) {
+            List<String> ret = new ArrayList<>();
+            final String cachePath = getCachePath();
+            for (String path : paths) {
+                try {
+                    Bitmap bitmap = BitmapCreate.bitmapFromStream(
+                            new FileInputStream(path), 512, 512);
+                    String tempFile = String.format("%s/IMG_%s.png", cachePath, System.currentTimeMillis());
+                    FileUtils.bitmapToFile(bitmap, tempFile);
+                    bitmap.recycle();
+                    ret.add(tempFile);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
                 }
             }
-        });
+            if (ret.size() > 0) {
+                String[] images = new String[ret.size()];
+                ret.toArray(images);
+                return images;
+            }
+            return null;
+        }
 
-    }
-
-    private String[] saveImageToCache(String[] paths) {
-        List<String> ret = new ArrayList<>();
-        final String sdCardPath = FileUtils.getSDCardPath();
-        for (String path : paths) {
-            try {
-                Bitmap bitmap = BitmapCreate.bitmapFromStream(
-                        new FileInputStream(path), 512, 512);
-                String temp = String.format("%s/OSChina/Pictures/IMG_%s.png", sdCardPath, System.currentTimeMillis());
-                FileUtils.bitmapToFile(bitmap, temp);
-                bitmap.recycle();
-                ret.add(temp);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+        /**
+         * 执行动弹发布操作
+         */
+        @Override
+        public void run() {
+            if (images == null) {
+                // 当没有图片的时候,直接进行发布动弹操作
+                onUploadImageDone();
+            } else {
+                String[] uploadPaths = saveImageToCache(images);
+                if (uploadPaths == null) {
+                    notifyMsg("图片转存失败~");
+                    onUploadImageDone();
+                    return;
+                }
+                uploadImages(0, null, uploadPaths, this);
             }
         }
-        if (ret.size() > 0) {
-            String[] images = new String[ret.size()];
-            ret.toArray(images);
-            return images;
+
+        /**
+         * 当图片上传完成时回调操作
+         */
+        @Override
+        public void onUploadImageDone() {
+            OSChinaApi.pubTweet(content, token, null, new LopperResponseHandler() {
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    notifyMsg("发送动弹失败~");
+                }
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                    notifyMsg("发送动弹成功~");
+                    cancelNotify();
+                }
+            });
         }
-        return null;
+
+        /**
+         * 执行通知操作
+         *
+         * @param msg 通知信息
+         */
+        private void notifyMsg(String msg) {
+            log(msg);
+            notifySimpleNotification(id,
+                    getString(R.string.tweet_public),
+                    msg, msg, true, false);
+        }
+
+        private void cancelNotify() {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    cancelNotification(id);
+                }
+            }, 2800);
+        }
     }
 
     private static void log(String str) {
         Log.e(TAG, str);
+    }
+
+    private void notifySimpleNotification(int id, String title, String ticker,
+                                          String content, boolean ongoing, boolean autoCancel) {
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_ID, id);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(
+                this)
+                .setTicker(ticker)
+                .setContentTitle(title)
+                .setContentText(content)
+                .setAutoCancel(autoCancel)
+                .setOngoing(ongoing)
+                .setOnlyAlertOnce(true)
+                .setContentIntent(pendingIntent)
+                .setSmallIcon(R.drawable.ic_notification);
+
+        Notification notification = builder.build();
+        NotificationManagerCompat.from(this).notify(id, notification);
+    }
+
+    private void cancelNotification(int id) {
+        NotificationManagerCompat.from(this).cancel(id);
     }
 }
