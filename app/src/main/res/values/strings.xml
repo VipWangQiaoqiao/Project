@@ -133,7 +133,7 @@
 
     <string name="tweet_public">发布动弹</string>
     <string name="tweet_hint">今天你动弹了吗？</string>
-    <string name="tweet_publishing">正在发布你的动弹…</string>
+    <string name="tweet_publishing">正在发布动弹…</string>
     <string name="tweet_publish_success">动弹发布成功</string>
     <string name="tweet_publish_faile">发布动弹失败</string>
     <string name="tweet_play_faile">动弹播放失败</string>
