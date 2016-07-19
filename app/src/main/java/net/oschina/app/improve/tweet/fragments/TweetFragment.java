@@ -13,6 +13,7 @@ import net.oschina.app.improve.base.fragments.BaseGeneralListFragment;
 import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.tweet.adapter.TweetAdapter;
 
 import java.lang.reflect.Type;
@@ -83,7 +84,7 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        TweetDetailActivity.show(getContext(),mAdapter.getItem(position));
     }
 
     @Override
