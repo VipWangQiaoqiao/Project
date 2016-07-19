@@ -133,10 +133,11 @@ public class TweetPublishService extends IntentService {
     private class Operator implements Runnable {
         private final int id;
         private final String content;
-        private String[] images;
 
-        private int index;
-        private String token;
+        private String[] images;
+        private String[] cacheImages;
+        private int uploadImagesIndex;
+        private String uploadImagesToken;
 
         private boolean running;
         private boolean done;
@@ -166,17 +167,20 @@ public class TweetPublishService extends IntentService {
             log(mTasks.size() + " " + id);
 
             if (images == null) {
-                // 当没有图片的时候,直接进行发布动弹操作
+                // 当没有图片的时候,直接进行发布动弹
                 publish();
             } else {
-                notifyMsg("准备图片中...");
-                String[] uploadPaths = saveImageToCache(images);
-                if (uploadPaths == null) {
-                    notifyMsg("图片转存失败!");
-                    publish();
-                    return;
+                if (cacheImages == null) {
+                    notifyMsg("准备图片中...");
+                    cacheImages = saveImageToCache(images);
+                    if (cacheImages == null) {
+                        images = null;
+                        notifyMsg("图片转存失败!");
+                        publish();
+                        return;
+                    }
                 }
-                uploadImages(0, null, uploadPaths, new UploadImageCallback() {
+                uploadImages(uploadImagesIndex, uploadImagesToken, cacheImages, new UploadImageCallback() {
                     @Override
                     public void onUploadImageDone() {
                         publish();
@@ -194,7 +198,8 @@ public class TweetPublishService extends IntentService {
          * @param runnable 完全上传完成时回调
          */
         private void uploadImages(final int index, final String token, final String[] paths, final UploadImageCallback runnable) {
-            this.token = token;
+            this.uploadImagesIndex = index;
+            this.uploadImagesToken = token;
 
             if (index < 0 || index >= paths.length) {
                 runnable.onUploadImageDone();
@@ -207,7 +212,7 @@ public class TweetPublishService extends IntentService {
                 @Override
                 public void onStart() {
                     super.onStart();
-                    notifyMsg(String.format("发送图片中(%s/%s)", (index + 1), +paths.length));
+                    notifyMsg(String.format("发送图片中...(%s/%s)", (index + 1), +paths.length));
                 }
 
                 @Override
@@ -276,7 +281,7 @@ public class TweetPublishService extends IntentService {
          * 发布动弹
          */
         private void publish() {
-            OSChinaApi.pubTweet(content, token, null, new LopperResponseHandler() {
+            OSChinaApi.pubTweet(content, uploadImagesToken, null, new LopperResponseHandler() {
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                     notifyMsg("发送失败; 点击重新发送.");
