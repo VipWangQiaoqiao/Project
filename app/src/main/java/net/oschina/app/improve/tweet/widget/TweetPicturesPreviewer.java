@@ -118,4 +118,8 @@ public class TweetPicturesPreviewer extends RecyclerView implements TweetSelectI
     public void onStartDrag(ViewHolder viewHolder) {
         mItemTouchHelper.startDrag(viewHolder);
     }
+
+    public ArrayList<String> getPaths() {
+        return mImageAdapter.getPaths();
+    }
 }
