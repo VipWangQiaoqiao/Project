@@ -475,7 +475,7 @@ public class OSChinaApi {
      * @param sourceId tweet's id
      * @param handler  handler
      */
-    public static void delSoftwareTweet(int sourceId, AsyncHttpResponseHandler handler) {
+    public static void delSoftwareTweet(long sourceId, AsyncHttpResponseHandler handler) {
         if (sourceId <= 0) return;
         RequestParams params = new RequestParams();
         params.put("sourceId", sourceId);

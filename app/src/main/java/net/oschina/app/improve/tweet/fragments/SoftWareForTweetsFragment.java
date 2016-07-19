@@ -3,6 +3,7 @@ package net.oschina.app.improve.tweet.fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -229,7 +230,9 @@ public class SoftWareForTweetsFragment extends BaseListFragment<Tweet> implement
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
         final Tweet tweet = mAdapter.getItem(position);
-        int sourceId = tweet.getId();
+        long sourceId = tweet.getId();
+
+        Log.d(TAG, "onItemLongClick: ----->" + tweet.getId());
 
         OSChinaApi.delSoftwareTweet(sourceId, new TextHttpResponseHandler() {
             @Override
