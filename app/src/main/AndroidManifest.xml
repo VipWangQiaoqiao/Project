@@ -50,7 +50,6 @@
         android:label="@string/app_name"
         android:theme="@style/AppBaseTheme_Light"
         tools:replace="android:allowBackup">
-
         <meta-data
             android:name="UMENG_CHANNEL"
             android:value="${UMENG_CHANNEL}" />
@@ -365,19 +364,21 @@
             android:label="用户主页"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
-
         <activity
             android:name=".improve.media.SelectImageActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="选择图片"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".improve.media.ImageGalleryActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="图片预览"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Dialog.NoTitle.Translucent" />
+
+        <service
+            android:name=".improve.tweet.service.TweetPublishService"
+            android:exported="false"></service>
     </application>
 
 </manifest>
