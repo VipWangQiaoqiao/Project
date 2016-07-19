@@ -1,5 +1,7 @@
 package net.oschina.app.improve.tweet.activities;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
@@ -14,23 +16,19 @@ import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.tweet.contract.TweetPublishContract;
 import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
+import net.oschina.app.ui.TweetPubActivity;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
 import java.util.List;
 
 public class TweetPublishActivity extends BaseBackActivity {
-    public static final String ACTION_TYPE = "action_type";
-    public static final int ACTION_TYPE_ALBUM = 0;
-    public static final int ACTION_TYPE_PHOTO = 1;
-    public static final int ACTION_TYPE_RECORD = 2; // 录音
-    public static final int ACTION_TYPE_TOPIC = 3; // 话题
-    public static final int ACTION_TYPE_REPOST = 4; // 转发
-
-    public static final String REPOST_IMAGE_KEY = "repost_image";
-    public static final String REPOST_TEXT_KEY = "tweet_topic";
-
     private TweetPublishContract.View mView;
+
+    public static void show(Context context){
+        Intent intent = new Intent(context, TweetPublishActivity.class);
+        context.startActivity(intent);
+    }
 
     @Override
     protected int getContentView() {

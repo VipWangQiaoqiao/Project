@@ -122,4 +122,12 @@ public class TweetPicturesPreviewer extends RecyclerView implements TweetSelectI
     public ArrayList<String> getPaths() {
         return mImageAdapter.getPaths();
     }
+
+    public void destroy() {
+        Context context = getContext();
+        if (!(context != null && context instanceof BaseActivity)) {
+            mCurImageLoader.onDestroy();
+        }
+        mCurImageLoader = null;
+    }
 }

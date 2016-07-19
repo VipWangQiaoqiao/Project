@@ -1486,7 +1486,7 @@ public class OSChinaApi {
      */
     public static void getTweetList(int type, String pageToken, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
-        params.put("authorId", type);
+        params.put("type", type);
         if (!TextUtils.isEmpty(pageToken))
             params.put("pageToken", pageToken);
         ApiHttpClient.get("action/apiv2/tweets", params, handler);
@@ -1501,7 +1501,7 @@ public class OSChinaApi {
      */
     public static void getTagTweetList(String tag, String pageToken, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
-        params.put("authorId", tag);
+        params.put("tag", tag);
         if (!TextUtils.isEmpty(pageToken))
             params.put("pageToken", pageToken);
         ApiHttpClient.get("action/apiv2/tweets", params, handler);

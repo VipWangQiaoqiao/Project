@@ -48,7 +48,8 @@ public abstract class BaseFragment<T> extends Fragment {
         } else {
             mRoot = inflater.inflate(getLayoutId(), container, false);
             ButterKnife.bind(this, mRoot);
-            onRestartInstance(savedInstanceState);
+            if (savedInstanceState != null)
+                onRestartInstance(savedInstanceState);
             initWidget(mRoot);
             initData();
         }
