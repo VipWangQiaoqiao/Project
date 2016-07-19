@@ -48,6 +48,7 @@ public abstract class BaseFragment extends Fragment {
         } else {
             mRoot = inflater.inflate(getLayoutId(), container, false);
             ButterKnife.bind(this, mRoot);
+            onRestartInstance(savedInstanceState);
             initWidget(mRoot);
             initData();
         }
@@ -186,5 +187,9 @@ public abstract class BaseFragment extends Fragment {
 
     protected void setInVisibility(int id) {
         findView(id).setVisibility(View.INVISIBLE);
+    }
+
+    protected void onRestartInstance(Bundle bundle) {
+
     }
 }
