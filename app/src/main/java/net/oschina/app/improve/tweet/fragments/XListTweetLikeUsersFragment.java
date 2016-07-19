@@ -10,12 +10,17 @@ import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.TweetLikeUserList;
 import net.oschina.app.bean.User;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseRecyclerViewFragment;
+import net.oschina.app.improve.bean.base.PageBean;
+import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.bean.simple.TweetLike;
 import net.oschina.app.improve.tweet.adapter.TweetLikeUsersAdapter;
+import net.oschina.app.improve.tweet.adapter.XTweetLikeUsersAdapter;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
@@ -30,15 +35,15 @@ import cz.msebera.android.httpclient.Header;
  * Created by thanatos
  * on 16/6/13.
  */
-public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<User> implements TweetDetailContract.IThumbupView {
+public class XListTweetLikeUsersFragment extends BaseRecyclerViewFragment<TweetLike> implements TweetDetailContract.IThumbupView {
 
     private int pageNum = 0;
     private TweetDetailContract.Operator mOperator;
     private TweetDetailContract.IAgencyView mAgencyView;
-    private AsyncHttpResponseHandler reqHandler;
+    private TextHttpResponseHandler reqHandler;
 
-    public static ListTweetLikeUsersFragment instantiate(TweetDetailContract.Operator operator, TweetDetailContract.IAgencyView mAgencyView) {
-        ListTweetLikeUsersFragment fragment = new ListTweetLikeUsersFragment();
+    public static XListTweetLikeUsersFragment instantiate(TweetDetailContract.Operator operator, TweetDetailContract.IAgencyView mAgencyView) {
+        XListTweetLikeUsersFragment fragment = new XListTweetLikeUsersFragment();
         fragment.mOperator = operator;
         fragment.mAgencyView = mAgencyView;
         return fragment;
@@ -54,21 +59,26 @@ public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<User> i
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        reqHandler = new AsyncHttpResponseHandler() {
+        reqHandler = new TextHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                TweetLikeUserList data = XmlUtils.toBean(TweetLikeUserList.class, responseBody);
-                setListData(data.getList());
-                onRequestSuccess(1);
-                onRequestFinish();
-                if (mAdapter.getCount() < 20 && mAgencyView != null)
-                    mAgencyView.resetLikeCount(mAdapter.getCount());
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                mRefreshLayout.onComplete();
+                mAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_ERROR, true);
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                mRefreshLayout.onComplete();
-                mAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_ERROR, true);
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                ResultBean<PageBean<TweetLike>> result = AppContext.createGson().fromJson(
+                        responseString, new TypeToken<ResultBean<PageBean<TweetLike>>>(){}.getType());
+                if (result.isSuccess()){
+                    setListData(result.getResult().getItems());
+                    onRequestSuccess(1);
+                    onRequestFinish();
+                    if (mAdapter.getCount() < 20 && mAgencyView != null)
+                        mAgencyView.resetLikeCount(mAdapter.getCount());
+                }else{
+                    onFailure(statusCode, headers, responseString, null);
+                }
             }
         };
     }
@@ -88,14 +98,13 @@ public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<User> i
     }
 
     @Override
-    protected BaseRecyclerAdapter<User> getRecyclerAdapter() {
-        return new TweetLikeUsersAdapter(getContext());
+    protected BaseRecyclerAdapter<TweetLike> getRecyclerAdapter() {
+        return new XTweetLikeUsersAdapter(getContext());
     }
 
     @Override
     protected Type getType() {
-        return new TypeToken<TweetLikeUserList>() {
-        }.getType();
+        return null;
     }
 
     @Override
@@ -118,15 +127,15 @@ public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<User> i
     @Override
     public void onItemClick(int position, long itemId) {
         super.onItemClick(position, itemId);
-        User user = mAdapter.getItem(position);
-        UIHelper.showUserCenter(getContext(), user.getId(), user.getName());
+        TweetLike liker = mAdapter.getItem(position);
+        UIHelper.showUserCenter(getContext(), liker.getAuthor().getId(), liker.getAuthor().getName());
     }
 
     private void requestData(int pageNum) {
-        OSChinaApi.getTweetLikeList((int) mOperator.getTweetDetail().getId(), pageNum, reqHandler);
+        OSChinaApi.getTweetLikeList(mOperator.getTweetDetail().getId(), reqHandler);
     }
 
-    private void setListData(List<User> users) {
+    private void setListData(List<TweetLike> users) {
         if (mIsRefresh) {
             //cache the time
             mAdapter.clear();
