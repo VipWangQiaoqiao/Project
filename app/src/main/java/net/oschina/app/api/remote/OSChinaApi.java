@@ -445,6 +445,7 @@ public class OSChinaApi {
         ApiHttpClient.post("action/api/tweet_pub", params, handler);
     }
 
+
     public static void pubSoftWareTweet(Tweet tweet, int softid,
                                         AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
@@ -452,6 +453,20 @@ public class OSChinaApi {
         params.put("msg", tweet.getBody());
         params.put("project", softid);
         ApiHttpClient.post("action/api/software_tweet_pub", params, handler);
+    }
+
+    /**
+     * pub software tweet
+     *
+     * @param content content
+     * @param handler handler
+     */
+    public static void pubSoftwareTweet(String content, AsyncHttpResponseHandler handler) {
+        if (!TextUtils.isEmpty(content)) {
+            RequestParams params = new RequestParams();
+            params.put("content", content);
+            ApiHttpClient.post("/action/apiv2/tweet", params, handler);
+        }
     }
 
     public static void deleteTweet(int uid, int tweetid,

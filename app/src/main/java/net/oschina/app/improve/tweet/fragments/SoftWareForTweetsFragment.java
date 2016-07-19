@@ -31,13 +31,15 @@ import java.io.Serializable;
 public class SoftWareForTweetsFragment extends BaseListFragment<Tweet> {
 
     public static final String BUNDLE_KEY_ID = "BUNDLE_KEY_ID";
+    public static final String BUNDLE_KEY_NAME = "bundle_key_id";
     //protected static final String TAG = SoftwareForTweetsFrament.class.getSimpleName();
     private static final String CACHE_KEY_PREFIX = "software_tweet_list";
     private static final int MAX_TEXT_LENGTH = 160;
 
     private int mId;
 
-    EditText inputEditText;
+    private EditText inputEditText;
+    private String softwareName;
 
     @Override
     protected int getLayoutId() {
@@ -97,7 +99,7 @@ public class SoftWareForTweetsFragment extends BaseListFragment<Tweet> {
 
                     Tweet tweet = new Tweet();
                     tweet.setAuthorid(AppContext.getInstance().getLoginUid());
-                    tweet.setBody(input);
+                    tweet.setBody(input + softwareName);
                     ServerTaskUtils.pubSoftWareTweet(getActivity(), tweet, mId);
                     inputEditText.setText(null);
                     TDevice.hideSoftKeyboard(inputEditText);
@@ -138,6 +140,7 @@ public class SoftWareForTweetsFragment extends BaseListFragment<Tweet> {
         Bundle args = getArguments();
         if (args != null) {
             mId = args.getInt(BUNDLE_KEY_ID, 0);
+            softwareName = args.getString(BUNDLE_KEY_NAME, null);
         }
 
         int mode = WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN

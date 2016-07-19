@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.util.Log;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -16,11 +17,10 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
-import net.oschina.app.bean.Tweet;
+import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.util.XmlUtils;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,12 +45,13 @@ public class ServerTaskService extends IntentService {
     private static final String KEY_TWEET = "tweet_";
     private static final String KEY_SOFTWARE_TWEET = "software_tweet_";
     private static final String KEY_POST = "post_";
+    private static final String TAG = "ServerTaskService";
 
-    public static List<String> penddingTasks = new ArrayList<String>();
+    private static List<String> penddingTasks = new ArrayList<String>();
 
-    class PublicCommentResponseHandler extends OperationResponseHandler {
+    private class PublicCommentResponseHandler extends OperationResponseHandler {
 
-        public PublicCommentResponseHandler(Looper looper, Object... args) {
+        PublicCommentResponseHandler(Looper looper, Object... args) {
             super(looper, args);
         }
 
@@ -96,11 +97,11 @@ public class ServerTaskService extends IntentService {
         }
     }
 
-    class PublicTweetResponseHandler extends OperationResponseHandler {
+    private class PublicTweetResponseHandler extends OperationResponseHandler {
 
         String key = null;
 
-        public PublicTweetResponseHandler(Looper looper, Object... args) {
+        PublicTweetResponseHandler(Looper looper, Object... args) {
             super(looper, args);
             key = (String) args[1];
         }
@@ -109,28 +110,30 @@ public class ServerTaskService extends IntentService {
         public void onSuccess(int code, ByteArrayInputStream is, Object[] args)
                 throws Exception {
             Tweet tweet = (Tweet) args[0];
-            final int id = tweet.getId();
+            final long id = tweet.getId();
+
+            Log.d(TAG, "onSuccess: ---->");
             Result res = XmlUtils.toBean(ResultBean.class, is).getResult();
             if (res.OK()) {
                 // 发布成功之后，删除草稿
                 AppContext.setTweetDraft("");
-                notifySimpleNotifycation(id,
+                notifySimpleNotifycation((int) id,
                         getString(R.string.tweet_publish_success),
                         getString(R.string.tweet_public),
                         getString(R.string.tweet_publish_success), false, true);
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        cancellNotification(id);
+                        cancellNotification((int) id);
                     }
                 }, 3000);
                 removePenddingTask(key + id);
-                if (tweet.getImageFilePath() != null) {
-                    File imgFile = new File(tweet.getImageFilePath());
-                    if (imgFile.exists()) {
-                        imgFile.delete();
-                    }
-                }
+                //  if (tweet.getImageFilePath() != null) {
+                // File imgFile = new File(tweet.getImageFilePath());
+                //  if (imgFile.exists()) {
+                //     imgFile.delete();
+                //   }
+                //  }
             } else {
                 onFailure(100, res.getErrorMessage(), args);
             }
@@ -139,8 +142,8 @@ public class ServerTaskService extends IntentService {
         @Override
         public void onFailure(int code, String errorMessage, Object[] args) {
             Tweet tweet = (Tweet) args[0];
-            int id = tweet.getId();
-            notifySimpleNotifycation(id,
+            long id = tweet.getId();
+            notifySimpleNotifycation((int) id,
                     getString(R.string.tweet_publish_faile),
                     getString(R.string.tweet_public),
                     code == 100 ? errorMessage
@@ -205,12 +208,12 @@ public class ServerTaskService extends IntentService {
             // publicPost(post);
             // }
         } else if (ACTION_PUB_TWEET.equals(action)) {
-            Tweet tweet = intent.getParcelableExtra(BUNDLE_PUB_TWEET_TASK);
+            net.oschina.app.bean.Tweet tweet = intent.getParcelableExtra(BUNDLE_PUB_TWEET_TASK);
             if (tweet != null) {
                 pubTweet(tweet);
             }
         } else if (ACTION_PUB_SOFTWARE_TWEET.equals(action)) {
-            Tweet tweet = intent
+            net.oschina.app.bean.Tweet tweet = intent
                     .getParcelableExtra(BUNDLE_PUB_SOFTWARE_TWEET_TASK);
             int softid = intent.getIntExtra(KEY_SOFTID, -1);
             if (tweet != null && softid != -1) {
@@ -257,27 +260,25 @@ public class ServerTaskService extends IntentService {
     // post));
     // }
     //
-    private void pubTweet(final Tweet tweet) {
+    private void pubTweet(final net.oschina.app.bean.Tweet tweet) {
         tweet.setId((int) System.currentTimeMillis());
-        int id = tweet.getId();
+        long id = tweet.getId();
         addPenddingTask(KEY_TWEET + id);
-        notifySimpleNotifycation(id, getString(R.string.tweet_publishing),
+        notifySimpleNotifycation((int) id, getString(R.string.tweet_publishing),
                 getString(R.string.tweet_public),
                 getString(R.string.tweet_publishing), true, false);
         OSChinaApi.pubTweet(tweet, new PublicTweetResponseHandler(
                 getMainLooper(), tweet, KEY_TWEET));
     }
 
-    private void pubSoftWareTweet(final Tweet tweet, int softid) {
+    private void pubSoftWareTweet(final net.oschina.app.bean.Tweet tweet, int softid) {
         tweet.setId((int) System.currentTimeMillis());
-        int id = tweet.getId();
+        int id = (int) tweet.getId();
         addPenddingTask(KEY_SOFTWARE_TWEET + id);
         notifySimpleNotifycation(id, getString(R.string.tweet_publishing),
                 getString(R.string.tweet_public),
                 getString(R.string.tweet_publishing), true, false);
-        OSChinaApi.pubSoftWareTweet(tweet, softid,
-                new PublicTweetResponseHandler(getMainLooper(), tweet,
-                        KEY_SOFTWARE_TWEET));
+        OSChinaApi.pubSoftwareTweet(tweet.getBody(), new PublicTweetResponseHandler(getMainLooper(), tweet, KEY_SOFTWARE_TWEET));
     }
 
     private void notifySimpleNotifycation(int id, String ticker, String title,
