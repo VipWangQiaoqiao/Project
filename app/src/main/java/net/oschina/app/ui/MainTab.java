@@ -3,8 +3,8 @@ package net.oschina.app.ui;
 import net.oschina.app.R;
 import net.oschina.app.fragment.ExploreFragment;
 import net.oschina.app.fragment.MyInformationFragment;
+import net.oschina.app.improve.tweet.fragments.TweetViewPagerFragment;
 import net.oschina.app.viewpagerfragment.GeneralViewPagerFragment;
-import net.oschina.app.viewpagerfragment.TweetsViewPagerFragment;
 
 public enum MainTab {
 
@@ -17,7 +17,7 @@ public enum MainTab {
             GeneralViewPagerFragment.class),
 
     TWEET(1, R.string.main_tab_name_tweet, R.drawable.tab_icon_tweet,
-            TweetsViewPagerFragment.class),
+            TweetViewPagerFragment.class),
 
     QUICK(2, R.string.main_tab_name_quick, R.drawable.tab_icon_new,
             null),
