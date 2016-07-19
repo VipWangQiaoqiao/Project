@@ -1385,7 +1385,7 @@ public class OSChinaApi {
      * @param imagePath 图片地址
      * @param handler   回调
      */
-    public static void uploadImage(String token, String imagePath, TextHttpResponseHandler handler) {
+    public static void uploadImage(String token, String imagePath, AsyncHttpResponseHandler handler) {
         if (TextUtils.isEmpty(imagePath))
             throw new NullPointerException("imagePath is not null.");
         RequestParams params = new RequestParams();
@@ -1408,7 +1408,7 @@ public class OSChinaApi {
      * @param audioToken  语音token
      * @param handler     回调
      */
-    public static void pubTweet(String content, String imagesToken, String audioToken, TextHttpResponseHandler handler) {
+    public static void pubTweet(String content, String imagesToken, String audioToken, AsyncHttpResponseHandler handler) {
         if (TextUtils.isEmpty(content))
             throw new NullPointerException("content is not null.");
         RequestParams params = new RequestParams();
