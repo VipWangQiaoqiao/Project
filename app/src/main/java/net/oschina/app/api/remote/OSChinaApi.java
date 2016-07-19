@@ -1530,4 +1530,17 @@ public class OSChinaApi {
         ApiHttpClient.get("action/apiv2/tweet_like_reverse", params, handler);
     }
 
+    /**
+     * 删除动弹评论
+     *
+     * @param sourceId  动弹id
+     * @param commentId 评论id
+     * @param handler   回调
+     */
+    public static void deleteTweetComment(long sourceId, long commentId, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        params.put("commentId", commentId);
+        ApiHttpClient.get("action/apiv2/tweet_comment_delete", params, handler);
+    }
 }
