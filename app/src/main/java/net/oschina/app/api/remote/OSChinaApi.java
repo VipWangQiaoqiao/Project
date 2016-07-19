@@ -649,11 +649,13 @@ public class OSChinaApi {
      * @param tag     software tag
      * @param handler handler
      */
-    public static void getSoftwareTweetList(String tag, AsyncHttpResponseHandler handler) {
-        if (!TextUtils.isEmpty(tag)) return;
+    public static void getSoftwareTweetList(String tag, String pageToken, TextHttpResponseHandler handler) {
+        if (TextUtils.isEmpty(tag)) return;
         RequestParams params = new RequestParams();
         params.put("tag", tag);
-        ApiHttpClient.get("/action/apiv2/tweets", params, handler);
+        if (!TextUtils.isEmpty(pageToken))
+            params.put("pageToken", pageToken);
+        ApiHttpClient.get("action/apiv2/tweets", params, handler);
     }
 
     public static void checkUpdate(AsyncHttpResponseHandler handler) {

@@ -23,6 +23,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Tweet;
+import net.oschina.app.bean.User;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.util.DialogHelp;
@@ -36,6 +37,8 @@ import net.oschina.app.widget.TweetTextView;
 
 import org.kymjs.kjframe.Core;
 import org.kymjs.kjframe.utils.DensityUtils;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -200,6 +203,8 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             vh.ivLikeState.setImageResource(R.drawable.ic_thumbup_normal);
         } else {
             //vh.tvLikeState.setAnimation(KJAnimations.getScaleAnimation(1.5f, 300));
+            List<User> likeUser = tweet.getLikeUser();
+            if (likeUser!=null)
             tweet.getLikeUser().add(0, AppContext.getInstance().getLoginUser());
             OSChinaApi.pubLikeTweet(tweet.getId(), tweet.getAuthorid(), handler);
 //            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color

@@ -17,7 +17,7 @@ import net.oschina.app.improve.widget.OWebView;
  * on 16/6/20.
  */
 
-public abstract class DetailFragment<Data, DataView extends DetailContract.View, Operator extends DetailContract.Operator<Data, DataView>> extends BaseFragment<T> implements DetailContract.View {
+public abstract class DetailFragment<Data, DataView extends DetailContract.View, Operator extends DetailContract.Operator<Data, DataView>> extends BaseFragment implements DetailContract.View {
     Operator mOperator;
     OWebView mWebView;
     private NestedScrollView mScrollView;
