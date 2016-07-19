@@ -469,6 +469,20 @@ public class OSChinaApi {
         }
     }
 
+    /**
+     * del software tweet
+     *
+     * @param sourceId tweet's id
+     * @param handler  handler
+     */
+    public static void delSoftwareTweet(int sourceId, AsyncHttpResponseHandler handler) {
+        if (sourceId <= 0) return;
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        ApiHttpClient.post("/action/apiv2/tweet_delete", params, handler);
+
+    }
+
     public static void deleteTweet(int uid, int tweetid,
                                    AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();

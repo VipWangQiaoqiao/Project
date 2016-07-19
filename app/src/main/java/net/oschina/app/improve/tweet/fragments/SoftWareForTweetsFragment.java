@@ -12,6 +12,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.reflect.TypeToken;
+import com.loopj.android.http.TextHttpResponseHandler;
+
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.TweetAdapter;
@@ -19,22 +22,26 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetsList;
+import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
-import net.oschina.app.service.ServerTaskUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
 import java.io.InputStream;
 import java.io.Serializable;
+import java.lang.reflect.Type;
 
-public class SoftWareForTweetsFragment extends BaseListFragment<Tweet> {
+import cz.msebera.android.httpclient.Header;
+
+public class SoftWareForTweetsFragment extends BaseListFragment<Tweet> implements AdapterView.OnItemLongClickListener {
 
     public static final String BUNDLE_KEY_ID = "BUNDLE_KEY_ID";
     public static final String BUNDLE_KEY_NAME = "bundle_key_id";
     //protected static final String TAG = SoftwareForTweetsFrament.class.getSimpleName();
     private static final String CACHE_KEY_PREFIX = "software_tweet_list";
     private static final int MAX_TEXT_LENGTH = 160;
+    private static final String TAG = "SoftWareForTweetsFragment";
 
     private int mId;
 
@@ -68,6 +75,7 @@ public class SoftWareForTweetsFragment extends BaseListFragment<Tweet> {
         if (!view.isFocused()) {
             view.requestFocus();
         }
+        mListView.setOnItemLongClickListener(this);
         inputEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -85,7 +93,7 @@ public class SoftWareForTweetsFragment extends BaseListFragment<Tweet> {
                         return false;
                     }
 
-                    String input = inputEditText.getText().toString().trim();
+                    final String input = inputEditText.getText().toString().trim();
 
                     if (TextUtils.isEmpty(input)) {
                         AppContext.showToastShort(R.string.tip_comment_content_empty);
@@ -97,13 +105,45 @@ public class SoftWareForTweetsFragment extends BaseListFragment<Tweet> {
                         return false;
                     }
 
-                    Tweet tweet = new Tweet();
-                    tweet.setAuthorid(AppContext.getInstance().getLoginUid());
-                    tweet.setBody(input + softwareName);
-                    ServerTaskUtils.pubSoftWareTweet(getActivity(), tweet, mId);
-                    inputEditText.setText(null);
-                    TDevice.hideSoftKeyboard(inputEditText);
-                    Toast.makeText(getActivity(), "发布成功...", Toast.LENGTH_SHORT).show();
+                    // Tweet tweet = new Tweet();
+                    //tweet.setAuthorid(AppContext.getInstance().getLoginUid());
+                    //tweet.setBody(input + softwareName);
+                    // ServerTaskUtils.pubSoftWareTweet(getActivity(), tweet, mId);
+                    //  inputEditText.setText(null);
+
+                    OSChinaApi.pubSoftwareTweet(input + softwareName, new TextHttpResponseHandler("UTF-8") {
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                            Toast.makeText(getActivity(), "发布失败...", Toast.LENGTH_SHORT).show();
+                            TDevice.showSoftKeyboard(inputEditText);
+                        }
+
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, String responseString) {
+
+                            try {
+                                Type type = new TypeToken<ResultBean<net.oschina.app.improve.bean.Tweet>>() {
+                                }.getType();
+                                ResultBean<net.oschina.app.improve.bean.Tweet> resultBean = AppContext.createGson().fromJson(responseString, type);
+
+                                if (resultBean != null && resultBean.isSuccess()) {
+                                    inputEditText.setText(null);
+                                    Toast.makeText(getActivity(), "发布成功...", Toast.LENGTH_SHORT).show();
+                                    TDevice.hideSoftKeyboard(inputEditText);
+                                } else {
+                                    Toast.makeText(getActivity(), "发布失败...", Toast.LENGTH_SHORT).show();
+                                    TDevice.showSoftKeyboard(inputEditText);
+                                }
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                onFailure(statusCode, headers, responseString, e);
+                            }
+
+                        }
+
+                    });
+
                     return true;
                 }
                 return false;
@@ -184,11 +224,39 @@ public class SoftWareForTweetsFragment extends BaseListFragment<Tweet> {
         TweetDetailActivity.show(getActivity(), tweet);
     }
 
-    private void handleComment(String text) {
-        Tweet tweet = new Tweet();
-        tweet.setAuthorid(AppContext.getInstance().getLoginUid());
-        tweet.setBody(text);
-        ServerTaskUtils.pubSoftWareTweet(getActivity(), tweet, mId);
-    }
 
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+        final Tweet tweet = mAdapter.getItem(position);
+        int sourceId = tweet.getId();
+
+        OSChinaApi.delSoftwareTweet(sourceId, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Toast.makeText(getContext(), "删除失败...", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+
+                try {
+                    Type type = new TypeToken<ResultBean>() {
+                    }.getType();
+                    ResultBean resultBean = AppContext.createGson().fromJson(responseString, type);
+                    if (resultBean != null && resultBean.isSuccess()) {
+                        Toast.makeText(getContext(), "删除成功...", Toast.LENGTH_SHORT).show();
+                        mAdapter.removeItem(tweet);
+                    } else {
+                        Toast.makeText(getContext(), "删除失败...", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    onFailure(statusCode, headers, responseString, e);
+                }
+            }
+        });
+
+        return true;
+    }
 }
