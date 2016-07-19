@@ -140,7 +140,9 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
         btn_preview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImageGalleryActivity.showActivity(getActivity(), mConfig.selectedImages(CommonUtil.toArrayList(mSelectedImage)), 0);
+                if (mSelectedImage.size() > 0) {
+                    ImageGalleryActivity.showActivity(getActivity(), mConfig.selectedImages(CommonUtil.toArrayList(mSelectedImage)), 0);
+                }
             }
         });
         getActivity().getSupportLoaderManager().initLoader(0, null, mCursorLoader);
@@ -154,6 +156,7 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
             if (image.isSelect()) {
                 image.setSelect(false);
                 mSelectedImage.remove(image);
+                mImageAdapter.updateItem(position);
             } else {
                 if (mSelectedImage.size() == mConfig.getSelectCount()) {
                     Toast.makeText(getActivity(), "最多只能选择 " + mConfig.getSelectCount() + " 张照片", Toast.LENGTH_SHORT).show();

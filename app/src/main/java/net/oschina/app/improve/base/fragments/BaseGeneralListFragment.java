@@ -10,8 +10,10 @@ import net.oschina.app.interf.OnTabReselectListener;
 public abstract class BaseGeneralListFragment<T> extends BaseListFragment<T> implements OnTabReselectListener {
     @Override
     public void onTabReselect() {
-        mListView.setSelection(0);
-        mRefreshLayout.setRefreshing(true);
-        onRefreshing();
+        if(mListView != null){
+            mListView.setSelection(0);
+            mRefreshLayout.setRefreshing(true);
+            onRefreshing();
+        }
     }
 }
