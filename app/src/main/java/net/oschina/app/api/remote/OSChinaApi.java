@@ -1419,4 +1419,50 @@ public class OSChinaApi {
             params.put("audio", audioToken);
         ApiHttpClient.post("action/apiv2/tweet", params, handler);
     }
+
+    /**
+     * 请求用户动弹列表
+     *
+     * @param authorId  用户id
+     * @param pageToken pageToken
+     * @param handler   回调
+     */
+    public static void getUserTweetList(long authorId, String pageToken, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("authorId", authorId);
+        if (!TextUtils.isEmpty(pageToken))
+            params.put("pageToken", pageToken);
+        ApiHttpClient.get("action/apiv2/tweets", params, handler);
+    }
+
+    /**
+     * 请求热门最新动弹列表
+     *
+     * @param type      type类型，1: 最新、2: 热门
+     * @param pageToken pageToken
+     * @param handler   回调
+     */
+    public static void getTweetList(int type, String pageToken, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("authorId", type);
+        if (!TextUtils.isEmpty(pageToken))
+            params.put("pageToken", pageToken);
+        ApiHttpClient.get("action/apiv2/tweets", params, handler);
+    }
+
+    /**
+     * 请求话题动弹列表
+     *
+     * @param tag       话题动弹
+     * @param pageToken pageToken
+     * @param handler   回调
+     */
+    public static void getTagTweetList(String tag, String pageToken, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("authorId", tag);
+        if (!TextUtils.isEmpty(pageToken))
+            params.put("pageToken", pageToken);
+        ApiHttpClient.get("action/apiv2/tweets", params, handler);
+    }
+
 }
