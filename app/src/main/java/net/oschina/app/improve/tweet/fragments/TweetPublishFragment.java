@@ -15,10 +15,13 @@ import net.oschina.app.emoji.Emojicon;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.emoji.OnEmojiClickListener;
 import net.oschina.app.improve.base.fragments.BaseFragment;
+import net.oschina.app.improve.tweet.contract.TweetPublishContract;
 import net.oschina.app.improve.tweet.widget.TweetPicturesPreviewer;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.UIHelper;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -26,7 +29,7 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TweetPublishFragment extends BaseFragment implements View.OnClickListener {
+public class TweetPublishFragment extends BaseFragment implements View.OnClickListener, TweetPublishContract.View {
     private static final int MAX_TEXT_LENGTH = 160;
     private static final int SELECT_FRIENDS_REQUEST_CODE = 100;
     private static final String TEXT_TAG = "#请输入软件名#";
@@ -195,4 +198,13 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     }
 
 
+    @Override
+    public String getContent() {
+        return mEditContent.getText().toString();
+    }
+
+    @Override
+    public List<String> getImagePath() {
+        return mLayImages.getPaths();
+    }
 }
