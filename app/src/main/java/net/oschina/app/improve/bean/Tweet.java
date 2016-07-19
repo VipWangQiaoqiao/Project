@@ -112,7 +112,7 @@ public class Tweet implements Serializable {
 
     public static class Code implements Serializable {
         private String brush;
-        private String conent;
+        private String content;
 
         public String getBrush() {
             return brush;
@@ -122,12 +122,12 @@ public class Tweet implements Serializable {
             this.brush = brush;
         }
 
-        public String getConent() {
-            return conent;
+        public String getContent() {
+            return content;
         }
 
-        public void setConent(String conent) {
-            this.conent = conent;
+        public void setContent(String content) {
+            this.content = content;
         }
     }
 

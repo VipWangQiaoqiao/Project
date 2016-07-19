@@ -1558,7 +1558,7 @@ public class OSChinaApi {
         RequestParams params = new RequestParams();
         params.put("sourceId", sourceId);
         params.put("content", content);
-        params.put("replyId", replyId);
+        if (replyId > 0) params.put("replyId", replyId);
         ApiHttpClient.post("action/apiv2/tweet_comment", params, handler);
     }
 

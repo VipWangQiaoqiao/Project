@@ -47,13 +47,23 @@
             </LinearLayout>
 
             <!--content-->
-            <net.oschina.app.improve.widget.OWebView
-                android:id="@+id/webview"
+            <TextView
+                android:id="@+id/tv_content"
                 android:layout_marginTop="8dp"
+                tools:text="又改需求!!!"
+                android:textSize="16sp"
+                android:textColor="#333"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:scrollbars="none" />
+                android:layout_height="wrap_content" />
+
+            <GridLayout
+                android:id="@+id/layout_grid"
+                android:rowCount="3"
+                android:columnCount="3"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
             <RelativeLayout
                 android:id="@+id/tweet_bg_record"

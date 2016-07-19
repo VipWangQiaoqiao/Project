@@ -107,10 +107,7 @@ public class TweetDetailViewPagerFragment extends Fragment
                         case 0:
                             return String.format("赞(%s)", mOperator.getTweetDetail().getLikeCount());
                         case 1:
-                            return String.format("评论(%s)",
-                                    mOperator.getTweetDetail().getCommentCount() == null
-                                            ? 0
-                                            : mOperator.getTweetDetail().getCommentCount());
+                            return String.format("评论(%s)", mOperator.getTweetDetail().getCommentCount());
                     }
                     return null;
                 }
@@ -124,7 +121,7 @@ public class TweetDetailViewPagerFragment extends Fragment
 
     @Override
     public void onCommentSuccess(Comment comment) {
-        mOperator.getTweetDetail().setCommentCount(String.valueOf(Integer.valueOf(mOperator.getTweetDetail().getCommentCount()) + 1)); // Bean的事,真不是我想这样干
+        mOperator.getTweetDetail().setCommentCount(mOperator.getTweetDetail().getCommentCount() + 1); // Bean的事,真不是我想这样干
         if (mCmnViewImp != null) mCmnViewImp.onCommentSuccess(comment);
         TabLayout.Tab tab = mTabLayout.getTabAt(1);
         if (tab != null) tab.setText(String.format("评论(%s)", mOperator.getTweetDetail().getCommentCount()));
@@ -147,7 +144,7 @@ public class TweetDetailViewPagerFragment extends Fragment
 
     @Override
     public void resetCmnCount(int count) {
-        mOperator.getTweetDetail().setCommentCount(String.valueOf(count));
+        mOperator.getTweetDetail().setCommentCount(count);
         TabLayout.Tab tab = mTabLayout.getTabAt(1);
         if (tab != null) tab.setText(String.format("评论(%s)", count));
     }

@@ -1,8 +1,8 @@
 package net.oschina.app.improve.tweet.contract;
 
 import net.oschina.app.bean.Comment;
-import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.User;
+import net.oschina.app.improve.bean.Tweet;
 
 /**
  * Created by thanatosx

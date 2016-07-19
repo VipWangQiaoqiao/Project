@@ -18,7 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:background="#cc000000">
+        android:background="#cc000000"
+        android:clickable="true">
 
         <Button
             android:id="@+id/btn_folder"
