@@ -1465,4 +1465,69 @@ public class OSChinaApi {
         ApiHttpClient.get("action/apiv2/tweets", params, handler);
     }
 
+    /**
+     * 请求动弹详情
+     *
+     * @param id      动弹id
+     * @param handler 回调
+     */
+    public static void getTweetDetail(long id, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("id", id);
+        ApiHttpClient.get("action/apiv2/tweet", params, handler);
+    }
+
+    /**
+     * 请求动弹评论列表
+     *
+     * @param sourceId 动弹id
+     * @param handler  回调
+     */
+    public static void getTweetCommentList(long sourceId, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        ApiHttpClient.get("action/apiv2/tweet_comments", params, handler);
+    }
+
+    /**
+     * 请求动弹点赞列表
+     *
+     * @param sourceId 动弹id
+     * @param handler  回调
+     */
+    public static void getTweetLikeList(long sourceId, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        ApiHttpClient.get("action/apiv2/tweet_likes", params, handler);
+    }
+
+
+    /**
+     * 发表动弹评论列表
+     *
+     * @param sourceId 动弹id
+     * @param content  内容
+     * @param replyId  回复的用户id
+     * @param handler  回调
+     */
+    public static void pubTweetComment(long sourceId, String content, long replyId, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        params.put("content", content);
+        params.put("replyId", replyId);
+        ApiHttpClient.post("action/apiv2/tweet_comment", params, handler);
+    }
+
+    /**
+     * 更改动弹点赞状态
+     *
+     * @param sourceId 动弹id
+     * @param handler  回调
+     */
+    public static void reverseTweetLike(long sourceId, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        ApiHttpClient.get("action/apiv2/tweet_like_reverse", params, handler);
+    }
+
 }
