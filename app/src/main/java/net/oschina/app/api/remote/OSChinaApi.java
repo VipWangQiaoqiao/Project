@@ -1396,7 +1396,7 @@ public class OSChinaApi {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        ApiHttpClient.post("action/api/resource_image", params, handler);
+        ApiHttpClient.post("action/apiv2/resource_image", params, handler);
     }
 
     /**

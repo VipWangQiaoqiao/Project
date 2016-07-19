@@ -30,7 +30,7 @@ import butterknife.OnClick;
  * A simple {@link Fragment} subclass.
  */
 public class TweetPublishFragment extends BaseFragment implements View.OnClickListener, TweetPublishContract.View {
-    private static final int MAX_TEXT_LENGTH = 160;
+    public static final int MAX_TEXT_LENGTH = 160;
     private static final int SELECT_FRIENDS_REQUEST_CODE = 100;
     private static final String TEXT_TAG = "#请输入软件名#";
 
