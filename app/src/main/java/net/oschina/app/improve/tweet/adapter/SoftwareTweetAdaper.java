@@ -8,25 +8,36 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.reflect.TypeToken;
+import com.loopj.android.http.TextHttpResponseHandler;
+
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewHolder;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.base.adapter.BaseListAdapter;
 import net.oschina.app.improve.bean.Tweet;
+import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.bean.simple.SoftwareTweetLike;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TDevice;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.TweetTextView;
 
 import org.kymjs.kjframe.utils.DensityUtils;
 
-import static android.content.ContentValues.TAG;
+import java.lang.reflect.Type;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by fei on 2016/7/19.
@@ -82,10 +93,12 @@ public class SoftwareTweetAdaper extends BaseListAdapter<Tweet> implements View.
             tv_content.setText(span);
         }
         ImageView ivLike = vh.getView(R.id.iv_like_state);
+        ivLike.setTag(position);
+
         ivLike.setOnClickListener(this);
-        if (item.isLiked()){
-                  ivLike.setImageResource(R.drawable.ic_thumbup_actived);
-        }else {
+        if (item.isLiked()) {
+            ivLike.setImageResource(R.drawable.ic_thumbup_actived);
+        } else {
             ivLike.setImageResource(R.drawable.ic_thumbup_normal);
         }
 
@@ -98,9 +111,49 @@ public class SoftwareTweetAdaper extends BaseListAdapter<Tweet> implements View.
 
     @Override
     public void onClick(View v) {
+        int position = (int) v.getTag();
 
-        Log.d(TAG, "onClick: ----->");
+        if (!AppContext.getInstance().isLogin()) {
+            UIHelper.showLoginActivity(mCallback.getContext());
+            return;
+        }
+        if (!TDevice.hasInternet()) {
+            AppContext.showToastShort(R.string.tip_no_internet);
+            return;
+        }
+        final Tweet item = getItem(position);
+        OSChinaApi.pubSoftwareLike(item.getId(), new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Toast.makeText(mCallback.getContext(), "点赞失败...", Toast.LENGTH_SHORT).show();
+            }
 
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                try {
+                    Type type = new TypeToken<ResultBean<SoftwareTweetLike>>() {
+                    }.getType();
+                    ResultBean resultBean = AppContext.createGson().fromJson(responseString, type);
+                    if (resultBean.getCode() == 1) {
+                        SoftwareTweetLike softwareTweetLike = (SoftwareTweetLike) resultBean.getResult();
+                        boolean like = softwareTweetLike.isLike();
+                        item.setLiked(like);
+                        int likeCount = item.getLikeCount();
+                        if (!like) {
+                            item.setLikeCount((likeCount - 1));
+                        } else {
+                            item.setLikeCount((likeCount + 1));
+                        }
+                        notifyDataSetChanged();
+                    } else {
+                        Toast.makeText(mCallback.getContext(), "点赞失败...", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    onFailure(statusCode, headers, responseString, e);
+                }
+            }
+        });
     }
 
 }

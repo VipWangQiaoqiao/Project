@@ -658,6 +658,18 @@ public class OSChinaApi {
         ApiHttpClient.get("action/apiv2/tweets", params, handler);
     }
 
+    /**
+     * pub tweet like status
+     * @param sourceId   source id
+     * @param handler  handler
+     */
+    public  static void  pubSoftwareLike(long sourceId,TextHttpResponseHandler handler){
+        if (sourceId<=0)return;
+        RequestParams params=new RequestParams();
+        params.put("sourceId",sourceId);
+        ApiHttpClient.post("action/apiv2/tweet_like_reverse",params,handler);
+    }
+
     public static void checkUpdate(AsyncHttpResponseHandler handler) {
         ApiHttpClient.get("MobileAppVersion.xml", handler);
     }
