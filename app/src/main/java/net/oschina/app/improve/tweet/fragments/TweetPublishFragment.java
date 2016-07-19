@@ -3,7 +3,6 @@ package net.oschina.app.improve.tweet.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -18,7 +17,6 @@ import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.tweet.contract.TweetPublishContract;
 import net.oschina.app.improve.tweet.widget.TweetPicturesPreviewer;
 import net.oschina.app.ui.SelectFriendsActivity;
-import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.UIHelper;
 
 import java.util.List;
@@ -27,8 +25,9 @@ import butterknife.Bind;
 import butterknife.OnClick;
 
 /**
- * A simple {@link Fragment} subclass.
+ * 发布动弹界面实现
  */
+@SuppressWarnings("WeakerAccess")
 public class TweetPublishFragment extends BaseFragment implements View.OnClickListener, TweetPublishContract.View {
     public static final int MAX_TEXT_LENGTH = 160;
     private static final int SELECT_FRIENDS_REQUEST_CODE = 100;
@@ -188,15 +187,8 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
             return;
         if (requestCode == SELECT_FRIENDS_REQUEST_CODE) {
             handleSelectFriendsResult(data);
-            return;
-        }
-        if (requestCode == ImageUtils.REQUEST_CODE_GETIMAGE_BYSDCARD) {
-
-        } else if (requestCode == ImageUtils.REQUEST_CODE_GETIMAGE_BYCAMERA) {
-
         }
     }
-
 
     @Override
     public String getContent() {
@@ -206,5 +198,11 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     @Override
     public List<String> getImagePath() {
         return mLayImages.getPaths();
+    }
+
+    @Override
+    public void onDestroyView() {
+        mLayImages.destroy();
+        super.onDestroyView();
     }
 }
