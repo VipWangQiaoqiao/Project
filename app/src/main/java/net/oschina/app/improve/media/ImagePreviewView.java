@@ -309,9 +309,6 @@ public class ImagePreviewView extends ImageView {
         mBoundWidth = drawable.getBounds().width();
         mBoundHeight = drawable.getBounds().height();
 
-        if (mBoundWidth == width && mBoundHeight <= height
-                || (mBoundHeight == height && mBoundWidth <= width)) return change;
-
         float scale = Math.max((float) mBoundWidth / width, (float) mBoundHeight / height);
 
         mBoundHeight /= scale;
@@ -323,6 +320,13 @@ public class ImagePreviewView extends ImageView {
         translateTop = (height - mBoundHeight) / 2;
 
         return change;
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        translateLeft = (w - mBoundWidth) / 2;
+        translateTop = (h - mBoundHeight) / 2;
     }
 
     @Override

@@ -30,6 +30,9 @@ import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
 import net.oschina.app.improve.comment.CommentsUtil;
+import net.oschina.app.improve.media.ImageGalleryActivity;
+import net.oschina.app.improve.media.config.ImageConfig;
+import net.oschina.app.improve.media.config.ImageLoaderListener;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
 import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.util.DialogHelp;
@@ -40,6 +43,9 @@ import net.oschina.app.util.UIHelper;
 import net.oschina.app.viewpagerfragment.TweetDetailViewPagerFragment;
 import net.oschina.app.widget.CircleImageView;
 import net.oschina.app.widget.RecordButtonUtil;
+
+import java.util.Arrays;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -301,8 +307,21 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
             final View.OnClickListener l = new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    String mImageUrl = (String) v.getTag();
-                    OSCPhotosActivity.showImagePreview(TweetDetailActivity.this, mImageUrl);
+//                    String mImageUrl = (String) v.getTag();
+                    String mImageUrl = "http://static.oschina.net/uploads/img/201607/17070619_o9t1.png";
+//                    OSCPhotosActivity.showImagePreview(TweetDetailActivity.this, mImageUrl);
+                    List<String> list = Arrays.asList(mImageUrl);
+                    ImageGalleryActivity.showActivity(TweetDetailActivity.this,ImageConfig.Build().selectedImages(list).loaderListener(new ImageLoaderListener() {
+                        @Override
+                        public void displayImage(ImageView iv, String path) {
+                            getImageLoader()
+                                    .load("http://static.oschina.net/uploads/img/201607/17070619_o9t1.png")
+                                    .asBitmap()
+                                    .placeholder(R.drawable.ic_default_image)
+                                    .error(R.drawable.ic_default_image)
+                                    .into(iv);
+                        }
+                    }),0);
                 }
             };
             for (int i = 0; i < tweet.getImages().length; i++){
