@@ -56,7 +56,10 @@ public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectIma
                         if (pos == -1)
                             return;
                         mModels.remove(pos);
-                        notifyItemRemoved(pos);
+                        if (mModels.size() > 0)
+                            notifyItemRemoved(pos);
+                        else
+                            notifyDataSetChanged();
                     }
                 }
 
@@ -96,8 +99,10 @@ public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectIma
         int size = mModels.size();
         if (size == MAX_SIZE) {
             return size;
+        } else if (size == 0) {
+            return 0;
         } else {
-            return ++size;
+            return size + 1;
         }
     }
 

@@ -22,6 +22,7 @@ import net.oschina.app.improve.media.config.SelectedCallBack;
 import net.oschina.app.improve.tweet.adapter.TweetSelectImageAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by JuQiu
@@ -69,7 +70,7 @@ public class TweetPicturesPreviewer extends RecyclerView implements TweetSelectI
         mGlobeImageLoader = Glide.with(getContext().getApplicationContext());
     }
 
-    private void set(ArrayList<String> paths) {
+    public void set(List<String> paths) {
         mImageAdapter.clear();
         for (String path : paths) {
             mImageAdapter.add(path);
