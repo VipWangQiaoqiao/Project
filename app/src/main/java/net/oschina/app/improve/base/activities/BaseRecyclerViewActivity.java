@@ -98,6 +98,7 @@ public abstract class BaseRecyclerViewActivity<T> extends BaseBackActivity imple
             @Override
             public void run() {
                 mRefreshLayout.setRefreshing(true);
+                onRefreshing();
             }
         });
     }
