@@ -35,6 +35,7 @@ import org.kymjs.kjframe.utils.DensityUtils;
  */
 public class TweetAdapter extends BaseListAdapter<Tweet> {
     private Bitmap recordBitmap;
+    private OnTweetLikeClickListener listener;
 
     public TweetAdapter(Callback callback) {
         super(callback);
@@ -79,6 +80,11 @@ public class TweetAdapter extends BaseListAdapter<Tweet> {
             tv_content.setText(span);
         }
 
+        ImageView iv_tweet_like = (ImageView) vh.getView(R.id.iv_like_state);
+        iv_tweet_like.setImageResource(item.isLiked() ? R.drawable.ic_thumbup_actived : R.drawable.ic_thumbup_normal);
+        iv_tweet_like.setTag(position);
+        iv_tweet_like.setOnClickListener(listener);
+
         Tweet.Image[] images = item.getImages();
         FlowLayout flowLayout = (FlowLayout) vh.getView(R.id.fl_image);
         flowLayout.removeAllViews();
@@ -101,5 +107,18 @@ public class TweetAdapter extends BaseListAdapter<Tweet> {
     @Override
     protected int getLayoutId(int position, Tweet item) {
         return R.layout.item_list_tweet_improve;
+    }
+
+    public void setListener(OnTweetLikeClickListener listener) {
+        this.listener = listener;
+    }
+
+    public abstract class OnTweetLikeClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            onClick(v, Integer.parseInt(v.getTag().toString()));
+        }
+
+        public abstract void onClick(View v, int position);
     }
 }

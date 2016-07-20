@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
+import net.oschina.app.R;
 import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.media.SelectImageActivity;
 import net.oschina.app.improve.media.config.ImageConfig;
@@ -84,7 +85,7 @@ public class TweetPicturesPreviewer extends RecyclerView implements TweetSelectI
         config.loaderListener(new ImageLoaderListener() {
             @Override
             public void displayImage(ImageView iv, String path) {
-                mGlobeImageLoader.load(path).centerCrop().into(iv);
+                mGlobeImageLoader.load(path).placeholder(R.drawable.ic_default_image).into(iv);
             }
         });
         config.callBack(new SelectedCallBack() {

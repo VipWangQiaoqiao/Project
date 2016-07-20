@@ -38,6 +38,16 @@ public class ImagePreviewView extends ImageView {
     private ValueAnimator.AnimatorUpdateListener onScaleAnimationUpdate;
     private ValueAnimator.AnimatorUpdateListener onTranslateXAnimationUpdate;
     private ValueAnimator.AnimatorUpdateListener onTranslateYAnimationUpdate;
+    
+    private OnTouchBorderListener onTouchBorderListener;
+    
+    public interface OnTouchBorderListener{
+        void onBorder(boolean isBorder);
+    }
+    
+    public void setOnTouchBorderListener(OnTouchBorderListener l){
+        this.onTouchBorderListener = l;
+    }
 
 
     public ImagePreviewView(Context context) {
@@ -208,6 +218,9 @@ public class ImagePreviewView extends ImageView {
         final int action = event.getAction();
         // 清理动画
         if (action == MotionEvent.ACTION_DOWN){
+            if (onTouchBorderListener != null){
+                onTouchBorderListener.onBorder(scale == 1.0f);
+            }
             if (getResetScaleAnimator().isRunning())
                 cancelResetScaleAnimation();
             if (getResetXAnimator().isRunning())
