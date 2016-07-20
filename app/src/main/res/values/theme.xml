@@ -122,4 +122,9 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="AppTheme.Tweet.Publish" parent="AppBaseTheme_Light">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
 </resources>
