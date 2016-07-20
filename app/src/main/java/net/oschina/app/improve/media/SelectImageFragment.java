@@ -150,7 +150,6 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
 
     private void handleImage(int position) {
         Image image = mImageAdapter.getItem(position);
-        image.setExist(true);
         //如果是多选模式
         if (mConfig.getSelectMode() == ImageConfig.SelectMode.MULTI_MODE) {
             if (image.isSelect()) {
