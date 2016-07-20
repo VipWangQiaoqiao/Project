@@ -35,7 +35,7 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
     @Override
     protected void requestData() {
         super.requestData();
-        OSChinaApi.getSoftwareTweetList(softwareName, mIsRefresh ? mBean.getPrevPageToken() : mBean.getNextPageToken(), mHandler);
+        OSChinaApi.getSoftwareTweetList(softwareName, mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
     }
 
     @Override
