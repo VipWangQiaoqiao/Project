@@ -1,10 +1,13 @@
 package net.oschina.app.improve.tweet.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
+import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.api.remote.OSChinaApi;
@@ -17,6 +20,8 @@ import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.tweet.adapter.TweetAdapter;
 
 import java.lang.reflect.Type;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * 动弹列表
@@ -67,6 +72,24 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
                 CACHE_NAME = CACHE_USER_TWEET;
                 break;
         }
+        TweetAdapter.OnTweetLikeClickListener listener = ((TweetAdapter) mAdapter).new OnTweetLikeClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Toast.makeText(getActivity(),"aaa",Toast.LENGTH_LONG).show();
+                OSChinaApi.reverseTweetLike(mAdapter.getItem(position).getId(), new TextHttpResponseHandler() {
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        Log.e("res", responseString);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        Log.e("res", responseString);
+                    }
+                });
+            }
+        };
+        ((TweetAdapter) mAdapter).setListener(listener);
     }
 
     @Override
@@ -77,14 +100,14 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
                 OSChinaApi.getTweetList(tweetType, mIsRefresh ? mBean.getPrevPageToken() : mBean.getNextPageToken(), mHandler);
                 break;
             case CATEGORY_USER:
-                OSChinaApi.getUserTweetList(Long.parseLong(String.valueOf(AppContext.getInstance().getLoginUid())),mIsRefresh ? mBean.getPrevPageToken() : mBean.getNextPageToken(), mHandler);
+                OSChinaApi.getUserTweetList(Long.parseLong(String.valueOf(AppContext.getInstance().getLoginUid())), mIsRefresh ? mBean.getPrevPageToken() : mBean.getNextPageToken(), mHandler);
                 break;
         }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        TweetDetailActivity.show(getContext(),mAdapter.getItem(position));
+        TweetDetailActivity.show(getContext(), mAdapter.getItem(position));
     }
 
     @Override
