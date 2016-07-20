@@ -3,12 +3,13 @@ package net.oschina.app.improve.bean;
 import net.oschina.app.improve.bean.simple.Author;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * Created by huanghaibin_dev
  * on 2016/7/18.
  */
-public class Tweet implements Serializable{
+public class Tweet implements Serializable {
     private long id;
     private String content;
     private int appClient;
@@ -109,7 +110,7 @@ public class Tweet implements Serializable{
         this.images = images;
     }
 
-    public static class Code implements Serializable{
+    public static class Code implements Serializable {
         private String brush;
         private String content;
 
@@ -130,7 +131,7 @@ public class Tweet implements Serializable{
         }
     }
 
-    public static class Audio implements Serializable{
+    public static class Audio implements Serializable {
         private String href;
         private long timeSpan;
 
@@ -151,7 +152,7 @@ public class Tweet implements Serializable{
         }
     }
 
-    public static class Image implements Serializable{
+    public static class Image implements Serializable {
         public String getThumb() {
             return thumb;
         }
@@ -170,5 +171,22 @@ public class Tweet implements Serializable{
 
         private String thumb;
         private String href;
+    }
+
+    @Override
+    public String toString() {
+        return "Tweet{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", appClient=" + appClient +
+                ", commentCount=" + commentCount +
+                ", likeCount=" + likeCount +
+                ", liked=" + liked +
+                ", pubDate='" + pubDate + '\'' +
+                ", author=" + author +
+                ", code=" + code +
+                ", audio=" + Arrays.toString(audio) +
+                ", images=" + Arrays.toString(images) +
+                '}';
     }
 }

@@ -714,9 +714,10 @@ public class UIHelper {
      * @param context context
      * @param id      id
      */
-    public static void showSoftwareTweets(Context context, int id) {
+    public static void showSoftwareTweets(Context context, int id, String softwareName) {
         Bundle args = new Bundle();
         args.putInt(SoftWareForTweetsFragment.BUNDLE_KEY_ID, id);
+        args.putString(SoftWareForTweetsFragment.BUNDLE_KEY_NAME, softwareName);
         showSimpleBack(context, SimpleBackPage.SOFTWARE_TWEETS_NEW, args);
     }
 

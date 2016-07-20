@@ -78,7 +78,7 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
                 break;
             case R.id.lay_option_comment:
                 // 评论列表
-                UIHelper.showSoftwareTweets(getActivity(), (int) mId);
+                UIHelper.showSoftwareTweets(getActivity(), (int) mId, mOperator.getData().getName());
                 break;
             default:
                 break;

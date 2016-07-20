@@ -445,6 +445,7 @@ public class OSChinaApi {
         ApiHttpClient.post("action/api/tweet_pub", params, handler);
     }
 
+
     public static void pubSoftWareTweet(Tweet tweet, int softid,
                                         AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
@@ -452,6 +453,34 @@ public class OSChinaApi {
         params.put("msg", tweet.getBody());
         params.put("project", softid);
         ApiHttpClient.post("action/api/software_tweet_pub", params, handler);
+    }
+
+    /**
+     * pub software tweet
+     *
+     * @param content content
+     * @param handler handler
+     */
+    public static void pubSoftwareTweet(String content, AsyncHttpResponseHandler handler) {
+        if (!TextUtils.isEmpty(content)) {
+            RequestParams params = new RequestParams();
+            params.put("content", content);
+            ApiHttpClient.post("/action/apiv2/tweet", params, handler);
+        }
+    }
+
+    /**
+     * del software tweet
+     *
+     * @param sourceId tweet's id
+     * @param handler  handler
+     */
+    public static void delSoftwareTweet(long sourceId, AsyncHttpResponseHandler handler) {
+        if (sourceId <= 0) return;
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        ApiHttpClient.post("/action/apiv2/tweet_delete", params, handler);
+
     }
 
     public static void deleteTweet(int uid, int tweetid,
@@ -612,6 +641,33 @@ public class OSChinaApi {
         params.put("pageIndex", page);
         params.put("pageSize", AppContext.PAGE_SIZE);
         ApiHttpClient.get("action/api/software_tweet_list", params, handler);
+    }
+
+    /**
+     * get software tweet list
+     *
+     * @param tag     software tag
+     * @param handler handler
+     */
+    public static void getSoftwareTweetList(String tag, String pageToken, TextHttpResponseHandler handler) {
+        if (TextUtils.isEmpty(tag)) return;
+        RequestParams params = new RequestParams();
+        params.put("tag", tag);
+        if (!TextUtils.isEmpty(pageToken))
+            params.put("pageToken", pageToken);
+        ApiHttpClient.get("action/apiv2/tweets", params, handler);
+    }
+
+    /**
+     * pub tweet like status
+     * @param sourceId   source id
+     * @param handler  handler
+     */
+    public  static void  pubSoftwareLike(long sourceId,TextHttpResponseHandler handler){
+        if (sourceId<=0)return;
+        RequestParams params=new RequestParams();
+        params.put("sourceId",sourceId);
+        ApiHttpClient.post("action/apiv2/tweet_like_reverse",params,handler);
     }
 
     public static void checkUpdate(AsyncHttpResponseHandler handler) {
