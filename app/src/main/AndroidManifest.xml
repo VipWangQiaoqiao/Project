@@ -313,6 +313,12 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
+            android:name=".improve.tweet.activities.SoftwareTweetActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="软件动态列表"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
             android:name=".improve.detail.activities.SchemeUrlActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="WebUrl"
@@ -378,7 +384,7 @@
 
         <service
             android:name=".improve.tweet.service.TweetPublishService"
-            android:exported="false"></service>
+            android:exported="false"/>
     </application>
 
 </manifest>
