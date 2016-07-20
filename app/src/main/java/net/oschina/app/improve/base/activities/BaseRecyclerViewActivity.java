@@ -51,6 +51,7 @@ public abstract class BaseRecyclerViewActivity<T> extends BaseBackActivity imple
         mRecyclerView.setLayoutManager(getLayoutManager());
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(this);
+        mRefreshLayout.setSuperRefreshLayoutListener(this);
         mRefreshLayout.setRefreshing(true);
         mRefreshLayout.setColorSchemeResources(
                 R.color.swiperefresh_color1, R.color.swiperefresh_color2,
@@ -71,7 +72,7 @@ public abstract class BaseRecyclerViewActivity<T> extends BaseBackActivity imple
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
                     ResultBean<PageBean<T>> resultBean = AppContext.createGson().fromJson(responseString, getType());
-                    if (resultBean != null && resultBean.isSuccess()) {
+                    if (resultBean != null && resultBean.isSuccess() && resultBean.getResult().getItems() != null) {
                         onLoadingSuccess();
                         setListData(resultBean);
                     }
@@ -135,12 +136,11 @@ public abstract class BaseRecyclerViewActivity<T> extends BaseBackActivity imple
             mAdapter.addAll(mBean.getItems());
             mBean.setPrevPageToken(resultBean.getResult().getPrevPageToken());
             mRefreshLayout.setCanLoadMore(true);
-
         } else {
             mAdapter.addAll(resultBean.getResult().getItems());
         }
         if (resultBean.getResult().getItems().size() < 20) {
-            mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, false);
+            mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
         }
     }
 
