@@ -335,7 +335,8 @@
             android:name=".improve.tweet.activities.TweetPublishActivity"
             android:label="弹一弹"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Tweet.Publish">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -375,10 +376,9 @@
             android:label="图片预览"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Dialog.NoTitle.Translucent" />
-
         <service
             android:name=".improve.tweet.service.TweetPublishService"
-            android:exported="false"></service>
+            android:exported="false" />
     </application>
 
 </manifest>

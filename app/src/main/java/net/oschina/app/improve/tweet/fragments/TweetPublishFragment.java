@@ -2,10 +2,15 @@ package net.oschina.app.improve.tweet.fragments;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.support.v4.view.ViewCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -31,7 +36,7 @@ import butterknife.OnClick;
 public class TweetPublishFragment extends BaseFragment implements View.OnClickListener, TweetPublishContract.View {
     public static final int MAX_TEXT_LENGTH = 160;
     private static final int SELECT_FRIENDS_REQUEST_CODE = 100;
-    private static final String TEXT_TAG = "#请输入软件名#";
+    private static final String TEXT_TAG = "#输入软件名#";
 
     @Bind(R.id.edit_content)
     EditText mEditContent;
@@ -39,10 +44,27 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     @Bind(R.id.recycler_images)
     TweetPicturesPreviewer mLayImages;
 
-    private final EmojiKeyboardFragment keyboardFragment = new EmojiKeyboardFragment();
+    @Bind(R.id.txt_indicator)
+    TextView mIndicator;
+
+    @Bind(R.id.icon_back)
+    View mIconBack;
+
+    @Bind(R.id.icon_send)
+    View mIconSend;
+
+    private TweetPublishContract.Operator mOperator;
+    private final EmojiKeyboardFragment mEmojiKeyboard = new EmojiKeyboardFragment();
 
     public TweetPublishFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        this.mOperator = (TweetPublishContract.Operator) context;
+        this.mOperator.setDataView(this);
+        super.onAttach(context);
     }
 
     @Override
@@ -54,10 +76,14 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     protected void initWidget(View root) {
         super.initWidget(root);
 
+        // Toolbar
+
+
+        // EmojiKeyboardFragment
         getChildFragmentManager().beginTransaction()
-                .replace(R.id.lay_emoji_keyboard, keyboardFragment)
+                .replace(R.id.lay_emoji_keyboard, mEmojiKeyboard)
                 .commit();
-        keyboardFragment.setOnEmojiClickListener(new OnEmojiClickListener() {
+        mEmojiKeyboard.setOnEmojiClickListener(new OnEmojiClickListener() {
             @Override
             public void onEmojiClick(Emojicon v) {
                 InputHelper.input2OSC(mEditContent, v);
@@ -69,11 +95,49 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
             }
         });
 
+        // set hide action
         mLayImages.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                keyboardFragment.hideAllKeyBoard();
+                mEmojiKeyboard.hideAllKeyBoard();
                 return false;
+            }
+        });
+
+        // add text change listener
+        mEditContent.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                final int len = s.length();
+                final int surplusLen = MAX_TEXT_LENGTH - len;
+
+                mIconSend.setEnabled(len > 0 && surplusLen >= 0);
+
+                if (surplusLen > 10) {
+                    // 隐藏提示
+                    mIndicator.setVisibility(View.INVISIBLE);
+                    ViewCompat.animate(mIndicator)
+                            .scaleX(1f)
+                            .scaleXBy(0)
+                            .setDuration(100)
+                            .start();
+                } else {
+                    mIndicator.setVisibility(View.VISIBLE);
+                    mIndicator.setText(String.valueOf(surplusLen));
+                    mIndicator.setTextColor(surplusLen >= 0 ?
+                            getResources().getColor(R.color.tweet_indicator_text_color) :
+                            getResources().getColor(R.color.tweet_indicator_text_color_error));
+                }
             }
         });
     }
@@ -81,9 +145,11 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     @Override
     protected void initData() {
         super.initData();
+        mOperator.loadXmlData();
     }
 
-    @OnClick({R.id.iv_picture, R.id.iv_mention, R.id.iv_tag, R.id.iv_emoji})
+    @OnClick({R.id.iv_picture, R.id.iv_mention, R.id.iv_tag,
+            R.id.iv_emoji, R.id.txt_indicator, R.id.icon_back, R.id.icon_send})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -99,6 +165,30 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
             case R.id.iv_emoji:
                 handleEmojiClick(v);
                 break;
+            case R.id.txt_indicator:
+                handleClearContentClick();
+                break;
+            case R.id.icon_back:
+                mOperator.onBack();
+                break;
+            case R.id.icon_send:
+                mOperator.publish();
+                break;
+
+        }
+    }
+
+    private void handleClearContentClick() {
+        mIndicator.setSelected(!mIndicator.isSelected());
+        if (mIndicator.isSelected()) {
+            mIndicator.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mIndicator.setSelected(false);
+                }
+            }, 1600);
+        } else {
+            mEditContent.setText("");
         }
     }
 
@@ -108,17 +198,17 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
      * @param v View
      */
     private void handleEmojiClick(View v) {
-        if (!keyboardFragment.isShow()) {
-            keyboardFragment.hideSoftKeyboard();
+        if (!mEmojiKeyboard.isShow()) {
+            mEmojiKeyboard.hideSoftKeyboard();
             v.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    keyboardFragment.showEmojiKeyBoard();
+                    mEmojiKeyboard.showEmojiKeyBoard();
                 }
             }, 280);
         } else {
-            keyboardFragment.hideEmojiKeyBoard();
-            keyboardFragment.showSoftKeyboard(mEditContent);
+            mEmojiKeyboard.hideEmojiKeyBoard();
+            mEmojiKeyboard.showSoftKeyboard(mEditContent);
         }
     }
 
@@ -196,8 +286,18 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     }
 
     @Override
-    public List<String> getImagePath() {
+    public void setContent(String content) {
+        mEditContent.setText(content);
+    }
+
+    @Override
+    public List<String> getImages() {
         return mLayImages.getPaths();
+    }
+
+    @Override
+    public void setImages(List<String> paths) {
+        mLayImages.set(paths);
     }
 
     @Override
