@@ -31,6 +31,8 @@ public class TweetPublishActivity extends BaseBackActivity implements TweetPubli
 
     private TweetPublishContract.View mView;
 
+    private boolean mSaveOnDestroy = true;
+
     public static void show(Context context) {
         Intent intent = new Intent(context, TweetPublishActivity.class);
         context.startActivity(intent);
@@ -84,7 +86,9 @@ public class TweetPublishActivity extends BaseBackActivity implements TweetPubli
         final List<String> paths = mView.getImages();
 
         TweetPublishService.startActionPublish(this, content, paths);
-        finish();
+
+        // 在这里我们需要清理缓存的草稿
+        clearAndFinish();
     }
 
     @Override
@@ -100,7 +104,9 @@ public class TweetPublishActivity extends BaseBackActivity implements TweetPubli
 
     @Override
     protected void onDestroy() {
-        saveXmlData();
+        if (mSaveOnDestroy) {
+            saveXmlData();
+        }
         super.onDestroy();
     }
 
@@ -156,5 +162,13 @@ public class TweetPublishActivity extends BaseBackActivity implements TweetPubli
         SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
     }
 
-
+    private void clearAndFinish() {
+        mSaveOnDestroy = false;
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARE_FILE_NAME, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(SHARE_VALUES_CONTENT, null);
+        editor.putStringSet(SHARE_VALUES_IMAGES, null);
+        SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
+        finish();
+    }
 }
