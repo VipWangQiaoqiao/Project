@@ -48,7 +48,7 @@ public class ImageFolder implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (o instanceof ImageFolder) {
-            if (o == null || ((ImageFolder) o).getPath() == null)
+            if (o == null || ((ImageFolder) o).getPath() == null && path != null)
                 return false;
             String oPath = ((ImageFolder) o).getPath().toLowerCase();
             return oPath.equals(this.path.toLowerCase());

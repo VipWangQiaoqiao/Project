@@ -1,10 +1,14 @@
 package net.oschina.app.improve.tweet.fragments;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -12,16 +16,19 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.bean.User;
+import net.oschina.app.bean.Constants;
 import net.oschina.app.improve.base.adapter.BaseListAdapter;
 import net.oschina.app.improve.base.fragments.BaseGeneralListFragment;
 import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.tweet.adapter.TweetAdapter;
-import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
+import net.oschina.app.ui.empty.EmptyLayout;
+import net.oschina.app.util.DialogHelp;
+import net.oschina.app.util.HTMLUtil;
+import net.oschina.app.util.TDevice;
+import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;
 
@@ -74,6 +81,10 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
                 break;
             case CATEGORY_USER:
                 CACHE_NAME = CACHE_USER_TWEET;
+                IntentFilter filter = new IntentFilter(
+                        Constants.INTENT_ACTION_USER_CHANGE);
+                filter.addAction(Constants.INTENT_ACTION_LOGOUT);
+                getActivity().registerReceiver(mReceiver, filter);
                 break;
         }
         TweetAdapter.OnTweetLikeClickListener listener = ((TweetAdapter) mAdapter).new OnTweetLikeClickListener() {
@@ -93,7 +104,33 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
             }
         };
         ((TweetAdapter) mAdapter).setListener(listener);
+
+        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                handleLongClick(mAdapter.getItem(position));
+                return true;
+            }
+        });
     }
+
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            setupContent();
+        }
+    };
+
+    private void setupContent() {
+        if (AppContext.getInstance().isLogin()) {
+            mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+            onRefreshing();
+        } else {
+            mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+            mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
+        }
+    }
+
 
     @Override
     protected void requestData() {
@@ -103,7 +140,12 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
                 OSChinaApi.getTweetList(tweetType, mIsRefresh ? mBean.getPrevPageToken() : mBean.getNextPageToken(), mHandler);
                 break;
             case CATEGORY_USER:
-                OSChinaApi.getUserTweetList(Long.parseLong(String.valueOf(AppContext.getInstance().getLoginUid())), mIsRefresh ? mBean.getPrevPageToken() : mBean.getNextPageToken(), mHandler);
+                if (AppContext.getInstance().isLogin()) {
+                    OSChinaApi.getUserTweetList(Long.parseLong(String.valueOf(AppContext.getInstance().getLoginUid())), mIsRefresh ? mBean.getPrevPageToken() : mBean.getNextPageToken(), mHandler);
+                } else {
+                    mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+                    mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
+                }
                 break;
         }
     }
@@ -112,6 +154,41 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         TweetDetailActivity.show(getContext(), mAdapter.getItem(position));
     }
+
+    @Override
+    public void onClick(View v) {
+        if (requestCategory == CATEGORY_USER && !AppContext.getInstance().isLogin()) {
+            UIHelper.showLoginActivity(getActivity());
+        } else {
+            super.onClick(v);
+        }
+    }
+
+    private void handleLongClick(final Tweet tweet) {
+        String[] items;
+        if (AppContext.getInstance().getLoginUid() == (int) tweet.getAuthor().getId()) {
+            items = new String[]{getString(R.string.copy),
+                    getString(R.string.delete)};
+        } else {
+            items = new String[]{getString(R.string.copy)};
+        }
+
+        DialogHelp.getSelectDialog(getActivity(), items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                switch (i) {
+                    case 0:
+                        TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(tweet.getContent()));
+                        break;
+                    case 1:
+                        // TODO: 2016/7/21 删除动弹
+                        break;
+                }
+            }
+        }).show();
+    }
+
 
     @Override
     protected BaseListAdapter getListAdapter() {
@@ -124,11 +201,18 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
         }.getType();
     }
 
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putInt("requestCategory", requestCategory);
         outState.putInt("tweetType", tweetType);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onDestroy() {
+        if (requestCategory > CATEGORY_USER) {
+            getActivity().unregisterReceiver(mReceiver);
+        }
+        super.onDestroy();
     }
 }
