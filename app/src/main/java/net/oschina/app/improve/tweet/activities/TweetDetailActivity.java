@@ -88,7 +88,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
     private Dialog dialog;
     private RecordButtonUtil mRecordUtil;
     private AsyncHttpResponseHandler publishAdmireHandler;
-    private TextHttpResponseHandler publishCommentHandler;
+    private AsyncHttpResponseHandler publishCommentHandler;
 
     private TweetDetailContract.ICmnView mCmnViewImp;
     private TweetDetailContract.IThumbupView mThumbupViewImp;
@@ -149,7 +149,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
         };
 
         // TODO 请使用新接口
-        publishCommentHandler = new TextHttpResponseHandler() {
+        /*publishCommentHandler = new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 Toast.makeText(TweetDetailActivity.this, "评论失败", Toast.LENGTH_SHORT).show();
@@ -164,6 +164,24 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
                 mViewInput.setText(null);
                 dismissDialog();
                 TDevice.hideSoftKeyboard(mDelegation.getInputView());
+            }
+        };*/
+
+        publishCommentHandler = new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                mCmnViewImp.onCommentSuccess(null);
+                reply = null; // 清除
+                mViewInput.setHint("发表评论");
+                mViewInput.setText(null);
+                dismissDialog();
+                TDevice.hideSoftKeyboard(mDelegation.getInputView());
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Toast.makeText(TweetDetailActivity.this, "评论失败", Toast.LENGTH_SHORT).show();
+                dismissDialog();
             }
         };
 
@@ -213,7 +231,14 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
                 }
                 dialog = DialogHelp.getWaitDialog(TweetDetailActivity.this, "正在发表评论...");
                 dialog.show();
-                OSChinaApi.pubTweetComment(tweet.getId(), content, reply == null ? 0 : reply.getId(), publishCommentHandler);
+//                OSChinaApi.pubTweetComment(tweet.getId(), content, reply == null ? 0 : reply.getId(), publishCommentHandler);
+                if (TweetDetailActivity.this.reply == null) {
+                    OSChinaApi.publicComment(3, tweet.getId(), AppContext.getInstance().getLoginUid(),
+                            v.getText().toString(), 1, publishCommentHandler);
+                } else {
+                    OSChinaApi.replyComment((int) tweet.getId(), 3, reply.getId(), reply.getAuthorId(),
+                            AppContext.getInstance().getLoginUid(), v.getText().toString(), publishCommentHandler);
+                }
             }
 
             @Override
