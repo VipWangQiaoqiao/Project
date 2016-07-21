@@ -94,6 +94,7 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
         mImageFolderAdapter = new ImageFolderAdapter(getActivity());
         if (mConfig == null) mConfig = ImageConfig.Build();
         mImageAdapter.setLoader(mConfig.getLoaderListener());
+        mImageFolderAdapter.setLoader(mConfig.getLoaderListener());
         rv_image.setAdapter(mImageAdapter);
     }
 
@@ -370,6 +371,7 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
                             ArrayList<Image> imageList = new ArrayList<>();
                             imageList.add(image);
                             folder.setImages(imageList);
+                            folder.setAlbumPath(image.getPath());//默认相册封面
                             imageFolders.add(folder);
                         } else {
                             // 更新
@@ -382,6 +384,11 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
 
                     mImageAdapter.resetItem(images);
                     defaultFolder.setImages(images);
+                    if (mConfig.getMediaMode() == ImageConfig.MediaMode.HAVE_CAM_MODE) {
+                        defaultFolder.setAlbumPath(images.size() > 1 ? images.get(1).getPath() : null);
+                    } else {
+                        defaultFolder.setAlbumPath(images.size() > 0 ? images.get(0).getPath() : null);
+                    }
                     mImageFolderAdapter.resetItem(imageFolders);
 
                     List<Image> rs = new ArrayList<>();

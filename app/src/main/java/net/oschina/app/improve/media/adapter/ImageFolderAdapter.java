@@ -10,6 +10,7 @@ import android.widget.TextView;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.media.bean.ImageFolder;
+import net.oschina.app.improve.media.config.ImageLoaderListener;
 
 
 /**
@@ -18,6 +19,8 @@ import net.oschina.app.improve.media.bean.ImageFolder;
  */
 
 public class ImageFolderAdapter extends BaseRecyclerAdapter<ImageFolder> {
+    private ImageLoaderListener loader;
+
     public ImageFolderAdapter(Context context) {
         super(context, NEITHER);
     }
@@ -32,6 +35,13 @@ public class ImageFolderAdapter extends BaseRecyclerAdapter<ImageFolder> {
         FolderViewHolder h = (FolderViewHolder) holder;
         h.tv_name.setText(item.getName());
         h.tv_size.setText(item.getImages().size() + " 张图片");
+        if (loader != null) {
+            loader.displayImage(h.iv_image, item.getAlbumPath());
+        }
+    }
+
+    public void setLoader(ImageLoaderListener loader) {
+        this.loader = loader;
     }
 
     private static class FolderViewHolder extends RecyclerView.ViewHolder {
@@ -40,7 +50,7 @@ public class ImageFolderAdapter extends BaseRecyclerAdapter<ImageFolder> {
 
         public FolderViewHolder(View itemView) {
             super(itemView);
-            iv_image = (ImageView) itemView.findViewById(R.id.iv_image);
+            iv_image = (ImageView) itemView.findViewById(R.id.iv_folder);
             tv_name = (TextView) itemView.findViewById(R.id.tv_folder_name);
             tv_size = (TextView) itemView.findViewById(R.id.tv_size);
         }

@@ -15,9 +15,12 @@ import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewHolder;
+import net.oschina.app.bean.User;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.base.adapter.BaseListAdapter;
 import net.oschina.app.improve.bean.Tweet;
+import net.oschina.app.improve.bean.simple.Author;
+import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.widget.FlowLayout;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.PlatfromUtil;
@@ -27,6 +30,8 @@ import net.oschina.app.widget.TweetTextView;
 import net.qiujuer.genius.ui.Ui;
 
 import org.kymjs.kjframe.utils.DensityUtils;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * 动弹列表适配器
@@ -49,10 +54,22 @@ public class TweetAdapter extends BaseListAdapter<Tweet> {
     }
 
     @Override
-    protected void convert(ViewHolder vh, Tweet item, int position) {
+    protected void convert(ViewHolder vh, final Tweet item, int position) {
         vh.setImageForNet(R.id.iv_tweet_face, item.getAuthor().getPortrait());
-        vh.setText(R.id.tv_tweet_name, item.getAuthor().getName());
+        CircleImageView iv_tweet_face = vh.getView(R.id.iv_tweet_face);
+        iv_tweet_face.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Author author = item.getAuthor();
+                User user = new User();
+                user.setId((int)author.getId());
+                user.setName(author.getName());
+                user.setPortrait(author.getPortrait());
+                OtherUserHomeActivity.show(mCallback.getContext(),user);
+            }
+        });
 
+        vh.setText(R.id.tv_tweet_name, item.getAuthor().getName());
         vh.setText(R.id.tv_tweet_time, StringUtils.friendly_time(item.getPubDate()));
         PlatfromUtil.setPlatFromString((TextView) vh.getView(R.id.tv_tweet_platform), item.getAppClient());
         vh.setText(R.id.tv_tweet_like_count, String.valueOf(item.getLikeCount()));
