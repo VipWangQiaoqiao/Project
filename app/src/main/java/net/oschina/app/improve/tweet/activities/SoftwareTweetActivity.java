@@ -220,43 +220,40 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
 
                 long id = tweet.getAuthor().getId();
                 int loginUid = AppContext.getInstance().getLoginUid();
-                if (id != loginUid) {
-                    Toast.makeText(SoftwareTweetActivity.this, "这不是你的动弹，小心被打哦!!!", Toast.LENGTH_SHORT).show();
-                } else {
+                if (id == loginUid) {
 
                     DialogHelp.getConfirmDialog(SoftwareTweetActivity.this, "删除该动弹?", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        OSChinaApi.delSoftwareTweet(sourceId, new TextHttpResponseHandler() {
-                            @Override
-                            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                                Toast.makeText(SoftwareTweetActivity.this, "删除失败...", Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                                try {
-                                    Type type = new TypeToken<ResultBean>() {
-                                    }.getType();
-                                    ResultBean resultBean = AppContext.createGson().fromJson(responseString, type);
-                                    if (resultBean.getCode() == 1) {
-                                        Toast.makeText(SoftwareTweetActivity.this, "删除成功...", Toast.LENGTH_SHORT).show();
-                                        onRefreshing();
-                                    } else {
-                                        Toast.makeText(SoftwareTweetActivity.this, "删除失败...", Toast.LENGTH_SHORT).show();
-                                    }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                    onFailure(statusCode, headers, responseString, e);
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            OSChinaApi.delSoftwareTweet(sourceId, new TextHttpResponseHandler() {
+                                @Override
+                                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                                    Toast.makeText(SoftwareTweetActivity.this, "删除失败...", Toast.LENGTH_SHORT).show();
                                 }
-                            }
-                        });
 
-                    }
-                }, null).create().show();
+                                @Override
+                                public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                                    try {
+                                        Type type = new TypeToken<ResultBean>() {
+                                        }.getType();
+                                        ResultBean resultBean = AppContext.createGson().fromJson(responseString, type);
+                                        if (resultBean.getCode() == 1) {
+                                            Toast.makeText(SoftwareTweetActivity.this, "删除成功...", Toast.LENGTH_SHORT).show();
+                                            onRefreshing();
+                                        } else {
+                                            Toast.makeText(SoftwareTweetActivity.this, "删除失败...", Toast.LENGTH_SHORT).show();
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        onFailure(statusCode, headers, responseString, e);
+                                    }
+                                }
+                            });
+
+                        }
+                    }, null).create().show();
 
                 }
-
 
             }
         });
