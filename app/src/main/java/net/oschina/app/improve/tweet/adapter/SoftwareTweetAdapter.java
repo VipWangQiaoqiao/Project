@@ -40,12 +40,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SoftwareTweetAdapter extends BaseRecyclerAdapter<Tweet> implements View.OnClickListener {
 
-    private static final String TAG = "SoftwareTweetAdapter";
     private RequestManager requestManager;
 
     public SoftwareTweetAdapter(Context context, int mode) {
         super(context, mode);
-        setState(BaseRecyclerAdapter.STATE_LOADING,false);
+        setState(BaseRecyclerAdapter.STATE_LOADING, false);
         requestManager = Glide.with(context);
     }
 
