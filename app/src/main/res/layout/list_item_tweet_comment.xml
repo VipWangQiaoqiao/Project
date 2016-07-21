@@ -11,7 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:layout_marginRight="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginTop="16dp"
         android:orientation="horizontal">
 
@@ -35,7 +37,6 @@
                 android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="年轻的小蜜蜂"
                 android:textColor="#111111"
                 android:textSize="14sp"
                 tools:text="年轻的小蜜蜂" />
@@ -44,7 +45,6 @@
                 android:id="@+id/tv_pub_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="6分钟前"
                 android:textColor="#6a6a6a"
                 android:textSize="12sp"
                 tools:text="12楼  6分钟前" />
@@ -57,7 +57,9 @@
             android:contentDescription="@string/app_name"
             android:paddingBottom="8dp"
             android:paddingLeft="16dp"
+            android:paddingStart="8dp"
             android:paddingRight="8dp"
+            android:paddingEnd="8dp"
             android:src="@drawable/ic_comment_30" />
     </LinearLayout>
 
@@ -66,6 +68,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
+        android:paddingLeft="44dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="8dp"
         android:lineSpacingExtra="4dp"
