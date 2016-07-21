@@ -59,6 +59,7 @@ import cz.msebera.android.httpclient.Header;
 public class TweetDetailActivity extends BaseBackActivity implements TweetDetailContract.Operator {
 
     public static final String BUNDLE_KEY_TWEET = "BUNDLE_KEY_TWEET";
+    public static final String BUNDLE_KEY_TWEET_ID = "BUNDLE_KEY_TWEET_ID";
 
     @Bind(R.id.iv_portrait)
     CircleImageView ivPortrait;
@@ -88,6 +89,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
     EditText mViewInput;
 
     private Tweet tweet;
+    private long tid;
     private Comment reply;
     private Dialog dialog;
     private RecordButtonUtil mRecordUtil;
@@ -113,6 +115,12 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
         context.startActivity(intent);
     }
 
+    public static void show(Context context, long id){
+        Intent intent = new Intent(context, TweetDetailActivity.class);
+        intent.putExtra(BUNDLE_KEY_TWEET_ID, id);
+        context.startActivity(intent);
+    }
+
     @Override
     protected int getContentView() {
         return R.layout.fragment_tweet_detail;
@@ -121,7 +129,8 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
     @Override
     protected boolean initBundle(Bundle bundle) {
         tweet = (Tweet) getIntent().getSerializableExtra(BUNDLE_KEY_TWEET);
-        if (tweet == null) {
+        tid = getIntent().getLongExtra(BUNDLE_KEY_TWEET_ID, 0);
+        if (tweet == null && tid == 0) {
             Toast.makeText(this, "对象没找到", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -164,31 +173,34 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
             }
         };
 
-        OSChinaApi.getTweetDetail(tweet.getId(), new TextHttpResponseHandler() {
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Toast.makeText(TweetDetailActivity.this, "获取数据失败", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                ResultBean<Tweet> result = AppContext.createGson().fromJson(
-                        responseString, new TypeToken<ResultBean<Tweet>>(){}.getType());
-                if (result.isSuccess()){
-                    if (result.getResult() == null){
-                        AppContext.showToast(R.string.tweet_detail_data_null);
-                        finish();
-                        return;
-                    }
-                    tweet = result.getResult();
-                    mAgencyViewImp.resetCmnCount(tweet.getCommentCount());
-                    mAgencyViewImp.resetLikeCount(tweet.getLikeCount());
-                    fillDetailView();
-                }else{
-                    onFailure(500, headers, "妈的智障", null);
+        if (tweet == null && tid != 0){
+            OSChinaApi.getTweetDetail(tid, new TextHttpResponseHandler() {
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    Toast.makeText(TweetDetailActivity.this, "获取数据失败", Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                    ResultBean<Tweet> result = AppContext.createGson().fromJson(
+                            responseString, new TypeToken<ResultBean<Tweet>>(){}.getType());
+                    if (result.isSuccess()){
+                        if (result.getResult() == null){
+                            AppContext.showToast(R.string.tweet_detail_data_null);
+                            finish();
+                            return;
+                        }
+                        tweet = result.getResult();
+                        mAgencyViewImp.resetCmnCount(tweet.getCommentCount());
+                        mAgencyViewImp.resetLikeCount(tweet.getLikeCount());
+                        fillDetailView();
+                    }else{
+                        onFailure(500, headers, "妈的智障", null);
+                    }
+                }
+            });
+        }
+
     }
 
     protected void initWidget() {
@@ -307,21 +319,8 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
             final View.OnClickListener l = new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-//                    String mImageUrl = (String) v.getTag();
-                    String mImageUrl = "http://static.oschina.net/uploads/img/201607/17070619_o9t1.png";
-//                    OSCPhotosActivity.showImagePreview(TweetDetailActivity.this, mImageUrl);
-                    List<String> list = Arrays.asList(mImageUrl);
-                    ImageGalleryActivity.showActivity(TweetDetailActivity.this,ImageConfig.Build().selectedImages(list).loaderListener(new ImageLoaderListener() {
-                        @Override
-                        public void displayImage(ImageView iv, String path) {
-                            getImageLoader()
-                                    .load("http://static.oschina.net/uploads/img/201607/17070619_o9t1.png")
-                                    .asBitmap()
-                                    .placeholder(R.drawable.ic_default_image)
-                                    .error(R.drawable.ic_default_image)
-                                    .into(iv);
-                        }
-                    }),0);
+                    String mImageUrl = (String) v.getTag();
+                    OSCPhotosActivity.showImagePreview(TweetDetailActivity.this, mImageUrl);
                 }
             };
             for (int i = 0; i < tweet.getImages().length; i++){
@@ -334,7 +333,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
                 mImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 mLayoutGrid.addView(mImage);
                 getImageLoader()
-                        .load("http://static.oschina.net/uploads/img/201607/17070619_o9t1.png")
+                        .load(tweet.getImages()[i].getThumb())
                         .asBitmap()
                         .placeholder(R.drawable.ic_default_image)
                         .error(R.drawable.ic_default_image)
