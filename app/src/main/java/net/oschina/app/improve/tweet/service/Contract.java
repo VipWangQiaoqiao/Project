@@ -16,6 +16,8 @@ interface Contract {
         void notifyMsg(int notifyId, String modelId, boolean haveReDo, boolean haveDelete, int resId, Object... values);
 
         void notifyCancel(int notifyId);
+
+        void updateModelCache(String id, TweetPublishModel model);
     }
 
     interface IOperator extends Runnable {

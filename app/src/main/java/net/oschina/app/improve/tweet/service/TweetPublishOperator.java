@@ -64,7 +64,11 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
             if (model.getCacheImages() == null) {
                 notifyMsg(R.string.tweet_image_wait);
                 final String cacheDir = service.getCachePath(model.getId());
+                // change the model
                 model.setCacheImages(saveImageToCache(cacheDir, model.getSrcImages()));
+                // update to cache file
+                service.updateModelCache(model.getId(), model);
+
                 if (model.getCacheImages() == null) {
                     notifyMsg(R.string.tweet_image_wait_failed);
                     publish();
@@ -81,8 +85,9 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
 
                         @Override
                         public void onUploadImage(int index, String token) {
-                            model.setCacheImagesIndex(index);
-                            model.setCacheImagesToken(token);
+                            model.setCacheImagesInfo(index, token);
+                            // update to cache file
+                            service.updateModelCache(model.getId(), model);
                         }
                     });
         }
@@ -228,12 +233,15 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
     private void setSuccess() {
         notifyMsg(R.string.tweet_publish_success);
         try {
-            Thread.sleep(2000);
+            Thread.sleep(1600);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         Contract.IService service = this.service;
         if (service != null) {
+            // clear the cache
+            service.updateModelCache(model.getId(), null);
+            // hide the notify
             service.notifyCancel(notificationId);
         }
         stop();

@@ -56,15 +56,8 @@ class TweetPublishModel implements Serializable {
         this.srcImages = null;
     }
 
-    public void setCacheImagesToken(String cacheImagesToken) {
+    public void setCacheImagesInfo(int cacheImagesIndex, String cacheImagesToken) {
         this.cacheImagesToken = cacheImagesToken;
-    }
-
-    public void setCacheImagesIndex(int cacheImagesIndex) {
         this.cacheImagesIndex = cacheImagesIndex;
-    }
-
-    public void remove() {
-
     }
 }

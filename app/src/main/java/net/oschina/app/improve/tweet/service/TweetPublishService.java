@@ -148,6 +148,7 @@ public class TweetPublishService extends Service implements Contract.IService {
      */
     private void handleActionPublish(String content, String[] images, int startId) {
         TweetPublishModel model = new TweetPublishModel(content, images);
+        TweetPublishCache.save(getApplicationContext(), model.getId(), model);
         Contract.IOperator operator = new TweetPublishOperator(model, this, startId);
         operator.run();
     }
@@ -165,7 +166,7 @@ public class TweetPublishService extends Service implements Contract.IService {
             // 正在运行, 不做操作
             return true;
         }
-        TweetPublishModel model = TweetPublishCache.get(id);
+        TweetPublishModel model = TweetPublishCache.get(getApplicationContext(), id);
         if (model != null) {
             operator = new TweetPublishOperator(model, this, startId);
             operator.run();
@@ -186,18 +187,20 @@ public class TweetPublishService extends Service implements Contract.IService {
         Contract.IOperator operator = mTasks.get(id);
         if (operator != null)
             operator.stop();
-        TweetPublishCache.remove(id);
+        TweetPublishCache.remove(getApplicationContext(), id);
         return true;
     }
 
     @Override
     public String getCachePath(String id) {
-        return String.format("%s/Pictures/%s", getCacheDir().getAbsolutePath(), id);
+        return TweetPublishCache.getImageCachePath(getApplicationContext(), id);
     }
 
     @Override
-    public void start(String modelId, Contract.IOperator operator) {
-        mTasks.put(modelId, operator);
+    public void start(String id, Contract.IOperator operator) {
+        if (!mTasks.containsKey(id)) {
+            mTasks.put(id, operator);
+        }
     }
 
     @Override
@@ -207,6 +210,14 @@ public class TweetPublishService extends Service implements Contract.IService {
         }
         // stop self
         stopSelf(startId);
+    }
+
+    @Override
+    public void updateModelCache(String id, TweetPublishModel model) {
+        if (model == null)
+            TweetPublishCache.remove(getApplicationContext(), id);
+        else
+            TweetPublishCache.save(getApplicationContext(), id, model);
     }
 
     @Override
