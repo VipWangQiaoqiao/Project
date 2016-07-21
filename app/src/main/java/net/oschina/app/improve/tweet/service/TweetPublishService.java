@@ -1,12 +1,14 @@
 package net.oschina.app.improve.tweet.service;
 
-import android.app.IntentService;
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Handler;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.util.ArrayMap;
@@ -36,7 +38,7 @@ import cz.msebera.android.httpclient.Header;
  * 动弹发布服务
  * 专用于动弹发布
  */
-public class TweetPublishService extends IntentService {
+public class TweetPublishService extends Service {
     private final static String TAG = TweetPublishService.class.getName();
     // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     private static final String ACTION_PUBLISH = "net.oschina.app.improve.tweet.service.action.PUBLISH";
@@ -50,8 +52,35 @@ public class TweetPublishService extends IntentService {
     private static Map<Integer, Operator> mTasks = new ArrayMap<>();
     private static int mIndex = 1;
 
+    private int id = 0;
+
     public TweetPublishService() {
-        super("TweetPublishService");
+        super();
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        log("TweetPublishService onCreate");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        log("TweetPublishService onDestroy");
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        log("TweetPublishService onStartCommand");
+        onHandleIntent(intent);
+        return super.onStartCommand(intent, flags, startId);
     }
 
     /**
@@ -69,8 +98,9 @@ public class TweetPublishService extends IntentService {
         context.startService(intent);
     }
 
-    @Override
     protected void onHandleIntent(Intent intent) {
+        id++;
+        log("id:" + id);
         if (intent != null) {
             final String action = intent.getAction();
 
@@ -113,6 +143,7 @@ public class TweetPublishService extends IntentService {
     }
 
     private void handleActionDelete(int id) {
+        stopSelf();
         if (mTasks.containsKey(id)) {
             mTasks.remove(id);
         }
