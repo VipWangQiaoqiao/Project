@@ -1,44 +1,33 @@
 package net.oschina.app.improve.tweet.service;
 
-import android.app.IntentService;
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.IBinder;
+import android.os.Looper;
+import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.util.ArrayMap;
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import net.oschina.app.R;
-import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.bean.resource.ImageResource;
 
-import org.kymjs.kjframe.bitmap.BitmapCreate;
-import org.kymjs.kjframe.utils.FileUtils;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import cz.msebera.android.httpclient.Header;
 
 /**
  * 动弹发布服务
  * 专用于动弹发布
  */
-public class TweetPublishService extends IntentService {
+public class TweetPublishService extends Service implements Contract.IService {
     private final static String TAG = TweetPublishService.class.getName();
-    // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
+
     private static final String ACTION_PUBLISH = "net.oschina.app.improve.tweet.service.action.PUBLISH";
     private static final String ACTION_CONTINUE = "net.oschina.app.improve.tweet.service.action.CONTINUE";
     private static final String ACTION_DELETE = "net.oschina.app.improve.tweet.service.action.DELETE";
@@ -47,11 +36,64 @@ public class TweetPublishService extends IntentService {
     private static final String EXTRA_IMAGES = "net.oschina.app.improve.tweet.service.extra.IMAGES";
     private static final String EXTRA_ID = "net.oschina.app.improve.tweet.service.extra.ID";
 
-    private static Map<Integer, Operator> mTasks = new ArrayMap<>();
-    private static int mIndex = 1;
+    private volatile Looper mServiceLooper;
+    private volatile ServiceHandler mServiceHandler;
+    private Map<String, Contract.IOperator> mTasks = new ArrayMap<>();
+
+    private final class ServiceHandler extends Handler {
+        ServiceHandler(Looper looper) {
+            super(looper);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            onHandleIntent((Intent) msg.obj, msg.arg1);
+        }
+    }
 
     public TweetPublishService() {
-        super("TweetPublishService");
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        HandlerThread thread = new HandlerThread(TweetPublishService.class.getSimpleName());
+        thread.start();
+
+        mServiceLooper = thread.getLooper();
+        mServiceHandler = new ServiceHandler(mServiceLooper);
+        log("onCreate");
+    }
+
+    /**
+     * You should not override this method for your IntentService. Instead,
+     * override {@link #onHandleIntent}, which the system calls when the IntentService
+     * receives a start request.
+     *
+     * @see android.app.Service#onStartCommand
+     */
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Message msg = mServiceHandler.obtainMessage();
+        msg.arg1 = startId;
+        msg.obj = intent;
+        mServiceHandler.sendMessage(msg);
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mServiceLooper.quit();
+        log("onDestroy");
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     /**
@@ -69,8 +111,13 @@ public class TweetPublishService extends IntentService {
         context.startService(intent);
     }
 
-    @Override
-    protected void onHandleIntent(Intent intent) {
+    /**
+     * 在线程中处理请求数据
+     *
+     * @param intent  请求的数据
+     * @param startId 启动服务的Id
+     */
+    private void onHandleIntent(Intent intent, int startId) {
         if (intent != null) {
             final String action = intent.getAction();
 
@@ -79,17 +126,19 @@ public class TweetPublishService extends IntentService {
             if (ACTION_PUBLISH.equals(action)) {
                 final String content = intent.getStringExtra(EXTRA_CONTENT);
                 final String[] images = intent.getStringArrayExtra(EXTRA_IMAGES);
-                handleActionPublish(content, images);
-            } else if (ACTION_CONTINUE.equals(action)) {
-                final int id = intent.getIntExtra(EXTRA_ID, 0);
-                if (id == 0)
-                    return;
-                handleActionContinue(id);
-            } else if (ACTION_DELETE.equals(action)) {
-                final int id = intent.getIntExtra(EXTRA_ID, 0);
-                if (id == 0)
-                    return;
-                handleActionDelete(id);
+                handleActionPublish(content, images, startId);
+            } else {
+                if (ACTION_CONTINUE.equals(action)) {
+                    final String id = intent.getStringExtra(EXTRA_ID);
+                    if (id == null || handleActionContinue(id, startId)) {
+                        stopSelf(startId);
+                    }
+                } else if (ACTION_DELETE.equals(action)) {
+                    final String id = intent.getStringExtra(EXTRA_ID);
+                    if (id == null || handleActionDelete(id, startId)) {
+                        stopSelf(startId);
+                    }
+                }
             }
         }
     }
@@ -97,272 +146,111 @@ public class TweetPublishService extends IntentService {
     /**
      * 发布动弹,在后台服务中进行
      */
-    private void handleActionPublish(String content, String[] images) {
-        Operator operator = new Operator(content, images);
-        operator.notifyMsg(getString(R.string.tweet_publishing));
+    private void handleActionPublish(String content, String[] images, int startId) {
+        TweetPublishModel model = new TweetPublishModel(content, images);
+        Contract.IOperator operator = new TweetPublishOperator(model, this, startId);
         operator.run();
     }
 
-    private void handleActionContinue(int id) {
-        Operator operator = mTasks.get(id);
-        log("id:" + id + " " + (operator != null));
+    /**
+     * 继续发送动弹
+     *
+     * @param id      动弹Id
+     * @param startId 服务Id
+     * @return 返回是否销毁当前服务
+     */
+    private boolean handleActionContinue(String id, int startId) {
+        Contract.IOperator operator = mTasks.get(id);
         if (operator != null) {
-            operator.notifyMsg(getString(R.string.tweet_publish_continue));
+            // 正在运行, 不做操作
+            return true;
+        }
+        TweetPublishModel model = TweetPublishCache.get(id);
+        if (model != null) {
+            operator = new TweetPublishOperator(model, this, startId);
             operator.run();
+            return false;
         }
-    }
-
-    private void handleActionDelete(int id) {
-        if (mTasks.containsKey(id)) {
-            mTasks.remove(id);
-        }
-    }
-
-    private int addTask(Operator operator) {
-        mTasks.put(mIndex, operator);
-        return mIndex++;
-    }
-
-    interface UploadImageCallback {
-        void onUploadImageDone();
+        return true;
     }
 
     /**
-     * 发布动弹执行者
+     * 移除动弹
+     * 该动弹的缓存将进行清空
+     *
+     * @param id      动弹Id
+     * @param startId 服务Id
+     * @return 返回是否销毁当前服务
      */
-    private class Operator implements Runnable {
-        private final int id;
-        private final String content;
+    private boolean handleActionDelete(String id, int startId) {
+        Contract.IOperator operator = mTasks.get(id);
+        if (operator != null)
+            operator.stop();
+        TweetPublishCache.remove(id);
+        return true;
+    }
 
-        private String[] images;
-        private String[] cacheImages;
-        private int uploadImagesIndex;
-        private String uploadImagesToken;
+    @Override
+    public String getCachePath(String id) {
+        return String.format("%s/Pictures/%s", getCacheDir().getAbsolutePath(), id);
+    }
 
-        private boolean running;
-        private boolean done;
+    @Override
+    public void start(String modelId, Contract.IOperator operator) {
+        mTasks.put(modelId, operator);
+    }
 
-        Operator(String content, String[] images) {
-            this.content = content;
-            this.images = images;
-
-            id = addTask(this);
-        }
-
-        /**
-         * 执行动弹发布操作
-         */
-        @Override
-        public void run() {
-            if (done) {
-                mTasks.remove(id);
-                return;
-            }
-
-            if (running)
-                return;
-
-            running = true;
-
-            log(mTasks.size() + " " + id);
-
-            if (images == null) {
-                // 当没有图片的时候,直接进行发布动弹
-                publish();
-            } else {
-                if (cacheImages == null) {
-                    notifyMsg("准备图片中...");
-                    cacheImages = saveImageToCache(images);
-                    if (cacheImages == null) {
-                        images = null;
-                        notifyMsg("图片转存失败!");
-                        publish();
-                        return;
-                    }
-                }
-                uploadImages(uploadImagesIndex, uploadImagesToken, cacheImages, new UploadImageCallback() {
-                    @Override
-                    public void onUploadImageDone() {
-                        publish();
-                    }
-                });
-            }
-        }
-
-        /**
-         * 上传图片
-         *
-         * @param index    上次图片的坐标
-         * @param token    上传Token
-         * @param paths    上传的路径数组
-         * @param runnable 完全上传完成时回调
-         */
-        private void uploadImages(final int index, final String token, final String[] paths, final UploadImageCallback runnable) {
-            this.uploadImagesIndex = index;
-            this.uploadImagesToken = token;
-
-            if (index < 0 || index >= paths.length) {
-                runnable.onUploadImageDone();
-                return;
-            }
-
-            String path = paths[index];
-            OSChinaApi.uploadImage(token, path, new LopperResponseHandler() {
-
-                @Override
-                public void onStart() {
-                    super.onStart();
-                    notifyMsg(String.format("发送图片中...(%s/%s)", (index + 1), +paths.length));
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    running = false;
-                    notifyMsg(String.format("发送图片失败(%s/%s)", (index + 1), +paths.length));
-                }
-
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                    Type type = new TypeToken<ResultBean<ImageResource>>() {
-                    }.getType();
-                    ResultBean<ImageResource> resultBean = new Gson().fromJson(responseString, type);
-                    if (resultBean.isSuccess()) {
-                        String token = resultBean.getResult().getToken();
-                        uploadImages(index + 1, token, paths, runnable);
-                    } else {
-                        running = false;
-                        notifyMsg("发送图片失败; " + resultBean.getMessage());
-                    }
-                }
-            });
-
-        }
-
-        private String getCachePath() {
-            return String.format("%s/Pictures/%s", getCacheDir().getAbsolutePath(), id);
-        }
-
-        /**
-         * 保存文件到缓存中
-         *
-         * @param paths 原始路径
-         * @return 返回存储后的路径
-         */
-        private String[] saveImageToCache(String[] paths) {
-            List<String> ret = new ArrayList<>();
-            final String cachePath = getCachePath();
-            for (String path : paths) {
-                try {
-                    Bitmap bitmap = BitmapCreate.bitmapFromStream(
-                            new FileInputStream(path), 256, 256);
-                    String tempFile = String.format("%s/IMG_%s.png", cachePath, System.currentTimeMillis());
-                    FileUtils.bitmapToFile(bitmap, tempFile);
-                    bitmap.recycle();
-                    ret.add(tempFile);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (ret.size() > 0) {
-                String[] images = new String[ret.size()];
-                ret.toArray(images);
-                return images;
-            }
-            return null;
-        }
-
-        private void setDone() {
-            done = true;
+    @Override
+    public void stop(String id, int startId) {
+        if (mTasks.containsKey(id)) {
             mTasks.remove(id);
+        }
+        // stop self
+        stopSelf(startId);
+    }
 
+    @Override
+    public void notifyMsg(int notifyId, String modelId, boolean haveReDo, boolean haveDelete, int resId, Object... values) {
+        PendingIntent contentIntent = null;
+        if (haveReDo) {
+            Intent intent = new Intent(this, TweetPublishService.class);
+            intent.setAction(ACTION_CONTINUE);
+            intent.putExtra(EXTRA_ID, modelId);
+            contentIntent = PendingIntent.getService(getApplicationContext(), notifyId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
-        /**
-         * 发布动弹
-         */
-        private void publish() {
-            OSChinaApi.pubTweet(content, uploadImagesToken, null, new LopperResponseHandler() {
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    notifyMsg("发送失败; 点击重新发送.");
-                }
-
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                    Type type = new TypeToken<ResultBean>() {
-                    }.getType();
-                    ResultBean resultBean = new Gson().fromJson(responseString, type);
-                    if (resultBean.isSuccess()) {
-                        setDone();
-                        notifyMsgAndCancel("发送动弹成功~");
-                    } else {
-                        notifyMsg("发送失败; 点击重新发送.");
-                    }
-                }
-
-                @Override
-                public void onFinish() {
-                    super.onFinish();
-                    running = false;
-                }
-            });
+        PendingIntent deleteIntent = null;
+        if (haveDelete) {
+            Intent intent = new Intent(this, TweetPublishService.class);
+            intent.setAction(ACTION_DELETE);
+            intent.putExtra(EXTRA_ID, modelId);
+            deleteIntent = PendingIntent.getService(getApplicationContext(), notifyId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
-        /**
-         * 执行通知操作
-         *
-         * @param msg 通知信息
-         */
-        private void notifyMsg(String msg) {
-            log(msg);
-            notifySimpleNotification(id,
-                    getString(R.string.tweet_public),
-                    msg, msg, true, true);
-        }
+        String content = getString(resId, values);
 
-        private void notifyMsgAndCancel(String msg) {
-            notifyMsg(msg);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    cancelNotification(id);
-                }
-            }, 2800);
-        }
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(
+                this)
+                .setTicker(content)
+                .setContentTitle(getString(R.string.tweet_publish_title))
+                .setContentText(content)
+                .setAutoCancel(haveDelete)
+                .setOngoing(!haveReDo)
+                .setContentIntent(contentIntent)
+                .setDeleteIntent(deleteIntent)
+                .setSmallIcon(R.drawable.ic_notification);
+        Notification notification = builder.build();
+        NotificationManagerCompat.from(this).notify(notifyId, notification);
+
+        log(content);
+    }
+
+    @Override
+    public void notifyCancel(int notifyId) {
+        NotificationManagerCompat.from(this).cancel(notifyId);
     }
 
     private static void log(String str) {
         Log.e(TAG, str);
-    }
-
-    private void notifySimpleNotification(int id, String title, String ticker,
-                                          String content, boolean ongoing, boolean autoCancel) {
-        Intent serverIntent = new Intent(this, TweetPublishService.class);
-        serverIntent.setAction(ACTION_CONTINUE);
-        serverIntent.putExtra(EXTRA_ID, id);
-        PendingIntent contentIntent = PendingIntent.getService(getApplicationContext(), id, serverIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        serverIntent = new Intent(this, TweetPublishService.class);
-        serverIntent.setAction(ACTION_DELETE);
-        serverIntent.putExtra(EXTRA_ID, id);
-        PendingIntent deleteIntent = PendingIntent.getService(getApplicationContext(), id, serverIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(
-                this)
-                .setTicker(ticker)
-                .setContentTitle(title)
-                .setContentText(content)
-                .setAutoCancel(autoCancel)
-                .setOngoing(false)
-                .setContentIntent(contentIntent)
-                .setDeleteIntent(deleteIntent)
-                .setSmallIcon(R.drawable.ic_notification);
-
-        Notification notification = builder.build();
-        NotificationManagerCompat.from(this).notify(id, notification);
-    }
-
-    private void cancelNotification(int id) {
-        NotificationManagerCompat.from(this).cancel(id);
     }
 }

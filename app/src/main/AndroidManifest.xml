@@ -385,7 +385,8 @@
 
         <service
             android:name=".improve.tweet.service.TweetPublishService"
-            android:exported="false" />
+            android:exported="false"
+            android:process="net.oschina.app.tweet.TweetPublishService" />
     </application>
 
 </manifest>
