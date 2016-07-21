@@ -30,9 +30,6 @@ import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
 import net.oschina.app.improve.comment.CommentsUtil;
-import net.oschina.app.improve.media.ImageGalleryActivity;
-import net.oschina.app.improve.media.config.ImageConfig;
-import net.oschina.app.improve.media.config.ImageLoaderListener;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
 import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.util.DialogHelp;
@@ -43,9 +40,6 @@ import net.oschina.app.util.UIHelper;
 import net.oschina.app.viewpagerfragment.TweetDetailViewPagerFragment;
 import net.oschina.app.widget.CircleImageView;
 import net.oschina.app.widget.RecordButtonUtil;
-
-import java.util.Arrays;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
