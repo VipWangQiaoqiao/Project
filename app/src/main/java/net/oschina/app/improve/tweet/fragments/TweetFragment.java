@@ -10,14 +10,18 @@ import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
+import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.bean.User;
 import net.oschina.app.improve.base.adapter.BaseListAdapter;
 import net.oschina.app.improve.base.fragments.BaseGeneralListFragment;
 import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.tweet.adapter.TweetAdapter;
+import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 
 import java.lang.reflect.Type;
 
@@ -75,16 +79,15 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
         TweetAdapter.OnTweetLikeClickListener listener = ((TweetAdapter) mAdapter).new OnTweetLikeClickListener() {
             @Override
             public void onClick(View v, int position) {
-                Toast.makeText(getActivity(),"aaa",Toast.LENGTH_LONG).show();
                 OSChinaApi.reverseTweetLike(mAdapter.getItem(position).getId(), new TextHttpResponseHandler() {
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                        Log.e("res", responseString);
+                        Log.e("onFailure", responseString);
                     }
 
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                        Log.e("res", responseString);
+                        Log.e("onSuccess", responseString);
                     }
                 });
             }

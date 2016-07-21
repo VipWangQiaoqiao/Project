@@ -10,6 +10,7 @@ import android.widget.PopupWindow;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.media.adapter.ImageFolderAdapter;
+import net.oschina.app.improve.media.config.CommonUtil;
 
 /**
  * Created by huanghaibin_dev
@@ -24,6 +25,7 @@ public class ImageFolderPopupWindow extends PopupWindow {
         super(LayoutInflater.from(context).inflate(R.layout.popup_window_folder, null), ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         rv_folder = (RecyclerView) getContentView().findViewById(R.id.rv_popup_folder);
         rv_folder.setLayoutManager(new LinearLayoutManager(context));
+        setHeight(CommonUtil.dipTopx(context, 400.0f));
         setOutsideTouchable(true);
         setFocusable(true);
     }

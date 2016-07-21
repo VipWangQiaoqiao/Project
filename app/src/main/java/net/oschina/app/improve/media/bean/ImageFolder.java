@@ -7,10 +7,10 @@ import java.util.ArrayList;
  * Created by huanghaibin_dev
  * on 2016/7/11.
  */
-
 public class ImageFolder implements Serializable {
     private String name;
     private String path;
+    private String albumPath;
     private ArrayList<Image> images;
 
     public String getName() {
@@ -35,6 +35,14 @@ public class ImageFolder implements Serializable {
 
     public void setImages(ArrayList<Image> images) {
         this.images = images;
+    }
+
+    public String getAlbumPath() {
+        return albumPath;
+    }
+
+    public void setAlbumPath(String albumPath) {
+        this.albumPath = albumPath;
     }
 
     @Override
