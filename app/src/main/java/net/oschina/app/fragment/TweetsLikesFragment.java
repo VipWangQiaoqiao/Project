@@ -101,8 +101,7 @@ public class TweetsLikesFragment extends BaseListFragment<TweetLike> {
         TweetLike tweetLike = mAdapter.getItem(position);
         if (tweetLike != null) {
             Tweet tweet = tweetLike.getTweet();
-//            UIHelper.showTweetDetail(view.getContext(), null, tweet.getId());
-            TweetDetailActivity.show(getActivity(), tweet);
+            UIHelper.showTweetDetail(view.getContext(), null, tweet.getId());
         }
     }
 
