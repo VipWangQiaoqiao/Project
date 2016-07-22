@@ -1,6 +1,6 @@
 package net.oschina.app.improve.tweet.service;
 
-import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -10,11 +10,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.resource.ImageResource;
 
-import org.kymjs.kjframe.bitmap.BitmapCreate;
-import org.kymjs.kjframe.utils.FileUtils;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -146,35 +142,6 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
         });
     }
 
-    /**
-     * 保存文件到缓存中
-     *
-     * @param cacheDir 缓存文件夹
-     * @param paths    原始路径
-     * @return 转存后的路径
-     */
-    private String[] saveImageToCache(String cacheDir, String[] paths) {
-        List<String> ret = new ArrayList<>();
-        for (String path : paths) {
-            try {
-                Bitmap bitmap = BitmapCreate.bitmapFromStream(
-                        new FileInputStream(path), 256, 256);
-                String tempFile = String.format("%s/IMG_%s.png", cacheDir, System.currentTimeMillis());
-                FileUtils.bitmapToFile(bitmap, tempFile);
-                bitmap.recycle();
-                ret.add(tempFile);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-        if (ret.size() > 0) {
-            String[] images = new String[ret.size()];
-            ret.toArray(images);
-            return images;
-        }
-        return null;
-    }
-
     @Override
     public void stop() {
         final Contract.IService service = this.service;
@@ -251,4 +218,41 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
         notifyMsg(true, resId, values);
         stop();
     }
+
+
+    /**
+     * 保存文件到缓存中
+     *
+     * @param cacheDir 缓存文件夹
+     * @param paths    原始路径
+     * @return 转存后的路径
+     */
+    private static String[] saveImageToCache(String cacheDir, String[] paths) {
+        List<String> ret = new ArrayList<>();
+        for (String path : paths) {
+            String tempFile = String.format("%s/IMG_%s.png", cacheDir, System.currentTimeMillis());
+            try {
+                if (doImage(path, tempFile))
+                    ret.add(tempFile);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (ret.size() > 0) {
+            String[] images = new String[ret.size()];
+            ret.toArray(images);
+            return images;
+        }
+        return null;
+    }
+
+    private static boolean doImage(String srcPath, String targetPath) {
+        if (TweetPublishCache.compressImage(srcPath, targetPath, 512 * 1024, 35, 1080, 1080 * 3)) {
+            Log.e("OPERATOR", "doImage " + new File(targetPath).length());
+            return true;
+        }
+        return false;
+    }
+
+
 }
