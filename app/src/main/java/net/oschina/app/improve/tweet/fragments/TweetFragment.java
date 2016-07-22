@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -29,6 +30,8 @@ import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
+
+import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 
@@ -108,7 +111,7 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                handleLongClick(mAdapter.getItem(position));
+                handleLongClick(mAdapter.getItem(position), position);
                 return true;
             }
         });
@@ -164,7 +167,7 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
         }
     }
 
-    private void handleLongClick(final Tweet tweet) {
+    private void handleLongClick(final Tweet tweet, final int position) {
         String[] items;
         if (AppContext.getInstance().getLoginUid() == (int) tweet.getAuthor().getId()) {
             items = new String[]{getString(R.string.copy),
@@ -183,6 +186,13 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
                         break;
                     case 1:
                         // TODO: 2016/7/21 删除动弹
+                        DialogHelp.getConfirmDialog(getActivity(), "是否删除该动弹?", new DialogInterface
+                                .OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                OSChinaApi.deleteTweet(tweet.getId(), new DeleteHandler(position));
+                            }
+                        }).show();
                         break;
                 }
             }
@@ -214,5 +224,34 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
             getActivity().unregisterReceiver(mReceiver);
         }
         super.onDestroy();
+    }
+
+    private class DeleteHandler extends TextHttpResponseHandler {
+        private int position;
+
+        public DeleteHandler(int position) {
+            this.position = position;
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+
+        }
+
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, String responseString) {
+            try {
+                JSONObject jsonObject = new JSONObject(responseString);
+                if (jsonObject.optInt("code") == 1) {
+                    mAdapter.removeItem(position);
+                    mAdapter.notifyDataSetChanged();
+                    Toast.makeText(getActivity(), "删除成功", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), jsonObject.optString("message"), Toast.LENGTH_SHORT).show();
+                }
+            } catch (Exception e) {
+
+            }
+        }
     }
 }

@@ -515,9 +515,11 @@ public class UIHelper {
         }
 
         if (url.contains("city.oschina.net/")) {
-            if (id == 0)
-                id = StringUtils.toInt(url.substring(url.lastIndexOf('/') + 1));
-            UIHelper.showEventDetail(context, id);
+            long nid = StringUtils.toInt(url.substring(url.lastIndexOf('/') + 1));
+            if (nid == 0) {
+                nid = id;
+            }
+            UIHelper.showEventDetail(context, nid);
             return;
         }
 
