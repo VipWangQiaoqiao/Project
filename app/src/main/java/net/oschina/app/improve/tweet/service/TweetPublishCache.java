@@ -20,6 +20,8 @@ import java.util.Map;
  */
 @SuppressWarnings("WeakerAccess")
 public class TweetPublishCache {
+    private final static String TAG = TweetPublishCache.class.getName();
+
     private TweetPublishCache() {
 
     }
@@ -42,7 +44,7 @@ public class TweetPublishCache {
     }
 
     static void removeImages(Context context, String id) {
-        String dir = String.format("%s/TweetPictures/%s", context.getCacheDir().getAbsolutePath(), id);
+        String dir = getImageCachePath(context, id);
         File file = new File(dir);
         if (file.exists() && file.isDirectory()) {
             deleteDir(file);
@@ -65,7 +67,7 @@ public class TweetPublishCache {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public static boolean save(Context context, String id, TweetPublishModel model) {
         final String path = getFileCachePath(context, id);
-        Log.e("TweetPublishCache", "save:" + path);
+        log("save", path);
         FileOutputStream fos = null;
         ObjectOutputStream oos = null;
         try {
@@ -87,13 +89,11 @@ public class TweetPublishCache {
     }
 
     public static TweetPublishModel get(Context context, String id) {
-        Log.e("TweetPublishCache", "get:" + id);
-
         if (!have(context, id))
             return null;
 
         final String path = getFileCachePath(context, id);
-        Log.e("TweetPublishCache", "get:" + path);
+        log("get", path);
         FileInputStream fis = null;
         ObjectInputStream ois = null;
         try {
@@ -113,12 +113,11 @@ public class TweetPublishCache {
     }
 
     public static boolean remove(Context context, String id) {
-        Log.e("TweetPublishCache", "remove:" + id);
-
         // To clear the images cache
         removeImages(context, id);
 
         File data = new File(getFileCachePath(context, id));
+        log("remove", data.getAbsolutePath());
         return !data.exists() || data.delete();
     }
 
@@ -131,7 +130,7 @@ public class TweetPublishCache {
                 deleteDir(new File(dir, c));
             }
         }
-        Log.e("TweetPublishCache", "deleteDir:" + dir.getAbsolutePath());
+        log("delete", dir.getAbsolutePath());
         dir.delete();
     }
 
@@ -147,5 +146,9 @@ public class TweetPublishCache {
                 }
             }
         }
+    }
+
+    private static void log(String action, String msg) {
+        Log.e(TAG, String.format("%s:%s", action, msg));
     }
 }
