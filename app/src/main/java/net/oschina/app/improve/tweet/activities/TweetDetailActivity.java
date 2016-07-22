@@ -97,12 +97,6 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
     private KeyboardInputDelegation mDelegation;
     private View.OnClickListener onPortraitClickListener;
 
-    @Deprecated
-    public static void show(Context context, net.oschina.app.bean.Tweet tweet) {
-        // TODO 全部使用新接口后删除此方法
-        Toast.makeText(context, "请用新的接口", Toast.LENGTH_SHORT).show();
-    }
-
     public static void show(Context context, Tweet tweet){
         Intent intent = new Intent(context, TweetDetailActivity.class);
         intent.putExtra(BUNDLE_KEY_TWEET, tweet);
@@ -124,7 +118,10 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
     protected boolean initBundle(Bundle bundle) {
         tweet = (Tweet) getIntent().getSerializableExtra(BUNDLE_KEY_TWEET);
         tid = getIntent().getLongExtra(BUNDLE_KEY_TWEET_ID, 0);
-        if (tweet == null && tid == 0) {
+        if (tid != 0){
+            tweet = new Tweet();
+        }
+        if (tweet == null) {
             Toast.makeText(this, "对象没找到", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -185,7 +182,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
             }
         };
 
-        if (tweet == null && tid != 0){
+        if (tid != 0){
             OSChinaApi.getTweetDetail(tid, new TextHttpResponseHandler() {
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -251,9 +248,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
         mViewInput = mDelegation.getInputView();
 
         // TODO to select friends when input @ character
-
         resolveVoice();
-
         fillDetailView();
 
         TweetDetailViewPagerFragment mTweetDetailViewPagerFrag = TweetDetailViewPagerFragment.instantiate(this);
@@ -266,7 +261,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
     }
 
     private void resolveVoice() {
-        if (tweet.getAudio() == null || tweet.getAudio().length == 0) return;
+        if (tweet == null || tweet.getAudio() == null || tweet.getAudio().length == 0) return;
         mRecordLayout.setVisibility(View.VISIBLE);
         final AnimationDrawable drawable = (AnimationDrawable) mImgRecord.getBackground();
         mRecordLayout.setOnClickListener(new View.OnClickListener() {
@@ -306,7 +301,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
 
     private void fillDetailView() {
         // 有可能传入的tweet只有id这一个值
-        if (isDestroy())
+        if (tweet == null || isDestroy())
             return;
         if (tweet.getAuthor() != null){
             if (TextUtils.isEmpty(tweet.getAuthor().getPortrait())) {

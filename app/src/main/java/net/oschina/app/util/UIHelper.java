@@ -414,9 +414,7 @@ public class UIHelper {
                     showPostDetail(context, id, active.getCommentCount());
                     break;
                 case Active.CATALOG_TWEET:
-                    Tweet tweet = new Tweet();
-                    tweet.setId(id);
-                    TweetDetailActivity.show(context, tweet);
+                    TweetDetailActivity.show(context, id);
 //                    showTweetDetail(context, null, id);
                     break;
                 case Active.CATALOG_BLOG:

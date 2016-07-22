@@ -17,6 +17,7 @@ import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetsList;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.service.ServerTaskUtils;
+import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
 import java.io.InputStream;
@@ -99,8 +100,7 @@ public class SoftWareTweetsFrament extends BaseListFragment<Tweet> implements
         if (tweet == null) {
             return;
         }
-//        UIHelper.showTweetDetail(parent.getContext(), tweet, tweet.getId());
-        TweetDetailActivity.show(getActivity(),tweet);
+        UIHelper.showTweetDetail(parent.getContext(), tweet, tweet.getId());
     }
 
     private void handleComment(String text) {
