@@ -2,11 +2,15 @@ package net.oschina.app.improve.media;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -120,13 +124,36 @@ public class SelectImageActivity extends AppCompatActivity implements EasyPermis
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
-        if (mView != null) {
-            if (requestCode == RC_EXTERNAL_STORAGE) {
+        if (requestCode == RC_EXTERNAL_STORAGE) {
+            if (mView != null)
                 mView.onExternalStorageDenied();
-            } else {
+            getConfirmDialog(this, "没有权限, 你需要去设置中开启读取手机存储权限.", "去设置", "取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivity(new Intent(Settings.ACTION_APPLICATION_SETTINGS));
+                    finish();
+                }
+            }, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            }).show();
+        } else {
+            if (mView != null)
                 mView.onCameraPermissionDenied();
-            }
+            getConfirmDialog(this, "没有权限, 你需要去设置中开启相机权限.", "去设置", "取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivity(new Intent(Settings.ACTION_APPLICATION_SETTINGS));
+                }
+            }, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            }).show();
         }
+
     }
 
     private void handleView() {
@@ -147,5 +174,19 @@ public class SelectImageActivity extends AppCompatActivity implements EasyPermis
         mConfig = null;
         mView = null;
         super.onDestroy();
+    }
+
+    public static AlertDialog.Builder getConfirmDialog(Context context, String message, String
+            okString, String cancelString,
+                                                       DialogInterface.OnClickListener
+                                                               okClickListener,
+                                                       DialogInterface.OnClickListener
+                                                               cancelClickListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(message);
+        builder.setPositiveButton(okString, okClickListener);
+        builder.setNegativeButton(cancelString, cancelClickListener);
+        builder.setCancelable(false);
+        return builder;
     }
 }

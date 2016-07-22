@@ -95,6 +95,7 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
         if (mConfig == null) mConfig = ImageConfig.Build();
         mImageAdapter.setLoader(mConfig.getLoaderListener());
         mImageFolderAdapter.setLoader(mConfig.getLoaderListener());
+        mImageFolderAdapter.setMediaMode(mConfig.getMediaMode());
         rv_image.setAdapter(mImageAdapter);
     }
 
@@ -104,7 +105,6 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
             if (mConfig.getSelectedImage() != null && mConfig.getSelectedImage().size() != 0) {
                 for (String s : mConfig.getSelectedImage()) {
                     Image image = new Image();
-                    image.setExist(true);
                     image.setSelect(true);
                     image.setPath(s);
                     mSelectedImage.add(image);
@@ -348,7 +348,6 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
                         //如果是新拍的照片
                         if (mCamImageName != null && mCamImageName.toLowerCase().equals(image.getName().toLowerCase())) {
                             image.setSelect(true);
-                            image.setExist(true);
                             mSelectedImage.add(image);
                         }
 
@@ -357,7 +356,6 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
                             for (Image i : mSelectedImage) {
                                 if (i.getPath().equals(image.getPath())) {
                                     image.setSelect(true);
-                                    image.setExist(true);
                                 }
                             }
                         }
@@ -381,31 +379,32 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
 
 
                     } while (data.moveToNext());
+                }
+                mImageAdapter.resetItem(images);
+                defaultFolder.setImages(images);
+                if (mConfig.getMediaMode() == ImageConfig.MediaMode.HAVE_CAM_MODE) {
+                    defaultFolder.setAlbumPath(images.size() > 1 ? images.get(1).getPath() : null);
+                } else {
+                    defaultFolder.setAlbumPath(images.size() > 0 ? images.get(0).getPath() : null);
+                }
+                mImageFolderAdapter.resetItem(imageFolders);
 
-                    mImageAdapter.resetItem(images);
-                    defaultFolder.setImages(images);
-                    if (mConfig.getMediaMode() == ImageConfig.MediaMode.HAVE_CAM_MODE) {
-                        defaultFolder.setAlbumPath(images.size() > 1 ? images.get(1).getPath() : null);
-                    } else {
-                        defaultFolder.setAlbumPath(images.size() > 0 ? images.get(0).getPath() : null);
-                    }
-                    mImageFolderAdapter.resetItem(imageFolders);
-
+                //删除掉不存在的，在于用户选择了相片，又去相册删除
+                if (mSelectedImage.size() > 0) {
                     List<Image> rs = new ArrayList<>();
-                    if (mSelectedImage.size() > 0) {
-                        for (Image i : mSelectedImage) {
-                            if (!i.isExist()) {
-                                rs.add(i);
-                            }
+                    for (Image i : mSelectedImage) {
+                        File f = new File(i.getPath());
+                        if(!f.exists()){
+                            rs.add(i);
                         }
                     }
                     mSelectedImage.removeAll(rs);
+                }
 
-                    btn_preview.setText("预览(" + mSelectedImage.size() + ")");
 
-                    if (mConfig != null && mConfig.getSelectMode() == ImageConfig.SelectMode.SINGLE_MODE && mCamImageName != null) {
-                        handleResult();
-                    }
+                btn_preview.setText("预览(" + mSelectedImage.size() + ")");
+                if (mConfig != null && mConfig.getSelectMode() == ImageConfig.SelectMode.SINGLE_MODE && mCamImageName != null) {
+                    handleResult();
                 }
             }
         }

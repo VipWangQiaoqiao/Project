@@ -11,7 +11,6 @@ public class Image implements Serializable {
     private int id;
     private String path;
     private String thumbPath;
-    private boolean exist;
     private boolean isSelect;
     private String folderName;
     private String name;
@@ -39,14 +38,6 @@ public class Image implements Serializable {
 
     public void setThumbPath(String thumbPath) {
         this.thumbPath = thumbPath;
-    }
-
-    public boolean isExist() {
-        return exist;
-    }
-
-    public void setExist(boolean exist) {
-        this.exist = exist;
     }
 
     public boolean isSelect() {

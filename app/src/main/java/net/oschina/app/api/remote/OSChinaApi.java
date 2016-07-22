@@ -1600,4 +1600,16 @@ public class OSChinaApi {
         params.put("commentId", commentId);
         ApiHttpClient.get("action/apiv2/tweet_comment_delete", params, handler);
     }
+
+    /**
+     * 删除动弹评论
+     *
+     * @param sourceId  动弹id
+     * @param handler   回调
+     */
+    public static void deleteTweet(long sourceId, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("sourceId", sourceId);
+        ApiHttpClient.get("action/apiv2/tweet_delete", params, handler);
+    }
 }
