@@ -34,7 +34,7 @@
                     android:layout_marginTop="16dp"
                     android:contentDescription="@string/app_name"
                     android:scaleType="fitXY"
-                    android:src="@drawable/qr_scan_mask" />
+                    android:src="@mipmap/qr_scan_mask" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -131,7 +131,7 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/ic__calendar" />
+                    android:src="@mipmap/ic__calendar" />
 
                 <TextView
                     android:id="@+id/tv_event_pub_time"
@@ -161,7 +161,7 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/ic_ticket" />
+                    android:src="@mipmap/ic_ticket" />
 
                 <TextView
                     android:id="@+id/tv_event_cost_desc"
@@ -192,7 +192,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginRight="@dimen/lay_16"
-                    android:src="@drawable/ic_location" />
+                    android:src="@mipmap/ic_location" />
 
                 <TextView
                     android:id="@+id/tv_event_location"

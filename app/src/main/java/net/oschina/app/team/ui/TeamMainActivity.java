@@ -189,7 +189,7 @@ public class TeamMainActivity extends BaseActivity implements ActionBar.OnNaviga
             mErrorLayout.setErrorType(EmptyLayout.NODATA);
             String msg = getResources().getString(R.string.team_empty);
             mErrorLayout.setErrorMessage(msg);
-            mErrorLayout.setErrorImag(R.drawable.page_icon_empty);
+            mErrorLayout.setErrorImag(R.mipmap.page_icon_empty);
         } else {
             mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             container.setVisibility(View.VISIBLE);

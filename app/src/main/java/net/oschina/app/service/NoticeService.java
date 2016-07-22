@@ -199,7 +199,7 @@ public class NoticeService extends Service {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(
                 this).setTicker(contentTitle).setContentTitle(contentTitle)
                 .setContentText(contentText).setAutoCancel(true)
-                .setContentIntent(pi).setSmallIcon(R.drawable.ic_notification);
+                .setContentIntent(pi).setSmallIcon(R.mipmap.ic_notification);
 
         if (AppContext.get(AppConfig.KEY_NOTIFICATION_SOUND, true)) {
             builder.setSound(Uri.parse("android.resource://"

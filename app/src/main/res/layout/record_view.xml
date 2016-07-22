@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:contentDescription="@null"
-        android:src="@drawable/icon_record_play" />
+        android:src="@mipmap/icon_record_play" />
 
     <LinearLayout
         android:id="@+id/recordview_layout"
@@ -48,7 +48,7 @@
                 android:layout_toRightOf="@+id/recordview_text_flag"
                 android:contentDescription="@null"
                 android:scaleType="fitXY"
-                android:src="@drawable/audio0" />
+                android:src="@mipmap/audio0" />
         </RelativeLayout>
     </LinearLayout>
 
@@ -69,7 +69,7 @@
         android:layout_marginLeft="50dp"
         android:layout_toRightOf="@+id/recordview_start"
         android:contentDescription="@null"
-        android:src="@drawable/icon_record_delete" />
+        android:src="@mipmap/icon_record_delete" />
 
     <ImageView
         android:id="@+id/recordview_listen"
@@ -79,7 +79,7 @@
         android:layout_marginRight="50dp"
         android:layout_toLeftOf="@+id/recordview_start"
         android:contentDescription="@null"
-        android:src="@drawable/icon_record_listen" />
+        android:src="@mipmap/icon_record_listen" />
 
     <LinearLayout
         android:id="@+id/recordview_try_listen_layout"

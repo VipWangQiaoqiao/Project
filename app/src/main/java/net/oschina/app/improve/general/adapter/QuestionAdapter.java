@@ -33,7 +33,7 @@ public class QuestionAdapter extends BaseListAdapter<Question> {
     protected void convert(ViewHolder vh, Question item, int position) {
         String authorPortrait = item.getAuthorPortrait();
         if (authorPortrait != null) {
-            vh.setImageForNet(R.id.iv_ques_item_icon, authorPortrait.trim(), R.drawable.widget_dface);
+            vh.setImageForNet(R.id.iv_ques_item_icon, authorPortrait.trim(), R.mipmap.widget_dface);
         }
         TextView title = vh.getView(R.id.tv_ques_item_title);
         String title1 = item.getTitle();

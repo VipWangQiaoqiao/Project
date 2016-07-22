@@ -149,9 +149,9 @@ public class MessageDetailAdapter extends ListBaseAdapter<MessageDetail> {
         vh.content.setVisibility(View.GONE);
         vh.image.setVisibility(View.VISIBLE);
         //加载图片
-        vh.image.setImageResource(R.drawable.load_img_loading);
+        vh.image.setImageResource(R.mipmap.load_img_loading);
         HttpConfig.sCookie = ApiHttpClient.getCookie(AppContext.getInstance());
-        mKjBitmap.display(vh.image, msg.getContent(), R.drawable.load_img_error, 3000, 3000,
+        mKjBitmap.display(vh.image, msg.getContent(), R.mipmap.load_img_error, 3000, 3000,
                 null);
     }
 

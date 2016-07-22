@@ -136,14 +136,14 @@ public class TeamDiaryFragment extends BaseFragment implements
         mPager.setCurrentItem(currentPage);
 
         if (currentPage <= 0) {
-            mImgLeft.setImageResource(R.drawable.ic_diary_back);
+            mImgLeft.setImageResource(R.mipmap.ic_diary_back);
         } else {
-            mImgLeft.setImageResource(R.drawable.ic_diary_canback);
+            mImgLeft.setImageResource(R.mipmap.ic_diary_canback);
         }
         if (currentPage >= adapter.getCount() - 1) {
-            mImgRight.setImageResource(R.drawable.ic_diary_forward);
+            mImgRight.setImageResource(R.mipmap.ic_diary_forward);
         } else {
-            mImgRight.setImageResource(R.drawable.ic_diary_canforward);
+            mImgRight.setImageResource(R.mipmap.ic_diary_canforward);
         }
         mTvTitle.setText(String.format("第%d周周报总览", currentPage + 1));
     }

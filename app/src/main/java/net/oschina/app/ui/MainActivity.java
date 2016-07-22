@@ -252,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements
                 mBvNotice = new BadgeView(MainActivity.this, cn);
                 mBvNotice.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
                 mBvNotice.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
-                mBvNotice.setBackgroundResource(R.drawable.notification_bg);
+                mBvNotice.setBackgroundResource(R.mipmap.notification_bg);
                 mBvNotice.setGravity(Gravity.CENTER);
             }
             mTabHost.getTabWidget().getChildAt(i).setOnTouchListener(this);

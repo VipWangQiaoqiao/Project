@@ -59,12 +59,12 @@ public class SoftwareTweetAdapter extends BaseRecyclerAdapter<Tweet> implements 
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Tweet item, int position) {
         SoftwareTweetViewholder vh = (SoftwareTweetViewholder) holder;
         if (TextUtils.isEmpty(item.getAuthor().getPortrait())) {
-            vh.icon.setImageResource(R.drawable.widget_dface);
+            vh.icon.setImageResource(R.mipmap.widget_dface);
         } else {
             requestManager.load(item.getAuthor().getPortrait())
                     .asBitmap()
-                    .placeholder(mContext.getResources().getDrawable(R.drawable.widget_dface))
-                    .error(mContext.getResources().getDrawable(R.drawable.widget_dface))
+                    .placeholder(mContext.getResources().getDrawable(R.mipmap.widget_dface))
+                    .error(mContext.getResources().getDrawable(R.mipmap.widget_dface))
                     .into(vh.icon);
         }
         vh.name.setText(item.getAuthor().getName());
@@ -73,9 +73,9 @@ public class SoftwareTweetAdapter extends BaseRecyclerAdapter<Tweet> implements 
         PlatfromUtil.setPlatFromString(vh.deviceType, item.getAppClient());
         boolean liked = item.isLiked();
         if (liked) {
-            vh.likeStatus.setImageResource(R.drawable.ic_thumbup_actived);
+            vh.likeStatus.setImageResource(R.mipmap.ic_thumbup_actived);
         } else {
-            vh.likeStatus.setImageResource(R.drawable.ic_thumbup_normal);
+            vh.likeStatus.setImageResource(R.mipmap.ic_thumbup_normal);
         }
         vh.likeStatus.setTag(position);
         vh.likeStatus.setOnClickListener(this);

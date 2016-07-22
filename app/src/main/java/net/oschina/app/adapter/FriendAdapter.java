@@ -55,8 +55,8 @@ public class FriendAdapter extends ListBaseAdapter<Friend> {
         }
 
         vh.gender
-                .setImageResource(item.getGender() == 1 ? R.drawable.userinfo_icon_male
-                        : R.drawable.userinfo_icon_female);
+                .setImageResource(item.getGender() == 1 ? R.mipmap.userinfo_icon_male
+                        : R.mipmap.userinfo_icon_female);
 
         vh.avatar.setAvatarUrl(item.getPortrait());
         vh.avatar.setUserInfo(item.getUserid(), item.getName());

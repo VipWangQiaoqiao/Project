@@ -50,7 +50,7 @@ public class ActiveAdapter extends ListBaseAdapter {
 
     private void initRecordImg(Context cxt) {
         recordBitmap = BitmapFactory.decodeResource(cxt.getResources(),
-                R.drawable.audio3);
+                R.mipmap.audio3);
         recordBitmap = ImageUtils.zoomBitmap(recordBitmap,
                 DensityUtils.dip2px(cxt, 20f), DensityUtils.dip2px(cxt, 20f));
     }

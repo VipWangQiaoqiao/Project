@@ -138,7 +138,7 @@
                     android:layout_alignParentRight="true"
                     android:contentDescription="@string/app_name"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_comment" />
+                    android:src="@mipmap/ic_comment" />
 
                 <ImageView
                     android:id="@+id/iv_thumbup"

@@ -247,10 +247,10 @@ public class TeamNewActiveActivity extends BaseActivity {
     private void updateSendMenu() {
         if (mEtInput.getText().length() == 0) {
             mMenuSend.setEnabled(false);
-            mMenuSend.setIcon(R.drawable.actionbar_unsend_icon);
+            mMenuSend.setIcon(R.mipmap.actionbar_unsend_icon);
         } else {
             mMenuSend.setEnabled(true);
-            mMenuSend.setIcon(R.drawable.actionbar_send_icon);
+            mMenuSend.setIcon(R.mipmap.actionbar_send_icon);
         }
     }
 

@@ -21,7 +21,7 @@
                 android:id="@+id/team_diary_pager_left"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@drawable/ic_diary_canback" />
+                android:src="@mipmap/ic_diary_canback" />
 
             <TextView
                 android:id="@+id/team_diary_pager_title"
@@ -39,7 +39,7 @@
                 android:id="@+id/team_diary_pager_right"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@drawable/ic_diary_forward" />
+                android:src="@mipmap/ic_diary_forward" />
         </LinearLayout>
 
         <ImageView
@@ -48,7 +48,7 @@
             android:layout_height="30dp"
             android:layout_alignParentRight="true"
             android:padding="5dp"
-            android:src="@drawable/ic_diary_calendar" />
+            android:src="@mipmap/ic_diary_calendar" />
     </RelativeLayout>
 
     <android.support.v4.view.ViewPager

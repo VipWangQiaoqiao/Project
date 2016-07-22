@@ -38,7 +38,7 @@
                     android:id="@+id/iv_avatar"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:src="@drawable/widget_dface" />
+                    android:src="@mipmap/widget_dface" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -94,7 +94,7 @@
                     android:layout_marginRight="4dp"
                     android:contentDescription="@string/app_name"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_label_recommend" />
+                    android:src="@mipmap/ic_label_recommend" />
 
                 <ImageView
                     android:id="@+id/iv_label_originate"
@@ -102,7 +102,7 @@
                     android:layout_height="20dp"
                     android:contentDescription="@string/app_name"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_label_originate" />
+                    android:src="@mipmap/ic_label_originate" />
             </LinearLayout>
 
 

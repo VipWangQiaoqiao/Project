@@ -129,7 +129,7 @@ public class ShakeActivity extends BaseActivity implements SensorEventListener {
                                             }
                                         });
                                 new Core.Builder().view(mImgHead).url(obj.getImage())
-                                        .loadBitmapRes(R.drawable.widget_dface).doTask();
+                                        .loadBitmapRes(R.mipmap.widget_dface).doTask();
                                 mTvTitle.setText(obj.getTitle());
                                 mTvDetail.setText(obj.getDetail());
                                 mTvAuthor.setText(obj.getAuthor());

@@ -85,7 +85,7 @@ public class TweetPicturesPreviewer extends RecyclerView implements TweetSelectI
         config.loaderListener(new ImageLoaderListener() {
             @Override
             public void displayImage(ImageView iv, String path) {
-                mGlobeImageLoader.load(path).placeholder(R.drawable.ic_default_image).into(iv);
+                mGlobeImageLoader.load(path).placeholder(R.mipmap.ic_default_image).into(iv);
             }
         });
         config.callBack(new SelectedCallBack() {

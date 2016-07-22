@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/space_4"
-            android:src="@drawable/userinfo_icon_male"
+            android:src="@mipmap/userinfo_icon_male"
             android:contentDescription="@null" />
     </LinearLayout>
 

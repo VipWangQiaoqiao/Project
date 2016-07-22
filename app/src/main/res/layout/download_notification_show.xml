@@ -11,7 +11,7 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/space_10"
         android:contentDescription="@null"
-        android:src="@drawable/ic_launcher" />
+        android:src="@mipmap/ic_launcher" />
 
     <TextView
         android:id="@+id/tv_download_state"

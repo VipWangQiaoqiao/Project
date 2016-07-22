@@ -4,17 +4,17 @@
 
     <item
         android:id="@+id/team_issue_detail_change_state"
-        android:icon="@drawable/actionbar_send_icon"
+        android:icon="@mipmap/actionbar_send_icon"
         android:title="任务状态"
         osc:showAsAction="ifRoom">
     </item>
     <item
         android:id="@+id/team_issue_detail_appoint"
-        android:icon="@drawable/actionbar_send_icon"
+        android:icon="@mipmap/actionbar_send_icon"
         android:title="指派人"/>
     <item
         android:id="@+id/team_issue_detail_time"
-        android:icon="@drawable/actionbar_send_icon"
+        android:icon="@mipmap/actionbar_send_icon"
         android:title="完成时间"/>
 
 </menu>

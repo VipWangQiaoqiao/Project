@@ -3,12 +3,12 @@
     
      <item
         android:id="@+id/team_new_active"
-        android:icon="@drawable/actionbar_send_icon"
+        android:icon="@mipmap/actionbar_send_icon"
         android:title="@string/team_new_active"
         android:visible="true"/>
     <item
         android:id="@+id/team_new_issue"
-        android:icon="@drawable/actionbar_send_icon"
+        android:icon="@mipmap/actionbar_send_icon"
         android:title="@string/team_new_issue"
         android:visible="true"/>
     

@@ -385,7 +385,7 @@ public class TweetPubActivity extends BaseActivity implements EasyPermissions.Pe
         mIvDel.setVisibility(View.GONE);
         mLyImage.setVisibility(View.VISIBLE);
         new Core.Builder().view(mIvImage)
-                .loadBitmapRes(R.drawable.load_img_loading)
+                .loadBitmapRes(R.mipmap.load_img_loading)
                 .url(url).bitmapCallBack(new BitmapCallBack() {
             @Override
             public void onSuccess(Bitmap bitmap) {
@@ -575,10 +575,10 @@ public class TweetPubActivity extends BaseActivity implements EasyPermissions.Pe
         }
         if (mEtInput.getText().length() == 0) {
             menu.setEnabled(false);
-            menu.setIcon(R.drawable.actionbar_unsend_icon);
+            menu.setIcon(R.mipmap.actionbar_unsend_icon);
         } else {
             menu.setEnabled(true);
-            menu.setIcon(R.drawable.actionbar_send_icon);
+            menu.setIcon(R.mipmap.actionbar_send_icon);
         }
     }
 

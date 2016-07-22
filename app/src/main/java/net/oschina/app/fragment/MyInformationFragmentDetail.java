@@ -210,7 +210,7 @@ public class MyInformationFragmentDetail extends BaseFragment implements EasyPer
 
     public void fillUI() {
         Core.getKJBitmap().displayWithLoadBitmap(mUserFace, mUser.getPortrait(),
-                R.drawable.widget_dface);
+                R.mipmap.widget_dface);
         mName.setText(mUser.getName());
         mJoinTime.setText(StringUtils.friendly_time(mUser.getJointime()));
         mFrom.setText(mUser.getFrom());

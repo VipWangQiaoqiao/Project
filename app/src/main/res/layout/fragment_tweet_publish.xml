@@ -23,7 +23,7 @@
             android:clickable="true"
             android:paddingLeft="@dimen/lay_12"
             android:paddingRight="@dimen/lay_16"
-            android:src="@drawable/btn_back_normal"
+            android:src="@mipmap/btn_back_normal"
             app:gTouchCornerRadius="18dp"
             app:gTouchEffect="press" />
 
@@ -146,7 +146,7 @@
                 android:paddingBottom="@dimen/lay_12"
                 android:paddingTop="@dimen/lay_12"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_tweet_picture_normal"
+                android:src="@mipmap/ic_tweet_picture_normal"
                 app:gTouchColor="@color/main_touch"
                 app:gTouchCornerRadius="0dp"
                 app:gTouchEffect="ripple" />
@@ -161,7 +161,7 @@
                 android:paddingBottom="@dimen/lay_12"
                 android:paddingTop="@dimen/lay_12"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_tweet_mention_normal"
+                android:src="@mipmap/ic_tweet_mention_normal"
                 app:gTouchColor="@color/main_touch"
                 app:gTouchCornerRadius="0dp"
                 app:gTouchEffect="ripple" />
@@ -176,7 +176,7 @@
                 android:paddingBottom="@dimen/lay_12"
                 android:paddingTop="@dimen/lay_12"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_tweet_topic_normal"
+                android:src="@mipmap/ic_tweet_topic_normal"
                 app:gTouchColor="@color/main_touch"
                 app:gTouchCornerRadius="0dp"
                 app:gTouchEffect="ripple" />
@@ -191,7 +191,7 @@
                 android:paddingBottom="@dimen/lay_12"
                 android:paddingTop="@dimen/lay_12"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_tweet_expression_normal"
+                android:src="@mipmap/ic_tweet_expression_normal"
                 app:gTouchColor="@color/main_touch"
                 app:gTouchCornerRadius="0dp"
                 app:gTouchEffect="ripple" />

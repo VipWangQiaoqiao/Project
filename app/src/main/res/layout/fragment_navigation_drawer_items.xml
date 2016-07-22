@@ -11,7 +11,7 @@
 
         <ImageView
             style="@style/MenuItemImageViewStyle"
-            android:background="@drawable/drawer_menu_icon_quest_nor"
+            android:background="@mipmap/drawer_menu_icon_quest_nor"
             android:contentDescription="@null" />
 
         <TextView
@@ -29,7 +29,7 @@
 
         <ImageView
             style="@style/MenuItemImageViewStyle"
-            android:background="@drawable/drawer_menu_icon_opensoft_nor"
+            android:background="@mipmap/drawer_menu_icon_opensoft_nor"
             android:contentDescription="@null" />
 
         <TextView
@@ -46,7 +46,7 @@
 
         <ImageView
             style="@style/MenuItemImageViewStyle"
-            android:background="@drawable/drawer_menu_icon_blog_nor"
+            android:background="@mipmap/drawer_menu_icon_blog_nor"
             android:contentDescription="@null" />
 
         <TextView
@@ -63,7 +63,7 @@
 
         <ImageView
             style="@style/MenuItemImageViewStyle"
-            android:background="@drawable/drawer_menu_icon_gitapp_nor"
+            android:background="@mipmap/drawer_menu_icon_gitapp_nor"
             android:contentDescription="@null" />
 
         <TextView

@@ -356,7 +356,7 @@ public class TweetPublishService extends IntentService {
                 .setOngoing(false)
                 .setContentIntent(contentIntent)
                 .setDeleteIntent(deleteIntent)
-                .setSmallIcon(R.drawable.ic_notification);
+                .setSmallIcon(R.mipmap.ic_notification);
 
         Notification notification = builder.build();
         NotificationManagerCompat.from(this).notify(id, notification);

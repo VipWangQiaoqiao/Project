@@ -18,7 +18,7 @@
             android:layout_height="20dp"
             android:layout_gravity="center"
             android:layout_marginTop="2dp"
-            android:background="@drawable/ic_menu_comment"
+            android:background="@mipmap/ic_menu_comment"
             android:gravity="center_horizontal|bottom"
             android:minWidth="20dp"
             android:paddingBottom="4dp"

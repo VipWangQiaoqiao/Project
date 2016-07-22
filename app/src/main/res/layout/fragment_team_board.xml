@@ -28,7 +28,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_marginRight="10dp"
-                    android:src="@drawable/widget_dface" />
+                    android:src="@mipmap/widget_dface" />
 
                 <TextView
                     android:id="@+id/team_myissue_name"

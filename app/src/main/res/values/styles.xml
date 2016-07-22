@@ -15,7 +15,7 @@
     </style>
 
     <style name="OverflowButton" parent="@style/Widget.AppCompat.ActionButton.Overflow">
-        <item name="android:src">@drawable/actionbar_more_icon_normal</item>
+        <item name="android:src">@mipmap/actionbar_more_icon_normal</item>
     </style>
 
     <style name="PopupMenu.ListPopupWindow" parent="@style/Widget.AppCompat.Light.ListPopupWindow">
@@ -193,11 +193,11 @@
     </style>
 
     <style name="dialog_common" parent="@style/Theme.AppCompat.Dialog">
-        <item name="android:windowBackground">@drawable/dialog_background</item>
+        <item name="android:windowBackground">@mipmap/dialog_background</item>
     </style>
 
     <style name="dialog_bottom" parent="@style/dialog_common">
-        <item name="android:windowBackground">@drawable/dialog_bottom_background</item>
+        <item name="android:windowBackground">@mipmap/dialog_bottom_background</item>
         <item name="android:windowAnimationStyle">@style/dialog_animation</item>
     </style>
 
@@ -218,11 +218,11 @@
         <item name="android:padding">1.0dip</item>
         <item name="android:clickable">true</item>
         <item name="android:contentDescription">face</item>
-        <item name="android:src">@drawable/widget_dface</item>
+        <item name="android:src">@mipmap/widget_dface</item>
     </style>
 
     <style name="dialog_waiting" parent="@android:style/Theme.Dialog">
-        <item name="android:windowBackground">@drawable/dialog_background</item>
+        <item name="android:windowBackground">@mipmap/dialog_background</item>
     </style>
 
     <style name="dialog_button">
@@ -293,7 +293,7 @@
         <item name="android:layout_height">40.0dip</item>
         <item name="android:padding">1.0dip</item>
         <item name="android:clickable">true</item>
-        <item name="android:src">@drawable/widget_dface</item>
+        <item name="android:src">@mipmap/widget_dface</item>
     </style>
 
     <style name="comment_user_face_image">
@@ -301,7 +301,7 @@
         <item name="android:layout_height">28.0dip</item>
         <item name="android:padding">1.0dip</item>
         <item name="android:clickable">true</item>
-        <item name="android:src">@drawable/widget_dface</item>
+        <item name="android:src">@mipmap/widget_dface</item>
     </style>
 
     <style name="toolbar_action">
@@ -386,7 +386,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:src">@drawable/ic_item_goto_right_tip</item>
+        <item name="android:src">@mipmap/ic_item_goto_right_tip</item>
         <item name="android:layout_marginRight">@dimen/space_10</item>
     </style>
 
@@ -501,7 +501,7 @@
     </style>
 
     <style name="Theme.AppStartLoad" parent="android:Theme.Black.NoTitleBar.Fullscreen">
-        <item name="android:windowBackground">@drawable/welcome</item>
+        <item name="android:windowBackground">@mipmap/welcome</item>
         <item name="android:windowNoTitle">true</item>
     </style>
 

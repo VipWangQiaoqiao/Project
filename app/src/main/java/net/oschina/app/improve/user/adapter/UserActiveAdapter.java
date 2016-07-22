@@ -112,13 +112,13 @@ public class UserActiveAdapter extends BaseRecyclerAdapter<Active> {
         vh.commentCount.setText(String.valueOf(item.getCommentCount()));
         reqManager.load(item.getPortrait())
                 .asBitmap()
-                .placeholder(R.drawable.widget_dface)
-                .error(R.drawable.widget_dface)
+                .placeholder(R.mipmap.widget_dface)
+                .error(R.mipmap.widget_dface)
                 .into(vh.portrait);
 
         if (!TextUtils.isEmpty(item.getTweetimage())) {
             vh.pic.setVisibility(View.VISIBLE);
-            vh.pic.setTag(R.drawable.widget_dface, item.getTweetimage());
+            vh.pic.setTag(R.mipmap.widget_dface, item.getTweetimage());
             vh.pic.setOnClickListener(getPreviewImageCallback());
             reqManager.load(item.getTweetimage()).into(vh.pic);
         } else {
@@ -132,7 +132,7 @@ public class UserActiveAdapter extends BaseRecyclerAdapter<Active> {
             mPreviewImageCallback = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String url = (String) v.getTag(R.drawable.widget_dface);
+                    String url = (String) v.getTag(R.mipmap.widget_dface);
                     OSCPhotosActivity.showImagePreview(mContext, getOriginalUrl(url));
                 }
             };
@@ -147,7 +147,7 @@ public class UserActiveAdapter extends BaseRecyclerAdapter<Active> {
     }
 
     private void initRecordImg(Context cxt) {
-        mRecordBitmap = BitmapFactory.decodeResource(cxt.getResources(), R.drawable.audio3);
+        mRecordBitmap = BitmapFactory.decodeResource(cxt.getResources(), R.mipmap.audio3);
         mRecordBitmap = ImageUtils.zoomBitmap(mRecordBitmap, DensityUtils.dip2px(cxt, 20f), DensityUtils.dip2px(cxt, 20f));
     }
 

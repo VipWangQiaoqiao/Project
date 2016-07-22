@@ -20,7 +20,7 @@
                 android:clickable="true"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:background="@drawable/bg_my"
+                android:background="@mipmap/bg_my"
                 android:padding="@dimen/space_16" >
 
                 <net.oschina.app.widget.CircleImageView

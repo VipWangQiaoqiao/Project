@@ -125,13 +125,13 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
     protected void initWidget() {
         // portrait
         if (TextUtils.isEmpty(comment.getAuthorPortrait())) {
-            ivPortrait.setImageResource(R.drawable.widget_dface);
+            ivPortrait.setImageResource(R.mipmap.widget_dface);
         } else {
             getImageLoader()
                     .load(comment.getAuthorPortrait())
                     .asBitmap()
-                    .placeholder(getResources().getDrawable(R.drawable.widget_dface))
-                    .error(getResources().getDrawable(R.drawable.widget_dface))
+                    .placeholder(getResources().getDrawable(R.mipmap.widget_dface))
+                    .error(getResources().getDrawable(R.mipmap.widget_dface))
                     .into(ivPortrait);
         }
 
@@ -207,13 +207,13 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
         TweetCommentAdapter.TweetCommentHolderView holder = new TweetCommentAdapter.TweetCommentHolderView(view);
         holder.tvName.setText(reply.getAuthor());
         if (TextUtils.isEmpty(reply.getAuthorPortrait())) {
-            holder.ivPortrait.setImageResource(R.drawable.widget_dface);
+            holder.ivPortrait.setImageResource(R.mipmap.widget_dface);
         } else {
             getImageLoader()
                     .load(reply.getAuthorPortrait())
                     .asBitmap()
-                    .placeholder(getResources().getDrawable(R.drawable.widget_dface))
-                    .error(getResources().getDrawable(R.drawable.widget_dface))
+                    .placeholder(getResources().getDrawable(R.mipmap.widget_dface))
+                    .error(getResources().getDrawable(R.mipmap.widget_dface))
                     .into(holder.ivPortrait);
         }
         holder.tvTime.setText(String.format("%s楼  %s", i + 1, StringUtils.friendly_time(reply.getPubDate())));

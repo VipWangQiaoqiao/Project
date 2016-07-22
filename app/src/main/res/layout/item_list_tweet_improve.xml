@@ -22,7 +22,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:clickable="true"
-            android:src="@drawable/widget_dface" />
+            android:src="@mipmap/widget_dface" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -119,7 +119,7 @@
                         android:contentDescription="@string/app_name"
                         android:padding="@dimen/space_4"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/ic_thumbup_normal"
+                        android:src="@mipmap/ic_thumbup_normal"
                         tools:ignore="RtlHardcoded" />
 
                     <TextView
@@ -138,7 +138,7 @@
                         android:contentDescription="@string/app_name"
                         android:padding="@dimen/space_4"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/ic_comment_30" />
+                        android:src="@mipmap/ic_comment_30" />
 
                     <TextView
                         android:id="@+id/tv_tweet_comment_count"

@@ -210,10 +210,10 @@ public class FeedBackFragment extends BaseFragment {
     private void setPubMenuState(boolean canOption) {
         if (!canOption) {
             mPubMenu.setEnabled(false);
-            mPubMenu.setIcon(R.drawable.actionbar_unsend_icon);
+            mPubMenu.setIcon(R.mipmap.actionbar_unsend_icon);
         } else {
             mPubMenu.setEnabled(true);
-            mPubMenu.setIcon(R.drawable.actionbar_send_icon);
+            mPubMenu.setIcon(R.mipmap.actionbar_send_icon);
         }
     }
 }

@@ -145,7 +145,7 @@ public class CommentExsView extends LinearLayout implements View.OnClickListener
     private ViewGroup addComment(boolean first, final CommentEX comment, RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_item_ex, null, false);
-        imageLoader.load(comment.getAuthorPortrait()).error(R.drawable.widget_dface)
+        imageLoader.load(comment.getAuthorPortrait()).error(R.mipmap.widget_dface)
                 .into(((ImageView) lay.findViewById(R.id.iv_avatar)));
 
         ((TextView) lay.findViewById(R.id.tv_name)).setText(comment.getAuthor());

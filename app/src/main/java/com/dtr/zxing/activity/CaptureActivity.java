@@ -513,12 +513,12 @@ public final class CaptureActivity extends BaseActivity implements
                 flag = false;
                 // 开闪光灯
                 cameraManager.openLight();
-                mFlash.setBackgroundResource(R.drawable.flash_open);
+                mFlash.setBackgroundResource(R.mipmap.flash_open);
             } else {
                 flag = true;
                 // 关闪光灯
                 cameraManager.offLight();
-                mFlash.setBackgroundResource(R.drawable.flash_default);
+                mFlash.setBackgroundResource(R.mipmap.flash_default);
             }
         } catch (Exception e) {
             e.printStackTrace();

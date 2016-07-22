@@ -192,16 +192,16 @@ public class RecordButton extends RelativeLayout {
         case 0:
         case 1:
         case 2:
-            mImgVolume.setImageResource(R.drawable.audio0);
+            mImgVolume.setImageResource(R.mipmap.audio0);
             break;
         case 3:
-            mImgVolume.setImageResource(R.drawable.audio1);
+            mImgVolume.setImageResource(R.mipmap.audio1);
             break;
         case 4:
-            mImgVolume.setImageResource(R.drawable.audio2);
+            mImgVolume.setImageResource(R.mipmap.audio2);
             break;
         case 5:
-            mImgVolume.setImageResource(R.drawable.audio3);
+            mImgVolume.setImageResource(R.mipmap.audio3);
             break;
         }
     }

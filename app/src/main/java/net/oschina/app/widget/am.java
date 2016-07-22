@@ -91,18 +91,18 @@ public abstract class am extends ReplacementSpan {
 			e = i2;
 		}
 		Drawable drawable = resources
-				.getDrawable(R.drawable.timeline_card_small_button);
+				.getDrawable(R.mipmap.timeline_card_small_button);
 		// a1.b(R.drawable.timeline_card_small_button);
 		drawable.setBounds(0, 0, e, f);
 		l[0] = drawable;
 		Drawable drawable1 = resources
-				.getDrawable(R.drawable.timeline_card_small_button_highlighted);
+				.getDrawable(R.mipmap.timeline_card_small_button_highlighted);
 		// a1.b(R.drawable.timeline_card_small_button_highlighted);
 		drawable1.setBounds(0, 0, e, f);
 		l[1] = drawable1;
 		if (h == null) {
 			h = resources
-					.getDrawable(R.drawable.timeline_card_small_placeholder);
+					.getDrawable(R.mipmap.timeline_card_small_placeholder);
 			// h = a1.b(R.drawable.timeline_card_small_placeholder);
 		}
 		h.setBounds(0, 0, i, j);

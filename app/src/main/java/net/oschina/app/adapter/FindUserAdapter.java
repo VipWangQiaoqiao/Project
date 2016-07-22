@@ -43,9 +43,9 @@ public class FindUserAdapter extends ListBaseAdapter<User> {
 
 	vh.from.setText(item.getFrom());
 	vh.desc.setVisibility(View.GONE);
-	int genderIcon = R.drawable.userinfo_icon_male;
+	int genderIcon = R.mipmap.userinfo_icon_male;
 	if ("女".equals(item.getGender())) {
-	    genderIcon = R.drawable.userinfo_icon_female;
+	    genderIcon = R.mipmap.userinfo_icon_female;
 	}
 
 	vh.gender.setImageResource(genderIcon);

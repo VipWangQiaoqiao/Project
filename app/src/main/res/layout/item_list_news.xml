@@ -100,7 +100,7 @@
             android:layout_marginRight="4dp"
             android:contentDescription="@string/app_name"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_comment" />
+            android:src="@mipmap/ic_comment" />
 
         <TextView
             android:id="@+id/tv_comment_count"

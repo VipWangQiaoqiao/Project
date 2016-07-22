@@ -48,13 +48,13 @@ public class XTweetCommentAdapter extends BaseRecyclerAdapter<TweetComment> {
         TweetCommentHolderView h = (TweetCommentHolderView) holder;
         h.ivPortrait.setTag(null);
         if (TextUtils.isEmpty(item.getAuthor().getPortrait())) {
-            h.ivPortrait.setImageResource(R.drawable.widget_dface);
+            h.ivPortrait.setImageResource(R.mipmap.widget_dface);
         } else {
             reqManager
                     .load(item.getAuthor().getPortrait())
                     .asBitmap()
-                    .placeholder(mContext.getResources().getDrawable(R.drawable.widget_dface))
-                    .error(mContext.getResources().getDrawable(R.drawable.widget_dface))
+                    .placeholder(mContext.getResources().getDrawable(R.mipmap.widget_dface))
+                    .error(mContext.getResources().getDrawable(R.mipmap.widget_dface))
                     .into(h.ivPortrait);
         }
         h.ivPortrait.setTag(item);

@@ -305,13 +305,13 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
             return;
         if (tweet.getAuthor() != null){
             if (TextUtils.isEmpty(tweet.getAuthor().getPortrait())) {
-                ivPortrait.setImageResource(R.drawable.widget_dface);
+                ivPortrait.setImageResource(R.mipmap.widget_dface);
             } else {
                 getImageLoader()
                         .load(tweet.getAuthor().getPortrait())
                         .asBitmap()
-                        .placeholder(getResources().getDrawable(R.drawable.widget_dface))
-                        .error(getResources().getDrawable(R.drawable.widget_dface))
+                        .placeholder(getResources().getDrawable(R.mipmap.widget_dface))
+                        .error(getResources().getDrawable(R.mipmap.widget_dface))
                         .into(ivPortrait);
             }
             ivPortrait.setOnClickListener(getOnPortraitClickListener());
@@ -349,8 +349,8 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
                 getImageLoader()
                         .load(tweet.getImages()[i].getThumb())
                         .asBitmap()
-                        .placeholder(R.drawable.ic_default_image)
-                        .error(R.drawable.ic_default_image)
+                        .placeholder(R.mipmap.ic_default_image)
+                        .error(R.mipmap.ic_default_image)
                         .into(mImage);
                 mImage.setTag(tweet.getImages()[i].getHref());
                 mImage.setOnClickListener(l);

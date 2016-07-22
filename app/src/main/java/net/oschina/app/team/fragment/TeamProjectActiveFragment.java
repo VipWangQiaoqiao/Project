@@ -101,7 +101,7 @@ public class TeamProjectActiveFragment extends BaseListFragment<TeamActive> {
 
     private void setNoProjectActive() {
         mErrorLayout.setErrorType(EmptyLayout.NODATA);
-        mErrorLayout.setErrorImag(R.drawable.page_icon_empty);
+        mErrorLayout.setErrorImag(R.mipmap.page_icon_empty);
         String str = getResources().getString(
                 R.string.team_empty_project_active);
         mErrorLayout.setErrorMessage(str);

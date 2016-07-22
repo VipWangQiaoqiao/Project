@@ -90,9 +90,9 @@ public class NoteEditFragment extends BaseFragment implements OnTouchListener {
             0xffddd7d9,// 紫色
     };
 
-    public static final int[] sThumbtackImgs = { R.drawable.green,
-            R.drawable.yellow, R.drawable.red, R.drawable.blue,
-            R.drawable.purple };
+    public static final int[] sThumbtackImgs = { R.mipmap.green,
+            R.mipmap.yellow, R.mipmap.red, R.mipmap.blue,
+            R.mipmap.purple };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

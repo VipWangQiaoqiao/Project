@@ -9,7 +9,7 @@
 
     <ImageView
         android:id="@+id/iv_cam"
-        android:src="@drawable/btn_camera"
+        android:src="@mipmap/btn_camera"
         android:layout_width="30dp"
         android:layout_height="30dp" />
 

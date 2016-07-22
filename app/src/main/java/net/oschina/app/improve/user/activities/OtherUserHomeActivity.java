@@ -98,7 +98,7 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> impl
         super.initWidget();
         mToolbar.setTitle("");
         mToolbar.setSubtitle("");
-        mToolbar.setNavigationIcon(R.drawable.btn_back_normal);
+        mToolbar.setNavigationIcon(R.mipmap.btn_back_normal);
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -178,14 +178,14 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> impl
         getImageLoader()
                 .load(user.getPortrait())
                 .asBitmap()
-                .placeholder(R.drawable.widget_dface)
-                .error(R.drawable.widget_dface)
+                .placeholder(R.mipmap.widget_dface)
+                .error(R.mipmap.widget_dface)
                 .into(mPortrait);
         getImageLoader()
                 .load(user.getPortrait())
                 .asBitmap()
-                .placeholder(R.drawable.widget_dface)
-                .error(R.drawable.widget_dface)
+                .placeholder(R.mipmap.widget_dface)
+                .error(R.mipmap.widget_dface)
                 .into(mLogoPortrait);
         mLogoNick.setText(user.getName());
         mNick.setText(user.getName());
@@ -196,9 +196,9 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> impl
 
         if (!TextUtils.isEmpty(user.getGender())){
             if (user.getGender().equals("2") || user.getGender().equals("女")){
-                mGenderImage.setImageResource(R.drawable.ic_female);
+                mGenderImage.setImageResource(R.mipmap.ic_female);
             }else{
-                mGenderImage.setImageResource(R.drawable.ic_male);
+                mGenderImage.setImageResource(R.mipmap.ic_male);
             }
         }
 

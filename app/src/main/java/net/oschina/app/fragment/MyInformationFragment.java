@@ -259,7 +259,7 @@ public class MyInformationFragment extends BaseFragment {
         mMesCount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
         mMesCount.setBadgePosition(BadgeView.POSITION_CENTER);
         mMesCount.setGravity(Gravity.CENTER);
-        mMesCount.setBackgroundResource(R.drawable.notification_bg);
+        mMesCount.setBackgroundResource(R.mipmap.notification_bg);
         mQrCode.setOnClickListener(this);
 
         initBackgroudColor();
@@ -322,9 +322,9 @@ public class MyInformationFragment extends BaseFragment {
             return;
         mIvAvatar.setAvatarUrl(mInfo.getPortrait());
         mTvName.setText(mInfo.getName());
-        mIvGender.setImageResource(StringUtils.toInt(mInfo.getGender()) != 2 ? R.drawable
+        mIvGender.setImageResource(StringUtils.toInt(mInfo.getGender()) != 2 ? R.mipmap
                 .userinfo_icon_male
-                : R.drawable.userinfo_icon_female);
+                : R.mipmap.userinfo_icon_female);
         mTvScore.setText(String.valueOf(mInfo.getScore()));
         mTvFavorite.setText(String.valueOf(mInfo.getFavoritecount()));
         mTvFollowing.setText(String.valueOf(mInfo.getFollowers()));

@@ -563,7 +563,7 @@ public class SelectFriendsActivity extends BaseActivity {
 
         final AvatarView image = new AvatarView(this);
         image.setDisplayCircle(false);
-        image.setImageResource(R.drawable.widget_dface);
+        image.setImageResource(R.mipmap.widget_dface);
         image.setAvatarUrl(friend.getPortrait());
         image.setTag(userId);
 
