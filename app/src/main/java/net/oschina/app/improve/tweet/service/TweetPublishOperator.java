@@ -98,14 +98,14 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
      * @param runnable 完全上传完成时回调
      */
     private void uploadImages(final int index, final String token, final String[] paths, final UploadImageCallback runnable) {
+        // call progress
+        runnable.onUploadImage(index, token);
+
         // check done
         if (index < 0 || index >= paths.length) {
             runnable.onUploadImageDone();
             return;
         }
-
-        // call progress
-        runnable.onUploadImage(index, token);
 
         final String path = paths[index];
 
@@ -230,10 +230,12 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
     private static String[] saveImageToCache(String cacheDir, String[] paths) {
         List<String> ret = new ArrayList<>();
         for (String path : paths) {
-            String tempFile = String.format("%s/IMG_%s.png", cacheDir, System.currentTimeMillis());
+            String tempFile = String.format("%s/IMG_%s.jpg", cacheDir, System.currentTimeMillis());
             try {
-                if (doImage(path, tempFile))
+                if (TweetPublishCache.compressImage(path, tempFile, 512 * 1024, 35, 1080, 1080 * 3)) {
+                    Log.e("OPERATOR", "doImage " + new File(tempFile).length());
                     ret.add(tempFile);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -245,14 +247,4 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
         }
         return null;
     }
-
-    private static boolean doImage(String srcPath, String targetPath) {
-        if (TweetPublishCache.compressImage(srcPath, targetPath, 512 * 1024, 35, 1080, 1080 * 3)) {
-            Log.e("OPERATOR", "doImage " + new File(targetPath).length());
-            return true;
-        }
-        return false;
-    }
-
-
 }

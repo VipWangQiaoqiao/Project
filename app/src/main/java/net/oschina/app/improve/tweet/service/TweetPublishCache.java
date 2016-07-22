@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.Closeable;
 import java.io.File;
@@ -138,34 +139,11 @@ public class TweetPublishCache {
     }
 
 
-    public static int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-            // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) > reqHeight
-                    && (halfWidth / inSampleSize) > reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-
-        return inSampleSize;
-    }
-
     static boolean compressImage(final String srcPath, final String savePath, final long maxSize,
                                  final int minQuality, final int maxWidth, final int maxHeight) {
         // build source file
-        final File source = new File(srcPath);
-        if (!source.exists())
+        final File sourceFile = new File(srcPath);
+        if (!sourceFile.exists())
             return false;
 
         // build save file
@@ -174,6 +152,11 @@ public class TweetPublishCache {
         if (!saveDir.exists()) {
             if (!saveDir.mkdirs())
                 return false;
+        }
+
+        // if the in file size <= maxSize, we can copy to savePath
+        if (sourceFile.length() <= maxSize) {
+            return copyFile(sourceFile, saveFile);
         }
 
         // create new temp file
@@ -247,6 +230,29 @@ public class TweetPublishCache {
         return tempFile.renameTo(saveFile);
     }
 
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
+    }
+
     public static int computeSampleSize(BitmapFactory.Options options, int minSideLength, int maxNumOfPixels) {
         int initialSize = computeInitialSampleSize(options, minSideLength, maxNumOfPixels);
         int roundedSize;
@@ -277,6 +283,27 @@ public class TweetPublishCache {
         } else {
             return upperBound;
         }
+    }
+
+    private static boolean copyFile(final File srcFile, final File saveFile) {
+        BufferedInputStream inputStream = null;
+        BufferedOutputStream outputStream = null;
+        try {
+            inputStream = new BufferedInputStream(new FileInputStream(srcFile));
+            outputStream = new BufferedOutputStream(new FileOutputStream(saveFile));
+            byte[] buffer = new byte[1024 * 16];
+
+            while (inputStream.read(buffer) != -1) {
+                outputStream.write(buffer);
+            }
+            outputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            close(inputStream, outputStream);
+        }
+        return true;
     }
 
     private static void close(Closeable... closeables) {
