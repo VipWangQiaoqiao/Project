@@ -34,7 +34,7 @@
                     android:layout_height="20dp"
                     android:contentDescription="@string/app_name"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_label_recommend" />
+                    android:src="@mipmap/ic_label_recommend" />
             </LinearLayout>
 
             <LinearLayout
@@ -94,7 +94,7 @@
                     android:layout_marginRight="@dimen/lay_8"
                     android:layout_weight="1"
                     android:background="@drawable/btn_software_bg"
-                    android:drawableLeft="@drawable/ic_website"
+                    android:drawableLeft="@mipmap/ic_website"
                     android:drawablePadding="8dp"
                     android:gravity="center"
                     android:maxLines="1"
@@ -115,7 +115,7 @@
                     android:layout_marginLeft="@dimen/lay_8"
                     android:layout_weight="1"
                     android:background="@drawable/btn_software_bg"
-                    android:drawableLeft="@drawable/ic_documents"
+                    android:drawableLeft="@mipmap/ic_documents"
                     android:drawablePadding="8dp"
                     android:gravity="center"
                     android:maxLines="1"

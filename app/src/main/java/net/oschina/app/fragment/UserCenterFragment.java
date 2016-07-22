@@ -244,9 +244,9 @@ public class UserCenterFragment extends BaseFragment implements
         mHisName = mUser.getName();
         mTvName.setText(mHisName);
 
-        int genderIcon = R.drawable.userinfo_icon_male;
+        int genderIcon = R.mipmap.userinfo_icon_male;
         if (FEMALE.equals(mUser.getGender())) {
-            genderIcon = R.drawable.userinfo_icon_female;
+            genderIcon = R.mipmap.userinfo_icon_female;
         }
         mIvGender.setBackgroundResource(genderIcon);
 
@@ -262,7 +262,7 @@ public class UserCenterFragment extends BaseFragment implements
         switch (mUser.getRelation()) {
             case User.RELATION_TYPE_BOTH:
                 mBtnFollowUser.setCompoundDrawablesWithIntrinsicBounds(
-                        R.drawable.ic_follow_each_other, 0, 0, 0);
+                        R.mipmap.ic_follow_each_other, 0, 0, 0);
                 mBtnFollowUser.setText(R.string.follow_each_other);
                 mBtnFollowUser.setTextColor(getResources().getColor(R.color.black));
                 mBtnFollowUser
@@ -270,7 +270,7 @@ public class UserCenterFragment extends BaseFragment implements
                 break;
             case User.RELATION_TYPE_FANS_HIM:
                 mBtnFollowUser.setCompoundDrawablesWithIntrinsicBounds(
-                        R.drawable.ic_followed, 0, 0, 0);
+                        R.mipmap.ic_followed, 0, 0, 0);
                 mBtnFollowUser.setText(R.string.unfollow_user);
                 mBtnFollowUser.setTextColor(getResources().getColor(R.color.black));
                 mBtnFollowUser
@@ -278,7 +278,7 @@ public class UserCenterFragment extends BaseFragment implements
                 break;
             case User.RELATION_TYPE_FANS_ME:
                 mBtnFollowUser.setCompoundDrawablesWithIntrinsicBounds(
-                        R.drawable.ic_add_follow, 0, 0, 0);
+                        R.mipmap.ic_add_follow, 0, 0, 0);
                 mBtnFollowUser.setText(R.string.follow_user);
                 mBtnFollowUser.setTextColor(getResources().getColor(R.color.white));
                 mBtnFollowUser
@@ -286,7 +286,7 @@ public class UserCenterFragment extends BaseFragment implements
                 break;
             case User.RELATION_TYPE_NULL:
                 mBtnFollowUser.setCompoundDrawablesWithIntrinsicBounds(
-                        R.drawable.ic_add_follow, 0, 0, 0);
+                        R.mipmap.ic_add_follow, 0, 0, 0);
                 mBtnFollowUser.setText(R.string.follow_user);
                 mBtnFollowUser.setTextColor(getResources().getColor(R.color.white));
                 mBtnFollowUser
@@ -371,7 +371,7 @@ public class UserCenterFragment extends BaseFragment implements
                                     case User.RELATION_TYPE_BOTH:
                                         mBtnFollowUser
                                                 .setCompoundDrawablesWithIntrinsicBounds(
-                                                        R.drawable.ic_add_follow,
+                                                        R.mipmap.ic_add_follow,
                                                         0, 0, 0);
                                         mBtnFollowUser
                                                 .setText(R.string.follow_user);
@@ -385,7 +385,7 @@ public class UserCenterFragment extends BaseFragment implements
                                     case User.RELATION_TYPE_FANS_HIM:
                                         mBtnFollowUser
                                                 .setCompoundDrawablesWithIntrinsicBounds(
-                                                        R.drawable.ic_add_follow,
+                                                        R.mipmap.ic_add_follow,
                                                         0, 0, 0);
                                         mBtnFollowUser
                                                 .setText(R.string.follow_user);
@@ -399,7 +399,7 @@ public class UserCenterFragment extends BaseFragment implements
                                     case User.RELATION_TYPE_FANS_ME:
                                         mBtnFollowUser
                                                 .setCompoundDrawablesWithIntrinsicBounds(
-                                                        R.drawable.ic_followed, 0,
+                                                        R.mipmap.ic_followed, 0,
                                                         0, 0);
                                         mBtnFollowUser
                                                 .setText(R.string.follow_each_other);
@@ -413,7 +413,7 @@ public class UserCenterFragment extends BaseFragment implements
                                     case User.RELATION_TYPE_NULL:
                                         mBtnFollowUser
                                                 .setCompoundDrawablesWithIntrinsicBounds(
-                                                        R.drawable.ic_followed, 0,
+                                                        R.mipmap.ic_followed, 0,
                                                         0, 0);
                                         mBtnFollowUser
                                                 .setText(R.string.unfollow_user);

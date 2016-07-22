@@ -11,7 +11,7 @@
         <ImageView
             style="@style/TeamMenuItemImageViewStyle"
             android:contentDescription="@null"
-            android:background="@drawable/widget_bar_news_nor" />
+            android:background="@mipmap/widget_bar_news_nor" />
 
         <TextView
             style="@style/TeamMenuItemTextViewStyle"
@@ -24,7 +24,7 @@
         <ImageView
             style="@style/TeamMenuItemImageViewStyle"
             android:contentDescription="@null"
-            android:background="@drawable/widget_bar_news_nor" />
+            android:background="@mipmap/widget_bar_news_nor" />
 
         <TextView
             style="@style/TeamMenuItemTextViewStyle"
@@ -36,7 +36,7 @@
         <ImageView
             style="@style/TeamMenuItemImageViewStyle"
             android:contentDescription="@null"
-            android:background="@drawable/widget_bar_news_nor" />
+            android:background="@mipmap/widget_bar_news_nor" />
 
         <TextView
             style="@style/TeamMenuItemTextViewStyle"
@@ -48,7 +48,7 @@
         <ImageView
             style="@style/TeamMenuItemImageViewStyle"
             android:contentDescription="@null"
-            android:background="@drawable/widget_bar_news_nor" />
+            android:background="@mipmap/widget_bar_news_nor" />
 
         <TextView
             style="@style/TeamMenuItemTextViewStyle"

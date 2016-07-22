@@ -36,6 +36,6 @@
         android:layout_weight="1"
         android:gravity="center"
         android:padding="1dp"
-        android:src="@drawable/btn_del" />
+        android:src="@mipmap/btn_del" />
 
 </RadioGroup>

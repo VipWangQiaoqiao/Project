@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_below="@id/tv_name"
-            android:drawableLeft="@drawable/platform"
+            android:drawableLeft="@mipmap/platform"
             android:drawablePadding="@dimen/space_5"
             android:textColor="?attr/infoTextColor"
             android:textSize="@dimen/text_size_12"

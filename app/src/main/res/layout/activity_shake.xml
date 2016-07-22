@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:contentDescription="@null"
-        android:src="@drawable/shaking" />
+        android:src="@mipmap/shaking" />
 
     <ProgressBar
         android:id="@+id/progress"

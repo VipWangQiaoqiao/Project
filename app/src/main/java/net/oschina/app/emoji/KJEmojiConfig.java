@@ -28,5 +28,5 @@ public class KJEmojiConfig {
     public static final int COUNT_IN_PAGE = 20; // 每页显示多少个表情(要减去一个删除符号:例如这里是三行七列)
     public static final int COLUMNS = 7; // 每页显示多少列
 
-    public static final int DELETE_EMOJI_ID = R.drawable.btn_del;
+    public static final int DELETE_EMOJI_ID = R.mipmap.btn_del;
 }

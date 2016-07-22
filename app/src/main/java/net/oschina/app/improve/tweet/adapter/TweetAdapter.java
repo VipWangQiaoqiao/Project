@@ -48,7 +48,7 @@ public class TweetAdapter extends BaseListAdapter<Tweet> {
 
     private void initRecordImg(Context cxt) {
         recordBitmap = BitmapFactory.decodeResource(cxt.getResources(),
-                R.drawable.audio3);
+                R.mipmap.audio3);
         recordBitmap = ImageUtils.zoomBitmap(recordBitmap,
                 DensityUtils.dip2px(cxt, 20f), DensityUtils.dip2px(cxt, 20f));
     }
@@ -98,7 +98,7 @@ public class TweetAdapter extends BaseListAdapter<Tweet> {
         }
 
         ImageView iv_tweet_like = (ImageView) vh.getView(R.id.iv_like_state);
-        iv_tweet_like.setImageResource(item.isLiked() ? R.drawable.ic_thumbup_actived : R.drawable.ic_thumbup_normal);
+        iv_tweet_like.setImageResource(item.isLiked() ? R.mipmap.ic_thumbup_actived : R.mipmap.ic_thumbup_normal);
         iv_tweet_like.setTag(position);
         iv_tweet_like.setOnClickListener(listener);
 
@@ -113,7 +113,7 @@ public class TweetAdapter extends BaseListAdapter<Tweet> {
                 ImageView imageView = new ImageView(mCallback.getContext());
                 imageView.setLayoutParams(layoutParams);
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                vh.setImageForNet(imageView, image.getThumb(), R.drawable.ic_default_image);
+                vh.setImageForNet(imageView, image.getThumb(), R.mipmap.ic_default_image);
                 flowLayout.addView(imageView);
             }
         } else {

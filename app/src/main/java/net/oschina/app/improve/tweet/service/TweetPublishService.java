@@ -249,7 +249,8 @@ public class TweetPublishService extends Service implements Contract.IService {
                 .setOngoing(!haveReDo)
                 .setContentIntent(contentIntent)
                 .setDeleteIntent(deleteIntent)
-                .setSmallIcon(R.drawable.ic_notification);
+                .setSmallIcon(R.mipmap.ic_notification);
+
         Notification notification = builder.build();
         NotificationManagerCompat.from(this).notify(notifyId, notification);
 

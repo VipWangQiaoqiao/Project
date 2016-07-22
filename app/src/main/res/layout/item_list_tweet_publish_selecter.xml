@@ -28,5 +28,5 @@
         android:paddingRight="0dp"
         android:paddingTop="0dp"
         android:scaleType="fitXY"
-        android:src="@drawable/ic_tweet_delete" />
+        android:src="@mipmap/ic_tweet_delete" />
 </net.oschina.app.improve.widget.TweetPublishImageLayout>

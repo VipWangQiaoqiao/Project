@@ -57,7 +57,7 @@ public class AvatarView extends CircleImageView {
 
     public void setAvatarUrl(String url) {
         if (StringUtils.isEmpty(url)) {
-            setImageResource(R.drawable.widget_dface);
+            setImageResource(R.mipmap.widget_dface);
             return;
         }
         // 由于头像地址默认加了一段参数需要去掉
@@ -69,8 +69,8 @@ public class AvatarView extends CircleImageView {
             headUrl = url;
         }
 
-        new Core.Builder().view(this).url(headUrl).errorBitmapRes(R.drawable.widget_dface)
-                .loadBitmapRes(R.drawable.widget_dface).doTask();
+        new Core.Builder().view(this).url(headUrl).errorBitmapRes(R.mipmap.widget_dface)
+                .loadBitmapRes(R.mipmap.widget_dface).doTask();
     }
 
     public static String getSmallAvatar(String source) {

@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/menu_share"
-        android:icon="@drawable/btn_share_white_normal"
+        android:icon="@mipmap/btn_share_white_normal"
         android:title="@string/share_to"
         android:visible="true"
         osc:showAsAction="always" />

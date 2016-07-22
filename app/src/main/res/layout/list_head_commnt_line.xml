@@ -38,7 +38,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/comment_line_triangle" />
+                android:background="@mipmap/comment_line_triangle" />
 
             <View
                 android:layout_width="0dp"

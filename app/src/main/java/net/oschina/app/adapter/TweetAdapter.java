@@ -92,7 +92,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
 
     private void initRecordImg(Context cxt) {
         recordBitmap = BitmapFactory.decodeResource(cxt.getResources(),
-                R.drawable.audio3);
+                R.mipmap.audio3);
         recordBitmap = ImageUtils.zoomBitmap(recordBitmap,
                 DensityUtils.dip2px(cxt, 20f), DensityUtils.dip2px(cxt, 20f));
     }
@@ -181,9 +181,9 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
 
 //        TypefaceUtils.setTypeface(vh.tvLikeState);
         if (tweet.getIsLike() == 1) {
-            vh.ivLikeState.setImageResource(R.drawable.ic_thumbup_actived);
+            vh.ivLikeState.setImageResource(R.mipmap.ic_thumbup_actived);
         } else {
-            vh.ivLikeState.setImageResource(R.drawable.ic_thumbup_normal);
+            vh.ivLikeState.setImageResource(R.mipmap.ic_thumbup_normal);
         }
         PlatfromUtil.setPlatFromString(vh.platform, tweet.getAppclient());
         return convertView;
@@ -200,7 +200,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
                     handler);
 //            vh.ivLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
 //                    .gray));
-            vh.ivLikeState.setImageResource(R.drawable.ic_thumbup_normal);
+            vh.ivLikeState.setImageResource(R.mipmap.ic_thumbup_normal);
         } else {
             //vh.tvLikeState.setAnimation(KJAnimations.getScaleAnimation(1.5f, 300));
             List<User> likeUser = tweet.getLikeUser();
@@ -209,7 +209,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             OSChinaApi.pubLikeTweet(tweet.getId(), tweet.getAuthorid(), handler);
 //            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
 //                    .day_colorPrimary));
-            vh.ivLikeState.setImageResource(R.drawable.ic_thumbup_actived);
+            vh.ivLikeState.setImageResource(R.mipmap.ic_thumbup_actived);
             tweet.setIsLike(1);
             tweet.setLikeCount(tweet.getLikeCount() + 1);
         }

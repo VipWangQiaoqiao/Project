@@ -120,8 +120,8 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
         setCommentCount(softwareDetail.getCommentCount());
         setBodyContent(softwareDetail.getBody());
         getImgLoader().load(softwareDetail.getLogo())
-                .error(R.drawable.logo_software_default)
-                .placeholder(R.drawable.logo_software_default)
+                .error(R.mipmap.logo_software_default)
+                .placeholder(R.mipmap.logo_software_default)
                 .into(ivIcon);
 
         toFavoriteOk(softwareDetail);

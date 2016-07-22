@@ -141,10 +141,10 @@ public class EmptyLayout extends LinearLayout implements
                 // img.setBackgroundDrawable(SkinsUtil.getDrawable(context,"pagefailed_bg"));
                 if (TDevice.hasInternet()) {
                     tv.setText(R.string.error_view_load_error_click_to_refresh);
-                    img.setBackgroundResource(R.drawable.pagefailed_bg);
+                    img.setBackgroundResource(R.mipmap.pagefailed_bg);
                 } else {
                     tv.setText(R.string.error_view_network_error_click_to_refresh);
-                    img.setBackgroundResource(R.drawable.page_icon_network);
+                    img.setBackgroundResource(R.mipmap.page_icon_network);
                 }
                 img.setVisibility(View.VISIBLE);
                 mLoading.stop();
@@ -163,7 +163,7 @@ public class EmptyLayout extends LinearLayout implements
             case NODATA:
                 mErrorState = NODATA;
                 // img.setBackgroundDrawable(SkinsUtil.getDrawable(context,"page_icon_empty"));
-                img.setBackgroundResource(R.drawable.page_icon_empty);
+                img.setBackgroundResource(R.mipmap.page_icon_empty);
                 img.setVisibility(View.VISIBLE);
                 mLoading.stop();
                 mLoading.setVisibility(View.GONE);
@@ -176,7 +176,7 @@ public class EmptyLayout extends LinearLayout implements
                 break;
             case NODATA_ENABLE_CLICK:
                 mErrorState = NODATA_ENABLE_CLICK;
-                img.setBackgroundResource(R.drawable.page_icon_empty);
+                img.setBackgroundResource(R.mipmap.page_icon_empty);
                 // img.setBackgroundDrawable(SkinsUtil.getDrawable(context,"page_icon_empty"));
                 img.setVisibility(View.VISIBLE);
                 mLoading.stop();

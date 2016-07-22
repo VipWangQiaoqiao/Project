@@ -13,7 +13,7 @@
         android:layout_marginBottom="15dp"
         android:padding="10dp"
         android:textColor="?android:editTextColor"
-        android:background="@drawable/edit_select"
+        android:background="@mipmap/edit_select"
         android:hint="任务标题" />
 
     <RelativeLayout

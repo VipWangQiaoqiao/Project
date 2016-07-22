@@ -56,7 +56,7 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
 
         if (item.isOriginal()) {
             spannable.append("[icon] ");
-            Drawable originate = mCallback.getContext().getResources().getDrawable(R.drawable.ic_label_originate);
+            Drawable originate = mCallback.getContext().getResources().getDrawable(R.mipmap.ic_label_originate);
             if (originate != null) {
                 originate.setBounds(0, 0, originate.getIntrinsicWidth(), originate.getIntrinsicHeight());
             }
@@ -66,7 +66,7 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
 
         if (item.isRecommend()) {
             spannable.append("[icon] ");
-            Drawable recommend = mCallback.getContext().getResources().getDrawable(R.drawable.ic_label_recommend);
+            Drawable recommend = mCallback.getContext().getResources().getDrawable(R.mipmap.ic_label_recommend);
             if (recommend != null) {
                 recommend.setBounds(0, 0, recommend.getIntrinsicWidth(), recommend.getIntrinsicHeight());
             }

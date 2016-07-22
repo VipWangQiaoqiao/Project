@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:padding="@dimen/space_15"
-    android:background="@drawable/comment_refer_container_bg" >
+    android:background="@mipmap/comment_refer_container_bg" >
     
 
     <TextView 

@@ -28,13 +28,13 @@
         android:layout_height="35dp"
         android:layout_marginLeft="59dp"
         android:scaleType="fitXY"
-        android:src="@drawable/line" />
+        android:src="@mipmap/line" />
 
     <ImageView
         android:id="@+id/item_diary_detail_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
-        android:src="@drawable/ic_week" />
+        android:src="@mipmap/ic_week" />
 
 </RelativeLayout>

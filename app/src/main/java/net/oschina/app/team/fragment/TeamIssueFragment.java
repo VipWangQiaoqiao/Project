@@ -192,7 +192,7 @@ public class TeamIssueFragment extends BaseListFragment<TeamIssue> {
 
     private void setNoTeamIssue() {
         mErrorLayout.setErrorType(EmptyLayout.NODATA);
-        mErrorLayout.setErrorImag(R.drawable.page_icon_empty);
+        mErrorLayout.setErrorImag(R.mipmap.page_icon_empty);
         String msg = getResources().getString(R.string.team_empty_issue);
         mErrorLayout.setErrorMessage(msg);
     }

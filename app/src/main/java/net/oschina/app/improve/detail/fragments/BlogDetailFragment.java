@@ -160,7 +160,7 @@ public class BlogDetailFragment
         setBodyContent(blog.getBody());
 
         mTVAuthorName.setText(blog.getAuthor());
-        getImgLoader().load(blog.getAuthorPortrait()).error(R.drawable.widget_dface).into(mIVAuthorPortrait);
+        getImgLoader().load(blog.getAuthorPortrait()).error(R.mipmap.widget_dface).into(mIVAuthorPortrait);
 
         String time = String.format("%s", StringUtils.friendly_time(blog.getPubDate()));
         mTVPubDate.setText(time);
@@ -176,8 +176,8 @@ public class BlogDetailFragment
 
         mIVLabelRecommend.setVisibility(blog.isRecommend() ? View.VISIBLE : View.GONE);
         mIVLabelOriginate.setImageDrawable(blog.isOriginal() ?
-                getResources().getDrawable(R.drawable.ic_label_originate) :
-                getResources().getDrawable(R.drawable.ic_label_reprint));
+                getResources().getDrawable(R.mipmap.ic_label_originate) :
+                getResources().getDrawable(R.mipmap.ic_label_reprint));
 
         toFollowOk(blog);
         toFavoriteOk(blog);

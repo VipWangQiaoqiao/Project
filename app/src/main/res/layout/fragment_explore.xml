@@ -21,7 +21,7 @@
                 style="@style/option_item_img"
                 android:contentDescription="@null"
                 android:layout_marginRight="@dimen/space_10"
-                android:background="@drawable/icon_explore_friends"/>
+                android:background="@mipmap/icon_explore_friends"/>
             
             <TextView
                 style="@style/option_item_text"
@@ -40,7 +40,7 @@
                 style="@style/option_item_img"
                 android:contentDescription="@null"
                 android:layout_marginRight="@dimen/space_10"
-                android:background="@drawable/icon_explore_finduser"/>
+                android:background="@mipmap/icon_explore_finduser"/>
 
             <TextView
                 style="@style/option_item_text"
@@ -59,7 +59,7 @@
             <ImageView 
                 style="@style/option_item_img"
                 android:contentDescription="@null"
-                android:background="@drawable/icon_explore_samecity"/>
+                android:background="@mipmap/icon_explore_samecity"/>
 
             <TextView
                 style="@style/option_item_text"
@@ -80,7 +80,7 @@
             <ImageView 
                 style="@style/option_item_img"
                 android:contentDescription="@null"
-                android:background="@drawable/icon_explore_scan"/>
+                android:background="@mipmap/icon_explore_scan"/>
 
             <TextView
                 style="@style/option_item_text"
@@ -97,7 +97,7 @@
             <ImageView 
                 style="@style/option_item_img"
                 android:contentDescription="@null"
-                android:background="@drawable/icon_explore_shake"/>
+                android:background="@mipmap/icon_explore_shake"/>
 
             <TextView
                 style="@style/option_item_text"

@@ -31,7 +31,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="14dp"
-            android:src="@drawable/ic_brows_back" />
+            android:src="@mipmap/ic_brows_back" />
 
         <ImageView
             android:id="@+id/browser_forward"
@@ -39,7 +39,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="14dp"
-            android:src="@drawable/ic_brows_forward" />
+            android:src="@mipmap/ic_brows_forward" />
 
         <ImageView
             android:id="@+id/browser_refresh"
@@ -47,7 +47,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="14dp"
-            android:src="@drawable/ic_brows_refresh" />
+            android:src="@mipmap/ic_brows_refresh" />
 
         <ImageView
             android:id="@+id/browser_system_browser"
@@ -55,7 +55,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="14dp"
-            android:src="@drawable/ic_brows_systembrowser" />
+            android:src="@mipmap/ic_brows_systembrowser" />
     </LinearLayout>
 
 </RelativeLayout>

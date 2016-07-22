@@ -46,7 +46,7 @@ public class NewsAdapter extends BaseListAdapter<News> {
         if (StringUtils.isSameDay(systemTime, item.getPubDate())) {
 
             String text = "[icon] " + item.getTitle();
-            Drawable drawable = mCallback.getContext().getResources().getDrawable(R.drawable.ic_label_today);
+            Drawable drawable = mCallback.getContext().getResources().getDrawable(R.mipmap.ic_label_today);
             drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
             ImageSpan imageSpan = new ImageSpan(drawable, ImageSpan.ALIGN_BOTTOM);
 

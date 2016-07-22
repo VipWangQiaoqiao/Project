@@ -221,7 +221,7 @@ public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectIma
             mDelete = (ImageView) itemView.findViewById(R.id.iv_delete);
 
             mDelete.setVisibility(View.GONE);
-            mImage.setImageResource(R.drawable.ic_tweet_add);
+            mImage.setImageResource(R.mipmap.ic_tweet_add);
             mImage.setOnClickListener(clickListener);
         }
 

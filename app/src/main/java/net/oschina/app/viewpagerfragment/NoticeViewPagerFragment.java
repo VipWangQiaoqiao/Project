@@ -175,31 +175,31 @@ public class NoticeViewPagerFragment extends BaseViewPagerFragment {
         mBvAtMe.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
         mBvAtMe.setBadgePosition(BadgeView.POSITION_CENTER);
         mBvAtMe.setGravity(Gravity.CENTER);
-        mBvAtMe.setBackgroundResource(R.drawable.notification_bg);
+        mBvAtMe.setBackgroundResource(R.mipmap.notification_bg);
 
         mBvComment = new BadgeView(getActivity(), mTabStrip.getBadgeView(1));
         mBvComment.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
         mBvComment.setBadgePosition(BadgeView.POSITION_CENTER);
         mBvComment.setGravity(Gravity.CENTER);
-        mBvComment.setBackgroundResource(R.drawable.notification_bg);
+        mBvComment.setBackgroundResource(R.mipmap.notification_bg);
 
         mBvMsg = new BadgeView(getActivity(), mTabStrip.getBadgeView(2));
         mBvMsg.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
         mBvMsg.setBadgePosition(BadgeView.POSITION_CENTER);
         mBvMsg.setGravity(Gravity.CENTER);
-        mBvMsg.setBackgroundResource(R.drawable.notification_bg);
+        mBvMsg.setBackgroundResource(R.mipmap.notification_bg);
 
         mBvFans = new BadgeView(getActivity(), mTabStrip.getBadgeView(3));
         mBvFans.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
         mBvFans.setBadgePosition(BadgeView.POSITION_CENTER);
         mBvFans.setGravity(Gravity.CENTER);
-        mBvFans.setBackgroundResource(R.drawable.notification_bg);
+        mBvFans.setBackgroundResource(R.mipmap.notification_bg);
         
         mBvLike = new BadgeView(getActivity(), mTabStrip.getBadgeView(4));
         mBvLike.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
         mBvLike.setBadgePosition(BadgeView.POSITION_CENTER);
         mBvLike.setGravity(Gravity.CENTER);
-        mBvLike.setBackgroundResource(R.drawable.notification_bg);
+        mBvLike.setBackgroundResource(R.mipmap.notification_bg);
 
         mTabStrip.getBadgeView(0).setVisibility(View.GONE);
         mTabStrip.getBadgeView(1).setVisibility(View.VISIBLE);

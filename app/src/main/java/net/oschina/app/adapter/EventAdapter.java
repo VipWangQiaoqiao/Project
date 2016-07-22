@@ -78,7 +78,7 @@ public class EventAdapter extends ListBaseAdapter<Event> {
                 if (event.getApplyStatus() == Event.APPLYSTATUS_CHECKING
                         || event.getApplyStatus() == Event.APPLYSTATUS_CHECKED) {
                     vh.status
-                            .setImageResource(R.drawable.icon_event_status_checked);
+                            .setImageResource(R.mipmap.icon_event_status_checked);
                     vh.status.setVisibility(View.VISIBLE);
                 } else {
                     vh.status.setVisibility(View.GONE);
@@ -86,12 +86,12 @@ public class EventAdapter extends ListBaseAdapter<Event> {
                 break;
             case EventList.EVENT_LIST_TYPE_MY_EVENT:
                 if (event.getApplyStatus() == Event.APPLYSTATUS_ATTEND) {
-                    vh.status.setImageResource(R.drawable.icon_event_status_attend);
+                    vh.status.setImageResource(R.mipmap.icon_event_status_attend);
                 } else if (event.getStatus() == Event.EVNET_STATUS_APPLYING) {
                     vh.status
-                            .setImageResource(R.drawable.icon_event_status_checked);
+                            .setImageResource(R.mipmap.icon_event_status_checked);
                 } else {
-                    vh.status.setImageResource(R.drawable.icon_event_status_over);
+                    vh.status.setImageResource(R.mipmap.icon_event_status_over);
                 }
                 vh.status.setVisibility(View.VISIBLE);
                 break;

@@ -213,7 +213,7 @@ public class ShareDialog extends CommonDialog implements
     }
 
     private UMImage getShareImg() {
-        return new UMImage(this.context, R.drawable.ic_share);
+        return new UMImage(this.context, R.mipmap.ic_share);
     }
 
     private boolean checkCanShare() {

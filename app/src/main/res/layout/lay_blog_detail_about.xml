@@ -15,7 +15,7 @@
         android:layout_centerVertical="true"
         android:layout_margin="16dp"
         android:scaleType="centerInside"
-        android:src="@drawable/ic_arrow_right" />
+        android:src="@mipmap/ic_arrow_right" />
 
     <TextView
         android:id="@+id/tv_title"

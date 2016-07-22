@@ -94,7 +94,7 @@ public class TeamProjectFragment extends BaseListFragment<TeamProject> {
     
     private void setNoProject() {
 	mErrorLayout.setErrorType(EmptyLayout.NODATA);
-	mErrorLayout.setErrorImag(R.drawable.page_icon_empty);
+	mErrorLayout.setErrorImag(R.mipmap.page_icon_empty);
 	String str = getResources().getString(R.string.team_empty_project);
 	mErrorLayout.setErrorMessage(str);
     }

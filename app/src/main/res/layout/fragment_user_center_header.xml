@@ -10,7 +10,7 @@
         android:id="@+id/ll_user_container"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:background="@drawable/bg_my"
+        android:background="@mipmap/bg_my"
         android:orientation="vertical"
         android:visibility="visible" >
 
@@ -28,7 +28,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/space_20"
                 android:contentDescription="@null"
-                android:src="@drawable/widget_dface"
+                android:src="@mipmap/widget_dface"
                 app:border_color="@color/white"
                 app:border_width="2dip" />
 
@@ -136,7 +136,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/btn_small_white_selector"
             android:clickable="true"
-            android:drawableLeft="@drawable/ic_private_message"
+            android:drawableLeft="@mipmap/ic_private_message"
             android:drawablePadding="@dimen/space_4"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/space_20"
@@ -152,7 +152,7 @@
             android:layout_marginLeft="@dimen/space_20"
             android:background="@drawable/btn_small_white_selector"
             android:clickable="true"
-            android:drawableLeft="@drawable/ic_followed"
+            android:drawableLeft="@mipmap/ic_followed"
             android:drawablePadding="@dimen/space_4"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/space_20"

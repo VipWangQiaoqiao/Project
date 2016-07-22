@@ -17,7 +17,7 @@
 
         <ImageView
             style="@style/MenuItemImageViewStyle"
-            android:background="@drawable/drawer_menu_icon_setting_nor" />
+            android:background="@mipmap/drawer_menu_icon_setting_nor" />
 
         <TextView
             style="@style/MenuItemTextViewStyle"
@@ -36,7 +36,7 @@
 
         <ImageView
             style="@style/MenuItemImageViewStyle"
-            android:background="@drawable/drawer_menu_icon_night_nor" />
+            android:background="@mipmap/drawer_menu_icon_night_nor" />
 
         <TextView
             style="@style/MenuItemTextViewStyle"

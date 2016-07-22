@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="2dip"
             android:contentDescription="@null"
-            android:src="@drawable/widget_today_icon"
+            android:src="@mipmap/widget_today_icon"
             android:visibility="visible" />
 
         <TextView

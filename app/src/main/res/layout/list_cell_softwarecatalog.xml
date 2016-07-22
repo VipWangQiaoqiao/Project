@@ -22,6 +22,6 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="@dimen/space_8"
         android:contentDescription="@null"
-        android:src="@drawable/ic_item_goto_right_tip" />
+        android:src="@mipmap/ic_item_goto_right_tip" />
 
 </RelativeLayout>

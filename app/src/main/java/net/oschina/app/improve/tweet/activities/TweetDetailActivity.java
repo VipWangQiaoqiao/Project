@@ -97,13 +97,13 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
     private KeyboardInputDelegation mDelegation;
     private View.OnClickListener onPortraitClickListener;
 
-    public static void show(Context context, Tweet tweet){
+    public static void show(Context context, Tweet tweet) {
         Intent intent = new Intent(context, TweetDetailActivity.class);
         intent.putExtra(BUNDLE_KEY_TWEET, tweet);
         context.startActivity(intent);
     }
 
-    public static void show(Context context, long id){
+    public static void show(Context context, long id) {
         Intent intent = new Intent(context, TweetDetailActivity.class);
         intent.putExtra(BUNDLE_KEY_TWEET_ID, id);
         context.startActivity(intent);
@@ -118,7 +118,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
     protected boolean initBundle(Bundle bundle) {
         tweet = (Tweet) getIntent().getSerializableExtra(BUNDLE_KEY_TWEET);
         tid = getIntent().getLongExtra(BUNDLE_KEY_TWEET_ID, 0);
-        if (tid != 0){
+        if (tid != 0) {
             tweet = new Tweet();
         }
         if (tweet == null) {
@@ -182,7 +182,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
             }
         };
 
-        if (tid != 0){
+        if (tid != 0) {
             OSChinaApi.getTweetDetail(tid, new TextHttpResponseHandler() {
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -192,9 +192,10 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, String responseString) {
                     ResultBean<Tweet> result = AppContext.createGson().fromJson(
-                            responseString, new TypeToken<ResultBean<Tweet>>(){}.getType());
-                    if (result.isSuccess()){
-                        if (result.getResult() == null){
+                            responseString, new TypeToken<ResultBean<Tweet>>() {
+                            }.getType());
+                    if (result.isSuccess()) {
+                        if (result.getResult() == null) {
                             AppContext.showToast(R.string.tweet_detail_data_null);
                             finish();
                             return;
@@ -203,7 +204,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
                         mAgencyViewImp.resetCmnCount(tweet.getCommentCount());
                         mAgencyViewImp.resetLikeCount(tweet.getLikeCount());
                         fillDetailView();
-                    }else{
+                    } else {
                         onFailure(500, headers, "妈的智障", null);
                     }
                 }
@@ -303,15 +304,15 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
         // 有可能传入的tweet只有id这一个值
         if (tweet == null || isDestroy())
             return;
-        if (tweet.getAuthor() != null){
+        if (tweet.getAuthor() != null) {
             if (TextUtils.isEmpty(tweet.getAuthor().getPortrait())) {
-                ivPortrait.setImageResource(R.drawable.widget_dface);
+                ivPortrait.setImageResource(R.mipmap.widget_dface);
             } else {
                 getImageLoader()
                         .load(tweet.getAuthor().getPortrait())
                         .asBitmap()
-                        .placeholder(getResources().getDrawable(R.drawable.widget_dface))
-                        .error(getResources().getDrawable(R.drawable.widget_dface))
+                        .placeholder(getResources().getDrawable(R.mipmap.widget_dface))
+                        .error(getResources().getDrawable(R.mipmap.widget_dface))
                         .into(ivPortrait);
             }
             ivPortrait.setOnClickListener(getOnPortraitClickListener());
@@ -325,19 +326,19 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
         } else {
             ivThumbup.setSelected(false);
         }
-        if (!TextUtils.isEmpty(tweet.getContent())){
+        if (!TextUtils.isEmpty(tweet.getContent())) {
             CommentsUtil.formatHtml(getResources(), mContent, tweet.getContent());
         }
-        if (tweet.getImages() != null && tweet.getImages().length > 0){
+        if (tweet.getImages() != null && tweet.getImages().length > 0) {
             mLayoutGrid.setVisibility(View.VISIBLE);
-            final View.OnClickListener l = new View.OnClickListener(){
+            final View.OnClickListener l = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String mImageUrl = (String) v.getTag();
                     OSCPhotosActivity.showImagePreview(TweetDetailActivity.this, mImageUrl);
                 }
             };
-            for (int i = 0; i < tweet.getImages().length; i++){
+            for (int i = 0; i < tweet.getImages().length; i++) {
                 ImageView mImage = new ImageView(this);
                 GridLayout.LayoutParams mParams = new GridLayout.LayoutParams();
                 mParams.setMargins(0, (int) TDevice.dpToPixel(8), (int) TDevice.dpToPixel(8), 0);
@@ -349,13 +350,13 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
                 getImageLoader()
                         .load(tweet.getImages()[i].getThumb())
                         .asBitmap()
-                        .placeholder(R.drawable.ic_default_image)
-                        .error(R.drawable.ic_default_image)
+                        .placeholder(R.mipmap.ic_default_image)
+                        .error(R.mipmap.ic_default_image)
                         .into(mImage);
                 mImage.setTag(tweet.getImages()[i].getHref());
                 mImage.setOnClickListener(l);
             }
-        }else {
+        } else {
             mLayoutGrid.setVisibility(View.GONE);
         }
     }

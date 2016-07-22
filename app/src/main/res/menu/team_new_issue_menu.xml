@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/team_issue_new_pub"
-        android:icon="@drawable/actionbar_send_icon"
+        android:icon="@mipmap/actionbar_send_icon"
         android:title="发布"
         android:visible="true"
         osc:showAsAction="always"/>

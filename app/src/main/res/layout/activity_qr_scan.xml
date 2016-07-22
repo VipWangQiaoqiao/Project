@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:layout_alignParentTop="true"
-            android:background="@drawable/qr_scan_mask" />
+            android:background="@mipmap/qr_scan_mask" />
 
         <RelativeLayout
             android:id="@+id/capture_crop_view"
@@ -28,7 +28,7 @@
             android:layout_height="200dp"
             android:layout_below="@id/capture_mask_top"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/qr_capture" >
+            android:background="@mipmap/qr_capture" >
 
             <ImageView
                 android:id="@+id/capture_scan_line"
@@ -39,7 +39,7 @@
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
                 android:layout_marginTop="5dp"
-                android:src="@drawable/qr_scan_line" />
+                android:src="@mipmap/qr_scan_line" />
         </RelativeLayout>
 
 
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_below="@id/capture_crop_view"
-            android:background="@drawable/qr_scan_mask" />
+            android:background="@mipmap/qr_scan_mask" />
         
         <TextView
             android:id="@+id/tv_tip"
@@ -70,7 +70,7 @@
             android:layout_alignParentLeft="true"
             android:layout_below="@id/capture_mask_top"
             android:layout_toLeftOf="@id/capture_crop_view"
-            android:background="@drawable/qr_scan_mask" />
+            android:background="@mipmap/qr_scan_mask" />
 
         <ImageView
             android:id="@+id/capture_mask_right"
@@ -80,7 +80,7 @@
             android:layout_alignParentRight="true"
             android:layout_below="@id/capture_mask_top"
             android:layout_toRightOf="@id/capture_crop_view"
-            android:background="@drawable/qr_scan_mask" />
+            android:background="@mipmap/qr_scan_mask" />
     </RelativeLayout>
 
     <LinearLayout
@@ -96,7 +96,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@drawable/flash_default"
+            android:background="@mipmap/flash_default"
             android:clickable="true"
             android:tag="1" />
     </LinearLayout>

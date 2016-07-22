@@ -114,7 +114,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/space_2"
-        android:drawableRight="@drawable/ic_item_goto_right_tip"
+        android:drawableRight="@mipmap/ic_item_goto_right_tip"
         android:gravity="center_vertical"
         android:padding="@dimen/space_8"
         android:textColor="@color/main_black"

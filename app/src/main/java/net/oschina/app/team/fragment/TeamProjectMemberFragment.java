@@ -93,7 +93,7 @@ public class TeamProjectMemberFragment extends
 
     private void setNoProjectMember() {
 	mErrorLayout.setErrorType(EmptyLayout.NODATA);
-	mErrorLayout.setErrorImag(R.drawable.page_icon_empty);
+	mErrorLayout.setErrorImag(R.mipmap.page_icon_empty);
 	String str = getResources().getString(
 		R.string.team_empty_project_member);
 	mErrorLayout.setErrorMessage(str);

@@ -293,7 +293,7 @@ public class ServerTaskService extends IntentService {
                 .setOnlyAlertOnce(true)
                 .setContentIntent(
                         PendingIntent.getActivity(this, 0, new Intent(), 0))
-                .setSmallIcon(R.drawable.ic_notification);
+                .setSmallIcon(R.mipmap.ic_notification);
 
         // if (AppContext.isNotificationSoundEnable()) {
         // builder.setDefaults(Notification.DEFAULT_SOUND);

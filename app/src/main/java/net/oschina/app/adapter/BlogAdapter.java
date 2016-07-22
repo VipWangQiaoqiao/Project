@@ -59,9 +59,9 @@ public class BlogAdapter extends ListBaseAdapter<Blog> {
 
         vh.tip.setVisibility(View.VISIBLE);
         if (blog.getDocumenttype() == Blog.DOC_TYPE_ORIGINAL) {
-            vh.tip.setImageResource(R.drawable.widget_original_icon);
+            vh.tip.setImageResource(R.mipmap.widget_original_icon);
         } else {
-            vh.tip.setImageResource(R.drawable.widget_repaste_icon);
+            vh.tip.setImageResource(R.mipmap.widget_repaste_icon);
         }
 
         vh.title.setText(blog.getTitle());

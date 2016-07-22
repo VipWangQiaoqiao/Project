@@ -139,7 +139,7 @@ public class DownloadService extends Service {
 	 * 创建通知
 	 */
 	private void setUpNotification() {
-		int icon = R.drawable.ic_notification;
+		int icon = R.mipmap.ic_notification;
 		CharSequence tickerText = "准备下载";
 		long when = System.currentTimeMillis();
 		mNotification = new Notification(icon, tickerText, when);

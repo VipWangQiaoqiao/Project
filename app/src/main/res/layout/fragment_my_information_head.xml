@@ -5,7 +5,7 @@
     android:id="@+id/user_container"
     android:layout_width="match_parent"
     android:layout_height="200dp"
-    android:background="@drawable/bg_my">
+    android:background="@mipmap/bg_my">
 
     <LinearLayout
         android:id="@+id/ll_user_container"
@@ -50,7 +50,7 @@
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
                         android:contentDescription="@null"
-                        android:src="@drawable/widget_dface"
+                        android:src="@mipmap/widget_dface"
                         app:border_color="@color/white"
                         app:border_width="2dip" />
 
@@ -61,7 +61,7 @@
                         android:layout_alignBottom="@+id/iv_avatar"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        app:srcCompat="@drawable/userinfo_icon_female" />
+                        app:srcCompat="@mipmap/userinfo_icon_female" />
                 </RelativeLayout>
 
                 <TextView
@@ -83,7 +83,7 @@
                     android:layout_marginRight="14dp"
                     android:clickable="true"
                     android:contentDescription="@string/information"
-                    android:src="@drawable/btn_qrcode" />
+                    android:src="@mipmap/btn_qrcode" />
 
                 <!--   <TextView
                        android:id="@+id/tv_tweet"
@@ -177,7 +177,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/space_20"
             android:contentDescription="@null"
-            android:src="@drawable/widget_dface"
+            android:src="@mipmap/widget_dface"
             app:border_color="@color/white"
             app:border_width="3dip" />
 
