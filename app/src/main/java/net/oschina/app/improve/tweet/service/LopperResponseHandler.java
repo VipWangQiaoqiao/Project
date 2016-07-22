@@ -13,6 +13,7 @@ import cz.msebera.android.httpclient.Header;
  * Created by JuQiu
  * on 16/7/19.
  */
+@SuppressWarnings("WeakerAccess")
 public abstract class LopperResponseHandler extends AsyncHttpResponseHandler {
     private static final String LOG_TAG = "TextHttpRH";
 
@@ -29,7 +30,7 @@ public abstract class LopperResponseHandler extends AsyncHttpResponseHandler {
      * @param encoding String encoding, see {@link #setCharset(String)}
      */
     public LopperResponseHandler(String encoding) {
-        super(Looper.getMainLooper());
+        super(Looper.myLooper());
         setCharset(encoding);
     }
 

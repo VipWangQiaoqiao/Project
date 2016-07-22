@@ -229,6 +229,7 @@ public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectIma
             mDelete.setTag(model);
             loader.load(model.path)
                     .centerCrop()
+                    .placeholder(R.color.grey_300)
                     .into(mImage);
         }
 

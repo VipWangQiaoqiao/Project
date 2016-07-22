@@ -125,6 +125,7 @@
 
     <!-- notification messages -->
     <string name="comment_blog">发布评论</string>
+    <string name="comment_pub">发表评论</string>
     <string name="comment_publishing">正在发布你的评论…</string>
     <string name="comment_publish_success">评论成功</string>
     <string name="comment_publish_faile">评论失败</string>
@@ -133,9 +134,17 @@
 
     <string name="tweet_public">发布动弹</string>
     <string name="tweet_hint">今天你动弹了吗？</string>
+
+    <string name="tweet_publish_title">发布动弹</string>
     <string name="tweet_publishing">正在发布动弹…</string>
     <string name="tweet_publish_continue">正在重新发布动弹…</string>
-    <string name="tweet_publish_success">动弹发布成功</string>
+    <string name="tweet_publish_success">动弹发布成功~</string>
+    <string name="tweet_publish_failed">动弹发布失败, 点击重新发送!</string>
+    <string name="tweet_image_wait">准备图片中…</string>
+    <string name="tweet_image_wait_failed">图片转存失败!</string>
+    <string name="tweet_image_publishing" formatted="false">发布图片中-[%s/%s]</string>
+    <string name="tweet_image_publish_failed" formatted="false">发布图片失败-[%s/%s]</string>
+
     <string name="tweet_publish_faile">发布动弹失败</string>
     <string name="tweet_play_faile">动弹播放失败</string>
     <string name="tweet_audio_faile">语音动弹发布失败</string>

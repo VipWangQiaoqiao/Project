@@ -35,7 +35,7 @@ public class SoftWareTweetsFrament extends BaseListFragment<Tweet> implements
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_software_tweets;
+        return R.layout.activity_software_tweets;
     }
 
     @Override

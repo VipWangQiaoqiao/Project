@@ -71,7 +71,11 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
                 recommend.setBounds(0, 0, recommend.getIntrinsicWidth(), recommend.getIntrinsicHeight());
             }
             ImageSpan imageSpan = new ImageSpan(recommend, ImageSpan.ALIGN_BOTTOM);
-            spannable.setSpan(imageSpan, 7, 13, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            if (item.isOriginal()) {
+                spannable.setSpan(imageSpan, 7, 13, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            } else {
+                spannable.setSpan(imageSpan, 0, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            }
         }
 
         title.setText(spannable.append(item.getTitle()));

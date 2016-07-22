@@ -76,9 +76,6 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     protected void initWidget(View root) {
         super.initWidget(root);
 
-        // Toolbar
-
-
         // EmojiKeyboardFragment
         getChildFragmentManager().beginTransaction()
                 .replace(R.id.lay_emoji_keyboard, mEmojiKeyboard)
@@ -125,14 +122,32 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
 
                 if (surplusLen > 10) {
                     // 隐藏提示
-                    mIndicator.setVisibility(View.INVISIBLE);
-                    ViewCompat.animate(mIndicator)
-                            .scaleX(1f)
-                            .scaleXBy(0)
-                            .setDuration(100)
-                            .start();
+                    if (mIndicator.getVisibility() != View.INVISIBLE) {
+                        ViewCompat.animate(mIndicator)
+                                .alpha(0)
+                                .setDuration(200)
+                                .withEndAction(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mIndicator.setVisibility(View.INVISIBLE);
+                                    }
+                                })
+                                .start();
+                    }
                 } else {
-                    mIndicator.setVisibility(View.VISIBLE);
+                    if (mIndicator.getVisibility() != View.VISIBLE) {
+                        ViewCompat.animate(mIndicator)
+                                .alpha(1f)
+                                .setDuration(200)
+                                .withStartAction(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mIndicator.setVisibility(View.VISIBLE);
+                                    }
+                                })
+                                .start();
+                    }
+
                     mIndicator.setText(String.valueOf(surplusLen));
                     mIndicator.setTextColor(surplusLen >= 0 ?
                             getResources().getColor(R.color.tweet_indicator_text_color) :
@@ -186,7 +201,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
                 public void run() {
                     mIndicator.setSelected(false);
                 }
-            }, 1600);
+            }, 1000);
         } else {
             mEditContent.setText("");
         }
