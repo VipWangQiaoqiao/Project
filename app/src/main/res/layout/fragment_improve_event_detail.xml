@@ -10,6 +10,7 @@
         android:id="@+id/nsv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_scrollFlags="scroll|enterAlways">
 
@@ -168,8 +169,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/lay_16"
-                    android:textColor="@color/text_dark"
                     android:lineSpacingExtra="4dp"
+                    android:textColor="@color/text_dark"
                     android:textSize="14sp"
                     tools:text="免费" />
             </LinearLayout>
@@ -213,19 +214,19 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/lay_16"
-                android:textColor="#111111"
-                android:lineSpacingExtra="4dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:textSize="18sp"
-                android:text="活动介绍:" />
+                android:layout_marginLeft="@dimen/lay_16"
+                android:layout_marginTop="8dp"
+                android:lineSpacingExtra="4dp"
+                android:text="活动介绍:"
+                android:textColor="#111111"
+                android:textSize="18sp" />
 
             <FrameLayout
                 android:id="@+id/lay_webview"
-                android:padding="@dimen/lay_16"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:padding="@dimen/lay_16" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
@@ -253,11 +254,11 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
-            android:paddingBottom="4dp"
-            android:paddingTop="4dp"
             android:background="@drawable/selector_event_fav"
-            android:orientation="horizontal">
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp">
 
             <ImageView
                 android:id="@+id/iv_fav"
@@ -283,8 +284,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
             android:background="@drawable/selector_event_sign"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <ImageView
