@@ -1,5 +1,6 @@
 package net.oschina.app.improve.tweet.service;
 
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -98,14 +99,14 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
      * @param runnable 完全上传完成时回调
      */
     private void uploadImages(final int index, final String token, final String[] paths, final UploadImageCallback runnable) {
+        // call progress
+        runnable.onUploadImage(index, token);
+
         // check done
         if (index < 0 || index >= paths.length) {
             runnable.onUploadImageDone();
             return;
         }
-
-        // call progress
-        runnable.onUploadImage(index, token);
 
         final String path = paths[index];
 
@@ -229,11 +230,23 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
      */
     private static String[] saveImageToCache(String cacheDir, String[] paths) {
         List<String> ret = new ArrayList<>();
+        byte[] buffer = new byte[PicturesCompress.DEFAULT_BUFFER_SIZE];
+        BitmapFactory.Options options = PicturesCompress.createOptions();
         for (String path : paths) {
-            String tempFile = String.format("%s/IMG_%s.png", cacheDir, System.currentTimeMillis());
+            File sourcePath = new File(path);
+            if (!sourcePath.exists())
+                continue;
             try {
-                if (doImage(path, tempFile))
+                String name = sourcePath.getName();
+                String ext = name.substring(name.lastIndexOf(".") + 1);
+                String tempFile = String.format("%s/IMG_%s.%s", cacheDir, System.currentTimeMillis(), ext);
+                if (PicturesCompress.compressImage(path, tempFile,
+                        512 * 1024, 80,
+                        1280, 1280 * 2,
+                        buffer, options, true)) {
+                    Log.e("OPERATOR", "doImage " + tempFile + " " + new File(tempFile).length());
                     ret.add(tempFile);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -245,14 +258,4 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
         }
         return null;
     }
-
-    private static boolean doImage(String srcPath, String targetPath) {
-        if (TweetPublishCache.compressImage(srcPath, targetPath, 512 * 1024, 35, 1080, 1080 * 3)) {
-            Log.e("OPERATOR", "doImage " + new File(targetPath).length());
-            return true;
-        }
-        return false;
-    }
-
-
 }
