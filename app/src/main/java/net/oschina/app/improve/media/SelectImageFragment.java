@@ -142,7 +142,7 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
             @Override
             public void onClick(View v) {
                 if (mSelectedImage.size() > 0) {
-                    ImageGalleryActivity.showActivity(getActivity(), mConfig.selectedImages(CommonUtil.toArrayList(mSelectedImage)), 0);
+                    ImageGalleryActivity.show(getActivity(), mConfig.selectedImages(CommonUtil.toArrayList(mSelectedImage)), 0);
                 }
             }
         });

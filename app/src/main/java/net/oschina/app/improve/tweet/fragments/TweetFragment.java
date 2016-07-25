@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
@@ -90,23 +89,6 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
                 getActivity().registerReceiver(mReceiver, filter);
                 break;
         }
-        TweetAdapter.OnTweetLikeClickListener listener = ((TweetAdapter) mAdapter).new OnTweetLikeClickListener() {
-            @Override
-            public void onClick(View v, int position) {
-                OSChinaApi.reverseTweetLike(mAdapter.getItem(position).getId(), new TextHttpResponseHandler() {
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                        Log.e("onFailure", responseString);
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                        Log.e("onSuccess", responseString);
-                    }
-                });
-            }
-        };
-        ((TweetAdapter) mAdapter).setListener(listener);
 
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override

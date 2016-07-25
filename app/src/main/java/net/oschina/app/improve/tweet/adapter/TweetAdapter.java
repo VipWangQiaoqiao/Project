@@ -13,13 +13,24 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.google.gson.reflect.TypeToken;
+import com.loopj.android.http.TextHttpResponseHandler;
+
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewHolder;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.User;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.base.adapter.BaseListAdapter;
 import net.oschina.app.improve.bean.Tweet;
+import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.Author;
+import net.oschina.app.improve.bean.simple.TweetLikeReverse;
+import net.oschina.app.improve.media.ImageGalleryActivity;
+import net.oschina.app.improve.media.config.ImageConfig;
+import net.oschina.app.improve.media.config.ImageLoaderListener;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.widget.FlowLayout;
 import net.oschina.app.util.ImageUtils;
@@ -31,6 +42,10 @@ import net.qiujuer.genius.ui.Ui;
 
 import org.kymjs.kjframe.utils.DensityUtils;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+
+import cz.msebera.android.httpclient.Header;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -41,9 +56,39 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class TweetAdapter extends BaseListAdapter<Tweet> {
     private Bitmap recordBitmap;
     private OnTweetLikeClickListener listener;
+    private OnTweetImageClickListener imageClickListener;
 
     public TweetAdapter(Callback callback) {
         super(callback);
+        initListener();
+    }
+
+    private void initListener() {
+        imageClickListener = new OnTweetImageClickListener() {
+            @Override
+            public void onClick(View v, int position, int imagePosition) {
+                ArrayList<String> images = new ArrayList<>();
+                for (Tweet.Image i : getItem(position).getImages()) {
+                    images.add(i.getHref());
+                }
+                ImageGalleryActivity.show(mCallback.getContext(), ImageConfig.Build()
+                        .selectedImages(images)
+                        .loaderListener(new ImageLoaderListener() {
+                            @Override
+                            public void displayImage(ImageView iv, String path) {
+                                Glide.with(mCallback.getContext().getApplicationContext()).load(path).into(iv);
+                            }
+                        }), imagePosition);
+            }
+        };
+
+        listener = new OnTweetLikeClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                OSChinaApi.reverseTweetLike(getItem(position).getId(), new TweetLikedHandler(position));
+            }
+        };
+
     }
 
     private void initRecordImg(Context cxt) {
@@ -55,17 +100,17 @@ public class TweetAdapter extends BaseListAdapter<Tweet> {
 
     @Override
     protected void convert(ViewHolder vh, final Tweet item, int position) {
-        vh.setImageForNet(R.id.iv_tweet_face, item.getAuthor().getPortrait());
+        vh.setImageForNet(R.id.iv_tweet_face, item.getAuthor().getPortrait(), R.mipmap.widget_dface);
         CircleImageView iv_tweet_face = vh.getView(R.id.iv_tweet_face);
         iv_tweet_face.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Author author = item.getAuthor();
                 User user = new User();
-                user.setId((int)author.getId());
+                user.setId((int) author.getId());
                 user.setName(author.getName());
                 user.setPortrait(author.getPortrait());
-                OtherUserHomeActivity.show(mCallback.getContext(),user);
+                OtherUserHomeActivity.show(mCallback.getContext(), user);
             }
         });
 
@@ -75,7 +120,7 @@ public class TweetAdapter extends BaseListAdapter<Tweet> {
         vh.setText(R.id.tv_tweet_like_count, String.valueOf(item.getLikeCount()));
         vh.setText(R.id.tv_tweet_comment_count, String.valueOf(item.getCommentCount()));
 
-        TweetTextView tv_content = (TweetTextView) vh.getView(R.id.tweet_item);
+        TweetTextView tv_content = vh.getView(R.id.tweet_item);
         tv_content.setMovementMethod(MyLinkMovementMethod.a());
         tv_content.setFocusable(false);
         tv_content.setDispatchToParent(true);
@@ -97,23 +142,26 @@ public class TweetAdapter extends BaseListAdapter<Tweet> {
             tv_content.setText(span);
         }
 
-        ImageView iv_tweet_like = (ImageView) vh.getView(R.id.iv_like_state);
+        ImageView iv_tweet_like = vh.getView(R.id.iv_like_state);
         iv_tweet_like.setImageResource(item.isLiked() ? R.mipmap.ic_thumbup_actived : R.mipmap.ic_thumbup_normal);
         iv_tweet_like.setTag(position);
         iv_tweet_like.setOnClickListener(listener);
 
         Tweet.Image[] images = item.getImages();
-        FlowLayout flowLayout = (FlowLayout) vh.getView(R.id.fl_image);
+        FlowLayout flowLayout = vh.getView(R.id.fl_image);
         flowLayout.removeAllViews();
         if (images != null && images.length > 0) {
             flowLayout.setVisibility(View.VISIBLE);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams((int) Ui.dipToPx(mCallback.getContext().getResources(), 64)
                     , (int) Ui.dipToPx(mCallback.getContext().getResources(), 64));
-            for (Tweet.Image image : images) {
+            for (int i = 0; i < images.length; i++) {
                 ImageView imageView = new ImageView(mCallback.getContext());
                 imageView.setLayoutParams(layoutParams);
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                vh.setImageForNet(imageView, image.getThumb(), R.mipmap.ic_default_image);
+                imageView.setTag(R.id.iv_tweet_image, i);
+                imageView.setTag(R.id.iv_tweet_face, position);
+                imageView.setOnClickListener(imageClickListener);
+                vh.setImageForNet(imageView, images[i].getThumb(), R.mipmap.ic_default_image);
                 flowLayout.addView(imageView);
             }
         } else {
@@ -126,16 +174,53 @@ public class TweetAdapter extends BaseListAdapter<Tweet> {
         return R.layout.item_list_tweet_improve;
     }
 
-    public void setListener(OnTweetLikeClickListener listener) {
-        this.listener = listener;
-    }
-
-    public abstract class OnTweetLikeClickListener implements View.OnClickListener {
+    private abstract class OnTweetLikeClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             onClick(v, Integer.parseInt(v.getTag().toString()));
         }
 
         public abstract void onClick(View v, int position);
+    }
+
+    private abstract class OnTweetImageClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            onClick(v, Integer.parseInt(v.getTag(R.id.iv_tweet_face).toString()),
+                    Integer.parseInt(v.getTag(R.id.iv_tweet_image).toString()));
+        }
+
+        public abstract void onClick(View v, int position, int imagePosition);
+    }
+
+    //点赞回调
+    private class TweetLikedHandler extends TextHttpResponseHandler {
+        private int position;
+
+        public TweetLikedHandler(int position) {
+            this.position = position;
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+
+        }
+
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, String responseString) {
+            try {
+                Type type = new TypeToken<ResultBean<TweetLikeReverse>>() {
+                }.getType();
+                ResultBean<TweetLikeReverse> resultBean = AppContext.createGson().fromJson(responseString, type);
+                Tweet tweet = getItem(position);
+                tweet.setLiked(resultBean.getResult().isLiked());
+                int count = tweet.getLikeCount();
+                tweet.setLikeCount(tweet.isLiked() ? count + 1 : count - 1);
+                updateItem(position, tweet);
+            } catch (Exception e) {
+                e.printStackTrace();
+                onFailure(statusCode, headers, responseString, e);
+            }
+        }
     }
 }

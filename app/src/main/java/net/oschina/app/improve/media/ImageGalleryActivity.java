@@ -1,6 +1,6 @@
 package net.oschina.app.improve.media;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -28,11 +28,11 @@ public class ImageGalleryActivity extends AppCompatActivity implements ViewPager
     private ViewPagerAdapter mAdapter;
     private int currentPosition;
 
-    public static void showActivity(Activity activity, ImageConfig config, int position) {
+    public static void show(Context context, ImageConfig config, int position) {
         mConfig = config;
-        Intent intent = new Intent(activity, ImageGalleryActivity.class);
+        Intent intent = new Intent(context, ImageGalleryActivity.class);
         intent.putExtra("position", position);
-        activity.startActivity(intent);
+        context.startActivity(intent);
     }
 
     @Override
