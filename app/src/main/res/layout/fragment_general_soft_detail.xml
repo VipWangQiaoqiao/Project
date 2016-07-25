@@ -15,6 +15,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_scrollFlags="scroll|enterAlways">
 
@@ -59,10 +60,10 @@
                     android:id="@+id/tv_software_name"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/size_40"
-                    android:gravity="center_vertical"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/lay_12"
                     android:ellipsize="end"
+                    android:gravity="center_vertical"
                     android:lineSpacingExtra="2dp"
                     android:maxLines="2"
                     android:minLines="1"
