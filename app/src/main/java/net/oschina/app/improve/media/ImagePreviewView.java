@@ -317,7 +317,7 @@ public class ImagePreviewView extends ImageView {
 
         Drawable drawable = getDrawable();
         if (drawable == null) return false;
-        if (mBoundHeight != 0 && mBoundWidth != 0) return false;
+        if (mBoundWidth != 0 && mBoundHeight != 0 && scale != 1) return false;
 
         int width = getWidth();
         int height = getHeight();
@@ -338,11 +338,13 @@ public class ImagePreviewView extends ImageView {
         return change;
     }
 
+
+
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-//        translateLeft = (w - mBoundWidth) / 2;
-//        translateTop = (h - mBoundHeight) / 2;
+        translateLeft = (w - mBoundWidth) / 2;
+        translateTop = (h - mBoundHeight) / 2;
     }
 
     @Override
