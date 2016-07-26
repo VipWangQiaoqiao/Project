@@ -95,7 +95,6 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
         if (mConfig == null) mConfig = ImageConfig.Build();
         mImageAdapter.setLoader(mConfig.getLoaderListener());
         mImageFolderAdapter.setLoader(mConfig.getLoaderListener());
-        mImageFolderAdapter.setMediaMode(mConfig.getMediaMode());
         rv_image.setAdapter(mImageAdapter);
     }
 

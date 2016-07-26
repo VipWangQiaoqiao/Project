@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import net.oschina.app.R;
+import net.oschina.app.bean.User;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
+import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.ui.MainActivity;
 import net.oschina.app.util.UIHelper;
 
@@ -44,7 +46,11 @@ public class SchemeUrlActivity extends BaseBackActivity {
                         }
                     }
                     startActivity(new Intent(this, MainActivity.class));
-                    if (type != 0 || type != -1) {
+                    if (type == 20) {//跳转到用户中心
+                        User user = new User();
+                        user.setId((int) id);
+                        OtherUserHomeActivity.show(this, user);
+                    } else if (type != 0 || type != -1) {
                         UIHelper.showDetail(this, type, id, "");
                     }
                 }
