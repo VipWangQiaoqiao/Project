@@ -1540,9 +1540,11 @@ public class OSChinaApi {
      * @param sourceId 动弹id
      * @param handler  回调
      */
-    public static void getTweetCommentList(long sourceId, TextHttpResponseHandler handler) {
+    public static void getTweetCommentList(long sourceId, String pageToken, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("sourceId", sourceId);
+        if (!TextUtils.isEmpty(pageToken))
+            params.put("pageToken", pageToken);
         ApiHttpClient.get("action/apiv2/tweet_comments", params, handler);
     }
 
@@ -1552,9 +1554,11 @@ public class OSChinaApi {
      * @param sourceId 动弹id
      * @param handler  回调
      */
-    public static void getTweetLikeList(long sourceId, TextHttpResponseHandler handler) {
+    public static void getTweetLikeList(long sourceId, String pageToken, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("sourceId", sourceId);
+        if (!TextUtils.isEmpty(pageToken))
+            params.put("pageToken", pageToken);
         ApiHttpClient.get("action/apiv2/tweet_likes", params, handler);
     }
 

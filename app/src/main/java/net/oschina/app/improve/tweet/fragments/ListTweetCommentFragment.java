@@ -11,15 +11,12 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Comment;
-import net.oschina.app.bean.CommentList;
-import net.oschina.app.bean.Result;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseRecyclerViewFragment;
 import net.oschina.app.improve.bean.base.PageBean;
@@ -31,7 +28,6 @@ import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
-import net.oschina.app.util.XmlUtils;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -42,15 +38,13 @@ import cz.msebera.android.httpclient.Header;
  * Created by thanatos
  * on 16/6/13.
  */
-public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>
+public class ListTweetCommentFragment extends BaseRecyclerViewFragment<TweetComment>
         implements TweetDetailContract.ICmnView, BaseRecyclerAdapter.OnItemLongClickListener {
 
     private TweetDetailContract.Operator mOperator;
     private TweetDetailContract.IAgencyView mAgencyView;
-    private int pageNum = 0;
     private int mDeleteIndex = 0;
     private Dialog mDeleteDialog;
-    private AsyncHttpResponseHandler reqHandler;
 
     public static ListTweetCommentFragment instantiate(TweetDetailContract.Operator operator, TweetDetailContract.IAgencyView mAgencyView) {
         ListTweetCommentFragment fragment = new ListTweetCommentFragment();
@@ -63,29 +57,6 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mOperator = (TweetDetailContract.Operator) activity;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        reqHandler = new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                CommentList data = XmlUtils.toBean(CommentList.class, responseBody);
-                setListData(data.getList());
-                onRequestSuccess(1);
-                onRequestFinish();
-                if (mAdapter.getCount() < 20 && mAgencyView != null)
-                    mAgencyView.resetCmnCount(mAdapter.getCount());
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                mRefreshLayout.onComplete();
-                mAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_ERROR, true);
-                Log.d("oschina", error.getMessage() == null ? "未知原因" : error.getMessage());
-            }
-        };
     }
 
     @Override
@@ -103,7 +74,7 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>
     }
 
     @Override
-    protected BaseRecyclerAdapter<Comment> getRecyclerAdapter() {
+    protected BaseRecyclerAdapter<TweetComment> getRecyclerAdapter() {
         TweetCommentAdapter adapter = new TweetCommentAdapter(getContext());
         adapter.setOnItemClickListener(this);
         adapter.setOnItemLongClickListener(this);
@@ -112,47 +83,33 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>
 
     @Override
     protected Type getType() {
-        return null;
-    }
-
-    @Override
-    public void onLoadMore() {
-        requestData(pageNum);
-    }
-
-    @Override
-    protected void requestData() {
-        requestData(0);
+        return new TypeToken<ResultBean<PageBean<TweetComment>>>(){}.getType();
     }
 
     @Override
     protected void onRequestSuccess(int code) {
         super.onRequestSuccess(code);
-        if (mIsRefresh) pageNum = 0;
-        ++pageNum;
-    }
-
-    private void requestData(int pageNum) {
-        OSChinaApi.getCommentList((int) mOperator.getTweetDetail().getId(), 3, pageNum, reqHandler);
-    }
-
-    private void setListData(List<Comment> comments) {
-        if (mIsRefresh) {
-            //cache the time
-            mAdapter.clear();
-            mAdapter.addAll(comments);
-            mRefreshLayout.setCanLoadMore(true);
-        } else {
-            mAdapter.addAll(comments);
-        }
-        if (comments.size() < 20) {
-            mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
-        }
+        if (mAdapter.getCount() < 20 && mAgencyView != null)
+            mAgencyView.resetCmnCount(mAdapter.getCount());
     }
 
     @Override
-    public void onCommentSuccess(Comment comment) {
-        onRefreshing();
+    protected void onRequestFinish() {
+        super.onRequestFinish();
+    }
+
+    @Override
+    public void onLoadMore() {
+        OSChinaApi.getTweetCommentList(
+                mOperator.getTweetDetail().getId(),
+                mIsRefresh ? mBean.getPrevPageToken() : mBean.getNextPageToken(),
+                mHandler
+        );
+    }
+
+    @Override
+    public void requestData() {
+        OSChinaApi.getTweetCommentList(mOperator.getTweetDetail().getId(), null, mHandler);
     }
 
     @Override
@@ -163,9 +120,9 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>
 
     @Override
     public void onLongClick(int position, long itemId) {
-        final Comment comment = mAdapter.getItem(position);
+        final TweetComment comment = mAdapter.getItem(position);
         if (comment == null) return;
-        int itemsLen = comment.getAuthorId() == AppContext.getInstance().getLoginUid() ? 2 : 1;
+        int itemsLen = comment.getAuthor().getId() == AppContext.getInstance().getLoginUid() ? 2 : 1;
         String[] items = new String[itemsLen];
         items[0] = getResources().getString(R.string.copy);
         if (itemsLen == 2) {
@@ -184,44 +141,46 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<Comment>
         }).show();
     }
 
-    private void handleDeleteComment(Comment comment) {
+    private void handleDeleteComment(TweetComment comment) {
         if (!AppContext.getInstance().isLogin()) {
             UIHelper.showLoginActivity(getActivity());
             return;
         }
         mDeleteDialog = DialogHelp.getWaitDialog(getContext(), "正在删除...");
-        OSChinaApi.deleteComment((int) mOperator.getTweetDetail().getId(), 3, comment.getId(), comment.getAuthorId(),
-                new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                        Result res = XmlUtils.toBean(Result.class, responseBody);
-                        if (res.OK()) {
-                            if (mDeleteDialog != null) {
-                                mDeleteDialog.dismiss();
-                                mDeleteDialog = null;
-                            }
-                            mAdapter.removeItem(mDeleteIndex);
-                            int count = mOperator.getTweetDetail().getCommentCount() - 1;
-                            mOperator.getTweetDetail().setCommentCount(count); // Bean就这样写的,我也不知道为什么!!!!
-                            mAgencyView.resetCmnCount(count);
-                        } else {
-                            if (mDeleteDialog != null) {
-                                mDeleteDialog.dismiss();
-                                mDeleteDialog = null;
-                            }
-                            Toast.makeText(getContext(), "删除失败", Toast.LENGTH_SHORT).show();
-                        }
-                    }
+        OSChinaApi.deleteTweetComment(mOperator.getTweetDetail().getId(), comment.getId(), new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Toast.makeText(getContext(), "删除失败", Toast.LENGTH_SHORT).show();
+            }
 
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                        if (mDeleteDialog != null) {
-                            mDeleteDialog.dismiss();
-                            mDeleteDialog = null;
-                        }
-                        Toast.makeText(getContext(), "删除失败", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                ResultBean result = AppContext.createGson().fromJson(
+                        responseString, new TypeToken<ResultBean>(){}.getType());
+                if (result.isSuccess()) {
+                    mAdapter.removeItem(mDeleteIndex);
+                    int count = mOperator.getTweetDetail().getCommentCount() - 1;
+                    mOperator.getTweetDetail().setCommentCount(count); // Bean就这样写的,我也不知道为什么!!!!
+                    mAgencyView.resetCmnCount(count);
+                } else {
+                    Toast.makeText(getContext(), "删除失败", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                if (mDeleteDialog != null) {
+                    mDeleteDialog.dismiss();
+                    mDeleteDialog = null;
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onCommentSuccess(TweetComment comment) {
+        onRefreshing();
     }
 
 }

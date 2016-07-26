@@ -46,6 +46,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment<T> implem
 
     @Override
     public void initData() {
+        mBean = new PageBean<>();
         mAdapter = getRecyclerAdapter();
         mAdapter.setState(BaseRecyclerAdapter.STATE_HIDE, false);
         mRecyclerView.setAdapter(mAdapter);
@@ -70,8 +71,8 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment<T> implem
                 try {
                     ResultBean<PageBean<T>> resultBean = AppContext.createGson().fromJson(responseString, getType());
                     if (resultBean != null && resultBean.isSuccess() && resultBean.getResult().getItems() != null) {
-                        onRequestSuccess(resultBean.getCode());
                         setListData(resultBean);
+                        onRequestSuccess(resultBean.getCode());
                     } else {
                         mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
                     }

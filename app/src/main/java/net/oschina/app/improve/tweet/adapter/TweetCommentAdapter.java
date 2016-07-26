@@ -13,9 +13,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
 import net.oschina.app.R;
-import net.oschina.app.bean.Comment;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
+import net.oschina.app.improve.bean.simple.TweetComment;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.TweetTextView;
@@ -28,7 +28,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by thanatos
  * on 16/6/13.
  */
-public class TweetCommentAdapter extends BaseRecyclerAdapter<Comment> {
+public class TweetCommentAdapter extends BaseRecyclerAdapter<TweetComment> {
 
     private RequestManager reqManager;
     private View.OnClickListener onPortraitClickListener;
@@ -44,14 +44,14 @@ public class TweetCommentAdapter extends BaseRecyclerAdapter<Comment> {
     }
 
     @Override
-    protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Comment item, int position) {
+    protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, TweetComment item, int position) {
         TweetCommentHolderView h = (TweetCommentHolderView) holder;
         h.ivPortrait.setTag(null);
-        if (TextUtils.isEmpty(item.getPortrait())) {
+        if (TextUtils.isEmpty(item.getAuthor().getPortrait())) {
             h.ivPortrait.setImageResource(R.mipmap.widget_dface);
         } else {
             reqManager
-                    .load(item.getPortrait())
+                    .load(item.getAuthor().getPortrait())
                     .asBitmap()
                     .placeholder(mContext.getResources().getDrawable(R.mipmap.widget_dface))
                     .error(mContext.getResources().getDrawable(R.mipmap.widget_dface))
@@ -60,7 +60,7 @@ public class TweetCommentAdapter extends BaseRecyclerAdapter<Comment> {
         h.ivPortrait.setTag(item);
         h.ivPortrait.setOnClickListener(getOnPortraitClickListener());
 
-        h.tvName.setText(item.getAuthor());
+        h.tvName.setText(item.getAuthor().getName());
         h.tvContent.setText(InputHelper.displayEmoji(mContext.getResources(), item.getContent()));
         h.tvTime.setText(StringUtils.friendly_time(item.getPubDate()));
     }
@@ -70,8 +70,8 @@ public class TweetCommentAdapter extends BaseRecyclerAdapter<Comment> {
             onPortraitClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Comment comment = (Comment) v.getTag();
-                    UIHelper.showUserCenter(mContext, comment.getAuthorId(), comment.getAuthor());
+                    TweetComment comment = (TweetComment) v.getTag();
+                    UIHelper.showUserCenter(mContext, comment.getAuthor().getId(), comment.getAuthor().getName());
                 }
             };
         }

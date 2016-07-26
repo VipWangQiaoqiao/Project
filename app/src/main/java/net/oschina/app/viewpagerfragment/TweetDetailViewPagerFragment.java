@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import net.oschina.app.R;
 import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.User;
+import net.oschina.app.improve.bean.simple.TweetComment;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
 import net.oschina.app.improve.tweet.fragments.ListTweetCommentFragment;
 import net.oschina.app.improve.tweet.fragments.ListTweetLikeUsersFragment;
@@ -120,7 +121,7 @@ public class TweetDetailViewPagerFragment extends Fragment
     }
 
     @Override
-    public void onCommentSuccess(Comment comment) {
+    public void onCommentSuccess(TweetComment comment) {
         mOperator.getTweetDetail().setCommentCount(mOperator.getTweetDetail().getCommentCount() + 1); // Bean的事,真不是我想这样干
         if (mCmnViewImp != null) mCmnViewImp.onCommentSuccess(comment);
         TabLayout.Tab tab = mTabLayout.getTabAt(1);
