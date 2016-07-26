@@ -38,7 +38,9 @@
 
         </LinearLayout>
 
-        <View style="@style/h_line" />
+        <View
+            style="@style/h_line"
+            android:layout_marginTop="30dp" />
 
         <LinearLayout
             android:id="@+id/rl_find_osc"
@@ -109,7 +111,16 @@
                 app:srcCompat="@mipmap/ic_arrow_right" />
         </LinearLayout>
 
-        <View style="@style/h_line" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+
+            <View
+                style="@style/h_line"
+                android:layout_marginLeft="8dp" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/rl_shake"

@@ -47,20 +47,14 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
     private boolean mInputDoubleEmpty = false;
 
     @Override
-    protected boolean initBundle(Bundle bundle) {
-        softwareName = bundle.getString(BUNDLE_KEY_NAME);
-        return super.initBundle(bundle);
-    }
-
-    @Override
     protected int getContentView() {
         return R.layout.activity_software_tweets;
     }
 
     @Override
-    protected void requestData() {
-        super.requestData();
-        OSChinaApi.getSoftwareTweetList(softwareName, mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
+    protected boolean initBundle(Bundle bundle) {
+        softwareName = bundle.getString(BUNDLE_KEY_NAME);
+        return super.initBundle(bundle);
     }
 
     @Override
@@ -93,6 +87,14 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
             }
         });
     }
+
+
+    @Override
+    protected void requestData() {
+        super.requestData();
+        OSChinaApi.getSoftwareTweetList(softwareName, mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
+    }
+
 
 
     /**
