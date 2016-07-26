@@ -81,6 +81,13 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> impl
         context.startActivity(intent);
     }
 
+    public static void show(Context context, long id){
+        if (id <= 0) return;
+        User user = new User();
+        user.setId((int) id);
+        show(context, user);
+    }
+
     @Override
     protected boolean initBundle(Bundle bundle) {
         user = (User) bundle.getSerializable(KEY_BUNDLE);
