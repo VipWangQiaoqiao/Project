@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -29,8 +28,6 @@ import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.bean.simple.TweetLikeReverse;
 import net.oschina.app.improve.media.ImageGalleryActivity;
-import net.oschina.app.improve.media.config.ImageConfig;
-import net.oschina.app.improve.media.config.ImageLoaderListener;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.widget.FlowLayout;
 import net.oschina.app.util.ImageUtils;
@@ -43,7 +40,6 @@ import net.qiujuer.genius.ui.Ui;
 import org.kymjs.kjframe.utils.DensityUtils;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -67,18 +63,8 @@ public class TweetAdapter extends BaseListAdapter<Tweet> {
         imageClickListener = new OnTweetImageClickListener() {
             @Override
             public void onClick(View v, int position, int imagePosition) {
-                ArrayList<String> images = new ArrayList<>();
-                for (Tweet.Image i : getItem(position).getImages()) {
-                    images.add(i.getHref());
-                }
-                ImageGalleryActivity.show(mCallback.getContext(), ImageConfig.Build()
-                        .selectedImages(images)
-                        .loaderListener(new ImageLoaderListener() {
-                            @Override
-                            public void displayImage(ImageView iv, String path) {
-                                Glide.with(mCallback.getContext().getApplicationContext()).load(path).into(iv);
-                            }
-                        }), imagePosition);
+                String[] images = Tweet.Image.getImagePath(getItem(position).getImages());
+                ImageGalleryActivity.show(mCallback.getContext(), images, imagePosition);
             }
         };
 

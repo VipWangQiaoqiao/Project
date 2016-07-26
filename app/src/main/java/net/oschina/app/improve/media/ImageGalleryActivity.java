@@ -3,54 +3,90 @@ package net.oschina.app.improve.media;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 
 import net.oschina.app.R;
-import net.oschina.app.improve.media.config.ImageConfig;
+import net.oschina.app.improve.base.activities.BaseActivity;
+
+import java.util.List;
 
 
 /**
- * Created by huanghaibin_dev
- * on 2016/7/11.
+ * 图片预览Activity
  */
+public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
+    public static final String KEY_IMAGE = "images";
+    public static final String KEY_POSITION = "position";
+    private ViewPager mImagePager;
+    private TextView mIndexText;
+    private String[] mImageSources;
+    private int mCurPosition;
 
-public class ImageGalleryActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
-    private ViewPager vp_image;
-    private TextView tv_index;
-    private static ImageConfig mConfig;
-    private ViewPagerAdapter mAdapter;
-    private int currentPosition;
+    public static void show(Context context, List<String> imageList, int position) {
+        if (imageList == null || imageList.size() == 0)
+            return;
+        String[] images = new String[imageList.size()];
+        imageList.toArray(images);
+        show(context, images, position);
+    }
 
-    public static void show(Context context, ImageConfig config, int position) {
-        if (config != null && config.getSelectedImage() != null) {
-            mConfig = config;
-            Intent intent = new Intent(context, ImageGalleryActivity.class);
-            intent.putExtra("position", position);
-            context.startActivity(intent);
-        }
+    public static void show(Context context, String[] images, int position) {
+        if (images == null || images.length == 0)
+            return;
+        Intent intent = new Intent(context, ImageGalleryActivity.class);
+        intent.putExtra(KEY_IMAGE, images);
+        intent.putExtra(KEY_POSITION, position);
+        context.startActivity(intent);
+    }
+
+    public static void show(Context context, String images) {
+        if (images == null)
+            return;
+        show(context, new String[]{images}, 0);
     }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image_gallery);
+    protected boolean initBundle(Bundle bundle) {
+        mImageSources = bundle.getStringArray(KEY_IMAGE);
+        mCurPosition = bundle.getInt(KEY_POSITION, 0);
+        return mImageSources != null;
+    }
+
+    @Override
+    protected void initWindow() {
+        super.initWindow();
         getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+    }
+
+    @Override
+    protected int getContentView() {
+        return R.layout.activity_image_gallery;
+    }
+
+    @Override
+    protected void initWidget() {
+        super.initWidget();
         setTitle("");
-        vp_image = (ViewPager) findViewById(R.id.vp_image);
-        tv_index = (TextView) findViewById(R.id.tv_index);
-        mAdapter = new ViewPagerAdapter();
-        vp_image.setAdapter(mAdapter);
-        vp_image.addOnPageChangeListener(this);
-        currentPosition = getIntent().getIntExtra("position", 0);
-        vp_image.setCurrentItem(currentPosition < mConfig.getSelectedImage().size() ? currentPosition : 0);
-        tv_index.setText((currentPosition + 1) + "/" + mConfig.getSelectedImage().size());
+        mImagePager = (ViewPager) findViewById(R.id.vp_image);
+        mIndexText = (TextView) findViewById(R.id.tv_index);
+        mImagePager.addOnPageChangeListener(this);
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+        int len = mImageSources.length;
+        if (mCurPosition < 0 || mCurPosition >= len)
+            mCurPosition = 0;
+        mImagePager.setAdapter(new ViewPagerAdapter());
+        mImagePager.setCurrentItem(mCurPosition);
+        // First we call to init the TextView
+        onPageSelected(mCurPosition);
     }
 
     @Override
@@ -60,7 +96,7 @@ public class ImageGalleryActivity extends AppCompatActivity implements ViewPager
 
     @Override
     public void onPageSelected(int position) {
-        tv_index.setText((position + 1) + "/" + mConfig.getSelectedImage().size());
+        mIndexText.setText(String.format("%s/%s", (position + 1), mImageSources.length));
     }
 
     @Override
@@ -68,17 +104,11 @@ public class ImageGalleryActivity extends AppCompatActivity implements ViewPager
 
     }
 
-    @Override
-    protected void onDestroy() {
-        mConfig = null;
-        super.onDestroy();
-    }
-
     private class ViewPagerAdapter extends PagerAdapter {
 
         @Override
         public int getCount() {
-            return mConfig.getSelectedImage().size();
+            return mImageSources.length;
         }
 
         @Override
@@ -91,9 +121,7 @@ public class ImageGalleryActivity extends AppCompatActivity implements ViewPager
             ImagePreviewView view = new ImagePreviewView(ImageGalleryActivity.this);
             view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
-            if (mConfig.getLoaderListener() != null) {
-                mConfig.getLoaderListener().displayImage(view, mConfig.getSelectedImage().get(position));
-            }
+            getImageLoader().load(mImageSources[position]).into(view);
             container.addView(view);
             return view;
         }

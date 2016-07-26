@@ -43,6 +43,20 @@ public class CommonUtil {
         return strings;
     }
 
+    public static String[] toArray(List<Image> images) {
+        if (images == null)
+            return null;
+        int len = images.size();
+        if (len == 0)
+            return null;
+
+        String[] strings = new String[len];
+        for (int i = 0; i < len; i++) {
+            strings[i] = images.get(i).getPath();
+        }
+        return strings;
+    }
+
     /**
      * 获得屏幕的宽度
      *
