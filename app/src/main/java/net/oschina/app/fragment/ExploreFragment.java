@@ -44,7 +44,7 @@ public class ExploreFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_explore, null);
+        View view = inflater.inflate(R.layout.fragment_explore, container, false);
         ButterKnife.bind(this, view);
         initView(view);
         return view;
