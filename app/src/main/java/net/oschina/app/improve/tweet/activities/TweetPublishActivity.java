@@ -56,9 +56,7 @@ public class TweetPublishActivity extends BaseBackActivity implements TweetPubli
         FragmentTransaction trans = getSupportFragmentManager()
                 .beginTransaction();
         trans.replace(R.id.activity_tweet_publish, fragment);
-        trans.commitAllowingStateLoss();
-
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        trans.commitNow();
     }
 
     @Override
@@ -144,6 +142,7 @@ public class TweetPublishActivity extends BaseBackActivity implements TweetPubli
         }
         if (set != null && set.size() > 0) {
             mView.setImages(new ArrayList<>(set));
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         }
     }
 

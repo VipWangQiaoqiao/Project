@@ -10,21 +10,21 @@
     <FrameLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="56dp"
         android:background="@color/actionbar_background"
-        android:paddingLeft="@dimen/lay_16"
-        android:paddingRight="@dimen/lay_16">
+        android:paddingTop="8dp">
 
         <net.qiujuer.genius.ui.widget.ImageView
             android:id="@+id/icon_back"
-            android:layout_width="@dimen/size_36"
-            android:layout_height="@dimen/size_36"
-            android:layout_gravity="center_vertical"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="left|bottom"
             android:clickable="true"
             android:paddingLeft="@dimen/lay_12"
             android:paddingRight="@dimen/lay_16"
+            android:scaleType="centerInside"
             android:src="@mipmap/btn_back_normal"
-            app:gTouchCornerRadius="18dp"
+            app:gTouchColor="@color/black_alpha_16"
             app:gTouchEffect="press" />
 
         <TextView
@@ -38,16 +38,16 @@
 
         <net.qiujuer.genius.ui.widget.Button
             android:id="@+id/icon_send"
-            android:layout_width="@dimen/size_36"
-            android:layout_height="@dimen/size_36"
-            android:layout_gravity="right|center_vertical"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right|bottom"
             android:background="@null"
             android:enabled="false"
             android:gravity="center"
             android:text="发送"
             android:textColor="@color/tweet_publish_send"
             android:textSize="@dimen/font_16"
-            app:gTouchCornerRadius="18dp"
+            app:gTouchColor="@color/black_alpha_16"
             app:gTouchEffect="press" />
     </FrameLayout>
 

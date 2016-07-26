@@ -105,12 +105,10 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         mEditContent.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override
@@ -223,7 +221,6 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
             }, 280);
         } else {
             mEmojiKeyboard.hideEmojiKeyBoard();
-            mEmojiKeyboard.showSoftKeyboard(mEditContent);
         }
     }
 
