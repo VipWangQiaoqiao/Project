@@ -47,6 +47,7 @@ public class ImageGalleryActivity extends AppCompatActivity implements ViewPager
         vp_image.setAdapter(mAdapter);
         vp_image.addOnPageChangeListener(this);
         currentPosition = getIntent().getIntExtra("position", 0);
+        vp_image.setCurrentItem(currentPosition);
         tv_index.setText((currentPosition + 1) + "/" + mConfig.getSelectedImage().size());
     }
 

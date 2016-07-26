@@ -21,8 +21,6 @@ import net.oschina.app.improve.media.config.ImageLoaderListener;
 
 public class ImageFolderAdapter extends BaseRecyclerAdapter<ImageFolder> {
     private ImageLoaderListener loader;
-    private ImageConfig.MediaMode mediaMode;
-
     public ImageFolderAdapter(Context context) {
         super(context, NEITHER);
     }
@@ -36,7 +34,7 @@ public class ImageFolderAdapter extends BaseRecyclerAdapter<ImageFolder> {
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, ImageFolder item, int position) {
         FolderViewHolder h = (FolderViewHolder) holder;
         h.tv_name.setText(item.getName());
-        h.tv_size.setText((mediaMode == ImageConfig.MediaMode.HAVE_CAM_MODE ? item.getImages().size() - 1 : item.getImages().size()) + " 张图片");
+        h.tv_size.setText(item.getImages().size() + " 张图片");
         if (loader != null) {
             loader.displayImage(h.iv_image, item.getAlbumPath());
         }
@@ -44,10 +42,6 @@ public class ImageFolderAdapter extends BaseRecyclerAdapter<ImageFolder> {
 
     public void setLoader(ImageLoaderListener loader) {
         this.loader = loader;
-    }
-
-    public void setMediaMode(ImageConfig.MediaMode mediaMode) {
-        this.mediaMode = mediaMode;
     }
 
     private static class FolderViewHolder extends RecyclerView.ViewHolder {

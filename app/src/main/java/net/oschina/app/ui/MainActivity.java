@@ -238,13 +238,6 @@ public class MainActivity extends AppCompatActivity implements
             }
             title.setText(getString(mainTab.getResName()));
             tab.setIndicator(indicator);
-            tab.setContent(new TabContentFactory() {
-
-                @Override
-                public View createTabContent(String tag) {
-                    return new View(MainActivity.this);
-                }
-            });
             mTabHost.addTab(tab, mainTab.getClz(), null);
 
             if (mainTab.equals(MainTab.ME)) {
