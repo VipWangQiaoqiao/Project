@@ -109,4 +109,5 @@
 
     <color name="tweet_indicator_text_color">#111111</color>
     <color name="tweet_indicator_text_color_error">#e35050</color>
+
 </resources>

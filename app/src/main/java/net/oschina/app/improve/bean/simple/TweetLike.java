@@ -7,6 +7,7 @@ public class TweetLike {
 
     private String pubDate;
     private Author author;
+    private boolean liked;
 
     public String getPubDate() {
         return pubDate;
@@ -22,5 +23,13 @@ public class TweetLike {
 
     public void setAuthor(Author author) {
         this.author = author;
+    }
+
+    public boolean isLiked() {
+        return liked;
+    }
+
+    public void setLiked(boolean liked) {
+        this.liked = liked;
     }
 }

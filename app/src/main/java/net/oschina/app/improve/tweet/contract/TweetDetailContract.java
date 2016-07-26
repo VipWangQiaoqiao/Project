@@ -1,8 +1,8 @@
 package net.oschina.app.improve.tweet.contract;
 
-import net.oschina.app.bean.Comment;
 import net.oschina.app.bean.User;
 import net.oschina.app.improve.bean.Tweet;
+import net.oschina.app.improve.bean.simple.TweetComment;
 
 /**
  * Created by thanatosx
@@ -15,13 +15,13 @@ public interface TweetDetailContract {
 
         Tweet getTweetDetail();
 
-        void toReply(Comment comment);
+        void toReply(TweetComment comment);
 
         void onScroll();
     }
 
     interface ICmnView {
-        void onCommentSuccess(Comment comment);
+        void onCommentSuccess(TweetComment comment);
     }
 
     interface IThumbupView {
