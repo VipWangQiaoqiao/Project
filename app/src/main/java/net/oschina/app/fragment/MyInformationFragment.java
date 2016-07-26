@@ -285,15 +285,18 @@ public class MyInformationFragment extends BaseFragment {
                 SolarSystemView.Planet planet1 = new SolarSystemView.Planet();
                 planet1.setClockwise(false);
                 planet1.setAngleRate(0.03F);
+                planet1.setOriginAngle(270);
                 planet1.setRadius(radius / 3);
 
                 SolarSystemView.Planet planet2 = new SolarSystemView.Planet();
                 planet2.setClockwise(true);
                 planet2.setAngleRate(0.04F);
+                planet1.setOriginAngle(180);
                 planet2.setRadius(radius / 3 * 2);
 
                 SolarSystemView.Planet planet3 = new SolarSystemView.Planet();
                 planet3.setClockwise(false);
+                planet1.setOriginAngle(270);
                 planet3.setAngleRate(0.05F);
                 planet3.setRadius(radius);
 
