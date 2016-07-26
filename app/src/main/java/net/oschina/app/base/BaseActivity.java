@@ -1,12 +1,15 @@
 package net.oschina.app.base;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.umeng.analytics.MobclickAgent;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.AppManager;
@@ -36,6 +39,9 @@ public abstract class BaseActivity extends AppCompatActivity implements
 
     protected LayoutInflater mInflater;
     protected ActionBar mActionBar;
+
+    private final String packageName4Umeng = this.getClass().getName();
+    private Context mContext4Umeng;
 
     @Override
     protected void onDestroy() {
@@ -69,6 +75,29 @@ public abstract class BaseActivity extends AppCompatActivity implements
         initView();
         initData();
         _isVisible = true;
+
+        //umeng analytics
+        MobclickAgent.setDebugMode(false);
+        MobclickAgent.openActivityDurationTrack(false);
+        MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageStart(this.packageName4Umeng);
+        MobclickAgent.onResume(this.mContext4Umeng);
+
+        if (this.isFinishing()){
+            TDevice.hideSoftKeyboard(getCurrentFocus());
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(this.packageName4Umeng);
+        MobclickAgent.onResume(this.mContext4Umeng);
     }
 
     protected void onBeforeSetContentLayout() {
@@ -139,19 +168,6 @@ public abstract class BaseActivity extends AppCompatActivity implements
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (this.isFinishing()){
-            TDevice.hideSoftKeyboard(getCurrentFocus());
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     public void showToast(int msgResid, int icon, int gravity) {
