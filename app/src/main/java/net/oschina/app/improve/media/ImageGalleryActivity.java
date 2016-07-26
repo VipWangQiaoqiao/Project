@@ -29,10 +29,12 @@ public class ImageGalleryActivity extends AppCompatActivity implements ViewPager
     private int currentPosition;
 
     public static void show(Context context, ImageConfig config, int position) {
-        mConfig = config;
-        Intent intent = new Intent(context, ImageGalleryActivity.class);
-        intent.putExtra("position", position);
-        context.startActivity(intent);
+        if (config != null && config.getSelectedImage() != null) {
+            mConfig = config;
+            Intent intent = new Intent(context, ImageGalleryActivity.class);
+            intent.putExtra("position", position);
+            context.startActivity(intent);
+        }
     }
 
     @Override
@@ -47,7 +49,7 @@ public class ImageGalleryActivity extends AppCompatActivity implements ViewPager
         vp_image.setAdapter(mAdapter);
         vp_image.addOnPageChangeListener(this);
         currentPosition = getIntent().getIntExtra("position", 0);
-        vp_image.setCurrentItem(currentPosition);
+        vp_image.setCurrentItem(currentPosition < mConfig.getSelectedImage().size() ? currentPosition : 0);
         tv_index.setText((currentPosition + 1) + "/" + mConfig.getSelectedImage().size());
     }
 

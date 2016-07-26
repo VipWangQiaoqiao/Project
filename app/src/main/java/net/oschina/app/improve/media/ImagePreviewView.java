@@ -7,7 +7,9 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -266,7 +268,7 @@ public class ImagePreviewView extends ImageView {
                 }
 
                 // 重置到中间位置
-                if (mScaledWidth < getWidth() && mScaledHeight >= getHeight() && mDiffX != 0) {
+                if (mScaledWidth < getWidth() && mScaledHeight >= getHeight() && (int) translateLeft != (getWidth() - mScaledWidth) / 2) {
                     ValueAnimator animator = getResetXAnimator();
                     animator.setFloatValues(translateLeft, (getWidth() - mScaledWidth) / 2.f);
                     animator.addUpdateListener(getOnTranslateXAnimationUpdate());
@@ -274,7 +276,7 @@ public class ImagePreviewView extends ImageView {
                 }
 
                 // 重置到中间位置
-                if (mScaledHeight < getHeight() && mScaledWidth >= getWidth() && mDiffY != 0) {
+                if (mScaledHeight < getHeight() && mScaledWidth >= getWidth() && (int) translateTop != (getHeight() - mScaledHeight) / 2) {
                     ValueAnimator animator = getResetYAnimator();
                     animator.setFloatValues(translateTop, (getHeight() - mScaledHeight) / 2.f);
                     animator.addUpdateListener(getOnTranslateYAnimationUpdate());
@@ -315,6 +317,7 @@ public class ImagePreviewView extends ImageView {
 
         Drawable drawable = getDrawable();
         if (drawable == null) return false;
+        if (mBoundHeight != 0 && mBoundWidth != 0) return false;
 
         int width = getWidth();
         int height = getHeight();
@@ -338,8 +341,8 @@ public class ImagePreviewView extends ImageView {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        translateLeft = (w - mBoundWidth) / 2;
-        translateTop = (h - mBoundHeight) / 2;
+//        translateLeft = (w - mBoundWidth) / 2;
+//        translateTop = (h - mBoundHeight) / 2;
     }
 
     @Override

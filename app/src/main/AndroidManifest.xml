@@ -368,6 +368,7 @@
             android:configChanges="keyboardHidden|orientation"
             android:label="图片预览"
             android:screenOrientation="portrait"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.Dialog.NoTitle.Translucent" />
 
         <service
