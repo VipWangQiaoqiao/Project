@@ -3,7 +3,6 @@ package net.oschina.app.improve.tweet.service;
 import android.content.Context;
 import android.util.Log;
 
-import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -13,6 +12,8 @@ import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Map;
+
+import static net.oschina.app.improve.utils.StreamUtils.close;
 
 /**
  * Created by JuQiu
@@ -132,20 +133,6 @@ public class TweetPublishCache {
         }
         log("delete", dir.getAbsolutePath());
         dir.delete();
-    }
-
-    private static void close(Closeable... closeables) {
-        if (closeables == null || closeables.length == 0)
-            return;
-        for (Closeable closeable : closeables) {
-            if (closeable != null) {
-                try {
-                    closeable.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 
     private static void log(String action, String msg) {

@@ -8,13 +8,15 @@ import android.os.Build;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import static net.oschina.app.improve.utils.StreamUtils.close;
+import static net.oschina.app.improve.utils.StreamUtils.copyFile;
 
 /**
  * Created by JuQiu
@@ -269,38 +271,4 @@ public class PicturesCompress {
         }
     }
 
-    private static boolean copyFile(final File srcFile, final File saveFile) {
-        BufferedInputStream inputStream = null;
-        BufferedOutputStream outputStream = null;
-        try {
-            inputStream = new BufferedInputStream(new FileInputStream(srcFile));
-            outputStream = new BufferedOutputStream(new FileOutputStream(saveFile));
-            byte[] buffer = new byte[1024 * 4];
-            int len;
-            while ((len = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, len);
-            }
-            outputStream.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            close(inputStream, outputStream);
-        }
-        return true;
-    }
-
-    private static void close(Closeable... closeables) {
-        if (closeables == null || closeables.length == 0)
-            return;
-        for (Closeable closeable : closeables) {
-            if (closeable != null) {
-                try {
-                    closeable.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
 }
