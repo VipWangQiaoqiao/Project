@@ -141,7 +141,7 @@ public class SelectImageFragment extends BaseFragment implements ISelectImageCon
             @Override
             public void onClick(View v) {
                 if (mSelectedImage.size() > 0) {
-                    ImageGalleryActivity.show(getActivity(), CommonUtil.toArray(mSelectedImage), 0);
+                    ImageGalleryActivity.show(getActivity(), CommonUtil.toArray(mSelectedImage), 0, false);
                 }
             }
         });

@@ -59,6 +59,14 @@ public class PicturesCompress {
         }
     }
 
+    public static String getExtension(String filePath) {
+        BitmapFactory.Options options = createOptions();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(filePath, options);
+        String mimeType = options.outMimeType;
+        return mimeType.substring(mimeType.lastIndexOf("/") + 1);
+    }
+
     static Bitmap decodeBitmap(final String filePath, final int maxWidth, final int maxHeight, byte[] byteStorage, BitmapFactory.Options options, boolean exactDecode) {
         InputStream is;
         try {
@@ -75,11 +83,6 @@ public class PicturesCompress {
         else
             resetOptions(options);
 
-        // Init the BitmapFactory.Options.inTempStorage value
-        if (byteStorage == null)
-            byteStorage = new byte[DEFAULT_BUFFER_SIZE];
-        options.inTempStorage = byteStorage;
-
         // First decode with inJustDecodeBounds=true to check dimensions
         options.inJustDecodeBounds = true;
 
@@ -93,6 +96,7 @@ public class PicturesCompress {
             is.reset();
         } catch (IOException e) {
             e.printStackTrace();
+            close(is);
             resetOptions(options);
             return null;
         }
@@ -100,9 +104,18 @@ public class PicturesCompress {
         // Calculate inSampleSize
         calculateScaling(options, maxWidth, maxHeight, exactDecode);
 
+        // Init the BitmapFactory.Options.inTempStorage value
+        if (byteStorage == null)
+            byteStorage = new byte[DEFAULT_BUFFER_SIZE];
+        options.inTempStorage = byteStorage;
+
         // Decode bitmap with inSampleSize set FALSE
         options.inJustDecodeBounds = false;
         Bitmap bitmap = BitmapFactory.decodeStream(is, null, options);
+
+        // Close the Stream
+        close(is);
+        // And Reset the option
         resetOptions(options);
 
         // To scale bitmap to user set
