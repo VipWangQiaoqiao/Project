@@ -19,14 +19,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.bean.Comment;
-import net.oschina.app.bean.TweetDetail;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.ResultBean;
@@ -36,7 +33,6 @@ import net.oschina.app.improve.behavior.KeyboardInputDelegation;
 import net.oschina.app.improve.comment.CommentsUtil;
 import net.oschina.app.improve.media.ImageGalleryActivity;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
-import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
@@ -45,8 +41,6 @@ import net.oschina.app.util.UIHelper;
 import net.oschina.app.viewpagerfragment.TweetDetailViewPagerFragment;
 import net.oschina.app.widget.CircleImageView;
 import net.oschina.app.widget.RecordButtonUtil;
-
-import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -141,11 +135,12 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 ResultBean<TweetLike> result = AppContext.getInstance().createGson().fromJson(
-                        responseString, new TypeToken<ResultBean<TweetLike>>(){}.getType());
-                if (result != null && result.isSuccess()){
+                        responseString, new TypeToken<ResultBean<TweetLike>>() {
+                        }.getType());
+                if (result != null && result.isSuccess()) {
                     ivThumbup.setSelected(result.getResult().isLiked());
                     mThumbupViewImp.onLikeSuccess(result.getResult().isLiked(), null);
-                }else{
+                } else {
                     onFailure(statusCode, headers, responseString, null);
                 }
             }
@@ -186,7 +181,8 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 Log.d("thanatosx", responseString);
                 ResultBean<Tweet> result = AppContext.createGson().fromJson(
-                        responseString, new TypeToken<ResultBean<Tweet>>() {}.getType());
+                        responseString, new TypeToken<ResultBean<Tweet>>() {
+                        }.getType());
                 if (result.isSuccess()) {
                     if (result.getResult() == null) {
                         AppContext.showToast(R.string.tweet_detail_data_null);
@@ -317,15 +313,11 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
         if (tweet.getImages() != null && tweet.getImages().length > 0) {
             mLayoutGrid.setVisibility(View.VISIBLE);
             mLayoutGrid.removeAllViews();
-            final ArrayList<String> images = new ArrayList<>();
-            for (int i = 0; i < tweet.getImages().length; i++){
-                images.add(tweet.getImages()[i].getHref());
-            }
             final View.OnClickListener l = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = (int) v.getTag();
-                    ImageGalleryActivity.show(TweetDetailActivity.this, images, position);
+                    ImageGalleryActivity.show(TweetDetailActivity.this, Tweet.Image.getImagePath(tweet.getImages()), position);
                 }
             };
             for (int i = 0; i < tweet.getImages().length; i++) {
@@ -340,7 +332,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
                 getImageLoader()
                         .load(tweet.getImages()[i].getThumb())
                         .asBitmap()
-                        .placeholder(R.mipmap.ic_default_image)
+                        .placeholder(R.color.grey_200)
                         .error(R.mipmap.ic_default_image)
                         .into(mImage);
                 mImage.setTag(i);

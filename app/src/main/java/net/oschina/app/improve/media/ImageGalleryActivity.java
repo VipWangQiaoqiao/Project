@@ -109,6 +109,11 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
         int len = mImageSources.length;
         if (mCurPosition < 0 || mCurPosition >= len)
             mCurPosition = 0;
+
+        // If only one, we not need the text to show
+        if (len == 1)
+            mIndexText.setVisibility(View.GONE);
+
         mImagePager.setAdapter(new ViewPagerAdapter());
         mImagePager.setCurrentItem(mCurPosition);
         // First we call to init the TextView
@@ -142,7 +147,7 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
                     File sourceFile = future.get();
                     String extension = PicturesCompress.getExtension(sourceFile.getAbsolutePath());
                     String extDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                            .getAbsolutePath() + File.separator + "OSC";
+                            .getAbsolutePath() + File.separator + "开源中国";
                     File extDirFile = new File(extDir);
                     if (!extDirFile.exists()) {
                         if (!extDirFile.mkdirs()) {
