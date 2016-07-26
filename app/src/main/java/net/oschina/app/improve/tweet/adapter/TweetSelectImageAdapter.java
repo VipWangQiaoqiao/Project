@@ -230,6 +230,7 @@ public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectIma
             loader.load(model.path)
                     .centerCrop()
                     .placeholder(R.color.grey_200)
+                    .error(R.mipmap.ic_default_image)
                     .into(mImage);
         }
 
