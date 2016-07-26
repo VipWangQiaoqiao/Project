@@ -2,7 +2,6 @@ package net.oschina.app.improve.tweet.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -17,11 +16,15 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.bean.User;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.bean.simple.SoftwareTweetLike;
+import net.oschina.app.improve.bean.simple.Author;
+import net.oschina.app.improve.bean.simple.TweetLikeReverse;
 import net.oschina.app.improve.comment.CommentsUtil;
+import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
+import net.oschina.app.util.ImageLoader;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -32,6 +35,7 @@ import java.lang.reflect.Type;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import cz.msebera.android.httpclient.Header;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -57,15 +61,11 @@ public class SoftwareTweetAdapter extends BaseRecyclerAdapter<Tweet> implements 
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Tweet item, int position) {
         SoftwareTweetViewholder vh = (SoftwareTweetViewholder) holder;
-        if (TextUtils.isEmpty(item.getAuthor().getPortrait())) {
-            vh.icon.setImageResource(R.mipmap.widget_dface);
-        } else {
-            requestManager.load(item.getAuthor().getPortrait())
-                    .asBitmap()
-                    .placeholder(mContext.getResources().getDrawable(R.mipmap.widget_dface))
-                    .error(mContext.getResources().getDrawable(R.mipmap.widget_dface))
-                    .into(vh.icon);
-        }
+
+        CircleImageView icon = vh.icon;
+        icon.setTag(R.id.iv_tweet_face, position);
+        ImageLoader.loadImage(requestManager, vh.icon, item.getAuthor().getPortrait(), R.mipmap.widget_dface);
+        vh.icon.setOnClickListener(this);
         vh.name.setText(item.getAuthor().getName());
         CommentsUtil.formatHtml(mContext.getResources(), vh.content, item.getContent());
         vh.pubTime.setText(StringUtils.friendly_time(item.getPubDate()));
@@ -91,7 +91,32 @@ public class SoftwareTweetAdapter extends BaseRecyclerAdapter<Tweet> implements 
 
     @Override
     public void onClick(View v) {
-        int position = (int) v.getTag();
+        int id = v.getId();
+        switch (id) {
+            case R.id.iv_tweet_face:
+                int p = (int) v.getTag(R.id.iv_tweet_face);
+                final Tweet item = getItem(p);
+                Author author = item.getAuthor();
+                User user = new User();
+                user.setId((int) author.getId());
+                user.setName(author.getName());
+                user.setPortrait(author.getPortrait());
+                OtherUserHomeActivity.show(mContext, user);
+                break;
+            case R.id.iv_like_state:
+                int position = (int) v.getTag();
+                final Tweet tempItem = getItem(position);
+                requestEventDispatcher(tempItem);
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     *
+     */
+    private void requestEventDispatcher(final Tweet item) {
 
         if (!AppContext.getInstance().isLogin()) {
             UIHelper.showLoginActivity(mContext);
@@ -101,29 +126,25 @@ public class SoftwareTweetAdapter extends BaseRecyclerAdapter<Tweet> implements 
             AppContext.showToastShort(R.string.tip_no_internet);
             return;
         }
-        final Tweet item = getItem(position);
+
         OSChinaApi.pubSoftwareLike(item.getId(), new TextHttpResponseHandler() {
             @Override
-            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 Toast.makeText(mContext, "操作失败...", Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
-                    Type type = new TypeToken<ResultBean<SoftwareTweetLike>>() {
+                    Type type = new TypeToken<ResultBean<TweetLikeReverse>>() {
                     }.getType();
-                    ResultBean resultBean = AppContext.createGson().fromJson(responseString, type);
+                    ResultBean<TweetLikeReverse> resultBean = AppContext.createGson().fromJson(responseString, type);
                     if (resultBean.getCode() == 1) {
-                        SoftwareTweetLike softwareTweetLike = (SoftwareTweetLike) resultBean.getResult();
-                        boolean like = softwareTweetLike.isLike();
+                        TweetLikeReverse result = resultBean.getResult();
+                        boolean like = result.isLiked();
                         item.setLiked(like);
                         int likeCount = item.getLikeCount();
-                        if (!like) {
-                            item.setLikeCount((likeCount - 1));
-                        } else {
-                            item.setLikeCount((likeCount + 1));
-                        }
+                        item.setLikeCount((!item.isLiked() ? likeCount - 1 : likeCount + 1));
                         notifyDataSetChanged();
                     } else {
                         Toast.makeText(mContext, "操作失败...", Toast.LENGTH_SHORT).show();
@@ -134,6 +155,7 @@ public class SoftwareTweetAdapter extends BaseRecyclerAdapter<Tweet> implements 
                 }
             }
         });
+
     }
 
     static class SoftwareTweetViewholder extends RecyclerView.ViewHolder {
