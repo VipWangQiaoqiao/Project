@@ -75,7 +75,6 @@ android {
         }
 
         google {
-
             manifestPlaceholders = [UMENG_CHANNEL: "google"]
         }
 

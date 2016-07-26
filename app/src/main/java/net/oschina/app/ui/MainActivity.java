@@ -25,6 +25,8 @@ import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.umeng.analytics.MobclickAgent;
+
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.AppManager;
@@ -52,6 +54,9 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity implements
         OnTabChangeListener, BaseViewInterface, View.OnClickListener,
         OnTouchListener {
+
+    private Context mContext4Umeng;
+    private final String packageName4Umeng = "MainActivity";
 
     private long mBackPressedTime;
 
@@ -105,6 +110,9 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        this.mContext4Umeng = this;
+
         super.onCreate(savedInstanceState);
         if (AppContext.getNightModeSwitch()) {
             setTheme(R.style.AppBaseTheme_Night);
@@ -118,12 +126,26 @@ public class MainActivity extends AppCompatActivity implements
         AppManager.getAppManager().addActivity(this);
 
         handleIntent(getIntent());
-        // 注册听云的检测分析
-        /*
-        NBSAppAgent.setLicenseKey("0ed0cc66c5cb45c0a91c6fa932ca99ac")
-                .withCrashReportEnabled(true).withLocationServiceEnabled(true)
-                .start(this);
-                */
+
+        //umeng analytics
+        MobclickAgent.setDebugMode(false);
+        MobclickAgent.openActivityDurationTrack(false);
+        MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(this.packageName4Umeng);
+        MobclickAgent.onResume(this.mContext4Umeng);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPageStart(this.packageName4Umeng);
+        MobclickAgent.onResume(this.mContext4Umeng);
     }
 
     @Override
