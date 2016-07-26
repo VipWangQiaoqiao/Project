@@ -36,10 +36,10 @@ public class SelectImageActivity extends AppCompatActivity implements EasyPermis
 
     private ISelectImageContract.View mView;
 
-    public static void showImage(Activity activity, ImageConfig config) {
-        Intent intent = new Intent(activity, SelectImageActivity.class);
+    public static void showImage(Context context, ImageConfig config) {
+        Intent intent = new Intent(context, SelectImageActivity.class);
         mConfig = config;
-        activity.startActivity(intent);
+        context.startActivity(intent);
     }
 
     @Override

@@ -171,6 +171,16 @@ public class Tweet implements Serializable {
 
         private String thumb;
         private String href;
+
+        public static String[] getImagePath(Image[] images) {
+            if (images == null || images.length == 0)
+                return null;
+            String[] paths = new String[images.length];
+            for (int i = 0; i < images.length; i++) {
+                paths[i] = images[i].href;
+            }
+            return paths;
+        }
     }
 
     @Override

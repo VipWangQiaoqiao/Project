@@ -8,8 +8,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -17,20 +15,21 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
+import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.media.adapter.ImageAdapter;
 import net.oschina.app.improve.media.adapter.ImageFolderAdapter;
 import net.oschina.app.improve.media.bean.Image;
 import net.oschina.app.improve.media.bean.ImageFolder;
 import net.oschina.app.improve.media.config.CommonUtil;
 import net.oschina.app.improve.media.config.ImageConfig;
+import net.oschina.app.improve.media.config.ImageLoaderListener;
 import net.oschina.app.improve.media.contract.ISelectImageContract;
 
 import java.io.File;
@@ -41,8 +40,7 @@ import java.util.List;
  * Created by huanghaibin_dev
  * on 2016/7/15.
  */
-public class SelectImageFragment extends Fragment implements ISelectImageContract.View {
-    private View mRootView;
+public class SelectImageFragment extends BaseFragment implements ISelectImageContract.View {
     private RecyclerView rv_image;
     private Button btn_folder, btn_preview;
 
@@ -70,35 +68,37 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (mRootView != null) {
-            ViewGroup parent = (ViewGroup) mRootView.getParent();
-            if (parent != null)
-                parent.removeView(mRootView);
-        } else {
-            mRootView = inflater.inflate(R.layout.fragment_select_image, container, false);
-            initWidget();
-            initData();
-        }
-        return mRootView;
+    protected int getLayoutId() {
+        return R.layout.fragment_select_image;
     }
 
-    private void initWidget() {
-        rv_image = (RecyclerView) mRootView.findViewById(R.id.rv_image);
-        btn_folder = (Button) mRootView.findViewById(R.id.btn_folder);
-        btn_preview = (Button) mRootView.findViewById(R.id.btn_preview);
+    @Override
+    protected void initWidget(View view) {
+        rv_image = (RecyclerView) view.findViewById(R.id.rv_image);
+        btn_folder = (Button) view.findViewById(R.id.btn_folder);
+        btn_preview = (Button) view.findViewById(R.id.btn_preview);
         rv_image.setLayoutManager(new GridLayoutManager(getActivity(), 4));
         rv_image.addItemDecoration(new SpaceGridItemDecoration(4));
         mImageAdapter = new ImageAdapter(getActivity());
         mImageAdapter.setSelectMode(mConfig.getSelectMode());
         mImageFolderAdapter = new ImageFolderAdapter(getActivity());
         if (mConfig == null) mConfig = ImageConfig.Build();
-        mImageAdapter.setLoader(mConfig.getLoaderListener());
-        mImageFolderAdapter.setLoader(mConfig.getLoaderListener());
+
+        ImageLoaderListener imageLoaderListener = mConfig.getLoaderListener();
+        if (imageLoaderListener == null)
+            imageLoaderListener = new ImageLoaderListener() {
+                @Override
+                public void displayImage(ImageView iv, String path) {
+                    getImgLoader().load(path).into(iv);
+                }
+            };
+        mImageAdapter.setLoader(imageLoaderListener);
+        mImageFolderAdapter.setLoader(imageLoaderListener);
         rv_image.setAdapter(mImageAdapter);
     }
 
-    private void initData() {
+    @Override
+    protected void initData() {
         mSelectedImage = new ArrayList<>();
         if (mConfig.getSelectMode() == ImageConfig.SelectMode.MULTI_MODE) {
             if (mConfig.getSelectedImage() != null && mConfig.getSelectedImage().size() != 0) {
@@ -141,7 +141,7 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
             @Override
             public void onClick(View v) {
                 if (mSelectedImage.size() > 0) {
-                    ImageGalleryActivity.show(getActivity(), mConfig.selectedImages(CommonUtil.toArrayList(mSelectedImage)), 0);
+                    ImageGalleryActivity.show(getActivity(), CommonUtil.toArray(mSelectedImage), 0);
                 }
             }
         });
@@ -238,7 +238,7 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
                 }
             });
         }
-        mFolderPopupWindow.showAtLocation(mRootView, Gravity.BOTTOM, 0, 0);
+        mFolderPopupWindow.showAtLocation(mRoot, Gravity.BOTTOM, 0, 0);
     }
 
     /**
@@ -393,7 +393,7 @@ public class SelectImageFragment extends Fragment implements ISelectImageContrac
                     List<Image> rs = new ArrayList<>();
                     for (Image i : mSelectedImage) {
                         File f = new File(i.getPath());
-                        if(!f.exists()){
+                        if (!f.exists()) {
                             rs.add(i);
                         }
                     }
