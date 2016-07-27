@@ -8,7 +8,7 @@ package net.oschina.app.improve.bean.simple;
 public class TweetLikeReverse {
     private Author author;
     private boolean liked;
-
+    private int likeCount;
     public Author getAuthor() {
         return author;
     }
@@ -23,5 +23,13 @@ public class TweetLikeReverse {
 
     public void setLiked(boolean liked) {
         this.liked = liked;
+    }
+
+    public int getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
     }
 }
