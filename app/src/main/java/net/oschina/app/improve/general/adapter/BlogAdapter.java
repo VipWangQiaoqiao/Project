@@ -24,6 +24,8 @@ import net.oschina.app.util.StringUtils;
  */
 public class BlogAdapter extends BaseListAdapter<Blog> {
 
+    public static final String TAG = "BlogAdapter";
+
     private boolean isUserBlog;
     private int actionPosition = 0;
 
@@ -42,7 +44,6 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
     @SuppressWarnings("deprecation")
     @Override
     protected void convert(ViewHolder vh, Blog item, int position) {
-
 
         TextView title = vh.getView(R.id.tv_item_blog_title);
         TextView content = vh.getView(R.id.tv_item_blog_body);
@@ -80,6 +81,17 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
 
         title.setText(spannable.append(item.getTitle()));
 
+        String body = item.getBody();
+        if (!TextUtils.isEmpty(body)) {
+            body = body.trim();
+            if (!TextUtils.isEmpty(body)) {
+                content.setText(body);
+                content.setVisibility(View.VISIBLE);
+            } else {
+                content.setVisibility(View.GONE);
+            }
+        }
+
         String cacheName = verifyFileName();
 
         if (isUserBlog) {
@@ -92,17 +104,6 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
         } else {
             title.setTextColor(mCallback.getContext().getResources().getColor(R.color.blog_title_text_color_light));
             content.setTextColor(mCallback.getContext().getResources().getColor(R.color.ques_bt_text_color_dark));
-        }
-
-        String body = item.getBody();
-        if (!TextUtils.isEmpty(body)) {
-            body = body.trim();
-            if (!TextUtils.isEmpty(body)) {
-                content.setText(body);
-                content.setVisibility(View.VISIBLE);
-            } else {
-                content.setVisibility(View.GONE);
-            }
         }
 
         String author = item.getAuthor();
@@ -124,14 +125,14 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
 
     private String verifyFileName() {
         switch (actionPosition) {
-            case 1:
-                return BlogFragment.BLOG_NORMAL;
-            case 2:
-                return BlogFragment.BLOG_HEAT;
-            case 3:
+            case 0:
                 return BlogFragment.BLOG_RECOMMEND;
-            default:
+            case 1:
+                return BlogFragment.BLOG_HEAT;
+            case 2:
                 return BlogFragment.BLOG_NORMAL;
+            default:
+                return BlogFragment.BLOG_RECOMMEND;
         }
     }
 

@@ -36,22 +36,20 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
 
     public static final String BUNDLE_BLOG_TYPE = "BUNDLE_BLOG_TYPE";
 
-    public static final String BLOG_NORMAL = "blog_normal";
-    public static final String BLOG_HEAT = "blog_heat";
-    public static final String BLOG_RECOMMEND = "blog_recommend";
+    public static final String BLOG_NORMAL = "blog_normal";        //最新博客
+    public static final String BLOG_HEAT = "blog_heat";            //本周热门
+    public static final String BLOG_RECOMMEND = "blog_recommend";  //最新推荐
 
     private int[] positions = {1, 0, 0};
     private ConnectivityManager connectivityManager;
     private BlogActionAdapter actionAdapter;
     private int catalog = 3;
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
-
 
     @Override
     protected void initWidget(View root) {
@@ -69,9 +67,11 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 displacementCatalog(position);
-                ((BlogAdapter) mAdapter).setActionPosition(position + 1);
+                ((BlogAdapter) mAdapter).setActionPosition(position);
                 if (!mIsRefresh) {
                     mIsRefresh = true;
+                    mBean.setPrevPageToken(null);
+                    mBean.setNextPageToken(null);
                 }
                 updateAction(position);
                 if (positions[position] == 1) {
@@ -81,28 +81,6 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
         });
         mListView.addHeaderView(headView);
 
-    }
-
-    /**
-     * displacement Catalog  type
-     *
-     * @param position position
-     */
-    private void displacementCatalog(int position) {
-        switch (position) {
-            case 0:
-                catalog = 3;
-                break;
-            case 1:
-                catalog = 2;
-                break;
-            case 2:
-                catalog = 1;
-                break;
-            default:
-                catalog = 3;
-                break;
-        }
     }
 
     /**
@@ -123,7 +101,6 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
         }
     }
 
-
     /**
      * notify action data
      *
@@ -139,6 +116,25 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
             }
         }
         actionAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * displacement Catalog  type
+     *
+     * @param position position
+     */
+    private void displacementCatalog(int position) {
+        switch (position) {
+            case 0:
+                catalog = OSChinaApi.CATALOG_BLOG_RECOMMEND;
+                break;
+            case 1:
+                catalog = OSChinaApi.CATALOG_BLOG_HEAT;
+                break;
+            case 2:
+                catalog = OSChinaApi.CATALOG_BLOG_NORMAL;
+                break;
+        }
     }
 
     /**
@@ -161,6 +157,18 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
         }
     }
 
+    @Override
+    protected void initData() {
+        CACHE_NAME = BLOG_NORMAL;
+        super.initData();
+    }
+
+    @Override
+    protected void onRequestError(int code) {
+        super.onRequestError(code);
+        requestLocalCache();
+    }
+
     /**
      * verify cache type
      */
@@ -176,38 +184,20 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
             case 3:
                 CACHE_NAME = BLOG_RECOMMEND;
                 break;
-            default:
-                CACHE_NAME = BLOG_NORMAL;
-                break;
         }
 
     }
 
     @Override
-    protected void initData() {
-        CACHE_NAME = BLOG_NORMAL;
-        super.initData();
+    protected BaseListAdapter<Blog> getListAdapter() {
+        return new BlogAdapter(this);
     }
-
-    @Override
-    protected void onRequestError(int code) {
-        super.onRequestError(code);
-        requestLocalCache();
-    }
-
 
     @Override
     protected void requestData() {
         super.requestData();
         verifyCacheType();
         OSChinaApi.getBlogList(catalog, mIsRefresh ? (mBean != null ? mBean.getPrevPageToken() : null) : (mBean != null ? mBean.getNextPageToken() : null), mHandler);
-
-    }
-
-
-    @Override
-    protected BaseListAdapter<Blog> getListAdapter() {
-        return new BlogAdapter(this);
     }
 
     @Override
@@ -229,13 +219,6 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
             saveToReadedList(CACHE_NAME, blog.getId() + "");
         }
 
-    }
-
-
-    @Override
-    protected void setListData(ResultBean<PageBean<Blog>> resultBean) {
-        verifyCacheType();
-        super.setListData(resultBean);
     }
 
 }
