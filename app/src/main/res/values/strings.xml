@@ -372,4 +372,8 @@
     <string name="lable_software">相关软件</string>
     <string name="vote_up">顶</string>
     <string name="vote_down">踩</string>
+
+    <string name="gallery_save_file_not_have_external_storage">没有外部存储!</string>
+    <string name="gallery_save_file_success">保存成功!</string>
+    <string name="gallery_save_file_failed">存储失败!</string>
 </resources>

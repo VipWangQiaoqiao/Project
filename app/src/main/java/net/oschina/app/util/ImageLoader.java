@@ -28,10 +28,14 @@ public class ImageLoader {
     }
 
     public static void loadImage(RequestManager loader, ImageView view, String url, int placeholder) {
+        loadImage(loader, view, url, placeholder, placeholder);
+    }
+
+    public static void loadImage(RequestManager loader, ImageView view, String url, int placeholder, int error) {
         boolean isCenterCrop = false;
         if (view instanceof CircleImageView)
             isCenterCrop = true;
-        loadImage(loader, view, url, placeholder, placeholder, isCenterCrop);
+        loadImage(loader, view, url, placeholder, error, isCenterCrop);
     }
 
     public static void loadImage(RequestManager loader, ImageView view, String url, int placeholder, int error, boolean isCenterCrop) {

@@ -147,7 +147,7 @@ public class TweetAdapter extends BaseListAdapter<Tweet> {
                 imageView.setTag(R.id.iv_tweet_image, i);
                 imageView.setTag(R.id.iv_tweet_face, position);
                 imageView.setOnClickListener(imageClickListener);
-                vh.setImageForNet(imageView, images[i].getThumb(), R.mipmap.ic_default_image);
+                vh.setImageForNet(imageView, images[i].getThumb(), R.color.grey_200, R.mipmap.ic_default_image);
                 flowLayout.addView(imageView);
             }
         } else {
