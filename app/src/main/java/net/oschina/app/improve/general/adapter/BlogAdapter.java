@@ -5,7 +5,6 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ImageSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -97,18 +96,14 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
 
         if (isUserBlog) {
             cacheName = UserBlogFragment.HISTORY_BLOG;
-            Log.d(TAG, "convert: -----------user");
         }
-        Log.e(TAG, " cacheName=" + cacheName + " id=" + item.getId());
 
         if (AppContext.isOnReadedPostList(cacheName, item.getId() + "")) {
             title.setTextColor(mCallback.getContext().getResources().getColor(R.color.count_text_color_light));
             content.setTextColor(mCallback.getContext().getResources().getColor(R.color.count_text_color_light));
-            Log.d(TAG, "convert: ---1");
         } else {
             title.setTextColor(mCallback.getContext().getResources().getColor(R.color.blog_title_text_color_light));
             content.setTextColor(mCallback.getContext().getResources().getColor(R.color.ques_bt_text_color_dark));
-            Log.d(TAG, "convert: ----2");
         }
 
         String author = item.getAuthor();
@@ -130,14 +125,14 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
 
     private String verifyFileName() {
         switch (actionPosition) {
-            case 1:
-                return BlogFragment.BLOG_NORMAL;
-            case 2:
-                return BlogFragment.BLOG_HEAT;
-            case 3:
+            case 0:
                 return BlogFragment.BLOG_RECOMMEND;
-            default:
+            case 1:
+                return BlogFragment.BLOG_HEAT;
+            case 2:
                 return BlogFragment.BLOG_NORMAL;
+            default:
+                return BlogFragment.BLOG_RECOMMEND;
         }
     }
 
