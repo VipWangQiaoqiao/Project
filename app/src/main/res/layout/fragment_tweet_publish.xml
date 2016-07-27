@@ -7,40 +7,43 @@
     android:background="@color/white"
     tools:context="net.oschina.app.improve.tweet.fragments.TweetPublishFragment">
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:background="@color/actionbar_background"
-        android:paddingTop="8dp">
+        android:paddingTop="1dp">
 
         <net.qiujuer.genius.ui.widget.ImageView
             android:id="@+id/icon_back"
-            android:layout_width="56dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="left|bottom"
+            android:layout_width="63dp"
+            android:layout_height="63dp"
+            android:layout_marginBottom="-8dp"
+            android:layout_marginLeft="-4dp"
             android:clickable="true"
-            android:paddingLeft="@dimen/lay_12"
-            android:paddingRight="@dimen/lay_16"
             android:scaleType="centerInside"
             android:src="@mipmap/btn_back_normal"
             app:gTouchColor="@color/black_alpha_16"
             app:gTouchEffect="press" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
             android:gravity="center"
+            android:paddingTop="@dimen/lay_8"
             android:text="弹一弹"
             android:textColor="@color/white"
             android:textSize="@dimen/font_18" />
 
         <net.qiujuer.genius.ui.widget.Button
             android:id="@+id/icon_send"
-            android:layout_width="56dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="right|bottom"
+            android:layout_width="63dp"
+            android:layout_height="63dp"
+            android:layout_gravity="right"
+            android:layout_marginBottom="-8dp"
+            android:layout_marginRight="-4dp"
             android:background="@null"
             android:enabled="false"
             android:gravity="center"
@@ -49,7 +52,7 @@
             android:textSize="@dimen/font_16"
             app:gTouchColor="@color/black_alpha_16"
             app:gTouchEffect="press" />
-    </FrameLayout>
+    </LinearLayout>
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"

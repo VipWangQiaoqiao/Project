@@ -5,11 +5,15 @@ package net.oschina.app.improve.media.contract;
  * Created by huanghaibin_dev
  * on 2016/7/15.
  */
-public interface ISelectImageContract {
+public interface SelectImageContract {
     interface Operator {
         void requestCamera();
 
         void requestExternalStorage();
+
+        void onBack();
+
+        void setDataView(View view);
     }
 
     interface View {

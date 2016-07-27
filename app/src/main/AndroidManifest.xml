@@ -374,7 +374,8 @@
             android:name=".improve.media.SelectImageActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="选择图片"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Base.NoTitle" />
         <activity
             android:name=".improve.media.ImageGalleryActivity"
             android:configChanges="keyboardHidden|orientation"
