@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lay_container"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@mipmap/bg_transparent">
+    android:layout_height="match_parent"
+    android:background="@color/black_alpha_80">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_popup_folder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#ffffff"
-        android:maxHeight="400dp" />
+        android:layout_marginBottom="@dimen/size_116"
+        android:background="@color/white" />
 </RelativeLayout>

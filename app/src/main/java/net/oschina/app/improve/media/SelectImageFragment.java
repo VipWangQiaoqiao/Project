@@ -36,13 +36,22 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.OnClick;
+
 /**
  * Created by huanghaibin_dev
  * on 2016/7/15.
  */
-public class SelectImageFragment extends BaseFragment implements SelectImageContract.View {
-    private RecyclerView rv_image;
-    private Button btn_folder, btn_preview;
+public class SelectImageFragment extends BaseFragment implements SelectImageContract.View, View.OnClickListener {
+    @Bind(R.id.rv_image)
+    RecyclerView mContentView;
+    @Bind(R.id.btn_title_select)
+    Button mSelectFolderView;
+    @Bind(R.id.toolbar)
+    View mToolbar;
+    @Bind(R.id.btn_done)
+    Button mDoneView;
 
     private ImageFolderPopupWindow mFolderPopupWindow;
     private ImageFolderAdapter mImageFolderAdapter;
@@ -73,13 +82,28 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
         return R.layout.fragment_select_image;
     }
 
+    @OnClick({R.id.btn_preview, R.id.icon_back, R.id.btn_title_select})
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.icon_back:
+                mOperator.onBack();
+                break;
+            case R.id.btn_preview:
+                if (mSelectedImage.size() > 0) {
+                    ImageGalleryActivity.show(getActivity(), CommonUtil.toArray(mSelectedImage), 0, false);
+                }
+                break;
+            case R.id.btn_title_select:
+                showPopupFolderList();
+                break;
+        }
+    }
+
     @Override
     protected void initWidget(View view) {
-        rv_image = (RecyclerView) view.findViewById(R.id.rv_image);
-        btn_folder = (Button) view.findViewById(R.id.btn_folder);
-        btn_preview = (Button) view.findViewById(R.id.btn_preview);
-        rv_image.setLayoutManager(new GridLayoutManager(getActivity(), 4));
-        rv_image.addItemDecoration(new SpaceGridItemDecoration(4));
+        mContentView.setLayoutManager(new GridLayoutManager(getActivity(), 4));
+        mContentView.addItemDecoration(new SpaceGridItemDecoration(4));
         mImageAdapter = new ImageAdapter(getActivity());
         mImageAdapter.setSelectMode(mConfig.getSelectMode());
         mImageFolderAdapter = new ImageFolderAdapter(getActivity());
@@ -95,7 +119,7 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
             };
         mImageAdapter.setLoader(imageLoaderListener);
         mImageFolderAdapter.setLoader(imageLoaderListener);
-        rv_image.setAdapter(mImageAdapter);
+        mContentView.setAdapter(mImageAdapter);
     }
 
     @Override
@@ -111,13 +135,6 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
                 }
             }
         }
-
-        btn_folder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPopupFolderList();
-            }
-        });
 
         mImageAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
             @Override
@@ -138,14 +155,6 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
             }
         });
 
-        btn_preview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mSelectedImage.size() > 0) {
-                    ImageGalleryActivity.show(getActivity(), CommonUtil.toArray(mSelectedImage), 0, false);
-                }
-            }
-        });
         getActivity().getSupportLoaderManager().initLoader(0, null, mCursorLoader);
     }
 
@@ -170,7 +179,7 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
             mSelectedImage.add(image);
             handleResult();
         }
-        btn_preview.setText("预览(" + mSelectedImage.size() + ")");
+        //btn_preview.setText("预览(" + mSelectedImage.size() + ")");
     }
 
     private void handleResult() {
@@ -234,12 +243,12 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
                         }
                     }
                     mImageAdapter.addAll(mImageFolderAdapter.getItem(position).getImages());
-                    rv_image.scrollToPosition(0);
+                    mContentView.scrollToPosition(0);
                     mFolderPopupWindow.dismiss();
                 }
             });
         }
-        mFolderPopupWindow.showAtLocation(mRoot, Gravity.BOTTOM, 0, 0);
+        mFolderPopupWindow.showAsDropDown(mToolbar);
     }
 
     /**
@@ -402,7 +411,7 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
                 }
 
 
-                btn_preview.setText("预览(" + mSelectedImage.size() + ")");
+                //btn_preview.setText("预览(" + mSelectedImage.size() + ")");
                 if (mConfig != null && mConfig.getSelectMode() == ImageConfig.SelectMode.SINGLE_MODE && mCamImageName != null) {
                     handleResult();
                 }

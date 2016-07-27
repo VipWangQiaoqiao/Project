@@ -10,7 +10,6 @@ import android.widget.TextView;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.media.bean.ImageFolder;
-import net.oschina.app.improve.media.config.ImageConfig;
 import net.oschina.app.improve.media.config.ImageLoaderListener;
 
 
@@ -21,6 +20,7 @@ import net.oschina.app.improve.media.config.ImageLoaderListener;
 
 public class ImageFolderAdapter extends BaseRecyclerAdapter<ImageFolder> {
     private ImageLoaderListener loader;
+
     public ImageFolderAdapter(Context context) {
         super(context, NEITHER);
     }
@@ -34,7 +34,7 @@ public class ImageFolderAdapter extends BaseRecyclerAdapter<ImageFolder> {
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, ImageFolder item, int position) {
         FolderViewHolder h = (FolderViewHolder) holder;
         h.tv_name.setText(item.getName());
-        h.tv_size.setText(item.getImages().size() + " 张图片");
+        h.tv_size.setText(String.format("(%s)", item.getImages().size()));
         if (loader != null) {
             loader.displayImage(h.iv_image, item.getAlbumPath());
         }

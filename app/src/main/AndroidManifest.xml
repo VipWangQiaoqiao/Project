@@ -215,11 +215,17 @@
 
         <receiver android:name=".broadcast.AlarmReceiver" />
 
-        <service  android:name=".service.NoticeService"  android:process=":notice" />
+        <service
+            android:name=".service.NoticeService"
+            android:process=":notice" />
         <service android:name=".service.DownloadService" />
 
-        <meta-data android:name="UMENG_APPKEY"  android:value="53cb520c56240bbd7d076ce5" />
-        <meta-data android:name="UMENG_CHANNEL" android:value="${UMENG_CHANNEL}" />
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="53cb520c56240bbd7d076ce5" />
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="${UMENG_CHANNEL}" />
 
         <!-- ############ QQ空间和QQ SSO授权的Activity注册 ############ -->
         <activity
@@ -362,13 +368,14 @@
             android:name=".improve.media.SelectImageActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="选择图片"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Base.NoTitle" />
         <activity
             android:name=".improve.media.ImageGalleryActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="图片预览"
-            android:screenOrientation="portrait"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Dialog.NoTitle.Translucent" />
 
         <service
