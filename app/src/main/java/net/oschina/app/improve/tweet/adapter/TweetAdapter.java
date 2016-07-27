@@ -200,8 +200,7 @@ public class TweetAdapter extends BaseListAdapter<Tweet> {
                 ResultBean<TweetLikeReverse> resultBean = AppContext.createGson().fromJson(responseString, type);
                 Tweet tweet = getItem(position);
                 tweet.setLiked(resultBean.getResult().isLiked());
-                int count = tweet.getLikeCount();
-                tweet.setLikeCount(tweet.isLiked() ? count + 1 : count - 1);
+                tweet.setLikeCount(resultBean.getResult().getLikeCount());
                 updateItem(position, tweet);
             } catch (Exception e) {
                 e.printStackTrace();
