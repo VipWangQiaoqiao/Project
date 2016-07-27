@@ -2,6 +2,7 @@ package net.oschina.app.improve.media;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.view.PagerAdapter;
@@ -151,16 +152,16 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
                     File extDirFile = new File(extDir);
                     if (!extDirFile.exists()) {
                         if (!extDirFile.mkdirs()) {
-                            callSaveStatus(false);
+                            callSaveStatus(false, null);
                             return;
                         }
                     }
-                    File saveFile = new File(extDirFile, String.format("IMG_%s.%s", System.currentTimeMillis(), extension));
+                    final File saveFile = new File(extDirFile, String.format("IMG_%s.%s", System.currentTimeMillis(), extension));
                     final boolean isSuccess = StreamUtils.copyFile(sourceFile, saveFile);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            callSaveStatus(isSuccess);
+                            callSaveStatus(isSuccess, saveFile);
                         }
                     });
                 } catch (InterruptedException | ExecutionException e) {
@@ -170,8 +171,11 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
         });
     }
 
-    private void callSaveStatus(boolean success) {
+    private void callSaveStatus(boolean success, File savePath) {
         if (success) {
+            // notify
+            Uri uri = Uri.fromFile(savePath);
+            sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
             Toast.makeText(ImageGalleryActivity.this, R.string.gallery_save_file_success, Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(ImageGalleryActivity.this, R.string.gallery_save_file_failed, Toast.LENGTH_SHORT).show();
