@@ -50,20 +50,6 @@ public class SelectImageActivity extends BaseActivity implements EasyPermissions
         requestExternalStorage();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_select_image_complete, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.select_image_complete) {
-            mView.onSelectComplete();
-        }
-        return true;
-    }
-
     @AfterPermissionGranted(RC_CAMERA_PERM)
     @Override
     public void requestCamera() {

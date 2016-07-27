@@ -17,7 +17,6 @@ public interface SelectImageContract {
     }
 
     interface View {
-        void onSelectComplete();
 
         void onOpenCameraSuccess();
 
