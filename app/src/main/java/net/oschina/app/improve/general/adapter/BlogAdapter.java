@@ -97,6 +97,7 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
 
         if (isUserBlog) {
             cacheName = UserBlogFragment.HISTORY_BLOG;
+            Log.d(TAG, "convert: -----------user");
         }
         Log.e(TAG, " cacheName=" + cacheName + " id=" + item.getId());
 

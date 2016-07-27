@@ -12,6 +12,7 @@
 
         <View
             style="@style/h_line"
+            android:layout_height="1px"
             android:layout_marginTop="25dp" />
 
         <LinearLayout
@@ -40,6 +41,7 @@
 
         <View
             style="@style/h_line"
+            android:layout_height="1px"
             android:layout_marginTop="30dp" />
 
         <LinearLayout
@@ -67,6 +69,7 @@
 
         <View
             style="@style/h_line"
+            android:layout_height="1px"
             android:visibility="gone" />
 
         <LinearLayout
@@ -84,10 +87,13 @@
                 android:text="@string/friends" />
         </LinearLayout>
 
-        <View style="@style/h_line" />
+        <View
+            style="@style/h_line"
+            android:layout_height="1px" />
 
         <View
             style="@style/h_line"
+            android:layout_height="1px"
             android:layout_marginTop="30dp" />
 
         <LinearLayout
@@ -118,6 +124,7 @@
 
             <View
                 style="@style/h_line"
+                android:layout_height="1px"
                 android:layout_marginLeft="8dp" />
 
         </LinearLayout>
@@ -143,7 +150,9 @@
                 app:srcCompat="@mipmap/ic_arrow_right" />
         </LinearLayout>
 
-        <View style="@style/h_line" />
+        <View
+            style="@style/h_line"
+            android:layout_height="1px" />
 
     </LinearLayout>
 
