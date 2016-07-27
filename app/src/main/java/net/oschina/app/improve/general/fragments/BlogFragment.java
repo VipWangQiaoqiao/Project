@@ -45,13 +45,11 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
     private BlogActionAdapter actionAdapter;
     private int catalog = 3;
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
-
 
     @Override
     protected void initWidget(View root) {
@@ -84,6 +82,41 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
     }
 
     /**
+     * According to the distribution network is events
+     */
+    private void requestEventDispatcher() {
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isAvailable()) {
+            boolean connectedOrConnecting = networkInfo.isConnectedOrConnecting();
+            NetworkInfo.State state = networkInfo.getState();
+            if (connectedOrConnecting && state == NetworkInfo.State.CONNECTED) {
+                requestData();
+            } else {
+                requestLocalCache();
+            }
+        } else {
+            requestLocalCache();
+        }
+    }
+
+    /**
+     * notify action data
+     *
+     * @param position position
+     */
+    private void updateAction(int position) {
+        int len = positions.length;
+        for (int i = 0; i < len; i++) {
+            if (i != position) {
+                positions[i] = 0;
+            } else {
+                positions[i] = 1;
+            }
+        }
+        actionAdapter.notifyDataSetChanged();
+    }
+
+    /**
      * displacement Catalog  type
      *
      * @param position position
@@ -106,42 +139,6 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
     }
 
     /**
-     * According to the distribution network is events
-     */
-    private void requestEventDispatcher() {
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isAvailable()) {
-            boolean connectedOrConnecting = networkInfo.isConnectedOrConnecting();
-            NetworkInfo.State state = networkInfo.getState();
-            if (connectedOrConnecting && state == NetworkInfo.State.CONNECTED) {
-                requestData();
-            } else {
-                requestLocalCache();
-            }
-        } else {
-            requestLocalCache();
-        }
-    }
-
-
-    /**
-     * notify action data
-     *
-     * @param position position
-     */
-    private void updateAction(int position) {
-        int len = positions.length;
-        for (int i = 0; i < len; i++) {
-            if (i != position) {
-                positions[i] = 0;
-            } else {
-                positions[i] = 1;
-            }
-        }
-        actionAdapter.notifyDataSetChanged();
-    }
-
-    /**
      * request local cache
      */
     @SuppressWarnings("unchecked")
@@ -159,6 +156,18 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
             mBean.setItems(new ArrayList<Blog>());
             onRefreshing();
         }
+    }
+
+    @Override
+    protected void initData() {
+        CACHE_NAME = BLOG_NORMAL;
+        super.initData();
+    }
+
+    @Override
+    protected void onRequestError(int code) {
+        super.onRequestError(code);
+        requestLocalCache();
     }
 
     /**
@@ -184,17 +193,9 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
     }
 
     @Override
-    protected void initData() {
-        CACHE_NAME = BLOG_NORMAL;
-        super.initData();
+    protected BaseListAdapter<Blog> getListAdapter() {
+        return new BlogAdapter(this);
     }
-
-    @Override
-    protected void onRequestError(int code) {
-        super.onRequestError(code);
-        requestLocalCache();
-    }
-
 
     @Override
     protected void requestData() {
@@ -202,12 +203,6 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
         verifyCacheType();
         OSChinaApi.getBlogList(catalog, mIsRefresh ? (mBean != null ? mBean.getPrevPageToken() : null) : (mBean != null ? mBean.getNextPageToken() : null), mHandler);
 
-    }
-
-
-    @Override
-    protected BaseListAdapter<Blog> getListAdapter() {
-        return new BlogAdapter(this);
     }
 
     @Override
@@ -229,13 +224,6 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
             saveToReadedList(CACHE_NAME, blog.getId() + "");
         }
 
-    }
-
-
-    @Override
-    protected void setListData(ResultBean<PageBean<Blog>> resultBean) {
-        verifyCacheType();
-        super.setListData(resultBean);
     }
 
 }

@@ -5,6 +5,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -24,6 +25,8 @@ import net.oschina.app.util.StringUtils;
  */
 public class BlogAdapter extends BaseListAdapter<Blog> {
 
+    public static final String TAG = "BlogAdapter";
+
     private boolean isUserBlog;
     private int actionPosition = 0;
 
@@ -42,7 +45,6 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
     @SuppressWarnings("deprecation")
     @Override
     protected void convert(ViewHolder vh, Blog item, int position) {
-
 
         TextView title = vh.getView(R.id.tv_item_blog_title);
         TextView content = vh.getView(R.id.tv_item_blog_body);
@@ -80,20 +82,6 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
 
         title.setText(spannable.append(item.getTitle()));
 
-        String cacheName = verifyFileName();
-
-        if (isUserBlog) {
-            cacheName = UserBlogFragment.HISTORY_BLOG;
-        }
-
-        if (AppContext.isOnReadedPostList(cacheName, item.getId() + "")) {
-            title.setTextColor(mCallback.getContext().getResources().getColor(R.color.count_text_color_light));
-            content.setTextColor(mCallback.getContext().getResources().getColor(R.color.count_text_color_light));
-        } else {
-            title.setTextColor(mCallback.getContext().getResources().getColor(R.color.blog_title_text_color_light));
-            content.setTextColor(mCallback.getContext().getResources().getColor(R.color.ques_bt_text_color_dark));
-        }
-
         String body = item.getBody();
         if (!TextUtils.isEmpty(body)) {
             body = body.trim();
@@ -103,6 +91,23 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
             } else {
                 content.setVisibility(View.GONE);
             }
+        }
+
+        String cacheName = verifyFileName();
+
+        if (isUserBlog) {
+            cacheName = UserBlogFragment.HISTORY_BLOG;
+        }
+        Log.e(TAG, " cacheName=" + cacheName + " id=" + item.getId());
+
+        if (AppContext.isOnReadedPostList(cacheName, item.getId() + "")) {
+            title.setTextColor(mCallback.getContext().getResources().getColor(R.color.count_text_color_light));
+            content.setTextColor(mCallback.getContext().getResources().getColor(R.color.count_text_color_light));
+            Log.d(TAG, "convert: ---1");
+        } else {
+            title.setTextColor(mCallback.getContext().getResources().getColor(R.color.blog_title_text_color_light));
+            content.setTextColor(mCallback.getContext().getResources().getColor(R.color.ques_bt_text_color_dark));
+            Log.d(TAG, "convert: ----2");
         }
 
         String author = item.getAuthor();
