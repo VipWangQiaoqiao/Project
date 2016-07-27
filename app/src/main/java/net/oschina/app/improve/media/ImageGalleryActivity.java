@@ -22,7 +22,6 @@ import net.oschina.app.improve.tweet.service.PicturesCompress;
 import net.oschina.app.improve.utils.StreamUtils;
 
 import java.io.File;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -40,16 +39,14 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
     private int mCurPosition;
     private boolean mNeedSaveLocal;
 
-    public static void show(Context context, List<String> imageList, int position) {
-        show(context, imageList, position, true);
+    public static void show(Context context, String images) {
+        show(context, images, true);
     }
 
-    public static void show(Context context, List<String> imageList, int position, boolean needSaveLocal) {
-        if (imageList == null || imageList.size() == 0)
+    public static void show(Context context, String images, boolean needSaveLocal) {
+        if (images == null)
             return;
-        String[] images = new String[imageList.size()];
-        imageList.toArray(images);
-        show(context, images, position, needSaveLocal);
+        show(context, new String[]{images}, 0);
     }
 
     public static void show(Context context, String[] images, int position) {
@@ -64,12 +61,6 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
         intent.putExtra(KEY_POSITION, position);
         intent.putExtra(KEY_NEED_SAVE, needSaveLocal);
         context.startActivity(intent);
-    }
-
-    public static void show(Context context, String images) {
-        if (images == null)
-            return;
-        show(context, new String[]{images}, 0);
     }
 
     @Override

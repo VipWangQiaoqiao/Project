@@ -91,7 +91,7 @@ public class TweetPublishActivity extends BaseBackActivity implements TweetPubli
 
     @Override
     public void onBack() {
-        onBackPressed();
+        onSupportNavigateUp();
     }
 
 

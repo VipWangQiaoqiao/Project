@@ -30,7 +30,7 @@ import net.oschina.app.improve.media.bean.ImageFolder;
 import net.oschina.app.improve.media.config.CommonUtil;
 import net.oschina.app.improve.media.config.ImageConfig;
 import net.oschina.app.improve.media.config.ImageLoaderListener;
-import net.oschina.app.improve.media.contract.ISelectImageContract;
+import net.oschina.app.improve.media.contract.SelectImageContract;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ import java.util.List;
  * Created by huanghaibin_dev
  * on 2016/7/15.
  */
-public class SelectImageFragment extends BaseFragment implements ISelectImageContract.View {
+public class SelectImageFragment extends BaseFragment implements SelectImageContract.View {
     private RecyclerView rv_image;
     private Button btn_folder, btn_preview;
 
@@ -54,7 +54,7 @@ public class SelectImageFragment extends BaseFragment implements ISelectImageCon
     private String mCamImageName;
     private LoaderListener mCursorLoader = new LoaderListener();
 
-    private ISelectImageContract.Operator mOperator;
+    private SelectImageContract.Operator mOperator;
 
     public static SelectImageFragment getInstance(ImageConfig config) {
         mConfig = config;
@@ -63,7 +63,8 @@ public class SelectImageFragment extends BaseFragment implements ISelectImageCon
 
     @Override
     public void onAttach(Context context) {
-        this.mOperator = (ISelectImageContract.Operator) context;
+        this.mOperator = (SelectImageContract.Operator) context;
+        this.mOperator.setDataView(this);
         super.onAttach(context);
     }
 

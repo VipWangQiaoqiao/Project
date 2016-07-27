@@ -1,23 +1,20 @@
 package net.oschina.app.improve.media;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import net.oschina.app.R;
+import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.media.config.ImageConfig;
-import net.oschina.app.improve.media.contract.ISelectImageContract;
+import net.oschina.app.improve.media.contract.SelectImageContract;
 
 import java.util.List;
 
@@ -29,12 +26,12 @@ import pub.devrel.easypermissions.EasyPermissions;
  * on 2016/7/13.
  */
 @SuppressWarnings("All")
-public class SelectImageActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks, ISelectImageContract.Operator {
+public class SelectImageActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks, SelectImageContract.Operator {
     private static ImageConfig mConfig;
     private final int RC_CAMERA_PERM = 0x03;
     private final int RC_EXTERNAL_STORAGE = 0x04;
 
-    private ISelectImageContract.View mView;
+    private SelectImageContract.View mView;
 
     public static void showImage(Context context, ImageConfig config) {
         Intent intent = new Intent(context, SelectImageActivity.class);
@@ -43,24 +40,13 @@ public class SelectImageActivity extends AppCompatActivity implements EasyPermis
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_select_image);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeButtonEnabled(false);
-        }
-        initData();
+    protected int getContentView() {
+        return R.layout.activity_select_image;
     }
 
     @Override
-    public boolean onSupportNavigateUp() {
-        finish();
-        return super.onSupportNavigateUp();
-    }
-
-    private void initData() {
+    protected void initWidget() {
+        super.initWidget();
         requestExternalStorage();
     }
 
@@ -102,6 +88,16 @@ public class SelectImageActivity extends AppCompatActivity implements EasyPermis
         } else {
             EasyPermissions.requestPermissions(this, "", RC_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
         }
+    }
+
+    @Override
+    public void onBack() {
+        onSupportNavigateUp();
+    }
+
+    @Override
+    public void setDataView(SelectImageContract.View view) {
+        mView = view;
     }
 
 
@@ -158,22 +154,14 @@ public class SelectImageActivity extends AppCompatActivity implements EasyPermis
 
     private void handleView() {
         try {
-            SelectImageFragment fragment = SelectImageFragment.getInstance(mConfig);
-            mView = fragment;
-            FragmentTransaction trans = getSupportFragmentManager()
-                    .beginTransaction();
-            trans.replace(R.id.fl_content, fragment);
-            trans.commitAllowingStateLoss();
+            Fragment fragment = SelectImageFragment.getInstance(mConfig);
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fl_content, fragment)
+                    .commitNowAllowingStateLoss();
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        mConfig = null;
-        mView = null;
-        super.onDestroy();
     }
 
     public static AlertDialog.Builder getConfirmDialog(Context context, String message, String
