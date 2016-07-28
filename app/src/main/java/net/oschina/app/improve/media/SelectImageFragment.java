@@ -52,6 +52,8 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
     View mToolbar;
     @Bind(R.id.btn_done)
     Button mDoneView;
+    @Bind(R.id.btn_preview)
+    Button mPreviewView;
 
     private ImageFolderPopupWindow mFolderPopupWindow;
     private ImageFolderAdapter mImageFolderAdapter;
@@ -114,6 +116,7 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
         mImageAdapter.setLoader(this);
         mImageFolderAdapter.setLoader(this);
         mContentView.setAdapter(mImageAdapter);
+        mContentView.setItemAnimator(null);
     }
 
     @Override
@@ -135,7 +138,7 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
             public void onItemClick(int position, long itemId) {
                 if (mConfig.getMediaMode() == ImageConfig.MediaMode.HAVE_CAM_MODE) {
                     if (position != 0) {
-                        handleImage(position);
+                        handleSelectChange(position);
                     } else {
                         if (mSelectedImage.size() < mConfig.getSelectCount()) {
                             mOperator.requestCamera();
@@ -144,7 +147,7 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
                         }
                     }
                 } else {
-                    handleImage(position);
+                    handleSelectChange(position);
                 }
             }
         });
@@ -152,7 +155,19 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
         getActivity().getSupportLoaderManager().initLoader(0, null, mCursorLoader);
     }
 
-    private void handleImage(int position) {
+    private void handleSelectSizeChange(int size) {
+        if (size > 0) {
+            mPreviewView.setEnabled(true);
+            mDoneView.setEnabled(true);
+            mDoneView.setText(String.format("%s(%s)", getText(R.string.image_select_opt_done), size));
+        } else {
+            mPreviewView.setEnabled(false);
+            mDoneView.setEnabled(false);
+            mDoneView.setText(getText(R.string.image_select_opt_done));
+        }
+    }
+
+    private void handleSelectChange(int position) {
         Image image = mImageAdapter.getItem(position);
         //如果是多选模式
         if (mConfig.getSelectMode() == ImageConfig.SelectMode.MULTI_MODE) {
@@ -169,13 +184,11 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
                     mImageAdapter.updateItem(position);
                 }
             }
+            handleSelectSizeChange(mSelectedImage.size());
         } else {
             mSelectedImage.add(image);
             handleResult();
         }
-        int size = mSelectedImage.size();
-        mDoneView.setText("完成(" + size + ")");
-        mDoneView.setEnabled(size > 0);
     }
 
     private void handleResult() {
@@ -223,11 +236,12 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
      */
     private void showPopupFolderList() {
         if (mFolderPopupWindow == null) {
-            mFolderPopupWindow = new ImageFolderPopupWindow(getActivity());
-            mFolderPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            mFolderPopupWindow.setAdapter(mImageFolderAdapter);
-            mFolderPopupWindow.setOutsideTouchable(true);
-            mFolderPopupWindow.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+            ImageFolderPopupWindow popupWindow = new ImageFolderPopupWindow(getActivity());
+            popupWindow.setAnimationStyle(R.style.popup_anim_style_alpha);
+            popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            popupWindow.setAdapter(mImageFolderAdapter);
+            popupWindow.setOutsideTouchable(true);
+            popupWindow.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(final int position, long itemId) {
                     mImageAdapter.clear();
@@ -242,6 +256,7 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
                     mFolderPopupWindow.dismiss();
                 }
             });
+            mFolderPopupWindow = popupWindow;
         }
         mFolderPopupWindow.showAsDropDown(mToolbar);
     }

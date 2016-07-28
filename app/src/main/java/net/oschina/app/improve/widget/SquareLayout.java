@@ -9,24 +9,24 @@ import android.widget.FrameLayout;
 /**
  * Created by JuQiu
  * on 16/7/15.
+ * 正方形控件
  */
+public class SquareLayout extends FrameLayout {
 
-public class TweetPublishImageLayout extends FrameLayout {
-
-    public TweetPublishImageLayout(Context context) {
+    public SquareLayout(Context context) {
         super(context);
     }
 
-    public TweetPublishImageLayout(Context context, AttributeSet attrs) {
+    public SquareLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public TweetPublishImageLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SquareLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public TweetPublishImageLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public SquareLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
