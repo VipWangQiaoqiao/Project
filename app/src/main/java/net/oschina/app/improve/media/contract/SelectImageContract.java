@@ -20,10 +20,6 @@ public interface SelectImageContract {
 
         void onOpenCameraSuccess();
 
-        void onReadExternalStorageSuccess();
-
         void onCameraPermissionDenied();
-
-        void onExternalStorageDenied();
     }
 }

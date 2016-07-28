@@ -107,12 +107,14 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
 
     @Override
     protected void initWidget(View view) {
+        if (mConfig == null) mConfig = ImageConfig.Build();
+
         mContentView.setLayoutManager(new GridLayoutManager(getActivity(), 4));
         mContentView.addItemDecoration(new SpaceGridItemDecoration((int) Ui.dipToPx(getResources(), 1)));
         mImageAdapter = new ImageAdapter(getActivity());
         mImageAdapter.setSelectMode(mConfig.getSelectMode());
         mImageFolderAdapter = new ImageFolderAdapter(getActivity());
-        if (mConfig == null) mConfig = ImageConfig.Build();
+
         mImageAdapter.setLoader(this);
         mImageFolderAdapter.setLoader(this);
         mContentView.setAdapter(mImageAdapter);
@@ -152,7 +154,7 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
             }
         });
 
-        getActivity().getSupportLoaderManager().initLoader(0, null, mCursorLoader);
+        getLoaderManager().initLoader(0, null, mCursorLoader);
     }
 
     private void handleSelectSizeChange(int size) {
@@ -213,21 +215,9 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
         toOpenCamera();
     }
 
-    /**
-     * 申请读取存储成功
-     */
-    @Override
-    public void onReadExternalStorageSuccess() {
-        getLoaderManager().initLoader(0, null, mCursorLoader);
-    }
 
     @Override
     public void onCameraPermissionDenied() {
-
-    }
-
-    @Override
-    public void onExternalStorageDenied() {
 
     }
 
