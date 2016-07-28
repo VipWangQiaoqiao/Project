@@ -97,6 +97,9 @@ public class CommentExsActivity extends BaseBackActivity {
                 mDelegation.getInputView().setHint("发表评论");
             }
         });
+        mRefreshLayout.setColorSchemeResources(
+                R.color.swiperefresh_color1, R.color.swiperefresh_color2,
+                R.color.swiperefresh_color3, R.color.swiperefresh_color4);
     }
 
     @Override
