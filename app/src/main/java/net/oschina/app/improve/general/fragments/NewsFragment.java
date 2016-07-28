@@ -1,6 +1,8 @@
 package net.oschina.app.improve.general.fragments;
 
+import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
@@ -45,6 +47,14 @@ public class NewsFragment extends BaseGeneralListFragment<News> {
 
     private ViewNewsHeader mHeaderView;
     private Handler handler = new Handler();
+    private String mSystemTime;
+
+    @Override
+    protected void onRestartInstance(Bundle bundle) {
+        super.onRestartInstance(bundle);
+        mIsRefresh = false;
+        mSystemTime = bundle.getString("system_time", "");
+    }
 
     @Override
     protected void initWidget(View root) {
@@ -70,6 +80,14 @@ public class NewsFragment extends BaseGeneralListFragment<News> {
         mHeaderView.setRefreshLayout(mRefreshLayout);
         mListView.addHeaderView(mHeaderView);
         getBannerList();
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+        if (!TextUtils.isEmpty(mSystemTime)) {
+            ((NewsAdapter) mAdapter).setSystemTime(mSystemTime);
+        }
     }
 
     @Override
@@ -118,8 +136,9 @@ public class NewsFragment extends BaseGeneralListFragment<News> {
 
     @Override
     protected void setListData(ResultBean<PageBean<News>> resultBean) {
-        ((NewsAdapter) mAdapter).setSystemTime(resultBean.getTime());
-        AppContext.set(NEWS_SYSTEM_TIME, resultBean.getTime());
+        mSystemTime = resultBean.getTime();
+        ((NewsAdapter) mAdapter).setSystemTime(mSystemTime);
+        AppContext.set(NEWS_SYSTEM_TIME, mSystemTime);
         super.setListData(resultBean);
     }
 
@@ -148,5 +167,11 @@ public class NewsFragment extends BaseGeneralListFragment<News> {
                 }
             }
         });
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString("system_time", mSystemTime);
+        super.onSaveInstanceState(outState);
     }
 }
