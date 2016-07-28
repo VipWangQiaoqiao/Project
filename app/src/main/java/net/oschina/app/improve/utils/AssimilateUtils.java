@@ -9,8 +9,6 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
-import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 
@@ -40,7 +38,7 @@ public class AssimilateUtils {
 
     // #Java#
     public static final Pattern PatternSoftwareTagWithHtml = Pattern.compile(
-            "<a[^<>]*>(#[^#@<>\\s]+#)</a>"
+            "<a[^<>]*>(#([^#@<>\\s]+)#)</a>"
     );
     public static final Pattern PatternSoftwareTag = Pattern.compile(
             "#([^#@<>\\s]+)#"
@@ -80,7 +78,7 @@ public class AssimilateUtils {
         String str = spannable.toString();
         Matcher matcher = PatternAtUser.matcher(str);
         while (matcher.find()){
-            ForegroundColorSpan span = new ForegroundColorSpan(0XFF5856E7);
+            ForegroundColorSpan span = new ForegroundColorSpan(0XFF6888AD);
             spannable.setSpan(span, matcher.start(), matcher.end(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         }
         return spannable;
@@ -108,7 +106,7 @@ public class AssimilateUtils {
      * @return
      */
     public static Spannable assimilateOnlyTag(final Context context, CharSequence content){
-        return assimilate(content, PatternSoftwareTagWithHtml, 1, 1, new Action1() {
+        return assimilate(content, PatternSoftwareTagWithHtml, 2, 1, new Action1() {
             @Override
             public void call(String str) {
                 Bundle bundle = new Bundle();
@@ -131,7 +129,7 @@ public class AssimilateUtils {
         return assimilate(content, PatternLinks, 1, 2, new Action1() {
             @Override
             public void call(String str) {
-                UIHelper.openBrowser(context, str);
+                UIHelper.showUrlRedirect(context, str);
             }
         });
     }
@@ -272,18 +270,23 @@ public class AssimilateUtils {
      */
     private static Spannable assimilate(CharSequence sequence, Pattern pattern, int index0, int index1, final Action1 action){
         SpannableStringBuilder builder = new SpannableStringBuilder(sequence);
-        Matcher matcher = pattern.matcher(sequence);
-        while (matcher.find()) {
-            final String group0 = matcher.group(index0);
-            final String group1 = matcher.group(index1);
-            builder.replace(matcher.start(), matcher.end(), group1);
-            ClickableSpan span = new ClickableSpan() {
-                @Override
-                public void onClick(View widget) {
-                    action.call(group0);
-                }
-            };
-            builder.setSpan(span, matcher.start(), matcher.start() + group1.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        Matcher matcher;
+        while (true) {
+            matcher = pattern.matcher(builder.toString());
+            if (matcher.find()){
+                final String group0 = matcher.group(index0);
+                final String group1 = matcher.group(index1);
+                builder.replace(matcher.start(), matcher.end(), group1);
+                ClickableSpan span = new ClickableSpan() {
+                    @Override
+                    public void onClick(View widget) {
+                        action.call(group0);
+                    }
+                };
+                builder.setSpan(span, matcher.start(), matcher.start() + group1.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                continue;
+            }
+            break;
         }
         return builder;
     }
