@@ -26,10 +26,9 @@ import java.util.List;
 
 /**
  * 关注、粉丝
- * 
+ *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @created 2014年11月6日 上午11:15:37
- * 
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class FriendsFragment extends BaseListFragment<Friend> {
@@ -122,14 +121,14 @@ public class FriendsFragment extends BaseListFragment<Friend> {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
-        Friend item = (Friend) mAdapter.getItem(position);
+                            long id) {
+        Friend item = mAdapter.getItem(position);
         if (item != null) {
-            if (mUid == AppContext.getInstance().getLoginUid()) {
-                UIHelper.showMessageDetail(getActivity(), item.getUserid(),
-                        item.getName());
-                return;
-            }
+            //  if (mUid == AppContext.getInstance().getLoginUid()) {
+            //  UIHelper.showMessageDetail(getActivity(), item.getUserid(),
+            //         item.getName());
+            //    return;
+            //   }
             UIHelper.showUserCenter(getActivity(), item.getUserid(),
                     item.getName());
         }
