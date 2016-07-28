@@ -376,4 +376,6 @@
     <string name="gallery_save_file_not_have_external_storage">没有外部存储!</string>
     <string name="gallery_save_file_success">保存成功!</string>
     <string name="gallery_save_file_failed">存储失败!</string>
+    <string name="image_select_opt_done">完成</string>
+    <string name="image_select_opt_preview">预览</string>
 </resources>

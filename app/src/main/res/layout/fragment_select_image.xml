@@ -28,8 +28,9 @@
 
         <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:paddingTop="8dp">
 
             <ImageView
@@ -42,10 +43,13 @@
             <net.qiujuer.genius.ui.widget.Button
                 android:id="@+id/btn_title_select"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@null"
                 android:clickable="true"
+                android:ellipsize="end"
                 android:gravity="center"
+                android:maxLines="1"
+                android:maxWidth="@dimen/size_128"
                 android:paddingBottom="@dimen/lay_4"
                 android:paddingLeft="@dimen/lay_4"
                 android:paddingRight="@dimen/size_28"
@@ -54,8 +58,7 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/font_18"
                 app:gTouchColor="@color/black_alpha_16"
-                app:gTouchCornerRadius="28dp"
-                app:gTouchEffect="ripple" />
+                app:gTouchEffect="ease" />
 
         </FrameLayout>
     </RelativeLayout>
@@ -66,13 +69,14 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/lay_button"
         android:layout_below="@id/toolbar"
-        android:scrollbars="vertical" />
+        android:padding="1dp"
+        android:scrollbars="none" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_above="@+id/lay_button"
-        android:background="#ccc" />
+        android:background="@color/black_alpha_80" />
 
     <FrameLayout
         android:id="@+id/lay_button"
@@ -85,25 +89,43 @@
         android:paddingRight="@dimen/lay_16"
         android:paddingTop="@dimen/lay_8">
 
-        <Button
+        <net.qiujuer.genius.ui.widget.Button
             android:id="@+id/btn_preview"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/size_32"
+            android:layout_height="@dimen/size_28"
             android:layout_gravity="left"
+            android:background="@drawable/btn_select_image_preview_bg_selector"
+            android:enabled="false"
             android:gravity="center"
-            android:text="预览"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:paddingBottom="@dimen/lay_4"
+            android:paddingLeft="@dimen/lay_12"
+            android:paddingRight="@dimen/lay_12"
+            android:paddingTop="@dimen/lay_4"
+            android:text="@string/image_select_opt_preview"
+            android:textColor="@color/btn_select_image_preview_bg_selector"
+            android:textSize="14sp"
+            app:gBorderColor="@color/black_alpha_16"
+            app:gTouchCornerRadius="2dp"
+            app:gTouchEffect="ripple" />
 
-        <Button
+        <net.qiujuer.genius.ui.widget.Button
             android:id="@+id/btn_done"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/size_32"
+            android:layout_height="@dimen/size_28"
             android:layout_gravity="right"
+            android:background="@drawable/btn_select_image_done_bg_selector"
+            android:enabled="false"
             android:gravity="center"
-            android:text="完成(0)"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:paddingBottom="@dimen/lay_4"
+            android:paddingLeft="@dimen/lay_12"
+            android:paddingRight="@dimen/lay_12"
+            android:paddingTop="@dimen/lay_4"
+            android:text="@string/image_select_opt_done"
+            android:textColor="@color/btn_select_image_done_bg_selector"
+            android:textSize="14sp"
+            app:gBorderColor="@color/black_alpha_16"
+            app:gTouchCornerRadius="2dp"
+            app:gTouchEffect="ripple" />
 
     </FrameLayout>
 </RelativeLayout>

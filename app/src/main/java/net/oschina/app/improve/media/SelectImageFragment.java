@@ -14,7 +14,6 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -31,6 +30,7 @@ import net.oschina.app.improve.media.config.CommonUtil;
 import net.oschina.app.improve.media.config.ImageConfig;
 import net.oschina.app.improve.media.config.ImageLoaderListener;
 import net.oschina.app.improve.media.contract.SelectImageContract;
+import net.qiujuer.genius.ui.Ui;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -43,7 +43,7 @@ import butterknife.OnClick;
  * Created by huanghaibin_dev
  * on 2016/7/15.
  */
-public class SelectImageFragment extends BaseFragment implements SelectImageContract.View, View.OnClickListener {
+public class SelectImageFragment extends BaseFragment implements SelectImageContract.View, View.OnClickListener, ImageLoaderListener {
     @Bind(R.id.rv_image)
     RecyclerView mContentView;
     @Bind(R.id.btn_title_select)
@@ -82,7 +82,7 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
         return R.layout.fragment_select_image;
     }
 
-    @OnClick({R.id.btn_preview, R.id.icon_back, R.id.btn_title_select})
+    @OnClick({R.id.btn_preview, R.id.icon_back, R.id.btn_title_select, R.id.btn_done})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -97,28 +97,22 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
             case R.id.btn_title_select:
                 showPopupFolderList();
                 break;
+            case R.id.btn_done:
+                onSelectComplete();
+                break;
         }
     }
 
     @Override
     protected void initWidget(View view) {
         mContentView.setLayoutManager(new GridLayoutManager(getActivity(), 4));
-        mContentView.addItemDecoration(new SpaceGridItemDecoration(4));
+        mContentView.addItemDecoration(new SpaceGridItemDecoration((int) Ui.dipToPx(getResources(), 1)));
         mImageAdapter = new ImageAdapter(getActivity());
         mImageAdapter.setSelectMode(mConfig.getSelectMode());
         mImageFolderAdapter = new ImageFolderAdapter(getActivity());
         if (mConfig == null) mConfig = ImageConfig.Build();
-
-        ImageLoaderListener imageLoaderListener = mConfig.getLoaderListener();
-        if (imageLoaderListener == null)
-            imageLoaderListener = new ImageLoaderListener() {
-                @Override
-                public void displayImage(ImageView iv, String path) {
-                    getImgLoader().load(path).into(iv);
-                }
-            };
-        mImageAdapter.setLoader(imageLoaderListener);
-        mImageFolderAdapter.setLoader(imageLoaderListener);
+        mImageAdapter.setLoader(this);
+        mImageFolderAdapter.setLoader(this);
         mContentView.setAdapter(mImageAdapter);
     }
 
@@ -146,7 +140,7 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
                         if (mSelectedImage.size() < mConfig.getSelectCount()) {
                             mOperator.requestCamera();
                         } else {
-                            Toast.makeText(getActivity(), "最多只能选择 " + mConfig.getSelectCount() + " 张照片", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "最多只能选择 " + mConfig.getSelectCount() + " 张图片", Toast.LENGTH_SHORT).show();
                         }
                     }
                 } else {
@@ -179,7 +173,9 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
             mSelectedImage.add(image);
             handleResult();
         }
-        //btn_preview.setText("预览(" + mSelectedImage.size() + ")");
+        int size = mSelectedImage.size();
+        mDoneView.setText("完成(" + size + ")");
+        mDoneView.setEnabled(size > 0);
     }
 
     private void handleResult() {
@@ -192,7 +188,6 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
     /**
      * 完成选择
      */
-    @Override
     public void onSelectComplete() {
         handleResult();
     }
@@ -210,7 +205,7 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
      */
     @Override
     public void onReadExternalStorageSuccess() {
-        getActivity().getSupportLoaderManager().initLoader(0, null, mCursorLoader);
+        getLoaderManager().initLoader(0, null, mCursorLoader);
     }
 
     @Override
@@ -296,6 +291,14 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
             Intent localIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, localUri);
             getActivity().sendBroadcast(localIntent);
         }
+    }
+
+    @Override
+    public void displayImage(ImageView iv, String path) {
+        getImgLoader().load(path)
+                .placeholder(R.color.grey_200)
+                .error(R.mipmap.ic_default_image)
+                .into(iv);
     }
 
     private class LoaderListener implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -422,12 +425,5 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
         public void onLoaderReset(Loader<Cursor> loader) {
 
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        mOperator = null;
-        mConfig = null;
-        super.onDestroy();
     }
 }
