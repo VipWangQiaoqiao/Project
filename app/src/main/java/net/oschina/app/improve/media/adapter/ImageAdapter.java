@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 
 import net.oschina.app.R;
@@ -43,7 +42,7 @@ public class ImageAdapter extends BaseRecyclerAdapter<Image> {
 
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Image item, int position) {
-        if (getItemViewType(position) == 1) {
+        if (item.getId() != 0) {
             ImageViewHolder h = (ImageViewHolder) holder;
             h.mCheckView.setSelected(item.isSelect());
             h.mMaskView.setVisibility(item.isSelect() ? View.VISIBLE : View.GONE);
@@ -84,4 +83,6 @@ public class ImageAdapter extends BaseRecyclerAdapter<Image> {
     public void setSelectMode(ImageConfig.SelectMode selectMode) {
         this.selectMode = selectMode;
     }
+
+
 }

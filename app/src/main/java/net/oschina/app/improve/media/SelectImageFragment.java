@@ -3,8 +3,6 @@ package net.oschina.app.improve.media;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -48,6 +46,8 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
     RecyclerView mContentView;
     @Bind(R.id.btn_title_select)
     Button mSelectFolderView;
+    @Bind(R.id.iv_title_select)
+    ImageView mSelectFolderIcon;
     @Bind(R.id.toolbar)
     View mToolbar;
     @Bind(R.id.btn_done)
@@ -236,26 +236,26 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
      */
     private void showPopupFolderList() {
         if (mFolderPopupWindow == null) {
-            ImageFolderPopupWindow popupWindow = new ImageFolderPopupWindow(getActivity());
-            popupWindow.setAnimationStyle(R.style.popup_anim_style_alpha);
-            popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            popupWindow.setAdapter(mImageFolderAdapter);
-            popupWindow.setOutsideTouchable(true);
-            popupWindow.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+            ImageFolderPopupWindow popupWindow = new ImageFolderPopupWindow(getActivity(), new ImageFolderPopupWindow.Callback() {
                 @Override
-                public void onItemClick(final int position, long itemId) {
-                    mImageAdapter.clear();
-                    if (mConfig != null && mConfig.getMediaMode() == ImageConfig.MediaMode.HAVE_CAM_MODE) {
-                        if (position != 0) {
-                            Image cam = new Image();
-                            mImageAdapter.addItem(cam);
-                        }
-                    }
-                    mImageAdapter.addAll(mImageFolderAdapter.getItem(position).getImages());
+                public void onSelect(ImageFolderPopupWindow popupWindow, ImageFolder model) {
+                    addImagesToAdapter(model.getImages());
                     mContentView.scrollToPosition(0);
-                    mFolderPopupWindow.dismiss();
+                    popupWindow.dismiss();
+                    mSelectFolderView.setText(model.getName());
+                }
+
+                @Override
+                public void onDismiss() {
+                    mSelectFolderIcon.setImageResource(R.mipmap.ic_arrow_bottom);
+                }
+
+                @Override
+                public void onShow() {
+                    mSelectFolderIcon.setImageResource(R.mipmap.ic_arrow_top);
                 }
             });
+            popupWindow.setAdapter(mImageFolderAdapter);
             mFolderPopupWindow = popupWindow;
         }
         mFolderPopupWindow.showAsDropDown(mToolbar);
@@ -341,10 +341,6 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
             if (data != null) {
                 ArrayList<Image> images = new ArrayList<>();
-                if (mConfig != null && mConfig.getMediaMode() == ImageConfig.MediaMode.HAVE_CAM_MODE) {
-                    Image cam = new Image();
-                    images.add(cam);
-                }
                 List<ImageFolder> imageFolders = new ArrayList<>();
 
                 ImageFolder defaultFolder = new ImageFolder();
@@ -407,7 +403,8 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
 
                     } while (data.moveToNext());
                 }
-                mImageAdapter.resetItem(images);
+
+                addImagesToAdapter(images);
                 defaultFolder.setImages(images);
                 if (mConfig.getMediaMode() == ImageConfig.MediaMode.HAVE_CAM_MODE) {
                     defaultFolder.setAlbumPath(images.size() > 1 ? images.get(1).getPath() : null);
@@ -440,5 +437,14 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
         public void onLoaderReset(Loader<Cursor> loader) {
 
         }
+    }
+
+    private void addImagesToAdapter(ArrayList<Image> images) {
+        mImageAdapter.clear();
+        if (mConfig != null && mConfig.getMediaMode() == ImageConfig.MediaMode.HAVE_CAM_MODE) {
+            Image cam = new Image();
+            mImageAdapter.addItem(cam);
+        }
+        mImageAdapter.addAll(images);
     }
 }

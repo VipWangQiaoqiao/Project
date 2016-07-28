@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <net.oschina.app.improve.widget.SquareLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:descendantFocusability="blocksDescendants">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/iv_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clickable="false"
         android:contentDescription="@string/app_name"
+        android:focusable="false"
         android:scaleType="centerCrop"
         android:src="@color/grey_200" />
 
@@ -16,10 +17,9 @@
         android:id="@+id/lay_mask"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black_alpha_96"
+        android:background="@color/black_alpha_80"
         android:clickable="false"
-        android:focusable="false"
-        android:visibility="gone" />
+        android:focusable="false" />
 
     <ImageView
         android:id="@+id/cb_selected"

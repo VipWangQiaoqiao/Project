@@ -12,5 +12,5 @@
         android:layout_height="@dimen/size_36"
         android:layout_gravity="center"
         android:contentDescription="@string/app_name"
-        android:src="@mipmap/btn_camera" />
+        android:src="@mipmap/ic_tweet_select_picture_camera" />
 </net.oschina.app.improve.widget.SquareLayout>

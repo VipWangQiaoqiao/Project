@@ -34,11 +34,13 @@
             android:paddingTop="8dp">
 
             <ImageView
-                android:layout_width="@dimen/size_24"
-                android:layout_height="@dimen/size_24"
+                android:id="@+id/iv_title_select"
+                android:layout_width="@dimen/size_16"
+                android:layout_height="@dimen/size_16"
                 android:layout_gravity="right|center_vertical"
+                android:paddingRight="@dimen/lay_4"
                 android:scaleType="centerInside"
-                android:src="@mipmap/btn_back_normal" />
+                android:src="@mipmap/ic_arrow_bottom" />
 
             <net.qiujuer.genius.ui.widget.Button
                 android:id="@+id/btn_title_select"
@@ -52,7 +54,7 @@
                 android:maxWidth="@dimen/size_128"
                 android:paddingBottom="@dimen/lay_4"
                 android:paddingLeft="@dimen/lay_4"
-                android:paddingRight="@dimen/size_28"
+                android:paddingRight="@dimen/size_20"
                 android:paddingTop="@dimen/lay_4"
                 android:text="选择图片"
                 android:textColor="@color/white"
