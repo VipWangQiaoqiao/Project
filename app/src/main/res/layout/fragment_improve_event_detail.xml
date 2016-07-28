@@ -132,7 +132,7 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@mipmap/ic__calendar" />
+                    android:src="@mipmap/ic_calendar" />
 
                 <TextView
                     android:id="@+id/tv_event_pub_time"
