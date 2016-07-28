@@ -45,10 +45,11 @@ public class ImageAdapter extends BaseRecyclerAdapter<Image> {
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Image item, int position) {
         if (getItemViewType(position) == 1) {
             ImageViewHolder h = (ImageViewHolder) holder;
-            h.cb_selected.setChecked(item.isSelect());
-            h.cb_selected.setVisibility(selectMode == ImageConfig.SelectMode.SINGLE_MODE ? View.GONE : View.VISIBLE);
+            h.mCheckView.setSelected(item.isSelect());
+            h.mMaskView.setVisibility(item.isSelect() ? View.VISIBLE : View.GONE);
+            h.mCheckView.setVisibility(selectMode == ImageConfig.SelectMode.SINGLE_MODE ? View.GONE : View.VISIBLE);
             if (loader != null) {
-                loader.displayImage(h.iv_image, item.getPath());
+                loader.displayImage(h.mImageView, item.getPath());
             }
         }
     }
@@ -64,13 +65,15 @@ public class ImageAdapter extends BaseRecyclerAdapter<Image> {
     }
 
     private static class ImageViewHolder extends RecyclerView.ViewHolder {
-        ImageView iv_image;
-        CheckBox cb_selected;
+        ImageView mImageView;
+        ImageView mCheckView;
+        View mMaskView;
 
         public ImageViewHolder(View itemView) {
             super(itemView);
-            iv_image = (ImageView) itemView.findViewById(R.id.iv_image);
-            cb_selected = (CheckBox) itemView.findViewById(R.id.cb_selected);
+            mImageView = (ImageView) itemView.findViewById(R.id.iv_image);
+            mCheckView = (ImageView) itemView.findViewById(R.id.cb_selected);
+            mMaskView = itemView.findViewById(R.id.lay_mask);
         }
     }
 
