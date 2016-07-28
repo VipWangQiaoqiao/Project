@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -51,22 +50,34 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * 别的用户的主页
  * Created by thanatos on 16/7/13.
  */
-public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> implements View.OnClickListener{
+public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> implements View.OnClickListener {
 
     public static final String KEY_BUNDLE = "KEY_BUNDLE_IN_OTHER_USER_HOME";
 
-    @Bind(R.id.toolbar) Toolbar mToolbar;
-    @Bind(R.id.iv_portrait) CircleImageView mPortrait;
-    @Bind(R.id.tv_nick) TextView mNick;
-    @Bind(R.id.tv_summary) TextView mSummary;
-    @Bind(R.id.tv_score) TextView mScore;
-    @Bind(R.id.tv_count_follow) TextView mCountFollow;
-    @Bind(R.id.tv_count_fans) TextView mCountFans;
-    @Bind(R.id.view_solar_system) SolarSystemView mSolarSystem;
-    @Bind(R.id.layout_appbar) AppBarLayout mLayoutAppBar;
-    @Bind(R.id.iv_logo_portrait) CircleImageView mLogoPortrait;
-    @Bind(R.id.tv_logo_nick) TextView mLogoNick;
-    @Bind(R.id.iv_gender) ImageView mGenderImage;
+    @Bind(R.id.toolbar)
+    Toolbar mToolbar;
+    @Bind(R.id.iv_portrait)
+    CircleImageView mPortrait;
+    @Bind(R.id.tv_nick)
+    TextView mNick;
+    @Bind(R.id.tv_summary)
+    TextView mSummary;
+    @Bind(R.id.tv_score)
+    TextView mScore;
+    @Bind(R.id.tv_count_follow)
+    TextView mCountFollow;
+    @Bind(R.id.tv_count_fans)
+    TextView mCountFans;
+    @Bind(R.id.view_solar_system)
+    SolarSystemView mSolarSystem;
+    @Bind(R.id.layout_appbar)
+    AppBarLayout mLayoutAppBar;
+    @Bind(R.id.iv_logo_portrait)
+    CircleImageView mLogoPortrait;
+    @Bind(R.id.tv_logo_nick)
+    TextView mLogoNick;
+    @Bind(R.id.iv_gender)
+    ImageView mGenderImage;
 
     private MenuItem mFollowMenu;
 
@@ -81,7 +92,7 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> impl
         context.startActivity(intent);
     }
 
-    public static void show(Context context, long id){
+    public static void show(Context context, long id) {
         if (id <= 0) return;
         User user = new User();
         user.setId((int) id);
@@ -126,7 +137,7 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> impl
                     mLogoNick.setVisibility(View.VISIBLE);
                     mLogoPortrait.setVisibility(View.VISIBLE);
                     isShow = true;
-                } else if(isShow) {
+                } else if (isShow) {
                     mLogoNick.setVisibility(View.GONE);
                     mLogoPortrait.setVisibility(View.GONE);
                     isShow = false;
@@ -201,15 +212,15 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> impl
         mCountFans.setText(String.format("粉丝 %s", user.getFans()));
         mCountFollow.setText(String.format("关注 %s", user.getFollowers()));
 
-        if (!TextUtils.isEmpty(user.getGender())){
-            if (user.getGender().equals("2") || user.getGender().equals("女")){
+        if (!TextUtils.isEmpty(user.getGender())) {
+            if (user.getGender().equals("2") || user.getGender().equals("女")) {
                 mGenderImage.setImageResource(R.mipmap.ic_female);
-            }else{
+            } else {
                 mGenderImage.setImageResource(R.mipmap.ic_male);
             }
         }
 
-        if (mFollowMenu != null){
+        if (mFollowMenu != null) {
             switch (user.getRelation()) {
                 case User.RELATION_TYPE_BOTH:
                     mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_following_botn));
@@ -230,21 +241,14 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> impl
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
-        outState.putSerializable(KEY_BUNDLE, user);
-    }
-
-    @Override
     protected void initData() {
-        super.initData();
         // temporary usage, changing it util new api come up
         mActivesHandler = new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 try {
                     UserInformation info = XmlUtils.toBean(UserInformation.class, responseBody);
-                    if (pageNum == 0){
+                    if (pageNum == 0) {
                         user = info.getUser();
                         injectDataToView();
                     }
@@ -266,8 +270,7 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> impl
                 onLoadingFinish();
             }
         };
-
-        onRefreshing();
+        super.initData();
     }
 
     @Override
@@ -281,10 +284,8 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> impl
     }
 
     @Override
-    protected void onLoadingSuccess() {
-        super.onLoadingSuccess();
-        if (mIsRefresh) pageNum = 0;
-        ++pageNum;
+    protected void onLoadingFailure() {
+        mAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_ERROR, true);
     }
 
     @Override
@@ -306,12 +307,15 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> impl
 
     protected void setListData(List<Active> actives) {
         if (mIsRefresh) {
-            mAdapter.clear();
-            mAdapter.addAll(actives);
-            mRefreshLayout.setCanLoadMore(true);
+            pageNum = 0;
+            mAdapter.resetItem(actives);
         } else {
             mAdapter.addAll(actives);
         }
+        ++pageNum;
+        mAdapter.setState(BaseRecyclerAdapter.STATE_LOADING, true);
+        mIsRefresh = false;
+        mRefreshLayout.setCanLoadMore(true);
         if (actives.size() < 20) {
             mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, false);
         }
@@ -319,7 +323,8 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> impl
 
     @Override
     protected Type getType() {
-        return new TypeToken<Active>() {}.getType();
+        return new TypeToken<Active>() {
+        }.getType();
     }
 
     @Override
@@ -329,7 +334,7 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> impl
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.tv_count_follow:
                 UIHelper.showFriends(this, user.getId(), 0);
                 break;
@@ -341,7 +346,7 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> impl
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.menu_pm:
                 if (user.getId() == AppContext.getInstance().getLoginUid()) {
                     AppContext.showToast("不能给自己发送留言:)");
@@ -385,42 +390,42 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> impl
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         OSChinaApi.updateRelation(AppContext.getInstance().getLoginUid(), user.getId(), ra, new AsyncHttpResponseHandler() {
-                                @Override
-                                public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-                                    try {
-                                        Result result = XmlUtils.toBean(ResultBean.class, new ByteArrayInputStream(arg2)).getResult();
-                                        if (result.OK()) {
-                                            switch (user.getRelation()) {
-                                                case User.RELATION_TYPE_BOTH:
-                                                    item.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
-                                                    user.setRelation(User.RELATION_TYPE_FANS_ME);
-                                                    break;
-                                                case User.RELATION_TYPE_FANS_HIM:
-                                                    item.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
-                                                    user.setRelation(User.RELATION_TYPE_NULL);
-                                                    break;
-                                                case User.RELATION_TYPE_FANS_ME:
-                                                    item.setIcon(getResources().getDrawable(R.drawable.selector_user_following_botn));
-                                                    user.setRelation(User.RELATION_TYPE_BOTH);
-                                                    break;
-                                                case User.RELATION_TYPE_NULL:
-                                                    item.setIcon(getResources().getDrawable(R.drawable.selector_user_following));
-                                                    user.setRelation(User.RELATION_TYPE_FANS_HIM);
-                                                    break;
-                                            }
-                                            Toast.makeText(OtherUserHomeActivity.this, "操作成功", Toast.LENGTH_SHORT).show();
+                            @Override
+                            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+                                try {
+                                    Result result = XmlUtils.toBean(ResultBean.class, new ByteArrayInputStream(arg2)).getResult();
+                                    if (result.OK()) {
+                                        switch (user.getRelation()) {
+                                            case User.RELATION_TYPE_BOTH:
+                                                item.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
+                                                user.setRelation(User.RELATION_TYPE_FANS_ME);
+                                                break;
+                                            case User.RELATION_TYPE_FANS_HIM:
+                                                item.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
+                                                user.setRelation(User.RELATION_TYPE_NULL);
+                                                break;
+                                            case User.RELATION_TYPE_FANS_ME:
+                                                item.setIcon(getResources().getDrawable(R.drawable.selector_user_following_botn));
+                                                user.setRelation(User.RELATION_TYPE_BOTH);
+                                                break;
+                                            case User.RELATION_TYPE_NULL:
+                                                item.setIcon(getResources().getDrawable(R.drawable.selector_user_following));
+                                                user.setRelation(User.RELATION_TYPE_FANS_HIM);
+                                                break;
                                         }
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                        onFailure(arg0, arg1, arg2, e);
+                                        Toast.makeText(OtherUserHomeActivity.this, "操作成功", Toast.LENGTH_SHORT).show();
                                     }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    onFailure(arg0, arg1, arg2, e);
                                 }
+                            }
 
-                                @Override
-                                public void onFailure(int arg0, Header[] arg1, byte[] arg2, Throwable arg3) {
-                                    Toast.makeText(OtherUserHomeActivity.this, "操作失败", Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                            @Override
+                            public void onFailure(int arg0, Header[] arg1, byte[] arg2, Throwable arg3) {
+                                Toast.makeText(OtherUserHomeActivity.this, "操作失败", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 }).show();
                 break;

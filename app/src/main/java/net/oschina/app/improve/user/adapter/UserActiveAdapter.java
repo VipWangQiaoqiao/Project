@@ -120,15 +120,15 @@ public class UserActiveAdapter extends BaseRecyclerAdapter<Active> {
             vh.pic.setVisibility(View.VISIBLE);
             vh.pic.setTag(R.mipmap.widget_dface, item.getTweetimage());
             vh.pic.setOnClickListener(getPreviewImageCallback());
-            reqManager.load(item.getTweetimage()).into(vh.pic);
+            reqManager.load(item.getTweetimage()).placeholder(R.color.grey_200).into(vh.pic);
         } else {
             vh.pic.setVisibility(View.GONE);
             vh.pic.setImageBitmap(null);
         }
     }
 
-    private View.OnClickListener getPreviewImageCallback(){
-        if (mPreviewImageCallback == null){
+    private View.OnClickListener getPreviewImageCallback() {
+        if (mPreviewImageCallback == null) {
             mPreviewImageCallback = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -156,14 +156,22 @@ public class UserActiveAdapter extends BaseRecyclerAdapter<Active> {
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.tv_nick) TextView nick;
-        @Bind(R.id.tv_time) TextView time;
-        @Bind(R.id.tv_action) TextView action;
-        @Bind(R.id.tv_comment_count) TextView commentCount;
-        @Bind(R.id.tv_content) TweetTextView content;
-        @Bind(R.id.tv_reply) TweetTextView replyContent;
-        @Bind(R.id.iv_pic) ImageView pic;
-        @Bind(R.id.iv_portrait) CircleImageView portrait;
+        @Bind(R.id.tv_nick)
+        TextView nick;
+        @Bind(R.id.tv_time)
+        TextView time;
+        @Bind(R.id.tv_action)
+        TextView action;
+        @Bind(R.id.tv_comment_count)
+        TextView commentCount;
+        @Bind(R.id.tv_content)
+        TweetTextView content;
+        @Bind(R.id.tv_reply)
+        TweetTextView replyContent;
+        @Bind(R.id.iv_pic)
+        ImageView pic;
+        @Bind(R.id.iv_portrait)
+        CircleImageView portrait;
 
         public ViewHolder(View view) {
             super(view);
