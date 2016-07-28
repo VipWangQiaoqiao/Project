@@ -60,8 +60,11 @@ public class InputHelper {
      * (I'm drunk, I go home)
      */
     public static Spannable displayEmoji(Resources res, CharSequence s) {
-        String str = s.toString().trim();
-        Spannable spannable = new SpannableString(str);
+        return displayEmoji(res, new SpannableString(s));
+    }
+
+    public static Spannable displayEmoji(Resources res, Spannable spannable){
+        String str = spannable.toString();
 
         if (!str.contains(":") && !str.contains("[")) {
             return spannable;
@@ -76,7 +79,7 @@ public class InputHelper {
             if (resId <= 0) continue;
             Drawable drawable = res.getDrawable(resId);
             if (drawable == null) continue;
-            drawable.setBounds(0, 0, 40, 40);
+            drawable.setBounds(0, 0, (int) TDevice.dpToPixel(20), (int) TDevice.dpToPixel(20));
             ImageSpan span = new ImageSpan(drawable, ImageSpan.ALIGN_BOTTOM);
             spannable.setSpan(span, matcher.start(), matcher.end(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         }

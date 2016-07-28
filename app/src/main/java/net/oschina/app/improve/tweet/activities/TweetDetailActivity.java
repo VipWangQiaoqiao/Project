@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.text.Spannable;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -24,6 +26,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.ResultBean;
@@ -33,6 +36,7 @@ import net.oschina.app.improve.behavior.KeyboardInputDelegation;
 import net.oschina.app.improve.comment.CommentsUtil;
 import net.oschina.app.improve.media.ImageGalleryActivity;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
+import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
@@ -308,7 +312,12 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
             ivThumbup.setSelected(false);
         }
         if (!TextUtils.isEmpty(tweet.getContent())) {
-            CommentsUtil.formatHtml(getResources(), mContent, tweet.getContent());
+            Spannable spannable = AssimilateUtils.assimilateOnlyAtUser(this, tweet.getContent());
+            spannable = AssimilateUtils.assimilateOnlyTag(this, spannable);
+            spannable = AssimilateUtils.assimilateOnlyLink(this, spannable);
+            spannable = InputHelper.displayEmoji(getResources(), spannable);
+            mContent.setText(spannable);
+            mContent.setMovementMethod(LinkMovementMethod.getInstance());
         }
         if (tweet.getImages() != null && tweet.getImages().length > 0) {
             mLayoutGrid.setVisibility(View.VISIBLE);

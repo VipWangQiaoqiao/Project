@@ -99,10 +99,19 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> impl
         show(context, user);
     }
 
+    public static void show(Context context, String nick){
+        if (TextUtils.isEmpty(nick)) return;
+        User user = new User();
+        user.setName(nick);
+        show(context, user);
+
+    }
+
     @Override
     protected boolean initBundle(Bundle bundle) {
         user = (User) bundle.getSerializable(KEY_BUNDLE);
-        if (user == null || user.getId() <= 0) return false;
+        if (user == null) return false;
+        if (user.getId() <= 0 && TextUtils.isEmpty(user.getName())) return false;
         return super.initBundle(bundle);
     }
 

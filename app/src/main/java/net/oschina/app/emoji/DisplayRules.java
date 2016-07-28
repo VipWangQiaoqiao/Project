@@ -42,7 +42,7 @@ public enum DisplayRules {
     KJEMOJI9(0, 1, R.mipmap.smiley_9, "[大哭]", "[9]"),
     KJEMOJI10(0, 1, R.mipmap.smiley_10, "[尴尬]", "[10]"),
     KJEMOJI11(0, 1, R.mipmap.smiley_11, "[发怒]", "[11]"),
-    KJEMOJI12(0, 1, R.mipmap.smiley_12, "调皮", "[12]"),
+    KJEMOJI12(0, 1, R.mipmap.smiley_12, "[调皮]", "[12]"),
     KJEMOJI13(0, 1, R.mipmap.smiley_13, "[呲牙]", "[13]"),
     KJEMOJI14(0, 1, R.mipmap.smiley_14, "[惊讶]", "[14]"),
     KJEMOJI15(0, 1, R.mipmap.smiley_15, "[难过]", "[15]"),
