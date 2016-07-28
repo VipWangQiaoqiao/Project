@@ -420,6 +420,8 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
                 if (mConfig != null && mConfig.getSelectMode() == ImageConfig.SelectMode.SINGLE_MODE && mCamImageName != null) {
                     handleResult();
                 }
+
+                handleSelectSizeChange(mSelectedImage.size());
             }
         }
 
