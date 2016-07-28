@@ -89,10 +89,12 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
     private void requestEventDispatcher() {
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isAvailable()) {
-            boolean connectedOrConnecting = networkInfo.isConnectedOrConnecting();
+            boolean connected = networkInfo.isConnected();
             NetworkInfo.State state = networkInfo.getState();
-            if (connectedOrConnecting && state == NetworkInfo.State.CONNECTED) {
-                requestData();
+            if (connected && state == NetworkInfo.State.CONNECTED) {
+                mRefreshLayout.setRefreshing(true);
+                onRefreshing();
+                // requestData();
             } else {
                 requestLocalCache();
             }
