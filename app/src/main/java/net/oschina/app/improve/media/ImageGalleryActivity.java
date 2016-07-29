@@ -7,12 +7,15 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
 import net.oschina.app.R;
@@ -20,6 +23,7 @@ import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.tweet.service.PicturesCompress;
 import net.oschina.app.improve.utils.StreamUtils;
+import net.qiujuer.genius.ui.widget.Loading;
 
 import java.io.File;
 import java.util.concurrent.ExecutionException;
@@ -203,17 +207,31 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            ImagePreviewView view = new ImagePreviewView(ImageGalleryActivity.this);
-            view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT));
-            getImageLoader().load(mImageSources[position]).into(view);
+            View view = LayoutInflater.from(container.getContext())
+                    .inflate(R.layout.lay_gallery_page_item_contener, container, false);
+            ImagePreviewView previewView = (ImagePreviewView) view.findViewById(R.id.iv_preview);
+            final Loading loading = (Loading) view.findViewById(R.id.loading);
+            getImageLoader().load(mImageSources[position]).listener(new RequestListener<String, GlideDrawable>() {
+                @Override
+                public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                    loading.stop();
+                    return false;
+                }
+
+                @Override
+                public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                    loading.stop();
+                    loading.setVisibility(View.GONE);
+                    return false;
+                }
+            }).into(previewView);
             container.addView(view);
             return view;
         }
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView((ImagePreviewView) object);
+            container.removeView((View) object);
         }
     }
 }

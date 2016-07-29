@@ -1,3 +1,5 @@
+
+
 package net.oschina.app.improve.media;
 
 import android.Manifest;
@@ -8,11 +10,9 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import net.oschina.app.R;
-import net.oschina.app.improve.base.activities.BaseActivity;
+import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.media.config.ImageConfig;
 import net.oschina.app.improve.media.contract.SelectImageContract;
 
@@ -26,7 +26,7 @@ import pub.devrel.easypermissions.EasyPermissions;
  * on 2016/7/13.
  */
 @SuppressWarnings("All")
-public class SelectImageActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks, SelectImageContract.Operator {
+public class SelectImageActivity extends BaseBackActivity implements EasyPermissions.PermissionCallbacks, SelectImageContract.Operator {
     private static ImageConfig mConfig;
     private final int RC_CAMERA_PERM = 0x03;
     private final int RC_EXTERNAL_STORAGE = 0x04;
@@ -68,8 +68,6 @@ public class SelectImageActivity extends BaseActivity implements EasyPermissions
         if (EasyPermissions.hasPermissions(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
             if (mView == null) {
                 handleView();
-            } else {
-                mView.onReadExternalStorageSuccess();
             }
         } else {
             EasyPermissions.requestPermissions(this, "", RC_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -107,8 +105,7 @@ public class SelectImageActivity extends BaseActivity implements EasyPermissions
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
         if (requestCode == RC_EXTERNAL_STORAGE) {
-            if (mView != null)
-                mView.onExternalStorageDenied();
+            removeView();
             getConfirmDialog(this, "没有权限, 你需要去设置中开启读取手机存储权限.", "去设置", "取消", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -135,7 +132,20 @@ public class SelectImageActivity extends BaseActivity implements EasyPermissions
                 }
             }).show();
         }
+    }
 
+    private void removeView() {
+        SelectImageContract.View view = mView;
+        if (view == null)
+            return;
+        try {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .remove((Fragment) view)
+                    .commitNowAllowingStateLoss();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void handleView() {
