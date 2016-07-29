@@ -119,8 +119,9 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                if (throwable != null)
+                if (throwable != null) {
                     throwable.printStackTrace();
+                }
                 setError(R.string.tweet_image_publish_failed, String.valueOf(index + 1), String.valueOf(paths.length));
             }
 
@@ -221,6 +222,8 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
     }
 
 
+    private static final long MAX_UPLOAD_LENGTH = 512 * 1024;
+
     /**
      * 保存文件到缓存中
      *
@@ -238,10 +241,10 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
                 continue;
             try {
                 String name = sourcePath.getName();
-                String ext = name.substring(name.lastIndexOf(".") + 1);
+                String ext = name.substring(name.lastIndexOf(".") + 1).toLowerCase();
                 String tempFile = String.format("%s/IMG_%s.%s", cacheDir, System.currentTimeMillis(), ext);
                 if (PicturesCompress.compressImage(path, tempFile,
-                        512 * 1024, 80,
+                        MAX_UPLOAD_LENGTH, 80,
                         1280, 1280 * 2,
                         buffer, options, true)) {
                     Log.e("OPERATOR", "doImage " + tempFile + " " + new File(tempFile).length());
