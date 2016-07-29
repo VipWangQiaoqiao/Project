@@ -567,7 +567,8 @@ public class UIHelper {
                 showPostListByTag(context, objKey);
                 break;
             case URLsUtils.URL_OBJ_TYPE_SOFTWARE:
-                showSoftwareDetail(context, objKey);
+                SoftwareDetailActivity.show(context, objKey);
+                //showSoftwareDetail(context, objKey);
                 break;
             case URLsUtils.URL_OBJ_TYPE_ZONE:
                 showUserCenter(context, objId, objKey);
