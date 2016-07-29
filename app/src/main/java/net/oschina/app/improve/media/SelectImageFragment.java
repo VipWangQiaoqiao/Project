@@ -17,6 +17,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.DrawableRequestBuilder;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseFragment;
@@ -300,10 +303,13 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
 
     @Override
     public void displayImage(ImageView iv, String path) {
-        getImgLoader().load(path)
+        DrawableRequestBuilder builder = getImgLoader().load(path)
+                .centerCrop()
                 .placeholder(R.color.grey_200)
-                .error(R.mipmap.ic_default_image)
-                .into(iv);
+                .error(R.mipmap.ic_default_image_error);
+        if (path.toLowerCase().endsWith("gif"))
+            builder = builder.diskCacheStrategy(DiskCacheStrategy.SOURCE);
+        builder.into(iv);
     }
 
     private class LoaderListener implements LoaderManager.LoaderCallbacks<Cursor> {
