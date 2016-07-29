@@ -27,8 +27,6 @@ import net.oschina.app.improve.media.adapter.ImageAdapter;
 import net.oschina.app.improve.media.adapter.ImageFolderAdapter;
 import net.oschina.app.improve.media.bean.Image;
 import net.oschina.app.improve.media.bean.ImageFolder;
-import net.oschina.app.improve.media.config.CommonUtil;
-import net.oschina.app.improve.media.config.ImageConfig;
 import net.oschina.app.improve.media.config.ImageLoaderListener;
 import net.oschina.app.improve.media.contract.SelectImageContract;
 import net.qiujuer.genius.ui.Ui;
@@ -41,10 +39,9 @@ import butterknife.Bind;
 import butterknife.OnClick;
 
 /**
- * Created by huanghaibin_dev
- * on 2016/7/15.
+ * 图片选择库实现界面
  */
-public class SelectImageFragment extends BaseFragment implements SelectImageContract.View, View.OnClickListener, ImageLoaderListener {
+public class SelectImageFragment extends BaseFragment implements SelectImageContract.View, View.OnClickListener, ImageLoaderListener, BaseRecyclerAdapter.OnItemClickListener {
     @Bind(R.id.rv_image)
     RecyclerView mContentView;
     @Bind(R.id.btn_title_select)
@@ -63,17 +60,11 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
     private ImageAdapter mImageAdapter;
 
     private List<Image> mSelectedImage;
-    private static ImageConfig mConfig;
 
     private String mCamImageName;
     private LoaderListener mCursorLoader = new LoaderListener();
 
     private SelectImageContract.Operator mOperator;
-
-    public static SelectImageFragment getInstance(ImageConfig config) {
-        mConfig = config;
-        return new SelectImageFragment();
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -96,7 +87,7 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
                 break;
             case R.id.btn_preview:
                 if (mSelectedImage.size() > 0) {
-                    ImageGalleryActivity.show(getActivity(), CommonUtil.toArray(mSelectedImage), 0, false);
+                    ImageGalleryActivity.show(getActivity(), Util.toArray(mSelectedImage), 0, false);
                 }
                 break;
             case R.id.btn_title_select:
@@ -110,26 +101,26 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
 
     @Override
     protected void initWidget(View view) {
-        if (mConfig == null) mConfig = ImageConfig.Build();
-
         mContentView.setLayoutManager(new GridLayoutManager(getActivity(), 4));
         mContentView.addItemDecoration(new SpaceGridItemDecoration((int) Ui.dipToPx(getResources(), 1)));
-        mImageAdapter = new ImageAdapter(getActivity());
-        mImageAdapter.setSelectMode(mConfig.getSelectMode());
+        mImageAdapter = new ImageAdapter(getContext(), this);
         mImageFolderAdapter = new ImageFolderAdapter(getActivity());
-
-        mImageAdapter.setLoader(this);
         mImageFolderAdapter.setLoader(this);
         mContentView.setAdapter(mImageAdapter);
         mContentView.setItemAnimator(null);
+        mImageAdapter.setOnItemClickListener(this);
+
     }
 
     @Override
     protected void initData() {
         mSelectedImage = new ArrayList<>();
-        if (mConfig.getSelectMode() == ImageConfig.SelectMode.MULTI_MODE) {
-            if (mConfig.getSelectedImage() != null && mConfig.getSelectedImage().size() != 0) {
-                for (String s : mConfig.getSelectedImage()) {
+        SelectImageActivity.Config config = mOperator.getConfig();
+        if (config.getSelectCount() > 1 && config.getSelectedImages() != null) {
+            String[] images = config.getSelectedImages();
+            for (String s : images) {
+                // check file exists
+                if (s != null && new File(s).exists()) {
                     Image image = new Image();
                     image.setSelect(true);
                     image.setPath(s);
@@ -137,27 +128,26 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
                 }
             }
         }
+        getLoaderManager().initLoader(0, null, mCursorLoader);
+    }
 
-        mImageAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, long itemId) {
-                if (mConfig.getMediaMode() == ImageConfig.MediaMode.HAVE_CAM_MODE) {
-                    if (position != 0) {
-                        handleSelectChange(position);
-                    } else {
-                        if (mSelectedImage.size() < mConfig.getSelectCount()) {
-                            mOperator.requestCamera();
-                        } else {
-                            Toast.makeText(getActivity(), "最多只能选择 " + mConfig.getSelectCount() + " 张图片", Toast.LENGTH_SHORT).show();
-                        }
-                    }
+
+    @Override
+    public void onItemClick(int position, long itemId) {
+        SelectImageActivity.Config config = mOperator.getConfig();
+        if (config.isHaveCamera()) {
+            if (position != 0) {
+                handleSelectChange(position);
+            } else {
+                if (mSelectedImage.size() < config.getSelectCount()) {
+                    mOperator.requestCamera();
                 } else {
-                    handleSelectChange(position);
+                    Toast.makeText(getActivity(), "最多只能选择 " + config.getSelectCount() + " 张图片", Toast.LENGTH_SHORT).show();
                 }
             }
-        });
-
-        getLoaderManager().initLoader(0, null, mCursorLoader);
+        } else {
+            handleSelectChange(position);
+        }
     }
 
     private void handleSelectSizeChange(int size) {
@@ -174,15 +164,17 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
 
     private void handleSelectChange(int position) {
         Image image = mImageAdapter.getItem(position);
+        SelectImageActivity.Config config = mOperator.getConfig();
         //如果是多选模式
-        if (mConfig.getSelectMode() == ImageConfig.SelectMode.MULTI_MODE) {
+        final int selectCount = config.getSelectCount();
+        if (selectCount > 1) {
             if (image.isSelect()) {
                 image.setSelect(false);
                 mSelectedImage.remove(image);
                 mImageAdapter.updateItem(position);
             } else {
-                if (mSelectedImage.size() == mConfig.getSelectCount()) {
-                    Toast.makeText(getActivity(), "最多只能选择 " + mConfig.getSelectCount() + " 张照片", Toast.LENGTH_SHORT).show();
+                if (mSelectedImage.size() == selectCount) {
+                    Toast.makeText(getActivity(), "最多只能选择 " + selectCount + " 张照片", Toast.LENGTH_SHORT).show();
                 } else {
                     image.setSelect(true);
                     mSelectedImage.add(image);
@@ -197,8 +189,8 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
     }
 
     private void handleResult() {
-        if (mConfig.getCallBack() != null && mSelectedImage.size() != 0) {
-            mConfig.getCallBack().doBack(CommonUtil.toArrayList(mSelectedImage));
+        if (mOperator != null && mSelectedImage.size() != 0) {
+            mOperator.getCallback().doSelectDone(Util.toArray(mSelectedImage));
             getActivity().finish();
         }
     }
@@ -261,8 +253,8 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
         // 判断是否挂载了SD卡
         mCamImageName = null;
         String savePath = "";
-        if (CommonUtil.hasSDCard()) {
-            savePath = CommonUtil.getCameraPath();
+        if (Util.hasSDCard()) {
+            savePath = Util.getCameraPath();
             File saveDir = new File(savePath);
             if (!saveDir.exists()) {
                 saveDir.mkdirs();
@@ -275,7 +267,7 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
             return;
         }
 
-        mCamImageName = CommonUtil.getSaveImageFullName();
+        mCamImageName = Util.getSaveImageFullName();
         File out = new File(savePath, mCamImageName);
         Uri uri = Uri.fromFile(out);
 
@@ -295,7 +287,7 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 0x03 && mCamImageName != null) {
-            Uri localUri = Uri.fromFile(new File(CommonUtil.getCameraPath() + mCamImageName));
+            Uri localUri = Uri.fromFile(new File(Util.getCameraPath() + mCamImageName));
             Intent localIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, localUri);
             getActivity().sendBroadcast(localIntent);
         }
@@ -402,7 +394,7 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
 
                 addImagesToAdapter(images);
                 defaultFolder.setImages(images);
-                if (mConfig.getMediaMode() == ImageConfig.MediaMode.HAVE_CAM_MODE) {
+                if (mOperator.getConfig().isHaveCamera()) {
                     defaultFolder.setAlbumPath(images.size() > 1 ? images.get(1).getPath() : null);
                 } else {
                     defaultFolder.setAlbumPath(images.size() > 0 ? images.get(0).getPath() : null);
@@ -421,9 +413,8 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
                     mSelectedImage.removeAll(rs);
                 }
 
-
-                //btn_preview.setText("预览(" + mSelectedImage.size() + ")");
-                if (mConfig != null && mConfig.getSelectMode() == ImageConfig.SelectMode.SINGLE_MODE && mCamImageName != null) {
+                // If add new mCamera picture, and we only need one picture, we result it.
+                if (mOperator.getConfig().getSelectCount() == 1 &&mCamImageName != null){
                     handleResult();
                 }
 
@@ -439,7 +430,7 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
 
     private void addImagesToAdapter(ArrayList<Image> images) {
         mImageAdapter.clear();
-        if (mConfig != null && mConfig.getMediaMode() == ImageConfig.MediaMode.HAVE_CAM_MODE) {
+        if (mOperator.getConfig().isHaveCamera()) {
             Image cam = new Image();
             mImageAdapter.addItem(cam);
         }

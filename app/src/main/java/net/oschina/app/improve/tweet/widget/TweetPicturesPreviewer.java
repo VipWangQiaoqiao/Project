@@ -13,12 +13,7 @@ import com.bumptech.glide.RequestManager;
 
 import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.media.SelectImageActivity;
-import net.oschina.app.improve.media.config.ImageConfig;
-import net.oschina.app.improve.media.config.SelectedCallBack;
 import net.oschina.app.improve.tweet.adapter.TweetSelectImageAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by JuQiu
@@ -29,7 +24,7 @@ import java.util.List;
  * 提供图片预览/图片操作 返回选中图片等功能
  */
 
-public class TweetPicturesPreviewer extends RecyclerView implements TweetSelectImageAdapter.Callback, SelectedCallBack {
+public class TweetPicturesPreviewer extends RecyclerView implements TweetSelectImageAdapter.Callback, SelectImageActivity.Callback {
     private TweetSelectImageAdapter mImageAdapter;
     private ItemTouchHelper mItemTouchHelper;
     private RequestManager mCurImageLoader;
@@ -62,7 +57,7 @@ public class TweetPicturesPreviewer extends RecyclerView implements TweetSelectI
         mItemTouchHelper.attachToRecyclerView(this);
     }
 
-    public void set(List<String> paths) {
+    public void set(String[] paths) {
         mImageAdapter.clear();
         for (String path : paths) {
             mImageAdapter.add(path);
@@ -72,14 +67,7 @@ public class TweetPicturesPreviewer extends RecyclerView implements TweetSelectI
 
     @Override
     public void onLoadMoreClick() {
-        ImageConfig config = ImageConfig.Build();
-        config.selectMode(ImageConfig.SelectMode.MULTI_MODE);
-        config.selectCount(9);
-        config.mediaMode(ImageConfig.MediaMode.HAVE_CAM_MODE);
-        config.selectedImages(mImageAdapter.getPaths());
-        config.callBack(this);
-        SelectImageActivity.showImage(getContext(), config);
-
+        SelectImageActivity.showImage(getContext(), 9, true, mImageAdapter.getPaths(), this);
     }
 
     @Override
@@ -100,7 +88,7 @@ public class TweetPicturesPreviewer extends RecyclerView implements TweetSelectI
         mItemTouchHelper.startDrag(viewHolder);
     }
 
-    public ArrayList<String> getPaths() {
+    public String[] getPaths() {
         return mImageAdapter.getPaths();
     }
 
@@ -113,7 +101,7 @@ public class TweetPicturesPreviewer extends RecyclerView implements TweetSelectI
     }
 
     @Override
-    public void doBack(ArrayList<String> images) {
+    public void doSelectDone(String[] images) {
         set(images);
     }
 }

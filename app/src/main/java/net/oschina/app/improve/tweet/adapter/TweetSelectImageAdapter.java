@@ -122,10 +122,14 @@ public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectIma
         add(new Model(path));
     }
 
-    public ArrayList<String> getPaths() {
-        ArrayList<String> paths = new ArrayList<>();
+    public String[] getPaths() {
+        int size = mModels.size();
+        if (size == 0)
+            return null;
+        String[] paths = new String[size];
+        int i = 0;
         for (Model model : mModels) {
-            paths.add(model.path);
+            paths[i++] = model.path;
         }
         return paths;
     }

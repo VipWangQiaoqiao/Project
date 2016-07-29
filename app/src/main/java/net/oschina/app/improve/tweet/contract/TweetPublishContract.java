@@ -1,7 +1,5 @@
 package net.oschina.app.improve.tweet.contract;
 
-import java.util.List;
-
 /**
  * Created by JuQiu
  * on 16/7/14.
@@ -23,8 +21,8 @@ public interface TweetPublishContract {
 
         void setContent(String content);
 
-        List<String> getImages();
+        String[] getImages();
 
-        void setImages(List<String> paths);
+        void setImages(String[] paths);
     }
 }
