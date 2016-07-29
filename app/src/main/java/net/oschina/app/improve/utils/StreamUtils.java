@@ -29,6 +29,12 @@ public class StreamUtils {
     }
 
     public static boolean copyFile(final File srcFile, final File saveFile) {
+        File parentFile = saveFile.getParentFile();
+        if (!parentFile.exists()) {
+            if (!parentFile.mkdirs())
+                return false;
+        }
+
         BufferedInputStream inputStream = null;
         BufferedOutputStream outputStream = null;
         try {
