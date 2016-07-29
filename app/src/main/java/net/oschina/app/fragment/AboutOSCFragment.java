@@ -45,7 +45,7 @@ public class AboutOSCFragment extends BaseFragment {
 
     @Override
     public void initData() {
-        mTvVersionName.setText("V " + TDevice.getVersionName());
+        mTvVersionName.setText(TDevice.getVersionName());
     }
 
     @Override
