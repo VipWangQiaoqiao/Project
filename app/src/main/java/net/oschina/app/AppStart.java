@@ -3,10 +3,6 @@ package net.oschina.app;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
 
 import net.oschina.app.ui.MainActivity;
 import net.oschina.app.util.TDevice;
@@ -19,9 +15,6 @@ import java.io.File;
 
 /**
  * 应用启动界面
- *
- * @author FireAnt（http://my.oschina.net/LittleDY）
- * @created 2014年12月22日 上午11:51:56
  */
 public class AppStart extends Activity {
 
@@ -33,28 +26,14 @@ public class AppStart extends Activity {
         if (aty != null && !aty.isFinishing()) {
             finish();
         }
-        // SystemTool.gc(this); //针对性能好的手机使用，加快应用相应速度
 
-        final View view = View.inflate(this, R.layout.app_start, null);
-        setContentView(view);
-        // 渐变展示启动屏
-        AlphaAnimation aa = new AlphaAnimation(0.5f, 1.0f);
-        aa.setDuration(800);
-        view.startAnimation(aa);
-        aa.setAnimationListener(new AnimationListener() {
+        setContentView(R.layout.app_start);
+        findViewById(R.id.app_start_view).postDelayed(new Runnable() {
             @Override
-            public void onAnimationEnd(Animation arg0) {
+            public void run() {
                 redirectTo();
             }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-        });
+        }, 800);
     }
 
     @Override
@@ -66,18 +45,14 @@ public class AppStart extends Activity {
         if (cacheVersion < currentVersion) {
             PreferenceHelper.write(this, "first_install", "first_install",
                     currentVersion);
-            cleanImageCache();
+            cleanKJImageCache();
         }
     }
 
-    private void cleanImageCache() {
+    private void cleanKJImageCache() {
         final File folder = FileUtils.getSaveFolder("OSChina/imagecache");
-
         File[] files = folder.listFiles();
-
         if (files != null && files.length > 0) {
-
-
             KJAsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -90,7 +65,6 @@ public class AppStart extends Activity {
                 }
 
             });
-
         }
     }
 
