@@ -387,7 +387,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
             if (cmm.getId() == comment.getId()) return;
         }
         if (replies.size() == 0) {
-            mViewInput.setHint("回复@ " + comment.getAuthor().getName());
+            mViewInput.setHint("回复 @" + comment.getAuthor().getName());
         }else {
             mViewInput.setHint(mViewInput.getHint() + " @" + comment.getAuthor().getName());
         }
