@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="?attr/layout_item_bg">
 
     <LinearLayout
@@ -72,26 +72,6 @@
 
         <View
             style="@style/h_line"
-            android:layout_height="1px"
-            android:visibility="gone" />
-
-        <LinearLayout
-            android:id="@+id/rl_city"
-            style="@style/option_item_rl"
-            android:visibility="gone">
-
-            <ImageView
-                style="@style/option_item_img"
-                android:background="@mipmap/icon_explore_samecity"
-                android:contentDescription="@null" />
-
-            <TextView
-                style="@style/option_item_text"
-                android:text="@string/friends" />
-        </LinearLayout>
-
-        <View
-            style="@style/h_line"
             android:layout_height="1px" />
 
         <View
@@ -156,6 +136,7 @@
         <View
             style="@style/h_line"
             android:layout_height="1px" />
+
 
     </LinearLayout>
 

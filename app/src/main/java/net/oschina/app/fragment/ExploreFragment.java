@@ -30,8 +30,8 @@ public class ExploreFragment extends BaseFragment {
     @Bind(R.id.rl_find_osc)
     View mFindOSCer;
 
-    @Bind(R.id.rl_city)
-    View mCity;
+    // @Bind(R.id.rl_city)
+    // View mCity;
 
 
     @Bind(R.id.rl_scan)
@@ -61,9 +61,9 @@ public class ExploreFragment extends BaseFragment {
             case R.id.rl_find_osc:
                 showFindUser();
                 break;
-            case R.id.rl_city:
-                UIHelper.showSimpleBack(getActivity(), SimpleBackPage.SAME_CITY);
-                break;
+            //  case R.id.rl_city:
+            //   UIHelper.showSimpleBack(getActivity(), SimpleBackPage.SAME_CITY);
+            //   break;
             case R.id.rl_scan:
                 UIHelper.showScanActivity(getActivity());
                 break;
@@ -92,7 +92,7 @@ public class ExploreFragment extends BaseFragment {
         mRlActive.setOnClickListener(this);
 
         mFindOSCer.setOnClickListener(this);
-        mCity.setOnClickListener(this);
+        // mCity.setOnClickListener(this);
         mScan.setOnClickListener(this);
         mShake.setOnClickListener(this);
     }
