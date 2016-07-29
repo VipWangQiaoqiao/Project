@@ -2,6 +2,7 @@ package net.oschina.app.improve.detail.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.google.gson.reflect.TypeToken;
@@ -27,7 +28,11 @@ import cz.msebera.android.httpclient.Header;
  * Created by fei on 2016/6/13.
  * desc:   news detail  module
  */
-public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftDetailContract.View> implements SoftDetailContract.Operator {
+public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftDetailContract.View>
+        implements SoftDetailContract.Operator {
+
+    private String ident;
+
     @Override
     int getOptionsMenuId() {
         return 0;
@@ -45,6 +50,26 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
         context.startActivity(intent);
     }
 
+    /**
+     * show news detail
+     *
+     * @param context context
+     * @param ident   ident--> software Name
+     */
+    public static void show(Context context, String ident) {
+        Intent intent = new Intent(context, SoftwareDetailActivity.class);
+        intent.putExtra("ident", ident);
+        context.startActivity(intent);
+    }
+
+    @Override
+    protected boolean initBundle(Bundle bundle) {
+        ident = bundle.getString("ident", null);
+        if (!TextUtils.isEmpty(ident)) {
+            return true;
+        }
+        return super.initBundle(bundle);
+    }
 
     @Override
     protected int getContentView() {
@@ -53,7 +78,12 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
 
     @Override
     void requestData() {
-        OSChinaApi.getNewsDetail(getDataId(), OSChinaApi.CATALOG_SOFTWARE_DETAIL, getRequestHandler());
+        if (TextUtils.isEmpty(ident)) {
+            OSChinaApi.getNewsDetail(getDataId(), OSChinaApi.CATALOG_SOFTWARE_DETAIL, getRequestHandler());
+        } else {
+            OSChinaApi.getSoftwareDetail(ident, OSChinaApi.CATALOG_SOFTWARE_DETAIL, getRequestHandler());
+        }
+
     }
 
     @Override

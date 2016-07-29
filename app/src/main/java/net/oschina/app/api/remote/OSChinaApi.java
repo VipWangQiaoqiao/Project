@@ -1140,6 +1140,19 @@ public class OSChinaApi {
         ApiHttpClient.get("action/apiv2/" + type, params, handler);
     }
 
+    /**
+     * 请求资讯详情 [直接用软件名去请求]
+     *
+     * @param ident   请求该资讯详情页
+     * @param handler AsyncHttpResponseHandler
+     */
+    public static void getSoftwareDetail(String ident, String type, AsyncHttpResponseHandler handler) {
+        if (TextUtils.isEmpty(ident)) return;
+        RequestParams params = new RequestParams();
+        params.put("ident", ident);
+        ApiHttpClient.get("action/apiv2/" + type, params, handler);
+    }
+
     public static final int CATALOG_BLOG_NORMAL = 1; // 最新
     public static final int CATALOG_BLOG_HEAT = 2; // 最热
     public static final int CATALOG_BLOG_RECOMMEND = 3;//推荐
@@ -1608,8 +1621,8 @@ public class OSChinaApi {
     /**
      * 删除动弹评论
      *
-     * @param sourceId  动弹id
-     * @param handler   回调
+     * @param sourceId 动弹id
+     * @param handler  回调
      */
     public static void deleteTweet(long sourceId, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
