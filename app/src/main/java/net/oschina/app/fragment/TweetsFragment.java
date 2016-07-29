@@ -163,7 +163,8 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
                             long id) {
         Tweet tweet = mAdapter.getItem(position);
         if (tweet != null) {
-            UIHelper.showTweetDetail(view.getContext(), null, tweet.getId());
+//            UIHelper.showTweetDetail(view.getContext(), null, tweet.getId());
+            TweetDetailActivity.show(view.getContext(), tweet.getId());
         }
     }
 

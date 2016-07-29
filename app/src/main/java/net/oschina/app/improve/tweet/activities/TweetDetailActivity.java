@@ -221,7 +221,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
                     return;
                 }
                 if (replies != null && replies.size() > 0)
-                    content = mViewInput.getHint() + " " + content;
+                    content = mViewInput.getHint() + ": " + content;
                 dialog = DialogHelp.getWaitDialog(TweetDetailActivity.this, "正在发表评论...");
                 dialog.show();
                 OSChinaApi.pubTweetComment(tweet.getId(), content, 0, publishCommentHandler);
@@ -384,7 +384,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
         mDelegation.notifyWrapper();
         if (replies.size() >= 3) return;
         for (TweetComment cmm : replies){
-            if (cmm.getId() == comment.getId()) return;
+            if (cmm.getAuthor().getId() == comment.getAuthor().getId()) return;
         }
         if (replies.size() == 0) {
             mViewInput.setHint("回复 @" + comment.getAuthor().getName());
