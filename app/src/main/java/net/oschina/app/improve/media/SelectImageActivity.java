@@ -205,7 +205,7 @@ public class SelectImageActivity extends BaseBackActivity implements EasyPermiss
 
     private void handleView() {
         try {
-            Fragment fragment = Fragment.instantiate(this, SelectImageFragment.class.getName());
+            Fragment fragment = Fragment.instantiate(this, SelectFragment.class.getName());
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fl_content, fragment)

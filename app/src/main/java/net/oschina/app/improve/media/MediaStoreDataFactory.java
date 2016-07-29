@@ -1,5 +1,6 @@
 package net.oschina.app.improve.media;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -31,10 +32,21 @@ public class MediaStoreDataFactory implements LoaderManager.LoaderCallbacks<Curs
 
     private final List<Image> mSource = new ArrayList<>();
     private final Map<String, ImageFolder> mFolderSource = new ArrayMap<>();
+    private String mRegisterKey = "";
+    private PictureSourceCallback mImageCallback;
+    private FolderSourceCallback mFolderCallback;
+    private Context mContext;
+
+    public MediaStoreDataFactory(Context context, PictureSourceCallback pictureSourceCallback,
+                                 FolderSourceCallback folderSourceCallback) {
+        this.mContext = context;
+        this.mImageCallback = pictureSourceCallback;
+        this.mFolderCallback = folderSourceCallback;
+    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(null,
+        return new CursorLoader(mContext,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION,
                 null, null, IMAGE_PROJECTION[2] + " DESC");
     }
@@ -106,6 +118,7 @@ public class MediaStoreDataFactory implements LoaderManager.LoaderCallbacks<Curs
     private void callDataAdded(List<Image> images) {
         List<ImageFolder> updateFolder = new ArrayList<>();
         List<ImageFolder> addFolder = new ArrayList<>();
+        List<Image> addImages = new ArrayList<>();
 
         final Map<String, ImageFolder> folderSource = mFolderSource;
         for (Image image : images) {
@@ -128,12 +141,22 @@ public class MediaStoreDataFactory implements LoaderManager.LoaderCallbacks<Curs
                 folderSource.put(folderPath, folder);
                 addFolder.add(folder);
             }
+
+            if (mRegisterKey.equals(folderPath)) {
+                addImages.add(image);
+            }
         }
+
+        notifyFolderAdd(addFolder);
+        notifyFolderUpdate(updateFolder);
+        notifyImageAdd(addImages);
     }
 
     private void callDataRemoved(List<Image> images) {
         List<ImageFolder> updateFolder = new ArrayList<>();
         List<ImageFolder> removeFolder = new ArrayList<>();
+        List<Image> removeImages = new ArrayList<>();
+
         final Map<String, ImageFolder> folderSource = mFolderSource;
         for (Image image : images) {
             File folderFile = new File(image.getPath()).getParentFile();
@@ -156,7 +179,15 @@ public class MediaStoreDataFactory implements LoaderManager.LoaderCallbacks<Curs
                     }
                 }
             }
+
+            if (mRegisterKey.equals(folderPath)) {
+                removeImages.add(image);
+            }
         }
+
+        notifyFolderUpdate(updateFolder);
+        notifyFolderRemove(removeFolder);
+        notifyImageRemove(removeImages);
     }
 
     @Override
@@ -164,21 +195,52 @@ public class MediaStoreDataFactory implements LoaderManager.LoaderCallbacks<Curs
 
     }
 
-    private void notifyFolderUpdate() {
-
+    private void notifyFolderUpdate(List<ImageFolder> items) {
+        if (items.size() == 0)
+            return;
+        mFolderCallback.onFolderUpdated(items);
     }
 
-    public interface ImageStateChangeCallback {
-        void onDataSourceRemoved(List<Image> images);
-
-        void onDataSourceAdded(List<Image> images);
+    private void notifyFolderAdd(List<ImageFolder> items) {
+        if (items.size() == 0)
+            return;
+        mFolderCallback.onFolderAdded(items);
     }
 
-    public interface ImageFolderStateChangeCallback {
-        void onDataSourceRemoved(List<ImageFolder> images);
+    private void notifyFolderRemove(List<ImageFolder> items) {
+        if (items.size() == 0)
+            return;
+        mFolderCallback.onFolderRemoved(items);
+    }
 
-        void onDataSourceAdded(List<ImageFolder> images);
 
-        void onDataSourceUpdated(List<ImageFolder> images);
+    private void notifyImageAdd(List<Image> items) {
+        if (items.size() == 0)
+            return;
+        mImageCallback.onPictureAdded(items);
+    }
+
+    private void notifyImageRemove(List<Image> items) {
+        if (items.size() == 0)
+            return;
+        mImageCallback.onPictureRemoved(items);
+    }
+
+    public void selectFolder(ImageFolder folder){
+        this.mRegisterKey = folder.getPath().toLowerCase();
+    }
+
+    public interface PictureSourceCallback {
+        void onPictureRemoved(List<Image> images);
+
+        void onPictureAdded(List<Image> images);
+    }
+
+    public interface FolderSourceCallback {
+        void onFolderRemoved(List<ImageFolder> images);
+
+        void onFolderAdded(List<ImageFolder> images);
+
+        void onFolderUpdated(List<ImageFolder> images);
     }
 }
