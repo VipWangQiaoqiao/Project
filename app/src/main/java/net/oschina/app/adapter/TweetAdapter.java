@@ -9,6 +9,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ImageSpan;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,6 +26,7 @@ import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.User;
 import net.oschina.app.emoji.InputHelper;
+import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.ImageUtils;
@@ -126,13 +128,16 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         vh.face.setAvatarUrl(tweet.getPortrait());
         vh.author.setText(tweet.getAuthor());
         vh.time.setText(StringUtils.friendly_time(tweet.getPubDate()));
-        vh.content.setMovementMethod(MyLinkMovementMethod.a());
+        vh.tv_tweet_like_count.setText(String.valueOf(tweet.getLikeCount()));
+
+        vh.content.setMovementMethod(LinkMovementMethod.getInstance());
         vh.content.setFocusable(false);
         vh.content.setDispatchToParent(true);
         vh.content.setLongClickable(false);
-        vh.tv_tweet_like_count.setText(String.valueOf(tweet.getLikeCount()));
-
-        Spanned span = Html.fromHtml(tweet.getBody().trim());
+        Spannable spannable = AssimilateUtils.assimilateOnlyLink(context, tweet.getBody());
+        spannable = AssimilateUtils.assimilateOnlyAtUser(context, spannable);
+        spannable = AssimilateUtils.assimilateOnlyTag(context, spannable);
+        spannable = InputHelper.displayEmoji(context.getResources(), spannable);
 
         if (!StringUtils.isEmpty(tweet.getAttach())) {
             if (recordBitmap == null) {
@@ -142,11 +147,9 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             SpannableString str = new SpannableString("c");
             str.setSpan(recordImg, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
             vh.content.setText(str);
-            span = InputHelper.displayEmoji(context.getResources(), span);
-            vh.content.append(span);
+            vh.content.append(spannable);
         } else {
-            span = InputHelper.displayEmoji(context.getResources(), span);
-            vh.content.setText(span);
+            vh.content.setText(spannable);
         }
 
         vh.commentcount.setText(tweet.getCommentCount());

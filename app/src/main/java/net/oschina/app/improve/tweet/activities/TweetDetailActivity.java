@@ -33,7 +33,6 @@ import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.TweetComment;
 import net.oschina.app.improve.bean.simple.TweetLike;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
-import net.oschina.app.improve.comment.CommentsUtil;
 import net.oschina.app.improve.media.ImageGalleryActivity;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
 import net.oschina.app.improve.utils.AssimilateUtils;
@@ -45,6 +44,9 @@ import net.oschina.app.util.UIHelper;
 import net.oschina.app.viewpagerfragment.TweetDetailViewPagerFragment;
 import net.oschina.app.widget.CircleImageView;
 import net.oschina.app.widget.RecordButtonUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -88,7 +90,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
     EditText mViewInput;
 
     private Tweet tweet;
-    private TweetComment reply;
+    private List<TweetComment> replies = new ArrayList<>();
     private Dialog dialog;
     private RecordButtonUtil mRecordUtil;
     private TextHttpResponseHandler publishAdmireHandler;
@@ -167,7 +169,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 mCmnViewImp.onCommentSuccess(null);
-                reply = null; // 清除
+                replies = null; // 清除
                 mViewInput.setHint("发表评论");
                 mViewInput.setText(null);
                 dismissDialog();
@@ -183,7 +185,6 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                Log.d("thanatosx", responseString);
                 ResultBean<Tweet> result = AppContext.createGson().fromJson(
                         responseString, new TypeToken<ResultBean<Tweet>>() {
                         }.getType());
@@ -219,16 +220,25 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
                     UIHelper.showLoginActivity(TweetDetailActivity.this);
                     return;
                 }
+                if (replies != null && replies.size() > 0)
+                    content = mViewInput.getHint() + " " + content;
                 dialog = DialogHelp.getWaitDialog(TweetDetailActivity.this, "正在发表评论...");
                 dialog.show();
-                OSChinaApi.pubTweetComment(tweet.getId(), content, reply == null ? 0 : reply.getId(), publishCommentHandler);
+                OSChinaApi.pubTweetComment(tweet.getId(), content, 0, publishCommentHandler);
             }
 
             @Override
             public void onFinalBackSpace(View v) {
-                if (reply == null) return;
-                reply = null;
-                mViewInput.setHint("发表评论");
+                if (replies == null || replies.size() == 0) return;
+                replies.remove(replies.size() - 1);
+                if (replies.size() == 0){
+                    mViewInput.setHint("发表评论");
+                    return;
+                }
+                mViewInput.setHint("回复: @" + replies.get(0).getAuthor().getName());
+                if (replies.size() == 2){
+                    mViewInput.setHint(mViewInput.getHint() + " @" + replies.get(1).getAuthor().getName());
+                }
             }
         });
         mViewInput = mDelegation.getInputView();
@@ -372,8 +382,16 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
     @Override
     public void toReply(TweetComment comment) {
         mDelegation.notifyWrapper();
-        this.reply = comment;
-        mViewInput.setHint("回复@ " + comment.getAuthor().getName());
+        if (replies.size() >= 3) return;
+        for (TweetComment cmm : replies){
+            if (cmm.getId() == comment.getId()) return;
+        }
+        if (replies.size() == 0) {
+            mViewInput.setHint("回复@ " + comment.getAuthor().getName());
+        }else {
+            mViewInput.setHint(mViewInput.getHint() + " @" + comment.getAuthor().getName());
+        }
+        this.replies.add(comment);
         TDevice.showSoftKeyboard(mViewInput);
     }
 

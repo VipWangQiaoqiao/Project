@@ -38,7 +38,7 @@ public class AssimilateUtils {
 
     // #Java#
     public static final Pattern PatternSoftwareTagWithHtml = Pattern.compile(
-            "<a[^<>]*>(#([^#@<>\\s]+)#)</a>"
+            "<a href='([^'\"]*)'[^<>]*>(#[^#@<>\\s]+#)</a>"
     );
     public static final Pattern PatternSoftwareTag = Pattern.compile(
             "#([^#@<>\\s]+)#"
@@ -106,12 +106,10 @@ public class AssimilateUtils {
      * @return
      */
     public static Spannable assimilateOnlyTag(final Context context, CharSequence content){
-        return assimilate(content, PatternSoftwareTagWithHtml, 2, 1, new Action1() {
+        return assimilate(content, PatternSoftwareTagWithHtml, 1, 2, new Action1() {
             @Override
             public void call(String str) {
-                Bundle bundle = new Bundle();
-                bundle.putString("topic", str);
-                UIHelper.showSimpleBack(context, SimpleBackPage.TWEET_TOPIC_LIST, bundle);
+                UIHelper.showUrlRedirect(context, str);
             }
         });
     }
