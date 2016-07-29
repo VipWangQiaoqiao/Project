@@ -109,7 +109,6 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
         mContentView.setAdapter(mImageAdapter);
         mContentView.setItemAnimator(null);
         mImageAdapter.setOnItemClickListener(this);
-
     }
 
     @Override
@@ -377,9 +376,7 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
                         folder.setName(folderFile.getName());
                         folder.setPath(folderFile.getAbsolutePath());
                         if (!imageFolders.contains(folder)) {
-                            ArrayList<Image> imageList = new ArrayList<>();
-                            imageList.add(image);
-                            folder.setImages(imageList);
+                            folder.getImages().add(image);
                             folder.setAlbumPath(image.getPath());//默认相册封面
                             imageFolders.add(folder);
                         } else {
@@ -393,7 +390,7 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
                 }
 
                 addImagesToAdapter(images);
-                defaultFolder.setImages(images);
+                defaultFolder.getImages().addAll(images);
                 if (mOperator.getConfig().isHaveCamera()) {
                     defaultFolder.setAlbumPath(images.size() > 1 ? images.get(1).getPath() : null);
                 } else {
@@ -414,7 +411,7 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
                 }
 
                 // If add new mCamera picture, and we only need one picture, we result it.
-                if (mOperator.getConfig().getSelectCount() == 1 &&mCamImageName != null){
+                if (mOperator.getConfig().getSelectCount() == 1 && mCamImageName != null) {
                     handleResult();
                 }
 
