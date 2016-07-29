@@ -303,12 +303,12 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     }
 
     @Override
-    public List<String> getImages() {
+    public String[] getImages() {
         return mLayImages.getPaths();
     }
 
     @Override
-    public void setImages(List<String> paths) {
+    public void setImages(String[] paths) {
         mLayImages.set(paths);
     }
 
