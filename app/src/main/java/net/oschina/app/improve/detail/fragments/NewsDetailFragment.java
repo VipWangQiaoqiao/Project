@@ -67,6 +67,9 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         mTVPubDate = (TextView) root.findViewById(R.id.tv_pub_date);
         mTVTitle = (TextView) root.findViewById(R.id.tv_title);
 
+        setGone(R.id.iv_info_view);
+        setGone(R.id.tv_info_view);
+
         mIVAuthorPortrait = (ImageView) root.findViewById(R.id.iv_avatar);
         mIVFav = (ImageView) root.findViewById(R.id.iv_fav);
         mIVFav.setOnClickListener(this);
@@ -155,7 +158,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
 
         toFavoriteOk(newsDetail);
 
-        setText(R.id.tv_info_view, String.valueOf(newsDetail.getViewCount()));
+        // setText(R.id.tv_info_view, String.valueOf(newsDetail.getViewCount()));
         setText(R.id.tv_info_comment, String.valueOf(newsDetail.getCommentCount()));
 
         Software software = newsDetail.getSoftware();
