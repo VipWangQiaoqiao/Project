@@ -145,7 +145,7 @@ public class KeyboardInputDelegation {
         mViewInput.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_DEL) {
+                if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN) {
                     mInputAdapter.onBackSpace(v);
                     if (!TextUtils.isEmpty(mViewInput.getText().toString())) {
                         isLastEmpty = false;
@@ -153,12 +153,12 @@ public class KeyboardInputDelegation {
                     }
                     if (TextUtils.isEmpty(mViewInput.getText().toString()) && !isLastEmpty) {
                         isLastEmpty = true;
-                        return false;
+                        return true;
                     }
                     mInputAdapter.onFinalBackSpace(v);
-                    return false;
+                    return true;
                 }
-                return false;
+                return true;
             }
         });
     }

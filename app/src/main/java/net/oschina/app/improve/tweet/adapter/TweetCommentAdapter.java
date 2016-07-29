@@ -62,7 +62,7 @@ public class TweetCommentAdapter extends BaseRecyclerAdapter<TweetComment> {
         h.ivPortrait.setOnClickListener(getOnPortraitClickListener());
 
         h.tvName.setText(item.getAuthor().getName());
-        h.tvContent.setText(InputHelper.displayEmoji(mContext.getResources(), AssimilateUtils.highlightAtUser(mContext, item.getContent())));
+        h.tvContent.setText(InputHelper.displayEmoji(mContext.getResources(), item.getContent()));
         h.tvTime.setText(StringUtils.friendly_time(item.getPubDate()));
     }
 
