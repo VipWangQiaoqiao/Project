@@ -8,7 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.tweet.widget.TweetPicturesPreviewerItemTouchCallback;
@@ -227,11 +229,13 @@ public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectIma
 
         public void bind(int position, TweetSelectImageAdapter.Model model, RequestManager loader) {
             mDelete.setTag(model);
-            loader.load(model.path)
+            DrawableRequestBuilder builder = loader.load(model.path)
                     .centerCrop()
                     .placeholder(R.color.grey_200)
-                    .error(R.mipmap.ic_default_image)
-                    .into(mImage);
+                    .error(R.mipmap.ic_default_image_error);
+            if (model.path.toLowerCase().endsWith("gif"))
+                builder = builder.diskCacheStrategy(DiskCacheStrategy.SOURCE);
+            builder.into(mImage);
         }
 
         @Override
