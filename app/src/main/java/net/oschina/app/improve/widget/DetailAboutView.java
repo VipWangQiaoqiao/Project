@@ -70,7 +70,8 @@ public class DetailAboutView extends LinearLayout {
                 ((TextView) lay.findViewById(R.id.tv_title)).setText(about.getTitle());
 
                 View layInfo = lay.findViewById(R.id.lay_info_view_comment);
-                ((TextView) layInfo.findViewById(R.id.tv_info_view)).setText(String.valueOf(about.getViewCount()));
+                layInfo.findViewById(R.id.iv_info_view).setVisibility(GONE);
+                ((TextView) layInfo.findViewById(R.id.tv_info_view)).setVisibility(GONE);//setText(String.valueOf(about.getViewCount()));
                 ((TextView) layInfo.findViewById(R.id.tv_info_comment)).setText(String.valueOf(about.getCommentCount()));
 
                 if (clearLine) {
