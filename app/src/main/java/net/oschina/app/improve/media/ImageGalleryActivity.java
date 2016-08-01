@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
@@ -211,20 +212,22 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
                     .inflate(R.layout.lay_gallery_page_item_contener, container, false);
             ImagePreviewView previewView = (ImagePreviewView) view.findViewById(R.id.iv_preview);
             final Loading loading = (Loading) view.findViewById(R.id.loading);
-            getImageLoader().load(mImageSources[position]).listener(new RequestListener<String, GlideDrawable>() {
-                @Override
-                public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                    loading.stop();
-                    return false;
-                }
+            getImageLoader().load(mImageSources[position])
+                    .listener(new RequestListener<String, GlideDrawable>() {
+                        @Override
+                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                            loading.stop();
+                            return false;
+                        }
 
-                @Override
-                public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                    loading.stop();
-                    loading.setVisibility(View.GONE);
-                    return false;
-                }
-            }).into(previewView);
+                        @Override
+                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            loading.stop();
+                            loading.setVisibility(View.GONE);
+                            return false;
+                        }
+                    }).diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .into(previewView);
             container.addView(view);
             return view;
         }

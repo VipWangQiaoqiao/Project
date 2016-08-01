@@ -3,10 +3,8 @@ package net.oschina.app.improve.tweet.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ImageSpan;
 import android.view.View;
@@ -14,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.DrawableRequestBuilder;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -35,7 +35,6 @@ import net.oschina.app.improve.widget.FlowLayout;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
-import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.TweetTextView;
 import net.qiujuer.genius.ui.Ui;
 
@@ -152,7 +151,16 @@ public class TweetAdapter extends BaseListAdapter<Tweet> {
                 imageView.setTag(R.id.iv_tweet_image, i);
                 imageView.setTag(R.id.iv_tweet_face, position);
                 imageView.setOnClickListener(imageClickListener);
-                vh.setImageForNet(imageView, images[i].getThumb(), R.color.grey_200, R.mipmap.ic_default_image);
+
+                String path = images[i].getThumb();
+                DrawableRequestBuilder builder = getImgLoader().load(path)
+                        .centerCrop()
+                        .placeholder(R.color.grey_200)
+                        .error(R.mipmap.ic_default_image_error);
+                if (path.toLowerCase().endsWith("gif"))
+                    builder = builder.diskCacheStrategy(DiskCacheStrategy.SOURCE);
+                builder.into(imageView);
+
                 flowLayout.addView(imageView);
             }
         } else {
