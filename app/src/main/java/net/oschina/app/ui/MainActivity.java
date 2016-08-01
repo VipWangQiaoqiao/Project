@@ -20,7 +20,6 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.TabHost.OnTabChangeListener;
-import android.widget.TabHost.TabContentFactory;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements
     private BadgeView mBvNotice;
 
     public static Notice mNotice;
+
+    private String[] mTitles;
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -186,6 +187,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void initView() {
         mTitle = getResources().getString(R.string.main_tab_name_news);
+        mTitles = getResources().getStringArray(R.array.main_titles_arrays);
         mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
         if (android.os.Build.VERSION.SDK_INT > 10) {
             mTabHost.getTabWidget().setShowDividers(0);
@@ -246,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements
         int size = tabs.length;
         for (int i = 0; i < size; i++) {
             MainTab mainTab = tabs[i];
-            TabSpec tab = mTabHost.newTabSpec(getString(mainTab.getResName()));
+            TabSpec tab = mTabHost.newTabSpec(getString(mainTab.getResName()) + this.toString());
             View indicator = View.inflate(this, R.layout.tab_indicator, null);
             TextView title = (TextView) indicator.findViewById(R.id.tab_title);
             ImageView icon = (ImageView) indicator.findViewById(R.id.iv_icon);
@@ -311,6 +313,7 @@ public class MainActivity extends AppCompatActivity implements
             View v = mTabHost.getTabWidget().getChildAt(i);
             if (i == mTabHost.getCurrentTab()) {
                 v.setSelected(true);
+                mTitle = mTitles[i == 4 || i == 3 ? i - 1 : i];
             } else {
                 v.setSelected(false);
             }
@@ -319,7 +322,6 @@ public class MainActivity extends AppCompatActivity implements
             mBvNotice.setText("");
             mBvNotice.hide();
         }
-        mTitle = tabId;
         supportInvalidateOptionsMenu();
     }
 
