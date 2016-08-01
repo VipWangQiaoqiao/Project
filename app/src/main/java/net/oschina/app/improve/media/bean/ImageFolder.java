@@ -11,7 +11,7 @@ public class ImageFolder implements Serializable {
     private String name;
     private String path;
     private String albumPath;
-    private ArrayList<Image> images;
+    private ArrayList<Image> images = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -31,10 +31,6 @@ public class ImageFolder implements Serializable {
 
     public ArrayList<Image> getImages() {
         return images;
-    }
-
-    public void setImages(ArrayList<Image> images) {
-        this.images = images;
     }
 
     public String getAlbumPath() {

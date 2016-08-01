@@ -3,10 +3,7 @@ package net.oschina.app.improve.tweet.fragments;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -16,7 +13,6 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.bean.Comment;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseRecyclerViewFragment;
 import net.oschina.app.improve.bean.base.PageBean;
@@ -30,7 +26,6 @@ import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;
-import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -83,7 +78,8 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<TweetComm
 
     @Override
     protected Type getType() {
-        return new TypeToken<ResultBean<PageBean<TweetComment>>>(){}.getType();
+        return new TypeToken<ResultBean<PageBean<TweetComment>>>() {
+        }.getType();
     }
 
     @Override
@@ -115,7 +111,9 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<TweetComm
     @Override
     public void onItemClick(int position, long itemId) {
         super.onItemClick(position, itemId);
-        mOperator.toReply(mAdapter.getItem(position));
+        TweetComment item = mAdapter.getItem(position);
+        if (item != null)
+            mOperator.toReply(item);
     }
 
     @Override
@@ -156,7 +154,8 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<TweetComm
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 ResultBean result = AppContext.createGson().fromJson(
-                        responseString, new TypeToken<ResultBean>(){}.getType());
+                        responseString, new TypeToken<ResultBean>() {
+                        }.getType());
                 if (result.isSuccess()) {
                     mAdapter.removeItem(mDeleteIndex);
                     int count = mOperator.getTweetDetail().getCommentCount() - 1;

@@ -81,7 +81,7 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
             case R.id.lay_option_comment:
                 // 评论列表
                 Intent intent = new Intent(getActivity(), SoftwareTweetActivity.class);
-                intent.putExtra(SoftwareTweetActivity.BUNDLE_KEY_NAME,mOperator.getData().getName());
+                intent.putExtra(SoftwareTweetActivity.BUNDLE_KEY_NAME, mOperator.getData().getName());
                 startActivity(intent);
                 //UIHelper.showSoftwareTweets(getActivity(), (int) mId, mOperator.getData().getName());
                 break;
@@ -107,7 +107,7 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
 
         String name = softwareDetail.getName();
         String extName = softwareDetail.getExtName();
-        tvName.setText(String.format("%s%s", name, (TextUtils.isEmpty(extName)) ? "" : " " + extName.trim()));
+        tvName.setText(String.format("%s%s", TextUtils.isEmpty(name) ? "" : name, (TextUtils.isEmpty(extName)) ? "" : " " + extName.trim()));
 
         String author = softwareDetail.getAuthor();
         tvAuthor.setText(TextUtils.isEmpty(author) ? "匿名" : author.trim());

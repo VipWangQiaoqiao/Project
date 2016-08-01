@@ -9,20 +9,18 @@ import android.widget.ImageView;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.media.bean.Image;
-import net.oschina.app.improve.media.config.ImageConfig;
 import net.oschina.app.improve.media.config.ImageLoaderListener;
 
 
 /**
- * Created by huanghaibin_dev
- * on 2016/7/13.
+ * 图片列表界面适配器
  */
 public class ImageAdapter extends BaseRecyclerAdapter<Image> {
     private ImageLoaderListener loader;
-    private ImageConfig.SelectMode selectMode;
 
-    public ImageAdapter(Context context) {
+    public ImageAdapter(Context context, ImageLoaderListener loader) {
         super(context, NEITHER);
+        this.loader = loader;
     }
 
     @Override
@@ -46,21 +44,14 @@ public class ImageAdapter extends BaseRecyclerAdapter<Image> {
             ImageViewHolder h = (ImageViewHolder) holder;
             h.mCheckView.setSelected(item.isSelect());
             h.mMaskView.setVisibility(item.isSelect() ? View.VISIBLE : View.GONE);
-            h.mCheckView.setVisibility(selectMode == ImageConfig.SelectMode.SINGLE_MODE ? View.GONE : View.VISIBLE);
-            if (loader != null) {
-                loader.displayImage(h.mImageView, item.getPath());
-            }
+            loader.displayImage(h.mImageView, item.getPath());
         }
     }
 
     private static class CamViewHolder extends RecyclerView.ViewHolder {
-        public CamViewHolder(View itemView) {
+        CamViewHolder(View itemView) {
             super(itemView);
         }
-    }
-
-    public void setLoader(ImageLoaderListener loader) {
-        this.loader = loader;
     }
 
     private static class ImageViewHolder extends RecyclerView.ViewHolder {
@@ -68,21 +59,11 @@ public class ImageAdapter extends BaseRecyclerAdapter<Image> {
         ImageView mCheckView;
         View mMaskView;
 
-        public ImageViewHolder(View itemView) {
+        ImageViewHolder(View itemView) {
             super(itemView);
             mImageView = (ImageView) itemView.findViewById(R.id.iv_image);
             mCheckView = (ImageView) itemView.findViewById(R.id.cb_selected);
             mMaskView = itemView.findViewById(R.id.lay_mask);
         }
     }
-
-    public ImageConfig.SelectMode getSelectMode() {
-        return selectMode;
-    }
-
-    public void setSelectMode(ImageConfig.SelectMode selectMode) {
-        this.selectMode = selectMode;
-    }
-
-
 }

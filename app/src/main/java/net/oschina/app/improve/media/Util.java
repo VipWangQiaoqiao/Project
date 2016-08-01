@@ -1,4 +1,4 @@
-package net.oschina.app.improve.media.config;
+package net.oschina.app.improve.media;
 
 import android.content.Context;
 import android.os.Environment;
@@ -13,11 +13,10 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by huanghaibin_dev
- * on 2016/7/13.
+ * 选择图片库相关工具类
  */
 @SuppressWarnings("All")
-public class CommonUtil {
+public class Util {
 
     public static boolean hasSDCard() {
         String status = Environment.getExternalStorageState();
@@ -51,8 +50,10 @@ public class CommonUtil {
             return null;
 
         String[] strings = new String[len];
-        for (int i = 0; i < len; i++) {
-            strings[i] = images.get(i).getPath();
+        int i = 0;
+        for (Image image : images) {
+            strings[i] = image.getPath();
+            i++;
         }
         return strings;
     }
