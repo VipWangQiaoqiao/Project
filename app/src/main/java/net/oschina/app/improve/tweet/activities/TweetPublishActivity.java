@@ -16,11 +16,10 @@ import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.tweet.contract.TweetPublishContract;
 import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
+import net.oschina.app.improve.utils.CollectionUtil;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -81,7 +80,7 @@ public class TweetPublishActivity extends BaseBackActivity implements TweetPubli
             return;
         }
 
-        final List<String> paths = mView.getImages();
+        final List<String> paths = CollectionUtil.toArrayList(mView.getImages());
 
         TweetPublishService.startActionPublish(this, content, paths);
 
@@ -112,22 +111,22 @@ public class TweetPublishActivity extends BaseBackActivity implements TweetPubli
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         final String content = mView.getContent();
-        final List<String> paths = mView.getImages();
+        final String[] paths = mView.getImages();
         if (content != null)
             outState.putString(SHARE_VALUES_CONTENT, content);
-        if (paths != null && paths.size() > 0)
-            outState.putStringArrayList(SHARE_VALUES_IMAGES, (ArrayList<String>) paths);
+        if (paths != null && paths.length > 0)
+            outState.putStringArray(SHARE_VALUES_IMAGES, paths);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         String content = savedInstanceState.getString(SHARE_VALUES_CONTENT, null);
-        ArrayList<String> images = savedInstanceState.getStringArrayList(SHARE_VALUES_IMAGES);
+        String[] images = savedInstanceState.getStringArray(SHARE_VALUES_IMAGES);
         if (content != null) {
             mView.setContent(content);
         }
-        if (images != null && images.size() > 0) {
+        if (images != null && images.length > 0) {
             mView.setImages(images);
         }
     }
@@ -141,20 +140,19 @@ public class TweetPublishActivity extends BaseBackActivity implements TweetPubli
             mView.setContent(content);
         }
         if (set != null && set.size() > 0) {
-            mView.setImages(new ArrayList<>(set));
+            mView.setImages(CollectionUtil.toArray(set, String.class));
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         }
     }
 
     private void saveXmlData() {
         final String content = mView.getContent();
-        final List<String> paths = mView.getImages();
+        final String[] paths = mView.getImages();
         SharedPreferences sharedPreferences = getSharedPreferences(SHARE_FILE_NAME, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(SHARE_VALUES_CONTENT, content);
-        if (paths != null && paths.size() > 0) {
-            Set<String> set = new HashSet<>(paths);
-            editor.putStringSet(SHARE_VALUES_IMAGES, set);
+        if (paths != null && paths.length > 0) {
+            editor.putStringSet(SHARE_VALUES_IMAGES, CollectionUtil.toHashSet(paths));
         } else {
             editor.putStringSet(SHARE_VALUES_IMAGES, null);
         }

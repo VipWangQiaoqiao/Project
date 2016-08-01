@@ -30,7 +30,7 @@ public class AssimilateUtils {
 
     // @thanatosx
     public static final Pattern PatternAtUserWithHtml = Pattern.compile(
-            "<a href='http://my\\.oschina\\.net/([0-9a-zA-Z_]+)'[^<>]*>(@[^@<>\\s]+)</a>"
+            "<a href=['\"]http://my\\.oschina\\.net/([0-9a-zA-Z_]+)['\"][^<>]*>(@[^@<>\\s]+)</a>"
     );
     public static final Pattern PatternAtUser = Pattern.compile(
             "@[^@\\s:]+"
@@ -38,7 +38,7 @@ public class AssimilateUtils {
 
     // #Java#
     public static final Pattern PatternSoftwareTagWithHtml = Pattern.compile(
-            "<a href='([^'\"]*)'[^<>]*>(#[^#@<>\\s]+#)</a>"
+            "<a href=['\"]([^'\"]*)['\"][^<>]*>(#[^#@<>\\s]+#)</a>"
     );
     public static final Pattern PatternSoftwareTag = Pattern.compile(
             "#([^#@<>\\s]+)#"
@@ -46,12 +46,12 @@ public class AssimilateUtils {
 
     // @user links
     public static final Pattern PatternAtUserAndLinks = Pattern.compile(
-            "<a href='http://my\\.oschina\\.net/([0-9a-zA-Z_]+)'[^<>]*>(@[^@<>\\s]+)</a>|<a href='([^'\"]*)'[^<>]*>([^<>]*)</a>"
+            "<a href=['\"]http://my\\.oschina\\.net/([0-9a-zA-Z_]+)['\"][^<>]*>(@[^@<>\\s]+)</a>|<a href=['\"]([^'\"]*)['\"][^<>]*>([^<>]*)</a>"
     );
 
     // links
     public static final Pattern PatternLinks = Pattern.compile(
-            "<a href='([^'\"]*)'[^<>]*>([^<>]*)</a>"
+            "<a href=['\"]([^'\"]*)['\"][^<>]*>([^<>]*)</a>"
     );
 
     private interface Action1{

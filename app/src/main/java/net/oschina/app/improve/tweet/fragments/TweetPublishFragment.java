@@ -24,8 +24,6 @@ import net.oschina.app.improve.tweet.widget.TweetPicturesPreviewer;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.UIHelper;
 
-import java.util.List;
-
 import butterknife.Bind;
 import butterknife.OnClick;
 
@@ -303,12 +301,12 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     }
 
     @Override
-    public List<String> getImages() {
+    public String[] getImages() {
         return mLayImages.getPaths();
     }
 
     @Override
-    public void setImages(List<String> paths) {
+    public void setImages(String[] paths) {
         mLayImages.set(paths);
     }
 

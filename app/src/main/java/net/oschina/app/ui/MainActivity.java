@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -21,7 +23,6 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.TabHost.OnTabChangeListener;
-import android.widget.TabHost.TabContentFactory;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -165,14 +166,14 @@ public class MainActivity extends AppCompatActivity implements
         if (action != null && action.equals(Intent.ACTION_VIEW)) {
             UIHelper.showUrlRedirect(this, intent.getDataString());
         } else if (intent.getBooleanExtra("NOTICE", false)) {
-            notifitcationBarClick(intent);
+            notificationBarClick(intent);
         }
     }
 
     /**
      * 从通知栏点击的时候相应
      */
-    private void notifitcationBarClick(Intent fromWhich) {
+    private void notificationBarClick(Intent fromWhich) {
         if (fromWhich != null) {
             boolean fromNoticeBar = fromWhich.getBooleanExtra("NOTICE", false);
             if (fromNoticeBar) {
