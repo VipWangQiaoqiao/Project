@@ -9,7 +9,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -57,6 +56,7 @@ import cz.msebera.android.httpclient.Header;
  * Created by thanatos
  * on 16/6/13.
  */
+@SuppressWarnings("deprecation")
 public class TweetDetailActivity extends BaseBackActivity implements TweetDetailContract.Operator {
 
     public static final String BUNDLE_KEY_TWEET = "BUNDLE_KEY_TWEET";
@@ -140,7 +140,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                ResultBean<TweetLike> result = AppContext.getInstance().createGson().fromJson(
+                ResultBean<TweetLike> result = AppContext.createGson().fromJson(
                         responseString, new TypeToken<ResultBean<TweetLike>>() {
                         }.getType());
                 if (result != null && result.isSuccess()) {

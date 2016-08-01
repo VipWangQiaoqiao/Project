@@ -24,8 +24,6 @@ import net.oschina.app.improve.tweet.widget.TweetPicturesPreviewer;
 import net.oschina.app.ui.SelectFriendsActivity;
 import net.oschina.app.util.UIHelper;
 
-import java.util.List;
-
 import butterknife.Bind;
 import butterknife.OnClick;
 
