@@ -409,6 +409,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
 
     @OnClick(R.id.iv_comment)
     void onClickComment() {
+        mDelegation.notifyWrapper();
         TDevice.showSoftKeyboard(mViewInput);
     }
 
