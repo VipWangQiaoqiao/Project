@@ -171,7 +171,9 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            setupContent();
+            if(isAdded()){
+                setupContent();
+            }
         }
     };
 
