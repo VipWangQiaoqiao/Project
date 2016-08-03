@@ -102,7 +102,9 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            setupContent();
+            if(isAdded()){
+                setupContent();
+            }
         }
     };
 
@@ -122,11 +124,11 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
         super.requestData();
         switch (requestCategory) {
             case CATEGORY_TYPE:
-                OSChinaApi.getTweetList(tweetType, mIsRefresh ? mBean.getPrevPageToken() : mBean.getNextPageToken(), mHandler);
+                OSChinaApi.getTweetList(tweetType, mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
                 break;
             case CATEGORY_USER:
                 if (AppContext.getInstance().isLogin()) {
-                    OSChinaApi.getUserTweetList(Long.parseLong(String.valueOf(AppContext.getInstance().getLoginUid())), mIsRefresh ? mBean.getPrevPageToken() : mBean.getNextPageToken(), mHandler);
+                    OSChinaApi.getUserTweetList(Long.parseLong(String.valueOf(AppContext.getInstance().getLoginUid())), mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
                 } else {
                     mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
                     mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));

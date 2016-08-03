@@ -199,7 +199,8 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
     protected void requestData() {
         super.requestData();
         verifyCacheType();
-        OSChinaApi.getBlogList(catalog, mIsRefresh ? (mBean != null ? mBean.getPrevPageToken() : null) : (mBean != null ? mBean.getNextPageToken() : null), mHandler);
+        OSChinaApi.getBlogList(catalog, mIsRefresh ? /*(mBean != null ? mBean.getPrevPageToken() : null)*/null
+                : (mBean != null ? mBean.getNextPageToken() : null), mHandler);
     }
 
     @Override
