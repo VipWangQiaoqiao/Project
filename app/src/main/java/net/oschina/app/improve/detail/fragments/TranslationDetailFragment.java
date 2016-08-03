@@ -65,6 +65,10 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
         mTVPubDate = (TextView) root.findViewById(R.id.tv_pub_date);
         mTVTitle = (TextView) root.findViewById(R.id.tv_title);
 
+        setGone(R.id.iv_info_view);
+        setGone(R.id.tv_info_view);
+        setGone(R.id.iv_info_comment);
+
         mIVAuthorPortrait = (ImageView) root.findViewById(R.id.iv_avatar);
         mIVFav = (ImageView) root.findViewById(R.id.iv_fav);
         mIVFav.setOnClickListener(this);
@@ -152,8 +156,8 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
 
         toFavoriteOk(translationDetail);
 
-        setText(R.id.tv_info_view, String.valueOf(translationDetail.getViewCount()));
-        setText(R.id.tv_info_comment, String.valueOf(translationDetail.getCommentCount()));
+        // setText(R.id.tv_info_view, String.valueOf(translationDetail.getViewCount()));
+        setText(R.id.tv_info_comment, translationDetail.getPubDate());
 
         mAboutSoftware.setVisibility(View.GONE);
         mAbouts.setVisibility(View.GONE);
