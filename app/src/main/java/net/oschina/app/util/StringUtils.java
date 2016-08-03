@@ -6,7 +6,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -75,6 +74,14 @@ public class StringUtils {
 
     public static String getDateString(String sdate) {
         return dateFormat3.get().format(toDate(sdate));
+    }
+
+
+    public static String friendlyTime(String sTime) {
+        String tempTime = sTime.substring(0, sTime.indexOf(" "));
+        String[] split = tempTime.split("-");
+        StringBuilder builder = new StringBuilder();
+        return builder.append(split[0]).append("年").append(split[1]).append("月").append(split[2]).append("日").toString();
     }
 
     /**
@@ -300,18 +307,19 @@ public class StringUtils {
 
     /**
      * 是否是相同的一天
+     *
      * @param sDate1 sDate1
      * @param sDate2 sDate2
      * @return
      */
-    public static boolean isSameDay(String sDate1,String sDate2){
-        if(TextUtils.isEmpty(sDate1) || TextUtils.isEmpty(sDate2)){
+    public static boolean isSameDay(String sDate1, String sDate2) {
+        if (TextUtils.isEmpty(sDate1) || TextUtils.isEmpty(sDate2)) {
             return false;
         }
         boolean b = false;
         Date date1 = toDate(sDate1);
         Date date2 = toDate(sDate2);
-        if(date1!= null && date2 != null){
+        if (date1 != null && date2 != null) {
             String d1 = dateFormater2.get().format(date1);
             String d2 = dateFormater2.get().format(date2);
             if (d1.equals(d2)) {

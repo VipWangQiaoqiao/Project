@@ -69,6 +69,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
 
         setGone(R.id.iv_info_view);
         setGone(R.id.tv_info_view);
+        setGone(R.id.iv_info_comment);
 
         mIVAuthorPortrait = (ImageView) root.findViewById(R.id.iv_avatar);
         mIVFav = (ImageView) root.findViewById(R.id.iv_fav);
@@ -159,7 +160,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         toFavoriteOk(newsDetail);
 
         // setText(R.id.tv_info_view, String.valueOf(newsDetail.getViewCount()));
-        setText(R.id.tv_info_comment, String.valueOf(newsDetail.getCommentCount()));
+        setText(R.id.tv_info_comment, StringUtils.friendlyTime(newsDetail.getPubDate()));
 
         Software software = newsDetail.getSoftware();
         if (software != null) {
