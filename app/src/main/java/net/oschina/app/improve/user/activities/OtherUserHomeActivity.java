@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -32,6 +33,7 @@ import net.oschina.app.bean.User;
 import net.oschina.app.bean.UserInformation;
 import net.oschina.app.improve.base.activities.BaseRecyclerViewActivity;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
+import net.oschina.app.improve.bean.simple.UserRelation;
 import net.oschina.app.improve.user.adapter.UserActiveAdapter;
 import net.oschina.app.improve.widget.SolarSystemView;
 import net.oschina.app.util.DialogHelp;
@@ -299,6 +301,9 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> impl
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        User mLoginUser = AppContext.getInstance().getLoginUser();
+        if (user.getId() == mLoginUser.getId() || user.getName().equals(mLoginUser.getName()))
+            return false;
         getMenuInflater().inflate(R.menu.menu_other_user, menu);
         mFollowMenu = menu.getItem(1);
         return true;
@@ -398,41 +403,37 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> impl
                 DialogHelp.getConfirmDialog(this, dialogTitle, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        OSChinaApi.updateRelation(AppContext.getInstance().getLoginUid(), user.getId(), ra, new AsyncHttpResponseHandler() {
+                        OSChinaApi.addUserRelationReverse(user.getId(), new TextHttpResponseHandler() {
                             @Override
-                            public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-                                try {
-                                    Result result = XmlUtils.toBean(ResultBean.class, new ByteArrayInputStream(arg2)).getResult();
-                                    if (result.OK()) {
-                                        switch (user.getRelation()) {
-                                            case User.RELATION_TYPE_BOTH:
-                                                item.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
-                                                user.setRelation(User.RELATION_TYPE_FANS_ME);
-                                                break;
-                                            case User.RELATION_TYPE_FANS_HIM:
-                                                item.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
-                                                user.setRelation(User.RELATION_TYPE_NULL);
-                                                break;
-                                            case User.RELATION_TYPE_FANS_ME:
-                                                item.setIcon(getResources().getDrawable(R.drawable.selector_user_following_botn));
-                                                user.setRelation(User.RELATION_TYPE_BOTH);
-                                                break;
-                                            case User.RELATION_TYPE_NULL:
-                                                item.setIcon(getResources().getDrawable(R.drawable.selector_user_following));
-                                                user.setRelation(User.RELATION_TYPE_FANS_HIM);
-                                                break;
-                                        }
-                                        Toast.makeText(OtherUserHomeActivity.this, "操作成功", Toast.LENGTH_SHORT).show();
-                                    }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                    onFailure(arg0, arg1, arg2, e);
-                                }
+                            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                                Toast.makeText(OtherUserHomeActivity.this, "操作失败", Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
-                            public void onFailure(int arg0, Header[] arg1, byte[] arg2, Throwable arg3) {
-                                Toast.makeText(OtherUserHomeActivity.this, "操作失败", Toast.LENGTH_SHORT).show();
+                            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                                net.oschina.app.improve.bean.base.ResultBean<UserRelation> result = AppContext.createGson().fromJson(
+                                        responseString, new TypeToken<net.oschina.app.improve.bean.base.ResultBean<UserRelation>>(){}.getType());
+                                if (result.isSuccess()){
+                                    int relation = result.getResult().getRelation();
+                                    switch (relation) {
+                                        case User.RELATION_TYPE_APIV2_BOTH:
+                                            item.setIcon(getResources().getDrawable(R.drawable.selector_user_following_botn));
+                                            break;
+                                        case User.RELATION_TYPE_APIV2_ONLY_FANS_HIM:
+                                            item.setIcon(getResources().getDrawable(R.drawable.selector_user_following));
+                                            break;
+                                        case User.RELATION_TYPE_APIV2_ONLY_FANS_ME:
+                                            item.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
+                                            break;
+                                        case User.RELATION_TYPE_APIV2_NULL:
+                                            item.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
+                                            break;
+                                    }
+                                    user.setRelation(relation);
+                                }else{
+                                    onFailure(statusCode, headers, responseString, null);
+                                }
+
                             }
                         });
                     }
