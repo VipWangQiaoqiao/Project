@@ -73,6 +73,32 @@ public class TweetPublishService extends Service implements Contract.IService {
         context.startService(intent);
     }
 
+    /**
+     * 继续发送动弹
+     *
+     * @param context Context
+     * @param modelId {@link TweetPublishModel#id}
+     */
+    public static void startActionContinue(Context context, String modelId) {
+        Intent intent = new Intent(context, TweetPublishService.class);
+        intent.setAction(ACTION_CONTINUE);
+        intent.putExtra(EXTRA_ID, modelId);
+        context.startService(intent);
+    }
+
+    /**
+     * 删除该动弹
+     *
+     * @param context Context
+     * @param modelId {@link TweetPublishModel#id}
+     */
+    public static void startActionDelete(Context context, String modelId) {
+        Intent intent = new Intent(context, TweetPublishService.class);
+        intent.setAction(ACTION_DELETE);
+        intent.putExtra(EXTRA_ID, modelId);
+        context.startService(intent);
+    }
+
 
     /**
      * 查询发送失败动

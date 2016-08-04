@@ -105,11 +105,11 @@ public class TweetPublishQueueFragment extends BaseFragment implements TweetQueu
 
     @Override
     public void onClickContinue(TweetPublishModel model) {
-
+        TweetPublishService.startActionContinue(getContext(), model.getId());
     }
 
     @Override
     public void onClickDelete(TweetPublishModel model) {
-
+        TweetPublishService.startActionDelete(getContext(), model.getId());
     }
 }
