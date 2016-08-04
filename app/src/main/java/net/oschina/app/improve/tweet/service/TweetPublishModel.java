@@ -9,7 +9,7 @@ import java.util.UUID;
  */
 
 @SuppressWarnings("WeakerAccess")
-class TweetPublishModel implements Serializable {
+public class TweetPublishModel implements Serializable {
     private String id;
     private String content;
     private String[] srcImages;
