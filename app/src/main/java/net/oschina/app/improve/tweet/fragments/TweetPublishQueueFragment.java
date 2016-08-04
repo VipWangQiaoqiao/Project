@@ -20,12 +20,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 
 /**
  * 发布动弹队列实现
  */
 @SuppressWarnings("WeakerAccess")
-public class TweetPublishQueueFragment extends BaseFragment implements TweetQueueAdapter.Callback {
+public class TweetPublishQueueFragment extends BaseFragment implements TweetQueueAdapter.Callback, View.OnClickListener {
     @Bind(R.id.loading)
     Loading mLoading;
     @Bind(R.id.txt_title)
@@ -106,10 +107,22 @@ public class TweetPublishQueueFragment extends BaseFragment implements TweetQueu
     @Override
     public void onClickContinue(TweetPublishModel model) {
         TweetPublishService.startActionContinue(getContext(), model.getId());
+        if (mAdapter.getItemCount() == 0)
+            finish();
     }
 
     @Override
     public void onClickDelete(TweetPublishModel model) {
         TweetPublishService.startActionDelete(getContext(), model.getId());
+        if (mAdapter.getItemCount() == 0)
+            finish();
+    }
+
+    @OnClick(R.id.icon_back)
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.icon_back) {
+            finish();
+        }
     }
 }
