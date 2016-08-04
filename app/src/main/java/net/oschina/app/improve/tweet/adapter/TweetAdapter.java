@@ -111,7 +111,7 @@ public class TweetAdapter extends BaseListAdapter<Tweet> {
         TweetTextView tv_content = vh.getView(R.id.tweet_item);
 
         String content = "";
-        if (TextUtils.isEmpty(item.getContent())){
+        if (!TextUtils.isEmpty(item.getContent())){
             content = item.getContent().replaceAll("[\n\\s]+", " ");
         }
         Spannable spannable = AssimilateUtils.assimilateOnlyAtUser(mCallback.getContext(), content);
