@@ -236,7 +236,7 @@ public class TweetPublishService extends Service implements Contract.IService {
             operator.stop();
         TweetPublishCache.remove(getApplicationContext(), id);
         // In this we need remove the notify
-        NotificationManagerCompat.from(this).cancel(id.hashCode());
+        notifyCancel(id.hashCode());
         return true;
     }
 
