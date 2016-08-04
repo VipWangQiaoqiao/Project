@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.app.AppOperator;
@@ -13,16 +14,24 @@ import net.oschina.app.improve.tweet.adapter.TweetQueueAdapter;
 import net.oschina.app.improve.tweet.service.TweetPublishCache;
 import net.oschina.app.improve.tweet.service.TweetPublishModel;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
+import net.qiujuer.genius.ui.widget.Loading;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.Bind;
 
 /**
  * 发布动弹队列实现
  */
 @SuppressWarnings("WeakerAccess")
 public class TweetPublishQueueFragment extends BaseFragment implements TweetQueueAdapter.Callback {
-
+    @Bind(R.id.loading)
+    Loading mLoading;
+    @Bind(R.id.txt_title)
+    TextView mTitle;
+    @Bind(R.id.recycler)
+    RecyclerView mRecycler;
     private TweetQueueAdapter mAdapter;
 
     public static TweetPublishQueueFragment newInstance(String[] ids) {
@@ -41,12 +50,9 @@ public class TweetPublishQueueFragment extends BaseFragment implements TweetQueu
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
-
-        RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
+        mRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new TweetQueueAdapter(this);
-        recyclerView.setAdapter(mAdapter);
+        mRecycler.setAdapter(mAdapter);
     }
 
     private void finish() {
@@ -71,7 +77,10 @@ public class TweetPublishQueueFragment extends BaseFragment implements TweetQueu
                             if (model != null)
                                 models.add(model);
                         }
-                        addData(models);
+                        if (models.size() > 0)
+                            addData(models);
+                        else
+                            finish();
                     }
                 });
                 return;
@@ -81,16 +90,17 @@ public class TweetPublishQueueFragment extends BaseFragment implements TweetQueu
     }
 
     private void addData(final List<TweetPublishModel> models) {
-        if (models.size() == 0) {
-            finish();
-        } else {
-            mRoot.post(new Runnable() {
-                @Override
-                public void run() {
-                    mAdapter.add(models);
-                }
-            });
-        }
+        mRoot.post(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.add(models);
+                mLoading.setVisibility(View.GONE);
+                mTitle.setVisibility(View.VISIBLE);
+                mRecycler.setVisibility(View.VISIBLE);
+
+                mTitle.setText(String.format("『%s』Todo", models.size()));
+            }
+        });
     }
 
     @Override
