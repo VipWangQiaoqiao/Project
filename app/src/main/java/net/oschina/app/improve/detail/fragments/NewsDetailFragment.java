@@ -152,8 +152,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         mTVAuthorName.setText(newsDetail.getAuthor());
         getImgLoader().load(newsDetail.getAuthorPortrait()).error(R.mipmap.widget_dface).into(mIVAuthorPortrait);
 
-        String time = String.format("%s", StringUtils.friendly_time(newsDetail.getPubDate()));
-        mTVPubDate.setText(time);
+        mTVPubDate.setText(StringUtils.friendly_time(newsDetail.getPubDate()));
 
         mTVTitle.setText(newsDetail.getTitle());
 
