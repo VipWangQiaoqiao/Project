@@ -12,6 +12,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -41,7 +42,9 @@ import butterknife.OnClick;
 /**
  * 图片选择库实现界面
  */
-public class SelectImageFragment extends BaseFragment implements SelectImageContract.View, View.OnClickListener, ImageLoaderListener, BaseRecyclerAdapter.OnItemClickListener {
+public class SelectFragment extends BaseFragment implements SelectImageContract.View, View.OnClickListener,
+        ImageLoaderListener, BaseRecyclerAdapter.OnItemClickListener ,
+        MediaStoreDataFactory.PictureSourceCallback, MediaStoreDataFactory.FolderSourceCallback {
     @Bind(R.id.rv_image)
     RecyclerView mContentView;
     @Bind(R.id.btn_title_select)
@@ -65,6 +68,7 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
     private LoaderListener mCursorLoader = new LoaderListener();
 
     private SelectImageContract.Operator mOperator;
+    private MediaStoreDataFactory mFactory;
 
     @Override
     public void onAttach(Context context) {
@@ -128,6 +132,9 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
             }
         }
         getLoaderManager().initLoader(0, null, mCursorLoader);
+
+        mFactory = new MediaStoreDataFactory(getContext(),this,this);
+        getLoaderManager().initLoader(1, null, mFactory);
     }
 
 
@@ -223,6 +230,8 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
             ImageFolderPopupWindow popupWindow = new ImageFolderPopupWindow(getActivity(), new ImageFolderPopupWindow.Callback() {
                 @Override
                 public void onSelect(ImageFolderPopupWindow popupWindow, ImageFolder model) {
+                    mFactory.selectFolder(model);
+
                     addImagesToAdapter(model.getImages());
                     mContentView.scrollToPosition(0);
                     popupWindow.dismiss();
@@ -303,6 +312,31 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
         builder.into(iv);
     }
 
+    @Override
+    public void onFolderRemoved(List<ImageFolder> images) {
+        Log.e("TAG", "onFolderRemoved: "+images.size());
+    }
+
+    @Override
+    public void onFolderAdded(List<ImageFolder> images) {
+        Log.e("TAG", "onFolderAdded: "+images.size());
+    }
+
+    @Override
+    public void onFolderUpdated(List<ImageFolder> images) {
+        Log.e("TAG", "onFolderUpdated: "+images.size());
+    }
+
+    @Override
+    public void onPictureRemoved(List<Image> images) {
+        Log.e("TAG", "onPictureRemoved: "+images.size());
+    }
+
+    @Override
+    public void onPictureAdded(List<Image> images) {
+        Log.e("TAG", "onPictureAdded: "+images.size());
+    }
+
     private class LoaderListener implements LoaderManager.LoaderCallbacks<Cursor> {
         private final String[] IMAGE_PROJECTION = {
                 MediaStore.Images.Media.DATA,
@@ -316,10 +350,9 @@ public class SelectImageFragment extends BaseFragment implements SelectImageCont
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
             if (id == 0) {
                 //数据库光标加载器
-                CursorLoader cursorLoader = new CursorLoader(getActivity(),
+                return new CursorLoader(getContext(),
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION,
-                        null, null, IMAGE_PROJECTION[2] + " DESC");//倒叙排列
-                return cursorLoader;
+                        null, null, IMAGE_PROJECTION[2] + " DESC");
             }
             return null;
         }
