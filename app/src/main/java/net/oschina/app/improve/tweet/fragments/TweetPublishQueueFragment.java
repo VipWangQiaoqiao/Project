@@ -7,11 +7,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import net.oschina.app.R;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.tweet.adapter.TweetQueueAdapter;
 import net.oschina.app.improve.tweet.service.TweetPublishCache;
 import net.oschina.app.improve.tweet.service.TweetPublishModel;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 发布动弹队列实现
@@ -45,15 +49,47 @@ public class TweetPublishQueueFragment extends BaseFragment implements TweetQueu
         recyclerView.setAdapter(mAdapter);
     }
 
+    private void finish() {
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .remove(this)
+                .commit();
+    }
+
     @Override
     protected void initData() {
         super.initData();
-        if (mBundle == null)
-            return;
-        String[] ids = mBundle.getStringArray(TweetPublishService.EXTRA_IDS);
-        if (ids != null && ids.length > 0) {
-            TweetPublishModel model = TweetPublishCache.get(getActivity().getApplicationContext(), ids[0]);
-            mAdapter.add(model);
+        if (mBundle != null) {
+            final String[] ids = mBundle.getStringArray(TweetPublishService.EXTRA_IDS);
+            if (ids != null && ids.length > 0) {
+                AppOperator.runOnThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        List<TweetPublishModel> models = new ArrayList<TweetPublishModel>();
+                        for (String str : ids) {
+                            TweetPublishModel model = TweetPublishCache.get(getActivity().getApplicationContext(), str);
+                            if (model != null)
+                                models.add(model);
+                        }
+                        addData(models);
+                    }
+                });
+                return;
+            }
+        }
+        finish();
+    }
+
+    private void addData(final List<TweetPublishModel> models) {
+        if (models.size() == 0) {
+            finish();
+        } else {
+            mRoot.post(new Runnable() {
+                @Override
+                public void run() {
+                    mAdapter.add(models);
+                }
+            });
         }
     }
 

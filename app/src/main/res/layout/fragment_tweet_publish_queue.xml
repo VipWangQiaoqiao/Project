@@ -1,4 +1,5 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content"
     android:layout_width="match_parent"
@@ -14,13 +15,23 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:padding="@dimen/lay_16"
-        android:text="『你有34个失败的动弹』"
+        android:text="『Failed』"
         android:textColor="@color/white"
-        android:textSize="@dimen/font_18" />
+        android:textSize="@dimen/font_18"
+        android:visibility="gone" />
+
+
+    <net.qiujuer.genius.ui.widget.Loading
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:gForegroundColor="@color/white_alpha_224" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/trans" />
-</LinearLayout>
+        android:background="@color/trans"
+        android:overScrollMode="never" />
+</FrameLayout>

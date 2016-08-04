@@ -59,8 +59,8 @@ public class TweetQueueAdapter extends RecyclerView.Adapter<TweetQueueAdapter.Ho
         return mModels.size();
     }
 
-    public void add(TweetPublishModel model){
-        mModels.add(model);
+    public void add(List<TweetPublishModel> models) {
+        mModels.addAll(models);
         notifyDataSetChanged();
     }
 
@@ -90,7 +90,7 @@ public class TweetQueueAdapter extends RecyclerView.Adapter<TweetQueueAdapter.Ho
             super(itemView);
             mListener = listener;
 
-            mTitle = (TextView)itemView.findViewById(R.id.tv_title);
+            mTitle = (TextView) itemView.findViewById(R.id.tv_title);
             mContinue = (Button) itemView.findViewById(R.id.btn_continue);
             mDelete = (Button) itemView.findViewById(R.id.btn_delete);
 
