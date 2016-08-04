@@ -322,7 +322,8 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
             ivThumbup.setSelected(false);
         }
         if (!TextUtils.isEmpty(tweet.getContent())) {
-            Spannable spannable = AssimilateUtils.assimilateOnlyAtUser(this, tweet.getContent());
+            String content = tweet.getContent().replaceAll("[\n\\s]+", " ");
+            Spannable spannable = AssimilateUtils.assimilateOnlyAtUser(this, content);
             spannable = AssimilateUtils.assimilateOnlyTag(this, spannable);
             spannable = AssimilateUtils.assimilateOnlyLink(this, spannable);
             spannable = InputHelper.displayEmoji(getResources(), spannable);
