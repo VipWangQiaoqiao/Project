@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ImageSpan;
 import android.view.View;
@@ -109,7 +110,11 @@ public class TweetAdapter extends BaseListAdapter<Tweet> {
 
         TweetTextView tv_content = vh.getView(R.id.tweet_item);
 
-        Spannable spannable = AssimilateUtils.assimilateOnlyAtUser(mCallback.getContext(), item.getContent());
+        String content = "";
+        if (TextUtils.isEmpty(item.getContent())){
+            content = item.getContent().replaceAll("[\n\\s]+", " ");
+        }
+        Spannable spannable = AssimilateUtils.assimilateOnlyAtUser(mCallback.getContext(), content);
         spannable = AssimilateUtils.assimilateOnlyTag(mCallback.getContext(), spannable);
         spannable = AssimilateUtils.assimilateOnlyLink(mCallback.getContext(), spannable);
         spannable = InputHelper.displayEmoji(mCallback.getContext().getResources(), spannable);

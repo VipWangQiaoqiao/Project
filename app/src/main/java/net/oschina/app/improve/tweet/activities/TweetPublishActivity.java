@@ -72,7 +72,7 @@ public class TweetPublishActivity extends BaseBackActivity implements TweetPubli
             return;
         }
 
-        final String content = mView.getContent();
+        String content = mView.getContent();
         if (TextUtils.isEmpty(content) || TextUtils.isEmpty(content.trim())) {
             AppContext.showToastShort(R.string.tip_content_empty);
             return;
@@ -86,6 +86,7 @@ public class TweetPublishActivity extends BaseBackActivity implements TweetPubli
         final List<String> paths = CollectionUtil.toArrayList(mView.getImages());
 
         // To service publish
+        content = content.replaceAll("[\n\\s]+", " ");
         TweetPublishService.startActionPublish(this, content, paths);
 
         // Toast
