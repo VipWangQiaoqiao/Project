@@ -93,7 +93,10 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                handleLongClick(mAdapter.getItem(position), position);
+                Tweet tweet = mAdapter.getItem(position);
+                if (tweet != null) {
+                    handleLongClick(tweet, position);
+                }
                 return true;
             }
         });
@@ -102,7 +105,7 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(isAdded()){
+            if (isAdded()) {
                 setupContent();
             }
         }
