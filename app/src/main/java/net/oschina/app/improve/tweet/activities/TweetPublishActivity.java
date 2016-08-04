@@ -88,6 +88,9 @@ public class TweetPublishActivity extends BaseBackActivity implements TweetPubli
         // To service publish
         TweetPublishService.startActionPublish(this, content, paths);
 
+        // Toast
+        AppContext.showToast(R.string.tweet_publishing_toast);
+
         // clear the tweet data
         clearAndFinish();
     }
