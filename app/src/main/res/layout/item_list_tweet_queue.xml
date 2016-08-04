@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/lay_8"
+        android:paddingLeft="@dimen/lay_16"
+        android:paddingRight="@dimen/lay_16"
+        android:paddingTop="@dimen/lay_16">
+
+        <net.oschina.app.widget.TweetTextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/lay_8"
+            android:clickable="true"
+            android:contentDescription="@string/app_name"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:padding="0dp"
+            android:textColor="#111111"
+            android:textSize="@dimen/font_16"
+            tools:text="Title" />
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/lay_8"
+            android:clickable="true"
+            android:contentDescription="@string/app_name"
+            android:textColor="#9d9d9d"
+            android:textSize="@dimen/font_12"
+            tools:text="2016-12-12 20:22:35" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal">
+
+            <net.qiujuer.genius.ui.widget.Button
+                android:id="@+id/btn_continue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/btn_tweet_queue_opt_continue"
+                android:paddingBottom="@dimen/lay_8"
+                android:paddingLeft="@dimen/lay_16"
+                android:paddingRight="@dimen/lay_16"
+                android:paddingTop="@dimen/lay_8"
+                android:text="继续发送"
+                android:textColor="@color/white_alpha_240"
+                android:textSize="@dimen/font_12"
+                app:gTouchCornerRadiusBL="4dp"
+                app:gTouchCornerRadiusBR="0dp"
+                app:gTouchCornerRadiusTL="4dp"
+                app:gTouchCornerRadiusTR="0dp" />
+
+            <net.qiujuer.genius.ui.widget.Button
+                android:id="@+id/btn_delete"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/btn_tweet_queue_opt_delete"
+                android:paddingBottom="@dimen/lay_8"
+                android:paddingLeft="@dimen/lay_16"
+                android:paddingRight="@dimen/lay_16"
+                android:paddingTop="@dimen/lay_8"
+                android:text="放弃"
+                android:textColor="@color/white_alpha_240"
+                android:textSize="@dimen/font_12"
+                app:gTouchCornerRadiusBL="0dp"
+                app:gTouchCornerRadiusBR="4dp"
+                app:gTouchCornerRadiusTL="0dp"
+                app:gTouchCornerRadiusTR="4dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="@dimen/lay_16"
+        android:background="#d2d2d2" />
+</LinearLayout>

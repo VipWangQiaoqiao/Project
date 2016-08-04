@@ -9,8 +9,9 @@ import java.util.UUID;
  */
 
 @SuppressWarnings("WeakerAccess")
-class TweetPublishModel implements Serializable {
+public class TweetPublishModel implements Serializable {
     private String id;
+    private long date;
     private String content;
     private String[] srcImages;
     private String[] cacheImages;
@@ -19,6 +20,7 @@ class TweetPublishModel implements Serializable {
 
     public TweetPublishModel() {
         id = UUID.randomUUID().toString();
+        date = System.currentTimeMillis();
     }
 
     public TweetPublishModel(String content, String[] images) {
@@ -29,6 +31,14 @@ class TweetPublishModel implements Serializable {
 
     public String getId() {
         return id;
+    }
+
+    public long getDate() {
+        return date;
+    }
+
+    public void setDate(long date) {
+        this.date = date;
     }
 
     public String getContent() {

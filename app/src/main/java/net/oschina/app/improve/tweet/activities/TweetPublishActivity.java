@@ -1,8 +1,10 @@
 package net.oschina.app.improve.tweet.activities;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -15,6 +17,7 @@ import net.oschina.app.R;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.tweet.contract.TweetPublishContract;
 import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
+import net.oschina.app.improve.tweet.fragments.TweetPublishQueueFragment;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.utils.CollectionUtil;
 import net.oschina.app.util.TDevice;
@@ -82,9 +85,13 @@ public class TweetPublishActivity extends BaseBackActivity implements TweetPubli
 
         final List<String> paths = CollectionUtil.toArrayList(mView.getImages());
 
+        // To service publish
         TweetPublishService.startActionPublish(this, content, paths);
 
-        // 在这里我们需要清理缓存的草稿
+        // Toast
+        AppContext.showToast(R.string.tweet_publishing_toast);
+
+        // clear the tweet data
         clearAndFinish();
     }
 
@@ -97,6 +104,8 @@ public class TweetPublishActivity extends BaseBackActivity implements TweetPubli
     @Override
     public void setDataView(TweetPublishContract.View view) {
         mView = view;
+        // before the fragment show
+        registerPublishStateReceiver();
     }
 
     @Override
@@ -104,6 +113,7 @@ public class TweetPublishActivity extends BaseBackActivity implements TweetPubli
         if (mSaveOnDestroy) {
             saveXmlData();
         }
+        unRegisterPublishStateReceiver();
         super.onDestroy();
     }
 
@@ -141,8 +151,10 @@ public class TweetPublishActivity extends BaseBackActivity implements TweetPubli
         }
         if (set != null && set.size() > 0) {
             mView.setImages(CollectionUtil.toArray(set, String.class));
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
         }
+        // hide the software
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
     private void saveXmlData() {
@@ -167,5 +179,41 @@ public class TweetPublishActivity extends BaseBackActivity implements TweetPubli
         editor.putStringSet(SHARE_VALUES_IMAGES, null);
         SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
         finish();
+    }
+
+    private void registerPublishStateReceiver() {
+        IntentFilter intentFilter = new IntentFilter(TweetPublishService.ACTION_RECEIVER_SEARCH_FAILED);
+        BroadcastReceiver receiver = new SearchReceiver();
+        registerReceiver(receiver, intentFilter);
+        mPublishStateReceiver = receiver;
+
+        // start search
+        TweetPublishService.startActionSearchFailed(this);
+    }
+
+    private void unRegisterPublishStateReceiver() {
+        final BroadcastReceiver receiver = mPublishStateReceiver;
+        mPublishStateReceiver = null;
+        if (receiver != null)
+            unregisterReceiver(receiver);
+    }
+
+    private BroadcastReceiver mPublishStateReceiver;
+
+    private class SearchReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (TweetPublishService.ACTION_RECEIVER_SEARCH_FAILED.equals(intent.getAction())) {
+                String[] ids = intent.getStringArrayExtra(TweetPublishService.EXTRA_IDS);
+                if (ids == null || ids.length == 0)
+                    return;
+                TweetPublishQueueFragment fragment = TweetPublishQueueFragment.newInstance(ids);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.activity_tweet_publish, fragment)
+                        .addToBackStack(TweetPublishQueueFragment.class.toString())
+                        .commit();
+            }
+        }
     }
 }

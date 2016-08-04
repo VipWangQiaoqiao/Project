@@ -11,7 +11,8 @@ import java.io.IOException;
 import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import static net.oschina.app.improve.utils.StreamUtils.close;
 
@@ -44,6 +45,16 @@ public class TweetPublishCache {
         return dir;
     }
 
+    static String getIdByFile(File file) {
+        if (file == null)
+            return null;
+        String name = file.getName();
+        int index = name.indexOf(".tweet");
+        if (index == -1)
+            return name;
+        return name.substring(0, index);
+    }
+
     static void removeImages(Context context, String id) {
         String dir = getImageCachePath(context, id);
         File file = new File(dir);
@@ -57,10 +68,20 @@ public class TweetPublishCache {
         return data.exists();
     }
 
-    public static Map<String, TweetPublishModel> list(Context context) {
-        File file = new File(getFileCachePath(context, null));
-        if (file.isDirectory()) {
-            File[] files = file.listFiles();
+    public static List<TweetPublishModel> list(Context context) {
+        File fileDir = new File(getFileCachePath(context, null));
+        if (fileDir.exists() && fileDir.isDirectory()) {
+            File[] files = fileDir.listFiles();
+            if (files != null && fileDir.length() > 0) {
+                List<TweetPublishModel> models = new ArrayList<>();
+                for (File file : files) {
+                    String id = getIdByFile(file);
+                    TweetPublishModel model = get(context, id);
+                    if (model != null)
+                        models.add(model);
+                }
+                return models;
+            }
         }
         return null;
     }
