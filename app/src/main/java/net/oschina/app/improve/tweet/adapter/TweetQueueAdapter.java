@@ -1,6 +1,10 @@
 package net.oschina.app.improve.tweet.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +14,15 @@ import android.widget.TextView;
 import com.bumptech.glide.RequestManager;
 
 import net.oschina.app.R;
+import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.tweet.service.TweetPublishModel;
+import net.oschina.app.improve.utils.AssimilateUtils;
+import net.oschina.app.widget.TweetTextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,6 +32,7 @@ import java.util.List;
 public class TweetQueueAdapter extends RecyclerView.Adapter<TweetQueueAdapter.Holder> {
     private final List<TweetPublishModel> mModels = new ArrayList<>();
     private Callback mCallback;
+    private static DateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public TweetQueueAdapter(Callback callback) {
         mCallback = callback;
@@ -33,6 +44,7 @@ public class TweetQueueAdapter extends RecyclerView.Adapter<TweetQueueAdapter.Ho
         return new Holder(view, new Holder.HolderListener() {
             @Override
             public void onDelete(TweetPublishModel model) {
+                remove(model);
                 Callback callback = mCallback;
                 if (callback != null) {
                     callback.onClickDelete(model);
@@ -41,6 +53,7 @@ public class TweetQueueAdapter extends RecyclerView.Adapter<TweetQueueAdapter.Ho
 
             @Override
             public void onContinue(TweetPublishModel model) {
+                remove(model);
                 Callback callback = mCallback;
                 if (callback != null) {
                     callback.onClickContinue(model);
@@ -59,13 +72,18 @@ public class TweetQueueAdapter extends RecyclerView.Adapter<TweetQueueAdapter.Ho
         return mModels.size();
     }
 
-    public void add(TweetPublishModel model){
-        mModels.add(model);
+    public void add(List<TweetPublishModel> models) {
+        Log.e("TAG", models.size() + "");
+        mModels.addAll(models);
         notifyDataSetChanged();
     }
 
     public void remove(TweetPublishModel model) {
-
+        int pos = mModels.indexOf(model);
+        if (pos != -1) {
+            mModels.remove(pos);
+            notifyItemRemoved(pos);
+        }
     }
 
 
@@ -81,7 +99,8 @@ public class TweetQueueAdapter extends RecyclerView.Adapter<TweetQueueAdapter.Ho
      * Holder
      */
     static class Holder extends RecyclerView.ViewHolder {
-        private TextView mTitle;
+        private TweetTextView mTitle;
+        private TextView mDate;
         private Button mContinue;
         private Button mDelete;
         private HolderListener mListener;
@@ -90,7 +109,8 @@ public class TweetQueueAdapter extends RecyclerView.Adapter<TweetQueueAdapter.Ho
             super(itemView);
             mListener = listener;
 
-            mTitle = (TextView)itemView.findViewById(R.id.tv_title);
+            mTitle = (TweetTextView) itemView.findViewById(R.id.tv_title);
+            mDate = (TextView) itemView.findViewById(R.id.tv_date);
             mContinue = (Button) itemView.findViewById(R.id.btn_continue);
             mDelete = (Button) itemView.findViewById(R.id.btn_delete);
 
@@ -119,6 +139,19 @@ public class TweetQueueAdapter extends RecyclerView.Adapter<TweetQueueAdapter.Ho
         public void bind(int position, TweetPublishModel model, RequestManager loader) {
             itemView.setTag(model);
 
+            Context context = itemView.getContext();
+
+            Spannable spannable = AssimilateUtils.assimilateOnlyAtUser(context, model.getContent());
+            spannable = AssimilateUtils.assimilateOnlyTag(context, spannable);
+            spannable = AssimilateUtils.assimilateOnlyLink(context, spannable);
+            spannable = InputHelper.displayEmoji(context.getResources(), spannable);
+            mTitle.setText(spannable);
+            mTitle.setMovementMethod(LinkMovementMethod.getInstance());
+            mTitle.setFocusable(false);
+            mTitle.setDispatchToParent(true);
+            mTitle.setLongClickable(false);
+
+            mDate.setText(FORMAT.format(new Date(model.getDate())));
         }
 
         /**

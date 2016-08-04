@@ -151,9 +151,10 @@ public class TweetPublishActivity extends BaseBackActivity implements TweetPubli
         }
         if (set != null && set.size() > 0) {
             mView.setImages(CollectionUtil.toArray(set, String.class));
-            // hide the software
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
         }
+        // hide the software
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
     private void saveXmlData() {
@@ -212,7 +213,6 @@ public class TweetPublishActivity extends BaseBackActivity implements TweetPubli
                         .add(R.id.activity_tweet_publish, fragment)
                         .addToBackStack(TweetPublishQueueFragment.class.toString())
                         .commit();
-                TDevice.hideSoftKeyboard(getCurrentFocus());
             }
         }
     }
