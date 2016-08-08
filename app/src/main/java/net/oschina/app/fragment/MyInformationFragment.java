@@ -33,7 +33,6 @@ import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.bean.User;
 import net.oschina.app.cache.CacheManager;
-import net.oschina.app.improve.widget.SolarSystemView;
 import net.oschina.app.ui.MainActivity;
 import net.oschina.app.ui.MyQrodeDialog;
 import net.oschina.app.ui.SimpleBackActivity;
@@ -45,6 +44,7 @@ import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.BadgeView;
 import net.qiujuer.genius.ui.drawable.shape.BorderShape;
+import net.thanatosx.solar.SolarSystemView;
 
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;

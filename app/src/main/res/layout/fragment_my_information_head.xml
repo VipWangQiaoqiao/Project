@@ -19,7 +19,7 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="2">
 
-            <net.oschina.app.improve.widget.SolarSystemView
+            <net.thanatosx.solar.SolarSystemView
                 android:id="@+id/view_solar_system"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
