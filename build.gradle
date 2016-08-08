@@ -6,9 +6,6 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.1.2'
-        // classpath 'com.networkbench.newlens.agent.android:agent-gradle-plugin:2.2.7'
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
     }
 }
 
@@ -26,6 +23,6 @@ ext {
     applicationId = "net.oschina.app"
     minSdkVersion = 15
     targetSdkVersion = 23
-    versionCode = 263
-    versionName = "v2.6.4 beta(1608020705)"
+    versionCode = 264
+    versionName = "v2.6.4(1608081154)"
 }
