@@ -124,7 +124,7 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
                 }
                 TweetPublishService.log(String.format("Upload image onFailure, statusCode:[%s] responseString:%s throwable:%s",
                         statusCode, (responseString == null ? "" : responseString), (throwable == null ? "" : throwable.getMessage())));
-                setError(R.string.tweet_image_publish_failed, String.valueOf(index + 1), String.valueOf(paths.length) + responseString);
+                setError(R.string.tweet_image_publish_failed, String.valueOf(index + 1), String.valueOf(paths.length));
             }
 
             @Override
