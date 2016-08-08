@@ -77,11 +77,11 @@ public class TweetDetailViewPagerFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
 
         if (mAdapter == null){
-            final ListTweetLikeUsersFragment mCmnFrag = ListTweetLikeUsersFragment.instantiate(mOperator, this);
-            mThumbupViewImp = mCmnFrag;
+            final ListTweetLikeUsersFragment mCmnFrag;
+            mThumbupViewImp = mCmnFrag = ListTweetLikeUsersFragment.instantiate(mOperator, this);
 
-            final ListTweetCommentFragment mThumbupFrag = ListTweetCommentFragment.instantiate(mOperator, this);
-            mCmnViewImp = mThumbupFrag;
+            final ListTweetCommentFragment mThumbupFrag;
+            mCmnViewImp = mThumbupFrag = ListTweetCommentFragment.instantiate(mOperator, this);
 
             mViewPager.setAdapter(mAdapter = new FragmentStatePagerAdapter(getChildFragmentManager()) {
                 @Override
@@ -148,5 +148,17 @@ public class TweetDetailViewPagerFragment extends Fragment
         mOperator.getTweetDetail().setCommentCount(count);
         TabLayout.Tab tab = mTabLayout.getTabAt(1);
         if (tab != null) tab.setText(String.format("评论(%s)", count));
+    }
+
+    public TweetDetailContract.ICmnView getCommentViewHandler(){
+        return this;
+    }
+
+    public TweetDetailContract.IThumbupView getThumbupViewHandler(){
+        return this;
+    }
+
+    public TweetDetailContract.IAgencyView getAgencyViewHandler(){
+        return this;
     }
 }

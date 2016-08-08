@@ -169,7 +169,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 mCmnViewImp.onCommentSuccess(null);
-                replies = null; // 清除
+                replies.clear(); // 清除
                 mViewInput.setHint("发表评论");
                 mViewInput.setText(null);
                 dismissDialog();
@@ -212,7 +212,8 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
         mDelegation.setAdapter(new KeyboardInputDelegation.KeyboardInputAdapter() {
             @Override
             public void onSubmit(TextView v, String content) {
-                if (TextUtils.isEmpty(content.replaceAll("[ \\s\\n]+", ""))) {
+                content = content.replaceAll("[ \\s\\n]+", "");
+                if (TextUtils.isEmpty(content)) {
                     Toast.makeText(TweetDetailActivity.this, "请输入文字", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -247,12 +248,12 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
         resolveVoice();
         fillDetailView();
 
-        TweetDetailViewPagerFragment mTweetDetailViewPagerFrag = TweetDetailViewPagerFragment.instantiate(this);
-        mCmnViewImp = mTweetDetailViewPagerFrag;
-        mThumbupViewImp = mTweetDetailViewPagerFrag;
-        mAgencyViewImp = mTweetDetailViewPagerFrag;
+        TweetDetailViewPagerFragment mPagerFrag = TweetDetailViewPagerFragment.instantiate(this);
+        mCmnViewImp = mPagerFrag.getCommentViewHandler();
+        mThumbupViewImp = mPagerFrag.getThumbupViewHandler();
+        mAgencyViewImp = mPagerFrag.getAgencyViewHandler();
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, mTweetDetailViewPagerFrag)
+                .replace(R.id.fragment_container, mPagerFrag)
                 .commit();
     }
 
