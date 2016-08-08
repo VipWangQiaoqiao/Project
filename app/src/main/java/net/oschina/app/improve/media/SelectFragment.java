@@ -9,6 +9,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -294,7 +295,7 @@ public class SelectFragment extends BaseFragment implements SelectImageContract.
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 0x03 && mCamImageName != null) {
+        if (resultCode == AppCompatActivity.RESULT_OK && requestCode == 0x03 && mCamImageName != null) {
             Uri localUri = Uri.fromFile(new File(Util.getCameraPath() + mCamImageName));
             Intent localIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, localUri);
             getActivity().sendBroadcast(localIntent);
@@ -389,7 +390,7 @@ public class SelectFragment extends BaseFragment implements SelectImageContract.
                         images.add(image);
 
                         //如果是新拍的照片
-                        if (mCamImageName != null && mCamImageName.toLowerCase().equals(image.getName().toLowerCase())) {
+                        if (mCamImageName != null && mCamImageName.equals(image.getName())) {
                             image.setSelect(true);
                             mSelectedImage.add(image);
                         }
