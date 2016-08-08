@@ -7,7 +7,6 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -40,28 +39,23 @@ public class ImagePreviewView extends ImageView {
     private ValueAnimator.AnimatorUpdateListener onScaleAnimationUpdate;
     private ValueAnimator.AnimatorUpdateListener onTranslateXAnimationUpdate;
     private ValueAnimator.AnimatorUpdateListener onTranslateYAnimationUpdate;
-    
-    private OnTouchBorderListener onTouchBorderListener;
-    
-    public interface OnTouchBorderListener{
-        void onBorder(boolean isBorder);
-    }
-    
-    public void setOnTouchBorderListener(OnTouchBorderListener l){
-        this.onTouchBorderListener = l;
+
+    private OnReachBorderListener onReachBorderListener;
+
+    public interface OnReachBorderListener{
+        void onReachBorder(boolean isReached);
     }
 
+    public void setOnReachBorderListener(OnReachBorderListener l){
+        onReachBorderListener = l;
+    }
 
     public ImagePreviewView(Context context) {
-        super(context);
-        mScaleDetector = new ScaleGestureDetector(getContext(), new ScaleListener());
-        mFlatDetector = new GestureDetector(getContext(), new FlatGestureListener());
+        this(context, null);
     }
 
     public ImagePreviewView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        mScaleDetector = new ScaleGestureDetector(getContext(), new ScaleListener());
-        mFlatDetector = new GestureDetector(getContext(), new FlatGestureListener());
+        this(context, attrs, 0);
     }
 
     public ImagePreviewView(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -218,11 +212,24 @@ public class ImagePreviewView extends ImageView {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         final int action = event.getAction();
+
+        switch (action){
+            case MotionEvent.ACTION_DOWN:
+                Log.d("thanatosx", "-----onTouchEvent: ACTION_DOWN");
+                break;
+            case MotionEvent.ACTION_MOVE:
+                Log.d("thanatosx", "-----onTouchEvent: ACTION_MOVE");
+                break;
+            case MotionEvent.ACTION_UP:
+                Log.d("thanatosx", "-----onTouchEvent: ACTION_UP");
+                break;
+            case MotionEvent.ACTION_CANCEL:
+                Log.d("thanatosx", "-----onTouchEvent: ACTION_CANCEL");
+                break;
+        }
+
         // 清理动画
         if (action == MotionEvent.ACTION_DOWN){
-            if (onTouchBorderListener != null){
-                onTouchBorderListener.onBorder(scale == 1.0f);
-            }
             if (getResetScaleAnimator().isRunning())
                 cancelResetScaleAnimation();
             if (getResetXAnimator().isRunning())
@@ -231,14 +238,21 @@ public class ImagePreviewView extends ImageView {
                 cancelResetFlatYAnimation();
         }
 
-        final boolean translated = mFlatDetector.onTouchEvent(event);
-        final boolean scaled = mScaleDetector.onTouchEvent(event);
+
+
+        mFlatDetector.onTouchEvent(event);
+        mScaleDetector.onTouchEvent(event);
+
+
+        /*if (action == MotionEvent.ACTION_MOVE && onReachBorderListener != null){
+            onReachBorderListener.onReachBorder(scale != 1 && (translateLeft >= 0 || -translateLeft + getWidth() >= mBoundWidth * scale));
+        }*/
 
         if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL){
             if (isAutoScale){
                 isAutoScale = false;
             }else{
-                if (isTranslating) isTranslating = false;
+//                if (isTranslating) isTranslating = false;
                 if (scale < 1) {
                     ValueAnimator animator = getResetScaleAnimator();
                     animator.setFloatValues(scale, 1.f);
@@ -268,7 +282,7 @@ public class ImagePreviewView extends ImageView {
                 }
 
                 // 重置到中间位置
-                if (mScaledWidth < getWidth() && mScaledHeight >= getHeight() && (int) translateLeft != (getWidth() - mScaledWidth) / 2) {
+                if (mScaledWidth < getWidth() && mScaledHeight >= getHeight() && mDiffX != 0) {
                     ValueAnimator animator = getResetXAnimator();
                     animator.setFloatValues(translateLeft, (getWidth() - mScaledWidth) / 2.f);
                     animator.addUpdateListener(getOnTranslateXAnimationUpdate());
@@ -276,7 +290,7 @@ public class ImagePreviewView extends ImageView {
                 }
 
                 // 重置到中间位置
-                if (mScaledHeight < getHeight() && mScaledWidth >= getWidth() && (int) translateTop != (getHeight() - mScaledHeight) / 2) {
+                if (mScaledHeight < getHeight() && mScaledWidth >= getWidth() && mDiffY != 0) {
                     ValueAnimator animator = getResetYAnimator();
                     animator.setFloatValues(translateTop, (getHeight() - mScaledHeight) / 2.f);
                     animator.addUpdateListener(getOnTranslateYAnimationUpdate());
@@ -289,7 +303,8 @@ public class ImagePreviewView extends ImageView {
             }
 
         }
-        return scaled || translated;
+
+        return true;
     }
 
     private void resetDefaultState(){
@@ -338,8 +353,6 @@ public class ImagePreviewView extends ImageView {
         return change;
     }
 
-
-
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
@@ -384,7 +397,7 @@ public class ImagePreviewView extends ImageView {
             if (mOldScaledWidth > getWidth() && getDiffX() != 0 ||
                     (mOldScaledHeight > getHeight() && getDiffY() != 0)) return false;
 
-            isScaling = true;
+//            isScaling = true;
             float factor = detector.getScaleFactor();
             float value = scale;
             value += (factor - 1) * 2;
@@ -442,36 +455,50 @@ public class ImagePreviewView extends ImageView {
          */
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            if (isScaling) return false;
-            isTranslating = true;
+//            if (isScaling) return false;
+//            isTranslating = true;
 
             final float mScaledWidth = mBoundWidth * scale;
             final float mScaledHeight = mBoundHeight * scale;
 
-            boolean change = false;
-
             if (mScaledHeight > getHeight()) {
-                if (getDiffY() != 0) {
+                /*if (getDiffY() != 0) {
                     final float disY = (float) (Math.acos(Math.abs(getDiffY()) / getHeight() * 6) * distanceY);
                     if (disY == disY) translateTop -= disY; // float 低值溢出变Nan数值
                 } else {
                     translateTop -= distanceY * 1.5;
+                }*/
+                translateTop -= distanceY * 1.5;
+                if (translateTop > 0) {
+                    translateTop = 0;
                 }
-                change = true;
+                if (-translateTop + getHeight() > mScaledHeight){
+                    translateTop = getHeight() - mScaledHeight;
+                }
             }
 
             if (mScaledWidth > getWidth()) {
-                if (getDiffX() != 0) {
+                /*if (getDiffX() != 0) {
                     final float disX = (float) (Math.acos(Math.abs(getDiffX()) / getWidth() * 4) * distanceX);
                     if (disX == disX) translateLeft -= disX;
                 } else {
                     translateLeft -= distanceX * 1.5;
+                }*/
+                translateLeft -= distanceX * 1.5;
+                if (translateLeft > 0){
+                    translateLeft = 0;
+                    onReachBorderListener.onReachBorder(true);
                 }
-                change = true;
+                if (-translateLeft + getWidth() > mScaledWidth){
+                    translateLeft = getWidth() - mScaledWidth;
+                    onReachBorderListener.onReachBorder(true);
+                }
+            }else {
+                onReachBorderListener.onReachBorder(true);
             }
 
-            if (change) invalidate();
-            return change;
+            invalidate();
+            return true;
         }
 
         @Override

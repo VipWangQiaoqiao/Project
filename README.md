@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # OSChina Android [客户端](http://www.oschina.net/app/)
 
 ##写在前面的话
@@ -45,3 +46,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+=======
+#osc-android-app
+>>>>>>> 096f8630d9ff1ecb7e413fdf8860848fc381ad9f

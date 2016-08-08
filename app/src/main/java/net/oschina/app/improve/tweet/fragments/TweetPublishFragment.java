@@ -22,6 +22,7 @@ import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.tweet.contract.TweetPublishContract;
 import net.oschina.app.improve.tweet.widget.TweetPicturesPreviewer;
 import net.oschina.app.ui.SelectFriendsActivity;
+import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
 import butterknife.Bind;
@@ -157,6 +158,12 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     protected void initData() {
         super.initData();
         mOperator.loadXmlData();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mEmojiKeyboard.hideSoftKeyboard();
     }
 
     @OnClick({R.id.iv_picture, R.id.iv_mention, R.id.iv_tag,

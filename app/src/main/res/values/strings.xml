@@ -137,6 +137,7 @@
 
     <string name="tweet_publish_title">发布动弹</string>
     <string name="tweet_publishing">正在发布动弹…</string>
+    <string name="tweet_publishing_toast">正在发布动弹, 请留意通知栏进度。</string>
     <string name="tweet_publish_continue">正在重新发布动弹…</string>
     <string name="tweet_publish_success">动弹发布成功~</string>
     <string name="tweet_publish_failed">动弹发布失败, 点击重新发送!</string>

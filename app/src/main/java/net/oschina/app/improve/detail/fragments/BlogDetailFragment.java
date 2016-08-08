@@ -162,8 +162,7 @@ public class BlogDetailFragment
         mTVAuthorName.setText(blog.getAuthor());
         getImgLoader().load(blog.getAuthorPortrait()).error(R.mipmap.widget_dface).into(mIVAuthorPortrait);
 
-        String time = String.format("%s", StringUtils.friendly_time(blog.getPubDate()));
-        mTVPubDate.setText(time);
+        mTVPubDate.setText(StringUtils.friendly_time(blog.getPubDate()));
 
         mTVTitle.setText(blog.getTitle());
 

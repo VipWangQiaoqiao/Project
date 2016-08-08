@@ -161,7 +161,8 @@ public class QuestionFragment extends BaseGeneralListFragment<Question> {
     protected void requestData() {
         super.requestData();
         verifyCacheType();
-        OSChinaApi.getQuestionList(catalog, mIsRefresh ? (mBean != null ? mBean.getPrevPageToken() : null) : (mBean != null ? mBean.getNextPageToken() : null), mHandler);
+        OSChinaApi.getQuestionList(catalog, mIsRefresh ? /*(mBean != null ? mBean.getPrevPageToken() : null)*/null
+                : (mBean != null ? mBean.getNextPageToken() : null), mHandler);
     }
 
     @Override

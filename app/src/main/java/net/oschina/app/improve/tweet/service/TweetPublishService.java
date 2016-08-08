@@ -17,7 +17,9 @@ import android.support.v4.util.ArrayMap;
 import android.util.Log;
 
 import net.oschina.app.R;
+import net.oschina.app.improve.utils.CollectionUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +30,9 @@ import java.util.Map;
 public class TweetPublishService extends Service implements Contract.IService {
     private final static String TAG = TweetPublishService.class.getName();
 
+    public static final String ACTION_RECEIVER_SEARCH_INCOMPLETE = "net.oschina.app.improve.tweet.service.action.receiver.SEARCH_INCOMPLETE";
+    public static final String ACTION_RECEIVER_SEARCH_FAILED = "net.oschina.app.improve.tweet.service.action.receiver.SEARCH_FAILED";
+
     private static final String ACTION_PUBLISH = "net.oschina.app.improve.tweet.service.action.PUBLISH";
     private static final String ACTION_CONTINUE = "net.oschina.app.improve.tweet.service.action.CONTINUE";
     private static final String ACTION_DELETE = "net.oschina.app.improve.tweet.service.action.DELETE";
@@ -35,10 +40,11 @@ public class TweetPublishService extends Service implements Contract.IService {
     private static final String EXTRA_CONTENT = "net.oschina.app.improve.tweet.service.extra.CONTENT";
     private static final String EXTRA_IMAGES = "net.oschina.app.improve.tweet.service.extra.IMAGES";
     private static final String EXTRA_ID = "net.oschina.app.improve.tweet.service.extra.ID";
+    public static final String EXTRA_IDS = "net.oschina.app.improve.tweet.service.extra.IDS";
 
     private volatile Looper mServiceLooper;
     private volatile ServiceHandler mServiceHandler;
-    private Map<String, Contract.IOperator> mTasks = new ArrayMap<>();
+    private Map<String, Contract.IOperator> mRunTasks = new ArrayMap<>();
 
     private final class ServiceHandler extends Handler {
         ServiceHandler(Looper looper) {
@@ -49,6 +55,59 @@ public class TweetPublishService extends Service implements Contract.IService {
         public void handleMessage(Message msg) {
             onHandleIntent((Intent) msg.obj, msg.arg1);
         }
+    }
+
+
+    /**
+     * 发起动弹发布服务
+     */
+    public static void startActionPublish(Context context, String content, List<String> images) {
+        Intent intent = new Intent(context, TweetPublishService.class);
+        intent.setAction(ACTION_PUBLISH);
+        intent.putExtra(EXTRA_CONTENT, content);
+        if (images != null && images.size() > 0) {
+            String[] pubImages = new String[images.size()];
+            images.toArray(pubImages);
+            intent.putExtra(EXTRA_IMAGES, pubImages);
+        }
+        context.startService(intent);
+    }
+
+    /**
+     * 继续发送动弹
+     *
+     * @param context Context
+     * @param modelId {@link TweetPublishModel#id}
+     */
+    public static void startActionContinue(Context context, String modelId) {
+        Intent intent = new Intent(context, TweetPublishService.class);
+        intent.setAction(ACTION_CONTINUE);
+        intent.putExtra(EXTRA_ID, modelId);
+        context.startService(intent);
+    }
+
+    /**
+     * 删除该动弹
+     *
+     * @param context Context
+     * @param modelId {@link TweetPublishModel#id}
+     */
+    public static void startActionDelete(Context context, String modelId) {
+        Intent intent = new Intent(context, TweetPublishService.class);
+        intent.setAction(ACTION_DELETE);
+        intent.putExtra(EXTRA_ID, modelId);
+        context.startService(intent);
+    }
+
+
+    /**
+     * 查询发送失败动
+     * 如果有将通过广播{@link #ACTION_RECEIVER_SEARCH_FAILED}通知
+     */
+    public static void startActionSearchFailed(Context context) {
+        Intent intent = new Intent(context, TweetPublishService.class);
+        intent.setAction(ACTION_RECEIVER_SEARCH_FAILED);
+        context.startService(intent);
     }
 
     public TweetPublishService() {
@@ -97,21 +156,6 @@ public class TweetPublishService extends Service implements Contract.IService {
     }
 
     /**
-     * 发起动弹发布服务
-     */
-    public static void startActionPublish(Context context, String content, List<String> images) {
-        Intent intent = new Intent(context, TweetPublishService.class);
-        intent.setAction(ACTION_PUBLISH);
-        intent.putExtra(EXTRA_CONTENT, content);
-        if (images != null && images.size() > 0) {
-            String[] pubImages = new String[images.size()];
-            images.toArray(pubImages);
-            intent.putExtra(EXTRA_IMAGES, pubImages);
-        }
-        context.startService(intent);
-    }
-
-    /**
      * 在线程中处理请求数据
      *
      * @param intent  请求的数据
@@ -138,6 +182,9 @@ public class TweetPublishService extends Service implements Contract.IService {
                     if (id == null || handleActionDelete(id, startId)) {
                         stopSelf(startId);
                     }
+                } else if (ACTION_RECEIVER_SEARCH_FAILED.equals(action)) {
+                    handleActionSearch();
+                    stopSelf(startId);
                 }
             }
         }
@@ -161,7 +208,7 @@ public class TweetPublishService extends Service implements Contract.IService {
      * @return 返回是否销毁当前服务
      */
     private boolean handleActionContinue(String id, int startId) {
-        Contract.IOperator operator = mTasks.get(id);
+        Contract.IOperator operator = mRunTasks.get(id);
         if (operator != null) {
             // 正在运行, 不做操作
             return true;
@@ -184,11 +231,42 @@ public class TweetPublishService extends Service implements Contract.IService {
      * @return 返回是否销毁当前服务
      */
     private boolean handleActionDelete(String id, int startId) {
-        Contract.IOperator operator = mTasks.get(id);
+        Contract.IOperator operator = mRunTasks.get(id);
         if (operator != null)
             operator.stop();
         TweetPublishCache.remove(getApplicationContext(), id);
+        // In this we need remove the notify
+        notifyCancel(id.hashCode());
         return true;
+    }
+
+    /**
+     * 进行查询操作,
+     * 查询当前发送失败的动弹
+     */
+    private boolean handleActionSearch() {
+        List<TweetPublishModel> models = TweetPublishCache.list(getApplicationContext());
+        if (models == null || models.size() == 0)
+            return false;
+
+        final Map<String, Contract.IOperator> runningMap = mRunTasks;
+        List<String> ids = new ArrayList<>();
+
+        for (TweetPublishModel model : models) {
+            if (!runningMap.containsKey(model.getId())) {
+                ids.add(model.getId());
+            }
+        }
+
+        // If have failed task, we need callback
+        if (ids.size() > 0) {
+            Intent intent = new Intent(ACTION_RECEIVER_SEARCH_FAILED);
+            intent.putExtra(EXTRA_IDS, CollectionUtil.toArray(ids, String.class));
+            sendBroadcast(intent);
+            return true;
+        }
+
+        return false;
     }
 
     @Override
@@ -198,15 +276,15 @@ public class TweetPublishService extends Service implements Contract.IService {
 
     @Override
     public void start(String id, Contract.IOperator operator) {
-        if (!mTasks.containsKey(id)) {
-            mTasks.put(id, operator);
+        if (!mRunTasks.containsKey(id)) {
+            mRunTasks.put(id, operator);
         }
     }
 
     @Override
     public void stop(String id, int startId) {
-        if (mTasks.containsKey(id)) {
-            mTasks.remove(id);
+        if (mRunTasks.containsKey(id)) {
+            mRunTasks.remove(id);
         }
         // stop self
         stopSelf(startId);

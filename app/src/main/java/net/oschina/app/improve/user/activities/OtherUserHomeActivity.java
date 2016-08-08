@@ -129,11 +129,12 @@ public class OtherUserHomeActivity extends BaseRecyclerViewActivity<Active> impl
         mToolbar.setSubtitle("");
         mToolbar.setNavigationIcon(R.mipmap.btn_back_normal);
         setSupportActionBar(mToolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setHomeButtonEnabled(false);
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         mLayoutAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = false;
