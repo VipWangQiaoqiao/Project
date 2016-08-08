@@ -340,7 +340,7 @@ public class TweetPublishService extends Service implements Contract.IService {
         NotificationManagerCompat.from(this).cancel(notifyId);
     }
 
-    private static void log(String str) {
+    public static void log(String str) {
         Log.e(TAG, str);
     }
 }
