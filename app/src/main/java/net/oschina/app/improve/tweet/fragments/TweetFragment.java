@@ -205,6 +205,9 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
         super.onSaveInstanceState(outState);
     }
 
+    /**
+     * 注销广播
+     */
     @Override
     public void onDestroy() {
         if (requestCategory == CATEGORY_USER) {
