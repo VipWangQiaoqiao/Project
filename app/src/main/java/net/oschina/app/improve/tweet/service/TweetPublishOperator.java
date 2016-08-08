@@ -122,7 +122,9 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
                 if (throwable != null) {
                     throwable.printStackTrace();
                 }
-                setError(R.string.tweet_image_publish_failed, String.valueOf(index + 1), String.valueOf(paths.length));
+                TweetPublishService.log(String.format("Upload image onFailure, statusCode:[%s] responseString:%s throwable:%s",
+                        statusCode, (responseString == null ? "" : responseString), (throwable == null ? "" : throwable.getMessage())));
+                setError(R.string.tweet_image_publish_failed, String.valueOf(index + 1), String.valueOf(paths.length) + responseString);
             }
 
             @Override
@@ -135,6 +137,9 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
                         String token = resultBean.getResult().getToken();
                         uploadImages(index + 1, token, paths, runnable);
                     } else {
+                        File file = new File(path);
+                        TweetPublishService.log(String.format("Upload name:[%s] size:[%s] error:%s",
+                                file.getAbsolutePath(), file.length(), resultBean.getMessage()));
                         onFailure(statusCode, headers, responseString, new Throwable(resultBean.getMessage()));
                     }
                 } catch (Exception e) {
