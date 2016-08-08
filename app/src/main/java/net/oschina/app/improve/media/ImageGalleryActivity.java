@@ -38,7 +38,7 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
     public static final String KEY_IMAGE = "images";
     public static final String KEY_POSITION = "position";
     public static final String KEY_NEED_SAVE = "save";
-    private ViewPager mImagePager;
+    private PreviewerViewPager mImagePager;
     private TextView mIndexText;
     private String[] mImageSources;
     private int mCurPosition;
@@ -91,7 +91,7 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
     protected void initWidget() {
         super.initWidget();
         setTitle("");
-        mImagePager = (ViewPager) findViewById(R.id.vp_image);
+        mImagePager = (PreviewerViewPager) findViewById(R.id.vp_image);
         mIndexText = (TextView) findViewById(R.id.tv_index);
         mImagePager.addOnPageChangeListener(this);
         if (mNeedSaveLocal)
@@ -194,7 +194,8 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
 
     }
 
-    private class ViewPagerAdapter extends PagerAdapter {
+
+    private class ViewPagerAdapter extends PagerAdapter implements ImagePreviewView.OnReachBorderListener {
 
         @Override
         public int getCount() {
@@ -211,6 +212,7 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
             View view = LayoutInflater.from(container.getContext())
                     .inflate(R.layout.lay_gallery_page_item_contener, container, false);
             ImagePreviewView previewView = (ImagePreviewView) view.findViewById(R.id.iv_preview);
+            previewView.setOnReachBorderListener(this);
             final Loading loading = (Loading) view.findViewById(R.id.loading);
             getImageLoader().load(mImageSources[position])
                     .listener(new RequestListener<String, GlideDrawable>() {
@@ -235,6 +237,11 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
+        }
+
+        @Override
+        public void onReachBorder(boolean isReached) {
+            mImagePager.isInterceptable(isReached);
         }
     }
 }
