@@ -207,7 +207,7 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
 
     @Override
     public void onDestroy() {
-        if (requestCategory > CATEGORY_USER) {
+        if (requestCategory == CATEGORY_USER) {
             getActivity().unregisterReceiver(mReceiver);
         }
         super.onDestroy();
