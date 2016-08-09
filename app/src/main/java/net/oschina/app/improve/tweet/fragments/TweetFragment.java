@@ -133,8 +133,10 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
                 if (AppContext.getInstance().isLogin()) {
                     OSChinaApi.getUserTweetList(Long.parseLong(String.valueOf(AppContext.getInstance().getLoginUid())), mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
                 } else {
-                    mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-                    mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
+                    if (isAdded()) {
+                        mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+                        mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
+                    }
                 }
                 break;
         }
