@@ -101,7 +101,7 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
             }
         });
 
-        if (!AppContext.getInstance().isLogin()) {
+        if (!AppContext.getInstance().isLogin() && requestCategory == CATEGORY_USER) {
             if (isAdded()) {
                 mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
                 mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
