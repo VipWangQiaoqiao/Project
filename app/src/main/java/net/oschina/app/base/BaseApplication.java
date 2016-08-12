@@ -1,7 +1,5 @@
 package net.oschina.app.base;
 
-import com.squareup.leakcanary.LeakCanary;
-
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -105,7 +103,7 @@ public class BaseApplication extends Application {
      * 2015-2-9 下午2:22:04
      */
     public static String getLastRefreshTime(String key) {
-        return getPreferences(LAST_REFRESH_TIME).getString(key, StringUtils.getCurTimeStr());
+        return getPreferences(LAST_REFRESH_TIME).getString(key, StringUtils.getCurrentTimeStr());
     }
 
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)

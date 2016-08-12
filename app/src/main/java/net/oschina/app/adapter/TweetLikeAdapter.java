@@ -48,7 +48,7 @@ public class TweetLikeAdapter extends ListBaseAdapter<TweetLike> {
 
         vh.action.setText("赞了我的动弹");
 
-        vh.time.setText(StringUtils.friendly_time(item.getDatatime().trim()));
+        vh.time.setText(StringUtils.formatSomeAgo(item.getDatatime().trim()));
 
         PlatfromUtil.setPlatFromString(vh.from, item.getAppClient());
         vh.avatar.setUserInfo(item.getUser().getId(), item.getUser().getName());

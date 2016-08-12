@@ -47,7 +47,7 @@ public class SearchAdapter extends ListBaseAdapter<SearchResult> {
 		}
 		
 		if (!StringUtils.isEmpty(item.getPubDate())) {
-			vh.time.setText(StringUtils.friendly_time(item.getPubDate()));
+			vh.time.setText(StringUtils.formatSomeAgo(item.getPubDate()));
 		} else {
 			vh.time.setVisibility(View.GONE);
 		}

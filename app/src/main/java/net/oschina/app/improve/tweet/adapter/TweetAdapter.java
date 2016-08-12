@@ -103,7 +103,7 @@ public class TweetAdapter extends BaseListAdapter<Tweet> {
         });
 
         vh.setText(R.id.tv_tweet_name, item.getAuthor().getName());
-        vh.setText(R.id.tv_tweet_time, StringUtils.friendly_time(item.getPubDate()));
+        vh.setText(R.id.tv_tweet_time, StringUtils.formatSomeAgo(item.getPubDate()));
         PlatfromUtil.setPlatFromString((TextView) vh.getView(R.id.tv_tweet_platform), item.getAppClient());
         vh.setText(R.id.tv_tweet_like_count, String.valueOf(item.getLikeCount()));
         vh.setText(R.id.tv_tweet_comment_count, String.valueOf(item.getCommentCount()));

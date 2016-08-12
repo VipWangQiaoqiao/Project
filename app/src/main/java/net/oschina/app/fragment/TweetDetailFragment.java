@@ -186,7 +186,7 @@ public class TweetDetailFragment extends
         mIvAvatar.setAvatarUrl(mTweet.getPortrait());
         mIvAvatar.setUserInfo(mTweet.getAuthorid(), mTweet.getAuthor());
         mTvName.setText(mTweet.getAuthor());
-        mTvTime.setText(StringUtils.friendly_time(mTweet.getPubDate()));
+        mTvTime.setText(StringUtils.formatSomeAgo(mTweet.getPubDate()));
         PlatfromUtil.setPlatFromString(mTvFrom, mTweet.getAppclient());
 
         mTvCommentCount.setText(mTweet.getCommentCount() + "");

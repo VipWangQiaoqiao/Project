@@ -159,7 +159,7 @@ public class CommentsView extends LinearLayout implements View.OnClickListener {
         }
 
         ((TextView) lay.findViewById(R.id.tv_pub_date)).setText(
-                StringUtils.friendly_time(comment.getPubDate()));
+                StringUtils.formatSomeAgo(comment.getPubDate()));
 
         lay.findViewById(R.id.btn_comment).setOnClickListener(new OnClickListener() {
             @Override

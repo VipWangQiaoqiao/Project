@@ -80,7 +80,7 @@ public class PostAdapter extends ListBaseAdapter<Post> {
         }
 
         vh.author.setText(post.getAuthor());
-        vh.time.setText(StringUtils.friendly_time(post.getPubDate()));
+        vh.time.setText(StringUtils.formatSomeAgo(post.getPubDate()));
         vh.comment_count.setText(post.getAnswerCount() + "回 / "
                 + post.getViewCount() + "阅");
 

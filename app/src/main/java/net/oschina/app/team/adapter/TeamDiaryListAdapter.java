@@ -74,7 +74,7 @@ public class TeamDiaryListAdapter extends BaseAdapter {
         }
         holder.iv_face.setAvatarUrl(data.getAuthor().getPortrait());
         holder.tv_author.setText(data.getAuthor().getName());
-        holder.tv_date.setText(StringUtils.friendly_time(data.getCreateTime()));
+        holder.tv_date.setText(StringUtils.formatSomeAgo(data.getCreateTime()));
         holder.tv_count.setText(data.getReply() + "");
         holder.tv_title.setText(Html.fromHtml(data.getTitle()).toString()
                 .trim());

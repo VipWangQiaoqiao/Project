@@ -75,7 +75,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
                               byte[] responseBytes) {
             if (mCurrentPage == 0 && needAutoRefresh()) {
                 AppContext.putToLastRefreshTime(getCacheKey(),
-                        StringUtils.getCurTimeStr());
+                        StringUtils.getCurrentTimeStr());
             }
             if (isAdded()) {
                 if (mState == STATE_REFRESH) {
@@ -276,7 +276,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
     // 是否到时间去刷新数据了
     private boolean onTimeRefresh() {
         String lastRefreshTime = AppContext.getLastRefreshTime(getCacheKey());
-        String currTime = StringUtils.getCurTimeStr();
+        String currTime = StringUtils.getCurrentTimeStr();
         long diff = StringUtils.calDateDifferent(lastRefreshTime, currTime);
         return needAutoRefresh() && diff > getAutoRefreshTime();
     }

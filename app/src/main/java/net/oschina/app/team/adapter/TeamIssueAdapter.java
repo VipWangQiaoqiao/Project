@@ -47,10 +47,10 @@ public class TeamIssueAdapter extends ListBaseAdapter<TeamIssue> {
 
         vh.title.setText(item.getTitle());
 
-        String date = StringUtils.friendly_time2(item.getCreateTime());
+        String date = StringUtils.formatDayWeek(item.getCreateTime());
         String preDate = "";
         if (position > 0) {
-            preDate = StringUtils.friendly_time2(mDatas.get(position - 1)
+            preDate = StringUtils.formatDayWeek(mDatas.get(position - 1)
                     .getCreateTime());
         }
         if (preDate.equals(date)) {
@@ -75,7 +75,7 @@ public class TeamIssueAdapter extends ListBaseAdapter<TeamIssue> {
             vh.touser.setText(item.getToUser().getName());
         }
 
-        vh.time.setText(StringUtils.friendly_time(item.getCreateTime()));
+        vh.time.setText(StringUtils.formatSomeAgo(item.getCreateTime()));
         vh.comment.setText(item.getReplyCount() + "");
 
         if (item.getProject() != null && item.getProject().getGit() != null) {

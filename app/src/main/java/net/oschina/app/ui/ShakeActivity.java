@@ -137,7 +137,7 @@ public class ShakeActivity extends BaseActivity implements SensorEventListener {
                                 TypefaceUtils.setTypeFaceWithText(mTvCommentCount, R.string
                                         .fa_comment, obj.getCommentCount() + "");
                                 TypefaceUtils.setTypeFaceWithText(mTvDate, R.string.fa_clock_o,
-                                        StringUtils.friendly_time(obj.getPubDate()));
+                                        StringUtils.formatSomeAgo(obj.getPubDate()));
                             }
                         } else {
                             jokeToast();
