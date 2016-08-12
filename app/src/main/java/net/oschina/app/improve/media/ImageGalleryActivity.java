@@ -25,8 +25,6 @@ import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.tweet.service.PicturesCompress;
 import net.oschina.app.improve.utils.StreamUtils;
 import net.qiujuer.genius.ui.widget.Loading;
-import net.thanatosx.previewer.ImagePreviewView;
-import net.thanatosx.previewer.PreviewerViewPager;
 
 import java.io.File;
 import java.util.concurrent.ExecutionException;

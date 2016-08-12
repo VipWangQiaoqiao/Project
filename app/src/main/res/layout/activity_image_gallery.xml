@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/black">
 
-    <net.thanatosx.previewer.PreviewerViewPager
+    <net.oschina.app.improve.media.PreviewerViewPager
         android:id="@+id/vp_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

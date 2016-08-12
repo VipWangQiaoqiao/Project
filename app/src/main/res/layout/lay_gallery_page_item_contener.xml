@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <net.thanatosx.previewer.ImagePreviewView
+    <net.oschina.app.improve.media.ImagePreviewView
         android:id="@+id/iv_preview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

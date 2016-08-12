@@ -22,7 +22,7 @@
             app:expandedTitleTextAppearance="@android:color/transparent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
-            <net.thanatosx.solar.SolarSystemView
+            <net.oschina.app.improve.widget.SolarSystemView
                 android:id="@+id/view_solar_system"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
