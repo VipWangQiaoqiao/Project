@@ -98,7 +98,7 @@ public class EventDetailFragment extends CommonDetailFragment<Post> {
         // 添加title
         body.append(String.format("<div class='title'>%s</div>", mDetail.getTitle()));
         // 添加作者和时间
-        String time = StringUtils.friendly_time(mDetail.getPubDate());
+        String time = StringUtils.formatSomeAgo(mDetail.getPubDate());
         String author = String.format
                 ("<a class='author' href='http://my.oschina.net/u/%s'>%s</a>", mDetail
                         .getAuthorId(), mDetail.getAuthor());

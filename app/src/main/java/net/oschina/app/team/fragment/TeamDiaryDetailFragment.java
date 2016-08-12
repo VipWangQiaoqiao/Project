@@ -168,7 +168,7 @@ public class TeamDiaryDetailFragment extends BaseFragment implements
 
         UIHelper.initWebView(content);
         fillWebViewBody(content);
-        time.setText(StringUtils.friendly_time(diaryData.getCreateTime()));
+        time.setText(StringUtils.formatSomeAgo(diaryData.getCreateTime()));
         return headerView;
     }
 
@@ -251,7 +251,7 @@ public class TeamDiaryDetailFragment extends BaseFragment implements
                             name.setText(data.getAuthor().getName());
                             TextView time = (TextView) layout
                                     .findViewById(R.id.tv_time);
-                            time.setText(StringUtils.friendly_time(data
+                            time.setText(StringUtils.formatSomeAgo(data
                                     .getCreateTime()));
                             TextView content = (TextView) layout
                                     .findViewById(R.id.tv_content);

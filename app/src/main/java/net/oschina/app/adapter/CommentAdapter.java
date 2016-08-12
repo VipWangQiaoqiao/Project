@@ -62,7 +62,7 @@ public class CommentAdapter extends ListBaseAdapter<Comment> {
             vh.content.setText(span);
             MyURLSpan.parseLinkText(vh.content, span);
 
-            vh.time.setText(StringUtils.friendly_time(item.getPubDate()));
+            vh.time.setText(StringUtils.formatSomeAgo(item.getPubDate()));
 
             PlatfromUtil.setPlatFromString(vh.from, item.getAppClient());
 

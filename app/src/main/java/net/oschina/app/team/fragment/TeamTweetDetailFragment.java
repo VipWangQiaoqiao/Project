@@ -119,7 +119,7 @@ public class TeamTweetDetailFragment extends
 
         img_head.setAvatarUrl(active.getAuthor().getPortrait());
         tv_name.setText(active.getAuthor().getName());
-        tv_date.setText(StringUtils.friendly_time(active.getCreateTime()));
+        tv_date.setText(StringUtils.formatSomeAgo(active.getCreateTime()));
         tv_client.setText("Android");
         tv_client.setVisibility(View.GONE);
         String imgPath = active.getBody().getImage();

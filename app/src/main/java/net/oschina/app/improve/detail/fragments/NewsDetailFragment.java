@@ -152,14 +152,14 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         mTVAuthorName.setText(newsDetail.getAuthor());
         getImgLoader().load(newsDetail.getAuthorPortrait()).error(R.mipmap.widget_dface).into(mIVAuthorPortrait);
 
-        mTVPubDate.setText(StringUtils.friendly_time(newsDetail.getPubDate()));
+        mTVPubDate.setText(StringUtils.formatSomeAgo(newsDetail.getPubDate()));
 
         mTVTitle.setText(newsDetail.getTitle());
 
         toFavoriteOk(newsDetail);
 
         // setText(R.id.tv_info_view, String.valueOf(newsDetail.getViewCount()));
-        setText(R.id.tv_info_comment, StringUtils.friendlyTime(newsDetail.getPubDate()));
+        setText(R.id.tv_info_comment, StringUtils.formatYearMonthDay(newsDetail.getPubDate()));
 
         Software software = newsDetail.getSoftware();
         if (software != null) {

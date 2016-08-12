@@ -47,7 +47,7 @@ public class BlogDetailFragment extends CommonDetailFragment<Blog> {
         // 添加title
         body.append(String.format("<div class='title'>%s</div>", mDetail.getTitle()));
         // 添加作者和时间
-        String time = StringUtils.friendly_time(mDetail.getPubDate());
+        String time = StringUtils.formatSomeAgo(mDetail.getPubDate());
         String author = String.format("<a class='author' href='http://my.oschina.net/u/%s'>%s</a>", mDetail.getAuthorId(), mDetail.getAuthor());
         body.append(String.format("<div class='authortime'>%s&nbsp;&nbsp;&nbsp;&nbsp;%s</div>", author, time));
         // 添加图片点击放大支持

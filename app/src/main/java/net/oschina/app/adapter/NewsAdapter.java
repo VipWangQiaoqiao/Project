@@ -57,7 +57,7 @@ public class NewsAdapter extends ListBaseAdapter<News> {
         } else {
             vh.tip.setVisibility(View.GONE);
         }
-        vh.time.setText(StringUtils.friendly_time(news.getPubDate()));
+        vh.time.setText(StringUtils.formatSomeAgo(news.getPubDate()));
         vh.comment_count.setText(news.getCommentCount() + "");
 
         return convertView;

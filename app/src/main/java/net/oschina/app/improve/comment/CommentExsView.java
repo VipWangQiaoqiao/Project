@@ -160,7 +160,7 @@ public class CommentExsView extends LinearLayout implements View.OnClickListener
         }
 
         ((TextView) lay.findViewById(R.id.tv_pub_date)).setText(
-                StringUtils.friendly_time(comment.getPubDate()));
+                StringUtils.formatSomeAgo(comment.getPubDate()));
 
         ImageView btn_comment = (ImageView) lay.findViewById(R.id.btn_comment);
         if (comment.isBest()) {

@@ -108,7 +108,7 @@ public class UserActiveAdapter extends BaseRecyclerAdapter<Active> {
             vh.replyContent.setVisibility(TextView.GONE);
         }
 
-        vh.time.setText(StringUtils.friendly_time(item.getPubDate()));
+        vh.time.setText(StringUtils.formatSomeAgo(item.getPubDate()));
         vh.commentCount.setText(String.valueOf(item.getCommentCount()));
         reqManager.load(item.getPortrait())
                 .asBitmap()

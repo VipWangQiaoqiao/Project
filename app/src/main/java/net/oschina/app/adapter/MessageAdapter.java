@@ -57,7 +57,7 @@ public class MessageAdapter extends ListBaseAdapter<Messages> {
         vh.content.setText(span);
         MyURLSpan.parseLinkText(vh.content, span);
 
-        vh.time.setText(StringUtils.friendly_time(item.getPubDate()));
+        vh.time.setText(StringUtils.formatSomeAgo(item.getPubDate()));
         vh.count.setText(parent.getResources().getString(
                 R.string.message_count, item.getMessageCount()));
 

@@ -68,7 +68,7 @@ public class TeamDiscussAdapter extends ListBaseAdapter<TeamDiscuss> {
         vh.description.setVisibility(View.VISIBLE);
         vh.description.setText(HTMLUtil.replaceTag(body));
         vh.author.setText(item.getAuthor().getName());
-        vh.time.setText(StringUtils.friendly_time(item.getCreateTime()));
+        vh.time.setText(StringUtils.formatSomeAgo(item.getCreateTime()));
         vh.vote_up.setText(item.getVoteUp() + "");
         vh.comment_count.setText(item.getAnswerCount() + "");
         return convertView;

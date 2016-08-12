@@ -16,7 +16,6 @@ import net.oschina.app.R;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.simple.TweetComment;
-import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.TweetTextView;
@@ -63,7 +62,7 @@ public class TweetCommentAdapter extends BaseRecyclerAdapter<TweetComment> {
 
         h.tvName.setText(item.getAuthor().getName());
         h.tvContent.setText(InputHelper.displayEmoji(mContext.getResources(), item.getContent()));
-        h.tvTime.setText(StringUtils.friendly_time(item.getPubDate()));
+        h.tvTime.setText(StringUtils.formatSomeAgo(item.getPubDate()));
     }
 
     private View.OnClickListener getOnPortraitClickListener() {
