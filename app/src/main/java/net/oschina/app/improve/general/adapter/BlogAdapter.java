@@ -24,8 +24,6 @@ import net.oschina.app.util.StringUtils;
  */
 public class BlogAdapter extends BaseListAdapter<Blog> {
 
-    public static final String TAG = "BlogAdapter";
-
     private boolean isUserBlog;
     private int actionPosition = 0;
 
