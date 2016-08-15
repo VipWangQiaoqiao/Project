@@ -315,7 +315,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
             tvNick.setText(tweet.getAuthor().getName());
         }
         if (!TextUtils.isEmpty(tweet.getPubDate()))
-            tvTime.setText(StringUtils.friendly_time(tweet.getPubDate()));
+            tvTime.setText(StringUtils.formatSomeAgo(tweet.getPubDate()));
         PlatfromUtil.setPlatFromString(tvClient, tweet.getAppClient());
         if (tweet.isLiked()) {
             ivThumbup.setSelected(true);

@@ -144,7 +144,7 @@ public class TeamDiscussDetailFragment extends
         // 添加title
         body.append(String.format("<div class='title'>%s</div>", detailBean.getTitle()));
         // 添加作者和时间
-        String time = StringUtils.friendly_time(detailBean.getCreateTime());
+        String time = StringUtils.formatSomeAgo(detailBean.getCreateTime());
         String author = String.format("<a class='author' href='http://my.oschina.net/u/%s'>%s</a>", detailBean.getAuthor().getId(), detailBean.getAuthor().getName());
         String answerCountAndVoteup = detailBean.getVoteUp() + "赞/"
                 + detailBean.getAnswerCount() + "回";

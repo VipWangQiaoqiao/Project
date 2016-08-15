@@ -855,7 +855,7 @@ public class SelectFriendsActivity extends BaseActivity {
 
         if (fromCache) {
             String lastRefreshTime = AppContext.getLastRefreshTime(cacheKey);
-            String currTime = StringUtils.getCurTimeStr();
+            String currTime = StringUtils.getCurrentTimeStr();
             long diff = StringUtils.calDateDifferent(lastRefreshTime, currTime);
             if (diff > CACHE_TIME) { //缓存超过有效时间，则重新请求数据
                 requestData(true);
@@ -1000,7 +1000,7 @@ public class SelectFriendsActivity extends BaseActivity {
                         //保存缓存结果
                         CacheManager.saveObject(applicationContext, newList, cacheKey);
                         //记录保存时间
-                        AppContext.putToLastRefreshTime(cacheKey, StringUtils.getCurTimeStr());
+                        AppContext.putToLastRefreshTime(cacheKey, StringUtils.getCurrentTimeStr());
                         return newList;
                     } catch (Exception e) {
                         e.printStackTrace();

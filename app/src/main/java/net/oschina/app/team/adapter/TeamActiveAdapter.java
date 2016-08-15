@@ -73,10 +73,10 @@ public class TeamActiveAdapter extends ListBaseAdapter<TeamActive> {
         holder.tv_name.setText(data.getAuthor().getName());
         setContent(holder.tv_content, stripTags(data.getBody().getTitle()));
 
-        String date = StringUtils.friendly_time2(data.getCreateTime());
+        String date = StringUtils.formatDayWeek(data.getCreateTime());
         String preDate = "";
         if (position > 0) {
-            preDate = StringUtils.friendly_time2(mDatas.get(position - 1)
+            preDate = StringUtils.formatDayWeek(mDatas.get(position - 1)
                     .getCreateTime());
         }
         if (preDate.equals(date)) {
@@ -87,7 +87,7 @@ public class TeamActiveAdapter extends ListBaseAdapter<TeamActive> {
         }
 
         holder.tv_content.setMaxLines(3);
-        holder.tv_date.setText(StringUtils.friendly_time(data.getCreateTime()));
+        holder.tv_date.setText(StringUtils.formatSomeAgo(data.getCreateTime()));
         holder.tv_commit.setText(data.getReply());
 
         String imgPath = data.getBody().getImage();

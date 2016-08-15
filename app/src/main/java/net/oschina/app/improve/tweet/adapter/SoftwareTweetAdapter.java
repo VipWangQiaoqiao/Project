@@ -68,7 +68,7 @@ public class SoftwareTweetAdapter extends BaseRecyclerAdapter<Tweet> implements 
         vh.icon.setOnClickListener(this);
         vh.name.setText(item.getAuthor().getName());
         CommentsUtil.formatHtml(mContext.getResources(), vh.content, item.getContent());
-        vh.pubTime.setText(StringUtils.friendly_time(item.getPubDate()));
+        vh.pubTime.setText(StringUtils.formatSomeAgo(item.getPubDate()));
         PlatfromUtil.setPlatFromString(vh.deviceType, item.getAppClient());
         boolean liked = item.isLiked();
         if (liked) {

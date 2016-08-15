@@ -65,7 +65,7 @@ public class QuestionAdapter extends BaseListAdapter<Question> {
         String author = item.getAuthor();
         if (author != null) {
             author = author.trim();
-            history.setText((author.length() > 9 ? author.substring(0, 9) : author.trim()) + "  " + StringUtils.friendly_time(item.getPubDate().trim()));
+            history.setText((author.length() > 9 ? author.substring(0, 9) : author.trim()) + "  " + StringUtils.formatSomeAgo(item.getPubDate().trim()));
         }
         TextView see = vh.getView(R.id.tv_info_view);
         see.setText(item.getViewCount() + "");

@@ -131,7 +131,7 @@ public class ActiveAdapter extends ListBaseAdapter {
             vh.lyReply.setVisibility(TextView.GONE);
         }
 
-        vh.time.setText(StringUtils.friendly_time(item.getPubDate()));
+        vh.time.setText(StringUtils.formatSomeAgo(item.getPubDate()));
 
         PlatfromUtil.setPlatFromString(vh.from, item.getAppClient());
 

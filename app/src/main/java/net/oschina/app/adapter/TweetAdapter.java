@@ -4,10 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ImageSpan;
@@ -34,7 +32,6 @@ import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.AvatarView;
-import net.oschina.app.widget.MyLinkMovementMethod;
 import net.oschina.app.widget.TweetTextView;
 
 import org.kymjs.kjframe.Core;
@@ -127,7 +124,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         vh.face.setUserInfo(tweet.getAuthorid(), tweet.getAuthor());
         vh.face.setAvatarUrl(tweet.getPortrait());
         vh.author.setText(tweet.getAuthor());
-        vh.time.setText(StringUtils.friendly_time(tweet.getPubDate()));
+        vh.time.setText(StringUtils.formatSomeAgo(tweet.getPubDate()));
         vh.tv_tweet_like_count.setText(String.valueOf(tweet.getLikeCount()));
 
         vh.content.setMovementMethod(LinkMovementMethod.getInstance());

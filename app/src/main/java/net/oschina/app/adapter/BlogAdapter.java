@@ -83,7 +83,7 @@ public class BlogAdapter extends ListBaseAdapter<Blog> {
         }
 
         vh.source.setText(blog.getAuthor());
-        vh.time.setText(StringUtils.friendly_time(blog.getPubDate()));
+        vh.time.setText(StringUtils.formatSomeAgo(blog.getPubDate()));
         vh.comment_count.setText(blog.getCommentCount() + "");
         return convertView;
     }

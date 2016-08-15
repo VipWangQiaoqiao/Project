@@ -100,6 +100,13 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
                 return true;
             }
         });
+
+        if (!AppContext.getInstance().isLogin() && requestCategory == CATEGORY_USER) {
+            if (isAdded()) {
+                mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+                mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
+            }
+        }
     }
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -132,9 +139,6 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
             case CATEGORY_USER:
                 if (AppContext.getInstance().isLogin()) {
                     OSChinaApi.getUserTweetList(Long.parseLong(String.valueOf(AppContext.getInstance().getLoginUid())), mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
-                } else {
-                    mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-                    mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
                 }
                 break;
         }

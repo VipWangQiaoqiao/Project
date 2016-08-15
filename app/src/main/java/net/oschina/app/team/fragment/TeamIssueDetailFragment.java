@@ -571,7 +571,7 @@ public class TeamIssueDetailFragment extends BaseFragment implements
         TextView content = (TextView) cell.findViewById(R.id.tv_content);
         content.setText(HTMLUtil.delHTMLTag(reply.getContent()));
         TextView time = (TextView) cell.findViewById(R.id.tv_time);
-        time.setText(StringUtils.friendly_time(reply.getCreateTime()));
+        time.setText(StringUtils.formatSomeAgo(reply.getCreateTime()));
         mLLComments.addView(cell);
     }
 

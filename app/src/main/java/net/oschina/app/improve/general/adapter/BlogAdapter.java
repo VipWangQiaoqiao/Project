@@ -110,7 +110,7 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
         if (!TextUtils.isEmpty(author)) {
             author = author.trim();
             history.setText((author.length() > 9 ? author.substring(0, 9) : author) +
-                    "  " + StringUtils.friendly_time(item.getPubDate().trim()));
+                    "  " + StringUtils.formatSomeAgo(item.getPubDate().trim()));
         }
 
         see.setText(item.getViewCount() + "");

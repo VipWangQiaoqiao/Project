@@ -44,7 +44,7 @@ public class TeamReplyAdapter extends ListBaseAdapter<TeamReply> {
 	vh.name.setText(item.getAuthor().getName());
 	vh.avatar.setAvatarUrl(item.getAuthor().getPortrait());
 	setContent(vh.content, HTMLUtil.delHTMLTag(item.getContent()));
-	vh.time.setText(StringUtils.friendly_time(item.getCreateTime()));
+	vh.time.setText(StringUtils.formatSomeAgo(item.getCreateTime()));
 
 	if (StringUtils.isEmpty(item.getAppName())) {
 	    vh.from.setVisibility(View.GONE);
@@ -86,7 +86,7 @@ public class TeamReplyAdapter extends ListBaseAdapter<TeamReply> {
 		TweetTextView content = (TweetTextView) replyItemView.findViewById(R.id.tv_content);
 		setContent(content, HTMLUtil.delHTMLTag(teamReply.getContent()));
 		TextView time = (TextView) replyItemView.findViewById(R.id.tv_time);
-		time.setText(StringUtils.friendly_time(teamReply.getCreateTime()));
+		time.setText(StringUtils.formatSomeAgo(teamReply.getCreateTime()));
 		TextView from = (TextView) replyItemView.findViewById(R.id.tv_from);
 		if (StringUtils.isEmpty(teamReply.getAppName())) {
 		    from.setVisibility(View.GONE);

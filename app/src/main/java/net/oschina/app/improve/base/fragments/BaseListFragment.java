@@ -72,7 +72,7 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements
         mFooterText = (TextView) mFooterView.findViewById(R.id.tv_footer);
         mFooterProgressBar = (ProgressBar) mFooterView.findViewById(R.id.pb_footer);
         mListView.setOnItemClickListener(this);
-        setFooterType(TYPE_LOADING);
+
         mErrorLayout.setOnLayoutClickListener(this);
         if (isNeedFooter())
             mListView.addFooterView(mFooterView);
@@ -262,24 +262,26 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements
     }
 
     protected void setFooterType(int type) {
-        switch (type) {
-            case TYPE_NORMAL:
-            case TYPE_LOADING:
-                mFooterText.setText(getResources().getString(R.string.footer_type_loading));
-                mFooterProgressBar.setVisibility(View.VISIBLE);
-                break;
-            case TYPE_NET_ERROR:
-                mFooterText.setText(getResources().getString(R.string.footer_type_net_error));
-                mFooterProgressBar.setVisibility(View.GONE);
-                break;
-            case TYPE_ERROR:
-                mFooterText.setText(getResources().getString(R.string.footer_type_error));
-                mFooterProgressBar.setVisibility(View.GONE);
-                break;
-            case TYPE_NO_MORE:
-                mFooterText.setText(getResources().getString(R.string.footer_type_not_more));
-                mFooterProgressBar.setVisibility(View.GONE);
-                break;
+        if (mRoot != null && isAdded()) {
+            switch (type) {
+                case TYPE_NORMAL:
+                case TYPE_LOADING:
+                    mFooterText.setText(getResources().getString(R.string.footer_type_loading));
+                    mFooterProgressBar.setVisibility(View.VISIBLE);
+                    break;
+                case TYPE_NET_ERROR:
+                    mFooterText.setText(getResources().getString(R.string.footer_type_net_error));
+                    mFooterProgressBar.setVisibility(View.GONE);
+                    break;
+                case TYPE_ERROR:
+                    mFooterText.setText(getResources().getString(R.string.footer_type_error));
+                    mFooterProgressBar.setVisibility(View.GONE);
+                    break;
+                case TYPE_NO_MORE:
+                    mFooterText.setText(getResources().getString(R.string.footer_type_not_more));
+                    mFooterProgressBar.setVisibility(View.GONE);
+                    break;
+            }
         }
     }
 }

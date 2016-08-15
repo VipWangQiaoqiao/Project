@@ -212,7 +212,7 @@ public class MyInformationFragmentDetail extends BaseFragment implements EasyPer
         Core.getKJBitmap().displayWithLoadBitmap(mUserFace, mUser.getPortrait(),
                 R.mipmap.widget_dface);
         mName.setText(mUser.getName());
-        mJoinTime.setText(StringUtils.friendly_time(mUser.getJointime()));
+        mJoinTime.setText(StringUtils.formatSomeAgo(mUser.getJointime()));
         mFrom.setText(mUser.getFrom());
         mPlatFrom.setText(mUser.getDevplatform());
         mFocus.setText(mUser.getExpertise());
