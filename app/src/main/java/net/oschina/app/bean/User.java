@@ -27,8 +27,8 @@ public class User extends Entity {
 
     public final static int RELATION_TYPE_APIV2_BOTH = 0x01;// 双方互为粉丝
     public final static int RELATION_TYPE_APIV2_ONLY_FANS_HIM = 0x02;// 你单方面关注他
-    public final static int RELATION_TYPE_APIV2_NULL = 0x03;// 只有他关注我
-    public final static int RELATION_TYPE_APIV2_ONLY_FANS_ME = 0x04;// 互不关注
+    public final static int RELATION_TYPE_APIV2_ONLY_FANS_ME = 0x03;// 只有他关注我
+    public final static int RELATION_TYPE_APIV2_NULL = 0x04;// 互不关注
 
     @XStreamAlias("uid")
     private int id;
