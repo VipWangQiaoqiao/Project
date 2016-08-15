@@ -54,12 +54,23 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
 
     public int requestCategory;//请求类型
     public int tweetType;
+    public long authorId;
+
+    public static TweetFragment getInstance(long authorId) {
+        TweetFragment fragment = new TweetFragment();
+        Bundle bundle = new Bundle();
+        bundle.putLong("authorId", authorId);
+        bundle.putInt("requestCategory", CATEGORY_USER);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     @Override
     protected void initBundle(Bundle bundle) {
         super.initBundle(bundle);
         requestCategory = bundle.getInt("requestCategory", CATEGORY_TYPE);
         tweetType = bundle.getInt("tweetType", TWEET_TYPE_NEW);
+        authorId = bundle.getLong("authorId", Long.parseLong(String.valueOf(AppContext.getInstance().getLoginUid())));
     }
 
     /**
@@ -72,6 +83,7 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
         super.onRestartInstance(bundle);
         requestCategory = bundle.getInt("requestCategory", 1);
         tweetType = bundle.getInt("tweetType", 1);
+        authorId = bundle.getLong("authorId", Long.parseLong(String.valueOf(AppContext.getInstance().getLoginUid())));
     }
 
     @Override
@@ -101,7 +113,7 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
             }
         });
 
-        if (!AppContext.getInstance().isLogin() && requestCategory == CATEGORY_USER) {
+        if (authorId == 0 && requestCategory == CATEGORY_USER) {
             if (isAdded()) {
                 mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
                 mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
@@ -120,6 +132,7 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
 
     private void setupContent() {
         if (AppContext.getInstance().isLogin()) {
+            authorId = Long.parseLong(String.valueOf(AppContext.getInstance().getLoginUid()));
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
             onRefreshing();
         } else {
@@ -137,8 +150,8 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
                 OSChinaApi.getTweetList(tweetType, mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
                 break;
             case CATEGORY_USER:
-                if (AppContext.getInstance().isLogin()) {
-                    OSChinaApi.getUserTweetList(Long.parseLong(String.valueOf(AppContext.getInstance().getLoginUid())), mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
+                if (authorId != 0) {
+                    OSChinaApi.getUserTweetList(authorId, mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
                 }
                 break;
         }
@@ -206,6 +219,7 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
     public void onSaveInstanceState(Bundle outState) {
         outState.putInt("requestCategory", requestCategory);
         outState.putInt("tweetType", tweetType);
+        outState.putLong("authorId", authorId);
         super.onSaveInstanceState(outState);
     }
 
