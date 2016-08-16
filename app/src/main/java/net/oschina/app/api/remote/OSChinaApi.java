@@ -1643,4 +1643,60 @@ public class OSChinaApi {
         params.put("sourceId", sourceId);
         ApiHttpClient.get("action/apiv2/tweet_delete", params, handler);
     }
+
+    /**
+     * 获取消息列表
+     *
+     * @param authorId  authorId 用户id，不加该参数时返回所有给我发送消息的列表
+     * @param pageToken pageToken
+     * @param handler   回调
+     */
+    public static void getMessageList(long authorId, String pageToken, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        if (authorId != 0)
+            params.put("authorId", authorId);
+        if (!TextUtils.isEmpty(pageToken))
+            params.put("pageToken", pageToken);
+        ApiHttpClient.get("action/apiv2/messages", params, handler);
+    }
+
+    /**
+     * 发送消息
+     *
+     * @param authorId 接收者
+     * @param content  发送内容
+     * @param handler  回调
+     */
+    public static void pubMessage(long authorId, String content, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("authorId", authorId);
+        params.put("pageToken", content);
+        ApiHttpClient.get("action/apiv2/messages_pub", params, handler);
+    }
+
+    /**
+     * 获取AT我的列表。
+     *
+     * @param pageToken pageToken
+     * @param handler   回调
+     */
+    public static void getMsgMentionList(String pageToken, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        if (!TextUtils.isEmpty(pageToken))
+            params.put("pageToken", pageToken);
+        ApiHttpClient.get("action/apiv2/user_msg_mentions", params, handler);
+    }
+
+    /**
+     * 评论我的列表
+     *
+     * @param pageToken pageToken
+     * @param handler   回调
+     */
+    public static void getMsgCommentList(String pageToken, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        if (!TextUtils.isEmpty(pageToken))
+            params.put("pageToken", pageToken);
+        ApiHttpClient.get("action/apiv2/user_msg_comments", params, handler);
+    }
 }
