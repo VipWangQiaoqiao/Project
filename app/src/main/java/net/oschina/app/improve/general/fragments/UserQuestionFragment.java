@@ -15,7 +15,7 @@ import net.oschina.app.improve.base.fragments.BaseListFragment;
 import net.oschina.app.improve.bean.Question;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.detail.activities.BlogDetailActivity;
+import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
 import net.oschina.app.improve.general.adapter.QuestionAdapter;
 
 import java.lang.reflect.Type;
@@ -27,13 +27,13 @@ import java.lang.reflect.Type;
 public class UserQuestionFragment extends BaseListFragment<Question> {
 
     public static final String HISTORY_MY_QUESTION = "history_my_question";
-    public static final String USER_ID = "authorId";
+    public static final String AUTHOR_ID = "author_id";
     private int userId;
 
     @Override
     protected void initBundle(Bundle bundle) {
         super.initBundle(bundle);
-        userId = bundle.getInt(USER_ID, 0);
+        userId = bundle.getInt(AUTHOR_ID, 0);
         // mIsRefresh = false;
     }
 
@@ -48,7 +48,7 @@ public class UserQuestionFragment extends BaseListFragment<Question> {
 
         UserQuestionFragment fragment = new UserQuestionFragment();
         Bundle bundle = new Bundle();
-        bundle.putLong("authorId", authorId);
+        bundle.putLong(AUTHOR_ID, authorId);
         fragment.setArguments(bundle);
 
         return fragment;
@@ -82,7 +82,7 @@ public class UserQuestionFragment extends BaseListFragment<Question> {
 
         Question question = mAdapter.getItem(position);
         if (question != null) {
-            BlogDetailActivity.show(getActivity(), question.getId());
+            QuestionDetailActivity.show(getActivity(), question.getId());
             TextView title = (TextView) view.findViewById(R.id.tv_item_blog_title);
             TextView content = (TextView) view.findViewById(R.id.tv_item_blog_body);
 
