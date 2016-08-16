@@ -10,6 +10,7 @@ import net.oschina.app.adapter.ViewHolder;
 import net.oschina.app.improve.base.adapter.BaseListAdapter;
 import net.oschina.app.improve.bean.Question;
 import net.oschina.app.improve.general.fragments.QuestionFragment;
+import net.oschina.app.improve.general.fragments.UserQuestionFragment;
 import net.oschina.app.util.StringUtils;
 
 /**
@@ -19,9 +20,14 @@ import net.oschina.app.util.StringUtils;
 public class QuestionAdapter extends BaseListAdapter<Question> {
 
     private int actionPosition = 0;
+    private boolean isUserQuestion;
 
     public void setActionPosition(int actionPosition) {
         this.actionPosition = actionPosition;
+    }
+
+    public void setUserQuestion(boolean userQuestion) {
+        this.isUserQuestion = userQuestion;
     }
 
     public QuestionAdapter(Callback callback) {
@@ -52,8 +58,13 @@ public class QuestionAdapter extends BaseListAdapter<Question> {
             }
         }
 
-        String fileName = verifyFileName();
-        if (AppContext.isOnReadedPostList(fileName, item.getId() + "")) {
+        String cacheName = verifyFileName();
+
+        if (isUserQuestion) {
+            cacheName = UserQuestionFragment.HISTORY_MY_QUESTION;
+        }
+
+        if (AppContext.isOnReadedPostList(cacheName, item.getId() + "")) {
             title.setTextColor(mCallback.getContext().getResources().getColor(R.color.count_text_color_light));
             content.setTextColor(mCallback.getContext().getResources().getColor(R.color.count_text_color_light));
         } else {
@@ -95,6 +106,5 @@ public class QuestionAdapter extends BaseListAdapter<Question> {
                 return QuestionFragment.QUES_ASK;
         }
     }
-
 
 }

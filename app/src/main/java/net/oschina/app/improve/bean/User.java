@@ -1,20 +1,19 @@
 package net.oschina.app.improve.bean;
 
+import net.oschina.app.improve.bean.simple.Author;
+
 import java.io.Serializable;
 
 /**
  * Created by thanatos on 16/8/15.
  */
-public class User implements Serializable{
+public class User extends Author{
 
     public static final int RELATION_TYPE_BOTH = 0x01;// 双方互为粉丝
     public static final int RELATION_TYPE_ONLY_FANS_HIM = 0x02;// 你单方面关注他
     public static final int RELATION_TYPE_ONLY_FANS_ME = 0x03;// 只有他关注我
     public static final int RELATION_TYPE_NULL = 0x04;// 互不关注
 
-    private long id;
-    private String name;
-    private String portrait;
     private String desc;
     private int score;
     private int gender;
@@ -25,30 +24,6 @@ public class User implements Serializable{
     private int answerCount;
     private int discussCount;
     private int relation;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPortrait() {
-        return portrait;
-    }
-
-    public void setPortrait(String portrait) {
-        this.portrait = portrait;
-    }
 
     public String getDesc() {
         return desc;

@@ -1179,21 +1179,35 @@ public class OSChinaApi {
     /**
      * 请求用户自己的博客列表
      *
-     * @param catalog   博客类别 {@link #CATALOG_BLOG_NORMAL, #CATALOG_BLOG_HEAT}
      * @param pageToken 请求上下页数据令牌
      * @param handler   AsyncHttpResponseHandler
      */
-    public static void getUserBlogList(int catalog, String pageToken, int userId, AsyncHttpResponseHandler handler) {
-        if (catalog <= 0)
-            catalog = 1;
+    public static void getUserBlogList(String pageToken, int userId, AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
-        params.put("catalog", catalog);
+
         if (!TextUtils.isEmpty(pageToken)) {
             params.put("pageToken", pageToken);
         }
         if (userId <= 0) return;
-        params.put("userId", userId);
+        params.put("authorId", userId);
         ApiHttpClient.get("action/apiv2/blog", params, handler);
+    }
+
+    /**
+     * 请求用户自己的博客列表
+     *
+     * @param pageToken 请求上下页数据令牌
+     * @param handler   AsyncHttpResponseHandler
+     */
+    public static void getUserQuestionList(String pageToken, int userId, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+
+        if (!TextUtils.isEmpty(pageToken)) {
+            params.put("pageToken", pageToken);
+        }
+        if (userId <= 0) return;
+        params.put("authorId", userId);
+        ApiHttpClient.get("action/apiv2/question", params, handler);
     }
 
 
@@ -1628,5 +1642,61 @@ public class OSChinaApi {
         RequestParams params = new RequestParams();
         params.put("sourceId", sourceId);
         ApiHttpClient.get("action/apiv2/tweet_delete", params, handler);
+    }
+
+    /**
+     * 获取消息列表
+     *
+     * @param authorId  authorId 用户id，不加该参数时返回所有给我发送消息的列表
+     * @param pageToken pageToken
+     * @param handler   回调
+     */
+    public static void getMessageList(long authorId, String pageToken, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        if (authorId != 0)
+            params.put("authorId", authorId);
+        if (!TextUtils.isEmpty(pageToken))
+            params.put("pageToken", pageToken);
+        ApiHttpClient.get("action/apiv2/messages", params, handler);
+    }
+
+    /**
+     * 发送消息
+     *
+     * @param authorId 接收者
+     * @param content  发送内容
+     * @param handler  回调
+     */
+    public static void pubMessage(long authorId, String content, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("authorId", authorId);
+        params.put("pageToken", content);
+        ApiHttpClient.get("action/apiv2/messages_pub", params, handler);
+    }
+
+    /**
+     * 获取AT我的列表。
+     *
+     * @param pageToken pageToken
+     * @param handler   回调
+     */
+    public static void getMsgMentionList(String pageToken, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        if (!TextUtils.isEmpty(pageToken))
+            params.put("pageToken", pageToken);
+        ApiHttpClient.get("action/apiv2/user_msg_mentions", params, handler);
+    }
+
+    /**
+     * 评论我的列表
+     *
+     * @param pageToken pageToken
+     * @param handler   回调
+     */
+    public static void getMsgCommentList(String pageToken, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        if (!TextUtils.isEmpty(pageToken))
+            params.put("pageToken", pageToken);
+        ApiHttpClient.get("action/apiv2/user_msg_comments", params, handler);
     }
 }

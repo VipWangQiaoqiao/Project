@@ -23,8 +23,6 @@ import butterknife.OnClick;
 public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftDetailContract.View, SoftDetailContract.Operator>
         implements View.OnClickListener, SoftDetailContract.View {
 
-    private long mId;
-
     @Bind(R.id.iv_label_recommend)
     ImageView ivRecomment;
 
@@ -94,10 +92,10 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
     @Override
     protected void initData() {
         final SoftwareDetail softwareDetail = mOperator.getData();
-        if (softwareDetail == null)
-            return;
 
-        mId = softwareDetail.getId();
+        if (softwareDetail == null) {
+            return;
+        }
 
         if (softwareDetail.isRecommend()) {
             ivRecomment.setVisibility(View.VISIBLE);
