@@ -27,7 +27,7 @@ import java.lang.reflect.Type;
 public class UserQuestionFragment extends BaseListFragment<Question> {
 
     public static final String HISTORY_MY_QUESTION = "history_my_question";
-    public static final String USER_ID = "user_id";
+    public static final String USER_ID = "authorId";
     private int userId;
 
     @Override
@@ -37,6 +37,22 @@ public class UserQuestionFragment extends BaseListFragment<Question> {
         // mIsRefresh = false;
     }
 
+
+    /**
+     * instantiate fragment
+     *
+     * @param authorId authorId
+     * @return fragment
+     */
+    public static UserQuestionFragment instantiate(int authorId) {
+
+        UserQuestionFragment fragment = new UserQuestionFragment();
+        Bundle bundle = new Bundle();
+        bundle.putLong("authorId", authorId);
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
 
     @Override
     protected void requestData() {
