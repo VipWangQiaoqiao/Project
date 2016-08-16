@@ -53,21 +53,19 @@
                 android:layout_weight="1"
                 android:background="@drawable/btn_tweet_queue_opt_continue"
                 android:paddingBottom="@dimen/lay_8"
-                android:paddingLeft="@dimen/lay_16"
-                android:paddingRight="@dimen/lay_16"
+                android:paddingLeft="@dimen/lay_8"
+                android:paddingRight="@dimen/lay_8"
                 android:paddingTop="@dimen/lay_8"
                 android:text="继续发送"
-                android:textColor="@color/white_alpha_240"
+                android:textColor="#111"
                 android:textSize="@dimen/font_12"
-                app:gTouchCornerRadiusBL="4dp"
-                app:gTouchCornerRadiusBR="0dp"
-                app:gTouchCornerRadiusTL="4dp"
-                app:gTouchCornerRadiusTR="0dp" />
+                app:gTouchEffect="none" />
 
             <net.qiujuer.genius.ui.widget.Button
                 android:id="@+id/btn_delete"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
                 android:layout_weight="1"
                 android:background="@drawable/btn_tweet_queue_opt_delete"
                 android:paddingBottom="@dimen/lay_8"
@@ -75,12 +73,9 @@
                 android:paddingRight="@dimen/lay_16"
                 android:paddingTop="@dimen/lay_8"
                 android:text="放弃"
-                android:textColor="@color/white_alpha_240"
+                android:textColor="@color/red_400"
                 android:textSize="@dimen/font_12"
-                app:gTouchCornerRadiusBL="0dp"
-                app:gTouchCornerRadiusBR="4dp"
-                app:gTouchCornerRadiusTL="0dp"
-                app:gTouchCornerRadiusTR="4dp" />
+                app:gTouchEffect="none" />
         </LinearLayout>
 
     </LinearLayout>

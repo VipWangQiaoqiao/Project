@@ -64,7 +64,7 @@ public class TweetQueueAdapter extends RecyclerView.Adapter<TweetQueueAdapter.Ho
 
     @Override
     public void onBindViewHolder(final Holder holder, int position) {
-        holder.bind(position, mModels.get(position), mCallback.getImgLoader());
+        holder.bind(position, mModels.get(position), mCallback.getImageLoader());
     }
 
     @Override
@@ -88,7 +88,7 @@ public class TweetQueueAdapter extends RecyclerView.Adapter<TweetQueueAdapter.Ho
 
 
     public interface Callback {
-        RequestManager getImgLoader();
+        RequestManager getImageLoader();
 
         void onClickContinue(TweetPublishModel model);
 
