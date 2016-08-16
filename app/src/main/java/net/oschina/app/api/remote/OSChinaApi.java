@@ -1179,21 +1179,35 @@ public class OSChinaApi {
     /**
      * 请求用户自己的博客列表
      *
-     * @param catalog   博客类别 {@link #CATALOG_BLOG_NORMAL, #CATALOG_BLOG_HEAT}
      * @param pageToken 请求上下页数据令牌
      * @param handler   AsyncHttpResponseHandler
      */
-    public static void getUserBlogList(int catalog, String pageToken, int userId, AsyncHttpResponseHandler handler) {
-        if (catalog <= 0)
-            catalog = 1;
+    public static void getUserBlogList(String pageToken, int userId, AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
-        params.put("catalog", catalog);
+
         if (!TextUtils.isEmpty(pageToken)) {
             params.put("pageToken", pageToken);
         }
         if (userId <= 0) return;
-        params.put("userId", userId);
+        params.put("authorId", userId);
         ApiHttpClient.get("action/apiv2/blog", params, handler);
+    }
+
+    /**
+     * 请求用户自己的博客列表
+     *
+     * @param pageToken 请求上下页数据令牌
+     * @param handler   AsyncHttpResponseHandler
+     */
+    public static void getUserQuestionList(String pageToken, int userId, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+
+        if (!TextUtils.isEmpty(pageToken)) {
+            params.put("pageToken", pageToken);
+        }
+        if (userId <= 0) return;
+        params.put("authorId", userId);
+        ApiHttpClient.get("action/apiv2/question", params, handler);
     }
 
 

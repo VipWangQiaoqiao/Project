@@ -1,4 +1,4 @@
-package net.oschina.app.improve.user.fragments;
+package net.oschina.app.improve.general.fragments;
 
 
 import android.os.Bundle;
@@ -12,21 +12,21 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.base.adapter.BaseListAdapter;
 import net.oschina.app.improve.base.fragments.BaseListFragment;
-import net.oschina.app.improve.bean.Blog;
+import net.oschina.app.improve.bean.Question;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.detail.activities.BlogDetailActivity;
-import net.oschina.app.improve.general.adapter.BlogAdapter;
+import net.oschina.app.improve.general.adapter.QuestionAdapter;
 
 import java.lang.reflect.Type;
 
 /**
  * created by fei  on 2016/8/16.
- * desc: question list module
+ * desc:user question list module
  */
-public class UserBlogFragment extends BaseListFragment<Blog> {
+public class UserQuestionFragment extends BaseListFragment<Question> {
 
-    public static final String HISTORY_BLOG = "history_my_blog";
+    public static final String HISTORY_MY_QUESTION = "history_my_question";
     public static final String USER_ID = "user_id";
     private int userId;
 
@@ -42,36 +42,36 @@ public class UserBlogFragment extends BaseListFragment<Blog> {
     protected void requestData() {
         super.requestData();
 
-        OSChinaApi.getUserBlogList((mIsRefresh ? (mBean != null ? mBean.getPrevPageToken() : null) :
+        OSChinaApi.getUserQuestionList((mIsRefresh ? (mBean != null ? mBean.getPrevPageToken() : null) :
                         (mBean != null ? mBean.getNextPageToken() : null))
                 , userId, mHandler);
 
     }
 
     @Override
-    protected BaseListAdapter<Blog> getListAdapter() {
-        BlogAdapter blogAdapter = new BlogAdapter(this);
-        blogAdapter.setUserBlog(true);
-        return blogAdapter;
+    protected BaseListAdapter<Question> getListAdapter() {
+        QuestionAdapter questionAdapter = new QuestionAdapter(this);
+        questionAdapter.setUserQuestion(true);
+        return questionAdapter;
     }
 
     @Override
     protected Type getType() {
-        return new TypeToken<ResultBean<PageBean<Blog>>>() {
+        return new TypeToken<ResultBean<PageBean<Question>>>() {
         }.getType();
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        Blog blog = mAdapter.getItem(position);
-        if (blog != null) {
-            BlogDetailActivity.show(getActivity(), blog.getId());
+        Question question = mAdapter.getItem(position);
+        if (question != null) {
+            BlogDetailActivity.show(getActivity(), question.getId());
             TextView title = (TextView) view.findViewById(R.id.tv_item_blog_title);
             TextView content = (TextView) view.findViewById(R.id.tv_item_blog_body);
 
             updateTextColor(title, content);
-            saveToReadedList(UserBlogFragment.HISTORY_BLOG, blog.getId() + "");
+            saveToReadedList(UserQuestionFragment.HISTORY_MY_QUESTION, question.getId() + "");
         }
     }
 
