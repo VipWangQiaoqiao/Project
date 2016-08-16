@@ -46,6 +46,9 @@ public class TweetPublishService extends Service implements Contract.IService {
     private volatile ServiceHandler mServiceHandler;
     private Map<String, Contract.IOperator> mRunTasks = new ArrayMap<>();
 
+    private int mTaskCount;
+    private volatile boolean mDoAddTask = false;
+
     private final class ServiceHandler extends Handler {
         ServiceHandler(Looper looper) {
             super(looper);
@@ -113,6 +116,24 @@ public class TweetPublishService extends Service implements Contract.IService {
     public TweetPublishService() {
     }
 
+    private void addTask(int startId) {
+        mDoAddTask = true;
+        synchronized (TweetPublishService.this) {
+            mTaskCount = mTaskCount + 1;
+            log("removeTask:" + startId + " count:" + mTaskCount);
+        }
+        mDoAddTask = false;
+    }
+
+    private void removeTask(int startId) {
+        synchronized (TweetPublishService.this) {
+            mTaskCount = mTaskCount - 1;
+            log("removeTask:" + startId + " count:" + mTaskCount + " doAdd:" + mDoAddTask);
+            if (mTaskCount == 0 && !mDoAddTask)
+                stopSelf();
+        }
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -134,13 +155,15 @@ public class TweetPublishService extends Service implements Contract.IService {
      */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        // In this, we add the task count
+        addTask(startId);
+        // Do message
         Message msg = mServiceHandler.obtainMessage();
         msg.arg1 = startId;
         msg.obj = intent;
         mServiceHandler.sendMessage(msg);
         return super.onStartCommand(intent, flags, startId);
     }
-
 
     @Override
     public void onDestroy() {
@@ -164,7 +187,7 @@ public class TweetPublishService extends Service implements Contract.IService {
     private void onHandleIntent(Intent intent, int startId) {
         if (intent != null) {
             final String action = intent.getAction();
-
+            log("onHandleIntent:" + startId);
             log(action);
 
             if (ACTION_PUBLISH.equals(action)) {
@@ -175,16 +198,16 @@ public class TweetPublishService extends Service implements Contract.IService {
                 if (ACTION_CONTINUE.equals(action)) {
                     final String id = intent.getStringExtra(EXTRA_ID);
                     if (id == null || handleActionContinue(id, startId)) {
-                        stopSelf(startId);
+                        removeTask(startId);
                     }
                 } else if (ACTION_DELETE.equals(action)) {
                     final String id = intent.getStringExtra(EXTRA_ID);
                     if (id == null || handleActionDelete(id, startId)) {
-                        stopSelf(startId);
+                        removeTask(startId);
                     }
                 } else if (ACTION_RECEIVER_SEARCH_FAILED.equals(action)) {
                     handleActionSearch();
-                    stopSelf(startId);
+                    removeTask(startId);
                 }
             }
         }
@@ -287,7 +310,7 @@ public class TweetPublishService extends Service implements Contract.IService {
             mRunTasks.remove(id);
         }
         // stop self
-        stopSelf(startId);
+        removeTask(startId);
     }
 
     @Override

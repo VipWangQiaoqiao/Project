@@ -10,14 +10,12 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.SharedPreferencesCompat;
 import android.text.TextUtils;
-import android.view.WindowManager;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.tweet.contract.TweetPublishContract;
 import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
-import net.oschina.app.improve.tweet.fragments.TweetPublishQueueFragment;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 import net.oschina.app.improve.utils.CollectionUtil;
 import net.oschina.app.util.TDevice;
@@ -155,7 +153,7 @@ public class TweetPublishActivity extends BaseBackActivity implements TweetPubli
 
         }
         // hide the software
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        // getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
     private void saveXmlData() {
@@ -208,12 +206,7 @@ public class TweetPublishActivity extends BaseBackActivity implements TweetPubli
                 String[] ids = intent.getStringArrayExtra(TweetPublishService.EXTRA_IDS);
                 if (ids == null || ids.length == 0)
                     return;
-                TweetPublishQueueFragment fragment = TweetPublishQueueFragment.newInstance(ids);
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .add(R.id.activity_tweet_publish, fragment)
-                        .addToBackStack(TweetPublishQueueFragment.class.toString())
-                        .commit();
+                TweetPublishQueueActivity.show(TweetPublishActivity.this, ids);
             }
         }
     }
