@@ -65,7 +65,7 @@
                 android:id="@+id/btn_delete"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="2dp"
+                android:layout_marginLeft="1dp"
                 android:layout_weight="1"
                 android:background="@drawable/btn_tweet_queue_opt_delete"
                 android:paddingBottom="@dimen/lay_8"
