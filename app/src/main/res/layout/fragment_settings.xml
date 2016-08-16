@@ -149,6 +149,24 @@
         </RelativeLayout>
 
         <View style="@style/h_line" />
+
+        <View
+            style="@style/h_line"
+            android:layout_marginTop="20dp" />
+
+        <RelativeLayout
+            android:id="@+id/rl_cancle"
+            style="@style/option_item_rl">
+
+            <TextView
+                android:id="@+id/setting_cancle"
+                style="@style/option_item_text_parent"
+                android:text="@string/setting_cancle"
+                android:textColor="?attr/textColor"
+                android:textSize="@dimen/text_size_16" />
+        </RelativeLayout>
+
+        <View style="@style/h_line" />
     </LinearLayout>
 
 </ScrollView>

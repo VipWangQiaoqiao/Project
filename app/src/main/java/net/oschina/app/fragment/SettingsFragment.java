@@ -79,6 +79,7 @@ public class SettingsFragment extends BaseFragment {
         view.findViewById(R.id.rl_about).setOnClickListener(this);
         view.findViewById(R.id.rl_exit).setOnClickListener(this);
         view.findViewById(R.id.rl_feedback).setOnClickListener(this);
+        view.findViewById(R.id.rl_cancle).setOnClickListener(this);
 
         if (!AppContext.getInstance().isLogin()) {
             mTvExit.setText("退出");
@@ -151,6 +152,11 @@ public class SettingsFragment extends BaseFragment {
                 break;
             case R.id.rl_exit:
                 onClickExit();
+                break;
+            case R.id.rl_cancle:
+                AppContext.getInstance().Logout();
+                AppContext.showToastShort(R.string.tip_logout_success);
+                getActivity().finish();
                 break;
             default:
                 break;

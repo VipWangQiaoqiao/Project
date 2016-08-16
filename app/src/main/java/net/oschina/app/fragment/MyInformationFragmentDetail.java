@@ -134,16 +134,11 @@ public class MyInformationFragmentDetail extends BaseFragment implements EasyPer
     }
 
     @Override
-    @OnClick({R.id.iv_avatar, R.id.btn_logout})
+    @OnClick({R.id.iv_avatar})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_avatar:
                 showClickAvatar();
-                break;
-            case R.id.btn_logout:
-                AppContext.getInstance().Logout();
-                AppContext.showToastShort(R.string.tip_logout_success);
-                getActivity().finish();
                 break;
             default:
                 break;
