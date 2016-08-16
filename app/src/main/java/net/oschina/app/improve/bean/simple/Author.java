@@ -7,9 +7,9 @@ import java.io.Serializable;
  * on 2016/7/18.
  */
 public class Author implements Serializable{
-    private long id;
-    private String name;
-    private String portrait;
+    protected long id;
+    protected String name;
+    protected String portrait;
 
     public long getId() {
         return id;
