@@ -21,7 +21,8 @@ import net.oschina.app.improve.general.adapter.BlogAdapter;
 import java.lang.reflect.Type;
 
 /**
- * 博客界面
+ * created by fei  on 2016/8/16.
+ * desc: question list module
  */
 public class UserBlogFragment extends BaseListFragment<Blog> {
 
@@ -41,8 +42,8 @@ public class UserBlogFragment extends BaseListFragment<Blog> {
     protected void requestData() {
         super.requestData();
 
-        OSChinaApi.getUserBlogList(OSChinaApi.CATALOG_BLOG_NORMAL,
-                (mIsRefresh ? (mBean != null ? mBean.getPrevPageToken() : null) : (mBean != null ? mBean.getNextPageToken() : null))
+        OSChinaApi.getUserBlogList((mIsRefresh ? (mBean != null ? mBean.getPrevPageToken() : null) :
+                        (mBean != null ? mBean.getNextPageToken() : null))
                 , userId, mHandler);
 
     }
