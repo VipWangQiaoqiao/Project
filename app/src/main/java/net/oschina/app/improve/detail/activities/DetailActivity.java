@@ -44,6 +44,7 @@ import cz.msebera.android.httpclient.Header;
  */
 
 public abstract class DetailActivity<Data, DataView extends DetailContract.View> extends BaseBackActivity implements DetailContract.Operator<Data, DataView> {
+
     long mDataId;
     Data mData;
     DataView mView;
@@ -171,7 +172,7 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
             FragmentTransaction trans = getSupportFragmentManager()
                     .beginTransaction();
             trans.replace(R.id.lay_container, fragment);
-            trans.commitAllowingStateLoss();
+            trans.commit();
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
