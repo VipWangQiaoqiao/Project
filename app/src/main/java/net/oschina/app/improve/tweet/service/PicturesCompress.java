@@ -29,7 +29,6 @@ public class PicturesCompress {
      * Currently 64KB.
      */
     public final static int DEFAULT_BUFFER_SIZE = 64 * 1024;
-    private final static String TAG = PicturesCompress.class.getSimpleName();
 
     private PicturesCompress() {
 
@@ -284,4 +283,30 @@ public class PicturesCompress {
         }
     }
 
+    public static String verifyPictureExt(String filePath) {
+        BitmapFactory.Options option = createOptions();
+        option.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(filePath, option);
+        String mimeType = option.outMimeType.toLowerCase();
+        int doIndex = filePath.lastIndexOf(".") + 1;
+        String ext = filePath.substring(doIndex).toLowerCase();
+        if (mimeType.contains("x-ico")) {
+            //TODO
+        } else if (mimeType.contains("jpeg")) {
+            ext = "jpg";
+        } else if (mimeType.contains("png")) {
+            ext = "png";
+        } else if (mimeType.contains("webp")) {
+            //TODO
+        } else if (mimeType.contains("vnd.wap.wbmp")) {
+            //TODO
+        }
+        String newFilePath = filePath.substring(0, doIndex) + ext;
+
+        if (!filePath.equals(newFilePath)) {
+            if (new File(filePath).renameTo(new File(newFilePath)))
+                return newFilePath;
+        }
+        return filePath;
+    }
 }

@@ -253,6 +253,10 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
                         1280, 1280 * 2,
                         buffer, options, true)) {
                     Log.e("OPERATOR", "doImage " + tempFile + " " + new File(tempFile).length());
+
+                    // verify the picture ext.
+                    tempFile = PicturesCompress.verifyPictureExt(tempFile);
+
                     ret.add(tempFile);
                 }
             } catch (Exception e) {
