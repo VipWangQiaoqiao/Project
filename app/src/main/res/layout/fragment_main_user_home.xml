@@ -23,6 +23,7 @@
             app:layout_collapseParallaxMultiplier="0.7" />
 
         <LinearLayout
+            android:id="@+id/rl_show_my_info"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
@@ -36,19 +37,24 @@
 
                 <ImageView
                     android:id="@+id/iv_logo_setting"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_gravity="left|center_horizontal"
-                    android:layout_marginLeft="24dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="left"
+                    android:contentDescription="@null"
+                    android:padding="12dp"
+                    android:scaleType="fitCenter"
                     android:src="@mipmap/btn_my_setting" />
 
                 <ImageView
                     android:id="@+id/iv_logo_zxing"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_gravity="right|center_horizontal"
-                    android:layout_marginRight="24dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="right"
+                    android:contentDescription="@null"
+                    android:padding="12dp"
+                    android:scaleType="fitCenter"
                     android:src="@mipmap/btn_qrcode" />
+
             </FrameLayout>
 
             <FrameLayout
@@ -56,11 +62,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp">
 
-                <de.hdodenhof.circleimageview.CircleImageView
+                <net.oschina.app.widget.AvatarView
                     android:id="@+id/iv_portrait"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
-                    android:src="@mipmap/widget_dface" />
+                    android:src="@mipmap/widget_dface"
+                    app:border_color="@color/white"
+                    app:border_width="2dip" />
 
                 <ImageView
                     android:id="@+id/iv_gender"
@@ -89,7 +97,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="8dp"
-                android:gravity="left|center_horizontal"
+                android:gravity="center_horizontal"
                 android:maxLines="2"
                 android:text="这个人很懒,什么都没有写这个人很懒,什么都没有写这个人很懒,什么都没有写这个人很懒,什么都没有写"
                 android:textColor="@color/white"
@@ -120,7 +128,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@android:color/white" />
+                android:background="@color/white_alpha_160" />
 
             <LinearLayout
                 android:id="@+id/lay_about_info"
@@ -132,7 +140,7 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:id="@+id/ly_score"
+                    android:id="@+id/ly_tweet"
                     style="@style/uset_information_ll">
 
                     <TextView
@@ -175,7 +183,8 @@
 
                 <LinearLayout
                     android:id="@+id/ly_follower"
-                    style="@style/uset_information_ll">
+                    style="@style/uset_information_ll"
+                    android:layout_height="match_parent">
 
                     <TextView
                         android:id="@+id/tv_follower"
@@ -183,6 +192,7 @@
                         android:text="2000" />
 
                     <TextView
+                        android:id="@+id/textView4"
                         style="@style/user_formation_info"
                         android:text="@string/follower" />
                 </LinearLayout>
@@ -229,6 +239,7 @@
                     android:id="@+id/imageView10"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
+                    android:contentDescription="@null"
                     android:src="@mipmap/ic_arrow_right" />
             </LinearLayout>
 
@@ -256,6 +267,7 @@
 
                 <TextView
                     style="@style/option_item_text"
+                    android:layout_width="0dp"
                     android:layout_weight="1"
                     android:text="@string/blog" />
 
@@ -263,6 +275,7 @@
                     android:id="@+id/imageView3"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
+                    android:contentDescription="@null"
                     android:src="@mipmap/ic_arrow_right" />
             </LinearLayout>
 
@@ -290,6 +303,7 @@
 
                 <TextView
                     style="@style/option_item_text"
+                    android:layout_width="0dp"
                     android:layout_weight="1"
                     android:text="@string/actionbar_title_event" />
 
@@ -297,6 +311,7 @@
                     android:id="@+id/imageView5"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
+                    android:contentDescription="@null"
                     android:src="@mipmap/ic_arrow_right" />
             </LinearLayout>
 
@@ -326,6 +341,7 @@
                 <TextView
                     android:id="@+id/textView3"
                     style="@style/option_item_text"
+                    android:layout_width="0dp"
                     android:layout_weight="1"
                     android:text="@string/team" />
 
@@ -333,13 +349,14 @@
                     android:id="@+id/imageView4"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
+                    android:contentDescription="@null"
                     android:src="@mipmap/ic_arrow_right" />
             </LinearLayout>
 
-            <View
-                style="@style/h_line"
-                android:layout_height="1px"
-                android:background="@color/list_divider_color" />
+            <!--<View-->
+            <!--style="@style/h_line"-->
+            <!--android:layout_height="1px"-->
+            <!--android:background="@color/list_divider_color" />-->
         </LinearLayout>
 
     </LinearLayout>
