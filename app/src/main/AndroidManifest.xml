@@ -191,8 +191,6 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/ThemePhotoBrowse" />
-
-        <service android:name=".LogUploadService" />
         <service android:name=".service.ServerTaskService">
             <intent-filter>
                 <action android:name="net.oschina.app.ACTION_PUB_BLOG_COMMENT" />

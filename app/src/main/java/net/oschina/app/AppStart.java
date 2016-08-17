@@ -72,8 +72,6 @@ public class AppStart extends Activity {
      * 跳转到...
      */
     private void redirectTo() {
-        Intent uploadLog = new Intent(this, LogUploadService.class);
-        startService(uploadLog);
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();

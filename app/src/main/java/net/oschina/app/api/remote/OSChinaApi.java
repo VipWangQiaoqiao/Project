@@ -781,25 +781,6 @@ public class OSChinaApi {
         ApiHttpClient.post("action/api/event_apply", params, handler);
     }
 
-    private static void uploadLog(String data, String report,
-                                  AsyncHttpResponseHandler handler) {
-        RequestParams params = new RequestParams();
-        params.put("app", "1");
-        params.put("report", report);
-        params.put("msg", data);
-        ApiHttpClient.post("action/api/user_report_to_admin", params, handler);
-    }
-
-    /**
-     * BUG上报
-     *
-     * @param data
-     * @param handler
-     */
-    public static void uploadLog(String data, AsyncHttpResponseHandler handler) {
-        uploadLog(data, "1", handler);
-    }
-
     /**
      * team动态
      *
