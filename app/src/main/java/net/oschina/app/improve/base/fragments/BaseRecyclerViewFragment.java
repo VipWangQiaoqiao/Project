@@ -24,7 +24,7 @@ import cz.msebera.android.httpclient.Header;
  * on 2016/4/12.
  */
 @SuppressWarnings("unused")
-public abstract class BaseRecyclerViewFragment<T> extends BaseFragment<T> implements RecyclerRefreshLayout.SuperRefreshLayoutListener,
+public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implements RecyclerRefreshLayout.SuperRefreshLayoutListener,
         BaseRecyclerAdapter.OnItemClickListener {
     protected BaseRecyclerAdapter<T> mAdapter;
     protected RecyclerView mRecyclerView;
