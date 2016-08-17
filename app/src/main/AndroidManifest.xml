@@ -191,6 +191,7 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/ThemePhotoBrowse" />
+
         <service android:name=".service.ServerTaskService">
             <intent-filter>
                 <action android:name="net.oschina.app.ACTION_PUB_BLOG_COMMENT" />
@@ -366,14 +367,12 @@
             android:label="用户主页"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
-
         <activity
             android:name=".improve.user.activities.UserMessageActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="消息中心"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
-
         <activity
             android:name=".improve.media.SelectImageActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -397,6 +396,7 @@
             android:exported="false"
             android:process="net.oschina.app.tweet.TweetPublishService" />
 
+        <activity android:name=".improve.main.MainActivity"></activity>
     </application>
 
 </manifest>
