@@ -1,4 +1,4 @@
-package net.oschina.app.improve.general.fragments;
+package net.oschina.app.improve.user.fragments;
 
 
 import android.os.Bundle;

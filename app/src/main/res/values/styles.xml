@@ -606,8 +606,9 @@
         <item name="android:layout_height">25dp</item>
         <item name="android:paddingLeft">12dp</item>
         <item name="android:paddingRight">12dp</item>
-        <item name="android:layout_marginLeft">10dp</item>
-        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
         <item name="android:layout_width">wrap_content</item>
     </style>
 
