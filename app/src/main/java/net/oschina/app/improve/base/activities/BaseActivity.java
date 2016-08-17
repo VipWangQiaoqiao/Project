@@ -1,6 +1,5 @@
 package net.oschina.app.improve.base.activities;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -19,9 +18,7 @@ import butterknife.ButterKnife;
 public abstract class BaseActivity extends AppCompatActivity {
     protected RequestManager mImageLoader;
     private boolean mIsDestroy;
-    //private final String packageName4Umeng = "ImprovedBaseActivity";
-    private final String packageName4Umeng = this.getClass().getName();
-    private Context mContext4Umeng;
+    private final String mPackageNameUmeng = this.getClass().getName();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,15 +45,15 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart(this.packageName4Umeng);
-        MobclickAgent.onResume(this.mContext4Umeng);
+        MobclickAgent.onPageStart(this.mPackageNameUmeng);
+        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageStart(this.packageName4Umeng);
-        MobclickAgent.onResume(this.mContext4Umeng);
+        MobclickAgent.onPageEnd(this.mPackageNameUmeng);
+        MobclickAgent.onPause(this);
     }
 
     protected abstract int getContentView();
