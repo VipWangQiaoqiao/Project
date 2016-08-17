@@ -291,6 +291,7 @@
     <string name="about" translatable="false">关于开源中国</string>
     <string name="feedback">意见反馈</string>
     <string name="exit">退出</string>
+    <string name="setting_cancle">注销</string>
     <string name="grade">去评分</string>
 
     <string name="notice_accept">接收新通知</string>

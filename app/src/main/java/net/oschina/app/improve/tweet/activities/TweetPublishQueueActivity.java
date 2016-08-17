@@ -1,6 +1,7 @@
-package net.oschina.app.improve.tweet.fragments;
+package net.oschina.app.improve.tweet.activities;
 
-
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +10,7 @@ import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.app.AppOperator;
-import net.oschina.app.improve.base.fragments.BaseFragment;
+import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.tweet.adapter.TweetQueueAdapter;
 import net.oschina.app.improve.tweet.service.TweetPublishCache;
 import net.oschina.app.improve.tweet.service.TweetPublishModel;
@@ -22,11 +23,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.OnClick;
 
-/**
- * 发布动弹队列实现
- */
-@SuppressWarnings("WeakerAccess")
-public class TweetPublishQueueFragment extends BaseFragment implements TweetQueueAdapter.Callback, View.OnClickListener {
+public class TweetPublishQueueActivity extends BaseBackActivity implements TweetQueueAdapter.Callback, View.OnClickListener {
     @Bind(R.id.loading)
     Loading mLoading;
     @Bind(R.id.txt_title)
@@ -35,46 +32,37 @@ public class TweetPublishQueueFragment extends BaseFragment implements TweetQueu
     RecyclerView mRecycler;
     private TweetQueueAdapter mAdapter;
 
-    public static TweetPublishQueueFragment newInstance(String[] ids) {
-        TweetPublishQueueFragment fragment = new TweetPublishQueueFragment();
-        Bundle bundle = new Bundle();
-        bundle.putStringArray(TweetPublishService.EXTRA_IDS, ids);
-        fragment.setArguments(bundle);
-        return fragment;
+    public static void show(Context context, String[] ids) {
+        Intent intent = new Intent(context, TweetPublishQueueActivity.class);
+        intent.putExtra(TweetPublishService.EXTRA_IDS, ids);
+        context.startActivity(intent);
     }
 
     @Override
-    protected int getLayoutId() {
-        return R.layout.fragment_tweet_publish_queue;
+    protected int getContentView() {
+        return R.layout.activity_tweet_publish_queue;
     }
 
     @Override
-    protected void initWidget(View root) {
-        super.initWidget(root);
-        mRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+    protected void initWidget() {
+        super.initWidget();
+        mRecycler.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new TweetQueueAdapter(this);
         mRecycler.setAdapter(mAdapter);
     }
 
-    private void finish() {
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .remove(this)
-                .commit();
-    }
-
     @Override
-    protected void initData() {
-        super.initData();
-        if (mBundle != null) {
-            final String[] ids = mBundle.getStringArray(TweetPublishService.EXTRA_IDS);
+    protected boolean initBundle(Bundle bundle) {
+        if (bundle != null) {
+            final String[] ids = bundle.getStringArray(TweetPublishService.EXTRA_IDS);
             if (ids != null && ids.length > 0) {
                 AppOperator.runOnThread(new Runnable() {
                     @Override
                     public void run() {
+                        Context context = getApplicationContext();
                         List<TweetPublishModel> models = new ArrayList<TweetPublishModel>();
                         for (String str : ids) {
-                            TweetPublishModel model = TweetPublishCache.get(getActivity().getApplicationContext(), str);
+                            TweetPublishModel model = TweetPublishCache.get(context, str);
                             if (model != null)
                                 models.add(model);
                         }
@@ -84,14 +72,14 @@ public class TweetPublishQueueFragment extends BaseFragment implements TweetQueu
                             finish();
                     }
                 });
-                return;
+                return true;
             }
         }
-        finish();
+        return false;
     }
 
     private void addData(final List<TweetPublishModel> models) {
-        mRoot.post(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 mAdapter.add(models);
@@ -106,14 +94,14 @@ public class TweetPublishQueueFragment extends BaseFragment implements TweetQueu
 
     @Override
     public void onClickContinue(TweetPublishModel model) {
-        TweetPublishService.startActionContinue(getContext(), model.getId());
+        TweetPublishService.startActionContinue(this, model.getId());
         if (mAdapter.getItemCount() == 0)
             finish();
     }
 
     @Override
     public void onClickDelete(TweetPublishModel model) {
-        TweetPublishService.startActionDelete(getContext(), model.getId());
+        TweetPublishService.startActionDelete(this, model.getId());
         if (mAdapter.getItemCount() == 0)
             finish();
     }
@@ -122,7 +110,7 @@ public class TweetPublishQueueFragment extends BaseFragment implements TweetQueu
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.icon_back) {
-            finish();
+            onSupportNavigateUp();
         }
     }
 }

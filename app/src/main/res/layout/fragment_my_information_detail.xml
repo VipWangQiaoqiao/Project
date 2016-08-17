@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="?attr/windows_bg"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="?attr/windows_bg">
 
     <net.oschina.app.widget.CustomerScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
+                android:background="@mipmap/bg_my"
                 android:clickable="true"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:background="@mipmap/bg_my"
-                android:padding="@dimen/space_16" >
+                android:padding="@dimen/space_16">
 
                 <net.oschina.app.widget.CircleImageView
                     android:id="@+id/iv_avatar"
@@ -38,23 +38,22 @@
                     android:textSize="@dimen/text_size_16" />
             </LinearLayout>
 
-            <View
-                style="@style/h_line" />
+            <View style="@style/h_line" />
 
             <include layout="@layout/fragment_user_center_information" />
 
-            <Button
-                android:id="@+id/btn_logout"
-                android:layout_marginLeft="30dp"
-                android:layout_marginTop="30dp"
-                android:padding="10dp"
-                android:text="注销账号"
-                android:textSize="18sp"
-                android:textColor="@color/white"
-                android:background="@drawable/btn_red"
-                android:layout_marginRight="30dp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+            <!--<Button-->
+            <!--android:id="@+id/btn_logout"-->
+            <!--android:layout_marginLeft="30dp"-->
+            <!--android:layout_marginTop="30dp"-->
+            <!--android:padding="10dp"-->
+            <!--android:text="注销账号"-->
+            <!--android:textSize="18sp"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:background="@drawable/btn_red"-->
+            <!--android:layout_marginRight="30dp"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent" />-->
 
         </LinearLayout>
     </net.oschina.app.widget.CustomerScrollView>
