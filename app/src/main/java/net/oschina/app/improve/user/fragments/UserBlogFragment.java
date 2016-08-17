@@ -1,7 +1,10 @@
 package net.oschina.app.improve.user.fragments;
 
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
@@ -29,6 +32,14 @@ public class UserBlogFragment extends BaseListFragment<Blog> {
     public static final String HISTORY_BLOG = "history_my_blog";
     public static final String USER_ID = "user_id";
     private int userId;
+
+    public static Fragment instantiate(long uid){
+        Bundle bundle = new Bundle();
+        bundle.putLong(USER_ID, uid);
+        Fragment fragment = new UserBlogFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     @Override
     protected void initBundle(Bundle bundle) {

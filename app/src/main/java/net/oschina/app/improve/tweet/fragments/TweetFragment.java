@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
@@ -56,11 +57,11 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
     public int tweetType;
     public long authorId;
 
-    public static TweetFragment getInstance(long authorId) {
-        TweetFragment fragment = new TweetFragment();
+    public static Fragment instantiate(long aid) {
         Bundle bundle = new Bundle();
-        bundle.putLong("authorId", authorId);
+        bundle.putLong("authorId", aid);
         bundle.putInt("requestCategory", CATEGORY_USER);
+        Fragment fragment = new TweetFragment();
         fragment.setArguments(bundle);
         return fragment;
     }
