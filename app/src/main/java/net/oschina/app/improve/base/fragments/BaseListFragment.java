@@ -1,5 +1,6 @@
 package net.oschina.app.improve.base.fragments;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -49,6 +50,7 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements
     protected TextHttpResponseHandler mHandler;
     protected PageBean<T> mBean;
     private String mTime;
+    protected boolean isAttach;
     private View mFooterView;
     private ProgressBar mFooterProgressBar;
     private TextView mFooterText;
@@ -261,27 +263,33 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements
         return true;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        isAttach = true;
+        super.onAttach(context);
+    }
+
     protected void setFooterType(int type) {
-        if (mRoot != null && isAdded()) {
-            switch (type) {
-                case TYPE_NORMAL:
-                case TYPE_LOADING:
-                    mFooterText.setText(getResources().getString(R.string.footer_type_loading));
-                    mFooterProgressBar.setVisibility(View.VISIBLE);
-                    break;
-                case TYPE_NET_ERROR:
-                    mFooterText.setText(getResources().getString(R.string.footer_type_net_error));
-                    mFooterProgressBar.setVisibility(View.GONE);
-                    break;
-                case TYPE_ERROR:
-                    mFooterText.setText(getResources().getString(R.string.footer_type_error));
-                    mFooterProgressBar.setVisibility(View.GONE);
-                    break;
-                case TYPE_NO_MORE:
-                    mFooterText.setText(getResources().getString(R.string.footer_type_not_more));
-                    mFooterProgressBar.setVisibility(View.GONE);
-                    break;
-            }
+        if (!isAttach) return;
+        switch (type) {
+            case TYPE_NORMAL:
+            case TYPE_LOADING:
+                mFooterText.setText(getResources().getString(R.string.footer_type_loading));
+                mFooterProgressBar.setVisibility(View.VISIBLE);
+                break;
+            case TYPE_NET_ERROR:
+                mFooterText.setText(getResources().getString(R.string.footer_type_net_error));
+                mFooterProgressBar.setVisibility(View.GONE);
+                break;
+            case TYPE_ERROR:
+                mFooterText.setText(getResources().getString(R.string.footer_type_error));
+                mFooterProgressBar.setVisibility(View.GONE);
+                break;
+            case TYPE_NO_MORE:
+                mFooterText.setText(getResources().getString(R.string.footer_type_not_more));
+                mFooterProgressBar.setVisibility(View.GONE);
+                break;
         }
+
     }
 }
