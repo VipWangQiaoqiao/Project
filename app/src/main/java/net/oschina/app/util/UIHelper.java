@@ -852,10 +852,7 @@ public class UIHelper {
             AppContext.showToast("提醒你，该用户为非会员");
             return;
         }
-        User user = new User();
-        user.setId((int) hisuid);
-        user.setName(hisname);
-        OtherUserHomeActivity.show(context, user);
+        OtherUserHomeActivity.show(context, hisuid);
     }
 
     /**

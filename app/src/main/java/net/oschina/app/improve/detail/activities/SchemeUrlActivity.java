@@ -47,9 +47,7 @@ public class SchemeUrlActivity extends BaseBackActivity {
                     }
                     startActivity(new Intent(this, MainActivity.class));
                     if (type == 20) {//跳转到用户中心
-                        User user = new User();
-                        user.setId((int) id);
-                        OtherUserHomeActivity.show(this, user);
+                        OtherUserHomeActivity.show(this, id);
                     } else if (type != 0 || type != -1) {
                         UIHelper.showDetail(this, type, id, "");
                     }
