@@ -31,7 +31,7 @@ import cz.msebera.android.httpclient.Header;
  * Created by huanghaibin
  * on 16-5-23.
  */
-public abstract class BaseListFragment<T> extends BaseFragment<T> implements
+public abstract class BaseListFragment<T> extends BaseFragment implements
         SuperRefreshLayout.SuperRefreshLayoutListener,
         AdapterView.OnItemClickListener, BaseListAdapter.Callback,
         View.OnClickListener {
