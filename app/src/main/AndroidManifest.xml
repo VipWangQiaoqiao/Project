@@ -368,6 +368,14 @@
             android:label="用户主页"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
+
+        <activity
+            android:name=".improve.user.activities.UserMessageActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="消息中心"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Base" />
+
         <activity
             android:name=".improve.media.SelectImageActivity"
             android:configChanges="keyboardHidden|orientation"

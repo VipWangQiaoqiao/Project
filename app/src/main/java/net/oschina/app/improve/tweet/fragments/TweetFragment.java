@@ -114,7 +114,7 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
         });
 
         if (authorId == 0 && requestCategory == CATEGORY_USER) {
-            if (isAdded()) {
+            if (isAttach) {
                 mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
                 mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
             }
@@ -124,7 +124,7 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (isAdded()) {
+            if (isAttach) {
                 setupContent();
             }
         }
