@@ -7,11 +7,7 @@ import android.os.Bundle;
 import net.oschina.app.ui.MainActivity;
 import net.oschina.app.util.TDevice;
 
-import org.kymjs.kjframe.http.KJAsyncTask;
-import org.kymjs.kjframe.utils.FileUtils;
 import org.kymjs.kjframe.utils.PreferenceHelper;
-
-import java.io.File;
 
 /**
  * 应用启动界面
@@ -45,26 +41,7 @@ public class AppStart extends Activity {
         if (cacheVersion < currentVersion) {
             PreferenceHelper.write(this, "first_install", "first_install",
                     currentVersion);
-            cleanKJImageCache();
-        }
-    }
-
-    private void cleanKJImageCache() {
-        final File folder = FileUtils.getSaveFolder("OSChina/imagecache");
-        File[] files = folder.listFiles();
-        if (files != null && files.length > 0) {
-            KJAsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    if (folder.isDirectory()) {
-
-                        for (File file : folder.listFiles()) {
-                            file.delete();
-                        }
-                    }
-                }
-
-            });
+            // TODO 新版本时进行一定操作
         }
     }
 

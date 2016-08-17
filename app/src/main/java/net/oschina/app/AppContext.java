@@ -76,7 +76,7 @@ public class AppContext extends BaseApplication {
         TLog.DEBUG = BuildConfig.DEBUG;
 
         // Bitmap缓存地址
-        HttpConfig.CACHEPATH = "OSChina/imagecache";
+        HttpConfig.CACHEPATH = "OSChina/ImageCache";
     }
 
     private void initLogin() {
