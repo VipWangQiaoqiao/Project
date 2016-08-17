@@ -389,14 +389,18 @@
         <activity
             android:name=".improve.tweet.activities.TweetPublishQueueActivity"
             android:label="动弹队列"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Base.NoTitle" />
+        <activity
+            android:name=".improve.main.MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base.NoTitle" />
 
         <service
             android:name=".improve.tweet.service.TweetPublishService"
             android:exported="false"
             android:process="net.oschina.app.tweet.TweetPublishService" />
-
-        <activity android:name=".improve.main.MainActivity"></activity>
     </application>
 
 </manifest>
