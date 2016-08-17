@@ -204,9 +204,13 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
     }
 
     protected void onRequestError(int code) {
-        setFooterType(TYPE_NET_ERROR);
-        if (mAdapter.getDatas().size() == 0)
-            mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+        try{
+            setFooterType(TYPE_NET_ERROR);
+            if (mAdapter.getDatas().size() == 0)
+                mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     protected void onRequestFinish() {
