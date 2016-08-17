@@ -9,12 +9,6 @@ import android.os.Looper;
 
 import net.oschina.app.util.UIHelper;
 
-import org.kymjs.kjframe.utils.FileUtils;
-import org.kymjs.kjframe.utils.SystemTool;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.Thread.UncaughtExceptionHandler;
@@ -159,7 +153,7 @@ public class AppException extends Exception implements UncaughtExceptionHandler 
         }
         boolean success = true;
         try {
-            success = saveToSDCard(ex);
+            // TODO 保存到文件或者其他操作
         } catch (Exception e) {
         } finally {
             if (!success) {
@@ -180,26 +174,6 @@ public class AppException extends Exception implements UncaughtExceptionHandler 
             }
         }
         return true;
-    }
-
-    private boolean saveToSDCard(Throwable ex) throws Exception {
-        boolean append = false;
-        File file = FileUtils.getSaveFile("OSChina", "OSCLog.log");
-        if (System.currentTimeMillis() - file.lastModified() > 5000) {
-            append = true;
-        }
-        PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(
-                file, append)));
-        // 导出发生异常的时间
-        pw.println(SystemTool.getDataTime("yyyy-MM-dd-HH-mm-ss"));
-        // 导出手机信息
-        dumpPhoneInfo(pw);
-        pw.println();
-        // 导出异常的调用栈信息
-        ex.printStackTrace(pw);
-        pw.println();
-        pw.close();
-        return append;
     }
 
     private void dumpPhoneInfo(PrintWriter pw) throws NameNotFoundException {
