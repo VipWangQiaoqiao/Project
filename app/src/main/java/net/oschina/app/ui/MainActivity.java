@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements
         ButterKnife.bind(this);
         initView();
 
+
         AppManager.getAppManager().addActivity(this);
 
         handleIntent(getIntent());
