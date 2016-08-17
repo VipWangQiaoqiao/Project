@@ -22,6 +22,7 @@ public class UserCommentFragment extends BaseListFragment<Comment> {
     @Override
     protected void requestData() {
         super.requestData();
+
         OSChinaApi.getMsgCommentList(mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
     }
 
