@@ -20,5 +20,5 @@
         android:id="@+id/vp_user_message"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#F6F6F6" />
+        android:background="#FFFFFF" />
 </LinearLayout>
