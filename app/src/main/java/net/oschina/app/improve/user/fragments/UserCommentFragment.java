@@ -38,4 +38,14 @@ public class UserCommentFragment extends BaseRecyclerViewFragment<Comment> {
         return new TypeToken<ResultBean<PageBean<Comment>>>() {
         }.getType();
     }
+
+    @Override
+    protected boolean isNeedCache() {
+        return false;
+    }
+
+    @Override
+    protected boolean isNeedEmptyView() {
+        return false;
+    }
 }

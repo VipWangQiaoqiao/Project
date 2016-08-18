@@ -76,7 +76,6 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 onRequestError(statusCode);
-                onRequestFinish();
             }
 
             @Override
@@ -89,18 +88,25 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
                     } else {
                         mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
                     }
-                    onRequestFinish();
                 } catch (Exception e) {
                     e.printStackTrace();
                     onFailure(statusCode, headers, responseString, e);
                 }
             }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                onRequestFinish();
+            }
         };
 
+        mErrorLayout.setErrorType(isNeedEmptyView() ? EmptyLayout.NETWORK_LOADING : EmptyLayout.HIDE_LAYOUT);
+        mRefreshLayout.setVisibility(isNeedEmptyView() ? View.GONE : View.VISIBLE);
         AppOperator.runOnThread(new Runnable() {
             @Override
             public void run() {
-                mBean = (PageBean<T>) CacheManager.readObject(getActivity(), CACHE_NAME);
+                mBean = isNeedCache() ? (PageBean<T>) CacheManager.readObject(getActivity(), CACHE_NAME) : null;
                 //if is the first loading
                 if (mBean == null) {
                     mBean = new PageBean<>();
@@ -160,12 +166,14 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
     }
 
     protected void onRequestError(int code) {
-        if (mAdapter.getItems().size() == 0)
+        if (mAdapter.getItems().size() == 0 && isNeedEmptyView())
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
     }
 
     protected void onComplete() {
         mRefreshLayout.onComplete();
+        if(mAdapter.getItems().size() == 0)
+            mAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_ERROR, true);
         mIsRefresh = false;
     }
 
@@ -179,12 +187,14 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
             mAdapter.addAll(mBean.getItems());
             mBean.setPrevPageToken(resultBean.getResult().getPrevPageToken());
             mRefreshLayout.setCanLoadMore(true);
-            AppOperator.runOnThread(new Runnable() {
-                @Override
-                public void run() {
-                    CacheManager.saveObject(getActivity(), mBean, CACHE_NAME);
-                }
-            });
+            if (isNeedCache()) {
+                AppOperator.runOnThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        CacheManager.saveObject(getActivity(), mBean, CACHE_NAME);
+                    }
+                });
+            }
         } else {
             mAdapter.addAll(resultBean.getResult().getItems());
         }
@@ -195,7 +205,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
             mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             mRefreshLayout.setVisibility(View.VISIBLE);
         } else {
-            mErrorLayout.setErrorType(EmptyLayout.NODATA);
+            mErrorLayout.setErrorType(isNeedEmptyView() ? EmptyLayout.NODATA : EmptyLayout.HIDE_LAYOUT);
         }
     }
 
@@ -212,4 +222,21 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
         return new Date();
     }
 
+    /**
+     * 需要缓存
+     *
+     * @return isNeedCache
+     */
+    protected boolean isNeedCache() {
+        return true;
+    }
+
+    /**
+     * 需要空的View
+     *
+     * @return isNeedEmptyView
+     */
+    protected boolean isNeedEmptyView() {
+        return true;
+    }
 }

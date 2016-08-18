@@ -14,6 +14,7 @@ import java.util.Date;
 public abstract class BaseGeneralRecyclerAdapter<T> extends BaseRecyclerAdapter<T> {
     public BaseGeneralRecyclerAdapter(Callback callback, int mode) {
         super(callback.getContext(), mode);
+        setState(STATE_LOADING,true);
     }
 
     public interface Callback {
