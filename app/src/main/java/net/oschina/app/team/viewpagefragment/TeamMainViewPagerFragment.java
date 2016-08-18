@@ -1,5 +1,13 @@
 package net.oschina.app.team.viewpagefragment;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
+
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.base.BaseViewPagerFragment;
@@ -10,18 +18,11 @@ import net.oschina.app.team.fragment.TeamMemberFragment;
 import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.team.ui.TeamNewActiveActivity;
 import net.oschina.app.util.UIHelper;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
 
 /**
  * Team主界面
- * 
+ *
  * @author kymjs (https://github.com/kymjs)
- * 
  */
 public class TeamMainViewPagerFragment extends BaseViewPagerFragment {
 
@@ -36,14 +37,14 @@ public class TeamMainViewPagerFragment extends BaseViewPagerFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case R.id.team_new_active:
-            showCreateNewActive();
-            break;
-        case R.id.team_new_issue:
-            UIHelper.showCreateNewIssue(getActivity(), mTeam, null, null);
-            break;
-        default:
-            break;
+            case R.id.team_new_active:
+                showCreateNewActive();
+                break;
+            case R.id.team_new_issue:
+                UIHelper.showCreateNewIssue(getActivity(), mTeam, null, null);
+                break;
+            default:
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -85,6 +86,10 @@ public class TeamMainViewPagerFragment extends BaseViewPagerFragment {
 
     @Override
     protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
+
+        FrameLayout generalActionBar = (FrameLayout) mRoot.findViewById(R.id.general_actionbar);
+        generalActionBar.setVisibility(View.GONE);
+
         String[] arraStrings = getResources().getStringArray(
                 R.array.team_main_viewpager);
 

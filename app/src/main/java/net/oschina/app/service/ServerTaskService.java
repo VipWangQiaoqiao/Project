@@ -181,13 +181,13 @@ public class ServerTaskService extends IntentService {
     }
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-
-    }
-
-    @Override
     protected void onHandleIntent(Intent intent) {
+        // 强制退出自己,不再走下面的逻辑
+        if (true) {
+            stopSelf();
+            return;
+        }
+
         String action = intent.getAction();
 
         if (ACTION_PUB_BLOG_COMMENT.equals(action)) {

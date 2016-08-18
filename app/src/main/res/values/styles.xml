@@ -448,9 +448,9 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
         <item name="android:clickable">true</item>
-        <item name="android:gravity">center_horizontal|bottom</item>
+        <item name="android:gravity">center_horizontal</item>
         <item name="android:background">@drawable/my_infomation_option_item_background</item>
-        <item name="android:paddingBottom">6dp</item>
+        <item name="android:paddingBottom">4dp</item>
         <item name="android:orientation">vertical</item>
     </style>
 
@@ -458,7 +458,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
     <style name="user_formation_info" parent="@style/user_formation_text">
@@ -606,8 +606,9 @@
         <item name="android:layout_height">25dp</item>
         <item name="android:paddingLeft">12dp</item>
         <item name="android:paddingRight">12dp</item>
-        <item name="android:layout_marginLeft">10dp</item>
-        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
         <item name="android:layout_width">wrap_content</item>
     </style>
 

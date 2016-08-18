@@ -2,7 +2,9 @@ package net.oschina.app.viewpagerfragment;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 
+import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.BaseViewPagerFragment;
@@ -33,6 +35,10 @@ public class FriendsViewPagerFragment extends BaseViewPagerFragment {
 
     @Override
     protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
+
+        FrameLayout generalActionBar = (FrameLayout) mRoot.findViewById(R.id.general_actionbar);
+        generalActionBar.setVisibility(View.GONE);
+
 		//String[] title = getResources().getStringArray(R.array.friends_viewpage_arrays);
         if (mInitTabIdx == 0) {
             adapter.addTab(null, "follower", FriendsFragment.class, getBundle(FriendsList.TYPE_FOLLOWER));

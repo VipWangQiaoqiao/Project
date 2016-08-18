@@ -781,25 +781,6 @@ public class OSChinaApi {
         ApiHttpClient.post("action/api/event_apply", params, handler);
     }
 
-    private static void uploadLog(String data, String report,
-                                  AsyncHttpResponseHandler handler) {
-        RequestParams params = new RequestParams();
-        params.put("app", "1");
-        params.put("report", report);
-        params.put("msg", data);
-        ApiHttpClient.post("action/api/user_report_to_admin", params, handler);
-    }
-
-    /**
-     * BUG上报
-     *
-     * @param data
-     * @param handler
-     */
-    public static void uploadLog(String data, AsyncHttpResponseHandler handler) {
-        uploadLog(data, "1", handler);
-    }
-
     /**
      * team动态
      *
@@ -1645,6 +1626,7 @@ public class OSChinaApi {
     }
 
     /**
+<<<<<<< Updated upstream
      * 获取消息列表
      *
      * @param authorId  authorId 用户id，不加该参数时返回所有给我发送消息的列表
@@ -1698,5 +1680,31 @@ public class OSChinaApi {
         if (!TextUtils.isEmpty(pageToken))
             params.put("pageToken", pageToken);
         ApiHttpClient.get("action/apiv2/user_msg_comments", params, handler);
+    }
+
+    /**
+     * 获取某用户的信息
+     * @param uid user id
+     * @param nick unique personal suffix
+     */
+    public static void getUserInfo(Long uid, String nick, TextHttpResponseHandler handler){
+        RequestParams params = new RequestParams();
+        params.put("id", uid);
+        params.put("name", nick);
+        ApiHttpClient.get("action/apiv2/user_info", params, handler);
+    }
+
+    /**
+     * 获取某用户的动态(讨论)列表
+     * @param uid user id
+     * @param pageToken page token
+     * @param handler async handler
+     */
+    public static void getUserActives(Long uid, String pageToken, TextHttpResponseHandler handler){
+        RequestParams params = new RequestParams();
+        params.put("id", uid);
+        if (!TextUtils.isEmpty(pageToken))
+            params.put("pageToken", pageToken);
+        ApiHttpClient.get("action/apiv2/user_activity", params, handler);
     }
 }

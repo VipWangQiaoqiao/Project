@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
@@ -56,11 +57,11 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
     public int tweetType;
     public long authorId;
 
-    public static TweetFragment getInstance(long authorId) {
-        TweetFragment fragment = new TweetFragment();
+    public static Fragment instantiate(long aid) {
         Bundle bundle = new Bundle();
-        bundle.putLong("authorId", authorId);
+        bundle.putLong("authorId", aid);
         bundle.putInt("requestCategory", CATEGORY_USER);
+        Fragment fragment = new TweetFragment();
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -114,19 +115,18 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
         });
 
         if (authorId == 0 && requestCategory == CATEGORY_USER) {
-            if (isAdded()) {
-                mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-                mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
-            }
+
+            mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+            mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
+
         }
     }
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (isAdded()) {
-                setupContent();
-            }
+            setupContent();
+
         }
     };
 

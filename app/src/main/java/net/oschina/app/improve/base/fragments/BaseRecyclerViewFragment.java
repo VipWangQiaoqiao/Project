@@ -8,12 +8,14 @@ import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
+import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
 
 import java.lang.reflect.Type;
+import java.util.Date;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -24,8 +26,10 @@ import cz.msebera.android.httpclient.Header;
  * on 2016/4/12.
  */
 @SuppressWarnings("unused")
-public abstract class BaseRecyclerViewFragment<T> extends BaseFragment<T> implements RecyclerRefreshLayout.SuperRefreshLayoutListener,
-        BaseRecyclerAdapter.OnItemClickListener {
+public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implements
+        RecyclerRefreshLayout.SuperRefreshLayoutListener,
+        BaseRecyclerAdapter.OnItemClickListener,
+        BaseGeneralRecyclerAdapter.Callback{
     protected BaseRecyclerAdapter<T> mAdapter;
     protected RecyclerView mRecyclerView;
     protected RecyclerRefreshLayout mRefreshLayout;
@@ -104,6 +108,10 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment<T> implem
         requestData();
     }
 
+    @Override
+    public void onLoadMore() {
+        requestData();
+    }
 
     protected void requestData() {
     }
@@ -150,4 +158,10 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment<T> implem
     protected abstract BaseRecyclerAdapter<T> getRecyclerAdapter();
 
     protected abstract Type getType();
+
+    @Override
+    public Date getSystemTime() {
+        return new Date();
+    }
+
 }

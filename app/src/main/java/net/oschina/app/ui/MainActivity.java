@@ -118,14 +118,17 @@ public class MainActivity extends AppCompatActivity implements
         this.mContext4Umeng = this;
 
         super.onCreate(savedInstanceState);
+        /*
         if (AppContext.getNightModeSwitch()) {
             setTheme(R.style.AppBaseTheme_Night);
         } else {
             setTheme(R.style.AppBaseTheme_Light);
         }
+        */
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         initView();
+
 
         AppManager.getAppManager().addActivity(this);
 

@@ -1,15 +1,7 @@
 package net.oschina.app.improve.user.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.TextUtils;
-import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,18 +12,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
 import net.oschina.app.R;
-import net.oschina.app.bean.Active;
-import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
-import net.oschina.app.ui.OSCPhotosActivity;
-import net.oschina.app.util.ImageUtils;
-import net.oschina.app.util.StringUtils;
-import net.oschina.app.util.UIHelper;
-import net.oschina.app.widget.MyLinkMovementMethod;
-import net.oschina.app.widget.MyURLSpan;
+import net.oschina.app.improve.bean.Active;
 import net.oschina.app.widget.TweetTextView;
-
-import org.kymjs.kjframe.utils.DensityUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -46,7 +29,6 @@ public class UserActiveAdapter extends BaseRecyclerAdapter<Active> {
     private final static String MAIN_HOST = "http://www.oschina.net";
 
     private RequestManager reqManager;
-    private Bitmap mRecordBitmap;
     private View.OnClickListener mPreviewImageCallback;
 
     public UserActiveAdapter(Context context, int mode) {
@@ -62,7 +44,8 @@ public class UserActiveAdapter extends BaseRecyclerAdapter<Active> {
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Active item, int position) {
         ViewHolder vh = (ViewHolder) holder;
-        vh.nick.setText(item.getAuthor());
+        /*vh.nick.setText(item.getAuthor().getName());
+
         vh.action.setText(UIHelper.parseActiveAction(item.getObjectType(), item.getObjectCatalog(), item.getObjectTitle()));
 
         if (TextUtils.isEmpty(item.getMessage())) {
@@ -124,35 +107,7 @@ public class UserActiveAdapter extends BaseRecyclerAdapter<Active> {
         } else {
             vh.pic.setVisibility(View.GONE);
             vh.pic.setImageBitmap(null);
-        }
-    }
-
-    private View.OnClickListener getPreviewImageCallback() {
-        if (mPreviewImageCallback == null) {
-            mPreviewImageCallback = new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String url = (String) v.getTag(R.mipmap.widget_dface);
-                    OSCPhotosActivity.showImagePreview(mContext, getOriginalUrl(url));
-                }
-            };
-        }
-        return mPreviewImageCallback;
-    }
-
-    private String modifyPath(String message) {
-        message = message.replaceAll("(<a[^>]+href=\")/([\\S]+)\"", "$1" + AT_HOST_PRE + "/$2\"");
-        message = message.replaceAll("(<a[^>]+href=\")http://m.oschina.net([\\S]+)\"", "$1" + MAIN_HOST + "$2\"");
-        return message;
-    }
-
-    private void initRecordImg(Context cxt) {
-        mRecordBitmap = BitmapFactory.decodeResource(cxt.getResources(), R.mipmap.audio3);
-        mRecordBitmap = ImageUtils.zoomBitmap(mRecordBitmap, DensityUtils.dip2px(cxt, 20f), DensityUtils.dip2px(cxt, 20f));
-    }
-
-    private String getOriginalUrl(String url) {
-        return url.replaceAll("_thumb", "");
+        }*/
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

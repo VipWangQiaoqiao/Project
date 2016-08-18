@@ -1,6 +1,7 @@
 package net.oschina.app.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -27,6 +28,7 @@ public class SoftwareListFragment extends BaseListFragment<SoftwareDec> {
     private static final String CACHE_KEY_PREFIX = "softwarelist_";
 
     private String softwareType = "recommend";
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,10 +70,11 @@ public class SoftwareListFragment extends BaseListFragment<SoftwareDec> {
                             long id) {
         SoftwareDec softwaredec = mAdapter.getItem(position);
         if (softwaredec != null) {
-            // String ident = softwaredec.getUrl().substring(softwaredec.getUrl().lastIndexOf("/") + 1);
+            String ident = softwaredec.getUrl().substring(softwaredec.getUrl().lastIndexOf("/") + 1);
             int softwaredecId = softwaredec.getId();
+            Log.d(TAG, "onItemClick: ----------->" + softwaredecId + "   ident=" + ident + " name=" + softwaredec.getName());
 
-            SoftwareDetailActivity.show(getActivity(), softwaredecId);
+            SoftwareDetailActivity.show(getActivity(), ident);
             //UIHelper.showSoftwareDetail(getActivity(), ident);
             // 放入已读列表
             saveToReadedList(view, SoftwareList.PREF_READED_SOFTWARE_LIST,

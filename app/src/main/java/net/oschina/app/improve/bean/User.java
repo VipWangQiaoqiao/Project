@@ -41,6 +41,10 @@ public class User extends Author{
         this.score = score;
     }
 
+    /**
+     *
+     * @return 0:未填, 1:male, 2:female
+     */
     public int getGender() {
         return gender;
     }

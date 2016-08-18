@@ -30,7 +30,7 @@ import cz.msebera.android.httpclient.Header;
  * Created by huanghaibin
  * on 16-5-23.
  */
-public abstract class BaseListFragment<T> extends BaseFragment<T> implements
+public abstract class BaseListFragment<T> extends BaseFragment implements
         SuperRefreshLayout.SuperRefreshLayoutListener,
         AdapterView.OnItemClickListener, BaseListAdapter.Callback,
         View.OnClickListener {
@@ -261,8 +261,9 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements
         return true;
     }
 
+
     protected void setFooterType(int type) {
-        if (mRoot != null && isAdded()) {
+        try {
             switch (type) {
                 case TYPE_NORMAL:
                 case TYPE_LOADING:
@@ -282,6 +283,8 @@ public abstract class BaseListFragment<T> extends BaseFragment<T> implements
                     mFooterProgressBar.setVisibility(View.GONE);
                     break;
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

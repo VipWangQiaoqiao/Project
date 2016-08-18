@@ -10,7 +10,7 @@ import net.oschina.app.adapter.ViewHolder;
 import net.oschina.app.improve.base.adapter.BaseListAdapter;
 import net.oschina.app.improve.bean.Question;
 import net.oschina.app.improve.general.fragments.QuestionFragment;
-import net.oschina.app.improve.general.fragments.UserQuestionFragment;
+import net.oschina.app.improve.user.fragments.UserQuestionFragment;
 import net.oschina.app.util.StringUtils;
 
 /**

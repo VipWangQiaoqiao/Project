@@ -1,7 +1,8 @@
-package net.oschina.app.improve.general.fragments;
+package net.oschina.app.improve.user.fragments;
 
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
@@ -44,7 +45,7 @@ public class UserQuestionFragment extends BaseListFragment<Question> {
      * @param authorId authorId
      * @return fragment
      */
-    public static UserQuestionFragment instantiate(int authorId) {
+    public static Fragment instantiate(int authorId) {
 
         UserQuestionFragment fragment = new UserQuestionFragment();
         Bundle bundle = new Bundle();

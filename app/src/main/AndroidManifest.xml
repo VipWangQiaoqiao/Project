@@ -64,6 +64,7 @@
         <activity
             android:name=".ui.MainActivity"
             android:launchMode="singleTask"
+            android:theme="@style/AppTheme.Base.NoTitle"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -192,7 +193,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/ThemePhotoBrowse" />
 
-        <service android:name=".LogUploadService" />
         <service android:name=".service.ServerTaskService">
             <intent-filter>
                 <action android:name="net.oschina.app.ACTION_PUB_BLOG_COMMENT" />
@@ -369,6 +369,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
         <activity
+            android:name=".improve.user.activities.UserMessageActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="消息中心"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".improve.media.SelectImageActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="选择图片"
@@ -384,13 +389,18 @@
         <activity
             android:name=".improve.tweet.activities.TweetPublishQueueActivity"
             android:label="动弹队列"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Base.NoTitle" />
+        <activity
+            android:name=".improve.main.MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base.NoTitle" />
 
         <service
             android:name=".improve.tweet.service.TweetPublishService"
             android:exported="false"
             android:process="net.oschina.app.tweet.TweetPublishService" />
-
     </application>
 
 </manifest>

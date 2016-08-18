@@ -31,6 +31,7 @@ import cz.msebera.android.httpclient.Header;
 public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftDetailContract.View>
         implements SoftDetailContract.Operator {
 
+    private static final String TAG = "SoftwareDetailActivity";
     private String ident;
 
     @Override
@@ -46,7 +47,10 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
      */
     public static void show(Context context, long id) {
         Intent intent = new Intent(context, SoftwareDetailActivity.class);
-        intent.putExtra("id", id);
+        Bundle bundle = new Bundle();
+        bundle.putLong("id", id);
+        intent.putExtras(bundle);
+        //intent.putExtra("id", id);
         context.startActivity(intent);
     }
 
@@ -58,7 +62,9 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
      */
     public static void show(Context context, String ident) {
         Intent intent = new Intent(context, SoftwareDetailActivity.class);
-        intent.putExtra("ident", ident);
+        Bundle bundle = new Bundle();
+        bundle.putString("ident", ident);
+        intent.putExtras(bundle);
         context.startActivity(intent);
     }
 

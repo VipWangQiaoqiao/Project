@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
  */
 
 @SuppressWarnings("WeakerAccess")
-public abstract class BaseFragment<T> extends Fragment {
+public abstract class BaseFragment extends Fragment {
     protected View mRoot;
     protected Bundle mBundle;
     private RequestManager mImgLoader;
