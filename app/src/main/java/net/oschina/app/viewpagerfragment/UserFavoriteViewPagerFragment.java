@@ -2,6 +2,7 @@ package net.oschina.app.viewpagerfragment;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
@@ -21,6 +22,9 @@ public class UserFavoriteViewPagerFragment extends BaseViewPagerFragment {
 
     @Override
     protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
+
+        FrameLayout generalActionBar = (FrameLayout) mRoot.findViewById(R.id.general_actionbar);
+        generalActionBar.setVisibility(View.GONE);
 
         String[] title = getResources().getStringArray(R.array.userfavorite);
         adapter.addTab(title[0], "favorite_software", UserFavoriteFragment.class, getBundle(Favorite.CATALOG_SOFTWARE));

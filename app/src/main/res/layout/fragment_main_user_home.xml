@@ -66,6 +66,7 @@
                     android:id="@+id/iv_portrait"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
+                    android:layout_marginTop="32dp"
                     android:src="@mipmap/widget_dface"
                     app:border_color="@color/white"
                     app:border_width="2dip" />
@@ -94,8 +95,8 @@
                 android:id="@+id/tv_summary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginLeft="48dp"
+                android:layout_marginRight="48dp"
                 android:layout_marginTop="8dp"
                 android:gravity="center_horizontal"
                 android:maxLines="2"

@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
@@ -15,6 +17,7 @@ import net.oschina.app.util.UIHelper;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * 发现页面
@@ -33,7 +36,6 @@ public class ExploreFragment extends BaseFragment {
     // @Bind(R.id.rl_city)
     // View mCity;
 
-
     @Bind(R.id.rl_scan)
     View mScan;
 
@@ -50,6 +52,7 @@ public class ExploreFragment extends BaseFragment {
         return view;
     }
 
+    @OnClick({R.id.iv_explore_discover})
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -70,6 +73,9 @@ public class ExploreFragment extends BaseFragment {
             case R.id.rl_shake:
                 showShake();
                 break;
+            case R.id.iv_explore_discover:
+                UIHelper.showSimpleBack(getActivity(), SimpleBackPage.SEARCH);
+                break;
             default:
                 break;
         }
@@ -89,12 +95,18 @@ public class ExploreFragment extends BaseFragment {
 
     @Override
     public void initView(View view) {
+
+        FrameLayout explore = (FrameLayout) view.findViewById(R.id.explore);
+        ImageView ivDiscover = (ImageView) explore.findViewById(R.id.iv_explore_discover);
+        ivDiscover.setOnClickListener(this);
+
         mRlActive.setOnClickListener(this);
 
         mFindOSCer.setOnClickListener(this);
         // mCity.setOnClickListener(this);
         mScan.setOnClickListener(this);
         mShake.setOnClickListener(this);
+
     }
 
     @Override

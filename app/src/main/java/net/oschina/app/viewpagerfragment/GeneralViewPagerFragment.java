@@ -3,6 +3,9 @@ package net.oschina.app.viewpagerfragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
@@ -10,12 +13,14 @@ import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.BaseViewPagerFragment;
 import net.oschina.app.bean.BlogList;
 import net.oschina.app.bean.NewsList;
+import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.improve.base.fragments.BaseGeneralListFragment;
 import net.oschina.app.improve.general.fragments.BlogFragment;
 import net.oschina.app.improve.general.fragments.EventFragment;
-import net.oschina.app.improve.base.fragments.BaseGeneralListFragment;
 import net.oschina.app.improve.general.fragments.NewsFragment;
 import net.oschina.app.improve.general.fragments.QuestionFragment;
 import net.oschina.app.interf.OnTabReselectListener;
+import net.oschina.app.util.UIHelper;
 
 /**
  * 综合Tab界面
@@ -24,12 +29,22 @@ public class GeneralViewPagerFragment extends BaseViewPagerFragment implements
         OnTabReselectListener {
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
+
+        FrameLayout generalActionBar = (FrameLayout) mRoot.findViewById(R.id.general_actionbar);
+        TextView tvTitle = (TextView) generalActionBar.findViewById(R.id.tv_explore_scan);
+        ImageView ivDiscover = (ImageView) generalActionBar.findViewById(R.id.iv_explore_discover);
+
+        tvTitle.setText(R.string.main_tab_name_news);
+        ivDiscover.setVisibility(View.VISIBLE);
+        ivDiscover.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UIHelper.showSimpleBack(getActivity(), SimpleBackPage.SEARCH);
+            }
+        });
+
+
         String[] title = getResources().getStringArray(
                 R.array.general_viewpage_arrays);
 
@@ -64,21 +79,6 @@ public class GeneralViewPagerFragment extends BaseViewPagerFragment implements
         Bundle bundle = new Bundle();
         bundle.putString(BlogFragment.BUNDLE_BLOG_TYPE, catalog);
         return bundle;
-    }
-
-    @Override
-    public void onClick(View v) {
-
-    }
-
-    @Override
-    public void initView(View view) {
-
-    }
-
-    @Override
-    public void initData() {
-
     }
 
     @Override
