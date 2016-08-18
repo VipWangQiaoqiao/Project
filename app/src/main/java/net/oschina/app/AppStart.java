@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import net.oschina.app.ui.MainActivity;
+import net.oschina.app.improve.main.MainActivity;
 import net.oschina.app.util.TDevice;
 
 import org.kymjs.kjframe.utils.PreferenceHelper;
