@@ -4,8 +4,8 @@ import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.improve.base.adapter.BaseListAdapter;
-import net.oschina.app.improve.base.fragments.BaseListFragment;
+import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
+import net.oschina.app.improve.base.fragments.BaseRecyclerViewFragment;
 import net.oschina.app.improve.bean.Message;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
@@ -18,11 +18,11 @@ import java.lang.reflect.Type;
  * on 2016/8/16.
  */
 
-public class UserMessageFragment extends BaseListFragment<Message> {
+public class UserMessageFragment extends BaseRecyclerViewFragment<Message> {
     public long authorId;
 
     @Override
-    protected void initData() {
+    public void initData() {
         super.initData();
         authorId = Long.parseLong(String.valueOf(AppContext.getInstance().getLoginUid()));
     }
@@ -34,7 +34,7 @@ public class UserMessageFragment extends BaseListFragment<Message> {
     }
 
     @Override
-    protected BaseListAdapter<Message> getListAdapter() {
+    protected BaseRecyclerAdapter<Message> getRecyclerAdapter() {
         return new UserMessageAdapter(this);
     }
 

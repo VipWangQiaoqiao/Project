@@ -1,7 +1,10 @@
 package net.oschina.app.improve.user.adapter;
 
+import android.support.v7.widget.RecyclerView;
+import android.view.ViewGroup;
+
 import net.oschina.app.adapter.ViewHolder;
-import net.oschina.app.improve.base.adapter.BaseListAdapter;
+import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.bean.Mention;
 
 /**
@@ -9,18 +12,18 @@ import net.oschina.app.improve.bean.Mention;
  * on 2016/8/16.
  */
 
-public class UserMentionAdapter extends BaseListAdapter<Mention> {
+public class UserMentionAdapter extends BaseGeneralRecyclerAdapter<Mention> {
     public UserMentionAdapter(Callback callback) {
-        super(callback);
+        super(callback,ONLY_FOOTER);
     }
 
     @Override
-    protected void convert(ViewHolder vh, Mention item, int position) {
-
+    protected RecyclerView.ViewHolder onCreateDefaultViewHolder(ViewGroup parent, int type) {
+        return null;
     }
 
     @Override
-    protected int getLayoutId(int position, Mention item) {
-        return 0;
+    protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Mention item, int position) {
+
     }
 }
