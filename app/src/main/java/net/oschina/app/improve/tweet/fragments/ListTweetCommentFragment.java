@@ -109,6 +109,16 @@ public class ListTweetCommentFragment extends BaseRecyclerViewFragment<TweetComm
     }
 
     @Override
+    protected boolean isNeedCache() {
+        return false;
+    }
+
+    @Override
+    protected boolean isNeedEmptyView() {
+        return false;
+    }
+
+    @Override
     public void onItemClick(int position, long itemId) {
         super.onItemClick(position, itemId);
         TweetComment item = mAdapter.getItem(position);

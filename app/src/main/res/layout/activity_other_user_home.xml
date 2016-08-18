@@ -16,7 +16,7 @@
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleTextAppearance="@android:color/transparent"
@@ -35,10 +35,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:paddingBottom="78dp">
+                android:orientation="vertical">
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -67,7 +66,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="thanatosx"
                     android:textColor="#FFF"
                     android:textSize="20sp"
                     tools:text="thanatosx" />
@@ -77,9 +75,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="这个人很懒,什么都没有写"
                     android:textColor="#FFF"
                     android:textSize="14sp"
+                    android:text="这个人很懒,什么都没有写"
                     tools:text="这个人很懒,什么都没有写" />
 
                 <TextView
@@ -89,16 +87,21 @@
                     android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
                     android:gravity="bottom"
-                    android:text="积分 88888"
                     android:textColor="#FFF"
                     android:textSize="14sp"
                     tools:text="积分 88888" />
 
+                <!--
+                    about margin bottom
+                    since using transparent status bar, so the layout
+                    push up some distances for status bar height, maybe
+                -->
                 <LinearLayout
                     android:layout_width="205dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/shape_other_user_wrapper"
                     android:gravity="center_vertical"
+                    android:layout_marginBottom="40dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -108,7 +111,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:onClick="onClick"
-                        android:text="关注 777"
+                        tools:text="关注 777"
                         android:textColor="#FFF"
                         android:textSize="16sp" />
 
@@ -126,12 +129,11 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:onClick="onClick"
-                        android:text="粉丝 777"
+                        tools:text="粉丝 777"
                         android:textColor="#FFF"
                         android:textSize="16sp" />
 
                 </LinearLayout>
-
             </LinearLayout>
 
             <android.support.v7.widget.Toolbar
@@ -159,17 +161,24 @@
                     tools:text="thanatosx"
                     tools:visibility="visible" />
             </android.support.v7.widget.Toolbar>
+
         </android.support.design.widget.CollapsingToolbarLayout>
+
+        <View
+            android:id="@+id/view_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#24E28E"
+            app:layout_scrollFlags="scroll"/>
 
         <android.support.design.widget.TabLayout
             android:id="@+id/layout_tab"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabIndicatorHeight="0dp"
-            app:tabGravity="fill"
-            app:tabMode="fixed"
+            app:tabTextAppearance="@style/TabItemAppearance"
             app:tabSelectedTextColor="#FFF"
-            app:tabTextColor="#92eabc"/>
+            app:tabTextColor="#92EABC"/>
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager

@@ -43,7 +43,6 @@ import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.ShakeObject;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.bean.Tweet;
-import net.oschina.app.bean.User;
 import net.oschina.app.fragment.BrowserFragment;
 import net.oschina.app.fragment.CommentFrament;
 import net.oschina.app.fragment.FriendsFragment;
@@ -863,7 +862,7 @@ public class UIHelper {
      */
     public static void showUserBlog(Context context, int uid) {
         Bundle args = new Bundle();
-        args.putInt(UserBlogFragment.USER_ID, uid);
+        args.putInt(UserBlogFragment.BUNDLE_KEY_USER_ID, uid);
         showSimpleBack(context, SimpleBackPage.USER_BLOG, args);
     }
 

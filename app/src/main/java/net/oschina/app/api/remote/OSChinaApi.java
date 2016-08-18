@@ -1163,7 +1163,7 @@ public class OSChinaApi {
      * @param pageToken 请求上下页数据令牌
      * @param handler   AsyncHttpResponseHandler
      */
-    public static void getUserBlogList(String pageToken, int userId, AsyncHttpResponseHandler handler) {
+    public static void getUserBlogList(String pageToken, long userId, AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
 
         if (!TextUtils.isEmpty(pageToken)) {
@@ -1180,9 +1180,8 @@ public class OSChinaApi {
      * @param pageToken 请求上下页数据令牌
      * @param handler   AsyncHttpResponseHandler
      */
-    public static void getUserQuestionList(String pageToken, int userId, AsyncHttpResponseHandler handler) {
+    public static void getUserQuestionList(String pageToken, long userId, AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
-
         if (!TextUtils.isEmpty(pageToken)) {
             params.put("pageToken", pageToken);
         }
