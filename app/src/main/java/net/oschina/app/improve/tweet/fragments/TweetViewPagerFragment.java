@@ -3,6 +3,9 @@ package net.oschina.app.improve.tweet.fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
@@ -20,12 +23,15 @@ public class TweetViewPagerFragment extends BaseViewPagerFragment implements
         OnTabReselectListener {
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
+
+        FrameLayout generalActionBar = (FrameLayout) mRoot.findViewById(R.id.general_actionbar);
+        TextView tvTitle = (TextView) generalActionBar.findViewById(R.id.tv_explore_scan);
+        ImageView ivDiscover = (ImageView) generalActionBar.findViewById(R.id.iv_explore_discover);
+
+        tvTitle.setText(R.string.main_tab_name_tweet);
+        ivDiscover.setVisibility(View.INVISIBLE);
+
         String[] title = getResources().getStringArray(
                 R.array.tweets_viewpage_arrays);
 
@@ -35,6 +41,7 @@ public class TweetViewPagerFragment extends BaseViewPagerFragment implements
                 getBundle(TweetFragment.CATEGORY_TYPE, TweetFragment.TWEET_TYPE_HOT));
         adapter.addTab(title[2], "tweet_mine", TweetFragment.class,
                 getBundle(TweetFragment.CATEGORY_USER, 0));
+
     }
 
     /**
@@ -62,6 +69,11 @@ public class TweetViewPagerFragment extends BaseViewPagerFragment implements
 
     @Override
     public void initView(View view) {
+        FrameLayout actionBar = (FrameLayout) view.findViewById(R.id.general_actionbar);
+        TextView tvTweetTitle = (TextView) actionBar.findViewById(R.id.tv_explore_scan);
+        tvTweetTitle.setText(R.string.main_tab_name_tweet);
+        ImageView ivDiscover = (ImageView) actionBar.findViewById(R.id.iv_explore_discover);
+        ivDiscover.setVisibility(View.INVISIBLE);
 
     }
 

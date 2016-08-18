@@ -19,6 +19,7 @@ import net.oschina.app.widget.PagerSlidingTabStrip;
  */
 public abstract class BaseViewPagerFragment extends BaseFragment {
 
+    private static final String TAG = "BaseViewPagerFragment";
     protected PagerSlidingTabStrip mTabStrip;
     protected ViewPager mViewPager;
     protected ViewPageFragmentAdapter mTabsAdapter;
@@ -46,9 +47,8 @@ public abstract class BaseViewPagerFragment extends BaseFragment {
             mTabsAdapter = new ViewPageFragmentAdapter(getChildFragmentManager(),
                     mTabStrip, mViewPager);
             setScreenPageLimit();
-            onSetupTabAdapter(mTabsAdapter);
-
             mRoot = root;
+            onSetupTabAdapter(mTabsAdapter);
         }
         return mRoot;
     }

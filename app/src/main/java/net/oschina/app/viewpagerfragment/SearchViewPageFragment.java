@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import net.oschina.app.R;
@@ -26,6 +27,10 @@ public class SearchViewPageFragment extends BaseViewPagerFragment {
 
     @Override
     protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
+
+        FrameLayout generalActionBar = (FrameLayout) mRoot.findViewById(R.id.general_actionbar);
+        generalActionBar.setVisibility(View.GONE);
+
         String[] title = getResources().getStringArray(R.array.search);
         adapter.addTab(title[0], "search_soft", SearchFragment.class, getBundle(SearchList.CATALOG_SOFTWARE));
         adapter.addTab(title[1], "search_quest", SearchFragment.class, getBundle(SearchList.CATALOG_POST));

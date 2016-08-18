@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:background="@color/actionbar_background">
+
+    <ImageView
+        android:id="@+id/iv_explore_discover"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"
+        android:layout_marginRight="16dp"
+        android:src="@mipmap/actionbar_search_icon" />
+
+    <TextView
+        android:id="@+id/tv_explore_scan"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_vertical"
+        android:text="@string/main_tab_name_explore"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+</FrameLayout>
