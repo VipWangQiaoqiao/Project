@@ -63,14 +63,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp">
 
-                <net.oschina.app.widget.AvatarView
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/iv_portrait"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginTop="32dp"
                     android:src="@mipmap/widget_dface"
-                    app:border_color="@color/white"
-                    app:border_width="2dip" />
+                    app:civ_border_color="@color/white"
+                    app:civ_border_width="2dip" />
 
                 <ImageView
                     android:id="@+id/iv_gender"
@@ -157,6 +157,7 @@
                         android:text="0" />
 
                     <TextView
+                        android:id="@+id/textView5"
                         style="@style/user_formation_info"
                         android:text="@string/favorite" />
                 </LinearLayout>
@@ -222,6 +223,7 @@
                     android:text="@string/message" />
 
                 <View
+                    android:id="@+id/user_info_notice_message"
                     android:layout_width="0dp"
                     android:layout_height="10dp"
                     android:layout_marginLeft="4dp"

@@ -18,6 +18,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -33,6 +34,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.MyInformation;
+import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.SimpleBackPage;
@@ -40,7 +42,9 @@ import net.oschina.app.bean.User;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.user.activities.UserMessageActivity;
+import net.oschina.app.improve.user.activities.UserTweetActivity;
 import net.oschina.app.improve.widget.SolarSystemView;
+import net.oschina.app.ui.MainActivity;
 import net.oschina.app.ui.MyQrodeDialog;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.ui.dialog.DialogControl;
@@ -51,7 +55,6 @@ import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
-import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.BadgeView;
 
 import java.io.ByteArrayInputStream;
@@ -66,6 +69,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.OnClick;
 import cz.msebera.android.httpclient.Header;
+import de.hdodenhof.circleimageview.CircleImageView;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -87,7 +91,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
     ImageView mIvLogoZxing;
 
     @Bind(R.id.iv_portrait)
-    AvatarView mCiOrtrait;
+    CircleImageView mCiOrtrait;
     @Bind(R.id.iv_gender)
     ImageView mIvGander;
     @Bind(R.id.tv_nick)
@@ -111,11 +115,12 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
     @Bind(R.id.tv_follower)
     TextView mTvFollowerCount;
 
+    @Bind(R.id.user_info_notice_message)
+    View mMesView;
+
     private BadgeView mMesCount;
 
     private boolean mIsWatingLogin;
-    private boolean refresh;
-
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
@@ -129,19 +134,20 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                     steupUser();
                     mMesCount.hide();
 
+                    Log.d(TAG, "onReceive: ------->账户被注销...");
                     break;
                 case Constants.INTENT_ACTION_USER_CHANGE:
+                    Log.d(TAG, "onReceive: ------->用户信息被更改.....");
                     requestData(true);
                     break;
                 case Constants.INTENT_ACTION_NOTICE:
+                    Log.d(TAG, "onReceive: --------->有消息提醒......");
                     setNotice();
                     break;
             }
         }
     };
-    private AsyncTask<String, Void, net.oschina.app.bean.User> mCacheTask;
-    private View mMesView;
-    private User mUser = new User();
+    private AsyncTask<String, Void, User> mCacheTask;
 
     private final static int CROP = 200;
 
@@ -159,8 +165,9 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
         @Override
         public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
             try {
-                mInfo = XmlUtils.toBean(MyInformation.class,
-                        new ByteArrayInputStream(arg2)).getUser();
+                mInfo = XmlUtils.toBean(MyInformation.class, new ByteArrayInputStream(arg2)).getUser();
+
+                Log.d(TAG, "onSuccess: ------------>mInfo=" + mInfo.getPortrait());
                 if (mInfo != null) {
                     fillUI();
                     AppContext.getInstance().updateUserInfo(mInfo);
@@ -184,7 +191,11 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
     private void fillUI() {
         if (mInfo == null)
             return;
-        mCiOrtrait.setAvatarUrl(mInfo.getPortrait());
+
+        Log.d(TAG, "fillUI: ------------->" + mInfo.getPortrait());
+
+        setImageFromNet(mCiOrtrait, mInfo.getPortrait(), R.mipmap.widget_dface);
+
         mTvName.setText(mInfo.getName());
         mIvGander.setImageResource(StringUtils.toInt(mInfo.getGender()) != 2 ? R.mipmap
                 .userinfo_icon_male
@@ -196,12 +207,32 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
         mTvFollowerCount.setText(String.valueOf(mInfo.getFans()));
     }
 
-
     private void setNotice() {
+
+        if (MainActivity.mNotice != null) {
+
+            Notice notice = MainActivity.mNotice;
+            int atmeCount = notice.getAtmeCount();// @我
+            int msgCount = notice.getMsgCount();// 留言
+            int reviewCount = notice.getReviewCount();// 评论
+            int newFansCount = notice.getNewFansCount();// 新粉丝
+            int newLikeCount = notice.getNewLikeCount();// 获得点赞
+            int activeCount = atmeCount + reviewCount + msgCount + newFansCount + newLikeCount;//
+            // 信息总数
+            if (activeCount > 0) {
+                mMesCount.show();
+                mMesCount.setText(" ");
+            } else {
+                mMesCount.hide();
+            }
+
+        } else {
+            mMesCount.hide();
+        }
 
     }
 
-    private void requestData(boolean b) {
+    private void requestData(boolean refresh) {
         if (AppContext.getInstance().isLogin()) {
             mIsWatingLogin = false;
             String key = getCacheKey();
@@ -313,6 +344,12 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().unregisterReceiver(mReceiver);
+    }
+
+    @Override
     protected void initWidget(View root) {
         super.initWidget(root);
 
@@ -330,21 +367,6 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
     protected void initData() {
         super.initData();
         sendRequestData();
-        // sendRequiredData();
-    }
-
-//    public void fillUI() {
-//        //Core.getKJBitmap().displayWithLoadBitmap(mUserFace, mUser.getPortrait(), R.mipmap.widget_dface);
-//        //  mName.setText(mUser.getName());
-//        // mJoinTime.setText(StringUtils.formatSomeAgo(mUser.getJointime()));
-//        //  mFrom.setText(mUser.getFrom());
-//        //  mPlatFrom.setText(mUser.getDevplatform());
-//        //  mFocus.setText(mUser.getExpertise());
-//    }
-
-    public void sendRequiredData() {
-        OSChinaApi.getMyInformation(AppContext.getInstance().getLoginUid(),
-                mHandler);
     }
 
     @Override
@@ -376,8 +398,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                     break;
                 case R.id.iv_portrait:
                     //编辑头像
-
-
+                    showClickAvatar();
                     break;
                 case R.id.rl_show_my_info:
                     //显示我的资料
@@ -388,7 +409,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                             SimpleBackPage.MY_INFORMATION_DETAIL);
                     break;
                 case R.id.ly_tweet:
-
+                    UserTweetActivity.show(getActivity(), AppContext.getInstance().getLoginUid());
                     break;
                 case R.id.ly_favorite:
                     UIHelper.showUserFavorite(getActivity(), AppContext.getInstance()
@@ -424,7 +445,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void showClickAvatar() {
-        if (mUser == null) {
+        if (mInfo == null) {
             AppContext.showToast("");
             return;
         }
@@ -434,7 +455,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                 if (i == 0) {
                     handleSelectPicture();
                 } else {
-                    UIHelper.showUserAvatar(getActivity(), mUser.getPortrait());
+                    UIHelper.showUserAvatar(getActivity(), mInfo.getPortrait());
                 }
             }
         }).show();
@@ -630,7 +651,7 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                                 if (res.OK()) {
                                     AppContext.showToast("更换成功");
                                     // 显示新头像
-                                    // mUserFace.setImageBitmap(protraitBitmap);
+                                    mCiOrtrait.setImageBitmap(protraitBitmap);
                                     isChangeFace = true;
                                 } else {
                                     AppContext.showToast(res.getErrorMessage());
