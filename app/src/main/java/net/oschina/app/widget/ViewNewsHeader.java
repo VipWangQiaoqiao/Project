@@ -6,6 +6,7 @@ import android.os.Message;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,9 +22,6 @@ import net.oschina.app.widget.indicator.CirclePagerIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by huanghaibin
@@ -36,7 +34,6 @@ public class ViewNewsHeader extends RelativeLayout implements ViewPager.OnPageCh
     private SuperRefreshLayout refreshLayout;
     private CirclePagerIndicator indicator;
     private TextView tv_news_title;
-    private ScheduledExecutorService mSchedule;
     private int mCurrentItem = 0;
     private Handler handler;
     private boolean isMoving = false;
@@ -73,19 +70,19 @@ public class ViewNewsHeader extends RelativeLayout implements ViewPager.OnPageCh
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 vp_news.setCurrentItem(mCurrentItem);
+                Log.e("message", "收到消息");
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!isMoving && !isScroll) {
+                            mCurrentItem = (mCurrentItem + 1) % banners.size();
+                            handler.sendEmptyMessage(1);
+                        }
+                    }
+                }, 4000);
             }
         };
-        mSchedule = Executors.newSingleThreadScheduledExecutor();
-        mSchedule.scheduleWithFixedDelay(new Runnable() {
-            @Override
-            public void run() {
-                if (!isMoving && !isScroll) {
-                    mCurrentItem = (mCurrentItem + 1) % banners.size();
-                    handler.obtainMessage().sendToTarget();
-                }
-            }
-        }, 2, 4, TimeUnit.SECONDS);
-
+        handler.sendEmptyMessage(1);
         vp_news.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -115,6 +112,8 @@ public class ViewNewsHeader extends RelativeLayout implements ViewPager.OnPageCh
             newsBanner.initData(manager, banner);
             this.banners.add(newsBanner);
         }
+        if (banners.size() > 0)
+            tv_news_title.setText(banners.get(0).getName());
         adapter.notifyDataSetChanged();
         indicator.notifyDataSetChanged();
     }
@@ -139,7 +138,6 @@ public class ViewNewsHeader extends RelativeLayout implements ViewPager.OnPageCh
         isScroll = state != ViewPager.SCROLL_STATE_IDLE;
         refreshLayout.setEnabled(state == ViewPager.SCROLL_STATE_IDLE);
     }
-
 
     private class NewsPagerAdapter extends PagerAdapter {
         @Override

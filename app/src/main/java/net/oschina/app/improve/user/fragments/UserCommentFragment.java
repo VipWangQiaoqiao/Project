@@ -7,12 +7,13 @@ import com.google.gson.reflect.TypeToken;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseRecyclerViewFragment;
-import net.oschina.app.improve.bean.Message;
+import net.oschina.app.improve.bean.Mention;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.bean.simple.Comment;
-import net.oschina.app.improve.user.adapter.UserCommentAdapter;
+import net.oschina.app.improve.bean.simple.Origin;
+import net.oschina.app.improve.user.adapter.UserMentionAdapter;
 import net.oschina.app.ui.empty.EmptyLayout;
 
 import java.lang.reflect.Type;
@@ -22,7 +23,7 @@ import java.lang.reflect.Type;
  * on 2016/8/16.
  */
 
-public class UserCommentFragment extends BaseRecyclerViewFragment<Comment> {
+public class UserCommentFragment extends BaseRecyclerViewFragment<Mention> {
 
     @Override
     protected void requestData() {
@@ -34,15 +35,19 @@ public class UserCommentFragment extends BaseRecyclerViewFragment<Comment> {
     @Override
     protected void onRequestError(int code) {
         for (int i = 0; i < 20; i++) {
-            mAdapter.addItem(new Comment());
-        }mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+            Mention mention = new Mention();
+            mention.setAuthor(new Author());
+            mention.setOrigin(new Origin());
+            mAdapter.addItem(mention);
+        }
+        mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
         mRefreshLayout.setVisibility(View.VISIBLE);
         super.onRequestError(code);
     }
 
     @Override
-    protected BaseRecyclerAdapter<Comment> getRecyclerAdapter() {
-        return new UserCommentAdapter(this);
+    protected BaseRecyclerAdapter<Mention> getRecyclerAdapter() {
+        return new UserMentionAdapter(this);
     }
 
     @Override
