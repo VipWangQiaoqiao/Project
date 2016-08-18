@@ -9,6 +9,9 @@ import android.support.v4.view.ViewPager;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
+import net.oschina.app.improve.user.fragments.UserCommentFragment;
+import net.oschina.app.improve.user.fragments.UserMentionFragment;
+import net.oschina.app.improve.user.fragments.UserMessageFragment;
 
 import butterknife.Bind;
 
@@ -22,6 +25,10 @@ public class UserMessageActivity extends BaseBackActivity {
     TabLayout tabLayout;
     @Bind(R.id.vp_user_message)
     ViewPager vp_user_message;
+
+    private UserMentionFragment mUserMentionFragment;
+    private UserCommentFragment mUserCommentFragment;
+    private UserMessageFragment mUserMessageFragment;
 
     public static void show(Context context) {
         context.startActivity(new Intent(context, UserMessageActivity.class));
@@ -37,6 +44,9 @@ public class UserMessageActivity extends BaseBackActivity {
         super.initWidget();
         vp_user_message.setAdapter(mAdapter);
         tabLayout.setupWithViewPager(vp_user_message);
+        mUserMentionFragment = new UserMentionFragment();
+        mUserCommentFragment = new UserCommentFragment();
+        mUserMessageFragment = new UserMessageFragment();
     }
 
     @Override
@@ -47,7 +57,12 @@ public class UserMessageActivity extends BaseBackActivity {
     private FragmentStatePagerAdapter mAdapter = new FragmentStatePagerAdapter(getSupportFragmentManager()) {
         @Override
         public Fragment getItem(int position) {
-            return null;
+            if(position == 0){
+                return mUserMentionFragment;
+            }else if(position == 1){
+                return mUserCommentFragment;
+            }
+            return mUserMessageFragment;
         }
 
         @Override
@@ -57,7 +72,12 @@ public class UserMessageActivity extends BaseBackActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return super.getPageTitle(position);
+            if(position == 0){
+                return "@我";
+            }else if(position == 1){
+                return "评论";
+            }
+            return "私信";
         }
     };
 }

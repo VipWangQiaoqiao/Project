@@ -372,8 +372,7 @@
             android:name=".improve.user.activities.UserMessageActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="消息中心"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Base" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".improve.media.SelectImageActivity"
             android:configChanges="keyboardHidden|orientation"
