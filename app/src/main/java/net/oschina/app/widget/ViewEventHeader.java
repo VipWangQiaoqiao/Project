@@ -20,9 +20,6 @@ import net.oschina.app.widget.indicator.CirclePagerIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by huanghaibin
@@ -34,7 +31,7 @@ public class ViewEventHeader extends RelativeLayout implements ViewPager.OnPageC
     private EventPagerAdapter adapter;
     private SuperRefreshLayout refreshLayout;
     private CirclePagerIndicator indicator;
-    private ScheduledExecutorService mSchedule;
+
     private int mCurrentItem = 0;
     private Handler handler;
     private boolean isMoving = false;
@@ -70,19 +67,19 @@ public class ViewEventHeader extends RelativeLayout implements ViewPager.OnPageC
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 vp_event.setCurrentItem(mCurrentItem);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!isMoving && !isScroll) {
+                            mCurrentItem = (mCurrentItem + 1) % banners.size();
+                            handler.sendEmptyMessage(1);
+                        }
+                    }
+                }, 4000);
             }
         };
-        mSchedule = Executors.newSingleThreadScheduledExecutor();
-        mSchedule.scheduleWithFixedDelay(new Runnable() {
-            @Override
-            public void run() {
-                if (!isMoving && !isScroll) {
-                    mCurrentItem = (mCurrentItem + 1) % banners.size();
-                    handler.obtainMessage().sendToTarget();
-                }
-            }
-        }, 2, 4, TimeUnit.SECONDS);
 
+        handler.sendEmptyMessage(1);
 
         vp_event.setOnTouchListener(new OnTouchListener() {
             @Override

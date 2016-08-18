@@ -134,6 +134,7 @@ public class StringUtils {
      * @return n分钟前, n小时前, 昨天, 前天, n天前, n个月前
      */
     public static String formatSomeAgo(@NonNull String sdate) {
+        if(sdate == null)return "";
         Calendar calendar = parseCalendar(sdate);
         if (calendar == null) return sdate;
 
