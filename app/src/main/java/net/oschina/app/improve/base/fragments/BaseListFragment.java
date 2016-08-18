@@ -1,6 +1,5 @@
 package net.oschina.app.improve.base.fragments;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -50,7 +49,6 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
     protected TextHttpResponseHandler mHandler;
     protected PageBean<T> mBean;
     private String mTime;
-    protected boolean isAttach;
     private View mFooterView;
     private ProgressBar mFooterProgressBar;
     private TextView mFooterText;
@@ -204,13 +202,9 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
     }
 
     protected void onRequestError(int code) {
-        try{
-            setFooterType(TYPE_NET_ERROR);
-            if (mAdapter.getDatas().size() == 0)
-                mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        setFooterType(TYPE_NET_ERROR);
+        if (mAdapter.getDatas().size() == 0)
+            mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
     }
 
     protected void onRequestFinish() {
@@ -267,33 +261,30 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
         return true;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        isAttach = true;
-        super.onAttach(context);
-    }
 
     protected void setFooterType(int type) {
-        if (!isAttach) return;
-        switch (type) {
-            case TYPE_NORMAL:
-            case TYPE_LOADING:
-                mFooterText.setText(getResources().getString(R.string.footer_type_loading));
-                mFooterProgressBar.setVisibility(View.VISIBLE);
-                break;
-            case TYPE_NET_ERROR:
-                mFooterText.setText(getResources().getString(R.string.footer_type_net_error));
-                mFooterProgressBar.setVisibility(View.GONE);
-                break;
-            case TYPE_ERROR:
-                mFooterText.setText(getResources().getString(R.string.footer_type_error));
-                mFooterProgressBar.setVisibility(View.GONE);
-                break;
-            case TYPE_NO_MORE:
-                mFooterText.setText(getResources().getString(R.string.footer_type_not_more));
-                mFooterProgressBar.setVisibility(View.GONE);
-                break;
+        try {
+            switch (type) {
+                case TYPE_NORMAL:
+                case TYPE_LOADING:
+                    mFooterText.setText(getResources().getString(R.string.footer_type_loading));
+                    mFooterProgressBar.setVisibility(View.VISIBLE);
+                    break;
+                case TYPE_NET_ERROR:
+                    mFooterText.setText(getResources().getString(R.string.footer_type_net_error));
+                    mFooterProgressBar.setVisibility(View.GONE);
+                    break;
+                case TYPE_ERROR:
+                    mFooterText.setText(getResources().getString(R.string.footer_type_error));
+                    mFooterProgressBar.setVisibility(View.GONE);
+                    break;
+                case TYPE_NO_MORE:
+                    mFooterText.setText(getResources().getString(R.string.footer_type_not_more));
+                    mFooterProgressBar.setVisibility(View.GONE);
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
     }
 }

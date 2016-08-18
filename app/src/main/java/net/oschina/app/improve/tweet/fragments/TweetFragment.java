@@ -115,19 +115,18 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
         });
 
         if (authorId == 0 && requestCategory == CATEGORY_USER) {
-            if (isAttach) {
-                mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-                mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
-            }
+
+            mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+            mErrorLayout.setErrorMessage(getString(R.string.unlogin_tip));
+
         }
     }
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (isAttach) {
-                setupContent();
-            }
+            setupContent();
+
         }
     };
 
