@@ -4,7 +4,9 @@ import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.base.adapter.BaseListAdapter;
+import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseListFragment;
+import net.oschina.app.improve.base.fragments.BaseRecyclerViewFragment;
 import net.oschina.app.improve.bean.Mention;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
@@ -17,7 +19,7 @@ import java.lang.reflect.Type;
  * on 2016/8/16.
  */
 
-public class UserMentionFragment extends BaseListFragment<Mention> {
+public class UserMentionFragment extends BaseRecyclerViewFragment<Mention> {
 
     @Override
     protected void requestData() {
@@ -26,7 +28,7 @@ public class UserMentionFragment extends BaseListFragment<Mention> {
     }
 
     @Override
-    protected BaseListAdapter<Mention> getListAdapter() {
+    protected BaseRecyclerAdapter<Mention> getRecyclerAdapter() {
         return new UserMentionAdapter(this);
     }
 
