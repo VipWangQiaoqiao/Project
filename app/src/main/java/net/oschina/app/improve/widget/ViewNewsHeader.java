@@ -2,11 +2,9 @@ package net.oschina.app.improve.widget;
 
 import android.content.Context;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,9 +16,9 @@ import com.bumptech.glide.RequestManager;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.Banner;
+import net.oschina.app.improve.widget.indicator.CirclePagerIndicator;
 import net.oschina.app.widget.SmoothScroller;
 import net.oschina.app.widget.SuperRefreshLayout;
-import net.oschina.app.improve.widget.indicator.CirclePagerIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +26,11 @@ import java.util.List;
 /**
  * Created by huanghaibin
  * on 16-6-2.
+ * <p>
+ * Changed qiujuer
+ * on 08-18
  */
-public class ViewNewsHeader extends RelativeLayout implements ViewPager.OnPageChangeListener {
+public class ViewNewsHeader extends RelativeLayout implements ViewPager.OnPageChangeListener, Runnable {
     private ViewPager vp_news;
     private List<ViewNewsBanner> banners = new ArrayList<>();
     private NewsPagerAdapter adapter;
@@ -37,7 +38,7 @@ public class ViewNewsHeader extends RelativeLayout implements ViewPager.OnPageCh
     private CirclePagerIndicator indicator;
     private TextView tv_news_title;
     private int mCurrentItem = 0;
-    private Handler handler;
+    private Handler mHandler;
     private boolean isMoving = false;
     private boolean isScroll = false;
 
@@ -66,25 +67,6 @@ public class ViewNewsHeader extends RelativeLayout implements ViewPager.OnPageCh
         indicator.bindViewPager(vp_news);
         new SmoothScroller(getContext()).bingViewPager(vp_news);
         vp_news.addOnPageChangeListener(this);
-
-        handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                vp_news.setCurrentItem(mCurrentItem);
-                Log.e("message", "收到消息");
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!isMoving && !isScroll) {
-                            mCurrentItem = (mCurrentItem + 1) % banners.size();
-                            handler.sendEmptyMessage(1);
-                        }
-                    }
-                }, 4000);
-            }
-        };
-        handler.sendEmptyMessage(1);
         vp_news.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -118,6 +100,7 @@ public class ViewNewsHeader extends RelativeLayout implements ViewPager.OnPageCh
             tv_news_title.setText(banners.get(0).getName());
         adapter.notifyDataSetChanged();
         indicator.notifyDataSetChanged();
+        requestNext();
     }
 
     @Override
@@ -139,6 +122,40 @@ public class ViewNewsHeader extends RelativeLayout implements ViewPager.OnPageCh
         isMoving = state != ViewPager.SCROLL_STATE_IDLE;
         isScroll = state != ViewPager.SCROLL_STATE_IDLE;
         refreshLayout.setEnabled(state == ViewPager.SCROLL_STATE_IDLE);
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        mHandler = new Handler();
+        // show first
+        run();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mHandler.removeCallbacksAndMessages(null);
+        mHandler = null;
+    }
+
+    private void requestNext() {
+        Handler handler = this.mHandler;
+        if (handler != null && banners.size() > 1) {
+            // do next
+            handler.postDelayed(this, 5000);
+        }
+    }
+
+    @Override
+    public void run() {
+        if(banners.size()==0)
+            return;
+        if (!isMoving && !isScroll) {
+            mCurrentItem = (mCurrentItem + 1) % banners.size();
+            vp_news.setCurrentItem(mCurrentItem);
+        }
+        requestNext();
     }
 
     private class NewsPagerAdapter extends PagerAdapter {

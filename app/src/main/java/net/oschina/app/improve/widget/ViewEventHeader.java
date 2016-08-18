@@ -2,7 +2,6 @@ package net.oschina.app.improve.widget;
 
 import android.content.Context;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -16,9 +15,9 @@ import com.bumptech.glide.RequestManager;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.Banner;
+import net.oschina.app.improve.widget.indicator.CirclePagerIndicator;
 import net.oschina.app.widget.SmoothScroller;
 import net.oschina.app.widget.SuperRefreshLayout;
-import net.oschina.app.improve.widget.indicator.CirclePagerIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,16 +25,18 @@ import java.util.List;
 /**
  * Created by huanghaibin
  * on 16-6-2.
+ * <p>
+ * Changed qiujuer
+ * on 08-18
  */
-public class ViewEventHeader extends RelativeLayout implements ViewPager.OnPageChangeListener {
+public class ViewEventHeader extends RelativeLayout implements ViewPager.OnPageChangeListener, Runnable {
     private ViewPager vp_event;
     private List<ViewEventBanner> banners = new ArrayList<>();
     private EventPagerAdapter adapter;
     private SuperRefreshLayout refreshLayout;
     private CirclePagerIndicator indicator;
-
     private int mCurrentItem = 0;
-    private Handler handler;
+    private Handler mHandler;
     private boolean isMoving = false;
     private boolean isScroll = false;
 
@@ -63,26 +64,6 @@ public class ViewEventHeader extends RelativeLayout implements ViewPager.OnPageC
         indicator.bindViewPager(vp_event);
         new SmoothScroller(getContext()).bingViewPager(vp_event);
         vp_event.addOnPageChangeListener(this);
-
-        handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                vp_event.setCurrentItem(mCurrentItem);
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!isMoving && !isScroll) {
-                            mCurrentItem = (mCurrentItem + 1) % banners.size();
-                            handler.sendEmptyMessage(1);
-                        }
-                    }
-                }, 4000);
-            }
-        };
-
-        handler.sendEmptyMessage(1);
-
         vp_event.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -113,6 +94,7 @@ public class ViewEventHeader extends RelativeLayout implements ViewPager.OnPageC
         }
         adapter.notifyDataSetChanged();
         indicator.notifyDataSetChanged();
+        requestNext();
     }
 
     @Override
@@ -133,6 +115,41 @@ public class ViewEventHeader extends RelativeLayout implements ViewPager.OnPageC
         isMoving = state != ViewPager.SCROLL_STATE_IDLE;
         isScroll = state != ViewPager.SCROLL_STATE_IDLE;
         refreshLayout.setEnabled(state == ViewPager.SCROLL_STATE_IDLE);
+    }
+
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        mHandler = new Handler();
+        // show first
+        run();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mHandler.removeCallbacksAndMessages(null);
+        mHandler = null;
+    }
+
+    private void requestNext() {
+        Handler handler = this.mHandler;
+        if (handler != null && banners.size() > 1) {
+            // do next
+            handler.postDelayed(this, 5000);
+        }
+    }
+
+    @Override
+    public void run() {
+        if (banners.size() == 0)
+            return;
+        if (!isMoving && !isScroll) {
+            mCurrentItem = (mCurrentItem + 1) % banners.size();
+            vp_event.setCurrentItem(mCurrentItem);
+        }
+        requestNext();
     }
 
     private class EventPagerAdapter extends PagerAdapter {
