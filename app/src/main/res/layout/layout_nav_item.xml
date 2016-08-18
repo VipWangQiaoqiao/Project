@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/nav_iv_icon"
+        android:layout_width="20dp"
+        android:layout_height="22dp"
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="@string/app_name"
+        android:scaleType="fitCenter"
+        android:src="@drawable/tab_icon_new" />
+
+    <TextView
+        android:id="@+id/nav_tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:gravity="center"
+        android:textColor="@color/primarybar_txt"
+        android:textSize="10sp"
+        tools:text="资讯" />
+
+    <View
+        android:id="@+id/tab_mes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@id/tab_title"
+        android:layout_alignTop="@id/tab_title"
+        android:layout_marginLeft="1dip"
+        android:clickable="false"
+        android:focusable="false" />
+
+</merge>
