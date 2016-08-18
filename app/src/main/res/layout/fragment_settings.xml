@@ -27,7 +27,7 @@
                 android:textColor="?attr/textColor"
                 android:textSize="@dimen/text_size_16" />
 
-            <net.oschina.app.widget.togglebutton.ToggleButton
+            <net.oschina.app.improve.widget.togglebutton.ToggleButton
                 android:id="@+id/tb_loading_img"
                 style="@style/option_item_toggleButton"
                 android:layout_alignParentRight="true" />
@@ -80,7 +80,7 @@
                 android:textColor="?attr/textColor"
                 android:textSize="@dimen/text_size_16" />
 
-            <net.oschina.app.widget.togglebutton.ToggleButton
+            <net.oschina.app.improve.widget.togglebutton.ToggleButton
                 android:id="@+id/tb_double_click_exit"
                 style="@style/option_item_toggleButton"
                 android:layout_alignParentRight="true" />
@@ -99,7 +99,7 @@
                 android:textColor="?attr/textColor"
                 android:textSize="@dimen/text_size_16" />
 
-            <net.oschina.app.widget.togglebutton.ToggleButton
+            <net.oschina.app.improve.widget.togglebutton.ToggleButton
                 android:id="@+id/tb_loading_more"
                 style="@style/option_item_toggleButton"
                 android:layout_alignParentRight="true" />

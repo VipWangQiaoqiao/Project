@@ -18,8 +18,8 @@ import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.FileUtil;
 import net.oschina.app.util.MethodsCompat;
 import net.oschina.app.util.UIHelper;
-import net.oschina.app.widget.togglebutton.ToggleButton;
-import net.oschina.app.widget.togglebutton.ToggleButton.OnToggleChanged;
+import net.oschina.app.improve.widget.togglebutton.ToggleButton;
+import net.oschina.app.improve.widget.togglebutton.ToggleButton.OnToggleChanged;
 
 import org.kymjs.kjframe.http.HttpConfig;
 

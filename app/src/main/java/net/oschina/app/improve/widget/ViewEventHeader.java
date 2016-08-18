@@ -1,4 +1,4 @@
-package net.oschina.app.widget;
+package net.oschina.app.improve.widget;
 
 import android.content.Context;
 import android.os.Handler;
@@ -16,7 +16,9 @@ import com.bumptech.glide.RequestManager;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.Banner;
-import net.oschina.app.widget.indicator.CirclePagerIndicator;
+import net.oschina.app.widget.SmoothScroller;
+import net.oschina.app.widget.SuperRefreshLayout;
+import net.oschina.app.improve.widget.indicator.CirclePagerIndicator;
 
 import java.util.ArrayList;
 import java.util.List;

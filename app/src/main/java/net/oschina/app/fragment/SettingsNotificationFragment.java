@@ -10,8 +10,8 @@ import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
-import net.oschina.app.widget.togglebutton.ToggleButton;
-import net.oschina.app.widget.togglebutton.ToggleButton.OnToggleChanged;
+import net.oschina.app.improve.widget.togglebutton.ToggleButton;
+import net.oschina.app.improve.widget.togglebutton.ToggleButton.OnToggleChanged;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

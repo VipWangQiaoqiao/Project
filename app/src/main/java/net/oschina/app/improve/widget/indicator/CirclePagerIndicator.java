@@ -1,4 +1,4 @@
-package net.oschina.app.widget.indicator;
+package net.oschina.app.improve.widget.indicator;
 
 import android.content.Context;
 import android.content.res.TypedArray;

@@ -38,7 +38,7 @@
                 android:textColor="@color/white"
                 tools:text="周五乱弹 — 饿的时候只有一个饼！还是画的" />
 
-            <net.oschina.app.widget.indicator.CirclePagerIndicator
+            <net.oschina.app.improve.widget.indicator.CirclePagerIndicator
                 android:id="@+id/indicator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
