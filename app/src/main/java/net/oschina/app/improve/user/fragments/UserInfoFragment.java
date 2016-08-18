@@ -1,46 +1,85 @@
 package net.oschina.app.improve.user.fragments;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Constants;
+import net.oschina.app.bean.MyInformation;
+import net.oschina.app.bean.Result;
+import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.bean.User;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.user.activities.UserMessageActivity;
 import net.oschina.app.improve.widget.SolarSystemView;
 import net.oschina.app.ui.MyQrodeDialog;
 import net.oschina.app.ui.SimpleBackActivity;
+import net.oschina.app.ui.dialog.DialogControl;
+import net.oschina.app.util.DialogHelp;
+import net.oschina.app.util.FileUtil;
+import net.oschina.app.util.ImageUtils;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
+import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.BadgeView;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import cz.msebera.android.httpclient.Header;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * Created by fei on 2016/8/15.
  * desc: user info module
  */
 
-public class UserInfoFragment extends BaseFragment implements View.OnClickListener {
+public class UserInfoFragment extends BaseFragment implements View.OnClickListener, EasyPermissions.PermissionCallbacks {
 
     private static final String TAG = "UserInfoFragment";
+
+    public static final int ACTION_TYPE_ALBUM = 0;
+    public static final int ACTION_TYPE_PHOTO = 1;
 
     @Bind(R.id.iv_logo_setting)
     ImageView mIvLogoSetting;
@@ -101,7 +140,61 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
         }
     };
     private AsyncTask<String, Void, net.oschina.app.bean.User> mCacheTask;
-    private net.oschina.app.bean.User mInfo;
+    private View mMesView;
+    private User mUser = new User();
+
+    private final static int CROP = 200;
+
+    private final static String FILE_SAVEPATH = Environment
+            .getExternalStorageDirectory().getAbsolutePath()
+            + "/OSChina/Portrait/";
+    private Uri origUri;
+    private File protraitFile;
+    private Bitmap protraitBitmap;
+    private String protraitPath;
+    private boolean isChangeFace;
+
+    private User mInfo;
+    private final AsyncHttpResponseHandler mHandler = new AsyncHttpResponseHandler() {
+        @Override
+        public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+            try {
+                mInfo = XmlUtils.toBean(MyInformation.class,
+                        new ByteArrayInputStream(arg2)).getUser();
+                if (mInfo != null) {
+                    fillUI();
+                    AppContext.getInstance().updateUserInfo(mInfo);
+                    new SaveCacheTask(getActivity(), mInfo, getCacheKey())
+                            .execute();
+                } else {
+                    onFailure(arg0, arg1, arg2, new Throwable());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                onFailure(arg0, arg1, arg2, e);
+            }
+        }
+
+        @Override
+        public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+                              Throwable arg3) {
+        }
+    };
+
+    private void fillUI() {
+        if (mInfo == null)
+            return;
+        mCiOrtrait.setAvatarUrl(mInfo.getPortrait());
+        mTvName.setText(mInfo.getName());
+        mIvGander.setImageResource(StringUtils.toInt(mInfo.getGender()) != 2 ? R.mipmap
+                .userinfo_icon_male
+                : R.mipmap.userinfo_icon_female);
+        //mTvSummary.setText(mInfo.getExpertise());
+        mTvScore.setText(String.format("%s  %02d", getString(R.string.user_score), mInfo.getScore()));
+        mTvFavoriteCount.setText(String.valueOf(mInfo.getFavoritecount()));
+        mTvFollowCount.setText(String.valueOf(mInfo.getFollowers()));
+        mTvFollowerCount.setText(String.valueOf(mInfo.getFans()));
+    }
 
 
     private void setNotice() {
@@ -137,8 +230,8 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void sendRequestData() {
-
-
+        int uid = AppContext.getInstance().getLoginUid();
+        OSChinaApi.getMyInformation(uid, mHandler);
     }
 
     private void steupUser() {
@@ -222,6 +315,13 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
+
+        mMesCount = new BadgeView(getActivity(), mMesView);
+        mMesCount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+        mMesCount.setBadgePosition(BadgeView.POSITION_CENTER);
+        mMesCount.setGravity(Gravity.CENTER);
+        mMesCount.setBackgroundResource(R.mipmap.notification_bg);
+
         initSolar();
     }
 
@@ -229,6 +329,22 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
     @Override
     protected void initData() {
         super.initData();
+        sendRequestData();
+        // sendRequiredData();
+    }
+
+//    public void fillUI() {
+//        //Core.getKJBitmap().displayWithLoadBitmap(mUserFace, mUser.getPortrait(), R.mipmap.widget_dface);
+//        //  mName.setText(mUser.getName());
+//        // mJoinTime.setText(StringUtils.formatSomeAgo(mUser.getJointime()));
+//        //  mFrom.setText(mUser.getFrom());
+//        //  mPlatFrom.setText(mUser.getDevplatform());
+//        //  mFocus.setText(mUser.getExpertise());
+//    }
+
+    public void sendRequiredData() {
+        OSChinaApi.getMyInformation(AppContext.getInstance().getLoginUid(),
+                mHandler);
     }
 
     @Override
@@ -261,12 +377,15 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                 case R.id.iv_portrait:
                     //编辑头像
 
+
                     break;
                 case R.id.rl_show_my_info:
                     //显示我的资料
-                    UIHelper.showUserCenter(getActivity(), AppContext.getInstance()
-                            .getLoginUid(), AppContext.getInstance().getLoginUser()
-                            .getName());
+//                    UIHelper.showUserCenter(getActivity(), AppContext.getInstance()
+//                            .getLoginUid(), AppContext.getInstance().getLoginUser()
+//                            .getName());
+                    UIHelper.showSimpleBack(getActivity(),
+                            SimpleBackPage.MY_INFORMATION_DETAIL);
                     break;
                 case R.id.ly_tweet:
 
@@ -302,6 +421,280 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                     break;
             }
         }
+    }
+
+    private void showClickAvatar() {
+        if (mUser == null) {
+            AppContext.showToast("");
+            return;
+        }
+        DialogHelp.getSelectDialog(getActivity(), "选择操作", getResources().getStringArray(R.array.avatar_option), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (i == 0) {
+                    handleSelectPicture();
+                } else {
+                    UIHelper.showUserAvatar(getActivity(), mUser.getPortrait());
+                }
+            }
+        }).show();
+    }
+
+    private void handleSelectPicture() {
+        DialogHelp.getSelectDialog(getActivity(), "选择图片", getResources().getStringArray(R.array.choose_picture),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        goToSelectPicture(i);
+                    }
+                }).show();
+    }
+
+    private void goToSelectPicture(int position) {
+        switch (position) {
+            case ACTION_TYPE_ALBUM:
+                startImagePick();
+                break;
+            case ACTION_TYPE_PHOTO:
+                startTakePhotoByPermissions();
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * 选择图片裁剪
+     */
+    private void startImagePick() {
+        Intent intent;
+        if (Build.VERSION.SDK_INT < 19) {
+            intent = new Intent();
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            startActivityForResult(Intent.createChooser(intent, "选择图片"),
+                    ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP);
+        } else {
+            intent = new Intent(Intent.ACTION_PICK,
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            intent.setType("image/*");
+            startActivityForResult(Intent.createChooser(intent, "选择图片"),
+                    ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP);
+        }
+    }
+
+    private static final int CAMERA_PERM = 1;
+
+    @AfterPermissionGranted(CAMERA_PERM)
+    private void startTakePhotoByPermissions() {
+        String[] perms = {Manifest.permission.CAMERA};
+        if (EasyPermissions.hasPermissions(this.getContext(), perms)) {
+            try {
+                startTakePhoto();
+            } catch (Exception e) {
+                Toast.makeText(this.getContext(), R.string.permissions_camera_error, Toast.LENGTH_LONG).show();
+            }
+        } else {
+            // Request one permission
+            EasyPermissions.requestPermissions(this,
+                    getResources().getString(R.string.str_request_camera_message),
+                    CAMERA_PERM, perms);
+        }
+    }
+
+    private void startTakePhoto() {
+        Intent intent;
+        // 判断是否挂载了SD卡
+        String savePath = "";
+        String storageState = Environment.getExternalStorageState();
+        if (storageState.equals(Environment.MEDIA_MOUNTED)) {
+            savePath = Environment.getExternalStorageDirectory()
+                    .getAbsolutePath() + "/oschina/Camera/";
+            File savedir = new File(savePath);
+            if (!savedir.exists()) {
+                savedir.mkdirs();
+            }
+        }
+
+        // 没有挂载SD卡，无法保存文件
+        if (StringUtils.isEmpty(savePath)) {
+            AppContext.showToastShort("无法保存照片，请检查SD卡是否挂载");
+            return;
+        }
+
+        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss")
+                .format(new Date());
+        String fileName = "osc_" + timeStamp + ".jpg";// 照片命名
+        File out = new File(savePath, fileName);
+        Uri uri = Uri.fromFile(out);
+        origUri = uri;
+
+        String theLarge = savePath + fileName;
+
+        intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        startActivityForResult(intent,
+                ImageUtils.REQUEST_CODE_GETIMAGE_BYCAMERA);
+    }
+
+    // 裁剪头像的绝对路径
+    private Uri getUploadTempFile(Uri uri) {
+        String storageState = Environment.getExternalStorageState();
+        if (storageState.equals(Environment.MEDIA_MOUNTED)) {
+            File savedir = new File(FILE_SAVEPATH);
+            if (!savedir.exists()) {
+                savedir.mkdirs();
+            }
+        } else {
+            AppContext.showToast("无法保存上传的头像，请检查SD卡是否挂载");
+            return null;
+        }
+        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String thePath = ImageUtils.getAbsolutePathFromNoStandardUri(uri);
+
+        // 如果是标准Uri
+        if (StringUtils.isEmpty(thePath)) {
+            thePath = ImageUtils.getAbsoluteImagePath(getActivity(), uri);
+        }
+        String ext = FileUtil.getFileFormat(thePath);
+        ext = StringUtils.isEmpty(ext) ? "jpg" : ext;
+        // 照片命名
+        String cropFileName = "osc_crop_" + timeStamp + "." + ext;
+        // 裁剪头像的绝对路径
+        protraitPath = FILE_SAVEPATH + cropFileName;
+        protraitFile = new File(protraitPath);
+
+        return Uri.fromFile(protraitFile);
+    }
+
+    /**
+     * 拍照后裁剪
+     *
+     * @param data 原始图片
+     */
+    private void startActionCrop(Uri data) {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(data, "image/*");
+        intent.putExtra("output", this.getUploadTempFile(data));
+        intent.putExtra("crop", "true");
+        intent.putExtra("aspectX", 1);// 裁剪框比例
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("outputX", CROP);// 输出图片大小
+        intent.putExtra("outputY", CROP);
+        intent.putExtra("scale", true);// 去黑边
+        intent.putExtra("scaleUpIfNeeded", true);// 去黑边
+        startActivityForResult(intent,
+                ImageUtils.REQUEST_CODE_GETIMAGE_BYSDCARD);
+    }
+
+    protected ProgressDialog showWaitDialog(String str) {
+        FragmentActivity activity = getActivity();
+        if (activity instanceof DialogControl) {
+            return ((DialogControl) activity).showWaitDialog(str);
+        }
+        return null;
+    }
+
+    protected void hideWaitDialog() {
+        FragmentActivity activity = getActivity();
+        if (activity instanceof DialogControl) {
+            ((DialogControl) activity).hideWaitDialog();
+        }
+    }
+
+    /**
+     * 上传新照片
+     */
+    private void uploadNewPhoto() {
+        showWaitDialog("正在上传头像...");
+
+        // 获取头像缩略图
+        if (!StringUtils.isEmpty(protraitPath) && protraitFile.exists()) {
+            protraitBitmap = ImageUtils
+                    .loadImgThumbnail(protraitPath, 200, 200);
+        } else {
+            AppContext.showToast("图像不存在，上传失败");
+        }
+        if (protraitBitmap != null) {
+
+            try {
+                OSChinaApi.updatePortrait(AppContext.getInstance().getLoginUid(), protraitFile,
+                        new AsyncHttpResponseHandler() {
+
+                            @Override
+                            public void onSuccess(int arg0, Header[] arg1,
+                                                  byte[] arg2) {
+                                Result res = XmlUtils.toBean(ResultBean.class,
+                                        new ByteArrayInputStream(arg2))
+                                        .getResult();
+                                if (res.OK()) {
+                                    AppContext.showToast("更换成功");
+                                    // 显示新头像
+                                    // mUserFace.setImageBitmap(protraitBitmap);
+                                    isChangeFace = true;
+                                } else {
+                                    AppContext.showToast(res.getErrorMessage());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(int arg0, Header[] arg1,
+                                                  byte[] arg2, Throwable arg3) {
+                                AppContext.showToast("更换头像失败");
+                            }
+
+                            @Override
+                            public void onFinish() {
+                                hideWaitDialog();
+                            }
+
+                        });
+            } catch (FileNotFoundException e) {
+                AppContext.showToast("图像不存在，上传失败");
+            }
+        }
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent imageReturnIntent) {
+        //  super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK)
+            return;
+
+        switch (requestCode) {
+            case ImageUtils.REQUEST_CODE_GETIMAGE_BYCAMERA:
+                startActionCrop(origUri);// 拍照后裁剪
+                break;
+            case ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP:
+                startActionCrop(imageReturnIntent.getData());// 选图后裁剪
+                break;
+            case ImageUtils.REQUEST_CODE_GETIMAGE_BYSDCARD:
+                uploadNewPhoto();
+                break;
+        }
+
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+        try {
+            startTakePhoto();
+        } catch (Exception e) {
+            Toast.makeText(this.getContext(), R.string.permissions_camera_error, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        Toast.makeText(this.getContext(), R.string.permissions_camera_error, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // EasyPermissions handles the request result.
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
     private class CacheTask extends AsyncTask<String, Void, net.oschina.app.bean.User> {

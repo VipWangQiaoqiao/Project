@@ -7,6 +7,7 @@
     android:orientation="vertical">
 
     <FrameLayout
+        android:id="@+id/fl_user_info_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
@@ -86,7 +87,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:maxLines="1"
-                android:text="thanatosx"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 tools:text="thanatosx" />
@@ -100,10 +100,9 @@
                 android:layout_marginTop="8dp"
                 android:gravity="center_horizontal"
                 android:maxLines="2"
-                android:text="这个人很懒,什么都没有写这个人很懒,什么都没有写这个人很懒,什么都没有写这个人很懒,什么都没有写"
+                android:text="这个人很懒,什么都没有写..."
                 android:textColor="@color/white"
-                android:textSize="14sp"
-                tools:text="这个人很懒,什么都没有写" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_score"
@@ -112,10 +111,9 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
                 android:gravity="bottom"
-                android:text="积分 88888"
+                android:text="积分 0"
                 android:textColor="@color/white"
-                android:textSize="14sp"
-                tools:text="积分 88888" />
+                android:textSize="14sp" />
 
         </LinearLayout>
 
@@ -142,7 +140,7 @@
                     <TextView
                         android:id="@+id/tv_tweet"
                         style="@style/user_formation_text"
-                        android:text="2000" />
+                        android:text="0" />
 
                     <TextView
                         style="@style/user_formation_info"
@@ -156,7 +154,7 @@
                     <TextView
                         android:id="@+id/tv_favorite"
                         style="@style/user_formation_text"
-                        android:text="2000" />
+                        android:text="0" />
 
                     <TextView
                         style="@style/user_formation_info"
@@ -170,7 +168,7 @@
                     <TextView
                         android:id="@+id/tv_following"
                         style="@style/user_formation_text"
-                        android:text="2000" />
+                        tools:text="2000" />
 
                     <TextView
                         style="@style/user_formation_info"
@@ -184,7 +182,7 @@
                     <TextView
                         android:id="@+id/tv_follower"
                         style="@style/user_formation_text"
-                        android:text="2000" />
+                        android:text="0" />
 
                     <TextView
                         android:id="@+id/textView4"
