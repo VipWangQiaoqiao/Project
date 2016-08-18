@@ -33,10 +33,10 @@ import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.base.handler.JsonHttpResponseHandler;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.simple.UserRelation;
-import net.oschina.app.improve.tweet.fragments.TweetFragment;
 import net.oschina.app.improve.user.fragments.UserActiveFragment;
 import net.oschina.app.improve.user.fragments.UserBlogFragment;
 import net.oschina.app.improve.user.fragments.UserQuestionFragment;
+import net.oschina.app.improve.user.fragments.UserTweetFragment;
 import net.oschina.app.improve.widget.SolarSystemView;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.UIHelper;
@@ -84,6 +84,8 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
     TabLayout mTabLayout;
     @Bind(R.id.view_pager)
     ViewPager mViewPager;
+    @Bind(R.id.view_divider)
+    View mDivider;
 
     private MenuItem mFollowMenu;
     private User user;
@@ -150,10 +152,12 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
                 if (mScrollRange + verticalOffset == 0) {
                     mLogoNick.setVisibility(View.VISIBLE);
                     mLogoPortrait.setVisibility(View.VISIBLE);
+                    mDivider.setVisibility(View.GONE);
                     isShow = true;
                 } else if (isShow) {
                     mLogoNick.setVisibility(View.GONE);
                     mLogoPortrait.setVisibility(View.GONE);
+                    mDivider.setVisibility(View.VISIBLE);
                     isShow = false;
                 }
             }
@@ -209,8 +213,8 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
 
     private void injectDataToViewPager(){
         if (user.getId() > 0 && fragments == null){
-            final List<Pair<String, Fragment>> fragments = new ArrayList<>();
-            fragments.add(new Pair<>(String.format("%s\n动弹", user.getTweetCount()), TweetFragment.instantiate(user.getId())));
+            fragments = new ArrayList<>();
+            fragments.add(new Pair<>(String.format("%s\n动弹", user.getTweetCount()), UserTweetFragment.instantiate(user.getId())));
             fragments.add(new Pair<>(String.format("%s\n博客", user.getBlogCount()), UserBlogFragment.instantiate(user.getId())));
             fragments.add(new Pair<>(String.format("%s\n问答", user.getAnswerCount()), UserQuestionFragment.instantiate((int) user.getId())));
             fragments.add(new Pair<>(String.format("%s\n动态", user.getDiscussCount()), UserActiveFragment.instantiate(user.getId())));
@@ -233,6 +237,10 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
             });
 
             mTabLayout.setupWithViewPager(mViewPager);
+            mTabLayout.addTab(mTabLayout.newTab().setCustomView(R.layout.tab_item_other_user));
+            mTabLayout.addTab(mTabLayout.newTab().setCustomView(R.layout.tab_item_other_user));
+            mTabLayout.addTab(mTabLayout.newTab().setCustomView(R.layout.tab_item_other_user));
+            mTabLayout.addTab(mTabLayout.newTab().setCustomView(R.layout.tab_item_other_user));
         }else {
             mTabLayout.addTab(mTabLayout.newTab().setText("0\n动弹"));
             mTabLayout.addTab(mTabLayout.newTab().setText("0\n博客"));

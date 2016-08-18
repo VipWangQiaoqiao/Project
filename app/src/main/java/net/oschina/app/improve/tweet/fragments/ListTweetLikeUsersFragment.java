@@ -83,6 +83,16 @@ public class ListTweetLikeUsersFragment extends BaseRecyclerViewFragment<TweetLi
     }
 
     @Override
+    protected boolean isNeedCache() {
+        return false;
+    }
+
+    @Override
+    protected boolean isNeedEmptyView() {
+        return false;
+    }
+
+    @Override
     protected void requestData() {
         OSChinaApi.getTweetLikeList(mOperator.getTweetDetail().getId(), null, mHandler);
     }

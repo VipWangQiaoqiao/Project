@@ -11,6 +11,7 @@
     <dimen name="navigation_drawer_width">240dp</dimen>
 
     <!-- OSChina APP -->
+    <!-- old setting!!! please ignore it!! will remove it in future!! -->
     <dimen name="text_size_32">32.0dip</dimen>
     <dimen name="text_size_31">31.0dip</dimen>
     <dimen name="text_size_30">30.0dip</dimen>

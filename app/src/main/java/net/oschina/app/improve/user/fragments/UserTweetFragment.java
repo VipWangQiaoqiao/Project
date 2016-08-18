@@ -10,26 +10,29 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseRecyclerViewFragment;
 import net.oschina.app.improve.bean.Blog;
+import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.detail.activities.BlogDetailActivity;
+import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.user.adapter.UserBlogAdapter;
+import net.oschina.app.improve.user.adapter.UserTweetAdapter;
 
 import java.lang.reflect.Type;
 
 /**
- * created by thanatosx  on 2016/8/16.
+ * created by fei  on 2016/8/16.
+ * desc: question list module
  */
-public class UserBlogFragment extends BaseRecyclerViewFragment<Blog> {
+public class UserTweetFragment extends BaseRecyclerViewFragment<Tweet> {
 
-    public static final String HISTORY_BLOG = "history_my_blog";
     public static final String BUNDLE_KEY_USER_ID = "BUNDLE_KEY_USER_ID";
     private long userId;
 
     public static Fragment instantiate(long uid){
         Bundle bundle = new Bundle();
         bundle.putLong(BUNDLE_KEY_USER_ID, uid);
-        Fragment fragment = new UserBlogFragment();
+        Fragment fragment = new UserTweetFragment();
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -42,29 +45,28 @@ public class UserBlogFragment extends BaseRecyclerViewFragment<Blog> {
 
     @Override
     protected void requestData() {
-        OSChinaApi.getUserBlogList(null, userId, mHandler);
-
+        OSChinaApi.getUserTweetList(userId, null, mHandler);
     }
 
     @Override
-    protected BaseRecyclerAdapter<Blog> getRecyclerAdapter() {
-        return new UserBlogAdapter(getContext(), BaseRecyclerAdapter.ONLY_FOOTER);
+    protected BaseRecyclerAdapter<Tweet> getRecyclerAdapter() {
+        return new UserTweetAdapter(getContext(), BaseRecyclerAdapter.ONLY_FOOTER);
     }
 
     @Override
     protected Type getType() {
-        return new TypeToken<ResultBean<PageBean<Blog>>>() {
+        return new TypeToken<ResultBean<PageBean<Tweet>>>() {
         }.getType();
     }
 
     @Override
     public void onItemClick(int position, long itemId) {
-        Blog blog = mAdapter.getItem(position);
-        BlogDetailActivity.show(getActivity(), blog.getId());
+        Tweet tweet = mAdapter.getItem(position);
+        TweetDetailActivity.show(getActivity(), tweet.getId());
     }
 
     @Override
     public void onLoadMore() {
-        OSChinaApi.getUserBlogList(mBean.getNextPageToken(), userId, mHandler);
+        OSChinaApi.getUserTweetList(userId, mBean.getNextPageToken(), mHandler);
     }
 }

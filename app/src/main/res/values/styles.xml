@@ -102,6 +102,9 @@
     </style>
     <!-- app main menu style end! -->
 
+    <style name="TabItemAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">16sp</item>
+    </style>
 
     <!-- project list text style bgein -->
     <style name="project_list_text_parent">
