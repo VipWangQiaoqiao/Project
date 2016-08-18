@@ -168,37 +168,40 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                 int width = mRlShowInfo.getWidth();
                 int height = mRlShowInfo.getHeight();
                 float rlShowInfoX = mRlShowInfo.getX();
-                float rlShowInfoY = mRlShowInfo.getY();
+                // float rlShowInfoY = mRlShowInfo.getY();
                 float x = mCiOrtrait.getX();
                 float y = mCiOrtrait.getY();
-                int ciOrtraitWidth = mCiOrtrait.getWidth();
+                // int ciOrtraitWidth = mCiOrtrait.getWidth();
                 int ciOrtraitHeight = mCiOrtrait.getHeight();
 
                 float px = x + +rlShowInfoX + (width >> 1);
-                float py = y + +rlShowInfoY + (height >> 1);
+                float py = (height >> 1) - ciOrtraitHeight - y / 2 + 28;
                 int radius = (width >> 1) - 20;
 
                 SolarSystemView.Planet planet1 = new SolarSystemView.Planet();
-                planet1.setClockwise(false);
-                planet1.setAngleRate(0.03F);
-                planet1.setOriginAngle(270);
-                planet1.setRadius(radius / 3);
+                planet1.setClockwise(true);
+                planet1.setAngleRate(0.015F);
+                planet1.setRadius(radius / 4);
 
                 SolarSystemView.Planet planet2 = new SolarSystemView.Planet();
-                planet2.setClockwise(true);
-                planet2.setAngleRate(0.04F);
-                planet1.setOriginAngle(180);
-                planet2.setRadius(radius / 3 * 2);
+                planet2.setClockwise(false);
+                planet2.setAngleRate(0.02F);
+                planet2.setRadius(radius / 4 * 2);
 
                 SolarSystemView.Planet planet3 = new SolarSystemView.Planet();
-                planet3.setClockwise(false);
-                planet1.setOriginAngle(270);
-                planet3.setAngleRate(0.05F);
-                planet3.setRadius(radius);
+                planet3.setClockwise(true);
+                planet3.setAngleRate(0.01F);
+                planet3.setRadius(radius / 4 * 3);
+
+                SolarSystemView.Planet planet4 = new SolarSystemView.Planet();
+                planet4.setClockwise(false);
+                planet4.setAngleRate(0.02F);
+                planet4.setRadius(radius);
 
                 mSolarSystem.addPlanets(planet1);
                 mSolarSystem.addPlanets(planet2);
                 mSolarSystem.addPlanets(planet3);
+                mSolarSystem.addPlanets(planet4);
                 mSolarSystem.setPivotPoint(px, py);
             }
         });

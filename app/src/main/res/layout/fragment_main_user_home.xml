@@ -15,7 +15,7 @@
             android:id="@+id/user_view_solar_system"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/user_info_bg_color"
+            android:background="@color/ques_bt_text_color_light"
             android:contentDescription="@null"
             android:fitsSystemWindows="true"
             android:scaleType="centerCrop"
@@ -126,18 +126,13 @@
             android:gravity="bottom"
             android:orientation="vertical">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/white_alpha_160" />
-
             <LinearLayout
                 android:id="@+id/lay_about_info"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
+                android:layout_height="48dp"
+                android:layout_gravity="center_horizontal"
                 android:background="@color/user_info_bg_color"
-                android:gravity="bottom"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -184,8 +179,7 @@
 
                 <LinearLayout
                     android:id="@+id/ly_follower"
-                    style="@style/uset_information_ll"
-                    android:layout_height="match_parent">
+                    style="@style/uset_information_ll">
 
                     <TextView
                         android:id="@+id/tv_follower"
