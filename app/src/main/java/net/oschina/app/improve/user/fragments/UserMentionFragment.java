@@ -10,7 +10,9 @@ import net.oschina.app.improve.base.fragments.BaseRecyclerViewFragment;
 import net.oschina.app.improve.bean.Mention;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.bean.simple.Comment;
+import net.oschina.app.improve.bean.simple.Origin;
 import net.oschina.app.improve.user.adapter.UserMentionAdapter;
 import net.oschina.app.ui.empty.EmptyLayout;
 
@@ -31,7 +33,10 @@ public class UserMentionFragment extends BaseRecyclerViewFragment<Mention> {
     @Override
     protected void onRequestError(int code) {
         for (int i = 0; i < 20; i++) {
-            mAdapter.addItem(new Mention());
+            Mention mention = new Mention();
+            mention.setAuthor(new Author());
+            mention.setOrigin(new Origin());
+            mAdapter.addItem(mention);
         }mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
         mRefreshLayout.setVisibility(View.VISIBLE);
         super.onRequestError(code);
