@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <net.oschina.app.widget.indicator.CirclePagerIndicator
+    <net.oschina.app.improve.widget.indicator.CirclePagerIndicator
         android:id="@+id/indicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

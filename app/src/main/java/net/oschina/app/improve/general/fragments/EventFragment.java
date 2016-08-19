@@ -21,7 +21,7 @@ import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.detail.activities.EventDetailActivity;
 import net.oschina.app.improve.general.adapter.EventAdapter;
-import net.oschina.app.widget.ViewEventHeader;
+import net.oschina.app.improve.widget.ViewEventHeader;
 
 import java.lang.reflect.Type;
 

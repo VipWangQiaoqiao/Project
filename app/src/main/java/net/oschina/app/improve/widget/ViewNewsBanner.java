@@ -1,4 +1,4 @@
-package net.oschina.app.widget;
+package net.oschina.app.improve.widget;
 
 import android.content.Context;
 import android.view.LayoutInflater;

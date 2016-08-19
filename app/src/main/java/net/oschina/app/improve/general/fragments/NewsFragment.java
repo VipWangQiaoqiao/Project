@@ -23,7 +23,7 @@ import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.general.adapter.NewsAdapter;
 import net.oschina.app.util.UIHelper;
-import net.oschina.app.widget.ViewNewsHeader;
+import net.oschina.app.improve.widget.ViewNewsHeader;
 
 import java.lang.reflect.Type;
 
