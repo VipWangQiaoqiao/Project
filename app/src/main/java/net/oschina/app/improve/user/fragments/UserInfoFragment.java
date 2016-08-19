@@ -299,8 +299,8 @@ public class UserInfoFragment extends BaseFragment implements View.OnClickListen
                 int ciOrtraitHeight = mCiOrtrait.getHeight();
 
                 float px = x + +rlShowInfoX + (width >> 1);
-                float py = (height >> 1) - ciOrtraitHeight - y / 2 + 28;
-                int radius = (width >> 1) - 20;
+                float py = (height >> 1) - ciOrtraitHeight / 2 + 48;
+                int radius = (width >> 1);
 
                 SolarSystemView.Planet planet1 = new SolarSystemView.Planet();
                 planet1.setClockwise(true);

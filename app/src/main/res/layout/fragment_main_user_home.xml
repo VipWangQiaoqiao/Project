@@ -65,9 +65,9 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/iv_portrait"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_marginTop="32dp"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_marginTop="66dp"
                     android:src="@mipmap/widget_dface"
                     app:civ_border_color="@color/white"
                     app:civ_border_width="2dip" />
@@ -169,7 +169,7 @@
                     <TextView
                         android:id="@+id/tv_following"
                         style="@style/user_formation_text"
-                        tools:text="2000" />
+                        android:text="0" />
 
                     <TextView
                         style="@style/user_formation_info"

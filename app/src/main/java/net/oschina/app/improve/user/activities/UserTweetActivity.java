@@ -15,8 +15,8 @@ import net.oschina.app.improve.user.fragments.UserTweetFragment;
 
 public class UserTweetActivity extends BaseBackActivity {
 
-
     private long uid;
+    private UserTweetFragment userTweetFragment;
 
     /**
      * show activity
@@ -47,7 +47,23 @@ public class UserTweetActivity extends BaseBackActivity {
     @Override
     protected void initWidget() {
         super.initWidget();
-        UserTweetFragment userTweetFragment = (UserTweetFragment) UserTweetFragment.instantiate(uid);
+        if (userTweetFragment == null)
+            userTweetFragment = (UserTweetFragment) UserTweetFragment.instantiate(uid);
         getSupportFragmentManager().beginTransaction().add(R.id.user_tweet_container, userTweetFragment).commit();
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (userTweetFragment != null) {
+            getSupportFragmentManager().beginTransaction().attach(userTweetFragment).commit();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        finish();
     }
 }
