@@ -14,7 +14,7 @@ import net.oschina.app.improve.notice.NoticeBean;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.tweet.activities.TweetPublishActivity;
 import net.oschina.app.improve.tweet.fragments.TweetViewPagerFragment;
-import net.oschina.app.improve.user.fragments.UserInfoFragment;
+import net.oschina.app.improve.user.fragments.NewUserInfoFragment;
 import net.oschina.app.viewpagerfragment.GeneralViewPagerFragment;
 
 import butterknife.Bind;
@@ -65,7 +65,7 @@ public class NavFragment extends BaseFragment implements View.OnClickListener, N
 
         mNavMe.init(R.drawable.tab_icon_me,
                 R.string.main_tab_name_my,
-                UserInfoFragment.class);
+                NewUserInfoFragment.class);
 
     }
 

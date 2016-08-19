@@ -1728,4 +1728,11 @@ public class OSChinaApi {
     public static void getNotice(TextHttpResponseHandler handler) {
         ApiHttpClient.get("action/apiv2/notice", handler);
     }
+
+    /**
+     * 获取个人信息
+     */
+    public static void getUserInfo(TextHttpResponseHandler handler) {
+        ApiHttpClient.get("action/apiv2/user_me", handler);
+    }
 }
