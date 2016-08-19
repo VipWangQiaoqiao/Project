@@ -1735,4 +1735,18 @@ public class OSChinaApi {
     public static void getUserInfo(TextHttpResponseHandler handler) {
         ApiHttpClient.get("action/apiv2/user_me", handler);
     }
+
+    /**
+     * update the user icon
+     *
+     * @param tocken  tocken
+     * @param handler handler
+     */
+    public static void updateUserIcon(String tocken, TextHttpResponseHandler handler) {
+        if (TextUtils.isEmpty(tocken)) return;
+        RequestParams params = new RequestParams();
+        params.put("portrait", tocken);
+        ApiHttpClient.post("action/apiv2/user_edit_portrait", params, handler);
+
+    }
 }
