@@ -409,9 +409,8 @@
             android:process="net.oschina.app.tweet.TweetPublishService" />
         <service
             android:name=".improve.notice.NoticeService"
-            android:enabled="true"
-            android:exported="true"
-            android:process=".improve.notice.NoticeService" />
+            android:enabled="false"
+            android:process="net.oschina.app.notice.NoticeService" />
     </application>
 
 </manifest>
