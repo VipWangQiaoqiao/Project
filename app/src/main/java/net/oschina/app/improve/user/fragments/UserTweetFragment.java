@@ -60,6 +60,16 @@ public class UserTweetFragment extends BaseRecyclerViewFragment<Tweet> {
     }
 
     @Override
+    protected boolean isNeedCache() {
+        return false;
+    }
+
+    @Override
+    protected boolean isNeedEmptyView() {
+        return false;
+    }
+
+    @Override
     public void onItemClick(int position, long itemId) {
         Tweet tweet = mAdapter.getItem(position);
         TweetDetailActivity.show(getActivity(), tweet.getId());

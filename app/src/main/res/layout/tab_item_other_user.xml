@@ -9,7 +9,8 @@
     <TextView
         android:id="@+id/tv_count"
         tools:text="200"
-        android:textSize="18sp"
+        android:textColor="@drawable/selector_tab_item_other_user"
+        android:textSize="24sp"
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -19,6 +20,7 @@
         tools:text="动弹"
         android:gravity="center"
         android:textSize="14sp"
+        android:textColor="@drawable/selector_tab_item_other_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

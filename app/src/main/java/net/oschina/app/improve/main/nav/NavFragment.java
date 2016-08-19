@@ -10,6 +10,8 @@ import android.view.View;
 import net.oschina.app.R;
 import net.oschina.app.fragment.ExploreFragment;
 import net.oschina.app.improve.base.fragments.BaseFragment;
+import net.oschina.app.improve.notice.NoticeBean;
+import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.tweet.activities.TweetPublishActivity;
 import net.oschina.app.improve.tweet.fragments.TweetViewPagerFragment;
 import net.oschina.app.improve.user.fragments.NewUserInfoFragment;
@@ -21,7 +23,7 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NavFragment extends BaseFragment implements View.OnClickListener {
+public class NavFragment extends BaseFragment implements View.OnClickListener, NoticeManager.NoticeNotify {
     @Bind(R.id.nav_item_news)
     NavigationButton mNavNews;
     @Bind(R.id.nav_item_tweet)
@@ -133,7 +135,24 @@ public class NavFragment extends BaseFragment implements View.OnClickListener {
         }
     }
 
+    @Override
+    public void onNoticeArrived(NoticeBean bean) {
+
+    }
+
     public interface OnNavigationReselectListener {
         void onReselect(NavigationButton navigationButton);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        NoticeManager.bindNotify(this);
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+        NoticeManager.unBindNotify(this);
     }
 }
