@@ -38,12 +38,12 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
     @Override
     protected void initData() {
         super.initData();
-        NoticeManager.start(this);
+        NoticeManager.init(this);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        NoticeManager.stop(this);
+        NoticeManager.stopListen(this);
     }
 }

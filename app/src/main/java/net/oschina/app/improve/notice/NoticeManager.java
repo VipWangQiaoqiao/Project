@@ -1,7 +1,11 @@
 package net.oschina.app.improve.notice;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,30 +25,38 @@ public final class NoticeManager {
         INSTANCE = new NoticeManager();
     }
 
-    private List<NoticeNotify> notifies = new ArrayList<>();
+    private final List<NoticeNotify> mNotifies = new ArrayList<>();
+    private NoticeBean mNotice;
 
     public static NoticeBean getNotice() {
         return new NoticeBean();
     }
 
     public static void bindNotify(NoticeNotify noticeNotify) {
-        INSTANCE.notifies.add(noticeNotify);
-        INSTANCE.check();
+        INSTANCE.mNotifies.add(noticeNotify);
+        INSTANCE.check(noticeNotify);
     }
 
     public static void unBindNotify(NoticeNotify noticeNotify) {
-        INSTANCE.notifies.remove(noticeNotify);
+        INSTANCE.mNotifies.remove(noticeNotify);
     }
 
-    private void check() {
-
+    private void check(NoticeNotify noticeNotify) {
+        if (mNotice != null)
+            noticeNotify.onNoticeArrived(mNotice);
     }
 
-    public static void start(Context context) {
+    public static void init(Context context) {
         NoticeServer.startAction(context);
+        IntentFilter filter = new IntentFilter(NoticeServer.FLAG_BROADCAST_REFRESH);
+        context.registerReceiver(INSTANCE.mReceiver, filter);
     }
 
-    public static void stop(Context context) {
+    public static void stopListen(Context context) {
+        context.unregisterReceiver(INSTANCE.mReceiver);
+    }
+
+    public static void exitServer(Context context) {
         NoticeServer.startActionExit(context);
     }
 
@@ -62,5 +74,29 @@ public final class NoticeManager {
 
     public interface NoticeNotify {
         void onNoticeArrived(NoticeBean bean);
+    }
+
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction() != null &&
+                    NoticeServer.FLAG_BROADCAST_REFRESH.equals(intent.getAction())) {
+                Serializable serializable = intent.getSerializableExtra(NoticeServer.EXTRA_BEAN);
+                if (serializable != null) {
+                    try {
+                        onNoticeChanged((NoticeBean) serializable);
+                    } catch (Exception e) {
+                        e.fillInStackTrace();
+                    }
+                }
+            }
+        }
+    };
+
+    private void onNoticeChanged(NoticeBean bean) {
+        mNotice = bean;
+        for (NoticeNotify notify : mNotifies) {
+            notify.onNoticeArrived(mNotice);
+        }
     }
 }
