@@ -1698,7 +1698,7 @@ public class OSChinaApi {
      * @param uid  user id
      * @param nick unique personal suffix
      */
-    public static void getUserInfo(Long uid, String nick, TextHttpResponseHandler handler) {
+    public static void getUserInfo(long uid, String nick, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("id", uid);
         params.put("name", nick);
@@ -1712,7 +1712,7 @@ public class OSChinaApi {
      * @param pageToken page token
      * @param handler   async handler
      */
-    public static void getUserActives(Long uid, String pageToken, TextHttpResponseHandler handler) {
+    public static void getUserActives(long uid, String pageToken, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("id", uid);
         if (!TextUtils.isEmpty(pageToken))
@@ -1721,7 +1721,16 @@ public class OSChinaApi {
     }
 
     /**
-     * get user info
+     * 获取当前的新消息数量
+     *
+     * @param handler TextHttpResponseHandler
+     */
+    public static void getNotice(TextHttpResponseHandler handler) {
+        ApiHttpClient.get("action/apiv2/notice", handler);
+    }
+
+    /**
+     * 获取个人信息
      */
     public static void getUserInfo(TextHttpResponseHandler handler) {
         ApiHttpClient.get("action/apiv2/user_me", handler);

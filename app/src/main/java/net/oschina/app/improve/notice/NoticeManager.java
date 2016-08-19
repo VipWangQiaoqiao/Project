@@ -41,11 +41,11 @@ public final class NoticeManager {
     }
 
     public static void start(Context context) {
-        NoticeService.startAction(context);
+        NoticeServer.startAction(context);
     }
 
     public static void stop(Context context) {
-        NoticeService.startActionExit(context);
+        NoticeServer.startActionExit(context);
     }
 
     /**
@@ -57,7 +57,7 @@ public final class NoticeManager {
      *                {@link #FLAG_CLEAR_LIKE}
      */
     public static void clear(Context context, int type) {
-        NoticeService.startActionClear(context, type);
+        NoticeServer.startActionClear(context, type);
     }
 
     public interface NoticeNotify {
