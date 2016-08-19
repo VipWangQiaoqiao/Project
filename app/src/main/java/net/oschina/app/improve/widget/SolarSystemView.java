@@ -3,6 +3,9 @@ package net.oschina.app.improve.widget;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.RadialGradient;
+import android.graphics.Shader;
+import android.graphics.SweepGradient;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -20,6 +23,7 @@ public class SolarSystemView extends ImageView{
     private float pivotY;
     private Paint mTrackPaint;
     private Paint mPlanetPaint;
+    private Paint mBackgroundPaint;
     private List<Planet> planets;
 
 
@@ -42,12 +46,19 @@ public class SolarSystemView extends ImageView{
         mPlanetPaint = new Paint();
         mPlanetPaint.setStyle(Paint.Style.FILL);
         mPlanetPaint.setAntiAlias(true);
+
+        mBackgroundPaint = new Paint();
+        mBackgroundPaint.setStyle(Paint.Style.FILL);
+        mBackgroundPaint.setAntiAlias(true);
     }
 
     public void setPivotPoint(float x, float y){
         this.pivotX = x;
         this.pivotY = y;
         paintCount = 0;
+        float b = getHeight() - y;
+        double r = Math.pow(x * x + b * b, 1.d / 2) + 5;
+        mBackgroundPaint.setShader(new RadialGradient(x, y, (float) r, 0XFF24CF5F, 0XFF20B955, Shader.TileMode.CLAMP));
         invalidate();
     }
 
@@ -65,6 +76,11 @@ public class SolarSystemView extends ImageView{
         if (planets.size() == 0) return;
         if (canvas.getWidth() <=0 || canvas.getHeight() <= 0) return;
         int count = canvas.save();
+        if (mBackgroundPaint.getShader() != null){
+//            canvas.drawCircle(pivotX, pivotY, (float) r, mBackgroundPaint);
+            canvas.drawRect(0, 0, getWidth(), getHeight(), mBackgroundPaint);
+        }
+
         for (Planet planet : planets){
             mTrackPaint.setStrokeWidth(planet.getTrackWidth());
             mTrackPaint.setColor(planet.getTrackColor());
@@ -80,11 +96,11 @@ public class SolarSystemView extends ImageView{
             }
             x = Math.cos(angle) * planet.getRadius() + pivotX;
             y = Math.sin(angle) * planet.getRadius() + pivotY;
-            canvas.drawCircle((int) x, (int) y, planet.getSelfRadius(), mPlanetPaint);
+            canvas.drawCircle(Math.round(x), Math.round(y), planet.getSelfRadius(), mPlanetPaint);
         }
         canvas.restoreToCount(count);
         ++paintCount;
-        postInvalidateDelayed(33);
+        postInvalidateDelayed(30);
     }
 
     public static class Planet{
