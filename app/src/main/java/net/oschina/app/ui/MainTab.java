@@ -3,7 +3,7 @@ package net.oschina.app.ui;
 import net.oschina.app.R;
 import net.oschina.app.fragment.ExploreFragment;
 import net.oschina.app.improve.tweet.fragments.TweetViewPagerFragment;
-import net.oschina.app.improve.user.fragments.UserInfoFragment;
+import net.oschina.app.improve.user.fragments.NewUserInfoFragment;
 import net.oschina.app.viewpagerfragment.GeneralViewPagerFragment;
 
 public enum MainTab {
@@ -26,7 +26,7 @@ public enum MainTab {
             ExploreFragment.class),
 
     ME(4, R.string.main_tab_name_my, R.drawable.tab_icon_me,
-            UserInfoFragment.class);
+            NewUserInfoFragment.class);
 
     private int idx;
     private int resName;

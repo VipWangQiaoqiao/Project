@@ -180,8 +180,9 @@
                     android:id="@+id/ly_follower"
                     style="@style/uset_information_ll">
 
+
                     <TextView
-                        android:id="@+id/tv_follower"
+                        android:id="@+id/tv_follower_count"
                         style="@style/user_formation_text"
                         android:text="0" />
 
@@ -224,10 +225,14 @@
 
                 <View
                     android:id="@+id/user_info_notice_message"
-                    android:layout_width="0dp"
+                    android:layout_width="10dp"
                     android:layout_height="10dp"
                     android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
+                    android:layout_marginRight="4dp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="10dp"
                     android:layout_weight="1" />
 
                 <ImageView
