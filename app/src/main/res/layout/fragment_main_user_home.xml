@@ -113,7 +113,7 @@
                             android:layout_height="4dp"
                             android:layout_gravity="right|top"
                             android:layout_marginLeft="12dp"
-                            android:background="@drawable/bg_show_fans" />
+                            android:background="@drawable/ic_red_dot" />
                     </FrameLayout>
 
                     <TextView

@@ -24,15 +24,12 @@
         tools:text="资讯" />
 
     <View
-        android:id="@+id/tab_mes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@id/tab_title"
-        android:layout_alignTop="@id/tab_title"
-        android:layout_marginLeft="1dip"
-        android:clickable="false"
-        android:focusable="false" />
+        android:id="@+id/nav_tv_dot"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/ic_red_dot"
+        android:visibility="gone" />
 
 </merge>
