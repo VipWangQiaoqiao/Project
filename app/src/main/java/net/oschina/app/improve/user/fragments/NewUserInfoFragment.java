@@ -45,6 +45,7 @@ import net.oschina.app.improve.user.activities.UserMessageActivity;
 import net.oschina.app.improve.user.activities.UserTweetActivity;
 import net.oschina.app.improve.user.bean.UserInfo;
 import net.oschina.app.improve.widget.SolarSystemView;
+import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.ui.MainActivity;
 import net.oschina.app.ui.MyQrodeDialog;
 import net.oschina.app.ui.SimpleBackActivity;
@@ -52,7 +53,6 @@ import net.oschina.app.ui.dialog.DialogControl;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.FileUtil;
 import net.oschina.app.util.ImageUtils;
-import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.BadgeView;
@@ -80,7 +80,7 @@ import pub.devrel.easypermissions.EasyPermissions;
  */
 
 public class NewUserInfoFragment extends BaseFragment implements View.OnClickListener,
-        EasyPermissions.PermissionCallbacks, NoticeManager.NoticeNotify {
+        EasyPermissions.PermissionCallbacks, NoticeManager.NoticeNotify, OnTabReselectListener {
 
     public static final int ACTION_TYPE_ALBUM = 0;
     public static final int ACTION_TYPE_PHOTO = 1;
@@ -170,10 +170,10 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         }
     };
     private net.oschina.app.bean.User mInfo;
-    private BadgeView mMesCountForFans;
 
     private void updateView(UserInfo userInfo) {
 
+        Log.d(TAG, "updateView: ---->" + mCiOrtrait.toString());
         setImageFromNet(mCiOrtrait, userInfo.getPortrait(), R.mipmap.widget_dface);
 
         mTvName.setText(userInfo.getName());
@@ -290,6 +290,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume: ------------>");
+        mInfo = AppContext.getInstance().getLoginUser();
         NoticeManager.bindNotify(this);
     }
 
@@ -304,20 +305,18 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     protected void initWidget(View root) {
         super.initWidget(root);
 
+
+        Log.d(TAG, "initWidget: ------->");
         mMesCount = new BadgeView(getActivity(), mMesView);
         mMesCount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
         mMesCount.setBadgePosition(BadgeView.POSITION_CENTER);
         mMesCount.setGravity(Gravity.CENTER);
         mMesCount.setBackgroundResource(R.mipmap.notification_bg);
-        //mMesCount.hide(true);
-        mMesCount.show(true);
+        mMesCount.hide(true);
+        //mMesCount.show(true);
 
-        mMesCountForFans = new BadgeView(getActivity(), mFansView);
-        mMesCountForFans.setTextSize(TypedValue.COMPLEX_UNIT_SP, 4);
-        mMesCountForFans.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
-        mMesCountForFans.setGravity(Gravity.CENTER);
-        mMesCountForFans.setBackgroundResource(R.mipmap.notification_bg);
-        mMesCountForFans.show(true);
+        if (mFansView != null)
+            mFansView.setVisibility(View.INVISIBLE);
 
         initSolar();
     }
@@ -325,6 +324,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     @Override
     protected void initData() {
         super.initData();
+        Log.d(TAG, "initData: ------------->");
         sendRequestData();
     }
 
@@ -333,7 +333,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         return R.layout.fragment_main_user_home;
     }
 
-    @OnClick({R.id.iv_logo_setting, R.id.iv_logo_zxing, R.id.iv_portrait, R.id.rl_show_my_info, R.id.ly_tweet,
+    @OnClick({R.id.iv_logo_setting, R.id.iv_logo_zxing, R.id.iv_portrait, R.id.user_view_solar_system, R.id.ly_tweet,
             R.id.ly_favorite, R.id.ly_following, R.id.ly_follower, R.id.rl_message, R.id.rl_blog, R.id.rl_info_avtivities,
             R.id.rl_team
     })
@@ -359,7 +359,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                     //编辑头像
                     showClickAvatar();
                     break;
-                case R.id.rl_show_my_info:
+                case R.id.user_view_solar_system:
                     //显示我的资料
 //                    UIHelper.showUserCenter(getActivity(), AppContext.getInstance()
 //                            .getLoginUid(), AppContext.getInstance().getLoginUser()
@@ -381,6 +381,10 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                 case R.id.ly_follower:
                     UIHelper.showFriends(getActivity(), AppContext.getInstance()
                             .getLoginUid(), 1);
+                    if (mFansView != null) {
+                        mFansView.setVisibility(View.INVISIBLE);
+                    }
+
                     break;
                 case R.id.rl_message:
                     UserMessageActivity.show(getActivity());
@@ -496,7 +500,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         }
 
         // 没有挂载SD卡，无法保存文件
-        if (StringUtils.isEmpty(savePath)) {
+        if (TextUtils.isEmpty(savePath)) {
             AppContext.showToastShort("无法保存照片，请检查SD卡是否挂载");
             return;
         }
@@ -604,7 +608,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                             @Override
                             public void onSuccess(int arg0, Header[] arg1,
                                                   byte[] arg2) {
-                                Result res = (Result) XmlUtils.toBean(ResultBean.class, new ByteArrayInputStream(arg2)).getResult();
+                                Result res = XmlUtils.toBean(net.oschina.app.bean.ResultBean.class, new ByteArrayInputStream(arg2)).getResult();
                                 if (res.OK()) {
                                     AppContext.showToast("更换成功");
                                     // 显示新头像
@@ -681,11 +685,15 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         // Log.d(TAG, "onNoticeArrived: ---->bean=" + bean.toString());
         int allCount = bean.getAllCount();
         if (allCount > 0) {
-            int fans = bean.getFans();
+            showMesCount();
+        }
+        int fans = bean.getFans();
+        if (fans > 0) {
             int tempCount = Integer.parseInt(mTvFollowerCount.getText().toString(), 2);
             int soCount = tempCount + fans;
             mTvFollowerCount.setText(soCount + "");
-            showMesCount();
+            if (mFansView != null)
+                mFansView.setVisibility(View.VISIBLE);
         }
 
     }
@@ -712,6 +720,12 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                 mMesCount.hide(true);
             }
         }
+    }
+
+    @Override
+    public void onTabReselect() {
+        initWidget(mRoot);
+        initData();
     }
 
     private class CacheTask extends AsyncTask<String, Void, User> {

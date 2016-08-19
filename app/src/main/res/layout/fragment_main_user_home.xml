@@ -239,12 +239,6 @@
             android:background="@android:color/white"
             android:orientation="vertical">
 
-            <View
-                style="@style/h_line"
-                android:layout_height="1px"
-                android:layout_marginLeft="46dp"
-                android:background="@color/list_divider_color" />
-
             <LinearLayout
                 android:id="@+id/rl_message"
                 style="@style/option_item_rl">
@@ -277,6 +271,12 @@
                     android:contentDescription="@null"
                     android:src="@mipmap/ic_arrow_right" />
             </LinearLayout>
+
+            <View
+                style="@style/h_line"
+                android:layout_height="1px"
+                android:layout_marginLeft="46dp"
+                android:background="@color/list_divider_color" />
         </LinearLayout>
 
         <LinearLayout
