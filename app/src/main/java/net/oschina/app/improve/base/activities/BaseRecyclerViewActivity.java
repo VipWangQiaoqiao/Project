@@ -1,18 +1,22 @@
 package net.oschina.app.improve.base.activities;
 
+import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.bumptech.glide.RequestManager;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
+import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
 
 import java.lang.reflect.Type;
+import java.util.Date;
 
 import butterknife.Bind;
 import cz.msebera.android.httpclient.Header;
@@ -23,7 +27,9 @@ import cz.msebera.android.httpclient.Header;
  */
 @SuppressWarnings("All")
 public abstract class BaseRecyclerViewActivity<T> extends BaseBackActivity implements
-        BaseRecyclerAdapter.OnItemClickListener, RecyclerRefreshLayout.SuperRefreshLayoutListener {
+        BaseRecyclerAdapter.OnItemClickListener,
+        RecyclerRefreshLayout.SuperRefreshLayoutListener ,
+        BaseGeneralRecyclerAdapter.Callback{
 
     @Bind(R.id.refreshLayout)
     protected RecyclerRefreshLayout mRefreshLayout;
@@ -169,4 +175,19 @@ public abstract class BaseRecyclerViewActivity<T> extends BaseBackActivity imple
     protected abstract Type getType();
 
     protected abstract BaseRecyclerAdapter<T> getRecyclerAdapter();
+
+    @Override
+    public RequestManager getImgLoader() {
+        return getImageLoader();
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
+    @Override
+    public Date getSystemTime() {
+        return new Date();
+    }
 }
