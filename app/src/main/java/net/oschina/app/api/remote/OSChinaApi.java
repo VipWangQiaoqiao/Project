@@ -1719,4 +1719,11 @@ public class OSChinaApi {
             params.put("pageToken", pageToken);
         ApiHttpClient.get("action/apiv2/user_activity", params, handler);
     }
+
+    /**
+     * get user info
+     */
+    public static void getUserInfo(TextHttpResponseHandler handler) {
+        ApiHttpClient.get("action/apiv2/user_me", handler);
+    }
 }

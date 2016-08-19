@@ -54,4 +54,15 @@ public class NoticeBean {
     public int getAllCount() {
         return mention + letter + review + fans + like;
     }
+
+    @Override
+    public String toString() {
+        return "NoticeBean{" +
+                "mention=" + mention +
+                ", letter=" + letter +
+                ", review=" + review +
+                ", fans=" + fans +
+                ", like=" + like +
+                '}';
+    }
 }
