@@ -25,20 +25,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Notice;
-import net.oschina.app.bean.Result;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.bean.User;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.bean.resource.ImageResource;
 import net.oschina.app.improve.notice.NoticeBean;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.user.activities.UserMessageActivity;
@@ -54,18 +54,16 @@ import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.FileUtil;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.UIHelper;
-import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.BadgeView;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -139,7 +137,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     private TextHttpResponseHandler textHandler = new TextHttpResponseHandler() {
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-
+            AppContext.showToast(R.string.title_update_fail_status);
         }
 
         @Override
@@ -155,8 +153,12 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                     UserInfo userInfo = (UserInfo) resultBean.getResult();
 
                     Log.d(TAG, "onSuccess: ----->userInfo=" + userInfo.toString());
-                    updateView(userInfo);
-                    mUserInfo = userInfo;
+                    if (userInfo != null) {
+                        updateView(userInfo);
+                        mUserInfo = userInfo;
+                    } else {
+                        AppContext.showToast(R.string.title_update_success_status);
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -250,37 +252,23 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                 // float rlShowInfoY = mRlShowInfo.getY();
                 float x = mCiOrtrait.getX();
                 // float y = mCiOrtrait.getY();
-                // int ciOrtraitWidth = mCiOrtrait.getWidth();
+                int ciOrtraitWidth = mCiOrtrait.getWidth();
                 int ciOrtraitHeight = mCiOrtrait.getHeight();
 
                 float px = x + +rlShowInfoX + (width >> 1);
                 float py = (height >> 1) - ciOrtraitHeight / 2 + 48;
-                int radius = (width >> 1);
+                int mMaxRadius = (int) (mSolarSystem.getHeight() - py + 50);
+                int r = (ciOrtraitWidth >> 1);
 
-                SolarSystemView.Planet planet1 = new SolarSystemView.Planet();
-                planet1.setClockwise(true);
-                planet1.setAngleRate(0.015F);
-                planet1.setRadius(radius / 4);
-
-                SolarSystemView.Planet planet2 = new SolarSystemView.Planet();
-                planet2.setClockwise(false);
-                planet2.setAngleRate(0.02F);
-                planet2.setRadius(radius / 4 * 2);
-
-                SolarSystemView.Planet planet3 = new SolarSystemView.Planet();
-                planet3.setClockwise(true);
-                planet3.setAngleRate(0.01F);
-                planet3.setRadius(radius / 4 * 3);
-
-                SolarSystemView.Planet planet4 = new SolarSystemView.Planet();
-                planet4.setClockwise(false);
-                planet4.setAngleRate(0.02F);
-                planet4.setRadius(radius);
-
-                mSolarSystem.addPlanets(planet1);
-                mSolarSystem.addPlanets(planet2);
-                mSolarSystem.addPlanets(planet3);
-                mSolarSystem.addPlanets(planet4);
+                Random random = new Random(System.currentTimeMillis());
+                for (int i = 60, radius = r + i; ; i = (int) (i * 1.4), radius += i) {
+                    SolarSystemView.Planet planet = new SolarSystemView.Planet();
+                    planet.setClockwise(random.nextInt(10) % 2 == 0);
+                    planet.setAngleRate(random.nextInt(35) / 1000.f);
+                    planet.setRadius(radius);
+                    mSolarSystem.addPlanets(planet);
+                    if (radius > mMaxRadius) break;
+                }
                 mSolarSystem.setPivotPoint(px, py);
             }
         });
@@ -289,7 +277,6 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume: ------------>");
         mInfo = AppContext.getInstance().getLoginUser();
         NoticeManager.bindNotify(this);
     }
@@ -298,15 +285,12 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     public void onPause() {
         super.onPause();
         NoticeManager.unBindNotify(this);
-        Log.d(TAG, "onPause: ------->");
     }
 
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
 
-
-        Log.d(TAG, "initWidget: ------->");
         mMesCount = new BadgeView(getActivity(), mMesView);
         mMesCount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
         mMesCount.setBadgePosition(BadgeView.POSITION_CENTER);
@@ -324,7 +308,6 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     @Override
     protected void initData() {
         super.initData();
-        Log.d(TAG, "initData: ------------->");
         sendRequestData();
     }
 
@@ -384,7 +367,6 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                     if (mFansView != null) {
                         mFansView.setVisibility(View.INVISIBLE);
                     }
-
                     break;
                 case R.id.rl_message:
                     UserMessageActivity.show(getActivity());
@@ -413,18 +395,21 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
             AppContext.showToast("");
             return;
         }
-        DialogHelp.getSelectDialog(getActivity(), "选择操作", getResources().getStringArray(R.array.avatar_option), new DialogInterface.OnClickListener() {
+        DialogHelp.getSelectDialog(getActivity(), getString(R.string.action_select), getResources().getStringArray(R.array.avatar_option), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (i == 0) {
                     handleSelectPicture();
                 } else {
-                    UIHelper.showUserAvatar(getActivity(), mInfo.getPortrait());
+                    UIHelper.showUserAvatar(getActivity(), mUserInfo.getPortrait());
                 }
             }
         }).show();
     }
 
+    /**
+     * show select-picture  dialog
+     */
     private void handleSelectPicture() {
         DialogHelp.getSelectDialog(getActivity(), "选择图片", getResources().getStringArray(R.array.choose_picture),
                 new DialogInterface.OnClickListener() {
@@ -435,10 +420,15 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                 }).show();
     }
 
+    /**
+     * select picture
+     *
+     * @param position action position
+     */
     private void goToSelectPicture(int position) {
         switch (position) {
             case ACTION_TYPE_ALBUM:
-                startImagePick();
+                showImagePick();
                 break;
             case ACTION_TYPE_PHOTO:
                 startTakePhotoByPermissions();
@@ -451,19 +441,19 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     /**
      * 选择图片裁剪
      */
-    private void startImagePick() {
+    private void showImagePick() {
         Intent intent;
         if (Build.VERSION.SDK_INT < 19) {
             intent = new Intent();
             intent.setAction(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
-            startActivityForResult(Intent.createChooser(intent, "选择图片"),
+            startActivityForResult(Intent.createChooser(intent, getString(R.string.action_select_picture)),
                     ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP);
         } else {
             intent = new Intent(Intent.ACTION_PICK,
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             intent.setType("image/*");
-            startActivityForResult(Intent.createChooser(intent, "选择图片"),
+            startActivityForResult(Intent.createChooser(intent, getString(R.string.action_select_picture)),
                     ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP);
         }
     }
@@ -485,6 +475,9 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         }
     }
 
+    /**
+     * take photo
+     */
     private void startTakePhoto() {
         Intent intent;
         // 判断是否挂载了SD卡
@@ -501,7 +494,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
         // 没有挂载SD卡，无法保存文件
         if (TextUtils.isEmpty(savePath)) {
-            AppContext.showToastShort("无法保存照片，请检查SD卡是否挂载");
+            AppContext.showToastShort(getString(R.string.title_error_photo));
             return;
         }
 
@@ -526,7 +519,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         if (storageState.equals(Environment.MEDIA_MOUNTED)) {
             File savedir = new File(FILE_SAVEPATH);
             if (!savedir.exists()) {
-                boolean mkdirs = savedir.mkdirs();
+                savedir.mkdirs();
             }
         } else {
             AppContext.showToast("无法保存上传的头像，请检查SD卡是否挂载");
@@ -587,53 +580,54 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     }
 
     /**
-     * 上传新照片
+     * update the new picture
      */
     private void uploadNewPhoto() {
-        showWaitDialog("正在上传头像...");
+        showWaitDialog(getString(R.string.title_update_icon_status));
 
         // 获取头像缩略图
         if (!TextUtils.isEmpty(protraitPath) && protraitFile.exists()) {
-            protraitBitmap = ImageUtils
-                    .loadImgThumbnail(protraitPath, 200, 200);
+            protraitBitmap = ImageUtils.loadImgThumbnail(protraitPath, 200, 200);
         } else {
-            AppContext.showToast("图像不存在，上传失败");
+            AppContext.showToast(getString(R.string.title_icon_null));
         }
-        if (protraitBitmap != null) {
+        if (protraitPath != null) {
 
-            try {
-                OSChinaApi.updatePortrait(AppContext.getInstance().getLoginUid(), protraitFile,
-                        new AsyncHttpResponseHandler() {
+            OSChinaApi.uploadImage(null, protraitPath, new TextHttpResponseHandler() {
 
-                            @Override
-                            public void onSuccess(int arg0, Header[] arg1,
-                                                  byte[] arg2) {
-                                Result res = XmlUtils.toBean(net.oschina.app.bean.ResultBean.class, new ByteArrayInputStream(arg2)).getResult();
-                                if (res.OK()) {
-                                    AppContext.showToast("更换成功");
-                                    // 显示新头像
-                                    mCiOrtrait.setImageBitmap(protraitBitmap);
-                                    isChangeFace = true;
-                                } else {
-                                    AppContext.showToast(res.getErrorMessage());
-                                }
+                @Override
+                public void onStart() {
+                    super.onStart();
+                    AppContext.showToast(getString(R.string.title_update_icon_status));
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    AppContext.showToast(getString(R.string.title_icon_upload_error));
+                }
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                    try {
+                        Type type = new TypeToken<ResultBean<ImageResource>>() {
+                        }.getType();
+                        ResultBean<ImageResource> resultBean = new Gson().fromJson(responseString, type);
+                        if (resultBean.isSuccess()) {
+                            String token = resultBean.getResult().getToken();
+
+                            if (!TextUtils.isEmpty(token)) {
+                                OSChinaApi.updateUserIcon(token, textHandler);
                             }
 
-                            @Override
-                            public void onFailure(int arg0, Header[] arg1,
-                                                  byte[] arg2, Throwable arg3) {
-                                AppContext.showToast("更换头像失败");
-                            }
+                        } else {
+                            onFailure(statusCode, headers, responseString, new Throwable(resultBean.getMessage()));
+                        }
+                    } catch (Exception e) {
+                        onFailure(statusCode, headers, responseString, e);
+                    }
 
-                            @Override
-                            public void onFinish() {
-                                hideWaitDialog();
-                            }
-
-                        });
-            } catch (FileNotFoundException e) {
-                AppContext.showToast("图像不存在，上传失败");
-            }
+                }
+            });
         }
     }
 

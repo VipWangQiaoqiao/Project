@@ -21,6 +21,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
@@ -873,7 +874,7 @@ public class UIHelper {
      * @param avatarUrl
      */
     public static void showUserAvatar(Context context, String avatarUrl) {
-        if (StringUtils.isEmpty(avatarUrl)) {
+        if (TextUtils.isEmpty(avatarUrl)) {
             return;
         }
         String url = AvatarView.getLargeAvatar(avatarUrl);

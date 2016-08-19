@@ -48,7 +48,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import cz.msebera.android.httpclient.Header;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -133,17 +132,17 @@ public class MyInformationFragmentDetail extends BaseFragment implements EasyPer
         return view;
     }
 
-    @Override
-    @OnClick({R.id.iv_avatar})
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.iv_avatar:
-                showClickAvatar();
-                break;
-            default:
-                break;
-        }
-    }
+//    @Override
+//    // @OnClick({R.id.iv_avatar})
+//    public void onClick(View v) {
+//        switch (v.getId()) {
+//            case R.id.iv_avatar:
+//                // showClickAvatar();
+//                break;
+//            default:
+//                break;
+//        }
+//    }
 
     public void showClickAvatar() {
         if (mUser == null) {

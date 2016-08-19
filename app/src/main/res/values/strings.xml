@@ -381,6 +381,16 @@
     <string name="image_select_opt_done">完成</string>
     <string name="image_select_opt_preview">预览</string>
 
+    <!-- 个人信息-->
+    <string name="action_select">选择操作</string>
+    <string name="action_select_picture">选择图片</string>
+    <string name="title_error_photo">无法保存照片，请检查SD卡是否挂载</string>
+    <string name="title_update_icon_status">正在上传头像中&#8230;</string>
+    <string name="title_icon_null">图像不存在，上传失败</string>
+    <string name="title_icon_upload_error">图片上传失败&#8230;</string>
+    <string name="title_update_success_status">个人信息更新成功&#8230;</string>
+    <string name="title_update_fail_status">个人信息更新失败&#8230;</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
