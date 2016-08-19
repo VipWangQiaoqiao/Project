@@ -9,7 +9,6 @@ import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.bean.Message;
 import net.oschina.app.improve.bean.simple.Author;
-import net.oschina.app.improve.utils.StreamUtils;
 import net.oschina.app.util.StringUtils;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -33,7 +32,7 @@ public class UserMessageAdapter extends BaseGeneralRecyclerAdapter<Message> {
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Message item, int position) {
         MessageViewHolder messageViewHolder = (MessageViewHolder) holder;
         Author author = item.getSender();
-        mCallBack.getImgLoader().load(author.getPortrait()).asBitmap().into(messageViewHolder.iv_user_avatar);
+        mCallBack.getImgLoader().load(author.getPortrait()).asBitmap().placeholder(R.mipmap.widget_dface).into(messageViewHolder.iv_user_avatar);
         messageViewHolder.tv_user_name.setText(author.getName());
         messageViewHolder.tv_content.setText(item.getContent());
         messageViewHolder.tv_time.setText(StringUtils.formatSomeAgo(item.getPubDate()));

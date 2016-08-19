@@ -24,6 +24,112 @@
             app:layout_collapseParallaxMultiplier="0.7" />
 
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/lay_about_info"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@color/user_info_bg_color"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/ly_tweet"
+                    style="@style/uset_information_ll">
+
+                    <TextView
+                        android:id="@+id/tv_tweet"
+                        style="@style/user_formation_text"
+                        android:text="0" />
+
+                    <TextView
+                        style="@style/user_formation_info"
+                        android:text="@string/main_tab_name_tweet" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ly_favorite"
+                    style="@style/uset_information_ll">
+
+                    <TextView
+                        android:id="@+id/tv_favorite"
+                        style="@style/user_formation_text"
+                        android:text="0" />
+
+                    <TextView
+                        android:id="@+id/textView5"
+                        style="@style/user_formation_info"
+                        android:text="@string/favorite" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ly_following"
+                    style="@style/uset_information_ll">
+
+                    <TextView
+                        android:id="@+id/tv_following"
+                        style="@style/user_formation_text"
+                        android:text="0" />
+
+                    <TextView
+                        style="@style/user_formation_info"
+                        android:text="@string/following" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ly_follower"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="@dimen/lay_12"
+                    android:paddingRight="@dimen/lay_12"
+                    android:paddingTop="4dp">
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tv_follower"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="0"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/font_12" />
+
+                        <View
+                            android:id="@+id/user_info_notice_fans"
+                            android:layout_width="4dp"
+                            android:layout_height="4dp"
+                            android:layout_gravity="right|top"
+                            android:layout_marginLeft="12dp"
+                            android:background="@drawable/bg_show_fans" />
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/follower"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/font_12" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/rl_show_my_info"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -117,83 +223,6 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:gravity="bottom"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:id="@+id/lay_about_info"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_gravity="center_horizontal"
-                android:background="@color/user_info_bg_color"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:id="@+id/ly_tweet"
-                    style="@style/uset_information_ll">
-
-                    <TextView
-                        android:id="@+id/tv_tweet"
-                        style="@style/user_formation_text"
-                        android:text="0" />
-
-                    <TextView
-                        style="@style/user_formation_info"
-                        android:text="@string/main_tab_name_tweet" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/ly_favorite"
-                    style="@style/uset_information_ll">
-
-                    <TextView
-                        android:id="@+id/tv_favorite"
-                        style="@style/user_formation_text"
-                        android:text="0" />
-
-                    <TextView
-                        android:id="@+id/textView5"
-                        style="@style/user_formation_info"
-                        android:text="@string/favorite" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/ly_following"
-                    style="@style/uset_information_ll">
-
-                    <TextView
-                        android:id="@+id/tv_following"
-                        style="@style/user_formation_text"
-                        android:text="0" />
-
-                    <TextView
-                        style="@style/user_formation_info"
-                        android:text="@string/following" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/ly_follower"
-                    style="@style/uset_information_ll">
-
-
-                    <TextView
-                        android:id="@+id/tv_follower_count"
-                        style="@style/user_formation_text"
-                        android:text="0" />
-
-                    <TextView
-                        android:id="@+id/textView4"
-                        style="@style/user_formation_info"
-                        android:text="@string/follower" />
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-
 
     </FrameLayout>
 
@@ -209,6 +238,12 @@
             android:layout_height="wrap_content"
             android:background="@android:color/white"
             android:orientation="vertical">
+
+            <View
+                style="@style/h_line"
+                android:layout_height="1px"
+                android:layout_marginLeft="46dp"
+                android:background="@color/list_divider_color" />
 
             <LinearLayout
                 android:id="@+id/rl_message"
@@ -242,12 +277,6 @@
                     android:contentDescription="@null"
                     android:src="@mipmap/ic_arrow_right" />
             </LinearLayout>
-
-            <View
-                style="@style/h_line"
-                android:layout_height="1px"
-                android:layout_marginLeft="46dp"
-                android:background="@color/list_divider_color" />
         </LinearLayout>
 
         <LinearLayout

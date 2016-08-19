@@ -166,14 +166,16 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
     }
 
     protected void onRequestError(int code) {
-        if (mAdapter.getItems().size() == 0 && isNeedEmptyView())
-            mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+        if (mAdapter.getItems().size() == 0) {
+            if (isNeedEmptyView()) mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
+            mAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_ERROR, true);
+        }
+
+
     }
 
     protected void onComplete() {
         mRefreshLayout.onComplete();
-        if(mAdapter.getItems().size() == 0)
-            mAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_ERROR, true);
         mIsRefresh = false;
     }
 

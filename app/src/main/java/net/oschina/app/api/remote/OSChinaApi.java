@@ -1625,7 +1625,6 @@ public class OSChinaApi {
     }
 
     /**
-     * <<<<<<< Updated upstream
      * 获取消息列表
      *
      * @param authorId  authorId 用户id，不加该参数时返回所有给我发送消息的列表
@@ -1634,11 +1633,23 @@ public class OSChinaApi {
      */
     public static void getMessageList(long authorId, String pageToken, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
-        if (authorId != 0)
-            params.put("authorId", authorId);
+        params.put("authorId", authorId);
         if (!TextUtils.isEmpty(pageToken))
             params.put("pageToken", pageToken);
         ApiHttpClient.get("action/apiv2/messages", params, handler);
+    }
+
+    /**
+     * 获取用户私信列表
+     *
+     * @param pageToken pageToken
+     * @param handler   回调
+     */
+    public static void getUserMessageList(String pageToken, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        if (!TextUtils.isEmpty(pageToken))
+            params.put("pageToken", pageToken);
+        ApiHttpClient.get("action/apiv2/user_msg_letters", params, handler);
     }
 
     /**

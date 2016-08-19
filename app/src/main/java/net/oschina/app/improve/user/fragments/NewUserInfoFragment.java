@@ -125,6 +125,9 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     @Bind(R.id.user_info_notice_message)
     View mMesView;
 
+    @Bind(R.id.user_info_notice_fans)
+    View mFansView;
+
     private BadgeView mMesCount;
     private boolean mIsWatingLogin;
     private Uri origUri;
@@ -306,13 +309,13 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         mMesCount.setBadgePosition(BadgeView.POSITION_CENTER);
         mMesCount.setGravity(Gravity.CENTER);
         mMesCount.setBackgroundResource(R.mipmap.notification_bg);
-        mMesCount.hide();
-        // mMesCount.show();
+        //mMesCount.hide(true);
+        mMesCount.show(true);
 
-        mMesCountForFans = new BadgeView(getActivity(), mTvFollowerCount);
-        mMesCountForFans.setTextSize(TypedValue.COMPLEX_UNIT_SP, 2);
+        mMesCountForFans = new BadgeView(getActivity(), mFansView);
+        mMesCountForFans.setTextSize(TypedValue.COMPLEX_UNIT_SP, 4);
         mMesCountForFans.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
-        mMesCountForFans.setGravity(Gravity.TOP);
+        mMesCountForFans.setGravity(Gravity.CENTER);
         mMesCountForFans.setBackgroundResource(R.mipmap.notification_bg);
         mMesCountForFans.show(true);
 
