@@ -56,6 +56,16 @@ public class UserQuestionFragment extends BaseRecyclerViewFragment<Question> {
     }
 
     @Override
+    protected boolean isNeedCache() {
+        return false;
+    }
+
+    @Override
+    protected boolean isNeedEmptyView() {
+        return false;
+    }
+
+    @Override
     public void onItemClick(int position, long itemId) {
         Question question = mAdapter.getItem(position);
         QuestionDetailActivity.show(getActivity(), question.getId());

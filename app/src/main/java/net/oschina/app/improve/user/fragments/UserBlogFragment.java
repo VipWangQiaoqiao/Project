@@ -58,6 +58,16 @@ public class UserBlogFragment extends BaseRecyclerViewFragment<Blog> {
     }
 
     @Override
+    protected boolean isNeedCache() {
+        return false;
+    }
+
+    @Override
+    protected boolean isNeedEmptyView() {
+        return false;
+    }
+
+    @Override
     public void onItemClick(int position, long itemId) {
         Blog blog = mAdapter.getItem(position);
         BlogDetailActivity.show(getActivity(), blog.getId());

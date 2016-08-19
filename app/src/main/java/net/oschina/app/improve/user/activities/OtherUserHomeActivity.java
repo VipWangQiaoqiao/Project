@@ -14,6 +14,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Pair;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,8 +31,8 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.base.activities.BaseActivity;
-import net.oschina.app.improve.base.handler.JsonHttpResponseHandler;
 import net.oschina.app.improve.bean.User;
+import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.UserRelation;
 import net.oschina.app.improve.user.fragments.UserActiveFragment;
 import net.oschina.app.improve.user.fragments.UserBlogFragment;
@@ -43,6 +44,7 @@ import net.oschina.app.util.UIHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.Bind;
 import cz.msebera.android.httpclient.Header;
@@ -153,13 +155,16 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
                     mLogoNick.setVisibility(View.VISIBLE);
                     mLogoPortrait.setVisibility(View.VISIBLE);
                     mDivider.setVisibility(View.GONE);
+//                    mTabLayout.setSelected(true);
                     isShow = true;
                 } else if (isShow) {
                     mLogoNick.setVisibility(View.GONE);
                     mLogoPortrait.setVisibility(View.GONE);
                     mDivider.setVisibility(View.VISIBLE);
+//                    mTabLayout.setSelected(false);
                     isShow = false;
                 }
+                mTabLayout.getBackground().setAlpha(Math.round(255 - Math.abs(verticalOffset) / (float) mScrollRange * 255));
             }
         });
 
@@ -178,41 +183,34 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
                 ViewGroup parent = (ViewGroup) mPortrait.getParent();
                 float px = x + parent.getX() + mPortrait.getWidth() / 2;
                 float py = y + parent.getY() + mPortrait.getHeight() / 2 + mStatusBarHeight;
-                int radius = (int) (mSolarSystem.getHeight() - py + 50);
+                int mMaxRadius = (int) (mSolarSystem.getHeight() - py + 50);
 
-                SolarSystemView.Planet planet1 = new SolarSystemView.Planet();
-                planet1.setClockwise(true);
-                planet1.setAngleRate(0.015F);
-                planet1.setRadius(radius / 4);
-
-                SolarSystemView.Planet planet2 = new SolarSystemView.Planet();
-                planet2.setClockwise(false);
-                planet2.setAngleRate(0.02F);
-                planet2.setRadius(radius / 4 * 2);
-
-                SolarSystemView.Planet planet3 = new SolarSystemView.Planet();
-                planet3.setClockwise(true);
-                planet3.setAngleRate(0.01F);
-                planet3.setRadius(radius / 4 * 3);
-
-                SolarSystemView.Planet planet4 = new SolarSystemView.Planet();
-                planet4.setClockwise(false);
-                planet4.setAngleRate(0.02F);
-                planet4.setRadius(radius);
-
-                mSolarSystem.addPlanets(planet1);
-                mSolarSystem.addPlanets(planet2);
-                mSolarSystem.addPlanets(planet3);
-                mSolarSystem.addPlanets(planet4);
+                int r = mPortrait.getWidth() / 2;
+                Random random = new Random(System.currentTimeMillis());
+                for (int i = 50, radius = r + i; ; i = (int) (i * 1.4), radius += i){
+                    SolarSystemView.Planet planet = new SolarSystemView.Planet();
+                    planet.setClockwise(random.nextInt(10) % 2 == 0);
+                    planet.setAngleRate(random.nextInt(35) / 1000.f);
+                    planet.setRadius(radius);
+                    mSolarSystem.addPlanets(planet);
+                    if (radius > mMaxRadius) break;
+                }
                 mSolarSystem.setPivotPoint(px, py);
             }
         });
+
+        mTabLayout.addTab(mTabLayout.newTab().setCustomView(getTabView("0", "动弹")));
+        mTabLayout.addTab(mTabLayout.newTab().setCustomView(getTabView("0", "博客")));
+        mTabLayout.addTab(mTabLayout.newTab().setCustomView(getTabView("0", "问答")));
+        mTabLayout.addTab(mTabLayout.newTab().setCustomView(getTabView("0", "动态")));
         injectDataToView();
         injectDataToViewPager();
     }
 
+    @SuppressWarnings("all")
     private void injectDataToViewPager(){
-        if (user.getId() > 0 && fragments == null){
+        if (user.getId() <= 0) return;
+        if (fragments == null){
             fragments = new ArrayList<>();
             fragments.add(new Pair<>(String.format("%s\n动弹", user.getTweetCount()), UserTweetFragment.instantiate(user.getId())));
             fragments.add(new Pair<>(String.format("%s\n博客", user.getBlogCount()), UserBlogFragment.instantiate(user.getId())));
@@ -237,16 +235,32 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
             });
 
             mTabLayout.setupWithViewPager(mViewPager);
-            mTabLayout.addTab(mTabLayout.newTab().setCustomView(R.layout.tab_item_other_user));
-            mTabLayout.addTab(mTabLayout.newTab().setCustomView(R.layout.tab_item_other_user));
-            mTabLayout.addTab(mTabLayout.newTab().setCustomView(R.layout.tab_item_other_user));
-            mTabLayout.addTab(mTabLayout.newTab().setCustomView(R.layout.tab_item_other_user));
+            mTabLayout.getTabAt(0).setCustomView(getTabView(String.valueOf(user.getTweetCount()), "动弹"));
+            mTabLayout.getTabAt(1).setCustomView(getTabView(String.valueOf(user.getBlogCount()), "博客"));
+            mTabLayout.getTabAt(2).setCustomView(getTabView(String.valueOf(user.getAnswerCount()), "问答"));
+            mTabLayout.getTabAt(3).setCustomView(getTabView(String.valueOf(user.getDiscussCount()), "动态"));
         }else {
-            mTabLayout.addTab(mTabLayout.newTab().setText("0\n动弹"));
-            mTabLayout.addTab(mTabLayout.newTab().setText("0\n博客"));
-            mTabLayout.addTab(mTabLayout.newTab().setText("0\n问答"));
-            mTabLayout.addTab(mTabLayout.newTab().setText("0\n动态"));
+            setupTabText(mTabLayout.getTabAt(0), String.valueOf(user.getTweetCount()));
+            setupTabText(mTabLayout.getTabAt(1), String.valueOf(user.getBlogCount()));
+            setupTabText(mTabLayout.getTabAt(2), String.valueOf(user.getAnswerCount()));
+            setupTabText(mTabLayout.getTabAt(3), String.valueOf(user.getDiscussCount()));
         }
+    }
+
+    private void setupTabText(TabLayout.Tab tab, String str){
+        View view = tab.getCustomView();
+        if (view == null) return;
+        TabViewHolder holder = (TabViewHolder) view.getTag();
+        holder.mViewCount.setText(str);
+    }
+
+    private View getTabView(String cs, String tag){
+        View view = LayoutInflater.from(this).inflate(R.layout.tab_item_other_user, mTabLayout, false);
+        TabViewHolder holder = new TabViewHolder(view);
+        holder.mViewCount.setText(cs);
+        holder.mViewTag.setText(tag);
+        view.setTag(holder);
+        return view;
     }
 
     private void injectDataToView() {
@@ -300,18 +314,20 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
     @Override
     protected void initData() {
         super.initData();
-        OSChinaApi.getUserInfo(user.getId(), user.getName(), new JsonHttpResponseHandler<User>(this) {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, User result) {
-                if (result == null) return;
-                user = result;
-                injectDataToView();
-                injectDataToViewPager();
-            }
-
+        OSChinaApi.getUserInfo(user.getId(), user.getName(), new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 Toast.makeText(OtherUserHomeActivity.this, "获取用户信息失败", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                ResultBean<User> result = AppContext.createGson().fromJson(
+                        responseString, new TypeToken<ResultBean<User>>(){}.getType());
+                if (result.isSuccess() && result.getResult() == null) return;
+                user = result.getResult();
+                injectDataToView();
+                injectDataToViewPager();
             }
         });
     }
@@ -415,6 +431,16 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private static class TabViewHolder{
+        private TextView mViewCount;
+        private TextView mViewTag;
+
+        public TabViewHolder(View view){
+            mViewCount = (TextView) view.findViewById(R.id.tv_count);
+            mViewTag = (TextView) view.findViewById(R.id.tv_tag);
+        }
     }
 
 }
