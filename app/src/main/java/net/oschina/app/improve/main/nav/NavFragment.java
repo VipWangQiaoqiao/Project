@@ -147,12 +147,12 @@ public class NavFragment extends BaseFragment implements View.OnClickListener, N
     @Override
     public void onDestroy() {
         super.onDestroy();
-        NoticeManager.bindNotify(this);
+        NoticeManager.unBindNotify(this);
     }
 
     @Override
     protected void initData() {
         super.initData();
-        NoticeManager.unBindNotify(this);
+        NoticeManager.bindNotify(this);
     }
 }
