@@ -71,7 +71,7 @@ public class NoticeBean implements Serializable {
                 '}';
     }
 
-    public NoticeBean add(NoticeBean bean) {
+    NoticeBean add(NoticeBean bean) {
         this.mention += bean.mention;
         this.letter += bean.letter;
         this.review += bean.review;
@@ -80,18 +80,7 @@ public class NoticeBean implements Serializable {
         return this;
     }
 
-    public static NoticeBean getInstance(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences(NoticeBean.class.getName(), Context.MODE_PRIVATE);
-        NoticeBean bean = new NoticeBean();
-        bean.mention = preferences.getInt("mention", 0);
-        bean.letter = preferences.getInt("letter", 0);
-        bean.review = preferences.getInt("review", 0);
-        bean.fans = preferences.getInt("fans", 0);
-        bean.like = preferences.getInt("like", 0);
-        return bean;
-    }
-
-    public NoticeBean save(Context context) {
+    NoticeBean save(Context context) {
         SharedPreferences.Editor editor = context.getSharedPreferences(NoticeBean.class.getName(), Context.MODE_PRIVATE).edit();
         editor.putInt("mention", mention);
         editor.putInt("letter", letter);
@@ -100,5 +89,16 @@ public class NoticeBean implements Serializable {
         editor.putInt("like", like);
         SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
         return this;
+    }
+
+    static NoticeBean getInstance(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences(NoticeBean.class.getName(), Context.MODE_PRIVATE);
+        NoticeBean bean = new NoticeBean();
+        bean.mention = preferences.getInt("mention", 0);
+        bean.letter = preferences.getInt("letter", 0);
+        bean.review = preferences.getInt("review", 0);
+        bean.fans = preferences.getInt("fans", 0);
+        bean.like = preferences.getInt("like", 0);
+        return bean;
     }
 }

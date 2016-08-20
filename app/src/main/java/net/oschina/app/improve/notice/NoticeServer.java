@@ -1,12 +1,16 @@
 package net.oschina.app.improve.notice;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.animation.AccelerateInterpolator;
@@ -14,7 +18,9 @@ import android.view.animation.AccelerateInterpolator;
 import com.google.gson.Gson;
 import com.loopj.android.http.TextHttpResponseHandler;
 
+import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.main.MainActivity;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -37,7 +43,7 @@ public class NoticeServer extends Service {
         Intent intent = new Intent(context, NoticeServer.class);
         intent.setAction(FLAG_ACTION_FIRST);
         context.startService(intent);
-        Log.e(TAG, "startAction");
+        log("startAction");
     }
 
     static void startActionClear(Context context, int type) {
@@ -45,14 +51,14 @@ public class NoticeServer extends Service {
         intent.setAction(FLAG_ACTION_CLEAR);
         intent.putExtra(EXTRA_TYPE, type);
         context.startService(intent);
-        Log.e(TAG, "startActionClear");
+        log("startActionClear");
     }
 
     static void startActionExit(Context context) {
         Intent intent = new Intent(context, NoticeServer.class);
         intent.setAction(FLAG_ACTION_EXIT);
         context.startService(intent);
-        Log.e(TAG, "startActionExit");
+        log("startActionExit");
     }
 
     public NoticeServer() {
@@ -66,7 +72,7 @@ public class NoticeServer extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         String action = intent.getAction();
-        Log.e(TAG, "onStartCommand:" + action);
+        log("onStartCommand:" + action);
         if (action != null) {
             handleAction(action, intent);
         }
@@ -76,7 +82,7 @@ public class NoticeServer extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.e(TAG, "onCreate");
+        log("onCreate");
         mAlarmMgr = (AlarmManager) getSystemService(ALARM_SERVICE);
         // First notify
         sendBroadcastToManager(NoticeBean.getInstance(this));
@@ -84,17 +90,17 @@ public class NoticeServer extends Service {
 
     @Override
     public void onDestroy() {
-        cancelRequestAlarm();
+        log("onDestroy");
         super.onDestroy();
     }
 
-    // The count 0~15, 20s->15*60s
-    private int mAlarmCount = ALARM_INTERVAL_MIN;
     private final static int ALARM_INTERVAL_MIN = 0;
     private final static int ALARM_INTERVAL_MAX = 15;
 
     private final static int ALARM_INTERVAL_MIN_SECOND = 20;
     private final static int ALARM_INTERVAL_MAX_SECOND = 15 * 60;
+    // The count 0~15, 20s->15*60s
+    private static int mAlarmCount = ALARM_INTERVAL_MIN;
 
     private void registerFirstAlarm() {
         long interval = getAlarmInterval(0);
@@ -111,7 +117,7 @@ public class NoticeServer extends Service {
             if (mAlarmCount < ALARM_INTERVAL_MIN)
                 mAlarmCount = ALARM_INTERVAL_MIN;
         }
-        Log.e(TAG, "registerCurrentAlarm:increase:" + increase);
+        log("registerCurrentAlarm:increase:" + increase);
         long interval = getAlarmInterval(mAlarmCount);
         registerAlarmByInterval(interval);
     }
@@ -120,7 +126,7 @@ public class NoticeServer extends Service {
         cancelRequestAlarm();
         mAlarmMgr.setRepeating(AlarmManager.ELAPSED_REALTIME,
                 SystemClock.elapsedRealtime() + interval, interval, getOperationIntent());
-        Log.e(TAG, "registerAlarmByInterval interval:" + interval);
+        log("registerAlarmByInterval interval:" + interval);
     }
 
 
@@ -128,10 +134,10 @@ public class NoticeServer extends Service {
         mAlarmCount = count;
 
         float progress = mAlarmCount / (float) ALARM_INTERVAL_MAX;
-        progress = new AccelerateInterpolator(2.5f).getInterpolation(progress);
+        progress = new AccelerateInterpolator(2.2f).getInterpolation(progress);
 
         int millisecond = (int) (1000 * (ALARM_INTERVAL_MIN_SECOND + ((ALARM_INTERVAL_MAX_SECOND - ALARM_INTERVAL_MIN_SECOND) * progress)));
-        Log.e(TAG, "getAlarmInterval:mAlarmCount:" + mAlarmCount + " progress:" + progress + " millisecond:" + millisecond);
+        log("getAlarmInterval:mAlarmCount:" + mAlarmCount + " progress:" + progress + " millisecond:" + millisecond);
         return millisecond;
     }
 
@@ -152,6 +158,7 @@ public class NoticeServer extends Service {
         } else if (FLAG_ACTION_CLEAR.equals(action)) {
             clearNotice(intent.getIntExtra(EXTRA_TYPE, 0));
         } else if (FLAG_ACTION_EXIT.equals(action)) {
+            cancelRequestAlarm();
             stopSelf();
         } else if (FLAG_ACTION_FIRST.equals(action)) {
             registerFirstAlarm();
@@ -161,7 +168,7 @@ public class NoticeServer extends Service {
     private boolean mRunning;
 
     private synchronized void refreshNotice() {
-        Log.e(TAG, "refreshNotice: mRunning:" + mRunning);
+        log("refreshNotice: mRunning:" + mRunning);
         if (mRunning)
             return;
 
@@ -195,16 +202,18 @@ public class NoticeServer extends Service {
     }
 
     private void doNetFinish(NoticeBean bean) {
-        Log.e(TAG, "doNetFinish:" + (bean == null ? "null" : bean.toString()));
+        log("doNetFinish:" + (bean == null ? "null" : bean.toString()));
 
         if (bean != null && bean.getAllCount() > 0) {
             NoticeBean notice = NoticeBean.getInstance(this)
                     .add(bean)
                     .save(this);
-            // Send to manager
-            sendBroadcastToManager(notice);
             // To register alarm
             registerCurrentAlarm(false);
+            // Send to manager
+            sendBroadcastToManager(notice);
+            // Send to notification
+            sendNotification(notice);
         } else {
             // To register alarm
             registerCurrentAlarm(true);
@@ -212,7 +221,7 @@ public class NoticeServer extends Service {
     }
 
     private void clearNotice(int type) {
-        Log.e(TAG, "clearNotice:" + type);
+        log("clearNotice:" + type);
         NoticeBean notice = NoticeBean.getInstance(this);
         switch (type) {
             case NoticeManager.FLAG_CLEAR_MENTION:
@@ -233,13 +242,71 @@ public class NoticeServer extends Service {
         }
         notice.save(this);
         sendBroadcastToManager(notice);
+        sendNotification(notice);
     }
 
     private void sendBroadcastToManager(NoticeBean bean) {
+        log("sendBroadcastToManager:" + bean.toString());
         Intent intent = new Intent(FLAG_BROADCAST_REFRESH);
         intent.putExtra(EXTRA_BEAN, bean);
         sendBroadcast(intent);
-        Log.e(TAG, "sendBroadcastToManager:" + bean.toString());
     }
 
+    private final static int NOTIFY_ID = 0x11111111;
+
+    @SuppressLint("StringFormatMatches")
+    private void sendNotification(NoticeBean bean) {
+        if (bean == null || bean.getAllCount() == 0) {
+            clearNotification();
+            return;
+        }
+
+        log("sendNotification:" + bean.toString());
+
+        StringBuilder sb = new StringBuilder();
+        if (bean.getMention() > 0) {
+            sb.append(getString(R.string.atme_count, bean.getMention())).append(" ");
+        }
+        if (bean.getLetter() > 0) {
+            sb.append(getString(R.string.msg_count, bean.getLetter())).append(" ");
+        }
+        if (bean.getReview() > 0) {
+            sb.append(getString(R.string.review_count, bean.getReview()))
+                    .append(" ");
+        }
+        if (bean.getFans() > 0) {
+            sb.append(getString(R.string.fans_count, bean.getFans()));
+        }
+        if (bean.getLike() > 0) {
+            sb.append(getString(R.string.like_count, bean.getLike()));
+        }
+        String content = sb.toString();
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setAction(MainActivity.ACTION_NOTICE);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, NOTIFY_ID, intent,
+                PendingIntent.FLAG_CANCEL_CURRENT);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(
+                this)
+                .setTicker(content)
+                .setContentTitle(getString(R.string.you_have_unread_messages, bean.getAllCount()))
+                .setContentText(content)
+                .setAutoCancel(true)
+                .setOngoing(true)
+                .setContentIntent(contentIntent)
+                .setSmallIcon(R.mipmap.ic_notification);
+
+        Notification notification = builder.build();
+        NotificationManagerCompat.from(this).notify(NOTIFY_ID, notification);
+    }
+
+    private void clearNotification() {
+        log("clearNotification");
+        NotificationManagerCompat.from(this).cancel(NOTIFY_ID);
+    }
+
+    static void log(String str) {
+        Log.e(TAG, str);
+    }
 }

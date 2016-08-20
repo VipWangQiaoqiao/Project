@@ -10,6 +10,7 @@ import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.interf.OnTabReselectListener;
 
 public class MainActivity extends BaseActivity implements NavFragment.OnNavigationReselectListener {
+    public static final String ACTION_NOTICE = "ACTION_NOTICE";
     NavFragment mNavigation;
 
     @Override
