@@ -1662,8 +1662,8 @@ public class OSChinaApi {
     public static void pubMessage(long authorId, String content, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("authorId", authorId);
-        params.put("pageToken", content);
-        ApiHttpClient.get("action/apiv2/messages_pub", params, handler);
+        params.put("content", content);
+        ApiHttpClient.post("action/apiv2/messages_pub", params, handler);
     }
 
     /**
