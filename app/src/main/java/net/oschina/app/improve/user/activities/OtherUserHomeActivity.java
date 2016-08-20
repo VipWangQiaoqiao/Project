@@ -155,13 +155,11 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
                     mLogoNick.setVisibility(View.VISIBLE);
                     mLogoPortrait.setVisibility(View.VISIBLE);
                     mDivider.setVisibility(View.GONE);
-//                    mTabLayout.setSelected(true);
                     isShow = true;
                 } else if (isShow) {
                     mLogoNick.setVisibility(View.GONE);
                     mLogoPortrait.setVisibility(View.GONE);
                     mDivider.setVisibility(View.VISIBLE);
-//                    mTabLayout.setSelected(false);
                     isShow = false;
                 }
                 mTabLayout.getBackground().setAlpha(Math.round(255 - Math.abs(verticalOffset) / (float) mScrollRange * 255));
@@ -235,6 +233,8 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
             });
 
             mTabLayout.setupWithViewPager(mViewPager);
+            // TabLayout will remove up all tabs after setted up view pager
+            // so we set it again
             mTabLayout.getTabAt(0).setCustomView(getTabView(String.valueOf(user.getTweetCount()), "动弹"));
             mTabLayout.getTabAt(1).setCustomView(getTabView(String.valueOf(user.getBlogCount()), "博客"));
             mTabLayout.getTabAt(2).setCustomView(getTabView(String.valueOf(user.getAnswerCount()), "问答"));
