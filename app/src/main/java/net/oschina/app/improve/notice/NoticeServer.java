@@ -265,10 +265,10 @@ public class NoticeServer extends Service {
 
         StringBuilder sb = new StringBuilder();
         if (bean.getMention() > 0) {
-            sb.append(getString(R.string.atme_count, bean.getMention())).append(" ");
+            sb.append(getString(R.string.mention_count, bean.getMention())).append(" ");
         }
         if (bean.getLetter() > 0) {
-            sb.append(getString(R.string.msg_count, bean.getLetter())).append(" ");
+            sb.append(getString(R.string.letter_count, bean.getLetter())).append(" ");
         }
         if (bean.getReview() > 0) {
             sb.append(getString(R.string.review_count, bean.getReview()))
