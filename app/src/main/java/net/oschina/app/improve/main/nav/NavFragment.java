@@ -137,7 +137,7 @@ public class NavFragment extends BaseFragment implements View.OnClickListener, N
 
     @Override
     public void onNoticeArrived(NoticeBean bean) {
-
+        mNavMe.showRedDot(bean.getAllCount() > 0);
     }
 
     public interface OnNavigationReselectListener {

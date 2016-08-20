@@ -5,7 +5,13 @@
     android:layout_height="match_parent"
     app:cardCornerRadius="0dp"
     app:cardElevation="8dp"
+    android:orientation="vertical"
     tools:context="net.oschina.app.improve.main.nav.NavFragment">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="?attr/lineColor" />
 
     <LinearLayout
         android:layout_width="match_parent"
