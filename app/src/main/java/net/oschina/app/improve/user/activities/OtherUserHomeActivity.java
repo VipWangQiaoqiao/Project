@@ -326,6 +326,7 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
                         responseString, new TypeToken<ResultBean<User>>(){}.getType());
                 if (result.isSuccess() && result.getResult() == null) return;
                 user = result.getResult();
+                invalidateOptionsMenu();
                 injectDataToView();
                 injectDataToViewPager();
             }
@@ -336,11 +337,12 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
     public boolean onCreateOptionsMenu(Menu menu) {
         // TODO make the user bean same
         net.oschina.app.bean.User mLoginUser = AppContext.getInstance().getLoginUser();
-        if (user.getId() == mLoginUser.getId() || user.getName().equals(mLoginUser.getName()))
-            return false;
-        getMenuInflater().inflate(R.menu.menu_other_user, menu);
-        mFollowMenu = menu.getItem(1);
-        return true;
+        if (user.getId() > 0 && mLoginUser != null && mLoginUser.getId() != user.getId()){
+            getMenuInflater().inflate(R.menu.menu_other_user, menu);
+            mFollowMenu = menu.getItem(1);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -371,12 +373,11 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
                 break;
             case R.id.menu_follow:
                 // 判断登录
-                final AppContext ac = AppContext.getInstance();
                 if (!AppContext.getInstance().isLogin()) {
                     UIHelper.showLoginActivity(this);
                     return true;
                 }
-                String mDialogTitle = "";
+                String mDialogTitle;
                 switch (user.getRelation()) {
                     case User.RELATION_TYPE_BOTH:
                         mDialogTitle = "确定取消互粉吗？";
@@ -390,6 +391,7 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
                     case User.RELATION_TYPE_NULL:
                         mDialogTitle = "确定关注Ta吗？";
                         break;
+                    default: return false;
                 }
                 DialogHelp.getConfirmDialog(this, mDialogTitle, new DialogInterface.OnClickListener() {
                     @Override
