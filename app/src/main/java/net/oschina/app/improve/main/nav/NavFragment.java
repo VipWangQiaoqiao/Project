@@ -2,6 +2,11 @@ package net.oschina.app.improve.main.nav;
 
 
 import android.content.Context;
+import android.graphics.RectF;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -16,6 +21,7 @@ import net.oschina.app.improve.tweet.activities.TweetPublishActivity;
 import net.oschina.app.improve.tweet.fragments.TweetViewPagerFragment;
 import net.oschina.app.improve.user.fragments.NewUserInfoFragment;
 import net.oschina.app.viewpagerfragment.GeneralViewPagerFragment;
+import net.qiujuer.genius.ui.drawable.shape.BorderShape;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -51,6 +57,15 @@ public class NavFragment extends BaseFragment implements View.OnClickListener, N
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
+
+        ShapeDrawable lineDrawable = new ShapeDrawable(new BorderShape(new RectF(0, 1, 0, 0)));
+        lineDrawable.getPaint().setColor(getResources().getColor(R.color.list_divider_color));
+        LayerDrawable layerDrawable = new LayerDrawable(new Drawable[]{
+                new ColorDrawable(getResources().getColor(R.color.white)),
+                lineDrawable
+        });
+        root.setBackgroundDrawable(layerDrawable);
+
         mNavNews.init(R.drawable.tab_icon_new,
                 R.string.main_tab_name_news,
                 GeneralViewPagerFragment.class);
