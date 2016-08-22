@@ -60,7 +60,7 @@ public class NavFragment extends BaseFragment implements View.OnClickListener, N
                 TweetViewPagerFragment.class);
 
         mNavExplore.init(R.drawable.tab_icon_explore,
-                R.string.main_tab_name_quick,
+                R.string.main_tab_name_explore,
                 ExploreFragment.class);
 
         mNavMe.init(R.drawable.tab_icon_me,
