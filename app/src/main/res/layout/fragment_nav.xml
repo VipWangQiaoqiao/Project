@@ -1,75 +1,51 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:cardCornerRadius="0dp"
-    app:cardElevation="8dp"
-    android:orientation="vertical"
+    android:layout_height="48dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
     tools:context="net.oschina.app.improve.main.nav.NavFragment">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="?attr/lineColor" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <net.oschina.app.improve.main.nav.NavigationButton
+        android:id="@+id/nav_item_news"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        android:orientation="horizontal">
+        android:layout_weight="1"
+        android:paddingLeft="@dimen/lay_12"
+        android:paddingRight="@dimen/lay_12" />
 
-        <net.oschina.app.improve.main.nav.NavigationButton
-            android:id="@+id/nav_item_news"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:paddingBottom="6dp"
-            android:paddingLeft="@dimen/lay_12"
-            android:paddingRight="@dimen/lay_12"
-            android:paddingTop="@dimen/lay_8" />
+    <net.oschina.app.improve.main.nav.NavigationButton
+        android:id="@+id/nav_item_tweet"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:paddingLeft="@dimen/lay_12"
+        android:paddingRight="@dimen/lay_12" />
 
-        <net.oschina.app.improve.main.nav.NavigationButton
-            android:id="@+id/nav_item_tweet"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:paddingBottom="6dp"
-            android:paddingLeft="@dimen/lay_12"
-            android:paddingRight="@dimen/lay_12"
-            android:paddingTop="@dimen/lay_8" />
+    <ImageView
+        android:id="@+id/nav_item_tweet_pub"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:contentDescription="@null"
+        android:padding="2dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_nav_add_selector" />
 
-        <ImageView
-            android:id="@+id/nav_item_tweet_pub"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:contentDescription="@null"
-            android:padding="6dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_nav_add_selector" />
+    <net.oschina.app.improve.main.nav.NavigationButton
+        android:id="@+id/nav_item_explore"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:paddingLeft="@dimen/lay_12"
+        android:paddingRight="@dimen/lay_12" />
 
-        <net.oschina.app.improve.main.nav.NavigationButton
-            android:id="@+id/nav_item_explore"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:paddingBottom="6dp"
-            android:paddingLeft="@dimen/lay_12"
-            android:paddingRight="@dimen/lay_12"
-            android:paddingTop="@dimen/lay_8" />
-
-        <net.oschina.app.improve.main.nav.NavigationButton
-            android:id="@+id/nav_item_me"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:paddingBottom="6dp"
-            android:paddingLeft="@dimen/lay_12"
-            android:paddingRight="@dimen/lay_12"
-            android:paddingTop="@dimen/lay_8" />
-    </LinearLayout>
-
-
+    <net.oschina.app.improve.main.nav.NavigationButton
+        android:id="@+id/nav_item_me"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:paddingLeft="@dimen/lay_12"
+        android:paddingRight="@dimen/lay_12" />
 </LinearLayout>

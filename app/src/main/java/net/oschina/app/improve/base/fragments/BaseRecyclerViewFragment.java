@@ -101,30 +101,44 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
             }
         };
 
-        mErrorLayout.setErrorType(isNeedEmptyView() ? EmptyLayout.NETWORK_LOADING : EmptyLayout.HIDE_LAYOUT);
-        mRefreshLayout.setVisibility(isNeedEmptyView() ? View.GONE : View.VISIBLE);
-        AppOperator.runOnThread(new Runnable() {
-            @Override
-            public void run() {
-                mBean = isNeedCache() ? (PageBean<T>) CacheManager.readObject(getActivity(), CACHE_NAME) : null;
-                //if is the first loading
-                if (mBean == null) {
-                    mBean = new PageBean<>();
-                    mBean.setItems(new ArrayList<T>());
-                    onRefreshing();
-                } else {
-                    mRoot.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mAdapter.addAll(mBean.getItems());
-                            mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-                            mRefreshLayout.setVisibility(View.VISIBLE);
-                            onRefreshing();
-                        }
-                    });
+        boolean isNeedEmptyView = isNeedEmptyView();
+        if(isNeedEmptyView){
+            mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+            mRefreshLayout.setVisibility(View.GONE);
+            AppOperator.runOnThread(new Runnable() {
+                @Override
+                public void run() {
+                    mBean = isNeedCache() ? (PageBean<T>) CacheManager.readObject(getActivity(), CACHE_NAME) : null;
+                    //if is the first loading
+                    if (mBean == null) {
+                        mBean = new PageBean<>();
+                        mBean.setItems(new ArrayList<T>());
+                        onRefreshing();
+                    } else {
+                        mRoot.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mAdapter.addAll(mBean.getItems());
+                                mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+                                mRefreshLayout.setVisibility(View.VISIBLE);
+                                mRefreshLayout.setRefreshing(true);
+                                onRefreshing();
+                            }
+                        });
+                    }
                 }
-            }
-        });
+            });
+        }else {
+            mErrorLayout.setErrorType( EmptyLayout.HIDE_LAYOUT);
+            mRefreshLayout.setVisibility(View.VISIBLE );
+            mRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    mRefreshLayout.setRefreshing(true);
+                    onRefreshing();
+                }
+            });
+        }
     }
 
     @Override
