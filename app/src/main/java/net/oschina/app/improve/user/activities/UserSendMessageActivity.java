@@ -1,6 +1,7 @@
 package net.oschina.app.improve.user.activities;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
+import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -20,13 +22,14 @@ import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.Message;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
 import net.oschina.app.improve.user.adapter.UserSendMessageAdapter;
-import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;
 
 import butterknife.Bind;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * 发送消息界面
@@ -40,11 +43,14 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
     private KeyboardInputDelegation mDelegation;
 
     EditText mViewInput;
-    private long authorId, receiverId;
+    private long authorId;
+    private Author mReceiver;
+    private ProgressDialog mDialog;
+    private boolean isFirstLoading = true;
 
-    public static void show(Context context, long receiverId) {
+    public static void show(Context context, Author sender) {
         Intent intent = new Intent(context, UserSendMessageActivity.class);
-        intent.putExtra("receiverId", receiverId);
+        intent.putExtra("receiver", sender);
         context.startActivity(intent);
     }
 
@@ -56,7 +62,9 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
     @Override
     protected void initData() {
         super.initData();
-        receiverId = getIntent().getLongExtra("receiverId", 0);
+        mDialog = new ProgressDialog(this);
+        mReceiver = (Author) getIntent().getSerializableExtra("receiver");
+        setTitle(mReceiver.getName());
         authorId = Long.parseLong(String.valueOf(AppContext.getInstance().getLoginUid()));
         init();
     }
@@ -66,7 +74,7 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
      */
     @Override
     public void onRefreshing() {
-        OSChinaApi.getMessageList(receiverId, mBean.getNextPageToken(), mHandler);
+        OSChinaApi.getMessageList(mReceiver.getId(), mBean.getNextPageToken(), mHandler);
     }
 
     /**
@@ -88,10 +96,9 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
                     Toast.makeText(UserSendMessageActivity.this, "请输入文字", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (!AppContext.getInstance().isLogin()) {
-                    UIHelper.showLoginActivity(UserSendMessageActivity.this);
-                    return;
-                }
+                mDialog.setTitle("正在发送中...");
+                mDialog.show();
+                OSChinaApi.pubMessage(mReceiver.getId(), content, mSendHandler);
             }
 
             @Override
@@ -100,6 +107,20 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
             }
         });
         mViewInput = mDelegation.getInputView();
+    }
+
+    @Override
+    protected void setListData(ResultBean<PageBean<Message>> resultBean) {
+        super.setListData(resultBean);
+        if (isFirstLoading) {
+            scrollToBottom();
+            isFirstLoading = false;
+        }
+
+    }
+
+    private void scrollToBottom() {
+        mRecyclerView.scrollToPosition(mAdapter.getItems().size() - 1);
     }
 
     @Override
@@ -112,4 +133,35 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
     protected BaseRecyclerAdapter<Message> getRecyclerAdapter() {
         return new UserSendMessageAdapter(this);
     }
+
+    private TextHttpResponseHandler mSendHandler = new TextHttpResponseHandler() {
+        @Override
+        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            Toast.makeText(UserSendMessageActivity.this, "发送失败，请检查数据", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, String responseString) {
+            Type type = new TypeToken<ResultBean<Message>>() {
+            }.getType();
+            try {
+                ResultBean<Message> resultBean = AppContext.createGson().fromJson(responseString, type);
+                if (resultBean.isSuccess()) {
+                    mAdapter.addItem(resultBean.getResult());
+                    scrollToBottom();
+                } else {
+                    Toast.makeText(UserSendMessageActivity.this, resultBean.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            mViewInput.setText("");
+        }
+
+        @Override
+        public void onFinish() {
+            super.onFinish();
+            mDialog.dismiss();
+        }
+    };
 }

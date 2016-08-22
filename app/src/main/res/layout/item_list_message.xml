@@ -59,13 +59,13 @@
                     tools:text="6分钟" />
             </LinearLayout>
 
-            <TextView
+            <net.oschina.app.widget.TweetTextView
                 android:id="@+id/tv_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:ellipsize="end"
-                android:maxLines="1"
+                android:lines="1"
                 android:textSize="14sp"
                 tools:text="New Text" />
         </LinearLayout>
