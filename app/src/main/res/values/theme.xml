@@ -129,4 +129,6 @@
 
     <style name="AppTheme.Tweet.Publish" parent="AppTheme.Base.NoTitle" />
 
+    <style name="AppTheme.Tweet.Main" parent="AppTheme.Base.NoTitle" />
+
 </resources>
