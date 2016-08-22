@@ -9,6 +9,7 @@ import net.oschina.app.improve.base.fragments.BaseRecyclerViewFragment;
 import net.oschina.app.improve.bean.Message;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.user.activities.UserSendMessageActivity;
 import net.oschina.app.improve.user.adapter.UserMessageAdapter;
 
@@ -37,7 +38,9 @@ public class UserMessageFragment extends BaseRecyclerViewFragment<Message> {
     @Override
     public void onItemClick(int position, long itemId) {
         Message message = mAdapter.getItem(position);
-        UserSendMessageActivity.show(getContext(), message.getSender());
+        Author sender = message.getSender();
+        if (sender != null)
+            UserSendMessageActivity.show(getContext(), message.getSender());
     }
 
     @Override
