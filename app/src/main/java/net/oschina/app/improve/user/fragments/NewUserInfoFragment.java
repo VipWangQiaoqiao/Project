@@ -14,12 +14,15 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,7 +35,6 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.bean.User;
 import net.oschina.app.cache.CacheManager;
@@ -46,7 +48,6 @@ import net.oschina.app.improve.user.activities.UserTweetActivity;
 import net.oschina.app.improve.user.bean.UserInfo;
 import net.oschina.app.improve.widget.SolarSystemView;
 import net.oschina.app.interf.OnTabReselectListener;
-import net.oschina.app.ui.MainActivity;
 import net.oschina.app.ui.MyQrodeDialog;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.ui.dialog.DialogControl;
@@ -94,11 +95,17 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     ImageView mIvLogoSetting;
     @Bind(R.id.iv_logo_zxing)
     ImageView mIvLogoZxing;
+    @Bind(R.id.user_info_head_container)
+    FrameLayout mFlUserInfonHeadContainer;
+
 
     @Bind(R.id.iv_portrait)
     CircleImageView mCiOrtrait;
     @Bind(R.id.iv_gender)
     ImageView mIvGander;
+    @Bind(R.id.user_info_icon_container)
+    FrameLayout mFlUserInfoIconContainer;
+
     @Bind(R.id.tv_nick)
     TextView mTvName;
     @Bind(R.id.tv_summary)
@@ -130,9 +137,8 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     private boolean mIsWatingLogin;
     private Uri origUri;
     private File protraitFile;
-    private Bitmap protraitBitmap;
+    //  private Bitmap protraitBitmap;
     private String protraitPath;
-    private boolean isChangeFace;
     private UserInfo mUserInfo;
     private TextHttpResponseHandler textHandler = new TextHttpResponseHandler() {
         @Override
@@ -144,7 +150,6 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         public void onSuccess(int statusCode, Header[] headers, String responseString) {
 
             try {
-
                 Type type = new TypeToken<ResultBean<UserInfo>>() {
                 }.getType();
 
@@ -153,12 +158,9 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                     UserInfo userInfo = (UserInfo) resultBean.getResult();
 
                     Log.d(TAG, "onSuccess: ----->userInfo=" + userInfo.toString());
-                    if (userInfo != null) {
-                        updateView(userInfo);
-                        mUserInfo = userInfo;
-                    } else {
-                        AppContext.showToast(R.string.title_update_success_status);
-                    }
+                    updateView(userInfo);
+                    mUserInfo = userInfo;
+
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -174,6 +176,8 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     private net.oschina.app.bean.User mInfo;
 
     private void updateView(UserInfo userInfo) {
+
+        AppContext.showToast(R.string.title_update_success_status);
 
         Log.d(TAG, "updateView: ---->" + mCiOrtrait.toString());
         setImageFromNet(mCiOrtrait, userInfo.getPortrait(), R.mipmap.widget_dface);
@@ -205,73 +209,55 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
     }
 
-    private void setNotice() {
-
-        if (MainActivity.mNotice != null) {
-
-            Notice notice = MainActivity.mNotice;
-            int atmeCount = notice.getAtmeCount();// @我
-            int msgCount = notice.getMsgCount();// 留言
-            int reviewCount = notice.getReviewCount();// 评论
-            int newFansCount = notice.getNewFansCount();// 新粉丝
-            int newLikeCount = notice.getNewLikeCount();// 获得点赞
-            int activeCount = atmeCount + reviewCount + msgCount + newFansCount + newLikeCount;//
-            // 信息总数
-            if (activeCount > 0) {
-                mMesCount.show();
-                mMesCount.setText(" ");
-            } else {
-                mMesCount.hide();
-            }
-
-        } else {
-            mMesCount.hide();
-        }
-
-    }
-
     private void sendRequestData() {
         OSChinaApi.getUserInfo(textHandler);
     }
 
-    private String getCacheKey() {
-        return "my_information" + AppContext.getInstance().getLoginUid();
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initSolar();
     }
 
     /**
      * init solar view
      */
     private void initSolar() {
-        mRlShowInfo.post(new Runnable() {
-            @Override
-            public void run() {
 
-                int width = mRlShowInfo.getWidth();
-                int height = mRlShowInfo.getHeight();
-                float rlShowInfoX = mRlShowInfo.getX();
-                // float rlShowInfoY = mRlShowInfo.getY();
-                float x = mCiOrtrait.getX();
-                // float y = mCiOrtrait.getY();
-                int ciOrtraitWidth = mCiOrtrait.getWidth();
-                int ciOrtraitHeight = mCiOrtrait.getHeight();
+        if (mRoot != null) {
+            mRoot.post(new Runnable() {
+                @Override
+                public void run() {
 
-                float px = x + +rlShowInfoX + (width >> 1);
-                float py = (height >> 1) - ciOrtraitHeight / 2 + 48;
-                int mMaxRadius = (int) (mSolarSystem.getHeight() - py + 50);
-                int r = (ciOrtraitWidth >> 1);
+                    int width = mRlShowInfo.getWidth();
+                    float rlShowInfoX = mRlShowInfo.getX();
 
-                Random random = new Random(System.currentTimeMillis());
-                for (int i = 60, radius = r + i; ; i = (int) (i * 1.4), radius += i) {
-                    SolarSystemView.Planet planet = new SolarSystemView.Planet();
-                    planet.setClockwise(random.nextInt(10) % 2 == 0);
-                    planet.setAngleRate(random.nextInt(35) / 1000.f);
-                    planet.setRadius(radius);
-                    mSolarSystem.addPlanets(planet);
-                    if (radius > mMaxRadius) break;
+                    int height = mFlUserInfoIconContainer.getHeight();
+                    float y1 = mFlUserInfoIconContainer.getY();
+
+                    float x = mCiOrtrait.getX();
+                    float y = mCiOrtrait.getY();
+                    int ciOrtraitWidth = mCiOrtrait.getWidth();
+
+                    float px = x + +rlShowInfoX + (width >> 1);
+                    float py = y1 + y + (height - y) / 2;
+                    int mMaxRadius = (int) (mSolarSystem.getHeight() - py + 50);
+                    int r = (ciOrtraitWidth >> 1);
+
+                    Random random = new Random(System.currentTimeMillis());
+                    for (int i = 60, radius = r + i; radius <= mMaxRadius; i = (int) (i * 1.4), radius += i) {
+                        SolarSystemView.Planet planet = new SolarSystemView.Planet();
+                        planet.setClockwise(random.nextInt(10) % 2 == 0);
+                        planet.setAngleRate(random.nextInt(35) / 1000.f);
+                        planet.setRadius(radius);
+                        mSolarSystem.addPlanets(planet);
+
+                    }
+                    mSolarSystem.setPivotPoint(px, py);
                 }
-                mSolarSystem.setPivotPoint(px, py);
-            }
-        });
+            });
+
+        }
     }
 
     @Override
@@ -287,8 +273,27 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         NoticeManager.unBindNotify(this);
     }
 
+    /**
+     * checkSdkVersion
+     *
+     * @param activity activity
+     */
+    private void CheckSdkVersion(Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+
+            //activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            // activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+
+            ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mFlUserInfonHeadContainer.getLayoutParams();
+            layoutParams.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25, getResources().getDisplayMetrics());
+
+            mFlUserInfonHeadContainer.setLayoutParams(layoutParams);
+        }
+    }
+
     @Override
     protected void initWidget(View root) {
+        CheckSdkVersion(getActivity());
         super.initWidget(root);
 
         mMesCount = new BadgeView(getActivity(), mMesView);
@@ -302,7 +307,6 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         if (mFansView != null)
             mFansView.setVisibility(View.INVISIBLE);
 
-        initSolar();
     }
 
     @Override
@@ -364,13 +368,9 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                 case R.id.ly_follower:
                     UIHelper.showFriends(getActivity(), AppContext.getInstance()
                             .getLoginUid(), 1);
-                    if (mFansView != null) {
-                        mFansView.setVisibility(View.INVISIBLE);
-                    }
                     break;
                 case R.id.rl_message:
                     UserMessageActivity.show(getActivity());
-                    hideMesCount();
                     break;
                 case R.id.rl_blog:
                     UIHelper.showUserBlog(getActivity(), AppContext.getInstance()
@@ -583,14 +583,14 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
      * update the new picture
      */
     private void uploadNewPhoto() {
-        showWaitDialog(getString(R.string.title_update_icon_status));
 
         // 获取头像缩略图
         if (!TextUtils.isEmpty(protraitPath) && protraitFile.exists()) {
-            protraitBitmap = ImageUtils.loadImgThumbnail(protraitPath, 200, 200);
+            Bitmap protraitBitmap = ImageUtils.loadImgThumbnail(protraitPath, 200, 200);
         } else {
             AppContext.showToast(getString(R.string.title_icon_null));
         }
+
         if (protraitPath != null) {
 
             OSChinaApi.uploadImage(null, protraitPath, new TextHttpResponseHandler() {
@@ -680,14 +680,19 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         int allCount = bean.getAllCount();
         if (allCount > 0) {
             showMesCount();
-        }
-        int fans = bean.getFans();
-        if (fans > 0) {
-            int tempCount = Integer.parseInt(mTvFollowerCount.getText().toString(), 2);
-            int soCount = tempCount + fans;
-            mTvFollowerCount.setText(soCount + "");
-            if (mFansView != null)
-                mFansView.setVisibility(View.VISIBLE);
+            int fans = bean.getFans();
+            if (fans > 0) {
+                int tempCount = Integer.parseInt(mTvFollowerCount.getText().toString(), 2);
+                int soCount = tempCount + fans;
+                mTvFollowerCount.setText(soCount + "");
+                if (mFansView != null)
+                    mFansView.setVisibility(View.VISIBLE);
+            }
+        } else {
+            hideMesCount();
+            if (mFansView != null) {
+                mFansView.setVisibility(View.INVISIBLE);
+            }
         }
 
     }
