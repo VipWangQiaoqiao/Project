@@ -29,7 +29,12 @@ public final class NoticeManager {
     private NoticeBean mNotice;
 
     public static NoticeBean getNotice() {
-        return new NoticeBean();
+        final NoticeBean bean = INSTANCE.mNotice;
+        if (bean == null) {
+            return new NoticeBean();
+        } else {
+            return bean;
+        }
     }
 
     public static void bindNotify(NoticeNotify noticeNotify) {
