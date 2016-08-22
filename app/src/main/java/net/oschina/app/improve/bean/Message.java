@@ -2,12 +2,14 @@ package net.oschina.app.improve.bean;
 
 import net.oschina.app.improve.bean.simple.Author;
 
+import java.io.Serializable;
+
 /**
  * 私信
  * Created by huanghaibin_dev
  * on 2016/8/16.
  */
-public class Message {
+public class Message implements Serializable{
     private long id;
     private String content;
     private String pubDate;

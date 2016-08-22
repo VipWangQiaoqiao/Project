@@ -4,10 +4,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.bean.Message;
 import net.oschina.app.widget.TweetTextView;
+
+import java.util.List;
 
 /**
  * Created by huanghaibin_dev
@@ -16,14 +19,16 @@ import net.oschina.app.widget.TweetTextView;
 public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> {
     private static final int SENDER = 1;
     private static final int RECEIVER = 2;
+    private long authorId;
 
     public UserSendMessageAdapter(Callback callback) {
         super(callback, NEITHER);
+        authorId = Long.parseLong(String.valueOf(AppContext.getInstance().getLoginUid()));
     }
 
     @Override
     public int getItemViewType(int position) {
-        return getItem(position).getSender() == null ? RECEIVER : SENDER;
+        return getItem(position).getSender().getId() == authorId ? SENDER : RECEIVER;
     }
 
     @Override
@@ -38,18 +43,28 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
         switch (getItemViewType(position)) {
             case SENDER:
                 SenderViewHolder senderViewHolder = (SenderViewHolder) holder;
-                senderViewHolder.tv_sender.setText(item.getContent());
+                parseAtUserContent(senderViewHolder.tv_sender, item.getContent());
                 break;
             case RECEIVER:
                 ReceiverViewHolder receiverViewHolder = (ReceiverViewHolder) holder;
-                receiverViewHolder.tv_receiver.setText(item.getContent());
+                parseAtUserContent(receiverViewHolder.tv_receiver, item.getContent());
                 break;
         }
     }
 
+    /**
+     * 倒序
+     *
+     * @param items items
+     */
+    @Override
+    public void addAll(List<Message> items) {
+        if (items != null)
+            mItems.addAll(0, items);
+    }
+
     private static class SenderViewHolder extends RecyclerView.ViewHolder {
         TweetTextView tv_sender;
-
         public SenderViewHolder(View itemView) {
             super(itemView);
             tv_sender = (TweetTextView) itemView.findViewById(R.id.tv_sender);

@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -143,6 +144,7 @@ public class ViewNewsHeader extends RelativeLayout implements ViewPager.OnPageCh
         Handler handler = this.mHandler;
         if (handler != null && banners.size() > 1) {
             // do next
+            handler.removeCallbacks(this);
             handler.postDelayed(this, 5000);
         }
     }

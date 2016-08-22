@@ -136,6 +136,7 @@ public abstract class BaseRecyclerViewActivity<T> extends BaseBackActivity imple
 
     protected void setListData(ResultBean<PageBean<T>> resultBean) {
         mBean.setNextPageToken(resultBean.getResult().getNextPageToken());
+        mBean.setPrevPageToken(resultBean.getResult().getPrevPageToken());
         if (mIsRefresh) {
             mBean.setItems(resultBean.getResult().getItems());
             mAdapter.clear();

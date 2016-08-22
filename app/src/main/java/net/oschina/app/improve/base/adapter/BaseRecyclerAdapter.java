@@ -242,7 +242,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
     }
 
 
-    public final void addAll(List<T> items) {
+    public void addAll(List<T> items) {
         if (items != null) {
             this.mItems.addAll(items);
             notifyItemRangeInserted(this.mItems.size(), items.size());
@@ -257,7 +257,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
     }
 
 
-    public final void addItem(int position, T item) {
+    public void addItem(int position, T item) {
         if (item != null) {
             this.mItems.add(getIndex(position), item);
             notifyItemInserted(position);

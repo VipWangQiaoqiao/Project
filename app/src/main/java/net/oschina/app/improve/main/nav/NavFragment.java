@@ -60,7 +60,7 @@ public class NavFragment extends BaseFragment implements View.OnClickListener, N
                 TweetViewPagerFragment.class);
 
         mNavExplore.init(R.drawable.tab_icon_explore,
-                R.string.main_tab_name_quick,
+                R.string.main_tab_name_explore,
                 ExploreFragment.class);
 
         mNavMe.init(R.drawable.tab_icon_me,
@@ -147,12 +147,12 @@ public class NavFragment extends BaseFragment implements View.OnClickListener, N
     @Override
     public void onDestroy() {
         super.onDestroy();
-        NoticeManager.bindNotify(this);
+        NoticeManager.unBindNotify(this);
     }
 
     @Override
     protected void initData() {
         super.initData();
-        NoticeManager.unBindNotify(this);
+        NoticeManager.bindNotify(this);
     }
 }

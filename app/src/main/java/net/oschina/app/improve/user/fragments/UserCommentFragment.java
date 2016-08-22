@@ -9,6 +9,7 @@ import net.oschina.app.improve.bean.Mention;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.Comment;
+import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.user.adapter.UserMentionAdapter;
 
 import java.lang.reflect.Type;
@@ -24,6 +25,12 @@ public class UserCommentFragment extends BaseRecyclerViewFragment<Mention> {
     protected void requestData() {
         super.requestData();
         OSChinaApi.getMsgCommentList(mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
+    }
+
+    @Override
+    public void onItemClick(int position, long itemId) {
+        Mention mention = mAdapter.getItem(position);
+        TweetDetailActivity.show(getContext(), mention.getId());
     }
 
     @Override

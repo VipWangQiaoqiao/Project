@@ -173,10 +173,10 @@ public class NoticeService extends Service {
         String contentText;
         StringBuffer sb = new StringBuffer();
         if (atmeCount > 0) {
-            sb.append(getString(R.string.atme_count, atmeCount)).append(" ");
+            sb.append(getString(R.string.mention_count, atmeCount)).append(" ");
         }
         if (msgCount > 0) {
-            sb.append(getString(R.string.msg_count, msgCount)).append(" ");
+            sb.append(getString(R.string.letter_count, msgCount)).append(" ");
         }
         if (reviewCount > 0) {
             sb.append(getString(R.string.review_count, reviewCount))
