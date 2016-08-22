@@ -9,6 +9,8 @@ import android.support.v4.view.ViewPager;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
+import net.oschina.app.improve.notice.NoticeBean;
+import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.user.fragments.UserCommentFragment;
 import net.oschina.app.improve.user.fragments.UserMentionFragment;
 import net.oschina.app.improve.user.fragments.UserMessageFragment;
@@ -30,7 +32,10 @@ public class UserMessageActivity extends BaseBackActivity {
     private UserCommentFragment mUserCommentFragment;
     private UserMessageFragment mUserMessageFragment;
 
+    private NoticeBean mNotice;
+
     public static void show(Context context) {
+
         context.startActivity(new Intent(context, UserMessageActivity.class));
     }
 
@@ -42,6 +47,7 @@ public class UserMessageActivity extends BaseBackActivity {
     @Override
     protected void initWidget() {
         super.initWidget();
+        mNotice = NoticeManager.getNotice();
         vp_user_message.setAdapter(mAdapter);
         tabLayout.setupWithViewPager(vp_user_message);
         mUserMentionFragment = new UserMentionFragment();
@@ -49,17 +55,12 @@ public class UserMessageActivity extends BaseBackActivity {
         mUserMessageFragment = new UserMessageFragment();
     }
 
-    @Override
-    protected void initData() {
-        super.initData();
-    }
-
     private FragmentStatePagerAdapter mAdapter = new FragmentStatePagerAdapter(getSupportFragmentManager()) {
         @Override
         public Fragment getItem(int position) {
-            if(position == 0){
+            if (position == 0) {
                 return mUserMentionFragment;
-            }else if(position == 1){
+            } else if (position == 1) {
                 return mUserCommentFragment;
             }
             return mUserMessageFragment;
@@ -72,12 +73,16 @@ public class UserMessageActivity extends BaseBackActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            if(position == 0){
-                return "@我";
-            }else if(position == 1){
-                return "评论";
+            if (position == 0) {
+                return formatMessageCount("评论", mNotice.getMention());
+            } else if (position == 1) {
+                return formatMessageCount("评论", mNotice.getReview());
             }
-            return "私信";
+            return formatMessageCount("私信", mNotice.getLetter());
         }
     };
+
+    private String formatMessageCount(String title, int messageCount) {
+        return messageCount == 0 ? title : String.format(title + "（%s）", messageCount);
+    }
 }
