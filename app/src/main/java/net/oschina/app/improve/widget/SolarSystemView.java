@@ -1,6 +1,7 @@
 package net.oschina.app.improve.widget;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RadialGradient;
@@ -13,9 +14,9 @@ import java.util.List;
 
 /**
  * 类太阳系星球转动
- * Created by thanatos on 16/7/14.
+ * Created by thanatosx on 16/7/14.
  */
-public class SolarSystemView extends ImageView{
+public class SolarSystemView extends ImageView {
 
     private int paintCount;
     private float pivotX;
@@ -24,7 +25,9 @@ public class SolarSystemView extends ImageView{
     private Paint mPlanetPaint;
     private Paint mBackgroundPaint;
     private List<Planet> planets;
+    private Bitmap mCacheBitmap;
 
+    private boolean isPickingBitmap;
 
     public SolarSystemView(Context context) {
         super(context);
@@ -45,70 +48,102 @@ public class SolarSystemView extends ImageView{
         mPlanetPaint = new Paint();
         mPlanetPaint.setStyle(Paint.Style.FILL);
         mPlanetPaint.setAntiAlias(true);
-
-        mBackgroundPaint = new Paint();
-        mBackgroundPaint.setStyle(Paint.Style.FILL);
-        mBackgroundPaint.setAntiAlias(true);
     }
 
-    public void setPivotPoint(float x, float y){
-        this.pivotX = x;
-        this.pivotY = y;
+    public void setPivotPoint(float x, float y) {
+        pivotX = x;
+        pivotY = y;
         paintCount = 0;
-        float b = getHeight() - y;
-        double r = Math.pow(x * x + b * b, 1.d / 2) + 5;
-        mBackgroundPaint.setShader(new RadialGradient(x, y, (float) r, 0XFF24CF5F, 0XFF20B955, Shader.TileMode.CLAMP));
-        invalidate();
     }
 
-    public void addPlanets(List<Planet> planets){
+    public void addPlanets(List<Planet> planets) {
         this.planets.addAll(planets);
     }
 
-    public void addPlanets(Planet planet){
-        this.planets.add(planet);
+    public void addPlanets(Planet planet) {
+        planets.add(planet);
     }
 
-    public void clear() {
-        if (planets != null && !planets.isEmpty()) {
-            planets.clear();
+    public void clear(){
+        planets.clear();
+    }
+
+    /**
+     * 设置背景渐变
+     * 设置中心点之后再做此事
+     * @param x pivot x
+     * @param y pivot y
+     * @param r radius of gradient
+     * @param sc start color
+     * @param ec end color
+     */
+    public void setRadialGradient(float x, float y, float r, int sc, int ec){
+        mBackgroundPaint = new Paint();
+        mBackgroundPaint.setStyle(Paint.Style.FILL);
+        mBackgroundPaint.setAntiAlias(true);
+        mBackgroundPaint.setShader(new RadialGradient(x, y, r, sc, ec, Shader.TileMode.CLAMP));
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        if (mCacheBitmap != null) {
+            mCacheBitmap.recycle();
+            mCacheBitmap = null;
         }
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
         if (planets.size() == 0) return;
-        if (canvas.getWidth() <=0 || canvas.getHeight() <= 0) return;
-        int count = canvas.save();
-        if (mBackgroundPaint.getShader() != null){
-//            canvas.drawCircle(pivotX, pivotY, (float) r, mBackgroundPaint);
-            canvas.drawRect(0, 0, getWidth(), getHeight(), mBackgroundPaint);
+        if (canvas.getWidth() <= 0 || canvas.getHeight() <= 0) return;
+
+        if (mCacheBitmap == null) {
+            if (!isPickingBitmap){
+                setDrawingCacheEnabled(true);
+                setDrawingCacheQuality(DRAWING_CACHE_QUALITY_HIGH);
+                isPickingBitmap = true;
+                mCacheBitmap = Bitmap.createBitmap(getDrawingCache());
+            }else {
+                int count = canvas.save();
+                super.onDraw(canvas);
+                if (mBackgroundPaint.getShader() != null){
+                    canvas.drawRect(0, 0, getWidth(), getHeight(), mBackgroundPaint);
+                }
+                for (Planet planet : planets) {
+                    mTrackPaint.setStrokeWidth(planet.getTrackWidth());
+                    mTrackPaint.setColor(planet.getTrackColor());
+                    canvas.drawCircle(pivotX, pivotY, planet.getRadius(), mTrackPaint);
+                }
+                canvas.restoreToCount(count);
+                isPickingBitmap = false;
+                return;
+            }
         }
 
-        for (Planet planet : planets){
-            mTrackPaint.setStrokeWidth(planet.getTrackWidth());
-            mTrackPaint.setColor(planet.getTrackColor());
-            mPlanetPaint.setColor(planet.getColor());
-            canvas.drawCircle(pivotX, pivotY, planet.getRadius(), mTrackPaint);
+        int count = canvas.save();
+        canvas.drawBitmap(mCacheBitmap, 0, 0, mPlanetPaint);
+        for (Planet planet : planets) {
             double y;
             double x;
             float angle;
-            if (planet.isClockwise()){
+            if (planet.isClockwise()) {
                 angle = (planet.getOriginAngle() + paintCount * planet.getAngleRate()) % 360;
-            }else {
+            } else {
                 angle = 360 - (planet.getOriginAngle() + paintCount * planet.getAngleRate()) % 360;
             }
             x = Math.cos(angle) * planet.getRadius() + pivotX;
             y = Math.sin(angle) * planet.getRadius() + pivotY;
-            canvas.drawCircle(Math.round(x), Math.round(y), planet.getSelfRadius(), mPlanetPaint);
+            mPlanetPaint.setColor(planet.getColor());
+            canvas.drawCircle((float) x, (float) y, planet.getSelfRadius(), mPlanetPaint);
         }
         canvas.restoreToCount(count);
         ++paintCount;
-        postInvalidateDelayed(30);
+        if (paintCount < 0) paintCount = 0;
+        postInvalidateDelayed(33);
     }
 
-    public static class Planet{
+    public static class Planet {
         private int mRadius = 100;
         private int mSelfRadius = 6;
         private int mTrackWidth = 2;
