@@ -89,7 +89,6 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
     @Bind(R.id.view_divider)
     View mDivider;
 
-    private MenuItem mFollowMenu;
     private User user;
     private List<Pair<String, Fragment>> fragments;
 
@@ -240,18 +239,25 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
             mTabLayout.getTabAt(2).setCustomView(getTabView(String.valueOf(user.getAnswerCount()), "问答"));
             mTabLayout.getTabAt(3).setCustomView(getTabView(String.valueOf(user.getDiscussCount()), "动态"));
         }else {
-            setupTabText(mTabLayout.getTabAt(0), String.valueOf(user.getTweetCount()));
-            setupTabText(mTabLayout.getTabAt(1), String.valueOf(user.getBlogCount()));
-            setupTabText(mTabLayout.getTabAt(2), String.valueOf(user.getAnswerCount()));
-            setupTabText(mTabLayout.getTabAt(3), String.valueOf(user.getDiscussCount()));
+            setupTabText(mTabLayout.getTabAt(0), user.getTweetCount());
+            setupTabText(mTabLayout.getTabAt(1), user.getBlogCount());
+            setupTabText(mTabLayout.getTabAt(2), user.getAnswerCount());
+            setupTabText(mTabLayout.getTabAt(3), user.getDiscussCount());
         }
     }
 
-    private void setupTabText(TabLayout.Tab tab, String str){
+    @SuppressWarnings("all")
+    private void setupTabText(TabLayout.Tab tab, int count){
         View view = tab.getCustomView();
         if (view == null) return;
         TabViewHolder holder = (TabViewHolder) view.getTag();
-        holder.mViewCount.setText(str);
+        if (count > 10000){
+            count /= 1000;
+            holder.mViewCount.setText(count + "k");
+        }else {
+            holder.mViewCount.setText(String.valueOf(count));
+        }
+
     }
 
     private View getTabView(String cs, String tag){
@@ -290,25 +296,6 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
         }else {
             mGenderImage.setVisibility(View.GONE);
         }
-
-        if (mFollowMenu != null) {
-            switch (user.getRelation()) {
-                case User.RELATION_TYPE_BOTH:
-                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_following_botn));
-                    break;
-                case User.RELATION_TYPE_ONLY_FANS_HIM:
-                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_following));
-                    break;
-                case User.RELATION_TYPE_ONLY_FANS_ME:
-                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
-                    break;
-                case User.RELATION_TYPE_NULL:
-                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
-                    break;
-                default:
-                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
-            }
-        }
     }
 
     @Override
@@ -326,9 +313,11 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
                         responseString, new TypeToken<ResultBean<User>>(){}.getType());
                 if (result.isSuccess() && result.getResult() == null) return;
                 user = result.getResult();
-                invalidateOptionsMenu();
                 injectDataToView();
                 injectDataToViewPager();
+                // after request user successful we could get user id when the static method show passed in user name
+                // before which, we hide the menu
+                invalidateOptionsMenu();
             }
         });
     }
@@ -339,7 +328,24 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
         net.oschina.app.bean.User mLoginUser = AppContext.getInstance().getLoginUser();
         if (user.getId() > 0 && mLoginUser != null && mLoginUser.getId() != user.getId()){
             getMenuInflater().inflate(R.menu.menu_other_user, menu);
-            mFollowMenu = menu.getItem(1);
+            MenuItem mFollowMenu = menu.getItem(1);
+            if (mFollowMenu == null) return false;
+            switch (user.getRelation()) {
+                case User.RELATION_TYPE_BOTH:
+                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_following_botn));
+                    break;
+                case User.RELATION_TYPE_ONLY_FANS_HIM:
+                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_following));
+                    break;
+                case User.RELATION_TYPE_ONLY_FANS_ME:
+                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
+                    break;
+                case User.RELATION_TYPE_NULL:
+                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
+                    break;
+                default:
+                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
+            }
             return true;
         }
         return false;
