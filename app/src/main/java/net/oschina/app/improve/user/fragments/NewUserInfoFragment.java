@@ -12,9 +12,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -43,7 +41,6 @@ import net.oschina.app.improve.widget.SolarSystemView;
 import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.ui.MyQrodeDialog;
 import net.oschina.app.ui.SimpleBackActivity;
-import net.oschina.app.ui.dialog.DialogControl;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.FileUtil;
 import net.oschina.app.util.ImageUtils;
@@ -74,7 +71,6 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
     public static final int ACTION_TYPE_ALBUM = 0;
     public static final int ACTION_TYPE_PHOTO = 1;
-    private static final String TAG = "NewUserInfoFragment";
     private final static int CROP = 200;
     private final static String FILE_SAVEPATH = Environment
             .getExternalStorageDirectory().getAbsolutePath()
@@ -125,16 +121,26 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     View mFansView;
 
     private BadgeView mMesCount;
-    private boolean mIsWatingLogin;
     private Uri origUri;
     private File protraitFile;
     //  private Bitmap protraitBitmap;
     private String protraitPath;
     private UserInfo mUserInfo;
     private TextHttpResponseHandler textHandler = new TextHttpResponseHandler() {
+
+        @Override
+        public void onStart() {
+            super.onStart();
+            if (isUploadIcon) {
+                showWaitDialog(R.string.title_update_success_status);
+            }
+        }
+
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-            Toast.makeText(getActivity(), R.string.title_update_fail_status, Toast.LENGTH_SHORT).show();
+            if (isUploadIcon)
+                Toast.makeText(getActivity(), R.string.title_update_fail_status, Toast.LENGTH_SHORT).show();
+            isUploadIcon = false;
         }
 
         @Override
@@ -148,10 +154,13 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                 if (resultBean.isSuccess()) {
                     UserInfo userInfo = (UserInfo) resultBean.getResult();
 
-                    Log.d(TAG, "onSuccess: ----->userInfo=" + userInfo.toString());
                     updateView(userInfo);
                     mUserInfo = userInfo;
 
+                }
+                if (isUploadIcon) {
+                    hideWaitDialog();
+                    isUploadIcon = false;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -165,6 +174,8 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         }
     };
     private net.oschina.app.bean.User mInfo;
+    private boolean isUploadIcon;
+    private ProgressDialog mDialog;
 
     private void updateView(UserInfo userInfo) {
 
@@ -249,6 +260,9 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         super.onResume();
         mInfo = AppContext.getInstance().getLoginUser();
         NoticeManager.bindNotify(this);
+        isUploadIcon = false;
+
+        sendRequestData();
     }
 
     @Override
@@ -546,18 +560,27 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                 ImageUtils.REQUEST_CODE_GETIMAGE_BYSDCARD);
     }
 
-    protected ProgressDialog showWaitDialog(String str) {
-        FragmentActivity activity = getActivity();
-        if (activity instanceof DialogControl) {
-            return ((DialogControl) activity).showWaitDialog(str);
+    public ProgressDialog showWaitDialog(int messageId) {
+        String message = getResources().getString(messageId);
+        if (mDialog == null) {
+            mDialog = DialogHelp.getWaitDialog(getActivity(), message);
         }
-        return null;
+
+        mDialog.setMessage(message);
+        mDialog.show();
+
+        return mDialog;
     }
 
-    protected void hideWaitDialog() {
-        FragmentActivity activity = getActivity();
-        if (activity instanceof DialogControl) {
-            ((DialogControl) activity).hideWaitDialog();
+    public void hideWaitDialog() {
+        ProgressDialog dialog = mDialog;
+        if (dialog != null) {
+            mDialog = null;
+            try {
+                dialog.dismiss();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -574,6 +597,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         }
 
         if (protraitFile != null) {
+            isUploadIcon = true;
             OSChinaApi.updateUserIcon(protraitFile, textHandler);
 
         }
