@@ -81,7 +81,7 @@ public class SoftWareDetailFragment extends DetailFragment<SoftwareDetail, SoftD
                 Intent intent = new Intent(getActivity(), SoftwareTweetActivity.class);
                 intent.putExtra(SoftwareTweetActivity.BUNDLE_KEY_NAME, mOperator.getData().getName());
                 startActivity(intent);
-                //UIHelper.showSoftwareTweets(getActivity(), (int) mId, mOperator.getData().getName());
+                //UIUtil.showSoftwareTweets(getActivity(), (int) mId, mOperator.getData().getName());
                 break;
             default:
                 break;

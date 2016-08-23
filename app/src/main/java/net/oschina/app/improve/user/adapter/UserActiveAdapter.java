@@ -46,7 +46,7 @@ public class UserActiveAdapter extends BaseRecyclerAdapter<Active> {
         ViewHolder vh = (ViewHolder) holder;
         /*vh.nick.setText(item.getAuthor().getName());
 
-        vh.action.setText(UIHelper.parseActiveAction(item.getObjectType(), item.getObjectCatalog(), item.getObjectTitle()));
+        vh.action.setText(UIUtil.parseActiveAction(item.getObjectType(), item.getObjectCatalog(), item.getObjectTitle()));
 
         if (TextUtils.isEmpty(item.getMessage())) {
             vh.content.setVisibility(View.GONE);
@@ -81,7 +81,7 @@ public class UserActiveAdapter extends BaseRecyclerAdapter<Active> {
             vh.replyContent.setFocusable(false);
             vh.replyContent.setDispatchToParent(true);
             vh.replyContent.setLongClickable(false);
-            Spanned span = UIHelper.parseActiveReply(reply.objectName,
+            Spanned span = UIUtil.parseActiveReply(reply.objectName,
                     reply.objectBody);
             vh.replyContent.setText(span);
             MyURLSpan.parseLinkText(vh.replyContent, span);

@@ -66,7 +66,7 @@ public class UserFavoriteFragment extends BaseListFragment<Favorite> {
                     break;
                 case Favorite.CATALOG_SOFTWARE:
                     UIHelper.showDetail(getActivity(), 1, favorite.getId(), favorite.getUrl());
-                    //UIHelper.showUrlRedirect(getActivity(), favorite.getUrl());
+                    //UIUtil.showUrlRedirect(getActivity(), favorite.getUrl());
                     break;
                 case Favorite.CATALOG_TOPIC:
                     UIHelper.showUrlRedirect(getActivity(), favorite.getUrl());

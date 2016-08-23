@@ -339,7 +339,7 @@ public class UIHelper {
             case 1:
                 //软件推荐
                 SoftwareDetailActivity.show(context, id);
-                //UIHelper.showSoftwareDetailById(context, (int) id);
+                //UIUtil.showSoftwareDetailById(context, (int) id);
                 break;
             case 2:
                 //问答
@@ -442,7 +442,7 @@ public class UIHelper {
             ZoomButtonsController zbc = new ZoomButtonsController(webView);
             zbc.getZoomControls().setVisibility(View.GONE);
         }
-        //webView.setWebViewClient(UIHelper.getWebViewClient());
+        //webView.setWebViewClient(UIUtil.getWebViewClient());
     }
 
     /**

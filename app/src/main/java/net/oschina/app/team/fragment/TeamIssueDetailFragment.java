@@ -376,7 +376,7 @@ public class TeamIssueDetailFragment extends BaseFragment implements
                 // bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_TEAM, mTeam);
                 // bundle.putSerializable(TeamMainActivity.BUNDLE_KEY_PROJECT,
                 // mTeamIssue.getProject());
-                // UIHelper.showSimpleBack(getActivity(),
+                // UIUtil.showSimpleBack(getActivity(),
                 // SimpleBackPage.TEAM_PROJECT_MEMBER_SELECT, bundle);
                 break;
             case R.id.ll_issue_cooperate_user:

@@ -137,10 +137,10 @@ public class LinkView extends TextView {
 			mLinkClickListener.onLinkClick();
 			URLsUtils urls = URLsUtils.parseURL(mUrl);
 			if (urls != null) {
-				//UIHelper.showLinkRedirect(widget.getContext(),
+				//UIUtil.showLinkRedirect(widget.getContext(),
 					//	urls.getObjType(), urls.getObjId(), urls.getObjKey());
 			} else {
-			//	UIHelper.openBrowser(widget.getContext(), mUrl);
+			//	UIUtil.openBrowser(widget.getContext(), mUrl);
 			}
 		}
 	}

@@ -3,18 +3,15 @@ package net.oschina.app.improve.user.fragments;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -28,7 +25,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -36,11 +32,8 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.SimpleBackPage;
-import net.oschina.app.bean.User;
-import net.oschina.app.cache.CacheManager;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.bean.resource.ImageResource;
 import net.oschina.app.improve.notice.NoticeBean;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.user.activities.UserMessageActivity;
@@ -58,8 +51,6 @@ import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.BadgeView;
 
 import java.io.File;
-import java.io.Serializable;
-import java.lang.ref.WeakReference;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -143,7 +134,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     private TextHttpResponseHandler textHandler = new TextHttpResponseHandler() {
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-            AppContext.showToast(R.string.title_update_fail_status);
+            Toast.makeText(getActivity(), R.string.title_update_fail_status, Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -177,9 +168,6 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
     private void updateView(UserInfo userInfo) {
 
-        AppContext.showToast(R.string.title_update_success_status);
-
-        Log.d(TAG, "updateView: ---->" + mCiOrtrait.toString());
         setImageFromNet(mCiOrtrait, userInfo.getPortrait(), R.mipmap.widget_dface);
 
         mTvName.setText(userInfo.getName());
@@ -213,12 +201,6 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         OSChinaApi.getUserInfo(textHandler);
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initSolar();
-    }
-
     /**
      * init solar view
      */
@@ -229,6 +211,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                 @Override
                 public void run() {
 
+                    if (mRlShowInfo == null) return;
                     int width = mRlShowInfo.getWidth();
                     float rlShowInfoX = mRlShowInfo.getX();
 
@@ -245,6 +228,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                     int r = (ciOrtraitWidth >> 1);
 
                     Random random = new Random(System.currentTimeMillis());
+                    mSolarSystem.clear();
                     for (int i = 60, radius = r + i; radius <= mMaxRadius; i = (int) (i * 1.4), radius += i) {
                         SolarSystemView.Planet planet = new SolarSystemView.Planet();
                         planet.setClockwise(random.nextInt(10) % 2 == 0);
@@ -275,26 +259,22 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
     /**
      * checkSdkVersion
-     *
-     * @param activity activity
      */
-    private void CheckSdkVersion(Activity activity) {
+    private void CheckSdkVersion() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 
-            //activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            // activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-
-            ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mFlUserInfonHeadContainer.getLayoutParams();
-            layoutParams.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25, getResources().getDisplayMetrics());
-
-            mFlUserInfonHeadContainer.setLayoutParams(layoutParams);
+            if (mFlUserInfonHeadContainer != null) {
+                ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mFlUserInfonHeadContainer.getLayoutParams();
+                layoutParams.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25, getResources().getDisplayMetrics());
+                mFlUserInfonHeadContainer.setLayoutParams(layoutParams);
+            }
         }
     }
 
     @Override
     protected void initWidget(View root) {
-        CheckSdkVersion(getActivity());
         super.initWidget(root);
+        CheckSdkVersion();
 
         mMesCount = new BadgeView(getActivity(), mMesView);
         mMesCount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
@@ -306,6 +286,8 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
         if (mFansView != null)
             mFansView.setVisibility(View.INVISIBLE);
+
+        initSolar();
 
     }
 
@@ -348,7 +330,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                     break;
                 case R.id.user_view_solar_system:
                     //显示我的资料
-//                    UIHelper.showUserCenter(getActivity(), AppContext.getInstance()
+//                    UIUtil.showUserCenter(getActivity(), AppContext.getInstance()
 //                            .getLoginUid(), AppContext.getInstance().getLoginUser()
 //                            .getName());
                     UIHelper.showSimpleBack(getActivity(),
@@ -591,46 +573,11 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
             AppContext.showToast(getString(R.string.title_icon_null));
         }
 
-        if (protraitPath != null) {
+        if (protraitFile != null) {
+            OSChinaApi.updateUserIcon(protraitFile, textHandler);
 
-            OSChinaApi.uploadImage(null, protraitPath, new TextHttpResponseHandler() {
-
-                @Override
-                public void onStart() {
-                    super.onStart();
-                    AppContext.showToast(getString(R.string.title_update_icon_status));
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    AppContext.showToast(getString(R.string.title_icon_upload_error));
-                }
-
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                    try {
-                        Type type = new TypeToken<ResultBean<ImageResource>>() {
-                        }.getType();
-                        ResultBean<ImageResource> resultBean = new Gson().fromJson(responseString, type);
-                        if (resultBean.isSuccess()) {
-                            String token = resultBean.getResult().getToken();
-
-                            if (!TextUtils.isEmpty(token)) {
-                                OSChinaApi.updateUserIcon(token, textHandler);
-                            }
-
-                        } else {
-                            onFailure(statusCode, headers, responseString, new Throwable(resultBean.getMessage()));
-                        }
-                    } catch (Exception e) {
-                        onFailure(statusCode, headers, responseString, e);
-                    }
-
-                }
-            });
         }
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent imageReturnIntent) {
@@ -726,55 +673,5 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         initWidget(mRoot);
         initData();
     }
-
-    private class CacheTask extends AsyncTask<String, Void, User> {
-        private final WeakReference<Context> mContext;
-
-        private CacheTask(Context context) {
-            mContext = new WeakReference<>(context);
-        }
-
-        @Override
-        protected User doInBackground(String... params) {
-            Serializable seri = CacheManager.readObject(mContext.get(),
-                    params[0]);
-            if (seri == null) {
-                return null;
-            } else {
-                return (User) seri;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(User info) {
-            super.onPostExecute(info);
-            if (info != null) {
-                mInfo = info;
-                // mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
-                // } else {
-                // mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
-                //fillUI();
-            }
-        }
-    }
-
-    private class SaveCacheTask extends AsyncTask<Void, Void, Void> {
-        private final WeakReference<Context> mContext;
-        private final Serializable seri;
-        private final String key;
-
-        private SaveCacheTask(Context context, Serializable seri, String key) {
-            mContext = new WeakReference<>(context);
-            this.seri = seri;
-            this.key = key;
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            CacheManager.saveObject(mContext.get(), seri, key);
-            return null;
-        }
-    }
-
 
 }

@@ -131,7 +131,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
                 break;
             // 评论列表
             //case R.id.tv_see_comment: {
-            // UIHelper.showBlogComment(getActivity(), (int) mId,
+            // UIUtil.showBlogComment(getActivity(), (int) mId,
             //  (int) mOperator.getNewsDetail().getId());
             //   }
             // break;

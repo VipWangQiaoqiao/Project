@@ -75,7 +75,7 @@ public class SoftwareListFragment extends BaseListFragment<SoftwareDec> {
             Log.d(TAG, "onItemClick: ----------->" + softwaredecId + "   ident=" + ident + " name=" + softwaredec.getName());
 
             SoftwareDetailActivity.show(getActivity(), ident);
-            //UIHelper.showSoftwareDetail(getActivity(), ident);
+            //UIUtil.showSoftwareDetail(getActivity(), ident);
             // 放入已读列表
             saveToReadedList(view, SoftwareList.PREF_READED_SOFTWARE_LIST,
                     softwaredec.getName());

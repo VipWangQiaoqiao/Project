@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import net.oschina.app.R;
@@ -19,6 +20,7 @@ import net.oschina.app.improve.general.fragments.BlogFragment;
 import net.oschina.app.improve.general.fragments.EventFragment;
 import net.oschina.app.improve.general.fragments.NewsFragment;
 import net.oschina.app.improve.general.fragments.QuestionFragment;
+import net.oschina.app.improve.utils.UIUtil;
 import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.util.UIHelper;
 
@@ -32,7 +34,10 @@ public class GeneralViewPagerFragment extends BaseViewPagerFragment implements
     protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
 
         FrameLayout generalActionBar = (FrameLayout) mRoot.findViewById(R.id.general_actionbar);
+
         TextView tvTitle = (TextView) generalActionBar.findViewById(R.id.tv_explore_scan);
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) generalActionBar.getLayoutParams();
+        layoutParams.topMargin = UIUtil.getStatusHeight(getActivity());
         ImageView ivDiscover = (ImageView) generalActionBar.findViewById(R.id.iv_explore_discover);
 
         tvTitle.setText(R.string.main_tab_name_news);

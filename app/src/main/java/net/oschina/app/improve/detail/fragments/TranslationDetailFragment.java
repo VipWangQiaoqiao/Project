@@ -128,7 +128,7 @@ public class TranslationDetailFragment extends DetailFragment<TranslationDetail,
                 break;
             // 评论列表
             //case R.id.tv_see_comment: {
-            // UIHelper.showBlogComment(getActivity(), (int) mId,
+            // UIUtil.showBlogComment(getActivity(), (int) mId,
             //  (int) mOperator.getNewsDetail().getId());
             //   }
             // break;

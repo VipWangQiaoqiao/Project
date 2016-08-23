@@ -2,9 +2,11 @@ package net.oschina.app.improve.tweet.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import net.oschina.app.R;
@@ -27,6 +29,8 @@ public class TweetViewPagerFragment extends BaseViewPagerFragment implements
 
         FrameLayout generalActionBar = (FrameLayout) mRoot.findViewById(R.id.general_actionbar);
         TextView tvTitle = (TextView) generalActionBar.findViewById(R.id.tv_explore_scan);
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) generalActionBar.getLayoutParams();
+        layoutParams.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25, getResources().getDisplayMetrics());
         ImageView ivDiscover = (ImageView) generalActionBar.findViewById(R.id.iv_explore_discover);
 
         tvTitle.setText(R.string.main_tab_name_tweet);
