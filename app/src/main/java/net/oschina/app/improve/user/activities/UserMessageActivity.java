@@ -74,7 +74,7 @@ public class UserMessageActivity extends BaseBackActivity {
         @Override
         public CharSequence getPageTitle(int position) {
             if (position == 0) {
-                return formatMessageCount("评论", mNotice.getMention());
+                return formatMessageCount("@我", mNotice.getMention());
             } else if (position == 1) {
                 return formatMessageCount("评论", mNotice.getReview());
             }
