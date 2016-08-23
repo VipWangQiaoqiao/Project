@@ -7,7 +7,7 @@ import android.graphics.Paint;
 import android.graphics.RadialGradient;
 import android.graphics.Shader;
 import android.util.AttributeSet;
-import android.widget.ImageView;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
  * 类太阳系星球转动
  * Created by thanatosx on 16/7/14.
  */
-public class SolarSystemView extends ImageView {
+public class SolarSystemView extends View {
 
     private int paintCount;
     private float pivotX;
@@ -68,6 +68,25 @@ public class SolarSystemView extends ImageView {
         planets.clear();
     }
 
+    public void repaint(){
+        if (planets.size() == 0) return;
+
+        if (mCacheBitmap != null) {
+            mCacheBitmap.recycle();
+            mCacheBitmap = null;
+        }
+        mCacheBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(mCacheBitmap);
+        if (mBackgroundPaint.getShader() != null){
+            canvas.drawRect(0, 0, getWidth(), getHeight(), mBackgroundPaint);
+        }
+        for (Planet planet : planets) {
+            mTrackPaint.setStrokeWidth(planet.getTrackWidth());
+            mTrackPaint.setColor(planet.getTrackColor());
+            canvas.drawCircle(pivotX, pivotY, planet.getRadius(), mTrackPaint);
+        }
+    }
+
     /**
      * 设置背景渐变
      * 设置中心点之后再做此事
@@ -87,42 +106,15 @@ public class SolarSystemView extends ImageView {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        if (mCacheBitmap != null) {
-            mCacheBitmap.recycle();
-            mCacheBitmap = null;
-        }
+        repaint();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         if (planets.size() == 0) return;
-        if (canvas.getWidth() <= 0 || canvas.getHeight() <= 0) return;
-
-        if (mCacheBitmap == null) {
-            if (!isPickingBitmap){
-                setDrawingCacheEnabled(true);
-                setDrawingCacheQuality(DRAWING_CACHE_QUALITY_HIGH);
-                isPickingBitmap = true;
-                mCacheBitmap = Bitmap.createBitmap(getDrawingCache());
-            }else {
-                int count = canvas.save();
-                super.onDraw(canvas);
-                if (mBackgroundPaint.getShader() != null){
-                    canvas.drawRect(0, 0, getWidth(), getHeight(), mBackgroundPaint);
-                }
-                for (Planet planet : planets) {
-                    mTrackPaint.setStrokeWidth(planet.getTrackWidth());
-                    mTrackPaint.setColor(planet.getTrackColor());
-                    canvas.drawCircle(pivotX, pivotY, planet.getRadius(), mTrackPaint);
-                }
-                canvas.restoreToCount(count);
-                isPickingBitmap = false;
-                return;
-            }
-        }
 
         int count = canvas.save();
-        canvas.drawBitmap(mCacheBitmap, 0, 0, mPlanetPaint);
+        if (mCacheBitmap != null) canvas.drawBitmap(mCacheBitmap, 0, 0, mPlanetPaint);
         for (Planet planet : planets) {
             double y;
             double x;
