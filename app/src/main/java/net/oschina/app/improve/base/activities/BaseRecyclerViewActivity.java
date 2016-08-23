@@ -14,6 +14,7 @@ import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
+import net.oschina.app.ui.empty.EmptyLayout;
 
 import java.lang.reflect.Type;
 import java.util.Date;
@@ -165,7 +166,9 @@ public abstract class BaseRecyclerViewActivity<T> extends BaseBackActivity imple
     }
 
     protected void onLoadingFailure() {
-
+        if (mAdapter.getItems().size() == 0) {
+            mAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_ERROR, true);
+        }
     }
 
 
