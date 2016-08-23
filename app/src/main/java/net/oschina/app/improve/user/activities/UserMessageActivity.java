@@ -2,10 +2,13 @@ package net.oschina.app.improve.user.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.view.ViewGroup;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
@@ -48,11 +51,12 @@ public class UserMessageActivity extends BaseBackActivity {
     protected void initWidget() {
         super.initWidget();
         mNotice = NoticeManager.getNotice();
-        vp_user_message.setAdapter(mAdapter);
-        tabLayout.setupWithViewPager(vp_user_message);
         mUserMentionFragment = new UserMentionFragment();
         mUserCommentFragment = new UserCommentFragment();
         mUserMessageFragment = new UserMessageFragment();
+
+        tabLayout.setupWithViewPager(vp_user_message);
+        vp_user_message.setAdapter(mAdapter);
     }
 
     private FragmentStatePagerAdapter mAdapter = new FragmentStatePagerAdapter(getSupportFragmentManager()) {
@@ -80,6 +84,13 @@ public class UserMessageActivity extends BaseBackActivity {
             }
             return formatMessageCount("私信", mNotice.getLetter());
         }
+
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+
+        }
+
     };
 
     private String formatMessageCount(String title, int messageCount) {

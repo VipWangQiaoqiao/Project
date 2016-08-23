@@ -212,9 +212,9 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
         } else {
             mAdapter.addAll(resultBean.getResult().getItems());
         }
-        if (resultBean.getResult().getItems().size() < 20) {
-            mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
-        }
+
+        mAdapter.setState(resultBean.getResult().getItems().size() < 20 ? BaseRecyclerAdapter.STATE_NO_MORE : BaseRecyclerAdapter.STATE_LOADING, true);
+
         if (mAdapter.getItems().size() > 0) {
             mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             mRefreshLayout.setVisibility(View.VISIBLE);
