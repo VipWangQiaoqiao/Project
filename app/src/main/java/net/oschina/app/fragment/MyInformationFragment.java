@@ -403,7 +403,7 @@ public class MyInformationFragment extends BaseFragment {
                             .getLoginUid());
                     break;
                 //  case R.id.rl_feedback:
-                //  UIHelper.showSimpleBack(getActivity(), SimpleBackPage.FEED_BACK);
+                //  UIUtil.showSimpleBack(getActivity(), SimpleBackPage.FEED_BACK);
                 // break;
                 case R.id.rl_message:
                     UIHelper.showMyMes(getActivity());
@@ -427,7 +427,7 @@ public class MyInformationFragment extends BaseFragment {
                     UIHelper.showSimpleBack(getActivity(), SimpleBackPage.MY_EVENT, bundle);
                     break;
                 //   case R.id.rl_note_book_avtivities:
-                //   UIHelper.showSimpleBack(getActivity(), SimpleBackPage.NOTE);
+                //   UIUtil.showSimpleBack(getActivity(), SimpleBackPage.NOTE);
                 //    break;
                 default:
                     break;

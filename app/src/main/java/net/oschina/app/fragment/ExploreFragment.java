@@ -1,12 +1,15 @@
 package net.oschina.app.fragment;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
@@ -65,7 +68,7 @@ public class ExploreFragment extends BaseFragment {
                 showFindUser();
                 break;
             //  case R.id.rl_city:
-            //   UIHelper.showSimpleBack(getActivity(), SimpleBackPage.SAME_CITY);
+            //   UIUtil.showSimpleBack(getActivity(), SimpleBackPage.SAME_CITY);
             //   break;
             case R.id.rl_scan:
                 UIHelper.showScanActivity(getActivity());
@@ -97,6 +100,10 @@ public class ExploreFragment extends BaseFragment {
     public void initView(View view) {
 
         FrameLayout explore = (FrameLayout) view.findViewById(R.id.explore);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) explore.getLayoutParams();
+            layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 81, getResources().getDisplayMetrics());
+        }
         ImageView ivDiscover = (ImageView) explore.findViewById(R.id.iv_explore_discover);
         ivDiscover.setOnClickListener(this);
 

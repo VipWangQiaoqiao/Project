@@ -125,7 +125,7 @@ public class FriendsFragment extends BaseListFragment<Friend> {
         Friend item = mAdapter.getItem(position);
         if (item != null) {
             //  if (mUid == AppContext.getInstance().getLoginUid()) {
-            //  UIHelper.showMessageDetail(getActivity(), item.getUserid(),
+            //  UIUtil.showMessageDetail(getActivity(), item.getUserid(),
             //         item.getName());
             //    return;
             //   }

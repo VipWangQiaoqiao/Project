@@ -1739,13 +1739,17 @@ public class OSChinaApi {
     /**
      * update the user icon
      *
-     * @param tocken  tocken
+     * @param file    file
      * @param handler handler
      */
-    public static void updateUserIcon(String tocken, TextHttpResponseHandler handler) {
-        if (TextUtils.isEmpty(tocken)) return;
+    public static void updateUserIcon(File file, TextHttpResponseHandler handler) {
+        if (file == null) return;
         RequestParams params = new RequestParams();
-        params.put("portrait", tocken);
+        try {
+            params.put("portrait", file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         ApiHttpClient.post("action/apiv2/user_edit_portrait", params, handler);
 
     }

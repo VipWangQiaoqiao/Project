@@ -64,7 +64,7 @@ public class ServerTaskService extends IntentService {
             Result res = resB.getResult();
             if (res.OK()) {
                 final Comment comment = resB.getComment();
-                // UIHelper.sendBroadCastCommentChanged(ServerTaskService.this,
+                // UIUtil.sendBroadCastCommentChanged(ServerTaskService.this,
                 // isBlog, task.getId(), task.getCatalog(),
                 // Comment.OPT_ADD, comment);
                 notifySimpleNotifycation(id,

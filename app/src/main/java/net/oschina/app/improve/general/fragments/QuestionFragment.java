@@ -209,7 +209,7 @@ public class QuestionFragment extends BaseGeneralListFragment<Question> {
         // super.onItemClick(parent, view, position, id);
         Question question = mAdapter.getItem(position - 1);
         if (question != null) {
-            // UIHelper.showPostDetail(getActivity(), (int) question.getId(), question.getCommentCount());
+            // UIUtil.showPostDetail(getActivity(), (int) question.getId(), question.getCommentCount());
             QuestionDetailActivity.show(getActivity(), question.getId());
             TextView title = (TextView) view.findViewById(R.id.tv_ques_item_title);
             TextView content = (TextView) view.findViewById(R.id.tv_ques_item_content);
