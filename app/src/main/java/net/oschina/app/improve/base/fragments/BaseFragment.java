@@ -57,18 +57,12 @@ public abstract class BaseFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
+        ButterKnife.unbind(this);
         RequestManager manager = mImgLoader;
         if (manager != null)
             manager.onDestroy();
-        mRoot = null;
         mBundle = null;
     }
 
