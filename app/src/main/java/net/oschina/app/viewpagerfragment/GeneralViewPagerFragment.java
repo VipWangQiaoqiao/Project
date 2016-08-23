@@ -1,5 +1,6 @@
 package net.oschina.app.viewpagerfragment;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -34,10 +35,11 @@ public class GeneralViewPagerFragment extends BaseViewPagerFragment implements
     protected void onSetupTabAdapter(ViewPageFragmentAdapter adapter) {
 
         FrameLayout generalActionBar = (FrameLayout) mRoot.findViewById(R.id.general_actionbar);
-
         TextView tvTitle = (TextView) generalActionBar.findViewById(R.id.tv_explore_scan);
-        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) generalActionBar.getLayoutParams();
-        layoutParams.topMargin = UIUtil.getStatusHeight(getActivity());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) generalActionBar.getLayoutParams();
+            layoutParams.topMargin = UIUtil.getStatusHeight(getActivity());
+        }
         ImageView ivDiscover = (ImageView) generalActionBar.findViewById(R.id.iv_explore_discover);
 
         tvTitle.setText(R.string.main_tab_name_news);

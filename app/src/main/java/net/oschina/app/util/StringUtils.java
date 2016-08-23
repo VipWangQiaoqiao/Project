@@ -197,9 +197,7 @@ public class StringUtils {
      */
     public static String formatWeek(Calendar calendar){
         if (calendar == null) return "星期?";
-        return new String[]{
-                "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"
-        }[calendar.get(Calendar.DAY_OF_WEEK)];
+        return new String[]{"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"}[calendar.get(Calendar.DAY_OF_WEEK) - 1];
     }
 
     /**

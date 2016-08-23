@@ -113,7 +113,7 @@ public class ClipView extends FrameLayout {
         }
         mIsEnter = true;
         ValueAnimator animation = ValueAnimator.ofFloat(0f, 1f);
-        animation.setDuration(600);
+        animation.setDuration(520);
         animation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -135,7 +135,7 @@ public class ClipView extends FrameLayout {
                 mIsAnim = true;
             }
         });
-        animation.setInterpolator(new DecelerateInterpolator(2));
+        animation.setInterpolator(new DecelerateInterpolator());
         animation.start();
     }
 
@@ -145,7 +145,7 @@ public class ClipView extends FrameLayout {
         }
         mIsEnter = false;
         ValueAnimator animation = ValueAnimator.ofFloat(1f, 0f);
-        animation.setDuration(500);
+        animation.setDuration(420);
         animation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -168,7 +168,7 @@ public class ClipView extends FrameLayout {
                 mIsAnim = true;
             }
         });
-        animation.setInterpolator(new AccelerateInterpolator(2));
+        animation.setInterpolator(new AccelerateInterpolator());
         animation.start();
     }
 

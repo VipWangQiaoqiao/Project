@@ -1,7 +1,6 @@
 package net.oschina.app.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -71,9 +70,8 @@ public class SoftwareListFragment extends BaseListFragment<SoftwareDec> {
         SoftwareDec softwaredec = mAdapter.getItem(position);
         if (softwaredec != null) {
             String ident = softwaredec.getUrl().substring(softwaredec.getUrl().lastIndexOf("/") + 1);
-            int softwaredecId = softwaredec.getId();
-            Log.d(TAG, "onItemClick: ----------->" + softwaredecId + "   ident=" + ident + " name=" + softwaredec.getName());
-
+            // int softwaredecId = softwaredec.getId();
+            // Log.d(TAG, "onItemClick: ----------->" + softwaredecId + "   ident=" + ident + " name=" + softwaredec.getName());
             SoftwareDetailActivity.show(getActivity(), ident);
             //UIUtil.showSoftwareDetail(getActivity(), ident);
             // 放入已读列表
