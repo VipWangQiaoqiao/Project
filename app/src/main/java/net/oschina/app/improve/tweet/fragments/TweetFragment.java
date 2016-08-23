@@ -99,7 +99,10 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
                 IntentFilter filter = new IntentFilter(
                         Constants.INTENT_ACTION_USER_CHANGE);
                 filter.addAction(Constants.INTENT_ACTION_LOGOUT);
-                getActivity().registerReceiver(mReceiver, filter);
+                if (mReceiver == null) {
+                    mReceiver = new LoginReceiver();
+                    getActivity().registerReceiver(mReceiver, filter);
+                }
                 break;
         }
 
@@ -122,13 +125,15 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
         }
     }
 
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+    private class LoginReceiver extends BroadcastReceiver {
+
         @Override
         public void onReceive(Context context, Intent intent) {
             setupContent();
-
         }
-    };
+    }
+
+    private LoginReceiver mReceiver;
 
     private void setupContent() {
         if (AppContext.getInstance().isLogin()) {
@@ -228,7 +233,7 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
      */
     @Override
     public void onDestroy() {
-        if (requestCategory == CATEGORY_USER) {
+        if (requestCategory == CATEGORY_USER && mReceiver != null) {
             getActivity().unregisterReceiver(mReceiver);
         }
         super.onDestroy();
