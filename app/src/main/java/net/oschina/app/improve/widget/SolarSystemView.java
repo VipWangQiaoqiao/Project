@@ -27,8 +27,6 @@ public class SolarSystemView extends View {
     private List<Planet> planets;
     private Bitmap mCacheBitmap;
 
-    private boolean isPickingBitmap;
-
     public SolarSystemView(Context context) {
         super(context);
     }
