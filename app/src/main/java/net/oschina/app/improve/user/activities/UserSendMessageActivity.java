@@ -149,13 +149,13 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
                 if (resultBean.isSuccess()) {
                     mAdapter.addItem(resultBean.getResult());
                     scrollToBottom();
+                    mViewInput.setText("");
                 } else {
                     Toast.makeText(UserSendMessageActivity.this, resultBean.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            mViewInput.setText("");
         }
 
         @Override

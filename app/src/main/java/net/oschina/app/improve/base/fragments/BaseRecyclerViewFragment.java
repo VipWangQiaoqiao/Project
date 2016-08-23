@@ -184,8 +184,6 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
             if (isNeedEmptyView()) mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
             mAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_ERROR, true);
         }
-
-
     }
 
     protected void onComplete() {
