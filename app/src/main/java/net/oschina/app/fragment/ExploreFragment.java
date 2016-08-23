@@ -3,17 +3,17 @@ package net.oschina.app.fragment;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.improve.utils.UIUtil;
 import net.oschina.app.ui.FindUserActivity;
 import net.oschina.app.ui.ShakeActivity;
 import net.oschina.app.util.UIHelper;
@@ -101,10 +101,11 @@ public class ExploreFragment extends BaseFragment {
 
         FrameLayout explore = (FrameLayout) view.findViewById(R.id.explore);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) explore.getLayoutParams();
-            layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 81, getResources().getDisplayMetrics());
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) explore.getLayoutParams();
+            layoutParams.topMargin = UIUtil.getStatusHeight(getActivity());
         }
         ImageView ivDiscover = (ImageView) explore.findViewById(R.id.iv_explore_discover);
+
         ivDiscover.setOnClickListener(this);
 
         mRlActive.setOnClickListener(this);
