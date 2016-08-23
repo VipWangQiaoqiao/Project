@@ -336,15 +336,14 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
                 @Override
                 public void run() {
                     ((BaseBackActivity) getActivity()).onSupportNavigateUp();
-                    /*
-                    getActivity().getSupportFragmentManager()
-                            .beginTransaction()
-                            .detach(TweetPublishFragment.this)
-                            .commit();
-                            */
                 }
             });
         }
+    }
+
+    @Override
+    public TweetPublishContract.Operator getOperator() {
+        return mOperator;
     }
 
     @Override

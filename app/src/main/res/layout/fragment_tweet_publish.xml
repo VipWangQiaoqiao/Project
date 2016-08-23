@@ -4,16 +4,15 @@
     android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/day_colorPrimary"
     android:fitsSystemWindows="true"
     tools:context="net.oschina.app.improve.tweet.fragments.TweetPublishFragment">
 
     <LinearLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="81dp"
         android:background="@color/actionbar_background"
-        android:paddingTop="1dp">
+        android:paddingTop="25dp">
 
         <net.qiujuer.genius.ui.widget.ImageView
             android:id="@+id/icon_back"
@@ -59,7 +58,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/lay_44"
-        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginTop="81dp"
         android:background="@color/white">
 
         <android.support.design.widget.AppBarLayout
