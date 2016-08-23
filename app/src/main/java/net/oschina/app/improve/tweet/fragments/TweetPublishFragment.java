@@ -4,9 +4,11 @@ package net.oschina.app.improve.tweet.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -18,11 +20,13 @@ import net.oschina.app.emoji.EmojiKeyboardFragment;
 import net.oschina.app.emoji.Emojicon;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.emoji.OnEmojiClickListener;
+import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.tweet.contract.TweetPublishContract;
+import net.oschina.app.improve.tweet.contract.TweetPublishOperator;
+import net.oschina.app.improve.tweet.widget.ClipView;
 import net.oschina.app.improve.tweet.widget.TweetPicturesPreviewer;
 import net.oschina.app.ui.SelectFriendsActivity;
-import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
 import butterknife.Bind;
@@ -43,6 +47,11 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     @Bind(R.id.recycler_images)
     TweetPicturesPreviewer mLayImages;
 
+    @Override
+    public Context getContext() {
+        return super.getContext();
+    }
+
     @Bind(R.id.txt_indicator)
     TextView mIndicator;
 
@@ -61,7 +70,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
 
     @Override
     public void onAttach(Context context) {
-        this.mOperator = (TweetPublishContract.Operator) context;
+        this.mOperator = new TweetPublishOperator();
         this.mOperator.setDataView(this);
         super.onAttach(context);
     }
@@ -154,6 +163,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         });
     }
 
+
     @Override
     protected void initData() {
         super.initData();
@@ -161,9 +171,11 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        mEmojiKeyboard.hideSoftKeyboard();
+    public void onResume() {
+        super.onResume();
+        if (mRoot instanceof ClipView) {
+            ((ClipView) mRoot).start(0, 0F);
+        }
     }
 
     @OnClick({R.id.iv_picture, R.id.iv_mention, R.id.iv_tag,
@@ -318,8 +330,33 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     }
 
     @Override
-    public void onDestroyView() {
-        mLayImages.destroy();
-        super.onDestroyView();
+    public void finish() {
+        if (mRoot instanceof ClipView) {
+            ((ClipView) mRoot).exit(new Runnable() {
+                @Override
+                public void run() {
+                    ((BaseBackActivity) getActivity()).onSupportNavigateUp();
+                    /*
+                    getActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .detach(TweetPublishFragment.this)
+                            .commit();
+                            */
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mOperator.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onInflate(Context context, AttributeSet attrs, Bundle savedInstanceState) {
+        super.onInflate(context, attrs, savedInstanceState);
+        if (savedInstanceState != null)
+            mOperator.onRestoreInstanceState(savedInstanceState);
     }
 }

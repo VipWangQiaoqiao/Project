@@ -18,6 +18,7 @@ import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.notice.NoticeBean;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.tweet.activities.TweetPublishActivity;
+import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.tweet.fragments.TweetViewPagerFragment;
 import net.oschina.app.improve.user.fragments.NewUserInfoFragment;
 import net.oschina.app.viewpagerfragment.GeneralViewPagerFragment;
@@ -94,8 +95,25 @@ public class NavFragment extends BaseFragment implements View.OnClickListener, N
             doSelect(nav);
         } else if (v.getId() == R.id.nav_item_tweet_pub) {
             TweetPublishActivity.show(getContext());
+            /*
+            if (mTweetFragment == null) {
+                TweetPublishFragment fragment = new TweetPublishFragment();
+                mFragmentManager
+                        .beginTransaction()
+                        .add(R.id.activity_main_ui, fragment)
+                        .commit();
+                mTweetFragment = fragment;
+            } else {
+                mFragmentManager
+                        .beginTransaction()
+                        .attach(mTweetFragment)
+                        .commit();
+            }
+            */
         }
     }
+
+    private TweetPublishFragment mTweetFragment;
 
 
     public void setup(Context context, FragmentManager fragmentManager, int contentId, OnNavigationReselectListener listener) {
