@@ -35,5 +35,7 @@ public interface TweetPublishContract {
         void setImages(String[] paths);
 
         void finish();
+
+        Operator getOperator();
     }
 }

@@ -15,6 +15,8 @@ import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 
 public class TweetPublishActivity extends BaseBackActivity {
+    private TweetPublishContract.View mView;
+
     public static void show(Context context) {
         Intent intent = new Intent(context, TweetPublishActivity.class);
         context.startActivity(intent);
@@ -36,14 +38,19 @@ public class TweetPublishActivity extends BaseBackActivity {
     protected void initWidget() {
         super.initWidget();
 
+        getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+
         TweetPublishFragment fragment = new TweetPublishFragment();
         FragmentTransaction trans = getSupportFragmentManager()
                 .beginTransaction();
         trans.replace(R.id.activity_tweet_publish, fragment);
-        trans.commitNow();
+        trans.commit();
+        mView = fragment;
     }
 
-    public void setDataView(TweetPublishContract.View view) {
+    @Override
+    protected void initData() {
+        super.initData();
         // before the fragment show
         registerPublishStateReceiver();
     }
@@ -54,8 +61,9 @@ public class TweetPublishActivity extends BaseBackActivity {
         super.onDestroy();
     }
 
-
     private void registerPublishStateReceiver() {
+        if (mPublishStateReceiver != null)
+            return;
         IntentFilter intentFilter = new IntentFilter(TweetPublishService.ACTION_RECEIVER_SEARCH_FAILED);
         BroadcastReceiver receiver = new SearchReceiver();
         registerReceiver(receiver, intentFilter);
@@ -83,6 +91,14 @@ public class TweetPublishActivity extends BaseBackActivity {
                     return;
                 TweetPublishQueueActivity.show(TweetPublishActivity.this, ids);
             }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        if(mView!=null){
+            mView.getOperator().onBack();
         }
     }
 }

@@ -1,13 +1,17 @@
 package net.oschina.app.improve.tweet.widget;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Rect;
+import android.os.Build;
 import android.util.AttributeSet;
+import android.view.WindowInsets;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 
 import net.qiujuer.genius.ui.Ui;
@@ -16,18 +20,15 @@ import net.qiujuer.genius.ui.Ui;
  * Created by JuQiu
  * on 16/8/22.
  */
-public class ClipView extends FrameLayout implements Runnable {
-    private static final float INC = 16f / 1000;
-    private Interpolator INTERPOLATOR = new DecelerateInterpolator(2);
-
-    private float mInx = INC;
+public class ClipView extends FrameLayout {
     private Path mPath = new Path();
-    private float mCurProgress;
-    private boolean mDone;
-
+    private boolean mIsAnim;
     private float mStartRadius, mEndRadius;
     private float mStartPointX, mEndPointX;
     private float mStartPointY, mEndPointY;
+    private int mColor;
+    private float mProgress;
+    private boolean mIsEnter = false;
 
     public ClipView(Context context) {
         super(context);
@@ -41,44 +42,28 @@ public class ClipView extends FrameLayout implements Runnable {
         super(context, attrs, defStyleAttr);
     }
 
-    private Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
     @Override
     protected void dispatchDraw(Canvas canvas) {
-        if (mDone) {
-            super.dispatchDraw(canvas);
+        if (mProgress <= 0)
             return;
-        }
-        if (mCurProgress > 0) {
+        if (mIsAnim) {
             int saveCount = canvas.save();
             canvas.clipPath(mPath);
             super.dispatchDraw(canvas);
             canvas.drawColor(mColor);
             canvas.restoreToCount(saveCount);
+        } else {
+            super.dispatchDraw(canvas);
         }
     }
 
-    @Override
-    public void run() {
-        if (mCurProgress > 1 || mCurProgress < 0) {
-            mDone = true;
-            return;
-        }
-
-        mCurProgress = mCurProgress + mInx;
-
-        doDirect(INTERPOLATOR.getInterpolation(mCurProgress));
-
-        // post next
-        postDelayed(this, 16);
-    }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
 
         mStartPointX = w / 2;
-        mStartPointY = h;
+        mStartPointY = h - 40;
 
         mEndPointX = mStartPointX;
         mEndPointY = h / 2;
@@ -87,9 +72,9 @@ public class ClipView extends FrameLayout implements Runnable {
         mStartRadius = 20;
     }
 
-    private int mColor;
-    private void doDirect(float progress) {
-        mColor = Ui.changeColorAlpha(0x24cf5f, (int) (200-(200*progress)));
+
+    private void doUpdate(float progress) {
+        mColor = Ui.changeColorAlpha(0x24cf5f, (int) (240 - (240 * progress)));
 
         Path path = mPath;
         path.reset();
@@ -98,6 +83,7 @@ public class ClipView extends FrameLayout implements Runnable {
         float pointY = mStartPointY + (mEndPointY - mStartPointY) * progress;
         path.addCircle(pointX, pointY, radius, Path.Direction.CW);
 
+        /*
         int w = getWidth();
         int h = getHeight();
 
@@ -115,29 +101,93 @@ public class ClipView extends FrameLayout implements Runnable {
         if (b > h)
             b = h;
 
-        //mPaint.setAlpha(255 - (int) (255 * progress));
+        //invalidate(l, t, r, b);
+        */
+        invalidate();
 
-        invalidate(l, t, r, b);
     }
 
     public void start(float startX, float startY) {
-        if (mCurProgress > 1) {
+        if (mIsEnter) {
             return;
         }
-        mCurProgress = 0;
-        mInx = INC;
-        mDone = false;
+        mIsEnter = true;
+        ValueAnimator animation = ValueAnimator.ofFloat(0f, 1f);
+        animation.setDuration(600);
+        animation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                mProgress = (float) animation.getAnimatedValue();
+                doUpdate(mProgress);
+            }
 
-        mPaint.setColor(Color.BLUE);
+        });
+        animation.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                mIsAnim = false;
+            }
 
-        post(this);
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                mIsAnim = true;
+            }
+        });
+        animation.setInterpolator(new DecelerateInterpolator(2));
+        animation.start();
     }
 
-    public void exit(Runnable runnable) {
-        mCurProgress = 1;
-        mInx = -INC;
-        mDone = false;
-        post(this);
-        postDelayed(runnable, 420);
+    public void exit(final Runnable runnable) {
+        if (!mIsEnter) {
+            return;
+        }
+        mIsEnter = false;
+        ValueAnimator animation = ValueAnimator.ofFloat(1f, 0f);
+        animation.setDuration(500);
+        animation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                mProgress = (float) animation.getAnimatedValue();
+                doUpdate(mProgress);
+            }
+
+        });
+        animation.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                mIsAnim = false;
+                runnable.run();
+            }
+
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                mIsAnim = true;
+            }
+        });
+        animation.setInterpolator(new AccelerateInterpolator(2));
+        animation.start();
+    }
+
+    @Override
+    protected final boolean fitSystemWindows(Rect insets) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            insets.left = 0;
+            insets.top = 0;
+            insets.right = 0;
+        }
+        return super.fitSystemWindows(insets);
+    }
+
+    @Override
+    public final WindowInsets onApplyWindowInsets(WindowInsets insets) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+            insets = insets.replaceSystemWindowInsets(0, 0, 0,
+                    insets.getSystemWindowInsetBottom());
+        }
+        return insets;
     }
 }
