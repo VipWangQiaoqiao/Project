@@ -290,25 +290,6 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
         }else {
             mGenderImage.setVisibility(View.GONE);
         }
-
-        if (mFollowMenu != null) {
-            switch (user.getRelation()) {
-                case User.RELATION_TYPE_BOTH:
-                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_following_botn));
-                    break;
-                case User.RELATION_TYPE_ONLY_FANS_HIM:
-                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_following));
-                    break;
-                case User.RELATION_TYPE_ONLY_FANS_ME:
-                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
-                    break;
-                case User.RELATION_TYPE_NULL:
-                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
-                    break;
-                default:
-                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
-            }
-        }
     }
 
     @Override
@@ -326,9 +307,9 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
                         responseString, new TypeToken<ResultBean<User>>(){}.getType());
                 if (result.isSuccess() && result.getResult() == null) return;
                 user = result.getResult();
-                invalidateOptionsMenu();
                 injectDataToView();
                 injectDataToViewPager();
+                invalidateOptionsMenu();
             }
         });
     }
@@ -340,6 +321,23 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
         if (user.getId() > 0 && mLoginUser != null && mLoginUser.getId() != user.getId()){
             getMenuInflater().inflate(R.menu.menu_other_user, menu);
             mFollowMenu = menu.getItem(1);
+            if (mFollowMenu == null) return false;
+            switch (user.getRelation()) {
+                case User.RELATION_TYPE_BOTH:
+                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_following_botn));
+                    break;
+                case User.RELATION_TYPE_ONLY_FANS_HIM:
+                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_following));
+                    break;
+                case User.RELATION_TYPE_ONLY_FANS_ME:
+                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
+                    break;
+                case User.RELATION_TYPE_NULL:
+                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
+                    break;
+                default:
+                    mFollowMenu.setIcon(getResources().getDrawable(R.drawable.selector_user_follow));
+            }
             return true;
         }
         return false;
