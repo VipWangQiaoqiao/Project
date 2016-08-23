@@ -193,7 +193,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/ThemePhotoBrowse" />
 
-        <service android:name=".service.ServerTaskService">
+        <service
+            android:name=".service.ServerTaskService"
+            android:enabled="false">
             <intent-filter>
                 <action android:name="net.oschina.app.ACTION_PUB_BLOG_COMMENT" />
             </intent-filter>
@@ -211,10 +213,13 @@
             </intent-filter>
         </service>
 
-        <receiver android:name=".broadcast.AlarmReceiver" />
+        <receiver
+            android:name=".broadcast.AlarmReceiver"
+            android:enabled="false" />
 
         <service
             android:name=".service.NoticeService"
+            android:enabled="false"
             android:process=":notice" />
         <service android:name=".service.DownloadService" />
 
@@ -345,6 +350,7 @@
             android:label="弹一弹"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/AppTheme.Tweet.Publish">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -406,7 +412,7 @@
             android:name=".improve.main.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Base.NoTitle" />
+            android:theme="@style/AppTheme.Tweet.Main" />
 
         <service
             android:name=".improve.tweet.service.TweetPublishService"

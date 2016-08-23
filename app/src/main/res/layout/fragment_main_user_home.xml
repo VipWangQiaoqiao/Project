@@ -138,9 +138,9 @@
             android:orientation="vertical">
 
             <FrameLayout
+                android:id="@+id/user_info_head_container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/iv_logo_setting"
@@ -165,6 +165,7 @@
             </FrameLayout>
 
             <FrameLayout
+                android:id="@+id/user_info_icon_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp">
@@ -183,6 +184,8 @@
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_gravity="right|bottom"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginRight="4dp"
                     android:contentDescription="@null"
                     android:src="@mipmap/ic_male" />
             </FrameLayout>

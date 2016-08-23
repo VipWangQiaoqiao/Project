@@ -102,7 +102,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
         };
 
         boolean isNeedEmptyView = isNeedEmptyView();
-        if(isNeedEmptyView){
+        if (isNeedEmptyView) {
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
             mRefreshLayout.setVisibility(View.GONE);
             AppOperator.runOnThread(new Runnable() {
@@ -128,9 +128,9 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
                     }
                 }
             });
-        }else {
-            mErrorLayout.setErrorType( EmptyLayout.HIDE_LAYOUT);
-            mRefreshLayout.setVisibility(View.VISIBLE );
+        } else {
+            mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
+            mRefreshLayout.setVisibility(View.VISIBLE);
             mRefreshLayout.post(new Runnable() {
                 @Override
                 public void run() {
@@ -184,8 +184,6 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
             if (isNeedEmptyView()) mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
             mAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_ERROR, true);
         }
-
-
     }
 
     protected void onComplete() {
