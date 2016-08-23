@@ -11,7 +11,6 @@ import android.view.View;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
-import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.media.SelectImageActivity;
 import net.oschina.app.improve.tweet.adapter.TweetSelectImageAdapter;
 
@@ -73,12 +72,7 @@ public class TweetPicturesPreviewer extends RecyclerView implements TweetSelectI
     @Override
     public RequestManager getImgLoader() {
         if (mCurImageLoader == null) {
-            Context context = getContext();
-            if (context != null && context instanceof BaseActivity) {
-                mCurImageLoader = ((BaseActivity) context).getImageLoader();
-            } else {
-                mCurImageLoader = Glide.with(getContext());
-            }
+            mCurImageLoader = Glide.with(getContext());
         }
         return mCurImageLoader;
     }
@@ -90,14 +84,6 @@ public class TweetPicturesPreviewer extends RecyclerView implements TweetSelectI
 
     public String[] getPaths() {
         return mImageAdapter.getPaths();
-    }
-
-    public void destroy() {
-        Context context = getContext();
-        if (!(context != null && context instanceof BaseActivity)) {
-            mCurImageLoader.onDestroy();
-        }
-        mCurImageLoader = null;
     }
 
     @Override

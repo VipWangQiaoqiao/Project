@@ -1,10 +1,11 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<net.oschina.app.improve.tweet.widget.ClipView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/day_colorPrimary"
+    android:fitsSystemWindows="true"
     tools:context="net.oschina.app.improve.tweet.fragments.TweetPublishFragment">
 
     <LinearLayout
@@ -58,7 +59,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/lay_44"
-        android:layout_marginTop="?attr/actionBarSize">
+        android:layout_marginTop="?attr/actionBarSize"
+        android:background="@color/white">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/layout_appbar"
@@ -209,4 +211,4 @@
             android:layout_gravity="bottom" />
     </LinearLayout>
 
-</FrameLayout>
+</net.oschina.app.improve.tweet.widget.ClipView>
