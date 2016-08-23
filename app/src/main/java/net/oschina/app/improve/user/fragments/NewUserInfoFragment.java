@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -202,12 +201,6 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         OSChinaApi.getUserInfo(textHandler);
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initSolar();
-    }
-
     /**
      * init solar view
      */
@@ -235,6 +228,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                     int r = (ciOrtraitWidth >> 1);
 
                     Random random = new Random(System.currentTimeMillis());
+                    mSolarSystem.clear();
                     for (int i = 60, radius = r + i; radius <= mMaxRadius; i = (int) (i * 1.4), radius += i) {
                         SolarSystemView.Planet planet = new SolarSystemView.Planet();
                         planet.setClockwise(random.nextInt(10) % 2 == 0);
@@ -292,6 +286,8 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
         if (mFansView != null)
             mFansView.setVisibility(View.INVISIBLE);
+
+        initSolar();
 
     }
 

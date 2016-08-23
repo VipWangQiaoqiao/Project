@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RadialGradient;
 import android.graphics.Shader;
-import android.graphics.SweepGradient;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -68,6 +67,12 @@ public class SolarSystemView extends ImageView{
 
     public void addPlanets(Planet planet){
         this.planets.add(planet);
+    }
+
+    public void clear() {
+        if (planets != null && !planets.isEmpty()) {
+            planets.clear();
+        }
     }
 
     @Override
