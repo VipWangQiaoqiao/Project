@@ -114,6 +114,8 @@ public class NavFragment extends BaseFragment implements View.OnClickListener, N
     private void clearOldFragment() {
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
         List<Fragment> fragments = mFragmentManager.getFragments();
+        if (transaction == null || fragments == null || fragments.size() == 0)
+            return;
         boolean doCommit = false;
         for (Fragment fragment : fragments) {
             if (fragment != this) {
