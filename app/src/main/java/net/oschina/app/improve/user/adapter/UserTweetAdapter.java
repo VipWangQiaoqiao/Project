@@ -54,12 +54,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by thanatos on 16/8/17.
  */
-public class UserTweetAdapter extends BaseRecyclerAdapter<Tweet>{
+public class UserTweetAdapter extends BaseRecyclerAdapter<Tweet> {
 
     private Bitmap recordBitmap;
     private OnTweetLikeClickListener listener;
     private OnTweetImageClickListener imageClickListener;
-    
+
     public UserTweetAdapter(Context context, int mode) {
         super(context, mode);
     }
@@ -122,7 +122,7 @@ public class UserTweetAdapter extends BaseRecyclerAdapter<Tweet>{
         holder.mViewCmmCount.setText(String.valueOf(item.getCommentCount()));
 
         String content = "";
-        if (!TextUtils.isEmpty(item.getContent())){
+        if (!TextUtils.isEmpty(item.getContent())) {
             content = item.getContent().replaceAll("[\n\\s]+", " ");
         }
         Spannable spannable = AssimilateUtils.assimilateOnlyAtUser(mContext, content);
@@ -181,18 +181,27 @@ public class UserTweetAdapter extends BaseRecyclerAdapter<Tweet>{
             holder.mLayoutFlow.setVisibility(View.GONE);
         }
     }
-    
-    public static class ViewHolder extends RecyclerView.ViewHolder{
-        @Bind(R.id.iv_tweet_face) CircleImageView mViewPortrait;
-        @Bind(R.id.tv_tweet_name) TextView mViewName;
-        @Bind(R.id.tv_tweet_time) TextView mViewTime;
-        @Bind(R.id.tv_tweet_platform) TextView mViewPlatform;
-        @Bind(R.id.tv_tweet_like_count) TextView mViewLikeCount;
-        @Bind(R.id.tv_tweet_comment_count) TextView mViewCmmCount;
-        @Bind(R.id.tweet_item) TweetTextView mViewContent;
-        @Bind(R.id.iv_like_state) ImageView mViewLikeState;
-        @Bind(R.id.fl_image) FlowLayout mLayoutFlow;
-        
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        @Bind(R.id.iv_tweet_face)
+        CircleImageView mViewPortrait;
+        @Bind(R.id.tv_tweet_name)
+        TextView mViewName;
+        @Bind(R.id.tv_tweet_time)
+        TextView mViewTime;
+        @Bind(R.id.tv_tweet_platform)
+        TextView mViewPlatform;
+        @Bind(R.id.tv_tweet_like_count)
+        TextView mViewLikeCount;
+        @Bind(R.id.tv_tweet_comment_count)
+        TextView mViewCmmCount;
+        @Bind(R.id.tweet_item)
+        TweetTextView mViewContent;
+        @Bind(R.id.iv_like_state)
+        ImageView mViewLikeState;
+        @Bind(R.id.fl_image)
+        FlowLayout mLayoutFlow;
+
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

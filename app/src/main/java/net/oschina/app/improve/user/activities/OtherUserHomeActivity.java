@@ -229,6 +229,16 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
                 public CharSequence getPageTitle(int position) {
                     return fragments.get(position).first;
                 }
+
+                @Override
+                public void destroyItem(ViewGroup container, int position, Object object) {
+
+                }
+
+                @Override
+                public void destroyItem(View container, int position, Object object) {
+
+                }
             });
 
             mTabLayout.setupWithViewPager(mViewPager);

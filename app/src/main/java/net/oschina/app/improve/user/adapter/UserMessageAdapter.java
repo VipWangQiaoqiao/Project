@@ -35,7 +35,7 @@ public class UserMessageAdapter extends BaseGeneralRecyclerAdapter<Message> {
         mListener = new OnUserFaceClickListener() {
             @Override
             public void onClick(View v, int position) {
-                OtherUserHomeActivity.show(mCallBack.getContext(), getItem(position).getId());
+                OtherUserHomeActivity.show(mCallBack.getContext(), getItem(position).getSender().getId());
             }
         };
     }

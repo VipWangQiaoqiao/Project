@@ -11,10 +11,11 @@
 
         <ListView
             android:id="@+id/listView"
+            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="@color/transparent"
-            android:dividerHeight="0dp" />
+            android:dividerHeight="1px" />
     </net.oschina.app.widget.SuperRefreshLayout>
 
     <net.oschina.app.ui.empty.EmptyLayout

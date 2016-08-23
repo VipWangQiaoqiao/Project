@@ -1,5 +1,10 @@
 package net.oschina.app.improve.user.fragments;
 
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.AppContext;
@@ -22,6 +27,12 @@ import java.lang.reflect.Type;
 
 public class UserMessageFragment extends BaseRecyclerViewFragment<Message> {
     public long authorId;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return super.onCreateView(inflater, container, savedInstanceState);
+
+    }
 
     @Override
     public void initData() {
@@ -52,5 +63,15 @@ public class UserMessageFragment extends BaseRecyclerViewFragment<Message> {
     protected Type getType() {
         return new TypeToken<ResultBean<PageBean<Message>>>() {
         }.getType();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
     }
 }
