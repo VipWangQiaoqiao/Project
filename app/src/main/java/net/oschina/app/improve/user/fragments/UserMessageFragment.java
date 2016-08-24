@@ -15,6 +15,7 @@ import net.oschina.app.improve.bean.Message;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.Author;
+import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.user.activities.UserSendMessageActivity;
 import net.oschina.app.improve.user.adapter.UserMessageAdapter;
 
@@ -29,11 +30,10 @@ public class UserMessageFragment extends BaseRecyclerViewFragment<Message> {
     public long authorId;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
-
+    protected void initWidget(View root) {
+        super.initWidget(root);
+        NoticeManager.clear(getContext(),NoticeManager.FLAG_CLEAR_LETTER);
     }
-
     @Override
     public void initData() {
         super.initData();
