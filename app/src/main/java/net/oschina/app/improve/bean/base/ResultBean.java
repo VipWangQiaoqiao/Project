@@ -52,4 +52,12 @@ public class ResultBean<T> {
     public boolean isSuccess() {
         return code == RESULT_SUCCESS && result != null;
     }
+
+    @Override
+    public String toString() {
+        return "code:" + code
+                + " + message:" + message
+                + " + time:" + time
+                + " + result:" + result.toString();
+    }
 }
