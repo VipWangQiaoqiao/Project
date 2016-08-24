@@ -9,7 +9,7 @@
     android:paddingTop="4dp">
 
     <ImageView
-        android:id="@+id/iv_icon"
+        android:id="@+id/iv_user_flow_icon"
         android:layout_width="20dp"
         android:layout_height="22dp"
         android:layout_centerHorizontal="true"
@@ -19,7 +19,7 @@
         android:id="@+id/tab_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/iv_icon"
+        android:layout_below="@id/iv_user_flow_icon"
         android:layout_centerHorizontal="true"
         android:clickable="false"
         android:enabled="false"

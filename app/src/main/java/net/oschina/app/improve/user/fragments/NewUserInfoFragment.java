@@ -34,6 +34,8 @@ import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.notice.NoticeBean;
 import net.oschina.app.improve.notice.NoticeManager;
+import net.oschina.app.improve.user.activities.UserFansActivity;
+import net.oschina.app.improve.user.activities.UserFollowsActivity;
 import net.oschina.app.improve.user.activities.UserMessageActivity;
 import net.oschina.app.improve.user.activities.UserTweetActivity;
 import net.oschina.app.improve.user.bean.UserInfo;
@@ -189,11 +191,11 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                 break;
             case 1:
                 mIvGander.setVisibility(View.VISIBLE);
-                mIvGander.setImageResource(R.mipmap.userinfo_icon_male);
+                mIvGander.setImageResource(R.mipmap.ic_male);
                 break;
             case 2:
                 mIvGander.setVisibility(View.VISIBLE);
-                mIvGander.setImageResource(R.mipmap.userinfo_icon_female);
+                mIvGander.setImageResource(R.mipmap.ic_female);
                 break;
             default:
                 break;
@@ -344,9 +346,6 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                     break;
                 case R.id.user_view_solar_system:
                     //显示我的资料
-//                    UIUtil.showUserCenter(getActivity(), AppContext.getInstance()
-//                            .getLoginUid(), AppContext.getInstance().getLoginUser()
-//                            .getName());
                     UIHelper.showSimpleBack(getActivity(),
                             SimpleBackPage.MY_INFORMATION_DETAIL);
                     break;
@@ -358,12 +357,14 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                             .getLoginUid());
                     break;
                 case R.id.ly_following:
-                    UIHelper.showFriends(getActivity(), AppContext.getInstance()
-                            .getLoginUid(), 0);
+//                    UIHelper.showFriends(getActivity(), AppContext.getInstance()
+//                            .getLoginUid(), 0);
+                    UserFollowsActivity.show(getActivity(), AppContext.getInstance().getLoginUid());
                     break;
                 case R.id.ly_follower:
-                    UIHelper.showFriends(getActivity(), AppContext.getInstance()
-                            .getLoginUid(), 1);
+//                    UIHelper.showFriends(getActivity(), AppContext.getInstance()
+//                            .getLoginUid(), 1);
+                    UserFansActivity.show(getActivity(), AppContext.getInstance().getLoginUid());
                     break;
                 case R.id.rl_message:
                     UserMessageActivity.show(getActivity());

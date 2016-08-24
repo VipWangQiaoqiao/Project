@@ -35,6 +35,7 @@ import static net.oschina.app.improve.base.adapter.BaseRecyclerAdapter.ONLY_FOOT
 
 /**
  * Created by fei on 2016/7/20.
+ * desc:
  */
 
 public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
@@ -94,7 +95,6 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
         super.requestData();
         OSChinaApi.getSoftwareTweetList(softwareName, mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
     }
-
 
 
     /**

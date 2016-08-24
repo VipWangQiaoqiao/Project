@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_user_flow_icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center_vertical|top"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="12dp"
+        app:srcCompat="@mipmap/widget_dface" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_user_flow_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:paddingBottom="4dp"
+                android:paddingTop="8dp"
+                android:textColor="@color/green_600"
+                android:textSize="14sp"
+                tools:text="葫芦娃" />
+
+            <ImageView
+                android:id="@+id/iv_user_flow_sex"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="center_vertical"
+                app:srcCompat="@mipmap/userinfo_icon_male" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_user_flow_city"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            tools:text="广东 深圳" />
+
+        <TextView
+            android:id="@+id/tv_user_flow_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:gravity="center_vertical"
+            tools:text="CEO CTO" />
+
+        <TextView
+            android:id="@+id/tv_user_flow_expertise"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:gravity="center_vertical"
+            tools:text="这是一个大佬" />
+
+        <View
+            android:id="@+id/textView9"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="8dp"
+            android:background="@color/list_divider_color" />
+
+    </LinearLayout>
+
+</LinearLayout>
