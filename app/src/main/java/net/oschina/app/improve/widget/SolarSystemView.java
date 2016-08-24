@@ -16,7 +16,7 @@ import java.util.List;
  * 类太阳系星球转动
  * Created by thanatosx on 16/7/14.
  */
-public class SolarSystemView extends View {
+public class SolarSystemView extends View implements Runnable {
 
     private int paintCount;
     private float pivotX;
@@ -52,6 +52,7 @@ public class SolarSystemView extends View {
         pivotX = x;
         pivotY = y;
         paintCount = 0;
+        prepare();
     }
 
     public void addPlanets(List<Planet> planets) {
@@ -66,7 +67,7 @@ public class SolarSystemView extends View {
         planets.clear();
     }
 
-    public void repaint(){
+    public synchronized void prepare(){
         if (planets.size() == 0) return;
 
         if (mCacheBitmap != null) {
@@ -75,7 +76,10 @@ public class SolarSystemView extends View {
         }
         mCacheBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(mCacheBitmap);
-        if (mBackgroundPaint.getShader() != null){
+        if (getBackground() != null){
+            getBackground().draw(canvas);
+        }
+        if (mBackgroundPaint != null && mBackgroundPaint.getShader() != null){
             canvas.drawRect(0, 0, getWidth(), getHeight(), mBackgroundPaint);
         }
         for (Planet planet : planets) {
@@ -83,6 +87,7 @@ public class SolarSystemView extends View {
             mTrackPaint.setColor(planet.getTrackColor());
             canvas.drawCircle(pivotX, pivotY, planet.getRadius(), mTrackPaint);
         }
+        postRepaint();
     }
 
     /**
@@ -99,12 +104,13 @@ public class SolarSystemView extends View {
         mBackgroundPaint.setStyle(Paint.Style.FILL);
         mBackgroundPaint.setAntiAlias(true);
         mBackgroundPaint.setShader(new RadialGradient(x, y, r, sc, ec, Shader.TileMode.CLAMP));
+        prepare();
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        repaint();
+        prepare();
     }
 
     @Override
@@ -130,7 +136,17 @@ public class SolarSystemView extends View {
         canvas.restoreToCount(count);
         ++paintCount;
         if (paintCount < 0) paintCount = 0;
-        postInvalidateDelayed(33);
+    }
+
+    private void postRepaint(){
+        removeCallbacks(this);
+        postDelayed(this, 33);
+    }
+
+    @Override
+    public void run() {
+        invalidate();
+        postRepaint();
     }
 
     public static class Planet {
