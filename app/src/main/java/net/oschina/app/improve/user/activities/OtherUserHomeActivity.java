@@ -193,6 +193,9 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
                     if (radius > mMaxRadius) break;
                 }
                 mSolarSystem.setPivotPoint(px, py);
+                float ry = mSolarSystem.getHeight() - py;
+                double rx = Math.pow(px * px + ry * ry, 1.f / 2.f);
+                mSolarSystem.setRadialGradient(px, py, (float) rx, 0XFF24CF5F, 0XFF20B955);
             }
         });
 
