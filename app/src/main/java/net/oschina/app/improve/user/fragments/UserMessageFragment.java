@@ -1,10 +1,5 @@
 package net.oschina.app.improve.user.fragments;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.AppContext;
@@ -30,10 +25,11 @@ public class UserMessageFragment extends BaseRecyclerViewFragment<Message> {
     public long authorId;
 
     @Override
-    protected void initWidget(View root) {
-        super.initWidget(root);
-        NoticeManager.clear(getContext(),NoticeManager.FLAG_CLEAR_LETTER);
+    public void onResume() {
+        super.onResume();
+        NoticeManager.clear(getContext(), NoticeManager.FLAG_CLEAR_LETTER);
     }
+
     @Override
     public void initData() {
         super.initData();

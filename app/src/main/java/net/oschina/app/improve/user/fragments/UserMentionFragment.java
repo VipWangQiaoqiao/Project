@@ -1,7 +1,5 @@
 package net.oschina.app.improve.user.fragments;
 
-import android.view.View;
-
 import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.api.remote.OSChinaApi;
@@ -24,9 +22,9 @@ import java.lang.reflect.Type;
 public class UserMentionFragment extends BaseRecyclerViewFragment<Mention> {
 
     @Override
-    protected void initWidget(View root) {
-        super.initWidget(root);
-        NoticeManager.clear(getContext(),NoticeManager.FLAG_CLEAR_MENTION);
+    public void onResume() {
+        super.onResume();
+        NoticeManager.clear(getContext(), NoticeManager.FLAG_CLEAR_MENTION);
     }
 
     @Override
