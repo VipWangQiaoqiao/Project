@@ -2,12 +2,10 @@ package net.oschina.app.improve.user.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Parcelable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.View;
 import android.view.ViewGroup;
 
 import net.oschina.app.R;
@@ -57,6 +55,13 @@ public class UserMessageActivity extends BaseBackActivity {
 
         tabLayout.setupWithViewPager(vp_user_message);
         vp_user_message.setAdapter(mAdapter);
+        int currentView = 0;
+        if (mNotice.getReview() > 0) {
+            currentView = 1;
+        } else if (mNotice.getLetter() > 0) {
+            currentView = 2;
+        }
+        vp_user_message.setCurrentItem(currentView);
     }
 
     private FragmentStatePagerAdapter mAdapter = new FragmentStatePagerAdapter(getSupportFragmentManager()) {
