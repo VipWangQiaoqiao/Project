@@ -16,14 +16,22 @@ import android.util.Log;
 import android.view.animation.AccelerateInterpolator;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.main.MainActivity;
+
+import java.lang.reflect.Type;
 
 import cz.msebera.android.httpclient.Header;
 
+/**
+ * Created by JuQiu
+ * on 16/8/18.
+ */
 public class NoticeServer extends Service {
     private static final String TAG = NoticeServer.class.getName();
 
@@ -180,14 +188,18 @@ public class NoticeServer extends Service {
         OSChinaApi.getNotice(new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                log("onFailure:" + statusCode + " " + responseString);
                 doNetFinish(null);
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                log("onSuccess:" + statusCode + " " + responseString);
                 if (!TextUtils.isEmpty(responseString)) {
                     try {
-                        NoticeBean bean = new Gson().fromJson(responseString, NoticeBean.class);
+                        Type type = new TypeToken<ResultBean<NoticeBean>>() {
+                        }.getType();
+                        ResultBean<NoticeBean> bean = new Gson().fromJson(responseString, type);
                         doNetFinish(bean);
                     } catch (Exception e) {
                         onFailure(statusCode, headers, responseString, e.fillInStackTrace());
@@ -205,12 +217,14 @@ public class NoticeServer extends Service {
         });
     }
 
-    private void doNetFinish(NoticeBean bean) {
+    private void doNetFinish(ResultBean<NoticeBean> bean) {
         log("doNetFinish:" + (bean == null ? "null" : bean.toString()));
-
-        if (bean != null && bean.getAllCount() > 0) {
+        if (bean != null && bean.isSuccess()
+                && bean.getResult() != null
+                && bean.getResult().getAllCount() > 0) {
+            NoticeBean request = bean.getResult();
             NoticeBean notice = NoticeBean.getInstance(this)
-                    .add(bean)
+                    .add(request)
                     .save(this);
             // To register alarm
             registerCurrentAlarm(false);

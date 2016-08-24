@@ -7,14 +7,16 @@ import android.support.v4.content.SharedPreferencesCompat;
 import java.io.Serializable;
 
 /**
- * Created by JuQiu on 16/8/19.
+ * Created by JuQiu
+ * on 16/8/19.
+ * Note: like count always zero
  */
 public class NoticeBean implements Serializable {
     private int mention;
     private int letter;
     private int review;
     private int fans;
-    private int like;
+    private int like = 0;
 
     public int getMention() {
         return mention;
@@ -53,7 +55,7 @@ public class NoticeBean implements Serializable {
     }
 
     public void setLike(int like) {
-        this.like = like;
+        this.like = 0;
     }
 
     public int getAllCount() {

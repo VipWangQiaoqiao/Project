@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by JuQiu on 16/8/18.
+ * Created by JuQiu
+ * on 16/8/18.
  */
 public final class NoticeManager {
     public static final int FLAG_CLEAR_MENTION = 0x1;
@@ -23,6 +24,10 @@ public final class NoticeManager {
 
     static {
         INSTANCE = new NoticeManager();
+    }
+
+    private NoticeManager() {
+
     }
 
     private final List<NoticeNotify> mNotifies = new ArrayList<>();
