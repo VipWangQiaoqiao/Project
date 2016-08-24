@@ -9,7 +9,6 @@ import net.oschina.app.improve.bean.Mention;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.Comment;
-import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.user.adapter.UserMentionAdapter;
 
@@ -21,12 +20,6 @@ import java.lang.reflect.Type;
  */
 
 public class UserCommentFragment extends BaseRecyclerViewFragment<Mention> {
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        NoticeManager.clear(getContext(), NoticeManager.FLAG_CLEAR_REVIEW);
-    }
 
     @Override
     protected void requestData() {

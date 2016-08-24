@@ -10,7 +10,6 @@ import net.oschina.app.improve.bean.Message;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.Author;
-import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.user.activities.UserSendMessageActivity;
 import net.oschina.app.improve.user.adapter.UserMessageAdapter;
 
@@ -23,12 +22,6 @@ import java.lang.reflect.Type;
 
 public class UserMessageFragment extends BaseRecyclerViewFragment<Message> {
     public long authorId;
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        NoticeManager.clear(getContext(), NoticeManager.FLAG_CLEAR_LETTER);
-    }
 
     @Override
     public void initData() {

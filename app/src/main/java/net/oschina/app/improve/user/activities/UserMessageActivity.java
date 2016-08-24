@@ -62,6 +62,31 @@ public class UserMessageActivity extends BaseBackActivity {
             currentView = 2;
         }
         vp_user_message.setCurrentItem(currentView);
+        vp_user_message.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    if (mNotice.getMention() > 0)
+                        NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_MENTION);
+                } else if (position == 1) {
+                    if (mNotice.getReview() > 0)
+                        NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_REVIEW);
+                } else {
+                    if (mNotice.getLetter() > 0)
+                        NoticeManager.clear(getApplicationContext(), NoticeManager.FLAG_CLEAR_LETTER);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     private FragmentStatePagerAdapter mAdapter = new FragmentStatePagerAdapter(getSupportFragmentManager()) {
