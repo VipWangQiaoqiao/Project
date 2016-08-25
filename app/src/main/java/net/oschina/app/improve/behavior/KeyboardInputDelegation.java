@@ -55,6 +55,10 @@ public class KeyboardInputDelegation {
         return delegator;
     }
 
+    public void setBehavior(CoordinatorLayout.Behavior behavior){
+        ((CoordinatorLayout.LayoutParams)mWrapperView.getLayoutParams()).setBehavior(behavior);
+    }
+
     public void showEmoji(FragmentManager fragManager) {
         if (mKeyboardFrame == null)
             mKeyboardFrame = (FrameLayout) mWrapperView.findViewById(R.id.emoji_keyboard_fragment);

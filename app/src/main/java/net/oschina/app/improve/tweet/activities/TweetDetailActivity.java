@@ -31,6 +31,7 @@ import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.TweetComment;
 import net.oschina.app.improve.bean.simple.TweetLike;
+import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
 import net.oschina.app.improve.media.ImageGalleryActivity;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
@@ -208,6 +209,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
 
     protected void initWidget() {
         mDelegation = KeyboardInputDelegation.delegation(this, mCoordinatorLayout, mFrameLayout);
+        mDelegation.setBehavior(new FloatingAutoHideDownBehavior());
         mDelegation.showEmoji(getSupportFragmentManager());
         mDelegation.setAdapter(new KeyboardInputDelegation.KeyboardInputAdapter() {
             @Override

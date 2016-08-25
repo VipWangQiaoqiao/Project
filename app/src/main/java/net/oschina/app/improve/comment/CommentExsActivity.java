@@ -25,6 +25,7 @@ import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.CommentEX;
+import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
 import net.oschina.app.widget.TweetTextView;
@@ -84,6 +85,7 @@ public class CommentExsActivity extends BaseBackActivity {
         mLayComments.setAdapter(mAdapter);
 
         mDelegation = KeyboardInputDelegation.delegation(this, mCoorLayout, mRefreshLayout);
+        mDelegation.setBehavior(new FloatingAutoHideDownBehavior());
         mDelegation.setAdapter(new KeyboardInputDelegation.KeyboardInputAdapter() {
             @Override
             public void onSubmit(TextView v, String content) {
