@@ -27,6 +27,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.CommentEX;
+import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
 import net.oschina.app.improve.tweet.adapter.TweetCommentAdapter;
 import net.oschina.app.improve.widget.OWebView;
@@ -157,6 +158,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
         tvCmnCount.setText("评论 (" + (comment.getReply() == null ? 0 : comment.getReply().length) + ")");
 
         mDelegation = KeyboardInputDelegation.delegation(this, mCoorLayout, mScrollView);
+        mDelegation.setBehavior(new FloatingAutoHideDownBehavior());
         mDelegation.setAdapter(new KeyboardInputDelegation.KeyboardInputAdapter() {
             @Override
             public void onSubmit(TextView v, String content) {

@@ -7,8 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
     android:background="#FFF"
-    android:orientation="vertical"
-    app:layout_behavior="net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior">
+    android:orientation="vertical">
 
     <View
         android:layout_width="match_parent"

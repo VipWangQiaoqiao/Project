@@ -26,6 +26,10 @@ public class FloatingAutoHideDownBehavior extends CoordinatorLayout.Behavior<Vie
         super();
     }
 
+    public FloatingAutoHideDownBehavior() {
+        super();
+    }
+
     @Override
     public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, View child, View target, int dx, int dy, int[] consumed) {
         super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed);
@@ -81,14 +85,6 @@ public class FloatingAutoHideDownBehavior extends CoordinatorLayout.Behavior<Vie
         }
         return super.layoutDependsOn(parent, child, dependency);
     }
-
-    @Override
-    public void onNestedScroll(final CoordinatorLayout coordinatorLayout, final View child,
-                               final View target, final int dxConsumed, final int dyConsumed,
-                               final int dxUnconsumed, final int dyUnconsumed) {
-        super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
-    }
-
 
     @Override
     public boolean onStartNestedScroll(final CoordinatorLayout coordinatorLayout, final View child,
