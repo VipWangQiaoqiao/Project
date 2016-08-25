@@ -11,7 +11,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="81dp"
-        android:background="@color/actionbar_background"
+        android:background="@color/tweet_publish_title_bg"
         android:paddingTop="25dp">
 
         <net.qiujuer.genius.ui.widget.ImageView
