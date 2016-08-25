@@ -3,6 +3,7 @@ package net.oschina.app.improve.user.fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.api.remote.OSChinaApi;
@@ -11,9 +12,18 @@ import net.oschina.app.improve.base.fragments.BaseRecyclerViewFragment;
 import net.oschina.app.improve.bean.Active;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.detail.activities.BlogDetailActivity;
+import net.oschina.app.improve.detail.activities.EventDetailActivity;
+import net.oschina.app.improve.detail.activities.NewsDetailActivity;
+import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
+import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
+import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.user.adapter.UserActiveAdapter;
+import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;
+
+import static net.oschina.app.improve.bean.Active.Origin;
 
 /**
  * 某用户的动态(讨论)列表
@@ -25,7 +35,7 @@ public class UserActiveFragment extends BaseRecyclerViewFragment<Active> {
 
     private long uid;
 
-    public static Fragment instantiate(Long uid){
+    public static Fragment instantiate(Long uid) {
         Bundle bundle = new Bundle();
         bundle.putLong(BUNDLE_KEY_USER_ID, uid);
         Fragment fragment = new UserActiveFragment();
@@ -41,22 +51,51 @@ public class UserActiveFragment extends BaseRecyclerViewFragment<Active> {
 
     @Override
     protected BaseRecyclerAdapter<Active> getRecyclerAdapter() {
-        return new UserActiveAdapter(getContext(), BaseRecyclerAdapter.ONLY_FOOTER);
+        return new UserActiveAdapter(getContext(), Glide.with(this));
     }
 
     @Override
     protected Type getType() {
-        return new TypeToken<ResultBean<PageBean<Active>>>(){}.getType();
+        return new TypeToken<ResultBean<PageBean<Active>>>() {
+        }.getType();
     }
 
     @Override
     protected void requestData() {
-        OSChinaApi.getUserActives(uid, null, mHandler);
+        OSChinaApi.getUserActives(uid, mBean.getNextPageToken(), mHandler);
     }
 
     @Override
-    public void onLoadMore() {
-        OSChinaApi.getUserActives(uid, mBean.getNextPageToken(), mHandler);
+    public void onItemClick(int position, long itemId) {
+        Origin origin = mAdapter.getItem(position).getOrigin();
+        switch (origin.getType()) {
+            case Origin.ORIGIN_TYPE_LINK:
+                UIHelper.showUrlRedirect(getContext(), origin.getHref());
+                break;
+            case Origin.ORIGIN_TYPE_SOFTWARE:
+                SoftwareDetailActivity.show(getContext(), origin.getId());
+                break;
+            case Origin.ORIGIN_TYPE_DISCUSS:
+                QuestionDetailActivity.show(getContext(), origin.getId());
+                break;
+            case Origin.ORIGIN_TYPE_BLOG:
+                BlogDetailActivity.show(getContext(), origin.getId());
+                break;
+            case Origin.ORIGIN_TYPE_TRANSLATION:
+                NewsDetailActivity.show(getContext(), origin.getId());
+                break;
+            case Origin.ORIGIN_TYPE_ACTIVE:
+                EventDetailActivity.show(getContext(), origin.getId());
+                break;
+            case Origin.ORIGIN_TYPE_NEWS:
+                NewsDetailActivity.show(getContext(), origin.getId());
+                break;
+            case Origin.ORIGIN_TYPE_TWEETS:
+                TweetDetailActivity.show(getContext(), origin.getId());
+                break;
+            default:
+                // pass
+        }
     }
 
     @Override

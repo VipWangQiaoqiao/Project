@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -8,118 +7,78 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:padding="16dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_portrait"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:src="@mipmap/widget_dface"/>
+            android:src="@mipmap/widget_dface" />
 
         <LinearLayout
-            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_nick"
-                android:textSize="16sp"
-                android:textColor="#000"
-                tools:text="thanatosx"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:textSize="16sp"
+                tools:text="thanatosx" />
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:textColor="?attr/infoTextColor"
+                android:textSize="12sp"
+                android:visibility="visible"
+                tools:text="更新的动态" />
 
-                <TextView
-                    android:id="@+id/tv_action"
-                    tools:text="更新的动态"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="?attr/infoTextColor"
-                    android:textSize="12sp"
-                    android:visibility="visible" />
-
-                <TextView
-                    android:id="@+id/tv_action_name"
-                    tools:text="Action Name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="?attr/infoTextColor"
-                    android:textSize="12sp" />
-            </LinearLayout>
-
-            <net.oschina.app.widget.TweetTextView
+            <TextView
                 android:id="@+id/tv_content"
-                tools:text="TweetTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:textColor="?attr/textColor"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                tools:text="this is content" />
 
-            <net.oschina.app.widget.TweetTextView
+            <TextView
                 android:id="@+id/tv_reply"
-                tools:text="\@Someone Reply Content"
-                android:paddingTop="12dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingBottom="8dp"
-                android:focusable="false"
-                android:background="?attr/comment_reply_container_bg"
-                android:layout_marginTop="4dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:focusableInTouchMode="false"
-                android:textColor="?attr/textColor"
-                android:textSize="12sp" />
-
-            <ImageView
-                android:id="@+id/iv_pic"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:background="?attr/comment_reply_container_bg"
                 android:layout_marginTop="4dp"
-                android:contentDescription="@null"
-                android:scaleType="centerCrop"
+                android:paddingTop="12dp"
+                android:paddingLeft="6dp"
+                android:paddingRight="6dp"
+                android:paddingBottom="6dp"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                tools:text="来至于什么什么动弹"
+                android:textColor="?attr/textColor"
+                android:textSize="@dimen/text_size_13"
                 android:visibility="gone"
                 tools:visibility="visible"/>
 
-            <RelativeLayout
+            <TextView
+                android:id="@+id/tv_time"
                 android:layout_marginTop="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/tv_time"
-                    tools:text="6小时前"
-                    android:textColor="?attr/infoTextColor"
-                    android:textSize="12sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:id="@+id/tv_comment_count"
-                    tools:text="0"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:drawablePadding="4dp"
-                    android:drawableLeft="@mipmap/ic_comment_30"
-                    android:drawableStart="@mipmap/ic_comment_30"
-                    android:textColor="?attr/infoTextColor"
-                    android:textSize="12sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </RelativeLayout>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/infoTextColor"
+                android:textSize="12sp"
+                tools:text="6小时前" />
         </LinearLayout>
     </LinearLayout>
 
@@ -130,3 +89,5 @@
         android:layout_marginStart="16dp"
         android:background="@color/list_divider_color" />
 </LinearLayout>
+
+
