@@ -27,7 +27,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class BlogDetailActivity extends DetailActivity<BlogDetail, BlogDetailContract.View> implements BlogDetailContract.Operator {
 
-    private static final String TAG = "BlogDetailActivity";
+    //private static final String TAG = "BlogDetailActivity";
 
     public static void show(Context context, long id) {
         Intent intent = new Intent(context, BlogDetailActivity.class);

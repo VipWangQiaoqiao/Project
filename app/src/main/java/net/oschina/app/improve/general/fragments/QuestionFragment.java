@@ -215,7 +215,7 @@ public class QuestionFragment extends BaseGeneralListFragment<Question> {
             TextView content = (TextView) view.findViewById(R.id.tv_ques_item_content);
             updateTextColor(title, content);
             verifyCacheType();
-            saveToReadedList(CACHE_NAME, question.getId() + "");
+            saveToReadedList(CACHE_NAME, String.valueOf(question.getId()));
         }
     }
 }

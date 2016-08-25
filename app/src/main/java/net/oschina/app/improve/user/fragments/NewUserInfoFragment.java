@@ -202,11 +202,28 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         }
 
         mTvSummary.setText(userInfo.getDesc());
-        mTvScore.setText(String.format("%s  %d", getString(R.string.user_score), userInfo.getScore()));
-        mTvStweetCount.setText(userInfo.getTweetCount() + "");
-        mTvFavoriteCount.setText(userInfo.getCollectCount() + "");
-        mTvFollowCount.setText(userInfo.getFollowCount() + "");
-        mTvFollowerCount.setText(userInfo.getFansCount() + "");
+        mTvScore.setText(String.format("%s  %s", getString(R.string.user_score), formatCount(userInfo.getScore())));
+
+        mTvStweetCount.setText(formatCount(userInfo.getTweetCount()));
+        mTvFavoriteCount.setText(formatCount(userInfo.getCollectCount()));
+        mTvFollowCount.setText(formatCount(userInfo.getFollowCount()));
+        mTvFollowerCount.setText(formatCount(userInfo.getFansCount()));
+
+    }
+
+    /**
+     * format count
+     *
+     * @param count count
+     * @return formatCount
+     */
+    private String formatCount(long count) {
+
+        if (count > 10000) {
+            return String.format("%d%s", (count / 1000), "k");
+        } else {
+            return String.valueOf(count);
+        }
 
     }
 
@@ -309,7 +326,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
     @Override
     protected void initData() {
-        super.initData();
+        //super.initData();
         sendRequestData();
     }
 
@@ -502,7 +519,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         Uri uri = Uri.fromFile(out);
         origUri = uri;
 
-        String theLarge = savePath + fileName;
+        //  String theLarge = savePath + fileName;
 
         intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
@@ -656,7 +673,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
             if (fans > 0) {
                 int tempCount = Integer.parseInt(mTvFollowerCount.getText().toString(), 2);
                 int soCount = tempCount + fans;
-                mTvFollowerCount.setText(soCount + "");
+                mTvFollowerCount.setText(String.valueOf(soCount));
                 if (mFansView != null)
                     mFansView.setVisibility(View.VISIBLE);
             }

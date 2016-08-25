@@ -22,8 +22,8 @@ import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.general.adapter.NewsAdapter;
-import net.oschina.app.util.UIHelper;
 import net.oschina.app.improve.widget.ViewNewsHeader;
+import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;
 
@@ -113,7 +113,7 @@ public class NewsFragment extends BaseGeneralListFragment<News> {
             TextView title = (TextView) view.findViewById(R.id.tv_title);
             TextView content = (TextView) view.findViewById(R.id.tv_description);
             updateTextColor(title, content);
-            saveToReadedList(HISTORY_NEWS, news.getId() + "");
+            saveToReadedList(HISTORY_NEWS, String.valueOf(news.getId()));
         }
     }
 

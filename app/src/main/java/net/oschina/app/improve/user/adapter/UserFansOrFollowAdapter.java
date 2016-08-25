@@ -26,7 +26,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserFansOrFollowAdapter extends BaseRecyclerAdapter<UserFansOrFollows> {
 
-    private static final String TAG = "UserFansOrFollowAdapter";
+    //private static final String TAG = "UserFansOrFollowAdapter";
     private RequestManager requestManager;
 
     public UserFansOrFollowAdapter(Context context, int mode) {
@@ -89,7 +89,7 @@ public class UserFansOrFollowAdapter extends BaseRecyclerAdapter<UserFansOrFollo
         TextView mTvExp;
 
 
-        public UserFansViewHolder(View itemView) {
+        UserFansViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
