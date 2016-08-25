@@ -1753,4 +1753,26 @@ public class OSChinaApi {
         ApiHttpClient.post("action/apiv2/user_edit_portrait", params, handler);
 
     }
+
+    public static final int TYPE_USER_FOLLOWS = 1;
+    public static final int TYPE_USER_FANS = 2;
+
+    /**
+     * @param type      {@link #TYPE_USER_FOLLOWS,#TYPE_USER_FANS}
+     * @param userId    userId
+     * @param pageToken pageToken
+     * @param handler   handler
+     */
+    public static void getUserFansOrFllows(int type, long userId, String pageToken, TextHttpResponseHandler handler) {
+        if (userId <= 0) return;
+        RequestParams params = new RequestParams();
+        params.put("id", userId);
+        params.put("token", pageToken);
+
+        String uri = "user_follows";
+        if (type == TYPE_USER_FANS) {
+            uri = "user_fans";
+        }
+        ApiHttpClient.get("action/apiv2/" + uri, params, handler);
+    }
 }

@@ -9,11 +9,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
@@ -257,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements
             TabSpec tab = mTabHost.newTabSpec(getString(mainTab.getResName()) + this.toString());
             View indicator = View.inflate(this, R.layout.tab_indicator, null);
             TextView title = (TextView) indicator.findViewById(R.id.tab_title);
-            ImageView icon = (ImageView) indicator.findViewById(R.id.iv_icon);
+            ImageView icon = (ImageView) indicator.findViewById(R.id.iv_user_flow_icon);
 
             Drawable drawable = this.getResources().getDrawable(mainTab.getResIcon());
             icon.setImageDrawable(drawable);
