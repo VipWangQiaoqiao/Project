@@ -24,26 +24,25 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tv_user_flow_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:gravity="center_vertical"
                 android:maxLines="1"
-                android:paddingBottom="4dp"
-                android:paddingTop="8dp"
                 android:textColor="@color/green_600"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 tools:text="葫芦娃" />
 
             <ImageView
                 android:id="@+id/iv_user_flow_sex"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="2dp"
                 app:srcCompat="@mipmap/userinfo_icon_male" />
 
         </LinearLayout>
@@ -53,6 +52,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
+            android:textColor="#111"
+            android:textSize="@dimen/font_14"
             tools:text="广东 深圳" />
 
         <TextView
@@ -61,6 +62,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:gravity="center_vertical"
+            android:textColor="@color/count_text_color_light"
+            android:textSize="@dimen/font_12"
             tools:text="CEO CTO" />
 
         <TextView
@@ -69,6 +72,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:gravity="center_vertical"
+            android:textColor="@color/count_text_color_light"
+            android:textSize="@dimen/font_12"
             tools:text="这是一个大佬" />
 
         <View

@@ -1767,7 +1767,7 @@ public class OSChinaApi {
         if (userId <= 0) return;
         RequestParams params = new RequestParams();
         params.put("id", userId);
-        params.put("token", pageToken);
+        params.put("pageToken", pageToken);
 
         String uri = "user_follows";
         if (type == TYPE_USER_FANS) {

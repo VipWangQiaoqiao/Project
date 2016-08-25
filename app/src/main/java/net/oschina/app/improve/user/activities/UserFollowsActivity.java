@@ -58,12 +58,6 @@ public class UserFollowsActivity extends BaseRecyclerViewActivity<UserFansOrFoll
     }
 
     @Override
-    protected void initWidget() {
-        super.initWidget();
-
-    }
-
-    @Override
     protected void requestData() {
         super.requestData();
         OSChinaApi.getUserFansOrFllows(getRequestType(), userId, mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
