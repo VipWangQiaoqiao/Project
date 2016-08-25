@@ -29,7 +29,7 @@ public class NewsAdapter extends BaseListAdapter<News> {
     @Override
     protected void convert(ViewHolder vh, News item, int position) {
         //    vh.setText(R.id.tv_title, item.getTitle());
-        if (AppContext.isOnReadedPostList(NewsFragment.HISTORY_NEWS, item.getId() + "")) {
+        if (AppContext.isOnReadedPostList(NewsFragment.HISTORY_NEWS, String.valueOf(item.getId()))) {
             vh.setTextColor(R.id.tv_title, mCallback.getContext().getResources().getColor(R.color.count_text_color_light));
             vh.setTextColor(R.id.tv_description, mCallback.getContext().getResources().getColor(R.color.count_text_color_light));
         } else {

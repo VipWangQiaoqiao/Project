@@ -86,7 +86,7 @@ public class EventFragment extends BaseGeneralListFragment<Event> {
             EventDetailActivity.show(getActivity(), event.getId());
             TextView title = (TextView) view.findViewById(R.id.tv_event_title);
             updateTextColor(title, null);
-            saveToReadedList(HISTORY_EVENT, event.getId() + "");
+            saveToReadedList(HISTORY_EVENT, String.valueOf(event.getId()));
         }
     }
 

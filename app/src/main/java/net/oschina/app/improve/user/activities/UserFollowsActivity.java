@@ -25,7 +25,7 @@ import java.lang.reflect.Type;
 public class UserFollowsActivity extends BaseRecyclerViewActivity<UserFansOrFollows> {
 
     public static final String BUNDLE_KEY_ID = "bundle_key_id";
-    private static final String TAG = "UserFollowsActivity";
+    // private static final String TAG = "UserFollowsActivity";
     private long userId;
 
 

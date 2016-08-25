@@ -64,7 +64,7 @@ public class QuestionAdapter extends BaseListAdapter<Question> {
             cacheName = UserQuestionFragment.HISTORY_MY_QUESTION;
         }
 
-        if (AppContext.isOnReadedPostList(cacheName, item.getId() + "")) {
+        if (AppContext.isOnReadedPostList(cacheName, String.valueOf(item.getId()))) {
             title.setTextColor(mCallback.getContext().getResources().getColor(R.color.count_text_color_light));
             content.setTextColor(mCallback.getContext().getResources().getColor(R.color.count_text_color_light));
         } else {
@@ -79,9 +79,9 @@ public class QuestionAdapter extends BaseListAdapter<Question> {
             history.setText((author.length() > 9 ? author.substring(0, 9) : author.trim()) + "  " + StringUtils.formatSomeAgo(item.getPubDate().trim()));
         }
         TextView see = vh.getView(R.id.tv_info_view);
-        see.setText(item.getViewCount() + "");
+        see.setText(String.valueOf(item.getViewCount()));
         TextView answer = vh.getView(R.id.tv_info_comment);
-        answer.setText(item.getCommentCount() + "");
+        answer.setText(String.valueOf(item.getCommentCount()));
     }
 
 

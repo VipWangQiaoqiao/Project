@@ -111,8 +111,8 @@ public class BlogAdapter extends BaseListAdapter<Blog> {
                     "  " + StringUtils.formatSomeAgo(item.getPubDate().trim()));
         }
 
-        see.setText(item.getViewCount() + "");
-        answer.setText(item.getCommentCount() + "");
+        see.setText(String.valueOf(item.getViewCount()));
+        answer.setText(String.valueOf(item.getCommentCount()));
     }
 
     @Override

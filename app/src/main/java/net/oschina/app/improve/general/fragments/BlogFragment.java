@@ -219,7 +219,7 @@ public class BlogFragment extends BaseGeneralListFragment<Blog> {
             TextView content = (TextView) view.findViewById(R.id.tv_item_blog_body);
             updateTextColor(title, content);
             verifyCacheType();
-            saveToReadedList(CACHE_NAME, blog.getId() + "");
+            saveToReadedList(CACHE_NAME, String.valueOf(blog.getId()));
         }
 
     }
