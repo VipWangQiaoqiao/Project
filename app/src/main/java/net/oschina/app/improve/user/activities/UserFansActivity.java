@@ -3,6 +3,7 @@ package net.oschina.app.improve.user.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -53,13 +54,13 @@ public class UserFansActivity extends BaseRecyclerViewActivity<UserFansOrFollows
     @Override
     protected boolean initBundle(Bundle bundle) {
         userId = bundle.getLong(BUNDLE_KEY_ID, 0);
-        // Log.e(TAG, "initBundle: ---------->userId=" + userId);
         return super.initBundle(bundle);
     }
 
     @Override
     protected void requestData() {
         super.requestData();
+        Log.e(TAG, "requestData: ----->isRefresh=" + mIsRefresh + " preToken=" + mBean.getPrevPageToken() + " nextToken=" + mBean.getNextPageToken());
         OSChinaApi.getUserFansOrFllows(getRequestType(), userId, mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
     }
 
