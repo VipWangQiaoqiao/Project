@@ -55,13 +55,6 @@ public class UserMessageActivity extends BaseBackActivity {
 
         tabLayout.setupWithViewPager(vp_user_message);
         vp_user_message.setAdapter(mAdapter);
-        int currentView = 0;
-        if (mNotice.getReview() > 0) {
-            currentView = 1;
-        } else if (mNotice.getLetter() > 0) {
-            currentView = 2;
-        }
-        vp_user_message.setCurrentItem(currentView);
         vp_user_message.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -87,6 +80,14 @@ public class UserMessageActivity extends BaseBackActivity {
 
             }
         });
+        int currentView = 0;
+        if (mNotice.getReview() > 0) {
+            currentView = 1;
+        } else if (mNotice.getLetter() > 0) {
+            currentView = 2;
+        }
+        vp_user_message.setCurrentItem(currentView);
+
     }
 
     private FragmentStatePagerAdapter mAdapter = new FragmentStatePagerAdapter(getSupportFragmentManager()) {
