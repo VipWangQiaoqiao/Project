@@ -74,6 +74,7 @@ public class FlowLayout extends ViewGroup {
         int childLeft = paddingLeft;
         int childTop = paddingTop;
         int lineHeight = 0;
+        final int contentWidth = selfWidth - paddingRight - paddingLeft;
 
         //通过计算每一个子控件的高度，得到自己的高度
         for (int i = 0, childCount = getChildCount(); i < childCount; ++i) {
@@ -86,20 +87,21 @@ public class FlowLayout extends ViewGroup {
                             childLayoutParams.height));
             int childWidth = childView.getMeasuredWidth();
             int childHeight = childView.getMeasuredHeight();
-
             lineHeight = Math.max(childHeight, lineHeight);
 
-            if (childLeft + childWidth + paddingRight > selfWidth) {
-                childLeft = paddingLeft;
+            childLeft += childWidth;
+            if (childLeft > contentWidth) {
+                childLeft = childWidth;
                 childTop += mVerticalSpacing + lineHeight;
                 lineHeight = childHeight;
             } else {
-                childLeft += childWidth + mHorizontalSpacing;
+                childLeft += mHorizontalSpacing;
             }
         }
 
         int wantedHeight = childTop + lineHeight + paddingBottom;
-        setMeasuredDimension(selfWidth, resolveSize(wantedHeight, heightMeasureSpec));
+        wantedHeight = resolveSize(wantedHeight, heightMeasureSpec);
+        setMeasuredDimension(selfWidth, wantedHeight);
     }
 
     @Override
