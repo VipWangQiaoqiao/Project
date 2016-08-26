@@ -275,11 +275,14 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
      * 跳转选择好友
      */
     private void toSelectFriends() {
+        Context context = getContext();
+        if (context == null)
+            return;
         if (!AppContext.getInstance().isLogin()) {
-            UIHelper.showLoginActivity(getContext());
+            UIHelper.showLoginActivity(context);
             return;
         }
-        Intent intent = new Intent(getContext(), SelectFriendsActivity.class);
+        Intent intent = new Intent(context, SelectFriendsActivity.class);
         startActivityForResult(intent, SELECT_FRIENDS_REQUEST_CODE);
     }
 
