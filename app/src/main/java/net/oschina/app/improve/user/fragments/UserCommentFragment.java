@@ -8,7 +8,6 @@ import net.oschina.app.improve.base.fragments.BaseRecyclerViewFragment;
 import net.oschina.app.improve.bean.Mention;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.user.adapter.UserMentionAdapter;
 
@@ -40,7 +39,7 @@ public class UserCommentFragment extends BaseRecyclerViewFragment<Mention> {
 
     @Override
     protected Type getType() {
-        return new TypeToken<ResultBean<PageBean<Comment>>>() {
+        return new TypeToken<ResultBean<PageBean<Mention>>>() {
         }.getType();
     }
 }

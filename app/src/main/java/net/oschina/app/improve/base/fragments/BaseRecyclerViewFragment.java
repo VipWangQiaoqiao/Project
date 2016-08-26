@@ -2,6 +2,7 @@ package net.oschina.app.improve.base.fragments;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.loopj.android.http.TextHttpResponseHandler;

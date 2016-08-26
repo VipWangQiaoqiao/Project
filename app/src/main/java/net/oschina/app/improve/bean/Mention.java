@@ -16,6 +16,24 @@ public class Mention implements Serializable{
     private String pubDate;
     private Author author;
     private Origin origin;
+    private int appClient;
+    private int commentCount;
+
+    public int getAppClient() {
+        return appClient;
+    }
+
+    public void setAppClient(int appClient) {
+        this.appClient = appClient;
+    }
+
+    public int getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(int commentCount) {
+        this.commentCount = commentCount;
+    }
 
     public long getId() {
         return id;
