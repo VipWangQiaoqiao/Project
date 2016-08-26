@@ -34,7 +34,7 @@
             <LinearLayout
                 android:id="@+id/lay_about_info"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:background="@color/user_info_bg_color"
                 android:gravity="center_vertical"
@@ -47,7 +47,8 @@
                     <TextView
                         android:id="@+id/tv_tweet"
                         style="@style/user_formation_text"
-                        android:text="0" />
+                        android:text="0"
+                        android:textSize="@dimen/font_18" />
 
                     <TextView
                         style="@style/user_formation_info"
@@ -61,7 +62,8 @@
                     <TextView
                         android:id="@+id/tv_favorite"
                         style="@style/user_formation_text"
-                        android:text="0" />
+                        android:text="0"
+                        android:textSize="@dimen/font_18" />
 
                     <TextView
                         android:id="@+id/textView5"
@@ -76,7 +78,8 @@
                     <TextView
                         android:id="@+id/tv_following"
                         style="@style/user_formation_text"
-                        android:text="0" />
+                        android:text="0"
+                        android:textSize="@dimen/font_18" />
 
                     <TextView
                         style="@style/user_formation_info"
@@ -90,7 +93,6 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:paddingBottom="4dp"
                     android:paddingLeft="@dimen/lay_12"
                     android:paddingRight="@dimen/lay_12"
                     android:paddingTop="4dp">
@@ -106,7 +108,7 @@
                             android:layout_gravity="center"
                             android:text="0"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/font_12" />
+                            android:textSize="@dimen/font_18" />
 
                         <View
                             android:id="@+id/user_info_notice_fans"
