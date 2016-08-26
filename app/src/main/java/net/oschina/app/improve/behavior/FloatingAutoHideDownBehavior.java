@@ -23,7 +23,7 @@ public class FloatingAutoHideDownBehavior extends CoordinatorLayout.Behavior<Vie
     private boolean mIsScrollToBottom = false;
 
     public FloatingAutoHideDownBehavior(Context context, AttributeSet attrs) {
-        super();
+        super(context, attrs);
     }
 
     public FloatingAutoHideDownBehavior() {
