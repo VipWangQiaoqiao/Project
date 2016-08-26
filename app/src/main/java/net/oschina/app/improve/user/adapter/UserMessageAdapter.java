@@ -65,7 +65,10 @@ public class UserMessageAdapter extends BaseGeneralRecyclerAdapter<Message> {
 
     protected void parseAtUserContent(TweetTextView textView, String text) {
         String content = "";
-        if (TextUtils.isEmpty(text)) return;
+        if (TextUtils.isEmpty(text)) {
+            textView.setText("[图片]");
+            return;
+        }
         content = text.replaceAll("[\n\\s]+", " ").replaceAll("<[^<>]+>([^<>]*)</[^<>]+>", "$1");
         textView.setText(InputHelper.displayEmoji(mCallBack.getContext().getResources(), content));
         textView.setMovementMethod(LinkMovementMethod.getInstance());
