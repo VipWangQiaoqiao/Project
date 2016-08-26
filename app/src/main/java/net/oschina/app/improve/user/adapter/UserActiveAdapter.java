@@ -4,21 +4,23 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import com.bumptech.glide.RequestManager;
+
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.Active;
+import net.oschina.app.improve.bean.simple.Origin;
 import net.oschina.app.util.StringUtils;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
-import static net.oschina.app.improve.bean.Active.Origin;
 
 /**
  * Created by thanatos on 16/7/14.
@@ -66,7 +68,7 @@ public class UserActiveAdapter extends BaseRecyclerAdapter<Active> {
 
     }
 
-    private CharSequence getWhichTitle(final Active.Origin origin) {
+    private CharSequence getWhichTitle(Origin origin) {
         if (origin == null) return "更新了动态";
         String desc = "在%s%s内发表了评论";
         String which;

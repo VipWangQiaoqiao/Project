@@ -37,6 +37,7 @@ public class KeyboardInputDelegation {
     private ImageView mViewShare;
     private ImageView mViewFavor;
     private ImageView mViewEmoji;
+    private ImageView mViewPic;
     private FrameLayout mKeyboardFrame;
 
     private KeyboardActionDelegation mActionDelegation;
@@ -118,6 +119,14 @@ public class KeyboardInputDelegation {
             mViewFavor = (ImageView) mWrapperView.findViewById(R.id.iv_fav);
         if (l != null) mViewFavor.setOnClickListener(l);
         mViewFavor.setVisibility(View.VISIBLE);
+    }
+
+    public void showPic(View.OnClickListener l){
+        if (mViewPic == null){
+            mViewPic = (ImageView) mWrapperView.findViewById(R.id.iv_pic);
+        }
+        if (l != null) mViewPic.setOnClickListener(l);
+        mViewPic.setVisibility(View.VISIBLE);
     }
 
     private void setWrapperView(View view) {

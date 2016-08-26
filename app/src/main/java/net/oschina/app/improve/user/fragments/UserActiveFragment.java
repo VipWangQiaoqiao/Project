@@ -12,6 +12,7 @@ import net.oschina.app.improve.base.fragments.BaseRecyclerViewFragment;
 import net.oschina.app.improve.bean.Active;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.bean.simple.Origin;
 import net.oschina.app.improve.detail.activities.BlogDetailActivity;
 import net.oschina.app.improve.detail.activities.EventDetailActivity;
 import net.oschina.app.improve.detail.activities.NewsDetailActivity;
@@ -23,7 +24,6 @@ import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;
 
-import static net.oschina.app.improve.bean.Active.Origin;
 
 /**
  * 某用户的动态(讨论)列表
