@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -214,11 +215,14 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
             ImagePreviewView previewView = (ImagePreviewView) view.findViewById(R.id.iv_preview);
             previewView.setOnReachBorderListener(this);
             final Loading loading = (Loading) view.findViewById(R.id.loading);
+            final ImageView defaultView = (ImageView) view.findViewById(R.id.iv_default);
             getImageLoader().load(mImageSources[position])
                     .listener(new RequestListener<String, GlideDrawable>() {
                         @Override
                         public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
                             loading.stop();
+                            loading.setVisibility(View.GONE);
+                            defaultView.setVisibility(View.VISIBLE);
                             return false;
                         }
 
