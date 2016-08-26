@@ -112,8 +112,8 @@
 
                         <View
                             android:id="@+id/user_info_notice_fans"
-                            android:layout_width="4dp"
-                            android:layout_height="4dp"
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
                             android:layout_gravity="right|top"
                             android:layout_marginLeft="12dp"
                             android:background="@drawable/ic_red_dot" />
@@ -260,10 +260,11 @@
 
                 <View
                     android:id="@+id/user_info_notice_message"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
                     android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp" />
+                    android:layout_marginRight="4dp"
+                    android:background="@drawable/ic_red_dot" />
 
                 <View
                     android:layout_width="0dp"
