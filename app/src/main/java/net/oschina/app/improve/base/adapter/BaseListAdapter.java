@@ -23,6 +23,7 @@ import java.util.List;
 public abstract class BaseListAdapter<T> extends BaseAdapter implements ViewHolder.Callback {
     protected LayoutInflater mInflater;
     private List<T> mDatas;
+    private List<T> mPreData;
     protected Callback mCallback;
 
     public BaseListAdapter(Callback callback) {
@@ -86,7 +87,20 @@ public abstract class BaseListAdapter<T> extends BaseAdapter implements ViewHold
 
     public void addItem(List<T> items) {
         checkListNull();
-        mDatas.addAll(items);
+        if (items != null) {
+            List<T> date = new ArrayList<>();
+            if (mPreData != null) {
+                for (T d : items) {
+                    if (!mPreData.contains(d)) {
+                        date.add(d);
+                    }
+                }
+            } else {
+                date = items;
+            }
+            mPreData = items;
+            mDatas.addAll(date);
+        }
         notifyDataSetChanged();
     }
 
@@ -108,6 +122,7 @@ public abstract class BaseListAdapter<T> extends BaseAdapter implements ViewHold
         if (mDatas == null || mDatas.isEmpty()) {
             return;
         }
+        mPreData = null;
         mDatas.clear();
         notifyDataSetChanged();
     }

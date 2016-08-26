@@ -199,4 +199,12 @@ public class Tweet implements Serializable {
                 ", images=" + Arrays.toString(images) +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o != null && o instanceof Tweet){
+            return ((Tweet) o).getId() == id;
+        }
+        return false;
+    }
 }
