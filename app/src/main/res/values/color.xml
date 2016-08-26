@@ -105,6 +105,7 @@
     <color name="user_info_line_color">#6FDA93</color>
     <color name="user_info_item_bg_color">#F5F5F5</color>
     <color name="user_info_line_bg">#FF6FDA93</color>
+    <color name="user_info_message_notice">#E35B5A</color>
 
 
     <color name="tweet_indicator_text_color">#111111</color>

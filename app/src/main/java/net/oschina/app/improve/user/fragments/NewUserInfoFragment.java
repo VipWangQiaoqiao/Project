@@ -313,7 +313,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         mMesCount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
         mMesCount.setBadgePosition(BadgeView.POSITION_CENTER);
         mMesCount.setGravity(Gravity.CENTER);
-        mMesCount.setBackgroundResource(R.mipmap.notification_bg);
+        mMesCount.setBackgroundResource(R.drawable.ic_red_dot);
         mMesCount.hide(true);
         //mMesCount.show(true);
 
