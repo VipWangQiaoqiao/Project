@@ -165,6 +165,8 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
+                    android:lines="1"
+                    android:ellipsize="end"
                     android:textColor="#FFF"
                     android:visibility="gone"
                     tools:text="thanatosx"
@@ -183,7 +185,7 @@
         <android.support.design.widget.TabLayout
             android:id="@+id/layout_tab"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_height="56dp"
             android:background="#20B955"
             app:tabIndicatorHeight="0dp"
             app:tabTextAppearance="@style/TabItemAppearance"

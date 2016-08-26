@@ -56,16 +56,17 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class UserTweetAdapter extends BaseRecyclerAdapter<Tweet> {
 
-    private Bitmap recordBitmap;
+    private Bitmap mRecordBitmap;
     private OnTweetLikeClickListener listener;
-    private OnTweetImageClickListener imageClickListener;
+    private OnTweetImageClickListener mImageClickListener;
 
     public UserTweetAdapter(Context context, int mode) {
         super(context, mode);
+        initListener();
     }
 
     private void initListener() {
-        imageClickListener = new OnTweetImageClickListener() {
+        mImageClickListener = new OnTweetImageClickListener() {
             @Override
             public void onClick(View v, int position, int imagePosition) {
                 String[] images = Tweet.Image.getImagePath(getItem(position).getImages());
@@ -83,9 +84,9 @@ public class UserTweetAdapter extends BaseRecyclerAdapter<Tweet> {
     }
 
     private void initRecordImg(Context cxt) {
-        recordBitmap = BitmapFactory.decodeResource(cxt.getResources(),
+        mRecordBitmap = BitmapFactory.decodeResource(cxt.getResources(),
                 R.mipmap.audio3);
-        recordBitmap = ImageUtils.zoomBitmap(recordBitmap,
+        mRecordBitmap = ImageUtils.zoomBitmap(mRecordBitmap,
                 DensityUtils.dip2px(cxt, 20f), DensityUtils.dip2px(cxt, 20f));
     }
 
@@ -136,10 +137,10 @@ public class UserTweetAdapter extends BaseRecyclerAdapter<Tweet> {
         holder.mViewContent.setLongClickable(false);
 
         if (item.getAudio() != null) {
-            if (recordBitmap == null) {
+            if (mRecordBitmap == null) {
                 initRecordImg(mContext);
             }
-            ImageSpan recordImg = new ImageSpan(mContext, recordBitmap);
+            ImageSpan recordImg = new ImageSpan(mContext, mRecordBitmap);
             SpannableString str = new SpannableString("c");
             str.setSpan(recordImg, 0, 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
             holder.mViewContent.setText(str);
@@ -164,7 +165,7 @@ public class UserTweetAdapter extends BaseRecyclerAdapter<Tweet> {
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 imageView.setTag(R.id.iv_tweet_image, i);
                 imageView.setTag(R.id.iv_tweet_face, position);
-                imageView.setOnClickListener(imageClickListener);
+                imageView.setOnClickListener(mImageClickListener);
 
                 String path = images[i].getThumb();
                 DrawableRequestBuilder builder = Glide.with(mContext).load(path)
