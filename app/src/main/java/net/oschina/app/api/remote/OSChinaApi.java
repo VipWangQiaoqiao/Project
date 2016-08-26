@@ -1666,6 +1666,17 @@ public class OSChinaApi {
         ApiHttpClient.post("action/apiv2/messages_pub", params, handler);
     }
 
+    public static void pubMessage(long authorId, File content, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("authorId", authorId);
+        try {
+            params.put("file", content);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        ApiHttpClient.post("action/apiv2/messages_pub", params, handler);
+    }
+
     /**
      * 获取AT我的列表。
      *
