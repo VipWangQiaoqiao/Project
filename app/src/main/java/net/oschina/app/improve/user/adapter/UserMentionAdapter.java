@@ -11,6 +11,7 @@ import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.bean.Mention;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.bean.simple.Origin;
+import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.TweetTextView;
@@ -23,13 +24,29 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 public class UserMentionAdapter extends BaseGeneralRecyclerAdapter<Mention> {
+    private OnUserFaceClickListener mListener;
+
     public UserMentionAdapter(Callback callback) {
         super(callback, ONLY_FOOTER);
+        initListener();
+    }
+
+    private void initListener() {
+        mListener = new UserMentionAdapter.OnUserFaceClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Author author = getItem(position).getAuthor();
+                if(author != null)
+                OtherUserHomeActivity.show(mCallBack.getContext(), author.getId());
+            }
+        };
     }
 
     @Override
     protected RecyclerView.ViewHolder onCreateDefaultViewHolder(ViewGroup parent, int type) {
-        return new UserMentionAdapter.MentionViewHolder(mInflater.inflate(R.layout.item_list_comment, parent, false));
+        MentionViewHolder holder = new UserMentionAdapter.MentionViewHolder(mInflater.inflate(R.layout.item_list_comment, parent, false));
+        holder.iv_user_avatar.setTag(R.id.iv_face, holder);
+        return holder;
     }
 
     @Override
@@ -40,16 +57,16 @@ public class UserMentionAdapter extends BaseGeneralRecyclerAdapter<Mention> {
             mCallBack.getImgLoader().load(author.getPortrait()).asBitmap().placeholder(R.mipmap.widget_dface).into(viewHolder.iv_user_avatar);
             viewHolder.tv_user_name.setText(author.getName());
         }
+        viewHolder.iv_user_avatar.setOnClickListener(mListener);
         PlatfromUtil.setPlatFromString(viewHolder.tv_platform, item.getAppClient());
         viewHolder.tv_comment_count.setText(String.valueOf(item.getCommentCount()));
         viewHolder.tv_time.setText(StringUtils.formatSomeAgo(item.getPubDate()));
         parseAtUserContent(viewHolder.tv_content, item.getContent());
         Origin origin = item.getOrigin();
-        if (origin != null && !TextUtils.isEmpty(origin.getDesc())){
+        if (origin != null && !TextUtils.isEmpty(origin.getDesc())) {
             viewHolder.tv_origin.setVisibility(View.VISIBLE);
             parseAtUserContent(viewHolder.tv_origin, item.getOrigin().getDesc());
-        }
-        else{
+        } else {
             viewHolder.tv_origin.setVisibility(View.GONE);
         }
 
@@ -70,5 +87,15 @@ public class UserMentionAdapter extends BaseGeneralRecyclerAdapter<Mention> {
             tv_platform = (TextView) itemView.findViewById(R.id.tv_platform);
             tv_comment_count = (TextView) itemView.findViewById(R.id.tv_comment_count);
         }
+    }
+
+    private abstract class OnUserFaceClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            MentionViewHolder holder = (MentionViewHolder) v.getTag(R.id.iv_face);
+            onClick(v, holder.getAdapterPosition());
+        }
+
+        public abstract void onClick(View v, int position);
     }
 }

@@ -8,8 +8,15 @@ import net.oschina.app.improve.base.fragments.BaseRecyclerViewFragment;
 import net.oschina.app.improve.bean.Mention;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.bean.simple.Origin;
+import net.oschina.app.improve.detail.activities.BlogDetailActivity;
+import net.oschina.app.improve.detail.activities.EventDetailActivity;
+import net.oschina.app.improve.detail.activities.NewsDetailActivity;
+import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
+import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.improve.user.adapter.UserMentionAdapter;
+import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;
 
@@ -29,7 +36,35 @@ public class UserCommentFragment extends BaseRecyclerViewFragment<Mention> {
     @Override
     public void onItemClick(int position, long itemId) {
         Mention mention = mAdapter.getItem(position);
-        TweetDetailActivity.show(getContext(), mention.getId());
+        Origin origin = mention.getOrigin();
+        switch (origin.getType()) {
+            case Origin.ORIGIN_TYPE_LINK:
+                UIHelper.showUrlRedirect(getContext(), origin.getHref());
+                break;
+            case Origin.ORIGIN_TYPE_SOFTWARE:
+                SoftwareDetailActivity.show(getContext(), origin.getId());
+                break;
+            case Origin.ORIGIN_TYPE_DISCUSS:
+                QuestionDetailActivity.show(getContext(), origin.getId());
+                break;
+            case Origin.ORIGIN_TYPE_BLOG:
+                BlogDetailActivity.show(getContext(), origin.getId());
+                break;
+            case Origin.ORIGIN_TYPE_TRANSLATION:
+                NewsDetailActivity.show(getContext(), origin.getId());
+                break;
+            case Origin.ORIGIN_TYPE_ACTIVE:
+                EventDetailActivity.show(getContext(), origin.getId());
+                break;
+            case Origin.ORIGIN_TYPE_NEWS:
+                NewsDetailActivity.show(getContext(), origin.getId());
+                break;
+            case Origin.ORIGIN_TYPE_TWEETS:
+                TweetDetailActivity.show(getContext(), origin.getId());
+                break;
+            default:
+                // pass
+        }
     }
 
     @Override

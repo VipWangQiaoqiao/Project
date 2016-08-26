@@ -7,8 +7,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
+
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
+import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.bean.Message;
 import net.oschina.app.util.StringUtils;
@@ -71,7 +76,7 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
                 break;
             case SENDER_PICTURE:
                 SenderPictureViewHolder senderPictureViewHolder = (SenderPictureViewHolder) holder;
-                mCallBack.getImgLoader().load(item.getContent()).asBitmap().placeholder(R.mipmap.ic_default_image).into(senderPictureViewHolder.iv_sender_picture);
+                mCallBack.getImgLoader().load(getGlideUrl(item.getResource())).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.ic_default_image).into(senderPictureViewHolder.iv_sender_picture);
                 formatTime(preMessage, item, senderPictureViewHolder.tv_send_time);
                 break;
             case RECEIVER:
@@ -81,10 +86,14 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
                 break;
             case RECEIVER_PICTURE:
                 ReceiverPictureViewHolder receiverPictureViewHolder = (ReceiverPictureViewHolder) holder;
-                mCallBack.getImgLoader().load(item.getContent()).asBitmap().placeholder(R.mipmap.ic_default_image).into(receiverPictureViewHolder.iv_receiver_picture);
+                mCallBack.getImgLoader().load(getGlideUrl(item.getResource())).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.ic_default_image).into(receiverPictureViewHolder.iv_receiver_picture);
                 formatTime(preMessage, item, receiverPictureViewHolder.tv_send_time);
                 break;
         }
+    }
+
+    public GlideUrl getGlideUrl(String url) {
+        return new GlideUrl(url, new LazyHeaders.Builder().addHeader("Cookie", ApiHttpClient.getCookie(AppContext.getInstance())).build());
     }
 
     private void formatTime(Message preMessage, Message item, TextView tv_time) {
@@ -157,6 +166,7 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
     private static class SenderPictureViewHolder extends RecyclerView.ViewHolder {
         ImageView iv_sender_picture;
         TextView tv_send_time;
+
         public SenderPictureViewHolder(View itemView) {
             super(itemView);
             iv_sender_picture = (ImageView) itemView.findViewById(R.id.iv_sender_picture);
@@ -178,6 +188,7 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
     private static class ReceiverPictureViewHolder extends RecyclerView.ViewHolder {
         ImageView iv_receiver_picture;
         TextView tv_send_time;
+
         public ReceiverPictureViewHolder(View itemView) {
             super(itemView);
             iv_receiver_picture = (ImageView) itemView.findViewById(R.id.iv_receiver_picture);

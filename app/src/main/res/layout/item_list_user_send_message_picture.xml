@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
     android:layout_marginLeft="66dp"
     android:layout_marginRight="16dp"
@@ -22,13 +22,13 @@
 
     <ImageView
         android:id="@+id/iv_sender_picture"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:contentDescription="@string/send_message_to"
         android:maxHeight="156dp"
         android:maxWidth="128dp"
         android:minHeight="64dp"
         android:minWidth="64dp"
-        android:scaleType="fitCenter"
+        android:scaleType="centerInside"
         android:src="@mipmap/ic_launcher" />
 </LinearLayout>

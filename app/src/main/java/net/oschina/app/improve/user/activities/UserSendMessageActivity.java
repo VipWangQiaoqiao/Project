@@ -24,8 +24,11 @@ import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
+import net.oschina.app.improve.media.ImageGalleryActivity;
+import net.oschina.app.improve.media.SelectImageActivity;
 import net.oschina.app.improve.user.adapter.UserSendMessageAdapter;
 
+import java.io.File;
 import java.lang.reflect.Type;
 
 import butterknife.Bind;
@@ -88,6 +91,19 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
     protected void init() {
         mDelegation = KeyboardInputDelegation.delegation(this, mCoordinatorLayout, null);
         mDelegation.showEmoji(getSupportFragmentManager());
+        mDelegation.showPic(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SelectImageActivity.showImage(UserSendMessageActivity.this, 1, true, null, new SelectImageActivity.Callback() {
+                    @Override
+                    public void doSelectDone(String[] images) {
+                        mDialog.setMessage("正在发送中...");
+                        mDialog.show();
+                        OSChinaApi.pubMessage(mReceiver.getId(), new File(images[0]), mSendHandler);
+                    }
+                });
+            }
+        });
         mDelegation.setAdapter(new KeyboardInputDelegation.KeyboardInputAdapter() {
             @Override
             public void onSubmit(TextView v, String content) {
@@ -96,7 +112,7 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
                     Toast.makeText(UserSendMessageActivity.this, "请输入文字", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                mDialog.setTitle("正在发送中...");
+                mDialog.setMessage("正在发送中...");
                 mDialog.show();
                 OSChinaApi.pubMessage(mReceiver.getId(), content, mSendHandler);
             }
@@ -107,6 +123,14 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
             }
         });
         mViewInput = mDelegation.getInputView();
+    }
+
+    @Override
+    public void onItemClick(int position, long itemId) {
+        Message message = mAdapter.getItem(position);
+        if(Message.TYPE_IMAGE == message.getType()){
+            ImageGalleryActivity.show(this,message.getResource());
+        }
     }
 
     @Override
