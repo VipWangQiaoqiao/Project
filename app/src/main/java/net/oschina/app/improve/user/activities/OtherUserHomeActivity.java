@@ -40,6 +40,7 @@ import net.oschina.app.improve.user.fragments.UserQuestionFragment;
 import net.oschina.app.improve.user.fragments.UserTweetFragment;
 import net.oschina.app.improve.widget.SolarSystemView;
 import net.oschina.app.util.DialogHelp;
+import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 
 import java.util.ArrayList;
@@ -264,9 +265,14 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
         View view = tab.getCustomView();
         if (view == null) return;
         TabViewHolder holder = (TabViewHolder) view.getTag();
-        if (count > 10000){
-            count /= 1000;
-            holder.mViewCount.setText(count + "k");
+        if (count > 1000){
+            int a = count / 100;
+            int b = a % 10;
+            int c = a / 10;
+            String str = "";
+            if (c <= 9 && b != 0) str = c + "." + b;
+            else str = String.valueOf(c);
+            holder.mViewCount.setText(str + "k");
         }else {
             holder.mViewCount.setText(String.valueOf(count));
         }
@@ -368,10 +374,10 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_count_follow:
-                UIHelper.showFriends(this, (int) user.getId(), 0);
+                UserFollowsActivity.show(this, user.getId());
                 break;
             case R.id.tv_count_fans:
-                UIHelper.showFriends(this, (int) user.getId(), 1);
+                UserFansActivity.show(this, user.getId());
                 break;
         }
     }
