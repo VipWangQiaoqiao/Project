@@ -9,7 +9,6 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.view.WindowInsets;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
@@ -107,69 +106,89 @@ public class ClipView extends FrameLayout {
 
     }
 
+    private ValueAnimator mEnterAnimator;
+
     public void start(float startX, float startY) {
         if (mIsEnter) {
             return;
         }
         mIsEnter = true;
-        ValueAnimator animation = ValueAnimator.ofFloat(0f, 1f);
-        animation.setDuration(520);
-        animation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                mProgress = (float) animation.getAnimatedValue();
-                doUpdate(mProgress);
-            }
+        if (mEnterAnimator == null) {
+            ValueAnimator animation = ValueAnimator.ofFloat(0f, 1f);
+            animation.setDuration(520);
+            animation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    mProgress = (float) animation.getAnimatedValue();
+                    doUpdate(mProgress);
+                }
 
-        });
-        animation.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                mIsAnim = false;
-            }
+            });
+            animation.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    mIsAnim = false;
+                }
 
-            @Override
-            public void onAnimationStart(Animator animation) {
-                super.onAnimationStart(animation);
-                mIsAnim = true;
-            }
-        });
-        animation.setInterpolator(new DecelerateInterpolator());
-        animation.start();
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    super.onAnimationStart(animation);
+                    mIsAnim = true;
+                }
+            });
+            animation.setInterpolator(new DecelerateInterpolator());
+            mEnterAnimator = animation;
+        } else {
+            mEnterAnimator.cancel();
+            mEnterAnimator.setFloatValues(0f, 1f);
+        }
+        mEnterAnimator.start();
     }
+
+    private ValueAnimator mExitAnimator;
 
     public void exit(final Runnable runnable) {
         if (!mIsEnter) {
             return;
         }
         mIsEnter = false;
-        ValueAnimator animation = ValueAnimator.ofFloat(1f, 0f);
-        animation.setDuration(420);
-        animation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                mProgress = (float) animation.getAnimatedValue();
-                doUpdate(mProgress);
-            }
 
-        });
-        animation.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                mIsAnim = false;
-                runnable.run();
-            }
+        if (mEnterAnimator != null)
+            mEnterAnimator.cancel();
 
-            @Override
-            public void onAnimationStart(Animator animation) {
-                super.onAnimationStart(animation);
-                mIsAnim = true;
-            }
-        });
-        animation.setInterpolator(new AccelerateInterpolator());
-        animation.start();
+        if (mExitAnimator == null) {
+            ValueAnimator animation = ValueAnimator.ofFloat(mProgress, 0f);
+            animation.setDuration(420);
+            animation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    mProgress = (float) animation.getAnimatedValue();
+                    doUpdate(mProgress);
+                }
+
+            });
+            animation.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    mIsAnim = false;
+                    runnable.run();
+                }
+
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    super.onAnimationStart(animation);
+                    mIsAnim = true;
+                }
+            });
+            animation.setInterpolator(new AccelerateInterpolator());
+            mExitAnimator = animation;
+        } else {
+            mExitAnimator.cancel();
+            mExitAnimator.setFloatValues(mProgress, 0);
+        }
+        mExitAnimator.start();
     }
 
     @Override
@@ -182,6 +201,7 @@ public class ClipView extends FrameLayout {
         return super.fitSystemWindows(insets);
     }
 
+    /*
     @Override
     public final WindowInsets onApplyWindowInsets(WindowInsets insets) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
@@ -190,4 +210,5 @@ public class ClipView extends FrameLayout {
         }
         return insets;
     }
+    */
 }
