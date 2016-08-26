@@ -12,6 +12,8 @@ import net.oschina.app.improve.base.activities.BaseRecyclerViewActivity;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.notice.NoticeBean;
+import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.user.adapter.UserFansOrFollowAdapter;
 import net.oschina.app.improve.user.bean.UserFansOrFollows;
 
@@ -25,7 +27,6 @@ import java.lang.reflect.Type;
 public class UserFansActivity extends BaseRecyclerViewActivity<UserFansOrFollows> {
 
     public static final String BUNDLE_KEY_ID = "bundle_key_id";
-    //private static final String TAG = "UserFansActivity";
     private long userId;
 
 
@@ -57,9 +58,22 @@ public class UserFansActivity extends BaseRecyclerViewActivity<UserFansOrFollows
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        NoticeBean FansNotice = NoticeManager.getNotice();
+        if (FansNotice == null) return;
+        int fans = FansNotice.getFans();
+        if (fans > 0) {
+            NoticeManager.clear(this, NoticeManager.FLAG_CLEAR_FANS);
+        }
+
+    }
+
+
+    @Override
     protected void requestData() {
         super.requestData();
-        //  Log.e(TAG, "requestData: ----->isRefresh=" + mIsRefresh + " preToken=" + mBean.getPrevPageToken() + " nextToken=" + mBean.getNextPageToken());
         OSChinaApi.getUserFansOrFllows(getRequestType(), userId, mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
     }
 
@@ -80,4 +94,5 @@ public class UserFansActivity extends BaseRecyclerViewActivity<UserFansOrFollows
         if (item.getId() <= 0) return;
         OtherUserHomeActivity.show(this, item.getId());
     }
+
 }
