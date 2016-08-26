@@ -388,7 +388,7 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
                     UIHelper.showLoginActivity(this);
                     return true;
                 }
-                UIHelper.showMessageDetail(this, (int) user.getId(), user.getName());
+                UserSendMessageActivity.show(this, user);
                 break;
             case R.id.menu_follow:
                 // 判断登录
