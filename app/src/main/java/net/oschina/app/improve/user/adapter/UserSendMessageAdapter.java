@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.oschina.app.AppContext;
@@ -23,7 +24,9 @@ import java.util.List;
  */
 public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> {
     private static final int SENDER = 1;
-    private static final int RECEIVER = 2;
+    private static final int SENDER_PICTURE = 2;
+    private static final int RECEIVER = 3;
+    private static final int RECEIVER_PICTURE = 4;
     private long authorId;
 
     public UserSendMessageAdapter(Callback callback) {
@@ -33,14 +36,28 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
 
     @Override
     public int getItemViewType(int position) {
-        return getItem(position).getSender().getId() == authorId ? SENDER : RECEIVER;
+        Message item = getItem(position);
+        if (item.getSender().getId() == authorId) {//如果是个人发送的私信
+            if (Message.TYPE_IMAGE == item.getType())
+                return SENDER_PICTURE;
+            return SENDER;
+        } else {
+            if (Message.TYPE_IMAGE == item.getType())
+                return RECEIVER_PICTURE;
+            return RECEIVER;
+        }
     }
 
     @Override
     protected RecyclerView.ViewHolder onCreateDefaultViewHolder(ViewGroup parent, int type) {
         if (type == SENDER)
             return new SenderViewHolder(mInflater.inflate(R.layout.item_list_user_send_message, parent, false));
-        return new ReceiverViewHolder(mInflater.inflate(R.layout.item_list_receiver_message, parent, false));
+        else if (type == SENDER_PICTURE)
+            return new SenderPictureViewHolder(mInflater.inflate(R.layout.item_list_user_send_message_picture, parent, false));
+        else if (type == RECEIVER)
+            return new ReceiverViewHolder(mInflater.inflate(R.layout.item_list_receiver_message, parent, false));
+        else
+            return new ReceiverViewHolder(mInflater.inflate(R.layout.item_list_receiver_message_picture, parent, false));
     }
 
     @Override
@@ -50,23 +67,33 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
             case SENDER:
                 SenderViewHolder senderViewHolder = (SenderViewHolder) holder;
                 parseAtUserContent(senderViewHolder.tv_sender, item.getContent());
-                formatTime(preMessage,item,senderViewHolder.tv_send_time);
+                formatTime(preMessage, item, senderViewHolder.tv_send_time);
+                break;
+            case SENDER_PICTURE:
+                SenderPictureViewHolder senderPictureViewHolder = (SenderPictureViewHolder) holder;
+                mCallBack.getImgLoader().load(item.getContent()).asBitmap().placeholder(R.mipmap.ic_default_image).into(senderPictureViewHolder.iv_sender_picture);
+                formatTime(preMessage, item, senderPictureViewHolder.tv_send_time);
                 break;
             case RECEIVER:
                 ReceiverViewHolder receiverViewHolder = (ReceiverViewHolder) holder;
                 parseAtUserContent(receiverViewHolder.tv_receiver, item.getContent());
-                formatTime(preMessage,item,receiverViewHolder.tv_send_time);
+                formatTime(preMessage, item, receiverViewHolder.tv_send_time);
+                break;
+            case RECEIVER_PICTURE:
+                ReceiverPictureViewHolder receiverPictureViewHolder = (ReceiverPictureViewHolder) holder;
+                mCallBack.getImgLoader().load(item.getContent()).asBitmap().placeholder(R.mipmap.ic_default_image).into(receiverPictureViewHolder.iv_receiver_picture);
+                formatTime(preMessage, item, receiverPictureViewHolder.tv_send_time);
                 break;
         }
     }
 
     private void formatTime(Message preMessage, Message item, TextView tv_time) {
         tv_time.setVisibility(View.GONE);
-        if (preMessage == null ) {
+        if (preMessage == null) {
             formatTime(tv_time, item.getPubDate());
             tv_time.setVisibility(View.VISIBLE);
-        }else {
-            if(checkTime(preMessage.getPubDate(), item.getPubDate())){
+        } else {
+            if (checkTime(preMessage.getPubDate(), item.getPubDate())) {
                 formatTime(tv_time, item.getPubDate());
                 tv_time.setVisibility(View.VISIBLE);
             }
@@ -127,6 +154,16 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
         }
     }
 
+    private static class SenderPictureViewHolder extends RecyclerView.ViewHolder {
+        ImageView iv_sender_picture;
+        TextView tv_send_time;
+        public SenderPictureViewHolder(View itemView) {
+            super(itemView);
+            iv_sender_picture = (ImageView) itemView.findViewById(R.id.iv_sender_picture);
+            tv_send_time = (TextView) itemView.findViewById(R.id.tv_send_time);
+        }
+    }
+
     private static class ReceiverViewHolder extends RecyclerView.ViewHolder {
         TweetTextView tv_receiver;
         TextView tv_send_time;
@@ -134,6 +171,16 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
         public ReceiverViewHolder(View itemView) {
             super(itemView);
             tv_receiver = (TweetTextView) itemView.findViewById(R.id.tv_receiver);
+            tv_send_time = (TextView) itemView.findViewById(R.id.tv_send_time);
+        }
+    }
+
+    private static class ReceiverPictureViewHolder extends RecyclerView.ViewHolder {
+        ImageView iv_receiver_picture;
+        TextView tv_send_time;
+        public ReceiverPictureViewHolder(View itemView) {
+            super(itemView);
+            iv_receiver_picture = (ImageView) itemView.findViewById(R.id.iv_receiver_picture);
             tv_send_time = (TextView) itemView.findViewById(R.id.tv_send_time);
         }
     }

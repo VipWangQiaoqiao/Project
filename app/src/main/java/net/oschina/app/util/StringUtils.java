@@ -20,12 +20,9 @@ import java.util.regex.Pattern;
  * 字符串操作工具包
  *
  * @author liux (http://my.oschina.net/liux)
- * @version 1.0C
- * Created 2012-3-21
- *
  * @author thanatosx
  * @version 2.0
- * Updated 2016-08-11
+ *          Updated 2016-08-11
  */
 public class StringUtils {
     private final static Pattern emailer = Pattern
@@ -82,10 +79,11 @@ public class StringUtils {
 
     /**
      * YYYY-MM-DD HH:mm:ss格式的时间字符串转换为{@link Calendar}类型
+     *
      * @param str YYYY-MM-DD HH:mm:ss格式字符串
      * @return {@link Calendar}
      */
-    public static Calendar parseCalendar(String str){
+    public static Calendar parseCalendar(String str) {
         Matcher matcher = UniversalDatePattern.matcher(str);
         Calendar calendar = Calendar.getInstance();
         if (!matcher.find()) return null;
@@ -102,6 +100,7 @@ public class StringUtils {
 
     /**
      * transform date to string that's type like YYYY-MM-DD HH:mm:ss
+     *
      * @param date {@link Date}
      * @return
      */
@@ -111,10 +110,12 @@ public class StringUtils {
 
     /**
      * transform date to string that's type like YYYY-MM-DD HH:mm
+     *
      * @param sdate
      * @return
      */
     public static String getDateString(String sdate) {
+        if (TextUtils.isEmpty(sdate)) return "";
         return YYYYMMDDHHMM.get().format(toDate(sdate));
     }
 
@@ -130,24 +131,25 @@ public class StringUtils {
 
     /**
      * format time friendly
+     *
      * @param sdate YYYY-MM-DD HH:mm:ss
      * @return n分钟前, n小时前, 昨天, 前天, n天前, n个月前
      */
     public static String formatSomeAgo(@NonNull String sdate) {
-        if(sdate == null)return "";
+        if (sdate == null) return "";
         Calendar calendar = parseCalendar(sdate);
         if (calendar == null) return sdate;
 
         Calendar mCurrentDate = Calendar.getInstance();
         long diff = mCurrentDate.getTimeInMillis() - calendar.getTimeInMillis();
-        if (diff >= 0 && diff < AlarmManager.INTERVAL_HOUR){
+        if (diff >= 0 && diff < AlarmManager.INTERVAL_HOUR) {
             return String.format("%s分钟前", diff / 60 / 1000);
         }
-        if (diff >= AlarmManager.INTERVAL_HOUR && diff < AlarmManager.INTERVAL_DAY){
+        if (diff >= AlarmManager.INTERVAL_HOUR && diff < AlarmManager.INTERVAL_DAY) {
             return String.format("%s小时前", diff / AlarmManager.INTERVAL_HOUR);
         }
 
-        return  mCurrentDate.get(Calendar.YEAR) == calendar.get(Calendar.YEAR)
+        return mCurrentDate.get(Calendar.YEAR) == calendar.get(Calendar.YEAR)
                 ? mCurrentDate.get(Calendar.MONTH) == calendar.get(Calendar.MONTH)
                 ? mCurrentDate.get(Calendar.DATE) == calendar.get(Calendar.DATE)
                 ? "今天" // impossible reach
@@ -161,56 +163,51 @@ public class StringUtils {
     }
 
     /**
-     *
      * @param str YYYY-MM-DD HH:mm:ss string
      * @return 今天, 昨天, 前天, n天前
      */
-    public static String formatSomeDay(String str){
+    public static String formatSomeDay(String str) {
         return formatSomeDay(parseCalendar(str));
     }
 
     /**
-     *
      * @param calendar {@link Calendar}
      * @return 今天, 昨天, 前天, n天前
      */
-    public static String formatSomeDay(Calendar calendar){
+    public static String formatSomeDay(Calendar calendar) {
         if (calendar == null) return "?天前";
         Calendar mCurrentDate = Calendar.getInstance();
         int diff = mCurrentDate.get(Calendar.DATE) - calendar.get(Calendar.DATE);
-        if (diff == 0){
+        if (diff == 0) {
             return "今天";
         }
-        if (diff == 1){
+        if (diff == 1) {
             return "昨天";
         }
-        if (diff == 2){
+        if (diff == 2) {
             return "前天";
         }
         return diff + "天前";
     }
 
     /**
-     *
      * @param calendar {@link Calendar}
      * @return 星期n
      */
-    public static String formatWeek(Calendar calendar){
+    public static String formatWeek(Calendar calendar) {
         if (calendar == null) return "星期?";
         return new String[]{"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"}[calendar.get(Calendar.DAY_OF_WEEK) - 1];
     }
 
     /**
-     *
      * @param str YYYY-MM-DD HH:mm:ss string
      * @return 星期n
      */
-    public static String formatWeek(String str){
+    public static String formatWeek(String str) {
         return formatWeek(parseCalendar(str));
     }
 
     /**
-     *
      * @param sdate YYYY-MM-DD HH:mm:ss string
      * @return
      */
@@ -220,10 +217,10 @@ public class StringUtils {
         Calendar mCurrentDate = Calendar.getInstance();
         String ws = formatWeek(calendar);
         int diff = mCurrentDate.get(Calendar.DATE) - calendar.get(Calendar.DATE);
-        if (diff == 0){
+        if (diff == 0) {
             return "今天 / " + ws;
         }
-        if (diff == 1){
+        if (diff == 1) {
             return "昨天 / " + ws;
         }
         int m = calendar.get(Calendar.MONTH);
@@ -233,11 +230,12 @@ public class StringUtils {
 
     /**
      * format to HH
+     *
      * @param i integer
      * @return HH
      */
-    public static String formatInt(int i){
-        return (i < 10 ? "0": "") + i;
+    public static String formatInt(int i) {
+        return (i < 10 ? "0" : "") + i;
     }
 
 

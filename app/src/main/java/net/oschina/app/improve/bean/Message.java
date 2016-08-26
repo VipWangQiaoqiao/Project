@@ -10,6 +10,9 @@ import java.io.Serializable;
  * on 2016/8/16.
  */
 public class Message implements Serializable{
+    public static final int TYPE_TEXT = 1;
+    public static final int TYPE_IMAGE = 3;
+    public static final int TYPE_FILE = 5;
     private long id;
     private String content;
     private String pubDate;

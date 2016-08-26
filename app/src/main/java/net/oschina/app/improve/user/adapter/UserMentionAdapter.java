@@ -1,6 +1,7 @@
 package net.oschina.app.improve.user.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -9,6 +10,7 @@ import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.bean.Mention;
 import net.oschina.app.improve.bean.simple.Author;
+import net.oschina.app.improve.bean.simple.Origin;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.TweetTextView;
@@ -34,13 +36,23 @@ public class UserMentionAdapter extends BaseGeneralRecyclerAdapter<Mention> {
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Mention item, int position) {
         MentionViewHolder viewHolder = (MentionViewHolder) holder;
         Author author = item.getAuthor();
-        mCallBack.getImgLoader().load(author.getPortrait()).asBitmap().into(viewHolder.iv_user_avatar);
-        viewHolder.tv_user_name.setText(author.getName());
-        PlatfromUtil.setPlatFromString(viewHolder.tv_platform, 1);
-        viewHolder.tv_comment_count.setText(String.valueOf(2));
+        if (author != null) {
+            mCallBack.getImgLoader().load(author.getPortrait()).asBitmap().placeholder(R.mipmap.widget_dface).into(viewHolder.iv_user_avatar);
+            viewHolder.tv_user_name.setText(author.getName());
+        }
+        PlatfromUtil.setPlatFromString(viewHolder.tv_platform, item.getAppClient());
+        viewHolder.tv_comment_count.setText(String.valueOf(item.getCommentCount()));
         viewHolder.tv_time.setText(StringUtils.formatSomeAgo(item.getPubDate()));
         parseAtUserContent(viewHolder.tv_content, item.getContent());
-        parseAtUserContent(viewHolder.tv_origin, item.getOrigin().getDesc());
+        Origin origin = item.getOrigin();
+        if (origin != null && !TextUtils.isEmpty(origin.getDesc())){
+            viewHolder.tv_origin.setVisibility(View.VISIBLE);
+            parseAtUserContent(viewHolder.tv_origin, item.getOrigin().getDesc());
+        }
+        else{
+            viewHolder.tv_origin.setVisibility(View.GONE);
+        }
+
     }
 
     private static class MentionViewHolder extends RecyclerView.ViewHolder {

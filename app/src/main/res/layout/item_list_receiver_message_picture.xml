@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_marginBottom="12dp"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     android:layout_marginTop="12dp"
-    android:gravity="center_vertical"
     android:orientation="vertical">
 
     <TextView
@@ -20,19 +19,15 @@
         android:textSize="@dimen/font_12"
         android:visibility="gone" />
 
-    <net.oschina.app.widget.TweetTextView
-        android:id="@+id/tv_receiver"
+    <ImageView
+        android:id="@+id/iv_receiver_picture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="50dp"
-        android:background="@drawable/bg_balloon_left"
-        android:gravity="center_vertical"
-        android:lineSpacingExtra="6dp"
-        android:paddingBottom="8dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="18dp"
-        android:paddingTop="8dp"
-        android:text="您好"
-        android:textColor="?attr/textColor"
-        android:textSize="16sp" />
+        android:contentDescription="@string/send_message_to"
+        android:maxHeight="156dp"
+        android:maxWidth="128dp"
+        android:minHeight="64dp"
+        android:minWidth="64dp"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/ic_launcher" />
 </LinearLayout>
