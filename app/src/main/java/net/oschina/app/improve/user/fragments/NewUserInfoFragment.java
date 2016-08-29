@@ -179,6 +179,11 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     private boolean isUploadIcon;
     private ProgressDialog mDialog;
 
+    /**
+     * update the view
+     *
+     * @param userInfo userInfo
+     */
     private void updateView(UserInfo userInfo) {
 
         setImageFromNet(mCiOrtrait, userInfo.getPortrait(), R.mipmap.widget_dface);
@@ -219,7 +224,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
      */
     private String formatCount(long count) {
 
-        if (count > 10000) {
+        if (count > 1000) {
             return String.format("%d%s", (count / 1000), "k");
         } else {
             return String.valueOf(count);
@@ -315,7 +320,6 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         mMesCount.setGravity(Gravity.CENTER);
         mMesCount.setBackgroundResource(R.drawable.ic_red_dot);
         mMesCount.hide(true);
-        //mMesCount.show(true);
 
         if (mFansView != null)
             mFansView.setVisibility(View.INVISIBLE);
@@ -374,13 +378,9 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                             .getLoginUid());
                     break;
                 case R.id.ly_following:
-//                    UIHelper.showFriends(getActivity(), AppContext.getInstance()
-//                            .getLoginUid(), 0);
                     UserFollowsActivity.show(getActivity(), AppContext.getInstance().getLoginUid());
                     break;
                 case R.id.ly_follower:
-//                    UIHelper.showFriends(getActivity(), AppContext.getInstance()
-//                            .getLoginUid(), 1);
                     UserFansActivity.show(getActivity(), AppContext.getInstance().getLoginUid());
                     break;
                 case R.id.rl_message:
@@ -665,13 +665,12 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onNoticeArrived(NoticeBean bean) {
 
-        // Log.d(TAG, "onNoticeArrived: ---->bean=" + bean.toString());
         int allCount = bean.getAllCount();
         if (allCount > 0) {
             showMesCount();
             int fans = bean.getFans();
             if (fans > 0) {
-                int tempCount = Integer.parseInt(mTvFollowerCount.getText().toString(), 2);
+                int tempCount = Integer.parseInt(mTvFollowerCount.getText().toString());
                 int soCount = tempCount + fans;
                 mTvFollowerCount.setText(String.valueOf(soCount));
                 if (mFansView != null)
