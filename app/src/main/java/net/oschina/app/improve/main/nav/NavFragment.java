@@ -111,6 +111,11 @@ public class NavFragment extends BaseFragment implements View.OnClickListener, N
         doSelect(mNavNews);
     }
 
+    public void select(int index) {
+        if (mNavMe != null)
+            doSelect(mNavMe);
+    }
+
     private void clearOldFragment() {
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
         List<Fragment> fragments = mFragmentManager.getFragments();

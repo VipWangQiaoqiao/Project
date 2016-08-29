@@ -56,9 +56,9 @@
 
             <net.oschina.app.improve.widget.FlowLayout
                 android:id="@+id/fl_image"
-                android:layout_marginTop="@dimen/lay_8"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/lay_8"
                 android:visibility="visible"
                 app:horizontalSpace="4dp"
                 app:verticalSpace="4dp" />

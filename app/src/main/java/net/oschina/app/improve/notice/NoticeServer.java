@@ -96,8 +96,6 @@ public class NoticeServer extends Service {
         super.onCreate();
         log("onCreate");
         mAlarmMgr = (AlarmManager) getSystemService(ALARM_SERVICE);
-        // First notify
-        sendBroadcastToManager(NoticeBean.getInstance(this));
     }
 
     @Override
@@ -174,6 +172,8 @@ public class NoticeServer extends Service {
             stopSelf();
         } else if (FLAG_ACTION_FIRST.equals(action)) {
             registerFirstAlarm();
+            // First notify
+            sendBroadcastToManager(NoticeBean.getInstance(this));
         }
     }
 
@@ -314,7 +314,7 @@ public class NoticeServer extends Service {
                 .setContentTitle(getString(R.string.you_have_unread_messages, bean.getAllCount()))
                 .setContentText(content)
                 .setAutoCancel(true)
-                .setOngoing(true)
+                .setOngoing(false)
                 .setContentIntent(contentIntent)
                 .setSmallIcon(R.mipmap.ic_notification);
 

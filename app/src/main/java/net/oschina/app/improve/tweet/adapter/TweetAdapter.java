@@ -111,7 +111,7 @@ public class TweetAdapter extends BaseListAdapter<Tweet> {
         TweetTextView tv_content = vh.getView(R.id.tweet_item);
 
         String content = "";
-        if (!TextUtils.isEmpty(item.getContent())){
+        if (!TextUtils.isEmpty(item.getContent())) {
             content = item.getContent().replaceAll("[\n\\s]+", " ");
         }
         Spannable spannable = AssimilateUtils.assimilateOnlyAtUser(mCallback.getContext(), content);
@@ -143,6 +143,11 @@ public class TweetAdapter extends BaseListAdapter<Tweet> {
         iv_tweet_like.setOnClickListener(listener);
 
         Tweet.Image[] images = item.getImages();
+        
+        /*
+        TweetPicturesView flowLayout = vh.getView(R.id.fl_image);
+        flowLayout.setImage(images);
+        */
         FlowLayout flowLayout = vh.getView(R.id.fl_image);
         flowLayout.removeAllViews();
         if (images != null && images.length > 0) {
