@@ -5,10 +5,12 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
@@ -20,7 +22,8 @@ import net.qiujuer.genius.ui.Ui;
  * on 16/8/22.
  */
 public class ClipView extends FrameLayout {
-    private Path mPath = new Path();
+    private static boolean IS_UP_KITKAT = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+    private Path mPath;
     private boolean mIsAnim;
     private float mStartRadius, mEndRadius;
     private float mStartPointX, mEndPointX;
@@ -43,9 +46,13 @@ public class ClipView extends FrameLayout {
 
     @Override
     protected void dispatchDraw(Canvas canvas) {
+        if (!IS_UP_KITKAT) {
+            super.dispatchDraw(canvas);
+            return;
+        }
         if (mProgress <= 0)
             return;
-        if (mIsAnim) {
+        if (mIsAnim && mPath != null) {
             int saveCount = canvas.save();
             canvas.clipPath(mPath);
             super.dispatchDraw(canvas);
@@ -54,6 +61,16 @@ public class ClipView extends FrameLayout {
         } else {
             super.dispatchDraw(canvas);
         }
+    }
+
+    @Override
+    public void setLayerType(int layerType, Paint paint) {
+        if (paint == null && getLayerType() == layerType) {
+            return;
+        }
+        if (IS_UP_KITKAT)
+            layerType = View.LAYER_TYPE_SOFTWARE;
+        super.setLayerType(layerType, paint);
     }
 
 
@@ -81,37 +98,21 @@ public class ClipView extends FrameLayout {
         float pointX = mStartPointX + (mEndPointX - mStartPointX) * progress;
         float pointY = mStartPointY + (mEndPointY - mStartPointY) * progress;
         path.addCircle(pointX, pointY, radius, Path.Direction.CW);
-
-        /*
-        int w = getWidth();
-        int h = getHeight();
-
-        int l = (int) (pointX - radius);
-        int t = (int) (pointY - radius);
-        int r = (int) (pointX + radius);
-        int b = (int) (pointY + radius);
-
-        if (l < 0)
-            l = 0;
-        if (t < 0)
-            t = 0;
-        if (r > w)
-            r = w;
-        if (b > h)
-            b = h;
-
-        //invalidate(l, t, r, b);
-        */
         invalidate();
-
     }
 
     private ValueAnimator mEnterAnimator;
 
     public void start(float startX, float startY) {
-        if (mIsEnter) {
+        if (!IS_UP_KITKAT || mIsEnter) {
             return;
         }
+
+        if (mPath == null) {
+            mPath = new Path();
+            setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        }
+
         mIsEnter = true;
         if (mEnterAnimator == null) {
             ValueAnimator animation = ValueAnimator.ofFloat(0f, 1f);
@@ -149,9 +150,21 @@ public class ClipView extends FrameLayout {
     private ValueAnimator mExitAnimator;
 
     public void exit(final Runnable runnable) {
-        if (!mIsEnter) {
+        if (!IS_UP_KITKAT) {
+            runnable.run();
             return;
         }
+
+        if (!mIsEnter) {
+            runnable.run();
+            return;
+        }
+
+        if (mPath == null) {
+            mPath = new Path();
+            setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        }
+
         mIsEnter = false;
 
         if (mEnterAnimator != null)
