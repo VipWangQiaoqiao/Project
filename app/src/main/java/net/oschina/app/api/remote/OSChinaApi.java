@@ -1383,7 +1383,7 @@ public class OSChinaApi {
     }
 
     /**
-     * 发表资讯评论
+     * 发表问答评论
      *
      * @see {{@link #publicComment(int, long, int, String, int, AsyncHttpResponseHandler)}}
      */

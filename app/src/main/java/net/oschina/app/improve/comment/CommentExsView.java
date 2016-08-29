@@ -21,6 +21,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.CommentEX;
+import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.TweetTextView;
 
@@ -145,8 +146,16 @@ public class CommentExsView extends LinearLayout implements View.OnClickListener
     private ViewGroup addComment(boolean first, final CommentEX comment, RequestManager imageLoader, final OnCommentClickListener onCommentClickListener) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         @SuppressLint("InflateParams") ViewGroup lay = (ViewGroup) inflater.inflate(R.layout.lay_comment_item_ex, null, false);
+
+        ImageView ivAvatar = (ImageView) lay.findViewById(R.id.iv_avatar);
         imageLoader.load(comment.getAuthorPortrait()).error(R.mipmap.widget_dface)
-                .into(((ImageView) lay.findViewById(R.id.iv_avatar)));
+                .into(ivAvatar);
+        ivAvatar.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OtherUserHomeActivity.show(getContext(), comment.getAuthorId());
+            }
+        });
 
         ((TextView) lay.findViewById(R.id.tv_name)).setText(comment.getAuthor());
 

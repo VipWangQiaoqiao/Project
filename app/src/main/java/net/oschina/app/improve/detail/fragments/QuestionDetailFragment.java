@@ -14,8 +14,10 @@ import android.widget.Toast;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.QuestionDetail;
+import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.bean.simple.CommentEX;
 import net.oschina.app.improve.comment.CommentExsView;
+import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.QuestionDetailContract;
 import net.oschina.app.improve.widget.FlowLayout;
 import net.oschina.app.util.StringUtils;
@@ -31,7 +33,7 @@ import java.util.List;
  */
 
 public class QuestionDetailFragment extends DetailFragment<QuestionDetail, QuestionDetailContract.View, QuestionDetailContract.Operator>
-        implements View.OnClickListener, QuestionDetailContract.View {
+        implements View.OnClickListener, QuestionDetailContract.View, OnCommentClickListener {
     private long mId;
     private TextView mTVAuthorName;
     private TextView mTVPubDate;
@@ -117,6 +119,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
             case R.id.tv_see_more_comment:
                 UIHelper.showBlogComment(getActivity(), (int) mId,
                         (int) mOperator.getData().getAuthorId());
+                System.out.println("-------------------------->");
                 break;
         }
     }
@@ -164,7 +167,7 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
 
         mComments.setTitle(String.format("回答 (%s)", questionDetail.getCommentCount()));
         mComments.init(questionDetail.getId(), OSChinaApi.COMMENT_QUESTION,
-                questionDetail.getCommentCount(), getImgLoader(), null);
+                questionDetail.getCommentCount(), getImgLoader(), this);
 
     }
 
@@ -216,5 +219,10 @@ public class QuestionDetailFragment extends DetailFragment<QuestionDetail, Quest
         mETInput.setText("");
         mComments.addComment(commentEX, getImgLoader(), null);
         TDevice.hideSoftKeyboard(mETInput);
+    }
+
+    @Override
+    public void onClick(View view, Comment comment) {
+
     }
 }

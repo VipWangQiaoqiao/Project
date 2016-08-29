@@ -665,7 +665,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onNoticeArrived(NoticeBean bean) {
 
-        int allCount = bean.getAllCount();
+        int allCount = bean.getReview() + bean.getLetter() + bean.getMention();
         if (allCount > 0) {
             showMesCount();
             int fans = bean.getFans();
