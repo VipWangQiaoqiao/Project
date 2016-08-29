@@ -73,6 +73,14 @@ public class NoticeBean implements Serializable {
                 '}';
     }
 
+    void clear() {
+        this.mention = 0;
+        this.letter = 0;
+        this.review = 0;
+        this.fans = 0;
+        this.like = 0;
+    }
+
     NoticeBean add(NoticeBean bean) {
         this.mention += bean.mention;
         this.letter += bean.letter;

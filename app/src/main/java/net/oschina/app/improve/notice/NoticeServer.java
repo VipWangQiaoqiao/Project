@@ -257,6 +257,9 @@ public class NoticeServer extends Service {
             case NoticeManager.FLAG_CLEAR_LIKE:
                 notice.setLike(0);
                 break;
+            case NoticeManager.FLAG_CLEAR_ALL:
+                notice.clear();
+                break;
         }
         notice.save(this);
         sendBroadcastToManager(notice);

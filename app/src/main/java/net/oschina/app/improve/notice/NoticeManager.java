@@ -19,6 +19,7 @@ public final class NoticeManager {
     public static final int FLAG_CLEAR_REVIEW = 0x3;
     public static final int FLAG_CLEAR_FANS = 0x4;
     public static final int FLAG_CLEAR_LIKE = 0x5;
+    public static final int FLAG_CLEAR_ALL = 0x6;
 
     private static NoticeManager INSTANCE;
 
