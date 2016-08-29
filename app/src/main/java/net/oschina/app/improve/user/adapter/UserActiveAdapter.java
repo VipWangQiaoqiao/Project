@@ -2,6 +2,7 @@ package net.oschina.app.improve.user.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -13,9 +14,11 @@ import android.widget.TextView;
 import com.bumptech.glide.RequestManager;
 
 import net.oschina.app.R;
+import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.Active;
 import net.oschina.app.improve.bean.simple.Origin;
+import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.util.StringUtils;
 
 import butterknife.Bind;
@@ -56,7 +59,13 @@ public class UserActiveAdapter extends BaseRecyclerAdapter<Active> {
 
         holder.mViewNick.setText(item.getAuthor().getName());
         holder.mViewTime.setText(StringUtils.formatSomeAgo(item.getPubDate()));
-        holder.mViewContent.setText(item.getContent());
+
+        Spannable spannable = AssimilateUtils.assimilateOnlyAtUser(mContext, item.getContent());
+        spannable = AssimilateUtils.assimilateOnlyTag(mContext, spannable);
+        spannable = AssimilateUtils.assimilateOnlyLink(mContext, spannable);
+        spannable = InputHelper.displayEmoji(mContext.getResources(), spannable);
+        holder.mViewContent.setText(spannable);
+
         holder.mViewTitle.setText(getWhichTitle(item.getOrigin()));
 
         if (item.getOrigin().getType() == Origin.ORIGIN_TYPE_TWEETS){

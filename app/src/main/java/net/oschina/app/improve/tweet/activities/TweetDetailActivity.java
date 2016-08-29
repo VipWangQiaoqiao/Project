@@ -214,7 +214,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
         mDelegation.setAdapter(new KeyboardInputDelegation.KeyboardInputAdapter() {
             @Override
             public void onSubmit(TextView v, String content) {
-                content = content.replaceAll("[ \\s\\n]+", "");
+                content = content.replaceAll("[\\s\\n]+", " ");
                 if (TextUtils.isEmpty(content)) {
                     Toast.makeText(TweetDetailActivity.this, "请输入文字", Toast.LENGTH_SHORT).show();
                     return;
