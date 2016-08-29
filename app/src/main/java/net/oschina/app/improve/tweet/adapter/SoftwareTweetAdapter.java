@@ -39,9 +39,9 @@ import cz.msebera.android.httpclient.Header;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * Created by fei on 2016/7/20.
+ * Created by fei
+ * on 2016/7/20.
  */
-
 public class SoftwareTweetAdapter extends BaseRecyclerAdapter<Tweet> implements View.OnClickListener {
 
     private RequestManager requestManager;
@@ -54,13 +54,13 @@ public class SoftwareTweetAdapter extends BaseRecyclerAdapter<Tweet> implements 
 
     @Override
     protected RecyclerView.ViewHolder onCreateDefaultViewHolder(ViewGroup parent, int type) {
-        return new SoftwareTweetViewholder(mInflater.inflate(R.layout.item_list_tweet_improve, parent, false));
+        return new SoftwareTweetViewHolder(mInflater.inflate(R.layout.item_list_tweet_improve, parent, false));
     }
 
     @SuppressWarnings("deprecation")
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Tweet item, int position) {
-        SoftwareTweetViewholder vh = (SoftwareTweetViewholder) holder;
+        SoftwareTweetViewHolder vh = (SoftwareTweetViewHolder) holder;
 
         CircleImageView icon = vh.icon;
         icon.setTag(R.id.iv_tweet_face, position);
@@ -158,7 +158,7 @@ public class SoftwareTweetAdapter extends BaseRecyclerAdapter<Tweet> implements 
 
     }
 
-    static class SoftwareTweetViewholder extends RecyclerView.ViewHolder {
+    static class SoftwareTweetViewHolder extends RecyclerView.ViewHolder {
 
         @Bind(R.id.iv_tweet_face)
         CircleImageView icon;
@@ -177,7 +177,7 @@ public class SoftwareTweetAdapter extends BaseRecyclerAdapter<Tweet> implements 
         @Bind(R.id.tv_tweet_comment_count)
         TextView commentCount;
 
-        SoftwareTweetViewholder(View itemView) {
+        SoftwareTweetViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }

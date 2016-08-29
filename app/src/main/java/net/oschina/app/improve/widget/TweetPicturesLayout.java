@@ -6,7 +6,6 @@ import android.content.res.TypedArray;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,31 +18,33 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.bean.Tweet;
+import net.oschina.app.improve.media.ImageGalleryActivity;
 
 /**
  * Created by JuQiu
  * on 16/8/26.
  */
-public class TweetPicturesView extends ViewGroup {
+public class TweetPicturesLayout extends ViewGroup implements View.OnClickListener {
     private Tweet.Image[] mImages;
     private float mVerticalSpacing;
     private float mHorizontalSpacing;
+    private int mColSum = 3;
 
-    public TweetPicturesView(Context context) {
+    public TweetPicturesLayout(Context context) {
         this(context, null);
     }
 
-    public TweetPicturesView(Context context, AttributeSet attrs) {
+    public TweetPicturesLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public TweetPicturesView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public TweetPicturesLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(attrs, defStyleAttr, 0);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public TweetPicturesView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public TweetPicturesLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(attrs, defStyleAttr, defStyleRes);
     }
@@ -89,30 +90,27 @@ public class TweetPicturesView extends ViewGroup {
             LayoutInflater inflater = LayoutInflater.from(this.getContext());
             RequestManager requestManager = Glide.with(getContext());
             for (int i = 0; i < images.length; i++) {
-                ImageView imageView = (ImageView) inflater.inflate(R.layout.lay_tweet_image_item, this, false);
-                //imageView.setTag(R.id.iv_tweet_image, i);
-                //imageView.setTag(R.id.iv_tweet_face, position);
-                //imageView.setOnClickListener(imageClickListener);
+                View view = inflater.inflate(R.layout.lay_tweet_image_item, this, false);
+                view.setTag(i);
+                view.setOnClickListener(this);
                 String path = images[i].getThumb();
                 BitmapRequestBuilder builder = requestManager.load(path)
                         .asBitmap()
                         .centerCrop()
                         .placeholder(R.color.grey_50)
                         .error(R.mipmap.ic_split_graph);
+
                 if (path.toLowerCase().endsWith("gif")) {
                     builder = builder.diskCacheStrategy(DiskCacheStrategy.SOURCE);
+                    view.findViewById(R.id.iv_is_gif).setVisibility(VISIBLE);
                 }
-                builder.into(imageView);
-                addView(imageView);
+                addView(view);
+                builder.into((ImageView) view.findViewById(R.id.iv_picture));
             }
             setVisibility(View.VISIBLE);
         } else {
             setVisibility(View.GONE);
         }
-    }
-
-    public void addImage(Tweet.Image image) {
-
     }
 
     public void removeAllImage() {
@@ -122,42 +120,28 @@ public class TweetPicturesView extends ViewGroup {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int selfWidth = resolveSize(0, widthMeasureSpec);
-
         int paddingLeft = getPaddingLeft();
         int paddingTop = getPaddingTop();
         int paddingRight = getPaddingRight();
         int paddingBottom = getPaddingBottom();
 
-        int childLeft = paddingLeft;
-        int childTop = paddingTop;
-        int lineHeight = 0;
-        final int contentWidth = selfWidth - paddingRight - paddingLeft;
+        int selfWidth = resolveSize(paddingLeft + paddingRight, widthMeasureSpec);
 
-        //通过计算每一个子控件的高度，得到自己的高度
-        for (int i = 0, childCount = getChildCount(); i < childCount; ++i) {
+        final float contentWidth = selfWidth - paddingRight - paddingLeft - mHorizontalSpacing * (mColSum - 1);
+        final int childSize = (int) (contentWidth / mColSum);
+        final int childCount = getChildCount();
+
+        for (int i = 0; i < childCount; ++i) {
             View childView = getChildAt(i);
-            LayoutParams childLayoutParams = childView.getLayoutParams();
-            childView.measure(
-                    getChildMeasureSpec(widthMeasureSpec, paddingLeft + paddingRight,
-                            childLayoutParams.width),
-                    getChildMeasureSpec(heightMeasureSpec, paddingTop + paddingBottom,
-                            childLayoutParams.height));
-            int childWidth = childView.getMeasuredWidth();
-            int childHeight = childView.getMeasuredHeight();
-            lineHeight = Math.max(childHeight, lineHeight);
-
-            childLeft += childWidth;
-            if (childLeft > contentWidth) {
-                childLeft = childWidth;
-                childTop += mVerticalSpacing + lineHeight;
-                lineHeight = childHeight;
-            } else {
-                childLeft += mHorizontalSpacing;
-            }
+            childView.measure(MeasureSpec.makeMeasureSpec(childSize, MeasureSpec.EXACTLY),
+                    MeasureSpec.makeMeasureSpec(childSize, MeasureSpec.EXACTLY));
         }
 
-        int wantedHeight = childTop + lineHeight + paddingBottom;
+        int lines = (int) (childCount / (float) mColSum + 0.9);
+
+        int wantedHeight = (int) (lines * childSize +
+                mVerticalSpacing * (lines - 1) +
+                paddingBottom + paddingTop);
         wantedHeight = resolveSize(wantedHeight, heightMeasureSpec);
         setMeasuredDimension(selfWidth, wantedHeight);
     }
@@ -175,7 +159,6 @@ public class TweetPicturesView extends ViewGroup {
 
         int lineHeight = 0;
 
-        //根据子控件的宽高，计算子控件应该出现的位置。
         for (int i = 0, childCount = getChildCount(); i < childCount; ++i) {
             View childView = getChildAt(i);
 
@@ -194,10 +177,26 @@ public class TweetPicturesView extends ViewGroup {
                 lineHeight = childHeight;
             }
             childView.layout(childLeft, childTop, childLeft + childWidth, childTop + childHeight);
-            Log.e("TAG", "i:" + i + " l:" + childLeft + " t:" + childTop + " r:" + (childLeft + childWidth) + " b:" + (childTop + childHeight));
             childLeft += childWidth + mHorizontalSpacing;
         }
+    }
 
-        Log.e("TAG", "w:" + getWidth() + " h:" + getHeight());
+    @Override
+    public void onClick(View v) {
+        Tweet.Image[] images = mImages;
+        if (images == null)
+            return;
+
+        Object obj = v.getTag();
+        if (obj == null || !(obj instanceof Integer))
+            return;
+
+        int index = (int) obj;
+        if (index < 0)
+            index = 0;
+        if (index >= images.length)
+            index = images.length - 1;
+
+        ImageGalleryActivity.show(getContext(), Tweet.Image.getImagePath(images), index);
     }
 }
