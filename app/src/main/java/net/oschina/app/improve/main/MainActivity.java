@@ -1,8 +1,12 @@
 package net.oschina.app.improve.main;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -22,7 +26,9 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
     private long mBackPressedTime;
 
     @Bind(R.id.activity_main_ui)
-    FrameLayout activity_main_ui;
+    FrameLayout mMainUi;
+
+    private NavFragment mNavBar;
 
     @Override
     protected int getContentView() {
@@ -32,10 +38,34 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
     @Override
     protected void initWidget() {
         super.initWidget();
-        activity_main_ui.setBackgroundColor(getResources().getColor(R.color.main_green));
         FragmentManager manager = getSupportFragmentManager();
-        ((NavFragment) manager.findFragmentById(R.id.fag_nav))
-                .setup(this, manager, R.id.main_container, this);
+        mNavBar = ((NavFragment) manager.findFragmentById(R.id.fag_nav));
+        mNavBar.setup(this, manager, R.id.main_container, this);
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        doNewIntent(getIntent(), true);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        doNewIntent(intent, false);
+    }
+
+    private void doNewIntent(Intent intent, boolean isCreate) {
+        if (intent == null || intent.getAction() == null)
+            return;
+        String action = intent.getAction();
+        Log.e("TAG", "onNewIntent action:" + action + " isCreate:" + isCreate);
+        if (action.equals(ACTION_NOTICE)) {
+            NavFragment bar = mNavBar;
+            if (bar != null) {
+                bar.select(3);
+            }
+        }
     }
 
     @Override
