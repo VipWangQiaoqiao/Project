@@ -57,12 +57,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <GridLayout
-                android:id="@+id/layout_grid"
-                android:rowCount="3"
-                android:columnCount="3"
-                android:visibility="gone"
-                tools:visibility="visible"
+            <net.oschina.app.improve.widget.TweetPicturesLayout
+                android:id="@+id/tweet_pics_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
