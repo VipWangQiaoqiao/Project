@@ -203,7 +203,7 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
         mTabLayout.addTab(mTabLayout.newTab().setCustomView(getTabView("0", "动弹")));
         mTabLayout.addTab(mTabLayout.newTab().setCustomView(getTabView("0", "博客")));
         mTabLayout.addTab(mTabLayout.newTab().setCustomView(getTabView("0", "问答")));
-        mTabLayout.addTab(mTabLayout.newTab().setCustomView(getTabView("0", "动态")));
+        mTabLayout.addTab(mTabLayout.newTab().setCustomView(getTabView("0", "讨论")));
         injectDataToView();
         injectDataToViewPager();
     }
@@ -216,7 +216,7 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
             fragments.add(new Pair<>(String.format("%s\n动弹", user.getTweetCount()), UserTweetFragment.instantiate(user.getId())));
             fragments.add(new Pair<>(String.format("%s\n博客", user.getBlogCount()), UserBlogFragment.instantiate(user.getId())));
             fragments.add(new Pair<>(String.format("%s\n问答", user.getAnswerCount()), UserQuestionFragment.instantiate((int) user.getId())));
-            fragments.add(new Pair<>(String.format("%s\n动态", user.getDiscussCount()), UserActiveFragment.instantiate(user.getId())));
+            fragments.add(new Pair<>(String.format("%s\n讨论", user.getDiscussCount()), UserActiveFragment.instantiate(user.getId())));
 
             mViewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
                 @Override
@@ -251,7 +251,7 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
             mTabLayout.getTabAt(0).setCustomView(getTabView(String.valueOf(user.getTweetCount()), "动弹"));
             mTabLayout.getTabAt(1).setCustomView(getTabView(String.valueOf(user.getBlogCount()), "博客"));
             mTabLayout.getTabAt(2).setCustomView(getTabView(String.valueOf(user.getAnswerCount()), "问答"));
-            mTabLayout.getTabAt(3).setCustomView(getTabView(String.valueOf(user.getDiscussCount()), "动态"));
+            mTabLayout.getTabAt(3).setCustomView(getTabView(String.valueOf(user.getDiscussCount()), "讨论"));
         }else {
             setupTabText(mTabLayout.getTabAt(0), user.getTweetCount());
             setupTabText(mTabLayout.getTabAt(1), user.getBlogCount());
@@ -308,9 +308,10 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
         mCountFans.setText(String.format("粉丝 %s", user.getFansCount()));
         mCountFollow.setText(String.format("关注 %s", user.getFollowCount()));
 
-        if (user.getGender() == 1){
+        mGenderImage.setVisibility(View.VISIBLE);
+        if (user.getGender() == User.GENDER_MALE){
             mGenderImage.setImageResource(R.mipmap.ic_male);
-        }else if (user.getGender() == 2){
+        }else if (user.getGender() == User.GENDER_FEMALE){
             mGenderImage.setImageResource(R.mipmap.ic_female);
         }else {
             mGenderImage.setVisibility(View.GONE);

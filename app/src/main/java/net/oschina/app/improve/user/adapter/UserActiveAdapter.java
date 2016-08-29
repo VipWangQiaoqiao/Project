@@ -79,9 +79,9 @@ public class UserActiveAdapter extends BaseRecyclerAdapter<Active> {
 
     private CharSequence getWhichTitle(Origin origin) {
         if (origin == null) return "更新了动态";
-        String desc = "在%s%s内发表了评论";
+        String desc = "评论了%s%s:";
         String which;
-        String title = origin.getDesc();
+        String title = "“" + origin.getDesc() + "”";
         switch (origin.getType()){
             case Origin.ORIGIN_TYPE_LINK:
                 which = "新闻";
@@ -115,9 +115,9 @@ public class UserActiveAdapter extends BaseRecyclerAdapter<Active> {
         desc = String.format(desc, which, title);
         if (title.length() == 0) return desc;
         SpannableStringBuilder builder = new SpannableStringBuilder(desc);
-        int start = which.length() + 1;
-        int end = start + title.length();
-        ForegroundColorSpan cs = new ForegroundColorSpan(mContext.getResources().getColor(R.color.link_color));
+        int start = which.length() + 4;
+        int end = start + title.length() - 2;
+        ForegroundColorSpan cs = new ForegroundColorSpan(mContext.getResources().getColor(R.color.day_colorPrimary));
         builder.setSpan(cs, start, end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         return builder;
     }
