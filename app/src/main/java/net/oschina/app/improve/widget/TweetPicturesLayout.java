@@ -28,7 +28,7 @@ public class TweetPicturesLayout extends ViewGroup implements View.OnClickListen
     private Tweet.Image[] mImages;
     private float mVerticalSpacing;
     private float mHorizontalSpacing;
-    private int mColSum = 3;
+    private int mColumn;
 
     public TweetPicturesLayout(Context context) {
         this(context, null);
@@ -60,11 +60,12 @@ public class TweetPicturesLayout extends ViewGroup implements View.OnClickListen
         if (attrs != null) {
             // Load attributes
             final TypedArray a = context.obtainStyledAttributes(
-                    attrs, R.styleable.FlowLayout, defStyleAttr, defStyleRes);
+                    attrs, R.styleable.TweetPicturesLayout, defStyleAttr, defStyleRes);
 
             // Load clip touch corner radius
-            vSpace = a.getDimensionPixelOffset(R.styleable.FlowLayout_verticalSpace, vSpace);
-            hSpace = a.getDimensionPixelOffset(R.styleable.FlowLayout_horizontalSpace, hSpace);
+            vSpace = a.getDimensionPixelOffset(R.styleable.TweetPicturesLayout_verticalSpace, vSpace);
+            hSpace = a.getDimensionPixelOffset(R.styleable.TweetPicturesLayout_horizontalSpace, hSpace);
+            setColumn(a.getInt(R.styleable.TweetPicturesLayout_column, 3));
             a.recycle();
         }
 
@@ -80,6 +81,13 @@ public class TweetPicturesLayout extends ViewGroup implements View.OnClickListen
         mVerticalSpacing = pixelSize;
     }
 
+    public void setColumn(int column) {
+        if (column < 1)
+            column = 1;
+        if (column > 20)
+            column = 20;
+        mColumn = column;
+    }
 
     public void setImage(Tweet.Image[] images) {
         if (mImages == images)
@@ -133,8 +141,8 @@ public class TweetPicturesLayout extends ViewGroup implements View.OnClickListen
 
         int selfWidth = resolveSize(paddingLeft + paddingRight, widthMeasureSpec);
 
-        final float contentWidth = selfWidth - paddingRight - paddingLeft - mHorizontalSpacing * (mColSum - 1);
-        final int childSize = (int) (contentWidth / mColSum);
+        final float contentWidth = selfWidth - paddingRight - paddingLeft - mHorizontalSpacing * (mColumn - 1);
+        final int childSize = (int) (contentWidth / mColumn);
         final int childCount = getChildCount();
 
         for (int i = 0; i < childCount; ++i) {
@@ -143,7 +151,7 @@ public class TweetPicturesLayout extends ViewGroup implements View.OnClickListen
                     MeasureSpec.makeMeasureSpec(childSize, MeasureSpec.EXACTLY));
         }
 
-        int lines = (int) (childCount / (float) mColSum + 0.9);
+        int lines = (int) (childCount / (float) mColumn + 0.9);
 
         int wantedHeight = (int) (lines * childSize +
                 mVerticalSpacing * (lines - 1) +
