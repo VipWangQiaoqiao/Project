@@ -1,11 +1,13 @@
 package net.oschina.app.improve.comment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -103,6 +105,8 @@ public class CommentsActivity extends BaseBackActivity {
                 R.color.swiperefresh_color1, R.color.swiperefresh_color2,
                 R.color.swiperefresh_color3, R.color.swiperefresh_color4);
     }
+
+
 
     @Override
     protected void initData() {
