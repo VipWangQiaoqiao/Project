@@ -13,7 +13,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -33,9 +32,9 @@ import net.oschina.app.improve.bean.simple.TweetComment;
 import net.oschina.app.improve.bean.simple.TweetLike;
 import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
-import net.oschina.app.improve.media.ImageGalleryActivity;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
 import net.oschina.app.improve.utils.AssimilateUtils;
+import net.oschina.app.improve.widget.TweetPicturesLayout;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
@@ -85,8 +84,8 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
     RelativeLayout mRecordLayout;
     @Bind(R.id.tv_content)
     TextView mContent;
-    @Bind(R.id.layout_grid)
-    GridLayout mLayoutGrid;
+    @Bind(R.id.tweet_pics_layout)
+    TweetPicturesLayout mLayoutGrid;
 
     EditText mViewInput;
 
@@ -333,37 +332,8 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
             mContent.setText(spannable);
             mContent.setMovementMethod(LinkMovementMethod.getInstance());
         }
-        if (tweet.getImages() != null && tweet.getImages().length > 0) {
-            mLayoutGrid.setVisibility(View.VISIBLE);
-            mLayoutGrid.removeAllViews();
-            final View.OnClickListener l = new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = (int) v.getTag();
-                    ImageGalleryActivity.show(TweetDetailActivity.this, Tweet.Image.getImagePath(tweet.getImages()), position);
-                }
-            };
-            for (int i = 0; i < tweet.getImages().length; i++) {
-                ImageView mImage = new ImageView(this);
-                GridLayout.LayoutParams mParams = new GridLayout.LayoutParams();
-                mParams.setMargins(0, (int) TDevice.dpToPixel(8), (int) TDevice.dpToPixel(8), 0);
-                mParams.width = (int) TDevice.dpToPixel(80);
-                mParams.height = (int) TDevice.dpToPixel(80);
-                mImage.setLayoutParams(mParams);
-                mImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                mLayoutGrid.addView(mImage);
-                getImageLoader()
-                        .load(tweet.getImages()[i].getThumb())
-                        .asBitmap()
-                        .placeholder(R.color.grey_200)
-                        .error(R.mipmap.ic_default_image)
-                        .into(mImage);
-                mImage.setTag(i);
-                mImage.setOnClickListener(l);
-            }
-        } else {
-            mLayoutGrid.setVisibility(View.GONE);
-        }
+
+        mLayoutGrid.setImage(tweet.getImages());
     }
 
     private View.OnClickListener getOnPortraitClickListener() {

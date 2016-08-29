@@ -107,7 +107,13 @@ public class TweetPicturesLayout extends ViewGroup implements View.OnClickListen
                 addView(view);
                 builder.into((ImageView) view.findViewById(R.id.iv_picture));
             }
-            setVisibility(View.VISIBLE);
+
+            // all do requestLayout
+            if (getVisibility() == VISIBLE) {
+                requestLayout();
+            } else {
+                setVisibility(View.VISIBLE);
+            }
         } else {
             setVisibility(View.GONE);
         }
