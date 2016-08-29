@@ -38,7 +38,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="?attr/infoTextColor"
-                android:textSize="12sp"
+                android:textSize="14sp"
+                android:layout_marginTop="2dp"
+                android:lineSpacingMultiplier="1.2"
                 android:visibility="visible"
                 tools:text="更新的动态" />
 
@@ -46,10 +48,11 @@
                 android:id="@+id/tv_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:focusable="false"
+                android:layout_marginTop="2dp"
                 android:focusableInTouchMode="false"
                 android:textColor="?attr/textColor"
+                android:lineSpacingMultiplier="1.2"
                 android:textSize="14sp"
                 tools:text="this is content" />
 
@@ -64,10 +67,11 @@
                 android:paddingRight="6dp"
                 android:paddingBottom="6dp"
                 android:focusable="false"
+                android:lineSpacingMultiplier="1.2"
                 android:focusableInTouchMode="false"
                 tools:text="来至于什么什么动弹"
                 android:textColor="?attr/textColor"
-                android:textSize="@dimen/text_size_13"
+                android:textSize="13sp"
                 android:visibility="gone"
                 tools:visibility="visible"/>
 

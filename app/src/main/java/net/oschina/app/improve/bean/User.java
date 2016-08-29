@@ -14,6 +14,10 @@ public class User extends Author{
     public static final int RELATION_TYPE_ONLY_FANS_ME = 0x03;// 只有他关注我
     public static final int RELATION_TYPE_NULL = 0x04;// 互不关注
 
+    public static final int GENDER_UNKNOW = 0;
+    public static final int GENDER_MALE = 1;
+    public static final int GENDER_FEMALE = 2;
+
     private String desc;
     private int score;
     private int gender;
