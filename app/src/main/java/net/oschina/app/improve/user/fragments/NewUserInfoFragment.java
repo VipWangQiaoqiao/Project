@@ -14,7 +14,6 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -115,17 +114,15 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     @Bind(R.id.tv_follower)
     TextView mTvFollowerCount;
 
-    //  private AsyncTask<String, Void, User> mCacheTask;
     @Bind(R.id.user_info_notice_message)
     View mMesView;
 
     @Bind(R.id.user_info_notice_fans)
     View mFansView;
 
-    private BadgeView mMesCount;
     private Uri origUri;
     private File protraitFile;
-    //  private Bitmap protraitBitmap;
+
     private String protraitPath;
     private UserInfo mUserInfo;
     private TextHttpResponseHandler textHandler = new TextHttpResponseHandler() {
@@ -225,7 +222,16 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     private String formatCount(long count) {
 
         if (count > 1000) {
-            return String.format("%d%s", (count / 1000), "k");
+            int a = (int) (count / 100);
+            int b = a % 10;
+            int c = a / 10;
+            String str;
+            if (c <= 9 && b != 0)
+                str = c + "." + b;
+            else
+                str = String.valueOf(c);
+
+            return str + "k";
         } else {
             return String.valueOf(count);
         }
@@ -313,13 +319,6 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     protected void initWidget(View root) {
         super.initWidget(root);
         CheckSdkVersion();
-
-        mMesCount = new BadgeView(getActivity(), mMesView);
-        mMesCount.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
-        mMesCount.setBadgePosition(BadgeView.POSITION_CENTER);
-        mMesCount.setGravity(Gravity.CENTER);
-        mMesCount.setBackgroundResource(R.drawable.ic_red_dot);
-        mMesCount.hide(true);
 
         if (mFansView != null)
             mFansView.setVisibility(View.INVISIBLE);
@@ -667,7 +666,8 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
         int allCount = bean.getReview() + bean.getLetter() + bean.getMention();
         if (allCount > 0) {
-            showMesCount();
+            if (mMesView != null)
+                mMesView.setVisibility(View.VISIBLE);
             int fans = bean.getFans();
             if (fans > 0) {
                 int tempCount = Integer.parseInt(mTvFollowerCount.getText().toString());
@@ -677,7 +677,8 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                     mFansView.setVisibility(View.VISIBLE);
             }
         } else {
-            hideMesCount();
+            if (mMesView != null)
+                mMesView.setVisibility(View.INVISIBLE);
             if (mFansView != null) {
                 mFansView.setVisibility(View.INVISIBLE);
             }
@@ -685,29 +686,6 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
     }
 
-    /**
-     * show MesCount
-     */
-    private void showMesCount() {
-        if (mMesCount != null) {
-            boolean shown = mMesCount.isShown();
-            if (!shown) {
-                mMesCount.show(true);
-            }
-        }
-    }
-
-    /**
-     * hide MesCount
-     */
-    private void hideMesCount() {
-        if (mMesCount != null) {
-            boolean shown = mMesCount.isShown();
-            if (shown) {
-                mMesCount.hide(true);
-            }
-        }
-    }
 
     @Override
     public void onTabReselect() {

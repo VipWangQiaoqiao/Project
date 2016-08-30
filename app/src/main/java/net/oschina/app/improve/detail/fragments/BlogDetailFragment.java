@@ -22,6 +22,7 @@ import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.comment.CommentsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.BlogDetailContract;
+import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -119,31 +120,33 @@ public class BlogDetailFragment
         });
     }
 
-    @OnClick({R.id.iv_share, R.id.iv_fav, R.id.btn_relation})
+    @OnClick({R.id.iv_share, R.id.iv_fav, R.id.btn_relation, R.id.iv_avatar})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             // 关注按钮
-            case R.id.btn_relation: {
+            case R.id.btn_relation:
                 handleRelation();
-            }
-            break;
+                break;
             // 收藏
-            case R.id.iv_fav: {
+            case R.id.iv_fav:
                 handleFavorite();
-            }
-            break;
+                break;
             // 分享
-            case R.id.iv_share: {
+            case R.id.iv_share:
                 handleShare();
-            }
-            break;
+                break;
             // 评论列表
-            case R.id.tv_see_more_comment: {
+            case R.id.tv_see_more_comment:
                 UIHelper.showBlogComment(getActivity(), (int) mId,
                         (int) mOperator.getData().getAuthorId());
-            }
-            break;
+                break;
+            case R.id.iv_avatar:
+                OtherUserHomeActivity.show(getActivity(), mOperator.getData().getAuthorId());
+                break;
+            default:
+                break;
+
         }
     }
 
@@ -161,6 +164,8 @@ public class BlogDetailFragment
 
         mTVAuthorName.setText(blog.getAuthor());
         getImgLoader().load(blog.getAuthorPortrait()).error(R.mipmap.widget_dface).into(mIVAuthorPortrait);
+        mIVAuthorPortrait.setOnClickListener(this);
+
 
         mTVPubDate.setText(StringUtils.formatSomeAgo(blog.getPubDate()));
 
