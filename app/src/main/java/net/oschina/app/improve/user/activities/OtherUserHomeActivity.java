@@ -304,6 +304,7 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
         mLogoNick.setText(user.getName());
         mNick.setText(user.getName());
         // TODO summary
+        mSummary.setText(user.getDesc());
         mScore.setText(String.format("积分 %s", user.getScore()));
         mCountFans.setText(String.format("粉丝 %s", user.getFansCount()));
         mCountFollow.setText(String.format("关注 %s", user.getFollowCount()));
