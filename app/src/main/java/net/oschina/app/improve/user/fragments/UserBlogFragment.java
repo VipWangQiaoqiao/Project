@@ -37,7 +37,7 @@ public class UserBlogFragment extends BaseRecyclerViewFragment<Blog> {
     @Override
     protected void initBundle(Bundle bundle) {
         super.initBundle(bundle);
-        userId = bundle.getLong(BUNDLE_KEY_USER_ID, 0);
+        userId = bundle.getInt(BUNDLE_KEY_USER_ID, 0);
     }
 
     @Override
