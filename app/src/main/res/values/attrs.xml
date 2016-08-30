@@ -52,5 +52,6 @@
         <attr name="verticalSpace" />
         <attr name="horizontalSpace" />
         <attr name="column" format="integer" />
+        <attr name="maxPictureSize" format="dimension" />
     </declare-styleable>
 </resources>
