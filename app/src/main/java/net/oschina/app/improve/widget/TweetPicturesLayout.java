@@ -29,6 +29,7 @@ public class TweetPicturesLayout extends ViewGroup implements View.OnClickListen
     private float mVerticalSpacing;
     private float mHorizontalSpacing;
     private int mColumn;
+    private int mMaxPictureSize;
 
     public TweetPicturesLayout(Context context) {
         this(context, null);
@@ -66,6 +67,7 @@ public class TweetPicturesLayout extends ViewGroup implements View.OnClickListen
             vSpace = a.getDimensionPixelOffset(R.styleable.TweetPicturesLayout_verticalSpace, vSpace);
             hSpace = a.getDimensionPixelOffset(R.styleable.TweetPicturesLayout_horizontalSpace, hSpace);
             setColumn(a.getInt(R.styleable.TweetPicturesLayout_column, 3));
+            setMaxPictureSize(a.getDimensionPixelOffset(R.styleable.TweetPicturesLayout_maxPictureSize, 0));
             a.recycle();
         }
 
@@ -87,6 +89,12 @@ public class TweetPicturesLayout extends ViewGroup implements View.OnClickListen
         if (column > 20)
             column = 20;
         mColumn = column;
+    }
+
+    public void setMaxPictureSize(int maxPictureSize) {
+        if (maxPictureSize < 0)
+            maxPictureSize = 0;
+        mMaxPictureSize = maxPictureSize;
     }
 
     public void setImage(Tweet.Image[] images) {
@@ -132,6 +140,13 @@ public class TweetPicturesLayout extends ViewGroup implements View.OnClickListen
         mImages = null;
     }
 
+    private int getMaxChildSize(int size) {
+        if (mMaxPictureSize == 0)
+            return size;
+        else
+            return Math.min(mMaxPictureSize, size);
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int paddingLeft = getPaddingLeft();
@@ -150,7 +165,7 @@ public class TweetPicturesLayout extends ViewGroup implements View.OnClickListen
 
         // Get child size
         final float contentWidth = selfWidth - paddingRight - paddingLeft - mHorizontalSpacing * (mColumn - 1);
-        final int childSize = (int) (contentWidth / mColumn);
+        final int childSize = getMaxChildSize((int) (contentWidth / mColumn));
 
         // Measure all child
         for (int i = 0; i < childCount; ++i) {
