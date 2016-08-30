@@ -49,28 +49,34 @@
             <!--content-->
             <TextView
                 android:id="@+id/tv_content"
-                android:layout_marginTop="8dp"
-                tools:text="又改需求!!!"
-                android:textSize="16sp"
-                android:textColor="#333"
-                android:lineSpacingMultiplier="1.2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:lineSpacingMultiplier="1.2"
+                android:textColor="#333"
+                android:textSize="16sp"
+                tools:text="又改需求!!!" />
 
             <net.oschina.app.improve.widget.TweetPicturesLayout
                 android:id="@+id/tweet_pics_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/lay_48"
+                android:layout_marginTop="@dimen/lay_8"
+                android:visibility="gone"
+                app:column="3"
+                app:horizontalSpace="@dimen/lay_4"
+                app:verticalSpace="@dimen/lay_4" />
 
             <RelativeLayout
                 android:id="@+id/tweet_bg_record"
                 android:layout_width="100dp"
-                android:layout_marginTop="8dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/selector_record_layout"
+                android:padding="3dp"
                 android:visibility="gone"
-                tools:visibility="visible"
-                android:padding="3dp">
+                tools:visibility="visible">
 
                 <ImageView
                     android:id="@+id/tweet_img_record"
@@ -82,16 +88,16 @@
 
                 <TextView
                     android:id="@+id/tweet_tv_record"
-                    tools:text="34'"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="4dp"
                     android:layout_marginEnd="4dp"
+                    android:layout_marginRight="4dp"
                     android:textColor="@android:color/white"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:text="34'" />
             </RelativeLayout>
 
             <!--bottom info-->
@@ -126,12 +132,12 @@
                     android:id="@+id/iv_comment"
                     android:layout_width="14dp"
                     android:layout_height="14dp"
+                    android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="4dp"
                     android:layout_marginRight="4dp"
                     android:layout_toLeftOf="@id/tv_comment_count"
                     android:layout_toStartOf="@id/tv_comment_count"
-                    android:layout_alignParentRight="true"
                     android:contentDescription="@string/app_name"
                     android:scaleType="fitCenter"
                     android:src="@mipmap/ic_comment" />
