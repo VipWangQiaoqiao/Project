@@ -22,8 +22,6 @@ public class SoftwareListFragment extends BaseListFragment<SoftwareDec> {
 
     public static final String BUNDLE_SOFTWARE = "BUNDLE_SOFTWARE";
 
-    protected static final String TAG = SoftwareListFragment.class
-            .getSimpleName();
     private static final String CACHE_KEY_PREFIX = "softwarelist_";
 
     private String softwareType = "recommend";
@@ -69,11 +67,10 @@ public class SoftwareListFragment extends BaseListFragment<SoftwareDec> {
                             long id) {
         SoftwareDec softwaredec = mAdapter.getItem(position);
         if (softwaredec != null) {
-            String ident = softwaredec.getUrl().substring(softwaredec.getUrl().lastIndexOf("/") + 1);
-            // int softwaredecId = softwaredec.getId();
-            // Log.d(TAG, "onItemClick: ----------->" + softwaredecId + "   ident=" + ident + " name=" + softwaredec.getName());
-            SoftwareDetailActivity.show(getActivity(), ident);
-            //UIUtil.showSoftwareDetail(getActivity(), ident);
+            // String ident = softwaredec.getUrl().substring(softwaredec.getUrl().lastIndexOf("/") + 1);
+            int softwaredecId = softwaredec.getId();
+            //SoftwareDetailActivity.show(getActivity(), ident);
+            SoftwareDetailActivity.show(getActivity(), softwaredecId);
             // 放入已读列表
             saveToReadedList(view, SoftwareList.PREF_READED_SOFTWARE_LIST,
                     softwaredec.getName());
