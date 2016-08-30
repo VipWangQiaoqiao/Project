@@ -22,6 +22,7 @@ import net.oschina.app.improve.comment.CommentsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.improve.detail.contract.NewsDetailContract;
+import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -68,10 +69,10 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         mTVTitle = (TextView) root.findViewById(R.id.tv_title);
 
         setGone(R.id.iv_info_view);
-        setGone(R.id.tv_info_view);
         setGone(R.id.iv_info_comment);
 
         mIVAuthorPortrait = (ImageView) root.findViewById(R.id.iv_avatar);
+        mIVAuthorPortrait.setOnClickListener(this);
         mIVFav = (ImageView) root.findViewById(R.id.iv_fav);
         mIVFav.setOnClickListener(this);
 
@@ -126,6 +127,9 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
             // 分享
             case R.id.iv_share:
                 handleShare();
+                break;
+            case R.id.iv_avatar:
+                OtherUserHomeActivity.show(getActivity(), mOperator.getData().getAuthorId());
                 break;
             default:
                 break;
