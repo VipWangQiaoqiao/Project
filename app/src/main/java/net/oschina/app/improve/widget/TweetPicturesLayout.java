@@ -155,66 +155,97 @@ public class TweetPicturesLayout extends ViewGroup implements View.OnClickListen
         int paddingBottom = getPaddingBottom();
 
         int selfWidth = resolveSize(paddingLeft + paddingRight, widthMeasureSpec);
+        int wantedHeight = paddingBottom + paddingTop;
         final int childCount = getChildCount();
 
-        // Not have child we can only need padding size
+
+        //noinspection StatementWithEmptyBody
         if (childCount == 0) {
-            setMeasuredDimension(selfWidth, resolveSize(paddingTop + paddingBottom, heightMeasureSpec));
-            return;
+            // Not have child we can only need padding size
+        } else if (childCount == 1) {
+            View child = getChildAt(0);
+            int imageW = mImages[0].getW();
+            int imageH = mImages[0].getH();
+            float density = getResources().getDisplayMetrics().density;
+            // Get max width and height
+            float maxContentW = Math.min(selfWidth - paddingRight - paddingLeft, density * 120);
+            float maxContentH = density * 180;
+
+            int childW, childH;
+
+            float hToW = imageH / (float) imageW;
+            if (hToW > (maxContentH / maxContentW)) {
+                childH = (int) maxContentH;
+                childW = (int) (maxContentH / hToW);
+            } else {
+                childW = (int) maxContentW;
+                childH = (int) (maxContentW * hToW);
+            }
+
+            child.measure(MeasureSpec.makeMeasureSpec(childW, MeasureSpec.EXACTLY),
+                    MeasureSpec.makeMeasureSpec(childH, MeasureSpec.EXACTLY));
+
+            wantedHeight += childH;
+        } else {
+            // Measure all child
+            final float maxContentWidth = selfWidth - paddingRight - paddingLeft - mHorizontalSpacing * (mColumn - 1);
+            // Get child size
+            final int childSize = getMaxChildSize((int) (maxContentWidth / mColumn));
+
+            for (int i = 0; i < childCount; ++i) {
+                View childView = getChildAt(i);
+                childView.measure(MeasureSpec.makeMeasureSpec(childSize, MeasureSpec.EXACTLY),
+                        MeasureSpec.makeMeasureSpec(childSize, MeasureSpec.EXACTLY));
+            }
+
+            int lines = (int) (childCount / (float) mColumn + 0.9);
+            wantedHeight += (int) (lines * childSize + mVerticalSpacing * (lines - 1));
         }
 
-        // Get child size
-        final float contentWidth = selfWidth - paddingRight - paddingLeft - mHorizontalSpacing * (mColumn - 1);
-        final int childSize = getMaxChildSize((int) (contentWidth / mColumn));
-
-        // Measure all child
-        for (int i = 0; i < childCount; ++i) {
-            View childView = getChildAt(i);
-            childView.measure(MeasureSpec.makeMeasureSpec(childSize, MeasureSpec.EXACTLY),
-                    MeasureSpec.makeMeasureSpec(childSize, MeasureSpec.EXACTLY));
-        }
-
-        int lines = (int) (childCount / (float) mColumn + 0.9);
-
-        int wantedHeight = (int) (lines * childSize +
-                mVerticalSpacing * (lines - 1) +
-                paddingBottom + paddingTop);
-        wantedHeight = resolveSize(wantedHeight, heightMeasureSpec);
-        setMeasuredDimension(selfWidth, wantedHeight);
+        setMeasuredDimension(selfWidth, resolveSize(wantedHeight, heightMeasureSpec));
     }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        int myWidth = r - l;
+        float childCount = getChildCount();
+        if (childCount > 0) {
+            int paddingLeft = getPaddingLeft();
+            int paddingTop = getPaddingTop();
 
-        int paddingLeft = getPaddingLeft();
-        int paddingTop = getPaddingTop();
-        int paddingRight = getPaddingRight();
+            if (childCount == 1) {
+                View childView = getChildAt(0);
+                int childWidth = childView.getMeasuredWidth();
+                int childHeight = childView.getMeasuredHeight();
+                childView.layout(paddingLeft, paddingTop, paddingLeft + childWidth, paddingTop + childHeight);
+            } else {
+                int mWidth = r - l;
+                int paddingRight = getPaddingRight();
 
-        int childLeft = paddingLeft;
-        int childTop = paddingTop;
+                int lineHeight = 0;
+                int childLeft = paddingLeft;
+                int childTop = paddingTop;
 
-        int lineHeight = 0;
+                for (int i = 0; i < childCount; ++i) {
+                    View childView = getChildAt(i);
 
-        for (int i = 0, childCount = getChildCount(); i < childCount; ++i) {
-            View childView = getChildAt(i);
+                    if (childView.getVisibility() == View.GONE) {
+                        continue;
+                    }
 
-            if (childView.getVisibility() == View.GONE) {
-                continue;
+                    int childWidth = childView.getMeasuredWidth();
+                    int childHeight = childView.getMeasuredHeight();
+
+                    lineHeight = Math.max(childHeight, lineHeight);
+
+                    if (childLeft + childWidth + paddingRight > mWidth) {
+                        childLeft = paddingLeft;
+                        childTop += mVerticalSpacing + lineHeight;
+                        lineHeight = childHeight;
+                    }
+                    childView.layout(childLeft, childTop, childLeft + childWidth, childTop + childHeight);
+                    childLeft += childWidth + mHorizontalSpacing;
+                }
             }
-
-            int childWidth = childView.getMeasuredWidth();
-            int childHeight = childView.getMeasuredHeight();
-
-            lineHeight = Math.max(childHeight, lineHeight);
-
-            if (childLeft + childWidth + paddingRight > myWidth) {
-                childLeft = paddingLeft;
-                childTop += mVerticalSpacing + lineHeight;
-                lineHeight = childHeight;
-            }
-            childView.layout(childLeft, childTop, childLeft + childWidth, childTop + childHeight);
-            childLeft += childWidth + mHorizontalSpacing;
         }
     }
 
