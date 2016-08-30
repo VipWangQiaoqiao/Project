@@ -46,7 +46,6 @@ import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.FileUtil;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.UIHelper;
-import net.oschina.app.widget.BadgeView;
 
 import java.io.File;
 import java.lang.reflect.Type;
@@ -668,17 +667,16 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         if (allCount > 0) {
             if (mMesView != null)
                 mMesView.setVisibility(View.VISIBLE);
-            int fans = bean.getFans();
-            if (fans > 0) {
-                int tempCount = Integer.parseInt(mTvFollowerCount.getText().toString());
-                int soCount = tempCount + fans;
-                mTvFollowerCount.setText(String.valueOf(soCount));
-                if (mFansView != null)
-                    mFansView.setVisibility(View.VISIBLE);
-            }
         } else {
             if (mMesView != null)
                 mMesView.setVisibility(View.INVISIBLE);
+        }
+
+        int fans = bean.getFans();
+        if (fans > 0) {
+            if (mFansView != null)
+                mFansView.setVisibility(View.VISIBLE);
+        } else {
             if (mFansView != null) {
                 mFansView.setVisibility(View.INVISIBLE);
             }

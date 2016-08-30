@@ -59,7 +59,7 @@ public class NoticeBean implements Serializable {
     }
 
     public int getAllCount() {
-        return mention + letter + review + fans + like;
+        return mention + letter + review + fans;
     }
 
     @Override
