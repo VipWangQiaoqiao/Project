@@ -26,7 +26,7 @@ public class UserBlogFragment extends BaseRecyclerViewFragment<Blog> {
     public static final String BUNDLE_KEY_USER_ID = "BUNDLE_KEY_USER_ID";
     private long userId;
 
-    public static Fragment instantiate(long uid){
+    public static Fragment instantiate(long uid) {
         Bundle bundle = new Bundle();
         bundle.putLong(BUNDLE_KEY_USER_ID, uid);
         Fragment fragment = new UserBlogFragment();
@@ -37,7 +37,7 @@ public class UserBlogFragment extends BaseRecyclerViewFragment<Blog> {
     @Override
     protected void initBundle(Bundle bundle) {
         super.initBundle(bundle);
-        userId = bundle.getInt(BUNDLE_KEY_USER_ID, 0);
+        userId = bundle.getLong(BUNDLE_KEY_USER_ID);
     }
 
     @Override
