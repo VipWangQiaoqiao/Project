@@ -1,14 +1,11 @@
 package net.oschina.app.improve.media;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.FloatEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -276,18 +273,16 @@ public class ImagePreviewView extends ImageView {
     }
 
     private void resetDefaultState(){
-        final float midWidth = (getWidth() - mBoundWidth) / 2;
-        final float midHeight = (getHeight() - mBoundHeight) / 2;
-        if (midWidth != translateLeft){
+        if (translateLeft != 0){
             ValueAnimator mTranslateXAnimator = getResetXAnimator();
-            mTranslateXAnimator.setFloatValues(translateLeft, midWidth);
+            mTranslateXAnimator.setFloatValues(translateLeft, 0);
             mTranslateXAnimator.addUpdateListener(getOnTranslateXAnimationUpdate());
             mTranslateXAnimator.start();
         }
 
-        if (midHeight != translateTop){
+        if (translateTop != 0){
             ValueAnimator mTranslateYAnimator = getResetYAnimator();
-            mTranslateYAnimator.setFloatValues(translateTop, midHeight);
+            mTranslateYAnimator.setFloatValues(translateTop, 0);
             mTranslateYAnimator.addUpdateListener(getOnTranslateYAnimationUpdate());
             mTranslateYAnimator.start();
         }
@@ -308,15 +303,15 @@ public class ImagePreviewView extends ImageView {
         mBoundWidth = drawable.getBounds().width();
         mBoundHeight = drawable.getBounds().height();
 
-        float scale = Math.max((float) mBoundWidth / width, (float) mBoundHeight / height);
+        float scale = (float) mBoundWidth / width;
 
         mBoundHeight /= scale;
-        mBoundWidth /= scale;
+        mBoundWidth = width;
 
         drawable.setBounds(0, 0, mBoundWidth, mBoundHeight);
 
-        translateLeft = (width - mBoundWidth) / 2;
-        translateTop = (height - mBoundHeight) / 2;
+        translateLeft = 0;
+        translateTop = 0;
 
         return change;
     }
@@ -324,8 +319,8 @@ public class ImagePreviewView extends ImageView {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        translateLeft = (w - mBoundWidth) / 2;
-        translateTop = (h - mBoundHeight) / 2;
+        translateLeft = 0;
+        translateTop = 0;
     }
 
     @Override
@@ -510,15 +505,6 @@ public class ImagePreviewView extends ImageView {
 
             if (scale == 1.f){
                 mResetScaleAnimator.setFloatValues(1.f, 2.f);
-
-                ValueAnimator mResetXAnimator = getResetXAnimator();
-                ValueAnimator mResetYAnimator = getResetYAnimator();
-                mResetXAnimator.setFloatValues(translateLeft, (getWidth() - mBoundWidth * 2.f) / 2.f);
-                mResetYAnimator.setFloatValues(translateTop, (getHeight() - mBoundHeight * 2.f) / 2.f);
-                mResetXAnimator.addUpdateListener(getOnTranslateXAnimationUpdate());
-                mResetYAnimator.addUpdateListener(getOnTranslateYAnimationUpdate());
-                mResetXAnimator.start();
-                mResetYAnimator.start();
             }else{
                 mResetScaleAnimator.setFloatValues(scale, 1.f);
                 resetDefaultState();
