@@ -1,19 +1,25 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
+
 buildscript {
     repositories {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.2'
+        classpath 'com.android.tools.build:gradle:2.1.3'
     }
 }
+
+
+
 
 allprojects {
     repositories {
         jcenter()
     }
 }
+
+
 
 
 ext {
@@ -24,5 +30,5 @@ ext {
     minSdkVersion = 15
     targetSdkVersion = 23
     versionCode = 264
-    versionName = "v2.6.4(1608081154)"
+    versionName = "v2.6.5 beta (1608301456)"
 }
