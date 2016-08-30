@@ -505,20 +505,20 @@ public final class CaptureActivity extends BaseActivity implements
         }
     }
 
-    private boolean flag;
+    private boolean mIsLight;
 
     private void light() {
         try {
-            if (flag) {
-                flag = false;
-                // 开闪光灯
-                cameraManager.openLight();
-                mFlash.setBackgroundResource(R.mipmap.flash_open);
-            } else {
-                flag = true;
+            if (mIsLight) {
                 // 关闪光灯
                 cameraManager.offLight();
                 mFlash.setBackgroundResource(R.mipmap.flash_default);
+                mIsLight = false;
+            } else {
+                // 开闪光灯
+                cameraManager.openLight();
+                mFlash.setBackgroundResource(R.mipmap.flash_open);
+                mIsLight = true;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -561,7 +561,7 @@ public final class CaptureActivity extends BaseActivity implements
     public void onPermissionsGranted(int requestCode, List<String> perms) {
         if (perms != null && perms.size() == 2) {
             initCamera();
-        }else{
+        } else {
             displayFrameworkBugMessageAndExit();
         }
     }
