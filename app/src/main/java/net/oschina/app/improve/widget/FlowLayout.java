@@ -106,37 +106,45 @@ public class FlowLayout extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        int myWidth = r - l;
+        float childCount = getChildCount();
+        if (childCount > 0) {
+            int paddingLeft = getPaddingLeft();
+            int paddingTop = getPaddingTop();
 
-        int paddingLeft = getPaddingLeft();
-        int paddingTop = getPaddingTop();
-        int paddingRight = getPaddingRight();
+            if (childCount == 1) {
+                View childView = getChildAt(0);
+                int childWidth = childView.getMeasuredWidth();
+                int childHeight = childView.getMeasuredHeight();
+                childView.layout(paddingLeft, paddingTop, paddingLeft + childWidth, paddingTop + childHeight);
+            } else {
+                int mWidth = r - l;
+                int paddingRight = getPaddingRight();
 
-        int childLeft = paddingLeft;
-        int childTop = paddingTop;
+                int lineHeight = 0;
+                int childLeft = paddingLeft;
+                int childTop = paddingTop;
 
-        int lineHeight = 0;
+                for (int i = 0; i < childCount; ++i) {
+                    View childView = getChildAt(i);
 
-        //根据子控件的宽高，计算子控件应该出现的位置。
-        for (int i = 0, childCount = getChildCount(); i < childCount; ++i) {
-            View childView = getChildAt(i);
+                    if (childView.getVisibility() == View.GONE) {
+                        continue;
+                    }
 
-            if (childView.getVisibility() == View.GONE) {
-                continue;
+                    int childWidth = childView.getMeasuredWidth();
+                    int childHeight = childView.getMeasuredHeight();
+
+                    lineHeight = Math.max(childHeight, lineHeight);
+
+                    if (childLeft + childWidth + paddingRight > mWidth) {
+                        childLeft = paddingLeft;
+                        childTop += mVerticalSpacing + lineHeight;
+                        lineHeight = childHeight;
+                    }
+                    childView.layout(childLeft, childTop, childLeft + childWidth, childTop + childHeight);
+                    childLeft += childWidth + mHorizontalSpacing;
+                }
             }
-
-            int childWidth = childView.getMeasuredWidth();
-            int childHeight = childView.getMeasuredHeight();
-
-            lineHeight = Math.max(childHeight, lineHeight);
-
-            if (childLeft + childWidth + paddingRight > myWidth) {
-                childLeft = paddingLeft;
-                childTop += mVerticalSpacing + lineHeight;
-                lineHeight = childHeight;
-            }
-            childView.layout(childLeft, childTop, childLeft + childWidth, childTop + childHeight);
-            childLeft += childWidth + mHorizontalSpacing;
         }
     }
 }

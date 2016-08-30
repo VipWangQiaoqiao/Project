@@ -153,6 +153,11 @@ public class Tweet implements Serializable {
     }
 
     public static class Image implements Serializable {
+        private String thumb;
+        private String href;
+        private int w;
+        private int h;
+
         public String getThumb() {
             return thumb;
         }
@@ -169,8 +174,21 @@ public class Tweet implements Serializable {
             this.href = href;
         }
 
-        private String thumb;
-        private String href;
+        public int getW() {
+            return w;
+        }
+
+        public void setW(int w) {
+            this.w = w;
+        }
+
+        public int getH() {
+            return h;
+        }
+
+        public void setH(int h) {
+            this.h = h;
+        }
 
         public static String[] getImagePath(Image[] images) {
             if (images == null || images.length == 0)
@@ -202,7 +220,7 @@ public class Tweet implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if(o != null && o instanceof Tweet){
+        if (o != null && o instanceof Tweet) {
             return ((Tweet) o).getId() == id;
         }
         return false;
