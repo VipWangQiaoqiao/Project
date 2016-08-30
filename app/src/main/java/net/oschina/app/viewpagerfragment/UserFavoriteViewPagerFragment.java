@@ -6,7 +6,6 @@ import android.widget.FrameLayout;
 
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
-import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.BaseViewPagerFragment;
 import net.oschina.app.bean.Favorite;
 import net.oschina.app.fragment.UserFavoriteFragment;
@@ -27,6 +26,7 @@ public class UserFavoriteViewPagerFragment extends BaseViewPagerFragment {
         generalActionBar.setVisibility(View.GONE);
 
         String[] title = getResources().getStringArray(R.array.userfavorite);
+        // adapter.addTab(title[5], "favorite_all", NewUserFavoriteFragment.class, getBundle(OSChinaApi.CATALOG_ALL));
         adapter.addTab(title[0], "favorite_software", UserFavoriteFragment.class, getBundle(Favorite.CATALOG_SOFTWARE));
         adapter.addTab(title[1], "favorite_topic", UserFavoriteFragment.class, getBundle(Favorite.CATALOG_TOPIC));
         adapter.addTab(title[2], "favorite_code", UserFavoriteFragment.class, getBundle(Favorite.CATALOG_CODE));
@@ -37,7 +37,7 @@ public class UserFavoriteViewPagerFragment extends BaseViewPagerFragment {
 
     private Bundle getBundle(int favoriteType) {
         Bundle bundle = new Bundle();
-        bundle.putInt(BaseListFragment.BUNDLE_KEY_CATALOG, favoriteType);
+        bundle.putInt(UserFavoriteFragment.BUNDLE_KEY_CATALOG, favoriteType);
         return bundle;
     }
 
