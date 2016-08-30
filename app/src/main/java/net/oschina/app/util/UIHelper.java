@@ -863,7 +863,7 @@ public class UIHelper {
      */
     public static void showUserBlog(Context context, int uid) {
         Bundle args = new Bundle();
-        args.putInt(UserBlogFragment.BUNDLE_KEY_USER_ID, uid);
+        args.putLong(UserBlogFragment.BUNDLE_KEY_USER_ID, uid);
         showSimpleBack(context, SimpleBackPage.USER_BLOG, args);
     }
 
