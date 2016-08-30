@@ -69,6 +69,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         mTVTitle = (TextView) root.findViewById(R.id.tv_title);
 
         setGone(R.id.iv_info_view);
+        setGone(R.id.tv_info_view);
         setGone(R.id.iv_info_comment);
 
         mIVAuthorPortrait = (ImageView) root.findViewById(R.id.iv_avatar);
