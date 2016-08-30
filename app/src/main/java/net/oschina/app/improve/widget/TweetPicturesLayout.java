@@ -140,11 +140,19 @@ public class TweetPicturesLayout extends ViewGroup implements View.OnClickListen
         int paddingBottom = getPaddingBottom();
 
         int selfWidth = resolveSize(paddingLeft + paddingRight, widthMeasureSpec);
-
-        final float contentWidth = selfWidth - paddingRight - paddingLeft - mHorizontalSpacing * (mColumn - 1);
-        final int childSize = (int) (contentWidth / mColumn);
         final int childCount = getChildCount();
 
+        // Not have child we can only need padding size
+        if (childCount == 0) {
+            setMeasuredDimension(selfWidth, resolveSize(paddingTop + paddingBottom, heightMeasureSpec));
+            return;
+        }
+
+        // Get child size
+        final float contentWidth = selfWidth - paddingRight - paddingLeft - mHorizontalSpacing * (mColumn - 1);
+        final int childSize = (int) (contentWidth / mColumn);
+
+        // Measure all child
         for (int i = 0; i < childCount; ++i) {
             View childView = getChildAt(i);
             childView.measure(MeasureSpec.makeMeasureSpec(childSize, MeasureSpec.EXACTLY),

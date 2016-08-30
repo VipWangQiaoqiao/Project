@@ -58,11 +58,11 @@
                 android:id="@+id/fl_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/lay_48"
                 android:layout_marginTop="@dimen/lay_8"
-                android:maxWidth="@dimen/size_256"
-                android:visibility="visible"
-                app:horizontalSpace="4dp"
-                app:verticalSpace="4dp" />
+                android:visibility="gone"
+                app:horizontalSpace="@dimen/lay_4"
+                app:verticalSpace="@dimen/lay_4" />
 
             <LinearLayout
                 android:id="@+id/ll_info"
