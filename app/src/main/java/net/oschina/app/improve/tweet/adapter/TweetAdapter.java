@@ -78,12 +78,7 @@ public class TweetAdapter extends BaseListAdapter<Tweet> {
         iv_tweet_face.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Author author = item.getAuthor();
-                User user = new User();
-                user.setId((int) author.getId());
-                user.setName(author.getName());
-                user.setPortrait(author.getPortrait());
-                OtherUserHomeActivity.show(mCallback.getContext(), user);
+                OtherUserHomeActivity.show(mCallback.getContext(), item.getAuthor());
             }
         });
 

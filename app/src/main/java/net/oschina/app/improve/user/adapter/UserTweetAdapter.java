@@ -92,12 +92,7 @@ public class UserTweetAdapter extends BaseRecyclerAdapter<Tweet> {
         holder.mViewPortrait.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Author author = item.getAuthor();
-                User user = new User();
-                user.setId((int) author.getId());
-                user.setName(author.getName());
-                user.setPortrait(author.getPortrait());
-                OtherUserHomeActivity.show(mContext, user);
+                OtherUserHomeActivity.show(mContext, item.getAuthor());
             }
         });
 
