@@ -71,11 +71,6 @@ public class UserMessageAdapter extends BaseGeneralRecyclerAdapter<Message> {
         }
         content = text.replaceAll("[\n\\s]+", " ").replaceAll("<[^<>]+>([^<>]*)</[^<>]+>", "$1");
         textView.setText(InputHelper.displayEmoji(mCallBack.getContext().getResources(), content));
-        textView.setMovementMethod(LinkMovementMethod.getInstance());
-        textView.setFocusable(false);
-        textView.setClickable(false);
-        textView.setSingleLine(true);
-        textView.setLongClickable(false);
     }
 
     private static class MessageViewHolder extends RecyclerView.ViewHolder {

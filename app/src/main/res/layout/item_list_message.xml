@@ -69,7 +69,6 @@
                 android:focusable="false"
                 android:lines="1"
                 android:longClickable="false"
-                android:maxLines="1"
                 android:textSize="14sp"
                 tools:text="New Text" />
         </LinearLayout>
