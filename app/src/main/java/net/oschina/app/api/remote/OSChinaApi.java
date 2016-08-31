@@ -1744,7 +1744,7 @@ public class OSChinaApi {
      * 获取个人信息
      */
     public static void getUserInfo(TextHttpResponseHandler handler) {
-        ApiHttpClient.get("action/apiv2/user_me", handler);
+        ApiHttpClient.get("action/apiv2/user_info", handler);
     }
 
     /**
@@ -1785,5 +1785,30 @@ public class OSChinaApi {
             uri = "user_fans";
         }
         ApiHttpClient.get("action/apiv2/" + uri, params, handler);
+    }
+
+
+    public static final int CATALOG_ALL = 0;
+    public static final int CATALOG_SOFTWARE = 1;
+    public static final int CATALOG_QUESTION = 2;
+    public static final int CATALOG_BLOG = 3;
+    public static final int CATALOG_TRANSALITON = 4;
+    public static final int CATALOG_EVENT = 5;
+    public static final int CATALOG_NEWS = 6;
+
+    /**
+     * get user favorites
+     *
+     * @param catalog   catalog  {@link #CATALOG_ALL,#CATALOG_SOFTWARE,#CATALOG_QUESTION,
+     *                  {@link #CATALOG_BLOG,#CATALOG_TRANSALITON,#CATALOG_EVENT,#CATALOG_NEWS}
+     * @param pagetoken pagetoken
+     * @param handler   handler
+     */
+    public static void getUserFavorites(int catalog, String pagetoken, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("catalog", catalog);
+        if (pagetoken != null)
+            params.put("pageToken", pagetoken);
+        ApiHttpClient.get("action/apiv2/favorites", params, handler);
     }
 }
