@@ -160,7 +160,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
 
         //mTVAuthorName.setText(newsDetail.getAuthor());
         // getImgLoader().load(newsDetail.getAuthorPortrait()).error(R.mipmap.widget_dface).into(mIVAuthorPortrait);
-        mTVName.setText(String.format("%s%s%s", "@", newsDetail.getAuthor(), "  发布于\t"));
+        mTVName.setText(String.format("%s%s%s", "@", newsDetail.getAuthor(), "  发布于  "));
 
         mTVPubDate.setText(StringUtils.formatSomeAgo(newsDetail.getPubDate()));
 
