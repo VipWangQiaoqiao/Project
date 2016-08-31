@@ -104,6 +104,9 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     @Bind(R.id.rl_show_my_info)
     LinearLayout mRlShowInfo;
 
+
+    @Bind(R.id.lay_about_info)
+    LinearLayout layAboutCount;
     @Bind(R.id.tv_tweet)
     TextView mTvStweetCount;
     @Bind(R.id.tv_favorite)
@@ -183,8 +186,10 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     private void updateView(UserInfo userInfo) {
 
         setImageFromNet(mCiOrtrait, userInfo.getPortrait(), R.mipmap.widget_dface);
+        mCiOrtrait.setVisibility(View.VISIBLE);
 
         mTvName.setText(userInfo.getName());
+        mTvName.setVisibility(View.VISIBLE);
 
         switch (userInfo.getGender()) {
             case 0:
@@ -203,8 +208,10 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         }
 
         mTvSummary.setText(userInfo.getDesc());
+        mTvSummary.setVisibility(View.VISIBLE);
         mTvScore.setText(String.format("%s  %s", getString(R.string.user_score), formatCount(userInfo.getScore())));
-
+        mTvScore.setVisibility(View.VISIBLE);
+        layAboutCount.setVisibility(View.VISIBLE);
         mTvStweetCount.setText(formatCount(userInfo.getTweetCount()));
         mTvFavoriteCount.setText(formatCount(userInfo.getCollectCount()));
         mTvFollowCount.setText(formatCount(userInfo.getFollowCount()));
@@ -288,10 +295,26 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     public void onResume() {
         super.onResume();
         mInfo = AppContext.getInstance().getLoginUser();
+        boolean login = AppContext.getInstance().isLogin();
         NoticeManager.bindNotify(this);
         isUploadIcon = false;
+        if (login) {
+            sendRequestData();
+        } else {
+            hideView();
+        }
+    }
 
-        sendRequestData();
+    /**
+     *
+     */
+    private void hideView() {
+        mCiOrtrait.setImageResource(R.mipmap.widget_dface);
+        mTvName.setText("点击头像登录");
+        mIvGander.setVisibility(View.INVISIBLE);
+        mTvSummary.setVisibility(View.INVISIBLE);
+        mTvScore.setVisibility(View.INVISIBLE);
+        layAboutCount.setVisibility(View.INVISIBLE);
     }
 
     @Override
