@@ -30,6 +30,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.improve.base.fragments.BaseFragment;
+import net.oschina.app.improve.bean.UserV2;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.notice.NoticeBean;
 import net.oschina.app.improve.notice.NoticeManager;
@@ -37,7 +38,6 @@ import net.oschina.app.improve.user.activities.UserFansActivity;
 import net.oschina.app.improve.user.activities.UserFollowsActivity;
 import net.oschina.app.improve.user.activities.UserMessageActivity;
 import net.oschina.app.improve.user.activities.UserTweetActivity;
-import net.oschina.app.improve.user.bean.UserInfo;
 import net.oschina.app.improve.widget.SolarSystemView;
 import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.ui.MyQrodeDialog;
@@ -126,7 +126,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     private File protraitFile;
 
     private String protraitPath;
-    private UserInfo mUserInfo;
+    private UserV2 mUserInfo;
     private TextHttpResponseHandler textHandler = new TextHttpResponseHandler() {
 
         @Override
@@ -148,12 +148,12 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         public void onSuccess(int statusCode, Header[] headers, String responseString) {
 
             try {
-                Type type = new TypeToken<ResultBean<UserInfo>>() {
+                Type type = new TypeToken<ResultBean<UserV2>>() {
                 }.getType();
 
                 ResultBean resultBean = AppContext.createGson().fromJson(responseString, type);
                 if (resultBean.isSuccess()) {
-                    UserInfo userInfo = (UserInfo) resultBean.getResult();
+                    UserV2 userInfo = (UserV2) resultBean.getResult();
 
                     updateView(userInfo);
                     mUserInfo = userInfo;
@@ -183,7 +183,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
      *
      * @param userInfo userInfo
      */
-    private void updateView(UserInfo userInfo) {
+    private void updateView(UserV2 userInfo) {
 
         setImageFromNet(mCiOrtrait, userInfo.getPortrait(), R.mipmap.widget_dface);
         mCiOrtrait.setVisibility(View.VISIBLE);
@@ -209,13 +209,13 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
         mTvSummary.setText(userInfo.getDesc());
         mTvSummary.setVisibility(View.VISIBLE);
-        mTvScore.setText(String.format("%s  %s", getString(R.string.user_score), formatCount(userInfo.getScore())));
+        mTvScore.setText(String.format("%s  %s", getString(R.string.user_score), formatCount(userInfo.getStatistics().getScore())));
         mTvScore.setVisibility(View.VISIBLE);
         layAboutCount.setVisibility(View.VISIBLE);
-        mTvStweetCount.setText(formatCount(userInfo.getTweetCount()));
-        mTvFavoriteCount.setText(formatCount(userInfo.getCollectCount()));
-        mTvFollowCount.setText(formatCount(userInfo.getFollowCount()));
-        mTvFollowerCount.setText(formatCount(userInfo.getFansCount()));
+        mTvStweetCount.setText(formatCount(userInfo.getStatistics().getTweet()));
+        mTvFavoriteCount.setText(formatCount(userInfo.getStatistics().getCollect()));
+        mTvFollowCount.setText(formatCount(userInfo.getStatistics().getFollow()));
+        mTvFollowerCount.setText(formatCount(userInfo.getStatistics().getFans()));
 
     }
 
@@ -388,8 +388,10 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                     break;
                 case R.id.user_view_solar_system:
                     //显示我的资料
+                    Bundle userBundle = new Bundle();
+                    userBundle.putSerializable("user_info", mUserInfo);
                     UIHelper.showSimpleBack(getActivity(),
-                            SimpleBackPage.MY_INFORMATION_DETAIL);
+                            SimpleBackPage.MY_INFORMATION_DETAIL, userBundle);
                     break;
                 case R.id.ly_tweet:
                     UserTweetActivity.show(getActivity(), AppContext.getInstance().getLoginUid());
