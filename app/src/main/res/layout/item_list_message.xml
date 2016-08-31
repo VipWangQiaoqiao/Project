@@ -26,7 +26,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="8dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -41,7 +41,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:ellipsize="end"
-                    android:gravity="center_vertical"
+                    android:gravity="top"
                     android:lines="1"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@color/blog_title_text_color_light"
@@ -59,13 +59,17 @@
                     tools:text="6分钟" />
             </LinearLayout>
 
-            <net.oschina.app.widget.TweetTextView
+            <TextView
                 android:id="@+id/tv_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:clickable="false"
                 android:ellipsize="end"
+                android:focusable="false"
                 android:lines="1"
+                android:longClickable="false"
+                android:maxLines="1"
                 android:textSize="14sp"
                 tools:text="New Text" />
         </LinearLayout>

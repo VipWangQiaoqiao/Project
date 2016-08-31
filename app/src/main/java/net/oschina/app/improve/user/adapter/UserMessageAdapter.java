@@ -63,7 +63,7 @@ public class UserMessageAdapter extends BaseGeneralRecyclerAdapter<Message> {
     }
 
 
-    protected void parseAtUserContent(TweetTextView textView, String text) {
+    protected void parseAtUserContent(TextView textView, String text) {
         String content = "";
         if (TextUtils.isEmpty(text)) {
             textView.setText("[图片]");
@@ -74,21 +74,21 @@ public class UserMessageAdapter extends BaseGeneralRecyclerAdapter<Message> {
         textView.setMovementMethod(LinkMovementMethod.getInstance());
         textView.setFocusable(false);
         textView.setClickable(false);
-        textView.setDispatchToParent(true);
+        textView.setSingleLine(true);
         textView.setLongClickable(false);
     }
 
     private static class MessageViewHolder extends RecyclerView.ViewHolder {
         CircleImageView iv_user_avatar;
         TextView tv_user_name, tv_time;
-        TweetTextView tv_content;
+        TextView tv_content;
 
         public MessageViewHolder(View itemView) {
             super(itemView);
             iv_user_avatar = (CircleImageView) itemView.findViewById(R.id.iv_user_avatar);
             tv_user_name = (TextView) itemView.findViewById(R.id.tv_user_name);
             tv_time = (TextView) itemView.findViewById(R.id.tv_time);
-            tv_content = (TweetTextView) itemView.findViewById(R.id.tv_content);
+            tv_content = (TextView) itemView.findViewById(R.id.tv_content);
         }
     }
 
