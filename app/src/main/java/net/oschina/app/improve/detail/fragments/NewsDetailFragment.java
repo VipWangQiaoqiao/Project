@@ -160,7 +160,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
 
         //mTVAuthorName.setText(newsDetail.getAuthor());
         // getImgLoader().load(newsDetail.getAuthorPortrait()).error(R.mipmap.widget_dface).into(mIVAuthorPortrait);
-        mTVName.setText(String.format("%s%s%s", "@", newsDetail.getAuthor(), "  发布于  "));
+        mTVName.setText(String.format("%s%s%s%s", "@", newsDetail.getAuthor(), "  ", "发布于 "));
 
         mTVPubDate.setText(StringUtils.formatSomeAgo(newsDetail.getPubDate()));
 
@@ -173,7 +173,6 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
 
         Software software = newsDetail.getSoftware();
         if (software != null) {
-
             mAboutSoftware.setOnClickListener(this);
             mAbhoutSoftwareTitle.setText(software.getName());
         } else {
