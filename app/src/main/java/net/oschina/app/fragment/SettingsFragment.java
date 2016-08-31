@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import net.oschina.app.AppConfig;
@@ -14,12 +15,12 @@ import net.oschina.app.AppManager;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.improve.widget.togglebutton.ToggleButton;
+import net.oschina.app.improve.widget.togglebutton.ToggleButton.OnToggleChanged;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.FileUtil;
 import net.oschina.app.util.MethodsCompat;
 import net.oschina.app.util.UIHelper;
-import net.oschina.app.improve.widget.togglebutton.ToggleButton;
-import net.oschina.app.improve.widget.togglebutton.ToggleButton.OnToggleChanged;
 
 import org.kymjs.kjframe.http.HttpConfig;
 
@@ -43,6 +44,7 @@ public class SettingsFragment extends BaseFragment {
     TextView mTvExit;
     @Bind(R.id.tb_double_click_exit)
     ToggleButton mTbDoubleClickExit;
+    private RelativeLayout rlCancle;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -79,7 +81,8 @@ public class SettingsFragment extends BaseFragment {
         view.findViewById(R.id.rl_about).setOnClickListener(this);
         view.findViewById(R.id.rl_exit).setOnClickListener(this);
         view.findViewById(R.id.rl_feedback).setOnClickListener(this);
-        view.findViewById(R.id.rl_cancle).setOnClickListener(this);
+        rlCancle = (RelativeLayout) view.findViewById(R.id.rl_cancle);
+        rlCancle.setOnClickListener(this);
 
         if (!AppContext.getInstance().isLogin()) {
             mTvExit.setText("退出");
@@ -99,8 +102,18 @@ public class SettingsFragment extends BaseFragment {
         } else {
             mTbDoubleClickExit.setToggleOff();
         }
-
         caculateCacheSize();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        boolean login = AppContext.getInstance().isLogin();
+        if (!login) {
+            rlCancle.setVisibility(View.INVISIBLE);
+        } else {
+            rlCancle.setVisibility(View.VISIBLE);
+        }
     }
 
     /**
