@@ -30,9 +30,12 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.bean.User;
+import net.oschina.app.improve.bean.UserV2;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.bean.simple.UserRelation;
 import net.oschina.app.improve.user.fragments.UserActiveFragment;
 import net.oschina.app.improve.user.fragments.UserBlogFragment;
@@ -89,33 +92,43 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
     @Bind(R.id.view_divider)
     View mDivider;
 
-    private User user;
+    private UserV2 user;
     private List<Pair<String, Fragment>> fragments;
+    private TabLayoutOffsetChangeListener mOffsetChangerListener;
 
-    public static void show(Context context, User user) {
-        if (user == null) return;
-        Intent intent = new Intent(context, OtherUserHomeActivity.class);
-        intent.putExtra(KEY_BUNDLE, user);
-        context.startActivity(intent);
+    public static void show(Context context, Author author) {
+        if (author == null) return;
+        UserV2 user = new UserV2();
+        user.setId(author.getId());
+        user.setName(author.getName());
+        user.setPortrait(author.getPortrait());
+        show(context, user);
     }
 
     public static void show(Context context, long id) {
         if (id <= 0) return;
-        User user = new User();
+        UserV2 user = new UserV2();
         user.setId((int) id);
         show(context, user);
     }
 
     public static void show(Context context, String nick){
         if (TextUtils.isEmpty(nick)) return;
-        User user = new User();
+        UserV2 user = new UserV2();
         user.setName(nick);
         show(context, user);
     }
 
+    public static void show(Context context, UserV2 user){
+        if (user == null) return;
+        Intent intent = new Intent(context, OtherUserHomeActivity.class);
+        intent.putExtra(KEY_BUNDLE, user);
+        context.startActivity(intent);
+    }
+
     @Override
     protected boolean initBundle(Bundle bundle) {
-        user = (User) bundle.getSerializable(KEY_BUNDLE);
+        user = (UserV2) bundle.getSerializable(KEY_BUNDLE);
         if (user == null) return false;
         if (user.getId() <= 0 && TextUtils.isEmpty(user.getName())) return false;
         return super.initBundle(bundle);
@@ -140,29 +153,7 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
             }
         });
 
-        mLayoutAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            boolean isShow = false;
-            int mScrollRange = -1;
-
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (mScrollRange == -1) {
-                    mScrollRange = appBarLayout.getTotalScrollRange();
-                }
-                if (mScrollRange + verticalOffset == 0) {
-                    mLogoNick.setVisibility(View.VISIBLE);
-                    mLogoPortrait.setVisibility(View.VISIBLE);
-                    mDivider.setVisibility(View.GONE);
-                    isShow = true;
-                } else if (isShow) {
-                    mLogoNick.setVisibility(View.GONE);
-                    mLogoPortrait.setVisibility(View.GONE);
-                    mDivider.setVisibility(View.VISIBLE);
-                    isShow = false;
-                }
-                mTabLayout.getBackground().setAlpha(Math.round(255 - Math.abs(verticalOffset) / (float) mScrollRange * 255));
-            }
-        });
+        mLayoutAppBar.addOnOffsetChangedListener(mOffsetChangerListener = new TabLayoutOffsetChangeListener());
 
         mPortrait.post(new Runnable() {
             @Override
@@ -211,10 +202,18 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
         if (user.getId() <= 0) return;
         if (fragments == null){
             fragments = new ArrayList<>();
-            fragments.add(new Pair<>(String.format("%s\n动弹", user.getTweetCount()), UserTweetFragment.instantiate(user.getId())));
-            fragments.add(new Pair<>(String.format("%s\n博客", user.getBlogCount()), UserBlogFragment.instantiate(user.getId())));
-            fragments.add(new Pair<>(String.format("%s\n问答", user.getAnswerCount()), UserQuestionFragment.instantiate((int) user.getId())));
-            fragments.add(new Pair<>(String.format("%s\n讨论", user.getDiscussCount()), UserActiveFragment.instantiate(user.getId())));
+            fragments.add(new Pair<>(
+                    String.format("%s\n动弹", 0),
+                    UserTweetFragment.instantiate(user.getId())));
+            fragments.add(new Pair<>(
+                    String.format("%s\n博客", 0),
+                    UserBlogFragment.instantiate(user.getId())));
+            fragments.add(new Pair<>(
+                    String.format("%s\n问答", 0),
+                    UserQuestionFragment.instantiate((int) user.getId())));
+            fragments.add(new Pair<>(
+                    String.format("%s\n讨论", 0),
+                    UserActiveFragment.instantiate(user.getId())));
 
             mViewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
                 @Override
@@ -246,15 +245,15 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
             mTabLayout.setupWithViewPager(mViewPager);
             // TabLayout will remove up all tabs after setted up view pager
             // so we set it again
-            mTabLayout.getTabAt(0).setCustomView(getTabView(String.valueOf(user.getTweetCount()), "动弹"));
-            mTabLayout.getTabAt(1).setCustomView(getTabView(String.valueOf(user.getBlogCount()), "博客"));
-            mTabLayout.getTabAt(2).setCustomView(getTabView(String.valueOf(user.getAnswerCount()), "问答"));
-            mTabLayout.getTabAt(3).setCustomView(getTabView(String.valueOf(user.getDiscussCount()), "讨论"));
-        }else {
-            setupTabText(mTabLayout.getTabAt(0), user.getTweetCount());
-            setupTabText(mTabLayout.getTabAt(1), user.getBlogCount());
-            setupTabText(mTabLayout.getTabAt(2), user.getAnswerCount());
-            setupTabText(mTabLayout.getTabAt(3), user.getDiscussCount());
+            mTabLayout.getTabAt(0).setCustomView(getTabView("0", "动弹"));
+            mTabLayout.getTabAt(1).setCustomView(getTabView("0", "博客"));
+            mTabLayout.getTabAt(2).setCustomView(getTabView("0", "问答"));
+            mTabLayout.getTabAt(3).setCustomView(getTabView("0", "讨论"));
+        }else if (user.getStatistics() != null){ // when request user detail info successfully
+            setupTabText(mTabLayout.getTabAt(0), user.getStatistics().getTweet());
+            setupTabText(mTabLayout.getTabAt(1), user.getStatistics().getBlog());
+            setupTabText(mTabLayout.getTabAt(2), user.getStatistics().getAnswer());
+            setupTabText(mTabLayout.getTabAt(3), user.getStatistics().getDiscuss());
         }
     }
 
@@ -304,9 +303,15 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
         // TODO summary
         String desc = user.getDesc();
         mSummary.setText(TextUtils.isEmpty(desc) ? "这人很懒,什么都没写" : desc);
-        mScore.setText(String.format("积分 %s", user.getScore()));
-        mCountFans.setText(String.format("粉丝 %s", user.getFansCount()));
-        mCountFollow.setText(String.format("关注 %s", user.getFollowCount()));
+        if (user.getStatistics() != null){
+            mScore.setText(String.format("积分 %s", user.getStatistics().getScore()));
+            mCountFans.setText(String.format("粉丝 %s", user.getStatistics().getFans()));
+            mCountFollow.setText(String.format("关注 %s", user.getStatistics().getFollow()));
+        }else {
+            mScore.setText("积分 0");
+            mCountFans.setText("粉丝 0");
+            mCountFollow.setText("关注 0");
+        }
 
         mGenderImage.setVisibility(View.VISIBLE);
         if (user.getGender() == User.GENDER_MALE){
@@ -316,6 +321,8 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
         }else {
             mGenderImage.setVisibility(View.GONE);
         }
+
+        mOffsetChangerListener.resetRange();
     }
 
     @Override
@@ -329,8 +336,8 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                ResultBean<User> result = AppContext.createGson().fromJson(
-                        responseString, new TypeToken<ResultBean<User>>(){}.getType());
+                ResultBean<UserV2> result = AppContext.createGson().fromJson(
+                        responseString, new TypeToken<ResultBean<UserV2>>(){}.getType());
                 if (result.isSuccess() && result.getResult() == null) return;
                 user = result.getResult();
                 injectDataToView();
@@ -381,7 +388,9 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
                 UserFansActivity.show(this, user.getId());
                 break;
             case R.id.view_solar_system:
-                //TODO into user information
+                Bundle userBundle = new Bundle();
+                userBundle.putSerializable("user_info", user);
+                UIHelper.showSimpleBack(this, SimpleBackPage.MY_INFORMATION_DETAIL, userBundle);
                 break;
         }
     }
@@ -433,8 +442,8 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
 
                             @Override
                             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                                net.oschina.app.improve.bean.base.ResultBean<UserRelation> result = AppContext.createGson().fromJson(
-                                        responseString, new TypeToken<net.oschina.app.improve.bean.base.ResultBean<UserRelation>>(){}.getType());
+                                ResultBean<UserRelation> result = AppContext.createGson().fromJson(
+                                        responseString, new TypeToken<ResultBean<UserRelation>>(){}.getType());
                                 if (result.isSuccess()){
                                     int relation = result.getResult().getRelation();
                                     switch (relation) {
@@ -471,6 +480,35 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
         public TabViewHolder(View view){
             mViewCount = (TextView) view.findViewById(R.id.tv_count);
             mViewTag = (TextView) view.findViewById(R.id.tv_tag);
+        }
+    }
+
+    private class TabLayoutOffsetChangeListener implements AppBarLayout.OnOffsetChangedListener {
+        boolean isShow = false;
+        int mScrollRange = -1;
+
+        @Override
+        public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+            if (mScrollRange == -1) {
+                mScrollRange = appBarLayout.getTotalScrollRange();
+            }
+            if (mScrollRange + verticalOffset == 0) {
+                mLogoNick.setVisibility(View.VISIBLE);
+                mLogoPortrait.setVisibility(View.VISIBLE);
+                mDivider.setVisibility(View.GONE);
+                isShow = true;
+            } else if (isShow) {
+                mLogoNick.setVisibility(View.GONE);
+                mLogoPortrait.setVisibility(View.GONE);
+                mDivider.setVisibility(View.VISIBLE);
+                isShow = false;
+            }
+            mTabLayout.getBackground().setAlpha(
+                    Math.round(255 - Math.abs(verticalOffset) / (float) mScrollRange * 255));
+        }
+
+        public void resetRange(){
+            mScrollRange = -1;
         }
     }
 

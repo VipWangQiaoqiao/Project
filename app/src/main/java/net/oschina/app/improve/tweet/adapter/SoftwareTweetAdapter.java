@@ -96,12 +96,7 @@ public class SoftwareTweetAdapter extends BaseRecyclerAdapter<Tweet> implements 
             case R.id.iv_tweet_face:
                 int p = (int) v.getTag(R.id.iv_tweet_face);
                 final Tweet item = getItem(p);
-                Author author = item.getAuthor();
-                User user = new User();
-                user.setId((int) author.getId());
-                user.setName(author.getName());
-                user.setPortrait(author.getPortrait());
-                OtherUserHomeActivity.show(mContext, user);
+                OtherUserHomeActivity.show(mContext, item.getAuthor());
                 break;
             case R.id.iv_like_state:
                 int position = (int) v.getTag();
