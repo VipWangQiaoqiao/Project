@@ -2,6 +2,8 @@ package net.oschina.app.improve.bean;
 
 import net.oschina.app.improve.bean.simple.Author;
 
+import java.io.Serializable;
+
 /**
  * Created by thanatos on 16/8/31.
  */
@@ -15,7 +17,7 @@ public class UserV2 extends Author {
     private Statistics statistics;
 
 
-    public static class More{
+    public static class More implements Serializable {
         private String joinDate;
         private String city;
         private String expertise;
@@ -52,9 +54,19 @@ public class UserV2 extends Author {
         public void setPlatform(String platform) {
             this.platform = platform;
         }
+
+        @Override
+        public String toString() {
+            return "More{" +
+                    "joinDate='" + joinDate + '\'' +
+                    ", city='" + city + '\'' +
+                    ", expertise='" + expertise + '\'' +
+                    ", platform='" + platform + '\'' +
+                    '}';
+        }
     }
 
-    public static class Statistics{
+    public static class Statistics implements Serializable {
         private int score;
         private int tweet;
         private int collect;
@@ -127,6 +139,20 @@ public class UserV2 extends Author {
         public void setDiscuss(int discuss) {
             this.discuss = discuss;
         }
+
+        @Override
+        public String toString() {
+            return "Statistics{" +
+                    "score=" + score +
+                    ", tweet=" + tweet +
+                    ", collect=" + collect +
+                    ", fans=" + fans +
+                    ", follow=" + follow +
+                    ", blog=" + blog +
+                    ", answer=" + answer +
+                    ", discuss=" + discuss +
+                    '}';
+        }
     }
 
     public int getGender() {
@@ -167,5 +193,16 @@ public class UserV2 extends Author {
 
     public void setStatistics(Statistics statistics) {
         this.statistics = statistics;
+    }
+
+    @Override
+    public String toString() {
+        return "UserV2{" +
+                "gender=" + gender +
+                ", desc='" + desc + '\'' +
+                ", relation=" + relation +
+                ", more=" + more +
+                ", statistics=" + statistics +
+                '}';
     }
 }
