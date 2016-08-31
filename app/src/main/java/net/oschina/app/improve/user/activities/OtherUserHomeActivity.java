@@ -40,7 +40,6 @@ import net.oschina.app.improve.user.fragments.UserQuestionFragment;
 import net.oschina.app.improve.user.fragments.UserTweetFragment;
 import net.oschina.app.improve.widget.SolarSystemView;
 import net.oschina.app.util.DialogHelp;
-import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 
 import java.util.ArrayList;
@@ -112,7 +111,6 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
         User user = new User();
         user.setName(nick);
         show(context, user);
-
     }
 
     @Override
@@ -381,6 +379,9 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
                 break;
             case R.id.tv_count_fans:
                 UserFansActivity.show(this, user.getId());
+                break;
+            case R.id.view_solar_system:
+                //TODO into user information
                 break;
         }
     }
