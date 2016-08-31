@@ -388,10 +388,12 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                     break;
                 case R.id.user_view_solar_system:
                     //显示我的资料
-                    Bundle userBundle = new Bundle();
-                    userBundle.putSerializable("user_info", mUserInfo);
-                    UIHelper.showSimpleBack(getActivity(),
-                            SimpleBackPage.MY_INFORMATION_DETAIL, userBundle);
+                    if (mUserInfo != null) {
+                        Bundle userBundle = new Bundle();
+                        userBundle.putSerializable("user_info", mUserInfo);
+                        UIHelper.showSimpleBack(getActivity(),
+                                SimpleBackPage.MY_INFORMATION_DETAIL, userBundle);
+                    }
                     break;
                 case R.id.ly_tweet:
                     UserTweetActivity.show(getActivity(), AppContext.getInstance().getLoginUid());
