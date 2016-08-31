@@ -36,10 +36,10 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         implements View.OnClickListener, NewsDetailContract.View, OnCommentClickListener {
 
     private long mId;
-    private TextView mTVAuthorName;
+    // private TextView mTVAuthorName;
     private TextView mTVPubDate;
     private TextView mTVTitle;
-    private ImageView mIVAuthorPortrait;
+    // private ImageView mIVAuthorPortrait;
     private ImageView mIVFav;
     private EditText mETInput;
     private long mCommentId;
@@ -52,6 +52,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
     private View mLayBottom;
     private TextView mAbhoutSoftwareTitle;
     private LinearLayout mAboutSoftware;
+    private TextView mTVName;
 
 
     @Override
@@ -64,16 +65,19 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
     protected void initWidget(View root) {
         super.initWidget(root);
 
-        mTVAuthorName = (TextView) root.findViewById(R.id.tv_name);
+
+        //mTVAuthorName = (TextView) root.findViewById(R.id.tv_name);
         mTVPubDate = (TextView) root.findViewById(R.id.tv_pub_date);
         mTVTitle = (TextView) root.findViewById(R.id.tv_title);
+        mTVName = (TextView) root.findViewById(R.id.tv_info_view);
+        mTVName.setOnClickListener(this);
 
         setGone(R.id.iv_info_view);
-        setGone(R.id.tv_info_view);
+        //setGone(R.id.tv_info_view);
         setGone(R.id.iv_info_comment);
 
-        mIVAuthorPortrait = (ImageView) root.findViewById(R.id.iv_avatar);
-        mIVAuthorPortrait.setOnClickListener(this);
+        //mIVAuthorPortrait = (ImageView) root.findViewById(R.id.iv_avatar);
+        //  mIVAuthorPortrait.setOnClickListener(this);
         mIVFav = (ImageView) root.findViewById(R.id.iv_fav);
         mIVFav.setOnClickListener(this);
 
@@ -129,7 +133,7 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
             case R.id.iv_share:
                 handleShare();
                 break;
-            case R.id.iv_avatar:
+            case R.id.tv_info_view:
                 OtherUserHomeActivity.show(getActivity(), mOperator.getData().getAuthorId());
                 break;
             default:
@@ -154,8 +158,9 @@ public class NewsDetailFragment extends DetailFragment<NewsDetail, NewsDetailCon
         setCommentCount(newsDetail.getCommentCount());
         setBodyContent(newsDetail.getBody());
 
-        mTVAuthorName.setText(newsDetail.getAuthor());
-        getImgLoader().load(newsDetail.getAuthorPortrait()).error(R.mipmap.widget_dface).into(mIVAuthorPortrait);
+        //mTVAuthorName.setText(newsDetail.getAuthor());
+        // getImgLoader().load(newsDetail.getAuthorPortrait()).error(R.mipmap.widget_dface).into(mIVAuthorPortrait);
+        mTVName.setText(String.format("%s%s%s", "@", newsDetail.getAuthor(), "  发布于\t"));
 
         mTVPubDate.setText(StringUtils.formatSomeAgo(newsDetail.getPubDate()));
 
