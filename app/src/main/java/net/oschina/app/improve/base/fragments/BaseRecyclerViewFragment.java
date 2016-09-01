@@ -195,13 +195,13 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
 
     protected void setListData(ResultBean<PageBean<T>> resultBean) {
         //is refresh
-        mBean.setNextPageToken(resultBean.getResult().getNextPageToken());
+        mBean.setNextPageToken((resultBean == null ? null : resultBean.getResult().getNextPageToken()));
         if (mIsRefresh) {
             //cache the time
             mBean.setItems(resultBean.getResult().getItems());
             mAdapter.clear();
             mAdapter.addAll(mBean.getItems());
-            mBean.setPrevPageToken(resultBean.getResult().getPrevPageToken());
+            mBean.setPrevPageToken((resultBean == null ? null : resultBean.getResult().getPrevPageToken()));
             mRefreshLayout.setCanLoadMore(true);
             if (isNeedCache()) {
                 AppOperator.runOnThread(new Runnable() {
