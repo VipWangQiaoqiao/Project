@@ -16,6 +16,9 @@ import net.oschina.app.improve.media.config.ImageLoaderListener;
 /**
  * Created by huanghaibin_dev
  * on 2016/7/13.
+ * <p>
+ * Changed by qiujuer
+ * on 2016/09/01
  */
 
 public class ImageFolderAdapter extends BaseRecyclerAdapter<ImageFolder> {
@@ -36,7 +39,7 @@ public class ImageFolderAdapter extends BaseRecyclerAdapter<ImageFolder> {
         h.tv_name.setText(item.getName());
         h.tv_size.setText(String.format("(%s)", item.getImages().size()));
         if (loader != null) {
-            loader.displayImage(h.iv_image, null, item.getAlbumPath());
+            loader.displayImage(h.iv_image, item.getAlbumPath());
         }
     }
 

@@ -338,7 +338,10 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
             ((ClipView) mRoot).exit(new Runnable() {
                 @Override
                 public void run() {
-                    ((BaseBackActivity) getActivity()).onSupportNavigateUp();
+                    Activity activity = getActivity();
+                    if (activity != null && activity instanceof BaseBackActivity) {
+                        ((BaseBackActivity) activity).onSupportNavigateUp();
+                    }
                 }
             });
         }

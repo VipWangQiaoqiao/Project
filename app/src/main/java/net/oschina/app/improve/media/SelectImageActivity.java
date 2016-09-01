@@ -25,6 +25,9 @@ import pub.devrel.easypermissions.EasyPermissions;
 /**
  * Created by huanghaibin_dev
  * on 2016/7/13.
+ * <p>
+ * Changed by qiujuer
+ * on 2016/09/01
  */
 @SuppressWarnings("All")
 public class SelectImageActivity extends BaseBackActivity implements EasyPermissions.PermissionCallbacks, SelectImageContract.Operator {
