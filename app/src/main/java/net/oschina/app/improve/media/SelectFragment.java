@@ -13,14 +13,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.DrawableRequestBuilder;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.BitmapRequestBuilder;
+import com.bumptech.glide.Glide;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
@@ -44,8 +43,7 @@ import butterknife.OnClick;
  * 图片选择库实现界面
  */
 public class SelectFragment extends BaseFragment implements SelectImageContract.View, View.OnClickListener,
-        ImageLoaderListener, BaseRecyclerAdapter.OnItemClickListener ,
-        MediaStoreDataFactory.PictureSourceCallback, MediaStoreDataFactory.FolderSourceCallback {
+        ImageLoaderListener, BaseRecyclerAdapter.OnItemClickListener {
     @Bind(R.id.rv_image)
     RecyclerView mContentView;
     @Bind(R.id.btn_title_select)
@@ -69,7 +67,6 @@ public class SelectFragment extends BaseFragment implements SelectImageContract.
     private LoaderListener mCursorLoader = new LoaderListener();
 
     private SelectImageContract.Operator mOperator;
-    private MediaStoreDataFactory mFactory;
 
     @Override
     public void onAttach(Context context) {
@@ -133,9 +130,6 @@ public class SelectFragment extends BaseFragment implements SelectImageContract.
             }
         }
         getLoaderManager().initLoader(0, null, mCursorLoader);
-
-        mFactory = new MediaStoreDataFactory(getContext(),this,this);
-        getLoaderManager().initLoader(1, null, mFactory);
     }
 
 
@@ -231,8 +225,6 @@ public class SelectFragment extends BaseFragment implements SelectImageContract.
             ImageFolderPopupWindow popupWindow = new ImageFolderPopupWindow(getActivity(), new ImageFolderPopupWindow.Callback() {
                 @Override
                 public void onSelect(ImageFolderPopupWindow popupWindow, ImageFolder model) {
-                    mFactory.selectFolder(model);
-
                     addImagesToAdapter(model.getImages());
                     mContentView.scrollToPosition(0);
                     popupWindow.dismiss();
@@ -303,39 +295,20 @@ public class SelectFragment extends BaseFragment implements SelectImageContract.
     }
 
     @Override
-    public void displayImage(ImageView iv, String path) {
-        DrawableRequestBuilder builder = getImgLoader().load(path)
+    public void displayImage(ImageView iv, ImageView gifMask, String path) {
+        // In this we need clear before load
+        Glide.clear(iv);
+        // Load image
+        BitmapRequestBuilder builder = getImgLoader().load(path)
+                .asBitmap()
                 .centerCrop()
-                .placeholder(R.color.grey_200)
-                .error(R.mipmap.ic_default_image_error);
-        if (path.toLowerCase().endsWith("gif"))
-            builder = builder.diskCacheStrategy(DiskCacheStrategy.SOURCE);
+                //.placeholder(R.color.grey_50)
+                .error(R.mipmap.ic_split_graph);
         builder.into(iv);
-    }
-
-    @Override
-    public void onFolderRemoved(List<ImageFolder> images) {
-        Log.e("TAG", "onFolderRemoved: "+images.size());
-    }
-
-    @Override
-    public void onFolderAdded(List<ImageFolder> images) {
-        Log.e("TAG", "onFolderAdded: "+images.size());
-    }
-
-    @Override
-    public void onFolderUpdated(List<ImageFolder> images) {
-        Log.e("TAG", "onFolderUpdated: "+images.size());
-    }
-
-    @Override
-    public void onPictureRemoved(List<Image> images) {
-        Log.e("TAG", "onPictureRemoved: "+images.size());
-    }
-
-    @Override
-    public void onPictureAdded(List<Image> images) {
-        Log.e("TAG", "onPictureAdded: "+images.size());
+        // Show gif mask
+        if (gifMask != null) {
+            gifMask.setVisibility(path.toLowerCase().endsWith("gif") ? View.VISIBLE : View.GONE);
+        }
     }
 
     private class LoaderListener implements LoaderManager.LoaderCallbacks<Cursor> {

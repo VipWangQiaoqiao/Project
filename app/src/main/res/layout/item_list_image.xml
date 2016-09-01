@@ -7,11 +7,11 @@
         android:id="@+id/iv_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#dadada"
         android:clickable="false"
         android:contentDescription="@string/app_name"
         android:focusable="false"
-        android:scaleType="centerCrop"
-        android:src="@color/grey_200" />
+        android:scaleType="centerCrop" />
 
     <View
         android:id="@+id/lay_mask"
@@ -19,7 +19,8 @@
         android:layout_height="match_parent"
         android:background="@color/black_alpha_80"
         android:clickable="false"
-        android:focusable="false" />
+        android:focusable="false"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/cb_selected"
@@ -32,4 +33,15 @@
         android:focusable="false"
         android:scaleType="centerInside"
         android:src="@drawable/cb_select_image_check_selector" />
+
+    <ImageView
+        android:id="@+id/iv_is_gif"
+        android:layout_width="30dp"
+        android:layout_height="18dp"
+        android:layout_gravity="right|bottom"
+        android:contentDescription="@string/app_name"
+        android:padding="2dp"
+        android:scaleType="centerInside"
+        android:src="@mipmap/gif"
+        android:visibility="gone" />
 </net.oschina.app.improve.widget.SquareLayout>

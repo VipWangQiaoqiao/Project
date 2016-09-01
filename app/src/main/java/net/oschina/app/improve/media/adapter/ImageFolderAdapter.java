@@ -36,7 +36,7 @@ public class ImageFolderAdapter extends BaseRecyclerAdapter<ImageFolder> {
         h.tv_name.setText(item.getName());
         h.tv_size.setText(String.format("(%s)", item.getImages().size()));
         if (loader != null) {
-            loader.displayImage(h.iv_image, item.getAlbumPath());
+            loader.displayImage(h.iv_image, null, item.getAlbumPath());
         }
     }
 

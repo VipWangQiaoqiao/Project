@@ -44,7 +44,7 @@ public class ImageAdapter extends BaseRecyclerAdapter<Image> {
             ImageViewHolder h = (ImageViewHolder) holder;
             h.mCheckView.setSelected(item.isSelect());
             h.mMaskView.setVisibility(item.isSelect() ? View.VISIBLE : View.GONE);
-            loader.displayImage(h.mImageView, item.getPath());
+            loader.displayImage(h.mImageView, h.mGifMask, item.getPath());
         }
     }
 
@@ -57,6 +57,7 @@ public class ImageAdapter extends BaseRecyclerAdapter<Image> {
     private static class ImageViewHolder extends RecyclerView.ViewHolder {
         ImageView mImageView;
         ImageView mCheckView;
+        ImageView mGifMask;
         View mMaskView;
 
         ImageViewHolder(View itemView) {
@@ -64,6 +65,7 @@ public class ImageAdapter extends BaseRecyclerAdapter<Image> {
             mImageView = (ImageView) itemView.findViewById(R.id.iv_image);
             mCheckView = (ImageView) itemView.findViewById(R.id.cb_selected);
             mMaskView = itemView.findViewById(R.id.lay_mask);
+            mGifMask = (ImageView) itemView.findViewById(R.id.iv_is_gif);
         }
     }
 }
