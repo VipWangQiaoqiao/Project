@@ -16,8 +16,6 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static android.support.v7.widget.StaggeredGridLayoutManager.TAG;
-
 /**
  * 字符串操作工具包
  *
@@ -28,7 +26,6 @@ import static android.support.v7.widget.StaggeredGridLayoutManager.TAG;
  */
 public class StringUtils {
 
-    public static final String TAG="StringUtils";
     private final static Pattern emailer = Pattern
             .compile("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*");
 
@@ -550,7 +547,6 @@ public class StringUtils {
      * 返回当前系统时间
      */
     public static String getDataTime(String format) {
-        Log.e(TAG, "getDataTime: --------->"+format);
         return new SimpleDateFormat(format, Locale.getDefault()).format(new Date());
     }
 
