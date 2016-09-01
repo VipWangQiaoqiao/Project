@@ -18,9 +18,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.BitmapRequestBuilder;
-import com.bumptech.glide.Glide;
-
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseFragment;
@@ -41,6 +38,11 @@ import butterknife.OnClick;
 
 /**
  * 图片选择库实现界面
+ * Created by huanghaibin_dev
+ * on 2016/7/13.
+ * <p>
+ * Changed by qiujuer
+ * on 2016/09/01
  */
 public class SelectFragment extends BaseFragment implements SelectImageContract.View, View.OnClickListener,
         ImageLoaderListener, BaseRecyclerAdapter.OnItemClickListener {
@@ -295,20 +297,13 @@ public class SelectFragment extends BaseFragment implements SelectImageContract.
     }
 
     @Override
-    public void displayImage(ImageView iv, ImageView gifMask, String path) {
-        // In this we need clear before load
-        Glide.clear(iv);
+    public void displayImage(final ImageView iv, final String path) {
         // Load image
-        BitmapRequestBuilder builder = getImgLoader().load(path)
+        getImgLoader().load(path)
                 .asBitmap()
                 .centerCrop()
-                //.placeholder(R.color.grey_50)
-                .error(R.mipmap.ic_split_graph);
-        builder.into(iv);
-        // Show gif mask
-        if (gifMask != null) {
-            gifMask.setVisibility(path.toLowerCase().endsWith("gif") ? View.VISIBLE : View.GONE);
-        }
+                .error(R.mipmap.ic_split_graph)
+                .into(iv);
     }
 
     private class LoaderListener implements LoaderManager.LoaderCallbacks<Cursor> {
