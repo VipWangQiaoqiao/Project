@@ -62,7 +62,7 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
         else if (type == RECEIVER)
             return new ReceiverViewHolder(mInflater.inflate(R.layout.item_list_receiver_message, parent, false));
         else
-            return new ReceiverViewHolder(mInflater.inflate(R.layout.item_list_receiver_message_picture, parent, false));
+            return new ReceiverPictureViewHolder(mInflater.inflate(R.layout.item_list_receiver_message_picture, parent, false));
     }
 
     @Override
