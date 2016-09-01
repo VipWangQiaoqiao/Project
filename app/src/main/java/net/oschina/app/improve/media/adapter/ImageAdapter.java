@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.media.bean.Image;
@@ -32,6 +34,14 @@ public class ImageAdapter extends BaseRecyclerAdapter<Image> {
     }
 
     @Override
+    public void onViewRecycled(RecyclerView.ViewHolder holder) {
+        if (holder instanceof ImageViewHolder) {
+            ImageViewHolder h = (ImageViewHolder) holder;
+            Glide.clear(h.mImageView);
+        }
+    }
+
+    @Override
     protected RecyclerView.ViewHolder onCreateDefaultViewHolder(ViewGroup parent, int type) {
         if (type == 0)
             return new CamViewHolder(mInflater.inflate(R.layout.item_list_cam, parent, false));
@@ -44,7 +54,12 @@ public class ImageAdapter extends BaseRecyclerAdapter<Image> {
             ImageViewHolder h = (ImageViewHolder) holder;
             h.mCheckView.setSelected(item.isSelect());
             h.mMaskView.setVisibility(item.isSelect() ? View.VISIBLE : View.GONE);
-            loader.displayImage(h.mImageView, h.mGifMask, item.getPath());
+
+            // Show gif mask
+            h.mGifMask.setVisibility(item.getPath().toLowerCase().endsWith("gif") ?
+                    View.VISIBLE : View.GONE);
+
+            loader.displayImage(h.mImageView, item.getPath());
         }
     }
 

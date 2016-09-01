@@ -11,7 +11,7 @@
         android:clickable="false"
         android:contentDescription="@string/app_name"
         android:focusable="false"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerInside" />
 
     <View
         android:id="@+id/lay_mask"

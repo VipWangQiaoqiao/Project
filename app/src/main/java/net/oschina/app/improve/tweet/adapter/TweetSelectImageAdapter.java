@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.BitmapRequestBuilder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
@@ -94,6 +93,11 @@ public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectIma
             Model model = mModels.get(position);
             holder.bind(position, model, mCallback.getImgLoader());
         }
+    }
+
+    @Override
+    public void onViewRecycled(TweetSelectImageHolder holder) {
+        Glide.clear(holder.mImage);
     }
 
     @Override
@@ -220,6 +224,7 @@ public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectIma
                     return true;
                 }
             });
+            mImage.setBackgroundColor(0xffdadada);
         }
 
         private TweetSelectImageHolder(View itemView, View.OnClickListener clickListener) {
@@ -231,6 +236,7 @@ public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectIma
             mDelete.setVisibility(View.GONE);
             mImage.setImageResource(R.mipmap.ic_tweet_add);
             mImage.setOnClickListener(clickListener);
+            mImage.setBackgroundDrawable(null);
         }
 
         public void bind(int position, TweetSelectImageAdapter.Model model, RequestManager loader) {
@@ -238,16 +244,23 @@ public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectIma
             // In this we need clear before load
             Glide.clear(mImage);
             // Load image
-            BitmapRequestBuilder builder = loader.load(model.path)
-                    .asBitmap()
-                    .centerCrop()
-                    //.placeholder(R.color.grey_50)
-                    .error(R.mipmap.ic_split_graph);
-            builder.into(mImage);
-            // Show gif mask
-            mGifMask.setVisibility(model.path.toLowerCase().endsWith("gif")
-                    ? View.VISIBLE : View.GONE);
+            if (model.path.toLowerCase().endsWith("gif")) {
+                loader.load(model.path)
+                        .asBitmap()
+                        .centerCrop()
+                        .error(R.mipmap.ic_split_graph)
+                        .into(mImage);
+                // Show gif mask
+                mGifMask.setVisibility(View.VISIBLE);
+            } else {
+                loader.load(model.path)
+                        .centerCrop()
+                        .error(R.mipmap.ic_split_graph)
+                        .into(mImage);
+                mGifMask.setVisibility(View.GONE);
+            }
         }
+
 
         @Override
         public void onItemSelected() {
