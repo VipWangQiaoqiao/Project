@@ -2,7 +2,6 @@ package net.oschina.app.improve.base.fragments;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -84,6 +83,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
                 try {
                     ResultBean<PageBean<T>> resultBean = AppContext.createGson().fromJson(responseString, getType());
                     if (resultBean != null && resultBean.isSuccess() && resultBean.getResult().getItems() != null) {
+                        int size = resultBean.getResult().getItems().size();
                         setListData(resultBean);
                         onRequestSuccess(resultBean.getCode());
                     } else {
@@ -107,6 +107,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
             mRefreshLayout.setVisibility(View.GONE);
             AppOperator.runOnThread(new Runnable() {
+                @SuppressWarnings("unchecked")
                 @Override
                 public void run() {
                     mBean = isNeedCache() ? (PageBean<T>) CacheManager.readObject(getActivity(), CACHE_NAME) : null;
@@ -214,7 +215,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
             mAdapter.addAll(resultBean.getResult().getItems());
         }
 
-        mAdapter.setState(resultBean.getResult().getItems().size() < 20 ? BaseRecyclerAdapter.STATE_NO_MORE : BaseRecyclerAdapter.STATE_LOADING, true);
+        mAdapter.setState(resultBean.getResult().getItems() == null || resultBean.getResult().getItems().size() < 20 ? BaseRecyclerAdapter.STATE_NO_MORE : BaseRecyclerAdapter.STATE_LOADING, true);
 
         if (mAdapter.getItems().size() > 0) {
             mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
