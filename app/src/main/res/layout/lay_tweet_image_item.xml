@@ -7,17 +7,19 @@
         android:id="@+id/iv_picture"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#dadada"
         android:contentDescription="@string/app_name"
         android:orientation="vertical"
         android:scaleType="centerInside" />
 
     <ImageView
         android:id="@+id/iv_is_gif"
-        android:layout_width="32dp"
-        android:layout_height="20dp"
+        android:layout_width="30dp"
+        android:layout_height="18dp"
         android:layout_gravity="right|bottom"
         android:contentDescription="@string/app_name"
         android:padding="2dp"
+        android:scaleType="centerInside"
         android:src="@mipmap/gif"
         android:visibility="gone" />
 </FrameLayout>

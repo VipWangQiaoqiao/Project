@@ -10,12 +10,24 @@
         android:id="@+id/iv_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#dadada"
         android:clickable="true"
         android:contentDescription="@string/app_name"
         android:padding="0dp"
         app:gTouchColor="@color/black_alpha_48"
         app:gTouchCornerRadius="0dp"
         app:gTouchEffect="ripple" />
+
+    <ImageView
+        android:id="@+id/iv_is_gif"
+        android:layout_width="30dp"
+        android:layout_height="18dp"
+        android:layout_gravity="right|bottom"
+        android:contentDescription="@string/app_name"
+        android:padding="2dp"
+        android:scaleType="centerInside"
+        android:src="@mipmap/gif"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/iv_delete"

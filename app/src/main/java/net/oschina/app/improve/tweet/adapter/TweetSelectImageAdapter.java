@@ -8,9 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.DrawableRequestBuilder;
+import com.bumptech.glide.BitmapRequestBuilder;
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.tweet.widget.TweetPicturesPreviewerItemTouchCallback;
@@ -190,6 +190,7 @@ public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectIma
     static class TweetSelectImageHolder extends RecyclerView.ViewHolder implements TweetPicturesPreviewerItemTouchCallback.ItemTouchHelperViewHolder {
         private ImageView mImage;
         private ImageView mDelete;
+        private ImageView mGifMask;
         private HolderListener mListener;
 
         private TweetSelectImageHolder(View itemView, HolderListener listener) {
@@ -197,6 +198,7 @@ public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectIma
             mListener = listener;
             mImage = (ImageView) itemView.findViewById(R.id.iv_content);
             mDelete = (ImageView) itemView.findViewById(R.id.iv_delete);
+            mGifMask = (ImageView) itemView.findViewById(R.id.iv_is_gif);
 
             mDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -233,13 +235,18 @@ public class TweetSelectImageAdapter extends RecyclerView.Adapter<TweetSelectIma
 
         public void bind(int position, TweetSelectImageAdapter.Model model, RequestManager loader) {
             mDelete.setTag(model);
-            DrawableRequestBuilder builder = loader.load(model.path)
+            // In this we need clear before load
+            Glide.clear(mImage);
+            // Load image
+            BitmapRequestBuilder builder = loader.load(model.path)
+                    .asBitmap()
                     .centerCrop()
-                    .placeholder(R.color.grey_200)
-                    .error(R.mipmap.ic_default_image_error);
-            if (model.path.toLowerCase().endsWith("gif"))
-                builder = builder.diskCacheStrategy(DiskCacheStrategy.SOURCE);
+                    //.placeholder(R.color.grey_50)
+                    .error(R.mipmap.ic_split_graph);
             builder.into(mImage);
+            // Show gif mask
+            mGifMask.setVisibility(model.path.toLowerCase().endsWith("gif")
+                    ? View.VISIBLE : View.GONE);
         }
 
         @Override

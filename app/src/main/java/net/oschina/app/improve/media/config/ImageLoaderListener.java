@@ -8,5 +8,5 @@ import android.widget.ImageView;
  * on 2016/7/13.
  */
 public interface ImageLoaderListener {
-    void displayImage(ImageView iv, String path);
+    void displayImage(ImageView iv, ImageView gifMask, String path);
 }

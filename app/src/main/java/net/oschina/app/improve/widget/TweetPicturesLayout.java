@@ -113,11 +113,11 @@ public class TweetPicturesLayout extends ViewGroup implements View.OnClickListen
                 BitmapRequestBuilder builder = requestManager.load(path)
                         .asBitmap()
                         .centerCrop()
-                        .placeholder(R.color.grey_50)
+                        //.placeholder(R.color.grey_50)
                         .error(R.mipmap.ic_split_graph);
 
                 if (path.toLowerCase().endsWith("gif")) {
-                    builder = builder.diskCacheStrategy(DiskCacheStrategy.SOURCE);
+                    //builder = builder.diskCacheStrategy(DiskCacheStrategy.SOURCE);
                     view.findViewById(R.id.iv_is_gif).setVisibility(VISIBLE);
                 }
                 addView(view);
