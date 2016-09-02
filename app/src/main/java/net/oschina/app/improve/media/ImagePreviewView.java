@@ -1,5 +1,7 @@
 package net.oschina.app.improve.media;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
 import android.animation.FloatEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -10,8 +12,12 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AnimationSet;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * 支持图片预览, 放大,缩小,位置自适应,双击放大缩小
@@ -249,15 +255,15 @@ public class ImagePreviewView extends ImageView {
                     animator.start();
                 }
 
-                // 重置到中间位置
+                // width重置到中间位置
                 if (mScaledWidth < getWidth() && mScaledHeight >= getHeight() && mDiffX != 0) {
                     ValueAnimator animator = getResetXAnimator();
-                    animator.setFloatValues(translateLeft, (getWidth() - mScaledWidth) / 2.f);
+                    animator.setFloatValues(translateLeft, 0);   // 宽度总是填充的
                     animator.addUpdateListener(getOnTranslateXAnimationUpdate());
                     animator.start();
                 }
 
-                // 重置到中间位置
+                // height重置到中间位置
                 if (mScaledHeight < getHeight() && mScaledWidth >= getWidth() && mDiffY != 0) {
                     ValueAnimator animator = getResetYAnimator();
                     animator.setFloatValues(translateTop, (getHeight() - mScaledHeight) / 2.f);

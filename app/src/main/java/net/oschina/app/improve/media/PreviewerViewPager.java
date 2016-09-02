@@ -1,6 +1,7 @@
 package net.oschina.app.improve.media;
 
 import android.content.Context;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -30,9 +31,15 @@ public class PreviewerViewPager extends ViewPager {
 
         boolean b = false;
 
+        if (ev.getAction() == MotionEvent.ACTION_DOWN){
+            b = super.onInterceptTouchEvent(ev);
+        }
+
         if (isTransition){
-            MotionEvent event = MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, ev.getX(), ev.getY(), 0);
-            super.onInterceptTouchEvent(event);
+            int action = ev.getAction();
+            ev.setAction(MotionEvent.ACTION_DOWN);
+            super.onInterceptTouchEvent(ev);
+            ev.setAction(action);
             isTransition = false;
         }
 
