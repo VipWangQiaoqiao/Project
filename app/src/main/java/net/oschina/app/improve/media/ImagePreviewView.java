@@ -1,7 +1,5 @@
 package net.oschina.app.improve.media;
 
-import android.animation.Animator;
-import android.animation.AnimatorSet;
 import android.animation.FloatEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -12,12 +10,8 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AnimationSet;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * 支持图片预览, 放大,缩小,位置自适应,双击放大缩小
