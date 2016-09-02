@@ -13,8 +13,8 @@ public class UserFansOrFollows implements Serializable {
     private String portrait;//0 未知 1 男 2 女
     private int gender;
     private String desc;
-    private String city;
-    private String expertise; //擅长领域
+    private int relation;
+    private More more;
 
     public long getId() {
         return id;
@@ -56,20 +56,69 @@ public class UserFansOrFollows implements Serializable {
         this.gender = gender;
     }
 
-    public String getCity() {
-        return city;
+    public int getRelation() {
+        return relation;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setRelation(int relation) {
+        this.relation = relation;
     }
 
-    public String getExpertise() {
-        return expertise;
+    public More getMore() {
+        return more;
     }
 
-    public void setExpertise(String expertise) {
-        this.expertise = expertise;
+    public void setMore(More more) {
+        this.more = more;
+    }
+
+    public static class More implements Serializable {
+        private String joinDate;
+        private String city;
+        private String expertise;
+        private String platform;
+
+        public String getJoinDate() {
+            return joinDate;
+        }
+
+        public void setJoinDate(String joinDate) {
+            this.joinDate = joinDate;
+        }
+
+        public String getCity() {
+            return city;
+        }
+
+        public void setCity(String city) {
+            this.city = city;
+        }
+
+        public String getExpertise() {
+            return expertise;
+        }
+
+        public void setExpertise(String expertise) {
+            this.expertise = expertise;
+        }
+
+        public String getPlatform() {
+            return platform;
+        }
+
+        public void setPlatform(String platform) {
+            this.platform = platform;
+        }
+
+        @Override
+        public String toString() {
+            return "More{" +
+                    "joinDate='" + joinDate + '\'' +
+                    ", city='" + city + '\'' +
+                    ", expertise='" + expertise + '\'' +
+                    ", platform='" + platform + '\'' +
+                    '}';
+        }
     }
 
     @Override
@@ -80,8 +129,8 @@ public class UserFansOrFollows implements Serializable {
                 ", portrait='" + portrait + '\'' +
                 ", gender=" + gender +
                 ", desc='" + desc + '\'' +
-                ", city='" + city + '\'' +
-                ", expertise='" + expertise + '\'' +
+                ", relation=" + relation +
+                ", more=" + more +
                 '}';
     }
 }
