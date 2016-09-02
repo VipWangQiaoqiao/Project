@@ -59,10 +59,12 @@
     </string-array>
 
     <string-array name="userfavorite">
+        <item>综合</item>
         <item>软件</item>
-        <item>话题</item>
-        <item>代码</item>
+        <item>问答</item>
         <item>博客</item>
+        <item>翻译</item>
+        <item>活动</item>
         <item>资讯</item>
     </string-array>
 

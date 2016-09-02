@@ -25,6 +25,7 @@ import java.util.regex.Pattern;
  *          Updated 2016-08-11
  */
 public class StringUtils {
+
     private final static Pattern emailer = Pattern
             .compile("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*");
 
@@ -530,7 +531,7 @@ public class StringUtils {
 
     public static int[] getCurrentDate() {
         int[] dateBundle = new int[3];
-        String[] temp = getDataTime("YYYY-MM-dd").split("-");
+        String[] temp = getDataTime("yyyy-MM-dd").split("-");
 
         for (int i = 0; i < 3; i++) {
             try {

@@ -59,9 +59,9 @@ public class UserFansOrFollowAdapter extends BaseRecyclerAdapter<UserFansOrFollo
             default:
                 break;
         }
-        vh.mTvCity.setText(item.getCity());
+        vh.mTvCity.setText(item.getMore().getCity());
         vh.mTvDesc.setText(item.getDesc());
-        vh.mTvExp.setText(item.getExpertise());
+        vh.mTvExp.setText(item.getMore().getExpertise());
 
     }
 
