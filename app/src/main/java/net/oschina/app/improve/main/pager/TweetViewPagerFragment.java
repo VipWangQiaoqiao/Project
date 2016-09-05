@@ -1,4 +1,4 @@
-package net.oschina.app.improve.main.nav;
+package net.oschina.app.improve.main.pager;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +12,9 @@ import net.oschina.app.interf.OnTabReselectListener;
 
 /**
  * Created by fei
+ * on 2016/9/5.
+ * <p>
+ * Changed qiujuer
  * on 2016/9/5.
  */
 public class TweetViewPagerFragment extends BaseViewPagerFragment implements OnTabReselectListener {
@@ -56,5 +59,10 @@ public class TweetViewPagerFragment extends BaseViewPagerFragment implements OnT
                 getBundle(TweetFragment.CATEGORY_USER, AppContext.getInstance().getLoginUid()));
 
         return infoList;
+    }
+
+    @Override
+    protected int getTitleRes() {
+        return 0;
     }
 }

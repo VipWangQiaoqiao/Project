@@ -1,4 +1,4 @@
-package net.oschina.app.improve.main.nav;
+package net.oschina.app.improve.main.pager;
 
 import android.support.v4.app.Fragment;
 
@@ -13,6 +13,9 @@ import net.oschina.app.interf.OnTabReselectListener;
 
 /**
  * Created by fei
+ * on 2016/9/5.
+ * <p>
+ * Changed qiujuer
  * on 2016/9/5.
  */
 public class GeneralViewPagerFragment extends BaseViewPagerFragment implements OnTabReselectListener {
@@ -45,5 +48,10 @@ public class GeneralViewPagerFragment extends BaseViewPagerFragment implements O
         infoList[3] = new PagerInfo(titles[3], EventFragment.class, null);
 
         return infoList;
+    }
+
+    @Override
+    protected int getTitleRes() {
+        return 0;
     }
 }

@@ -15,6 +15,8 @@ import android.view.View;
 import net.oschina.app.R;
 import net.oschina.app.fragment.ExploreFragment;
 import net.oschina.app.improve.base.fragments.BaseFragment;
+import net.oschina.app.improve.main.pager.GeneralViewPagerFragment;
+import net.oschina.app.improve.main.pager.TweetViewPagerFragment;
 import net.oschina.app.improve.notice.NoticeBean;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.tweet.activities.TweetPublishActivity;
