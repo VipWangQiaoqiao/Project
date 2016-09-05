@@ -5,6 +5,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,8 +48,6 @@ public abstract class BaseViewPagerFragment extends BaseTitleFragment {
         private String title;
         private Class<?> clx;
         private Bundle args;
-        private Fragment fragment;
-
 
         public PagerInfo(String title, Class<?> clx, Bundle args) {
             this.title = title;
@@ -59,6 +58,7 @@ public abstract class BaseViewPagerFragment extends BaseTitleFragment {
 
     public class BaseViewPagerAdapter extends FragmentPagerAdapter {
         private PagerInfo[] mInfoList;
+        private Fragment mCurFragment;
 
         public BaseViewPagerAdapter(FragmentManager fm, PagerInfo[] infoList) {
             super(fm);
@@ -66,20 +66,21 @@ public abstract class BaseViewPagerFragment extends BaseTitleFragment {
         }
 
         @Override
-        public Fragment getItem(int position) {
-            PagerInfo info = mInfoList[position];
-            Fragment fragment = info.fragment;
-            if (fragment == null) {
-                fragment = Fragment.instantiate(getContext(), info.clx.getName(), info.args);
-                info.fragment = fragment;
+        public void setPrimaryItem(ViewGroup container, int position, Object object) {
+            super.setPrimaryItem(container, position, object);
+            if (object instanceof Fragment) {
+                mCurFragment = (Fragment) object;
             }
-            return fragment;
+        }
+
+        public Fragment getCurFragment() {
+            return mCurFragment;
         }
 
         @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            super.destroyItem(container, position, object);
-            mInfoList[position].fragment = null;
+        public Fragment getItem(int position) {
+            PagerInfo info = mInfoList[position];
+            return Fragment.instantiate(getContext(), info.clx.getName(), info.args);
         }
 
         @Override
@@ -92,5 +93,9 @@ public abstract class BaseViewPagerFragment extends BaseTitleFragment {
             return mInfoList[position].title;
         }
 
+        @Override
+        public int getItemPosition(Object object) {
+            return PagerAdapter.POSITION_NONE;
+        }
     }
 }
