@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -198,6 +199,8 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
 
     private class ViewPagerAdapter extends PagerAdapter implements ImagePreviewView.OnReachBorderListener {
 
+        private View.OnClickListener mFinishClickListener;
+
         @Override
         public int getCount() {
             return mImageSources.length;
@@ -234,8 +237,22 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
                         }
                     }).diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(previewView);
+            previewView.setOnClickListener(getListener());
             container.addView(view);
             return view;
+        }
+
+        private View.OnClickListener getListener(){
+            if (mFinishClickListener == null){
+                mFinishClickListener = new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        Log.d("thanatosx", "---------on click------");
+                        finish();
+                    }
+                };
+            }
+            return mFinishClickListener;
         }
 
         @Override
