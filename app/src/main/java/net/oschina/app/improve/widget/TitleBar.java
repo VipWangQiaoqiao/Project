@@ -86,6 +86,10 @@ public class TitleBar extends FrameLayout {
         mIcon.setVisibility(VISIBLE);
     }
 
+    public void setIconOnClickListener(OnClickListener listener) {
+        mIcon.setOnClickListener(listener);
+    }
+
     public static int getStatusHeight(Context context) {
         int statusHeight = 0;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
