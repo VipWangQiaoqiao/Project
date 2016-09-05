@@ -22,6 +22,7 @@ import butterknife.Bind;
  * on 2016/9/5.
  */
 public abstract class BaseViewPagerFragment extends BaseTitleFragment {
+
     @Bind(R.id.tab_nav)
     protected TabLayout mTabNav;
 

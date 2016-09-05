@@ -2,7 +2,6 @@ package net.oschina.app.improve.main.pager;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -39,12 +38,11 @@ public class TweetViewPagerFragment extends BaseViewPagerFragment implements OnT
             BaseViewPagerAdapter pagerAdapter = (BaseViewPagerAdapter) mBaseViewPager.getAdapter();
             Fragment fragment = pagerAdapter.getCurFragment();
             if (fragment != null && fragment instanceof BaseGeneralListFragment) {
-                Log.e("TAG", "f:" + fragment.getClass().toString() + " m:" + fragment.toString());
-
                 ((BaseGeneralListFragment) fragment).onTabReselect();
             }
         }
     }
+
     @Override
     protected PagerInfo[] getPagers() {
 

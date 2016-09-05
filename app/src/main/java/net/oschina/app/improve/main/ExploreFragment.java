@@ -1,30 +1,25 @@
-package net.oschina.app.fragment;
+package net.oschina.app.improve.main;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import net.oschina.app.R;
-import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.improve.base.fragments.BaseTitleFragment;
 import net.oschina.app.ui.FindUserActivity;
 import net.oschina.app.ui.ShakeActivity;
 import net.oschina.app.util.UIHelper;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * 发现页面
- *
- * @author FireAnt（http://my.oschina.net/LittleDY）
- * @version 创建时间：2014年11月4日 下午3:34:07
+ * Created by fei on 2016/9/6.
+ * desc:
  */
 
-public class ExploreFragment extends BaseFragment {
+public class ExploreFragment extends BaseTitleFragment implements View.OnClickListener {
+
     @Bind(R.id.rl_soft)
     View mRlActive;
 
@@ -37,20 +32,32 @@ public class ExploreFragment extends BaseFragment {
     @Bind(R.id.rl_scan)
     View mScan;
 
-    @Bind(R.id.rl_shake)
-    View mShake;
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_explore, container, false);
-        ButterKnife.bind(this, view);
-        initView(view);
-        return view;
+    protected int getIconRes() {
+        return R.mipmap.actionbar_search_icon;
     }
 
-    @OnClick({R.id.iv_explore_discover})
+    @Override
+    protected View.OnClickListener getIconClickListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UIHelper.showSimpleBack(getActivity(), SimpleBackPage.SEARCH);
+            }
+        };
+    }
+
+    @Override
+    protected int getContentLayoutId() {
+        return R.layout.fragment_explore;
+    }
+
+    @Override
+    protected int getTitleRes() {
+        return R.string.main_tab_name_explore;
+    }
+
+    @OnClick({R.id.rl_soft, R.id.rl_find_osc, R.id.rl_scan, R.id.rl_shake})
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -89,31 +96,5 @@ public class ExploreFragment extends BaseFragment {
         Intent intent = new Intent();
         intent.setClass(getActivity(), FindUserActivity.class);
         getActivity().startActivity(intent);
-    }
-
-    @Override
-    public void initView(View view) {
-
-//        FrameLayout explore = (FrameLayout) view.findViewById(R.id.explore);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) explore.getLayoutParams();
-//            layoutParams.topMargin = UIUtil.getStatusHeight(getActivity());
-//        }
-        //  ImageView ivDiscover = (ImageView) explore.findViewById(R.id.iv_explore_discover);
-
-        //   ivDiscover.setOnClickListener(this);
-
-        mRlActive.setOnClickListener(this);
-
-        mFindOSCer.setOnClickListener(this);
-        // mCity.setOnClickListener(this);
-        mScan.setOnClickListener(this);
-        mShake.setOnClickListener(this);
-
-    }
-
-    @Override
-    public void initData() {
-
     }
 }
