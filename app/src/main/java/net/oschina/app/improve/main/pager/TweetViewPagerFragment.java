@@ -63,6 +63,6 @@ public class TweetViewPagerFragment extends BaseViewPagerFragment implements OnT
 
     @Override
     protected int getTitleRes() {
-        return 0;
+        return R.string.main_tab_name_tweet;
     }
 }

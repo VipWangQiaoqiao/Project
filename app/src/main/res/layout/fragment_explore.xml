@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="false">
+    android:orientation="vertical">
 
-    <include
+    <net.oschina.app.improve.widget.TitleBar
         android:id="@+id/explore"
-        layout="@layout/actionbar_main_layout" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/explore"
         android:background="?attr/layout_item_bg"
         android:fitsSystemWindows="false"
         android:orientation="vertical">
@@ -36,12 +36,14 @@
 
             <TextView
                 style="@style/option_item_text"
+                android:layout_width="0dp"
                 android:layout_weight="1"
                 android:text="@string/actionbar_title_softwarelist" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@null"
                 app:srcCompat="@mipmap/ic_arrow_right" />
         </LinearLayout>
 
@@ -68,12 +70,14 @@
             <TextView
                 android:id="@+id/textView2"
                 style="@style/option_item_text"
+                android:layout_width="0dp"
                 android:layout_weight="1"
                 android:text="@string/find_oscer" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@null"
                 app:srcCompat="@mipmap/ic_arrow_right" />
         </LinearLayout>
 
@@ -98,12 +102,14 @@
 
             <TextView
                 style="@style/option_item_text"
+                android:layout_width="0dp"
                 android:layout_weight="1"
                 android:text="@string/scan" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@null"
                 app:srcCompat="@mipmap/ic_arrow_right" />
         </LinearLayout>
 
@@ -131,12 +137,14 @@
 
             <TextView
                 style="@style/option_item_text"
+                android:layout_width="0dp"
                 android:layout_weight="1"
                 android:text="@string/shake" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@null"
                 app:srcCompat="@mipmap/ic_arrow_right" />
         </LinearLayout>
 
@@ -145,4 +153,4 @@
             android:layout_height="1px" />
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

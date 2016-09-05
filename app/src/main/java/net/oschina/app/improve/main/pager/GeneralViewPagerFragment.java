@@ -21,7 +21,6 @@ import net.oschina.app.interf.OnTabReselectListener;
 public class GeneralViewPagerFragment extends BaseViewPagerFragment implements OnTabReselectListener {
 
 
-
     @Override
     public void onTabReselect() {
 
@@ -52,6 +51,6 @@ public class GeneralViewPagerFragment extends BaseViewPagerFragment implements O
 
     @Override
     protected int getTitleRes() {
-        return 0;
+        return R.string.main_tab_name_news;
     }
 }
