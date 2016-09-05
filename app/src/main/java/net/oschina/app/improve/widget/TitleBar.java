@@ -80,10 +80,16 @@ public class TitleBar extends FrameLayout {
     }
 
     public void setTitle(@StringRes int titleRes) {
+        if (titleRes <= 0)
+            return;
         mTitle.setText(titleRes);
     }
 
     public void setIcon(@DrawableRes int iconRes) {
+        if (iconRes <= 0) {
+            mIcon.setVisibility(GONE);
+            return;
+        }
         mIcon.setImageResource(iconRes);
         mIcon.setVisibility(VISIBLE);
     }

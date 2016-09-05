@@ -13,23 +13,9 @@
         app:aIcon="@mipmap/actionbar_search_icon"
         app:aTitle="综合" />
 
-    <!--tab navigation-->
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tab_nav"
+    <ViewStub
+        android:id="@+id/lay_content"
         android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:background="#F6F6F6"
-        app:tabGravity="fill"
-        app:tabIndicatorColor="@color/actionbar_background"
-        app:tabMode="fixed"
-        app:tabSelectedTextColor="?attr/colorPrimary"
-        app:tabTextColor="@color/project_listitem_someinfo" />
-
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/base_viewPager"
-        android:layout_width="wrap_content"
         android:layout_height="match_parent" />
-
 
 </LinearLayout>

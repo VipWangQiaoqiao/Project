@@ -47,13 +47,17 @@ public abstract class BaseFragment extends Fragment {
                 parent.removeView(mRoot);
         } else {
             mRoot = inflater.inflate(getLayoutId(), container, false);
-            ButterKnife.bind(this, mRoot);
+            onBindView(mRoot);
             if (savedInstanceState != null)
                 onRestartInstance(savedInstanceState);
             initWidget(mRoot);
             initData();
         }
         return mRoot;
+    }
+
+    protected void onBindView(View root){
+        ButterKnife.bind(this, root);
     }
 
     @Override

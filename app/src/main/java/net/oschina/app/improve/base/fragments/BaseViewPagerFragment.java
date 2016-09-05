@@ -11,24 +11,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import net.oschina.app.R;
-import net.oschina.app.bean.SimpleBackPage;
-import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
-import net.oschina.app.improve.widget.TitleBar;
-import net.oschina.app.util.UIHelper;
 
 import butterknife.Bind;
 
-import static java.security.AccessController.getContext;
-
 /**
- * Created by fei on 2016/9/5.
- * desc:
+ * Created by fei
+ * on 2016/9/5.
+ * <p>
+ * Changed qiujuer
+ * on 2016/9/5.
  */
-
-public abstract class BaseViewPagerFragment extends BaseFragment {
-    @Bind(R.id.titleBar)
-    TitleBar mTitleBar;
-
+public abstract class BaseViewPagerFragment extends BaseTitleFragment {
     @Bind(R.id.tab_nav)
     protected TabLayout mTabNav;
 
@@ -36,25 +29,17 @@ public abstract class BaseViewPagerFragment extends BaseFragment {
     protected ViewPager mBaseViewPager;
 
     @Override
-    protected int getLayoutId() {
-        return R.layout.fragment_main_base_viewpager;
+    protected int getContentLayoutId() {
+        return R.layout.fragment_base_viewpager;
     }
 
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
-        mTitleBar.setIconOnClickListener(new BaseRecyclerAdapter.OnClickListener() {
-            @Override
-            public void onClick(int position, long itemId) {
-                UIHelper.showSimpleBack(getActivity(), SimpleBackPage.SEARCH);
-            }
-        });
-
         BaseViewPagerAdapter adapter = new BaseViewPagerAdapter(getChildFragmentManager(), getPagers());
         mBaseViewPager.setAdapter(adapter);
         mTabNav.setupWithViewPager(mBaseViewPager);
         mBaseViewPager.setCurrentItem(0, true);
-
     }
 
     protected Fragment addTab(Context context, Class<? extends BaseFragment> fClass, Bundle args) {
