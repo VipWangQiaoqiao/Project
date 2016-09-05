@@ -1,6 +1,7 @@
 package net.oschina.app.improve.main.pager;
 
 import android.support.v4.app.Fragment;
+import android.util.Log;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.fragments.BaseGeneralListFragment;
@@ -22,11 +23,11 @@ public class GeneralViewPagerFragment extends BaseViewPagerFragment implements O
     @Override
     public void onTabReselect() {
         if (mBaseViewPager != null) {
-            int position = mBaseViewPager.getCurrentItem();
             BaseViewPagerAdapter pagerAdapter = (BaseViewPagerAdapter) mBaseViewPager.getAdapter();
-            Fragment fragment = pagerAdapter.getItem(position);
-
+            Fragment fragment = pagerAdapter.getCurFragment();
             if (fragment != null && fragment instanceof BaseGeneralListFragment) {
+                Log.e("TAG", "f:" + fragment.getClass().toString() + " m:" + fragment.toString());
+
                 ((BaseGeneralListFragment) fragment).onTabReselect();
             }
         }

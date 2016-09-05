@@ -47,7 +47,10 @@ public abstract class BaseFragment extends Fragment {
                 parent.removeView(mRoot);
         } else {
             mRoot = inflater.inflate(getLayoutId(), container, false);
-            onBindView(mRoot);
+            // Do something
+            onBindViewBefore(mRoot);
+            // Bind view
+            ButterKnife.bind(this, mRoot);
             if (savedInstanceState != null)
                 onRestartInstance(savedInstanceState);
             initWidget(mRoot);
@@ -56,8 +59,8 @@ public abstract class BaseFragment extends Fragment {
         return mRoot;
     }
 
-    protected void onBindView(View root){
-        ButterKnife.bind(this, root);
+    protected void onBindViewBefore(View root) {
+        // ...
     }
 
     @Override

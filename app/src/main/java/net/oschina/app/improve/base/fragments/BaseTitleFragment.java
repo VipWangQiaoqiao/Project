@@ -25,18 +25,18 @@ public abstract class BaseTitleFragment extends BaseFragment {
     }
 
     @Override
-    protected void onBindView(View root) {
-        // on before onBindView call
+    protected void onBindViewBefore(View root) {
+        super.onBindViewBefore(root);
+        // on before onBindViewBefore call
         ViewStub stub = (ViewStub) root.findViewById(R.id.lay_content);
         stub.setLayoutResource(getContentLayoutId());
         stub.inflate();
-
-        super.onBindView(root);
     }
 
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
+        // not null
         mTitleBar.setTitle(getTitleRes());
         mTitleBar.setIcon(getIconRes());
         mTitleBar.setIconOnClickListener(getIconClickListener());
