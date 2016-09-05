@@ -249,15 +249,15 @@ public class ImagePreviewView extends ImageView {
                     animator.start();
                 }
 
-                // 重置到中间位置
+                // width重置到中间位置
                 if (mScaledWidth < getWidth() && mScaledHeight >= getHeight() && mDiffX != 0) {
                     ValueAnimator animator = getResetXAnimator();
-                    animator.setFloatValues(translateLeft, (getWidth() - mScaledWidth) / 2.f);
+                    animator.setFloatValues(translateLeft, 0);   // 宽度总是填充的
                     animator.addUpdateListener(getOnTranslateXAnimationUpdate());
                     animator.start();
                 }
 
-                // 重置到中间位置
+                // height重置到中间位置
                 if (mScaledHeight < getHeight() && mScaledWidth >= getWidth() && mDiffY != 0) {
                     ValueAnimator animator = getResetYAnimator();
                     animator.setFloatValues(translateTop, (getHeight() - mScaledHeight) / 2.f);

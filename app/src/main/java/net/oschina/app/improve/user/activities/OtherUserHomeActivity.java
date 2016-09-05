@@ -340,6 +340,11 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
                         responseString, new TypeToken<ResultBean<UserV2>>(){}.getType());
                 if (result.isSuccess() && result.getResult() == null) return;
                 user = result.getResult();
+                if (user == null){
+                    Toast.makeText(OtherUserHomeActivity.this, "该用户不存在", Toast.LENGTH_SHORT).show();
+                    finish();
+                    return;
+                }
                 injectDataToView();
                 injectDataToViewPager();
                 // after request user successful we could get user id when the static method show passed in user name

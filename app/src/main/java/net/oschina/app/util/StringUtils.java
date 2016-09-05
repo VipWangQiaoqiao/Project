@@ -1,7 +1,6 @@
 package net.oschina.app.util;
 
 import android.app.AlarmManager;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -136,31 +135,44 @@ public class StringUtils {
      * @param sdate YYYY-MM-DD HH:mm:ss
      * @return n分钟前, n小时前, 昨天, 前天, n天前, n个月前
      */
-    public static String formatSomeAgo(@NonNull String sdate) {
+    public static String formatSomeAgo(String sdate) {
         if (sdate == null) return "";
         Calendar calendar = parseCalendar(sdate);
         if (calendar == null) return sdate;
 
         Calendar mCurrentDate = Calendar.getInstance();
-        long diff = mCurrentDate.getTimeInMillis() - calendar.getTimeInMillis();
-        if (diff >= 0 && diff < AlarmManager.INTERVAL_HOUR) {
+        long crim = mCurrentDate.getTimeInMillis(); // current
+        long trim = calendar.getTimeInMillis(); // target
+        long diff = crim - trim;
+
+        int year = mCurrentDate.get(Calendar.YEAR);
+        int month = mCurrentDate.get(Calendar.MONTH);
+        int day = mCurrentDate.get(Calendar.DATE);
+
+        if (diff < 60 * 1000){
+            return "刚刚";
+        }
+        if (diff >= 60 * 1000 && diff < AlarmManager.INTERVAL_HOUR) {
             return String.format("%s分钟前", diff / 60 / 1000);
         }
-        if (diff >= AlarmManager.INTERVAL_HOUR && diff < AlarmManager.INTERVAL_DAY) {
+        mCurrentDate.set(year, month, day, 0, 0, 0);
+        if (trim >= mCurrentDate.getTimeInMillis()) {
             return String.format("%s小时前", diff / AlarmManager.INTERVAL_HOUR);
         }
-
-        return mCurrentDate.get(Calendar.YEAR) == calendar.get(Calendar.YEAR)
-                ? mCurrentDate.get(Calendar.MONTH) == calendar.get(Calendar.MONTH)
-                ? mCurrentDate.get(Calendar.DATE) == calendar.get(Calendar.DATE)
-                ? "今天" // impossible reach
-                : mCurrentDate.get(Calendar.DATE) - calendar.get(Calendar.DATE) == 1
-                ? "昨天"
-                : mCurrentDate.get(Calendar.DATE) - calendar.get(Calendar.DATE) == 2
-                ? "前天"
-                : String.format("%s天前", mCurrentDate.get(Calendar.DATE) - calendar.get(Calendar.DATE))
-                : String.format("%s月前", mCurrentDate.get(Calendar.MONTH) - calendar.get(Calendar.MONTH))
-                : String.format("%s年前", mCurrentDate.get(Calendar.YEAR) - calendar.get(Calendar.YEAR));
+        mCurrentDate.set(year, month, day - 1, 0, 0, 0);
+        if (trim >= mCurrentDate.getTimeInMillis()){
+            return "昨天";
+        }
+        mCurrentDate.set(year, month, day - 2, 0, 0, 0);
+        if (trim >= mCurrentDate.getTimeInMillis()){
+            return "前天";
+        }
+        if (diff < AlarmManager.INTERVAL_DAY * 30){
+            return String.format("%s天前", diff / AlarmManager.INTERVAL_DAY);
+        }
+        int md = mCurrentDate.get(Calendar.MONTH) - calendar.get(Calendar.MONTH);
+        if (md < 12) return String.format("%s月前", md);
+        return String.format("%s年前", mCurrentDate.get(Calendar.YEAR) - calendar.get(Calendar.YEAR));
     }
 
     /**
