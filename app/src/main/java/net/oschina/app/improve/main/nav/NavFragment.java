@@ -18,9 +18,7 @@ import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.notice.NoticeBean;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.tweet.activities.TweetPublishActivity;
-import net.oschina.app.improve.tweet.fragments.TweetViewPagerFragment;
 import net.oschina.app.improve.user.fragments.NewUserInfoFragment;
-import net.oschina.app.viewpagerfragment.GeneralViewPagerFragment;
 import net.qiujuer.genius.ui.drawable.shape.BorderShape;
 
 import java.util.List;
@@ -56,6 +54,7 @@ public class NavFragment extends BaseFragment implements View.OnClickListener, N
         return R.layout.fragment_nav;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
@@ -74,7 +73,7 @@ public class NavFragment extends BaseFragment implements View.OnClickListener, N
 
         mNavTweet.init(R.drawable.tab_icon_tweet,
                 R.string.main_tab_name_tweet,
-                TweetViewPagerFragment.class);
+               TweetViewPagerFragment.class);
 
         mNavExplore.init(R.drawable.tab_icon_explore,
                 R.string.main_tab_name_explore,
