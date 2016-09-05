@@ -198,6 +198,8 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
 
     private class ViewPagerAdapter extends PagerAdapter implements ImagePreviewView.OnReachBorderListener {
 
+        private View.OnClickListener mFinishClickListener;
+
         @Override
         public int getCount() {
             return mImageSources.length;
@@ -234,8 +236,21 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
                         }
                     }).diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(previewView);
+            previewView.setOnClickListener(getListener());
             container.addView(view);
             return view;
+        }
+
+        private View.OnClickListener getListener(){
+            if (mFinishClickListener == null){
+                mFinishClickListener = new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                };
+            }
+            return mFinishClickListener;
         }
 
         @Override

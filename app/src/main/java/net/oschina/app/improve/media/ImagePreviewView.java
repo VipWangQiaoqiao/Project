@@ -269,7 +269,6 @@ public class ImagePreviewView extends ImageView {
                     resetDefaultState();
                 }
             }
-
         }
 
         return true;
@@ -476,6 +475,11 @@ public class ImagePreviewView extends ImageView {
 
             invalidate();
             return true;
+        }
+
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+            return performClick();
         }
 
         @Override
