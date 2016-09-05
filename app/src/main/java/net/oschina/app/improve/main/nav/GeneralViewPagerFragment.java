@@ -16,8 +16,12 @@ import net.oschina.app.interf.OnTabReselectListener;
  * on 2016/9/5.
  */
 public class GeneralViewPagerFragment extends BaseViewPagerFragment implements OnTabReselectListener {
+
+
+
     @Override
     public void onTabReselect() {
+
         if (mBaseViewPager != null) {
             int position = mBaseViewPager.getCurrentItem();
             BaseViewPagerAdapter pagerAdapter = (BaseViewPagerAdapter) mBaseViewPager.getAdapter();
@@ -31,6 +35,7 @@ public class GeneralViewPagerFragment extends BaseViewPagerFragment implements O
 
     @Override
     protected PagerInfo[] getPagers() {
+
         String[] titles = getResources().getStringArray(R.array.general_viewpage_arrays);
         PagerInfo[] infoList = new PagerInfo[4];
 

@@ -1,6 +1,5 @@
 package net.oschina.app.improve.base.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -17,8 +16,6 @@ import net.oschina.app.improve.widget.TitleBar;
 import net.oschina.app.util.UIHelper;
 
 import butterknife.Bind;
-
-import static java.security.AccessController.getContext;
 
 /**
  * Created by fei on 2016/9/5.
@@ -55,10 +52,6 @@ public abstract class BaseViewPagerFragment extends BaseFragment {
         mTabNav.setupWithViewPager(mBaseViewPager);
         mBaseViewPager.setCurrentItem(0, true);
 
-    }
-
-    protected Fragment addTab(Context context, Class<? extends BaseFragment> fClass, Bundle args) {
-        return Fragment.instantiate(context, fClass.getName(), args);
     }
 
     protected abstract PagerInfo[] getPagers();

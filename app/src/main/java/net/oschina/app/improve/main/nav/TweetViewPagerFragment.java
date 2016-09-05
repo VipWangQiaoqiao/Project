@@ -30,6 +30,7 @@ public class TweetViewPagerFragment extends BaseViewPagerFragment implements OnT
 
     @Override
     public void onTabReselect() {
+
         if (mBaseViewPager != null) {
             int position = mBaseViewPager.getCurrentItem();
             BaseViewPagerAdapter pagerAdapter = (BaseViewPagerAdapter) mBaseViewPager.getAdapter();
@@ -43,6 +44,7 @@ public class TweetViewPagerFragment extends BaseViewPagerFragment implements OnT
 
     @Override
     protected PagerInfo[] getPagers() {
+
         String[] titles = getResources().getStringArray(R.array.tweets_viewpage_arrays);
         PagerInfo[] infoList = new PagerInfo[3];
 
