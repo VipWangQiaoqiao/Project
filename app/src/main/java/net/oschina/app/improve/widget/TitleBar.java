@@ -23,6 +23,8 @@ public class TitleBar extends FrameLayout {
     private TextView mTitle;
     private ImageView mIcon;
 
+    private int mExtPaddingTop;
+
     public TitleBar(Context context) {
         super(context);
         init(null, 0, 0);
@@ -74,7 +76,7 @@ public class TitleBar extends FrameLayout {
         setBackgroundColor(getResources().getColor(R.color.main_green));
 
         // Init padding
-        setPadding(getLeft(), getTop() + getStatusHeight(context), getRight(), getBottom());
+        setPadding(getLeft(), getTop() + getExtPaddingTop(), getRight(), getBottom());
     }
 
     public void setTitle(@StringRes int titleRes) {
@@ -90,19 +92,28 @@ public class TitleBar extends FrameLayout {
         mIcon.setOnClickListener(listener);
     }
 
-    public static int getStatusHeight(Context context) {
-        int statusHeight = 0;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        float d = getResources().getDisplayMetrics().density;
+        int minH = (int) (d * 56 + getExtPaddingTop());
+
+        heightMeasureSpec = MeasureSpec.makeMeasureSpec(minH, MeasureSpec.EXACTLY);
+
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
+    private int getExtPaddingTop() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && mExtPaddingTop == 0) {
             try {
                 Class<?> clazz = Class.forName("com.android.internal.R$dimen");
                 Object object = clazz.newInstance();
                 int height = Integer.parseInt(clazz.getField("status_bar_height")
                         .get(object).toString());
-                statusHeight = context.getResources().getDimensionPixelSize(height);
+                mExtPaddingTop = getContext().getResources().getDimensionPixelSize(height);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        return statusHeight;
+        return mExtPaddingTop;
     }
 }
