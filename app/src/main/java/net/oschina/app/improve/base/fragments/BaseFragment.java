@@ -51,8 +51,10 @@ public abstract class BaseFragment extends Fragment {
             onBindViewBefore(mRoot);
             // Bind view
             ButterKnife.bind(this, mRoot);
+            // Get savedInstanceState
             if (savedInstanceState != null)
                 onRestartInstance(savedInstanceState);
+            // Init
             initWidget(mRoot);
             initData();
         }
