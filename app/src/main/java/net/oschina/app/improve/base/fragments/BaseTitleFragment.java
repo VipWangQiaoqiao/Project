@@ -16,7 +16,8 @@ import butterknife.Bind;
  * on 16/9/5.
  */
 public abstract class BaseTitleFragment extends BaseFragment {
-    @Bind(R.id.titleBar)
+
+    @Bind(R.id.nav_title_bar)
     TitleBar mTitleBar;
 
     @Override
