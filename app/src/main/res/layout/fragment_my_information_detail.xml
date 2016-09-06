@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/windows_bg">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="?attr/layout_item_bg">
 
     <net.oschina.app.widget.CustomerScrollView
         android:layout_width="match_parent"
@@ -16,7 +17,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="wrap_content"
                 android:background="@mipmap/bg_my"
                 android:clickable="true"
                 android:gravity="center"
@@ -26,6 +27,8 @@
                 <net.oschina.app.widget.CircleImageView
                     android:id="@+id/iv_avatar"
                     style="@style/UserFaceImageStyle"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
                     app:border_color="@color/white"
                     app:border_width="2dip" />
 
@@ -35,10 +38,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/space_10"
                     android:textColor="@color/white"
+                    tools:text="uni7corn"
                     android:textSize="@dimen/text_size_16" />
             </LinearLayout>
 
-            <View style="@style/h_line" />
+            <!--<View style="@style/h_line" />-->
 
             <include layout="@layout/fragment_user_center_information" />
 

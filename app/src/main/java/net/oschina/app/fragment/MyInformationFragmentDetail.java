@@ -83,9 +83,10 @@ public class MyInformationFragmentDetail extends BaseFragment {
         Core.getKJBitmap().displayWithLoadBitmap(mUserFace, userInfo.getPortrait(),
                 R.mipmap.widget_dface);
         mName.setText(userInfo.getName());
-        mJoinTime.setText(StringUtils.formatSomeAgo(userInfo.getMore().getJoinDate()));
+        mJoinTime.setText(StringUtils.formatYearMonthDayNew(userInfo.getMore().getJoinDate()));
         mFrom.setText(userInfo.getMore().getCity());
         mPlatFrom.setText(userInfo.getMore().getPlatform());
         mFocus.setText(userInfo.getMore().getExpertise());
     }
+
 }
