@@ -129,6 +129,15 @@ public class StringUtils {
                 matcher.group(3) == null ? 0 : matcher.group(3));
     }
 
+    public static String formatYearMonthDayNew(String st) {
+        Matcher matcher = UniversalDatePattern.matcher(st);
+        if (!matcher.find()) return st;
+        return String.format("%s/%s/%s",
+                matcher.group(1) == null ? 0 : matcher.group(1),
+                matcher.group(2) == null ? 0 : matcher.group(2),
+                matcher.group(3) == null ? 0 : matcher.group(3));
+    }
+
     /**
      * format time friendly
      *
@@ -149,7 +158,7 @@ public class StringUtils {
         int month = mCurrentDate.get(Calendar.MONTH);
         int day = mCurrentDate.get(Calendar.DATE);
 
-        if (diff < 60 * 1000){
+        if (diff < 60 * 1000) {
             return "刚刚";
         }
         if (diff >= 60 * 1000 && diff < AlarmManager.INTERVAL_HOUR) {
@@ -160,14 +169,14 @@ public class StringUtils {
             return String.format("%s小时前", diff / AlarmManager.INTERVAL_HOUR);
         }
         mCurrentDate.set(year, month, day - 1, 0, 0, 0);
-        if (trim >= mCurrentDate.getTimeInMillis()){
+        if (trim >= mCurrentDate.getTimeInMillis()) {
             return "昨天";
         }
         mCurrentDate.set(year, month, day - 2, 0, 0, 0);
-        if (trim >= mCurrentDate.getTimeInMillis()){
+        if (trim >= mCurrentDate.getTimeInMillis()) {
             return "前天";
         }
-        if (diff < AlarmManager.INTERVAL_DAY * 30){
+        if (diff < AlarmManager.INTERVAL_DAY * 30) {
             return String.format("%s天前", diff / AlarmManager.INTERVAL_DAY);
         }
         int md = mCurrentDate.get(Calendar.MONTH) - calendar.get(Calendar.MONTH);

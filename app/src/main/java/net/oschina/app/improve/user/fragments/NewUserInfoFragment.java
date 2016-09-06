@@ -360,6 +360,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         return R.layout.fragment_main_user_home;
     }
 
+    @SuppressWarnings("deprecation")
     @OnClick({R.id.iv_logo_setting, R.id.iv_logo_zxing, R.id.iv_portrait, R.id.user_view_solar_system, R.id.ly_tweet,
             R.id.ly_favorite, R.id.ly_following, R.id.ly_follower, R.id.rl_message, R.id.rl_blog, R.id.rl_info_avtivities,
             R.id.rl_team
@@ -517,6 +518,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     /**
      * take photo
      */
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void startTakePhoto() {
         Intent intent;
         // 判断是否挂载了SD卡
@@ -553,6 +555,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     }
 
     // 裁剪头像的绝对路径
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private Uri getUploadTempFile(Uri uri) {
         String storageState = Environment.getExternalStorageState();
         if (storageState.equals(Environment.MEDIA_MOUNTED)) {

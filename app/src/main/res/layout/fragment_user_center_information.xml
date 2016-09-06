@@ -2,20 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
-    <View
-        android:layout_width="wrap_content"
-        android:layout_height="1px"
-        android:background="@color/list_divider_color"
-        android:visibility="gone" />
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/layout_item_bg"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/ic_bg_item_selector"
         android:clickable="true"
-        android:padding="@dimen/space_16" >
+        android:padding="@dimen/space_16">
 
         <TextView
             android:id="@+id/text"
@@ -30,21 +25,18 @@
             android:id="@+id/tv_join_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/text"
             android:textColor="?attr/textColor"
             android:textSize="@dimen/text_size_16" />
-    </RelativeLayout>
+    </LinearLayout>
 
-    <View
-        style="@style/h_line" />
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/layout_item_bg"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/ic_bg_item_selector"
         android:clickable="true"
         android:orientation="horizontal"
-        android:padding="@dimen/space_16" >
+        android:padding="@dimen/space_16">
 
         <TextView
             android:id="@id/text"
@@ -59,21 +51,18 @@
             android:id="@+id/tv_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/text"
             android:textColor="?attr/textColor"
             android:textSize="@dimen/text_size_16" />
-    </RelativeLayout>
+    </LinearLayout>
 
-    <View
-        style="@style/h_line" />
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?layout_item_bg"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/ic_bg_item_selector"
         android:clickable="true"
         android:orientation="horizontal"
-        android:padding="@dimen/space_16" >
+        android:padding="@dimen/space_16">
 
         <TextView
             android:id="@id/text"
@@ -88,21 +77,18 @@
             android:id="@+id/tv_development_platform"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/text"
             android:textColor="?attr/textColor"
             android:textSize="@dimen/text_size_16" />
-    </RelativeLayout>
+    </LinearLayout>
 
-    <View
-        style="@style/h_line" />
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/layout_item_bg"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/ic_bg_item_selector"
         android:clickable="true"
         android:orientation="horizontal"
-        android:padding="@dimen/space_16" >
+        android:padding="@dimen/space_16">
 
         <TextView
             android:id="@id/text"
@@ -117,12 +103,8 @@
             android:id="@+id/tv_academic_focus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/text"
             android:textColor="?attr/textColor"
             android:textSize="@dimen/text_size_16" />
-    </RelativeLayout>
-
-    <View
-        style="@style/h_line" />
+    </LinearLayout>
 
 </LinearLayout>

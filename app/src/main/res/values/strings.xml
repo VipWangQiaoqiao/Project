@@ -201,7 +201,7 @@
     <string name="favorite">收藏</string>
     <string name="following">关注</string>
     <string name="follower">粉丝</string>
-    <string name="join_time">加入时间:</string>
+    <string name="join_time">加入于 :</string>
     <string name="location">所在地区:</string>
     <string name="development_platform">开发平台:</string>
     <string name="academic_focus">专长领域:</string>
