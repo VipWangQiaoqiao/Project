@@ -235,7 +235,22 @@ public class AppContext extends BaseApplication {
                 "user.isRememberMe", "user.gender", "user.favoritecount");
     }
 
-    public long getLoginUid() {
+    /**
+     * 获取登陆用户Id, 已过时
+     *
+     * @return 用户Id
+     */
+    @Deprecated
+    public int getLoginUid() {
+        return (int) loginUid;
+    }
+
+    /**
+     * 获取登陆用户Id
+     *
+     * @return 用户Id
+     */
+    public long getLoginId() {
         return loginUid;
     }
 
