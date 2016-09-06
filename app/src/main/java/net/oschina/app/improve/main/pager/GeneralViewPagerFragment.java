@@ -1,9 +1,10 @@
 package net.oschina.app.improve.main.pager;
 
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.view.View;
 
 import net.oschina.app.R;
+import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.improve.base.fragments.BaseGeneralListFragment;
 import net.oschina.app.improve.base.fragments.BaseViewPagerFragment;
 import net.oschina.app.improve.general.fragments.BlogFragment;
@@ -11,6 +12,7 @@ import net.oschina.app.improve.general.fragments.EventFragment;
 import net.oschina.app.improve.general.fragments.NewsFragment;
 import net.oschina.app.improve.general.fragments.QuestionFragment;
 import net.oschina.app.interf.OnTabReselectListener;
+import net.oschina.app.util.UIHelper;
 
 /**
  * Created by fei
@@ -20,14 +22,15 @@ import net.oschina.app.interf.OnTabReselectListener;
  * on 2016/9/5.
  */
 public class GeneralViewPagerFragment extends BaseViewPagerFragment implements OnTabReselectListener {
+
+
     @Override
     public void onTabReselect() {
+
         if (mBaseViewPager != null) {
             BaseViewPagerAdapter pagerAdapter = (BaseViewPagerAdapter) mBaseViewPager.getAdapter();
             Fragment fragment = pagerAdapter.getCurFragment();
             if (fragment != null && fragment instanceof BaseGeneralListFragment) {
-                Log.e("TAG", "f:" + fragment.getClass().toString() + " m:" + fragment.toString());
-
                 ((BaseGeneralListFragment) fragment).onTabReselect();
             }
         }
@@ -35,6 +38,7 @@ public class GeneralViewPagerFragment extends BaseViewPagerFragment implements O
 
     @Override
     protected PagerInfo[] getPagers() {
+
         String[] titles = getResources().getStringArray(R.array.general_viewpage_arrays);
         PagerInfo[] infoList = new PagerInfo[4];
 
@@ -48,6 +52,22 @@ public class GeneralViewPagerFragment extends BaseViewPagerFragment implements O
 
     @Override
     protected int getTitleRes() {
-        return 0;
+        return R.string.main_tab_name_news;
     }
+
+    @Override
+    protected int getIconRes() {
+        return R.mipmap.actionbar_search_icon;
+    }
+
+    @Override
+    protected View.OnClickListener getIconClickListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UIHelper.showSimpleBack(getActivity(), SimpleBackPage.SEARCH);
+            }
+        };
+    }
+
 }

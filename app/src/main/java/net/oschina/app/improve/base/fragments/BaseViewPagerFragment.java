@@ -1,6 +1,5 @@
 package net.oschina.app.improve.base.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -23,6 +22,7 @@ import butterknife.Bind;
  * on 2016/9/5.
  */
 public abstract class BaseViewPagerFragment extends BaseTitleFragment {
+
     @Bind(R.id.tab_nav)
     protected TabLayout mTabNav;
 
@@ -41,10 +41,6 @@ public abstract class BaseViewPagerFragment extends BaseTitleFragment {
         mBaseViewPager.setAdapter(adapter);
         mTabNav.setupWithViewPager(mBaseViewPager);
         mBaseViewPager.setCurrentItem(0, true);
-    }
-
-    protected Fragment addTab(Context context, Class<? extends BaseFragment> fClass, Bundle args) {
-        return Fragment.instantiate(context, fClass.getName(), args);
     }
 
     protected abstract PagerInfo[] getPagers();

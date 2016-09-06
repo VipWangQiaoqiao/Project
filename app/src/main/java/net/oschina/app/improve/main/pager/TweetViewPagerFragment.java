@@ -2,7 +2,6 @@ package net.oschina.app.improve.main.pager;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -34,18 +33,19 @@ public class TweetViewPagerFragment extends BaseViewPagerFragment implements OnT
 
     @Override
     public void onTabReselect() {
+
         if (mBaseViewPager != null) {
             BaseViewPagerAdapter pagerAdapter = (BaseViewPagerAdapter) mBaseViewPager.getAdapter();
             Fragment fragment = pagerAdapter.getCurFragment();
             if (fragment != null && fragment instanceof BaseGeneralListFragment) {
-                Log.e("TAG", "f:" + fragment.getClass().toString() + " m:" + fragment.toString());
-
                 ((BaseGeneralListFragment) fragment).onTabReselect();
             }
         }
     }
+
     @Override
     protected PagerInfo[] getPagers() {
+
         String[] titles = getResources().getStringArray(R.array.tweets_viewpage_arrays);
         PagerInfo[] infoList = new PagerInfo[3];
 
@@ -61,6 +61,6 @@ public class TweetViewPagerFragment extends BaseViewPagerFragment implements OnT
 
     @Override
     protected int getTitleRes() {
-        return 0;
+        return R.string.main_tab_name_tweet;
     }
 }

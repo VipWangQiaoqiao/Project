@@ -1,148 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="false">
+    android:background="?attr/layout_item_bg"
+    android:orientation="vertical">
 
-    <include
-        android:id="@+id/explore"
-        layout="@layout/actionbar_main_layout" />
+    <View
+        style="@style/h_line"
+        android:layout_height="1px"
+        android:layout_marginTop="25dp" />
+
+    <LinearLayout
+        android:id="@+id/rl_soft"
+        style="@style/option_item_rl">
+
+        <ImageView
+            android:id="@+id/imageView7"
+            style="@style/option_item_img"
+            android:layout_marginRight="@dimen/space_10"
+            android:contentDescription="@null"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/ic_discover_softwares" />
+
+        <TextView
+            style="@style/option_item_text"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="@string/actionbar_title_softwarelist" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            app:srcCompat="@mipmap/ic_arrow_right" />
+    </LinearLayout>
+
+    <View
+        style="@style/h_line"
+        android:layout_height="1px" />
+
+    <View
+        style="@style/h_line"
+        android:layout_height="1px"
+        android:layout_marginTop="30dp" />
+
+    <LinearLayout
+        android:id="@+id/rl_find_osc"
+        style="@style/option_item_rl">
+
+        <ImageView
+            style="@style/option_item_img"
+            android:layout_marginRight="@dimen/space_10"
+            android:contentDescription="@null"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/ic_discover_find" />
+
+        <TextView
+            android:id="@+id/textView2"
+            style="@style/option_item_text"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="@string/find_oscer" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            app:srcCompat="@mipmap/ic_arrow_right" />
+    </LinearLayout>
+
+    <View
+        style="@style/h_line"
+        android:layout_height="1px" />
+
+    <View
+        style="@style/h_line"
+        android:layout_height="1px"
+        android:layout_marginTop="30dp" />
+
+    <LinearLayout
+        android:id="@+id/rl_scan"
+        style="@style/option_item_rl">
+
+        <ImageView
+            style="@style/option_item_img"
+            android:contentDescription="@null"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/ic_discover_scan" />
+
+        <TextView
+            style="@style/option_item_text"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="@string/scan" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            app:srcCompat="@mipmap/ic_arrow_right" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/explore"
-        android:background="?attr/layout_item_bg"
-        android:fitsSystemWindows="false"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:background="@color/white">
 
         <View
             style="@style/h_line"
             android:layout_height="1px"
-            android:layout_marginTop="25dp" />
+            android:layout_marginLeft="8dp" />
 
-        <LinearLayout
-            android:id="@+id/rl_soft"
-            style="@style/option_item_rl">
-
-            <ImageView
-                android:id="@+id/imageView7"
-                style="@style/option_item_img"
-                android:layout_marginRight="@dimen/space_10"
-                android:contentDescription="@null"
-                android:scaleType="fitCenter"
-                android:src="@mipmap/ic_discover_softwares" />
-
-            <TextView
-                style="@style/option_item_text"
-                android:layout_weight="1"
-                android:text="@string/actionbar_title_softwarelist" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/ic_arrow_right" />
-        </LinearLayout>
-
-        <View
-            style="@style/h_line"
-            android:layout_height="1px" />
-
-        <View
-            style="@style/h_line"
-            android:layout_height="1px"
-            android:layout_marginTop="30dp" />
-
-        <LinearLayout
-            android:id="@+id/rl_find_osc"
-            style="@style/option_item_rl">
-
-            <ImageView
-                style="@style/option_item_img"
-                android:layout_marginRight="@dimen/space_10"
-                android:contentDescription="@null"
-                android:scaleType="fitCenter"
-                android:src="@mipmap/ic_discover_find" />
-
-            <TextView
-                android:id="@+id/textView2"
-                style="@style/option_item_text"
-                android:layout_weight="1"
-                android:text="@string/find_oscer" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/ic_arrow_right" />
-        </LinearLayout>
-
-        <View
-            style="@style/h_line"
-            android:layout_height="1px" />
-
-        <View
-            style="@style/h_line"
-            android:layout_height="1px"
-            android:layout_marginTop="30dp" />
-
-        <LinearLayout
-            android:id="@+id/rl_scan"
-            style="@style/option_item_rl">
-
-            <ImageView
-                style="@style/option_item_img"
-                android:contentDescription="@null"
-                android:scaleType="fitCenter"
-                android:src="@mipmap/ic_discover_scan" />
-
-            <TextView
-                style="@style/option_item_text"
-                android:layout_weight="1"
-                android:text="@string/scan" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/ic_arrow_right" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white">
-
-            <View
-                style="@style/h_line"
-                android:layout_height="1px"
-                android:layout_marginLeft="8dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/rl_shake"
-            style="@style/option_item_rl">
-
-            <ImageView
-                style="@style/option_item_img"
-                android:contentDescription="@null"
-                android:scaleType="fitCenter"
-                android:src="@mipmap/ic_discover_shake" />
-
-            <TextView
-                style="@style/option_item_text"
-                android:layout_weight="1"
-                android:text="@string/shake" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/ic_arrow_right" />
-        </LinearLayout>
-
-        <View
-            style="@style/h_line"
-            android:layout_height="1px" />
     </LinearLayout>
 
-</RelativeLayout>
+    <LinearLayout
+        android:id="@+id/rl_shake"
+        style="@style/option_item_rl">
+
+        <ImageView
+            style="@style/option_item_img"
+            android:contentDescription="@null"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/ic_discover_shake" />
+
+        <TextView
+            style="@style/option_item_text"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="@string/shake" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            app:srcCompat="@mipmap/ic_arrow_right" />
+    </LinearLayout>
+
+    <View
+        style="@style/h_line"
+        android:layout_height="1px" />
+</LinearLayout>
