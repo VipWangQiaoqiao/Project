@@ -34,7 +34,7 @@ public class ExploreFragment extends BaseTitleFragment implements View.OnClickLi
 
     @Override
     protected int getIconRes() {
-        return R.mipmap.actionbar_search_icon;
+        return R.mipmap.btn_search_normal;
     }
 
     @Override
