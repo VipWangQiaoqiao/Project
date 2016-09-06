@@ -57,7 +57,7 @@ public class GeneralViewPagerFragment extends BaseViewPagerFragment implements O
 
     @Override
     protected int getIconRes() {
-        return R.mipmap.btn_search_normal;
+        return 0;
     }
 
     @Override
