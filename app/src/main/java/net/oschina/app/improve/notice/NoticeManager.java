@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
+import net.oschina.app.AppContext;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +60,11 @@ public final class NoticeManager {
     }
 
     public static void init(Context context) {
+        // 未登陆时不启动服务
+        if (!AppContext.getInstance().isLogin()) {
+            return;
+        }
+
         NoticeServer.startAction(context);
         IntentFilter filter = new IntentFilter(NoticeServer.FLAG_BROADCAST_REFRESH);
         context.registerReceiver(INSTANCE.mReceiver, filter);

@@ -834,8 +834,10 @@ public class UIHelper {
      * @param context
      */
     public static void sendBroadcastForNotice(Context context) {
+        /*
         Intent intent = new Intent(NoticeService.INTENT_ACTION_BROADCAST);
         context.sendBroadcast(intent);
+        */
     }
 
     /**

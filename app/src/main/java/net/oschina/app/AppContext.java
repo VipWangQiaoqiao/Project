@@ -3,6 +3,7 @@ package net.oschina.app;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
@@ -13,11 +14,11 @@ import net.oschina.app.base.BaseApplication;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.User;
 import net.oschina.app.cache.DataCleanManager;
+import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.util.CyptoUtils;
 import net.oschina.app.util.MethodsCompat;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TLog;
-import net.oschina.app.util.UIHelper;
 
 import org.kymjs.kjframe.Core;
 import org.kymjs.kjframe.http.HttpConfig;
@@ -39,28 +40,17 @@ import static net.oschina.app.AppConfig.KEY_TWEET_DRAFT;
  * @created 2014-04-22
  */
 public class AppContext extends BaseApplication {
-
     public static final int PAGE_SIZE = 20;// 默认分页大小
-
     private static AppContext instance;
-
-    private int loginUid;
-
-    private boolean login;
+    private long loginUid;
 
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
+
         init();
         initLogin();
-
-        /*
-        // AppException 取消
-        Thread.setDefaultUncaughtExceptionHandler(AppException
-                .getAppExceptionHandler(this));
-                */
-        UIHelper.sendBroadcastForNotice(this);
     }
 
     private void init() {
@@ -82,7 +72,6 @@ public class AppContext extends BaseApplication {
     private void initLogin() {
         User user = getLoginUser();
         if (null != user && user.getId() > 0) {
-            login = true;
             loginUid = user.getId();
         } else {
             this.cleanLoginInfo();
@@ -122,8 +111,7 @@ public class AppContext extends BaseApplication {
      * @return
      */
     public String getProperty(String key) {
-        String res = AppConfig.getAppConfig(this).get(key);
-        return res;
+        return AppConfig.getAppConfig(this).get(key);
     }
 
     public void removeProperty(String... key) {
@@ -137,7 +125,7 @@ public class AppContext extends BaseApplication {
      */
     public String getAppId() {
         String uniqueID = getProperty(AppConfig.CONF_APP_UNIQUEID);
-        if (StringUtils.isEmpty(uniqueID)) {
+        if (TextUtils.isEmpty(uniqueID)) {
             uniqueID = UUID.randomUUID().toString();
             setProperty(AppConfig.CONF_APP_UNIQUEID, uniqueID);
         }
@@ -168,8 +156,10 @@ public class AppContext extends BaseApplication {
      */
     @SuppressWarnings("serial")
     public void saveUserInfo(final User user) {
+        // 登陆成功,重新启动消息服务
+        NoticeManager.init(this);
+
         this.loginUid = user.getId();
-        this.login = true;
         setProperties(new Properties() {
             {
                 setProperty("user.uid", String.valueOf(user.getId()));
@@ -240,28 +230,44 @@ public class AppContext extends BaseApplication {
      */
     public void cleanLoginInfo() {
         this.loginUid = 0;
-        this.login = false;
         removeProperty("user.uid", "user.name", "user.face", "user.location",
                 "user.followers", "user.fans", "user.score",
                 "user.isRememberMe", "user.gender", "user.favoritecount");
     }
 
+    /**
+     * 获取登陆用户Id, 已过时
+     *
+     * @return 用户Id
+     */
+    @Deprecated
     public int getLoginUid() {
+        return (int) loginUid;
+    }
+
+    /**
+     * 获取登陆用户Id
+     *
+     * @return 用户Id
+     */
+    public long getLoginId() {
         return loginUid;
     }
 
     public boolean isLogin() {
-        return login;
+        return loginUid != 0;
     }
 
     /**
      * 用户注销
      */
     public void Logout() {
+        // 用户退出时退出服务
+        NoticeManager.exitServer(this);
+
         cleanLoginInfo();
         ApiHttpClient.cleanCookie();
         this.cleanCookie();
-        this.login = false;
         this.loginUid = 0;
 
         Intent intent = new Intent(Constants.INTENT_ACTION_LOGOUT);
