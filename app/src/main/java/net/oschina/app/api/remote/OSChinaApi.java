@@ -1711,7 +1711,7 @@ public class OSChinaApi {
      */
     public static void getUserInfo(long uid, String nick, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
-        params.put("id", uid);
+        if (uid > 0 ) params.put("id", uid);
         params.put("name", nick);
         ApiHttpClient.get("action/apiv2/user_info", params, handler);
     }

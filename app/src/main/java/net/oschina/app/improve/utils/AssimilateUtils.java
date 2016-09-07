@@ -30,7 +30,7 @@ public class AssimilateUtils {
 
     // @thanatosx
     public static final Pattern PatternAtUserWithHtml = Pattern.compile(
-            "<a href=['\"]http://my\\.oschina\\.net/([0-9a-zA-Z_]+)['\"][^<>]*>(@[^@<>\\s]+)</a>"
+            "<a href=['\"]http://my\\.oschina\\.net/([0-9a-zA-Z_]+)['\"][^<>]*>(@([^@<>\\s]+))</a>"
     );
     public static final Pattern PatternAtUser = Pattern.compile(
             "@[^@\\s:]+"
@@ -91,7 +91,7 @@ public class AssimilateUtils {
      * @return
      */
     public static Spannable assimilateOnlyAtUser(final Context context, CharSequence content){
-        return assimilate(content, PatternAtUserWithHtml, 1, 2, new Action1() {
+        return assimilate(content, PatternAtUserWithHtml, 3, 2, new Action1() {
             @Override
             public void call(String str) {
                 OtherUserHomeActivity.show(context, str);
