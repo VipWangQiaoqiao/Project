@@ -156,9 +156,6 @@ public class AppContext extends BaseApplication {
      */
     @SuppressWarnings("serial")
     public void saveUserInfo(final User user) {
-        // 登陆成功,重新启动消息服务
-        NoticeManager.init(this);
-
         this.loginUid = user.getId();
         setProperties(new Properties() {
             {
@@ -179,6 +176,9 @@ public class AppContext extends BaseApplication {
                         String.valueOf(user.isRememberMe()));// 是否记住我的信息
             }
         });
+
+        // 登陆成功,重新启动消息服务
+        NoticeManager.init(this);
     }
 
     /**
@@ -262,7 +262,8 @@ public class AppContext extends BaseApplication {
      * 用户注销
      */
     public void Logout() {
-        // 用户退出时退出服务
+        // 用户退出时清理红点并退出服务
+        NoticeManager.clear(this, NoticeManager.FLAG_CLEAR_ALL);
         NoticeManager.exitServer(this);
 
         cleanLoginInfo();
