@@ -1765,16 +1765,16 @@ public class OSChinaApi {
 
     }
 
-    public static final int TYPE_USER_FOLLOWS = 1;
+    public static final int TYPE_USER_FOLOWS = 1;
     public static final int TYPE_USER_FANS = 2;
 
     /**
-     * @param type      {@link #TYPE_USER_FOLLOWS,#TYPE_USER_FANS}
+     * @param type      {@link #TYPE_USER_FOLOWS ,#TYPE_USER_FANS}
      * @param userId    userId
      * @param pageToken pageToken
      * @param handler   handler
      */
-    public static void getUserFansOrFllows(int type, long userId, String pageToken, TextHttpResponseHandler handler) {
+    public static void getUserFansOrFlows(int type, long userId, String pageToken, TextHttpResponseHandler handler) {
         if (userId <= 0) return;
         RequestParams params = new RequestParams();
         params.put("id", userId);

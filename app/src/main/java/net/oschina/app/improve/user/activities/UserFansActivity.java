@@ -74,7 +74,7 @@ public class UserFansActivity extends BaseRecyclerViewActivity<UserFansOrFollows
     @Override
     protected void requestData() {
         super.requestData();
-        OSChinaApi.getUserFansOrFllows(getRequestType(), userId, mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
+        OSChinaApi.getUserFansOrFlows(getRequestType(), userId, mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
     }
 
     @Override
