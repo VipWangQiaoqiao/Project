@@ -200,6 +200,15 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
     @SuppressWarnings("all")
     private void injectDataToViewPager(){
         if (user.getId() <= 0) return;
+
+        int t = 0, b = 0, a = 0, d = 0;
+        if (user.getStatistics() != null){
+            t = user.getStatistics().getTweet();
+            b = user.getStatistics().getBlog();
+            a = user.getStatistics().getAnswer();
+            d = user.getStatistics().getDiscuss();
+        }
+
         if (fragments == null){
             fragments = new ArrayList<>();
             fragments.add(new Pair<>(
@@ -245,15 +254,15 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
             mTabLayout.setupWithViewPager(mViewPager);
             // TabLayout will remove up all tabs after setted up view pager
             // so we set it again
-            mTabLayout.getTabAt(0).setCustomView(getTabView("0", "动弹"));
-            mTabLayout.getTabAt(1).setCustomView(getTabView("0", "博客"));
-            mTabLayout.getTabAt(2).setCustomView(getTabView("0", "问答"));
-            mTabLayout.getTabAt(3).setCustomView(getTabView("0", "讨论"));
-        }else if (user.getStatistics() != null){ // when request user detail info successfully
-            setupTabText(mTabLayout.getTabAt(0), user.getStatistics().getTweet());
-            setupTabText(mTabLayout.getTabAt(1), user.getStatistics().getBlog());
-            setupTabText(mTabLayout.getTabAt(2), user.getStatistics().getAnswer());
-            setupTabText(mTabLayout.getTabAt(3), user.getStatistics().getDiscuss());
+            mTabLayout.getTabAt(0).setCustomView(getTabView(formatNumeric(t), "动弹"));
+            mTabLayout.getTabAt(1).setCustomView(getTabView(formatNumeric(b), "博客"));
+            mTabLayout.getTabAt(2).setCustomView(getTabView(formatNumeric(a), "问答"));
+            mTabLayout.getTabAt(3).setCustomView(getTabView(formatNumeric(d), "讨论"));
+        }else { // when request user detail info successfully
+            setupTabText(mTabLayout.getTabAt(0), t);
+            setupTabText(mTabLayout.getTabAt(1), b);
+            setupTabText(mTabLayout.getTabAt(2), a);
+            setupTabText(mTabLayout.getTabAt(3), d);
         }
     }
 
@@ -262,18 +271,21 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
         View view = tab.getCustomView();
         if (view == null) return;
         TabViewHolder holder = (TabViewHolder) view.getTag();
+        holder.mViewCount.setText(formatNumeric(count));
+    }
+
+    private String formatNumeric(int count){
         if (count > 1000){
             int a = count / 100;
             int b = a % 10;
             int c = a / 10;
-            String str = "";
+            String str;
             if (c <= 9 && b != 0) str = c + "." + b;
             else str = String.valueOf(c);
-            holder.mViewCount.setText(str + "k");
+            return str + "k";
         }else {
-            holder.mViewCount.setText(String.valueOf(count));
+            return String.valueOf(count);
         }
-
     }
 
     private View getTabView(String cs, String tag){
