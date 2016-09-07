@@ -262,7 +262,8 @@ public class AppContext extends BaseApplication {
      * 用户注销
      */
     public void Logout() {
-        // 用户退出时退出服务
+        // 用户退出时清理红点并退出服务
+        NoticeManager.clear(this, NoticeManager.FLAG_CLEAR_ALL);
         NoticeManager.exitServer(this);
 
         cleanLoginInfo();
