@@ -30,7 +30,7 @@ public class UserFollowsActivity extends BaseRecyclerViewActivity<UserFansOrFoll
 
 
     private int getRequestType() {
-        return OSChinaApi.TYPE_USER_FOLLOWS;
+        return OSChinaApi.TYPE_USER_FOLOWS;
     }
 
     /**
@@ -60,7 +60,7 @@ public class UserFollowsActivity extends BaseRecyclerViewActivity<UserFansOrFoll
     @Override
     protected void requestData() {
         super.requestData();
-        OSChinaApi.getUserFansOrFllows(getRequestType(), userId, mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
+        OSChinaApi.getUserFansOrFlows(getRequestType(), userId, mIsRefresh ? null : mBean.getNextPageToken(), mHandler);
     }
 
     @Override
