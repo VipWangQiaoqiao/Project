@@ -426,6 +426,11 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Tweet.Main" />
+        <activity
+            android:name=".improve.search.SearchActivity"
+            android:label="搜索"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Translucent"/>
 
         <service
             android:name=".improve.tweet.service.TweetPublishService"
