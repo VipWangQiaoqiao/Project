@@ -250,7 +250,7 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
                 String tempFile = String.format("%s/IMG_%s.%s", cacheDir, System.currentTimeMillis(), ext);
                 if (PicturesCompress.compressImage(path, tempFile,
                         MAX_UPLOAD_LENGTH, 80,
-                        1280, 1280 * 2,
+                        1280, 1280 * 3,
                         buffer, options, true)) {
                     Log.e("OPERATOR", "doImage " + tempFile + " " + new File(tempFile).length());
 

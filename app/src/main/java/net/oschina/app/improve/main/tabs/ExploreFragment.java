@@ -1,4 +1,4 @@
-package net.oschina.app.improve.main;
+package net.oschina.app.improve.main.tabs;
 
 import android.content.Intent;
 import android.util.Log;
