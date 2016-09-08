@@ -125,9 +125,7 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         if (args != null) {
-            Log.d("thanatosx", ">>>>>>>>>>>>>>>>>>>>>>");
             mCatalog = args.getInt(BUNDLE_KEY_CATALOG, 0);
-            Log.d("thanatosx", "<<<<<<<<<<<<<<<<<<<<<<");
         }
     }
 
