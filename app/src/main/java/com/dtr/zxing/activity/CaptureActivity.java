@@ -242,7 +242,7 @@ public final class CaptureActivity extends BaseActivity implements
             finish();
             return;
         }
-        DialogHelp.getConfirmDialog(this, "可能存在风险，是否打开链接?</br>" + url, new DialogInterface.OnClickListener() {
+        DialogHelp.getConfirmDialog(this, "可能存在风险，是否打开链接?\n" + url, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 UIHelper.showUrlRedirect(CaptureActivity.this, url);
