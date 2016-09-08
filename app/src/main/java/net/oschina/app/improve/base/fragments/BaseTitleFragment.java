@@ -9,15 +9,12 @@ import android.view.ViewStub;
 import net.oschina.app.R;
 import net.oschina.app.improve.widget.TitleBar;
 
-import butterknife.Bind;
-
 /**
  * Created by JuQiu
  * on 16/9/5.
  */
 public abstract class BaseTitleFragment extends BaseFragment {
 
-    @Bind(R.id.nav_title_bar)
     TitleBar mTitleBar;
 
     @Override
@@ -38,6 +35,7 @@ public abstract class BaseTitleFragment extends BaseFragment {
     protected void initWidget(View root) {
         super.initWidget(root);
         // not null
+        mTitleBar = (TitleBar) root.findViewById(R.id.nav_title_bar);
         mTitleBar.setTitle(getTitleRes());
         mTitleBar.setIcon(getIconRes());
         mTitleBar.setIconOnClickListener(getIconClickListener());

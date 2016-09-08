@@ -1,11 +1,13 @@
 package net.oschina.app.improve.main;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.improve.base.fragments.BaseTitleFragment;
+import net.oschina.app.improve.search.SearchActivity;
 import net.oschina.app.ui.FindUserActivity;
 import net.oschina.app.ui.ShakeActivity;
 import net.oschina.app.util.UIHelper;
@@ -43,6 +45,7 @@ public class ExploreFragment extends BaseTitleFragment implements View.OnClickLi
             @Override
             public void onClick(View v) {
                 UIHelper.showSimpleBack(getActivity(), SimpleBackPage.SEARCH);
+//                SearchActivity.show(getContext());
             }
         };
     }
