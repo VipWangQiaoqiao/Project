@@ -1,4 +1,4 @@
-package net.oschina.app.improve.main.pager;
+package net.oschina.app.improve.main.tabs;
 
 import android.support.v4.app.Fragment;
 import android.view.View;
