@@ -2,7 +2,6 @@ package net.oschina.app.improve.search;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -14,16 +13,18 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 import net.oschina.app.R;
-import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.SearchList;
 import net.oschina.app.fragment.SearchFragment;
 import net.oschina.app.improve.base.activities.BaseActivity;
+import net.oschina.app.util.TDevice;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,7 @@ public class SearchActivity extends BaseActivity {
     @Bind(R.id.layout_tab) TabLayout mLayoutTab;
     @Bind(R.id.view_pager) ViewPager mViewPager;
     @Bind(R.id.view_searcher) SearchView mViewSearch;
+    @Bind(R.id.toolbar) Toolbar mToolbar;
 
     private List<Pair<String, Fragment>> mPagerItems;
 
@@ -68,9 +70,23 @@ public class SearchActivity extends BaseActivity {
     protected void initWidget() {
         getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
-        mViewSearch.setOnCloseListener(new SearchView.OnCloseListener() {
+        mViewSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onClose() {
+            public boolean onQueryTextSubmit(String query) {
+                if (TextUtils.isEmpty(query)) return false;
+                for (Pair<String, Fragment> pair : mPagerItems){
+                    ((SearchFragment) pair.second).search(query);
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (!TDevice.isWifiOpen()) return false;
+                if (TextUtils.isEmpty(newText)) return false;
+                for (Pair<String, Fragment> pair : mPagerItems){
+                    ((SearchFragment) pair.second).search(newText);
+                }
                 return true;
             }
         });
@@ -94,10 +110,14 @@ public class SearchActivity extends BaseActivity {
         mViewPager.setOffscreenPageLimit(4);
         mLayoutTab.setupWithViewPager(mViewPager);
 
-        startAnimation();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            startAnimation();
+        }else {
+            mViewSearch.setIconified(false);
+        }
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private void startAnimation(){
         mViewRoot.post(new Runnable() {
             @Override
@@ -128,7 +148,7 @@ public class SearchActivity extends BaseActivity {
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                mViewRoot.setVisibility(View.INVISIBLE);
+                mViewRoot.setVisibility(View.INVISIBLE); // avoid splash
                 finish();
             }
 
@@ -136,14 +156,9 @@ public class SearchActivity extends BaseActivity {
         animator.start();
     }
 
-    @Override
-    protected void initData() {
-        super.initData();
-    }
-
     private Fragment instantiate(Class<? extends Fragment> clazz, String catalog){
         Bundle bundle = new Bundle();
-        bundle.putString(BaseListFragment.BUNDLE_KEY_CATALOG, catalog);
+        bundle.putString(SearchFragment.BUNDLE_KEY_SEARCH_CATALOG, catalog);
         return Fragment.instantiate(this, clazz.getName(), bundle);
     }
 

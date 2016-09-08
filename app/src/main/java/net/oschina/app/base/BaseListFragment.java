@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -124,7 +125,9 @@ public abstract class BaseListFragment<T extends Entity> extends BaseFragment
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         if (args != null) {
+            Log.d("thanatosx", ">>>>>>>>>>>>>>>>>>>>>>");
             mCatalog = args.getInt(BUNDLE_KEY_CATALOG, 0);
+            Log.d("thanatosx", "<<<<<<<<<<<<<<<<<<<<<<");
         }
     }
 

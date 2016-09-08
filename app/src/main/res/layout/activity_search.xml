@@ -14,13 +14,14 @@
         android:layout_height="wrap_content">
 
         <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:background="@color/transparent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <android.support.v7.widget.SearchView
                 android:id="@+id/view_searcher"
-                android:background="@null"
+                app:queryBackground="@color/transparent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </android.support.v7.widget.Toolbar>

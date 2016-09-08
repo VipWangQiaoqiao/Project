@@ -65,7 +65,7 @@ public class CommonToast {
 			FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(-2,
 					-2);
 			params.gravity = i;
-			int j = (int) TDevice.dpToPixel(16F);
+			int j = (int) TDevice.dp2px(16F);
 			params.setMargins(j, j, j, j);
 			_toastVw.setLayoutParams(params);
 		}

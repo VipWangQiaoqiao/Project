@@ -1,7 +1,6 @@
 package net.oschina.app.improve.main.tabs;
 
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 
 import net.oschina.app.R;
@@ -44,8 +43,8 @@ public class ExploreFragment extends BaseTitleFragment implements View.OnClickLi
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UIHelper.showSimpleBack(getActivity(), SimpleBackPage.SEARCH);
-//                SearchActivity.show(getContext());
+//                UIHelper.showSimpleBack(getActivity(), SimpleBackPage.SEARCH);
+                SearchActivity.show(getContext());
             }
         };
     }

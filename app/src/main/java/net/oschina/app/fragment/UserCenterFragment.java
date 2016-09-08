@@ -293,7 +293,7 @@ public class UserCenterFragment extends BaseFragment implements
                         .setBackgroundResource(R.drawable.btn_small_green_selector);
                 break;
         }
-        int padding = (int) TDevice.dpToPixel(20);
+        int padding = (int) TDevice.dp2px(20);
         mBtnFollowUser.setPadding(padding, 0, padding, 0);
     }
 
@@ -425,7 +425,7 @@ public class UserCenterFragment extends BaseFragment implements
                                         mUser.setRelation(User.RELATION_TYPE_FANS_HIM);
                                         break;
                                 }
-                                int padding = (int) TDevice.dpToPixel(20);
+                                int padding = (int) TDevice.dp2px(20);
                                 mBtnFollowUser.setPadding(padding, 0, padding,
                                         0);
                             }

@@ -117,10 +117,10 @@ public class CacheManager {
 	}
 	long existTime = System.currentTimeMillis() - data.lastModified();
 	boolean failure = false;
-	if (TDevice.getNetworkType() == TDevice.NETTYPE_WIFI) {
-	    failure = existTime > wifi_cache_time ? true : false;
+	if (TDevice.isWifiOpen()) {
+	    failure = existTime > wifi_cache_time;
 	} else {
-	    failure = existTime > other_cache_time ? true : false;
+	    failure = existTime > other_cache_time;
 	}
 	return failure;
     }

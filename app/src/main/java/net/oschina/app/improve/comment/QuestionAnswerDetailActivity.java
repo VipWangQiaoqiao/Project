@@ -423,7 +423,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                 .create();
         mVoteDialog.show();
         WindowManager.LayoutParams params = mVoteDialog.getWindow().getAttributes();
-        params.width = (int) TDevice.dpToPixel(260f);
+        params.width = (int) TDevice.dp2px(260f);
         mVoteDialog.getWindow().setAttributes(params);
     }
 
