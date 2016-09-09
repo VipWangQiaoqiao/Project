@@ -18,18 +18,21 @@ import java.io.InputStream;
 import java.io.Serializable;
 
 public class SearchFragment extends BaseListFragment<SearchResult> {
-    protected static final String TAG = SearchFragment.class.getSimpleName();
+
+    public static final String TAG = SearchFragment.class.getSimpleName();
     private static final String CACHE_KEY_PREFIX = "search_list_";
-    private String mCatalog;
+    public static final String BUNDLE_KEY_SEARCH_CATALOG = "BUNDLE_KEY_SEARCH_CATALOG";
+
+    private String mSearchCatalog;
     private String mSearch;
-    private boolean mRquestDataIfCreated = false;
+    private boolean mRequestDataIfCreated = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         if (args != null) {
-            mCatalog = args.getString(BUNDLE_KEY_CATALOG);
+            mSearchCatalog = args.getString(BUNDLE_KEY_SEARCH_CATALOG);
         }
         int mode = WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN
                 | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN;
@@ -43,13 +46,13 @@ public class SearchFragment extends BaseListFragment<SearchResult> {
             mState = STATE_REFRESH;
             requestData(true);
         } else {
-            mRquestDataIfCreated = true;
+            mRequestDataIfCreated = true;
         }
     }
 
     @Override
     protected boolean requestDataIfViewCreated() {
-        return mRquestDataIfCreated;
+        return mRequestDataIfCreated;
     }
 
     @Override
@@ -59,7 +62,7 @@ public class SearchFragment extends BaseListFragment<SearchResult> {
 
     @Override
     protected String getCacheKeyPrefix() {
-        return CACHE_KEY_PREFIX + mCatalog + mSearch;
+        return CACHE_KEY_PREFIX + mSearchCatalog + mSearch;
     }
 
     @Override
@@ -75,7 +78,7 @@ public class SearchFragment extends BaseListFragment<SearchResult> {
 
     @Override
     protected void sendRequestData() {
-        OSChinaApi.getSearchList(mCatalog, mSearch, mCurrentPage, mHandler);
+        OSChinaApi.getSearchList(mSearchCatalog, mSearch, mCurrentPage, mHandler);
     }
 
     @Override

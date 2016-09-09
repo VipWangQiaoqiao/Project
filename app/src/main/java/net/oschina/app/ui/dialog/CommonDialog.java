@@ -111,7 +111,7 @@ public class CommonDialog extends Dialog {
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         if (TDevice.isTablet()) {
-            int maxWidth = (int) TDevice.dpToPixel(360f);
+            int maxWidth = (int) TDevice.dp2px(360f);
             if (maxWidth < TDevice.getScreenWidth()) {
                 WindowManager.LayoutParams params = getWindow().getAttributes();
                 params.width = maxWidth;

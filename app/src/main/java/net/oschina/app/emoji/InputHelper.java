@@ -24,7 +24,6 @@ import android.text.style.ImageSpan;
 import android.view.KeyEvent;
 import android.widget.EditText;
 
-import net.oschina.app.R;
 import net.oschina.app.util.TDevice;
 
 import java.util.regex.Matcher;
@@ -79,7 +78,7 @@ public class InputHelper {
             if (resId <= 0) continue;
             Drawable drawable = res.getDrawable(resId);
             if (drawable == null) continue;
-            drawable.setBounds(0, 0, (int) TDevice.dpToPixel(20), (int) TDevice.dpToPixel(20));
+            drawable.setBounds(0, 0, (int) TDevice.dp2px(20), (int) TDevice.dp2px(20));
             ImageSpan span = new ImageSpan(drawable, ImageSpan.ALIGN_BOTTOM);
             spannable.setSpan(span, matcher.start(), matcher.end(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         }
