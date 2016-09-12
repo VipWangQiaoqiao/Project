@@ -441,6 +441,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                 if (i == 0) {
                     handleSelectPicture();
                 } else {
+                    if (mUserInfo == null) return;
                     UIHelper.showUserAvatar(getActivity(), mUserInfo.getPortrait());
                 }
             }
