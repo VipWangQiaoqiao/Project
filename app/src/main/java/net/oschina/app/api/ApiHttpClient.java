@@ -33,10 +33,8 @@ import cz.msebera.android.httpclient.conn.ssl.SSLSocketFactory;
 @SuppressWarnings("WeakerAccess")
 public class ApiHttpClient {
 
-    public final static String HOST = "www.oschina.master";
-    //private static String API_URL = "http://www.oschina.net/%s";
-//    public final static String HOST = "192.168.1.58:8080";
-    private static String API_URL = "http://www.oschina.master/%s";
+    public final static String HOST = "www.oschina.net";
+    private static String API_URL = "http://www.oschina.net/%s";
 
     public static AsyncHttpClient client;
 
