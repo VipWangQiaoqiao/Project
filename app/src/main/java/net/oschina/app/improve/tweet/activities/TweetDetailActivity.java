@@ -10,6 +10,8 @@ import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -35,6 +37,7 @@ import net.oschina.app.improve.behavior.KeyboardInputDelegation;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.widget.TweetPicturesLayout;
+import net.oschina.app.ui.ShareDialog;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
@@ -92,6 +95,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
     private Tweet tweet;
     private List<TweetComment> replies = new ArrayList<>();
     private Dialog dialog;
+    private ShareDialog mShareDialog;
     private RecordButtonUtil mRecordUtil;
     private TextHttpResponseHandler publishAdmireHandler;
     private TextHttpResponseHandler publishCommentHandler;
@@ -282,6 +286,30 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
                 mImgRecord.setBackgroundDrawable(drawable);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_share, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_share:
+                if (tweet == null || tweet.getId() <= 0) break;
+                if (mShareDialog == null) {
+                    mShareDialog = new ShareDialog(this);
+                }
+                mShareDialog.setCancelable(true);
+                mShareDialog.setCanceledOnTouchOutside(true);
+                mShareDialog.setTitle(R.string.share_to);
+                mShareDialog.setShareInfo(tweet.getAuthor().getName() + "的动弹", tweet.getContent(), tweet.getHref());
+                mShareDialog.show();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private RecordButtonUtil getRecordUtil() {

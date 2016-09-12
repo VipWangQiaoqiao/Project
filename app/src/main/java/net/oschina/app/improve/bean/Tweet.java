@@ -19,6 +19,7 @@ public class Tweet implements Serializable {
     private String pubDate;
     private Author author;
     private Code code;
+    private String href;
     private Audio[] audio;
     private Image[] images;
 
@@ -52,6 +53,14 @@ public class Tweet implements Serializable {
 
     public void setCommentCount(int commentCount) {
         this.commentCount = commentCount;
+    }
+
+    public String getHref() {
+        return href;
+    }
+
+    public void setHref(String href) {
+        this.href = href;
     }
 
     public int getLikeCount() {
