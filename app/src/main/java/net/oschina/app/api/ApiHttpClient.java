@@ -10,9 +10,24 @@ import com.loopj.android.http.RequestParams;
 import net.oschina.app.AppContext;
 import net.oschina.app.util.TLog;
 
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.Locale;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
 import cz.msebera.android.httpclient.client.params.ClientPNames;
+import cz.msebera.android.httpclient.conn.ssl.SSLSocketFactory;
 
 public class ApiHttpClient {
 
@@ -124,8 +139,8 @@ public class ApiHttpClient {
         client.addHeader("Connection", "Keep-Alive");
         client.getHttpClient().getParams()
                 .setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, true);
-
         setUserAgent(ApiClientHelper.getUserAgent(AppContext.getInstance()));
+        initSSL(client);
     }
 
     public static void setUserAgent(String userAgent) {
@@ -147,5 +162,56 @@ public class ApiHttpClient {
             appCookie = appContext.getProperty("cookie");
         }
         return appCookie;
+    }
+
+    public static void initSSL(AsyncHttpClient client) {
+        try {
+            /// We initialize a default Keystore
+            KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+            // We load the KeyStore
+            trustStore.load(null, null);
+            // We initialize a new SSLSocketFacrory
+            MySSLSocketFactory socketFactory = new MySSLSocketFactory(trustStore);
+            // We set that all host names are allowed in the socket factory
+            socketFactory.setHostnameVerifier(MySSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+            // We set the SSL Factory
+            client.setSSLSocketFactory(socketFactory);
+            // We initialize a GET http request
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static class MySSLSocketFactory extends SSLSocketFactory {
+        SSLContext sslContext = SSLContext.getInstance("TLS");
+
+        public MySSLSocketFactory(KeyStore truststore) throws NoSuchAlgorithmException, KeyManagementException, KeyStoreException, UnrecoverableKeyException {
+            super(truststore);
+
+            TrustManager tm = new X509TrustManager() {
+                public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+                }
+
+                public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+                }
+
+                public X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
+            };
+
+            sslContext.init(null, new TrustManager[]{tm}, null);
+        }
+
+        @Override
+        public Socket createSocket(Socket socket, String host, int port, boolean autoClose) throws IOException, UnknownHostException {
+            return sslContext.getSocketFactory().createSocket(socket, host, port, autoClose);
+        }
+
+        @Override
+        public Socket createSocket() throws IOException {
+            return sslContext.getSocketFactory().createSocket();
+        }
     }
 }

@@ -7,6 +7,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.ShapeDrawable;
 import android.text.Html;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +53,8 @@ public final class CommentsUtil {
     }
 
     public static void formatHtml(Resources resources, TextView textView, String str) {
+        str = str.trim();
+
         textView.setMovementMethod(MyLinkMovementMethod.a());
         textView.setFocusable(false);
         textView.setLongClickable(false);
