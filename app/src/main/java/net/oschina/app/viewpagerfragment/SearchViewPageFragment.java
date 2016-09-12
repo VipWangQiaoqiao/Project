@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
-import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.base.BaseViewPagerFragment;
 import net.oschina.app.bean.SearchList;
 import net.oschina.app.fragment.SearchFragment;
@@ -40,7 +39,7 @@ public class SearchViewPageFragment extends BaseViewPagerFragment {
 
     private Bundle getBundle(String catalog) {
         Bundle bundle = new Bundle();
-        bundle.putString(BaseListFragment.BUNDLE_KEY_CATALOG, catalog);
+        bundle.putString(SearchFragment.BUNDLE_KEY_SEARCH_CATALOG, catalog);
         return bundle;
     }
 
