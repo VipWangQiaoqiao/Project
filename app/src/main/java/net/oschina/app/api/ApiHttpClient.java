@@ -1,6 +1,7 @@
 package net.oschina.app.api;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -29,6 +30,7 @@ import javax.net.ssl.X509TrustManager;
 import cz.msebera.android.httpclient.client.params.ClientPNames;
 import cz.msebera.android.httpclient.conn.ssl.SSLSocketFactory;
 
+@SuppressWarnings("WeakerAccess")
 public class ApiHttpClient {
 
     public final static String HOST = "www.oschina.master";
@@ -36,10 +38,6 @@ public class ApiHttpClient {
 //    public final static String HOST = "192.168.1.58:8080";
     private static String API_URL = "http://www.oschina.master/%s";
 
-    public static final String DELETE = "DELETE";
-    public static final String GET = "GET";
-    public static final String POST = "POST";
-    public static final String PUT = "PUT";
     public static AsyncHttpClient client;
 
     public ApiHttpClient() {
@@ -59,19 +57,19 @@ public class ApiHttpClient {
 
     public static void delete(String partUrl, AsyncHttpResponseHandler handler) {
         client.delete(getAbsoluteApiUrl(partUrl), handler);
-        log(new StringBuilder("DELETE ").append(partUrl).toString());
+        log("DELETE " + partUrl);
     }
 
     public static void get(String partUrl, AsyncHttpResponseHandler handler) {
         client.get(getAbsoluteApiUrl(partUrl), handler);
-        log(new StringBuilder("GET ").append(partUrl).toString());
+        log("GET " + partUrl);
     }
 
     public static void get(String partUrl, RequestParams params,
                            AsyncHttpResponseHandler handler) {
         client.get(getAbsoluteApiUrl(partUrl), params, handler);
-        log(new StringBuilder("GET ").append(partUrl).append("&")
-                .append(params).toString());
+        log("GET " + partUrl + "&" +
+                params);
     }
 
     public static String getAbsoluteApiUrl(String partUrl) {
@@ -89,7 +87,7 @@ public class ApiHttpClient {
 
     public static void getDirect(String url, AsyncHttpResponseHandler handler) {
         client.get(url, handler);
-        log(new StringBuilder("GET ").append(url).toString());
+        log("GET " + url);
     }
 
     public static void log(String log) {
@@ -99,33 +97,32 @@ public class ApiHttpClient {
 
     public static void post(String partUrl, AsyncHttpResponseHandler handler) {
         client.post(getAbsoluteApiUrl(partUrl), handler);
-        log(new StringBuilder("POST ").append(partUrl).toString());
+        log("POST " + partUrl);
     }
 
     public static void post(String partUrl, RequestParams params,
                             AsyncHttpResponseHandler handler) {
         client.post(getAbsoluteApiUrl(partUrl), params, handler);
-        log(new StringBuilder("POST ").append(partUrl).append("&")
-                .append(params).toString());
+        log("POST " + partUrl + "&" +
+                params);
     }
 
     public static void postDirect(String url, RequestParams params,
                                   AsyncHttpResponseHandler handler) {
         client.post(url, params, handler);
-        log(new StringBuilder("POST ").append(url).append("&").append(params)
-                .toString());
+        log("POST " + url + "&" + params);
     }
 
     public static void put(String partUrl, AsyncHttpResponseHandler handler) {
         client.put(getAbsoluteApiUrl(partUrl), handler);
-        log(new StringBuilder("PUT ").append(partUrl).toString());
+        log("PUT " + partUrl);
     }
 
     public static void put(String partUrl, RequestParams params,
                            AsyncHttpResponseHandler handler) {
         client.put(getAbsoluteApiUrl(partUrl), params, handler);
-        log(new StringBuilder("PUT ").append(partUrl).append("&")
-                .append(params).toString());
+        log("PUT " + partUrl + "&" +
+                params);
     }
 
     public static void setApiUrl(String apiUrl) {
@@ -158,7 +155,7 @@ public class ApiHttpClient {
     }
 
     public static String getCookie(AppContext appContext) {
-        if (appCookie == null || appCookie == "") {
+        if (TextUtils.isEmpty(appCookie)) {
             appCookie = appContext.getProperty("cookie");
         }
         return appCookie;
@@ -182,10 +179,10 @@ public class ApiHttpClient {
         }
     }
 
-
-    public static class MySSLSocketFactory extends SSLSocketFactory {
+    private static class MySSLSocketFactory extends SSLSocketFactory {
         SSLContext sslContext = SSLContext.getInstance("TLS");
 
+        @SuppressWarnings("WeakerAccess")
         public MySSLSocketFactory(KeyStore truststore) throws NoSuchAlgorithmException, KeyManagementException, KeyStoreException, UnrecoverableKeyException {
             super(truststore);
 
