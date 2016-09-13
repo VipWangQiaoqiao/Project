@@ -34,7 +34,7 @@ import cz.msebera.android.httpclient.conn.ssl.SSLSocketFactory;
 public class ApiHttpClient {
 
     public final static String HOST = "www.oschina.net";
-    private static String API_URL = "http://www.oschina.net/%s";
+    private static String API_URL = "https://www.oschina.net/%s";
 
     public static AsyncHttpClient client;
 
