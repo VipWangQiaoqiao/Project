@@ -241,9 +241,9 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
             return view;
         }
 
-        private View.OnClickListener getListener(){
-            if (mFinishClickListener == null){
-                mFinishClickListener = new View.OnClickListener(){
+        private View.OnClickListener getListener() {
+            if (mFinishClickListener == null) {
+                mFinishClickListener = new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         finish();
