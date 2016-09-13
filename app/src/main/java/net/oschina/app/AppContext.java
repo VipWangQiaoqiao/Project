@@ -54,6 +54,9 @@ public class AppContext extends BaseApplication {
     }
 
     private void init() {
+        AppCrashHandler handler  = AppCrashHandler.getInstance();
+        handler.init(this);
+
         // 初始化网络请求
         AsyncHttpClient client = new AsyncHttpClient();
         PersistentCookieStore myCookieStore = new PersistentCookieStore(this);
