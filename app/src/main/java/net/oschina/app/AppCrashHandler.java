@@ -44,6 +44,7 @@ public class AppCrashHandler implements Thread.UncaughtExceptionHandler {
             return false;
         }
         ex.printStackTrace();
+
         new Thread() {
             @Override
             public void run() {
@@ -52,6 +53,13 @@ public class AppCrashHandler implements Thread.UncaughtExceptionHandler {
                 Looper.loop();
             }
         }.start();
+
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         return true;
     }
 }
