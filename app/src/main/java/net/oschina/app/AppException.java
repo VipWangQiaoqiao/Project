@@ -1,22 +1,8 @@
 package net.oschina.app;
 
-import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.os.Build;
-import android.os.Looper;
-
-import net.oschina.app.util.UIHelper;
-
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.lang.Thread.UncaughtExceptionHandler;
 import java.net.ConnectException;
-import java.net.SocketException;
 import java.net.UnknownHostException;
-
-import cz.msebera.android.httpclient.HttpException;
 
 /**
  * 应用程序异常：用于捕获异常和提示错误信息
@@ -26,8 +12,7 @@ import cz.msebera.android.httpclient.HttpException;
  * @created 2014年9月25日 下午5:34:05
  */
 @SuppressWarnings("serial")
-public class AppException extends Exception implements UncaughtExceptionHandler {
-
+public class AppException extends Exception {
     /**
      * 定义异常类型
      */
@@ -44,15 +29,6 @@ public class AppException extends Exception implements UncaughtExceptionHandler 
     private byte type;// 异常的类型
     // 异常的状态码，这里一般是网络请求的状态码
     private int code;
-
-    /**
-     * 系统默认的UncaughtException处理类
-     */
-    private AppContext mContext;
-
-    private AppException(Context context) {
-        this.mContext = (AppContext) context;
-    }
 
     private AppException(byte type, int code, Exception excp) {
         super(excp);
@@ -107,106 +83,7 @@ public class AppException extends Exception implements UncaughtExceptionHandler 
         return new AppException(TYPE_JSON, 0, e);
     }
 
-    // 网络请求异常
-    public static AppException network(Exception e) {
-        if (e instanceof UnknownHostException || e instanceof ConnectException) {
-            return new AppException(TYPE_NETWORK, 0, e);
-        } else if (e instanceof HttpException) {
-            return http(e);
-        } else if (e instanceof SocketException) {
-            return socket(e);
-        }
-        return http(e);
-    }
-
     public static AppException run(Exception e) {
         return new AppException(TYPE_RUN, 0, e);
-    }
-
-    /**
-     * 获取APP异常崩溃处理对象
-     *
-     * @param context
-     * @return
-     */
-    public static AppException getAppExceptionHandler(Context context) {
-        return new AppException(context.getApplicationContext());
-    }
-
-    @Override
-    public void uncaughtException(Thread thread, Throwable ex) {
-        ex.printStackTrace();
-        if (!handleException(ex)) {
-            //System.exit(0);
-        }
-    }
-
-    /**
-     * 自定义异常处理:收集错误信息&发送错误报告
-     *
-     * @param ex
-     * @return true:处理了该异常信息;否则返回false
-     */
-    private boolean handleException(final Throwable ex) {
-        if (ex == null || mContext == null) {
-            return false;
-        }
-        boolean success = true;
-        try {
-            // TODO 保存到文件或者其他操作
-        } catch (Exception e) {
-        } finally {
-            if (!success) {
-                return false;
-            } else {
-                final Context context = AppManager.getAppManager()
-                        .currentActivity();
-                // 显示异常信息&发送报告
-                new Thread() {
-                    @Override
-                    public void run() {
-                        Looper.prepare();
-                        // 拿到未捕获的异常，
-                        UIHelper.sendAppCrashReport(context);
-                        Looper.loop();
-                    }
-                }.start();
-            }
-        }
-        return true;
-    }
-
-    private void dumpPhoneInfo(PrintWriter pw) throws NameNotFoundException {
-        // 应用的版本名称和版本号
-        PackageManager pm = mContext.getPackageManager();
-        PackageInfo pi = pm.getPackageInfo(mContext.getPackageName(),
-                PackageManager.GET_ACTIVITIES);
-        pw.print("App Version: ");
-        pw.print(pi.versionName);
-        pw.print('_');
-        pw.println(pi.versionCode);
-        pw.println();
-
-        // android版本号
-        pw.print("OS Version: ");
-        pw.print(Build.VERSION.RELEASE);
-        pw.print("_");
-        pw.println(Build.VERSION.SDK_INT);
-        pw.println();
-
-        // 手机制造商
-        pw.print("Vendor: ");
-        pw.println(Build.MANUFACTURER);
-        pw.println();
-
-        // 手机型号
-        pw.print("Model: ");
-        pw.println(Build.MODEL);
-        pw.println();
-
-        // cpu架构
-        pw.print("CPU ABI: ");
-        pw.println(Build.CPU_ABI);
-        pw.println();
     }
 }
