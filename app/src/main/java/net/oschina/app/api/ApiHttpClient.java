@@ -35,6 +35,7 @@ public class ApiHttpClient {
 
     public final static String HOST = "www.oschina.net";
     private static String API_URL = "http://www.oschina.net/%s";
+//    private static String API_URL = "http://192.168.1.10/%s";
 
     public static AsyncHttpClient client;
 

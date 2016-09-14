@@ -13,6 +13,7 @@ public class UserV2 extends Author {
     private int gender;
     private String desc;
     private int relation;
+    private String suffix; // 个性后缀
     private More more;
     private Statistics statistics;
 
@@ -153,6 +154,14 @@ public class UserV2 extends Author {
                     ", discuss=" + discuss +
                     '}';
         }
+    }
+
+    public String getSuffix() {
+        return suffix;
+    }
+
+    public void setSuffix(String suffix) {
+        this.suffix = suffix;
     }
 
     public int getGender() {
