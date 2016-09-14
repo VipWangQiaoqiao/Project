@@ -7,6 +7,7 @@ import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Pair;
@@ -29,8 +30,10 @@ import java.util.regex.Pattern;
 public class AssimilateUtils {
 
     // @thanatosx
+    // http://my.oschina.net/u/user_id
+    // http://my.oschina.net/user_ident
     public static final Pattern PatternAtUserWithHtml = Pattern.compile(
-            "<a href=['\"]http://my\\.oschina\\.net/([0-9a-zA-Z_]+)['\"][^<>]*>(@([^@<>\\s]+))</a>"
+            "<a href=['\"]http[s]?://my\\.oschina\\.[a-z]+/([0-9a-zA-Z_]+|u/([0-9]+))['\"][^<>]*>(@([^@<>\\s]+))</a>"
     );
     public static final Pattern PatternAtUser = Pattern.compile(
             "@[^@\\s:]+"
@@ -45,6 +48,7 @@ public class AssimilateUtils {
     );
 
     // @user links
+    @Deprecated
     public static final Pattern PatternAtUserAndLinks = Pattern.compile(
             "<a href=['\"]http://my\\.oschina\\.net/([0-9a-zA-Z_]+)['\"][^<>]*>(@[^@<>\\s]+)</a>|<a href=['\"]([^'\"]*)['\"][^<>]*>([^<>]*)</a>"
     );
@@ -91,12 +95,42 @@ public class AssimilateUtils {
      * @return
      */
     public static Spannable assimilateOnlyAtUser(final Context context, CharSequence content){
-        return assimilate(content, PatternAtUserWithHtml, 3, 2, new Action1() {
-            @Override
-            public void call(String str) {
-                OtherUserHomeActivity.show(context, str);
+        SpannableStringBuilder builder = new SpannableStringBuilder(content);
+        Matcher matcher;
+        while (true) {
+            matcher = PatternAtUserWithHtml.matcher(builder.toString());
+            if (matcher.find()){
+                final String group0 = matcher.group(1); // ident
+                final String group1 = matcher.group(2); // uid
+                final String group2 = matcher.group(3); // @Nick
+                final String group3 = matcher.group(4); // Nick
+                builder.replace(matcher.start(), matcher.end(), group2);
+                long uid = 0;
+                try {
+                    uid = group1 == null ? 0 : Integer.valueOf(group1);
+                }catch (Exception e){
+                    uid = 0;
+                }
+                final long _uid = uid;
+                ClickableSpan span = new ClickableSpan() {
+                    @Override
+                    public void onClick(View widget) {
+                        if (_uid > 0){
+                            OtherUserHomeActivity.show(context, _uid);
+                        }else if (!TextUtils.isEmpty(group0)){
+                            OtherUserHomeActivity.show(context, 0, group0);
+                        }else {
+                            OtherUserHomeActivity.show(context, group3);
+                        }
+                    }
+                };
+                builder.setSpan(span, matcher.start(), matcher.start() + group2.length(),
+                        Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                continue;
             }
-        });
+            break;
+        }
+        return builder;
     }
 
     /**
@@ -219,7 +253,8 @@ public class AssimilateUtils {
      * @return Spannable
      */
     @Deprecated
-    private static Spannable assimilate(String content, Pattern pattern, int index0, int index1, final Action1 action){
+    private static Spannable assimilate(String content, Pattern pattern, int index0, int index1,
+                                        final Action1 action){
         Matcher matcher;
         Map<String, Pair<Integer, Integer>> maps = new HashMap<>();
 
@@ -266,7 +301,8 @@ public class AssimilateUtils {
      * @param action 回调函数
      * @return Spannable
      */
-    private static Spannable assimilate(CharSequence sequence, Pattern pattern, int index0, int index1, final Action1 action){
+    private static Spannable assimilate(CharSequence sequence, Pattern pattern, int index0,
+                                        int index1, final Action1 action){
         SpannableStringBuilder builder = new SpannableStringBuilder(sequence);
         Matcher matcher;
         while (true) {
@@ -281,7 +317,8 @@ public class AssimilateUtils {
                         action.call(group0);
                     }
                 };
-                builder.setSpan(span, matcher.start(), matcher.start() + group1.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                builder.setSpan(span, matcher.start(), matcher.start() + group1.length(),
+                        Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
                 continue;
             }
             break;
