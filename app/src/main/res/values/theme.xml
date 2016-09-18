@@ -7,13 +7,13 @@
         <item name="colorPrimary">@color/day_colorPrimary</item>
         <item name="colorPrimaryDark">@color/day_colorPrimaryDark</item>
         <item name="colorAccent">@color/day_colorPrimary</item>
-        <item name="android:textColorPrimary">@color/white</item>
 
         <!--text style-->
-        <item name="android:textColorLink">#0b9a27</item>
         <item name="editTextColor">@color/gray</item>
         <item name="textColor">@color/day_textColor</item>
         <item name="infoTextColor">@color/day_infoTextColor</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorLink">#0b9a27</item>
         <item name="android:editTextColor">@color/day_edit_color</item>
         <item name="android:textColorHint">@color/day_edit_hit_color</item>
 
