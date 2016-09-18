@@ -1,47 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- 日间模式 -->
-    <style name="AppBaseTheme_Light" parent="AppBaseTheme_Light.Base" />
 
-    <style name="AppBaseTheme_Light.Base" parent="@style/Theme.AppCompat.Light">
-        <item name="elevation">0dp</item>
+    <!--base theme light-->
+    <style name="Base.App.Theme.Light" parent="@style/Theme.AppCompat.Light">
+        <!--color primary-->
         <item name="colorPrimary">@color/day_colorPrimary</item>
         <item name="colorPrimaryDark">@color/day_colorPrimaryDark</item>
-        <item name="android:textColorLink">#0b9a27</item>
         <item name="colorAccent">@color/day_colorPrimary</item>
         <item name="android:textColorPrimary">@color/white</item>
+
+        <!--text style-->
+        <item name="android:textColorLink">#0b9a27</item>
         <item name="editTextColor">@color/gray</item>
-        <item name="actionBarPopupTheme">@style/ThemeOverlay.AppCompat.Dark</item>
-        <item name="android:windowBackground">@color/window_background</item>
-        <item name="actionMenuTextColor">@color/white</item>
         <item name="textColor">@color/day_textColor</item>
         <item name="infoTextColor">@color/day_infoTextColor</item>
-        <item name="layout_bg_normal">@color/day_layout_bg_normal</item>
-        <item name="lineColor">@color/day_line_color</item>
-        <item name="windows_bg">@color/day_windows_bg</item>
-        <item name="sliding_block_bg">@mipmap/image_sliding_block</item>
-        <item name="layout_item_bg">@drawable/day_list_item_background</item>
         <item name="android:editTextColor">@color/day_edit_color</item>
         <item name="android:textColorHint">@color/day_edit_hit_color</item>
-        <item name="comment_reply_container_bg">@mipmap/day_comment_reply_container_bg</item>
-        <item name="message_bg_left">@mipmap/chat_from_bg_normal</item>
-        <item name="message_bg_right">@mipmap/chat_to_bg_normal</item>
-        <item name="quickoption_icon_text_selector">@drawable/day_quickoption_icon_text_selector
-        </item>
-        <item name="quickoption_icon_album_selector">@drawable/day_quickoption_icon_album_selector
-        </item>
-        <item name="quickoption_icon_photo_selector">@drawable/day_quickoption_icon_photo_selector
-        </item>
-        <item name="quickoption_icon_voice_selector">@drawable/day_quickoption_icon_voice_selector
-        </item>
-        <item name="quickoption_icon_scan_selector">@drawable/day_quickoption_icon_scan_selector
-        </item>
-        <item name="quickoption_icon_note_selector">@drawable/day_quickoption_icon_note_selector
-        </item>
-        <item name="actionBarStyle">@style/Theme.App.ActionBar</item>
+
+        <!--action style-->
+        <item name="actionBarStyle">@style/App.Widget.ActionBar</item>
+        <item name="homeAsUpIndicator">@mipmap/btn_back_normal</item>
+
+        <!--action popup-->
+        <item name="actionBarPopupTheme">@style/ThemeOverlay.AppCompat.Dark</item>
+
+        <!--action menu-->
+        <item name="actionMenuTextColor">@color/white</item>
+
+        <!--action mode-->
+        <item name="actionModeBackground">@color/day_colorPrimary</item>
+
+        <!--toolbar style-->
+        <item name="toolbarStyle">@style/App.Widget.Toolbar</item>
+
+        <!--button style-->
+        <item name="android:buttonStyle">@style/App.Widget.Button</item>
+
+        <!--window style-->
+        <item name="elevation">0dp</item>
+        <item name="android:windowBackground">@color/window_background</item>
+        <item name="windows_bg">@color/day_windows_bg</item>
         <item name="android:windowContentOverlay">@null</item>
 
-        <item name="android:buttonStyle">@style/App_ButtonStyle</item>
+        <item name="layout_item_bg">@drawable/day_list_item_background</item>
+        <item name="layout_bg_normal">@color/day_layout_bg_normal</item>
+        <item name="sliding_block_bg">@mipmap/image_sliding_block</item>
+        <item name="comment_reply_container_bg">@mipmap/day_comment_reply_container_bg</item>
+
+        <item name="lineColor">@color/day_line_color</item>
+
+        <item name="message_bg_left">@mipmap/chat_from_bg_normal</item>
+        <item name="message_bg_right">@mipmap/chat_to_bg_normal</item>
+
+        <item name="quickoption_icon_text_selector">@drawable/day_quickoption_icon_text_selector</item>
+        <item name="quickoption_icon_album_selector">@drawable/day_quickoption_icon_album_selector</item>
+        <item name="quickoption_icon_photo_selector">@drawable/day_quickoption_icon_photo_selector</item>
+        <item name="quickoption_icon_voice_selector">@drawable/day_quickoption_icon_voice_selector</item>
+        <item name="quickoption_icon_scan_selector">@drawable/day_quickoption_icon_scan_selector</item>
+        <item name="quickoption_icon_note_selector">@drawable/day_quickoption_icon_note_selector</item>
 
         <!-- In this custom widget style -->
         <item name="gTextViewStyle">@style/Genius.Widget.TextView</item>
@@ -54,16 +70,44 @@
         <item name="gImageViewStyle">@style/Genius.Widget.ImageView</item>
     </style>
 
-    <style name="App_ButtonStyle">
+    <!-- 日间模式 -->
+    <style name="App.Theme.Light" parent="Base.App.Theme.Light" />
+
+    <style name="App.Widget.Button" parent="Widget.AppCompat.Button">
         <item name="android:windowContentOverlay">@null</item>
         <item name="elevation">0dp</item>
         <item name="android:gravity">center</item>
     </style>
 
-    <!-- 夜间模式 -->
-    <style name="AppBaseTheme_Night" parent="AppBaseTheme_Night.Base" />
+    <style name="App.Widget.Toolbar" parent="@style/Widget.AppCompat.Toolbar">
+        <item name="titleTextAppearance">@style/App.TextAppearance.Widget.Toolbar.Title</item>
+        <item name="titleMargin">0dp</item>
+        <item name="navigationIcon">@mipmap/btn_back_normal</item>
+    </style>
 
-    <style name="AppBaseTheme_Night.Base" parent="@style/Theme.AppCompat">
+    <style name="App.TextAppearance.Widget.Toolbar.Title" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="App.Widget.ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
+        <item name="background">?attr/colorPrimary</item>
+        <item name="titleTextStyle">@style/App.TextAppearance.Widget.ActionBar.Title</item>
+        <item name="contentInsetStart">0dp</item>
+        <item name="contentInsetStartWithNavigation">0dp</item>
+        <item name="contentInsetEnd">0dp</item>
+        <item name="elevation">0dp</item>
+    </style>
+
+    <style name="App.TextAppearance.Widget.ActionBar.Title" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#FFF</item>
+    </style>
+
+    <!-- 夜间模式 -->
+    <style name="App.Theme.Night" parent="Base.App.Theme.Night" />
+
+    <style name="Base.App.Theme.Night" parent="@style/Theme.AppCompat">
         <item name="colorPrimary">@color/night_colorPrimary</item>
         <item name="colorPrimaryDark">@color/night_colorPrimaryDark</item>
         <item name="android:textColorLink">@color/night_colorPrimary</item>
@@ -81,29 +125,19 @@
         <item name="comment_reply_container_bg">@mipmap/night_comment_reply_container_bg</item>
         <item name="message_bg_left">@mipmap/night_chat_from_bg_normal</item>
         <item name="message_bg_right">@mipmap/chat_to_bg_pressed</item>
-        <item name="quickoption_icon_text_selector">@drawable/night_quickoption_icon_text_selector
-        </item>
-        <item name="quickoption_icon_album_selector">
-            @drawable/night_quickoption_icon_album_selector
-        </item>
-        <item name="quickoption_icon_photo_selector">
-            @drawable/night_quickoption_icon_photo_selector
-        </item>
-        <item name="quickoption_icon_voice_selector">
-            @drawable/night_quickoption_icon_voice_selector
-        </item>
-        <item name="quickoption_icon_scan_selector">@drawable/night_quickoption_icon_scan_selector
-        </item>
-        <item name="quickoption_icon_note_selector">@drawable/night_quickoption_icon_note_selector
-        </item>
+        <item name="quickoption_icon_text_selector">@drawable/night_quickoption_icon_text_selector</item>
+        <item name="quickoption_icon_album_selector">@drawable/night_quickoption_icon_album_selector</item>
+        <item name="quickoption_icon_photo_selector">@drawable/night_quickoption_icon_photo_selector</item>
+        <item name="quickoption_icon_voice_selector">@drawable/night_quickoption_icon_voice_selector</item>
+        <item name="quickoption_icon_scan_selector">@drawable/night_quickoption_icon_scan_selector</item>
+        <item name="quickoption_icon_note_selector">@drawable/night_quickoption_icon_note_selector</item>
         <item name="actionBarStyle">@style/Theme.App.ActionBar</item>
         <item name="android:windowContentOverlay">@null</item>
-
-        <item name="android:buttonStyle">@style/App_ButtonStyle</item>
+        <item name="android:buttonStyle">@style/App.Widget.Button</item>
     </style>
 
     <!-- 全透明的背景 -->
-    <style name="Theme.Transparent" parent="@android:style/Theme">
+    <style name="App.Theme.Transparent" parent="@android:style/Theme">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>
@@ -117,24 +151,24 @@
         <item name="elevation">0dp</item>
     </style>
 
-    <style name="AppTheme.Base" parent="AppBaseTheme_Light.Base">
+    <style name="Base.App.Theme" parent="Base.App.Theme.Light">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.Base.NoTitle" parent="AppBaseTheme_Light">
+    <style name="Base.App.Theme.NoTitle" parent="App.Theme.Light">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.Tweet.Publish" parent="AppTheme.Base.NoTitle">
+    <style name="App.Theme.Tweet.Publish" parent="Base.App.Theme.NoTitle">
         <item name="android:windowAnimationStyle">@null</item>
     </style>
 
-    <style name="AppTheme.Tweet.Main" parent="AppTheme.Base.NoTitle" />
+    <style name="App.Theme.Tweet.Main" parent="Base.App.Theme.NoTitle" />
 
     <!--作用于搜索界面-->
-    <style name="AppTheme.Translucent" parent="AppBaseTheme_Light">
+    <style name="App.Theme.Translucent" parent="App.Theme.Light">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>

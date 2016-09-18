@@ -48,7 +48,7 @@
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppBaseTheme_Light"
+        android:theme="@style/App.Theme.Light"
         tools:replace="android:allowBackup">
         <activity
             android:name=".AppStart"
@@ -65,7 +65,7 @@
             android:name=".ui.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Base.NoTitle">
+            android:theme="@style/Base.App.Theme.NoTitle">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -253,7 +253,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Transparent" />
+            android:theme="@style/App.Theme.Transparent" />
         <activity
             android:name=".improve.detail.activities.BlogDetailActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -362,7 +362,7 @@
             android:label="弹一弹"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Tweet.Publish"
+            android:theme="@style/App.Theme.Tweet.Publish"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -391,7 +391,7 @@
             android:configChanges="keyboardHidden|orientation"
             android:label="用户主页"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Base" />
+            android:theme="@style/Base.App.Theme" />
         <activity
             android:name=".improve.user.activities.UserMessageActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -407,7 +407,7 @@
             android:configChanges="keyboardHidden|orientation"
             android:label="选择图片"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Base.NoTitle" />
+            android:theme="@style/Base.App.Theme.NoTitle" />
         <activity
             android:name=".improve.media.ImageGalleryActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -419,18 +419,18 @@
             android:name=".improve.tweet.activities.TweetPublishQueueActivity"
             android:label="动弹队列"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Base.NoTitle" />
+            android:theme="@style/Base.App.Theme.NoTitle" />
         <activity
             android:name=".improve.main.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Tweet.Main" />
+            android:theme="@style/App.Theme.Tweet.Main" />
         <activity
             android:name=".improve.search.SearchActivity"
             android:label="搜索"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Translucent"/>
+            android:theme="@style/App.Theme.Translucent"/>
 
         <service
             android:name=".improve.tweet.service.TweetPublishService"
