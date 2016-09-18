@@ -136,19 +136,19 @@
 
         <View style="@style/h_line" />
 
-        <RelativeLayout
-            android:id="@+id/rl_exit"
-            style="@style/option_item_rl">
+        <!--<RelativeLayout-->
+        <!--android:id="@+id/rl_exit"-->
+        <!--style="@style/option_item_rl">-->
 
-            <TextView
-                android:id="@+id/setting_logout"
-                style="@style/option_item_text_parent"
-                android:text="@string/exit"
-                android:textColor="?attr/textColor"
-                android:textSize="@dimen/text_size_16" />
-        </RelativeLayout>
+        <!--<TextView-->
+        <!--android:id="@+id/setting_logout"-->
+        <!--style="@style/option_item_text_parent"-->
+        <!--android:text="@string/exit"-->
+        <!--android:textColor="?attr/textColor"-->
+        <!--android:textSize="@dimen/text_size_16" />-->
+        <!--</RelativeLayout>-->
 
-        <View style="@style/h_line" />
+        <!--<View style="@style/h_line" />-->
 
         <View
             style="@style/h_line"
