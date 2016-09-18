@@ -10,6 +10,7 @@
         android:id="@+id/iv_info_view"
         android:layout_width="16dp"
         android:layout_height="12dp"
+        android:layout_marginRight="4dp"
         android:contentDescription="@string/app_name"
         android:scaleType="fitCenter"
         android:src="@mipmap/ic_view" />
@@ -18,7 +19,6 @@
         android:id="@+id/tv_info_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:gravity="center_vertical"
         android:text="0"
