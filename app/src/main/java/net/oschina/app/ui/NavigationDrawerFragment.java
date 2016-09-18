@@ -1,7 +1,6 @@
 package net.oschina.app.ui;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
@@ -166,9 +165,9 @@ public class NavigationDrawerFragment extends BaseFragment implements
         }
 
         if (AppContext.getNightModeSwitch()) {
-            getActivity().setTheme(R.style.AppBaseTheme_Night);
+            getActivity().setTheme(R.style.App_Theme_Night);
         } else {
-            getActivity().setTheme(R.style.AppBaseTheme_Light);
+            getActivity().setTheme(R.style.App_Theme_Light);
         }
 
         Log.i("asdfasd","11111111111111");
