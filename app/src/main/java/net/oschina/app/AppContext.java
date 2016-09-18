@@ -17,6 +17,7 @@ import net.oschina.app.cache.CacheManager;
 import net.oschina.app.cache.DataCleanManager;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.tweet.fragments.TweetFragment;
+import net.oschina.app.improve.user.fragments.NewUserInfoFragment;
 import net.oschina.app.util.CyptoUtils;
 import net.oschina.app.util.MethodsCompat;
 import net.oschina.app.util.StringUtils;
@@ -277,6 +278,8 @@ public class AppContext extends BaseApplication {
         this.loginUid = 0;
 
         CacheManager.deleteObject(context(), TweetFragment.CACHE_USER_TWEET);
+        CacheManager.deleteObject(context(), NewUserInfoFragment.CACHE_NAME);
+
 
         Intent intent = new Intent(Constants.INTENT_ACTION_LOGOUT);
         sendBroadcast(intent);
