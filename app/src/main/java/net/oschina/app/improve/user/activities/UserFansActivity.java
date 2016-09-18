@@ -47,11 +47,6 @@ public class UserFansActivity extends BaseRecyclerViewActivity<UserFansOrFollows
     }
 
     @Override
-    protected int getContentView() {
-        return R.layout.activity_main_user_flow;
-    }
-
-    @Override
     protected boolean initBundle(Bundle bundle) {
         userId = bundle.getLong(BUNDLE_KEY_ID, 0);
         return super.initBundle(bundle);

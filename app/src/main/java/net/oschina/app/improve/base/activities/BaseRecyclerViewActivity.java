@@ -59,7 +59,6 @@ public abstract class BaseRecyclerViewActivity<T> extends BaseBackActivity imple
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(this);
         mRefreshLayout.setSuperRefreshLayoutListener(this);
-        mRefreshLayout.setRefreshing(true);
         mRefreshLayout.setColorSchemeResources(
                 R.color.swiperefresh_color1, R.color.swiperefresh_color2,
                 R.color.swiperefresh_color3, R.color.swiperefresh_color4);
