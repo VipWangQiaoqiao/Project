@@ -47,6 +47,7 @@ public class IndexView extends View {
         this(context, attrs, 0);
     }
 
+    @SuppressWarnings("ResourceType")
     public IndexView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
