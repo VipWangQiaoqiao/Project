@@ -179,8 +179,9 @@ public class StringUtils {
         if (diff < AlarmManager.INTERVAL_DAY * 30) {
             return String.format("%s天前", diff / AlarmManager.INTERVAL_DAY);
         }
-        int md = mCurrentDate.get(Calendar.MONTH) - calendar.get(Calendar.MONTH);
-        if (md < 12) return String.format("%s月前", md);
+        if (diff < AlarmManager.INTERVAL_DAY * 30 * 12) {
+            return String.format("%s月前", diff / (AlarmManager.INTERVAL_DAY * 30));
+        }
         return String.format("%s年前", mCurrentDate.get(Calendar.YEAR) - calendar.get(Calendar.YEAR));
     }
 
@@ -199,17 +200,27 @@ public class StringUtils {
     public static String formatSomeDay(Calendar calendar) {
         if (calendar == null) return "?天前";
         Calendar mCurrentDate = Calendar.getInstance();
-        int diff = mCurrentDate.get(Calendar.DATE) - calendar.get(Calendar.DATE);
-        if (diff == 0) {
+        long crim = mCurrentDate.getTimeInMillis(); // current
+        long trim = calendar.getTimeInMillis(); // target
+        long diff = crim - trim;
+
+        int year = mCurrentDate.get(Calendar.YEAR);
+        int month = mCurrentDate.get(Calendar.MONTH);
+        int day = mCurrentDate.get(Calendar.DATE);
+
+        mCurrentDate.set(year, month, day, 0, 0, 0);
+        if (trim >= mCurrentDate.getTimeInMillis()) {
             return "今天";
         }
-        if (diff == 1) {
+        mCurrentDate.set(year, month, day - 1, 0, 0, 0);
+        if (trim >= mCurrentDate.getTimeInMillis()) {
             return "昨天";
         }
-        if (diff == 2) {
+        mCurrentDate.set(year, month, day - 2, 0, 0, 0);
+        if (trim >= mCurrentDate.getTimeInMillis()) {
             return "前天";
         }
-        return diff + "天前";
+        return String.format("%s天前", diff / AlarmManager.INTERVAL_DAY);
     }
 
     /**
