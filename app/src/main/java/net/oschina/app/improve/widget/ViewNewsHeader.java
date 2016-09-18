@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -97,8 +96,7 @@ public class ViewNewsHeader extends RelativeLayout implements ViewPager.OnPageCh
             newsBanner.initData(manager, banner);
             this.banners.add(newsBanner);
         }
-        if (banners.size() > 0)
-            tv_news_title.setText(banners.get(0).getName());
+
         adapter.notifyDataSetChanged();
         indicator.notifyDataSetChanged();
         requestNext();
@@ -151,7 +149,7 @@ public class ViewNewsHeader extends RelativeLayout implements ViewPager.OnPageCh
 
     @Override
     public void run() {
-        if(banners.size()==0)
+        if (banners.size() == 0)
             return;
         if (!isMoving && !isScroll) {
             mCurrentItem = (mCurrentItem + 1) % banners.size();

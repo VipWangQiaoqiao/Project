@@ -56,8 +56,8 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
     @Bind(R.id.tv_event_status)
     TextView tv_event_status;
 
-    @Bind(R.id.tv_event_pub_time)
-    TextView tv_event_pub_time;
+    @Bind(R.id.tv_event_start_date)
+    TextView tv_event_start_date;
 
     @Bind(R.id.tv_event_location)
     TextView tv_event_location;
@@ -86,7 +86,7 @@ public class EventDetailFragment extends DetailFragment<EventDetail, EventDetail
         tv_event_member.setText(String.format("%s人参与", mDetail.getApplyCount()));
         tv_event_cost_desc.setText(mDetail.getCostDesc());
         tv_event_location.setText(mDetail.getSpot());
-        tv_event_pub_time.setText(mDetail.getPubDate());
+        tv_event_start_date.setText(mDetail.getStartDate());
         getImgLoader().load(mDetail.getImg()).into(iv_event_img);
         iv_fav.setImageResource(mDetail.isFavorite() ? R.drawable.ic_faved : R.drawable.ic_fav);
         tv_fav.setText(mDetail.isFavorite() ? getResources().getString(R.string.event_is_fav) : getResources().getString(R.string.event_un_fav));
