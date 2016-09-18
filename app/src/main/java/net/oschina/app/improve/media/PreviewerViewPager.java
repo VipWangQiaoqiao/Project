@@ -6,33 +6,31 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 
 /**
+ * 适配ImagePreviewerView的使用
  * Created by thanatos on 16/8/5.
  */
 public class PreviewerViewPager extends ViewPager {
 
     private boolean isInterceptable = false;
     private boolean isTransition = false;
+    private int mScrollState = SCROLL_STATE_IDLE;
 
     public PreviewerViewPager(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public PreviewerViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
+        addOnPageChangeListener(new PageChangeListener());
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if (ev.getAction() == MotionEvent.ACTION_DOWN){
-            isInterceptable = false;
+        if (mScrollState != SCROLL_STATE_IDLE) {
+            return super.onInterceptTouchEvent(ev);
         }
 
-        boolean b = false;
-
-        if (ev.getAction() == MotionEvent.ACTION_DOWN){
-            b = super.onInterceptTouchEvent(ev);
-        }
-
+        // 移动到边界改变拦截方式时
         if (isTransition){
             int action = ev.getAction();
             ev.setAction(MotionEvent.ACTION_DOWN);
@@ -41,7 +39,15 @@ public class PreviewerViewPager extends ViewPager {
             isTransition = false;
         }
 
-        if (ev.getAction() != MotionEvent.ACTION_MOVE || isInterceptable){
+        boolean b = false;
+
+        int action  = ev.getAction();
+
+        if (action == MotionEvent.ACTION_DOWN){
+            isInterceptable = false;
+        }
+
+        if (action != MotionEvent.ACTION_MOVE || isInterceptable){
             b = super.onInterceptTouchEvent(ev);
         }
 
@@ -51,5 +57,13 @@ public class PreviewerViewPager extends ViewPager {
     public void isInterceptable(boolean b){
         if (!isInterceptable && b) isTransition = true;
         this.isInterceptable = b;
+    }
+
+    private class PageChangeListener extends SimpleOnPageChangeListener{
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+            mScrollState = state;
+        }
     }
 }
