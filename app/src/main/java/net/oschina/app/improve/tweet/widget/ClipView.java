@@ -10,6 +10,7 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -224,4 +225,15 @@ public class ClipView extends FrameLayout {
         return insets;
     }
     */
+
+    /**
+     * If in animation or finish state, we InterceptTouchEvent
+     *
+     * @param ev ev
+     * @return can do
+     */
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        return mIsEnter && !mIsAnim && super.dispatchTouchEvent(ev);
+    }
 }

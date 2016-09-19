@@ -170,6 +170,7 @@ public class SelectFriendsActivity extends BaseActivity {
     }
 
     @Override
+    @SuppressWarnings("ResourceType")
     public void initView() {
         TypedArray a = obtainStyledAttributes(new int[]{R.attr.lineColor, R.attr.colorPrimary});
         lineColor = a.getColor(0, 0xFFDADADA);

@@ -31,6 +31,5 @@
         android:maxWidth="128dp"
         android:minHeight="64dp"
         android:minWidth="64dp"
-        android:scaleType="centerInside"
-        android:background="#dadada" />
+        android:scaleType="centerInside" />
 </LinearLayout>
