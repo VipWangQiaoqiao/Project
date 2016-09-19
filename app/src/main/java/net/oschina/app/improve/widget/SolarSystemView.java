@@ -153,8 +153,8 @@ public class SolarSystemView extends View implements Runnable {
         private int mRadius = 100;
         private int mSelfRadius = 6;
         private int mTrackWidth = 2;
-        private int mColor = 0XA624E28E;
-        private int mTrackColor = 0XA624E28E;
+        private int mColor = 0XFF6FDB94;
+        private int mTrackColor = 0XFF6FDB94;
         private float mAngleRate = 0.01F;
         private int mOriginAngle = 0;
         private boolean isClockwise = true;

@@ -280,7 +280,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                     for (int i = 60, radius = r + i; radius <= mMaxRadius; i = (int) (i * 1.4), radius += i) {
                         SolarSystemView.Planet planet = new SolarSystemView.Planet();
                         planet.setClockwise(random.nextInt(10) % 2 == 0);
-                        planet.setAngleRate(random.nextInt(35) / 1000.f);
+                        planet.setAngleRate((random.nextInt(35) + 1) / 1000.f);
                         planet.setRadius(radius);
                         mSolarSystem.addPlanets(planet);
 

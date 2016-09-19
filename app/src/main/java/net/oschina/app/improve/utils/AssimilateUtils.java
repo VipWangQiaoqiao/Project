@@ -62,7 +62,7 @@ public class AssimilateUtils {
 
     // team task
     public static final Pattern PatternTeamTask =  Pattern.compile(
-            "<strong><a\\s+style=['\"][^'\"]*['\"]\\s+href=['\"]([^'\"]*)['\"][^<>]*>([^<>]*)</a></strong>"
+            "<a\\s+style=['\"][^'\"]*['\"]\\s+href=['\"]([^'\"]*)['\"][^<>]*>([^<>]*)</a>"
     );
 
     // html task
