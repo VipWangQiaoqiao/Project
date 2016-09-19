@@ -280,7 +280,6 @@ public class AppContext extends BaseApplication {
         CacheManager.deleteObject(context(), TweetFragment.CACHE_USER_TWEET);
         CacheManager.deleteObject(context(), NewUserInfoFragment.CACHE_NAME);
 
-
         Intent intent = new Intent(Constants.INTENT_ACTION_LOGOUT);
         sendBroadcast(intent);
     }
