@@ -47,11 +47,14 @@
                     <TextView
                         android:id="@+id/tv_tweet"
                         style="@style/user_formation_text"
+                        android:padding="0dp"
                         android:text="0"
-                        android:textSize="@dimen/font_18" />
+                        android:textSize="@dimen/font_24" />
 
                     <TextView
                         style="@style/user_formation_info"
+                        android:layout_marginBottom="6dp"
+                        android:padding="0dp"
                         android:text="@string/main_tab_name_tweet" />
                 </LinearLayout>
 
@@ -62,12 +65,15 @@
                     <TextView
                         android:id="@+id/tv_favorite"
                         style="@style/user_formation_text"
+                        android:padding="0dp"
                         android:text="0"
-                        android:textSize="@dimen/font_18" />
+                        android:textSize="@dimen/font_24" />
 
                     <TextView
                         android:id="@+id/textView5"
                         style="@style/user_formation_info"
+                        android:layout_marginBottom="6dp"
+                        android:padding="0dp"
                         android:text="@string/favorite" />
                 </LinearLayout>
 
@@ -78,52 +84,58 @@
                     <TextView
                         android:id="@+id/tv_following"
                         style="@style/user_formation_text"
+                        android:padding="0dp"
                         android:text="0"
-                        android:textSize="@dimen/font_18" />
+                        android:textSize="@dimen/font_24" />
 
                     <TextView
                         style="@style/user_formation_info"
+                        android:layout_marginBottom="6dp"
+                        android:padding="0dp"
                         android:text="@string/following" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/ly_follower"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
+                    style="@style/uset_information_ll"
                     android:orientation="vertical"
                     android:paddingLeft="@dimen/lay_12"
-                    android:paddingRight="@dimen/lay_12"
-                    android:paddingTop="4dp">
+                    android:paddingRight="@dimen/lay_12">
 
                     <FrameLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal">
 
                         <TextView
                             android:id="@+id/tv_follower"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="4dp"
+                            android:padding="0dp"
                             android:text="0"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/font_18" />
+                            android:textSize="@dimen/font_24" />
 
                         <View
                             android:id="@+id/user_info_notice_fans"
                             android:layout_width="8dp"
                             android:layout_height="8dp"
                             android:layout_gravity="right|top"
-                            android:layout_marginLeft="12dp"
+                            android:layout_marginLeft="14dp"
+                            android:layout_marginTop="2dp"
                             android:background="@drawable/ic_red_dot" />
                     </FrameLayout>
 
                     <TextView
                         android:id="@+id/textView4"
+                        style="@style/user_formation_info"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:layout_marginBottom="6dp"
+                        android:padding="0dp"
                         android:text="@string/follower"
                         android:textColor="@color/white"
                         android:textSize="@dimen/font_12" />
