@@ -305,7 +305,8 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
                 mShareDialog.setCancelable(true);
                 mShareDialog.setCanceledOnTouchOutside(true);
                 mShareDialog.setTitle(R.string.share_to);
-                mShareDialog.setShareInfo(tweet.getAuthor().getName() + "的动弹", tweet.getContent(), tweet.getHref());
+                mShareDialog.setShareInfo(tweet.getAuthor().getName() + "的动弹 - 开源中国社区",
+                        tweet.getContent(), tweet.getHref());
                 mShareDialog.show();
                 break;
         }

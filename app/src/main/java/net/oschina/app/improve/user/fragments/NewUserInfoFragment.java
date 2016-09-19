@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,6 +28,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.cache.CacheManager;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.bean.UserV2;
 import net.oschina.app.improve.bean.base.ResultBean;
@@ -45,6 +45,7 @@ import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.FileUtil;
 import net.oschina.app.util.ImageUtils;
+import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
 import java.io.File;
@@ -68,6 +69,8 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 public class NewUserInfoFragment extends BaseFragment implements View.OnClickListener,
         EasyPermissions.PermissionCallbacks, NoticeManager.NoticeNotify, OnTabReselectListener {
+
+    public static final String CACHE_NAME = "NewUserInfoFragment";
 
     public static final int ACTION_TYPE_ALBUM = 0;
     public static final int ACTION_TYPE_PHOTO = 1;
@@ -154,10 +157,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                 ResultBean resultBean = AppContext.createGson().fromJson(responseString, type);
                 if (resultBean.isSuccess()) {
                     UserV2 userInfo = (UserV2) resultBean.getResult();
-
                     updateView(userInfo);
-                    mUserInfo = userInfo;
-
                 }
                 if (isUploadIcon) {
                     hideWaitDialog();
@@ -217,6 +217,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         mTvFollowCount.setText(formatCount(userInfo.getStatistics().getFollow()));
         mTvFollowerCount.setText(formatCount(userInfo.getStatistics().getFans()));
 
+        mUserInfo = userInfo;
     }
 
     /**
@@ -295,13 +296,13 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     public void onResume() {
         super.onResume();
         mInfo = AppContext.getInstance().getLoginUser();
-        boolean login = AppContext.getInstance().isLogin();
-        NoticeManager.bindNotify(this);
         isUploadIcon = false;
-        if (login) {
-            sendRequestData();
-        } else {
+        NoticeManager.bindNotify(this);
+        boolean login = AppContext.getInstance().isLogin();
+        if (!login) {
             hideView();
+        } else {
+            initData();
         }
     }
 
@@ -321,6 +322,13 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     public void onPause() {
         super.onPause();
         NoticeManager.unBindNotify(this);
+        if (mUserInfo != null) {
+            CacheManager.saveObject(getContext(), mUserInfo, CACHE_NAME);
+        }
+        boolean login = AppContext.getInstance().isLogin();
+        if (!login) {
+            hideView();
+        }
     }
 
     /**
@@ -351,8 +359,17 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
     @Override
     protected void initData() {
-        //super.initData();
-        sendRequestData();
+        // super.initData();
+        UserV2 userInfo = (UserV2) CacheManager.readObject(getActivity(), CACHE_NAME);
+        if (userInfo != null) {
+            updateView(userInfo);
+        } else {
+            if (TDevice.hasInternet()) {
+                sendRequestData();
+            } else {
+                hideView();
+            }
+        }
     }
 
     @Override
@@ -519,7 +536,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     /**
      * take photo
      */
-    @SuppressWarnings("ResultOfMethodCallIgnored")
+    @SuppressWarnings({"ResultOfMethodCallIgnored", "SimpleDateFormat"})
     private void startTakePhoto() {
         Intent intent;
         // 判断是否挂载了SD卡
@@ -556,7 +573,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     }
 
     // 裁剪头像的绝对路径
-    @SuppressWarnings("ResultOfMethodCallIgnored")
+    @SuppressWarnings({"ResultOfMethodCallIgnored", "SimpleDateFormat"})
     private Uri getUploadTempFile(Uri uri) {
         String storageState = Environment.getExternalStorageState();
         if (storageState.equals(Environment.MEDIA_MOUNTED)) {
@@ -637,9 +654,9 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     private void uploadNewPhoto() {
 
         // 获取头像缩略图
-        if (!TextUtils.isEmpty(protraitPath) && protraitFile.exists()) {
-            Bitmap protraitBitmap = ImageUtils.loadImgThumbnail(protraitPath, 200, 200);
-        } else {
+        if (TextUtils.isEmpty(protraitPath) && !protraitFile.exists()) {
+            //Bitmap protraitBitmap = ImageUtils.loadImgThumbnail(protraitPath, 200, 200);
+            //} else {
             AppContext.showToast(getString(R.string.title_icon_null));
         }
 
@@ -719,7 +736,8 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onTabReselect() {
         initWidget(mRoot);
-        initData();
+        if (AppContext.getInstance().isLogin() && TDevice.hasInternet())
+            initData();
     }
 
 }

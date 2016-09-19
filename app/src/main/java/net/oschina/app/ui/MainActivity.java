@@ -117,9 +117,9 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         /*
         if (AppContext.getNightModeSwitch()) {
-            setTheme(R.style.AppBaseTheme_Night);
+            setTheme(R.style.App.Theme.Night);
         } else {
-            setTheme(R.style.AppBaseTheme_Light);
+            setTheme(R.style.App.Theme.Light);
         }
         */
         setContentView(R.layout.activity_main);

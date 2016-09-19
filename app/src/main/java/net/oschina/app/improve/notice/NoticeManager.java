@@ -71,7 +71,11 @@ public final class NoticeManager {
     }
 
     public static void stopListen(Context context) {
-        context.unregisterReceiver(INSTANCE.mReceiver);
+        try {
+            context.unregisterReceiver(INSTANCE.mReceiver);
+        } catch (IllegalArgumentException e) {
+
+        }
     }
 
     public static void exitServer(Context context) {

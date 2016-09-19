@@ -119,6 +119,19 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
         show(context, user);
     }
 
+    /**
+     *
+     * @param context context
+     * @param id 无效值,随便填,只是用来区别{{@link #show(Context, String)}}方法的
+     * @param suffix 个性后缀
+     */
+    public static void show(Context context, long id, String suffix){
+        if (TextUtils.isEmpty(suffix)) return;
+        UserV2 user = new UserV2();
+        user.setSuffix(suffix);
+        show(context, user);
+    }
+
     public static void show(Context context, UserV2 user){
         if (user == null) return;
         Intent intent = new Intent(context, OtherUserHomeActivity.class);
@@ -129,8 +142,11 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
     @Override
     protected boolean initBundle(Bundle bundle) {
         user = (UserV2) bundle.getSerializable(KEY_BUNDLE);
-        if (user == null) return false;
-        if (user.getId() <= 0 && TextUtils.isEmpty(user.getName())) return false;
+        if (user == null || (user.getId() <= 0 && TextUtils.isEmpty(user.getName())
+                && TextUtils.isEmpty(user.getSuffix()))) {
+            Toast.makeText(this, "没有此用户", Toast.LENGTH_SHORT).show();
+            return false;
+        }
         return super.initBundle(bundle);
     }
 
@@ -340,7 +356,7 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
     @Override
     protected void initData() {
         super.initData();
-        OSChinaApi.getUserInfo(user.getId(), user.getName(), new TextHttpResponseHandler() {
+        OSChinaApi.getUserInfo(user.getId(), user.getName(), user.getSuffix(), new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 Toast.makeText(OtherUserHomeActivity.this, "获取用户信息失败", Toast.LENGTH_SHORT).show();

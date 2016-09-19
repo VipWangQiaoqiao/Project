@@ -1709,10 +1709,11 @@ public class OSChinaApi {
      * @param uid  user id
      * @param nick unique personal suffix
      */
-    public static void getUserInfo(long uid, String nick, TextHttpResponseHandler handler) {
+    public static void getUserInfo(long uid, String nick, String suffix, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         if (uid > 0 ) params.put("id", uid);
-        params.put("name", nick);
+        if (!TextUtils.isEmpty(nick)) params.put("nickname", nick);
+        if (!TextUtils.isEmpty(suffix)) params.put("suffix", suffix);
         ApiHttpClient.get("action/apiv2/user_info", params, handler);
     }
 

@@ -71,7 +71,8 @@ public class InputHelper {
 
         Pattern pattern = Pattern.compile("(\\[[^\\[\\]:\\s\\n]+\\])|(:[^:\\[\\]\\s\\n]+:)");
         Matcher matcher = pattern.matcher(str);
-        while (matcher.find()){
+        int count = 0; // why the limitation is 6 ? don't ask me, i don't wanna do that.
+        while (matcher.find() && count < 6){
             String emojiStr = matcher.group();
             if (TextUtils.isEmpty(emojiStr)) continue;
             int resId = getEmojiResId(emojiStr);
@@ -81,6 +82,7 @@ public class InputHelper {
             drawable.setBounds(0, 0, (int) TDevice.dp2px(20), (int) TDevice.dp2px(20));
             ImageSpan span = new ImageSpan(drawable, ImageSpan.ALIGN_BOTTOM);
             spannable.setSpan(span, matcher.start(), matcher.end(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+            ++count;
         }
 
         return spannable;

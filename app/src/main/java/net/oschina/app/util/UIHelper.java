@@ -604,7 +604,8 @@ public class UIHelper {
             return;
         }
 
-        if (url.startsWith("http://www.oschina.net/tweet-topic/")) {
+        if (url.startsWith("http://www.oschina.net/tweet-topic/")
+                || url.startsWith("https://www.oschina.net/tweet-topic/")) {
             Bundle bundle = new Bundle();
             int i = url.lastIndexOf("/");
             if (i != -1) {

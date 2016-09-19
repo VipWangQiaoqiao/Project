@@ -53,9 +53,9 @@ public abstract class BaseActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (AppContext.getNightModeSwitch()) {
-            setTheme(R.style.AppBaseTheme_Night);
+            setTheme(R.style.App_Theme_Night);
         } else {
-            setTheme(R.style.AppBaseTheme_Light);
+            setTheme(R.style.App_Theme_Light);
         }
         AppManager.getAppManager().addActivity(this);
         onBeforeSetContentLayout();

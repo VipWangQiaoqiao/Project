@@ -1,6 +1,7 @@
 package net.oschina.app.fragment;
 
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -11,7 +12,6 @@ import android.widget.TextView;
 
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
-import net.oschina.app.AppManager;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.SimpleBackPage;
@@ -40,8 +40,8 @@ public class SettingsFragment extends BaseFragment {
     ToggleButton mTbLoadImg;
     @Bind(R.id.tv_cache_size)
     TextView mTvCacheSize;
-    @Bind(R.id.setting_logout)
-    TextView mTvExit;
+    //@Bind(R.id.setting_logout)
+    // TextView mTvExit;
     @Bind(R.id.tb_double_click_exit)
     ToggleButton mTbDoubleClickExit;
     private RelativeLayout rlCancle;
@@ -79,14 +79,14 @@ public class SettingsFragment extends BaseFragment {
         view.findViewById(R.id.rl_clean_cache).setOnClickListener(this);
         view.findViewById(R.id.rl_double_click_exit).setOnClickListener(this);
         view.findViewById(R.id.rl_about).setOnClickListener(this);
-        view.findViewById(R.id.rl_exit).setOnClickListener(this);
+        // view.findViewById(R.id.rl_exit).setOnClickListener(this);
         view.findViewById(R.id.rl_feedback).setOnClickListener(this);
         rlCancle = (RelativeLayout) view.findViewById(R.id.rl_cancle);
         rlCancle.setOnClickListener(this);
 
-        if (!AppContext.getInstance().isLogin()) {
-            mTvExit.setText("退出");
-        }
+        //  if (!AppContext.getInstance().isLogin()) {
+        //  mTvExit.setText("退出");
+        //    }
     }
 
     @Override
@@ -163,9 +163,9 @@ public class SettingsFragment extends BaseFragment {
             case R.id.rl_about:
                 UIHelper.showAboutOSC(getActivity());
                 break;
-            case R.id.rl_exit:
-                onClickExit();
-                break;
+//            case R.id.rl_exit:
+//              //  onClickExit();
+//                break;
             case R.id.rl_cancle:
                 AppContext.getInstance().Logout();
                 AppContext.showToastShort(R.string.tip_logout_success);
@@ -192,7 +192,10 @@ public class SettingsFragment extends BaseFragment {
         AppContext
                 .set(AppConfig.KEY_NOTIFICATION_DISABLE_WHEN_EXIT,
                         false);
-        AppManager.getAppManager().AppExit();
-        getActivity().finish();
+        //getActivity().finish();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            getActivity().finishAffinity();
+        }
     }
 }
