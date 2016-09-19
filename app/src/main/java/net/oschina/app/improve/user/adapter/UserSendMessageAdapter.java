@@ -76,7 +76,7 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
                 break;
             case SENDER_PICTURE:
                 SenderPictureViewHolder senderPictureViewHolder = (SenderPictureViewHolder) holder;
-                mCallBack.getImgLoader().load(getGlideUrl(item.getResource())).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.ic_default_image).into(senderPictureViewHolder.iv_sender_picture);
+                mCallBack.getImgLoader().load(getGlideUrl(item.getResource())).diskCacheStrategy(DiskCacheStrategy.ALL).error(R.mipmap.ic_split_graph).into(senderPictureViewHolder.iv_sender_picture);
                 formatTime(preMessage, item, senderPictureViewHolder.tv_send_time);
                 break;
             case RECEIVER:
@@ -86,7 +86,7 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
                 break;
             case RECEIVER_PICTURE:
                 ReceiverPictureViewHolder receiverPictureViewHolder = (ReceiverPictureViewHolder) holder;
-                mCallBack.getImgLoader().load(getGlideUrl(item.getResource())).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.mipmap.ic_default_image).into(receiverPictureViewHolder.iv_receiver_picture);
+                mCallBack.getImgLoader().load(getGlideUrl(item.getResource())).diskCacheStrategy(DiskCacheStrategy.ALL).error(R.mipmap.ic_split_graph).into(receiverPictureViewHolder.iv_receiver_picture);
                 formatTime(preMessage, item, receiverPictureViewHolder.tv_send_time);
                 break;
         }
@@ -135,7 +135,7 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
         if (TextUtils.isEmpty(time)) return;
         SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm");
         Date date = StringUtils.toDate(time);
-        tv_time.setText(formatWeek(date) + "," + formatDate(date) + "," + timeFormat.format(date));
+        tv_time.setText(formatWeek(date) + ", " + formatDate(date) + ", " + timeFormat.format(date));
     }
 
     /**
