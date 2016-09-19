@@ -33,7 +33,8 @@ public class AssimilateUtils {
     // http://my.oschina.net/u/user_id
     // http://my.oschina.net/user_ident
     public static final Pattern PatternAtUserWithHtml = Pattern.compile(
-            "<a href=['\"]http[s]?://my\\.oschina\\.[a-z]+/([0-9a-zA-Z_]+|u/([0-9]+))['\"][^<>]*>(@([^@<>\\s]+))</a>"
+            "<a\\s+href=['\"]http[s]?://my\\.oschina\\.[a-z]+/([0-9a-zA-Z_]+" +
+                    "|u/([0-9]+))['\"][^<>]*>(@([^@<>\\s]+))</a>"
     );
     public static final Pattern PatternAtUser = Pattern.compile(
             "@[^@\\s:]+"
@@ -41,7 +42,7 @@ public class AssimilateUtils {
 
     // #Java#
     public static final Pattern PatternSoftwareTagWithHtml = Pattern.compile(
-            "<a href=['\"]([^'\"]*)['\"][^<>]*>(#[^#@<>\\s]+#)</a>"
+            "<a\\s+href=['\"]([^'\"]*)['\"][^<>]*>(#[^#@<>\\s]+#)</a>"
     );
     public static final Pattern PatternSoftwareTag = Pattern.compile(
             "#([^#@<>\\s]+)#"
@@ -50,12 +51,18 @@ public class AssimilateUtils {
     // @user links
     @Deprecated
     public static final Pattern PatternAtUserAndLinks = Pattern.compile(
-            "<a href=['\"]http://my\\.oschina\\.net/([0-9a-zA-Z_]+)['\"][^<>]*>(@[^@<>\\s]+)</a>|<a href=['\"]([^'\"]*)['\"][^<>]*>([^<>]*)</a>"
+            "<a\\s+href=['\"]http://my\\.oschina\\.net/([0-9a-zA-Z_]+)['\"][^<>]*>(@[^@<>\\s]+)</a>" +
+                    "|<a href=['\"]([^'\"]*)['\"][^<>]*>([^<>]*)</a>"
     );
 
     // links
     public static final Pattern PatternLinks = Pattern.compile(
-            "<a href=['\"]([^'\"]*)['\"][^<>]*>([^<>]*)</a>"
+            "<a\\s+href=['\"]([^'\"]*)['\"][^<>]*>([^<>]*)</a>"
+    );
+
+    // team task
+    public static final Pattern PatternTeamTask =  Pattern.compile(
+            "<strong><a\\s+style=['\"][^'\"]*['\"]\\s+href=['\"]([^'\"]*)['\"][^<>]*>([^<>]*)</a></strong>"
     );
 
     private interface Action1{
@@ -162,6 +169,15 @@ public class AssimilateUtils {
             @Override
             public void call(String str) {
                 UIHelper.showUrlRedirect(context, str);
+            }
+        });
+    }
+
+    public static Spannable assimilateOnlyTeamTask(final Context context, CharSequence content){
+        return assimilate(content, PatternTeamTask, 1, 2, new Action1() {
+            @Override
+            public void call(String str) {
+                UIHelper.openBrowser(context,  str);
             }
         });
     }
