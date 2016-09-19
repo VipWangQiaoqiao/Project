@@ -210,6 +210,7 @@ public class UserV2 extends Author {
                 "gender=" + gender +
                 ", desc='" + desc + '\'' +
                 ", relation=" + relation +
+                ", suffix='" + suffix + '\'' +
                 ", more=" + more +
                 ", statistics=" + statistics +
                 '}';

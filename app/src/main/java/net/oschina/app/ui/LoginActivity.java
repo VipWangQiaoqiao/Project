@@ -10,8 +10,10 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
+import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.TextHttpResponseHandler;
 import com.tencent.mm.sdk.modelmsg.SendAuth;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
@@ -32,10 +34,13 @@ import net.oschina.app.R;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseActivity;
-import net.oschina.app.base.CommonDetailFragment;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.LoginUserBean;
 import net.oschina.app.bean.OpenIdCatalog;
+import net.oschina.app.cache.CacheManager;
+import net.oschina.app.improve.bean.UserV2;
+import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.user.fragments.NewUserInfoFragment;
 import net.oschina.app.util.CyptoUtils;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.TDevice;
@@ -44,6 +49,7 @@ import net.oschina.app.util.XmlUtils;
 
 import org.kymjs.kjframe.http.HttpConfig;
 
+import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Set;
 
@@ -169,7 +175,34 @@ public class LoginActivity extends BaseActivity implements IUiListener {
         setResult(RESULT_OK, data);
         this.sendBroadcast(new Intent(Constants.INTENT_ACTION_USER_CHANGE));
         TDevice.hideSoftKeyboard(getWindow().getDecorView());
-        finish();
+
+        OSChinaApi.getUserInfo(new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+
+                try {
+                    Type type = new TypeToken<ResultBean<UserV2>>() {
+                    }.getType();
+
+                    ResultBean resultBean = AppContext.createGson().fromJson(responseString, type);
+                    if (resultBean.isSuccess()) {
+                        UserV2 userInfo = (UserV2) resultBean.getResult();
+                        CacheManager.saveObject(LoginActivity.this, userInfo, NewUserInfoFragment.CACHE_NAME);
+                        finish();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    onFailure(statusCode, headers, responseString, e);
+                }
+
+            }
+        });
+
     }
 
     private boolean prepareForLogin() {

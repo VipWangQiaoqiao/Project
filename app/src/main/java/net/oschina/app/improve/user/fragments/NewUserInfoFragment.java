@@ -360,6 +360,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     @Override
     protected void initData() {
         // super.initData();
+
         UserV2 userInfo = (UserV2) CacheManager.readObject(getActivity(), CACHE_NAME);
         if (userInfo != null) {
             updateView(userInfo);
