@@ -34,6 +34,8 @@ public abstract class BaseGeneralRecyclerAdapter<T> extends BaseRecyclerAdapter<
         Spannable spannable = AssimilateUtils.assimilateOnlyAtUser(mCallBack.getContext(), content);
         spannable = AssimilateUtils.assimilateOnlyTag(mCallBack.getContext(), spannable);
         spannable = AssimilateUtils.assimilateOnlyLink(mCallBack.getContext(), spannable);
+        spannable = AssimilateUtils.assimilateOnlyTeamTask(mCallBack.getContext(),spannable);
+        spannable = AssimilateUtils.assimilateClearHtmlTag(mCallBack.getContext(),spannable);
         spannable = InputHelper.displayEmoji(mCallBack.getContext().getResources(), spannable);
         textView.setText(spannable);
         textView.setMovementMethod(LinkMovementMethod.getInstance());

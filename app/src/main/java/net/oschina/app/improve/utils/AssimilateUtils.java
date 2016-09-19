@@ -65,6 +65,11 @@ public class AssimilateUtils {
             "<strong><a\\s+style=['\"][^'\"]*['\"]\\s+href=['\"]([^'\"]*)['\"][^<>]*>([^<>]*)</a></strong>"
     );
 
+    // html task
+    public static final Pattern PatternHtml =  Pattern.compile(
+            "<[^<>]+>([^<>]+)</[^<>]+>"
+    );
+
     private interface Action1{
         void call(String str);
     }
@@ -180,6 +185,21 @@ public class AssimilateUtils {
                 UIHelper.openBrowser(context,  str);
             }
         });
+    }
+
+    public static Spannable assimilateClearHtmlTag(final Context context, CharSequence content){
+        SpannableStringBuilder builder = new SpannableStringBuilder(content);
+        Matcher matcher;
+        while (true){
+            matcher = PatternHtml.matcher(builder.toString());
+            if (matcher.find()){
+                String str = matcher.group(1);
+                builder.replace(matcher.start(), matcher.end(), str);
+                continue;
+            }
+            break;
+        }
+        return builder;
     }
 
     @Deprecated
