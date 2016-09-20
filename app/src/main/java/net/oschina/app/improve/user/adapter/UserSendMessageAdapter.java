@@ -98,7 +98,7 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
                     senderPictureViewHolder.loading.setVisibility(View.GONE);
                     senderPictureViewHolder.iv_resend.setVisibility(View.VISIBLE);
                 } else {
-                    mCallBack.getImgLoader().load(getGlideUrl(item.getResource())).diskCacheStrategy(DiskCacheStrategy.ALL).error(R.mipmap.ic_split_graph).into(senderPictureViewHolder.iv_sender_picture);
+                    mCallBack.getImgLoader().load(getGlideUrl(item.getResource())).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.color.list_divider_color).error(R.mipmap.ic_split_graph).into(senderPictureViewHolder.iv_sender_picture);
                     senderPictureViewHolder.loading.setVisibility(View.GONE);
                     senderPictureViewHolder.iv_resend.setVisibility(View.GONE);
                 }
