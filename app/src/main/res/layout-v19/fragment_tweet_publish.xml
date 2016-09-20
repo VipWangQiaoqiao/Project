@@ -59,6 +59,7 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/lay_44"
         android:layout_marginTop="81dp"
+        android:id="@+id/layout_coordinator"
         android:background="@color/white">
 
         <android.support.design.widget.AppBarLayout

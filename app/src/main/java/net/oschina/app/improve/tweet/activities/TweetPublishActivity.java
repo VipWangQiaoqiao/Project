@@ -97,7 +97,7 @@ public class TweetPublishActivity extends BaseBackActivity {
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
-        if(mView!=null){
+        if (mView != null) {
             mView.getOperator().onBack();
         }
     }

@@ -104,7 +104,7 @@ public class ClipView extends FrameLayout {
 
     private ValueAnimator mEnterAnimator;
 
-    public void start(float startX, float startY) {
+    public void start(float startX, float startY, final Runnable runnable) {
         if (!IS_UP_KITKAT || mIsEnter) {
             return;
         }
@@ -117,7 +117,7 @@ public class ClipView extends FrameLayout {
         mIsEnter = true;
         if (mEnterAnimator == null) {
             ValueAnimator animation = ValueAnimator.ofFloat(0f, 1f);
-            animation.setDuration(520);
+            animation.setDuration(480);
             animation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
@@ -127,16 +127,26 @@ public class ClipView extends FrameLayout {
 
             });
             animation.addListener(new AnimatorListenerAdapter() {
+                private boolean isCancel;
+
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     super.onAnimationEnd(animation);
                     mIsAnim = false;
+                    if (!isCancel && runnable != null)
+                        runnable.run();
                 }
 
                 @Override
                 public void onAnimationStart(Animator animation) {
                     super.onAnimationStart(animation);
                     mIsAnim = true;
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                    super.onAnimationCancel(animation);
+                    isCancel = true;
                 }
             });
             animation.setInterpolator(new DecelerateInterpolator());
@@ -173,7 +183,7 @@ public class ClipView extends FrameLayout {
 
         if (mExitAnimator == null) {
             ValueAnimator animation = ValueAnimator.ofFloat(mProgress, 0f);
-            animation.setDuration(420);
+            animation.setDuration(360);
             animation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
@@ -183,17 +193,26 @@ public class ClipView extends FrameLayout {
 
             });
             animation.addListener(new AnimatorListenerAdapter() {
+                private boolean isCancel;
+
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     super.onAnimationEnd(animation);
                     mIsAnim = false;
-                    runnable.run();
+                    if (!isCancel && runnable != null)
+                        runnable.run();
                 }
 
                 @Override
                 public void onAnimationStart(Animator animation) {
                     super.onAnimationStart(animation);
                     mIsAnim = true;
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                    super.onAnimationCancel(animation);
+                    isCancel = true;
                 }
             });
             animation.setInterpolator(new AccelerateInterpolator());
