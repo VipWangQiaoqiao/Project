@@ -152,7 +152,7 @@ public class SolarSystemView extends View implements Runnable {
     public static class Planet {
         private int mRadius = 100;
         private int mSelfRadius = 6;
-        private int mTrackWidth = 2;
+        private int mTrackWidth = 1;
         private int mColor = 0XFF6FDB94;
         private int mTrackColor = 0XFF6FDB94;
         private float mAngleRate = 0.01F;
