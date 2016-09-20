@@ -23,7 +23,7 @@ import com.bumptech.glide.request.target.Target;
 import net.oschina.app.R;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseActivity;
-import net.oschina.app.improve.tweet.service.PicturesCompress;
+import net.oschina.app.improve.utils.PicturesCompressor;
 import net.oschina.app.improve.utils.StreamUtils;
 import net.qiujuer.genius.ui.widget.Loading;
 
@@ -143,7 +143,7 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
             public void run() {
                 try {
                     File sourceFile = future.get();
-                    String extension = PicturesCompress.getExtension(sourceFile.getAbsolutePath());
+                    String extension = PicturesCompressor.getExtension(sourceFile.getAbsolutePath());
                     String extDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                             .getAbsolutePath() + File.separator + "开源中国";
                     File extDirFile = new File(extDir);

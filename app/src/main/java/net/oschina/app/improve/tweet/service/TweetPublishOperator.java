@@ -10,6 +10,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.resource.ImageResource;
+import net.oschina.app.improve.utils.PicturesCompressor;
 
 import java.io.File;
 import java.lang.reflect.Type;
@@ -238,8 +239,8 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
      */
     private static String[] saveImageToCache(String cacheDir, String[] paths) {
         List<String> ret = new ArrayList<>();
-        byte[] buffer = new byte[PicturesCompress.DEFAULT_BUFFER_SIZE];
-        BitmapFactory.Options options = PicturesCompress.createOptions();
+        byte[] buffer = new byte[PicturesCompressor.DEFAULT_BUFFER_SIZE];
+        BitmapFactory.Options options = PicturesCompressor.createOptions();
         for (String path : paths) {
             File sourcePath = new File(path);
             if (!sourcePath.exists())
@@ -248,14 +249,14 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
                 String name = sourcePath.getName();
                 String ext = name.substring(name.lastIndexOf(".") + 1).toLowerCase();
                 String tempFile = String.format("%s/IMG_%s.%s", cacheDir, System.currentTimeMillis(), ext);
-                if (PicturesCompress.compressImage(path, tempFile,
+                if (PicturesCompressor.compressImage(path, tempFile,
                         MAX_UPLOAD_LENGTH, 80,
                         1280, 1280 * 3,
                         buffer, options, true)) {
                     Log.e("OPERATOR", "doImage " + tempFile + " " + new File(tempFile).length());
 
                     // verify the picture ext.
-                    tempFile = PicturesCompress.verifyPictureExt(tempFile);
+                    tempFile = PicturesCompressor.verifyPictureExt(tempFile);
 
                     ret.add(tempFile);
                 }
