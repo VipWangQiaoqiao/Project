@@ -165,6 +165,15 @@ public final class PicturesCompressor {
                                         final long maxSize,
                                         final int minQuality,
                                         final int maxWidth,
+                                        final int maxHeight) {
+        return compressImage(srcPath, savePath, maxSize, minQuality, maxWidth, maxHeight, true);
+    }
+
+    public static boolean compressImage(final String srcPath,
+                                        final String savePath,
+                                        final long maxSize,
+                                        final int minQuality,
+                                        final int maxWidth,
                                         final int maxHeight,
                                         boolean exactDecode) {
         return compressImage(srcPath, savePath, maxSize, minQuality, maxWidth, maxHeight, null, null, exactDecode);
