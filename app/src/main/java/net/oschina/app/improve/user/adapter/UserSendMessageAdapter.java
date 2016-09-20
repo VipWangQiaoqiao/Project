@@ -90,15 +90,28 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
             case SENDER_PICTURE:
                 SenderPictureViewHolder senderPictureViewHolder = (SenderPictureViewHolder) holder;
                 if (item.getId() == 0) {
-                    mCallBack.getImgLoader().load(item.getResource()).diskCacheStrategy(DiskCacheStrategy.ALL).error(R.mipmap.ic_split_graph).into(senderPictureViewHolder.iv_sender_picture);
+                    mCallBack.getImgLoader()
+                            .load(item.getResource())
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .error(R.mipmap.ic_split_graph)
+                            .into(senderPictureViewHolder.iv_sender_picture);
                     senderPictureViewHolder.loading.setVisibility(View.VISIBLE);
                     senderPictureViewHolder.iv_resend.setVisibility(View.GONE);
                 } else if (item.getId() == -1) {
-                    mCallBack.getImgLoader().load(item.getResource()).diskCacheStrategy(DiskCacheStrategy.ALL).error(R.mipmap.ic_split_graph).into(senderPictureViewHolder.iv_sender_picture);
+                    mCallBack.getImgLoader()
+                            .load(item.getResource())
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .error(R.mipmap.ic_split_graph)
+                            .into(senderPictureViewHolder.iv_sender_picture);
                     senderPictureViewHolder.loading.setVisibility(View.GONE);
                     senderPictureViewHolder.iv_resend.setVisibility(View.VISIBLE);
                 } else {
-                    mCallBack.getImgLoader().load(getGlideUrl(item.getResource())).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.color.list_divider_color).error(R.mipmap.ic_split_graph).into(senderPictureViewHolder.iv_sender_picture);
+                    mCallBack.getImgLoader()
+                            .load(getGlideUrl(item.getResource()))
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .placeholder(R.color.list_divider_color)
+                            .error(R.mipmap.ic_split_graph)
+                            .into(senderPictureViewHolder.iv_sender_picture);
                     senderPictureViewHolder.loading.setVisibility(View.GONE);
                     senderPictureViewHolder.iv_resend.setVisibility(View.GONE);
                 }
@@ -111,7 +124,12 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
                 break;
             case RECEIVER_PICTURE:
                 ReceiverPictureViewHolder receiverPictureViewHolder = (ReceiverPictureViewHolder) holder;
-                mCallBack.getImgLoader().load(getGlideUrl(item.getResource())).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.color.list_divider_color).error(R.mipmap.ic_split_graph).into(receiverPictureViewHolder.iv_receiver_picture);
+                mCallBack.getImgLoader()
+                        .load(getGlideUrl(item.getResource()))
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .placeholder(R.color.list_divider_color)
+                        .error(R.mipmap.ic_split_graph)
+                        .into(receiverPictureViewHolder.iv_receiver_picture);
                 formatTime(preMessage, item, receiverPictureViewHolder.tv_send_time);
                 break;
         }
