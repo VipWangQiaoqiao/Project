@@ -26,7 +26,6 @@
         android:layout_width="100dp"
         android:layout_marginRight="50dp"
         android:layout_height="100dp"
-        android:background="#dadada"
         android:contentDescription="@string/send_message_to"
         android:maxHeight="156dp"
         android:maxWidth="128dp"
