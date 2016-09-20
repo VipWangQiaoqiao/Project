@@ -2,6 +2,7 @@ package net.oschina.app.improve.user.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -18,6 +19,7 @@ import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.bean.Message;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.TweetTextView;
+import net.qiujuer.genius.ui.widget.Loading;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -53,6 +55,17 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
         }
     }
 
+    public ImageView getTargetImageView(int position, RecyclerView recyclerView) {
+        RecyclerView.ViewHolder holder = recyclerView.findViewHolderForAdapterPosition(position);
+        if (holder != null) {
+            if (holder instanceof SenderPictureViewHolder)
+                return ((SenderPictureViewHolder) holder).iv_sender_picture;
+            if (holder instanceof ReceiverPictureViewHolder)
+                return ((ReceiverPictureViewHolder) holder).iv_receiver_picture;
+        }
+        return null;
+    }
+
     @Override
     protected RecyclerView.ViewHolder onCreateDefaultViewHolder(ViewGroup parent, int type) {
         if (type == SENDER)
@@ -76,7 +89,19 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
                 break;
             case SENDER_PICTURE:
                 SenderPictureViewHolder senderPictureViewHolder = (SenderPictureViewHolder) holder;
-                mCallBack.getImgLoader().load(getGlideUrl(item.getResource())).diskCacheStrategy(DiskCacheStrategy.ALL).error(R.mipmap.ic_split_graph).into(senderPictureViewHolder.iv_sender_picture);
+                if (item.getId() == 0) {
+                    mCallBack.getImgLoader().load(item.getResource()).diskCacheStrategy(DiskCacheStrategy.ALL).error(R.mipmap.ic_split_graph).into(senderPictureViewHolder.iv_sender_picture);
+                    senderPictureViewHolder.loading.setVisibility(View.VISIBLE);
+                    senderPictureViewHolder.iv_resend.setVisibility(View.GONE);
+                } else if (item.getId() == -1) {
+                    mCallBack.getImgLoader().load(item.getResource()).diskCacheStrategy(DiskCacheStrategy.ALL).error(R.mipmap.ic_split_graph).into(senderPictureViewHolder.iv_sender_picture);
+                    senderPictureViewHolder.loading.setVisibility(View.GONE);
+                    senderPictureViewHolder.iv_resend.setVisibility(View.VISIBLE);
+                } else {
+                    mCallBack.getImgLoader().load(getGlideUrl(item.getResource())).diskCacheStrategy(DiskCacheStrategy.ALL).error(R.mipmap.ic_split_graph).into(senderPictureViewHolder.iv_sender_picture);
+                    senderPictureViewHolder.loading.setVisibility(View.GONE);
+                    senderPictureViewHolder.iv_resend.setVisibility(View.GONE);
+                }
                 formatTime(preMessage, item, senderPictureViewHolder.tv_send_time);
                 break;
             case RECEIVER:
@@ -164,13 +189,16 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
     }
 
     private static class SenderPictureViewHolder extends RecyclerView.ViewHolder {
-        ImageView iv_sender_picture;
+        ImageView iv_sender_picture, iv_resend;
         TextView tv_send_time;
+        Loading loading;
 
         public SenderPictureViewHolder(View itemView) {
             super(itemView);
             iv_sender_picture = (ImageView) itemView.findViewById(R.id.iv_sender_picture);
+            iv_resend = (ImageView) itemView.findViewById(R.id.iv_resend);
             tv_send_time = (TextView) itemView.findViewById(R.id.tv_send_time);
+            loading = (Loading) itemView.findViewById(R.id.loading);
         }
     }
 
