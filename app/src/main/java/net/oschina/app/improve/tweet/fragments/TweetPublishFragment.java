@@ -174,7 +174,14 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     public void onResume() {
         super.onResume();
         if (mRoot instanceof ClipView) {
-            ((ClipView) mRoot).start(0, 0F);
+            ((ClipView) mRoot).start(0, 0F, new Runnable() {
+                @Override
+                public void run() {
+                    mEmojiKeyboard.showSoftKeyboard(mEditContent);
+                }
+            });
+        } else {
+            mEmojiKeyboard.showSoftKeyboard(mEditContent);
         }
     }
 
