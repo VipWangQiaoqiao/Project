@@ -1,4 +1,4 @@
-package net.oschina.app.improve.tweet.service;
+package net.oschina.app.improve.utils;
 
 import android.annotation.TargetApi;
 import android.graphics.Bitmap;
@@ -23,18 +23,18 @@ import static net.oschina.app.improve.utils.StreamUtils.copyFile;
  * on 16/7/21.
  */
 @SuppressWarnings("WeakerAccess")
-public class PicturesCompress {
+public final class PicturesCompressor {
     /**
      * A default size to use to increase hit rates when the required size isn't defined.
      * Currently 64KB.
      */
     public final static int DEFAULT_BUFFER_SIZE = 64 * 1024;
 
-    private PicturesCompress() {
+    private PicturesCompressor() {
 
     }
 
-    static BitmapFactory.Options createOptions() {
+    public static BitmapFactory.Options createOptions() {
         return new BitmapFactory.Options();
     }
 
@@ -66,7 +66,12 @@ public class PicturesCompress {
         return mimeType.substring(mimeType.lastIndexOf("/") + 1);
     }
 
-    static Bitmap decodeBitmap(final String filePath, final int maxWidth, final int maxHeight, byte[] byteStorage, BitmapFactory.Options options, boolean exactDecode) {
+    public static Bitmap decodeBitmap(final String filePath,
+                                      final int maxWidth,
+                                      final int maxHeight,
+                                      byte[] byteStorage,
+                                      BitmapFactory.Options options,
+                                      boolean exactDecode) {
         InputStream is;
         try {
             // In this, we can set the buffer size
@@ -124,7 +129,7 @@ public class PicturesCompress {
 
     }
 
-    static Bitmap scaleBitmap(Bitmap source, float scale, boolean recycleSource) {
+    public static Bitmap scaleBitmap(Bitmap source, float scale, boolean recycleSource) {
         if (scale <= 0 || scale >= 1)
             return source;
         Matrix m = new Matrix();
@@ -137,7 +142,7 @@ public class PicturesCompress {
         return scaledBitmap;
     }
 
-    static Bitmap scaleBitmap(Bitmap source, int targetMaxWidth, int targetMaxHeight, boolean recycleSource) {
+    public static Bitmap scaleBitmap(Bitmap source, int targetMaxWidth, int targetMaxHeight, boolean recycleSource) {
         int sourceWidth = source.getWidth();
         int sourceHeight = source.getHeight();
 
@@ -155,13 +160,34 @@ public class PicturesCompress {
         return scaledBitmap;
     }
 
-    static boolean compressImage(final String srcPath, final String savePath, final long maxSize,
-                                 final int minQuality, final int maxWidth, final int maxHeight, boolean exactDecode) {
+    public static boolean compressImage(final String srcPath,
+                                        final String savePath,
+                                        final long maxSize,
+                                        final int minQuality,
+                                        final int maxWidth,
+                                        final int maxHeight) {
+        return compressImage(srcPath, savePath, maxSize, minQuality, maxWidth, maxHeight, true);
+    }
+
+    public static boolean compressImage(final String srcPath,
+                                        final String savePath,
+                                        final long maxSize,
+                                        final int minQuality,
+                                        final int maxWidth,
+                                        final int maxHeight,
+                                        boolean exactDecode) {
         return compressImage(srcPath, savePath, maxSize, minQuality, maxWidth, maxHeight, null, null, exactDecode);
     }
 
-    static boolean compressImage(final String srcPath, final String savePath, final long maxSize,
-                                 final int minQuality, final int maxWidth, final int maxHeight, byte[] byteStorage, BitmapFactory.Options options, boolean exactDecode) {
+    public static boolean compressImage(final String srcPath,
+                                        final String savePath,
+                                        final long maxSize,
+                                        final int minQuality,
+                                        final int maxWidth,
+                                        final int maxHeight,
+                                        byte[] byteStorage,
+                                        BitmapFactory.Options options,
+                                        boolean exactDecode) {
         // build source file
         final File sourceFile = new File(srcPath);
         if (!sourceFile.exists())
@@ -250,8 +276,8 @@ public class PicturesCompress {
         return tempFile.renameTo(saveFile);
     }
 
-    static void calculateScaling(BitmapFactory.Options options,
-                                 final int requestedMaxWidth, final int requestedMaxHeight, boolean exactDecode) {
+    private static void calculateScaling(BitmapFactory.Options options,
+                                         final int requestedMaxWidth, final int requestedMaxHeight, boolean exactDecode) {
         int sourceWidth = options.outWidth;
         int sourceHeight = options.outHeight;
 
