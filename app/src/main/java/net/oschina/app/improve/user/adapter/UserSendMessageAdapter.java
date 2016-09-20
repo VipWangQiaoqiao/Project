@@ -111,7 +111,7 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
                 break;
             case RECEIVER_PICTURE:
                 ReceiverPictureViewHolder receiverPictureViewHolder = (ReceiverPictureViewHolder) holder;
-                mCallBack.getImgLoader().load(getGlideUrl(item.getResource())).diskCacheStrategy(DiskCacheStrategy.ALL).error(R.mipmap.ic_split_graph).into(receiverPictureViewHolder.iv_receiver_picture);
+                mCallBack.getImgLoader().load(getGlideUrl(item.getResource())).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.color.list_divider_color).error(R.mipmap.ic_split_graph).into(receiverPictureViewHolder.iv_receiver_picture);
                 formatTime(preMessage, item, receiverPictureViewHolder.tv_send_time);
                 break;
         }
