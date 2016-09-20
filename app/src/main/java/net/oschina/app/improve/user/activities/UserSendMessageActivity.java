@@ -30,6 +30,8 @@ import net.oschina.app.improve.user.adapter.UserSendMessageAdapter;
 
 import java.io.File;
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
 import cz.msebera.android.httpclient.Header;
@@ -50,6 +52,7 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
     private Author mReceiver;
     private ProgressDialog mDialog;
     private boolean isFirstLoading = true;
+    private Map<String, Message> mSendQuent = new HashMap<>();
 
     public static void show(Context context, Author sender) {
         Intent intent = new Intent(context, UserSendMessageActivity.class);
@@ -97,9 +100,23 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
                 SelectImageActivity.showImage(UserSendMessageActivity.this, 1, true, null, new SelectImageActivity.Callback() {
                     @Override
                     public void doSelectDone(String[] images) {
-                        mDialog.setMessage("正在发送中...");
-                        mDialog.show();
-                        OSChinaApi.pubMessage(mReceiver.getId(), new File(images[0]), mSendHandler);
+                        File file = new File(images[0]);
+                        String path = file.getPath();
+                        if (mSendQuent.containsKey(path)) {
+                            Toast.makeText(UserSendMessageActivity.this, "图片已经在发送队列", Toast.LENGTH_SHORT).show();
+                        } else {
+                            OSChinaApi.pubMessage(mReceiver.getId(), file, new CallBack(file.getPath()));
+                            Message message = new Message();
+                            message.setType(Message.TYPE_IMAGE);
+                            Author author = new Author();
+                            author.setId(AppContext.getInstance().getLoginId());
+                            message.setSender(author);
+                            message.setResource(file.getPath());
+                            mSendQuent.put(file.getPath(), message);
+                            mAdapter.addItem(message);
+                            scrollToBottom();
+                        }
+
                     }
                 });
             }
@@ -114,7 +131,7 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
                 }
                 mDialog.setMessage("正在发送中...");
                 mDialog.show();
-                OSChinaApi.pubMessage(mReceiver.getId(), content, mSendHandler);
+                OSChinaApi.pubMessage(mReceiver.getId(), content, new CallBack(null));
             }
 
             @Override
@@ -128,8 +145,17 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
     @Override
     public void onItemClick(int position, long itemId) {
         Message message = mAdapter.getItem(position);
-        if(Message.TYPE_IMAGE == message.getType()){
-            ImageGalleryActivity.show(this,message.getResource());
+        if (Message.TYPE_IMAGE == message.getType()) {
+            if (message.getId() == 0) {
+
+            }else if (message.getId() == -1) { //重新发送
+                message.setId(0);
+                mAdapter.updateItem(position);
+                File file = new File(message.getResource());
+                OSChinaApi.pubMessage(mReceiver.getId(), file, new CallBack(file.getPath()));
+            } else {
+                ImageGalleryActivity.show(this, message.getResource());
+            }
         }
     }
 
@@ -158,9 +184,20 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
         return new UserSendMessageAdapter(this);
     }
 
-    private TextHttpResponseHandler mSendHandler = new TextHttpResponseHandler() {
+    private class CallBack extends TextHttpResponseHandler {
+        private String filePath;
+
+        public CallBack(String filePath) {
+            this.filePath = filePath;
+        }
+
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            if (filePath != null) {
+                Message message = mSendQuent.get(filePath);
+                message.setId(-1);
+                mAdapter.updateItem(mAdapter.getItems().indexOf(message));
+            }
             Toast.makeText(UserSendMessageActivity.this, "发送失败，请检查数据", Toast.LENGTH_SHORT).show();
         }
 
@@ -171,10 +208,22 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
             try {
                 ResultBean<Message> resultBean = AppContext.createGson().fromJson(responseString, type);
                 if (resultBean.isSuccess()) {
+                    if (filePath != null) {
+                        Message message = mSendQuent.get(filePath);
+                        if (message != null) {
+                            mAdapter.removeItem(message);
+                            mSendQuent.remove(filePath);
+                        }
+                    }
                     mAdapter.addItem(resultBean.getResult());
                     scrollToBottom();
                     mViewInput.setText("");
                 } else {
+                    if (filePath != null) {
+                        Message message = mSendQuent.get(filePath);
+                        message.setId(-1);
+                        mAdapter.updateItem(mAdapter.getItems().indexOf(message));
+                    }
                     Toast.makeText(UserSendMessageActivity.this, resultBean.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
@@ -187,5 +236,5 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
             super.onFinish();
             mDialog.dismiss();
         }
-    };
+    }
 }
