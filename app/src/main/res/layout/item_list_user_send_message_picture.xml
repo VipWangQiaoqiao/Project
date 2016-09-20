@@ -33,8 +33,8 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_gravity="bottom"
-            android:src="@mipmap/ic_male"
-            android:visibility="visible" />
+            android:src="@mipmap/bg_send_error"
+            android:visibility="gone" />
 
         <FrameLayout
             android:layout_width="wrap_content"
