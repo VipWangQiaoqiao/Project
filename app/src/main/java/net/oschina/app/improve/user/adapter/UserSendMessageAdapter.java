@@ -96,7 +96,7 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
                             .error(R.mipmap.ic_split_graph)
                             .into(senderPictureViewHolder.iv_sender_picture);
                     senderPictureViewHolder.loading.setVisibility(View.VISIBLE);
-                    senderPictureViewHolder.iv_resend.setVisibility(View.GONE);
+                    senderPictureViewHolder.iv_resend.setVisibility(View.INVISIBLE);
                 } else if (item.getId() == -1) {
                     mCallBack.getImgLoader()
                             .load(item.getResource())
@@ -113,7 +113,7 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
                             .error(R.mipmap.ic_split_graph)
                             .into(senderPictureViewHolder.iv_sender_picture);
                     senderPictureViewHolder.loading.setVisibility(View.GONE);
-                    senderPictureViewHolder.iv_resend.setVisibility(View.GONE);
+                    senderPictureViewHolder.iv_resend.setVisibility(View.INVISIBLE);
                 }
                 formatTime(preMessage, item, senderPictureViewHolder.tv_send_time);
                 break;

@@ -17,6 +17,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseRecyclerViewActivity;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.Message;
@@ -27,6 +28,7 @@ import net.oschina.app.improve.behavior.KeyboardInputDelegation;
 import net.oschina.app.improve.media.ImageGalleryActivity;
 import net.oschina.app.improve.media.SelectImageActivity;
 import net.oschina.app.improve.user.adapter.UserSendMessageAdapter;
+import net.oschina.app.improve.utils.PicturesCompressor;
 
 import java.io.File;
 import java.lang.reflect.Type;
@@ -100,21 +102,12 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
                 SelectImageActivity.showImage(UserSendMessageActivity.this, 1, true, null, new SelectImageActivity.Callback() {
                     @Override
                     public void doSelectDone(String[] images) {
-                        File file = new File(images[0]);
+                        final File file = new File(images[0]);
                         String path = file.getPath();
-                        if (mSendQuent.containsKey(path)) {
+                        if (mSendQuent.containsKey(getFileName(path))) {
                             Toast.makeText(UserSendMessageActivity.this, "图片已经在发送队列", Toast.LENGTH_SHORT).show();
                         } else {
-                            OSChinaApi.pubMessage(mReceiver.getId(), file, new CallBack(file.getPath()));
-                            Message message = new Message();
-                            message.setType(Message.TYPE_IMAGE);
-                            Author author = new Author();
-                            author.setId(AppContext.getInstance().getLoginId());
-                            message.setSender(author);
-                            message.setResource(file.getPath());
-                            mSendQuent.put(file.getPath(), message);
-                            mAdapter.addItem(message);
-                            scrollToBottom();
+                            compress(path, new Run());
                         }
 
                     }
@@ -148,11 +141,11 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
         if (Message.TYPE_IMAGE == message.getType()) {
             if (message.getId() == 0) {
 
-            }else if (message.getId() == -1) { //重新发送
+            } else if (message.getId() == -1) { //重新发送
                 message.setId(0);
                 mAdapter.updateItem(position);
                 File file = new File(message.getResource());
-                OSChinaApi.pubMessage(mReceiver.getId(), file, new CallBack(file.getPath()));
+                OSChinaApi.pubMessage(mReceiver.getId(), file, new CallBack(getFileName(file.getPath())));
             } else {
                 ImageGalleryActivity.show(this, message.getResource());
             }
@@ -213,6 +206,7 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
                         if (message != null) {
                             mAdapter.removeItem(message);
                             mSendQuent.remove(filePath);
+                            delete(filePath);
                         }
                     }
                     mAdapter.addItem(resultBean.getResult());
@@ -235,6 +229,52 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
         public void onFinish() {
             super.onFinish();
             mDialog.dismiss();
+        }
+    }
+
+    private void compress(final String oriPath, final Run runnable) {
+        final String path = getFilesDir() + "/message/" + getFileName(oriPath);
+        AppOperator.runOnThread(new Runnable() {
+            @Override
+            public void run() {
+                if (PicturesCompressor.compressImage(oriPath, path, 512 * 1024, 80, 1280, 1280 * 2)) {
+                    runnable.setPath(path);
+                    runOnUiThread(runnable);
+                }
+            }
+        });
+    }
+
+    private String getFileName(String filePath) {
+        return filePath.substring(filePath.lastIndexOf("/") + 1);
+    }
+
+    private void delete(String path) {
+        File file = new File(path);
+        if (file.exists())
+            file.delete();
+    }
+
+    private class Run implements Runnable {
+        private String path;
+
+        @Override
+        public void run() {
+            File file = new File(path);
+            OSChinaApi.pubMessage(mReceiver.getId(), file, new CallBack(getFileName(path)));
+            Message message = new Message();
+            message.setType(Message.TYPE_IMAGE);
+            Author author = new Author();
+            author.setId(AppContext.getInstance().getLoginId());
+            message.setSender(author);
+            message.setResource(path);
+            mSendQuent.put(getFileName(path), message);
+            mAdapter.addItem(message);
+            scrollToBottom();
+        }
+
+        public void setPath(String path) {
+            this.path = path;
         }
     }
 }
