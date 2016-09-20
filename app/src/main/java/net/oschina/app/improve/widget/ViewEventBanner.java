@@ -8,17 +8,14 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.BitmapRequestBuilder;
 import com.bumptech.glide.RequestManager;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.Banner;
 import net.oschina.app.util.UIHelper;
-import net.qiujuer.genius.blur.StackBlur;
+import net.qiujuer.genius.graphics.Blur;
 
 /**
  * Created by huanghaibin
@@ -52,7 +49,7 @@ public class ViewEventBanner extends RelativeLayout implements View.OnClickListe
                 .transform(new BitmapTransformation(getContext()) {
                     @Override
                     protected Bitmap transform(BitmapPool pool, Bitmap toTransform, int outWidth, int outHeight) {
-                        toTransform = StackBlur.blur(toTransform, 25, true);
+                        toTransform = Blur.onStackBlur(toTransform, 25, true);
                         return toTransform;
                     }
 
