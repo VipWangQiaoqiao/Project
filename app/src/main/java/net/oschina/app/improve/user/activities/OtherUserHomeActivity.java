@@ -190,7 +190,7 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
 
                 int r = mPortrait.getWidth() / 2;
                 Random random = new Random(System.currentTimeMillis());
-                for (int i = 50, radius = r + i; ; i = (int) (i * 1.4), radius += i){
+                for (int i = 60, radius = r + i; ; i = (int) (i * 1.4), radius += i){
                     SolarSystemView.Planet planet = new SolarSystemView.Planet();
                     planet.setClockwise(random.nextInt(10) % 2 == 0);
                     planet.setAngleRate((random.nextInt(35) + 1) / 1000.f);
