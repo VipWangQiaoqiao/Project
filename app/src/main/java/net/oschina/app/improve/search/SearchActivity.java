@@ -68,9 +68,15 @@ public class SearchActivity extends BaseActivity {
 
     @Override
     protected void initWidget() {
-        mToolbar.setNavigationIcon(null);
         getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
+        mViewSearch.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                // 阻止点击关闭按钮 collapse icon
+                return true;
+            }
+        });
         mViewSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
