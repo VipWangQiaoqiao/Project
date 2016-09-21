@@ -341,6 +341,9 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
 
     @Override
     public void finish() {
+        // hide key board before finish
+        mEmojiKeyboard.hideAllKeyBoard();
+        // do animation to finish
         if (mRoot instanceof ClipView) {
             ((ClipView) mRoot).exit(new Runnable() {
                 @Override
