@@ -44,6 +44,10 @@ public class SettingsFragment extends BaseFragment {
     // TextView mTvExit;
     @Bind(R.id.tb_double_click_exit)
     ToggleButton mTbDoubleClickExit;
+    @Bind(R.id.setting_line_top)
+    View mSettingLineTop;
+    @Bind(R.id.setting_line_bottom)
+    View mSettingLineBottom;
     private RelativeLayout rlCancle;
 
     @Override
@@ -111,8 +115,12 @@ public class SettingsFragment extends BaseFragment {
         boolean login = AppContext.getInstance().isLogin();
         if (!login) {
             rlCancle.setVisibility(View.INVISIBLE);
+            mSettingLineTop.setVisibility(View.INVISIBLE);
+            mSettingLineBottom.setVisibility(View.INVISIBLE);
         } else {
             rlCancle.setVisibility(View.VISIBLE);
+            mSettingLineTop.setVisibility(View.VISIBLE);
+            mSettingLineBottom.setVisibility(View.VISIBLE);
         }
     }
 
@@ -170,6 +178,7 @@ public class SettingsFragment extends BaseFragment {
                 AppContext.getInstance().Logout();
                 AppContext.showToastShort(R.string.tip_logout_success);
                 getActivity().finish();
+
                 break;
             default:
                 break;
