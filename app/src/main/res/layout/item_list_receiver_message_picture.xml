@@ -21,15 +21,30 @@
         android:textSize="@dimen/font_12"
         android:visibility="gone" />
 
-    <ImageView
-        android:id="@+id/iv_receiver_picture"
+    <FrameLayout
         android:layout_width="100dp"
-        android:layout_marginRight="50dp"
         android:layout_height="100dp"
-        android:contentDescription="@string/send_message_to"
-        android:maxHeight="156dp"
-        android:maxWidth="128dp"
-        android:minHeight="64dp"
-        android:minWidth="64dp"
-        android:scaleType="centerInside" />
+        android:layout_marginRight="50dp">
+
+        <ImageView
+            android:id="@+id/iv_receiver_picture"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/send_message_to"
+            android:maxHeight="156dp"
+            android:maxWidth="128dp"
+            android:minHeight="64dp"
+            android:minWidth="64dp"
+            android:scaleType="centerInside" />
+
+        <net.qiujuer.genius.ui.widget.Loading
+            android:id="@+id/loading"
+            android:layout_width="@dimen/size_32"
+            android:layout_height="@dimen/size_32"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            app:gBackgroundColor="@color/white_alpha_16"
+            app:gForegroundColor="@color/main_green"
+            app:gForegroundLineSize="1dp" />
+    </FrameLayout>
 </LinearLayout>
