@@ -2,15 +2,18 @@ package net.oschina.app.improve.user.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -38,7 +41,7 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
 
     public UserSendMessageAdapter(Callback callback) {
         super(callback, NEITHER);
-        authorId = Long.parseLong(String.valueOf(AppContext.getInstance().getLoginUid()));
+        authorId = AppContext.getInstance().getLoginId();
     }
 
     @Override
@@ -79,7 +82,7 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
     }
 
     @Override
-    protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, Message item, int position) {
+    protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, final Message item, int position) {
         Message preMessage = position != 0 ? getItem(position - 1) : null;
         switch (getItemViewType(position)) {
             case SENDER:
@@ -88,7 +91,7 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
                 formatTime(preMessage, item, senderViewHolder.tv_send_time);
                 break;
             case SENDER_PICTURE:
-                SenderPictureViewHolder senderPictureViewHolder = (SenderPictureViewHolder) holder;
+                final SenderPictureViewHolder senderPictureViewHolder = (SenderPictureViewHolder) holder;
                 if (item.getId() == 0) {
                     mCallBack.getImgLoader()
                             .load(item.getResource())
@@ -96,6 +99,7 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
                             .error(R.mipmap.ic_split_graph)
                             .into(senderPictureViewHolder.iv_sender_picture);
                     senderPictureViewHolder.loading.setVisibility(View.VISIBLE);
+                    senderPictureViewHolder.loading.start();
                     senderPictureViewHolder.iv_resend.setVisibility(View.INVISIBLE);
                 } else if (item.getId() == -1) {
                     mCallBack.getImgLoader()
@@ -104,16 +108,34 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
                             .error(R.mipmap.ic_split_graph)
                             .into(senderPictureViewHolder.iv_sender_picture);
                     senderPictureViewHolder.loading.setVisibility(View.GONE);
+                    senderPictureViewHolder.loading.stop();
                     senderPictureViewHolder.iv_resend.setVisibility(View.VISIBLE);
                 } else {
+                    senderPictureViewHolder.loading.setVisibility(View.VISIBLE);
+                    senderPictureViewHolder.loading.start();
+                    senderPictureViewHolder.iv_resend.setVisibility(View.INVISIBLE);
+                    Glide.clear(senderPictureViewHolder.iv_sender_picture);
                     mCallBack.getImgLoader()
                             .load(getGlideUrl(item.getResource()))
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .listener(new RequestListener<GlideUrl, GlideDrawable>() {
+                                @Override
+                                public boolean onException(Exception e, GlideUrl model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                    senderPictureViewHolder.loading.setVisibility(View.GONE);
+                                    senderPictureViewHolder.loading.stop();
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onResourceReady(GlideDrawable resource, GlideUrl model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                    senderPictureViewHolder.loading.setVisibility(View.GONE);
+                                    senderPictureViewHolder.loading.stop();
+                                    return false;
+                                }
+                            })
                             .placeholder(R.color.list_divider_color)
                             .error(R.mipmap.ic_split_graph)
                             .into(senderPictureViewHolder.iv_sender_picture);
-                    senderPictureViewHolder.loading.setVisibility(View.GONE);
-                    senderPictureViewHolder.iv_resend.setVisibility(View.INVISIBLE);
+
                 }
                 formatTime(preMessage, item, senderPictureViewHolder.tv_send_time);
                 break;
@@ -123,10 +145,26 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
                 formatTime(preMessage, item, receiverViewHolder.tv_send_time);
                 break;
             case RECEIVER_PICTURE:
-                ReceiverPictureViewHolder receiverPictureViewHolder = (ReceiverPictureViewHolder) holder;
+                final ReceiverPictureViewHolder receiverPictureViewHolder = (ReceiverPictureViewHolder) holder;
+                receiverPictureViewHolder.loading.setVisibility(View.VISIBLE);
+                receiverPictureViewHolder.loading.start();
                 mCallBack.getImgLoader()
                         .load(getGlideUrl(item.getResource()))
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .listener(new RequestListener<GlideUrl, GlideDrawable>() {
+                            @Override
+                            public boolean onException(Exception e, GlideUrl model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                receiverPictureViewHolder.loading.setVisibility(View.GONE);
+                                receiverPictureViewHolder.loading.stop();
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(GlideDrawable resource, GlideUrl model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                receiverPictureViewHolder.loading.setVisibility(View.GONE);
+                                receiverPictureViewHolder.loading.stop();
+                                return false;
+                            }
+                        })
                         .placeholder(R.color.list_divider_color)
                         .error(R.mipmap.ic_split_graph)
                         .into(receiverPictureViewHolder.iv_receiver_picture);
@@ -228,17 +266,20 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
             super(itemView);
             tv_receiver = (TweetTextView) itemView.findViewById(R.id.tv_receiver);
             tv_send_time = (TextView) itemView.findViewById(R.id.tv_send_time);
+
         }
     }
 
     private static class ReceiverPictureViewHolder extends RecyclerView.ViewHolder {
         ImageView iv_receiver_picture;
         TextView tv_send_time;
+        Loading loading;
 
         public ReceiverPictureViewHolder(View itemView) {
             super(itemView);
             iv_receiver_picture = (ImageView) itemView.findViewById(R.id.iv_receiver_picture);
             tv_send_time = (TextView) itemView.findViewById(R.id.tv_send_time);
+            loading = (Loading) itemView.findViewById(R.id.loading);
         }
     }
 }
