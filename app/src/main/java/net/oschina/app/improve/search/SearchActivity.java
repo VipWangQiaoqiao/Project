@@ -68,6 +68,7 @@ public class SearchActivity extends BaseActivity {
 
     @Override
     protected void initWidget() {
+        mToolbar.setNavigationIcon(null);
         getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
         mViewSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
