@@ -69,6 +69,12 @@ public class SearchActivity extends BaseActivity {
     @Override
     protected void initWidget() {
         getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                supportFinish();
+            }
+        });
 
         mViewSearch.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
@@ -171,6 +177,10 @@ public class SearchActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
+        supportFinish();
+    }
+
+    private void supportFinish(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             endAnimation();
         }else {
