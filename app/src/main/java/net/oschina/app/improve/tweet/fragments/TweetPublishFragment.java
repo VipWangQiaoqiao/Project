@@ -202,9 +202,11 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_picture:
+                mEmojiKeyboard.hideAllKeyBoard();
                 mLayImages.onLoadMoreClick();
                 break;
             case R.id.iv_mention:
+                mEmojiKeyboard.hideAllKeyBoard();
                 toSelectFriends();
                 break;
             case R.id.iv_tag:
