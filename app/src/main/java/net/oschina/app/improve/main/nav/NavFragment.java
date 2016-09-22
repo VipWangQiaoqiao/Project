@@ -96,7 +96,7 @@ public class NavFragment extends BaseFragment implements View.OnClickListener, N
             NavigationButton nav = (NavigationButton) v;
             doSelect(nav);
         } else if (v.getId() == R.id.nav_item_tweet_pub) {
-            TweetPublishActivity.show(getContext());
+            TweetPublishActivity.show(getContext(), mRoot.findViewById(R.id.nav_item_tweet_pub));
         }
     }
 

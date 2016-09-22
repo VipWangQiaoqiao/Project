@@ -79,14 +79,13 @@ public class ClipView extends FrameLayout {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
 
-        mStartPointX = w / 2;
-        mStartPointY = h - 40;
+        //mStartPointX = w * mStartPercentX;
+        //mStartPointY = h * mStartPercentY;
 
-        mEndPointX = mStartPointX;
-        mEndPointY = h / 2;
+        mEndPointX = w >> 1;
+        mEndPointY = h >> 1;
 
         mEndRadius = (float) Math.sqrt(mEndPointY * mEndPointY + mEndPointX * mEndPointX);
-        mStartRadius = 20;
     }
 
 
@@ -104,7 +103,14 @@ public class ClipView extends FrameLayout {
 
     private ValueAnimator mEnterAnimator;
 
-    public void start(float startX, float startY, final Runnable runnable) {
+    private int[] mStartLocation;
+    private int[] mStartSize;
+
+    public void start(int[] startLocation, int[] startSize,
+                      final Runnable runnable) {
+        mStartLocation = startLocation;
+        mStartSize = startSize;
+
         if (!IS_UP_KITKAT || mIsEnter) {
             return;
         }

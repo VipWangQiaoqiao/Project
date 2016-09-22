@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.view.View;
 import android.view.WindowManager;
 
 import net.oschina.app.R;
@@ -14,11 +15,28 @@ import net.oschina.app.improve.tweet.contract.TweetPublishContract;
 import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 
-public class TweetPublishActivity extends BaseBackActivity {
+public class TweetPublishActivity extends BaseBackActivity implements TweetPublishContract.Host {
     private TweetPublishContract.View mView;
+    private int[] mViewLocation;
+    private int[] mViewSize;
 
     public static void show(Context context) {
+        show(context, null);
+    }
+
+    public static void show(Context context, View view) {
         Intent intent = new Intent(context, TweetPublishActivity.class);
+
+        if (view != null) {
+            int[] location = new int[2];
+            view.getLocationInWindow(location);
+            int[] size = new int[2];
+            size[0] = view.getWidth();
+            size[1] = view.getHeight();
+            intent.putExtra("location", location);
+            intent.putExtra("size", size);
+        }
+
         context.startActivity(intent);
     }
 
@@ -31,6 +49,15 @@ public class TweetPublishActivity extends BaseBackActivity {
 
     @Override
     protected boolean initBundle(Bundle bundle) {
+        if (bundle != null) {
+            mViewLocation = bundle.getIntArray("location");
+            mViewSize = bundle.getIntArray("size");
+        }
+        if (mViewLocation == null)
+            mViewLocation = new int[]{0, 0};
+        if (mViewSize == null)
+            mViewSize = new int[]{0, 0};
+
         return super.initBundle(bundle);
     }
 
@@ -81,6 +108,16 @@ public class TweetPublishActivity extends BaseBackActivity {
     }
 
     private BroadcastReceiver mPublishStateReceiver;
+
+    @Override
+    public int[] getStartLocation() {
+        return mViewLocation;
+    }
+
+    @Override
+    public int[] getStartSize() {
+        return mViewSize;
+    }
 
     private class SearchReceiver extends BroadcastReceiver {
         @Override
