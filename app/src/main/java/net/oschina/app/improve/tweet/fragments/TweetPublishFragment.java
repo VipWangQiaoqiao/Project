@@ -62,7 +62,6 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     View mIconSend;
 
     private TweetPublishContract.Operator mOperator;
-    private TweetPublishContract.Host mHost;
     private final EmojiKeyboardFragment mEmojiKeyboard = new EmojiKeyboardFragment();
 
     public TweetPublishFragment() {
@@ -74,9 +73,6 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         // init operator
         this.mOperator = new TweetPublishOperator();
         this.mOperator.setDataView(this);
-        // init host
-        this.mHost = (TweetPublishContract.Host) context;
-
         super.onAttach(context);
     }
 
@@ -90,7 +86,13 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         super.initWidget(root);
         if (root instanceof ClipView) {
             ClipView clipView = ((ClipView) root);
-            clipView.setup(mHost.getStartLocation(), mHost.getStartSize());
+
+            if (mBundle != null) {
+                clipView.setup(mBundle.getIntArray("location"), mBundle.getIntArray("size"));
+            } else {
+                clipView.setup(null, null);
+            }
+
             clipView.post(new Runnable() {
                 @Override
                 public void run() {

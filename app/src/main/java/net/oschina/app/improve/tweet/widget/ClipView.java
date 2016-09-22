@@ -49,6 +49,10 @@ public class ClipView extends FrameLayout implements ValueAnimator.AnimatorUpdat
     }
 
     public void setup(int[] startLocation, int[] startSize) {
+        if (startLocation == null)
+            startLocation = new int[]{0, 0};
+        if (startSize == null)
+            startSize = new int[]{0, 0};
         mStartLocation = startLocation;
         mStartSize = startSize;
         requestLayout();

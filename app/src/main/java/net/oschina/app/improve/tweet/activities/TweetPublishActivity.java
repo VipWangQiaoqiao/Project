@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Bundle;
 import android.support.annotation.Size;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -16,10 +15,8 @@ import net.oschina.app.improve.tweet.contract.TweetPublishContract;
 import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 
-public class TweetPublishActivity extends BaseBackActivity implements TweetPublishContract.Host {
+public class TweetPublishActivity extends BaseBackActivity {
     private TweetPublishContract.View mView;
-    private int[] mViewLocation;
-    private int[] mViewSize;
 
     public static void show(Context context) {
         show(context, null);
@@ -59,26 +56,15 @@ public class TweetPublishActivity extends BaseBackActivity implements TweetPubli
     }
 
     @Override
-    protected boolean initBundle(Bundle bundle) {
-        if (bundle != null) {
-            mViewLocation = bundle.getIntArray("location");
-            mViewSize = bundle.getIntArray("size");
-        }
-        if (mViewLocation == null)
-            mViewLocation = new int[]{0, 0};
-        if (mViewSize == null)
-            mViewSize = new int[]{0, 0};
-
-        return super.initBundle(bundle);
-    }
-
-    @Override
     protected void initWidget() {
         super.initWidget();
-
         getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
         TweetPublishFragment fragment = new TweetPublishFragment();
+
+        // init the args bounds
+        fragment.setArguments(getIntent().getExtras());
+
         FragmentTransaction trans = getSupportFragmentManager()
                 .beginTransaction();
         trans.replace(R.id.activity_tweet_publish, fragment);
@@ -119,16 +105,6 @@ public class TweetPublishActivity extends BaseBackActivity implements TweetPubli
     }
 
     private BroadcastReceiver mPublishStateReceiver;
-
-    @Override
-    public int[] getStartLocation() {
-        return mViewLocation;
-    }
-
-    @Override
-    public int[] getStartSize() {
-        return mViewSize;
-    }
 
     private class SearchReceiver extends BroadcastReceiver {
         @Override
