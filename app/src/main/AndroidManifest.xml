@@ -390,6 +390,7 @@
             android:name=".improve.user.activities.OtherUserHomeActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="用户主页"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Base.App.Theme" />
         <activity
@@ -430,7 +431,7 @@
             android:name=".improve.search.SearchActivity"
             android:label="搜索"
             android:screenOrientation="portrait"
-            android:theme="@style/App.Theme.Translucent"/>
+            android:theme="@style/App.Theme.Translucent" />
 
         <service
             android:name=".improve.tweet.service.TweetPublishService"
