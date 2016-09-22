@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.Size;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.WindowManager;
@@ -25,16 +26,26 @@ public class TweetPublishActivity extends BaseBackActivity implements TweetPubli
     }
 
     public static void show(Context context, View view) {
-        Intent intent = new Intent(context, TweetPublishActivity.class);
+        int[] location = new int[]{0, 0};
+        int[] size = new int[]{0, 0};
 
         if (view != null) {
-            int[] location = new int[2];
-            view.getLocationInWindow(location);
-            int[] size = new int[2];
+            view.getLocationOnScreen(location);
             size[0] = view.getWidth();
             size[1] = view.getHeight();
-            intent.putExtra("location", location);
-            intent.putExtra("size", size);
+        }
+
+        show(context, location, size);
+    }
+
+    public static void show(Context context, @Size(2) int[] viewLocationOnScreen, @Size(2) int[] viewSize) {
+        Intent intent = new Intent(context, TweetPublishActivity.class);
+
+        if (viewLocationOnScreen != null) {
+            intent.putExtra("location", viewLocationOnScreen);
+        }
+        if (viewSize != null) {
+            intent.putExtra("size", viewSize);
         }
 
         context.startActivity(intent);

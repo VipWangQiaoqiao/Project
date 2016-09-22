@@ -88,6 +88,25 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
+        if (root instanceof ClipView) {
+            ClipView clipView = ((ClipView) root);
+            clipView.setup(mHost.getStartLocation(), mHost.getStartSize());
+            clipView.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (mRoot instanceof ClipView) {
+                        ((ClipView) mRoot).start(new Runnable() {
+                            @Override
+                            public void run() {
+                                mEmojiKeyboard.showSoftKeyboard(mEditContent);
+                            }
+                        });
+                    } else {
+                        mEmojiKeyboard.showSoftKeyboard(mEditContent);
+                    }
+                }
+            });
+        }
 
         // EmojiKeyboardFragment
         getChildFragmentManager().beginTransaction()
@@ -173,21 +192,6 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     protected void initData() {
         super.initData();
         mOperator.loadXmlData();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mRoot instanceof ClipView) {
-            ((ClipView) mRoot).start(0.5f, 0.95f, 40, new Runnable() {
-                @Override
-                public void run() {
-                    mEmojiKeyboard.showSoftKeyboard(mEditContent);
-                }
-            });
-        } else {
-            mEmojiKeyboard.showSoftKeyboard(mEditContent);
-        }
     }
 
     @OnClick({R.id.iv_picture, R.id.iv_mention, R.id.iv_tag,
