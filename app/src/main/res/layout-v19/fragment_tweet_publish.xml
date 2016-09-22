@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     tools:context="net.oschina.app.improve.tweet.fragments.TweetPublishFragment">
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="81dp"
@@ -17,6 +17,7 @@
             android:id="@+id/icon_back"
             android:layout_width="72dp"
             android:layout_height="72dp"
+            android:layout_gravity="left"
             android:layout_marginLeft="-4dp"
             android:layout_marginTop="17dp"
             android:clickable="true"
@@ -26,11 +27,11 @@
             app:gTouchEffect="press" />
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:paddingTop="25dp"
-            android:layout_weight="1"
+            android:layout_gravity="center"
             android:gravity="center"
+            android:paddingTop="25dp"
             android:text="弹一弹"
             android:textColor="@color/white"
             android:textSize="@dimen/font_18" />
@@ -39,8 +40,9 @@
             android:id="@+id/icon_send"
             android:layout_width="72dp"
             android:layout_height="72dp"
-            android:layout_marginTop="17dp"
+            android:layout_gravity="right"
             android:layout_marginRight="-4dp"
+            android:layout_marginTop="17dp"
             android:background="@null"
             android:enabled="false"
             android:gravity="center"
@@ -49,7 +51,7 @@
             android:textSize="@dimen/font_16"
             app:gTouchColor="@color/black_alpha_16"
             app:gTouchEffect="press" />
-    </LinearLayout>
+    </FrameLayout>
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/layout_coordinator"
