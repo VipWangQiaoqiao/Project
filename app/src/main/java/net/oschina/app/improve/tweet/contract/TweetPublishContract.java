@@ -23,13 +23,6 @@ public interface TweetPublishContract {
         void onRestoreInstanceState(Bundle savedInstanceState);
     }
 
-    interface Host {
-        int[] getStartLocation();
-
-        int[] getStartSize();
-    }
-
-
     interface View {
         Context getContext();
 
