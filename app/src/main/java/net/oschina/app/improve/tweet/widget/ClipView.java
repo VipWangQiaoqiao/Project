@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 
 import net.qiujuer.genius.ui.Ui;
@@ -22,16 +23,18 @@ import net.qiujuer.genius.ui.Ui;
  * Created by JuQiu
  * on 16/8/22.
  */
-public class ClipView extends FrameLayout {
+public class ClipView extends FrameLayout implements ValueAnimator.AnimatorUpdateListener {
     private static boolean IS_UP_KITKAT = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
     private Path mPath;
-    private boolean mIsAnim;
+    private boolean mInAnim = IS_UP_KITKAT;
     private float mStartRadius, mEndRadius;
     private float mStartPointX, mEndPointX;
     private float mStartPointY, mEndPointY;
     private int mColor;
     private float mProgress;
-    private boolean mIsEnter = false;
+
+    private int[] mStartLocation;
+    private int[] mStartSize;
 
     public ClipView(Context context) {
         super(context);
@@ -45,6 +48,13 @@ public class ClipView extends FrameLayout {
         super(context, attrs, defStyleAttr);
     }
 
+    public void setup(int[] startLocation, int[] startSize) {
+        mStartLocation = startLocation;
+        mStartSize = startSize;
+        requestLayout();
+    }
+
+
     @Override
     protected void dispatchDraw(Canvas canvas) {
         if (!IS_UP_KITKAT) {
@@ -53,7 +63,7 @@ public class ClipView extends FrameLayout {
         }
         if (mProgress <= 0)
             return;
-        if (mIsAnim && mPath != null) {
+        if (mInAnim && mPath != null) {
             int saveCount = canvas.save();
             canvas.clipPath(mPath);
             super.dispatchDraw(canvas);
@@ -78,15 +88,41 @@ public class ClipView extends FrameLayout {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
+        if (mStartLocation == null || mStartSize == null)
+            return;
 
-        mStartPointX = w / 2;
-        mStartPointY = h - 40;
+        int[] selfLocation = new int[2];
+        getLocationOnScreen(selfLocation);
 
-        mEndPointX = mStartPointX;
-        mEndPointY = h / 2;
+        int pointX = mStartLocation[0] - selfLocation[0];
+        int pointY = mStartLocation[1] - selfLocation[1];
 
+        int sizePointX = mStartSize[0] >> 1;
+        int sizePointY = mStartSize[1] >> 1;
+
+        mStartPointX = pointX + sizePointX;
+        mStartPointY = pointY + sizePointY;
+
+        // Check the point by start
+        if (mStartPointX < 0) {
+            mStartPointX = sizePointX;
+        }
+        if (mStartPointX > w) {
+            mStartPointX = w - sizePointX;
+        }
+        if (mStartPointY < 0) {
+            mStartPointY = sizePointY;
+        }
+        if (mStartPointY > h) {
+            mStartPointY = h - sizePointY;
+        }
+
+        // End
+        mEndPointX = w >> 1;
+        mEndPointY = h >> 1;
+
+        mStartRadius = Math.min(sizePointX, sizePointY);
         mEndRadius = (float) Math.sqrt(mEndPointY * mEndPointY + mEndPointX * mEndPointX);
-        mStartRadius = 20;
     }
 
 
@@ -102,71 +138,49 @@ public class ClipView extends FrameLayout {
         invalidate();
     }
 
-    private ValueAnimator mEnterAnimator;
+    private ValueAnimator mAnimator;
 
-    public void start(float startX, float startY, final Runnable runnable) {
-        if (!IS_UP_KITKAT || mIsEnter) {
-            return;
-        }
+    private ValueAnimator getAnimator(boolean isEnter, int time, Runnable runnable) {
+        mDoRunnable = runnable;
+        final float nowProgress = mProgress;
 
-        if (mPath == null) {
-            mPath = new Path();
-            setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        }
-
-        mIsEnter = true;
-        if (mEnterAnimator == null) {
-            ValueAnimator animation = ValueAnimator.ofFloat(0f, 1f);
-            animation.setDuration(480);
-            animation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    mProgress = (float) animation.getAnimatedValue();
-                    doUpdate(mProgress);
-                }
-
-            });
-            animation.addListener(new AnimatorListenerAdapter() {
-                private boolean isCancel;
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    mIsAnim = false;
-                    if (!isCancel && runnable != null)
-                        runnable.run();
-                }
-
-                @Override
-                public void onAnimationStart(Animator animation) {
-                    super.onAnimationStart(animation);
-                    mIsAnim = true;
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-                    super.onAnimationCancel(animation);
-                    isCancel = true;
-                }
-            });
-            animation.setInterpolator(new DecelerateInterpolator());
-            mEnterAnimator = animation;
+        if (mAnimator == null) {
+            ValueAnimator animation = ValueAnimator.ofFloat(nowProgress, isEnter ? 1f : 0f);
+            animation.addUpdateListener(this);
+            animation.addListener(mAnimatorListenerAdapter);
+            mAnimator = animation;
         } else {
-            mEnterAnimator.cancel();
-            mEnterAnimator.setFloatValues(0f, 1f);
+            mAnimator.cancel();
+            mAnimator.setFloatValues(nowProgress, isEnter ? 1f : 0f);
         }
-        mEnterAnimator.start();
+
+        Interpolator interpolator;
+        if (isEnter)
+            interpolator = new DecelerateInterpolator();
+        else
+            interpolator = new AccelerateInterpolator();
+        mAnimator.setInterpolator(interpolator);
+        mAnimator.setDuration((long) (time * (isEnter ? 1 - nowProgress : nowProgress)));
+
+        return mAnimator;
     }
 
-    private ValueAnimator mExitAnimator;
-
-    public void exit(final Runnable runnable) {
+    public void start(Runnable runnable) {
         if (!IS_UP_KITKAT) {
             runnable.run();
             return;
         }
 
-        if (!mIsEnter) {
+        if (mPath == null) {
+            mPath = new Path();
+            setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        }
+
+        getAnimator(true, 480, runnable).start();
+    }
+
+    public void exit(Runnable runnable) {
+        if (!IS_UP_KITKAT) {
             runnable.run();
             return;
         }
@@ -176,52 +190,7 @@ public class ClipView extends FrameLayout {
             setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
 
-        mIsEnter = false;
-
-        if (mEnterAnimator != null)
-            mEnterAnimator.cancel();
-
-        if (mExitAnimator == null) {
-            ValueAnimator animation = ValueAnimator.ofFloat(mProgress, 0f);
-            animation.setDuration(360);
-            animation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    mProgress = (float) animation.getAnimatedValue();
-                    doUpdate(mProgress);
-                }
-
-            });
-            animation.addListener(new AnimatorListenerAdapter() {
-                private boolean isCancel;
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    mIsAnim = false;
-                    if (!isCancel && runnable != null)
-                        runnable.run();
-                }
-
-                @Override
-                public void onAnimationStart(Animator animation) {
-                    super.onAnimationStart(animation);
-                    mIsAnim = true;
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-                    super.onAnimationCancel(animation);
-                    isCancel = true;
-                }
-            });
-            animation.setInterpolator(new AccelerateInterpolator());
-            mExitAnimator = animation;
-        } else {
-            mExitAnimator.cancel();
-            mExitAnimator.setFloatValues(mProgress, 0);
-        }
-        mExitAnimator.start();
+        getAnimator(false, 380, runnable).start();
     }
 
     @Override
@@ -253,6 +222,39 @@ public class ClipView extends FrameLayout {
      */
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        return mIsEnter && !mIsAnim && super.dispatchTouchEvent(ev);
+        return !mInAnim && super.dispatchTouchEvent(ev);
     }
+
+    @Override
+    public void onAnimationUpdate(ValueAnimator animation) {
+        mProgress = (float) animation.getAnimatedValue();
+        doUpdate(mProgress);
+    }
+
+    private Runnable mDoRunnable;
+
+    private AnimatorListenerAdapter mAnimatorListenerAdapter = new AnimatorListenerAdapter() {
+        private boolean isCancel;
+
+        @Override
+        public void onAnimationCancel(Animator animation) {
+            isCancel = true;
+        }
+
+        @Override
+        public void onAnimationStart(Animator animation) {
+            mInAnim = true;
+            isCancel = false;
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animation) {
+            mInAnim = false;
+            Runnable runnable = mDoRunnable;
+            if (!isCancel && runnable != null) {
+                runnable.run();
+                mDoRunnable = null;
+            }
+        }
+    };
 }

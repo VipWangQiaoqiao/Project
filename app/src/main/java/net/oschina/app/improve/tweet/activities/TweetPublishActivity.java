@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.Size;
 import android.support.v4.app.FragmentTransaction;
+import android.view.View;
 import android.view.WindowManager;
 
 import net.oschina.app.R;
@@ -14,11 +16,38 @@ import net.oschina.app.improve.tweet.contract.TweetPublishContract;
 import net.oschina.app.improve.tweet.fragments.TweetPublishFragment;
 import net.oschina.app.improve.tweet.service.TweetPublishService;
 
-public class TweetPublishActivity extends BaseBackActivity {
+public class TweetPublishActivity extends BaseBackActivity implements TweetPublishContract.Host {
     private TweetPublishContract.View mView;
+    private int[] mViewLocation;
+    private int[] mViewSize;
 
     public static void show(Context context) {
+        show(context, null);
+    }
+
+    public static void show(Context context, View view) {
+        int[] location = new int[]{0, 0};
+        int[] size = new int[]{0, 0};
+
+        if (view != null) {
+            view.getLocationOnScreen(location);
+            size[0] = view.getWidth();
+            size[1] = view.getHeight();
+        }
+
+        show(context, location, size);
+    }
+
+    public static void show(Context context, @Size(2) int[] viewLocationOnScreen, @Size(2) int[] viewSize) {
         Intent intent = new Intent(context, TweetPublishActivity.class);
+
+        if (viewLocationOnScreen != null) {
+            intent.putExtra("location", viewLocationOnScreen);
+        }
+        if (viewSize != null) {
+            intent.putExtra("size", viewSize);
+        }
+
         context.startActivity(intent);
     }
 
@@ -31,6 +60,15 @@ public class TweetPublishActivity extends BaseBackActivity {
 
     @Override
     protected boolean initBundle(Bundle bundle) {
+        if (bundle != null) {
+            mViewLocation = bundle.getIntArray("location");
+            mViewSize = bundle.getIntArray("size");
+        }
+        if (mViewLocation == null)
+            mViewLocation = new int[]{0, 0};
+        if (mViewSize == null)
+            mViewSize = new int[]{0, 0};
+
         return super.initBundle(bundle);
     }
 
@@ -81,6 +119,16 @@ public class TweetPublishActivity extends BaseBackActivity {
     }
 
     private BroadcastReceiver mPublishStateReceiver;
+
+    @Override
+    public int[] getStartLocation() {
+        return mViewLocation;
+    }
+
+    @Override
+    public int[] getStartSize() {
+        return mViewSize;
+    }
 
     private class SearchReceiver extends BroadcastReceiver {
         @Override

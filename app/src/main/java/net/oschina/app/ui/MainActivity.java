@@ -334,8 +334,7 @@ public class MainActivity extends AppCompatActivity implements
         switch (id) {
             // 点击了快速操作按钮
             case R.id.quick_option_iv:
-                TweetPublishActivity.show(MainActivity.this);
-                //showQuickOption();
+                showQuickOption();
                 break;
             default:
                 break;
