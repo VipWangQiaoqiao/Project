@@ -42,7 +42,7 @@
 
                 <LinearLayout
                     android:id="@+id/ly_tweet"
-                    style="@style/uset_information_ll">
+                    style="@style/new_user_information_counts">
 
                     <TextView
                         android:id="@+id/tv_tweet"
@@ -60,7 +60,7 @@
 
                 <LinearLayout
                     android:id="@+id/ly_favorite"
-                    style="@style/uset_information_ll">
+                    style="@style/new_user_information_counts">
 
                     <TextView
                         android:id="@+id/tv_favorite"
@@ -79,7 +79,7 @@
 
                 <LinearLayout
                     android:id="@+id/ly_following"
-                    style="@style/uset_information_ll">
+                    style="@style/new_user_information_counts">
 
                     <TextView
                         android:id="@+id/tv_following"
@@ -97,7 +97,7 @@
 
                 <LinearLayout
                     android:id="@+id/ly_follower"
-                    style="@style/uset_information_ll"
+                    style="@style/new_user_information_counts"
                     android:orientation="vertical"
                     android:paddingLeft="@dimen/lay_12"
                     android:paddingRight="@dimen/lay_12">

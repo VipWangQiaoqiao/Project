@@ -169,14 +169,15 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
             }
         }
 
-        @Override
-        public void onFinish() {
-            super.onFinish();
-        }
     };
     private net.oschina.app.bean.User mInfo;
     private boolean isUploadIcon;
     private ProgressDialog mDialog;
+
+    private int mMaxRadius;
+    private int mR;
+    private float mPx;
+    private float mPy;
 
     /**
      * update the view
@@ -216,6 +217,8 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         mTvFavoriteCount.setText(formatCount(userInfo.getStatistics().getCollect()));
         mTvFollowCount.setText(formatCount(userInfo.getStatistics().getFollow()));
         mTvFollowerCount.setText(formatCount(userInfo.getStatistics().getFans()));
+
+        updateSolar(mPx, mPy);
 
         mUserInfo = userInfo;
     }
@@ -270,26 +273,41 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                     float y = mCiOrtrait.getY();
                     int ciOrtraitWidth = mCiOrtrait.getWidth();
 
-                    float px = x + +rlShowInfoX + (width >> 1);
-                    float py = y1 + y + (height - y) / 2;
-                    int mMaxRadius = (int) (mSolarSystem.getHeight() - py + 50);
-                    int r = (ciOrtraitWidth >> 1);
+                    mPx = x + +rlShowInfoX + (width >> 1);
+                    mPy = y1 + y + (height - y) / 2;
+                    mMaxRadius = (int) (mSolarSystem.getHeight() - mPy + 50);
+                    mR = (ciOrtraitWidth >> 1);
 
-                    Random random = new Random(System.currentTimeMillis());
-                    mSolarSystem.clear();
-                    for (int i = 60, radius = r + i; radius <= mMaxRadius; i = (int) (i * 1.4), radius += i) {
-                        SolarSystemView.Planet planet = new SolarSystemView.Planet();
-                        planet.setClockwise(random.nextInt(10) % 2 == 0);
-                        planet.setAngleRate((random.nextInt(35) + 1) / 1000.f);
-                        planet.setRadius(radius);
-                        mSolarSystem.addPlanets(planet);
+                    updateSolar(mPx, mPy);
 
-                    }
-                    mSolarSystem.setPivotPoint(px, py);
                 }
             });
 
         }
+    }
+
+    /**
+     * update solar
+     *
+     * @param px float
+     * @param py float
+     */
+    private void updateSolar(float px, float py) {
+
+        SolarSystemView solarSystemView = mSolarSystem;
+        Random random = new Random(System.currentTimeMillis());
+        int maxRadius = mMaxRadius;
+        int r = mR;
+        solarSystemView.clear();
+        for (int i = 60, radius = r + i; radius <= maxRadius; i = (int) (i * 1.4), radius += i) {
+            SolarSystemView.Planet planet = new SolarSystemView.Planet();
+            planet.setClockwise(random.nextInt(10) % 2 == 0);
+            planet.setAngleRate((random.nextInt(35) + 1) / 1000.f);
+            planet.setRadius(radius);
+            solarSystemView.addPlanets(planet);
+
+        }
+        solarSystemView.setPivotPoint(px, py);
     }
 
     @Override
@@ -736,7 +754,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
     @Override
     public void onTabReselect() {
-        initWidget(mRoot);
+        /// initWidget(mRoot);
         if (AppContext.getInstance().isLogin() && TDevice.hasInternet())
             initData();
     }
