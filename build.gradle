@@ -15,11 +15,11 @@ allprojects {
 }
 
 ext {
-    compileSdkVersion = 23
-    buildToolsVersion = "23.0.3"
+    compileSdkVersion = 24
+    buildToolsVersion = "24.0.2"
     applicationId = "net.oschina.app"
-    minSdkVersion = 15
-    targetSdkVersion = 23
-    versionCode = 264
-    versionName = "v2.6.5 beta (1609071406)"
+    minSdkVersion = 19
+    targetSdkVersion = 24
+    versionCode = 265
+    versionName = "v2.6.5(1609211120)"
 }

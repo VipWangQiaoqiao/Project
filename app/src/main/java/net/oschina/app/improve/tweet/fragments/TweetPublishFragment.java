@@ -70,6 +70,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
 
     @Override
     public void onAttach(Context context) {
+        // init operator
         this.mOperator = new TweetPublishOperator();
         this.mOperator.setDataView(this);
         super.onAttach(context);
@@ -83,6 +84,31 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
+        if (root instanceof ClipView) {
+            ClipView clipView = ((ClipView) root);
+
+            if (mBundle != null) {
+                clipView.setup(mBundle.getIntArray("location"), mBundle.getIntArray("size"));
+            } else {
+                clipView.setup(null, null);
+            }
+
+            clipView.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (mRoot instanceof ClipView) {
+                        ((ClipView) mRoot).start(new Runnable() {
+                            @Override
+                            public void run() {
+                                mEmojiKeyboard.showSoftKeyboard(mEditContent);
+                            }
+                        });
+                    } else {
+                        mEmojiKeyboard.showSoftKeyboard(mEditContent);
+                    }
+                }
+            });
+        }
 
         // EmojiKeyboardFragment
         getChildFragmentManager().beginTransaction()
@@ -170,30 +196,17 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         mOperator.loadXmlData();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mRoot instanceof ClipView) {
-            ((ClipView) mRoot).start(0, 0F, new Runnable() {
-                @Override
-                public void run() {
-                    mEmojiKeyboard.showSoftKeyboard(mEditContent);
-                }
-            });
-        } else {
-            mEmojiKeyboard.showSoftKeyboard(mEditContent);
-        }
-    }
-
     @OnClick({R.id.iv_picture, R.id.iv_mention, R.id.iv_tag,
             R.id.iv_emoji, R.id.txt_indicator, R.id.icon_back, R.id.icon_send})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_picture:
+                mEmojiKeyboard.hideAllKeyBoard();
                 mLayImages.onLoadMoreClick();
                 break;
             case R.id.iv_mention:
+                mEmojiKeyboard.hideAllKeyBoard();
                 toSelectFriends();
                 break;
             case R.id.iv_tag:

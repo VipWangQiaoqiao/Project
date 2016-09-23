@@ -4,8 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Bundle;
+import android.support.annotation.Size;
 import android.support.v4.app.FragmentTransaction;
+import android.view.View;
 import android.view.WindowManager;
 
 import net.oschina.app.R;
@@ -18,7 +19,32 @@ public class TweetPublishActivity extends BaseBackActivity {
     private TweetPublishContract.View mView;
 
     public static void show(Context context) {
+        show(context, null);
+    }
+
+    public static void show(Context context, View view) {
+        int[] location = new int[]{0, 0};
+        int[] size = new int[]{0, 0};
+
+        if (view != null) {
+            view.getLocationOnScreen(location);
+            size[0] = view.getWidth();
+            size[1] = view.getHeight();
+        }
+
+        show(context, location, size);
+    }
+
+    public static void show(Context context, @Size(2) int[] viewLocationOnScreen, @Size(2) int[] viewSize) {
         Intent intent = new Intent(context, TweetPublishActivity.class);
+
+        if (viewLocationOnScreen != null) {
+            intent.putExtra("location", viewLocationOnScreen);
+        }
+        if (viewSize != null) {
+            intent.putExtra("size", viewSize);
+        }
+
         context.startActivity(intent);
     }
 
@@ -30,17 +56,15 @@ public class TweetPublishActivity extends BaseBackActivity {
     }
 
     @Override
-    protected boolean initBundle(Bundle bundle) {
-        return super.initBundle(bundle);
-    }
-
-    @Override
     protected void initWidget() {
         super.initWidget();
-
         getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
         TweetPublishFragment fragment = new TweetPublishFragment();
+
+        // init the args bounds
+        fragment.setArguments(getIntent().getExtras());
+
         FragmentTransaction trans = getSupportFragmentManager()
                 .beginTransaction();
         trans.replace(R.id.activity_tweet_publish, fragment);
