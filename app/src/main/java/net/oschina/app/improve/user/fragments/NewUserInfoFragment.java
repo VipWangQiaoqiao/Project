@@ -29,6 +29,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.cache.CacheManager;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.bean.UserV2;
 import net.oschina.app.improve.bean.base.ResultBean;
@@ -135,6 +136,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         @Override
         public void onStart() {
             super.onStart();
+            mSolarSystem.accelerate();
             if (isUploadIcon) {
                 showWaitDialog(R.string.title_update_success_status);
             }
@@ -142,6 +144,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            mSolarSystem.decelerate();
             if (isUploadIcon)
                 Toast.makeText(getActivity(), R.string.title_update_fail_status, Toast.LENGTH_SHORT).show();
             isUploadIcon = false;
@@ -149,8 +152,9 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
         @Override
         public void onSuccess(int statusCode, Header[] headers, String responseString) {
-
             try {
+                mSolarSystem.decelerate();
+
                 Type type = new TypeToken<ResultBean<UserV2>>() {
                 }.getType();
 
@@ -158,6 +162,12 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                 if (resultBean.isSuccess()) {
                     UserV2 userInfo = (UserV2) resultBean.getResult();
                     updateView(userInfo);
+                    AppOperator.getExecutor().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            CacheManager.saveObject(getContext(), mUserInfo, CACHE_NAME);
+                        }
+                    });
                 }
                 if (isUploadIcon) {
                     hideWaitDialog();
@@ -218,7 +228,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         mTvFollowCount.setText(formatCount(userInfo.getStatistics().getFollow()));
         mTvFollowerCount.setText(formatCount(userInfo.getStatistics().getFans()));
 
-        updateSolar(mPx, mPy);
+//        updateSolar(mPx, mPy);
 
         mUserInfo = userInfo;
     }
@@ -340,9 +350,6 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     public void onPause() {
         super.onPause();
         NoticeManager.unBindNotify(this);
-        if (mUserInfo != null) {
-            CacheManager.saveObject(getContext(), mUserInfo, CACHE_NAME);
-        }
         boolean login = AppContext.getInstance().isLogin();
         if (!login) {
             hideView();
@@ -754,9 +761,11 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
     @Override
     public void onTabReselect() {
-        /// initWidget(mRoot);
-        if (AppContext.getInstance().isLogin() && TDevice.hasInternet())
-            initData();
+//        initWidget(mRoot);
+        if (AppContext.getInstance().isLogin() && TDevice.hasInternet()) {
+            sendRequestData();
+        }
+//            initData();
     }
 
 }
