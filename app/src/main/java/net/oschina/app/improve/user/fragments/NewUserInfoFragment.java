@@ -330,7 +330,9 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         if (!login) {
             hideView();
         } else {
-            initData();
+            if (TDevice.hasInternet()) {
+                sendRequestData();
+            }
         }
     }
 
@@ -389,6 +391,9 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         UserV2 userInfo = (UserV2) CacheManager.readObject(getActivity(), CACHE_NAME);
         if (userInfo != null) {
             updateView(userInfo);
+            if (TDevice.hasInternet()) {
+                sendRequestData();
+            }
         } else {
             if (TDevice.hasInternet()) {
                 sendRequestData();
