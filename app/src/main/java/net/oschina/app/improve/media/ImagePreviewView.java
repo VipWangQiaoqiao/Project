@@ -291,15 +291,26 @@ public class ImagePreviewView extends ImageView {
 
     @Override
     protected boolean setFrame(int l, int t, int r, int b) {
-        boolean change = super.setFrame(l, t, r, b);
+        super.setFrame(l, t, r, b);
 
         Drawable drawable = getDrawable();
         if (drawable == null) return false;
         if (mBoundWidth != 0 && mBoundHeight != 0 && scale != 1) return false;
 
-        int width = getWidth();
-        int height = getHeight();
+        adjustBounds(getWidth(), getHeight());
 
+        return true;
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        adjustBounds(w, h);
+    }
+
+    private void adjustBounds(int width, int height){
+        Drawable drawable = getDrawable();
+        if (drawable == null) return;
         mBoundWidth = drawable.getBounds().width();
         mBoundHeight = drawable.getBounds().height();
 
@@ -312,15 +323,6 @@ public class ImagePreviewView extends ImageView {
 
         translateLeft = 0;
         translateTop = getDefaultTranslateTop(height, mBoundHeight);
-
-        return change;
-    }
-
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        translateLeft = 0;
-        translateTop = getDefaultTranslateTop(h, mBoundHeight);
     }
 
     private float getDefaultTranslateTop(int height, int bh) {
