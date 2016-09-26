@@ -523,7 +523,7 @@ public class UIHelper {
         if (url.startsWith("mailto:")){
             Uri uri = Uri.parse(url);
             Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
-            context.startActivity(Intent.createChooser(intent, "选择发送类型"));
+            context.startActivity(Intent.createChooser(intent, "选择发送应用"));
             return;
         }
 
@@ -555,62 +555,6 @@ public class UIHelper {
             openBrowser(context, url);
         }
     }
-
-
-    private static void parseUrl(Context context, long id, String url){
-        if (url == null && id > 0){
-            NewsDetailActivity.show(context, id);
-            return;
-        }
-
-        if (TextUtils.isEmpty(url)) return;
-
-        if (!url.startsWith("http://") && !url.startsWith("https://")){
-            url = "https://" + url;
-        }
-
-        Pattern pattern;
-        Matcher matcher;
-
-        pattern = Pattern.compile("(http|https)://([^/]+)(.+)");
-        matcher = pattern.matcher(url);
-        if (!matcher.find()) return;
-
-        String host = matcher.group(2);
-        String path = matcher.group(3);
-
-        if (TextUtils.isEmpty(host) || TextUtils.isEmpty(path)) return;
-
-        switch (host){
-            case "www.oschina.net":
-                break;
-        }
-
-        // 活动
-        pattern = Pattern.compile("(http|https)://city\\.oschina\\.net/([^/]+)/event/([0-9]+)");
-        matcher = pattern.matcher(url);
-        if (matcher.find()){
-            long eid = StringUtils.toInt(matcher.group(3), 0);
-            if (eid <= 0) return;
-            UIHelper.showEventDetail(context, eid);
-            return;
-        }
-
-        // image, 我不懂老代码的思路...所以直接copy过来
-        if (url.startsWith(SHOWIMAGE)) {
-            String realUrl = url.substring(SHOWIMAGE.length());
-            try {
-                JSONObject json = new JSONObject(realUrl);
-                String[] urls = json.getString("urls").split(",");
-                OSCPhotosActivity.showImagePreview(context, urls[0]);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return;
-        }
-
-    }
-
 
     /**
      * url跳转
