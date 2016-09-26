@@ -145,6 +145,7 @@ public abstract class BaseRecyclerViewActivity<T> extends BaseBackActivity imple
             mRefreshLayout.setCanLoadMore(true);
         } else {
             mAdapter.addAll(resultBean.getResult().getItems());
+            mAdapter.setState(BaseRecyclerAdapter.STATE_LOADING,true);
         }
         if (resultBean.getResult().getItems().size() < 20) {
             mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
