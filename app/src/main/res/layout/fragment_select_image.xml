@@ -65,69 +65,80 @@
         </FrameLayout>
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_image"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/lay_button"
-        android:layout_below="@id/toolbar"
-        android:padding="1dp"
-        android:scrollbars="none" />
+        android:layout_below="@+id/toolbar"
+        android:orientation="vertical">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_above="@+id/lay_button"
-        android:background="@color/black_alpha_80" />
+        <net.oschina.app.ui.empty.EmptyLayout
+            android:id="@+id/error_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible" />
 
-    <FrameLayout
-        android:id="@+id/lay_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:clickable="true"
-        android:paddingBottom="@dimen/lay_8"
-        android:paddingLeft="@dimen/lay_16"
-        android:paddingRight="@dimen/lay_16"
-        android:paddingTop="@dimen/lay_8">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/lay_button"
+            android:padding="1dp"
+            android:scrollbars="none" />
 
-        <net.qiujuer.genius.ui.widget.Button
-            android:id="@+id/btn_preview"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/size_28"
-            android:layout_gravity="left"
-            android:background="@drawable/btn_select_image_preview_bg_selector"
-            android:enabled="false"
-            android:gravity="center"
-            android:paddingBottom="@dimen/lay_4"
-            android:paddingLeft="@dimen/lay_12"
-            android:paddingRight="@dimen/lay_12"
-            android:paddingTop="@dimen/lay_4"
-            android:text="@string/image_select_opt_preview"
-            android:textColor="@color/btn_select_image_preview_bg_selector"
-            android:textSize="14sp"
-            app:gBorderColor="@color/black_alpha_16"
-            app:gTouchCornerRadius="2dp"
-            app:gTouchEffect="ripple" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/black_alpha_80" />
 
-        <net.qiujuer.genius.ui.widget.Button
-            android:id="@+id/btn_done"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/size_28"
-            android:layout_gravity="right"
-            android:background="@drawable/btn_select_image_done_bg_selector"
-            android:enabled="false"
-            android:gravity="center"
-            android:paddingBottom="@dimen/lay_4"
-            android:paddingLeft="@dimen/lay_12"
-            android:paddingRight="@dimen/lay_12"
-            android:paddingTop="@dimen/lay_4"
-            android:text="@string/image_select_opt_done"
-            android:textColor="@color/btn_select_image_done_bg_selector"
-            android:textSize="14sp"
-            app:gBorderColor="@color/black_alpha_16"
-            app:gTouchCornerRadius="2dp"
-            app:gTouchEffect="ripple" />
+        <FrameLayout
+            android:id="@+id/lay_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:paddingBottom="@dimen/lay_8"
+            android:paddingLeft="@dimen/lay_16"
+            android:paddingRight="@dimen/lay_16"
+            android:paddingTop="@dimen/lay_8">
 
-    </FrameLayout>
+            <net.qiujuer.genius.ui.widget.Button
+                android:id="@+id/btn_preview"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/size_28"
+                android:layout_gravity="left"
+                android:background="@drawable/btn_select_image_preview_bg_selector"
+                android:enabled="false"
+                android:gravity="center"
+                android:paddingBottom="@dimen/lay_4"
+                android:paddingLeft="@dimen/lay_12"
+                android:paddingRight="@dimen/lay_12"
+                android:paddingTop="@dimen/lay_4"
+                android:text="@string/image_select_opt_preview"
+                android:textColor="@color/btn_select_image_preview_bg_selector"
+                android:textSize="14sp"
+                app:gBorderColor="@color/black_alpha_16"
+                app:gTouchCornerRadius="2dp"
+                app:gTouchEffect="ripple" />
+
+            <net.qiujuer.genius.ui.widget.Button
+                android:id="@+id/btn_done"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/size_28"
+                android:layout_gravity="right"
+                android:background="@drawable/btn_select_image_done_bg_selector"
+                android:enabled="false"
+                android:gravity="center"
+                android:paddingBottom="@dimen/lay_4"
+                android:paddingLeft="@dimen/lay_12"
+                android:paddingRight="@dimen/lay_12"
+                android:paddingTop="@dimen/lay_4"
+                android:text="@string/image_select_opt_done"
+                android:textColor="@color/btn_select_image_done_bg_selector"
+                android:textSize="14sp"
+                app:gBorderColor="@color/black_alpha_16"
+                app:gTouchCornerRadius="2dp"
+                app:gTouchEffect="ripple" />
+
+        </FrameLayout>
+    </LinearLayout>
+
 </RelativeLayout>
