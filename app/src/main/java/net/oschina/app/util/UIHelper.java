@@ -237,6 +237,10 @@ public class UIHelper {
         showSimpleBack(context, SimpleBackPage.QUESTION_TAG, args);
     }
 
+    public static void showTweetDetail(Context context, long tweetId) {
+        TweetDetailActivity.show(context,tweetId);
+    }
+
     /**
      * 显示动弹详情
      *
@@ -574,7 +578,7 @@ public class UIHelper {
                 showUserCenter(context, objId, objKey);
                 break;
             case URLsUtils.URL_OBJ_TYPE_TWEET:
-                showTweetDetail(context, null, objId);
+                showTweetDetail(context, objId);
                 break;
             case URLsUtils.URL_OBJ_TYPE_BLOG:
                 showBlogDetail(context, objId);
