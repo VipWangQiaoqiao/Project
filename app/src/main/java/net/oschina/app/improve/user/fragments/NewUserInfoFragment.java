@@ -39,6 +39,7 @@ import net.oschina.app.improve.user.activities.UserFollowsActivity;
 import net.oschina.app.improve.user.activities.UserMessageActivity;
 import net.oschina.app.improve.user.activities.UserTweetActivity;
 import net.oschina.app.improve.widget.SolarSystemView;
+import net.oschina.app.improve.widget.TitleBar;
 import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.ui.MyQrodeDialog;
 import net.oschina.app.ui.SimpleBackActivity;
@@ -361,12 +362,10 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
      * checkSdkVersion
      */
     private void CheckSdkVersion() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-
-            if (mRlShowInfo != null) {
-                int paddingTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25, getResources().getDisplayMetrics());
-                mRlShowInfo.setPadding(0, paddingTop, 0, 0);
-            }
+        if (mRlShowInfo != null) {
+            mRlShowInfo.setPadding(mRlShowInfo.getLeft(),
+                    TitleBar.getExtPaddingTop(getResources()),
+                    mRlShowInfo.getRight(), mRlShowInfo.getBottom());
         }
     }
 
