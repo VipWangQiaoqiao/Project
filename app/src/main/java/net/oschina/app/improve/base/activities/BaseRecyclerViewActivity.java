@@ -14,7 +14,6 @@ import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.widget.RecyclerRefreshLayout;
-import net.oschina.app.ui.empty.EmptyLayout;
 
 import java.lang.reflect.Type;
 import java.util.Date;
@@ -29,8 +28,8 @@ import cz.msebera.android.httpclient.Header;
 @SuppressWarnings("All")
 public abstract class BaseRecyclerViewActivity<T> extends BaseBackActivity implements
         BaseRecyclerAdapter.OnItemClickListener,
-        RecyclerRefreshLayout.SuperRefreshLayoutListener ,
-        BaseGeneralRecyclerAdapter.Callback{
+        RecyclerRefreshLayout.SuperRefreshLayoutListener,
+        BaseGeneralRecyclerAdapter.Callback {
 
     @Bind(R.id.refreshLayout)
     protected RecyclerRefreshLayout mRefreshLayout;
@@ -145,7 +144,7 @@ public abstract class BaseRecyclerViewActivity<T> extends BaseBackActivity imple
             mRefreshLayout.setCanLoadMore(true);
         } else {
             mAdapter.addAll(resultBean.getResult().getItems());
-            mAdapter.setState(BaseRecyclerAdapter.STATE_LOADING,true);
+            mAdapter.setState(BaseRecyclerAdapter.STATE_LOADING, true);
         }
         if (resultBean.getResult().getItems().size() < 20) {
             mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
