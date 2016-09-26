@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -114,10 +113,11 @@ public class SimpleBackActivity extends BaseActivity implements
         switch (item.getItemId()) {
             case R.id.public_menu_send:
                 if (mFragment.get() instanceof TweetsFragment) {
+                    String topic = String.format("#%s#", ((TweetsFragment) mFragment.get()).getTopic());
                     // 硬编码呗, view得不到, 坐标也不好取, 简单粗暴的来!!
                     TweetPublishActivity.show(this,
-                            new int[]{(int) (TDevice.getScreenWidth() - 30), 45}, new int[]{0, 0});
-//                    sendTopic();
+                            new int[]{(int) (TDevice.getScreenWidth() - 30), 45},
+                            new int[]{0, 0}, topic);
                 } else {
                     return super.onOptionsItemSelected(item);
                 }

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -72,7 +73,8 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     public void onAttach(Context context) {
         // init operator
         this.mOperator = new TweetPublishOperator();
-        this.mOperator.setDataView(this);
+        this.mOperator.setDataView(this, getArguments() != null ?
+                getArguments().getString("defaultContent") : null);
         super.onAttach(context);
     }
 
@@ -149,11 +151,11 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
             public void afterTextChanged(Editable s) {
                 final int len = s.length();
                 final int surplusLen = MAX_TEXT_LENGTH - len;
-
-                mIconSend.setEnabled(len > 0 && surplusLen >= 0);
-
+                // set the send icon state
+                setSendIconStatus(len > 0 && surplusLen >= 0, s.toString());
+                // check the indicator state
                 if (surplusLen > 10) {
-                    // 隐藏提示
+                    // hide
                     if (mIndicator.getVisibility() != View.INVISIBLE) {
                         ViewCompat.animate(mIndicator)
                                 .alpha(0)
@@ -167,6 +169,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
                                 .start();
                     }
                 } else {
+                    // show
                     if (mIndicator.getVisibility() != View.VISIBLE) {
                         ViewCompat.animate(mIndicator)
                                 .alpha(1f)
@@ -187,6 +190,15 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
                 }
             }
         });
+    }
+
+    private void setSendIconStatus(boolean haveContent, String content) {
+        if (haveContent) {
+            content = content.trim();
+            haveContent = (!TextUtils.isEmpty(content))
+                    && (!TEXT_TAG.equals(content));
+        }
+        mIconSend.setEnabled(haveContent);
     }
 
 
@@ -340,6 +352,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     @Override
     public void setContent(String content) {
         mEditContent.setText(content);
+        mEditContent.setSelection(mEditContent.getText().length());
     }
 
     @Override
