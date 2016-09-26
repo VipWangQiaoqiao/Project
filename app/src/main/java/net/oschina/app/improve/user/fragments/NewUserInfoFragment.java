@@ -363,11 +363,9 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     private void CheckSdkVersion() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 
-            if (mFlUserInfonHeadContainer != null) {
-                // LinearLayout.MarginLayoutParams layoutParams = (LinearLayout.MarginLayoutParams) mRlShowInfo.getLayoutParams();
+            if (mRlShowInfo != null) {
                 int paddingTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25, getResources().getDisplayMetrics());
                 mRlShowInfo.setPadding(0, paddingTop, 0, 0);
-                //  mFlUserInfonHeadContainer.setLayoutParams(layoutParams);
             }
         }
     }

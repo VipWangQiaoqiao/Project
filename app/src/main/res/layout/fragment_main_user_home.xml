@@ -156,7 +156,7 @@
                 android:id="@+id/user_info_head_container"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:layout_gravity="center_vertical">
+                android:layout_gravity="top">
 
                 <ImageView
                     android:id="@+id/iv_logo_setting"
