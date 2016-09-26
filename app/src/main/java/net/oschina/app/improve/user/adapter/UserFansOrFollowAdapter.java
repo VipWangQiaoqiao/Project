@@ -41,6 +41,8 @@ public class UserFansOrFollowAdapter extends BaseRecyclerAdapter<UserFansOrFollo
 
     @Override
     protected void onBindDefaultViewHolder(RecyclerView.ViewHolder holder, UserFansOrFollows item, int position) {
+
+        if (item == null) return;
         final UserFansViewHolder vh = (UserFansViewHolder) holder;
         ImageLoader.loadImage(requestManager, vh.mCiIcon, item.getPortrait(), R.mipmap.widget_dface);
         vh.mTvName.setText(item.getName());
@@ -59,9 +61,11 @@ public class UserFansOrFollowAdapter extends BaseRecyclerAdapter<UserFansOrFollo
             default:
                 break;
         }
-        vh.mTvCity.setText(item.getMore().getCity());
         vh.mTvDesc.setText(item.getDesc());
-        vh.mTvExp.setText(item.getMore().getExpertise());
+        UserFansOrFollows.More more = item.getMore();
+        if (more == null) return;
+        vh.mTvCity.setText(more.getCity());
+        vh.mTvExp.setText(more.getExpertise());
 
     }
 
