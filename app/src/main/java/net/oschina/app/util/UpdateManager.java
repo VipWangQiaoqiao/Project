@@ -49,7 +49,7 @@ public class UpdateManager {
             mUpdate = XmlUtils.toBean(Update.class,
                     new ByteArrayInputStream(arg2));
 
-            onFinshCheck();
+            onFinishCheck();
         }
     };
 
@@ -79,7 +79,7 @@ public class UpdateManager {
         OSChinaApi.checkUpdate(mCheckUpdateHandle);
     }
 
-    private void onFinshCheck() {
+    private void onFinishCheck() {
         if (haveNew()) {
             showUpdateInfo();
         } else {

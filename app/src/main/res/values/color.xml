@@ -112,6 +112,6 @@
     <color name="tweet_indicator_text_color">#111111</color>
     <color name="tweet_indicator_text_color_error">#e35050</color>
 
-    <color name="tweet_publish_title_bg">#20B955</color>
+    <color name="tweet_publish_title_bg">#12ca52</color>
 
 </resources>
