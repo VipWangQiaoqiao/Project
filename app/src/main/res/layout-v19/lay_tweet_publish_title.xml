@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="81dp"
+    android:background="@color/tweet_publish_title_bg">
+
+    <net.qiujuer.genius.ui.widget.ImageView
+        android:id="@+id/icon_back"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_gravity="left"
+        android:layout_marginLeft="-4dp"
+        android:layout_marginTop="17dp"
+        android:clickable="true"
+        android:scaleType="centerInside"
+        android:src="@mipmap/btn_back_normal"
+        app:gTouchColor="@color/black_alpha_16"
+        app:gTouchEffect="press" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:paddingTop="25dp"
+        android:text="弹一弹"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_18" />
+
+    <net.qiujuer.genius.ui.widget.Button
+        android:id="@+id/icon_send"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_gravity="right"
+        android:layout_marginRight="-4dp"
+        android:layout_marginTop="17dp"
+        android:background="@null"
+        android:enabled="false"
+        android:gravity="center"
+        android:text="发送"
+        android:textColor="@color/tweet_publish_send"
+        android:textSize="@dimen/font_16"
+        app:gTouchColor="@color/black_alpha_16"
+        app:gTouchEffect="press" />
+</FrameLayout>
