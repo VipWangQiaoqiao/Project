@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import net.oschina.app.AppConfig;
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseApplication;
 import net.oschina.app.improve.base.activities.BaseActivity;
@@ -18,6 +19,7 @@ import net.oschina.app.improve.main.nav.NavFragment;
 import net.oschina.app.improve.main.nav.NavigationButton;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.interf.OnTabReselectListener;
+import net.oschina.app.util.UpdateManager;
 
 import butterknife.Bind;
 
@@ -82,6 +84,8 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
     protected void initData() {
         super.initData();
         NoticeManager.init(this);
+        // in this we can check update
+        checkUpdate();
     }
 
     @Override
@@ -104,5 +108,12 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
         } else {
             finish();
         }
+    }
+
+    private void checkUpdate() {
+        if (!AppContext.get(AppConfig.KEY_CHECK_UPDATE, true)) {
+            return;
+        }
+        new UpdateManager(MainActivity.this, false).checkUpdate();
     }
 }

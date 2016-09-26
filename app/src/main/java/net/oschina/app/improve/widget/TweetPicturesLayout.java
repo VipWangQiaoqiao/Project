@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import com.bumptech.glide.BitmapRequestBuilder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.bean.Tweet;
@@ -25,6 +24,11 @@ import net.oschina.app.improve.media.ImageGalleryActivity;
  * on 16/8/26.
  */
 public class TweetPicturesLayout extends ViewGroup implements View.OnClickListener {
+    private static final int SINGLE_MAX_W = 120;
+    private static final int SINGLE_MAX_H = 180;
+    private static final int SINGLE_MIN_W = 34;
+    private static final int SINGLE_MIN_H = 34;
+
     private Tweet.Image[] mImages;
     private float mVerticalSpacing;
     private float mHorizontalSpacing;
@@ -168,8 +172,8 @@ public class TweetPicturesLayout extends ViewGroup implements View.OnClickListen
             int imageH = mImages[0].getH();
             float density = getResources().getDisplayMetrics().density;
             // Get max width and height
-            float maxContentW = Math.min(selfWidth - paddingRight - paddingLeft, density * 120);
-            float maxContentH = density * 180;
+            float maxContentW = Math.min(selfWidth - paddingRight - paddingLeft, density * SINGLE_MAX_W);
+            float maxContentH = density * SINGLE_MAX_H;
 
             int childW, childH;
 
@@ -181,6 +185,14 @@ public class TweetPicturesLayout extends ViewGroup implements View.OnClickListen
                 childW = (int) maxContentW;
                 childH = (int) (maxContentW * hToW);
             }
+            // Check the width and height below Min values
+            int minW = (int) (SINGLE_MIN_W * density);
+            if (childW < minW)
+                childW = minW;
+            int minH = (int) (SINGLE_MIN_H * density);
+            if (childH < minH)
+                childH = minH;
+
 
             child.measure(MeasureSpec.makeMeasureSpec(childW, MeasureSpec.EXACTLY),
                     MeasureSpec.makeMeasureSpec(childH, MeasureSpec.EXACTLY));
