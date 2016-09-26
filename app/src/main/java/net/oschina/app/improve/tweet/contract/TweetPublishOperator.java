@@ -27,10 +27,12 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
     private final static String SHARE_VALUES_CONTENT = "content";
     private final static String SHARE_VALUES_IMAGES = "images";
     private TweetPublishContract.View mView;
+    private String mDefaultContent;
 
     @Override
-    public void setDataView(TweetPublishContract.View view) {
+    public void setDataView(TweetPublishContract.View view, String defaultContent) {
         mView = view;
+        mDefaultContent = defaultContent;
     }
 
     @Override
@@ -78,16 +80,20 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
 
     @Override
     public void loadXmlData() {
-        final Context context = mView.getContext();
-        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARE_FILE_NAME, Activity.MODE_PRIVATE);
-        String content = sharedPreferences.getString(SHARE_VALUES_CONTENT, null);
-        Set<String> set = sharedPreferences.getStringSet(SHARE_VALUES_IMAGES, null);
-        if (content != null) {
-            mView.setContent(content);
-        }
-        if (set != null && set.size() > 0) {
-            mView.setImages(CollectionUtil.toArray(set, String.class));
+        if (TextUtils.isEmpty(mDefaultContent)) {
+            final Context context = mView.getContext();
+            SharedPreferences sharedPreferences = context.getSharedPreferences(SHARE_FILE_NAME, Activity.MODE_PRIVATE);
+            String content = sharedPreferences.getString(SHARE_VALUES_CONTENT, null);
+            Set<String> set = sharedPreferences.getStringSet(SHARE_VALUES_IMAGES, null);
+            if (content != null) {
+                mView.setContent(content);
+            }
+            if (set != null && set.size() > 0) {
+                mView.setImages(CollectionUtil.toArray(set, String.class));
 
+            }
+        } else {
+            mView.setContent(mDefaultContent);
         }
     }
 
@@ -114,28 +120,32 @@ public class TweetPublishOperator implements TweetPublishContract.Operator {
     }
 
     private void clearAndFinish(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARE_FILE_NAME, Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(SHARE_VALUES_CONTENT, null);
-        editor.putStringSet(SHARE_VALUES_IMAGES, null);
-        SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
+        if (TextUtils.isEmpty(mDefaultContent)) {
+            SharedPreferences sharedPreferences = context.getSharedPreferences(SHARE_FILE_NAME, Activity.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(SHARE_VALUES_CONTENT, null);
+            editor.putStringSet(SHARE_VALUES_IMAGES, null);
+            SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
+        }
         mView.finish();
     }
 
 
     private void saveXmlData() {
-        final Context context = mView.getContext();
-        final String content = mView.getContent();
-        final String[] paths = mView.getImages();
-        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARE_FILE_NAME, Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(SHARE_VALUES_CONTENT, content);
-        if (paths != null && paths.length > 0) {
-            editor.putStringSet(SHARE_VALUES_IMAGES, CollectionUtil.toHashSet(paths));
-        } else {
-            editor.putStringSet(SHARE_VALUES_IMAGES, null);
+        if (TextUtils.isEmpty(mDefaultContent)) {
+            final Context context = mView.getContext();
+            final String content = mView.getContent();
+            final String[] paths = mView.getImages();
+            SharedPreferences sharedPreferences = context.getSharedPreferences(SHARE_FILE_NAME, Activity.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(SHARE_VALUES_CONTENT, content);
+            if (paths != null && paths.length > 0) {
+                editor.putStringSet(SHARE_VALUES_IMAGES, CollectionUtil.toHashSet(paths));
+            } else {
+                editor.putStringSet(SHARE_VALUES_IMAGES, null);
+            }
+            SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
         }
-        SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
     }
 
 

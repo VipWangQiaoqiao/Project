@@ -23,6 +23,10 @@ public class TweetPublishActivity extends BaseBackActivity {
     }
 
     public static void show(Context context, View view) {
+        show(context, view, null);
+    }
+
+    public static void show(Context context, View view, String defaultContent) {
         int[] location = new int[]{0, 0};
         int[] size = new int[]{0, 0};
 
@@ -32,10 +36,11 @@ public class TweetPublishActivity extends BaseBackActivity {
             size[1] = view.getHeight();
         }
 
-        show(context, location, size);
+        show(context, location, size, defaultContent);
     }
 
-    public static void show(Context context, @Size(2) int[] viewLocationOnScreen, @Size(2) int[] viewSize) {
+
+    public static void show(Context context, @Size(2) int[] viewLocationOnScreen, @Size(2) int[] viewSize, String defaultContent) {
         Intent intent = new Intent(context, TweetPublishActivity.class);
 
         if (viewLocationOnScreen != null) {
@@ -43,6 +48,9 @@ public class TweetPublishActivity extends BaseBackActivity {
         }
         if (viewSize != null) {
             intent.putExtra("size", viewSize);
+        }
+        if (defaultContent != null) {
+            intent.putExtra("defaultContent", defaultContent);
         }
 
         context.startActivity(intent);

@@ -10,7 +10,7 @@ import android.os.Bundle;
 
 public interface TweetPublishContract {
     interface Operator {
-        void setDataView(View view);
+        void setDataView(View view, String defaultContent);
 
         void publish();
 
