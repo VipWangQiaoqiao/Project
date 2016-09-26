@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<net.oschina.app.widget.CustomerScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/layout_item_bg"
-    android:orientation="vertical"
-    android:scrollbars="none">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
             android:contentDescription="@null"
@@ -34,13 +34,15 @@
 
         <RelativeLayout
             android:id="@+id/rl_check_update"
-            style="@style/option_item_rl">
+            style="@style/option_item_rl"
+            android:visibility="gone">
 
             <TextView
                 style="@style/option_item_text_parent"
                 android:text="@string/update"
                 android:textColor="?attr/textColor"
-                android:textSize="@dimen/text_size_16" />
+                android:textSize="@dimen/text_size_16"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -66,7 +68,9 @@
             </LinearLayout>
         </RelativeLayout>
 
-        <View style="@style/h_line" />
+        <View
+            style="@style/h_line"
+            android:visibility="gone" />
 
         <RelativeLayout
             android:id="@+id/rl_grade"
@@ -97,40 +101,41 @@
         </RelativeLayout>
 
         <View style="@style/h_line" />
+    </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="50dip"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="10dip">
+
+        <TextView
+            android:id="@+id/tv_oscsite"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginTop="50dip"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="10dip">
-
-            <TextView
-                android:id="@+id/tv_oscsite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                android:text="@string/oscsite"
-                android:textColor="?android:textColorLink" />
-
-
-            <TextView
-                android:id="@+id/tv_knowmore"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/knowmore"
-                android:textColor="?android:textColorLink" />
-        </LinearLayout>
+            android:layout_marginRight="15dp"
+            android:text="@string/oscsite"
+            android:textColor="?android:textColorLink" />
 
 
         <TextView
+            android:id="@+id/tv_knowmore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/copyright"
-            android:textColor="?attr/infoTextColor" />
+            android:text="@string/knowmore"
+            android:textColor="?android:textColorLink" />
     </LinearLayout>
 
-</net.oschina.app.widget.CustomerScrollView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"
+        android:text="@string/copyright"
+        android:textColor="?attr/infoTextColor" />
+
+</LinearLayout>

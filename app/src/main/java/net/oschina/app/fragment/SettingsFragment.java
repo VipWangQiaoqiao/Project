@@ -21,6 +21,7 @@ import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.FileUtil;
 import net.oschina.app.util.MethodsCompat;
 import net.oschina.app.util.UIHelper;
+import net.oschina.app.util.UpdateManager;
 
 import org.kymjs.kjframe.http.HttpConfig;
 
@@ -42,6 +43,8 @@ public class SettingsFragment extends BaseFragment {
     TextView mTvCacheSize;
     //@Bind(R.id.setting_logout)
     // TextView mTvExit;
+    @Bind(R.id.rl_check_version)
+    RelativeLayout mRlCheck_version;
     @Bind(R.id.tb_double_click_exit)
     ToggleButton mTbDoubleClickExit;
     @Bind(R.id.setting_line_top)
@@ -78,11 +81,11 @@ public class SettingsFragment extends BaseFragment {
         });
 
         view.findViewById(R.id.rl_loading_img).setOnClickListener(this);
-        view.findViewById(R.id.rl_notification_settings).setOnClickListener(
-                this);
+        view.findViewById(R.id.rl_notification_settings).setOnClickListener(this);
         view.findViewById(R.id.rl_clean_cache).setOnClickListener(this);
         view.findViewById(R.id.rl_double_click_exit).setOnClickListener(this);
         view.findViewById(R.id.rl_about).setOnClickListener(this);
+        view.findViewById(R.id.rl_check_version).setOnClickListener(this);
         // view.findViewById(R.id.rl_exit).setOnClickListener(this);
         view.findViewById(R.id.rl_feedback).setOnClickListener(this);
         rlCancle = (RelativeLayout) view.findViewById(R.id.rl_cancle);
@@ -171,6 +174,9 @@ public class SettingsFragment extends BaseFragment {
             case R.id.rl_about:
                 UIHelper.showAboutOSC(getActivity());
                 break;
+            case R.id.rl_check_version:
+                onClickUpdate();
+                break;
 //            case R.id.rl_exit:
 //              //  onClickExit();
 //                break;
@@ -184,6 +190,10 @@ public class SettingsFragment extends BaseFragment {
                 break;
         }
 
+    }
+
+    private void onClickUpdate() {
+        new UpdateManager(getActivity(), true).checkUpdate();
     }
 
     private void onClickCleanCache() {

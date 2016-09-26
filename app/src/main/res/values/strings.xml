@@ -288,8 +288,8 @@
     <string name="clean_cache">清理缓存</string>
     <string name="double_click_exit">双击退出</string>
     <string name="loading_more">自动加载\"更多\"</string>
-    <string name="update">检查新版本</string>
-    <string name="about" translatable="false">关于开源中国</string>
+    <string name="update">检查更新</string>
+    <string name="about" translatable="false">关于我们</string>
     <string name="feedback">意见反馈</string>
     <string name="exit">退出</string>
     <string name="setting_cancle">注销</string>

@@ -19,7 +19,8 @@
 
         <RelativeLayout
             android:id="@+id/rl_loading_img"
-            style="@style/option_item_rl">
+            style="@style/option_item_rl"
+            android:visibility="gone">
 
             <TextView
                 style="@style/option_item_text_parent"
@@ -33,7 +34,9 @@
                 android:layout_alignParentRight="true" />
         </RelativeLayout>
 
-        <View style="@style/h_line" />
+        <View
+            style="@style/h_line"
+            android:visibility="gone" />
 
         <RelativeLayout
             android:id="@+id/rl_notification_settings"
@@ -130,6 +133,19 @@
             <TextView
                 style="@style/option_item_text_parent"
                 android:text="@string/about"
+                android:textColor="?attr/textColor"
+                android:textSize="@dimen/text_size_16" />
+        </RelativeLayout>
+
+        <View style="@style/h_line" />
+
+        <RelativeLayout
+            android:id="@+id/rl_check_version"
+            style="@style/option_item_rl">
+
+            <TextView
+                style="@style/option_item_text_parent"
+                android:text="@string/update"
                 android:textColor="?attr/textColor"
                 android:textSize="@dimen/text_size_16" />
         </RelativeLayout>
