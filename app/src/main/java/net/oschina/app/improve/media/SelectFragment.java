@@ -28,6 +28,7 @@ import net.oschina.app.improve.media.bean.Image;
 import net.oschina.app.improve.media.bean.ImageFolder;
 import net.oschina.app.improve.media.config.ImageLoaderListener;
 import net.oschina.app.improve.media.contract.SelectImageContract;
+import net.oschina.app.ui.empty.EmptyLayout;
 import net.qiujuer.genius.ui.Ui;
 
 import java.io.File;
@@ -59,6 +60,9 @@ public class SelectFragment extends BaseFragment implements SelectImageContract.
     Button mDoneView;
     @Bind(R.id.btn_preview)
     Button mPreviewView;
+
+    @Bind(R.id.error_layout)
+    EmptyLayout mErrorLayout;
 
     private ImageFolderPopupWindow mFolderPopupWindow;
     private ImageFolderAdapter mImageFolderAdapter;
@@ -114,6 +118,13 @@ public class SelectFragment extends BaseFragment implements SelectImageContract.
         mContentView.setAdapter(mImageAdapter);
         mContentView.setItemAnimator(null);
         mImageAdapter.setOnItemClickListener(this);
+        mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
+                getLoaderManager().initLoader(0, null, mCursorLoader);
+            }
+        });
     }
 
     @Override
@@ -424,6 +435,7 @@ public class SelectFragment extends BaseFragment implements SelectImageContract.
                                 }
 
                                 handleSelectSizeChange(mSelectedImage.size());
+                                mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
                             }
                         });
                     }
