@@ -1,6 +1,7 @@
 package net.oschina.app.improve.widget;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -20,10 +21,10 @@ import net.oschina.app.R;
  * on 16/9/5.
  */
 public class TitleBar extends FrameLayout {
+    private static int EXT_PADDING_TOP;
     private TextView mTitle;
     private ImageView mIcon;
 
-    private int mExtPaddingTop;
 
     public TitleBar(Context context) {
         super(context);
@@ -76,7 +77,7 @@ public class TitleBar extends FrameLayout {
         setBackgroundColor(getResources().getColor(R.color.main_green));
 
         // Init padding
-        setPadding(getLeft(), getTop() + getExtPaddingTop(), getRight(), getBottom());
+        setPadding(getLeft(), getTop() + getExtPaddingTop(getResources()), getRight(), getBottom());
     }
 
     public void setTitle(@StringRes int titleRes) {
@@ -101,25 +102,25 @@ public class TitleBar extends FrameLayout {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         float d = getResources().getDisplayMetrics().density;
-        int minH = (int) (d * 56 + getExtPaddingTop());
+        int minH = (int) (d * 56 + getExtPaddingTop(getResources()));
 
         heightMeasureSpec = MeasureSpec.makeMeasureSpec(minH, MeasureSpec.EXACTLY);
 
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
-    private int getExtPaddingTop() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && mExtPaddingTop == 0) {
+    public static int getExtPaddingTop(Resources resources) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && EXT_PADDING_TOP == 0) {
             try {
                 Class<?> clazz = Class.forName("com.android.internal.R$dimen");
                 Object object = clazz.newInstance();
                 int height = Integer.parseInt(clazz.getField("status_bar_height")
                         .get(object).toString());
-                mExtPaddingTop = getContext().getResources().getDimensionPixelSize(height);
+                EXT_PADDING_TOP = resources.getDimensionPixelSize(height);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        return mExtPaddingTop;
+        return EXT_PADDING_TOP;
     }
 }
