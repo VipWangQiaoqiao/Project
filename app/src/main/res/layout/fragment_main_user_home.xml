@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/main_green"
+    android:fitsSystemWindows="false"
     android:orientation="vertical">
 
     <FrameLayout
@@ -19,7 +20,6 @@
             android:layout_height="match_parent"
             android:background="@color/ques_bt_text_color_light"
             android:contentDescription="@null"
-            android:fitsSystemWindows="true"
             android:scaleType="centerCrop"
             app:layout_collapseMode="parallax"
             app:layout_collapseParallaxMultiplier="0.7" />
@@ -155,26 +155,29 @@
             <FrameLayout
                 android:id="@+id/user_info_head_container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="56dp"
+                android:layout_gravity="top">
 
                 <ImageView
                     android:id="@+id/iv_logo_setting"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_gravity="left"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:layout_gravity="center_vertical|left"
+                    android:layout_margin="4dp"
                     android:contentDescription="@null"
                     android:padding="12dp"
-                    android:scaleType="fitCenter"
+                    android:scaleType="centerInside"
                     android:src="@mipmap/btn_my_setting" />
 
                 <ImageView
                     android:id="@+id/iv_logo_zxing"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_gravity="right"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:layout_gravity="center_vertical|right"
+                    android:layout_margin="4dp"
                     android:contentDescription="@null"
                     android:padding="12dp"
-                    android:scaleType="fitCenter"
+                    android:scaleType="centerInside"
                     android:src="@mipmap/btn_qrcode" />
 
             </FrameLayout>

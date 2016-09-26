@@ -14,7 +14,6 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -364,10 +363,9 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     private void CheckSdkVersion() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 
-            if (mFlUserInfonHeadContainer != null) {
-                ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mFlUserInfonHeadContainer.getLayoutParams();
-                layoutParams.topMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25, getResources().getDisplayMetrics());
-                mFlUserInfonHeadContainer.setLayoutParams(layoutParams);
+            if (mRlShowInfo != null) {
+                int paddingTop = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25, getResources().getDisplayMetrics());
+                mRlShowInfo.setPadding(0, paddingTop, 0, 0);
             }
         }
     }
