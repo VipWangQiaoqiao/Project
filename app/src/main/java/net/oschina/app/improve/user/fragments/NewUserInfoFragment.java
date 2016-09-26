@@ -12,7 +12,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -51,8 +50,6 @@ import net.oschina.app.util.UIHelper;
 
 import java.io.File;
 import java.lang.reflect.Type;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -76,9 +73,8 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     public static final int ACTION_TYPE_ALBUM = 0;
     public static final int ACTION_TYPE_PHOTO = 1;
     private final static int CROP = 200;
-    private final static String FILE_SAVEPATH = Environment
-            .getExternalStorageDirectory().getAbsolutePath()
-            + "/OSChina/Portrait/";
+    private final static String FILE_SAVEPATH = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+            .getAbsolutePath() + File.separator + "开源中国" + File.separator;
 
     private static final int CAMERA_PERM = 1;
 
@@ -162,7 +158,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                 if (resultBean.isSuccess()) {
                     UserV2 userInfo = (UserV2) resultBean.getResult();
                     updateView(userInfo);
-                    AppOperator.getExecutor().execute(new Runnable() {
+                    AppOperator.runOnThread(new Runnable() {
                         @Override
                         public void run() {
                             CacheManager.saveObject(getContext(), mUserInfo, CACHE_NAME);
@@ -188,6 +184,69 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     private int mR;
     private float mPx;
     private float mPy;
+
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.fragment_main_user_home;
+    }
+
+    @Override
+    protected void initWidget(View root) {
+        super.initWidget(root);
+        measureTitleBarHeight();
+
+        if (mFansView != null)
+            mFansView.setVisibility(View.INVISIBLE);
+
+        initSolar();
+
+    }
+
+    @Override
+    protected void initData() {
+        // super.initData();
+
+        UserV2 userInfo = (UserV2) CacheManager.readObject(getActivity(), CACHE_NAME);
+        if (userInfo != null) {
+            updateView(userInfo);
+            if (TDevice.hasInternet()) {
+                sendRequestData();
+            }
+        } else {
+            if (TDevice.hasInternet()) {
+                sendRequestData();
+            } else {
+                hideView();
+            }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mInfo = AppContext.getInstance().getLoginUser();
+        isUploadIcon = false;
+        NoticeManager.bindNotify(this);
+        boolean login = AppContext.getInstance().isLogin();
+        if (!login) {
+            hideView();
+        } else {
+            if (TDevice.hasInternet()) {
+                sendRequestData();
+            }
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        NoticeManager.unBindNotify(this);
+        boolean login = AppContext.getInstance().isLogin();
+        if (!login) {
+            hideView();
+        }
+    }
 
     /**
      * update the view
@@ -320,22 +379,6 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         solarSystemView.setPivotPoint(px, py);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        mInfo = AppContext.getInstance().getLoginUser();
-        isUploadIcon = false;
-        NoticeManager.bindNotify(this);
-        boolean login = AppContext.getInstance().isLogin();
-        if (!login) {
-            hideView();
-        } else {
-            if (TDevice.hasInternet()) {
-                sendRequestData();
-            }
-        }
-    }
-
     /**
      *
      */
@@ -348,61 +391,15 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         layAboutCount.setVisibility(View.INVISIBLE);
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        NoticeManager.unBindNotify(this);
-        boolean login = AppContext.getInstance().isLogin();
-        if (!login) {
-            hideView();
-        }
-    }
-
     /**
-     * checkSdkVersion
+     * measureTitleBarHeight
      */
-    private void CheckSdkVersion() {
+    private void measureTitleBarHeight() {
         if (mRlShowInfo != null) {
             mRlShowInfo.setPadding(mRlShowInfo.getLeft(),
                     TitleBar.getExtPaddingTop(getResources()),
                     mRlShowInfo.getRight(), mRlShowInfo.getBottom());
         }
-    }
-
-    @Override
-    protected void initWidget(View root) {
-        super.initWidget(root);
-        CheckSdkVersion();
-
-        if (mFansView != null)
-            mFansView.setVisibility(View.INVISIBLE);
-
-        initSolar();
-
-    }
-
-    @Override
-    protected void initData() {
-        // super.initData();
-
-        UserV2 userInfo = (UserV2) CacheManager.readObject(getActivity(), CACHE_NAME);
-        if (userInfo != null) {
-            updateView(userInfo);
-            if (TDevice.hasInternet()) {
-                sendRequestData();
-            }
-        } else {
-            if (TDevice.hasInternet()) {
-                sendRequestData();
-            } else {
-                hideView();
-            }
-        }
-    }
-
-    @Override
-    protected int getLayoutId() {
-        return R.layout.fragment_main_user_home;
     }
 
     @SuppressWarnings("deprecation")
@@ -564,15 +561,14 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     /**
      * take photo
      */
-    @SuppressWarnings({"ResultOfMethodCallIgnored", "SimpleDateFormat"})
+    @SuppressWarnings({"ResultOfMethodCallIgnored"})
     private void startTakePhoto() {
         Intent intent;
         // 判断是否挂载了SD卡
         String savePath = "";
         String storageState = Environment.getExternalStorageState();
         if (storageState.equals(Environment.MEDIA_MOUNTED)) {
-            savePath = Environment.getExternalStorageDirectory()
-                    .getAbsolutePath() + "/oschina/Camera/";
+            savePath = FILE_SAVEPATH;
             File savedir = new File(savePath);
             if (!savedir.exists()) {
                 savedir.mkdirs();
@@ -585,9 +581,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
             return;
         }
 
-        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss")
-                .format(new Date());
-        String fileName = "osc_" + timeStamp + ".jpg";// 照片命名
+        String fileName = "portrait.jpg";// 照片命名
         File out = new File(savePath, fileName);
         Uri uri = Uri.fromFile(out);
         origUri = uri;
@@ -601,7 +595,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     }
 
     // 裁剪头像的绝对路径
-    @SuppressWarnings({"ResultOfMethodCallIgnored", "SimpleDateFormat"})
+    @SuppressWarnings({"ResultOfMethodCallIgnored"})
     private Uri getUploadTempFile(Uri uri) {
         String storageState = Environment.getExternalStorageState();
         if (storageState.equals(Environment.MEDIA_MOUNTED)) {
@@ -613,7 +607,6 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
             AppContext.showToast("无法保存上传的头像，请检查SD卡是否挂载");
             return null;
         }
-        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         String thePath = ImageUtils.getAbsolutePathFromNoStandardUri(uri);
 
         // 如果是标准Uri
@@ -624,12 +617,16 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
         ext = TextUtils.isEmpty(ext) ? "jpg" : ext;
         // 照片命名
-        String cropFileName = "osc_crop_" + timeStamp + "." + ext;
+        String cropFileName = "portrait." + ext;
         // 裁剪头像的绝对路径
         protraitPath = FILE_SAVEPATH + cropFileName;
         protraitFile = new File(protraitPath);
 
-        return Uri.fromFile(protraitFile);
+        // notify
+        Uri notifyUri = Uri.fromFile(protraitFile);
+        getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, notifyUri));
+
+        return notifyUri;
     }
 
     /**
@@ -683,15 +680,12 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
         // 获取头像缩略图
         if (TextUtils.isEmpty(protraitPath) && !protraitFile.exists()) {
-            //Bitmap protraitBitmap = ImageUtils.loadImgThumbnail(protraitPath, 200, 200);
-            //} else {
             AppContext.showToast(getString(R.string.title_icon_null));
         }
 
         if (protraitFile != null) {
             isUploadIcon = true;
             OSChinaApi.updateUserIcon(protraitFile, textHandler);
-
         }
     }
 
@@ -732,7 +726,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        // EasyPermissions handles the request result.
+
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
@@ -763,11 +757,9 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
     @Override
     public void onTabReselect() {
-//        initWidget(mRoot);
         if (AppContext.getInstance().isLogin() && TDevice.hasInternet()) {
             sendRequestData();
         }
-//            initData();
     }
 
 }

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -39,7 +38,6 @@ public class OSCPhotosActivity extends BaseActivity {
     private TouchImageView mTouchImageView;
     private ProgressBar mProgressBar;
     private ImageView mOption;
-    private AsyncTask<Void, Void, Bitmap> task;
     private String mImageUrl;
 
     public static void showImagePreview(Context context,
@@ -165,6 +163,11 @@ public class OSCPhotosActivity extends BaseActivity {
     }
 
     @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
     public void initView() {
 
     }
@@ -173,10 +176,4 @@ public class OSCPhotosActivity extends BaseActivity {
     public void initData() {
 
     }
-
-    @Override
-    public void onClick(View v) {
-
-    }
-
 }
