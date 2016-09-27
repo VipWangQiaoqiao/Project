@@ -182,7 +182,7 @@ public class AssimilateUtils {
         return assimilate(content, PatternTeamTask, 1, 2, new Action1() {
             @Override
             public void call(String str) {
-                UIHelper.openBrowser(context,  str);
+                UIHelper.openInternalBrowser(context,  str);
             }
         });
     }
@@ -241,7 +241,7 @@ public class AssimilateUtils {
                 @Override
                 public void onClick(View widget) {
                     if (substr.startsWith("http://") || substr.startsWith("https://")){
-                        UIHelper.openBrowser(context, substr);
+                        UIHelper.openInternalBrowser(context, substr);
                     }else {
                         OtherUserHomeActivity.show(context, substr);
                     }

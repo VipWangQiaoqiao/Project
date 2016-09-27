@@ -63,7 +63,6 @@ import net.oschina.app.interf.ICallbackResult;
 import net.oschina.app.interf.OnWebViewImageListener;
 import net.oschina.app.service.DownloadService;
 import net.oschina.app.service.DownloadService.DownloadBinder;
-import net.oschina.app.service.NoticeService;
 import net.oschina.app.team.adapter.TeamMemberAdapter;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamActive;
@@ -83,13 +82,7 @@ import net.oschina.app.ui.TweetPubActivity;
 import net.oschina.app.viewpagerfragment.FriendsViewPagerFragment;
 import net.oschina.app.widget.AvatarView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.kymjs.kjframe.utils.DensityUtils;
-
-import java.net.URLDecoder;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * 界面帮助类
@@ -513,47 +506,12 @@ public class UIHelper {
     }
 
     private static void showUrlRedirect(Context context, long id, String url) {
-        if (url == null) {
-            if (id != 0) {
-                NewsDetailActivity.show(context, id);
-            }
+        if (url == null && id > 0) {
+            NewsDetailActivity.show(context, id);
             return;
         }
 
-        if (url.startsWith("mailto:")){
-            Uri uri = Uri.parse(url);
-            Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
-            context.startActivity(Intent.createChooser(intent, "选择发送应用"));
-            return;
-        }
-
-        if (url.contains("city.oschina.net/")) {
-            long nid = StringUtils.toInt(url.substring(url.lastIndexOf('/') + 1));
-            if (nid == 0) {
-                nid = id;
-            }
-            UIHelper.showEventDetail(context, nid);
-            return;
-        }
-
-        if (url.startsWith(SHOWIMAGE)) {
-            String realUrl = url.substring(SHOWIMAGE.length());
-            try {
-                JSONObject json = new JSONObject(realUrl);
-                int idx = json.optInt("index");
-                String[] urls = json.getString("urls").split(",");
-                OSCPhotosActivity.showImagePreview(context, urls[0]);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return;
-        }
-        URLsUtils urls = URLsUtils.parseURL(url);
-        if (urls != null) {
-            showLinkRedirect(context, urls.getObjType(), urls.getObjId() != 0 ? urls.getObjId() : id, urls.getObjKey());
-        } else {
-            openBrowser(context, url);
-        }
+        URLUtils.parseUrl(context, url);
     }
 
     /**
@@ -566,97 +524,33 @@ public class UIHelper {
         showUrlRedirect(context, 0, url);
     }
 
-    public static void showLinkRedirect(Context context, int objType,
-                                        long objId, String objKey) {
-        switch (objType) {
-            case URLsUtils.URL_OBJ_TYPE_NEWS:
-                showNewsDetail(context, objId, -1);
-                break;
-            case URLsUtils.URL_OBJ_TYPE_QUESTION:
-                showPostDetail(context, objId, 0);
-                break;
-            case URLsUtils.URL_OBJ_TYPE_QUESTION_TAG:
-                showPostListByTag(context, objKey);
-                break;
-            case URLsUtils.URL_OBJ_TYPE_SOFTWARE:
-                SoftwareDetailActivity.show(context, objKey);
-                //showSoftwareDetail(context, objKey);
-                break;
-            case URLsUtils.URL_OBJ_TYPE_ZONE:
-                showUserCenter(context, objId, objKey);
-                break;
-            case URLsUtils.URL_OBJ_TYPE_TWEET:
-                showTweetDetail(context, objId);
-                break;
-            case URLsUtils.URL_OBJ_TYPE_BLOG:
-                showBlogDetail(context, objId);
-                break;
-            case URLsUtils.URL_OBJ_TYPE_OTHER:
-                openBrowser(context, objKey);
-                break;
-            case URLsUtils.URL_OBJ_TYPE_TEAM:
-                openSysBrowser(context, objKey);
-                break;
-            case URLsUtils.URL_OBJ_TYPE_GIT:
-                openSysBrowser(context, objKey);
-                break;
-        }
-    }
-
     /**
      * 打开内置浏览器
      *
      * @param context
      * @param url
      */
-    public static void openBrowser(Context context, String url) {
-
-        if (StringUtils.isImgUrl(url)) {
-            OSCPhotosActivity.showImagePreview(context, url);
-            return;
-        }
-
-        if (url.startsWith("http://www.oschina.net/tweet-topic/")
-                || url.startsWith("https://www.oschina.net/tweet-topic/")) {
-            Bundle bundle = new Bundle();
-            int i = url.lastIndexOf("/");
-            if (i != -1) {
-                bundle.putString("topic",
-                        URLDecoder.decode(url.substring(i + 1)));
-            }
-            UIHelper.showSimpleBack(context, SimpleBackPage.TWEET_TOPIC_LIST,
-                    bundle);
-            return;
-        }
+    public static void openInternalBrowser(Context context, String url) {
         try {
-            // 启用外部浏览器
-            // Uri uri = Uri.parse(url);
-            // Intent it = new Intent(Intent.ACTION_VIEW, uri);
-            // context.startActivity(it);
             Bundle bundle = new Bundle();
             bundle.putString(BrowserFragment.BROWSER_KEY, url);
             showSimpleBack(context, SimpleBackPage.BROWSER, bundle);
         } catch (Exception e) {
             e.printStackTrace();
-            AppContext.showToastShort("无法浏览此网页");
+            openExternalBrowser(context, url);
         }
     }
 
     /**
-     * 打开系统中的浏览器
+     * 打开外置的浏览器
      *
      * @param context
      * @param url
      */
-    public static void openSysBrowser(Context context, String url) {
-        try {
-            Uri uri = Uri.parse(url);
-            Intent it = new Intent(Intent.ACTION_VIEW, uri);
-            context.startActivity(it);
-        } catch (Exception e) {
-            e.printStackTrace();
-            AppContext.showToastShort("无法浏览此网页");
-        }
+    public static void openExternalBrowser(Context context, String url) {
+        Uri uri = Uri.parse(url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        context.startActivity(Intent.createChooser(intent, "选择打开的应用"));
     }
 
     public static void showSimpleBackForResult(Fragment fragment,

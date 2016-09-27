@@ -64,7 +64,7 @@ public class AboutOSCFragment extends BaseFragment {
 
                 if (!res) {
                     if (!TDevice.isHaveMarket(getActivity())) {
-                        UIHelper.openSysBrowser(getActivity(),
+                        UIHelper.openExternalBrowser(getActivity(),
                                 "http://git.oschina.net/appclient");
                     } else {
                         TDevice.gotoMarket(getActivity(), "net.oschina.gitapp");
@@ -72,10 +72,10 @@ public class AboutOSCFragment extends BaseFragment {
                 }
                 break;
             case R.id.tv_oscsite:
-                UIHelper.openBrowser(getActivity(), "https://www.oschina.net");
+                UIHelper.openInternalBrowser(getActivity(), "https://www.oschina.net");
                 break;
             case R.id.tv_knowmore:
-                UIHelper.openBrowser(getActivity(),
+                UIHelper.openInternalBrowser(getActivity(),
                         "https://www.oschina.net/home/aboutosc");
                 break;
             default:
