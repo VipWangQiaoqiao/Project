@@ -17,6 +17,7 @@ public class TweetPublishModel implements Serializable {
     private String[] cacheImages;
     private String cacheImagesToken;
     private int cacheImagesIndex;
+    private String errorString;
 
     public TweetPublishModel() {
         id = UUID.randomUUID().toString();
@@ -69,5 +70,13 @@ public class TweetPublishModel implements Serializable {
     public void setCacheImagesInfo(int cacheImagesIndex, String cacheImagesToken) {
         this.cacheImagesToken = cacheImagesToken;
         this.cacheImagesIndex = cacheImagesIndex;
+    }
+
+    public String getErrorString() {
+        return errorString;
+    }
+
+    public void setErrorString(String errorString) {
+        this.errorString = errorString;
     }
 }

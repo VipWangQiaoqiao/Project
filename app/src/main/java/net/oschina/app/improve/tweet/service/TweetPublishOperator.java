@@ -1,7 +1,6 @@
 package net.oschina.app.improve.tweet.service;
 
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -115,16 +114,24 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
             @Override
             public void onStart() {
                 super.onStart();
-                notifyMsg(R.string.tweet_image_publishing, String.valueOf(index + 1), String.valueOf(paths.length));
+                notifyMsg(R.string.tweet_image_publishing, String.valueOf(paths.length - index));
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                String error = "";
+                String response = responseString == null ? "" : responseString;
                 if (throwable != null) {
                     throwable.printStackTrace();
+                    error = throwable.getMessage();
+                    if (error.contains("UnknownHostException")) {
+                        saveError("Upload", "network error");
+                    } else {
+                        saveError("Upload", response + " " + error);
+                    }
                 }
                 TweetPublishService.log(String.format("Upload image onFailure, statusCode:[%s] responseString:%s throwable:%s",
-                        statusCode, (responseString == null ? "" : responseString), (throwable == null ? "" : throwable.getMessage())));
+                        statusCode, response, error));
                 setError(R.string.tweet_image_publish_failed, String.valueOf(index + 1), String.valueOf(paths.length));
             }
 
@@ -141,10 +148,12 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
                         File file = new File(path);
                         TweetPublishService.log(String.format("Upload name:[%s] size:[%s] error:%s",
                                 file.getAbsolutePath(), file.length(), resultBean.getMessage()));
-                        onFailure(statusCode, headers, responseString, new Throwable(resultBean.getMessage()));
+                        onFailure(statusCode, headers, responseString, null);
+                        saveError("Upload", resultBean.getMessage());
                     }
                 } catch (Exception e) {
-                    onFailure(statusCode, headers, responseString, e);
+                    onFailure(statusCode, headers, responseString, null);
+                    saveError("Upload", "response parse error「" + responseString + "」");
                 }
             }
         });
@@ -166,8 +175,20 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
         OSChinaApi.pubTweet(model.getContent(), model.getCacheImagesToken(), null, new LopperResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                if (throwable != null)
+                String error = "";
+                String response = responseString == null ? "" : responseString;
+                if (throwable != null) {
                     throwable.printStackTrace();
+                    error = throwable.getMessage();
+                    if (error.contains("UnknownHostException")) {
+                        saveError("Publish", "network error");
+                    } else {
+                        saveError("Publish", response + " " + error);
+                    }
+                }
+
+                TweetPublishService.log(String.format("Publish tweet onFailure, statusCode:[%s] responseString:%s throwable:%s",
+                        statusCode, response, error));
                 setError(R.string.tweet_publish_failed);
             }
 
@@ -180,10 +201,12 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
                     if (resultBean.isSuccess()) {
                         setSuccess();
                     } else {
-                        onFailure(statusCode, headers, responseString, new Throwable(resultBean.getMessage()));
+                        onFailure(statusCode, headers, responseString, null);
+                        saveError("Publish", resultBean.getMessage());
                     }
                 } catch (Exception e) {
-                    onFailure(statusCode, headers, responseString, e);
+                    onFailure(statusCode, headers, responseString, null);
+                    saveError("Publish", "response parse error「" + responseString + "」");
                 }
             }
 
@@ -251,9 +274,9 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
                 String tempFile = String.format("%s/IMG_%s.%s", cacheDir, System.currentTimeMillis(), ext);
                 if (PicturesCompressor.compressImage(path, tempFile,
                         MAX_UPLOAD_LENGTH, 80,
-                        1280, 1280 * 3,
+                        1280, 1280 * 5,
                         buffer, options, true)) {
-                    Log.e("OPERATOR", "doImage " + tempFile + " " + new File(tempFile).length());
+                    TweetPublishService.log("OPERATOR doImage " + tempFile + " " + new File(tempFile).length());
 
                     // verify the picture ext.
                     tempFile = PicturesCompressor.verifyPictureExt(tempFile);
@@ -270,5 +293,11 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
             return images;
         }
         return null;
+    }
+
+    private void saveError(String cmd, String log) {
+        model.setErrorString(String.format("%s | %s", cmd, log));
+        // update to cache file save error log
+        service.updateModelCache(model.getId(), model);
     }
 }

@@ -101,6 +101,7 @@ public class TweetQueueAdapter extends RecyclerView.Adapter<TweetQueueAdapter.Ho
     static class Holder extends RecyclerView.ViewHolder {
         private TweetTextView mTitle;
         private TextView mDate;
+        private TextView mLog;
         private Button mContinue;
         private Button mDelete;
         private HolderListener mListener;
@@ -110,6 +111,7 @@ public class TweetQueueAdapter extends RecyclerView.Adapter<TweetQueueAdapter.Ho
             mListener = listener;
 
             mTitle = (TweetTextView) itemView.findViewById(R.id.tv_title);
+            mLog = (TextView) itemView.findViewById(R.id.tv_log);
             mDate = (TextView) itemView.findViewById(R.id.tv_date);
             mContinue = (Button) itemView.findViewById(R.id.btn_continue);
             mDelete = (Button) itemView.findViewById(R.id.btn_delete);
@@ -151,6 +153,8 @@ public class TweetQueueAdapter extends RecyclerView.Adapter<TweetQueueAdapter.Ho
             mTitle.setDispatchToParent(true);
             mTitle.setLongClickable(false);
 
+            mLog.setText(String.format("Error:%s.",
+                    model.getErrorString() == null ? "null" : model.getErrorString()));
             mDate.setText(FORMAT.format(new Date(model.getDate())));
         }
 

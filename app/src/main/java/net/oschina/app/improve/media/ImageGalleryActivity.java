@@ -214,7 +214,7 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
         public Object instantiateItem(ViewGroup container, int position) {
             View view = LayoutInflater.from(container.getContext())
                     .inflate(R.layout.lay_gallery_page_item_contener, container, false);
-            ImagePreviewView previewView = (ImagePreviewView) view.findViewById(R.id.iv_preview);
+            final ImagePreviewView previewView = (ImagePreviewView) view.findViewById(R.id.iv_preview);
             previewView.setOnReachBorderListener(this);
             final Loading loading = (Loading) view.findViewById(R.id.loading);
             final ImageView defaultView = (ImageView) view.findViewById(R.id.iv_default);
@@ -236,6 +236,8 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
                         }
                     }).diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .into(previewView);
+            //.into(new  ImageViewTargetFactory().buildTarget(previewView,GlideDrawable.class));
+
             previewView.setOnClickListener(getListener());
             container.addView(view);
             return view;
