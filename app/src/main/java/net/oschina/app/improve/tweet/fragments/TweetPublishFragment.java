@@ -48,11 +48,6 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
     @Bind(R.id.recycler_images)
     TweetPicturesPreviewer mLayImages;
 
-    @Override
-    public Context getContext() {
-        return super.getContext();
-    }
-
     @Bind(R.id.txt_indicator)
     TextView mIndicator;
 
@@ -184,6 +179,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
                     }
 
                     mIndicator.setText(String.valueOf(surplusLen));
+                    //noinspection deprecation
                     mIndicator.setTextColor(surplusLen >= 0 ?
                             getResources().getColor(R.color.tweet_indicator_text_color) :
                             getResources().getColor(R.color.tweet_indicator_text_color_error));
