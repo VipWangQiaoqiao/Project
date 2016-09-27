@@ -124,7 +124,9 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
                 if (throwable != null) {
                     throwable.printStackTrace();
                     error = throwable.getMessage();
-                    if (error.contains("UnknownHostException")) {
+                    if (error.contains("UnknownHostException")
+                            || error.contains("Read error: ssl")
+                            || error.contains("Connection timed out")) {
                         saveError("Upload", "network error");
                     } else {
                         saveError("Upload", response + " " + error);
@@ -148,12 +150,12 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
                         File file = new File(path);
                         TweetPublishService.log(String.format("Upload name:[%s] size:[%s] error:%s",
                                 file.getAbsolutePath(), file.length(), resultBean.getMessage()));
-                        onFailure(statusCode, headers, responseString, null);
                         saveError("Upload", resultBean.getMessage());
+                        onFailure(statusCode, headers, responseString, null);
                     }
                 } catch (Exception e) {
-                    onFailure(statusCode, headers, responseString, null);
                     saveError("Upload", "response parse error「" + responseString + "」");
+                    onFailure(statusCode, headers, responseString, null);
                 }
             }
         });
@@ -180,7 +182,9 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
                 if (throwable != null) {
                     throwable.printStackTrace();
                     error = throwable.getMessage();
-                    if (error.contains("UnknownHostException")) {
+                    if (error.contains("UnknownHostException")
+                            || error.contains("Read error: ssl")
+                            || error.contains("Connection timed out")) {
                         saveError("Publish", "network error");
                     } else {
                         saveError("Publish", response + " " + error);
@@ -201,12 +205,12 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
                     if (resultBean.isSuccess()) {
                         setSuccess();
                     } else {
-                        onFailure(statusCode, headers, responseString, null);
                         saveError("Publish", resultBean.getMessage());
+                        onFailure(statusCode, headers, responseString, null);
                     }
                 } catch (Exception e) {
-                    onFailure(statusCode, headers, responseString, null);
                     saveError("Publish", "response parse error「" + responseString + "」");
+                    onFailure(statusCode, headers, responseString, null);
                 }
             }
 
