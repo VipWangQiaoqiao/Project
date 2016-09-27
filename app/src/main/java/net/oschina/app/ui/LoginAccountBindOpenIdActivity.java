@@ -15,9 +15,9 @@ import net.oschina.app.bean.LoginUserBean;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.XmlUtils;
 
-import cz.msebera.android.httpclient.Header;
 import butterknife.Bind;
 import butterknife.OnClick;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * 第三方登陆账号绑定操作
@@ -84,7 +84,7 @@ public class LoginAccountBindOpenIdActivity extends BaseActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 LoginUserBean loginUserBean = XmlUtils.toBean(LoginUserBean.class, responseBody);
-                if (loginUserBean != null && loginUserBean.getResult().OK()) {
+                if (loginUserBean != null && loginUserBean.getResult() != null && loginUserBean.getResult().OK()) {
                     Intent data = new Intent();
                     Bundle bundle = new Bundle();
                     bundle.putSerializable(LoginActivity.BUNDLE_KEY_LOGINBEAN, loginUserBean);
@@ -92,7 +92,9 @@ public class LoginAccountBindOpenIdActivity extends BaseActivity {
                     setResult(RESULT_OK, data);
                     finish();
                 } else {
-                    DialogHelp.getMessageDialog(LoginAccountBindOpenIdActivity.this, loginUserBean.getResult().getErrorMessage()).show();
+                    DialogHelp.getMessageDialog(LoginAccountBindOpenIdActivity.this,
+                            (loginUserBean != null ? (loginUserBean.getResult() != null ?
+                                    loginUserBean.getResult().getErrorMessage() : "error") : "error")).show();
                 }
             }
 
