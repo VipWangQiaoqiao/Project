@@ -143,7 +143,7 @@
     <string name="tweet_publish_failed">动弹发布失败, 点击重新发送!</string>
     <string name="tweet_image_wait">准备图片中…</string>
     <string name="tweet_image_wait_failed">图片转存失败!</string>
-    <string name="tweet_image_publishing" formatted="false">发布图片中-[%s/%s]</string>
+    <string name="tweet_image_publishing" formatted="false">发布图片中…%s</string>
     <string name="tweet_image_publish_failed" formatted="false">发布图片失败-[%s/%s]</string>
 
     <string name="tweet_publish_faile">发布动弹失败</string>

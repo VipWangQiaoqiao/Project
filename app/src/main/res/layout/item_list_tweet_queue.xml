@@ -30,6 +30,17 @@
             tools:text="Title" />
 
         <TextView
+            android:id="@+id/tv_log"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/lay_8"
+            android:clickable="true"
+            android:contentDescription="@string/app_name"
+            android:textColor="#9d9d9d"
+            android:textSize="@dimen/font_14"
+            tools:text="Error: null." />
+
+        <TextView
             android:id="@+id/tv_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -49,33 +60,37 @@
             <net.qiujuer.genius.ui.widget.Button
                 android:id="@+id/btn_continue"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/size_40"
                 android:layout_weight="1"
-                android:background="@drawable/btn_tweet_queue_opt_continue"
-                android:paddingBottom="@dimen/lay_8"
+                android:background="@null"
+                android:paddingBottom="@dimen/lay_4"
                 android:paddingLeft="@dimen/lay_8"
                 android:paddingRight="@dimen/lay_8"
-                android:paddingTop="@dimen/lay_8"
+                android:paddingTop="@dimen/lay_4"
                 android:text="继续发送"
                 android:textColor="#111"
                 android:textSize="@dimen/font_12"
-                app:gTouchEffect="none" />
+                app:gTouchColor="@color/black_alpha_32"
+                app:gTouchCornerRadius="@dimen/lay_4"
+                app:gTouchEffect="ease" />
 
             <net.qiujuer.genius.ui.widget.Button
                 android:id="@+id/btn_delete"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/size_40"
                 android:layout_marginLeft="1dp"
                 android:layout_weight="1"
-                android:background="@drawable/btn_tweet_queue_opt_delete"
-                android:paddingBottom="@dimen/lay_8"
+                android:background="@null"
+                android:paddingBottom="@dimen/lay_4"
                 android:paddingLeft="@dimen/lay_16"
                 android:paddingRight="@dimen/lay_16"
-                android:paddingTop="@dimen/lay_8"
+                android:paddingTop="@dimen/lay_4"
                 android:text="放弃"
                 android:textColor="@color/red_400"
                 android:textSize="@dimen/font_12"
-                app:gTouchEffect="none" />
+                app:gTouchColor="@color/black_alpha_32"
+                app:gTouchCornerRadius="@dimen/lay_4"
+                app:gTouchEffect="ease" />
         </LinearLayout>
 
     </LinearLayout>
