@@ -140,7 +140,7 @@ public class LinkView extends TextView {
 				//UIUtil.showLinkRedirect(widget.getContext(),
 					//	urls.getObjType(), urls.getObjId(), urls.getObjKey());
 			} else {
-			//	UIUtil.openBrowser(widget.getContext(), mUrl);
+			//	UIUtil.openInternalBrowser(widget.getContext(), mUrl);
 			}
 		}
 	}

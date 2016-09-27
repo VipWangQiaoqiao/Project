@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import net.oschina.app.util.UIHelper;
+import net.oschina.app.util.URLUtils;
 import net.oschina.app.util.URLsUtils;
 
 import java.util.regex.Matcher;
@@ -135,13 +136,7 @@ public class MyURLSpan extends URLSpan {
 
     @Override
     public void onClick(View widget) {
-        URLsUtils urls = URLsUtils.parseURL(getURL());
-        if (urls != null) {
-            UIHelper.showLinkRedirect(widget.getContext(), urls.getObjType(),
-                    urls.getObjId(), urls.getObjKey());
-        } else {
-            UIHelper.openBrowser(widget.getContext(), getURL());
-        }
+        URLUtils.parseUrl(widget.getContext(), getURL());
     }
 
     public static void parseLinkText(TextView widget, Spanned spanhtml) {

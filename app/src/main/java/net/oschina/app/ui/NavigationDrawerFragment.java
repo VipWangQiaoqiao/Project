@@ -131,7 +131,7 @@ public class NavigationDrawerFragment extends BaseFragment implements
 
                 if (!res) {
                     if (!TDevice.isHaveMarket(getActivity())) {
-                        UIHelper.openSysBrowser(getActivity(),
+                        UIHelper.openExternalBrowser(getActivity(),
                                 "http://git.oschina.net/appclient");
                     } else {
                         TDevice.gotoMarket(getActivity(), "net.oschina.gitapp");

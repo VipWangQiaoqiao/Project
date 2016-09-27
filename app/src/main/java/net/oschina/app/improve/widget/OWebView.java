@@ -19,6 +19,7 @@ import android.webkit.WebViewClient;
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.improve.app.AppOperator;
+import net.oschina.app.improve.media.ImageGalleryActivity;
 import net.oschina.app.interf.OnWebViewImageListener;
 import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.util.StringUtils;
@@ -80,7 +81,7 @@ public class OWebView extends WebView {
                 @JavascriptInterface
                 public void showImagePreview(String bigImageUrl) {
                     if (bigImageUrl != null && !StringUtils.isEmpty(bigImageUrl)) {
-                        OSCPhotosActivity.showImagePreview(getContext(), bigImageUrl);
+                        ImageGalleryActivity.show(getContext(), bigImageUrl);
                     }
                 }
             }, "mWebViewImageListener");

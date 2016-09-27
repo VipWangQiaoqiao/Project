@@ -265,7 +265,7 @@ public class EventDetailFragment extends CommonDetailFragment<Post> {
     private void showEventApply() {
 
         if (mDetail.getEvent().getCategory() == 4) {
-            UIHelper.openSysBrowser(getActivity(), mDetail.getEvent().getUrl());
+            UIHelper.openExternalBrowser(getActivity(), mDetail.getEvent().getUrl());
             return;
         }
 
