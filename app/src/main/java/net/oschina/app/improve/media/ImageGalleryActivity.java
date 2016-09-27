@@ -1,12 +1,17 @@
 package net.oschina.app.improve.media;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +57,7 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
     public static void show(Context context, String images, boolean needSaveLocal) {
         if (images == null)
             return;
-        show(context, new String[]{images}, 0);
+        show(context, new String[]{images}, 0, needSaveLocal);
     }
 
     public static void show(Context context, String[] images, int position) {
@@ -195,6 +200,28 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
 
     }
 
+    private Point displayDimens;
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    @SuppressWarnings("deprecation")
+    private synchronized Point getDisplayDimens() {
+        if (displayDimens != null) {
+            return displayDimens;
+        }
+        WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        Display display = windowManager.getDefaultDisplay();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            displayDimens = new Point();
+            display.getSize(displayDimens);
+        } else {
+            displayDimens = new Point(display.getWidth(), display.getHeight());
+        }
+
+        // In this we can only get 75% width and 45% height
+        displayDimens.y = (int) (displayDimens.y * 0.45f);
+        displayDimens.x = (int) (displayDimens.x * 0.75f);
+        return displayDimens;
+    }
 
     private class ViewPagerAdapter extends PagerAdapter implements ImagePreviewView.OnReachBorderListener {
 
@@ -214,29 +241,13 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
         public Object instantiateItem(ViewGroup container, int position) {
             View view = LayoutInflater.from(container.getContext())
                     .inflate(R.layout.lay_gallery_page_item_contener, container, false);
-            final ImagePreviewView previewView = (ImagePreviewView) view.findViewById(R.id.iv_preview);
+            ImagePreviewView previewView = (ImagePreviewView) view.findViewById(R.id.iv_preview);
             previewView.setOnReachBorderListener(this);
-            final Loading loading = (Loading) view.findViewById(R.id.loading);
-            final ImageView defaultView = (ImageView) view.findViewById(R.id.iv_default);
-            getImageLoader().load(mImageSources[position])
-                    .listener(new RequestListener<String, GlideDrawable>() {
-                        @Override
-                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                            loading.stop();
-                            loading.setVisibility(View.GONE);
-                            defaultView.setVisibility(View.VISIBLE);
-                            return false;
-                        }
+            Loading loading = (Loading) view.findViewById(R.id.loading);
+            ImageView defaultView = (ImageView) view.findViewById(R.id.iv_default);
 
-                        @Override
-                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                            loading.stop();
-                            loading.setVisibility(View.GONE);
-                            return false;
-                        }
-                    }).diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .into(previewView);
-            //.into(new  ImageViewTargetFactory().buildTarget(previewView,GlideDrawable.class));
+            // Do load
+            loadImage(mImageSources[position], previewView, defaultView, loading);
 
             previewView.setOnClickListener(getListener());
             container.addView(view);
@@ -264,5 +275,111 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
         public void onReachBorder(boolean isReached) {
             mImagePager.isInterceptable(isReached);
         }
+
+        private void loadImage(final String path,
+                               final ImagePreviewView previewView,
+                               final ImageView defaultView,
+                               final Loading loading) {
+            loadImageDoDownAndGetOverrideSize(path, new DoOverrideSizeCallback() {
+                @Override
+                public void onDone(int overrideW, int overrideH) {
+                    getImageLoader()
+                            .load(path)
+                            .listener(new RequestListener<String, GlideDrawable>() {
+                                @Override
+                                public boolean onException(Exception e, String model,
+                                                           Target<GlideDrawable> target,
+                                                           boolean isFirstResource) {
+                                    onError();
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onResourceReady(GlideDrawable resource, String model,
+                                                               Target<GlideDrawable> target,
+                                                               boolean isFromMemoryCache,
+                                                               boolean isFirstResource) {
+                                    loading.stop();
+                                    loading.setVisibility(View.GONE);
+                                    return false;
+                                }
+                            }).diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                            .override(overrideW, overrideH)
+                            .into(previewView);
+                }
+
+                @Override
+                public void onError() {
+                    loading.stop();
+                    loading.setVisibility(View.GONE);
+                    defaultView.setVisibility(View.VISIBLE);
+                }
+            });
+        }
+
+        private void loadImageDoDownAndGetOverrideSize(final String path, final DoOverrideSizeCallback callback) {
+            // In this save max image size is source
+            final Future<File> future = getImageLoader().load(path)
+                    .downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
+
+            AppOperator.runOnThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        File sourceFile = future.get();
+
+                        BitmapFactory.Options options = PicturesCompressor.createOptions();
+                        // First decode with inJustDecodeBounds=true to check dimensions
+                        options.inJustDecodeBounds = true;
+                        BitmapFactory.decodeFile(sourceFile.getAbsolutePath(), options);
+                        int width = options.outWidth;
+                        int height = options.outHeight;
+
+                        // This max size
+                        final int maxLen = 1280 * 5;
+
+                        // Get Screen
+                        Point point = getDisplayDimens();
+                        // Init override size
+                        final int overrideW, overrideH;
+
+                        if ((width / (float) height) > (point.x / (float) point.y)) {
+                            overrideH = height > point.y ? point.y : height;
+                            overrideW = width > maxLen ? maxLen : width;
+                        } else {
+                            overrideW = width > point.x ? point.x : width;
+                            overrideH = height > maxLen ? maxLen : height;
+                        }
+
+                        // Call back on main thread
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                callback.onDone(overrideW, overrideH);
+                            }
+                        });
+
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+
+                        // Call back on main thread
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                callback.onError();
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
+
+    }
+
+    interface DoOverrideSizeCallback {
+        void onDone(int overrideW, int overrideH);
+
+        void onError();
     }
 }
