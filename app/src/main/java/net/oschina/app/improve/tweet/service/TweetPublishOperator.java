@@ -255,7 +255,8 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
     }
 
 
-    private static final long MAX_UPLOAD_LENGTH = 512 * 1024;
+    // Max upload 1MB
+    private static final long MAX_UPLOAD_LENGTH = 1024 * 1024;
 
     /**
      * 保存文件到缓存中
@@ -278,7 +279,7 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
                 String tempFile = String.format("%s/IMG_%s.%s", cacheDir, System.currentTimeMillis(), ext);
                 if (PicturesCompressor.compressImage(path, tempFile,
                         MAX_UPLOAD_LENGTH, 80,
-                        1280, 1280 * 5,
+                        1280, 1280 * 6,
                         buffer, options, true)) {
                     TweetPublishService.log("OPERATOR doImage " + tempFile + " " + new File(tempFile).length());
 

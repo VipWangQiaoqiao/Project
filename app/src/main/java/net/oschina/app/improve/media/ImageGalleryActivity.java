@@ -221,9 +221,9 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
             displayDimens = new Point(display.getWidth(), display.getHeight());
         }
 
-        // In this we can only get 75% width and 45% height
-        displayDimens.y = (int) (displayDimens.y * 0.45f);
-        displayDimens.x = (int) (displayDimens.x * 0.75f);
+        // In this we can only get 85% width and 60% height
+        displayDimens.y = (int) (displayDimens.y * 0.60f);
+        displayDimens.x = (int) (displayDimens.x * 0.85f);
 
         mDisplayDimens = displayDimens;
         return mDisplayDimens;
@@ -351,7 +351,7 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
 
                         if (width > 0 && height > 0) {
                             // This max size
-                            final int maxLen = 1280 * 5;
+                            final int maxLen = 1280 * 6;
 
                             // Get Screen
                             Point point = getDisplayDimens();
