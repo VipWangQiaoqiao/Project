@@ -9,4 +9,6 @@
     <item name="quit" type="id"/>
     <item name="return_scan_result" type="id"/>
 
+    <item name="detail_behavior_content_padding_done" type="id"/>
+
 </resources>
