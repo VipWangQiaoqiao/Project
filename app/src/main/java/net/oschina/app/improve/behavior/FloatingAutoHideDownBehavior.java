@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 
+import net.oschina.app.R;
 import net.oschina.app.util.TDevice;
 
 /**
@@ -57,10 +58,14 @@ public class FloatingAutoHideDownBehavior extends CoordinatorLayout.Behavior<Vie
             NestedScrollView s = (NestedScrollView) dependency;
             if (s.getChildCount() > 0) {
                 View view = s.getChildAt(s.getChildCount() - 1);
-                view.setPadding(view.getPaddingLeft(),
-                        view.getPaddingTop(),
-                        view.getPaddingRight(),
-                        view.getPaddingBottom() + child.getHeight());
+                if (view.getTag(R.id.detail_behavior_content_padding_done) == null) {
+                    int paddingBottom = view.getPaddingBottom() + child.getHeight();
+                    view.setTag(R.id.detail_behavior_content_padding_done, paddingBottom);
+                    view.setPadding(view.getPaddingLeft(),
+                            view.getPaddingTop(),
+                            view.getPaddingRight(),
+                            paddingBottom);
+                }
             }
 
             s.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {

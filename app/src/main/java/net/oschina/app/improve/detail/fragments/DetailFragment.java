@@ -3,7 +3,6 @@ package net.oschina.app.improve.detail.fragments;
 import android.content.Context;
 import android.support.annotation.IdRes;
 import android.support.v4.widget.NestedScrollView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -79,7 +78,6 @@ public abstract class DetailFragment<Data, DataView extends DetailContract.View,
         if (nestedScrollView != null && target != null) {
             int curY = nestedScrollView.getScrollY();
             int targetY = target.getTop();
-            Log.e("TAG", "curY:" + curY + " targetY:" + targetY + " mScrollYPoint:" + mScrollYPoint);
             if (targetY > 0) {
                 if (curY == targetY && targetY == mScrollYPoint) {
                     nestedScrollView.fullScroll(View.FOCUS_UP);
