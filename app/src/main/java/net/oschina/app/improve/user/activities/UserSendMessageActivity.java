@@ -147,7 +147,7 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
                 File file = new File(message.getResource());
                 OSChinaApi.pubMessage(mReceiver.getId(), file, new CallBack(getFileName(file.getPath())));
             } else {
-                ImageGalleryActivity.show(this, message.getResource());
+                ImageGalleryActivity.show(this, message.getResource(), true, true);
             }
         }
     }
