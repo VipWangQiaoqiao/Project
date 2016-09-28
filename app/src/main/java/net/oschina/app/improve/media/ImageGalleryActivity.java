@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
@@ -45,6 +44,7 @@ import java.util.concurrent.Future;
  */
 public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
     public static final String KEY_IMAGE = "images";
+    public static final String KEY_COOKIE = "cookie";
     public static final String KEY_POSITION = "position";
     public static final String KEY_NEED_SAVE = "save";
     private PreviewerViewPager mImagePager;
@@ -52,6 +52,7 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
     private String[] mImageSources;
     private int mCurPosition;
     private boolean mNeedSaveLocal;
+    private boolean mNeedCookie;
 
     public static void show(Context context, String images) {
         show(context, images, true);
@@ -63,17 +64,28 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
         show(context, new String[]{images}, 0, needSaveLocal);
     }
 
+    public static void show(Context context, String images, boolean needSaveLocal, boolean needCookie) {
+        if (images == null)
+            return;
+        show(context, new String[]{images}, 0, needSaveLocal, needCookie);
+    }
+
     public static void show(Context context, String[] images, int position) {
         show(context, images, position, true);
     }
 
     public static void show(Context context, String[] images, int position, boolean needSaveLocal) {
+        show(context, images, position, needSaveLocal, false);
+    }
+
+    public static void show(Context context, String[] images, int position, boolean needSaveLocal, boolean needCookie) {
         if (images == null || images.length == 0)
             return;
         Intent intent = new Intent(context, ImageGalleryActivity.class);
         intent.putExtra(KEY_IMAGE, images);
         intent.putExtra(KEY_POSITION, position);
         intent.putExtra(KEY_NEED_SAVE, needSaveLocal);
+        intent.putExtra(KEY_COOKIE, needCookie);
         context.startActivity(intent);
     }
 
@@ -82,6 +94,7 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
         mImageSources = bundle.getStringArray(KEY_IMAGE);
         mCurPosition = bundle.getInt(KEY_POSITION, 0);
         mNeedSaveLocal = bundle.getBoolean(KEY_NEED_SAVE, true);
+        mNeedCookie = bundle.getBoolean(KEY_COOKIE, false);
         return mImageSources != null;
     }
 
@@ -253,7 +266,11 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
             ImageView defaultView = (ImageView) view.findViewById(R.id.iv_default);
 
             // Do load
-            loadImage(mImageSources[position], previewView, defaultView, loading);
+            if (mNeedCookie)
+                loadImage(AppContext.getGlideUrlByUser(mImageSources[position]),
+                        previewView, defaultView, loading);
+            else
+                loadImage(mImageSources[position], previewView, defaultView, loading);
 
             previewView.setOnClickListener(getListener());
             container.addView(view);
@@ -282,22 +299,20 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
             mImagePager.isInterceptable(isReached);
         }
 
-        private void loadImage(final String path,
-                               final ImagePreviewView previewView,
-                               final ImageView defaultView,
-                               final Loading loading) {
-            final GlideUrl url = AppContext.getGlideUrlByUser(path);
+        private <T> void loadImage(final T urlOrPath,
+                                   final ImagePreviewView previewView,
+                                   final ImageView defaultView,
+                                   final Loading loading) {
 
-            loadImageDoDownAndGetOverrideSize(url, new DoOverrideSizeCallback() {
+            loadImageDoDownAndGetOverrideSize(urlOrPath, new DoOverrideSizeCallback() {
                 @Override
                 public void onDone(int overrideW, int overrideH, boolean isTrue) {
-
                     DrawableRequestBuilder builder = getImageLoader()
-                            .load(url)
-                            .listener(new RequestListener<GlideUrl, GlideDrawable>() {
+                            .load(urlOrPath)
+                            .listener(new RequestListener<T, GlideDrawable>() {
                                 @Override
                                 public boolean onException(Exception e,
-                                                           GlideUrl model,
+                                                           T model,
                                                            Target<GlideDrawable> target,
                                                            boolean isFirstResource) {
                                     loading.stop();
@@ -308,7 +323,7 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
 
                                 @Override
                                 public boolean onResourceReady(GlideDrawable resource,
-                                                               GlideUrl model,
+                                                               T model,
                                                                Target<GlideDrawable> target,
                                                                boolean isFromMemoryCache,
                                                                boolean isFirstResource) {
@@ -328,9 +343,9 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
             });
         }
 
-        private void loadImageDoDownAndGetOverrideSize(final GlideUrl url, final DoOverrideSizeCallback callback) {
+        private <T> void loadImageDoDownAndGetOverrideSize(final T urlOrPath, final DoOverrideSizeCallback callback) {
             // In this save max image size is source
-            final Future<File> future = getImageLoader().load(url)
+            final Future<File> future = getImageLoader().load(urlOrPath)
                     .downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
 
             AppOperator.runOnThread(new Runnable() {
