@@ -35,7 +35,7 @@ import net.oschina.app.bean.User;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.improve.widget.SolarSystemView;
 import net.oschina.app.ui.MainActivity;
-import net.oschina.app.ui.MyQrodeDialog;
+import net.oschina.app.ui.MyQRCodeDialog;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
@@ -437,7 +437,7 @@ public class MyInformationFragment extends BaseFragment {
     }
 
     private void showMyQrCode() {
-        MyQrodeDialog dialog = new MyQrodeDialog(getActivity());
+        MyQRCodeDialog dialog = new MyQRCodeDialog(getActivity());
         dialog.show();
     }
 

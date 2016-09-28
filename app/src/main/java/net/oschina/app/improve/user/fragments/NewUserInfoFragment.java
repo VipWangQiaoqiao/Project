@@ -40,7 +40,7 @@ import net.oschina.app.improve.user.activities.UserTweetActivity;
 import net.oschina.app.improve.widget.SolarSystemView;
 import net.oschina.app.improve.widget.TitleBar;
 import net.oschina.app.interf.OnTabReselectListener;
-import net.oschina.app.ui.MyQrodeDialog;
+import net.oschina.app.ui.MyQRCodeDialog;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.FileUtil;
@@ -73,7 +73,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     public static final int ACTION_TYPE_ALBUM = 0;
     public static final int ACTION_TYPE_PHOTO = 1;
     private final static int CROP = 200;
-    private final static String FILE_SAVEPATH = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+    private final static String FILE_SAVE_PATH = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
             .getAbsolutePath() + File.separator + "开源中国" + File.separator;
 
     private static final int CAMERA_PERM = 1;
@@ -83,11 +83,11 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     @Bind(R.id.iv_logo_zxing)
     ImageView mIvLogoZxing;
     @Bind(R.id.user_info_head_container)
-    FrameLayout mFlUserInfonHeadContainer;
+    FrameLayout mFlUserInfoHeadContainer;
 
 
     @Bind(R.id.iv_portrait)
-    CircleImageView mCiOrtrait;
+    CircleImageView mCirclePortrait;
     @Bind(R.id.iv_gender)
     ImageView mIvGander;
     @Bind(R.id.user_info_icon_container)
@@ -108,7 +108,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     @Bind(R.id.lay_about_info)
     LinearLayout layAboutCount;
     @Bind(R.id.tv_tweet)
-    TextView mTvStweetCount;
+    TextView mTvTweetCount;
     @Bind(R.id.tv_favorite)
     TextView mTvFavoriteCount;
     @Bind(R.id.tv_following)
@@ -122,34 +122,46 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     @Bind(R.id.user_info_notice_fans)
     View mFansView;
 
-    private Uri origUri;
-    private File protraitFile;
+    private Uri mOrigUri;
+    private File mPortraitFile;
 
-    private String protraitPath;
+    private net.oschina.app.bean.User mInfo;
+    private boolean mIsUploadIcon;
+    private ProgressDialog mDialog;
+
+    private int mMaxRadius;
+    private int mR;
+    private float mPx;
+    private float mPy;
+
+    private String mPortraitPath;
     private UserV2 mUserInfo;
     private TextHttpResponseHandler textHandler = new TextHttpResponseHandler() {
 
         @Override
         public void onStart() {
             super.onStart();
-            mSolarSystem.accelerate();
-            if (isUploadIcon) {
+            if (mSolarSystem != null)
+                mSolarSystem.accelerate();
+            if (mIsUploadIcon) {
                 showWaitDialog(R.string.title_update_success_status);
             }
         }
 
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-            mSolarSystem.decelerate();
-            if (isUploadIcon)
+            if (mSolarSystem != null)
+                mSolarSystem.decelerate();
+            if (mIsUploadIcon)
                 Toast.makeText(getActivity(), R.string.title_update_fail_status, Toast.LENGTH_SHORT).show();
-            isUploadIcon = false;
+            mIsUploadIcon = false;
         }
 
         @Override
         public void onSuccess(int statusCode, Header[] headers, String responseString) {
             try {
-                mSolarSystem.decelerate();
+                if (mSolarSystem != null)
+                    mSolarSystem.decelerate();
 
                 Type type = new TypeToken<ResultBean<UserV2>>() {
                 }.getType();
@@ -165,9 +177,9 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                         }
                     });
                 }
-                if (isUploadIcon) {
+                if (mIsUploadIcon) {
                     hideWaitDialog();
-                    isUploadIcon = false;
+                    mIsUploadIcon = false;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -176,15 +188,6 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         }
 
     };
-    private net.oschina.app.bean.User mInfo;
-    private boolean isUploadIcon;
-    private ProgressDialog mDialog;
-
-    private int mMaxRadius;
-    private int mR;
-    private float mPx;
-    private float mPy;
-
 
     @Override
     protected int getLayoutId() {
@@ -226,7 +229,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     public void onResume() {
         super.onResume();
         mInfo = AppContext.getInstance().getLoginUser();
-        isUploadIcon = false;
+        mIsUploadIcon = false;
         NoticeManager.bindNotify(this);
         boolean login = AppContext.getInstance().isLogin();
         if (!login) {
@@ -255,8 +258,8 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
      */
     private void updateView(UserV2 userInfo) {
 
-        setImageFromNet(mCiOrtrait, userInfo.getPortrait(), R.mipmap.widget_dface);
-        mCiOrtrait.setVisibility(View.VISIBLE);
+        setImageFromNet(mCirclePortrait, userInfo.getPortrait(), R.mipmap.widget_dface);
+        mCirclePortrait.setVisibility(View.VISIBLE);
 
         mTvName.setText(userInfo.getName());
         mTvName.setVisibility(View.VISIBLE);
@@ -282,7 +285,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         mTvScore.setText(String.format("%s  %s", getString(R.string.user_score), formatCount(userInfo.getStatistics().getScore())));
         mTvScore.setVisibility(View.VISIBLE);
         layAboutCount.setVisibility(View.VISIBLE);
-        mTvStweetCount.setText(formatCount(userInfo.getStatistics().getTweet()));
+        mTvTweetCount.setText(formatCount(userInfo.getStatistics().getTweet()));
         mTvFavoriteCount.setText(formatCount(userInfo.getStatistics().getCollect()));
         mTvFollowCount.setText(formatCount(userInfo.getStatistics().getFollow()));
         mTvFollowerCount.setText(formatCount(userInfo.getStatistics().getFans()));
@@ -338,9 +341,9 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                     int height = mFlUserInfoIconContainer.getHeight();
                     float y1 = mFlUserInfoIconContainer.getY();
 
-                    float x = mCiOrtrait.getX();
-                    float y = mCiOrtrait.getY();
-                    int ciOrtraitWidth = mCiOrtrait.getWidth();
+                    float x = mCirclePortrait.getX();
+                    float y = mCirclePortrait.getY();
+                    int ciOrtraitWidth = mCirclePortrait.getWidth();
 
                     mPx = x + +rlShowInfoX + (width >> 1);
                     mPy = y1 + y + (height - y) / 2;
@@ -383,7 +386,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
      *
      */
     private void hideView() {
-        mCiOrtrait.setImageResource(R.mipmap.widget_dface);
+        mCirclePortrait.setImageResource(R.mipmap.widget_dface);
         mTvName.setText("点击头像登录");
         mIvGander.setVisibility(View.INVISIBLE);
         mTvSummary.setVisibility(View.INVISIBLE);
@@ -422,7 +425,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
             switch (id) {
                 case R.id.iv_logo_zxing:
-                    MyQrodeDialog dialog = new MyQrodeDialog(getActivity());
+                    MyQRCodeDialog dialog = new MyQRCodeDialog(getActivity());
                     dialog.show();
                     break;
                 case R.id.iv_portrait:
@@ -568,10 +571,10 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         String savePath = "";
         String storageState = Environment.getExternalStorageState();
         if (storageState.equals(Environment.MEDIA_MOUNTED)) {
-            savePath = FILE_SAVEPATH;
-            File savedir = new File(savePath);
-            if (!savedir.exists()) {
-                savedir.mkdirs();
+            savePath = FILE_SAVE_PATH;
+            File saveDir = new File(savePath);
+            if (!saveDir.exists()) {
+                saveDir.mkdirs();
             }
         }
 
@@ -584,7 +587,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         String fileName = "portrait.jpg";// 照片命名
         File out = new File(savePath, fileName);
         Uri uri = Uri.fromFile(out);
-        origUri = uri;
+        mOrigUri = uri;
 
         //  String theLarge = savePath + fileName;
 
@@ -599,9 +602,9 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     private Uri getUploadTempFile(Uri uri) {
         String storageState = Environment.getExternalStorageState();
         if (storageState.equals(Environment.MEDIA_MOUNTED)) {
-            File savedir = new File(FILE_SAVEPATH);
-            if (!savedir.exists()) {
-                savedir.mkdirs();
+            File saveDir = new File(FILE_SAVE_PATH);
+            if (!saveDir.exists()) {
+                saveDir.mkdirs();
             }
         } else {
             AppContext.showToast("无法保存上传的头像，请检查SD卡是否挂载");
@@ -619,11 +622,11 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         // 照片命名
         String cropFileName = "portrait." + ext;
         // 裁剪头像的绝对路径
-        protraitPath = FILE_SAVEPATH + cropFileName;
-        protraitFile = new File(protraitPath);
+        mPortraitPath = FILE_SAVE_PATH + cropFileName;
+        mPortraitFile = new File(mPortraitPath);
 
         // notify
-        Uri notifyUri = Uri.fromFile(protraitFile);
+        Uri notifyUri = Uri.fromFile(mPortraitFile);
         getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, notifyUri));
 
         return notifyUri;
@@ -679,25 +682,25 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     private void uploadNewPhoto() {
 
         // 获取头像缩略图
-        if (TextUtils.isEmpty(protraitPath) && !protraitFile.exists()) {
+        if (TextUtils.isEmpty(mPortraitPath) && !mPortraitFile.exists()) {
             AppContext.showToast(getString(R.string.title_icon_null));
         }
 
-        if (protraitFile != null) {
-            isUploadIcon = true;
-            OSChinaApi.updateUserIcon(protraitFile, textHandler);
+        if (mPortraitFile != null) {
+            mIsUploadIcon = true;
+            OSChinaApi.updateUserIcon(mPortraitFile, textHandler);
         }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent imageReturnIntent) {
-        //  super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, imageReturnIntent);
         if (resultCode != Activity.RESULT_OK)
             return;
 
         switch (requestCode) {
             case ImageUtils.REQUEST_CODE_GETIMAGE_BYCAMERA:
-                startActionCrop(origUri);// 拍照后裁剪
+                startActionCrop(mOrigUri);// 拍照后裁剪
                 break;
             case ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP:
                 startActionCrop(imageReturnIntent.getData());// 选图后裁剪
