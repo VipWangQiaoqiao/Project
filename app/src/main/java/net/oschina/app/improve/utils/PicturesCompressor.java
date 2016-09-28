@@ -39,7 +39,7 @@ public final class PicturesCompressor {
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private static void resetOptions(BitmapFactory.Options options) {
+    public static void resetOptions(BitmapFactory.Options options) {
         options.inTempStorage = null;
         options.inDither = false;
         options.inScaled = false;
