@@ -5,6 +5,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.text.TextUtils;
 
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.PersistentCookieStore;
@@ -370,5 +372,18 @@ public class AppContext extends BaseApplication {
         //gsonBuilder.setExclusionStrategies(new SpecificClassExclusionStrategy(null, Model.class));
         gsonBuilder.setDateFormat("yyyy-MM-dd HH:mm:ss");
         return gsonBuilder.create();
+    }
+
+
+    public static GlideUrl getGlideUrlByUser(String url) {
+        if (AppContext.getInstance().isLogin()) {
+            return new GlideUrl(url,
+                    new LazyHeaders
+                            .Builder()
+                            .addHeader("Cookie", ApiHttpClient.getCookie(AppContext.getInstance()))
+                            .build());
+        } else {
+            return new GlideUrl(url);
+        }
     }
 }

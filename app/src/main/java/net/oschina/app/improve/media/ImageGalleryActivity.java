@@ -20,11 +20,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseActivity;
@@ -200,14 +203,15 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
 
     }
 
-    private Point displayDimens;
+    private Point mDisplayDimens;
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     @SuppressWarnings("deprecation")
     private synchronized Point getDisplayDimens() {
-        if (displayDimens != null) {
-            return displayDimens;
+        if (mDisplayDimens != null) {
+            return mDisplayDimens;
         }
+        Point displayDimens;
         WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
@@ -220,7 +224,9 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
         // In this we can only get 75% width and 45% height
         displayDimens.y = (int) (displayDimens.y * 0.45f);
         displayDimens.x = (int) (displayDimens.x * 0.75f);
-        return displayDimens;
+
+        mDisplayDimens = displayDimens;
+        return mDisplayDimens;
     }
 
     private class ViewPagerAdapter extends PagerAdapter implements ImagePreviewView.OnReachBorderListener {
@@ -280,22 +286,29 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
                                final ImagePreviewView previewView,
                                final ImageView defaultView,
                                final Loading loading) {
-            loadImageDoDownAndGetOverrideSize(path, new DoOverrideSizeCallback() {
+            final GlideUrl url = AppContext.getGlideUrlByUser(path);
+
+            loadImageDoDownAndGetOverrideSize(url, new DoOverrideSizeCallback() {
                 @Override
-                public void onDone(int overrideW, int overrideH) {
-                    getImageLoader()
-                            .load(path)
-                            .listener(new RequestListener<String, GlideDrawable>() {
+                public void onDone(int overrideW, int overrideH, boolean isTrue) {
+
+                    DrawableRequestBuilder builder = getImageLoader()
+                            .load(url)
+                            .listener(new RequestListener<GlideUrl, GlideDrawable>() {
                                 @Override
-                                public boolean onException(Exception e, String model,
+                                public boolean onException(Exception e,
+                                                           GlideUrl model,
                                                            Target<GlideDrawable> target,
                                                            boolean isFirstResource) {
-                                    onError();
+                                    loading.stop();
+                                    loading.setVisibility(View.GONE);
+                                    defaultView.setVisibility(View.VISIBLE);
                                     return false;
                                 }
 
                                 @Override
-                                public boolean onResourceReady(GlideDrawable resource, String model,
+                                public boolean onResourceReady(GlideDrawable resource,
+                                                               GlideUrl model,
                                                                Target<GlideDrawable> target,
                                                                boolean isFromMemoryCache,
                                                                boolean isFirstResource) {
@@ -303,23 +316,21 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
                                     loading.setVisibility(View.GONE);
                                     return false;
                                 }
-                            }).diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                            .override(overrideW, overrideH)
-                            .into(previewView);
-                }
+                            }).diskCacheStrategy(DiskCacheStrategy.SOURCE);
 
-                @Override
-                public void onError() {
-                    loading.stop();
-                    loading.setVisibility(View.GONE);
-                    defaultView.setVisibility(View.VISIBLE);
+                    // If download or get option error we not set override
+                    if (isTrue && overrideW > 0 && overrideH > 0) {
+                        builder = builder.override(overrideW, overrideH);
+                    }
+
+                    builder.into(previewView);
                 }
             });
         }
 
-        private void loadImageDoDownAndGetOverrideSize(final String path, final DoOverrideSizeCallback callback) {
+        private void loadImageDoDownAndGetOverrideSize(final GlideUrl url, final DoOverrideSizeCallback callback) {
             // In this save max image size is source
-            final Future<File> future = getImageLoader().load(path)
+            final Future<File> future = getImageLoader().load(url)
                     .downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
 
             AppOperator.runOnThread(new Runnable() {
@@ -331,34 +342,46 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
                         BitmapFactory.Options options = PicturesCompressor.createOptions();
                         // First decode with inJustDecodeBounds=true to check dimensions
                         options.inJustDecodeBounds = true;
+                        // First decode with inJustDecodeBounds=true to check dimensions
                         BitmapFactory.decodeFile(sourceFile.getAbsolutePath(), options);
+
                         int width = options.outWidth;
                         int height = options.outHeight;
+                        PicturesCompressor.resetOptions(options);
 
-                        // This max size
-                        final int maxLen = 1280 * 5;
+                        if (width > 0 && height > 0) {
+                            // This max size
+                            final int maxLen = 1280 * 5;
 
-                        // Get Screen
-                        Point point = getDisplayDimens();
-                        // Init override size
-                        final int overrideW, overrideH;
+                            // Get Screen
+                            Point point = getDisplayDimens();
+                            // Init override size
+                            final int overrideW, overrideH;
 
-                        if ((width / (float) height) > (point.x / (float) point.y)) {
-                            overrideH = height > point.y ? point.y : height;
-                            overrideW = width > maxLen ? maxLen : width;
-                        } else {
-                            overrideW = width > point.x ? point.x : width;
-                            overrideH = height > maxLen ? maxLen : height;
-                        }
-
-                        // Call back on main thread
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                callback.onDone(overrideW, overrideH);
+                            if ((width / (float) height) > (point.x / (float) point.y)) {
+                                overrideH = height > point.y ? point.y : height;
+                                overrideW = width > maxLen ? maxLen : width;
+                            } else {
+                                overrideW = width > point.x ? point.x : width;
+                                overrideH = height > maxLen ? maxLen : height;
                             }
-                        });
 
+                            // Call back on main thread
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onDone(overrideW, overrideH, true);
+                                }
+                            });
+                        } else {
+                            // Call back on main thread
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onDone(0, 0, false);
+                                }
+                            });
+                        }
                     } catch (InterruptedException | ExecutionException e) {
                         e.printStackTrace();
 
@@ -366,7 +389,7 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                callback.onError();
+                                callback.onDone(0, 0, false);
                             }
                         });
                     }
@@ -378,8 +401,6 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
     }
 
     interface DoOverrideSizeCallback {
-        void onDone(int overrideW, int overrideH);
-
-        void onError();
+        void onDone(int overrideW, int overrideH, boolean isTrue);
     }
 }

@@ -10,14 +10,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.model.GlideUrl;
-import com.bumptech.glide.load.model.LazyHeaders;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
-import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.improve.base.adapter.BaseGeneralRecyclerAdapter;
 import net.oschina.app.improve.bean.Message;
 import net.oschina.app.util.StringUtils;
@@ -116,7 +114,7 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
                     senderPictureViewHolder.iv_resend.setVisibility(View.INVISIBLE);
                     Glide.clear(senderPictureViewHolder.iv_sender_picture);
                     mCallBack.getImgLoader()
-                            .load(getGlideUrl(item.getResource()))
+                            .load(AppContext.getGlideUrlByUser(item.getResource()))
                             .listener(new RequestListener<GlideUrl, GlideDrawable>() {
                                 @Override
                                 public boolean onException(Exception e, GlideUrl model, Target<GlideDrawable> target, boolean isFirstResource) {
@@ -149,7 +147,7 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
                 receiverPictureViewHolder.loading.setVisibility(View.VISIBLE);
                 receiverPictureViewHolder.loading.start();
                 mCallBack.getImgLoader()
-                        .load(getGlideUrl(item.getResource()))
+                        .load(AppContext.getGlideUrlByUser(item.getResource()))
                         .listener(new RequestListener<GlideUrl, GlideDrawable>() {
                             @Override
                             public boolean onException(Exception e, GlideUrl model, Target<GlideDrawable> target, boolean isFirstResource) {
@@ -173,9 +171,6 @@ public class UserSendMessageAdapter extends BaseGeneralRecyclerAdapter<Message> 
         }
     }
 
-    public GlideUrl getGlideUrl(String url) {
-        return new GlideUrl(url, new LazyHeaders.Builder().addHeader("Cookie", ApiHttpClient.getCookie(AppContext.getInstance())).build());
-    }
 
     private void formatTime(Message preMessage, Message item, TextView tv_time) {
         tv_time.setVisibility(View.GONE);
