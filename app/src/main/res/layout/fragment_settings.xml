@@ -40,7 +40,8 @@
 
         <RelativeLayout
             android:id="@+id/rl_notification_settings"
-            style="@style/option_item_rl">
+            style="@style/option_item_rl"
+            android:visibility="gone">
 
             <TextView
                 style="@style/option_item_text_parent"
@@ -49,7 +50,9 @@
                 android:textSize="@dimen/text_size_16" />
         </RelativeLayout>
 
-        <View style="@style/h_line" />
+        <View
+            style="@style/h_line"
+            android:visibility="gone" />
 
         <RelativeLayout
             android:id="@+id/rl_clean_cache"
