@@ -330,6 +330,6 @@ public class NoticeServer extends Service {
 
     static void log(String str) {
         if (BuildConfig.DEBUG)
-            Log.e(TAG, str);
+            Log.d(TAG, str);
     }
 }
