@@ -35,7 +35,6 @@ import net.oschina.app.improve.utils.StreamUtils;
 import net.qiujuer.genius.ui.widget.Loading;
 
 import java.io.File;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 
@@ -156,20 +155,32 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
 
         String path = mImageSources[mCurPosition];
 
+        Object urlOrPath;
+        // Do load
+        if (mNeedCookie)
+            urlOrPath = AppContext.getGlideUrlByUser(path);
+        else
+            urlOrPath = path;
+
         // In this save max image size is source
-        final Future<File> future = getImageLoader().load(path).downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
+        final Future<File> future = getImageLoader()
+                .load(urlOrPath)
+                .downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);
 
         AppOperator.runOnThread(new Runnable() {
             @Override
             public void run() {
                 try {
                     File sourceFile = future.get();
+                    if (sourceFile == null || !sourceFile.exists())
+                        return;
                     String extension = PicturesCompressor.getExtension(sourceFile.getAbsolutePath());
                     String extDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                             .getAbsolutePath() + File.separator + "开源中国";
                     File extDirFile = new File(extDir);
                     if (!extDirFile.exists()) {
                         if (!extDirFile.mkdirs()) {
+                            // If mk dir error
                             callSaveStatus(false, null);
                             return;
                         }
@@ -182,7 +193,7 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
                             callSaveStatus(isSuccess, saveFile);
                         }
                     });
-                } catch (InterruptedException | ExecutionException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -397,7 +408,7 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
                                 }
                             });
                         }
-                    } catch (InterruptedException | ExecutionException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
 
                         // Call back on main thread
