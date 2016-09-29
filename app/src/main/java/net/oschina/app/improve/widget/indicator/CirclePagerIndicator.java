@@ -81,12 +81,13 @@ public class CirclePagerIndicator extends View implements PagerIndicator {
         int paddingTop = getPaddingTop();
 
         final float circleAndSpace = 2 * mRadius + mIndicatorSpace;//直径+圆的间隔
-        final float yOffset = paddingTop + mRadius;//竖直方向圆心偏移量
+        final float yOffset = getHeight() / 2;//竖直方向圆心偏移量，剧中对齐
         float xOffset = paddingLeft + mRadius;//水平方向圆心偏移量
 
         //如果采用水平居中对齐
         if (mCenterHorizontal) {
-            xOffset += ((width - paddingLeft - paddingRight) - (count * circleAndSpace)) / 2.0f;
+            //xOffset += ((width - paddingLeft - paddingRight) - (count * circleAndSpace)) / 2.0f;
+            xOffset = (width - count * 2 * mRadius - (count - 1) * mIndicatorSpace) / 2 - mRadius;
         }
 
         float cX;
@@ -174,7 +175,7 @@ public class CirclePagerIndicator extends View implements PagerIndicator {
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         mCurrentPage = position;
         mPageOffset = positionOffset;
-        //如果指示器跟随ViewPager缓慢滑动，那么滚动是时候都绘制界面
+        //如果指示器跟随ViewPager缓慢滑动，那么滚动的时候都绘制界面
         if (mIsFollow) {
             invalidate();
         }
