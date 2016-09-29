@@ -255,8 +255,8 @@ class TweetPublishOperator implements Runnable, Contract.IOperator {
     }
 
 
-    // Max upload 1MB
-    private static final long MAX_UPLOAD_LENGTH = 1024 * 1024;
+    // Max upload 860KB
+    private static final long MAX_UPLOAD_LENGTH = 860 * 1024;
 
     /**
      * 保存文件到缓存中
