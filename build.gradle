@@ -18,8 +18,8 @@ ext {
     compileSdkVersion = 24
     buildToolsVersion = "24.0.2"
     applicationId = "net.oschina.app"
-    minSdkVersion = 19
+    minSdkVersion = 15
     targetSdkVersion = 24
-    versionCode = 265
-    versionName = "v2.6.5(1609211120)"
+    versionCode = 266
+    versionName = "v2.6.6(1609281026)"
 }
