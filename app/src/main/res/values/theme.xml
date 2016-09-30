@@ -70,6 +70,12 @@
         <item name="gImageViewStyle">@style/Genius.Widget.ImageView</item>
     </style>
 
+    <!-- transition -->
+    <style name="App.Theme.Transition.TweetDetail" parent="Base.App.Theme.Light">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+    </style>
+
     <!-- 日间模式 -->
     <style name="App.Theme.Light" parent="Base.App.Theme.Light" />
 
@@ -107,7 +113,7 @@
         <item name="android:windowAnimationStyle">@null</item>
     </style>
 
-    <style name="App.Theme.Tweet.Main" parent="Base.App.Theme.NoTitle" />v
+    <style name="App.Theme.Tweet.Main" parent="Base.App.Theme.NoTitle" />
 
     <!--button-->
     <style name="App.Widget.Button" parent="Widget.AppCompat.Button">

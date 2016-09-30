@@ -6,9 +6,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.Pair;
+import android.support.v4.view.ViewCompat;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
@@ -16,6 +22,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
+import net.oschina.app.adapter.ViewHolder;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.improve.base.adapter.BaseListAdapter;
@@ -34,8 +41,12 @@ import net.oschina.app.util.UIHelper;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+
+import static net.oschina.app.improve.tweet.activities.TweetDetailActivity.BUNDLE_KEY_TWEET;
 
 /**
  * 动弹列表
@@ -162,9 +173,26 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        TweetDetailActivity.show(getContext(), mAdapter.getItem(position));
+//        TweetDetailActivity.show(getContext(), mAdapter.getItem(position));
+
+        ViewHolder holder = (ViewHolder) view.getTag();
+        // footer view or header view haven't ViewHolder
+        if (holder == null) return;
+
+        ImageView mp = holder.getView(R.id.iv_tweet_face);
+        TextView mn = holder.getView(R.id.tv_tweet_name);
+
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
+                Pair.<View, String>create(mp, ViewCompat.getTransitionName(mp)),
+                Pair.<View, String>create(mn, ViewCompat.getTransitionName(mn))
+        );
+
+        Intent intent = new Intent(getContext(), TweetDetailActivity.class);
+        intent.putExtra(BUNDLE_KEY_TWEET, mAdapter.getItem(position));
+        ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
     }
 
     @Override
