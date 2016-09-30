@@ -6,9 +6,11 @@ import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,7 +29,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.emoji.InputHelper;
-import net.oschina.app.improve.base.activities.BaseBackActivity;
+import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.TweetComment;
@@ -44,7 +46,6 @@ import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.viewpagerfragment.TweetDetailViewPagerFragment;
-import net.oschina.app.widget.CircleImageView;
 import net.oschina.app.widget.RecordButtonUtil;
 
 import java.util.ArrayList;
@@ -53,6 +54,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.OnClick;
 import cz.msebera.android.httpclient.Header;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * 动弹详情
@@ -60,7 +62,7 @@ import cz.msebera.android.httpclient.Header;
  * on 16/6/13.
  */
 @SuppressWarnings("deprecation")
-public class TweetDetailActivity extends BaseBackActivity implements TweetDetailContract.Operator {
+public class TweetDetailActivity extends BaseActivity implements TweetDetailContract.Operator {
 
     public static final String BUNDLE_KEY_TWEET = "BUNDLE_KEY_TWEET";
     public static final String BUNDLE_KEY_TWEET_ID = "BUNDLE_KEY_TWEET_ID";
@@ -89,6 +91,8 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
     TextView mContent;
     @Bind(R.id.tweet_pics_layout)
     TweetPicturesLayout mLayoutGrid;
+    @Bind(R.id.toolbar)
+    Toolbar mToolbar;
 
     EditText mViewInput;
 
@@ -121,7 +125,7 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
 
     @Override
     protected int getContentView() {
-        return R.layout.fragment_tweet_detail;
+        return R.layout.activity_tweet_detail;
     }
 
     @Override
@@ -211,6 +215,15 @@ public class TweetDetailActivity extends BaseBackActivity implements TweetDetail
     }
 
     protected void initWidget() {
+        mToolbar.setTitle("动弹详情");
+        setSupportActionBar(mToolbar);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                supportFinishAfterTransition();
+            }
+        });
+
         mDelegation = KeyboardInputDelegation.delegation(this, mCoordinatorLayout, mFrameLayout);
         mDelegation.setBehavior(new FloatingAutoHideDownBehavior());
         mDelegation.showEmoji(getSupportFragmentManager());
