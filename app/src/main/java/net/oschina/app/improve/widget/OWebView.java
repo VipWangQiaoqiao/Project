@@ -197,12 +197,16 @@ public class OWebView extends WebView {
 
             // 添加点击图片放大支持
             if (isShowImagePreview) {
-                content = content.replaceAll("(<img[^>]+src=\")(\\S+)\"",
-                        "$1$2\" onClick=\"javascript:mWebViewImageListener.showImagePreview('$2')\"");
+                // TODO 用一个正则就搞定??
+                content = content.replaceAll("<img[^>]+src=\"([^\"\'\\s]+)\"\\s*[/]?>",
+                        "<img src=\"$1\" onClick=\"javascript:mWebViewImageListener.showImagePreview('$1')\"/>");
+                content = content.replaceAll(
+                        "<a\\s+[^<>]*href=[\"\']([^\"\']+)[\"\'][^<>]*>\\s*<img\\s+src=\"([^\"\']+)\"[^<>]*/>\\s*</a>",
+                        "<a href=\"$1\"><img src=\"$2\"/></a>");
             }
         } else {
             // 过滤掉 img标签
-            content = content.replaceAll("<\\s*img\\s+([^>]*)\\s*>", "");
+            content = content.replaceAll("<\\s*img\\s+([^>]*)\\s*/>", "");
         }
 
         // 过滤table的内部属性
