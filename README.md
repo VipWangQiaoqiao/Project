@@ -6,13 +6,14 @@
 
 编号 | 标签名 | 发布版本 | 备注
 ------- | ------- | ------- | -------
-1 | [v2.6.5](http://git.oschina.net/oschina/android-app/tree/v2.6.5/)  |v2.6.5 (1609211120)| 当前最新版  
-2 | [v2.6.4](http://git.oschina.net/oschina/android-app/tree/v2.6.4/)  |v2.6.4 (1608081154)|   
-3 | [v2.6.3](http://git.oschina.net/oschina/android-app/tree/v2.6.3/)  |v2.6.3 (1607081128)|
-4 | [v2.6.2](http://git.oschina.net/oschina/android-app/tree/v2.6.2/)  |v2.6.2(1606121625)|   
-5 | [v2.4](http://git.oschina.net/oschina/android-app/tree/v2.4/) | -- | -- |
-6 | [v2.3](http://git.oschina.net/oschina/android-app/tree/v2.3/) | -- | 迁移到AndroidStudio |
-7 | [v2.2.1](http://git.oschina.net/oschina/android-app/tree/v2.2.1/) | -- | Eclipse可用 |
+1 | [v2.6.6](http://git.oschina.net/oschina/android-app/tree/v2.6.6/)  |v2.6.6 (1609281026)| 当前最新版  
+2 | [v2.6.5](http://git.oschina.net/oschina/android-app/tree/v2.6.5/)  |v2.6.5 (1609211120)|  
+3 | [v2.6.4](http://git.oschina.net/oschina/android-app/tree/v2.6.4/)  |v2.6.4 (1608081154)|   
+4 | [v2.6.3](http://git.oschina.net/oschina/android-app/tree/v2.6.3/)  |v2.6.3 (1607081128)|
+5 | [v2.6.2](http://git.oschina.net/oschina/android-app/tree/v2.6.2/)  |v2.6.2(1606121625)|   
+6 | [v2.4](http://git.oschina.net/oschina/android-app/tree/v2.4/) | -- | -- |
+7 | [v2.3](http://git.oschina.net/oschina/android-app/tree/v2.3/) | -- | 迁移到AndroidStudio |
+8 | [v2.2.1](http://git.oschina.net/oschina/android-app/tree/v2.2.1/) | -- | Eclipse可用 |
 
 
 ##开发环境
