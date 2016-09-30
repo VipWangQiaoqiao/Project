@@ -33,4 +33,19 @@
         <item name="android:windowFrame">@null</item>
         <item name="android:windowBackground">@color/transparent</item>
     </style>
+
+    <style name="App.Theme.Transition.TweetDetail" parent="Base.App.Theme.Light" >
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+        <item name="android:windowEnterTransition">@transition/transition_window_elements_enter</item>
+        <item name="android:windowReturnTransition">@transition/transition_window_elements_return</item>
+        <item name="android:windowSharedElementEnterTransition">@transition/transition_shared_element_enter</item>
+        <item name="android:windowSharedElementReturnTransition">@transition/transition_shared_element_return</item>
+    </style>
+
 </resources>

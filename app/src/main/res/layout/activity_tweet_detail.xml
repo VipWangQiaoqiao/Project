@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"/>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/layout_coordinator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--detail header-->
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/layout_appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:elevation="0dp">
+
+            <LinearLayout
+                android:id="@+id/layout_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="@dimen/lay_16"
+                android:background="@color/white"
+                app:layout_scrollFlags="scroll">
+
+                <!--portrait and nick-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/iv_portrait"
+                        android:layout_width="@dimen/size_48"
+                        android:layout_height="@dimen/size_48"
+                        android:transitionName="transition_portrait"
+                        tools:src="@mipmap/widget_dface" />
+
+                    <TextView
+                        android:id="@+id/tv_nick"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_weight="1"
+                        android:textColor="#111111"
+                        android:textSize="16sp"
+                        android:transitionName="transition_name"
+                        tools:text="李大神" />
+                </LinearLayout>
+
+                <!--content-->
+                <TextView
+                    android:id="@+id/tv_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:lineSpacingMultiplier="1.2"
+                    android:textColor="#333"
+                    android:textSize="16sp"
+                    android:transitionName="transition_content"
+                    tools:text="又改需求!!!" />
+
+                <net.oschina.app.improve.widget.TweetPicturesLayout
+                    android:id="@+id/tweet_pics_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/lay_8"
+                    android:visibility="gone"
+                    app:column="3"
+                    app:horizontalSpace="@dimen/lay_4"
+                    android:transitionName="transition_pictures"
+                    app:verticalSpace="@dimen/lay_4" />
+
+                <RelativeLayout
+                    android:id="@+id/tweet_bg_record"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/selector_record_layout"
+                    android:padding="3dp"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <ImageView
+                        android:id="@+id/tweet_img_record"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_centerVertical="true"
+                        android:background="@anim/audio_animations"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:id="@+id/tweet_tv_record"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginRight="4dp"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        tools:text="34'" />
+                </RelativeLayout>
+
+                <!--bottom info-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/lay_8">
+
+                    <TextView
+                        android:id="@+id/tv_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:textSize="12sp"
+                        android:transitionName="transition_time"
+                        tools:text="6分钟前" />
+
+                    <TextView
+                        android:id="@+id/tv_client"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/lay_8"
+                        android:layout_marginLeft="8dp"
+                        android:layout_toEndOf="@id/tv_time"
+                        android:layout_toRightOf="@id/tv_time"
+                        android:textSize="12sp"
+                        android:visibility="gone"
+                        tools:text="Android"
+                        android:transitionName="transition_platform"
+                        tools:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/iv_comment"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:layout_toStartOf="@id/tv_comment_count"
+                        android:layout_toLeftOf="@id/tv_comment_count"
+                        android:contentDescription="@string/app_name"
+                        android:scaleType="fitCenter"
+                        android:transitionName="transition_comment"
+                        android:src="@mipmap/ic_comment" />
+
+                    <ImageView
+                        android:id="@+id/iv_thumbup"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_toLeftOf="@id/iv_comment"
+                        android:layout_toStartOf="@id/iv_comment"
+                        android:contentDescription="@string/app_name"
+                        android:scaleType="fitCenter"
+                        android:transitionName="transition_like"
+                        android:src="@drawable/selector_thumb" />
+                </RelativeLayout>
+            </LinearLayout>
+        </android.support.design.widget.AppBarLayout>
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</LinearLayout>

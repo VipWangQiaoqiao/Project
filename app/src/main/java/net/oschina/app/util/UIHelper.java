@@ -117,7 +117,6 @@ public class UIHelper {
             "allImgUrls = getAllImgSrc(document.body.innerHTML);</script>";
 
     private static final String SHOWIMAGE = "ima-api:action=showImage&data=";
-
     /**
      * 显示登录界面
      *

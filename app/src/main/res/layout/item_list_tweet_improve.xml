@@ -22,6 +22,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:clickable="true"
+            android:transitionName="transition_portrait"
             android:src="@mipmap/widget_dface" />
 
         <LinearLayout
@@ -39,6 +40,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/blog_title_text_color_light"
                 android:textSize="16sp"
+                android:transitionName="transition_name"
                 tools:text="Large Text" />
 
             <net.oschina.app.widget.TweetTextView
@@ -52,6 +54,7 @@
                 android:lineSpacingExtra="@dimen/font_4"
                 android:textColor="?attr/textColor"
                 android:textSize="14sp"
+                android:transitionName="transition_content"
                 tools:text="最近研究了这个项目，学习rx系列,修复了楼主的bug 主要原因在mainActivity里面资讯fragment的构建" />
 
             <net.oschina.app.improve.widget.TweetPicturesLayout
@@ -62,6 +65,7 @@
                 android:layout_marginTop="@dimen/lay_8"
                 android:visibility="gone"
                 app:horizontalSpace="@dimen/lay_4"
+                android:transitionName="transition_pictures"
                 app:verticalSpace="@dimen/lay_4" />
 
             <LinearLayout
@@ -89,6 +93,7 @@
                         android:singleLine="true"
                         android:textColor="#9d9d9d"
                         android:textSize="@dimen/font_12"
+                        android:transitionName="transition_time"
                         tools:text="6分钟" />
 
                     <TextView
@@ -102,6 +107,7 @@
                         android:singleLine="true"
                         android:textColor="#9d9d9d"
                         android:textSize="@dimen/font_12"
+                        android:transitionName="transition_platform"
                         tools:text="iPhone" />
                 </LinearLayout>
 
@@ -120,6 +126,7 @@
                         android:contentDescription="@string/app_name"
                         android:padding="@dimen/space_4"
                         android:scaleType="fitCenter"
+                        android:transitionName="transition_like"
                         android:src="@mipmap/ic_thumbup_normal"
                         tools:ignore="RtlHardcoded" />
 
@@ -133,12 +140,14 @@
                         tools:text="12" />
 
                     <ImageView
+                        android:id="@+id/iv_comment"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginLeft="@dimen/space_8"
                         android:contentDescription="@string/app_name"
                         android:padding="@dimen/space_4"
                         android:scaleType="fitCenter"
+                        android:transitionName="transition_comment"
                         android:src="@mipmap/ic_comment_30" />
 
                     <TextView
