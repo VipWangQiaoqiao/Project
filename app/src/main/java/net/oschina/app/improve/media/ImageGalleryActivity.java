@@ -246,8 +246,8 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
         }
 
         // In this we can only get 85% width and 60% height
-        displayDimens.y = (int) (displayDimens.y * 0.60f);
-        displayDimens.x = (int) (displayDimens.x * 0.85f);
+        //displayDimens.y = (int) (displayDimens.y * 0.60f);
+        //displayDimens.x = (int) (displayDimens.x * 0.85f);
 
         mDisplayDimens = displayDimens;
         return mDisplayDimens;
@@ -311,7 +311,7 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
         }
 
         private <T> void loadImage(final T urlOrPath,
-                                   final ImagePreviewView previewView,
+                                   final ImageView previewView,
                                    final ImageView defaultView,
                                    final Loading loading) {
 
@@ -326,6 +326,8 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
                                                            T model,
                                                            Target<GlideDrawable> target,
                                                            boolean isFirstResource) {
+                                    if (e != null)
+                                        e.printStackTrace();
                                     loading.stop();
                                     loading.setVisibility(View.GONE);
                                     defaultView.setVisibility(View.VISIBLE);
@@ -376,20 +378,21 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
                         PicturesCompressor.resetOptions(options);
 
                         if (width > 0 && height > 0) {
-                            // This max size
-                            final int maxLen = 1280 * 6;
-
                             // Get Screen
-                            Point point = getDisplayDimens();
+                            final Point point = getDisplayDimens();
+
+                            // This max size
+                            final int maxLen = Math.min(Math.min(point.y, point.x) * 5, 1366 * 3);
+
                             // Init override size
                             final int overrideW, overrideH;
 
                             if ((width / (float) height) > (point.x / (float) point.y)) {
-                                overrideH = height > point.y ? point.y : height;
-                                overrideW = width > maxLen ? maxLen : width;
+                                overrideH = Math.min(height, point.y);
+                                overrideW = Math.min(width, maxLen);
                             } else {
-                                overrideW = width > point.x ? point.x : width;
-                                overrideH = height > maxLen ? maxLen : height;
+                                overrideW = Math.min(width, point.x);
+                                overrideH = Math.min(height, maxLen);
                             }
 
                             // Call back on main thread
