@@ -12,8 +12,9 @@ import net.oschina.app.AppContext;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Update;
 
-import cz.msebera.android.httpclient.Header;
 import java.io.ByteArrayInputStream;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * 更新管理类
@@ -37,19 +38,27 @@ public class UpdateManager {
         @Override
         public void onFailure(int arg0, Header[] arg1, byte[] arg2,
                               Throwable arg3) {
-            hideCheckDialog();
-            if (isShow) {
-                showFaileDialog();
+            try {
+                hideCheckDialog();
+                if (isShow) {
+                    showFaileDialog();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
         @Override
         public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-            hideCheckDialog();
-            mUpdate = XmlUtils.toBean(Update.class,
-                    new ByteArrayInputStream(arg2));
+            try {
+                hideCheckDialog();
+                mUpdate = XmlUtils.toBean(Update.class,
+                        new ByteArrayInputStream(arg2));
 
-            onFinishCheck();
+                onFinishCheck();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     };
 
