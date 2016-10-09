@@ -17,6 +17,8 @@ import net.oschina.app.R;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.tweet.service.TweetPublishModel;
 import net.oschina.app.improve.utils.AssimilateUtils;
+import net.oschina.app.util.HTMLUtil;
+import net.oschina.app.util.TDevice;
 import net.oschina.app.widget.TweetTextView;
 
 import java.text.DateFormat;
@@ -98,7 +100,7 @@ public class TweetQueueAdapter extends RecyclerView.Adapter<TweetQueueAdapter.Ho
     /**
      * Holder
      */
-    static class Holder extends RecyclerView.ViewHolder {
+    static class Holder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
         private TweetTextView mTitle;
         private TextView mDate;
         private TextView mLog;
@@ -108,6 +110,9 @@ public class TweetQueueAdapter extends RecyclerView.Adapter<TweetQueueAdapter.Ho
 
         private Holder(final View itemView, HolderListener listener) {
             super(itemView);
+            // Add long click
+            itemView.setOnLongClickListener(this);
+
             mListener = listener;
 
             mTitle = (TweetTextView) itemView.findViewById(R.id.tv_title);
@@ -156,6 +161,12 @@ public class TweetQueueAdapter extends RecyclerView.Adapter<TweetQueueAdapter.Ho
             mLog.setText(String.format("Error:%s.",
                     model.getErrorString() == null ? "null" : model.getErrorString()));
             mDate.setText(FORMAT.format(new Date(model.getDate())));
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            TDevice.copyTextToBoard(HTMLUtil.delHTMLTag(mTitle.getText().toString()));
+            return true;
         }
 
         /**
