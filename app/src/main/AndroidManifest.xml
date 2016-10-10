@@ -434,6 +434,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/App.Theme.Translucent" />
 
+        <activity
+            android:name=".improve.main.discover.ShakePresentActivity"
+            android:label="摇一摇"
+            android:screenOrientation="portrait"
+            android:theme="@style/App.Theme.Translucent" />
+
         <service
             android:name=".improve.tweet.service.TweetPublishService"
             android:exported="false"

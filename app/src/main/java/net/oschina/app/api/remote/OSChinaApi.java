@@ -1711,7 +1711,7 @@ public class OSChinaApi {
      */
     public static void getUserInfo(long uid, String nick, String suffix, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
-        if (uid > 0 ) params.put("id", uid);
+        if (uid > 0) params.put("id", uid);
         if (!TextUtils.isEmpty(nick)) params.put("nickname", nick);
         if (!TextUtils.isEmpty(suffix)) params.put("suffix", suffix);
         ApiHttpClient.get("action/apiv2/user_info", params, handler);
@@ -1811,5 +1811,9 @@ public class OSChinaApi {
         if (pagetoken != null)
             params.put("pageToken", pagetoken);
         ApiHttpClient.get("action/apiv2/favorites", params, handler);
+    }
+
+    public static void getShakePresent(long timestamp, long userId, String signature) {
+
     }
 }
