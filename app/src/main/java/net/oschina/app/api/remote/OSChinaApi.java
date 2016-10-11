@@ -1813,7 +1813,28 @@ public class OSChinaApi {
         ApiHttpClient.get("action/apiv2/favorites", params, handler);
     }
 
-    public static void getShakePresent(long timestamp, long userId, String signature) {
+    /**
+     * 摇一摇(抽奖)
+     *
+     * @param timestamp 当前摇一摇的时间戳
+     * @param appToken  App唯一校验
+     * @param signature 加密后的字符串
+     * @param handler
+     */
+    public static void getShakePresent(long timestamp, String appToken, String signature, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("timestamp", timestamp);
+        params.put("appToken", appToken);
+        params.put("signature", signature);
+        ApiHttpClient.post("action/apiv2/shake_present", params, handler);
+    }
 
+    /**
+     * 摇一摇(综合)
+     *
+     * @param handler
+     */
+    public static void getShakeNews(TextHttpResponseHandler handler) {
+        ApiHttpClient.get("action/apiv2/shake_news", handler);
     }
 }
