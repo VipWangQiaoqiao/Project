@@ -7,7 +7,6 @@ import android.text.Editable;
 import android.view.KeyEvent;
 import android.view.View;
 
-import com.umeng.socialize.sso.UMSsoHandler;
 
 import net.oschina.app.R;
 import net.oschina.app.base.BaseActivity;
@@ -242,10 +241,10 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (currentFragment instanceof CommonDetailFragment) {
-            UMSsoHandler ssoHandler = ((CommonDetailFragment) currentFragment).getDialog().getController().getConfig().getSsoHandler(requestCode);
-            if (ssoHandler != null) {
-                ssoHandler.authorizeCallBack(requestCode, resultCode, data);
-            }
+            //UMSsoHandler ssoHandler = ((CommonDetailFragment) currentFragment).getDialog().getController().getConfig().getSsoHandler(requestCode);
+          //  if (ssoHandler != null) {
+            //    ssoHandler.authorizeCallBack(requestCode, resultCode, data);
+          //  }
         }
     }
 }

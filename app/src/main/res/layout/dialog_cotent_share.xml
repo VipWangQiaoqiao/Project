@@ -27,7 +27,7 @@
             <TextView
                 style="@style/dialog_content_share_text"
                 android:drawableTop="@drawable/share_icon_wechat_selector"
-                android:text="@string/platform_weichat" />
+                android:text="@string/platform_wechat" />
         </LinearLayout>
 
         <LinearLayout

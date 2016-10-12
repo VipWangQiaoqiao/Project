@@ -24,7 +24,7 @@
     <dimen name="umeng_socialize_pad_window_height">350dip</dimen>
     <dimen name="umeng_socialize_pad_window_width">580dip</dimen>
 
-    <string name="umeng_socialize_share_content">友盟社会化组件（SDK）让移动应用快速整合社交分享功能，我们简化了社交平台的接入，为开发者提供坚实的基础服务。（一）支持各大主流社交平台， 
+    <string name="umeng_socialize_share_content">友盟社会化组件（SDK）让移动应用快速整合社交分享功能，我们简化了社交平台的接入，为开发者提供坚实的基础服务。（一）支持各大主流社交平台，
 												（二）支持图片、文字、gif动图、音频、视频；@好友，关注官方微博等功能。
 												（三）提供详尽的后台用户社交行为分析。www.umeng.com/social</string>
     <string name="umeng_socialize_login_qq">QQ空间</string>
