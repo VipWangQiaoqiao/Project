@@ -22,4 +22,10 @@ public class ShakePresentActivity extends BaseBackActivity {
     protected int getContentView() {
         return R.layout.activity_shake_present;
     }
+
+    @Override
+    protected void initWidget() {
+        super.initWidget();
+        addFragment(R.id.fl_content, ShakeNewsFragment.newInstance());
+    }
 }

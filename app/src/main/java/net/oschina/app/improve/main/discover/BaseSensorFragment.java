@@ -26,7 +26,7 @@ public abstract class BaseSensorFragment extends BaseFragment implements SensorE
     private float lastZ;
     private long lastUpdateTime;
 
-    private boolean mLoading;
+    protected boolean mLoading;
 
     @Override
     protected void initWidget(View root) {
@@ -64,6 +64,7 @@ public abstract class BaseSensorFragment extends BaseFragment implements SensorE
         double speed = (Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ
                 * deltaZ) / timeInterval) * 100;
         if (speed >= SPEED_SHRESHOLD && !mLoading) {
+            mLoading = true;
             mVibrator.vibrate(300);
             onShake();
         }

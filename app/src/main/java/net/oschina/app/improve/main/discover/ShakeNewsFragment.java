@@ -1,5 +1,7 @@
 package net.oschina.app.improve.main.discover;
 
+import android.util.Log;
+
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.R;
@@ -29,12 +31,18 @@ public class ShakeNewsFragment extends BaseSensorFragment {
         OSChinaApi.getShakeNews(new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-
+                Log.e("onFailure", responseString + "");
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                Log.e("onSuccess", responseString);
+            }
 
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                mLoading = false;
             }
         });
     }
