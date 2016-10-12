@@ -1,5 +1,7 @@
 package net.oschina.app.improve.main.discover;
 
+import android.util.Log;
+
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.R;
@@ -12,29 +14,35 @@ import cz.msebera.android.httpclient.Header;
  * on 2016/10/11.
  */
 
-public class ShakePresentFragment extends BaseSensorFragment {
+public class ShakeNewsFragment extends BaseSensorFragment {
 
-    public static ShakePresentFragment newInstance() {
-        ShakePresentFragment fragment = new ShakePresentFragment();
+    public static ShakeNewsFragment newInstance() {
+        ShakeNewsFragment fragment = new ShakeNewsFragment();
         return fragment;
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_shake_present;
+        return R.layout.fragment_shake_news;
     }
 
     @Override
     public void onShake() {
-        OSChinaApi.getShakePresent(0, "", "", new TextHttpResponseHandler() {
+        OSChinaApi.getShakeNews(new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-
+                Log.e("onFailure", responseString + "");
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                Log.e("onSuccess", responseString);
+            }
 
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                mLoading = false;
             }
         });
     }
