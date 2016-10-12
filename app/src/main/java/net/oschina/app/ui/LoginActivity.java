@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -13,6 +14,11 @@ import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
+import com.sina.weibo.sdk.auth.AuthInfo;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+import com.sina.weibo.sdk.auth.WeiboAuthListener;
+import com.sina.weibo.sdk.auth.sso.SsoHandler;
+import com.sina.weibo.sdk.exception.WeiboException;
 import com.tencent.mm.sdk.modelmsg.SendAuth;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
@@ -32,6 +38,7 @@ import net.oschina.app.bean.OpenIdCatalog;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.improve.bean.UserV2;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.login.constant.SinaConstant;
 import net.oschina.app.improve.user.fragments.NewUserInfoFragment;
 import net.oschina.app.util.CyptoUtils;
 import net.oschina.app.util.DialogHelp;
@@ -39,6 +46,8 @@ import net.oschina.app.util.TDevice;
 import net.oschina.app.util.TLog;
 import net.oschina.app.util.XmlUtils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.kymjs.kjframe.http.HttpConfig;
 
 import java.lang.reflect.Type;
@@ -279,6 +288,66 @@ public class LoginActivity extends BaseActivity implements IUiListener {
      * 新浪登录
      */
     private void sinaLogin() {
+
+        // 创建授权认证信息
+        AuthInfo authInfo = new AuthInfo(this, null, SinaConstant.REDIRECT_URL,
+                SinaConstant.SCOPE);
+
+        SsoHandler ssoHandler = new SsoHandler(this, authInfo);
+
+        ssoHandler.authorizeClientSso(new WeiboAuthListener() {
+
+                                          @Override
+                                          public void onComplete(Bundle bundle) {
+
+
+                                              Oauth2AccessToken oauth2AccessToken =
+                                                      Oauth2AccessToken.parseAccessToken(bundle);
+
+                                              if (oauth2AccessToken.isSessionValid()) {
+
+                                              } else {
+
+                                              }
+                                              new UsersAPI(oauth2AccessToken);
+
+                                              JSONObject jsonObject = new JSONObject();
+                                              try {
+
+                                                  jsonObject.put("openid", "");
+                                                  jsonObject.put("favourites_count", "");
+                                                  jsonObject.put("location", "");
+                                                  jsonObject.put("description", "");
+                                                  jsonObject.put("verified", "");
+                                                  jsonObject.put("friends_count", "");
+                                                  jsonObject.put("gender", "");
+                                                  jsonObject.put("screen_name", "");
+                                                  jsonObject.put("profile_image_url", "");
+                                                  jsonObject.put("access_token", "");
+
+                                              } catch (JSONException e) {
+                                                  e.printStackTrace();
+                                              }
+
+                                              openIdLogin(OpenIdCatalog.WEIBO, jsonObject
+                                                      .toString());
+
+                                          }
+
+                                          @Override
+                                          public void onWeiboException(WeiboException e) {
+                                              AppContext.showToast("新浪授权失败");
+                                          }
+
+                                          @Override
+                                          public void onCancel() {
+                                              AppContext.showToast("已取消新浪登陆");
+                                          }
+                                      }
+
+        );
+
+
         // if (mController == null)
         // mController = UMServiceFactory.getUMSocialService("com.umeng.login");
         loginType = LOGIN_TYPE_SINA;
@@ -408,6 +477,7 @@ public class LoginActivity extends BaseActivity implements IUiListener {
     // 登陆实体类
     public static final String BUNDLE_KEY_LOGINBEAN = "bundle_key_loginbean";
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -444,6 +514,7 @@ public class LoginActivity extends BaseActivity implements IUiListener {
 
 
     // 处理loginBean
+    @SuppressWarnings("deprecation")
     private void handleLoginBean(LoginUserBean loginUserBean, Header[] headers) {
         if (loginUserBean.getResult().OK()) {
             AsyncHttpClient client = ApiHttpClient.getHttpClient();
