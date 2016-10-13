@@ -1,6 +1,6 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="Widget" />
+    <style name="Widget"/>
 
     <style name="Widget.ProgressBar">
         <item name="android:indeterminateDrawable">@drawable/progress_medium_holo</item>
@@ -197,6 +197,26 @@
 
     <style name="dialog_common" parent="@style/Theme.AppCompat.Dialog">
         <item name="android:windowBackground">@mipmap/dialog_background</item>
+    </style>
+
+    <style name="share_dialog" parent="@style/Theme.AppCompat.DayNight.Dialog.Alert">
+        <item name="android:windowTitleStyle">@style/RtlOverlay.DialogWindowTitle.AppCompat</item>
+        <item name="android:windowTitleBackgroundStyle">
+            @style/Base.DialogWindowTitleBackground.AppCompat
+        </item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@style/Animation.AppCompat.Dialog</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowActionModeOverlay">true</item>>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:textColor">@color/main_gray</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+
+
     </style>
 
     <style name="dialog_bottom" parent="@style/dialog_common">

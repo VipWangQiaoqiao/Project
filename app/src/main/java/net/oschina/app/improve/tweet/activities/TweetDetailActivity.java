@@ -10,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,10 +35,11 @@ import net.oschina.app.improve.bean.simple.TweetComment;
 import net.oschina.app.improve.bean.simple.TweetLike;
 import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
+import net.oschina.app.improve.share.bean.Share;
+import net.oschina.app.improve.share.widget.ShareDialogBuilder;
 import net.oschina.app.improve.tweet.contract.TweetDetailContract;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.improve.widget.TweetPicturesLayout;
-import net.oschina.app.ui.ShareDialog;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.PlatfromUtil;
 import net.oschina.app.util.StringUtils;
@@ -99,7 +99,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
     private Tweet tweet;
     private List<TweetComment> replies = new ArrayList<>();
     private Dialog dialog;
-    private ShareDialog mShareDialog;
+   // private ShareDialog mShareDialog;
     private RecordButtonUtil mRecordUtil;
     private TextHttpResponseHandler publishAdmireHandler;
     private TextHttpResponseHandler publishCommentHandler;
@@ -142,8 +142,10 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         // admire tweet
         publishAdmireHandler = new TextHttpResponseHandler() {
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Toast.makeText(TweetDetailActivity.this, ivThumbup.isSelected() ? "取消失败" : "点赞失败", Toast.LENGTH_SHORT).show();
+            public void onFailure(int statusCode, Header[] headers, String responseString,
+                                  Throwable throwable) {
+                Toast.makeText(TweetDetailActivity.this, ivThumbup.isSelected() ? "取消失败" :
+                        "点赞失败", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -169,7 +171,8 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         // publish tweet comment
         publishCommentHandler = new TextHttpResponseHandler() {
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            public void onFailure(int statusCode, Header[] headers, String responseString,
+                                  Throwable throwable) {
                 Toast.makeText(TweetDetailActivity.this, "评论失败", Toast.LENGTH_SHORT).show();
                 dismissDialog();
             }
@@ -187,7 +190,8 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
 
         OSChinaApi.getTweetDetail(tweet.getId(), new TextHttpResponseHandler() {
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            public void onFailure(int statusCode, Header[] headers, String responseString,
+                                  Throwable throwable) {
                 Toast.makeText(TweetDetailActivity.this, "获取数据失败", Toast.LENGTH_SHORT).show();
             }
 
@@ -250,13 +254,14 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
             public void onFinalBackSpace(View v) {
                 if (replies == null || replies.size() == 0) return;
                 replies.remove(replies.size() - 1);
-                if (replies.size() == 0){
+                if (replies.size() == 0) {
                     mViewInput.setHint("发表评论");
                     return;
                 }
                 mViewInput.setHint("回复: @" + replies.get(0).getAuthor().getName());
-                if (replies.size() == 2){
-                    mViewInput.setHint(mViewInput.getHint() + " @" + replies.get(1).getAuthor().getName());
+                if (replies.size() == 2) {
+                    mViewInput.setHint(mViewInput.getHint() + " @" + replies.get(1).getAuthor()
+                            .getName());
                 }
             }
         });
@@ -309,18 +314,30 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.menu_share:
                 if (tweet == null || tweet.getId() <= 0) break;
-                if (mShareDialog == null) {
-                    mShareDialog = new ShareDialog(this);
-                }
-                mShareDialog.setCancelable(true);
-                mShareDialog.setCanceledOnTouchOutside(true);
-                mShareDialog.setTitle(R.string.share_to);
-                mShareDialog.setShareInfo(tweet.getAuthor().getName() + "的动弹 - 开源中国社区",
-                        tweet.getContent(), tweet.getHref());
-                mShareDialog.show();
+//                if (mShareDialog == null) {
+//                   mShareDialog = new ShareDialog(this);
+                //              }
+//                mShareDialog.setCancelable(true);
+//                mShareDialog.setCanceledOnTouchOutside(true);
+//                mShareDialog.setTitle(R.string.share_to);
+//                mShareDialog.setShareInfo(tweet.getAuthor().getName() + "的动弹 - 开源中国社区",
+//                        tweet.getContent(), tweet.getHref());
+//                mShareDialog.show();
+
+                ShareDialogBuilder builder = new ShareDialogBuilder(this, R.style.share_dialog);
+
+                Share share = new Share();
+                share.setTitle(tweet.getAuthor().getName() + "的动弹 - 开源中国社区 ");
+                share.setContent(tweet.getContent());
+                share.setUrl(tweet.getHref());
+
+                builder.boundActivity(this).addShare(share).setTitle(R.string.share_to)
+                        .setView(R.layout
+                                .dialog_share_main).create().show();
+
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -383,7 +400,8 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
             onPortraitClickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    UIHelper.showUserCenter(TweetDetailActivity.this, tweet.getAuthor().getId(), tweet.getAuthor().getName());
+                    UIHelper.showUserCenter(TweetDetailActivity.this, tweet.getAuthor().getId(),
+                            tweet.getAuthor().getName());
                 }
             };
         }
@@ -399,12 +417,12 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
     public void toReply(TweetComment comment) {
         mDelegation.notifyWrapper();
         if (replies.size() >= 3) return;
-        for (TweetComment cmm : replies){
+        for (TweetComment cmm : replies) {
             if (cmm.getAuthor().getId() == comment.getAuthor().getId()) return;
         }
         if (replies.size() == 0) {
             mViewInput.setHint("回复 @" + comment.getAuthor().getName());
-        }else {
+        } else {
             mViewInput.setHint(mViewInput.getHint() + " @" + comment.getAuthor().getName());
         }
         this.replies.add(comment);

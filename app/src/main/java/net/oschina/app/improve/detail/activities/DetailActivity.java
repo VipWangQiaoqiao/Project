@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
-import com.umeng.socialize.sso.UMSsoHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -27,8 +26,9 @@ import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.detail.contract.DetailContract;
 import net.oschina.app.improve.detail.fragments.DetailFragment;
+import net.oschina.app.improve.share.bean.Share;
+import net.oschina.app.improve.share.widget.ShareDialogBuilder;
 import net.oschina.app.ui.ReportDialog;
-import net.oschina.app.ui.ShareDialog;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.TDevice;
@@ -43,8 +43,11 @@ import cz.msebera.android.httpclient.Header;
  * on 16/6/20.
  */
 
-public abstract class DetailActivity<Data, DataView extends DetailContract.View> extends BaseBackActivity implements DetailContract.Operator<Data, DataView> {
+public abstract class DetailActivity<Data, DataView extends DetailContract.View> extends
+                                                                                 BaseBackActivity
+        implements DetailContract.Operator<Data, DataView> {
 
+    private static final String TAG = "DetailActivity";
     long mDataId;
     Data mData;
     DataView mView;
@@ -52,7 +55,7 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
     TextView mCommentCountView;
 
     private ProgressDialog mDialog;
-    private ShareDialog mShareDialog;
+    //  private ShareDialog mShareDialog;
 
     public long getDataId() {
         return mDataId;
@@ -148,7 +151,8 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
     AsyncHttpResponseHandler getRequestHandler() {
         return new TextHttpResponseHandler() {
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            public void onFailure(int statusCode, Header[] headers, String responseString,
+                                  Throwable throwable) {
                 throwable.printStackTrace();
                 if (isDestroy())
                     return;
@@ -283,17 +287,24 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
     }
 
     protected void toShare(String title, String content, String url) {
-        ShareDialog dialog = mShareDialog;
-        if (dialog == null) {
-            dialog = new ShareDialog(this);
-            mShareDialog = dialog;
-        }
-        dialog.setCancelable(true);
-        dialog.setCanceledOnTouchOutside(true);
-        dialog.setTitle(R.string.share_to);
-        dialog.setShareInfo(title, content, url);
-        dialog.show();
+
+        ShareDialogBuilder builder = new ShareDialogBuilder(this, R.style.share_dialog);
+
+        Share share = new Share();
+        share.setTitle(title);
+        share.setContent(content);
+        share.setUrl(url);
+
+        builder.boundActivity(DetailActivity.this)
+                .addShare(share)
+                .setTitle(R.string.share_to)
+                .setView(R.layout.dialog_share_main)
+                .create()
+                .show();
+
+
     }
+
 
     protected void toReport(long id, String href, byte reportType) {
 
@@ -345,28 +356,29 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
     }
 
 
-    protected void hideShareDialog() {
-        ShareDialog dialog = mShareDialog;
-        if (dialog != null) {
-            mShareDialog = null;
-            try {
-                dialog.dismiss();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
+//    protected void hideShareDialog() {
+//        ShareDialog dialog = mShareDialog;
+//        if (dialog != null) {
+//            mShareDialog = null;
+//            try {
+//                dialog.dismiss();
+//            } catch (Exception ex) {
+//                ex.printStackTrace();
+//            }
+//        }
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        final ShareDialog shareDialog = mShareDialog;
-        if (shareDialog != null) {
-            UMSsoHandler ssoHandler = shareDialog.getController().getConfig().getSsoHandler(requestCode);
-            if (ssoHandler != null) {
-                ssoHandler.authorizeCallBack(requestCode, resultCode, data);
-            }
-        }
+        //final ShareDialog shareDialog = mShareDialog;
+        // if (shareDialog != null) {
+        //  UMSsoHandler ssoHandler = shareDialog.getController().getConfig().getSsoHandler
+        // (requestCode);
+        //if (ssoHandler != null) {
+        // ssoHandler.authorizeCallBack(requestCode, resultCode, data);
+        // }
+        // }
     }
 
     /**
@@ -396,7 +408,7 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
     protected void onDestroy() {
         super.onDestroy();
         hideWaitDialog();
-        hideShareDialog();
+        // hideShareDialog();
         mEmptyLayout = null;
         mData = null;
     }
