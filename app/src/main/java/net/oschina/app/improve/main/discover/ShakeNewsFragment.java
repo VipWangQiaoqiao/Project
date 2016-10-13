@@ -22,7 +22,8 @@ import java.lang.reflect.Type;
 public class ShakeNewsFragment extends BaseSensorFragment<ShakeNews> {
 
     private ImageView iv_news;
-    private TextView tv_news_name,tv_time;
+    private TextView tv_news_name, tv_time;
+
     public static ShakeNewsFragment newInstance() {
         ShakeNewsFragment fragment = new ShakeNewsFragment();
         return fragment;
@@ -39,7 +40,7 @@ public class ShakeNewsFragment extends BaseSensorFragment<ShakeNews> {
         mShakeView = mInflater.inflate(R.layout.view_news, null);
         iv_news = (ImageView) mShakeView.findViewById(R.id.iv_news);
         tv_news_name = (TextView) mShakeView.findViewById(R.id.tv_news_name);
-        tv_time = (TextView)mShakeView.findViewById(R.id.tv_time);
+        tv_time = (TextView) mShakeView.findViewById(R.id.tv_time);
     }
 
     @Override
@@ -53,6 +54,18 @@ public class ShakeNewsFragment extends BaseSensorFragment<ShakeNews> {
         getImgLoader().load(news.getImg()).placeholder(R.mipmap.ic_split_graph).into(iv_news);
         tv_news_name.setText(news.getName());
         tv_time.setText(StringUtils.formatSomeAgo(news.getPubDate()));
+    }
+
+    @Override
+    protected void onRequestStart() {
+        super.onRequestStart();
+        mTvState.setText("正在搜寻资讯");
+    }
+
+    @Override
+    protected void onFailure() {
+        super.onFailure();
+        mTvState.setText("很遗憾，你没有摇到资讯，请再试一次");
     }
 
     @Override

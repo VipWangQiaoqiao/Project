@@ -73,10 +73,7 @@ public abstract class BaseSensorFragment<T> extends BaseFragment implements Sens
             @Override
             public void onStart() {
                 super.onStart();
-                mTvState.setVisibility(View.VISIBLE);
-                mTvState.setText("正在搜寻礼品");
-                mLoadingView.setVisibility(View.VISIBLE);
-                mLoadingView.start();
+                BaseSensorFragment.this.onRequestStart();
             }
 
             @Override
@@ -90,9 +87,6 @@ public abstract class BaseSensorFragment<T> extends BaseFragment implements Sens
                     mBean = new GsonBuilder().create().fromJson(responseString, getType());
                     if (mBean != null && mBean.isSuccess()) {
                         BaseSensorFragment.this.onSuccess();
-                        mLoadingView.stop();
-                        mLoadingView.setVisibility(View.GONE);
-                        mTvState.setVisibility(View.GONE);
                     } else {
                         onFailure(statusCode, headers, responseString, new Exception());
                     }
@@ -120,6 +114,18 @@ public abstract class BaseSensorFragment<T> extends BaseFragment implements Sens
 
     }
 
+
+    protected void initShakeView() {
+
+    }
+
+    protected void onRequestStart() {
+        mTvState.setVisibility(View.VISIBLE);
+        mTvState.setText("正在搜寻礼品");
+        mLoadingView.setVisibility(View.VISIBLE);
+        mLoadingView.start();
+    }
+
     protected void onSuccess() {
         mCardView.removeAllViews();
         initShakeView();
@@ -129,11 +135,12 @@ public abstract class BaseSensorFragment<T> extends BaseFragment implements Sens
         animation.setDuration(320);
         animation.setFillAfter(true);
         mShakeView.startAnimation(animation);
+
+        mLoadingView.stop();
+        mLoadingView.setVisibility(View.GONE);
+        mTvState.setVisibility(View.GONE);
     }
 
-    protected void initShakeView() {
-
-    }
 
     protected void onFailure() {
         mTvState.setText("很遗憾，你没有摇到礼品，请再试一次");
