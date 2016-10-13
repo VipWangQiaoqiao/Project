@@ -28,6 +28,8 @@ public class ShakePresentActivity extends BaseBackActivity implements View.OnCli
     private ShakePresentFragment mPresentFragment;
     private ShakeNewsFragment mNewsFragment;
 
+    private boolean mIsRegisterPresent;
+
     public static void show(Context context) {
         context.startActivity(new Intent(context, ShakePresentActivity.class));
     }
@@ -44,7 +46,8 @@ public class ShakePresentActivity extends BaseBackActivity implements View.OnCli
         mPresentFragment = ShakePresentFragment.newInstance();
         addFragment(R.id.fl_content, mNewsFragment);
         addFragment(R.id.fl_content, mPresentFragment);
-
+        setState(ll_shake_present, true);
+        mIsRegisterPresent = true;
     }
 
     @OnClick({R.id.ll_shake_present, R.id.ll_shake_news})
@@ -56,20 +59,32 @@ public class ShakePresentActivity extends BaseBackActivity implements View.OnCli
             mPresentFragment.registerSensor();
             setState(ll_shake_news, false);
             setState(ll_shake_present, true);
+            mIsRegisterPresent = true;
         } else if (v.getId() == R.id.ll_shake_news) {
             addFragment(R.id.fl_content, mNewsFragment);
             mPresentFragment.unregisterSensor();
             mNewsFragment.registerSensor();
             setState(ll_shake_present, false);
             setState(ll_shake_news, true);
+            mIsRegisterPresent = false;
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mPresentFragment.unregisterSensor();
+        mNewsFragment.unregisterSensor();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mPresentFragment.registerSensor();
-        setState(ll_shake_present, true);
+        if (mIsRegisterPresent) {
+            mPresentFragment.registerSensor();
+        } else {
+            mNewsFragment.registerSensor();
+        }
     }
 
     @Override

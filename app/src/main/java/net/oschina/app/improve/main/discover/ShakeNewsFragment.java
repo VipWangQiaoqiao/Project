@@ -8,9 +8,11 @@ import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.bean.Banner;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.shake.ShakeNews;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;
 
@@ -41,6 +43,18 @@ public class ShakeNewsFragment extends BaseSensorFragment<ShakeNews> {
         iv_news = (ImageView) mShakeView.findViewById(R.id.iv_news);
         tv_news_name = (TextView) mShakeView.findViewById(R.id.tv_news_name);
         tv_time = (TextView) mShakeView.findViewById(R.id.tv_time);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (mBean != null) {
+            Banner banner = new Banner();
+            ShakeNews news = mBean.getResult();
+            banner.setId(news.getId());
+            banner.setType(news.getType());
+            banner.setName(news.getName());
+            UIHelper.showBannerDetail(mContext, banner);
+        }
     }
 
     @Override

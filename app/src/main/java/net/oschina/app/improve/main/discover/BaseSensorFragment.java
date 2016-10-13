@@ -6,6 +6,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v7.widget.CardView;
 import android.view.View;
@@ -31,7 +32,7 @@ import cz.msebera.android.httpclient.Header;
  * on 2016/10/12.
  */
 
-public abstract class BaseSensorFragment<T> extends BaseFragment implements SensorEventListener {
+public abstract class BaseSensorFragment<T> extends BaseFragment implements SensorEventListener ,View.OnClickListener{
     protected SensorManager mSensor = null;
     protected Vibrator mVibrator = null;
     public static final int SPEED_SHRESHOLD = 45;// 这个值越大需要越大的力气来摇晃手机
@@ -58,12 +59,20 @@ public abstract class BaseSensorFragment<T> extends BaseFragment implements Sens
     @Bind(R.id.loading)
     Loading mLoadingView;
 
+    private int timeDelay = 3;
+
+    @Bind(R.id.tv_time)
+    TextView tv_time;
+
+    private Handler mTimeHandler;
+
     @Override
     protected void initWidget(View root) {
         super.initWidget(root);
         mSensor = (SensorManager) getActivity()
                 .getSystemService(Context.SENSOR_SERVICE);
         mVibrator = (Vibrator) getActivity().getSystemService(Service.VIBRATOR_SERVICE);
+        mCardView.setOnClickListener(this);
     }
 
     @Override
@@ -78,11 +87,15 @@ public abstract class BaseSensorFragment<T> extends BaseFragment implements Sens
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                BaseSensorFragment.this.onFailure();
+                if (mContext != null) {
+                    BaseSensorFragment.this.onFailure();
+                }
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                if (mContext == null)
+                    return;
                 try {
                     mBean = new GsonBuilder().create().fromJson(responseString, getType());
                     if (mBean != null && mBean.isSuccess()) {
@@ -99,15 +112,43 @@ public abstract class BaseSensorFragment<T> extends BaseFragment implements Sens
             @Override
             public void onFinish() {
                 super.onFinish();
-                mLoadingView.setVisibility(View.GONE);
-                mRoot.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mLoading = false;
-                    }
-                }, 5000);
+                if (mContext != null) {
+                    if (mTimeHandler == null)
+                        mTimeHandler = new Handler();
+                    mLoadingView.setVisibility(View.GONE);
+                    tv_time.setText(String.format("请%d秒之后再试", timeDelay));
+                    tv_time.setVisibility(View.VISIBLE);
+                    mTimeHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            --timeDelay;
+                            if (tv_time == null)
+                                return;
+                            tv_time.setText(String.format("请%d秒之后再试", timeDelay));
+                            if (timeDelay > 0)
+                                mTimeHandler.postDelayed(this, 1000);
+                            else {
+                                tv_time.setVisibility(View.GONE);
+                                mLoading = false;
+                                timeDelay = 3;
+                            }
+
+                        }
+                    }, 1000);
+                }
             }
         };
+    }
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mTimeHandler = null;
     }
 
     public void onShake() {

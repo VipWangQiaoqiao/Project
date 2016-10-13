@@ -1,5 +1,6 @@
 package net.oschina.app.improve.base.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -25,10 +26,23 @@ import butterknife.ButterKnife;
 
 @SuppressWarnings("WeakerAccess")
 public abstract class BaseFragment extends Fragment {
+    protected Context mContext;
     protected View mRoot;
     protected Bundle mBundle;
     private RequestManager mImgLoader;
     protected LayoutInflater mInflater;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mContext = null;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
