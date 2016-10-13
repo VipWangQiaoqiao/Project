@@ -57,7 +57,7 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
     @Override
     public void onShake() {
         if (!AppContext.getInstance().isLogin()) {
-            Toast.makeText(mContext, "摇一摇需要登陆", Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, "摇礼品需要登陆", Toast.LENGTH_LONG).show();
             return;
         }
         String appToken = Verifier.getPrivateToken(getActivity().getApplication());
