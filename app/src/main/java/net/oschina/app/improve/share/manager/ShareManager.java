@@ -9,9 +9,9 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.sina.weibo.sdk.api.WebpageObject;
-import com.sina.weibo.sdk.api.WeiboMessage;
+import com.sina.weibo.sdk.api.WeiboMultiMessage;
 import com.sina.weibo.sdk.api.share.IWeiboShareAPI;
-import com.sina.weibo.sdk.api.share.SendMessageToWeiboRequest;
+import com.sina.weibo.sdk.api.share.SendMultiMessageToWeiboRequest;
 import com.sina.weibo.sdk.api.share.WeiboShareSDK;
 import com.sina.weibo.sdk.utils.Utility;
 import com.tencent.connect.share.QQShare;
@@ -36,7 +36,6 @@ public class ShareManager {
     private static final String TAG = "ShareManager";
     private IWXAPI mIWXAPI;
     private Tencent mTencent;
-    private IWeiboShareAPI mIWeiBoShareAPI;
 
     private ShareManager() {
     }
@@ -65,11 +64,10 @@ public class ShareManager {
 
     public ShareManager registerQQShare(Context context) {
         this.mTencent = Tencent.createInstance(ShareConstant.QQ_APP_ID, context);
-        Log.e(TAG, "registerQQShare: ---->" + mTencent.toString());
         return this;
     }
 
-    public ShareManager registerSinaShare(Context context) {
+    public ShareManager registerSinaShare(Context context, Activity activity, Share share) {
 
         // 创建微博分享接口实例
         IWeiboShareAPI weiBoAPI = WeiboShareSDK.createWeiboAPI(context, ShareConstant.WB_APP_KEY);
@@ -77,9 +75,10 @@ public class ShareManager {
         // 注册第三方应用到微博客户端中，注册成功后该应用将显示在微博的应用列表中。
         // 但该附件栏集成分享权限需要合作申请，详情请查看 Demo 提示
         // NOTE：请务必提前注册，即界面初始化的时候或是应用程序初始化时，进行注册
-        weiBoAPI.registerApp();
-
-        this.mIWeiBoShareAPI = weiBoAPI;
+        boolean registerApp = weiBoAPI.registerApp();
+        if (registerApp) {
+            shareWeiBoWeb(weiBoAPI, activity, share);
+        }
 
         return this;
     }
@@ -126,30 +125,33 @@ public class ShareManager {
         mTencent.shareToQQ(context, params, null);
     }
 
-    public void shareWeiBoWeb(Activity activity, Share share) {
+    public void shareWeiBoWeb(IWeiboShareAPI shareAPI, Activity activity, Share share) {
 
         // 1. 初始化微博的分享消息
-        // 用户可以分享文本、图片、网页、音乐、视频中的一种
-        WeiboMessage weiboMessage = new WeiboMessage();
-        WebpageObject mediaObject = new WebpageObject();
-        mediaObject.identify = Utility.generateGUID();
-        mediaObject.title = share.getTitle();
-        mediaObject.description = share.getTitle();
+        // 分享网页
+        WebpageObject webpageObject = new WebpageObject();
 
-        Bitmap bitmap = getShareBitmap(activity);
+        webpageObject.identify = Utility.generateGUID();
+        webpageObject.title = share.getTitle();
+        webpageObject.description = share.getTitle();
+
+        Bitmap bitmap = getShareBitmap(activity.getApplicationContext());
         // 设置 Bitmap 类型的图片到视频对象里         设置缩略图。 注意：最终压缩过的缩略图大小不得超过 32kb。
-        mediaObject.setThumbImage(bitmap);
-        mediaObject.actionUrl = share.getUrl();
-        mediaObject.defaultText = " -  开源中国客户端";
+        webpageObject.setThumbImage(bitmap);
+        webpageObject.actionUrl = share.getUrl();
+        webpageObject.defaultText = " -  开源中国客户端";
 
+        WeiboMultiMessage weiboMessage = new WeiboMultiMessage();
+
+        weiboMessage.mediaObject = webpageObject;
         // 2. 初始化从第三方到微博的消息请求
-        SendMessageToWeiboRequest request = new SendMessageToWeiboRequest();
+        SendMultiMessageToWeiboRequest request = new SendMultiMessageToWeiboRequest();
         // 用transaction唯一标识一个请求
-        request.transaction = buildTransaction("web");
-        request.message = weiboMessage;
+        request.transaction = String.valueOf(System.currentTimeMillis());
+        request.multiMessage = weiboMessage;
 
         // 3. 发送请求消息到微博，唤起微博分享界面
-        mIWeiBoShareAPI.sendRequest(activity, request);
+        shareAPI.sendRequest(activity, request);
     }
 
 

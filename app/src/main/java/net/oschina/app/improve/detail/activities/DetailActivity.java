@@ -47,6 +47,7 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
                                                                                  BaseBackActivity
         implements DetailContract.Operator<Data, DataView> {
 
+    private static final String TAG = "DetailActivity";
     long mDataId;
     Data mData;
     DataView mView;
@@ -294,22 +295,16 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
         share.setContent(content);
         share.setUrl(url);
 
-        builder.boundActivity(DetailActivity.this).addShare(share).setTitle(R.string.share_to)
-                .setView(R.layout
-                        .dialog_share_main).create().show();
+        builder.boundActivity(DetailActivity.this)
+                .addShare(share)
+                .setTitle(R.string.share_to)
+                .setView(R.layout.dialog_share_main)
+                .create()
+                .show();
 
 
-//        ShareDialog dialog = mShareDialog;
-//        if (dialog == null) {
-//            dialog = new ShareDialog(this);
-//            mShareDialog = dialog;
-//        }
-//        dialog.setCancelable(true);
-//        dialog.setCanceledOnTouchOutside(true);
-//        dialog.setTitle(R.string.share_to);
-//        dialog.setShareInfo(title, content, url);
-//        dialog.show();
     }
+
 
     protected void toReport(long id, String href, byte reportType) {
 

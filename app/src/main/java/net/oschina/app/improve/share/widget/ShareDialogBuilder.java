@@ -194,8 +194,7 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements DialogInt
                 break;
             //新浪微博
             case 2:
-                shareManager.registerSinaShare(getContext());
-                shareManager.shareWeiBoWeb(mActivity, share);
+                shareManager.registerSinaShare(getContext().getApplicationContext(), mActivity, share);
                 break;
             //QQ
             case 3:

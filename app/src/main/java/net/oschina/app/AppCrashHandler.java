@@ -34,8 +34,9 @@ public class AppCrashHandler implements Thread.UncaughtExceptionHandler {
         if (!handleException(ex) && mDefaultHandler != null) {
             mDefaultHandler.uncaughtException(thread, ex);
         } else {
-            android.os.Process.killProcess(android.os.Process.myPid());
-            System.exit(1);
+            //android.os.Process.killProcess(android.os.Process.myPid());
+           // System.exit(1);
+            ex.printStackTrace();
         }
     }
 

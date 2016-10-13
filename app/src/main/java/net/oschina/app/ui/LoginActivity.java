@@ -19,6 +19,9 @@ import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
 import com.sina.weibo.sdk.auth.sso.SsoHandler;
 import com.sina.weibo.sdk.exception.WeiboException;
+import com.sina.weibo.sdk.net.AsyncWeiboRunner;
+import com.sina.weibo.sdk.net.RequestListener;
+import com.sina.weibo.sdk.net.WeiboParameters;
 import com.tencent.mm.sdk.modelmsg.SendAuth;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
@@ -38,7 +41,7 @@ import net.oschina.app.bean.OpenIdCatalog;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.improve.bean.UserV2;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.login.constant.SinaConstant;
+import net.oschina.app.improve.share.constant.ShareConstant;
 import net.oschina.app.improve.user.fragments.NewUserInfoFragment;
 import net.oschina.app.util.CyptoUtils;
 import net.oschina.app.util.DialogHelp;
@@ -87,6 +90,8 @@ public class LoginActivity extends BaseActivity implements IUiListener {
     private static final int LOGIN_TYPE_WX = 3;
 
     private int loginType;
+    private AuthInfo authInfo;
+    private SsoHandler ssoHandler;
 
     @Override
     protected int getLayoutId() {
@@ -290,60 +295,78 @@ public class LoginActivity extends BaseActivity implements IUiListener {
     private void sinaLogin() {
 
         // 创建授权认证信息
-        AuthInfo authInfo = new AuthInfo(this, null, SinaConstant.REDIRECT_URL,
-                SinaConstant.SCOPE);
+        authInfo = new AuthInfo(this, ShareConstant.WB_APP_KEY, ShareConstant.REDIRECT_URL,
+                null);
 
-        SsoHandler ssoHandler = new SsoHandler(this, authInfo);
+        ssoHandler = new SsoHandler(this, authInfo);
 
-        ssoHandler.authorizeClientSso(new WeiboAuthListener() {
+        ssoHandler.authorize(new WeiboAuthListener() {
 
-                                          @Override
-                                          public void onComplete(Bundle bundle) {
+                                 @Override
+                                 public void onComplete(Bundle bundle) {
+
+                                     final Oauth2AccessToken oauth2AccessToken =
+                                             Oauth2AccessToken.parseAccessToken(bundle);
+
+                                     if (oauth2AccessToken.isSessionValid()) {
+
+                                         WeiboParameters parameters = new WeiboParameters(ShareConstant.WB_APP_KEY);
+                                         parameters.put("uid", oauth2AccessToken.getUid());
+                                         parameters.put("access_token", oauth2AccessToken.getToken());
+
+                                         AsyncWeiboRunner asyncWeiboRunner = new AsyncWeiboRunner(LoginActivity.this);
+
+                                         String url = "https://api.weibo.com/2/users/show.json";
+                                         asyncWeiboRunner.requestAsync(url, parameters, "GET", new RequestListener() {
+                                             @Override
+                                             public void onComplete(String s) {
+
+                                                 try {
+                                                     JSONObject jsonObject = new JSONObject(s);
+
+                                                     jsonObject.put("openid", jsonObject.getLong("id"));
+
+                                                     String gender = jsonObject.getString("gender");
+                                                     jsonObject.remove("gender");
+                                                     if ("m".equals(gender)) {
+                                                         jsonObject.put("gender", 1);
+                                                     } else {
+                                                         jsonObject.put("gender", 2);
+                                                     }
+
+                                                     jsonObject.put("access_token", oauth2AccessToken.getToken());
+
+                                                     openIdLogin(OpenIdCatalog.WEIBO, jsonObject
+                                                             .toString());
+
+                                                 } catch (JSONException e) {
+                                                     e.printStackTrace();
+                                                 }
 
 
-                                              Oauth2AccessToken oauth2AccessToken =
-                                                      Oauth2AccessToken.parseAccessToken(bundle);
+                                             }
 
-                                              if (oauth2AccessToken.isSessionValid()) {
+                                             @Override
+                                             public void onWeiboException(WeiboException e) {
 
-                                              } else {
+                                             }
+                                         });
 
-                                              }
-                                              new UsersAPI(oauth2AccessToken);
 
-                                              JSONObject jsonObject = new JSONObject();
-                                              try {
+                                     }
 
-                                                  jsonObject.put("openid", "");
-                                                  jsonObject.put("favourites_count", "");
-                                                  jsonObject.put("location", "");
-                                                  jsonObject.put("description", "");
-                                                  jsonObject.put("verified", "");
-                                                  jsonObject.put("friends_count", "");
-                                                  jsonObject.put("gender", "");
-                                                  jsonObject.put("screen_name", "");
-                                                  jsonObject.put("profile_image_url", "");
-                                                  jsonObject.put("access_token", "");
+                                 }
 
-                                              } catch (JSONException e) {
-                                                  e.printStackTrace();
-                                              }
+                                 @Override
+                                 public void onWeiboException(WeiboException e) {
+                                     AppContext.showToast("新浪授权失败");
+                                 }
 
-                                              openIdLogin(OpenIdCatalog.WEIBO, jsonObject
-                                                      .toString());
-
-                                          }
-
-                                          @Override
-                                          public void onWeiboException(WeiboException e) {
-                                              AppContext.showToast("新浪授权失败");
-                                          }
-
-                                          @Override
-                                          public void onCancel() {
-                                              AppContext.showToast("已取消新浪登陆");
-                                          }
-                                      }
+                                 @Override
+                                 public void onCancel() {
+                                     AppContext.showToast("已取消新浪登陆");
+                                 }
+                             }
 
         );
 
@@ -481,10 +504,12 @@ public class LoginActivity extends BaseActivity implements IUiListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        Tencent tencent = Tencent.createInstance(AppConfig.APP_QQ_KEY, this);
-        //在某些低端机上调用登录后，由于内存紧张导致APP被系统回收，登录成功后无法成功回传数据。
-        // 解决办法
-        tencent.handleLoginData(data, this);
+        if (loginType == LOGIN_TYPE_QQ) {
+            Tencent tencent = Tencent.createInstance(AppConfig.APP_QQ_KEY, this);
+            //在某些低端机上调用登录后，由于内存紧张导致APP被系统回收，登录成功后无法成功回传数据。
+            // 解决办法
+            tencent.handleLoginData(data, this);
+        }
 
         super.onActivityResult(requestCode, resultCode, data);
         if (loginType == LOGIN_TYPE_SINA) {
@@ -492,6 +517,16 @@ public class LoginActivity extends BaseActivity implements IUiListener {
 //            if (ssoHandler != null) {
 //                ssoHandler.authorizeCallBack(requestCode, resultCode, data);
 //            }
+
+            // SSO 授权回调
+            // 重要：发起 SSO 登陆的 Activity 必须重写 onActivityResults
+            if (authInfo == null)
+                authInfo = new AuthInfo(this, ShareConstant.WB_APP_KEY, ShareConstant.REDIRECT_URL, "all");
+            if (ssoHandler == null)
+                ssoHandler = new SsoHandler(this, authInfo);
+            ssoHandler.authorizeCallBack(requestCode, resultCode, data);
+
+
         } else {
 
             switch (requestCode) {
