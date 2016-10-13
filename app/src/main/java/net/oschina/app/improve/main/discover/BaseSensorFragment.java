@@ -116,7 +116,7 @@ public abstract class BaseSensorFragment<T> extends BaseFragment implements Sens
                     if (mTimeHandler == null)
                         mTimeHandler = new Handler();
                     mLoadingView.setVisibility(View.GONE);
-                    tv_time.setText(String.format("请%d秒后再再摇一次", timeDelay));
+                    tv_time.setText(String.format("%d秒后可再摇一次", timeDelay));
                     tv_time.setVisibility(View.VISIBLE);
                     mTimeHandler.postDelayed(new Runnable() {
                         @Override
@@ -124,7 +124,7 @@ public abstract class BaseSensorFragment<T> extends BaseFragment implements Sens
                             --timeDelay;
                             if (tv_time == null)
                                 return;
-                            tv_time.setText(String.format("请%d秒后再再摇一次", timeDelay));
+                            tv_time.setText(String.format("%d秒后可再摇一次", timeDelay));
                             if (timeDelay > 0)
                                 mTimeHandler.postDelayed(this, 1000);
                             else {
@@ -175,7 +175,7 @@ public abstract class BaseSensorFragment<T> extends BaseFragment implements Sens
                 Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         animation.setDuration(320);
         animation.setFillAfter(true);
-        mShakeView.startAnimation(animation);
+        mCardView.startAnimation(animation);
 
         mLoadingView.stop();
         mLoadingView.setVisibility(View.GONE);
