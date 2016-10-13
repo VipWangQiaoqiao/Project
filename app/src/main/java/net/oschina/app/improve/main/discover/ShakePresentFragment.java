@@ -1,5 +1,6 @@
 package net.oschina.app.improve.main.discover;
 
+import android.media.MediaPlayer;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,6 +12,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.shake.ShakePresent;
+import net.oschina.app.util.UIHelper;
 import net.oschina.common.verify.Verifier;
 
 import java.lang.reflect.Type;
@@ -41,6 +43,14 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
         mShakeView = mInflater.inflate(R.layout.view_present, null);
         iv_present = (ImageView) mShakeView.findViewById(R.id.iv_present);
         tv_present_name = (TextView) mShakeView.findViewById(R.id.tv_present_name);
+        SPEED_SHRESHOLD = 90;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (mBean != null) {
+            UIHelper.showUrlRedirect(mContext, mBean.getResult().getHref());
+        }
     }
 
     @Override
@@ -57,6 +67,7 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
         ShakePresent present = mBean.getResult();
         getImgLoader().load(present.getPic()).placeholder(R.mipmap.ic_split_graph).into(iv_present);
         tv_present_name.setText(present.getName());
+        MediaPlayer.create(mContext, R.raw.shake).start();
     }
 
     @Override

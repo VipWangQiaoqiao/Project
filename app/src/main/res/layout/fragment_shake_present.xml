@@ -36,11 +36,11 @@
         <TextView
             android:id="@+id/tv_state"
             android:layout_width="160dp"
-            android:layout_marginTop="@dimen/lay_16"
             android:layout_height="wrap_content"
-            android:lineSpacingExtra="4dp"
+            android:layout_marginTop="@dimen/lay_16"
             android:ellipsize="end"
             android:gravity="center"
+            android:lineSpacingExtra="4dp"
             android:lines="2"
             android:text="" />
     </LinearLayout>
@@ -52,4 +52,12 @@
         android:layout_gravity="bottom"
         android:layout_margin="16dp"
         android:background="@color/white" />
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:text="请5秒之后再试" />
 </LinearLayout>

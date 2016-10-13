@@ -382,6 +382,7 @@ public class UIHelper {
                 EventDetailActivity.show(context, newsId);
                 break;
             case Banner.BANNER_TYPE_NEWS:
+                NewsDetailActivity.show(context,newsId);
             default:
                 showUrlRedirect(context, banner.getHref());
                 break;
