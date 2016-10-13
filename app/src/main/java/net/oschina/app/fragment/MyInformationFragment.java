@@ -34,7 +34,6 @@ import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.bean.User;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.improve.widget.SolarSystemView;
-import net.oschina.app.ui.MainActivity;
 import net.oschina.app.ui.MyQRCodeDialog;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -178,26 +177,26 @@ public class MyInformationFragment extends BaseFragment {
     }
 
     public void setNotice() {
-        if (MainActivity.mNotice != null) {
-
-            Notice notice = MainActivity.mNotice;
-            int atmeCount = notice.getAtmeCount();// @我
-            int msgCount = notice.getMsgCount();// 留言
-            int reviewCount = notice.getReviewCount();// 评论
-            int newFansCount = notice.getNewFansCount();// 新粉丝
-            int newLikeCount = notice.getNewLikeCount();// 获得点赞
-            int activeCount = atmeCount + reviewCount + msgCount + newFansCount + newLikeCount;//
-            // 信息总数
-            if (activeCount > 0) {
-                mMesCount.show();
-                mMesCount.setText(" ");
-            } else {
-                mMesCount.hide();
-            }
-
-        } else {
-            mMesCount.hide();
-        }
+//        if (MainActivity.mNotice != null) {
+//
+//            Notice notice = MainActivity.mNotice;
+//            int atmeCount = notice.getAtmeCount();// @我
+//            int msgCount = notice.getMsgCount();// 留言
+//            int reviewCount = notice.getReviewCount();// 评论
+//            int newFansCount = notice.getNewFansCount();// 新粉丝
+//            int newLikeCount = notice.getNewLikeCount();// 获得点赞
+//            int activeCount = atmeCount + reviewCount + msgCount + newFansCount + newLikeCount;//
+//            // 信息总数
+//            if (activeCount > 0) {
+//                mMesCount.show();
+//                mMesCount.setText(" ");
+//            } else {
+//                mMesCount.hide();
+//            }
+//
+//        } else {
+//            mMesCount.hide();
+//        }
     }
 
     @Override

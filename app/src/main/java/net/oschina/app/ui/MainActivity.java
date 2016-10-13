@@ -247,36 +247,36 @@ public class MainActivity extends AppCompatActivity implements
 
     @SuppressWarnings("deprecation")
     private void initTabs() {
-        MainTab[] tabs = MainTab.values();
-        int size = tabs.length;
-        for (int i = 0; i < size; i++) {
-            MainTab mainTab = tabs[i];
-            TabSpec tab = mTabHost.newTabSpec(getString(mainTab.getResName()) + this.toString());
-            View indicator = View.inflate(this, R.layout.tab_indicator, null);
-            TextView title = (TextView) indicator.findViewById(R.id.tab_title);
-            ImageView icon = (ImageView) indicator.findViewById(R.id.iv_user_flow_icon);
-
-            Drawable drawable = this.getResources().getDrawable(mainTab.getResIcon());
-            icon.setImageDrawable(drawable);
-            //title.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
-            if (i == 2) {
-                indicator.setVisibility(View.INVISIBLE);
-                mTabHost.setNoTabChangedTag(getString(mainTab.getResName()));
-            }
-            title.setText(getString(mainTab.getResName()));
-            tab.setIndicator(indicator);
-            mTabHost.addTab(tab, mainTab.getClz(), null);
-
-            if (mainTab.equals(MainTab.ME)) {
-                View cn = indicator.findViewById(R.id.tab_mes);
-                mBvNotice = new BadgeView(MainActivity.this, cn);
-                mBvNotice.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
-                mBvNotice.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
-                mBvNotice.setBackgroundResource(R.mipmap.notification_bg);
-                mBvNotice.setGravity(Gravity.CENTER);
-            }
-            mTabHost.getTabWidget().getChildAt(i).setOnTouchListener(this);
-        }
+//        MainTab[] tabs = MainTab.values();
+//        int size = tabs.length;
+//        for (int i = 0; i < size; i++) {
+//            MainTab mainTab = tabs[i];
+//            TabSpec tab = mTabHost.newTabSpec(getString(mainTab.getResName()) + this.toString());
+//            View indicator = View.inflate(this, R.layout.tab_indicator, null);
+//            TextView title = (TextView) indicator.findViewById(R.id.tab_title);
+//            ImageView icon = (ImageView) indicator.findViewById(R.id.iv_user_flow_icon);
+//
+//            Drawable drawable = this.getResources().getDrawable(mainTab.getResIcon());
+//            icon.setImageDrawable(drawable);
+//            //title.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
+//            if (i == 2) {
+//                indicator.setVisibility(View.INVISIBLE);
+//                mTabHost.setNoTabChangedTag(getString(mainTab.getResName()));
+//            }
+//            title.setText(getString(mainTab.getResName()));
+//            tab.setIndicator(indicator);
+//            mTabHost.addTab(tab, mainTab.getClz(), null);
+//
+//            if (mainTab.equals(MainTab.ME)) {
+//                View cn = indicator.findViewById(R.id.tab_mes);
+//                mBvNotice = new BadgeView(MainActivity.this, cn);
+//                mBvNotice.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
+//                mBvNotice.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+//                mBvNotice.setBackgroundResource(R.mipmap.notification_bg);
+//                mBvNotice.setGravity(Gravity.CENTER);
+//            }
+//            mTabHost.getTabWidget().getChildAt(i).setOnTouchListener(this);
+//        }
     }
 
     @SuppressWarnings("deprecation")
@@ -321,10 +321,10 @@ public class MainActivity extends AppCompatActivity implements
                 v.setSelected(false);
             }
         }
-        if (tabId.equals(getString(MainTab.ME.getResName()))) {
-            mBvNotice.setText("");
-            mBvNotice.hide();
-        }
+//        if (tabId.equals(getString(MainTab.ME.getResName()))) {
+//            mBvNotice.setText("");
+//            mBvNotice.hide();
+//        }
         supportInvalidateOptionsMenu();
     }
 

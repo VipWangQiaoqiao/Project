@@ -2,6 +2,7 @@ package net.oschina.app.improve.main.discover;
 
 import android.media.MediaPlayer;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,8 +26,9 @@ import java.lang.reflect.Type;
 
 public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
 
-    private ImageView iv_present;
-    private TextView tv_present_name;
+    private Button btn_shake_again, btn_get;
+    private ImageView iv_pig;
+    private TextView tv_name;
 
     public static ShakePresentFragment newInstance() {
         ShakePresentFragment fragment = new ShakePresentFragment();
@@ -42,15 +44,27 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
     protected void initWidget(View root) {
         super.initWidget(root);
         mShakeView = mInflater.inflate(R.layout.view_present, null);
-        iv_present = (ImageView) mShakeView.findViewById(R.id.iv_present);
-        tv_present_name = (TextView) mShakeView.findViewById(R.id.tv_present_name);
+        btn_shake_again = (Button) mShakeView.findViewById(R.id.btn_shake_again);
+        btn_get = (Button) mShakeView.findViewById(R.id.btn_get);
+        iv_pig = (ImageView) mShakeView.findViewById(R.id.iv_pig);
+        tv_name = (TextView) mShakeView.findViewById(R.id.tv_name);
+        btn_get.setOnClickListener(this);
         SPEED_SHRESHOLD = 90;
     }
 
     @Override
     public void onClick(View v) {
-        if (mBean != null) {
-            UIHelper.showUrlRedirect(mContext, mBean.getResult().getHref());
+        switch (v.getId()) {
+            case R.id.btn_shake_again:
+                break;
+            case R.id.btn_get:
+                if (mBean != null) {
+                    UIHelper.showUrlRedirect(mContext, mBean.getResult().getHref());
+                }
+                break;
+            default:
+
+                break;
         }
     }
 
@@ -61,17 +75,39 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
             return;
         }
         String appToken = Verifier.getPrivateToken(getActivity().getApplication());
-        long time = System.currentTimeMillis();
+        appToken = "1";
+        long time = 15428467;
         String sign = Verifier.signStringArray(String.valueOf(time), String.valueOf(AppContext.getInstance().getLoginId()),
                 appToken);
         OSChinaApi.getShakePresent(time, appToken, sign, mHandler);
     }
 
     @Override
+    protected void onTimeProgress(Runnable runnable) {
+        tv_time.setVisibility(View.VISIBLE);
+        --timeDelay;
+        if (tv_time == null)
+            return;
+        btn_shake_again.setText(String.format("%d", timeDelay));
+        if (mBean != null) {
+            tv_time.setText(String.format("%d秒后可再摇一次", timeDelay));
+        }
+        if (timeDelay > 0)
+            mTimeHandler.postDelayed(runnable, 1000);
+        else {
+            btn_shake_again.setText("再摇一次");
+            tv_time.setVisibility(View.INVISIBLE);
+            mLoading = false;
+            timeDelay = 3;
+        }
+    }
+
+    @Override
     protected void initShakeView() {
         ShakePresent present = mBean.getResult();
-        getImgLoader().load(present.getPic()).placeholder(R.mipmap.ic_split_graph).into(iv_present);
-        tv_present_name.setText(present.getName());
+        getImgLoader().load(present.getPic()).placeholder(R.mipmap.ic_split_graph).into(iv_pig);
+        tv_name.setText(present.getName());
+        mTvState.setText("恭喜您中奖了");
         MediaPlayer.create(mContext, R.raw.shake).start();
     }
 
