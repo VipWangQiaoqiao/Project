@@ -177,7 +177,7 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements DialogInt
     public void onItemClick(int position, long itemId) {
 
         Share share = getShare();
-        ShareManager shareManager = ShareManager.initShareManager();
+        ShareManager shareManager = new ShareManager();
 
         switch (position) {
             //朋友圈
