@@ -3,12 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="@dimen/lay_16">
+    android:padding="@dimen/lay_12">
 
     <ImageView
         android:id="@+id/iv_present"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:background="@drawable/shake_img_border"
         android:padding="8dp"
         android:scaleType="centerCrop"
