@@ -9,7 +9,6 @@ import net.oschina.app.fragment.EventAppliesFragment;
 import net.oschina.app.fragment.EventFragment;
 import net.oschina.app.fragment.FeedBackFragment;
 import net.oschina.app.fragment.MessageDetailFragment;
-import net.oschina.app.fragment.MyInformationFragment;
 import net.oschina.app.fragment.MyInformationFragmentDetail;
 import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.fragment.SettingsFragment;
@@ -58,8 +57,6 @@ public enum SimpleBackPage {
 
     USER_BLOG(6, R.string.actionbar_title_user_blog, UserBlogFragment.class),
 
-    MY_INFORMATION(7, R.string.actionbar_title_my_information,
-            MyInformationFragment.class),
 
     MY_ACTIVE(8, R.string.actionbar_title_active, ActiveFragment.class),
 
