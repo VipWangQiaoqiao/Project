@@ -15,7 +15,6 @@ import net.oschina.app.bean.Friend;
 import net.oschina.app.bean.FriendsList;
 import net.oschina.app.bean.Notice;
 import net.oschina.app.service.NoticeUtils;
-import net.oschina.app.ui.MainActivity;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.viewpagerfragment.NoticeViewPagerFragment;
@@ -64,10 +63,10 @@ public class FriendsFragment extends BaseListFragment<Friend> {
     }
 
     private void refreshNotice() {
-        Notice notice = MainActivity.mNotice;
-        if (notice != null && notice.getNewFansCount() > 0) {
-            onRefresh();
-        }
+//        Notice notice = MainActivity.mNotice;
+//        if (notice != null && notice.getNewFansCount() > 0) {
+//            onRefresh();
+//        }
     }
 
     @Override

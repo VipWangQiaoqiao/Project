@@ -23,7 +23,6 @@ import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.service.NoticeUtils;
-import net.oschina.app.ui.MainActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
@@ -81,10 +80,10 @@ public class MessageFragment extends BaseListFragment<Messages> implements
     }
 
     private void refreshNotice() {
-        Notice notice = MainActivity.mNotice;
-        if (notice != null && notice.getMsgCount() > 0) {
-            onRefresh();
-        }
+//        Notice notice = MainActivity.mNotice;
+//        if (notice != null && notice.getMsgCount() > 0) {
+//            onRefresh();
+//        }
     }
 
     @Override

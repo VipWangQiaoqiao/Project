@@ -35,7 +35,7 @@ import cz.msebera.android.httpclient.Header;
 public abstract class BaseSensorFragment<T> extends BaseFragment implements SensorEventListener, View.OnClickListener {
     protected SensorManager mSensor = null;
     protected Vibrator mVibrator = null;
-    protected  int SPEED_SHRESHOLD = 45;// 这个值越大需要越大的力气来摇晃手机
+    protected int SPEED_SHRESHOLD = 45;// 这个值越大需要越大的力气来摇晃手机
     public static final int UPTATE_INTERVAL_TIME = 50;
     private float lastX;
     private float lastY;
@@ -59,12 +59,12 @@ public abstract class BaseSensorFragment<T> extends BaseFragment implements Sens
     @Bind(R.id.loading)
     Loading mLoadingView;
 
-    private int timeDelay = 3;
+    protected int timeDelay = 3;
 
     @Bind(R.id.tv_time)
     TextView tv_time;
 
-    private Handler mTimeHandler;
+    protected Handler mTimeHandler;
 
     @Override
     protected void initWidget(View root) {
@@ -116,23 +116,10 @@ public abstract class BaseSensorFragment<T> extends BaseFragment implements Sens
                     if (mTimeHandler == null)
                         mTimeHandler = new Handler();
                     mLoadingView.setVisibility(View.GONE);
-                    tv_time.setText(String.format("%d秒后可再摇一次", timeDelay));
-                    tv_time.setVisibility(View.VISIBLE);
                     mTimeHandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            --timeDelay;
-                            if (tv_time == null)
-                                return;
-                            tv_time.setText(String.format("%d秒后可再摇一次", timeDelay));
-                            if (timeDelay > 0)
-                                mTimeHandler.postDelayed(this, 1000);
-                            else {
-                                tv_time.setVisibility(View.INVISIBLE);
-                                mLoading = false;
-                                timeDelay = 3;
-                            }
-
+                            onTimeProgress(this);
                         }
                     }, 1000);
                 }
@@ -158,6 +145,21 @@ public abstract class BaseSensorFragment<T> extends BaseFragment implements Sens
 
     protected void initShakeView() {
 
+    }
+
+    protected void onTimeProgress(Runnable runnable) {
+        tv_time.setVisibility(View.VISIBLE);
+        --timeDelay;
+        if (tv_time == null)
+            return;
+        tv_time.setText(String.format("%d秒后可再摇一次", timeDelay));
+        if (timeDelay > 0)
+            mTimeHandler.postDelayed(runnable, 1000);
+        else {
+            tv_time.setVisibility(View.INVISIBLE);
+            mLoading = false;
+            timeDelay = 3;
+        }
     }
 
     protected void onRequestStart() {
