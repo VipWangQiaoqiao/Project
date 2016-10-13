@@ -6,7 +6,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.sina.weibo.sdk.api.WebpageObject;
 import com.sina.weibo.sdk.api.WeiboMultiMessage;
@@ -37,21 +36,8 @@ public class ShareManager {
     private IWXAPI mIWXAPI;
     private Tencent mTencent;
 
-    private ShareManager() {
+    public ShareManager() {
     }
-
-
-    private static class ShareHolder {
-        private static volatile ShareManager INSTANCE = new ShareManager();
-
-        private ShareHolder() {
-        }
-    }
-
-    public static ShareManager initShareManager() {
-        return ShareHolder.INSTANCE;
-    }
-
 
     public ShareManager registerWeChatShare(Context context) {
 
