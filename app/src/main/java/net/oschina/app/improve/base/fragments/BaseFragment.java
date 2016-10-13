@@ -28,7 +28,7 @@ public abstract class BaseFragment extends Fragment {
     protected View mRoot;
     protected Bundle mBundle;
     private RequestManager mImgLoader;
-
+    protected LayoutInflater mInflater;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,6 +47,7 @@ public abstract class BaseFragment extends Fragment {
                 parent.removeView(mRoot);
         } else {
             mRoot = inflater.inflate(getLayoutId(), container, false);
+            mInflater = inflater;
             // Do something
             onBindViewBefore(mRoot);
             // Bind view

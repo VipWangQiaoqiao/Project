@@ -1,18 +1,29 @@
 package net.oschina.app.improve.main.discover;
 
-import com.loopj.android.http.TextHttpResponseHandler;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.google.gson.reflect.TypeToken;
+
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.bean.shake.ShakePresent;
+import net.oschina.common.verify.Verifier;
 
-import cz.msebera.android.httpclient.Header;
+import java.lang.reflect.Type;
 
 /**
  * Created by haibin
  * on 2016/10/11.
  */
 
-public class ShakePresentFragment extends BaseSensorFragment {
+public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
+
+    private ImageView iv_present;
+    private TextView tv_present_name;
 
     public static ShakePresentFragment newInstance() {
         ShakePresentFragment fragment = new ShakePresentFragment();
@@ -25,17 +36,32 @@ public class ShakePresentFragment extends BaseSensorFragment {
     }
 
     @Override
+    protected void initWidget(View root) {
+        super.initWidget(root);
+        mShakeView = mInflater.inflate(R.layout.view_present, null);
+        iv_present = (ImageView) mShakeView.findViewById(R.id.iv_present);
+        tv_present_name = (TextView) mShakeView.findViewById(R.id.tv_present_name);
+    }
+
+    @Override
     public void onShake() {
-        OSChinaApi.getShakePresent(0, "", "", new TextHttpResponseHandler() {
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+        String appToken = Verifier.getPrivateToken(getActivity().getApplication());
+        long time = System.currentTimeMillis();
+        String sign = Verifier.signStringArray(String.valueOf(time), String.valueOf(AppContext.getInstance().getLoginId()),
+                appToken);
+        OSChinaApi.getShakePresent(time, appToken, sign, mHandler);
+    }
 
-            }
+    @Override
+    protected void initShakeView() {
+        ShakePresent present = mBean.getResult();
+        getImgLoader().load(present.getPic()).placeholder(R.mipmap.ic_split_graph).into(iv_present);
+        tv_present_name.setText(present.getName());
+    }
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-
-            }
-        });
+    @Override
+    protected Type getType() {
+        return new TypeToken<ResultBean<ShakePresent>>() {
+        }.getType();
     }
 }
