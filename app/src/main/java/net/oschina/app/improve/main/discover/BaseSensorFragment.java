@@ -32,10 +32,10 @@ import cz.msebera.android.httpclient.Header;
  * on 2016/10/12.
  */
 
-public abstract class BaseSensorFragment<T> extends BaseFragment implements SensorEventListener ,View.OnClickListener{
+public abstract class BaseSensorFragment<T> extends BaseFragment implements SensorEventListener, View.OnClickListener {
     protected SensorManager mSensor = null;
     protected Vibrator mVibrator = null;
-    public static final int SPEED_SHRESHOLD = 45;// 这个值越大需要越大的力气来摇晃手机
+    protected  int SPEED_SHRESHOLD = 45;// 这个值越大需要越大的力气来摇晃手机
     public static final int UPTATE_INTERVAL_TIME = 50;
     private float lastX;
     private float lastY;
@@ -116,7 +116,7 @@ public abstract class BaseSensorFragment<T> extends BaseFragment implements Sens
                     if (mTimeHandler == null)
                         mTimeHandler = new Handler();
                     mLoadingView.setVisibility(View.GONE);
-                    tv_time.setText(String.format("请%d秒之后再试", timeDelay));
+                    tv_time.setText(String.format("请%d秒后再再摇一次", timeDelay));
                     tv_time.setVisibility(View.VISIBLE);
                     mTimeHandler.postDelayed(new Runnable() {
                         @Override
@@ -124,7 +124,7 @@ public abstract class BaseSensorFragment<T> extends BaseFragment implements Sens
                             --timeDelay;
                             if (tv_time == null)
                                 return;
-                            tv_time.setText(String.format("请%d秒之后再试", timeDelay));
+                            tv_time.setText(String.format("请%d秒后再再摇一次", timeDelay));
                             if (timeDelay > 0)
                                 mTimeHandler.postDelayed(this, 1000);
                             else {
