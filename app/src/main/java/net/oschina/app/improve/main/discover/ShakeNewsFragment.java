@@ -1,21 +1,28 @@
 package net.oschina.app.improve.main.discover;
 
-import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.loopj.android.http.TextHttpResponseHandler;
+import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.bean.shake.ShakeNews;
+import net.oschina.app.util.StringUtils;
 
-import cz.msebera.android.httpclient.Header;
+import java.lang.reflect.Type;
 
 /**
  * Created by haibin
  * on 2016/10/11.
  */
 
-public class ShakeNewsFragment extends BaseSensorFragment {
+public class ShakeNewsFragment extends BaseSensorFragment<ShakeNews> {
 
+    private ImageView iv_news;
+    private TextView tv_news_name,tv_time;
     public static ShakeNewsFragment newInstance() {
         ShakeNewsFragment fragment = new ShakeNewsFragment();
         return fragment;
@@ -27,23 +34,30 @@ public class ShakeNewsFragment extends BaseSensorFragment {
     }
 
     @Override
+    protected void initWidget(View root) {
+        super.initWidget(root);
+        mShakeView = mInflater.inflate(R.layout.view_news, null);
+        iv_news = (ImageView) mShakeView.findViewById(R.id.iv_news);
+        tv_news_name = (TextView) mShakeView.findViewById(R.id.tv_news_name);
+        tv_time = (TextView)mShakeView.findViewById(R.id.tv_time);
+    }
+
+    @Override
     public void onShake() {
-        OSChinaApi.getShakeNews(new TextHttpResponseHandler() {
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Log.e("onFailure", responseString + "");
-            }
+        OSChinaApi.getShakeNews(mHandler);
+    }
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                Log.e("onSuccess", responseString);
-            }
+    @Override
+    protected void initShakeView() {
+        ShakeNews news = mBean.getResult();
+        getImgLoader().load(news.getImg()).placeholder(R.mipmap.ic_split_graph).into(iv_news);
+        tv_news_name.setText(news.getName());
+        tv_time.setText(StringUtils.formatSomeAgo(news.getPubDate()));
+    }
 
-            @Override
-            public void onFinish() {
-                super.onFinish();
-                mLoading = false;
-            }
-        });
+    @Override
+    protected Type getType() {
+        return new TypeToken<ResultBean<ShakeNews>>() {
+        }.getType();
     }
 }

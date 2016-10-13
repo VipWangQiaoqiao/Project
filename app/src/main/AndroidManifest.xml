@@ -437,8 +437,7 @@
         <activity
             android:name=".improve.main.discover.ShakePresentActivity"
             android:label="摇一摇"
-            android:screenOrientation="portrait"
-            android:theme="@style/App.Theme.Translucent" />
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".improve.tweet.service.TweetPublishService"
