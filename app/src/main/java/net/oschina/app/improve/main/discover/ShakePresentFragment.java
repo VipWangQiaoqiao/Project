@@ -4,6 +4,7 @@ import android.media.MediaPlayer;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -55,6 +56,10 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
 
     @Override
     public void onShake() {
+        if (!AppContext.getInstance().isLogin()) {
+            Toast.makeText(mContext, "摇一摇需要登陆", Toast.LENGTH_LONG).show();
+            return;
+        }
         String appToken = Verifier.getPrivateToken(getActivity().getApplication());
         long time = System.currentTimeMillis();
         String sign = Verifier.signStringArray(String.valueOf(time), String.valueOf(AppContext.getInstance().getLoginId()),

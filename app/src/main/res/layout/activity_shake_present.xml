@@ -12,7 +12,7 @@
         android:layout_weight="1" />
 
     <View
-        android:layout_height="1dp"
+        android:background="#c8c7cc"
         style="@style/h_line" />
 
     <LinearLayout

@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:padding="16dp">
+    android:padding="8dp">
 
     <ImageView
         android:id="@+id/iv_news"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:background="@drawable/shake_img_border"
-        android:padding="8dp"
+        android:padding="2dp"
         android:scaleType="centerCrop"
-        android:src="@mipmap/ic_launcher" />
+        tools:src="@mipmap/ic_launcher" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/lay_16"
         android:orientation="vertical">
 
@@ -28,19 +30,19 @@
             android:layout_weight="1"
             android:ellipsize="end"
             android:gravity="center_vertical"
-            android:lineSpacingExtra="6dp"
+            android:lineSpacingExtra="2dp"
             android:lines="2"
-            android:text="大数据方法分析"
             android:textColor="#111111"
-            android:textSize="18sp" />
+            android:textSize="16sp"
+            tools:text="大数据方法分析大数据方法分析大数据方法分析" />
 
         <TextView
             android:id="@+id/tv_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="20分钟前"
+            android:layout_marginTop="4dp"
             android:textColor="#9d9d9d"
-            android:textSize="@dimen/font_16" />
+            android:textSize="@dimen/font_14"
+            tools:text="20分钟前" />
     </LinearLayout>
 </LinearLayout>

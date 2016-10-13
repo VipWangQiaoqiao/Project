@@ -128,7 +128,7 @@ public abstract class BaseSensorFragment<T> extends BaseFragment implements Sens
                             if (timeDelay > 0)
                                 mTimeHandler.postDelayed(this, 1000);
                             else {
-                                tv_time.setVisibility(View.GONE);
+                                tv_time.setVisibility(View.INVISIBLE);
                                 mLoading = false;
                                 timeDelay = 3;
                             }
