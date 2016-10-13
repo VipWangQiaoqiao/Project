@@ -24,7 +24,6 @@ import net.oschina.app.base.BaseActivity;
 import net.oschina.app.ui.dialog.ImageMenuDialog;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.TDevice;
-import net.oschina.app.util.UIHelper;
 import net.oschina.app.widget.TouchImageView;
 
 import java.io.IOException;
@@ -113,9 +112,6 @@ public class OSCPhotosActivity extends BaseActivity {
      * 发送到动弹
      */
     private void sendTweet() {
-        Bundle bundle = new Bundle();
-        bundle.putString(TweetPubActivity.REPOST_IMAGE_KEY, mImageUrl);
-        UIHelper.showTweetActivity(this, TweetPubActivity.ACTION_TYPE_REPOST, bundle);
         finish();
     }
 

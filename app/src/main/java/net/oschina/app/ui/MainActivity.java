@@ -4,24 +4,18 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.widget.ImageView;
 import android.widget.TabHost.OnTabChangeListener;
-import android.widget.TabHost.TabSpec;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.umeng.analytics.MobclickAgent;
@@ -35,8 +29,6 @@ import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.cache.DataCleanManager;
-import net.oschina.app.fragment.MyInformationFragment;
-import net.oschina.app.improve.tweet.activities.TweetPublishActivity;
 import net.oschina.app.interf.BaseViewInterface;
 import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.service.NoticeUtils;
@@ -80,17 +72,12 @@ public class MainActivity extends AppCompatActivity implements
                 int newLikeCount = mNotice.getNewLikeCount();// 收到赞
                 int activeCount = atmeCount + reviewCount + msgCount + newFansCount + newLikeCount;
 
-                Fragment fragment = getCurrentFragment();
-                if (fragment instanceof MyInformationFragment) {
-                    ((MyInformationFragment) fragment).setNotice();
+                if (activeCount > 0) {
+                    mBvNotice.setText(String.format("%s", activeCount + ""));
+                    mBvNotice.show();
                 } else {
-                    if (activeCount > 0) {
-                        mBvNotice.setText(String.format("%s", activeCount + ""));
-                        mBvNotice.show();
-                    } else {
-                        mBvNotice.hide();
-                        mNotice = null;
-                    }
+                    mBvNotice.hide();
+                    mNotice = null;
                 }
             } else if (intent.getAction()
                     .equals(Constants.INTENT_ACTION_LOGOUT)) {
