@@ -8,8 +8,8 @@ import java.io.Serializable;
 
 public class Order implements Serializable{
 
-    public static final String TYPE_ALIPAY = "ALIPAY"; // 支付宝支付
-    public static final String TYPE_WEPAY = "WEPAY"; // 微信支付
+    public static final String TYPE_ALIPAY = "alipay"; // 支付宝支付
+    public static final String TYPE_WEPAY = "wepay"; // 微信支付
 
     private long objType;
     private long objId;
