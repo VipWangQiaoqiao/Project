@@ -2,8 +2,11 @@ package net.oschina.app.api.remote;
 
 import android.support.v4.util.Pair;
 import android.text.TextUtils;
+import android.util.Log;
 
+import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.PersistentCookieStore;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -23,6 +26,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URLEncoder;
 import java.util.List;
+
+import cz.msebera.android.httpclient.HttpEntity;
+import cz.msebera.android.httpclient.entity.HttpEntityWrapper;
 
 public class OSChinaApi {
 
@@ -1874,10 +1880,19 @@ public class OSChinaApi {
     public static void reward(List<Pair<String, String>> pairs, TextHttpResponseHandler handler){
         RequestParams params = new RequestParams();
         for (Pair<String, String> pair : pairs){
-            params.put(pair.first, pair.second);
+            params.add(pair.first, pair.second);
         }
-        ApiHttpClient.getHttpClient().addHeader("Host", "121.41.10.133");
-        ApiHttpClient.getHttpClient().post("http://121.41.10.133/action/apiv2/blog_reward", params, handler);
+
+
+        Log.e("oschina", "params: " + params.toString());
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        PersistentCookieStore myCookieStore = new PersistentCookieStore(AppContext.getInstance().getApplicationContext());
+        client.setCookieStore(myCookieStore);
+        ApiHttpClient.setCookie(ApiHttpClient.getCookie(AppContext.getInstance()));
+
+        Log.e("oschina", "post request");
+        client.post("http://121.41.10.133/action/apiv2/blog_reward", params, handler);
     }
 
 

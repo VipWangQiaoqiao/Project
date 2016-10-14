@@ -68,6 +68,7 @@ public class RewardDialog extends Dialog implements View.OnClickListener {
 
         Glide.with(getContext())
                 .load(portrait)
+                .asBitmap()
                 .placeholder(R.mipmap.widget_dface)
                 .error(R.mipmap.widget_dface)
                 .into(mPortrait);

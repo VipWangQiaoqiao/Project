@@ -20,6 +20,22 @@ public class RewardUtil {
 
     public static final String REWARD_SECURITY_KEY = "19328_etanod_cso_4_yek_sed_a_si_sihT";
 
+    /**
+     * 二行制转字符串
+     * @param b
+     * @return
+     */
+    private static String byte2hex(byte[] b) {
+        StringBuilder hs = new StringBuilder();
+        String stmp;
+        for (int n = 0; b!=null && n < b.length; n++) {
+            stmp = Integer.toHexString(b[n] & 0XFF);
+            if (stmp.length() == 1)
+                hs.append('0');
+            hs.append(stmp);
+        }
+        return hs.toString().toUpperCase();
+    }
 
     public static String encrypt(String data, String key){
         return byte2hex(encrypt(data.getBytes(), key.getBytes()));
@@ -71,23 +87,6 @@ public class RewardUtil {
         return null;
     }
 
-    /**
-     * 二行制转字符串
-     * @param b
-     * @return
-     */
-    private static String byte2hex(byte[] b) {
-        StringBuilder hs = new StringBuilder();
-        String stmp;
-        for (int n = 0; b!=null && n < b.length; n++) {
-            stmp = Integer.toHexString(b[n] & 0XFF);
-            if (stmp.length() == 1)
-                hs.append('0');
-            hs.append(stmp);
-        }
-        return hs.toString().toUpperCase();
-    }
-
     public static String sign(List<Pair<String, String>> pairs){
         String sign = "";
         for (Pair<String, String> pair : pairs){
@@ -95,7 +94,7 @@ public class RewardUtil {
             sign += "&" + pair.first + "=" + pair.second;
         }
         sign = sign.substring(1, sign.length() - 1);
-        Log.d("oschina", "params: " + sign);
+        Log.e("oschina", "params: " + sign);
         return encrypt(sign, REWARD_SECURITY_KEY);
     }
 

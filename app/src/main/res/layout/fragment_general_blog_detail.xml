@@ -182,12 +182,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:layout_margin="16dp"
+                android:visibility="gone"
                 android:background="@color/list_divider_color" />
 
             <ImageView
                 android:id="@+id/btn_reward"
+                android:visibility="gone"
                 android:src="@drawable/selector_reward_btn"
-                android:layout_marginTop="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"/>
@@ -195,6 +196,7 @@
             <TextView
                 android:text="写得不错,打赏作者"
                 android:textSize="15sp"
+                android:visibility="gone"
                 android:textColor="#111111"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="8dp"
