@@ -3,7 +3,6 @@ package net.oschina.app.improve.detail.fragments;
 import android.app.Dialog;
 import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.util.Pair;
 import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -17,13 +16,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.AppManager;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.User;
@@ -34,18 +29,16 @@ import net.oschina.app.improve.comment.CommentsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.BlogDetailContract;
 import net.oschina.app.improve.pay.bean.Order;
+import net.oschina.app.improve.pay.dialog.RewardDialog;
 import net.oschina.app.improve.pay.util.RewardUtil;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.widget.DetailAboutView;
-import net.oschina.app.improve.pay.dialog.RewardDialog;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.net.URLEncoder;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -255,8 +248,7 @@ public class BlogDetailFragment
         mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mETInput.getText().toString().trim());
     }
 
-    private void handleReward(){
-        // TODO 移至Activity处理
+    private void handleReward() {
         final BlogDetail detail = mOperator.getData();
 
         final RewardDialog dialog = new RewardDialog(getContext());
@@ -267,7 +259,7 @@ public class BlogDetailFragment
             @Override
             public void reward(float cast) {
                 User user = AppContext.getInstance().getLoginUser();
-                if (user == null || user.getId() <= 0){
+                if (user == null || user.getId() <= 0) {
                     Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -276,69 +268,36 @@ public class BlogDetailFragment
                 pairs.put("objType", "16344358");
                 pairs.put("objId", String.valueOf(detail.getId()));
                 pairs.put("attach", Order.TYPE_ALIPAY);
-                pairs.put("money", String.valueOf((int)(cast * 100)));
+                pairs.put("money", String.valueOf((int) (cast * 100)));
                 pairs.put("subject", detail.getTitle());
                 pairs.put("donater", String.valueOf(user.getId()));
                 pairs.put("author", String.valueOf(detail.getAuthorId()));
-                pairs.put("message",  "");
-                pairs.put("returnUrl", detail.getHref());
-                pairs.put("notifyUrl", detail.getNotifyUrl() == null ? "" : detail.getNotifyUrl());
+                pairs.put("message", "Hello");
+                pairs.put("returnUrl", URLEncoder.encode(detail.getHref()));
+                pairs.put("notifyUrl", URLEncoder.encode(detail.getNotifyUrl()));
 
                 String sign = RewardUtil.sign(pairs);
-
-                Log.e("oschina", "sign: " + sign);
-
                 pairs.put("sign", sign);
-
-                Log.e("oschina", "before: " + new RequestParams(pairs).toString());
-
-                dialog.dismiss();
 
                 mWaitDialog = DialogHelp.getWaitDialog(getContext(), "正在提交数据");
                 mWaitDialog.setCancelable(false);
 
-                /*OSChinaApi.reward(pairs, new TextHttpResponseHandler() {
+                OSChinaApi.reward(pairs, new TextHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, String responseBody) {
-                        Log.e("oschina", "successful");
-                        Log.e("oschina", "bytes: " + responseBody);
                         Log.e("oschina", "response body: " + responseBody);
                     }
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String responseBody, Throwable error) {
-                        Log.e("oschina", "successful");
+                        Log.e("oschina", "onFailure");
                         error.toString();
                     }
-                });*/
-
-                AsyncHttpClient client = new AsyncHttpClient();
-
-                pairs = new ConcurrentHashMap<>();
-                pairs.put("objType", "16344358");
-                pairs.put("objId", "758261");
-                pairs.put("attach", "alipay");
-                pairs.put("money", "500");
-                pairs.put("subject", "Sass的基础姿势");
-                pairs.put("donater", "1996694");
-                pairs.put("author", "2947794");
-                pairs.put("message",  "");
-                pairs.put("returnUrl", "https://my.oschina.net/mllitch/blog/758261");
-                pairs.put("notifyUrl", "");
-                pairs.put("sign", "B07EC849351F30C1DA7BF60DABD8DC7B9AF0E6298EF684CB86584411094FD0EF2B2E746949287604361BC5C523813F68D0DF70321CA52B69D7533D36FEB5D45F2BE5EF78DAEC00A75CE0FEBBA457BE0171FCCACE01CE83F344056A5F251816BF75DD5F9DA4D762095BEFEB3BB5C5149AB84EC293F51EBE7CE43B5D63F57DBEB519DDEF39E1A8776BC43E8182B42131770F7FC6FBA39FCE95F92211C316B9ACEF2CC7CA22AAD4FB3DAA8AB624B3EAAE01F4BD218EE3635A10E346EE40883F7901");
-
-                Log.d("oschina", "after: " + new RequestParams(pairs).toString());
-
-
-                client.post("http://121.41.10.133/action/apiv2/reward_order", new RequestParams(pairs), new TextHttpResponseHandler() {
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                        Log.e("oschina", "failure: " + responseString);
-                    }
 
                     @Override
-                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                        Log.e("oschina", "successful: " + responseString);
+                    public void onFinish() {
+                        super.onFinish();
+                        dialog.dismiss();
                     }
                 });
             }
