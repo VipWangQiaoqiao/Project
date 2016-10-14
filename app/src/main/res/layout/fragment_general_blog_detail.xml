@@ -182,37 +182,40 @@
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:layout_margin="16dp"
-                android:background="@color/list_divider_color" />
+                android:background="@color/list_divider_color"
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/btn_reward"
-                android:src="@drawable/selector_reward_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"/>
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/selector_reward_btn"
+                android:visibility="gone" />
 
             <TextView
-                android:text="写得不错,打赏作者"
-                android:textSize="15sp"
-                android:textColor="#111111"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="8dp"
+                android:text="写得不错,打赏作者"
+                android:textColor="#111111"
+                android:textSize="15sp"
+                android:visibility="gone" />
             <!--reward widgets end-->
 
             <net.oschina.app.improve.widget.DetailAboutView
                 android:id="@+id/lay_detail_about"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/ques_detail_bg_color"/>
+                android:background="@color/ques_detail_bg_color" />
 
             <net.oschina.app.improve.comment.CommentsView
                 android:id="@+id/lay_detail_comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/ques_detail_bg_color"/>
+                android:background="@color/ques_detail_bg_color" />
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
