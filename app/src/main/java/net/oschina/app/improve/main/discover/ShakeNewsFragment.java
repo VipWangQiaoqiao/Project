@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -13,6 +14,7 @@ import net.oschina.app.bean.Banner;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.shake.ShakeNews;
 import net.oschina.app.util.StringUtils;
+import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;
@@ -63,6 +65,11 @@ public class ShakeNewsFragment extends BaseSensorFragment<ShakeNews> {
 
     @Override
     public void onShake() {
+        if(!TDevice.hasInternet()){
+            Toast.makeText(mContext,"网络连接失败",Toast.LENGTH_SHORT).show();
+            mLoading = false;
+            return;
+        }
         OSChinaApi.getShakeNews(mHandler);
     }
 

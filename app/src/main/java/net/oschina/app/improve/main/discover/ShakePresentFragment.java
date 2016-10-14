@@ -15,6 +15,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.shake.ShakePresent;
+import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.common.verify.Verifier;
 
@@ -81,6 +82,11 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
 
     @Override
     public void onShake() {
+        if (!TDevice.hasInternet()) {
+            Toast.makeText(mContext, "网络连接失败", Toast.LENGTH_SHORT).show();
+            mLoading = false;
+            return;
+        }
         if (!AppContext.getInstance().isLogin()) {
             Toast.makeText(mContext, "摇礼品需要登陆", Toast.LENGTH_LONG).show();
             return;
