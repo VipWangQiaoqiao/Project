@@ -45,6 +45,8 @@ public class ShakeNewsFragment extends BaseSensorFragment<ShakeNews> {
         tv_news_name = (TextView) mShakeView.findViewById(R.id.tv_news_name);
         tv_pubTime = (TextView) mShakeView.findViewById(R.id.tv_time);
         timeDelay = 3;
+        mCardView.setVisibility(View.GONE);
+        mTvState.setText("摇一摇获取资讯");
     }
 
     @Override
@@ -67,6 +69,7 @@ public class ShakeNewsFragment extends BaseSensorFragment<ShakeNews> {
     @Override
     protected void initShakeView() {
         ShakeNews news = mBean.getResult();
+        mCardView.setVisibility(View.VISIBLE);
         getImgLoader().load(news.getImg()).placeholder(R.mipmap.ic_split_graph).into(iv_news);
         tv_news_name.setText(news.getName());
         tv_pubTime.setText(StringUtils.formatSomeAgo(news.getPubDate()));
@@ -89,6 +92,8 @@ public class ShakeNewsFragment extends BaseSensorFragment<ShakeNews> {
             mTimeHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    if (tv_time == null)
+                        return;
                     tv_time.setVisibility(View.VISIBLE);
                     --timeDelay;
                     if (tv_time == null)
