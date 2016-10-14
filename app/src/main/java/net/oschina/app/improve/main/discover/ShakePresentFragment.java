@@ -53,6 +53,7 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
         btn_shake_again.setOnClickListener(this);
         btn_get.setOnClickListener(this);
         SPEED_SHRESHOLD = 90;
+        mCardView.setVisibility(View.GONE);
         mTvState.setText("摇一摇抢礼品");
     }
 
