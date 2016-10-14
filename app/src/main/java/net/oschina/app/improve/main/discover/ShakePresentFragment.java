@@ -1,6 +1,5 @@
 package net.oschina.app.improve.main.discover;
 
-import android.media.MediaPlayer;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
@@ -67,6 +66,7 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
                     mCardView.setVisibility(View.GONE);
                     mCanAgain = false;
                     mLoading = false;
+                    mCardView.setVisibility(View.GONE);
                 }
                 break;
             case R.id.btn_get:
@@ -106,6 +106,7 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
             if (mTimeHandler == null)
                 mTimeHandler = new Handler();
             mLoadingView.setVisibility(View.GONE);
+            btn_shake_again.setTextColor(0xFFD8D8D8);
             tv_time.setVisibility((mBean == null || mBean.getResult() == null) ? View.VISIBLE : View.INVISIBLE);
             tv_time.setText(String.format("%d秒后可再摇一次", timeDelay));
             mTimeHandler.postDelayed(new Runnable() {
@@ -123,6 +124,7 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
                         mTimeHandler.postDelayed(this, 1000);
                     else {
                         btn_shake_again.setText("再摇一次");
+                        btn_shake_again.setTextColor(0xFF111111);
                         mTvState.setText("摇一摇抢礼品");
                         mCanAgain = true;
                         tv_time.setVisibility(View.INVISIBLE);
@@ -141,7 +143,6 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
         getImgLoader().load(present.getPic()).placeholder(R.mipmap.ic_split_graph).into(iv_pig);
         tv_name.setText(present.getName());
         mTvState.setText("恭喜您中奖了");
-        MediaPlayer.create(mContext, R.raw.shake).start();
     }
 
     @Override

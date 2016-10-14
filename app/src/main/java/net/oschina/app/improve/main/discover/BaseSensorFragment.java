@@ -6,6 +6,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v7.widget.CardView;
@@ -150,6 +151,7 @@ public abstract class BaseSensorFragment<T> extends BaseFragment implements Sens
 
     protected void onSuccess() {
         mCardView.removeAllViews();
+        MediaPlayer.create(mContext, R.raw.shake).start();
         initShakeView();
         mCardView.addView(mShakeView);
         ScaleAnimation animation = new ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f,

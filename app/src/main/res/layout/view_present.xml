@@ -35,7 +35,7 @@
             android:layout_weight="1"
             android:background="@drawable/selector_shake_again"
             android:text="继续抽奖"
-            android:textColor="#9d9d9d" />
+            android:textColor="#D8D8D8" />
 
         <Button
             android:id="@+id/btn_get"
@@ -43,7 +43,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/selector_shake_get"
-            android:text="领取奖品"
+            android:text="免费领取"
             android:textColor="#ffffff" />
     </LinearLayout>
 </LinearLayout>
