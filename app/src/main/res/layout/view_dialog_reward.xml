@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFF"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="24dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="24dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/img_portrait"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="8dp"
+        android:src="@mipmap/widget_dface" />
+
+    <TextView
+        android:id="@+id/tv_nick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="#111111"
+        android:textSize="18sp"
+        android:text="thanatosx" />
+
+    <TextView
+        android:id="@+id/tv_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="#6a6a6a"
+        android:textSize="14sp"
+        android:text="每个人都不容易,感谢作者的辛苦劳作,谢谢。" />
+
+    <LinearLayout
+        android:id="@+id/layout_casts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/selector_pay_btn"
+            android:gravity="center"
+            android:padding="12dp"
+            android:tag="5"
+            android:text="¥5"
+            android:textSize="16sp"
+            android:textColor="@drawable/selector_pay_text" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_weight="1"
+            android:background="@drawable/selector_pay_btn"
+            android:gravity="center"
+            android:padding="12dp"
+            android:tag="10"
+            android:text="¥10"
+            android:textSize="16sp"
+            android:textColor="@drawable/selector_pay_text" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/selector_pay_btn"
+            android:gravity="center"
+            android:padding="12dp"
+            android:tag="-1"
+            android:text="其他金额"
+            android:textSize="16sp"
+            android:textColor="@drawable/selector_pay_text" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@id/et_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/selector_pay_input"
+        android:hint="请输入金额"
+        android:padding="12dp"
+        android:textColor="#000"
+        android:textColorHint="#6a6a6a"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="使用支付宝支付, "
+            android:textColor="#6a6a6a"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_pay_choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="更换"
+            android:textColor="@color/day_colorPrimary"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/btn_reward"
+        android:text="打赏"
+        android:textColor="#FFF"
+        android:background="@drawable/ic_bg_btn_blue"
+        android:layout_width="match_parent"
+        android:layout_height="42dp" />
+
+</LinearLayout>

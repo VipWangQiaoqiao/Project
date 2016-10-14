@@ -18,6 +18,15 @@ public class BlogDetail extends Blog {
     @SerializedName("abstract")
     private String abstractStr;
     private List<About> abouts;
+    private String notifyUrl;
+
+    public String getNotifyUrl() {
+        return notifyUrl;
+    }
+
+    public void setNotifyUrl(String notifyUrl) {
+        this.notifyUrl = notifyUrl;
+    }
 
     public long getAuthorId() {
         return authorId;

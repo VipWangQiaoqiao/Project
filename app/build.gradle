@@ -55,7 +55,6 @@ android {
     buildTypes {
 
         debug {
-            testCoverageEnabled false
             zipAlignEnabled false
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -109,7 +108,6 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile(name: 'social_sdk_library_project', ext: 'aar')
     compile(name: 'common', ext: 'aar')
-
 
     compile 'com.android.support:support-v4:24.2.1'
     compile 'com.android.support:appcompat-v7:24.2.1'

@@ -1,9 +1,12 @@
 package net.oschina.app.improve.detail.fragments;
 
+import android.app.Dialog;
 import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.util.Pair;
 import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -14,22 +17,34 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.loopj.android.http.TextHttpResponseHandler;
+
+import net.oschina.app.AppContext;
+import net.oschina.app.AppManager;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.bean.User;
 import net.oschina.app.improve.bean.BlogDetail;
 import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.comment.CommentsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.BlogDetailContract;
+import net.oschina.app.improve.pay.bean.Order;
+import net.oschina.app.improve.pay.util.RewardUtil;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.widget.DetailAboutView;
+import net.oschina.app.improve.pay.dialog.RewardDialog;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.OnClick;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by qiujuer
@@ -120,7 +135,7 @@ public class BlogDetailFragment
         });
     }
 
-    @OnClick({R.id.iv_share, R.id.iv_fav, R.id.btn_relation, R.id.iv_avatar})
+    @OnClick({R.id.iv_share, R.id.iv_fav, R.id.btn_relation, R.id.iv_avatar, R.id.btn_reward})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -144,6 +159,8 @@ public class BlogDetailFragment
             case R.id.iv_avatar:
                 OtherUserHomeActivity.show(getActivity(), mOperator.getData().getAuthorId());
                 break;
+            case R.id.btn_reward:
+                handleReward();
             default:
                 break;
 
@@ -227,6 +244,60 @@ public class BlogDetailFragment
 
     private void handleSendComment() {
         mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mETInput.getText().toString().trim());
+    }
+
+    private void handleReward(){
+        // TODO 移至Activity处理
+        final BlogDetail detail = mOperator.getData();
+
+        final RewardDialog dialog = new RewardDialog(getContext());
+        dialog.setCancelable(true);
+        dialog.setPortrait(detail.getAuthorPortrait());
+        dialog.setNick(detail.getAuthor());
+        dialog.setOnClickRewardListener(new RewardDialog.OnClickRewardCallback() {
+            @Override
+            public void reward(float cast) {
+                User user = AppContext.getInstance().getLoginUser();
+                if (user == null || user.getId() <= 0){
+                    Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                List<Pair<String, String>> pairs = new ArrayList<>();
+                pairs.add(Pair.create("objType", "16344358"));
+                pairs.add(Pair.create("objId", String.valueOf(detail.getId())));
+                pairs.add(Pair.create("attach", Order.TYPE_ALIPAY));
+                pairs.add(Pair.create("money", String.valueOf((int)(cast * 100))));
+                pairs.add(Pair.create("subject", detail.getTitle()));
+                pairs.add(Pair.create("donater", String.valueOf(user.getId())));
+                pairs.add(Pair.create("author", String.valueOf(detail.getAuthorId())));
+                pairs.add(Pair.create("message", (String) null));
+                pairs.add(Pair.create("returnUrl", detail.getHref()));
+                pairs.add(Pair.create("notifyUrl", detail.getNotifyUrl()));
+
+                String sign = RewardUtil.sign(pairs);
+                Log.d("oschina", "sign: " + sign);
+
+                pairs.add(Pair.create("sign", sign));
+
+                OSChinaApi.reward(pairs, new TextHttpResponseHandler() {
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        throwable.printStackTrace();
+                        if (getContext() == null) return;
+                        Log.d("oschina", responseString + "");
+                        Toast.makeText(AppContext.getInstance().getApplicationContext(),
+                                "请求失败", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        Log.d("oschina", responseString);
+                    }
+                });
+            }
+        });
+        dialog.show();
     }
 
     @SuppressWarnings("deprecation")

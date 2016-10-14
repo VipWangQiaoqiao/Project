@@ -5,7 +5,7 @@
     android:id="@+id/fragment_blog_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/ques_detail_bg_color">
+    android:background="@color/white">
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/lay_nsv"
@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!--头-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -82,6 +83,7 @@
                 android:layout_height="1px"
                 android:background="@color/list_divider_color" />
 
+            <!--推荐 or 原创-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -132,6 +134,7 @@
                     android:id="@+id/lay_info_view_comment"
                     layout="@layout/item_info_view_comment" />
 
+                <!--摘要-->
                 <LinearLayout
                     android:id="@+id/lay_blog_detail_abstract"
                     android:layout_width="match_parent"
@@ -163,35 +166,60 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <!--内容-->
             <FrameLayout
                 android:id="@+id/lay_webview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/white"
-                android:paddingBottom="16dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:paddingTop="8dp" />
 
+
+            <!--reward widgets start-->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
+                android:layout_margin="16dp"
                 android:background="@color/list_divider_color" />
+
+            <ImageView
+                android:id="@+id/btn_reward"
+                android:src="@drawable/selector_reward_btn"
+                android:layout_marginTop="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"/>
+
+            <TextView
+                android:text="写得不错,打赏作者"
+                android:textSize="15sp"
+                android:textColor="#111111"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <!--reward widgets end-->
 
             <net.oschina.app.improve.widget.DetailAboutView
                 android:id="@+id/lay_detail_about"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:background="@color/ques_detail_bg_color"/>
 
             <net.oschina.app.improve.comment.CommentsView
                 android:id="@+id/lay_detail_comment"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:background="@color/ques_detail_bg_color"/>
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
 
 
+    <!--底部输入栏-->
     <LinearLayout
         android:id="@+id/lay_option"
         android:layout_width="match_parent"
