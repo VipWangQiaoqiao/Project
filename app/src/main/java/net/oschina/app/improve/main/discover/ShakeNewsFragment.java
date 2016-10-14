@@ -45,6 +45,8 @@ public class ShakeNewsFragment extends BaseSensorFragment<ShakeNews> {
         tv_news_name = (TextView) mShakeView.findViewById(R.id.tv_news_name);
         tv_pubTime = (TextView) mShakeView.findViewById(R.id.tv_time);
         timeDelay = 3;
+        mCardView.setVisibility(View.GONE);
+        mTvState.setText("摇一摇获取资讯");
     }
 
     @Override

@@ -30,6 +30,7 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
     private Button btn_shake_again, btn_get;
     private ImageView iv_pig;
     private TextView tv_name;
+    private boolean mCanAgain;
 
     public static ShakePresentFragment newInstance() {
         ShakePresentFragment fragment = new ShakePresentFragment();
@@ -52,14 +53,19 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
         btn_shake_again.setOnClickListener(this);
         btn_get.setOnClickListener(this);
         SPEED_SHRESHOLD = 90;
+        mTvState.setText("摇一摇抢礼品");
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_shake_again:
-                mCardView.removeAllViews();
-                mLoading = false;
+                if (mLoading && mCanAgain) {
+                    mCardView.removeAllViews();
+                    mCardView.setVisibility(View.GONE);
+                    mCanAgain = false;
+                    mLoading = false;
+                }
                 break;
             case R.id.btn_get:
                 if (mBean != null) {
@@ -104,13 +110,14 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
                     if (mBean == null || mBean.getResult() == null) {
                         tv_time.setText(String.format("%d秒后可再摇一次", timeDelay));
                     } else {
-                        btn_shake_again.setText(String.format("%d", timeDelay));
+                        btn_shake_again.setText(String.format("再摇一次(%d)", timeDelay));
                     }
                     if (timeDelay > 0)
                         mTimeHandler.postDelayed(this, 1000);
                     else {
                         btn_shake_again.setText("再摇一次");
                         mTvState.setText("摇一摇抢礼品");
+                        mCanAgain = true;
                         tv_time.setVisibility(View.INVISIBLE);
                         mLoading = mBean != null && mBean.getResult() != null;
                         timeDelay = 5;
@@ -123,6 +130,7 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
     @Override
     protected void initShakeView() {
         ShakePresent present = mBean.getResult();
+        mCardView.setVisibility(View.VISIBLE);
         getImgLoader().load(present.getPic()).placeholder(R.mipmap.ic_split_graph).into(iv_pig);
         tv_name.setText(present.getName());
         mTvState.setText("恭喜您中奖了");
