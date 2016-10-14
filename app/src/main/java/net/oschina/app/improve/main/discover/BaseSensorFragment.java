@@ -59,7 +59,7 @@ public abstract class BaseSensorFragment<T> extends BaseFragment implements Sens
     @Bind(R.id.loading)
     Loading mLoadingView;
 
-    protected int timeDelay = 3;
+    protected int timeDelay = 5;
 
     @Bind(R.id.tv_time)
     TextView tv_time;
@@ -112,17 +112,7 @@ public abstract class BaseSensorFragment<T> extends BaseFragment implements Sens
             @Override
             public void onFinish() {
                 super.onFinish();
-                if (mContext != null) {
-                    if (mTimeHandler == null)
-                        mTimeHandler = new Handler();
-                    mLoadingView.setVisibility(View.GONE);
-                    mTimeHandler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            onTimeProgress(this);
-                        }
-                    }, 1000);
-                }
+                onTimeProgress();
             }
         };
     }
@@ -147,19 +137,8 @@ public abstract class BaseSensorFragment<T> extends BaseFragment implements Sens
 
     }
 
-    protected void onTimeProgress(Runnable runnable) {
-        tv_time.setVisibility(View.VISIBLE);
-        --timeDelay;
-        if (tv_time == null)
-            return;
-        tv_time.setText(String.format("%d秒后可再摇一次", timeDelay));
-        if (timeDelay > 0)
-            mTimeHandler.postDelayed(runnable, 1000);
-        else {
-            tv_time.setVisibility(View.INVISIBLE);
-            mLoading = false;
-            timeDelay = 3;
-        }
+    protected void onTimeProgress() {
+
     }
 
     protected void onRequestStart() {

@@ -8,7 +8,7 @@
     <ImageView
         android:id="@+id/iv_pig"
         android:layout_width="match_parent"
-        android:layout_height="96dp"
+        android:layout_height="116dp"
         android:scaleType="centerCrop" />
 
     <TextView
@@ -43,7 +43,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/selector_shake_get"
-            android:text="继续抽奖"
+            android:text="领取奖品"
             android:textColor="#ffffff" />
     </LinearLayout>
 </LinearLayout>
