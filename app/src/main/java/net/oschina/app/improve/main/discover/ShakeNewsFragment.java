@@ -69,6 +69,7 @@ public class ShakeNewsFragment extends BaseSensorFragment<ShakeNews> {
     @Override
     protected void initShakeView() {
         ShakeNews news = mBean.getResult();
+        mCardView.setVisibility(View.VISIBLE);
         getImgLoader().load(news.getImg()).placeholder(R.mipmap.ic_split_graph).into(iv_news);
         tv_news_name.setText(news.getName());
         tv_pubTime.setText(StringUtils.formatSomeAgo(news.getPubDate()));
