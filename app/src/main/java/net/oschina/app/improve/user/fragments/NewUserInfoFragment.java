@@ -27,6 +27,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.cache.CacheManager;
+import net.oschina.app.improve.account.activities.LoginActivity;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.bean.UserV2;
@@ -66,7 +67,7 @@ import pub.devrel.easypermissions.EasyPermissions;
  */
 
 public class NewUserInfoFragment extends BaseFragment implements View.OnClickListener,
-        EasyPermissions.PermissionCallbacks, NoticeManager.NoticeNotify, OnTabReselectListener {
+                                                                 EasyPermissions.PermissionCallbacks, NoticeManager.NoticeNotify, OnTabReselectListener {
 
     public static final String CACHE_NAME = "NewUserInfoFragment";
 
@@ -299,6 +300,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
      * format count
      *
      * @param count count
+     *
      * @return formatCount
      */
     private String formatCount(long count) {
@@ -419,7 +421,8 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
             UIHelper.showSetting(getActivity());
         } else {
             if (!AppContext.getInstance().isLogin()) {
-                UIHelper.showLoginActivity(getActivity());
+                //UIHelper.showLoginActivity(getActivity());
+                LoginActivity.show(getActivity());
                 return;
             }
 

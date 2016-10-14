@@ -399,6 +399,54 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Base.App.Theme"/>
+
+        <!-- 新账户中心模块-->
+        <activity
+            android:name=".improve.account.activities.LoginActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="登录中心"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/Account_Base.App.Theme.NoTitle"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
+        <activity
+            android:name=".improve.account.activities.RegisterStepOneActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="注册中心一"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/Account_Base.App.Theme.NoTitle"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
+
+        <activity
+            android:name=".improve.account.activities.RegisterStepTwoActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="注册中心一"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/Account_Base.App.Theme.NoTitle"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
+
+        <activity
+            android:name=".improve.account.activities.RetrieveActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="密码找回"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/Account_Base.App.Theme.NoTitle"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
+
+        <activity
+            android:name=".improve.account.activities.ResetPwdActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="密码重置"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/Account_Base.App.Theme.NoTitle"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
+
+        <!-- 新账户中心模块完-->
+
         <activity
             android:name=".improve.user.activities.UserMessageActivity"
             android:configChanges="keyboardHidden|orientation"

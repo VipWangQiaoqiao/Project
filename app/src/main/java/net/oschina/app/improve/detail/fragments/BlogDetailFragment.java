@@ -91,7 +91,7 @@ public class BlogDetailFragment
     protected void initWidget(View root) {
         super.initWidget(root);
 
-        mAbouts.setTitle(getString(R.string.lable_about_title));
+        mAbouts.setTitle(getString(R.string.label_about_title));
         registerScroller(mLayContent, mComments);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
