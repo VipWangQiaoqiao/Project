@@ -1,5 +1,6 @@
 package net.oschina.app.api.remote;
 
+import android.support.v4.util.Pair;
 import android.text.TextUtils;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -21,6 +22,7 @@ import org.kymjs.kjframe.utils.KJLoger;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URLEncoder;
+import java.util.List;
 
 public class OSChinaApi {
 
@@ -1837,4 +1839,46 @@ public class OSChinaApi {
     public static void getShakeNews(TextHttpResponseHandler handler) {
         ApiHttpClient.get("action/apiv2/shake_news", handler);
     }
+
+    /**
+     * 打赏接口
+     * @param type 打赏类型, 博客: 16344358(暂时是固定值)
+     * @param targetId 博客id
+     * @param attach 支付类型 alipay、wepay
+     * @param money 多少钱呐!
+     * @param subject 博客标题
+     * @param donatorId 捐助者id
+     * @param authorId 博客作者id
+     * @param message 留言
+     * @param returnUrl 博客url
+     * @param notifyUrl ???
+     * @param sign 签名
+     * @param handler handler
+     */
+    public static void reward(
+            long type,
+            long targetId,
+            String attach,
+            long money,
+            String subject,
+            long donatorId,
+            long authorId,
+            String message,
+            String returnUrl,
+            String notifyUrl,
+            String sign,
+            TextHttpResponseHandler handler){
+        // pass
+    }
+
+    public static void reward(List<Pair<String, String>> pairs, TextHttpResponseHandler handler){
+        RequestParams params = new RequestParams();
+        for (Pair<String, String> pair : pairs){
+            params.put(pair.first, pair.second);
+        }
+        ApiHttpClient.getHttpClient().addHeader("Host", "121.41.10.133");
+        ApiHttpClient.getHttpClient().post("http://121.41.10.133/action/apiv2/blog_reward", params, handler);
+    }
+
+
 }
