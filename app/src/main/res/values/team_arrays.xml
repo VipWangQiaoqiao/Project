@@ -6,7 +6,7 @@
         <item>讨论</item>
         <item>周报</item>
     </string-array>
-    
+
     <string-array name="team_main_viewpager">
         <item>面板</item>
         <item>任务</item>
