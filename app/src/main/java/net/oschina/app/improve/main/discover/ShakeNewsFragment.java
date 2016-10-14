@@ -92,6 +92,8 @@ public class ShakeNewsFragment extends BaseSensorFragment<ShakeNews> {
             mTimeHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    if (tv_time == null)
+                        return;
                     tv_time.setVisibility(View.VISIBLE);
                     --timeDelay;
                     if (tv_time == null)
