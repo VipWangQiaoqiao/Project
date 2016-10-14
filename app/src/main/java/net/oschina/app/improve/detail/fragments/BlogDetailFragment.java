@@ -35,6 +35,7 @@ import net.oschina.app.improve.pay.util.RewardUtil;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.widget.DetailAboutView;
 import net.oschina.app.improve.pay.dialog.RewardDialog;
+import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
@@ -96,6 +97,8 @@ public class BlogDetailFragment
     NestedScrollView mLayContent;
     @Bind(R.id.lay_option)
     View mLayBottom;
+
+    private Dialog mWaitDialog;
 
     @Override
     protected int getLayoutId() {
@@ -276,23 +279,36 @@ public class BlogDetailFragment
                 pairs.add(Pair.create("notifyUrl", detail.getNotifyUrl()));
 
                 String sign = RewardUtil.sign(pairs);
-                Log.d("oschina", "sign: " + sign);
+                Log.e("oschina", "sign: " + sign);
 
                 pairs.add(Pair.create("sign", sign));
+
+                dialog.dismiss();
+
+                mWaitDialog = DialogHelp.getWaitDialog(getContext(), "正在提交数据");
+                mWaitDialog.setCancelable(false);
 
                 OSChinaApi.reward(pairs, new TextHttpResponseHandler() {
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        Log.e("oschina", "failure: " + throwable.getMessage());
                         throwable.printStackTrace();
+                        if (mWaitDialog != null){
+                            mWaitDialog.dismiss();
+                        }
                         if (getContext() == null) return;
-                        Log.d("oschina", responseString + "");
+                        Log.e("oschina", responseString + "");
                         Toast.makeText(AppContext.getInstance().getApplicationContext(),
                                 "请求失败", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                        Log.d("oschina", responseString);
+                        if (mWaitDialog != null){
+                            mWaitDialog.dismiss();
+                        }
+                        Log.e("oschina", "successful");
+                        Log.e("oschina", responseString + " ------ ");
                     }
                 });
             }
