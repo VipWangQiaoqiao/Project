@@ -1,6 +1,7 @@
 package net.oschina.app.improve.main.discover;
 
 import android.media.MediaPlayer;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -48,6 +49,7 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
         btn_get = (Button) mShakeView.findViewById(R.id.btn_get);
         iv_pig = (ImageView) mShakeView.findViewById(R.id.iv_pig);
         tv_name = (TextView) mShakeView.findViewById(R.id.tv_name);
+        btn_shake_again.setOnClickListener(this);
         btn_get.setOnClickListener(this);
         SPEED_SHRESHOLD = 90;
     }
@@ -56,6 +58,8 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_shake_again:
+                mCardView.removeAllViews();
+                mLoading = false;
                 break;
             case R.id.btn_get:
                 if (mBean != null) {
@@ -83,22 +87,36 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
     }
 
     @Override
-    protected void onTimeProgress(Runnable runnable) {
-        tv_time.setVisibility(View.VISIBLE);
-        --timeDelay;
-        if (tv_time == null)
-            return;
-        btn_shake_again.setText(String.format("%d", timeDelay));
-        if (mBean != null) {
+    protected void onTimeProgress() {
+
+        if (mContext != null) {
+            if (mTimeHandler == null)
+                mTimeHandler = new Handler();
+            mLoadingView.setVisibility(View.GONE);
+            tv_time.setVisibility((mBean == null || mBean.getResult() == null) ? View.VISIBLE : View.INVISIBLE);
             tv_time.setText(String.format("%d秒后可再摇一次", timeDelay));
-        }
-        if (timeDelay > 0)
-            mTimeHandler.postDelayed(runnable, 1000);
-        else {
-            btn_shake_again.setText("再摇一次");
-            tv_time.setVisibility(View.INVISIBLE);
-            mLoading = false;
-            timeDelay = 3;
+            mTimeHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    --timeDelay;
+                    if (tv_time == null)
+                        return;
+                    if (mBean == null || mBean.getResult() == null) {
+                        tv_time.setText(String.format("%d秒后可再摇一次", timeDelay));
+                    } else {
+                        btn_shake_again.setText(String.format("%d", timeDelay));
+                    }
+                    if (timeDelay > 0)
+                        mTimeHandler.postDelayed(this, 1000);
+                    else {
+                        btn_shake_again.setText("再摇一次");
+                        mTvState.setText("摇一摇抢礼品");
+                        tv_time.setVisibility(View.INVISIBLE);
+                        mLoading = mBean != null && mBean.getResult() != null;
+                        timeDelay = 5;
+                    }
+                }
+            }, 1000);
         }
     }
 
