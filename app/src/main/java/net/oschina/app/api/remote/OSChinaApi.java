@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.Map;
 
 import cz.msebera.android.httpclient.HttpEntity;
 import cz.msebera.android.httpclient.entity.HttpEntityWrapper;
@@ -1877,22 +1878,14 @@ public class OSChinaApi {
         // pass
     }
 
-    public static void reward(List<Pair<String, String>> pairs, TextHttpResponseHandler handler){
-        RequestParams params = new RequestParams();
-        for (Pair<String, String> pair : pairs){
-            params.add(pair.first, pair.second);
-        }
-
-
+    public static void reward(Map<String, String> pairs, AsyncHttpResponseHandler handler){
+        RequestParams params = new RequestParams(pairs);
         Log.e("oschina", "params: " + params.toString());
 
         AsyncHttpClient client = new AsyncHttpClient();
-        PersistentCookieStore myCookieStore = new PersistentCookieStore(AppContext.getInstance().getApplicationContext());
-        client.setCookieStore(myCookieStore);
-        ApiHttpClient.setCookie(ApiHttpClient.getCookie(AppContext.getInstance()));
 
         Log.e("oschina", "post request");
-        client.post("http://121.41.10.133/action/apiv2/blog_reward", params, handler);
+        client.post("http://121.41.10.133/action/apiv2/reward_order", params, handler);
     }
 
 

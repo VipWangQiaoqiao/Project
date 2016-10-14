@@ -6,6 +6,7 @@ import android.util.Log;
 
 import java.security.SecureRandom;
 import java.util.List;
+import java.util.Map;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -87,14 +88,14 @@ public class RewardUtil {
         return null;
     }
 
-    public static String sign(List<Pair<String, String>> pairs){
+    public static String sign(Map<String, String> pairs){
         String sign = "";
-        for (Pair<String, String> pair : pairs){
-            if (TextUtils.isEmpty(pair.second)) continue;
-            sign += "&" + pair.first + "=" + pair.second;
+        for (Map.Entry<String, String> pair : pairs.entrySet()){
+            if (pair.getValue() == null) continue;
+            sign += "&" + pair.getKey() + "=" + pair.getValue();
         }
         sign = sign.substring(1, sign.length() - 1);
-        Log.e("oschina", "params: " + sign);
+        Log.e("oschina", "parameters: " + sign);
         return encrypt(sign, REWARD_SECURITY_KEY);
     }
 
