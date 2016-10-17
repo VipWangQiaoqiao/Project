@@ -151,10 +151,7 @@
             android:name="com.dtr.zxing.activity.CaptureActivity"
             android:label="@string/actionbar_title_qr_scan"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.ShakeActivity"
-            android:label="@string/actionbar_title_shake"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.SelectFriendsActivity"
             android:label="@string/actionbar_title_select_friends"
@@ -411,6 +408,11 @@
         <activity
             android:name=".improve.main.discover.ShakePresentActivity"
             android:label="摇一摇"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".improve.main.FeedBackActivity"
+            android:label="反馈"
             android:screenOrientation="portrait" />
 
         <service

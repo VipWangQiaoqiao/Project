@@ -1680,6 +1680,28 @@ public class OSChinaApi {
     }
 
     /**
+     * 添加反馈，私信接口
+     *
+     * @param authorId
+     * @param content
+     * @param file
+     * @param handler
+     */
+    public static void pubMessage(long authorId, String content, File file, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("authorId", authorId);
+        params.put("content", content);
+        if (file != null && file.exists()) {
+            try {
+                params.put("file", file);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        ApiHttpClient.post("action/apiv2/messages_pub", params, handler);
+    }
+
+    /**
      * 获取AT我的列表。
      *
      * @param pageToken pageToken
@@ -1842,18 +1864,19 @@ public class OSChinaApi {
 
     /**
      * 打赏接口
-     * @param type 打赏类型, 博客: 16344358(暂时是固定值)
-     * @param targetId 博客id
-     * @param attach 支付类型 alipay、wepay
-     * @param money 多少钱呐!
-     * @param subject 博客标题
+     *
+     * @param type      打赏类型, 博客: 16344358(暂时是固定值)
+     * @param targetId  博客id
+     * @param attach    支付类型 alipay、wepay
+     * @param money     多少钱呐!
+     * @param subject   博客标题
      * @param donatorId 捐助者id
-     * @param authorId 博客作者id
-     * @param message 留言
+     * @param authorId  博客作者id
+     * @param message   留言
      * @param returnUrl 博客url
      * @param notifyUrl ???
-     * @param sign 签名
-     * @param handler handler
+     * @param sign      签名
+     * @param handler   handler
      */
     public static void reward(
             long type,
@@ -1867,13 +1890,13 @@ public class OSChinaApi {
             String returnUrl,
             String notifyUrl,
             String sign,
-            TextHttpResponseHandler handler){
+            TextHttpResponseHandler handler) {
         // pass
     }
 
-    public static void reward(List<Pair<String, String>> pairs, TextHttpResponseHandler handler){
+    public static void reward(List<Pair<String, String>> pairs, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
-        for (Pair<String, String> pair : pairs){
+        for (Pair<String, String> pair : pairs) {
             params.put(pair.first, pair.second);
         }
         ApiHttpClient.getHttpClient().addHeader("Host", "121.41.10.133");
