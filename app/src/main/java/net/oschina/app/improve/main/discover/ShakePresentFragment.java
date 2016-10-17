@@ -62,11 +62,11 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
         switch (v.getId()) {
             case R.id.btn_shake_again:
                 if (mLoading && mCanAgain) {
-                    mCardView.removeAllViews();
+                    mCardView.clearAnimation();
                     mCardView.setVisibility(View.GONE);
+                    mCardView.removeAllViews();
                     mCanAgain = false;
                     mLoading = false;
-                    mCardView.setVisibility(View.GONE);
                 }
                 break;
             case R.id.btn_get:
@@ -91,9 +91,10 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
             Toast.makeText(mContext, "摇礼品需要登陆", Toast.LENGTH_LONG).show();
             return;
         }
+        mCanAgain = false;
         String appToken = Verifier.getPrivateToken(getActivity().getApplication());
         appToken = "1";
-        long time = 15428467;
+        long time = System.currentTimeMillis();
         String sign = Verifier.signStringArray(String.valueOf(time), String.valueOf(AppContext.getInstance().getLoginId()),
                 appToken);
         OSChinaApi.getShakePresent(time, appToken, sign, mHandler);
@@ -101,7 +102,6 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
 
     @Override
     protected void onTimeProgress() {
-
         if (mContext != null) {
             if (mTimeHandler == null)
                 mTimeHandler = new Handler();

@@ -412,7 +412,7 @@
 
         <activity
             android:name=".improve.main.FeedBackActivity"
-            android:label="反馈"
+            android:label="意见反馈"
             android:screenOrientation="portrait" />
 
         <service

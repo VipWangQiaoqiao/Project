@@ -92,7 +92,7 @@ public class FeedBackActivity extends BaseBackActivity implements View.OnClickLi
                 openImageSelector();
                 break;
             case R.id.iv_clear_img:
-                iv_add.setImageResource(R.drawable.selector_image_add);
+                iv_add.setImageResource(R.mipmap.ic_tweet_add);
                 iv_clear_img.setVisibility(View.GONE);
                 mFilePath = "";
                 break;
