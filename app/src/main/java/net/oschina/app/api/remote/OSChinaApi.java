@@ -2,7 +2,9 @@ package net.oschina.app.api.remote;
 
 import android.support.v4.util.Pair;
 import android.text.TextUtils;
+import android.util.Log;
 
+import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -23,6 +25,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.Map;
 
 public class OSChinaApi {
 
@@ -1903,5 +1906,13 @@ public class OSChinaApi {
         ApiHttpClient.getHttpClient().post("http://121.41.10.133/action/apiv2/blog_reward", params, handler);
     }
 
+    public static void reward(Map<String, String> pairs, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams(pairs);
+        Log.e("oschina", "params: " + params.toString());
 
+        AsyncHttpClient client = new AsyncHttpClient();
+
+        Log.e("oschina", "post request");
+        client.post("http://121.41.10.133/action/apiv2/reward_order", params, handler);
+    }
 }

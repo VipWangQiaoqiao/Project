@@ -93,7 +93,6 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
         }
         mCanAgain = false;
         String appToken = Verifier.getPrivateToken(getActivity().getApplication());
-        appToken = "1";
         long time = System.currentTimeMillis();
         String sign = Verifier.signStringArray(String.valueOf(time), String.valueOf(AppContext.getInstance().getLoginId()),
                 appToken);
