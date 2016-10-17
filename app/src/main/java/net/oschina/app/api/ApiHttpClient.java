@@ -58,7 +58,7 @@ public class ApiHttpClient {
         COOKIE_STRING = null;
         CLIENT = null;
         AsyncHttpClient client = new AsyncHttpClient();
-        client.setCookieStore(new PersistentCookieStore(context));
+        //client.setCookieStore(new PersistentCookieStore(context));
         // Set
         ApiHttpClient.setHttpClient(client);
         // Set Cookie
@@ -192,10 +192,10 @@ public class ApiHttpClient {
      */
     public static synchronized String getCookieString(AppContext appContext) {
         if (TextUtils.isEmpty(COOKIE_STRING)) {
-            String cookie = getClientCookie(CLIENT);
+            // 从本地拿
+            String cookie = appContext.getProperty(AppConfig.CONF_COOKIE);
             if (TextUtils.isEmpty(cookie)) {
-                // 从本地拿
-                cookie = appContext.getProperty(AppConfig.CONF_COOKIE);
+                cookie = getClientCookie(CLIENT);
             }
             COOKIE_STRING = cookie;
         }
