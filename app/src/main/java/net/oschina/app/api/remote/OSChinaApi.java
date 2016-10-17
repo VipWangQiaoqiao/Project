@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.PersistentCookieStore;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -27,9 +26,6 @@ import java.io.FileNotFoundException;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
-
-import cz.msebera.android.httpclient.HttpEntity;
-import cz.msebera.android.httpclient.entity.HttpEntityWrapper;
 
 public class OSChinaApi {
 
@@ -1687,6 +1683,28 @@ public class OSChinaApi {
     }
 
     /**
+     * 添加反馈，私信接口
+     *
+     * @param authorId
+     * @param content
+     * @param file
+     * @param handler
+     */
+    public static void pubMessage(long authorId, String content, File file, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("authorId", authorId);
+        params.put("content", content);
+        if (file != null && file.exists()) {
+            try {
+                params.put("file", file);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        ApiHttpClient.post("action/apiv2/messages_pub", params, handler);
+    }
+
+    /**
      * 获取AT我的列表。
      *
      * @param pageToken pageToken
@@ -1849,18 +1867,19 @@ public class OSChinaApi {
 
     /**
      * 打赏接口
-     * @param type 打赏类型, 博客: 16344358(暂时是固定值)
-     * @param targetId 博客id
-     * @param attach 支付类型 alipay、wepay
-     * @param money 多少钱呐!
-     * @param subject 博客标题
+     *
+     * @param type      打赏类型, 博客: 16344358(暂时是固定值)
+     * @param targetId  博客id
+     * @param attach    支付类型 alipay、wepay
+     * @param money     多少钱呐!
+     * @param subject   博客标题
      * @param donatorId 捐助者id
-     * @param authorId 博客作者id
-     * @param message 留言
+     * @param authorId  博客作者id
+     * @param message   留言
      * @param returnUrl 博客url
      * @param notifyUrl ???
-     * @param sign 签名
-     * @param handler handler
+     * @param sign      签名
+     * @param handler   handler
      */
     public static void reward(
             long type,
@@ -1874,11 +1893,20 @@ public class OSChinaApi {
             String returnUrl,
             String notifyUrl,
             String sign,
-            TextHttpResponseHandler handler){
+            TextHttpResponseHandler handler) {
         // pass
     }
 
-    public static void reward(Map<String, String> pairs, AsyncHttpResponseHandler handler){
+    public static void reward(List<Pair<String, String>> pairs, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        for (Pair<String, String> pair : pairs) {
+            params.put(pair.first, pair.second);
+        }
+        ApiHttpClient.getHttpClient().addHeader("Host", "121.41.10.133");
+        ApiHttpClient.getHttpClient().post("http://121.41.10.133/action/apiv2/blog_reward", params, handler);
+    }
+
+    public static void reward(Map<String, String> pairs, AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams(pairs);
         Log.e("oschina", "params: " + params.toString());
 
@@ -1887,6 +1915,4 @@ public class OSChinaApi {
         Log.e("oschina", "post request");
         client.post("http://121.41.10.133/action/apiv2/reward_order", params, handler);
     }
-
-
 }

@@ -34,6 +34,7 @@
                 android:layout_width="320dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:visibility="gone"
                 android:layout_margin="@dimen/lay_16"
                 android:background="@color/white" />
         </FrameLayout>
