@@ -14,10 +14,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.util.ArrayMap;
-import android.util.Log;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
+import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.improve.utils.CollectionUtil;
+import net.oschina.app.util.TLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -137,13 +139,16 @@ public class TweetPublishService extends Service implements Contract.IService {
     @Override
     public void onCreate() {
         super.onCreate();
+        log("onCreate");
+
+        // init sync client
+        ApiHttpClient.init((AppContext) getApplication());
 
         HandlerThread thread = new HandlerThread(TweetPublishService.class.getSimpleName());
         thread.start();
 
         mServiceLooper = thread.getLooper();
         mServiceHandler = new ServiceHandler(mServiceLooper);
-        log("onCreate");
     }
 
     /**
@@ -364,6 +369,6 @@ public class TweetPublishService extends Service implements Contract.IService {
     }
 
     public static void log(String str) {
-        Log.e(TAG, str);
+        TLog.log(TAG, str);
     }
 }

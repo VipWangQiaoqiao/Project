@@ -211,7 +211,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         // super.initData();
 
         UserV2 userInfo = (UserV2) CacheManager.readObject(getActivity(), CACHE_NAME);
-        if (userInfo != null) {
+        if (AppContext.getInstance().isLogin() && userInfo != null) {
             updateView(userInfo);
             if (TDevice.hasInternet()) {
                 sendRequestData();
@@ -321,7 +321,8 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     }
 
     private void sendRequestData() {
-        OSChinaApi.getUserInfo(textHandler);
+        if (AppContext.getInstance().isLogin())
+            OSChinaApi.getUserInfo(textHandler);
     }
 
     /**
