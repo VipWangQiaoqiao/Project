@@ -21,15 +21,12 @@ import net.oschina.common.verify.Verifier;
 import java.lang.reflect.Type;
 
 /**
- * Created by haibin
- * on 2016/10/11.
+ * 摇一摇礼品相关实现
  */
-
 public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
-
-    private Button btn_shake_again, btn_get;
-    private ImageView iv_pig;
-    private TextView tv_name;
+    private Button mBtnShakeAgain, mBtnGet;
+    private ImageView mImgPig;
+    private TextView mTxtName;
     private boolean mCanAgain;
 
     public static ShakePresentFragment newInstance() {
@@ -46,13 +43,13 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
     protected void initWidget(View root) {
         super.initWidget(root);
         mShakeView = mInflater.inflate(R.layout.view_present, null);
-        btn_shake_again = (Button) mShakeView.findViewById(R.id.btn_shake_again);
-        btn_get = (Button) mShakeView.findViewById(R.id.btn_get);
-        iv_pig = (ImageView) mShakeView.findViewById(R.id.iv_pig);
-        tv_name = (TextView) mShakeView.findViewById(R.id.tv_name);
-        btn_shake_again.setOnClickListener(this);
-        btn_get.setOnClickListener(this);
-        SPEED_SHRESHOLD = 90;
+        mBtnShakeAgain = (Button) mShakeView.findViewById(R.id.btn_shake_again);
+        mBtnGet = (Button) mShakeView.findViewById(R.id.btn_get);
+        mImgPig = (ImageView) mShakeView.findViewById(R.id.iv_pig);
+        mTxtName = (TextView) mShakeView.findViewById(R.id.tv_name);
+        mBtnShakeAgain.setOnClickListener(this);
+        mBtnGet.setOnClickListener(this);
+        //mSpeedThreshold = 90;
         mCardView.setVisibility(View.GONE);
         mTvState.setText("摇一摇抢礼品");
     }
@@ -105,30 +102,30 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
             if (mTimeHandler == null)
                 mTimeHandler = new Handler();
             mLoadingView.setVisibility(View.GONE);
-            btn_shake_again.setTextColor(0xFFD8D8D8);
-            tv_time.setVisibility((mBean == null || mBean.getResult() == null) ? View.VISIBLE : View.INVISIBLE);
-            tv_time.setText(String.format("%d秒后可再摇一次", timeDelay));
+            mBtnShakeAgain.setTextColor(0xFFD8D8D8);
+            mTxtTime.setVisibility((mBean == null || mBean.getResult() == null) ? View.VISIBLE : View.INVISIBLE);
+            mTxtTime.setText(String.format("%s秒后可再摇一次", mDelayTime));
             mTimeHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    --timeDelay;
-                    if (tv_time == null)
+                    --mDelayTime;
+                    if (mTxtTime == null)
                         return;
                     if (mBean == null || mBean.getResult() == null) {
-                        tv_time.setText(String.format("%d秒后可再摇一次", timeDelay));
+                        mTxtTime.setText(String.format("%s秒后可再摇一次", mDelayTime));
                     } else {
-                        btn_shake_again.setText(String.format("再摇一次(%d)", timeDelay));
+                        mBtnShakeAgain.setText(String.format("再摇一次(%s)", mDelayTime));
                     }
-                    if (timeDelay > 0)
+                    if (mDelayTime > 0)
                         mTimeHandler.postDelayed(this, 1000);
                     else {
-                        btn_shake_again.setText("再摇一次");
-                        btn_shake_again.setTextColor(0xFF111111);
+                        mBtnShakeAgain.setText("再摇一次");
+                        mBtnShakeAgain.setTextColor(0xFF111111);
                         mTvState.setText("摇一摇抢礼品");
                         mCanAgain = true;
-                        tv_time.setVisibility(View.INVISIBLE);
+                        mTxtTime.setVisibility(View.INVISIBLE);
                         mLoading = mBean != null && mBean.getResult() != null;
-                        timeDelay = 5;
+                        mDelayTime = 5;
                     }
                 }
             }, 1000);
@@ -139,8 +136,8 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
     protected void initShakeView() {
         ShakePresent present = mBean.getResult();
         mCardView.setVisibility(View.VISIBLE);
-        getImgLoader().load(present.getPic()).placeholder(R.mipmap.ic_split_graph).into(iv_pig);
-        tv_name.setText(present.getName());
+        getImgLoader().load(present.getPic()).placeholder(R.mipmap.ic_split_graph).into(mImgPig);
+        mTxtName.setText(present.getName());
         mTvState.setText("恭喜您中奖了");
     }
 

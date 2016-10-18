@@ -29,22 +29,23 @@ import butterknife.Bind;
 import cz.msebera.android.httpclient.Header;
 
 /**
- * Created by haibin
- * on 2016/10/12.
+ * 摇一摇基本逻辑实现
  */
-
 public abstract class BaseSensorFragment<T> extends BaseFragment implements SensorEventListener, View.OnClickListener {
+    public static final int UPTATE_INTERVAL_TIME = 50;
+
     protected SensorManager mSensor = null;
     protected Vibrator mVibrator = null;
-    protected int SPEED_SHRESHOLD = 45;// 这个值越大需要越大的力气来摇晃手机
-    public static final int UPTATE_INTERVAL_TIME = 50;
-    private float lastX;
-    private float lastY;
-    private float lastZ;
-    private long lastUpdateTime;
+    protected int mSpeedThreshold = 45;// 这个值越大需要越大的力气来摇晃手机
+
+    private float mSensorLastX;
+    private float mSensorLastY;
+    private float mSensorLastZ;
+    private long mSensorLastUpdateTime;
 
     protected boolean mLoading;
     protected boolean mIsRegister;
+    protected int mDelayTime = 5;
 
     protected TextHttpResponseHandler mHandler;
     protected ResultBean<T> mBean;
@@ -53,17 +54,14 @@ public abstract class BaseSensorFragment<T> extends BaseFragment implements Sens
     @Bind(R.id.cv_shake)
     CardView mCardView;
 
-
     @Bind(R.id.tv_state)
     TextView mTvState;
 
     @Bind(R.id.loading)
     Loading mLoadingView;
 
-    protected int timeDelay = 5;
-
     @Bind(R.id.tv_time)
-    TextView tv_time;
+    TextView mTxtTime;
 
     protected Handler mTimeHandler;
 
@@ -174,27 +172,27 @@ public abstract class BaseSensorFragment<T> extends BaseFragment implements Sens
     @Override
     public void onSensorChanged(SensorEvent event) {
         long currentUpdateTime = System.currentTimeMillis();
-        long timeInterval = currentUpdateTime - lastUpdateTime;
+        long timeInterval = currentUpdateTime - mSensorLastUpdateTime;
         if (timeInterval < UPTATE_INTERVAL_TIME) {
             return;
         }
-        lastUpdateTime = currentUpdateTime;
+        mSensorLastUpdateTime = currentUpdateTime;
 
         float x = event.values[0];
         float y = event.values[1];
         float z = event.values[2];
 
-        float deltaX = x - lastX;
-        float deltaY = y - lastY;
-        float deltaZ = z - lastZ;
+        float deltaX = x - mSensorLastX;
+        float deltaY = y - mSensorLastY;
+        float deltaZ = z - mSensorLastZ;
 
-        lastX = x;
-        lastY = y;
-        lastZ = z;
+        mSensorLastX = x;
+        mSensorLastY = y;
+        mSensorLastZ = z;
 
         double speed = (Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ
                 * deltaZ) / timeInterval) * 100;
-        if (speed >= SPEED_SHRESHOLD && !mLoading) {
+        if (speed >= mSpeedThreshold && !mLoading) {
             mLoading = true;
             mVibrator.vibrate(300);
             onShake();
