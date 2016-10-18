@@ -7,7 +7,7 @@ import net.oschina.app.R;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.improve.base.fragments.BaseTitleFragment;
 import net.oschina.app.improve.main.discover.ShakePresentActivity;
-import net.oschina.app.improve.search.SearchActivity;
+import net.oschina.app.improve.search.activities.SearchActivity;
 import net.oschina.app.ui.FindUserActivity;
 import net.oschina.app.util.UIHelper;
 
