@@ -1,4 +1,4 @@
-package net.oschina.app.improve.search;
+package net.oschina.app.improve.search.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -13,11 +13,12 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import net.oschina.app.R;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 
 /**
  * 搜索界面
@@ -42,7 +44,8 @@ public class SearchActivity extends BaseActivity {
     @Bind(R.id.layout_tab) TabLayout mLayoutTab;
     @Bind(R.id.view_pager) ViewPager mViewPager;
     @Bind(R.id.view_searcher) SearchView mViewSearch;
-    @Bind(R.id.toolbar) Toolbar mToolbar;
+    @Bind(R.id.search_mag_icon) ImageView mSearchIcon;
+    @Bind(R.id.search_edit_frame) LinearLayout mLayoutEditFrame;
 
     private List<Pair<String, Fragment>> mPagerItems;
 
@@ -53,7 +56,7 @@ public class SearchActivity extends BaseActivity {
 
     @Override
     protected int getContentView() {
-        return R.layout.activity_search;
+        return R.layout.activity_v2_search;
     }
 
     @Override
@@ -64,18 +67,12 @@ public class SearchActivity extends BaseActivity {
         mPagerItems.add(new Pair<>("问答", instantiate(SearchFragment.class, SearchList.CATALOG_POST)));
         mPagerItems.add(new Pair<>("博客", instantiate(SearchFragment.class, SearchList.CATALOG_BLOG)));
         mPagerItems.add(new Pair<>("新闻", instantiate(SearchFragment.class, SearchList.CATALOG_NEWS)));
+        mPagerItems.add(new Pair<>("人", instantiate(SearchFragment.class, SearchList.CATALOG_NEWS)));
     }
 
     @Override
     protected void initWidget() {
         getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                supportFinish();
-            }
-        });
-
         mViewSearch.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
@@ -87,6 +84,8 @@ public class SearchActivity extends BaseActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (TextUtils.isEmpty(query)) return false;
+                mLayoutTab.setVisibility(View.VISIBLE);
+                mViewPager.setVisibility(View.VISIBLE);
                 for (Pair<String, Fragment> pair : mPagerItems){
                     ((SearchFragment) pair.second).search(query);
                 }
@@ -95,8 +94,14 @@ public class SearchActivity extends BaseActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                if (TextUtils.isEmpty(newText)) {
+                    mLayoutTab.setVisibility(View.GONE);
+                    mViewPager.setVisibility(View.GONE);
+                    return false;
+                };
                 if (!TDevice.isWifiOpen()) return false;
-                if (TextUtils.isEmpty(newText)) return false;
+                mLayoutTab.setVisibility(View.VISIBLE);
+                mViewPager.setVisibility(View.VISIBLE);
                 for (Pair<String, Fragment> pair : mPagerItems){
                     ((SearchFragment) pair.second).search(newText);
                 }
@@ -120,14 +125,27 @@ public class SearchActivity extends BaseActivity {
                 return mPagerItems.get(position).first;
             }
         });
-        mViewPager.setOffscreenPageLimit(4);
+        mViewPager.setOffscreenPageLimit(5);
         mLayoutTab.setupWithViewPager(mViewPager);
 
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mSearchIcon.getLayoutParams();
+        params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+        mSearchIcon.setLayoutParams(params);
+
+        LinearLayout.LayoutParams params1 = (LinearLayout.LayoutParams) mLayoutEditFrame.getLayoutParams();
+        params1.setMargins(0, 0, 0, 0);
+        mLayoutEditFrame.setLayoutParams(params1);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(getResources().getColor(R.color.day_colorPrimary));
             startAnimation();
         }else {
             mViewSearch.setIconified(false);
         }
+    }
+
+    @OnClick(R.id.tv_cancel) void onClickCancle(){
+        supportFinish();
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)

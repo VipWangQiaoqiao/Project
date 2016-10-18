@@ -404,10 +404,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/App.Theme.Tweet.Main" />
         <activity
-            android:name=".improve.search.SearchActivity"
+            android:name=".improve.search.activities.SearchActivity"
             android:label="搜索"
             android:screenOrientation="portrait"
-            android:theme="@style/App.Theme.Translucent" />
+            android:theme="@style/App.Theme.Search" />
 
         <activity
             android:name=".improve.main.discover.ShakePresentActivity"
