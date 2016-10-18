@@ -409,6 +409,12 @@
             android:theme="@style/App.Theme.Translucent" />
 
         <activity
+            android:name=".improve.search.V2SearchActivity"
+            android:label="搜索"
+            android:screenOrientation="portrait"
+            android:theme="@style/App.Theme.Translucent" />
+
+        <activity
             android:name=".improve.main.discover.ShakePresentActivity"
             android:label="摇一摇"
             android:screenOrientation="portrait" />
