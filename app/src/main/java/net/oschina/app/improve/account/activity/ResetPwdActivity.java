@@ -1,4 +1,4 @@
-package net.oschina.app.improve.account.activities;
+package net.oschina.app.improve.account.activity;
 
 import android.view.View;
 import android.widget.Button;
