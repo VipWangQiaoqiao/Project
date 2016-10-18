@@ -20,14 +20,12 @@ import net.oschina.app.util.UIHelper;
 import java.lang.reflect.Type;
 
 /**
- * Created by haibin
- * on 2016/10/11.
+ * 摇一摇新闻咨询等相关界面实现
  */
-
 public class ShakeNewsFragment extends BaseSensorFragment<ShakeNews> {
 
-    private ImageView iv_news;
-    private TextView tv_news_name, tv_pubTime;
+    private ImageView mImgNews;
+    private TextView mTxtNewsName, mTxtPubTime;
 
     public static ShakeNewsFragment newInstance() {
         ShakeNewsFragment fragment = new ShakeNewsFragment();
@@ -43,10 +41,10 @@ public class ShakeNewsFragment extends BaseSensorFragment<ShakeNews> {
     protected void initWidget(View root) {
         super.initWidget(root);
         mShakeView = mInflater.inflate(R.layout.view_news, null);
-        iv_news = (ImageView) mShakeView.findViewById(R.id.iv_news);
-        tv_news_name = (TextView) mShakeView.findViewById(R.id.tv_news_name);
-        tv_pubTime = (TextView) mShakeView.findViewById(R.id.tv_time);
-        timeDelay = 3;
+        mImgNews = (ImageView) mShakeView.findViewById(R.id.iv_news);
+        mTxtNewsName = (TextView) mShakeView.findViewById(R.id.tv_news_name);
+        mTxtPubTime = (TextView) mShakeView.findViewById(R.id.tv_time);
+        mDelayTime = 3;
         mCardView.setVisibility(View.GONE);
         mTvState.setText("摇一摇获取资讯");
     }
@@ -79,9 +77,9 @@ public class ShakeNewsFragment extends BaseSensorFragment<ShakeNews> {
         mCardView.setVisibility(View.VISIBLE);
         getImgLoader().load(news.getImg())
                 .placeholder(R.mipmap.ic_split_graph)
-                .into(iv_news);
-        tv_news_name.setText(news.getName());
-        tv_pubTime.setText(StringUtils.formatSomeAgo(news.getPubDate()));
+                .into(mImgNews);
+        mTxtNewsName.setText(news.getName());
+        mTxtPubTime.setText(StringUtils.formatSomeAgo(news.getPubDate()));
     }
 
     @Override
@@ -96,26 +94,26 @@ public class ShakeNewsFragment extends BaseSensorFragment<ShakeNews> {
             if (mTimeHandler == null)
                 mTimeHandler = new Handler();
             mLoadingView.setVisibility(View.GONE);
-            tv_time.setVisibility(View.VISIBLE);
-            tv_time.setText(String.format("%d秒后可再摇一次", timeDelay));
+            mTxtTime.setVisibility(View.VISIBLE);
+            mTxtTime.setText(String.format("%d秒后可再摇一次", mDelayTime));
             mTimeHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if (tv_time == null)
+                    if (mTxtTime == null)
                         return;
-                    tv_time.setVisibility(View.VISIBLE);
-                    --timeDelay;
-                    if (tv_time == null)
+                    mTxtTime.setVisibility(View.VISIBLE);
+                    --mDelayTime;
+                    if (mTxtTime == null)
                         return;
-                    tv_time.setText(String.format("%d秒后可再摇一次", timeDelay));
-                    if (timeDelay > 0)
+                    mTxtTime.setText(String.format("%d秒后可再摇一次", mDelayTime));
+                    if (mDelayTime > 0)
                         mTimeHandler.postDelayed(this, 1000);
                     else {
-                        tv_time.setVisibility(View.INVISIBLE);
+                        mTxtTime.setVisibility(View.INVISIBLE);
                         mTvState.setVisibility(View.VISIBLE);
                         mTvState.setText("摇一摇获取资讯");
                         mLoading = false;
-                        timeDelay = 3;
+                        mDelayTime = 3;
                     }
                 }
             }, 1000);

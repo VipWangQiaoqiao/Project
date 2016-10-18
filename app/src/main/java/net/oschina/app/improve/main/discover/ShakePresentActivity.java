@@ -12,18 +12,15 @@ import butterknife.Bind;
 import butterknife.OnClick;
 
 /**
- * 摇一摇抽奖
- * Created by haibin
- * on 2016/10/10.
+ * 摇一摇活动界面
  */
-
 public class ShakePresentActivity extends BaseBackActivity implements View.OnClickListener {
 
     @Bind(R.id.ll_shake_present)
-    LinearLayout ll_shake_present;
+    LinearLayout mLayShakePresent;
 
     @Bind(R.id.ll_shake_news)
-    LinearLayout ll_shake_news;
+    LinearLayout mLayShakeNews;
 
     private ShakePresentFragment mPresentFragment;
     private ShakeNewsFragment mNewsFragment;
@@ -46,7 +43,7 @@ public class ShakePresentActivity extends BaseBackActivity implements View.OnCli
         mPresentFragment = ShakePresentFragment.newInstance();
         addFragment(R.id.fl_content, mNewsFragment);
         addFragment(R.id.fl_content, mPresentFragment);
-        setState(ll_shake_present, true);
+        setState(mLayShakePresent, true);
         mIsRegisterPresent = true;
     }
 
@@ -57,15 +54,15 @@ public class ShakePresentActivity extends BaseBackActivity implements View.OnCli
             addFragment(R.id.fl_content, mPresentFragment);
             mNewsFragment.unregisterSensor();
             mPresentFragment.registerSensor();
-            setState(ll_shake_news, false);
-            setState(ll_shake_present, true);
+            setState(mLayShakeNews, false);
+            setState(mLayShakePresent, true);
             mIsRegisterPresent = true;
         } else if (v.getId() == R.id.ll_shake_news) {
             addFragment(R.id.fl_content, mNewsFragment);
             mPresentFragment.unregisterSensor();
             mNewsFragment.registerSensor();
-            setState(ll_shake_present, false);
-            setState(ll_shake_news, true);
+            setState(mLayShakePresent, false);
+            setState(mLayShakeNews, true);
             mIsRegisterPresent = false;
         }
     }

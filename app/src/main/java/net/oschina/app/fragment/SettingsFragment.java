@@ -183,7 +183,7 @@ public class SettingsFragment extends BaseFragment {
 //                break;
             case R.id.rl_cancle:
                 // 清理所有缓存
-                UIHelper.clearAppCache(getActivity());
+                UIHelper.clearAppCache(false);
                 // 注销操作
                 AppContext.getInstance().Logout();
                 AppContext.showToastShort(R.string.tip_logout_success);
@@ -204,7 +204,7 @@ public class SettingsFragment extends BaseFragment {
                 () {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                UIHelper.clearAppCache(getActivity());
+                UIHelper.clearAppCache(true);
                 mTvCacheSize.setText("0KB");
             }
         }).show();
