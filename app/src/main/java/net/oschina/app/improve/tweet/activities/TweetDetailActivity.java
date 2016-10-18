@@ -99,7 +99,6 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
     private Tweet tweet;
     private List<TweetComment> replies = new ArrayList<>();
     private Dialog dialog;
-   // private ShareDialog mShareDialog;
     private RecordButtonUtil mRecordUtil;
     private TextHttpResponseHandler publishAdmireHandler;
     private TextHttpResponseHandler publishCommentHandler;
@@ -317,18 +316,8 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         switch (item.getItemId()) {
             case R.id.menu_share:
                 if (tweet == null || tweet.getId() <= 0) break;
-//                if (mShareDialog == null) {
-//                   mShareDialog = new ShareDialog(this);
-                //              }
-//                mShareDialog.setCancelable(true);
-//                mShareDialog.setCanceledOnTouchOutside(true);
-//                mShareDialog.setTitle(R.string.share_to);
-//                mShareDialog.setShareInfo(tweet.getAuthor().getName() + "的动弹 - 开源中国社区",
-//                        tweet.getContent(), tweet.getHref());
-//                mShareDialog.show();
 
                 ShareDialogBuilder builder = new ShareDialogBuilder(this, R.style.share_dialog);
-
                 Share share = new Share();
                 share.setTitle(tweet.getAuthor().getName() + "的动弹 - 开源中国社区 ");
                 share.setContent(tweet.getContent());
@@ -337,7 +326,6 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                 builder.boundActivity(this).addShare(share).setTitle(R.string.share_to)
                         .setView(R.layout
                                 .dialog_share_main).create().show();
-
                 break;
         }
         return super.onOptionsItemSelected(item);

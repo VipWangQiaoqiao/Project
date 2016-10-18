@@ -42,7 +42,6 @@
             android:text="男" />
 
         <RadioButton
-            android:id="@+id/rb_female"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

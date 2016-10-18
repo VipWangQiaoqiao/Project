@@ -203,9 +203,7 @@
                 </HorizontalScrollView>
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/ll_issue_attachments"
-                style="@style/team_issue_detail_layout" >
+            <LinearLayout style="@style/team_issue_detail_layout" >
 
                 <TextView
                     android:id="@+id/tv_issue_fa_attachments"
@@ -225,9 +223,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/ll_issue_relations"
-                style="@style/team_issue_detail_layout" >
+            <LinearLayout style="@style/team_issue_detail_layout" >
 
                 <TextView
                     android:id="@+id/tv_issue_fa_relations"
@@ -259,7 +255,6 @@
                 android:visibility="gone" />
 
             <LinearLayout
-                android:id="@+id/ll_issue_active"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"

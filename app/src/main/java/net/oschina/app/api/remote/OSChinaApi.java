@@ -1,7 +1,10 @@
 package net.oschina.app.api.remote;
 
+import android.support.v4.util.Pair;
 import android.text.TextUtils;
+import android.util.Log;
 
+import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -21,6 +24,8 @@ import org.kymjs.kjframe.utils.KJLoger;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URLEncoder;
+import java.util.List;
+import java.util.Map;
 
 public class OSChinaApi {
 
@@ -1678,6 +1683,28 @@ public class OSChinaApi {
     }
 
     /**
+     * 添加反馈，私信接口
+     *
+     * @param authorId
+     * @param content
+     * @param file
+     * @param handler
+     */
+    public static void pubMessage(long authorId, String content, File file, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("authorId", authorId);
+        params.put("content", content);
+        if (file != null && file.exists()) {
+            try {
+                params.put("file", file);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        ApiHttpClient.post("action/apiv2/messages_pub", params, handler);
+    }
+
+    /**
      * 获取AT我的列表。
      *
      * @param pageToken pageToken
@@ -1711,7 +1738,7 @@ public class OSChinaApi {
      */
     public static void getUserInfo(long uid, String nick, String suffix, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
-        if (uid > 0 ) params.put("id", uid);
+        if (uid > 0) params.put("id", uid);
         if (!TextUtils.isEmpty(nick)) params.put("nickname", nick);
         if (!TextUtils.isEmpty(suffix)) params.put("suffix", suffix);
         ApiHttpClient.get("action/apiv2/user_info", params, handler);
@@ -1811,5 +1838,81 @@ public class OSChinaApi {
         if (pagetoken != null)
             params.put("pageToken", pagetoken);
         ApiHttpClient.get("action/apiv2/favorites", params, handler);
+    }
+
+    /**
+     * 摇一摇(抽奖)
+     *
+     * @param timestamp 当前摇一摇的时间戳
+     * @param appToken  App唯一校验
+     * @param signature 加密后的字符串
+     * @param handler
+     */
+    public static void getShakePresent(long timestamp, String appToken, String signature, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("timestamp", timestamp);
+        params.put("appToken", appToken);
+        params.put("signature", signature);
+        ApiHttpClient.post("action/apiv2/shake_present", params, handler);
+    }
+
+    /**
+     * 摇一摇(综合)
+     *
+     * @param handler
+     */
+    public static void getShakeNews(TextHttpResponseHandler handler) {
+        ApiHttpClient.get("action/apiv2/shake_news", handler);
+    }
+
+    /**
+     * 打赏接口
+     *
+     * @param type      打赏类型, 博客: 16344358(暂时是固定值)
+     * @param targetId  博客id
+     * @param attach    支付类型 alipay、wepay
+     * @param money     多少钱呐!
+     * @param subject   博客标题
+     * @param donatorId 捐助者id
+     * @param authorId  博客作者id
+     * @param message   留言
+     * @param returnUrl 博客url
+     * @param notifyUrl ???
+     * @param sign      签名
+     * @param handler   handler
+     */
+    public static void reward(
+            long type,
+            long targetId,
+            String attach,
+            long money,
+            String subject,
+            long donatorId,
+            long authorId,
+            String message,
+            String returnUrl,
+            String notifyUrl,
+            String sign,
+            TextHttpResponseHandler handler) {
+        // pass
+    }
+
+    public static void reward(List<Pair<String, String>> pairs, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        for (Pair<String, String> pair : pairs) {
+            params.put(pair.first, pair.second);
+        }
+        ApiHttpClient.getHttpClient().addHeader("Host", "121.41.10.133");
+        ApiHttpClient.getHttpClient().post("http://121.41.10.133/action/apiv2/blog_reward", params, handler);
+    }
+
+    public static void reward(Map<String, String> pairs, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams(pairs);
+        Log.e("oschina", "params: " + params.toString());
+
+        AsyncHttpClient client = new AsyncHttpClient();
+
+        Log.e("oschina", "post request");
+        client.post("http://121.41.10.133/action/apiv2/reward_order", params, handler);
     }
 }

@@ -10,7 +10,6 @@
         android:layout_weight="1" >
 
         <ScrollView
-            android:id="@+id/sv_news_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fadingEdge="none"
@@ -27,8 +26,7 @@
                     android:background="@color/white"
                     android:orientation="vertical"
                     android:padding="@dimen/space_8"
-                    android:visibility="gone"
-                    android:id="@+id/ll_header">
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/tv_title"

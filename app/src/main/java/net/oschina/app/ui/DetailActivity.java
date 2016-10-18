@@ -23,12 +23,11 @@ import net.oschina.app.fragment.EventDetailFragment;
 import net.oschina.app.fragment.NewsDetailFragment;
 import net.oschina.app.fragment.PostDetailFragment;
 import net.oschina.app.fragment.SoftwareDetailFragment;
-import net.oschina.app.fragment.TweetDetailFragment;
+import net.oschina.app.improve.detail.activities.BlogDetailActivity;
 import net.oschina.app.team.fragment.TeamDiaryDetailFragment;
 import net.oschina.app.team.fragment.TeamDiscussDetailFragment;
 import net.oschina.app.team.fragment.TeamIssueDetailFragment;
 import net.oschina.app.team.fragment.TeamTweetDetailFragment;
-import net.oschina.app.improve.detail.activities.BlogDetailActivity;
 
 /**
  * 详情activity（包括：资讯、博客、软件、问答、动弹）
@@ -98,9 +97,8 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
                 fragment = new PostDetailFragment();
                 break;
             case DISPLAY_TWEET:
-                actionBarTitle = R.string.actionbar_title_tweet;
-                fragment = new TweetDetailFragment();
-                break;
+                finish();
+                return;
             case DISPLAY_EVENT:
                 actionBarTitle = R.string.actionbar_title_event_detail;
                 fragment = new EventDetailFragment();
@@ -153,8 +151,7 @@ public class DetailActivity extends BaseActivity implements OnSendClickListener 
 
     @Override
     public void initView() {
-        if (currentFragment instanceof TweetDetailFragment
-                || currentFragment instanceof TeamTweetDetailFragment
+        if (currentFragment instanceof TeamTweetDetailFragment
                 || currentFragment instanceof TeamDiaryDetailFragment
                 || currentFragment instanceof TeamIssueDetailFragment
                 || currentFragment instanceof TeamDiscussDetailFragment

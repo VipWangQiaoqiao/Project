@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
-import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.MessageDetail;
 import net.oschina.app.emoji.InputHelper;
@@ -28,7 +27,6 @@ import net.oschina.app.widget.TweetTextView;
 import org.kymjs.kjframe.Core;
 import org.kymjs.kjframe.KJBitmap;
 import org.kymjs.kjframe.bitmap.BitmapConfig;
-import org.kymjs.kjframe.http.HttpConfig;
 
 import java.lang.reflect.Field;
 
@@ -150,7 +148,6 @@ public class MessageDetailAdapter extends ListBaseAdapter<MessageDetail> {
         vh.image.setVisibility(View.VISIBLE);
         //加载图片
         vh.image.setImageResource(R.mipmap.load_img_loading);
-        HttpConfig.sCookie = ApiHttpClient.getCookie(AppContext.getInstance());
         mKjBitmap.display(vh.image, msg.getContent(), R.mipmap.load_img_error, 3000, 3000,
                 null);
     }

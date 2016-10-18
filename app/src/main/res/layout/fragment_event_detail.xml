@@ -7,7 +7,6 @@
     android:orientation="vertical">
 
     <net.oschina.app.widget.CustomerScrollView
-        android:id="@+id/sv_news_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fadingEdge="none"
