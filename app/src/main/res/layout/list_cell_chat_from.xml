@@ -41,7 +41,6 @@
             android:paddingRight="@dimen/space_28">
 
             <LinearLayout
-                android:id="@+id/ly_content"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

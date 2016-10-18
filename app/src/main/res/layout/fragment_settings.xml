@@ -95,7 +95,6 @@
         <View style="@style/h_line" />
 
         <RelativeLayout
-            android:id="@+id/rl_loading_more"
             style="@style/option_item_rl"
             android:visibility="gone">
 
@@ -106,7 +105,6 @@
                 android:textSize="@dimen/text_size_16" />
 
             <net.oschina.app.improve.widget.togglebutton.ToggleButton
-                android:id="@+id/tb_loading_more"
                 style="@style/option_item_toggleButton"
                 android:layout_alignParentRight="true" />
         </RelativeLayout>
@@ -120,7 +118,6 @@
             style="@style/option_item_rl">
 
             <TextView
-                android:id="@+id/setting_feedback"
                 style="@style/option_item_text_parent"
                 android:text="@string/feedback"
                 android:textColor="?attr/textColor"
@@ -179,7 +176,6 @@
             style="@style/option_item_rl">
 
             <TextView
-                android:id="@+id/setting_cancle"
                 style="@style/option_item_text_parent"
                 android:text="@string/setting_cancle"
                 android:textColor="?attr/textColor"

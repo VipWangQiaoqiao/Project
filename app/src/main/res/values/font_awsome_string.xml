@@ -22,13 +22,6 @@
     <string name="fa_link">\uf0c1</string>
     <string name="fa_paperclip">\uf0c6</string>
     <string name="fa_trello">\uf181</string>
-    <string name="fa_bookmark">\uf02e</string>
-    <string name="fa_mobile">\uf10b</string>
-    <string name="fa_comment">\uf0e5</string>
-    <string name="fa_thumbs_o_up">\uf087</string>
     <string name="fa_list">\uf03a</string>
-    <string name="fa_icon_phone">\uf095</string>
-    <string name="fa_trash">\uf014</string>
-    <style name="fa_moon">\uf186</style>
 
 </resources>

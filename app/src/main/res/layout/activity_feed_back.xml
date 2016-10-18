@@ -6,7 +6,6 @@
     android:orientation="vertical">
 
     <RadioGroup
-        android:id="@+id/rg_feedback"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginBottom="@dimen/lay_12"
@@ -27,7 +26,6 @@
             android:textSize="@dimen/font_14" />
 
         <RadioButton
-            android:id="@+id/rb_suggest"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/lay_12"

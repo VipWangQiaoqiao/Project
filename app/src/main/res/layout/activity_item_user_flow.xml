@@ -78,7 +78,6 @@
             tools:text="这是一个大佬" />
 
         <View
-            android:id="@+id/textView9"
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_marginTop="8dp"

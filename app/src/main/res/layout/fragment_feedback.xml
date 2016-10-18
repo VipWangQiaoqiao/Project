@@ -21,7 +21,6 @@
             android:text="@string/str_feedback_error" />
 
         <RadioButton
-            android:id="@+id/rb_feedback_function"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -45,7 +44,6 @@
         android:textSize="@dimen/text_size_account_info" />
 
     <TextView
-        android:id="@+id/tv_contact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
