@@ -50,6 +50,7 @@ import net.oschina.app.fragment.FriendsFragment;
 import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.detail.activities.BlogDetailActivity;
 import net.oschina.app.improve.detail.activities.EventDetailActivity;
 import net.oschina.app.improve.detail.activities.NewsDetailActivity;
@@ -872,11 +873,9 @@ public class UIHelper {
 
     /**
      * 清除app缓存
-     *
-     * @param activity
      */
-    public static void clearAppCache(Activity activity) {
-        final Handler handler = new Handler() {
+    public static void clearAppCache(boolean showToast) {
+        final Handler handler = showToast ? new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 if (msg.what == 1) {
@@ -885,8 +884,8 @@ public class UIHelper {
                     AppContext.showToastShort("缓存清除失败");
                 }
             }
-        };
-        new Thread() {
+        } : null;
+        AppOperator.runOnThread(new Runnable() {
             @Override
             public void run() {
                 Message msg = new Message();
@@ -897,9 +896,10 @@ public class UIHelper {
                     e.printStackTrace();
                     msg.what = -1;
                 }
-                handler.sendMessage(msg);
+                if (handler != null)
+                    handler.sendMessage(msg);
             }
-        }.start();
+        });
     }
 
     public static void openDownLoadService(Context context, String downurl,

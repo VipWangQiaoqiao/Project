@@ -52,12 +52,18 @@
         <item name="message_bg_left">@mipmap/chat_from_bg_normal</item>
         <item name="message_bg_right">@mipmap/chat_to_bg_normal</item>
 
-        <item name="quickoption_icon_text_selector">@drawable/day_quickoption_icon_text_selector</item>
-        <item name="quickoption_icon_album_selector">@drawable/day_quickoption_icon_album_selector</item>
-        <item name="quickoption_icon_photo_selector">@drawable/day_quickoption_icon_photo_selector</item>
-        <item name="quickoption_icon_voice_selector">@drawable/day_quickoption_icon_voice_selector</item>
-        <item name="quickoption_icon_scan_selector">@drawable/day_quickoption_icon_scan_selector</item>
-        <item name="quickoption_icon_note_selector">@drawable/day_quickoption_icon_note_selector</item>
+        <item name="quickoption_icon_text_selector">@drawable/day_quickoption_icon_text_selector
+        </item>
+        <item name="quickoption_icon_album_selector">@drawable/day_quickoption_icon_album_selector
+        </item>
+        <item name="quickoption_icon_photo_selector">@drawable/day_quickoption_icon_photo_selector
+        </item>
+        <item name="quickoption_icon_voice_selector">@drawable/day_quickoption_icon_voice_selector
+        </item>
+        <item name="quickoption_icon_scan_selector">@drawable/day_quickoption_icon_scan_selector
+        </item>
+        <item name="quickoption_icon_note_selector">@drawable/day_quickoption_icon_note_selector
+        </item>
 
         <!-- In this custom widget style -->
         <item name="gTextViewStyle">@style/Genius.Widget.TextView</item>
@@ -185,15 +191,27 @@
         <item name="comment_reply_container_bg">@mipmap/night_comment_reply_container_bg</item>
         <item name="message_bg_left">@mipmap/night_chat_from_bg_normal</item>
         <item name="message_bg_right">@mipmap/chat_to_bg_pressed</item>
-        <item name="quickoption_icon_text_selector">@drawable/night_quickoption_icon_text_selector</item>
-        <item name="quickoption_icon_album_selector">@drawable/night_quickoption_icon_album_selector</item>
-        <item name="quickoption_icon_photo_selector">@drawable/night_quickoption_icon_photo_selector</item>
-        <item name="quickoption_icon_voice_selector">@drawable/night_quickoption_icon_voice_selector</item>
-        <item name="quickoption_icon_scan_selector">@drawable/night_quickoption_icon_scan_selector</item>
-        <item name="quickoption_icon_note_selector">@drawable/night_quickoption_icon_note_selector</item>
+        <item name="quickoption_icon_text_selector">@drawable/night_quickoption_icon_text_selector
+        </item>
+        <item name="quickoption_icon_album_selector">
+            @drawable/night_quickoption_icon_album_selector
+        </item>
+        <item name="quickoption_icon_photo_selector">
+            @drawable/night_quickoption_icon_photo_selector
+        </item>
+        <item name="quickoption_icon_voice_selector">
+            @drawable/night_quickoption_icon_voice_selector
+        </item>
+        <item name="quickoption_icon_scan_selector">@drawable/night_quickoption_icon_scan_selector
+        </item>
+        <item name="quickoption_icon_note_selector">@drawable/night_quickoption_icon_note_selector
+        </item>
         <item name="actionBarStyle">@style/Theme.App.ActionBar</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:buttonStyle">@style/App.Widget.Button</item>
     </style>
 
+    <style name="App.Theme.Dialog.Alert" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="android:textColorPrimary">@color/black_alpha_240</item>
+    </style>
 </resources>
