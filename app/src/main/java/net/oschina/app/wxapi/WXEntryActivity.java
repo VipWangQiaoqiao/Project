@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.tencent.mm.sdk.modelbase.BaseResp;
-import com.tencent.mm.sdk.modelmsg.SendAuth;
+import com.tencent.mm.sdk.openapi.BaseResp;
+import com.tencent.mm.sdk.openapi.SendAuth;
 
 import net.oschina.app.R;
 import net.oschina.app.api.ApiHttpClient;
@@ -45,7 +45,7 @@ public class WXEntryActivity extends Activity {
         if (resp.errCode == BaseResp.ErrCode.ERR_OK) {
 
             //用户同意
-            String code = resp.code;
+            String code = resp.token;
             String state = resp.state;
             // 如果不是登录
             if (!"wechat_login".equals(state)) {
