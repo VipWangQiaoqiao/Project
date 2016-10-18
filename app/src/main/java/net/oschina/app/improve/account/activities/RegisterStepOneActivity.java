@@ -32,8 +32,6 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
     TextView mTvRegisterSmsCall;
     @Bind(R.id.bt_register_submit)
     Button mBtRegisterSubmit;
-    @Bind(R.id.bt_register_login)
-    Button mBtRegisterLogin;
 
     /**
      * show the register activity
@@ -67,9 +65,6 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
 
                 RegisterStepTwoActivity.show(RegisterStepOneActivity.this);
 
-                break;
-            case R.id.bt_register_login:
-                LoginActivity.show(RegisterStepOneActivity.this);
                 break;
             default:
                 break;

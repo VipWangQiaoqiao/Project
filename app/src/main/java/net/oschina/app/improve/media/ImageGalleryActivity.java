@@ -43,7 +43,7 @@ import java.util.concurrent.Future;
  */
 public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
     public static final String KEY_IMAGE = "images";
-    public static final String KEY_COOKIE = "cookie";
+    public static final String KEY_COOKIE = "cookie_need";
     public static final String KEY_POSITION = "position";
     public static final String KEY_NEED_SAVE = "save";
     private PreviewerViewPager mImagePager;

@@ -260,8 +260,8 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                 }
                 mViewInput.setHint("回复: @" + replies.get(0).getAuthor().getName());
                 if (replies.size() == 2) {
-                    mViewInput.setHint(mViewInput.getHint() + " @" + replies.get(1).getAuthor()
-                            .getName());
+                    mViewInput.setHint(mViewInput.getHint() + " @" + replies.get(1).getAuthor().getName());
+
                 }
             }
         });
@@ -317,15 +317,6 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
         switch (item.getItemId()) {
             case R.id.menu_share:
                 if (tweet == null || tweet.getId() <= 0) break;
-//                if (mShareDialog == null) {
-//                   mShareDialog = new ShareDialog(this);
-                //              }
-//                mShareDialog.setCancelable(true);
-//                mShareDialog.setCanceledOnTouchOutside(true);
-//                mShareDialog.setTitle(R.string.share_to);
-//                mShareDialog.setShareInfo(tweet.getAuthor().getName() + "的动弹 - 开源中国社区",
-//                        tweet.getContent(), tweet.getHref());
-//                mShareDialog.show();
 
                 ShareDialogBuilder builder = new ShareDialogBuilder(this, R.style.share_dialog);
 

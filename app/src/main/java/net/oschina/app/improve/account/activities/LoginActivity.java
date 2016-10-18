@@ -4,9 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -27,8 +27,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     EditText mEtLoginUsername;
     @Bind(R.id.et_login_pwd)
     EditText mEtLoginPwd;
-    @Bind(R.id.cb_login_hold_pwd)
-    CheckBox mCbHoldPwd;
+    @Bind(R.id.iv_login_hold_pwd)
+    ImageView mIvHoldPwd;
     @Bind(R.id.tv_login_forget_pwd)
     TextView mTvLoginForgetPwd;
     @Bind(R.id.bt_login_submit)
@@ -70,7 +70,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
 
-    @OnClick({R.id.tv_login_forget_pwd, R.id.bt_login_submit, R.id.bt_login_register})
+    @OnClick({R.id.tv_login_forget_pwd, R.id.iv_login_hold_pwd, R.id.bt_login_submit, R.id.bt_login_register})
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -79,6 +79,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 RegisterStepOneActivity.show(LoginActivity.this);
                 break;
             case R.id.bt_login_submit:
+
+                break;
+            case R.id.iv_login_hold_pwd:
 
                 break;
             case R.id.bt_login_register:

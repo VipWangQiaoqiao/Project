@@ -105,3 +105,5 @@
     **[] $VALUES;
     public *;
 }
+
+#-dontwarn android.net.SSLCertificateSocketFactory

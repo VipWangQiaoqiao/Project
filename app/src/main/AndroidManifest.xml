@@ -107,32 +107,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.TweetPubActivity"
-            android:label="弹一弹"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.SEND"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-
-                <data android:mimeType="image/*"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.SEND"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-
-                <data android:mimeType="text/plain"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.SEND_MULTIPLE"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-
-                <data android:mimeType="image/*"/>
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".ui.FindUserActivity"
             android:screenOrientation="portrait"/>
         <activity
@@ -175,10 +149,7 @@
         <activity
             android:name="com.dtr.zxing.activity.CaptureActivity"
             android:label="@string/actionbar_title_qr_scan"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".ui.ShakeActivity"
-            android:label="@string/actionbar_title_shake"
+
             android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.SelectFriendsActivity"
@@ -486,6 +457,16 @@
             android:label="搜索"
             android:screenOrientation="portrait"
             android:theme="@style/App.Theme.Translucent"/>
+
+        <activity
+            android:name=".improve.main.discover.ShakePresentActivity"
+            android:label="摇一摇"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".improve.main.FeedBackActivity"
+            android:label="意见反馈"
+            android:screenOrientation="portrait"/>
 
         <service
             android:name=".improve.tweet.service.TweetPublishService"

@@ -1,9 +1,11 @@
 package net.oschina.app.improve.detail.fragments;
 
+import android.app.Dialog;
 import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -14,22 +16,35 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.loopj.android.http.TextHttpResponseHandler;
+
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.bean.User;
 import net.oschina.app.improve.bean.BlogDetail;
 import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.comment.CommentsView;
 import net.oschina.app.improve.comment.OnCommentClickListener;
 import net.oschina.app.improve.detail.contract.BlogDetailContract;
+import net.oschina.app.improve.pay.bean.Order;
+import net.oschina.app.improve.pay.dialog.RewardDialog;
+import net.oschina.app.improve.pay.util.RewardUtil;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 import net.oschina.app.improve.widget.DetailAboutView;
+import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
+import java.net.URLEncoder;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import butterknife.Bind;
 import butterknife.OnClick;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by qiujuer
@@ -82,6 +97,8 @@ public class BlogDetailFragment
     @Bind(R.id.lay_option)
     View mLayBottom;
 
+    private Dialog mWaitDialog;
+
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_general_blog_detail;
@@ -120,7 +137,7 @@ public class BlogDetailFragment
         });
     }
 
-    @OnClick({R.id.iv_share, R.id.iv_fav, R.id.btn_relation, R.id.iv_avatar})
+    @OnClick({R.id.iv_share, R.id.iv_fav, R.id.btn_relation, R.id.iv_avatar, R.id.btn_reward})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -144,6 +161,8 @@ public class BlogDetailFragment
             case R.id.iv_avatar:
                 OtherUserHomeActivity.show(getActivity(), mOperator.getData().getAuthorId());
                 break;
+            case R.id.btn_reward:
+                handleReward();
             default:
                 break;
 
@@ -227,6 +246,63 @@ public class BlogDetailFragment
 
     private void handleSendComment() {
         mOperator.toSendComment(mId, mCommentId, mCommentAuthorId, mETInput.getText().toString().trim());
+    }
+
+    private void handleReward() {
+        final BlogDetail detail = mOperator.getData();
+
+        final RewardDialog dialog = new RewardDialog(getContext());
+        dialog.setCancelable(true);
+        dialog.setPortrait(detail.getAuthorPortrait());
+        dialog.setNick(detail.getAuthor());
+        dialog.setOnClickRewardListener(new RewardDialog.OnClickRewardCallback() {
+            @Override
+            public void reward(float cast) {
+                User user = AppContext.getInstance().getLoginUser();
+                if (user == null || user.getId() <= 0) {
+                    Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                Map<String, String> pairs = new ConcurrentHashMap<>();
+                pairs.put("objType", "16344358");
+                pairs.put("objId", String.valueOf(detail.getId()));
+                pairs.put("attach", Order.TYPE_ALIPAY);
+                pairs.put("money", String.valueOf((int) (cast * 100)));
+                pairs.put("subject", detail.getTitle());
+                pairs.put("donater", String.valueOf(user.getId()));
+                pairs.put("author", String.valueOf(detail.getAuthorId()));
+                pairs.put("message", "Hello");
+                pairs.put("returnUrl", URLEncoder.encode(detail.getHref()));
+                pairs.put("notifyUrl", URLEncoder.encode(detail.getNotifyUrl()));
+
+                String sign = RewardUtil.sign(pairs);
+                pairs.put("sign", sign);
+
+                mWaitDialog = DialogHelp.getWaitDialog(getContext(), "正在提交数据");
+                mWaitDialog.setCancelable(false);
+
+                OSChinaApi.reward(pairs, new TextHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseBody) {
+                        Log.e("oschina", "response body: " + responseBody);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseBody, Throwable error) {
+                        Log.e("oschina", "onFailure");
+                        error.toString();
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        super.onFinish();
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
+        dialog.show();
     }
 
     @SuppressWarnings("deprecation")

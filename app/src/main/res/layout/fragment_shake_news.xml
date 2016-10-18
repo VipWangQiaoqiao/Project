@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f6f6f6"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/lay_32">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/lay_16"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/lay_16">
+
+        <ImageView
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:layout_marginBottom="0dp"
+            android:src="@mipmap/ic_shake" />
+
+        <net.qiujuer.genius.ui.widget.Loading
+            android:id="@+id/loading"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_marginTop="@dimen/lay_16"
+            android:visibility="gone"
+            app:gForegroundColor="@color/main_green" />
+
+        <TextView
+            android:id="@+id/tv_state"
+            android:layout_width="160dp"
+            android:layout_marginTop="@dimen/lay_16"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="4dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lines="2"
+            android:text="" />
+    </LinearLayout>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cv_shake"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="16dp"
+        android:background="@color/white" />
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="请5秒之后再试" />
+</LinearLayout>

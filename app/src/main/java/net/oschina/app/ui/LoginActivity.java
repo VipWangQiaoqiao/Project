@@ -6,12 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
 import com.google.gson.reflect.TypeToken;
-import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.sina.weibo.sdk.auth.AuthInfo;
@@ -46,22 +44,16 @@ import net.oschina.app.improve.user.fragments.NewUserInfoFragment;
 import net.oschina.app.util.CyptoUtils;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.TDevice;
-import net.oschina.app.util.TLog;
 import net.oschina.app.util.XmlUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.kymjs.kjframe.http.HttpConfig;
 
 import java.lang.reflect.Type;
 
 import butterknife.Bind;
 import butterknife.OnClick;
 import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.client.CookieStore;
-import cz.msebera.android.httpclient.client.protocol.ClientContext;
-import cz.msebera.android.httpclient.cookie.Cookie;
-import cz.msebera.android.httpclient.protocol.HttpContext;
 
 /**
  * 用户登录界面
@@ -295,8 +287,7 @@ public class LoginActivity extends BaseActivity implements IUiListener {
     private void sinaLogin() {
 
         // 创建授权认证信息
-        authInfo = new AuthInfo(this, ShareConstant.WB_APP_KEY, ShareConstant.REDIRECT_URL,
-                null);
+        authInfo = new AuthInfo(this, ShareConstant.WB_APP_KEY, ShareConstant.REDIRECT_URL, null);
 
         ssoHandler = new SsoHandler(this, authInfo);
 
@@ -369,7 +360,6 @@ public class LoginActivity extends BaseActivity implements IUiListener {
                              }
 
         );
-
 
         // if (mController == null)
         // mController = UMServiceFactory.getUMSocialService("com.umeng.login");
@@ -504,6 +494,7 @@ public class LoginActivity extends BaseActivity implements IUiListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+
         if (loginType == LOGIN_TYPE_QQ) {
             Tencent tencent = Tencent.createInstance(AppConfig.APP_QQ_KEY, this);
             //在某些低端机上调用登录后，由于内存紧张导致APP被系统回收，登录成功后无法成功回传数据。
@@ -552,46 +543,18 @@ public class LoginActivity extends BaseActivity implements IUiListener {
     @SuppressWarnings("deprecation")
     private void handleLoginBean(LoginUserBean loginUserBean, Header[] headers) {
         if (loginUserBean.getResult().OK()) {
-            AsyncHttpClient client = ApiHttpClient.getHttpClient();
-            HttpContext httpContext = client.getHttpContext();
-            CookieStore cookies = (CookieStore) httpContext
-                    .getAttribute(ClientContext.COOKIE_STORE);
-            if (cookies != null) {
-                String tmpcookies = "";
-                for (Cookie c : cookies.getCookies()) {
-                    TLog.log(TAG,
-                            "cookie:" + c.getName() + " " + c.getValue());
-                    tmpcookies += (c.getName() + "=" + c.getValue()) + ";";
-                }
-                if (TextUtils.isEmpty(tmpcookies)) {
+            // 更新相关Cookie信息
+            ApiHttpClient.updateCookie(ApiHttpClient.getHttpClient(), headers);
 
-                    if (headers != null) {
-                        for (Header header : headers) {
-                            String key = header.getName();
-                            String value = header.getValue();
-                            if (key.contains("Set-Cookie"))
-                                tmpcookies += value + ";";
-                        }
-                        if (tmpcookies.length() > 0) {
-                            tmpcookies = tmpcookies.substring(0, tmpcookies.length() - 1);
-                        }
-                    }
-                }
-                TLog.log(TAG, "cookies:" + tmpcookies);
-                AppContext.getInstance().setProperty(AppConfig.CONF_COOKIE,
-                        tmpcookies);
-                ApiHttpClient.setCookie(ApiHttpClient.getCookie(AppContext
-                        .getInstance()));
-                HttpConfig.sCookie = tmpcookies;
-            }
-            // 保存登录信息
+            // 保存用户信息
             loginUserBean.getUser().setAccount(mUserName);
             loginUserBean.getUser().setPwd(mPassword);
             loginUserBean.getUser().setRememberMe(true);
             AppContext.getInstance().saveUserInfo(loginUserBean.getUser());
+
+            // 成功回调
             hideWaitDialog();
             handleLoginSuccess();
-
         } else {
             AppContext.getInstance().cleanLoginInfo();
             AppContext.showToast(loginUserBean.getResult().getErrorMessage());
