@@ -8,7 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/darker_gray"
+        android:background="@mipmap/bg_login"
         android:orientation="vertical">
 
         <ImageView
@@ -18,7 +18,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="48dp"
             android:contentDescription="@null"
-            app:srcCompat="@mipmap/ic_launcher"/>
+            app:srcCompat="@mipmap/logo_osc"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,7 +37,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:contentDescription="@null"
-                app:srcCompat="@mipmap/actionbar_search_icon"/>
+                app:srcCompat="@mipmap/ic_singup_mobile"/>
 
             <View
                 android:layout_width="1dp"
@@ -78,7 +78,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:contentDescription="@null"
-                app:srcCompat="@mipmap/actionbar_search_icon"/>
+                app:srcCompat="@mipmap/ic_login_password"/>
 
             <View
                 android:layout_width="1dp"
@@ -117,7 +117,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:contentDescription="@null"
-                app:srcCompat="@mipmap/actionbar_search_icon"/>
+                app:srcCompat="@mipmap/checkbox_checked"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -174,19 +174,48 @@
             android:id="@+id/bt_login_pull"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
+            android:background="@mipmap/bg_login_thirdpart"
             android:text="@string/login_other_hint"
             android:textColor="@color/login_other_color"
             android:textSize="14sp"/>
 
-        <GridView
-            android:id="@+id/gv_login_footer"
+        <LinearLayout
+            android:id="@+id/ll_login_options"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:choiceMode="singleChoice"
-            android:columnWidth="12dp"
-            android:numColumns="2"
-            android:visibility="gone"/>
+            android:layout_height="64dp"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+
+            <ImageButton
+                android:id="@+id/ib_login_weibo"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:contentDescription="@null"
+                android:src="@mipmap/ic_login_3party_weibo"/>
+
+            <ImageButton
+                android:id="@+id/ib_login_wx"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:contentDescription="@null"
+                android:src="@mipmap/ic_login_3party_wechat"/>
+
+            <ImageButton
+                android:id="@+id/ib_login_qq"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:contentDescription="@null"
+                android:src="@mipmap/ic_login_3party_qq"/>
+
+        </LinearLayout>
+
     </LinearLayout>
 
 
