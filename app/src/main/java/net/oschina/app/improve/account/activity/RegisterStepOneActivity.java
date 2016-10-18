@@ -50,7 +50,7 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
 
 
     @OnClick({R.id.iv_register_username_del, R.id.tv_register_sms_call,
-            R.id.bt_register_submit, R.id.bt_register_login})
+            R.id.bt_register_submit})
     @Override
     public void onClick(View v) {
         int id = v.getId();
