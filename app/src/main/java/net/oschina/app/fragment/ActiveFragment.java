@@ -20,7 +20,6 @@ import net.oschina.app.bean.ActiveList;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.Notice;
 import net.oschina.app.service.NoticeUtils;
-import net.oschina.app.ui.MainActivity;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
@@ -34,11 +33,10 @@ import java.io.Serializable;
 
 /**
  * 动态fragment
- * 
+ *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @author kymjs (https://github.com/kymjs)
  * @created 2014年10月22日 下午3:35:43
- * 
  */
 public class ActiveFragment extends BaseListFragment<Active> implements
         OnItemLongClickListener {
@@ -86,16 +84,16 @@ public class ActiveFragment extends BaseListFragment<Active> implements
      * 开始刷新请求
      */
     private void refreshNotice() {
-        Notice notice = MainActivity.mNotice;
-        if (notice == null) {
-            return;
-        }
-        if (notice.getAtmeCount() > 0 && mCatalog == ActiveList.CATALOG_ATME) {
-            onRefresh();
-        } else if (notice.getReviewCount() > 0
-                && mCatalog == ActiveList.CATALOG_COMMENT) {
-            onRefresh();
-        }
+//        Notice notice = MainActivity.mNotice;
+//        if (notice == null) {
+//            return;
+//        }
+//        if (notice.getAtmeCount() > 0 && mCatalog == ActiveList.CATALOG_ATME) {
+//            onRefresh();
+//        } else if (notice.getReviewCount() > 0
+//                && mCatalog == ActiveList.CATALOG_COMMENT) {
+//            onRefresh();
+//        }
     }
 
     @Override
@@ -177,7 +175,7 @@ public class ActiveFragment extends BaseListFragment<Active> implements
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
+                            long id) {
         Active active = mAdapter.getItem(position);
         if (active != null)
             UIHelper.showActiveRedirect(view.getContext(), active);
@@ -185,11 +183,11 @@ public class ActiveFragment extends BaseListFragment<Active> implements
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view,
-            int position, long id) {
+                                   int position, long id) {
         final Active active = mAdapter.getItem(position);
         if (active == null)
             return false;
-        String[] items = new String[] { getResources().getString(R.string.copy) };
+        String[] items = new String[]{getResources().getString(R.string.copy)};
         DialogHelp.getSelectDialog(getActivity(), items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {

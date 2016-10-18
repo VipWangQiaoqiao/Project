@@ -75,11 +75,6 @@
         <item>资讯</item>
     </string-array>
 
-    <string-array name="friends_viewpage_arrays">
-        <item>关注</item>
-        <item>粉丝</item>
-    </string-array>
-
     <string-array name="message_list_options">
         <item>复制</item>
         <item>删除</item>

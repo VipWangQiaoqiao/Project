@@ -56,7 +56,7 @@ public class FloatingAutoHideDownBehavior extends CoordinatorLayout.Behavior<Vie
     public boolean layoutDependsOn(CoordinatorLayout parent, final View child, View dependency) {
         if (child != null && dependency != null && dependency instanceof NestedScrollView) {
             NestedScrollView s = (NestedScrollView) dependency;
-            if (s.getChildCount() > 0) {
+            if (s.getChildCount() > 0 && child.getHeight() > 0) {
                 View view = s.getChildAt(s.getChildCount() - 1);
                 if (view.getTag(R.id.detail_behavior_content_padding_done) == null) {
                     int paddingBottom = view.getPaddingBottom() + child.getHeight();

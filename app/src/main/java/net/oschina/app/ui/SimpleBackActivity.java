@@ -21,7 +21,6 @@ import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.TweetsFragment;
 import net.oschina.app.improve.tweet.activities.TweetPublishActivity;
 import net.oschina.app.util.TDevice;
-import net.oschina.app.util.UIHelper;
 
 import java.lang.ref.WeakReference;
 
@@ -143,16 +142,6 @@ public class SimpleBackActivity extends BaseActivity implements
             getMenuInflater().inflate(R.menu.chat_menu, menu);
         }
         return super.onCreateOptionsMenu(menu);
-    }
-
-    /**
-     * 发送话题
-     */
-    private void sendTopic() {
-        Bundle bundle = new Bundle();
-        bundle.putString(TweetPubActivity.REPOST_TEXT_KEY, "#"
-                + ((TweetsFragment) mFragment.get()).getTopic() + "# ");
-        UIHelper.showTweetActivity(this, TweetPubActivity.ACTION_TYPE_TOPIC, bundle);
     }
 
     @Override

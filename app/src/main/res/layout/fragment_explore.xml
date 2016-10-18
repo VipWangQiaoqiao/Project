@@ -16,7 +16,6 @@
         style="@style/option_item_rl">
 
         <ImageView
-            android:id="@+id/imageView7"
             style="@style/option_item_img"
             android:layout_marginRight="@dimen/space_10"
             android:contentDescription="@null"
@@ -57,7 +56,6 @@
             android:src="@mipmap/ic_discover_find" />
 
         <TextView
-            android:id="@+id/textView2"
             style="@style/option_item_text"
             android:layout_width="0dp"
             android:layout_weight="1"

@@ -329,7 +329,6 @@
             tools:ignore="UseCompoundDrawables">
 
             <ImageView
-                android:id="@+id/imageView"
                 android:layout_width="@dimen/size_20"
                 android:layout_height="@dimen/size_20"
                 android:contentDescription="@string/app_name"

@@ -1,5 +1,7 @@
 package net.oschina.app;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -8,8 +10,6 @@ import android.text.TextUtils;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.google.gson.Gson;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.PersistentCookieStore;
 
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.base.BaseApplication;
@@ -38,11 +38,8 @@ import static net.oschina.app.AppConfig.KEY_NIGHT_MODE_SWITCH;
 import static net.oschina.app.AppConfig.KEY_TWEET_DRAFT;
 
 /**
- * 全局应用程序类：用于保存和调用全局应用配置及访问网络数据
- *
- * @author 火蚁 (http://my.oschina.net/LittleDY)
- * @version 1.0
- * @created 2014-04-22
+ * 全局应用程序类
+ * 用于保存和调用全局应用配置及访问网络数据
  */
 public class AppContext extends BaseApplication {
     public static final int PAGE_SIZE = 20;// 默认分页大小
@@ -60,14 +57,11 @@ public class AppContext extends BaseApplication {
 
     private void init() {
         AppCrashHandler handler = AppCrashHandler.getInstance();
-        handler.init(this);
+        if (!BuildConfig.DEBUG)
+            handler.init(this);
 
         // 初始化网络请求
-        AsyncHttpClient client = new AsyncHttpClient();
-        PersistentCookieStore myCookieStore = new PersistentCookieStore(this);
-        client.setCookieStore(myCookieStore);
-        ApiHttpClient.setHttpClient(client);
-        ApiHttpClient.setCookie(ApiHttpClient.getCookie(this));
+        ApiHttpClient.init(this);
 
         // Log控制器
         KJLoger.openDebutLog(BuildConfig.DEBUG);
@@ -275,22 +269,19 @@ public class AppContext extends BaseApplication {
         NoticeManager.exitServer(this);
 
         cleanLoginInfo();
-        ApiHttpClient.cleanCookie();
-        this.cleanCookie();
-        this.loginUid = 0;
+        ApiHttpClient.destroy(this);
 
         CacheManager.deleteObject(context(), TweetFragment.CACHE_USER_TWEET);
         CacheManager.deleteObject(context(), NewUserInfoFragment.CACHE_NAME);
 
         Intent intent = new Intent(Constants.INTENT_ACTION_LOGOUT);
         sendBroadcast(intent);
-    }
 
-    /**
-     * 清除保存的缓存
-     */
-    public void cleanCookie() {
-        removeProperty(AppConfig.CONF_COOKIE);
+        this.loginUid = 0;
+
+        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        activityManager.killBackgroundProcesses("net.oschina.app.tweet.TweetPublishService");
+        activityManager.killBackgroundProcesses("net.oschina.app.notice.NoticeServer");
     }
 
     /**
@@ -380,7 +371,7 @@ public class AppContext extends BaseApplication {
             return new GlideUrl(url,
                     new LazyHeaders
                             .Builder()
-                            .addHeader("Cookie", ApiHttpClient.getCookie(AppContext.getInstance()))
+                            .addHeader("Cookie", ApiHttpClient.getCookieString(AppContext.getInstance()))
                             .build());
         } else {
             return new GlideUrl(url);

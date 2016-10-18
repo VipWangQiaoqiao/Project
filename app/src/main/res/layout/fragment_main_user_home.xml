@@ -9,7 +9,6 @@
     android:orientation="vertical">
 
     <FrameLayout
-        android:id="@+id/fl_user_info_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
@@ -171,7 +170,6 @@
                     android:textSize="@dimen/font_24" />
 
                 <TextView
-                    android:id="@+id/textView5"
                     style="@style/user_formation_info"
                     android:layout_marginBottom="6dp"
                     android:padding="0dp"
@@ -230,7 +228,6 @@
                 </FrameLayout>
 
                 <TextView
-                    android:id="@+id/textView4"
                     style="@style/user_formation_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -285,7 +282,6 @@
                     android:layout_weight="1" />
 
                 <ImageView
-                    android:id="@+id/imageView10"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
                     android:contentDescription="@null"
@@ -321,7 +317,6 @@
                     android:text="@string/blog" />
 
                 <ImageView
-                    android:id="@+id/imageView3"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
                     android:contentDescription="@null"
@@ -357,7 +352,6 @@
                     android:text="@string/actionbar_title_event" />
 
                 <ImageView
-                    android:id="@+id/imageView5"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
                     android:contentDescription="@null"
@@ -388,14 +382,12 @@
                     android:src="@mipmap/ic_my_team" />
 
                 <TextView
-                    android:id="@+id/textView3"
                     style="@style/option_item_text"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:text="@string/team" />
 
                 <ImageView
-                    android:id="@+id/imageView4"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
                     android:contentDescription="@null"

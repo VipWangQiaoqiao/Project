@@ -7,7 +7,6 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/ll_user_container"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:background="@mipmap/bg_my"
@@ -15,7 +14,6 @@
         android:visibility="visible" >
 
         <RelativeLayout
-            android:id="@+id/rl_user_center"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -62,7 +60,6 @@
             android:orientation="horizontal" >
 
             <LinearLayout
-                android:id="@+id/ly_score"
                 style="@style/uset_information_ll"
                 android:clickable="false" >
 

@@ -7,6 +7,9 @@ import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.text.TextUtils;
 
+import net.oschina.app.R;
+
+
 /**
  * 对话框辅助类
  * Created by 火蚁 on 15/6/19.
@@ -15,16 +18,18 @@ public class DialogHelp {
 
     /***
      * 获取一个dialog
+     *
      * @param context
      * @return
      */
     public static AlertDialog.Builder getDialog(Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.App_Theme_Dialog_Alert);
         return builder;
     }
 
     /***
      * 获取一个耗时等待对话框
+     *
      * @param context
      * @param message
      * @return
@@ -39,6 +44,7 @@ public class DialogHelp {
 
     /***
      * 获取一个信息对话框，注意需要自己手动调用show方法显示
+     *
      * @param context
      * @param message
      * @param onClickListener

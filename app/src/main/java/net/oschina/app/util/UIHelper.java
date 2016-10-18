@@ -50,6 +50,7 @@ import net.oschina.app.fragment.FriendsFragment;
 import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.detail.activities.BlogDetailActivity;
 import net.oschina.app.improve.detail.activities.EventDetailActivity;
 import net.oschina.app.improve.detail.activities.NewsDetailActivity;
@@ -78,7 +79,6 @@ import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.LoginActivity;
 import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.ui.SimpleBackActivity;
-import net.oschina.app.ui.TweetPubActivity;
 import net.oschina.app.viewpagerfragment.FriendsViewPagerFragment;
 import net.oschina.app.widget.AvatarView;
 
@@ -117,6 +117,7 @@ public class UIHelper {
             "allImgUrls = getAllImgSrc(document.body.innerHTML);</script>";
 
     private static final String SHOWIMAGE = "ima-api:action=showImage&data=";
+
     /**
      * 显示登录界面
      *
@@ -232,7 +233,7 @@ public class UIHelper {
     }
 
     public static void showTweetDetail(Context context, long tweetId) {
-        TweetDetailActivity.show(context,tweetId);
+        TweetDetailActivity.show(context, tweetId);
     }
 
     /**
@@ -382,6 +383,7 @@ public class UIHelper {
                 EventDetailActivity.show(context, newsId);
                 break;
             case Banner.BANNER_TYPE_NEWS:
+                NewsDetailActivity.show(context, newsId);
             default:
                 showUrlRedirect(context, banner.getHref());
                 break;
@@ -590,15 +592,6 @@ public class UIHelper {
         context.startActivity(intent);
     }
 
-    public static void showTweetActivity(Context context, int actionType, Bundle bundle) {
-        Intent intent = new Intent(context, TweetPubActivity.class);
-        intent.putExtra(TweetPubActivity.ACTION_TYPE, actionType);
-        if (bundle != null) {
-            intent.putExtras(bundle);
-        }
-        context.startActivity(intent);
-    }
-
     public static void showComment(Context context, int id, int catalog) {
         Intent intent = new Intent(context, DetailActivity.class);
         intent.putExtra(CommentFrament.BUNDLE_KEY_ID, id);
@@ -790,24 +783,6 @@ public class UIHelper {
     }
 
     /**
-     * 显示登陆用户的个人中心页面
-     *
-     * @param context
-     */
-    public static void showMyInformation(Context context) {
-        showSimpleBack(context, SimpleBackPage.MY_INFORMATION);
-    }
-
-    /**
-     * 显示我的所有动态
-     *
-     * @param context
-     */
-    public static void showMyActive(Context context) {
-        showSimpleBack(context, SimpleBackPage.MY_ACTIVE);
-    }
-
-    /**
      * 显示扫一扫界面
      *
      * @param context
@@ -898,11 +873,9 @@ public class UIHelper {
 
     /**
      * 清除app缓存
-     *
-     * @param activity
      */
-    public static void clearAppCache(Activity activity) {
-        final Handler handler = new Handler() {
+    public static void clearAppCache(boolean showToast) {
+        final Handler handler = showToast ? new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 if (msg.what == 1) {
@@ -911,8 +884,8 @@ public class UIHelper {
                     AppContext.showToastShort("缓存清除失败");
                 }
             }
-        };
-        new Thread() {
+        } : null;
+        AppOperator.runOnThread(new Runnable() {
             @Override
             public void run() {
                 Message msg = new Message();
@@ -923,9 +896,10 @@ public class UIHelper {
                     e.printStackTrace();
                     msg.what = -1;
                 }
-                handler.sendMessage(msg);
+                if (handler != null)
+                    handler.sendMessage(msg);
             }
-        }.start();
+        });
     }
 
     public static void openDownLoadService(Context context, String downurl,

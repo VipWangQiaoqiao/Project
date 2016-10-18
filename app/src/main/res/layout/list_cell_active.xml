@@ -123,7 +123,6 @@
             style="@style/list_text_info" />
 
         <LinearLayout
-            android:id="@+id/ll_comments"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">

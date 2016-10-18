@@ -5,6 +5,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.1'
+        classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.3.0'
     }
 }
 
@@ -20,6 +21,6 @@ ext {
     applicationId = "net.oschina.app"
     minSdkVersion = 15
     targetSdkVersion = 24
-    versionCode = 266
-    versionName = "v2.6.6(1609281026)"
+    versionCode = 267
+    versionName = "v2.6.7(1610181630)"
 }
