@@ -14,7 +14,7 @@ import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
-import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.improve.main.FeedBackActivity;
 import net.oschina.app.improve.widget.togglebutton.ToggleButton;
 import net.oschina.app.improve.widget.togglebutton.ToggleButton.OnToggleChanged;
 import net.oschina.app.util.DialogHelp;
@@ -169,7 +169,8 @@ public class SettingsFragment extends BaseFragment {
                 mTbDoubleClickExit.toggle();
                 break;
             case R.id.rl_feedback:
-                UIHelper.showSimpleBack(getActivity(), SimpleBackPage.FEED_BACK);
+                //UIHelper.showSimpleBack(getActivity(), SimpleBackPage.FEED_BACK);
+                FeedBackActivity.show(getActivity());
                 break;
             case R.id.rl_about:
                 UIHelper.showAboutOSC(getActivity());
@@ -181,10 +182,12 @@ public class SettingsFragment extends BaseFragment {
 //              //  onClickExit();
 //                break;
             case R.id.rl_cancle:
+                // 清理所有缓存
+                UIHelper.clearAppCache(getActivity());
+                // 注销操作
                 AppContext.getInstance().Logout();
                 AppContext.showToastShort(R.string.tip_logout_success);
                 getActivity().finish();
-
                 break;
             default:
                 break;

@@ -110,18 +110,7 @@ public class QuickOptionDialog extends Dialog implements
 
 
     private void onClickTweetPub(int id) {
-        int type = -1;
-        switch (id) {
-            case R.id.ly_quick_option_album:
-                type = TweetPubActivity.ACTION_TYPE_ALBUM;
-                break;
-            case R.id.ly_quick_option_photo:
-                type = TweetPubActivity.ACTION_TYPE_PHOTO;
-                break;
-            default:
-                break;
-        }
-        UIHelper.showTweetActivity(getContext(), type, null);
+        return;
     }
 
     private void onClickNote() {

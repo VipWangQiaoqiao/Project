@@ -21,6 +21,8 @@ public interface BlogDetailContract {
 
         // 提交评价
         void toSendComment(long id, long commentId, long commentAuthorId, String comment);
+
+//        void toReward();
     }
 
     interface View extends DetailContract.View {
@@ -29,5 +31,7 @@ public interface BlogDetailContract {
         void toFollowOk(BlogDetail blogDetail);
 
         void toSendCommentOk(Comment comment);
+
+//        void toRewardOk();
     }
 }

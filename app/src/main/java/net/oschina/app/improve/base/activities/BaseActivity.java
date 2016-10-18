@@ -1,6 +1,5 @@
 package net.oschina.app.improve.base.activities;
 
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,7 +21,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected RequestManager mImageLoader;
     private boolean mIsDestroy;
     private final String mPackageNameUmeng = this.getClass().getName();
-    private Fragment mContent;
+    private Fragment mFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,17 +46,30 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void addFragment(int frameLayoutId, Fragment fragment) {
-        if (mContent == null) {
-            mContent = new Fragment();
-        }
         if (fragment != null) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             if (fragment.isAdded()) {
-                transaction.hide(mContent).show(fragment);
+                if (mFragment != null) {
+                    transaction.hide(mFragment).show(fragment);
+                } else {
+                    transaction.show(fragment);
+                }
             } else {
-                transaction.hide(mContent).add(frameLayoutId, fragment);
+                if (mFragment != null) {
+                    transaction.hide(mFragment).add(frameLayoutId, fragment);
+                } else {
+                    transaction.add(frameLayoutId, fragment);
+                }
             }
-            mContent = fragment;
+            mFragment = fragment;
+            transaction.commit();
+        }
+    }
+
+    protected void replaceFragment(int frameLayoutId, Fragment fragment) {
+        if (fragment != null) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(frameLayoutId, fragment);
             transaction.commit();
         }
     }

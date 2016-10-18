@@ -55,7 +55,7 @@ public class AppCrashHandler implements Thread.UncaughtExceptionHandler {
         }.start();
 
         try {
-            Thread.sleep(3000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

@@ -4,24 +4,18 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.widget.ImageView;
 import android.widget.TabHost.OnTabChangeListener;
-import android.widget.TabHost.TabSpec;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.umeng.analytics.MobclickAgent;
@@ -35,8 +29,6 @@ import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.cache.DataCleanManager;
-import net.oschina.app.fragment.MyInformationFragment;
-import net.oschina.app.improve.tweet.activities.TweetPublishActivity;
 import net.oschina.app.interf.BaseViewInterface;
 import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.service.NoticeUtils;
@@ -80,17 +72,12 @@ public class MainActivity extends AppCompatActivity implements
                 int newLikeCount = mNotice.getNewLikeCount();// 收到赞
                 int activeCount = atmeCount + reviewCount + msgCount + newFansCount + newLikeCount;
 
-                Fragment fragment = getCurrentFragment();
-                if (fragment instanceof MyInformationFragment) {
-                    ((MyInformationFragment) fragment).setNotice();
+                if (activeCount > 0) {
+                    mBvNotice.setText(String.format("%s", activeCount + ""));
+                    mBvNotice.show();
                 } else {
-                    if (activeCount > 0) {
-                        mBvNotice.setText(String.format("%s", activeCount + ""));
-                        mBvNotice.show();
-                    } else {
-                        mBvNotice.hide();
-                        mNotice = null;
-                    }
+                    mBvNotice.hide();
+                    mNotice = null;
                 }
             } else if (intent.getAction()
                     .equals(Constants.INTENT_ACTION_LOGOUT)) {
@@ -247,36 +234,36 @@ public class MainActivity extends AppCompatActivity implements
 
     @SuppressWarnings("deprecation")
     private void initTabs() {
-        MainTab[] tabs = MainTab.values();
-        int size = tabs.length;
-        for (int i = 0; i < size; i++) {
-            MainTab mainTab = tabs[i];
-            TabSpec tab = mTabHost.newTabSpec(getString(mainTab.getResName()) + this.toString());
-            View indicator = View.inflate(this, R.layout.tab_indicator, null);
-            TextView title = (TextView) indicator.findViewById(R.id.tab_title);
-            ImageView icon = (ImageView) indicator.findViewById(R.id.iv_user_flow_icon);
-
-            Drawable drawable = this.getResources().getDrawable(mainTab.getResIcon());
-            icon.setImageDrawable(drawable);
-            //title.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
-            if (i == 2) {
-                indicator.setVisibility(View.INVISIBLE);
-                mTabHost.setNoTabChangedTag(getString(mainTab.getResName()));
-            }
-            title.setText(getString(mainTab.getResName()));
-            tab.setIndicator(indicator);
-            mTabHost.addTab(tab, mainTab.getClz(), null);
-
-            if (mainTab.equals(MainTab.ME)) {
-                View cn = indicator.findViewById(R.id.tab_mes);
-                mBvNotice = new BadgeView(MainActivity.this, cn);
-                mBvNotice.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
-                mBvNotice.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
-                mBvNotice.setBackgroundResource(R.mipmap.notification_bg);
-                mBvNotice.setGravity(Gravity.CENTER);
-            }
-            mTabHost.getTabWidget().getChildAt(i).setOnTouchListener(this);
-        }
+//        MainTab[] tabs = MainTab.values();
+//        int size = tabs.length;
+//        for (int i = 0; i < size; i++) {
+//            MainTab mainTab = tabs[i];
+//            TabSpec tab = mTabHost.newTabSpec(getString(mainTab.getResName()) + this.toString());
+//            View indicator = View.inflate(this, R.layout.tab_indicator, null);
+//            TextView title = (TextView) indicator.findViewById(R.id.tab_title);
+//            ImageView icon = (ImageView) indicator.findViewById(R.id.iv_user_flow_icon);
+//
+//            Drawable drawable = this.getResources().getDrawable(mainTab.getResIcon());
+//            icon.setImageDrawable(drawable);
+//            //title.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
+//            if (i == 2) {
+//                indicator.setVisibility(View.INVISIBLE);
+//                mTabHost.setNoTabChangedTag(getString(mainTab.getResName()));
+//            }
+//            title.setText(getString(mainTab.getResName()));
+//            tab.setIndicator(indicator);
+//            mTabHost.addTab(tab, mainTab.getClz(), null);
+//
+//            if (mainTab.equals(MainTab.ME)) {
+//                View cn = indicator.findViewById(R.id.tab_mes);
+//                mBvNotice = new BadgeView(MainActivity.this, cn);
+//                mBvNotice.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);
+//                mBvNotice.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+//                mBvNotice.setBackgroundResource(R.mipmap.notification_bg);
+//                mBvNotice.setGravity(Gravity.CENTER);
+//            }
+//            mTabHost.getTabWidget().getChildAt(i).setOnTouchListener(this);
+//        }
     }
 
     @SuppressWarnings("deprecation")
@@ -321,10 +308,10 @@ public class MainActivity extends AppCompatActivity implements
                 v.setSelected(false);
             }
         }
-        if (tabId.equals(getString(MainTab.ME.getResName()))) {
-            mBvNotice.setText("");
-            mBvNotice.hide();
-        }
+//        if (tabId.equals(getString(MainTab.ME.getResName()))) {
+//            mBvNotice.setText("");
+//            mBvNotice.hide();
+//        }
         supportInvalidateOptionsMenu();
     }
 

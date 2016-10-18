@@ -10,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -250,12 +249,12 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
             public void onFinalBackSpace(View v) {
                 if (replies == null || replies.size() == 0) return;
                 replies.remove(replies.size() - 1);
-                if (replies.size() == 0){
+                if (replies.size() == 0) {
                     mViewInput.setHint("发表评论");
                     return;
                 }
                 mViewInput.setHint("回复: @" + replies.get(0).getAuthor().getName());
-                if (replies.size() == 2){
+                if (replies.size() == 2) {
                     mViewInput.setHint(mViewInput.getHint() + " @" + replies.get(1).getAuthor().getName());
                 }
             }
@@ -309,7 +308,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.menu_share:
                 if (tweet == null || tweet.getId() <= 0) break;
                 if (mShareDialog == null) {
@@ -318,7 +317,13 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                 mShareDialog.setCancelable(true);
                 mShareDialog.setCanceledOnTouchOutside(true);
                 mShareDialog.setTitle(R.string.share_to);
-                mShareDialog.setShareInfo(tweet.getAuthor().getName() + "的动弹 - 开源中国社区",
+
+                String title = tweet.getContent().trim();
+                if (!TextUtils.isEmpty(title)) {
+                    title = title.substring(0, title.length() > 10 ? 10 : title.length());
+                }
+
+                mShareDialog.setShareInfo(title + " - 开源中国社区",
                         tweet.getContent(), tweet.getHref());
                 mShareDialog.show();
                 break;
@@ -399,12 +404,12 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
     public void toReply(TweetComment comment) {
         mDelegation.notifyWrapper();
         if (replies.size() >= 3) return;
-        for (TweetComment cmm : replies){
+        for (TweetComment cmm : replies) {
             if (cmm.getAuthor().getId() == comment.getAuthor().getId()) return;
         }
         if (replies.size() == 0) {
             mViewInput.setHint("回复 @" + comment.getAuthor().getName());
-        }else {
+        } else {
             mViewInput.setHint(mViewInput.getHint() + " @" + comment.getAuthor().getName());
         }
         this.replies.add(comment);
