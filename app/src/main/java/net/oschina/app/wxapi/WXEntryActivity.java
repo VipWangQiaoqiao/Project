@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.tencent.mm.sdk.openapi.BaseResp;
-import com.tencent.mm.sdk.openapi.SendAuth;
+import com.tencent.mm.sdk.modelbase.BaseResp;
+import com.tencent.mm.sdk.modelmsg.SendAuth;
 
 import net.oschina.app.R;
 import net.oschina.app.api.ApiHttpClient;
@@ -18,6 +18,7 @@ import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.TLog;
 
 import cz.msebera.android.httpclient.Header;
+
 /**
  * 微信回调的activity
  * Created by zhangdeyi on 15/7/27.
@@ -45,7 +46,7 @@ public class WXEntryActivity extends Activity {
         if (resp.errCode == BaseResp.ErrCode.ERR_OK) {
 
             //用户同意
-            String code = resp.token;
+            String code = resp.code;
             String state = resp.state;
             // 如果不是登录
             if (!"wechat_login".equals(state)) {
