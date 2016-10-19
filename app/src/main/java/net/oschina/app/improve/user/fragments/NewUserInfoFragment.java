@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -66,7 +67,7 @@ import pub.devrel.easypermissions.EasyPermissions;
  */
 
 public class NewUserInfoFragment extends BaseFragment implements View.OnClickListener,
-        EasyPermissions.PermissionCallbacks, NoticeManager.NoticeNotify, OnTabReselectListener {
+                                                                 EasyPermissions.PermissionCallbacks, NoticeManager.NoticeNotify, OnTabReselectListener {
 
     public static final String CACHE_NAME = "NewUserInfoFragment";
 
@@ -299,6 +300,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
      * format count
      *
      * @param count count
+     *
      * @return formatCount
      */
     private String formatCount(long count) {
@@ -421,6 +423,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         } else {
             if (!AppContext.getInstance().isLogin()) {
                 UIHelper.showLoginActivity(getActivity());
+                //LoginActivity.show(getActivity());
                 return;
             }
 
@@ -685,9 +688,11 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         // 获取头像缩略图
         if (TextUtils.isEmpty(mPortraitPath) && !mPortraitFile.exists()) {
             AppContext.showToast(getString(R.string.title_icon_null));
-        }
 
-        if (mPortraitFile != null) {
+        }
+        Bitmap protraitBitmap = ImageUtils.loadImgThumbnail(mPortraitPath, 200, 200);
+
+        if (mPortraitFile != null && protraitBitmap != null) {
             mIsUploadIcon = true;
             OSChinaApi.updateUserIcon(mPortraitFile, textHandler);
         }
