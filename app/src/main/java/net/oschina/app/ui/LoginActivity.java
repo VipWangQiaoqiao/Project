@@ -20,8 +20,8 @@ import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.AsyncWeiboRunner;
 import com.sina.weibo.sdk.net.RequestListener;
 import com.sina.weibo.sdk.net.WeiboParameters;
+import com.tencent.mm.sdk.modelmsg.SendAuth;
 import com.tencent.mm.sdk.openapi.IWXAPI;
-import com.tencent.mm.sdk.openapi.SendAuth;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
@@ -39,7 +39,7 @@ import net.oschina.app.bean.OpenIdCatalog;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.improve.bean.UserV2;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.share.constant.ShareConstant;
+import net.oschina.app.improve.share.constant.OpenConstant;
 import net.oschina.app.improve.user.fragments.NewUserInfoFragment;
 import net.oschina.app.util.CyptoUtils;
 import net.oschina.app.util.DialogHelp;
@@ -287,7 +287,7 @@ public class LoginActivity extends BaseActivity implements IUiListener {
     private void sinaLogin() {
 
         // 创建授权认证信息
-        authInfo = new AuthInfo(this, ShareConstant.WB_APP_KEY, ShareConstant.REDIRECT_URL, null);
+        authInfo = new AuthInfo(this, OpenConstant.WB_APP_KEY, OpenConstant.REDIRECT_URL, null);
 
         ssoHandler = new SsoHandler(this, authInfo);
 
@@ -301,7 +301,7 @@ public class LoginActivity extends BaseActivity implements IUiListener {
 
                                      if (oauth2AccessToken.isSessionValid()) {
 
-                                         WeiboParameters parameters = new WeiboParameters(ShareConstant.WB_APP_KEY);
+                                         WeiboParameters parameters = new WeiboParameters(OpenConstant.WB_APP_KEY);
                                          parameters.put("uid", oauth2AccessToken.getUid());
                                          parameters.put("access_token", oauth2AccessToken.getToken());
 
@@ -512,7 +512,7 @@ public class LoginActivity extends BaseActivity implements IUiListener {
             // SSO 授权回调
             // 重要：发起 SSO 登陆的 Activity 必须重写 onActivityResults
             if (authInfo == null)
-                authInfo = new AuthInfo(this, ShareConstant.WB_APP_KEY, ShareConstant.REDIRECT_URL, "all");
+                authInfo = new AuthInfo(this, OpenConstant.WB_APP_KEY, OpenConstant.REDIRECT_URL, "all");
             if (ssoHandler == null)
                 ssoHandler = new SsoHandler(this, authInfo);
             ssoHandler.authorizeCallBack(requestCode, resultCode, data);

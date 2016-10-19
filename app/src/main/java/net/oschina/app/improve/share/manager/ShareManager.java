@@ -14,16 +14,16 @@ import com.sina.weibo.sdk.api.share.SendMultiMessageToWeiboRequest;
 import com.sina.weibo.sdk.api.share.WeiboShareSDK;
 import com.sina.weibo.sdk.utils.Utility;
 import com.tencent.connect.share.QQShare;
+import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.sdk.openapi.IWXAPI;
-import com.tencent.mm.sdk.openapi.SendMessageToWX;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
-import com.tencent.mm.sdk.openapi.WXMediaMessage;
-import com.tencent.mm.sdk.openapi.WXWebpageObject;
 import com.tencent.tauth.Tencent;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.share.bean.Share;
-import net.oschina.app.improve.share.constant.ShareConstant;
+import net.oschina.app.improve.share.constant.OpenConstant;
 
 /**
  * Created by fei on 2016/10/11.
@@ -41,22 +41,22 @@ public class ShareManager {
 
     public ShareManager registerWeChatShare(Context context) {
 
-        IWXAPI iwxapi = WXAPIFactory.createWXAPI(context, ShareConstant.WECHAT_APP_ID, true);
-        iwxapi.registerApp(ShareConstant.WECHAT_APP_ID);
+        IWXAPI iwxapi = WXAPIFactory.createWXAPI(context, OpenConstant.WECHAT_APP_ID, true);
+        iwxapi.registerApp(OpenConstant.WECHAT_APP_ID);
 
         this.mIWXAPI = iwxapi;
         return this;
     }
 
     public ShareManager registerQQShare(Context context) {
-        this.mTencent = Tencent.createInstance(ShareConstant.QQ_APP_ID, context);
+        this.mTencent = Tencent.createInstance(OpenConstant.QQ_APP_ID, context);
         return this;
     }
 
     public ShareManager registerSinaShare(Context context, Activity activity, Share share) {
 
         // 创建微博分享接口实例
-        IWeiboShareAPI weiBoAPI = WeiboShareSDK.createWeiboAPI(context, ShareConstant.WB_APP_KEY);
+        IWeiboShareAPI weiBoAPI = WeiboShareSDK.createWeiboAPI(context, OpenConstant.WB_APP_KEY);
 
         // 注册第三方应用到微博客户端中，注册成功后该应用将显示在微博的应用列表中。
         // 但该附件栏集成分享权限需要合作申请，详情请查看 Demo 提示

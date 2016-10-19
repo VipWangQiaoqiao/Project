@@ -373,7 +373,7 @@
 
         <!-- 新账户中心模块-->
         <activity
-            android:name=".improve.account.activities.LoginActivity"
+            android:name=".improve.account.activity.LoginActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="登录中心"
             android:launchMode="singleTop"
@@ -381,7 +381,7 @@
             android:theme="@style/Account_Base.App.Theme.NoTitle"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
-            android:name=".improve.account.activities.RegisterStepOneActivity"
+            android:name=".improve.account.activity.RegisterStepOneActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="注册中心一"
             android:launchMode="singleTop"
@@ -390,16 +390,16 @@
             android:windowSoftInputMode="stateHidden|adjustResize"/>
 
         <activity
-            android:name=".improve.account.activities.RegisterStepTwoActivity"
+            android:name=".improve.account.activity.RegisterStepTwoActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:label="注册中心一"
+            android:label="注册中心二"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Account_Base.App.Theme.NoTitle"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
 
         <activity
-            android:name=".improve.account.activities.RetrieveActivity"
+            android:name=".improve.account.activity.RetrieveActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="密码找回"
             android:launchMode="singleTop"
@@ -408,7 +408,7 @@
             android:windowSoftInputMode="stateHidden|adjustResize"/>
 
         <activity
-            android:name=".improve.account.activities.ResetPwdActivity"
+            android:name=".improve.account.activity.ResetPwdActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="密码重置"
             android:launchMode="singleTop"

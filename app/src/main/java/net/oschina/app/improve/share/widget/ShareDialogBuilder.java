@@ -17,12 +17,20 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.sina.weibo.sdk.auth.sso.SsoHandler;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.tauth.IUiListener;
+import com.tencent.tauth.Tencent;
+
 import net.oschina.app.R;
 import net.oschina.app.improve.share.adapter.ShareActionAdapter;
-import net.oschina.app.improve.share.bean.Share;
 import net.oschina.app.improve.share.bean.ShareItem;
+import net.oschina.app.improve.share.constant.OpenConstant;
 import net.oschina.app.improve.share.manager.ShareManager;
 import net.oschina.app.util.TDevice;
+import net.oschina.open.bean.Share;
+import net.oschina.open.constants.OpenConstants;
+import net.oschina.open.factory.OpenShare;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +52,9 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements DialogInt
     private Share mShare;
     private Activity mActivity;
     private AlertDialog mAlertDialog;
+    private int openType;
+
+    private IUiListener mIUiListener;
 
 
     public ShareDialogBuilder(@NonNull Context context) {
@@ -56,8 +67,11 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements DialogInt
         // initListener();
     }
 
+    public void addIUiListener(IUiListener IUiListener) {
+        mIUiListener = IUiListener;
+    }
 
-//    private void initListener() {
+    //    private void initListener() {
 //        setOnCancelListener(this);
 //        setOnDismissListener(this);
 //    }
@@ -182,24 +196,52 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements DialogInt
         switch (position) {
             //朋友圈
             case 0:
-                shareManager.registerWeChatShare(getContext());
+                openType = OpenConstants.WECHAT;
+
+                OpenShare<IWXAPI> iwxapiOpenShare = new OpenShare<>();
                 share.setShareScene(Share.SHARE_TIMELINE);
-                shareManager.shareWechatWeb(getContext(), share);
+                iwxapiOpenShare.addAppId(OpenConstant.WECHAT_APP_ID)
+                        .toShare(mActivity.getApplicationContext(), mActivity, OpenConstants.WECHAT, share)
+                        .addSendReqCallback(null);
                 break;
             //微信会话
             case 1:
-                shareManager.registerWeChatShare(getContext());
+
+                openType = OpenConstants.WECHAT;
+
                 share.setShareScene(Share.SHARE_SESSION);
-                shareManager.shareWechatWeb(getContext(), share);
+
+                OpenShare<IWXAPI> iwxapiOpenShare2 = new OpenShare<>();
+                iwxapiOpenShare2.addAppId(OpenConstant.WECHAT_APP_ID)
+                        .toShare(mActivity.getApplicationContext(), mActivity, OpenConstants.WECHAT, share)
+                        .addSendReqCallback(null);
+
                 break;
             //新浪微博
             case 2:
-                shareManager.registerSinaShare(getContext().getApplicationContext(), mActivity, share);
+
+                openType = OpenConstants.SINA;
+
+                share.setShareScene(Share.SHARE_SESSION);
+
+                OpenShare<SsoHandler> openShare = new OpenShare<>();
+                openShare.addAppKey(OpenConstant.WB_APP_KEY)
+                        .toShare(mActivity.getApplicationContext(), mActivity, OpenConstants.SINA, share);
+
                 break;
             //QQ
             case 3:
-                shareManager.registerQQShare(getContext().getApplicationContext());
-                shareManager.shareQQWeb(mActivity, share);
+
+                openType = OpenConstants.TENCENT;
+
+                share.setShareScene(Share.SHARE_SESSION);
+
+                OpenShare<Tencent> tencentOpenShare = new OpenShare<>();
+                tencentOpenShare.addAppId(OpenConstant.QQ_APP_ID)
+                        .addAppKey(OpenConstant.QQ_APP_KEY)
+                        .addIUiListener(mIUiListener)
+                        .toShare(mActivity.getApplicationContext(), mActivity, OpenConstants.TENCENT, share);
+
                 break;
             //复制链接
             case 4:
@@ -224,6 +266,9 @@ public class ShareDialogBuilder extends AlertDialog.Builder implements DialogInt
         return mShare;
     }
 
+    public int getOpenType() {
+        return openType;
+    }
 
     /**
      * 调用系统安装的应用分享

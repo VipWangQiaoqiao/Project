@@ -20,7 +20,7 @@ import com.tencent.tauth.UiError;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.activities.BaseActivity;
-import net.oschina.app.improve.share.constant.ShareConstant;
+import net.oschina.app.improve.share.constant.OpenConstant;
 import net.oschina.open.constants.OpenConstants;
 import net.oschina.open.factory.OpenLogin;
 
@@ -112,8 +112,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
                 OpenLogin<SsoHandler> ssoHandlerOpenLogin = new OpenLogin<>();
                 try {
-                    ssoHandlerOpenLogin.addAppKey(ShareConstant.WB_APP_KEY)
-                            .addRedirectUrl(ShareConstant.REDIRECT_URL)
+                    ssoHandlerOpenLogin.addAppKey(OpenConstant.WB_APP_KEY)
+                            .addRedirectUrl(OpenConstant.REDIRECT_URL)
                             .addWeiboAuthListener(this)
                             .toLogin(getApplicationContext(), LoginActivity.this, OpenConstants.SINA);
                 } catch (NoSuchMethodException e) {
@@ -125,8 +125,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 //微信登录
                 OpenLogin<IWXAPI> iwxapiOpenLogin = new OpenLogin<>();
                 try {
-                    iwxapiOpenLogin.addAppId(ShareConstant.QQ_APP_ID)
-                            .addAppKey(ShareConstant.QQ_APP_KEY)
+                    iwxapiOpenLogin.addAppId(OpenConstant.QQ_APP_ID)
+                            .addAppKey(OpenConstant.QQ_APP_KEY)
                             .addIUiListener(this)
                             .toLogin(getApplicationContext(), LoginActivity.this, OpenConstants.TENCENT);
                 } catch (NoSuchMethodException e) {
