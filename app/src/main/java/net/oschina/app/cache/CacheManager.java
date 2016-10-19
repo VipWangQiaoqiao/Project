@@ -2,6 +2,7 @@ package net.oschina.app.cache;
 
 import android.content.Context;
 
+import net.oschina.app.improve.utils.StreamUtils;
 import net.oschina.app.util.TDevice;
 
 import java.io.File;
@@ -42,14 +43,7 @@ public class CacheManager {
             e.printStackTrace();
             return false;
         } finally {
-            try {
-                oos.close();
-            } catch (Exception e) {
-            }
-            try {
-                fos.close();
-            } catch (Exception e) {
-            }
+            StreamUtils.close(fos, oos);
         }
     }
 
@@ -86,14 +80,7 @@ public class CacheManager {
                 data.delete();
             }
         } finally {
-            try {
-                ois.close();
-            } catch (Exception e) {
-            }
-            try {
-                fis.close();
-            } catch (Exception e) {
-            }
+            StreamUtils.close(ois, fis);
         }
         return null;
     }

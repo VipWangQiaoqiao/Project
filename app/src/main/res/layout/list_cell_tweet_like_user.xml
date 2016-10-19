@@ -2,40 +2,38 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/fill_wrap"
-    android:orientation="vertical"
-    android:background="@drawable/ic_bg_item_selector">
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_material"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_avatar"
-            style="@style/user_face_image"/>
+            style="@style/user_face_image" />
 
         <TextView
             android:id="@+id/tv_name"
             style="@style/wrap_wrap"
-            android:textSize="16sp"
+            android:layout_gravity="center"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
-            android:layout_gravity="center"
             android:textColor="?attr/textColor"
+            android:textSize="16sp"
             tools:text="用户名" />
     </LinearLayout>
-
 
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_marginTop="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
         android:background="@color/list_divider_color" />
-
 </LinearLayout>

@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/ic_bg_item_selector"
+    android:background="@drawable/ic_material"
     android:padding="@dimen/space_8">
 
     <net.oschina.app.widget.AvatarView

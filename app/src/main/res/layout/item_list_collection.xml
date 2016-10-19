@@ -3,12 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/ic_bg_item_selector"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <LinearLayout
+        android:background="@drawable/ic_material"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/lay_16"
@@ -32,6 +33,8 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:lines="1"
+            android:textSize="@dimen/font_16"
+            android:textColor="#111111"
             tools:text="阿里云疼腾讯" />
     </LinearLayout>
 
