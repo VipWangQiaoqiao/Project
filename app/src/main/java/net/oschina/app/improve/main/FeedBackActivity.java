@@ -1,5 +1,6 @@
 package net.oschina.app.improve.main;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
@@ -50,6 +51,7 @@ public class FeedBackActivity extends BaseBackActivity implements View.OnClickLi
 
     private String mFilePath = "";
     private String mFeedbackStr = "[Android-主站-%s]";
+    private ProgressDialog mDialog;
 
     public static void show(Context context) {
         context.startActivity(new Intent(context, FeedBackActivity.class));
@@ -117,6 +119,7 @@ public class FeedBackActivity extends BaseBackActivity implements View.OnClickLi
      * @param file    file
      */
     private void addFeedBack(String content, File file) {
+        getDialog("反馈中...").show();
         OSChinaApi.pubMessage(2609904, content, file, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -138,6 +141,12 @@ public class FeedBackActivity extends BaseBackActivity implements View.OnClickLi
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                mDialog.dismiss();
             }
         });
     }
@@ -180,5 +189,15 @@ public class FeedBackActivity extends BaseBackActivity implements View.OnClickLi
 
     public String getFeedBackContent() {
         return et_feed_back.getText().toString().trim();
+    }
+
+    public ProgressDialog getDialog(String message) {
+        if (mDialog == null) {
+            mDialog = new ProgressDialog(this);
+            mDialog.setCancelable(false);
+            mDialog.setCanceledOnTouchOutside(false);
+        }
+        mDialog.setMessage(message);
+        return mDialog;
     }
 }

@@ -1915,4 +1915,20 @@ public class OSChinaApi {
         Log.e("oschina", "post request");
         client.post("http://121.41.10.133/action/apiv2/reward_order", params, handler);
     }
+
+    public static void checkUpdate(TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("appId", 1);
+        params.put("catalog", 1);
+        params.put("all", false);
+        ApiHttpClient.get("action/apiv2/product_version", params, handler);
+    }
+
+    public static void getCollectionList(String pageToken, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("catalog", 0);
+        if (!TextUtils.isEmpty(pageToken))
+            params.put("pageToken", pageToken);
+        ApiHttpClient.get("action/apiv2/favorites", params, handler);
+    }
 }
