@@ -1923,4 +1923,12 @@ public class OSChinaApi {
         params.put("all", false);
         ApiHttpClient.get("action/apiv2/product_version", params, handler);
     }
+
+    public static void getCollectionList(String pageToken, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("catalog", 0);
+        if (TextUtils.isEmpty(pageToken))
+            params.put("pageToken", pageToken);
+        ApiHttpClient.get("action/apiv2/favorites", params, handler);
+    }
 }
