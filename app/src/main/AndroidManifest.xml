@@ -415,6 +415,11 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".improve.user.activities.UserCollectionActivity"
+            android:label="收藏"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".improve.main.FeedBackActivity"
             android:label="意见反馈"
             android:screenOrientation="portrait" />

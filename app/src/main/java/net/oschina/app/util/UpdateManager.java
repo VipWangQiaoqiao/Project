@@ -89,7 +89,7 @@ public class UpdateManager {
     }
 
     private void onFinishCheck() {
-        if (haveNew()) {
+        if (!haveNew()) {
             showUpdateInfo();
         } else {
             if (isShow) {

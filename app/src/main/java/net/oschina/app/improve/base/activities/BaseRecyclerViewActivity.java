@@ -3,6 +3,7 @@ package net.oschina.app.improve.base.activities;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.bumptech.glide.RequestManager;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -75,11 +76,14 @@ public abstract class BaseRecyclerViewActivity<T> extends BaseBackActivity imple
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                Log.e("res",responseString);
                 try {
                     ResultBean<PageBean<T>> resultBean = AppContext.createGson().fromJson(responseString, getType());
                     if (resultBean != null && resultBean.isSuccess() && resultBean.getResult().getItems() != null) {
                         onLoadingSuccess();
                         setListData(resultBean);
+                    }else {
+                        onLoadingFailure();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -144,11 +148,8 @@ public abstract class BaseRecyclerViewActivity<T> extends BaseBackActivity imple
             mRefreshLayout.setCanLoadMore(true);
         } else {
             mAdapter.addAll(resultBean.getResult().getItems());
-            mAdapter.setState(BaseRecyclerAdapter.STATE_LOADING, true);
         }
-        if (resultBean.getResult().getItems().size() < 20) {
-            mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
-        }
+        mAdapter.setState(resultBean.getResult().getItems() == null || resultBean.getResult().getItems().size() < 20 ? BaseRecyclerAdapter.STATE_NO_MORE : BaseRecyclerAdapter.STATE_LOADING, true);
     }
 
     protected void onLoadingStart() {
@@ -167,6 +168,8 @@ public abstract class BaseRecyclerViewActivity<T> extends BaseBackActivity imple
     protected void onLoadingFailure() {
         if (mAdapter.getItems().size() == 0) {
             mAdapter.setState(BaseRecyclerAdapter.STATE_LOAD_ERROR, true);
+        }else {
+            mAdapter.setState(BaseRecyclerAdapter.STATE_NO_MORE, true);
         }
     }
 

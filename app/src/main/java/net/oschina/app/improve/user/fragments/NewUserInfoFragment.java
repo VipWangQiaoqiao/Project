@@ -33,6 +33,7 @@ import net.oschina.app.improve.bean.UserV2;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.notice.NoticeBean;
 import net.oschina.app.improve.notice.NoticeManager;
+import net.oschina.app.improve.user.activities.UserCollectionActivity;
 import net.oschina.app.improve.user.activities.UserFansActivity;
 import net.oschina.app.improve.user.activities.UserFollowsActivity;
 import net.oschina.app.improve.user.activities.UserMessageActivity;
@@ -446,8 +447,9 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                     UserTweetActivity.show(getActivity(), AppContext.getInstance().getLoginUid());
                     break;
                 case R.id.ly_favorite:
-                    UIHelper.showUserFavorite(getActivity(), AppContext.getInstance()
-                            .getLoginUid());
+//                    UIHelper.showUserFavorite(getActivity(), AppContext.getInstance()
+//                            .getLoginUid());
+                    UserCollectionActivity.show(getActivity());
                     break;
                 case R.id.ly_following:
                     UserFollowsActivity.show(getActivity(), AppContext.getInstance().getLoginUid());
