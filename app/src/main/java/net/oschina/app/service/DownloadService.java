@@ -153,7 +153,7 @@ public class DownloadService extends Service {
 		// 指定个性化视图
 		mNotification.contentView = contentView;
 
-		Intent intent = new Intent(this, MainActivity.class);
+		Intent intent = new Intent(this, net.oschina.app.improve.main.MainActivity.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
 				intent, PendingIntent.FLAG_UPDATE_CURRENT);
 

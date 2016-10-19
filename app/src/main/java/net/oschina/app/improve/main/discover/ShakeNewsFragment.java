@@ -44,7 +44,7 @@ public class ShakeNewsFragment extends BaseSensorFragment<ShakeNews> {
         mImgNews = (ImageView) mShakeView.findViewById(R.id.iv_news);
         mTxtNewsName = (TextView) mShakeView.findViewById(R.id.tv_news_name);
         mTxtPubTime = (TextView) mShakeView.findViewById(R.id.tv_time);
-        mDelayTime = 3;
+        mDelayTime = 1;
         mCardView.setVisibility(View.GONE);
         mTvState.setText("摇一摇获取资讯");
     }
@@ -113,7 +113,7 @@ public class ShakeNewsFragment extends BaseSensorFragment<ShakeNews> {
                         mTvState.setVisibility(View.VISIBLE);
                         mTvState.setText("摇一摇获取资讯");
                         mLoading = false;
-                        mDelayTime = 3;
+                        mDelayTime = 1;
                     }
                 }
             }, 1000);

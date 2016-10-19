@@ -18,8 +18,8 @@ import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.main.nav.NavFragment;
 import net.oschina.app.improve.main.nav.NavigationButton;
 import net.oschina.app.improve.notice.NoticeManager;
+import net.oschina.app.improve.main.update.CheckUpdateManager;
 import net.oschina.app.interf.OnTabReselectListener;
-import net.oschina.app.util.UpdateManager;
 
 import butterknife.Bind;
 
@@ -114,6 +114,6 @@ public class MainActivity extends BaseActivity implements NavFragment.OnNavigati
         if (!AppContext.get(AppConfig.KEY_CHECK_UPDATE, true)) {
             return;
         }
-        new UpdateManager(MainActivity.this, false).checkUpdate();
+        new CheckUpdateManager(this, false).checkUpdate();
     }
 }

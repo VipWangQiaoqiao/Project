@@ -15,13 +15,13 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.improve.main.FeedBackActivity;
+import net.oschina.app.improve.main.update.CheckUpdateManager;
 import net.oschina.app.improve.widget.togglebutton.ToggleButton;
 import net.oschina.app.improve.widget.togglebutton.ToggleButton.OnToggleChanged;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.FileUtil;
 import net.oschina.app.util.MethodsCompat;
 import net.oschina.app.util.UIHelper;
-import net.oschina.app.util.UpdateManager;
 
 import org.kymjs.kjframe.http.HttpConfig;
 
@@ -196,7 +196,7 @@ public class SettingsFragment extends BaseFragment {
     }
 
     private void onClickUpdate() {
-        new UpdateManager(getActivity(), true).checkUpdate();
+        new CheckUpdateManager(getActivity(),true).checkUpdate();
     }
 
     private void onClickCleanCache() {
