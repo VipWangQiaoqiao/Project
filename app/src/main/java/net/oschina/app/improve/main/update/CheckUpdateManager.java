@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -56,7 +55,6 @@ public class CheckUpdateManager {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                Log.e("res", responseString);
                 try {
                     ResultBean<List<Version>> bean = AppContext.createGson()
                             .fromJson(responseString, new TypeToken<ResultBean<List<Version>>>() {

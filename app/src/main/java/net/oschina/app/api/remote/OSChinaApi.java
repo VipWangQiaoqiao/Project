@@ -1927,7 +1927,7 @@ public class OSChinaApi {
     public static void getCollectionList(String pageToken, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("catalog", 0);
-        if (TextUtils.isEmpty(pageToken))
+        if (!TextUtils.isEmpty(pageToken))
             params.put("pageToken", pageToken);
         ApiHttpClient.get("action/apiv2/favorites", params, handler);
     }
