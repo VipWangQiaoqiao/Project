@@ -337,7 +337,7 @@
     <style name="option_item_rl">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@drawable/ic_bg_item_selector</item>
+        <item name="android:background">@drawable/ic_material</item>
         <item name="android:clickable">true</item>
         <item name="android:padding">@dimen/space_13</item>
         <item name="android:gravity">center_vertical</item>

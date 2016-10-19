@@ -3,10 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/ic_bg_item_selector"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <LinearLayout
+        android:background="@drawable/ic_material"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:gravity="center_vertical"

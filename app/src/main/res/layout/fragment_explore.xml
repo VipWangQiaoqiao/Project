@@ -12,6 +12,7 @@
         android:layout_marginTop="25dp" />
 
     <LinearLayout
+        android:background="@drawable/item_selector"
         android:id="@+id/rl_soft"
         style="@style/option_item_rl">
 
@@ -45,6 +46,7 @@
         android:layout_marginTop="30dp" />
 
     <LinearLayout
+        android:background="@drawable/item_selector"
         android:id="@+id/rl_find_osc"
         style="@style/option_item_rl">
 
@@ -78,6 +80,7 @@
         android:layout_marginTop="30dp" />
 
     <LinearLayout
+        android:background="@drawable/item_selector"
         android:id="@+id/rl_scan"
         style="@style/option_item_rl">
 
@@ -113,6 +116,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:background="@drawable/item_selector"
         android:id="@+id/rl_shake"
         style="@style/option_item_rl">
 
