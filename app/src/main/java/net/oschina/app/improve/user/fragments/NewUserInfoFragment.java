@@ -5,13 +5,12 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -44,12 +43,14 @@ import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.ui.MyQRCodeDialog;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.util.DialogHelp;
-import net.oschina.app.util.FileUtil;
 import net.oschina.app.util.ImageUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Random;
@@ -61,13 +62,16 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
+import static net.oschina.app.util.ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP;
+import static org.kymjs.kjframe.utils.ImageUtils.getRandomFileName;
+
 /**
  * Created by fei on 2016/8/15.
  * desc: user mUserInfo module
  */
 
 public class NewUserInfoFragment extends BaseFragment implements View.OnClickListener,
-        EasyPermissions.PermissionCallbacks, NoticeManager.NoticeNotify, OnTabReselectListener {
+                                                                 EasyPermissions.PermissionCallbacks, NoticeManager.NoticeNotify, OnTabReselectListener {
 
     public static final String CACHE_NAME = "NewUserInfoFragment";
 
@@ -123,9 +127,6 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     @Bind(R.id.user_info_notice_fans)
     View mFansView;
 
-    private Uri mOrigUri;
-    private File mPortraitFile;
-
     private net.oschina.app.bean.User mInfo;
     private boolean mIsUploadIcon;
     private ProgressDialog mDialog;
@@ -135,7 +136,8 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     private float mPx;
     private float mPy;
 
-    private String mPortraitPath;
+    private File mCacheFile;
+
     private UserV2 mUserInfo;
     private TextHttpResponseHandler textHandler = new TextHttpResponseHandler() {
 
@@ -153,9 +155,11 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
             if (mSolarSystem != null)
                 mSolarSystem.decelerate();
-            if (mIsUploadIcon)
+            if (mIsUploadIcon) {
                 Toast.makeText(getActivity(), R.string.title_update_fail_status, Toast.LENGTH_SHORT).show();
-            mIsUploadIcon = false;
+                mIsUploadIcon = false;
+                deleteCacheImage();
+            }
         }
 
         @Override
@@ -181,6 +185,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                 if (mIsUploadIcon) {
                     hideWaitDialog();
                     mIsUploadIcon = false;
+                    deleteCacheImage();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -189,6 +194,18 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         }
 
     };
+
+
+    /**
+     * delete the cache image file for upload action
+     */
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    private void deleteCacheImage() {
+        File file = this.mCacheFile;
+        if (file != null && file.exists()) {
+            file.delete();
+        }
+    }
 
     @Override
     protected int getLayoutId() {
@@ -209,7 +226,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
     @Override
     protected void initData() {
-        // super.initData();
+        super.initData();
 
         UserV2 userInfo = (UserV2) CacheManager.readObject(getActivity(), CACHE_NAME);
         if (AppContext.getInstance().isLogin() && userInfo != null) {
@@ -300,6 +317,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
      * format count
      *
      * @param count count
+     *
      * @return formatCount
      */
     private String formatCount(long count) {
@@ -345,12 +363,12 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
                     float x = mCirclePortrait.getX();
                     float y = mCirclePortrait.getY();
-                    int ciOrtraitWidth = mCirclePortrait.getWidth();
+                    int portraitWidth = mCirclePortrait.getWidth();
 
                     mPx = x + +rlShowInfoX + (width >> 1);
                     mPy = y1 + y + (height - y) / 2;
                     mMaxRadius = (int) (mSolarSystem.getHeight() - mPy + 50);
-                    mR = (ciOrtraitWidth >> 1);
+                    mR = (portraitWidth >> 1);
 
                     updateSolar(mPx, mPy);
 
@@ -422,6 +440,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         } else {
             if (!AppContext.getInstance().isLogin()) {
                 UIHelper.showLoginActivity(getActivity());
+                //LoginActivity.show(getActivity());
                 return;
             }
 
@@ -500,7 +519,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
      * show select-picture  dialog
      */
     private void handleSelectPicture() {
-        DialogHelp.getSelectDialog(getActivity(), "选择图片", getResources().getStringArray(R.array.choose_picture),
+        DialogHelp.getSelectDialog(getActivity(), getResources().getString(R.string.action_select_picture), getResources().getStringArray(R.array.choose_picture),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -528,23 +547,15 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     }
 
     /**
-     * 选择图片裁剪
+     * 选择图片返回并准备裁剪
      */
     private void showImagePick() {
-        Intent intent;
-        if (Build.VERSION.SDK_INT < 19) {
-            intent = new Intent();
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            intent.setType("image/*");
-            startActivityForResult(Intent.createChooser(intent, getString(R.string.action_select_picture)),
-                    ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP);
-        } else {
-            intent = new Intent(Intent.ACTION_PICK,
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            intent.setType("image/*");
-            startActivityForResult(Intent.createChooser(intent, getString(R.string.action_select_picture)),
-                    ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP);
-        }
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("image/*");
+        startActivityForResult(Intent.createChooser(intent, getString(R.string.action_select_picture)),
+                REQUEST_CODE_GETIMAGE_BYCROP);
     }
 
     @AfterPermissionGranted(CAMERA_PERM)
@@ -567,72 +578,10 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     /**
      * take photo
      */
-    @SuppressWarnings({"ResultOfMethodCallIgnored"})
     private void startTakePhoto() {
-        Intent intent;
-        // 判断是否挂载了SD卡
-        String savePath = "";
-        String storageState = Environment.getExternalStorageState();
-        if (storageState.equals(Environment.MEDIA_MOUNTED)) {
-            savePath = FILE_SAVE_PATH;
-            File saveDir = new File(savePath);
-            if (!saveDir.exists()) {
-                saveDir.mkdirs();
-            }
-        }
-
-        // 没有挂载SD卡，无法保存文件
-        if (TextUtils.isEmpty(savePath)) {
-            AppContext.showToastShort(getString(R.string.title_error_photo));
-            return;
-        }
-
-        String fileName = "portrait.jpg";// 照片命名
-        File out = new File(savePath, fileName);
-        Uri uri = Uri.fromFile(out);
-        mOrigUri = uri;
-
-        //  String theLarge = savePath + fileName;
-
-        intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent,
                 ImageUtils.REQUEST_CODE_GETIMAGE_BYCAMERA);
-    }
-
-    // 裁剪头像的绝对路径
-    @SuppressWarnings({"ResultOfMethodCallIgnored"})
-    private Uri getUploadTempFile(Uri uri) {
-        String storageState = Environment.getExternalStorageState();
-        if (storageState.equals(Environment.MEDIA_MOUNTED)) {
-            File saveDir = new File(FILE_SAVE_PATH);
-            if (!saveDir.exists()) {
-                saveDir.mkdirs();
-            }
-        } else {
-            AppContext.showToast("无法保存上传的头像，请检查SD卡是否挂载");
-            return null;
-        }
-        String thePath = ImageUtils.getAbsolutePathFromNoStandardUri(uri);
-
-        // 如果是标准Uri
-        if (TextUtils.isEmpty(thePath)) {
-            thePath = ImageUtils.getAbsoluteImagePath(getActivity(), uri);
-        }
-        String ext = FileUtil.getFileFormat(thePath);
-
-        ext = TextUtils.isEmpty(ext) ? "jpg" : ext;
-        // 照片命名
-        String cropFileName = "portrait." + ext;
-        // 裁剪头像的绝对路径
-        mPortraitPath = FILE_SAVE_PATH + cropFileName;
-        mPortraitFile = new File(mPortraitPath);
-
-        // notify
-        Uri notifyUri = Uri.fromFile(mPortraitFile);
-        getActivity().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, notifyUri));
-
-        return notifyUri;
     }
 
     /**
@@ -641,9 +590,10 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
      * @param data 原始图片
      */
     private void startActionCrop(Uri data) {
+
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(data, "image/*");
-        intent.putExtra("output", this.getUploadTempFile(data));
+        intent.putExtra("output", data);
         intent.putExtra("crop", "true");
         intent.putExtra("aspectX", 1);// 裁剪框比例
         intent.putExtra("aspectY", 1);
@@ -682,18 +632,50 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     /**
      * update the new picture
      */
-    private void uploadNewPhoto() {
+    private void uploadNewPhoto(File file) {
 
         // 获取头像缩略图
-        if (TextUtils.isEmpty(mPortraitPath) && !mPortraitFile.exists()) {
+        if (!file.exists()) {
             AppContext.showToast(getString(R.string.title_icon_null));
+        } else {
+            mIsUploadIcon = true;
+            this.mCacheFile = file;
+            OSChinaApi.updateUserIcon(file, textHandler);
         }
 
-        if (mPortraitFile != null) {
-            mIsUploadIcon = true;
-            OSChinaApi.updateUserIcon(mPortraitFile, textHandler);
-        }
     }
+
+    /**
+     * 保存到随机文件
+     *
+     * @param bmp     bmp
+     * @param quality quality
+     *
+     * @return file
+     */
+    public File saveToCacheFile(Bitmap bmp, int quality) {
+        //保存图片千万不能放在app自己的cache 目录下,不然系统裁决功能无法访问- - 这系统级的裁剪权限控制得比较高啊
+        //getActivity().getApplication().getCacheDir().getPath()  这个是会出问题的
+        File file = new File(getRandomFileName(FILE_SAVE_PATH));
+        BufferedOutputStream outputStream = null;
+        try {
+            outputStream = new BufferedOutputStream(new FileOutputStream(file));
+            bmp.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+            outputStream.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (outputStream != null) {
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return file;
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent imageReturnIntent) {
@@ -703,13 +685,27 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
         switch (requestCode) {
             case ImageUtils.REQUEST_CODE_GETIMAGE_BYCAMERA:
-                startActionCrop(mOrigUri);// 拍照后裁剪
+
+                //得到照片的bitmap
+                Bitmap bitmap = imageReturnIntent.getParcelableExtra("data");
+
+                File file = saveToCacheFile(bitmap, 100);
+                Uri fromFile = Uri.fromFile(file);
+                bitmap.recycle();
+
+                startActionCrop(fromFile);// 拍照后裁剪
                 break;
-            case ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP:
-                startActionCrop(imageReturnIntent.getData());// 选图后裁剪
+            case REQUEST_CODE_GETIMAGE_BYCROP:
+
+                Uri uri = imageReturnIntent.getData();
+
+                startActionCrop(uri);// 选图后裁剪
                 break;
             case ImageUtils.REQUEST_CODE_GETIMAGE_BYSDCARD:
-                uploadNewPhoto();
+
+                Uri uri1 = imageReturnIntent.getData();
+                File file1 = new File(uri1.getPath());
+                uploadNewPhoto(file1);
                 break;
         }
 
