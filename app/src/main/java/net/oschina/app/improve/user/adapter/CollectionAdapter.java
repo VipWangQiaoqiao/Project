@@ -49,6 +49,9 @@ public class CollectionAdapter extends BaseRecyclerAdapter<Collection> {
             case News.TYPE_NEWS:
                 type = "资讯";
                 break;
+            default:
+                type = "其他";
+                break;
         }
         h.mTypeView.setText(type);
         h.mTitleView.setText(item.getTitle());
