@@ -618,7 +618,9 @@ public class OSChinaApi {
      *
      * @param uid
      * @param type 1:@我的信息 2:未读消息 3:评论个数 4:新粉丝个数
+     *
      * @return
+     *
      * @throws AppException
      */
     public static void clearNotice(int uid, int type,
@@ -999,7 +1001,9 @@ public class OSChinaApi {
      *
      * @param url
      * @param handler
+     *
      * @return void
+     *
      * @author 火蚁 2015-3-13 上午11:45:47
      */
     public static void scanQrCodeLogin(String url,
@@ -1930,5 +1934,19 @@ public class OSChinaApi {
         if (!TextUtils.isEmpty(pageToken))
             params.put("pageToken", pageToken);
         ApiHttpClient.get("action/apiv2/favorites", params, handler);
+    }
+
+    /**
+     * @param catalog  open catalog
+     * @param openInfo openInfo
+     * @param handler  handler
+     */
+    public static void openLogin(int catalog, String openInfo, TextHttpResponseHandler handler) {
+        if (TextUtils.isEmpty(openInfo)) return;
+        RequestParams params = new RequestParams();
+        params.put("catalog", catalog);
+        params.put("info", openInfo);
+
+        ApiHttpClient.post("action/apiv2/account_open_login", params, handler);
     }
 }

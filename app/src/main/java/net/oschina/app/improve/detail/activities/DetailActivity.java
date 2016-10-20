@@ -2,7 +2,6 @@ package net.oschina.app.improve.detail.activities;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -26,13 +25,13 @@ import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.detail.contract.DetailContract;
 import net.oschina.app.improve.detail.fragments.DetailFragment;
-import net.oschina.app.improve.share.bean.Share;
 import net.oschina.app.improve.share.widget.ShareDialogBuilder;
 import net.oschina.app.ui.ReportDialog;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
+import net.oschina.open.bean.Share;
 
 import java.lang.reflect.Type;
 
@@ -47,7 +46,6 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
                                                                                  BaseBackActivity
         implements DetailContract.Operator<Data, DataView> {
 
-    private static final String TAG = "DetailActivity";
     long mDataId;
     Data mData;
     DataView mView;
@@ -55,6 +53,7 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
     TextView mCommentCountView;
 
     private ProgressDialog mDialog;
+    private ShareDialogBuilder builder;
     //  private ShareDialog mShareDialog;
 
     public long getDataId() {
@@ -288,12 +287,16 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
 
     protected void toShare(String title, String content, String url) {
 
-        ShareDialogBuilder builder = new ShareDialogBuilder(this, R.style.share_dialog);
 
         Share share = new Share();
         share.setTitle(title);
         share.setContent(content);
         share.setUrl(url);
+        share.setBitmapResID(R.mipmap.ic_share);
+        share.setAppShareIcon(R.mipmap.ic_share);
+
+        if (builder == null)
+            builder = new ShareDialogBuilder(this, R.style.share_dialog);
 
         builder.boundActivity(DetailActivity.this)
                 .addShare(share)
@@ -301,8 +304,6 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
                 .setView(R.layout.dialog_share_main)
                 .create()
                 .show();
-
-
     }
 
 
@@ -368,24 +369,12 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
 //        }
 //    }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        //final ShareDialog shareDialog = mShareDialog;
-        // if (shareDialog != null) {
-        //  UMSsoHandler ssoHandler = shareDialog.getController().getConfig().getSsoHandler
-        // (requestCode);
-        //if (ssoHandler != null) {
-        // ssoHandler.authorizeCallBack(requestCode, resultCode, data);
-        // }
-        // }
-    }
-
     /**
      * 检查当前数据,并检查网络状况
      *
      * @return 返回当前登录用户, 未登录或者未通过检查返回0
      */
+    @SuppressWarnings("deprecation")
     public int requestCheck() {
         if (mDataId == 0 || mData == null) {
             AppContext.showToast("数据加载中...");

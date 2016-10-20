@@ -18,11 +18,15 @@ import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.TLog;
 
 import cz.msebera.android.httpclient.Header;
+
 /**
  * 微信回调的activity
  * Created by zhangdeyi on 15/7/27.
  */
 public class WXEntryActivity extends Activity {
+
+    public static final String EXTRA_LOGIN_WX = "extra_login_wx";
+    public static final String ACTION_LOGIN_WX = "net.oschina.app.wx.action.wx_login";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,7 @@ public class WXEntryActivity extends Activity {
             if (!"wechat_login".equals(state)) {
                 finish();
             }
+
             //上面的code就是接入指南里要拿到的code
             getAccessTokenAndOpenId(code);
         } else {
@@ -67,11 +72,32 @@ public class WXEntryActivity extends Activity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 TLog.log("Test", new String(responseBody));
-                String openid_info = new String(responseBody);
+                String openInfo = new String(responseBody);
                 Intent intent = new Intent(OpenIdCatalog.WECHAT);
-                intent.putExtra(LoginBindActivityChooseActivity.BUNDLE_KEY_OPENIDINFO, openid_info);
+                intent.putExtra(LoginBindActivityChooseActivity.BUNDLE_KEY_OPENIDINFO, openInfo);
                 sendBroadcast(intent);
-                finish();
+
+//                if (!TextUtils.isEmpty(openInfo)) {
+//
+//                    OSChinaApi.openLogin(2, openInfo, new TextHttpResponseHandler() {
+//                        @Override
+//                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onSuccess(int statusCode, Header[] headers, String responseString) {
+//
+//                            Intent intent = new Intent(WXEntryActivity.this, MainActivity.class);
+//                            startActivity(intent);
+//
+//                            finish();
+//
+//                        }
+//                    });
+//
+//                }
+
             }
 
             @Override
@@ -88,7 +114,7 @@ public class WXEntryActivity extends Activity {
             @Override
             public void onFinish() {
                 super.onFinish();
-                //waitDialog.dismiss();
+                waitDialog.dismiss();
             }
         });
     }

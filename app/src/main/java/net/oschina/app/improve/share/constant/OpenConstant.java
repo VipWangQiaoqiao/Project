@@ -5,7 +5,7 @@ package net.oschina.app.improve.share.constant;
  * desc:
  */
 
-public interface ShareConstant {
+public interface OpenConstant {
 
     String WECHAT_APP_ID = "wxa8213dc827399101";
     String WECHAT_SECRET = "5c716417ce72ff69d8cf0c43572c9284";

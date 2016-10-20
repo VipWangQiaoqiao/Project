@@ -62,16 +62,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-import static net.oschina.app.util.ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP;
-import static org.kymjs.kjframe.utils.ImageUtils.getRandomFileName;
-
 /**
  * Created by fei on 2016/8/15.
  * desc: user mUserInfo module
  */
 
 public class NewUserInfoFragment extends BaseFragment implements View.OnClickListener,
-                                                                 EasyPermissions.PermissionCallbacks, NoticeManager.NoticeNotify, OnTabReselectListener {
+        EasyPermissions.PermissionCallbacks, NoticeManager.NoticeNotify, OnTabReselectListener {
 
     public static final String CACHE_NAME = "NewUserInfoFragment";
 
@@ -317,7 +314,6 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
      * format count
      *
      * @param count count
-     *
      * @return formatCount
      */
     private String formatCount(long count) {
@@ -440,7 +436,8 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         } else {
             if (!AppContext.getInstance().isLogin()) {
                 UIHelper.showLoginActivity(getActivity());
-                //LoginActivity.show(getActivity());
+                // LoginActivity.show(getActivity());
+
                 return;
             }
 
@@ -555,7 +552,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("image/*");
         startActivityForResult(Intent.createChooser(intent, getString(R.string.action_select_picture)),
-                REQUEST_CODE_GETIMAGE_BYCROP);
+                ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP);
     }
 
     @AfterPermissionGranted(CAMERA_PERM)
@@ -650,13 +647,12 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
      *
      * @param bmp     bmp
      * @param quality quality
-     *
      * @return file
      */
     public File saveToCacheFile(Bitmap bmp, int quality) {
         //保存图片千万不能放在app自己的cache 目录下,不然系统裁决功能无法访问- - 这系统级的裁剪权限控制得比较高啊
         //getActivity().getApplication().getCacheDir().getPath()  这个是会出问题的
-        File file = new File(getRandomFileName(FILE_SAVE_PATH));
+        File file = new File(org.kymjs.kjframe.utils.ImageUtils.getRandomFileName(FILE_SAVE_PATH));
         BufferedOutputStream outputStream = null;
         try {
             outputStream = new BufferedOutputStream(new FileOutputStream(file));
@@ -695,7 +691,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
                 startActionCrop(fromFile);// 拍照后裁剪
                 break;
-            case REQUEST_CODE_GETIMAGE_BYCROP:
+            case ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP:
 
                 Uri uri = imageReturnIntent.getData();
 

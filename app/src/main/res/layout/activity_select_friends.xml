@@ -57,7 +57,7 @@
             android:textColor="?attr/textColor"
             android:layout_gravity="center_horizontal"
             android:textSize="@dimen/text_size_16"
-            android:text="@string/select_friends_noresult"
+            android:text="@string/select_friends_no_result"
             android:layout_marginTop="@dimen/select_friend_header_height"/>
 
         <ListView
