@@ -164,9 +164,9 @@ public class OpenLogin<T> extends LoginFactory {
 
     private IWeiboShareAPI initWeiBo(Context context) {
         IWeiboShareAPI weiBoShareSDK = WeiboShareSDK.createWeiboAPI(context, mAppKey);
-        boolean weiBoAppInstalled = weiBoShareSDK.isWeiboAppInstalled();
+        // boolean weiBoAppInstalled = weiBoShareSDK.isWeiboAppInstalled();
         boolean weiBoAppSupportAPI = weiBoShareSDK.isWeiboAppSupportAPI();
-        if (weiBoAppInstalled && weiBoAppSupportAPI) {
+        if (weiBoAppSupportAPI) {
             boolean registerApp = weiBoShareSDK.registerApp();
             if (registerApp) {
                 return weiBoShareSDK;
@@ -181,9 +181,9 @@ public class OpenLogin<T> extends LoginFactory {
 
     private IWXAPI initWeChat(Context context) {
         IWXAPI iwxapi = WXAPIFactory.createWXAPI(context, mAppId, false);
-        boolean wxAppInstalled = iwxapi.isWXAppInstalled();
+        // boolean wxAppInstalled = iwxapi.isWXAppInstalled();
         boolean wxAppSupportAPI = iwxapi.isWXAppSupportAPI();
-        if (wxAppInstalled && wxAppSupportAPI) {
+        if (wxAppSupportAPI) {
             boolean registerApp = iwxapi.registerApp(mAppId);
             if (registerApp) {
                 return iwxapi;

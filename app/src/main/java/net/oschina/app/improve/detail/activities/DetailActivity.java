@@ -2,7 +2,6 @@ package net.oschina.app.improve.detail.activities;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -17,11 +16,6 @@ import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
-import com.sina.weibo.sdk.auth.AuthInfo;
-import com.sina.weibo.sdk.auth.sso.SsoHandler;
-import com.tencent.tauth.IUiListener;
-import com.tencent.tauth.Tencent;
-import com.tencent.tauth.UiError;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
@@ -31,7 +25,6 @@ import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.detail.contract.DetailContract;
 import net.oschina.app.improve.detail.fragments.DetailFragment;
-import net.oschina.app.improve.share.constant.OpenConstant;
 import net.oschina.app.improve.share.widget.ShareDialogBuilder;
 import net.oschina.app.ui.ReportDialog;
 import net.oschina.app.ui.empty.EmptyLayout;
@@ -39,8 +32,6 @@ import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.UIHelper;
 import net.oschina.open.bean.Share;
-import net.oschina.open.constants.OpenConstants;
-import net.oschina.open.factory.OpenLogin;
 
 import java.lang.reflect.Type;
 
@@ -53,7 +44,7 @@ import cz.msebera.android.httpclient.Header;
 
 public abstract class DetailActivity<Data, DataView extends DetailContract.View> extends
                                                                                  BaseBackActivity
-        implements DetailContract.Operator<Data, DataView>, IUiListener {
+        implements DetailContract.Operator<Data, DataView> {
 
     long mDataId;
     Data mData;
@@ -378,43 +369,12 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
 //        }
 //    }
 
-    @SuppressWarnings("deprecation")
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        ShareDialogBuilder builder = this.builder;
-        if (builder != null) {
-            int openType = builder.getOpenType();
-            if (openType == OpenConstants.TENCENT) {
-                // 对于tencent
-                // 注：在某些低端机上调用登录后，由于内存紧张导致APP被系统回收，登录成功后无法成功回传数据。
-                OpenLogin<Tencent> tencentOpenLogin = new OpenLogin<>();
-                tencentOpenLogin.addAppId(OpenConstant.QQ_APP_ID)
-                        .addAppKey(OpenConstant.QQ_APP_KEY);
-                try {
-                    Tencent tencent = tencentOpenLogin.createOpen(this, OpenConstants.TENCENT);
-                    tencent.handleLoginData(data, this);
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            super.onActivityResult(requestCode, resultCode, data);
-
-            if (openType == OpenConstants.SINA) {
-                AuthInfo authInfo = new AuthInfo(getApplicationContext(), OpenConstant.WB_APP_KEY, OpenConstant.REDIRECT_URL, "all");
-                SsoHandler ssoHandler = new SsoHandler(DetailActivity.this, authInfo);
-                ssoHandler.authorizeCallBack(requestCode, resultCode, data);
-            }
-        }
-
-    }
-
     /**
      * 检查当前数据,并检查网络状况
      *
      * @return 返回当前登录用户, 未登录或者未通过检查返回0
      */
+    @SuppressWarnings("deprecation")
     public int requestCheck() {
         if (mDataId == 0 || mData == null) {
             AppContext.showToast("数据加载中...");
@@ -440,20 +400,5 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
         // hideShareDialog();
         mEmptyLayout = null;
         mData = null;
-    }
-
-    @Override
-    public void onComplete(Object o) {
-
-    }
-
-    @Override
-    public void onError(UiError uiError) {
-
-    }
-
-    @Override
-    public void onCancel() {
-
     }
 }

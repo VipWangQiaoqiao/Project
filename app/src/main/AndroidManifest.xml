@@ -418,8 +418,6 @@
             android:windowSoftInputMode="stateHidden|adjustResize"/>
 
         <!-- 新账户中心模块完-->
-
-        >>>>>>> login
         <activity
             android:name=".improve.user.activities.UserMessageActivity"
             android:configChanges="keyboardHidden|orientation"

@@ -11,7 +11,7 @@
     <item android:state_pressed="true">
         <shape>
             <corners android:radius="26dp"/>
-            <solid android:color="@color/list_item_background_pressed"/>
+            <solid android:color="@color/actionbar_item_background_pressed"/>
         </shape>
     </item>
 

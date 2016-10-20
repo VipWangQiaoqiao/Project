@@ -58,6 +58,7 @@
                 android:minLines="1"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
+                android:textColor="@color/login_line_color"
                 android:textColorHint="@color/login_line_color"/>
         </LinearLayout>
 
@@ -99,6 +100,7 @@
                 android:minLines="1"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
+                android:textColor="@color/login_line_color"
                 android:textColorHint="@color/login_line_color"/>
 
         </LinearLayout>
@@ -114,16 +116,17 @@
 
             <ImageView
                 android:id="@+id/iv_login_hold_pwd"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:contentDescription="@null"
+                android:padding="4dp"
                 app:srcCompat="@mipmap/checkbox_checked"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp"
                 android:layout_weight="1"
                 android:text="@string/login_hold_hint"
                 android:textColor="@color/white"
