@@ -10,6 +10,8 @@ import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.Collection;
 import net.oschina.app.improve.bean.News;
+import net.oschina.app.improve.bean.User;
+import net.oschina.app.util.StringUtils;
 
 /**
  * Created by haibin
@@ -55,15 +57,24 @@ public class CollectionAdapter extends BaseRecyclerAdapter<Collection> {
         }
         h.mTypeView.setText(type);
         h.mTitleView.setText(item.getTitle());
+        h.mFavDateText.setText(StringUtils.formatSomeAgo(item.getFavDate()));
+        User user = item.getAuthor();
+        h.mAuthorText.setText(user != null ? item.getAuthor().getName() : "匿名");
+        h.mCommentCountText.setText(String.valueOf(item.getCommentCount()));
+        h.mFavCountText.setText(String.valueOf(item.getFavCount()));
     }
 
     private class CollectionViewHolder extends RecyclerView.ViewHolder {
-        private TextView mTypeView, mTitleView;
+        private TextView mTypeView, mTitleView, mCommentCountText, mFavCountText, mAuthorText, mFavDateText;
 
         public CollectionViewHolder(View itemView) {
             super(itemView);
             mTypeView = (TextView) itemView.findViewById(R.id.tv_type);
             mTitleView = (TextView) itemView.findViewById(R.id.tv_title);
+            mCommentCountText = (TextView) itemView.findViewById(R.id.tv_comment_count);
+            mFavCountText = (TextView) itemView.findViewById(R.id.tv_fav_count);
+            mAuthorText = (TextView) itemView.findViewById(R.id.tv_user);
+            mFavDateText = (TextView) itemView.findViewById(R.id.tv_fav_date);
         }
     }
 }

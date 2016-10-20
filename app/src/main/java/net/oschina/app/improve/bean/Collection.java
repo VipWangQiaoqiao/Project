@@ -12,7 +12,12 @@ public class Collection implements Serializable{
     private int type;
     private String title;
     private String href;
-
+    private User author;
+    private String favDate;
+    private int favCount;
+    private String body;
+    private int commentCount;
+    private boolean favorite;
     public long getId() {
         return id;
     }
@@ -43,5 +48,53 @@ public class Collection implements Serializable{
 
     public void setHref(String href) {
         this.href = href;
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
+    }
+
+    public String getFavDate() {
+        return favDate;
+    }
+
+    public void setFavDate(String favDate) {
+        this.favDate = favDate;
+    }
+
+    public int getFavCount() {
+        return favCount;
+    }
+
+    public void setFavCount(int favCount) {
+        this.favCount = favCount;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public int getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(int commentCount) {
+        this.commentCount = commentCount;
+    }
+
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
     }
 }
