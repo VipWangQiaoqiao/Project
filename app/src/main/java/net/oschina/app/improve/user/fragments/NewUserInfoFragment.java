@@ -26,6 +26,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.cache.CacheManager;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.bean.UserV2;
@@ -61,9 +62,6 @@ import cz.msebera.android.httpclient.Header;
 import de.hdodenhof.circleimageview.CircleImageView;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
-
-import static net.oschina.app.util.ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP;
-import static org.kymjs.kjframe.utils.ImageUtils.getRandomFileName;
 
 /**
  * Created by fei on 2016/8/15.
@@ -439,8 +437,9 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
             UIHelper.showSetting(getActivity());
         } else {
             if (!AppContext.getInstance().isLogin()) {
-                UIHelper.showLoginActivity(getActivity());
-                //LoginActivity.show(getActivity());
+                //UIHelper.showLoginActivity(getActivity());
+                LoginActivity.show(getActivity());
+
                 return;
             }
 
@@ -555,7 +554,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("image/*");
         startActivityForResult(Intent.createChooser(intent, getString(R.string.action_select_picture)),
-                REQUEST_CODE_GETIMAGE_BYCROP);
+                ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP);
     }
 
     @AfterPermissionGranted(CAMERA_PERM)
@@ -656,7 +655,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     public File saveToCacheFile(Bitmap bmp, int quality) {
         //保存图片千万不能放在app自己的cache 目录下,不然系统裁决功能无法访问- - 这系统级的裁剪权限控制得比较高啊
         //getActivity().getApplication().getCacheDir().getPath()  这个是会出问题的
-        File file = new File(getRandomFileName(FILE_SAVE_PATH));
+        File file = new File(org.kymjs.kjframe.utils.ImageUtils.getRandomFileName(FILE_SAVE_PATH));
         BufferedOutputStream outputStream = null;
         try {
             outputStream = new BufferedOutputStream(new FileOutputStream(file));
@@ -695,7 +694,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
                 startActionCrop(fromFile);// 拍照后裁剪
                 break;
-            case REQUEST_CODE_GETIMAGE_BYCROP:
+            case ImageUtils.REQUEST_CODE_GETIMAGE_BYCROP:
 
                 Uri uri = imageReturnIntent.getData();
 

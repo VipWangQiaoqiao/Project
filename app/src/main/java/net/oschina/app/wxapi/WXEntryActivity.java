@@ -18,6 +18,7 @@ import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.TLog;
 
 import cz.msebera.android.httpclient.Header;
+
 /**
  * 微信回调的activity
  * Created by zhangdeyi on 15/7/27.

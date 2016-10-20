@@ -39,7 +39,7 @@ import net.oschina.app.bean.OpenIdCatalog;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.improve.bean.UserV2;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.share.constant.ShareConstant;
+import net.oschina.app.improve.share.constant.OpenConstant;
 import net.oschina.app.improve.user.fragments.NewUserInfoFragment;
 import net.oschina.app.util.CyptoUtils;
 import net.oschina.app.util.DialogHelp;
@@ -287,8 +287,7 @@ public class LoginActivity extends BaseActivity implements IUiListener {
     private void sinaLogin() {
 
         // 创建授权认证信息
-        authInfo = new AuthInfo(this, ShareConstant.WB_APP_KEY, ShareConstant.REDIRECT_URL,
-                null);
+        authInfo = new AuthInfo(this, OpenConstant.WB_APP_KEY, OpenConstant.REDIRECT_URL, null);
 
         ssoHandler = new SsoHandler(this, authInfo);
 
@@ -302,7 +301,7 @@ public class LoginActivity extends BaseActivity implements IUiListener {
 
                                      if (oauth2AccessToken.isSessionValid()) {
 
-                                         WeiboParameters parameters = new WeiboParameters(ShareConstant.WB_APP_KEY);
+                                         WeiboParameters parameters = new WeiboParameters(OpenConstant.WB_APP_KEY);
                                          parameters.put("uid", oauth2AccessToken.getUid());
                                          parameters.put("access_token", oauth2AccessToken.getToken());
 
@@ -361,7 +360,6 @@ public class LoginActivity extends BaseActivity implements IUiListener {
                              }
 
         );
-
 
         // if (mController == null)
         // mController = UMServiceFactory.getUMSocialService("com.umeng.login");
@@ -496,6 +494,7 @@ public class LoginActivity extends BaseActivity implements IUiListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+
         if (loginType == LOGIN_TYPE_QQ) {
             Tencent tencent = Tencent.createInstance(AppConfig.APP_QQ_KEY, this);
             //在某些低端机上调用登录后，由于内存紧张导致APP被系统回收，登录成功后无法成功回传数据。
@@ -513,7 +512,7 @@ public class LoginActivity extends BaseActivity implements IUiListener {
             // SSO 授权回调
             // 重要：发起 SSO 登陆的 Activity 必须重写 onActivityResults
             if (authInfo == null)
-                authInfo = new AuthInfo(this, ShareConstant.WB_APP_KEY, ShareConstant.REDIRECT_URL, "all");
+                authInfo = new AuthInfo(this, OpenConstant.WB_APP_KEY, OpenConstant.REDIRECT_URL, "all");
             if (ssoHandler == null)
                 ssoHandler = new SsoHandler(this, authInfo);
             ssoHandler.authorizeCallBack(requestCode, resultCode, data);

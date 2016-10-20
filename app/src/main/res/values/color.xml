@@ -81,4 +81,9 @@
 
     <color name="tweet_publish_title_bg">#12ca52</color>
 
+    <!-- 新版登录模块-->
+    <color name="login_line_color">#dededf</color>
+    <color name="login_input_active">#31b968</color>
+    <color name="login_other_color">#cacaca</color>
+
 </resources>
