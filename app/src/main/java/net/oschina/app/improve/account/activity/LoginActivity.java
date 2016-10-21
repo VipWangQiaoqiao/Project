@@ -3,7 +3,10 @@ package net.oschina.app.improve.account.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +30,7 @@ import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.api.remote.OSChinaApi;
@@ -35,10 +39,12 @@ import net.oschina.app.improve.bean.UserV2;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.main.MainActivity;
 import net.oschina.app.improve.share.constant.OpenConstant;
-import net.oschina.app.wxapi.WXEntryActivity;
 import net.oschina.open.constants.OpenConstants;
 import net.oschina.open.factory.OpenLogin;
 
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 
 import butterknife.Bind;
@@ -51,18 +57,28 @@ import cz.msebera.android.httpclient.Header;
  * desc:
  */
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener, WeiboAuthListener, IUiListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener, WeiboAuthListener, IUiListener, View.OnFocusChangeListener {
 
     private static final String TAG = "LoginActivity";
 
+    private static final String HOLD_PWD_KEY = "holdPwdKey";
+    private static final String HOLD_PWD_STATUS = "holdPwdStatus";
+
+    @Bind(R.id.ll_login_username)
+    LinearLayout mLlLoginUsername;
     @Bind(R.id.et_login_username)
     EditText mEtLoginUsername;
+
+    @Bind(R.id.ll_login_pwd)
+    LinearLayout mLlLoginPwd;
     @Bind(R.id.et_login_pwd)
     EditText mEtLoginPwd;
+
     @Bind(R.id.iv_login_hold_pwd)
     ImageView mIvHoldPwd;
     @Bind(R.id.tv_login_forget_pwd)
     TextView mTvLoginForgetPwd;
+
     @Bind(R.id.bt_login_submit)
     Button mTvLoginSubmit;
     @Bind(R.id.bt_login_register)
@@ -114,6 +130,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
         }
     };
+    private boolean mHoldStatus;
 
 
     /**
@@ -134,21 +151,74 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     @Override
     protected void initWidget() {
         super.initWidget();
+
+        mEtLoginUsername.setOnFocusChangeListener(this);
+        mEtLoginUsername.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        mEtLoginPwd.setOnFocusChangeListener(this);
+        mEtLoginPwd.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @Override
     protected void initData() {
         super.initData();
 
-        Intent intent = getIntent();
-        String action = intent.getAction();
-        if (!TextUtils.isEmpty(action)) {
-            if (WXEntryActivity.ACTION_LOGIN_WX.equals(action)) {
-                String wxOpenInfo = intent.getStringExtra(WXEntryActivity.EXTRA_LOGIN_WX);
-                if (TextUtils.isEmpty(wxOpenInfo)) {
-                    OSChinaApi.openLogin(2, wxOpenInfo, mHandler);
-                }
+        String holdPwd = AppContext.get(HOLD_PWD_KEY, null);
+
+        if (!TextUtils.isEmpty(holdPwd)) {
+            byte[] decode = Base64.decode(holdPwd, Base64.DEFAULT);
+            try {
+                String tempPwd = new String(decode, 0, decode.length, "utf-8");
+
+                Log.e(TAG, "initData: --------------->tempPwd=" + tempPwd);
+                mEtLoginPwd.setText(tempPwd);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
             }
+        } else {
+            mEtLoginPwd.setText(null);
+        }
+        mHoldStatus = AppContext.get(HOLD_PWD_STATUS, false);
+        Log.e(TAG, "initData: --------------->" + mHoldStatus);
+        updateHoldPwd(mHoldStatus);
+
+    }
+
+    private void updateHoldPwd(boolean holdStatus) {
+        if (holdStatus) {
+            mIvHoldPwd.setImageResource(R.mipmap.checkbox_checked);
+        } else {
+            mIvHoldPwd.setImageResource(R.mipmap.checkbox_normal);
         }
     }
 
@@ -167,6 +237,35 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 break;
             case R.id.iv_login_hold_pwd:
                 //记住密码
+                String inputPwd = mEtLoginPwd.getText().toString().trim();
+                if (!TextUtils.isEmpty(inputPwd)) {
+
+                    try {
+                        byte[] bytes = inputPwd.getBytes("utf-8");
+                        byte[] encode = Base64.encode(bytes, Base64.DEFAULT);
+
+                        inputPwd = new String(encode, 0, encode.length, "utf-8");
+
+                        Log.e(TAG, "onClick: ------------->encode=" + inputPwd);
+
+                        AppContext.set(HOLD_PWD_KEY, inputPwd);
+
+                        boolean holdStatus = this.mHoldStatus;
+                        if (holdStatus) {
+                            holdStatus = false;
+                        } else {
+                            holdStatus = true;
+                        }
+
+                        updateHoldPwd(holdStatus);
+                        this.mHoldStatus = holdStatus;
+
+                        AppContext.set(HOLD_PWD_STATUS, mHoldStatus);
+
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                }
 
                 break;
             case R.id.bt_login_register:
@@ -245,7 +344,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         if (openType == OpenConstants.SINA) {
             // SSO 授权回调
             // 重要：发起 SSO 登陆的 Activity 必须重写 onActivityResults
-            AuthInfo authInfo = new AuthInfo(getApplicationContext(), OpenConstant.WB_APP_KEY, OpenConstant.REDIRECT_URL, "all");
+            AuthInfo authInfo = new AuthInfo(getApplicationContext(), OpenConstant.WB_APP_KEY, OpenConstant.REDIRECT_URL, OpenConstant.SCOPE);
             SsoHandler ssoHandler = new SsoHandler(LoginActivity.this, authInfo);
             ssoHandler.authorizeCallBack(requestCode, resultCode, data);
         }
@@ -264,8 +363,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         Oauth2AccessToken oauth2AccessToken = Oauth2AccessToken.parseAccessToken(bundle);
 
         if (oauth2AccessToken.isSessionValid()) {
-
-            Gson gson = new Gson();
+            Gson gson = AppContext.createGson();
             String openInfo = gson.toJson(oauth2AccessToken);
             OSChinaApi.openLogin(3, openInfo, mHandler);
 
@@ -279,6 +377,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     @Override
     public void onWeiboException(WeiboException e) {
 
+        Log.e(TAG, "onWeiboException: ---------------->");
+
     }
 
     /**
@@ -288,7 +388,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
      */
     @Override
     public void onComplete(Object o) {
-        OSChinaApi.openLogin(1, (String) o, mHandler);
+
+        Log.e(TAG, "onComplete: -------->tencent------>" + o);
+
+        JSONObject jsonObject = (JSONObject) o;
+        OSChinaApi.openLogin(1, jsonObject.toString(), mHandler);
     }
 
     /**
@@ -308,5 +412,28 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     @Override
     public void onCancel() {
 
+        Log.e(TAG, "onCancel: ------------->");
+
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+
+        int id = v.getId();
+        if (id == R.id.et_login_username) {
+            if (hasFocus) {
+                mLlLoginUsername.setActivated(true);
+                mLlLoginPwd.setActivated(false);
+            }
+
+            Log.e(TAG, "onFocusChange: -----username->" + hasFocus);
+        } else {
+            if (hasFocus) {
+                mLlLoginPwd.setActivated(true);
+                mLlLoginUsername.setActivated(false);
+            }
+
+            Log.e(TAG, "onFocusChange: ---pawd--->" + hasFocus);
+        }
     }
 }

@@ -4,16 +4,19 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.TextHttpResponseHandler;
 import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.tencent.mm.sdk.modelmsg.SendAuth;
 
 import net.oschina.app.R;
 import net.oschina.app.api.ApiHttpClient;
+import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Constants;
-import net.oschina.app.bean.OpenIdCatalog;
-import net.oschina.app.ui.LoginBindActivityChooseActivity;
+import net.oschina.app.improve.main.MainActivity;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.TLog;
 
@@ -27,6 +30,8 @@ public class WXEntryActivity extends Activity {
 
     public static final String EXTRA_LOGIN_WX = "extra_login_wx";
     public static final String ACTION_LOGIN_WX = "net.oschina.app.wx.action.wx_login";
+
+    private static final String TAG = "WXEntryActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,32 +76,40 @@ public class WXEntryActivity extends Activity {
         ApiHttpClient.getDirect(tokenUrl, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
                 TLog.log("Test", new String(responseBody));
                 String openInfo = new String(responseBody);
-                Intent intent = new Intent(OpenIdCatalog.WECHAT);
-                intent.putExtra(LoginBindActivityChooseActivity.BUNDLE_KEY_OPENIDINFO, openInfo);
-                sendBroadcast(intent);
 
-//                if (!TextUtils.isEmpty(openInfo)) {
-//
-//                    OSChinaApi.openLogin(2, openInfo, new TextHttpResponseHandler() {
-//                        @Override
-//                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-//
-//                        }
-//
-//                        @Override
-//                        public void onSuccess(int statusCode, Header[] headers, String responseString) {
-//
-//                            Intent intent = new Intent(WXEntryActivity.this, MainActivity.class);
-//                            startActivity(intent);
-//
-//                            finish();
-//
-//                        }
-//                    });
-//
-//                }
+                //这里是老板微信登录,新版完善了就可以删除掉
+                // Intent intent = new Intent(OpenIdCatalog.WECHAT);
+                //intent.putExtra(LoginBindActivityChooseActivity.BUNDLE_KEY_OPENIDINFO, openInfo);
+                //  sendBroadcast(intent);
+
+
+                Log.e(TAG, "onSuccess: ----------->" + openInfo);
+
+
+                //新版微信登录
+                if (!TextUtils.isEmpty(openInfo)) {
+
+                    OSChinaApi.openLogin(2, openInfo, new TextHttpResponseHandler() {
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+
+                        }
+
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, String responseString) {
+
+                            Intent intent = new Intent(WXEntryActivity.this, MainActivity.class);
+                            startActivity(intent);
+
+                            finish();
+
+                        }
+                    });
+
+                }
 
             }
 

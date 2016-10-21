@@ -39,9 +39,9 @@ public interface OpenConstant {
      * 有关哪些 OpenAPI 需要权限申请，请查看：http://open.weibo.com/wiki/%E5%BE%AE%E5%8D%9AAPI
      * 关于 Scope 概念及注意事项，请查看：http://open.weibo.com/wiki/Scope
      */
-    final String SCOPE =
+    String SCOPE =
             "email,direct_messages_read,direct_messages_write,"
                     + "friendships_groups_read,friendships_groups_write,statuses_to_me_read,"
-                    + "follow_app_official_microblog," + "invitation_write";
+                    + "follow_app_official_microblog,";// + "invitation_write";最后一个为好友邀请功能
 
 }
