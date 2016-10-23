@@ -56,7 +56,8 @@
 
         <RelativeLayout
             android:id="@+id/rl_clean_cache"
-            style="@style/option_item_rl">
+            style="@style/option_item_rl"
+            android:background="@drawable/item_selector">
 
             <TextView
                 style="@style/option_item_text_parent"
@@ -78,7 +79,8 @@
 
         <RelativeLayout
             android:id="@+id/rl_double_click_exit"
-            style="@style/option_item_rl">
+            style="@style/option_item_rl"
+            android:background="@drawable/item_selector">
 
             <TextView
                 style="@style/option_item_text_parent"
@@ -115,7 +117,8 @@
 
         <RelativeLayout
             android:id="@+id/rl_feedback"
-            style="@style/option_item_rl">
+            style="@style/option_item_rl"
+            android:background="@drawable/item_selector">
 
             <TextView
                 style="@style/option_item_text_parent"
@@ -128,7 +131,8 @@
 
         <RelativeLayout
             android:id="@+id/rl_about"
-            style="@style/option_item_rl">
+            style="@style/option_item_rl"
+            android:background="@drawable/item_selector">
 
             <TextView
                 style="@style/option_item_text_parent"
@@ -141,7 +145,8 @@
 
         <RelativeLayout
             android:id="@+id/rl_check_version"
-            style="@style/option_item_rl">
+            style="@style/option_item_rl"
+            android:background="@drawable/item_selector">
 
             <TextView
                 style="@style/option_item_text_parent"
@@ -173,7 +178,8 @@
 
         <RelativeLayout
             android:id="@+id/rl_cancle"
-            style="@style/option_item_rl">
+            style="@style/option_item_rl"
+            android:background="@drawable/item_selector">
 
             <TextView
                 style="@style/option_item_text_parent"
