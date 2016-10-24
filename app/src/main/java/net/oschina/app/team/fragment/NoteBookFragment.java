@@ -28,8 +28,8 @@ import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.NotebookData;
 import net.oschina.app.bean.NotebookDataList;
 import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.bean.User;
 import net.oschina.app.db.NoteDatabase;
-import net.oschina.app.improve.bean.UserV2;
 import net.oschina.app.team.adapter.NotebookAdapter;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.KJAnimations;
@@ -68,7 +68,7 @@ public class NoteBookFragment extends BaseFragment implements
     private SynchronizeController controller;
     private List<NotebookData> datas;
     private NotebookAdapter adapter;
-    private UserV2 user;
+    private User user;
     private Activity aty;
 
     /**
@@ -151,7 +151,7 @@ public class NoteBookFragment extends BaseFragment implements
 
     @Override
     public void initData() {
-        user = AppContext.getInstance().getLoginUserV2();
+        user = AppContext.getInstance().getLoginUser();
         controller = new SynchronizeController();
         noteDb = new NoteDatabase(aty);
         datas = noteDb.query();// 查询操作，忽略耗时

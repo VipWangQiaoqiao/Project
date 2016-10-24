@@ -274,12 +274,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                     ApiHttpClient.updateCookie(ApiHttpClient.getHttpClient(), headers);
                                     //2. 更新本地用户缓存信息
                                     UserV2 userV2 = resultBean.getResult();
-                                    AppContext.getInstance().saveUserInfo(userV2);
+                                  //  AppContext.getInstance().saveUserInfo(userV2);
                                     //finish  进入用户中心页
                                     finish();
                                 } else {
                                     // AppContext.getInstance().cleanLoginInfo();
-                                    AppContext.getInstance().cleanLoginInfoV2();
+                                   // AppContext.getInstance().cleanLoginInfoV2();
                                 }
 
                             }

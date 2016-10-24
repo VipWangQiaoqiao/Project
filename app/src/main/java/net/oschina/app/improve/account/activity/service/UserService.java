@@ -22,4 +22,7 @@ public interface UserService {
 
     boolean isLogin(Context context);
 
+    boolean logout(Context context);
+
+    boolean login(Context context,UserV2 userV2);
 }

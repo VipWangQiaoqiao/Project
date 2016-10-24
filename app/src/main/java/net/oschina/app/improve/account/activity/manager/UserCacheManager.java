@@ -1,12 +1,19 @@
 package net.oschina.app.improve.account.activity.manager;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v4.content.SharedPreferencesCompat;
 
+import net.oschina.app.AppContext;
+import net.oschina.app.api.ApiHttpClient;
+import net.oschina.app.cache.CacheManager;
 import net.oschina.app.improve.account.activity.constants.UserConstants;
 import net.oschina.app.improve.account.activity.service.UserService;
 import net.oschina.app.improve.bean.UserV2;
+import net.oschina.app.improve.notice.NoticeManager;
+import net.oschina.app.improve.tweet.fragments.TweetFragment;
+import net.oschina.app.improve.user.fragments.NewUserInfoFragment;
 
 /**
  * Created by fei
@@ -14,9 +21,11 @@ import net.oschina.app.improve.bean.UserV2;
  * desc:
  */
 
-public class UserManager implements UserService {
+public class UserCacheManager implements UserService {
 
-    private UserManager() {
+    private  long mUid;
+
+    private UserCacheManager() {
     }
 
     /**
@@ -79,7 +88,7 @@ public class UserManager implements UserService {
         edit.putInt(UserConstants.DISCUSS, userV2.getStatistics().getDiscuss());
 
         commit(edit);
-        return false;
+        return true;
     }
 
     @Override
@@ -89,32 +98,34 @@ public class UserManager implements UserService {
         SharedPreferences.Editor edit = getEditor(sp);
         edit.clear();
         commit(edit);
-        return false;
+        return true;
     }
 
     @Override
     public boolean updatePairUserCache(Context context, String key, Object value) {
+
         SharedPreferences sp = createSp(context);
         SharedPreferences.Editor edit = getEditor(sp);
 
         if (value instanceof Integer) {
-
+            edit.putInt(key, (Integer) value);
         } else if (value instanceof Long) {
-
+            edit.putLong(key, (Long) value);
         } else if (value instanceof String) {
-
+            edit.putString(key, (String) value);
         } else if (value instanceof Boolean) {
-
+            edit.putBoolean(key, (Boolean) value);
+        } else {
+            edit.putFloat(key, (Float) value);
         }
-
-
-        return false;
+        commit(edit);
+        return true;
     }
 
     @Override
     public boolean updateUserCache(Context context, UserV2 userV2) {
         saveUserCache(context, userV2);
-        return false;
+        return true;
     }
 
     @Override
@@ -124,11 +135,41 @@ public class UserManager implements UserService {
         return uid > 0;
     }
 
-    private static class UserHolder {
-        private static UserManager INSTANCE = new UserManager();
+    @Override
+    public boolean logout(Context context) {
+
+        // 用户退出时清理红点并退出服务
+        NoticeManager.clear(context, NoticeManager.FLAG_CLEAR_ALL);
+        NoticeManager.exitServer(context);
+
+        ApiHttpClient.destroy((AppContext) context);
+
+        CacheManager.deleteObject(context, TweetFragment.CACHE_USER_TWEET);
+        CacheManager.deleteObject(context, NewUserInfoFragment.CACHE_NAME);
+
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        activityManager.killBackgroundProcesses("net.oschina.app.tweet.TweetPublishService");
+        activityManager.killBackgroundProcesses("net.oschina.app.notice.NoticeServer");
+        deleteUserCache(context);
+
+        return true;
     }
 
-    public static UserManager initUserManager() {
+    @Override
+    public boolean login(Context context, UserV2 userV2) {
+
+        //1.保存缓存
+        saveUserCache(context, userV2);
+        //2.登陆成功,重新启动消息服务
+        NoticeManager.init(context);
+        return true;
+    }
+
+    private static class UserHolder {
+        private static UserCacheManager INSTANCE = new UserCacheManager();
+    }
+
+    public static UserCacheManager initUserManager() {
         return UserHolder.INSTANCE;
     }
 

@@ -17,10 +17,8 @@ import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.User;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.cache.DataCleanManager;
-import net.oschina.app.improve.bean.UserV2;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.tweet.fragments.TweetFragment;
-import net.oschina.app.improve.account.activity.constants.UserConstants;
 import net.oschina.app.improve.user.fragments.NewUserInfoFragment;
 import net.oschina.app.util.CyptoUtils;
 import net.oschina.app.util.MethodsCompat;
@@ -74,19 +72,18 @@ public class AppContext extends BaseApplication {
     }
 
     private void initLogin() {
-        UserV2 user = getLoginUserV2();
+        User user = getLoginUser();
         if (null != user && user.getId() > 0) {
             loginUid = user.getId();
         } else {
-            //this.cleanLoginInfo();
-            this.cleanLoginInfoV2();
+            this.cleanLoginInfo();
         }
     }
 
     /**
      * 获得当前app运行的AppContext
      *
-     * @return appContext
+     * @return
      */
     public static AppContext getInstance() {
         return instance;
@@ -112,8 +109,8 @@ public class AppContext extends BaseApplication {
     /**
      * 获取cookie时传AppConfig.CONF_COOKIE
      *
-     * @param key key
-     * @return key
+     * @param key
+     * @return
      */
     public String getProperty(String key) {
         return AppConfig.getAppConfig(this).get(key);
@@ -126,7 +123,7 @@ public class AppContext extends BaseApplication {
     /**
      * 获取App唯一标识
      *
-     * @return appId
+     * @return
      */
     public String getAppId() {
         String uniqueID = getProperty(AppConfig.CONF_APP_UNIQUEID);
@@ -140,7 +137,7 @@ public class AppContext extends BaseApplication {
     /**
      * 获取App安装包信息
      *
-     * @return packageInfo
+     * @return
      */
     public PackageInfo getPackageInfo() {
         PackageInfo info = null;
@@ -187,43 +184,6 @@ public class AppContext extends BaseApplication {
     }
 
     /**
-     * 保存登录信息 v2
-     *
-     * @param user 用户信息
-     */
-    @SuppressWarnings("serial")
-    public void saveUserInfo(final UserV2 user) {
-        this.loginUid = user.getId();
-
-        setProperties(new Properties() {{
-            setProperty(UserConstants.UID, String.valueOf(user.getId()));
-            setProperty(UserConstants.NAME, user.getName());
-            setProperty(UserConstants.PORTRAIT, user.getPortrait());// 用户头像-文件名
-            setProperty(UserConstants.GENDER, String.valueOf(user.getGender()));
-            setProperty(UserConstants.RELATION, String.valueOf(user.getRelation()));
-
-            //save more
-            setProperty(UserConstants.JOIN_DATE, user.getMore().getJoinDate());
-            setProperty(UserConstants.CITY, user.getMore().getCity());
-            setProperty(UserConstants.EXPERTISE, user.getMore().getExpertise());
-            setProperty(UserConstants.PLATFORM, user.getMore().getPlatform());
-
-            //save statistics
-            setProperty(UserConstants.SCORE, String.valueOf(user.getStatistics().getScore()));
-            setProperty(UserConstants.TWEET, String.valueOf(user.getStatistics().getTweet()));
-            setProperty(UserConstants.COLLECT, String.valueOf(user.getStatistics().getCollect()));
-            setProperty(UserConstants.FANS, String.valueOf(user.getStatistics().getFans()));
-            setProperty(UserConstants.FOLLOW, String.valueOf(user.getStatistics().getFollow()));
-            setProperty(UserConstants.BLOG, String.valueOf(user.getStatistics().getBlog()));
-            setProperty(UserConstants.ANSWER, String.valueOf(user.getStatistics().getAnswer()));
-            setProperty(UserConstants.DISCUSS, String.valueOf(user.getStatistics().getDiscuss()));
-        }});
-
-        // 登陆成功,重新启动消息服务
-        NoticeManager.init(this);
-    }
-
-    /**
      * 更新用户信息
      *
      * @param user
@@ -248,7 +208,7 @@ public class AppContext extends BaseApplication {
     /**
      * 获得登录用户的信息
      *
-     * @return user
+     * @return
      */
     public User getLoginUser() {
         User user = new User();
@@ -268,45 +228,6 @@ public class AppContext extends BaseApplication {
     }
 
     /**
-     * 获得登录用户的信息
-     *
-     * @return userV2
-     */
-    public UserV2 getLoginUserV2() {
-
-        UserV2 user = new UserV2();
-
-        user.setId(getProperty(UserConstants.UID) == null ? 0 : Long.parseLong(getProperty(UserConstants.UID)));
-        user.setName(getProperty(UserConstants.NAME));
-        user.setPortrait(getProperty(UserConstants.PORTRAIT));
-        user.setGender(Integer.parseInt(getProperty(UserConstants.GENDER)));
-        user.setDesc(getProperty(UserConstants.DESC));
-        user.setRelation(Integer.parseInt(getProperty(UserConstants.RELATION)));
-
-        UserV2.More more = new UserV2.More();
-
-        more.setCity(getProperty(UserConstants.CITY));
-        more.setExpertise(getProperty(UserConstants.EXPERTISE));
-        more.setJoinDate(getProperty(UserConstants.JOIN_DATE));
-        more.setPlatform(getProperty(UserConstants.PLATFORM));
-        user.setMore(more);
-
-        UserV2.Statistics statistics = new UserV2.Statistics();
-
-        statistics.setScore(Integer.parseInt(getProperty(UserConstants.SCORE)));
-        statistics.setTweet(Integer.parseInt(getProperty(UserConstants.TWEET)));
-        statistics.setCollect(Integer.parseInt(getProperty(UserConstants.COLLECT)));
-        statistics.setFans(Integer.parseInt(getProperty(UserConstants.FANS)));
-        statistics.setFollow(Integer.parseInt(getProperty(UserConstants.FOLLOW)));
-        statistics.setBlog(Integer.parseInt(getProperty(UserConstants.BLOG)));
-        statistics.setAnswer(Integer.parseInt(getProperty(UserConstants.ANSWER)));
-        statistics.setDiscuss(Integer.parseInt(getProperty(UserConstants.DISCUSS)));
-        user.setStatistics(statistics);
-
-        return user;
-    }
-
-    /**
      * 清除登录信息
      */
     public void cleanLoginInfo() {
@@ -314,19 +235,6 @@ public class AppContext extends BaseApplication {
         removeProperty("user.uid", "user.name", "user.face", "user.location",
                 "user.followers", "user.fans", "user.score",
                 "user.isRememberMe", "user.gender", "user.favoritecount");
-    }
-
-    /**
-     * 清除登录信息  v2
-     */
-    public void cleanLoginInfoV2() {
-        this.loginUid = 0;
-
-        removeProperty(UserConstants.UID, UserConstants.NAME, UserConstants.PORTRAIT, UserConstants.GENDER,
-                UserConstants.DESC, UserConstants.RELATION, UserConstants.JOIN_DATE,
-                UserConstants.CITY, UserConstants.EXPERTISE, UserConstants.PLATFORM, UserConstants.SCORE,
-                UserConstants.TWEET, UserConstants.FOLLOW, UserConstants.FANS, UserConstants.FOLLOW,
-                UserConstants.BLOG, UserConstants.ANSWER, UserConstants.DISCUSS);
     }
 
     /**
@@ -360,8 +268,7 @@ public class AppContext extends BaseApplication {
         NoticeManager.clear(this, NoticeManager.FLAG_CLEAR_ALL);
         NoticeManager.exitServer(this);
 
-        //cleanLoginInfo();
-        cleanLoginInfoV2();
+        cleanLoginInfo();
         ApiHttpClient.destroy(this);
 
         CacheManager.deleteObject(context(), TweetFragment.CACHE_USER_TWEET);

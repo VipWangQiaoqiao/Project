@@ -243,7 +243,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onResume() {
         super.onResume();
-        mUserInfo = AppContext.getInstance().getLoginUserV2();
+        //mUser = AppContext.getInstance().getLoginUser();
         mIsUploadIcon = false;
         NoticeManager.bindNotify(this);
         boolean login = AppContext.getInstance().isLogin();
