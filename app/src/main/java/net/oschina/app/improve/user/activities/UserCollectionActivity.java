@@ -1,9 +1,11 @@
 package net.oschina.app.improve.user.activities;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 
 import com.google.gson.reflect.TypeToken;
+import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.base.activities.BaseRecyclerViewActivity;
@@ -19,19 +21,28 @@ import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
 import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.improve.detail.activities.TranslateDetailActivity;
 import net.oschina.app.improve.user.adapter.CollectionAdapter;
+import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.UIHelper;
 
 import java.lang.reflect.Type;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by haibin
  * on 2016/10/18.
  */
 
-public class UserCollectionActivity extends BaseRecyclerViewActivity<Collection> {
+public class UserCollectionActivity extends BaseRecyclerViewActivity<Collection> implements BaseRecyclerAdapter.OnItemLongClickListener {
 
     public static void show(Context context) {
         context.startActivity(new Intent(context, UserCollectionActivity.class));
+    }
+
+    @Override
+    protected void initWidget() {
+        super.initWidget();
+        mAdapter.setOnItemLongClickListener(this);
     }
 
     @Override
@@ -56,9 +67,33 @@ public class UserCollectionActivity extends BaseRecyclerViewActivity<Collection>
                 NewsDetailActivity.show(this, item.getId());
                 break;
             default:
-                UIHelper.showUrlRedirect(this,item.getHref());
+                UIHelper.showUrlRedirect(this, item.getHref());
                 break;
         }
+    }
+
+    @Override
+    public void onLongClick(int position, long itemId) {
+        final Collection collection = mAdapter.getItem(position);
+        DialogHelp.getConfirmDialog(this, "删除收藏", "是否确认删除该内容吗？", "确认", "取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                OSChinaApi.getFavReverse(collection.getId(), collection.getType(), new TextHttpResponseHandler() {
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        if (collection.isFavorite()) {
+                            mAdapter.removeItem(collection);
+                        }
+                    }
+                });
+            }
+        }, null).show();
     }
 
     @Override
