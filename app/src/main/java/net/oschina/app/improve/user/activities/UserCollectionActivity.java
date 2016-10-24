@@ -75,7 +75,7 @@ public class UserCollectionActivity extends BaseRecyclerViewActivity<Collection>
     @Override
     public void onLongClick(int position, long itemId) {
         final Collection collection = mAdapter.getItem(position);
-        DialogHelp.getConfirmDialog(this, "取消收藏", "确定取消收藏该内容吗？", "确认", "取消", new DialogInterface.OnClickListener() {
+        DialogHelp.getConfirmDialog(this, "删除收藏", "是否确认删除该内容吗？", "确认", "取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
