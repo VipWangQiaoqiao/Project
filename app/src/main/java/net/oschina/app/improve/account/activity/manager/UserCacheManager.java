@@ -23,8 +23,6 @@ import net.oschina.app.improve.user.fragments.NewUserInfoFragment;
 
 public class UserCacheManager implements UserService {
 
-    private  long mUid;
-
     private UserCacheManager() {
     }
 
@@ -45,7 +43,7 @@ public class UserCacheManager implements UserService {
      * @return sp
      */
     private SharedPreferences createSp(Context context) {
-        return context.getSharedPreferences(UserConstants.USER_CONFIG, Context.MODE_PRIVATE);
+        return context.getSharedPreferences(UserConstants.USER_CACHE, Context.MODE_PRIVATE);
     }
 
     /**
@@ -66,7 +64,7 @@ public class UserCacheManager implements UserService {
 
         edit.putLong(UserConstants.UID, userV2.getId());
         edit.putString(UserConstants.NAME, userV2.getName());
-        edit.putString(UserConstants.PLATFORM, userV2.getPortrait());
+        edit.putString(UserConstants.PORTRAIT, userV2.getPortrait());
         edit.putInt(UserConstants.GENDER, userV2.getGender());
         edit.putString(UserConstants.DESC, userV2.getDesc());
         edit.putInt(UserConstants.RELATION, userV2.getRelation());
@@ -163,6 +161,72 @@ public class UserCacheManager implements UserService {
         //2.登陆成功,重新启动消息服务
         NoticeManager.init(context);
         return true;
+    }
+
+    @Override
+    public UserV2 getUserCache(Context context) {
+        SharedPreferences sp = createSp(context);
+        long uid = sp.getLong(UserConstants.UID, 0);
+        if (uid > 0) {
+            UserV2 userV2 = new UserV2();
+            String name = sp.getString(UserConstants.NAME, null);
+            String portrait = sp.getString(UserConstants.PORTRAIT, null);
+            int gender = sp.getInt(UserConstants.GENDER, 0);
+            int relation = sp.getInt(UserConstants.RELATION, 0);
+
+            userV2.setId(uid);
+            userV2.setName(name);
+            userV2.setPortrait(portrait);
+            userV2.setGender(gender);
+            userV2.setRelation(relation);
+
+            UserV2.More more = new UserV2.More();
+
+            String joinDate = sp.getString(UserConstants.JOIN_DATE, null);
+            String city = sp.getString(UserConstants.CITY, null);
+            String expertise = sp.getString(UserConstants.EXPERTISE, null);
+            String platform = sp.getString(UserConstants.PLATFORM, null);
+            String company = sp.getString(UserConstants.COMPANY, null);
+            String position = sp.getString(UserConstants.POSITION, null);
+
+            more.setJoinDate(joinDate);
+            more.setCity(city);
+            more.setExpertise(expertise);
+            more.setPlatform(platform);
+            more.setCompany(company);
+            more.setPosition(position);
+
+            userV2.setMore(more);
+
+
+            UserV2.Statistics statistics = new UserV2.Statistics();
+
+            int score = sp.getInt(UserConstants.SCORE, 0);
+            int tweet = sp.getInt(UserConstants.TWEET, 0);
+            int collect = sp.getInt(UserConstants.COLLECT, 0);
+            int fans = sp.getInt(UserConstants.FANS, 0);
+            int follow = sp.getInt(UserConstants.FOLLOW, 0);
+            int blog = sp.getInt(UserConstants.BLOG, 0);
+            int answer = sp.getInt(UserConstants.ANSWER, 0);
+            int discuss = sp.getInt(UserConstants.DISCUSS, 0);
+
+            statistics.setScore(score);
+            statistics.setTweet(tweet);
+            statistics.setCollect(collect);
+            statistics.setFans(fans);
+            statistics.setFollow(follow);
+            statistics.setBlog(blog);
+            statistics.setAnswer(answer);
+            statistics.setDiscuss(discuss);
+
+            userV2.setStatistics(statistics);
+
+        } else {
+            return null;
+        }
+
+
+        return null;
     }
 
     private static class UserHolder {

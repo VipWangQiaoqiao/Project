@@ -25,4 +25,7 @@ public interface UserService {
     boolean logout(Context context);
 
     boolean login(Context context,UserV2 userV2);
+
+    UserV2 getUserCache(Context context);
+
 }

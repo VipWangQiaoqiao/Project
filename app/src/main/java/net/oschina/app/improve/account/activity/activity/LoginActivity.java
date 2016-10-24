@@ -35,6 +35,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.bean.UserV2;
 import net.oschina.app.improve.bean.base.ResultBean;
@@ -274,12 +275,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                     ApiHttpClient.updateCookie(ApiHttpClient.getHttpClient(), headers);
                                     //2. 更新本地用户缓存信息
                                     UserV2 userV2 = resultBean.getResult();
-                                  //  AppContext.getInstance().saveUserInfo(userV2);
-                                    //finish  进入用户中心页
+                                    UserCacheManager.initUserManager().saveUserCache(LoginActivity.this, userV2);
+
+                                    //3. finish  进入用户中心页
                                     finish();
                                 } else {
+                                    //更新失败因该是不进行任何的本地操作
                                     // AppContext.getInstance().cleanLoginInfo();
-                                   // AppContext.getInstance().cleanLoginInfoV2();
+                                    // AppContext.getInstance().cleanLoginInfoV2();
                                 }
 
                             }

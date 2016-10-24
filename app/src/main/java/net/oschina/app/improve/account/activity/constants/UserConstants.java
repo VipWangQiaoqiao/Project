@@ -8,7 +8,7 @@ package net.oschina.app.improve.account.activity.constants;
 
 public interface UserConstants {
 
-    String USER_CONFIG = "user_config";
+    String USER_CACHE = "user_config";
 
     String ID = "_id";
     String UID = "uid";
