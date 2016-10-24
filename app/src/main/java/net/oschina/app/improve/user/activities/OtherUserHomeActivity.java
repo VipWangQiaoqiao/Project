@@ -385,7 +385,7 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // TODO make the user bean same
-        net.oschina.app.bean.User mLoginUser = AppContext.getInstance().getLoginUser();
+        UserV2 mLoginUser = AppContext.getInstance().getLoginUserV2();
         if (user.getId() > 0 && mLoginUser != null && mLoginUser.getId() != user.getId()){
             getMenuInflater().inflate(R.menu.menu_other_user, menu);
             MenuItem mFollowMenu = menu.getItem(1);

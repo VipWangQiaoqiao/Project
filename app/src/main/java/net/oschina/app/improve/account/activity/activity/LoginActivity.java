@@ -1,4 +1,4 @@
-package net.oschina.app.improve.account.activity;
+package net.oschina.app.improve.account.activity.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -39,6 +40,8 @@ import net.oschina.app.improve.bean.UserV2;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.main.MainActivity;
 import net.oschina.app.improve.share.constant.OpenConstant;
+import net.oschina.app.improve.utils.AssimilateUtils;
+import net.oschina.common.verify.Verifier;
 import net.oschina.open.constants.OpenConstants;
 import net.oschina.open.factory.OpenLogin;
 
@@ -163,6 +166,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+                boolean b = AssimilateUtils.MachPhoneNum(s);
+                boolean email = AssimilateUtils.machEmail(s);
+                Log.e(TAG, "onTextChanged: ------------->phone=" + b + "  email=" + email);
+
             }
 
             @Override
@@ -234,10 +241,64 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 break;
             case R.id.bt_login_submit:
 
+                String tempUsername = mEtLoginUsername.getText().toString().trim();
+                String tempPwd = mEtLoginPwd.getText().toString().trim();
+
+
+                if (TextUtils.isEmpty(tempUsername) && TextUtils.isEmpty(tempPwd)) {
+
+                    boolean machPhoneNum = AssimilateUtils.MachPhoneNum(tempUsername);
+                    boolean mathEmail = AssimilateUtils.machEmail(tempUsername);
+
+                    if (machPhoneNum || mathEmail) {
+                        //登录成功,请求数据进入用户个人中心页面
+
+                        String appToken = Verifier.getPrivateToken(getApplication());
+
+                        OSChinaApi.login(tempUsername, tempPwd, appToken, new TextHttpResponseHandler() {
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+
+                            }
+
+                            @Override
+                            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+
+                                Type type = new TypeToken<ResultBean<UserV2>>() {
+                                }.getType();
+
+                                ResultBean<UserV2> resultBean = AppContext.createGson().fromJson(responseString, type);
+                                if (resultBean.isSuccess()) {
+
+                                    //1. 更新相关Cookie信息
+                                    ApiHttpClient.updateCookie(ApiHttpClient.getHttpClient(), headers);
+                                    //2. 更新本地用户缓存信息
+                                    UserV2 userV2 = resultBean.getResult();
+                                    AppContext.getInstance().saveUserInfo(userV2);
+                                    //finish  进入用户中心页
+                                    finish();
+                                } else {
+                                    // AppContext.getInstance().cleanLoginInfo();
+                                    AppContext.getInstance().cleanLoginInfoV2();
+                                }
+
+                            }
+                        });
+
+
+                    } else {
+                        AppContext.showToast(getString(R.string.hint_username_ok), Toast.LENGTH_SHORT);
+                    }
+
+                } else {
+                    AppContext.showToast(getString(R.string.hint_pwd_null), Toast.LENGTH_SHORT);
+                }
+
                 break;
             case R.id.iv_login_hold_pwd:
                 //记住密码
                 String inputPwd = mEtLoginPwd.getText().toString().trim();
+
                 if (!TextUtils.isEmpty(inputPwd)) {
 
                     try {
@@ -245,8 +306,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                         byte[] encode = Base64.encode(bytes, Base64.DEFAULT);
 
                         inputPwd = new String(encode, 0, encode.length, "utf-8");
-
-                        Log.e(TAG, "onClick: ------------->encode=" + inputPwd);
 
                         AppContext.set(HOLD_PWD_KEY, inputPwd);
 
@@ -265,6 +324,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
+                } else {
+                    AppContext.showToast(getString(R.string.hint_pwd_null), Toast.LENGTH_SHORT);
                 }
 
                 break;

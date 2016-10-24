@@ -26,7 +26,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.cache.CacheManager;
-import net.oschina.app.improve.account.activity.LoginActivity;
+import net.oschina.app.improve.account.activity.activity.LoginActivity;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.bean.UserV2;
@@ -125,7 +125,6 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     @Bind(R.id.user_info_notice_fans)
     View mFansView;
 
-    private net.oschina.app.bean.User mInfo;
     private boolean mIsUploadIcon;
     private ProgressDialog mDialog;
 
@@ -244,7 +243,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onResume() {
         super.onResume();
-        mInfo = AppContext.getInstance().getLoginUser();
+        mUserInfo = AppContext.getInstance().getLoginUserV2();
         mIsUploadIcon = false;
         NoticeManager.bindNotify(this);
         boolean login = AppContext.getInstance().isLogin();
@@ -437,7 +436,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         } else {
             if (!AppContext.getInstance().isLogin()) {
                 //UIHelper.showLoginActivity(getActivity());
-                 LoginActivity.show(getActivity());
+                LoginActivity.show(getActivity());
 
                 return;
             }
@@ -496,34 +495,41 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     }
 
     private void showClickAvatar() {
-        if (mInfo == null) {
-            AppContext.showToast("");
-            return;
-        }
-        DialogHelp.getSelectDialog(getActivity(), getString(R.string.action_select), getResources().getStringArray(R.array.avatar_option), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if (i == 0) {
-                    handleSelectPicture();
-                } else {
-                    if (mUserInfo == null) return;
-                    UIHelper.showUserAvatar(getActivity(), mUserInfo.getPortrait());
+        if (!AppContext.getInstance().isLogin()) {
+            //UIHelper.showLoginActivity(getActivity());
+            LoginActivity.show(getActivity());
+        } else {
+            DialogHelp.getSelectDialog(getActivity(), getString(R.string.action_select), getResources().getStringArray(R.array.avatar_option), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    if (i == 0) {
+                        handleSelectPicture();
+                    } else {
+                        if (mUserInfo == null) return;
+                        UIHelper.showUserAvatar(getActivity(), mUserInfo.getPortrait());
+                    }
                 }
-            }
-        }).show();
+            }).show();
+        }
     }
 
     /**
      * show select-picture  dialog
      */
     private void handleSelectPicture() {
-        DialogHelp.getSelectDialog(getActivity(), getResources().getString(R.string.action_select_picture), getResources().getStringArray(R.array.choose_picture),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        goToSelectPicture(i);
-                    }
-                }).show();
+        if (!AppContext.getInstance().isLogin()) {
+            //UIHelper.showLoginActivity(getActivity());
+            LoginActivity.show(getActivity());
+        } else {
+            DialogHelp.getSelectDialog(getActivity(), getResources().getString(R.string.action_select_picture),
+                    getResources().getStringArray(R.array.choose_picture),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            goToSelectPicture(i);
+                        }
+                    }).show();
+        }
     }
 
     /**

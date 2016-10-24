@@ -618,9 +618,7 @@ public class OSChinaApi {
      *
      * @param uid
      * @param type 1:@我的信息 2:未读消息 3:评论个数 4:新粉丝个数
-     *
      * @return
-     *
      * @throws AppException
      */
     public static void clearNotice(int uid, int type,
@@ -926,7 +924,7 @@ public class OSChinaApi {
      * @param id  便签id
      * @param uid 用户id
      */
-    public static void deleteNoteBook(int id, int uid,
+    public static void deleteNoteBook(int id, long uid,
                                       AsyncHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("uid", uid);
@@ -1001,9 +999,7 @@ public class OSChinaApi {
      *
      * @param url
      * @param handler
-     *
      * @return void
-     *
      * @author 火蚁 2015-3-13 上午11:45:47
      */
     public static void scanQrCodeLogin(String url,
@@ -1948,5 +1944,25 @@ public class OSChinaApi {
         params.put("info", openInfo);
 
         ApiHttpClient.post("action/apiv2/account_open_login", params, handler);
+    }
+
+    /**
+     * login account
+     *
+     * @param username username
+     * @param pwd      pwd
+     * @param appToken appToken
+     * @param handler  handler
+     */
+    public static void login(String username, String pwd, String appToken, TextHttpResponseHandler handler) {
+        if (TextUtils.isEmpty(username) && TextUtils.isEmpty(pwd) && TextUtils.isEmpty(appToken)) return;
+
+        RequestParams params = new RequestParams();
+        params.put("account", username);
+        params.put("password", pwd);
+        params.put("appToken", appToken);
+
+        ApiHttpClient.post("action/apiv2/account_login", handler);
+
     }
 }
