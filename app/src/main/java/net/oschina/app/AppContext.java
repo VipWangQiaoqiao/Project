@@ -20,7 +20,7 @@ import net.oschina.app.cache.DataCleanManager;
 import net.oschina.app.improve.bean.UserV2;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.tweet.fragments.TweetFragment;
-import net.oschina.app.improve.user.constants.UserConstants;
+import net.oschina.app.improve.account.activity.constants.UserConstants;
 import net.oschina.app.improve.user.fragments.NewUserInfoFragment;
 import net.oschina.app.util.CyptoUtils;
 import net.oschina.app.util.MethodsCompat;
@@ -194,6 +194,7 @@ public class AppContext extends BaseApplication {
     @SuppressWarnings("serial")
     public void saveUserInfo(final UserV2 user) {
         this.loginUid = user.getId();
+
         setProperties(new Properties() {{
             setProperty(UserConstants.UID, String.valueOf(user.getId()));
             setProperty(UserConstants.NAME, user.getName());
@@ -275,7 +276,7 @@ public class AppContext extends BaseApplication {
 
         UserV2 user = new UserV2();
 
-        user.setId(Integer.parseInt(getProperty(UserConstants.UID), 0));
+        user.setId(getProperty(UserConstants.UID) == null ? 0 : Long.parseLong(getProperty(UserConstants.UID)));
         user.setName(getProperty(UserConstants.NAME));
         user.setPortrait(getProperty(UserConstants.PORTRAIT));
         user.setGender(Integer.parseInt(getProperty(UserConstants.GENDER)));

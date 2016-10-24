@@ -1,4 +1,4 @@
-package net.oschina.app.improve.user.constants;
+package net.oschina.app.improve.account.activity.constants;
 
 /**
  * Created by fei
@@ -7,6 +7,8 @@ package net.oschina.app.improve.user.constants;
  */
 
 public interface UserConstants {
+
+    String USER_CONFIG = "user_config";
 
     String ID = "_id";
     String UID = "uid";
@@ -20,6 +22,8 @@ public interface UserConstants {
     String CITY = "city";
     String EXPERTISE = "expertise";
     String PLATFORM = "platform";
+    String COMPANY="company";
+    String POSITION="position";
 
     String SCORE = "score";
     String TWEET = "tweet";
