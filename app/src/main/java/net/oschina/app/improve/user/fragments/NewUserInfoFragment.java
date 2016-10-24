@@ -79,7 +79,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     private final static String FILE_SAVE_PATH = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
             .getAbsolutePath() + File.separator + "开源中国" + File.separator;
 
-    private static final int CAMERA_PERM = 1; 
+    private static final int CAMERA_PERM = 1;
 
     @Bind(R.id.iv_logo_setting)
     ImageView mIvLogoSetting;
