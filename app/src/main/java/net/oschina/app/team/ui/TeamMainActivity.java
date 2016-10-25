@@ -46,8 +46,7 @@ import cz.msebera.android.httpclient.Header;
 public class TeamMainActivity extends BaseActivity implements ActionBar.OnNavigationListener {
 
     private final String TEAM_LIST_FILE = "team_list_file";
-    private final String TEAM_LIST_KEY = "team_list_key"
-            + UserCacheManager.initUserManager().loginId(this);
+    private String TEAM_LIST_KEY = null;
 
     public final static String BUNDLE_KEY_TEAM = "bundle_key_team";
 
@@ -80,6 +79,8 @@ public class TeamMainActivity extends BaseActivity implements ActionBar.OnNaviga
 
     @Override
     public void initView() {
+
+        TEAM_LIST_KEY = "team_list_key" + UserCacheManager.initUserManager().loginId(this);
         ButterKnife.bind(this);
         // 隐藏actionbar的标题
         mActionBar.setDisplayShowTitleEnabled(false);
