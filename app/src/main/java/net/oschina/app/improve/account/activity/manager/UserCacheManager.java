@@ -13,7 +13,6 @@ import net.oschina.app.improve.account.activity.service.UserService;
 import net.oschina.app.improve.bean.UserV2;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.tweet.fragments.TweetFragment;
-import net.oschina.app.improve.user.fragments.NewUserInfoFragment;
 
 /**
  * Created by fei
@@ -128,9 +127,14 @@ public class UserCacheManager implements UserService {
 
     @Override
     public boolean isLogin(Context context) {
-        SharedPreferences sp = createSp(context);
-        long uid = sp.getLong(UserConstants.UID, 0);
+        long uid = loginId(context);
         return uid > 0;
+    }
+
+    @Override
+    public long loginId(Context context) {
+        SharedPreferences sp = createSp(context);
+        return sp.getLong(UserConstants.UID, 0);
     }
 
     @Override
@@ -143,7 +147,7 @@ public class UserCacheManager implements UserService {
         ApiHttpClient.destroy((AppContext) context);
 
         CacheManager.deleteObject(context, TweetFragment.CACHE_USER_TWEET);
-        CacheManager.deleteObject(context, NewUserInfoFragment.CACHE_NAME);
+        // CacheManager.deleteObject(context, NewUserInfoFragment.CACHE_NAME);
 
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         activityManager.killBackgroundProcesses("net.oschina.app.tweet.TweetPublishService");
@@ -172,12 +176,14 @@ public class UserCacheManager implements UserService {
             String name = sp.getString(UserConstants.NAME, null);
             String portrait = sp.getString(UserConstants.PORTRAIT, null);
             int gender = sp.getInt(UserConstants.GENDER, 0);
+            String desc = sp.getString(UserConstants.DESC, null);
             int relation = sp.getInt(UserConstants.RELATION, 0);
 
             userV2.setId(uid);
             userV2.setName(name);
             userV2.setPortrait(portrait);
             userV2.setGender(gender);
+            userV2.setDesc(desc);
             userV2.setRelation(relation);
 
             UserV2.More more = new UserV2.More();
@@ -221,12 +227,10 @@ public class UserCacheManager implements UserService {
 
             userV2.setStatistics(statistics);
 
+            return userV2;
         } else {
             return null;
         }
-
-
-        return null;
     }
 
     private static class UserHolder {

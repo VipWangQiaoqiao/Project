@@ -1,5 +1,6 @@
 package net.oschina.app.api.remote;
 
+import android.content.Context;
 import android.support.v4.util.Pair;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,6 +17,7 @@ import net.oschina.app.bean.EventApplyData;
 import net.oschina.app.bean.NewsList;
 import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Tweet;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.util.StringUtils;
 
@@ -127,20 +129,20 @@ public class OSChinaApi {
     }
 
     public static void pubLikeTweet(int tweetId, int authorId,
-                                    AsyncHttpResponseHandler handler) {
+                                    AsyncHttpResponseHandler handler, Context context) {
 
         RequestParams params = new RequestParams();
         params.put("tweetid", tweetId);
-        params.put("uid", AppContext.getInstance().getLoginUid());
+        params.put("uid", UserCacheManager.initUserManager().loginId(context));
         params.put("ownerOfTweet", authorId);
         ApiHttpClient.post("action/api/tweet_like", params, handler);
     }
 
     public static void pubUnLikeTweet(int tweetId, int authorId,
-                                      AsyncHttpResponseHandler handler) {
+                                      AsyncHttpResponseHandler handler, Context context) {
         RequestParams params = new RequestParams();
         params.put("tweetid", tweetId);
-        params.put("uid", AppContext.getInstance().getLoginUid());
+        params.put("uid", UserCacheManager.initUserManager().loginId(context));
         params.put("ownerOfTweet", authorId);
         ApiHttpClient.post("action/api/tweet_unlike", params, handler);
     }
@@ -607,9 +609,9 @@ public class OSChinaApi {
         ApiHttpClient.post("action/api/portrait_update", params, handler);
     }
 
-    public static void getNotices(AsyncHttpResponseHandler handler) {
+    public static void getNotices(AsyncHttpResponseHandler handler, Context context) {
         RequestParams params = new RequestParams();
-        params.put("uid", AppContext.getInstance().getLoginUid());
+        params.put("uid", UserCacheManager.initUserManager().loginId(context));
         ApiHttpClient.get("action/api/user_notice", params, handler);
     }
 
@@ -810,9 +812,9 @@ public class OSChinaApi {
      *
      * @param handler
      */
-    public static void teamList(AsyncHttpResponseHandler handler) {
+    public static void teamList(AsyncHttpResponseHandler handler, Context context) {
         RequestParams params = new RequestParams();
-        params.put("uid", AppContext.getInstance().getLoginUid());
+        params.put("uid", UserCacheManager.initUserManager().loginId(context));
         ApiHttpClient.get("action/api/team_list", params, handler);
     }
 
@@ -1062,14 +1064,14 @@ public class OSChinaApi {
     /**
      * 意见反馈
      */
-    public static void feedback(String content, File file, AsyncHttpResponseHandler handler) {
+    public static void feedback(String content, File file, AsyncHttpResponseHandler handler, Context context) {
         RequestParams params = new RequestParams();
         if (file != null && file.exists())
             try {
                 params.put("file", file);
             } catch (FileNotFoundException e) {
             }
-        params.put("uid", AppContext.getInstance().getLoginUid());
+        params.put("uid", UserCacheManager.initUserManager().loginId(context));
         params.put("receiver", "2609904");
         params.put("content", content);
         ApiHttpClient.post("action/api/message_pub", params, handler);
@@ -1771,8 +1773,11 @@ public class OSChinaApi {
     /**
      * 获取个人信息
      */
-    public static void getUserInfo(TextHttpResponseHandler handler) {
+    public static void getUserInfo(long uid, TextHttpResponseHandler handler) {
+        // RequestParams params = new RequestParams();
+        // params.put("id", uid);
         ApiHttpClient.get("action/apiv2/user_info", handler);
+
     }
 
     /**
@@ -1955,14 +1960,14 @@ public class OSChinaApi {
      * @param handler  handler
      */
     public static void login(String username, String pwd, String appToken, TextHttpResponseHandler handler) {
-        if (TextUtils.isEmpty(username) && TextUtils.isEmpty(pwd) && TextUtils.isEmpty(appToken)) return;
+        if (TextUtils.isEmpty(appToken)) return;
 
         RequestParams params = new RequestParams();
         params.put("account", username);
         params.put("password", pwd);
         params.put("appToken", appToken);
 
-        ApiHttpClient.post("action/apiv2/account_login", handler);
+        ApiHttpClient.post("action/apiv2/account_login", params, handler);
 
     }
 }

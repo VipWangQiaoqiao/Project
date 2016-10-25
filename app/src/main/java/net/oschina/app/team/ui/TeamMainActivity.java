@@ -19,6 +19,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseActivity;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamList;
 import net.oschina.app.team.viewpagefragment.TeamMainViewPagerFragment;
@@ -46,7 +47,7 @@ public class TeamMainActivity extends BaseActivity implements ActionBar.OnNaviga
 
     private final String TEAM_LIST_FILE = "team_list_file";
     private final String TEAM_LIST_KEY = "team_list_key"
-            + AppContext.getInstance().getLoginUid();
+            + UserCacheManager.initUserManager().loginId(this);
 
     public final static String BUNDLE_KEY_TEAM = "bundle_key_team";
 
@@ -178,7 +179,7 @@ public class TeamMainActivity extends BaseActivity implements ActionBar.OnNaviga
                                   Throwable arg3) {
                 //AppContext.showToast("网络不好，请稍后重试");
             }
-        });
+        }, this);
     }
 
     private void setTeamDataState() {

@@ -3,6 +3,7 @@ package net.oschina.app.improve.account.activity.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -42,7 +43,6 @@ import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.main.MainActivity;
 import net.oschina.app.improve.share.constant.OpenConstant;
 import net.oschina.app.improve.utils.AssimilateUtils;
-import net.oschina.common.verify.Verifier;
 import net.oschina.open.constants.OpenConstants;
 import net.oschina.open.factory.OpenLogin;
 
@@ -50,6 +50,8 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -242,21 +244,21 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 break;
             case R.id.bt_login_submit:
 
-                String tempUsername = mEtLoginUsername.getText().toString().trim();
-                String tempPwd = mEtLoginPwd.getText().toString().trim();
+                String tempUsername = "771297972@qq.com";//mEtLoginUsername.getText().toString().trim();
+                String tempPwd = "123456";//mEtLoginPwd.getText().toString().trim();
 
 
-                if (TextUtils.isEmpty(tempUsername) && TextUtils.isEmpty(tempPwd)) {
+                if (!TextUtils.isEmpty(tempUsername) && !TextUtils.isEmpty(tempPwd)) {
 
                     boolean machPhoneNum = AssimilateUtils.MachPhoneNum(tempUsername);
-                    boolean mathEmail = AssimilateUtils.machEmail(tempUsername);
+                    boolean machEmail = AssimilateUtils.machEmail(tempUsername);
 
-                    if (machPhoneNum || mathEmail) {
+                    if (machPhoneNum || machEmail) {
                         //登录成功,请求数据进入用户个人中心页面
 
-                        String appToken = Verifier.getPrivateToken(getApplication());
+                        String appToken = "123";//"765e06cc569b5b8ed41a4a8c979338c888d644f4";//Verifier.getPrivateToken(getApplication());
 
-                        OSChinaApi.login(tempUsername, tempPwd, appToken, new TextHttpResponseHandler() {
+                        OSChinaApi.login(tempUsername, Sha1toHex(tempPwd), appToken, new TextHttpResponseHandler() {
                             @Override
                             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
 
@@ -268,6 +270,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                 Type type = new TypeToken<ResultBean<UserV2>>() {
                                 }.getType();
 
+                                Log.e(TAG, "onSuccess: --------->" + responseString);
                                 ResultBean<UserV2> resultBean = AppContext.createGson().fromJson(responseString, type);
                                 if (resultBean.isSuccess()) {
 
@@ -275,10 +278,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                     ApiHttpClient.updateCookie(ApiHttpClient.getHttpClient(), headers);
                                     //2. 更新本地用户缓存信息
                                     UserV2 userV2 = resultBean.getResult();
-                                    UserCacheManager.initUserManager().saveUserCache(LoginActivity.this, userV2);
+                                    Log.e(TAG, "onSuccess: -------------->" + userV2.toString());
+                                    boolean saveUserCache = UserCacheManager.initUserManager().saveUserCache(LoginActivity.this, userV2);
+                                    if (saveUserCache) {
+                                        //3. finish  进入用户中心页
+                                        finish();
+                                    }
 
-                                    //3. finish  进入用户中心页
-                                    finish();
                                 } else {
                                     //更新失败因该是不进行任何的本地操作
                                     // AppContext.getInstance().cleanLoginInfo();
@@ -383,6 +389,30 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 break;
         }
 
+    }
+
+    @NonNull
+    private String Sha1toHex(String tempPwd) {
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
+            messageDigest.update(tempPwd.getBytes());
+            byte[] bytes = messageDigest.digest();
+
+            StringBuilder tempHex = new StringBuilder();
+            // 字节数组转换为 十六进制数
+            for (byte aByte : bytes) {
+                String shaHex = Integer.toHexString(aByte & 0xff);
+                if (shaHex.length() < 2) {
+                    tempHex.append(0);
+                }
+                tempHex.append(shaHex);
+            }
+            return tempHex.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return tempPwd;
     }
 
     @SuppressWarnings("deprecation")

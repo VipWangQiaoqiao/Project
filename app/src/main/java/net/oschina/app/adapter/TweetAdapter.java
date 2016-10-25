@@ -24,6 +24,7 @@ import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.User;
 import net.oschina.app.emoji.InputHelper;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.util.DialogHelp;
@@ -170,7 +171,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
         vh.ivLikeState.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (AppContext.getInstance().isLogin()) {
+                if (UserCacheManager.initUserManager().isLogin(mContext)) {
                     updateLikeState(vh, tweet);
                 } else {
                     AppContext.showToast("先登陆再赞~");
@@ -197,7 +198,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
                 tweet.getLikeUser().remove(0);
             }
             OSChinaApi.pubUnLikeTweet(tweet.getId(), tweet.getAuthorid(),
-                    handler);
+                    handler,mContext);
 //            vh.ivLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
 //                    .gray));
             vh.ivLikeState.setImageResource(R.mipmap.ic_thumbup_normal);
@@ -206,7 +207,7 @@ public class TweetAdapter extends ListBaseAdapter<Tweet> {
             List<User> likeUser = tweet.getLikeUser();
             if (likeUser!=null)
             tweet.getLikeUser().add(0, AppContext.getInstance().getLoginUser());
-            OSChinaApi.pubLikeTweet(tweet.getId(), tweet.getAuthorid(), handler);
+            OSChinaApi.pubLikeTweet(tweet.getId(), tweet.getAuthorid(), handler,mContext);
 //            vh.tvLikeState.setTextColor(AppContext.getInstance().getResources().getColor(R.color
 //                    .day_colorPrimary));
             vh.ivLikeState.setImageResource(R.mipmap.ic_thumbup_actived);

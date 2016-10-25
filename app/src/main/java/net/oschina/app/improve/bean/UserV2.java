@@ -226,7 +226,9 @@ public class UserV2 extends Author {
 
     @Override
     public String toString() {
-        return "UserV2{" +
+        return "UserV2{" + "id=" + id +
+                ", name='" + name + '\'' +
+                ", portrait='" + portrait + '\'' +
                 "gender=" + gender +
                 ", desc='" + desc + '\'' +
                 ", relation=" + relation +

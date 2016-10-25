@@ -13,6 +13,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.team.bean.MyIssueState;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.ui.TeamMainActivity;
@@ -21,14 +22,13 @@ import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 import net.oschina.app.widget.AvatarView;
 
-
 import org.kymjs.kjframe.utils.SystemTool;
 
 import java.io.ByteArrayInputStream;
 import java.util.Calendar;
 
-import butterknife.ButterKnife;
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cz.msebera.android.httpclient.Header;
 
@@ -237,8 +237,7 @@ public class TeamBoardFragment extends BaseFragment {
     }
 
     private void requestData() {
-        OSChinaApi.getMyIssueState(team.getId() + "", AppContext.getInstance()
-                .getLoginUid() + "", new AsyncHttpResponseHandler() {
+        OSChinaApi.getMyIssueState(team.getId() + "", UserCacheManager.initUserManager().loginId(getContext()) + "", new AsyncHttpResponseHandler() {
 
             @Override
             public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {

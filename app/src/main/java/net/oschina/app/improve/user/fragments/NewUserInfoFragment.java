@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -27,7 +28,6 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.improve.account.activity.activity.LoginActivity;
 import net.oschina.app.improve.account.activity.manager.UserCacheManager;
-import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.bean.UserV2;
 import net.oschina.app.improve.bean.base.ResultBean;
@@ -71,6 +71,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class NewUserInfoFragment extends BaseFragment implements View.OnClickListener,
         EasyPermissions.PermissionCallbacks, NoticeManager.NoticeNotify, OnTabReselectListener {
 
+    private static final String TAG = "NewUserInfoFragment";
     // public static final String CACHE_NAME = "NewUserInfoFragment";
 
     public static final int ACTION_TYPE_ALBUM = 0;
@@ -136,6 +137,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     private File mCacheFile;
 
     private UserV2 mUserInfo;
+
     private TextHttpResponseHandler textHandler = new TextHttpResponseHandler() {
 
         @Override
@@ -169,17 +171,13 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                 }.getType();
 
                 ResultBean resultBean = AppContext.createGson().fromJson(responseString, type);
+                Log.e(TAG, "onSuccess: ---->" + responseString);
                 if (resultBean.isSuccess()) {
-                    final UserV2 userInfo = (UserV2) resultBean.getResult();
+                    UserV2 userInfo = (UserV2) resultBean.getResult();
                     updateView(userInfo);
-                    AppOperator.runOnThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // CacheManager.saveObject(getContext(), mUserInfo, CACHE_NAME);
-                            //缓存用户信息
-                            UserCacheManager.initUserManager().saveUserCache(getContext(), userInfo);
-                        }
-                    });
+                    //缓存用户信息
+                    UserCacheManager.initUserManager().saveUserCache(getContext(), userInfo);
+                    Log.e(TAG, "onSuccess: ----------->" + userInfo.toString());
                 }
                 if (mIsUploadIcon) {
                     hideWaitDialog();
@@ -227,11 +225,13 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     protected void initData() {
         super.initData();
 
-        UserV2 userInfo = UserCacheManager.initUserManager().getUserCache(getContext());
+        UserV2 userV2 = UserCacheManager.initUserManager().getUserCache(getContext());
         //(UserV2) CacheManager.readObject(getActivity(), CACHE_NAME);
+        this.mUserInfo = userV2;
+       // Log.e(TAG, "initData: --------->userV2="+userV2.toString());
 
-        if (isLogin() && userInfo != null) {
-            updateView(userInfo);
+        if (isLogin()) {
+            updateView(userV2);
             if (TDevice.hasInternet()) {
                 sendRequestData();
             }
@@ -247,7 +247,9 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onResume() {
         super.onResume();
+        Log.e(TAG, "onResume: --------->");
         mIsUploadIcon = false;
+
         boolean login = isLogin();
         if (!login) {
             hideView();
@@ -256,6 +258,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                 sendRequestData();
             }
         }
+
         NoticeManager.bindNotify(this);
     }
 
@@ -343,7 +346,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
      */
     private void sendRequestData() {
         if (isLogin())
-            OSChinaApi.getUserInfo(textHandler);
+            OSChinaApi.getUserInfo(0, textHandler);
     }
 
     /**
@@ -465,7 +468,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                     }
                     break;
                 case R.id.ly_tweet:
-                    UserTweetActivity.show(getActivity(), AppContext.getInstance().getLoginUid());
+                    UserTweetActivity.show(getActivity(),UserCacheManager.initUserManager().loginId(getContext()));
                     break;
                 case R.id.ly_favorite:
 //                    UIHelper.showUserFavorite(getActivity(), AppContext.getInstance()
@@ -473,17 +476,16 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                     UserCollectionActivity.show(getActivity());
                     break;
                 case R.id.ly_following:
-                    UserFollowsActivity.show(getActivity(), AppContext.getInstance().getLoginUid());
+                    UserFollowsActivity.show(getActivity(), UserCacheManager.initUserManager().loginId(getContext()));
                     break;
                 case R.id.ly_follower:
-                    UserFansActivity.show(getActivity(), AppContext.getInstance().getLoginUid());
+                    UserFansActivity.show(getActivity(), UserCacheManager.initUserManager().loginId(getContext()));
                     break;
                 case R.id.rl_message:
                     UserMessageActivity.show(getActivity());
                     break;
                 case R.id.rl_blog:
-                    UIHelper.showUserBlog(getActivity(), AppContext.getInstance()
-                            .getLoginUid());
+                    UIHelper.showUserBlog(getActivity(), UserCacheManager.initUserManager().loginId(getContext()));
                     break;
                 case R.id.rl_info_avtivities:
                     Bundle bundle = new Bundle();

@@ -105,7 +105,7 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
 
     @Override
     public void toFavorite() {
-        int uid = requestCheck();
+        long uid = requestCheck();
         if (uid == 0)
             return;
         showWaitDialog(R.string.progress_submit);

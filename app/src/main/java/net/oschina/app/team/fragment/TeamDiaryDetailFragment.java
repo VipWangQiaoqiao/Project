@@ -47,7 +47,7 @@ import cz.msebera.android.httpclient.Header;
  * 周报详情<br>
  * 逻辑介绍：用Listview来显示评论内容，在ListView的HeadView中添加本周报的详细内容与周报列表的item。
  * 周报的详细内容通过动态添加addView的方式
- * 
+ *
  * @author kymjs (https://github.com/kymjs)
  */
 public class TeamDiaryDetailFragment extends BaseFragment implements
@@ -69,7 +69,7 @@ public class TeamDiaryDetailFragment extends BaseFragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = View.inflate(getActivity(),
                 R.layout.fragment_pull_refresh_listview, null);
@@ -150,7 +150,7 @@ public class TeamDiaryDetailFragment extends BaseFragment implements
 
     /**
      * 初始化头部周报Title
-     * 
+     *
      * @return
      */
     private View initHeaderView() {
@@ -217,7 +217,7 @@ public class TeamDiaryDetailFragment extends BaseFragment implements
 
                     @Override
                     public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                            Throwable arg3) {
+                                          Throwable arg3) {
                         mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
                         mErrorLayout.setErrorMessage("网络不好，请稍后重试");
                     }
@@ -236,7 +236,7 @@ public class TeamDiaryDetailFragment extends BaseFragment implements
                 new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int arg0, Header[] arg1,
-                            final byte[] arg2) {
+                                          final byte[] arg2) {
                         List<TeamReply> datas = XmlUtils.toBean(
                                 TeamRepliesList.class, arg2).getList();
                         footerView.removeAllViews();
@@ -275,7 +275,8 @@ public class TeamDiaryDetailFragment extends BaseFragment implements
 
                     @Override
                     public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                            Throwable arg3) {}
+                                          Throwable arg3) {
+                    }
 
                     @Override
                     public void onFinish() {
@@ -287,10 +288,10 @@ public class TeamDiaryDetailFragment extends BaseFragment implements
 
     /**
      * 移除字符串中的Html标签
-     * 
-     * @author kymjs (https://github.com/kymjs)
+     *
      * @param pHTMLString
      * @return
+     * @author kymjs (https://github.com/kymjs)
      */
     public static Spanned stripTags(final String pHTMLString) {
         String str = pHTMLString.replaceAll("<\\s*>", "");
@@ -303,14 +304,17 @@ public class TeamDiaryDetailFragment extends BaseFragment implements
         OSChinaTeamApi.pubTeamTweetReply(teamid, 118, diaryData.getId(),
                 str.toString(), new AsyncHttpResponseHandler() {
                     @Override
-                    public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {}
+                    public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+                    }
 
                     @Override
                     public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                            Throwable arg3) {}
-                });
+                                          Throwable arg3) {
+                    }
+                }, getContext());
     }
 
     @Override
-    public void onClickFlagButton() {}
+    public void onClickFlagButton() {
+    }
 }

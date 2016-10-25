@@ -69,7 +69,7 @@ public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailCon
 
     @Override
     public void toFavorite() {
-        int uid = requestCheck();
+        long uid = requestCheck();
         if (uid == 0)
             return;
         showWaitDialog(R.string.progress_submit);
@@ -137,7 +137,7 @@ public class NewsDetailActivity extends DetailActivity<NewsDetail, NewsDetailCon
 
     @Override
     public void toSendComment(long id, long commentId, long commentAuthorId, String comment) {
-        int uid = requestCheck();
+        long uid = requestCheck();
         if (uid == 0)
             return;
 

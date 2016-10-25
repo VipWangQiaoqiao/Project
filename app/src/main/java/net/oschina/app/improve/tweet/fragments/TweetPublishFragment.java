@@ -15,12 +15,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.emoji.EmojiKeyboardFragment;
 import net.oschina.app.emoji.Emojicon;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.emoji.OnEmojiClickListener;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.tweet.contract.TweetPublishContract;
@@ -306,7 +306,7 @@ public class TweetPublishFragment extends BaseFragment implements View.OnClickLi
         Context context = getContext();
         if (context == null)
             return;
-        if (!AppContext.getInstance().isLogin()) {
+        if (!UserCacheManager.initUserManager().isLogin(getContext())) {
             UIHelper.showLoginActivity(context);
             return;
         }

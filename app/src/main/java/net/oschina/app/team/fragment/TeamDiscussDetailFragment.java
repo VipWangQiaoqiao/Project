@@ -18,6 +18,7 @@ import net.oschina.app.base.BeseHaveHeaderListFragment;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.emoji.OnSendClickListener;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.team.adapter.TeamReplyAdapter;
 import net.oschina.app.team.bean.TeamDiscuss;
 import net.oschina.app.team.bean.TeamDiscussDetail;
@@ -29,10 +30,11 @@ import net.oschina.app.util.ThemeSwitchUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
-import cz.msebera.android.httpclient.Header;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * TeamDiscussDetailFragment.java
@@ -204,11 +206,11 @@ public class TeamDiscussDetailFragment extends
             AppContext.showToast("请先输入评论内容...");
             return;
         }
-        if (!AppContext.getInstance().isLogin()) {
+        if (!UserCacheManager.initUserManager().isLogin(getContext())) {
             UIHelper.showLoginActivity(getActivity());
             return;
         }
-        int uid = AppContext.getInstance().getLoginUid();
+        int uid = (int) UserCacheManager.initUserManager().loginId(getContext());
         OSChinaTeamApi.pubTeamDiscussReply(uid, mTeamId, mDiscussId,
                 str.toString(), mReplyHandler);
     }

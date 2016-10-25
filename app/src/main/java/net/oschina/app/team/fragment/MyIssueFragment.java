@@ -1,11 +1,13 @@
 package net.oschina.app.team.fragment;
 
-import java.io.InputStream;
-import java.io.Serializable;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.team.adapter.TeamIssueAdapter;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamIssue;
@@ -14,16 +16,14 @@ import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.team.viewpagefragment.MyIssuePagerfragment;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
+
+import java.io.InputStream;
+import java.io.Serializable;
 
 /**
  * 我的任务列表界面
- * 
+ *
  * @author kymjs (https://github.com/kymjs)
- * 
  */
 public class MyIssueFragment extends BaseListFragment<TeamIssue> {
 
@@ -62,7 +62,7 @@ public class MyIssueFragment extends BaseListFragment<TeamIssue> {
      */
     @Override
     protected String getCacheKeyPrefix() {
-        return CACHE_KEY_PREFIX + AppContext.getInstance().getLoginUid() + "_"
+        return CACHE_KEY_PREFIX + UserCacheManager.initUserManager().loginId(getContext()) + "_"
                 + mTeam.getId() + mCurrentPage + type;
     }
 
@@ -79,13 +79,12 @@ public class MyIssueFragment extends BaseListFragment<TeamIssue> {
 
     @Override
     protected void sendRequestData() {
-        OSChinaApi.getMyIssue(mTeam.getId() + "", AppContext.getInstance()
-                .getLoginUid() + "", mCurrentPage, type, mHandler);
+        OSChinaApi.getMyIssue(mTeam.getId() + "", UserCacheManager.initUserManager().loginId(getContext()) + "", mCurrentPage, type, mHandler);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
+                            long id) {
         // TODO Auto-generated method stub
         TeamIssue issue = mAdapter.getItem(position);
         if (issue != null) {

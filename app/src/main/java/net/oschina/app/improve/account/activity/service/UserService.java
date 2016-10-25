@@ -22,9 +22,11 @@ public interface UserService {
 
     boolean isLogin(Context context);
 
+    long loginId(Context context);
+
     boolean logout(Context context);
 
-    boolean login(Context context,UserV2 userV2);
+    boolean login(Context context, UserV2 userV2);
 
     UserV2 getUserCache(Context context);
 

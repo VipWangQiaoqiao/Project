@@ -5,12 +5,12 @@ import android.os.Build;
 import android.view.View;
 import android.widget.AdapterView;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.adapter.EventApplyAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.Apply;
 import net.oschina.app.bean.EventAppliesList;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
@@ -65,7 +65,7 @@ public class EventAppliesFragment extends BaseListFragment<Apply> {
 			long id) {
 		Apply item = (Apply) mAdapter.getItem(position);
 		if (item != null) {
-			if (AppContext.getInstance().isLogin()) {
+			if (UserCacheManager.initUserManager().isLogin(getContext())) {
 				UIHelper.showMessageDetail(getActivity(), item.getId(), item.getName());
 				return;
 			}

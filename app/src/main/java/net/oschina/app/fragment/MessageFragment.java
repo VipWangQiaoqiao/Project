@@ -22,6 +22,7 @@ import net.oschina.app.bean.Messages;
 import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.DialogHelp;
@@ -115,7 +116,7 @@ public class MessageFragment extends BaseListFragment<Messages> implements
         mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (AppContext.getInstance().isLogin()) {
+                if (UserCacheManager.initUserManager().isLogin(getContext())) {
                     mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
                     requestData(false);
                 } else {
@@ -123,14 +124,14 @@ public class MessageFragment extends BaseListFragment<Messages> implements
                 }
             }
         });
-        if (AppContext.getInstance().isLogin()) {
+        if (UserCacheManager.initUserManager().isLogin(getContext())) {
             UIHelper.sendBroadcastForNotice(getActivity());
         }
     }
 
     @Override
     protected void requestData(boolean refresh) {
-        if (AppContext.getInstance().isLogin()) {
+        if (UserCacheManager.initUserManager().isLogin(getContext())) {
             mIsWatingLogin = false;
             super.requestData(refresh);
         } else {
@@ -142,7 +143,7 @@ public class MessageFragment extends BaseListFragment<Messages> implements
 
     @Override
     protected void sendRequestData() {
-        OSChinaApi.getMessageList(AppContext.getInstance().getLoginUid(),
+        OSChinaApi.getMessageList((int) UserCacheManager.initUserManager().loginId(getContext()),
                 mCurrentPage, mHandler);
     }
 
@@ -150,7 +151,7 @@ public class MessageFragment extends BaseListFragment<Messages> implements
     protected void onRefreshNetworkSuccess() {
         if (2 == NoticeViewPagerFragment.sCurrentPage
                 || NoticeViewPagerFragment.sShowCount[2] > 0) { // 在page中第三个位置
-            NoticeUtils.clearNotice(Notice.TYPE_MESSAGE);
+            NoticeUtils.clearNotice(Notice.TYPE_MESSAGE,getContext());
             UIHelper.sendBroadcastForNotice(getActivity());
         }
     }
@@ -194,8 +195,7 @@ public class MessageFragment extends BaseListFragment<Messages> implements
             public void onClick(DialogInterface dialogInterface, int i) {
                 showWaitDialog(R.string.progress_submit);
 
-                OSChinaApi.deleteMessage(AppContext.getInstance()
-                                .getLoginUid(), message.getFriendId(),
+                OSChinaApi.deleteMessage((int) UserCacheManager.initUserManager().loginId(getContext()), message.getFriendId(),
                         new DeleteMessageOperationHandler(message));
             }
         }).show();

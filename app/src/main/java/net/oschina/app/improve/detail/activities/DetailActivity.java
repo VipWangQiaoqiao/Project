@@ -21,6 +21,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Report;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.detail.contract.DetailContract;
@@ -374,8 +375,7 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
      *
      * @return 返回当前登录用户, 未登录或者未通过检查返回0
      */
-    @SuppressWarnings("deprecation")
-    public int requestCheck() {
+    public long requestCheck() {
         if (mDataId == 0 || mData == null) {
             AppContext.showToast("数据加载中...");
             return 0;
@@ -384,12 +384,12 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
             AppContext.showToastShort(R.string.tip_no_internet);
             return 0;
         }
-        if (!AppContext.getInstance().isLogin()) {
+        if (!UserCacheManager.initUserManager().isLogin(this)) {
             UIHelper.showLoginActivity(this);
             return 0;
         }
         // 返回当前登录用户ID
-        return AppContext.getInstance().getLoginUid();
+        return UserCacheManager.initUserManager().loginId(this);
     }
 
 

@@ -316,7 +316,7 @@ public class TeamNewActiveActivity extends BaseActivity {
                         super.onFinish();
                         hideWaitDialog();
                     }
-                });
+                }, this);
     }
 
     @Override
