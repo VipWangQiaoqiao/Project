@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="#FFF"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/ic_material">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:textColor="#111"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="浅谈Android Theme"/>
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:textColor="#6A6A6A"
+            android:textSize="14sp"
+            android:lines="2"
+            android:ellipsize="end"
+            android:layout_marginTop="8dp"
+            android:lineSpacingMultiplier="1.2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="我是巴拉巴拉小魔仙"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="16dp"
+        android:background="?attr/dividerHorizontal"/>
+</LinearLayout>

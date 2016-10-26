@@ -1,8 +1,11 @@
 package net.oschina.app.ui.empty;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -44,10 +47,9 @@ public class EmptyLayout extends LinearLayout implements
     }
 
     private void init() {
-        View view = View.inflate(context, R.layout.view_error_layout, null);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.view_error_layout, this, false);
         img = (ImageView) view.findViewById(R.id.img_error_layout);
         tv = (TextView) view.findViewById(R.id.tv_error_layout);
-        RelativeLayout mLayout = (RelativeLayout) view.findViewById(R.id.pageerrLayout);
         mLoading = (Loading) view.findViewById(R.id.animProgress);
         setBackgroundColor(-1);
         setOnClickListener(this);
@@ -141,7 +143,7 @@ public class EmptyLayout extends LinearLayout implements
                 // img.setBackgroundDrawable(SkinsUtil.getDrawable(context,"pagefailed_bg"));
                 if (TDevice.hasInternet()) {
                     tv.setText(R.string.error_view_load_error_click_to_refresh);
-                    img.setBackgroundResource(R.mipmap.pagefailed_bg);
+                    img.setBackgroundResource(R.mipmap.ic_tip_fail);
                 } else {
                     tv.setText(R.string.error_view_network_error_click_to_refresh);
                     img.setBackgroundResource(R.mipmap.page_icon_network);

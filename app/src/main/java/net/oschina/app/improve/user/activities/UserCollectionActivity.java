@@ -57,7 +57,7 @@ public class UserCollectionActivity extends BaseRecyclerViewActivity<Collection>
             case News.TYPE_BLOG:
                 BlogDetailActivity.show(this, item.getId());
                 break;
-            case News.TYPE_TRNSLATE:
+            case News.TYPE_TRANSLATE:
                 TranslateDetailActivity.show(this, item.getId());
                 break;
             case News.TYPE_EVENT:
