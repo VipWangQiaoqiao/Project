@@ -58,7 +58,6 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
     @Bind(R.id.search_src_text) EditText mViewSearchEditor;
 
     private List<Pair<String, Fragment>> mPagerItems;
-    private QueryTimer mQueryTimer;
 
     private static boolean isMiUi = false;
 
@@ -106,7 +105,6 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
     @Override
     public void onPageSelected(int position) {
         String content = mViewSearch.getQuery().toString();
-        Log.d("oschina", "content: " + content + "");
         if (TextUtils.isEmpty(content)) return;
         doSearch(content);
     }
@@ -139,8 +137,6 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
         mPagerItems.add(new Pair<>("博客", SearchArticleFragment.instantiate(this, News.TYPE_BLOG)));
         mPagerItems.add(new Pair<>("新闻", SearchArticleFragment.instantiate(this, News.TYPE_NEWS)));
         mPagerItems.add(new Pair<>("人", SearchUserFragment.instantiate(this)));
-
-        mQueryTimer = new QueryTimer();
     }
 
     @Override
@@ -162,7 +158,6 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
                 if (TextUtils.isEmpty(query)) return false;
                 mLayoutTab.setVisibility(View.VISIBLE);
                 mViewPager.setVisibility(View.VISIBLE);
-//                if (!mQueryTimer.isCancelled()) mQueryTimer.cancel(true);
                 mViewPager.post(new Runnable() {
                     @Override
                     public void run() {
@@ -182,8 +177,6 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
                 if (!TDevice.isWifiOpen()) return false;
                 mLayoutTab.setVisibility(View.VISIBLE);
                 mViewPager.setVisibility(View.VISIBLE);
-//                if (!mQueryTimer.isCancelled()) mQueryTimer.cancel(true);
-//                mQueryTimer.execute();
                 mViewPager.post(new Runnable() {
                     @Override
                     public void run() {
@@ -291,26 +284,4 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
         }
     }
 
-    private class QueryTimer extends AsyncTask<Void, Void, Boolean>{
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            Log.d("oschina", "----------------------");
-            try {
-                Thread.sleep(1000);
-                return true;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return false;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean bool) {
-            super.onPostExecute(bool);
-            if (!bool) return;
-            Log.d("oschina", "=============");
-            doSearch(mViewSearch.getQuery().toString());
-        }
-    }
 }
