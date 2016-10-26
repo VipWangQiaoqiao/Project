@@ -80,6 +80,7 @@
                 <ImageView
                     android:layout_width="14dp"
                     android:layout_height="14dp"
+                    android:layout_marginTop="@dimen/lay_2"
                     android:src="@mipmap/ic_fav_normal" />
 
                 <TextView
@@ -95,6 +96,7 @@
                 <ImageView
                     android:layout_width="14dp"
                     android:layout_height="14dp"
+                    android:layout_marginTop="@dimen/lay_2"
                     android:src="@mipmap/ic_comment_40" />
 
                 <TextView
