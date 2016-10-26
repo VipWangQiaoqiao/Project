@@ -2,6 +2,7 @@ package net.oschina.app.improve.account.activity.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.Editable;
@@ -36,13 +37,16 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.account.activity.constants.UserConstants;
 import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.activity.utils.SharedPreferencesUtils;
 import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.bean.UserV2;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.main.MainActivity;
 import net.oschina.app.improve.share.constant.OpenConstant;
 import net.oschina.app.improve.utils.AssimilateUtils;
+import net.oschina.app.util.TDevice;
 import net.oschina.open.constants.OpenConstants;
 import net.oschina.open.factory.OpenLogin;
 
@@ -68,7 +72,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private static final String TAG = "LoginActivity";
 
     private static final String HOLD_PWD_KEY = "holdPwdKey";
-    private static final String HOLD_PWD_STATUS = "holdPwdStatus";
+    public static final String HOLD_USERNAME_KEY = "holdUsernameKey";
+    private static final String HOLD_PWD_STATUS_KEY = "holdPwdStatusKey";
 
     @Bind(R.id.ll_login_username)
     LinearLayout mLlLoginUsername;
@@ -106,6 +111,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     ImageButton mImLoginQq;
 
     private int openType;
+    private boolean mHoldStatus;
+
     private TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -136,7 +143,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
         }
     };
-    private boolean mHoldStatus;
 
 
     /**
@@ -203,14 +209,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     protected void initData() {
         super.initData();
 
-        String holdPwd = AppContext.get(HOLD_PWD_KEY, null);
-
+        SharedPreferences sp = SharedPreferencesUtils.createSp(UserConstants.HOLD_ACCOUNT, this);
+        String holdUsername = sp.getString(HOLD_USERNAME_KEY, null);
+        String holdPwd = sp.getString(HOLD_PWD_KEY, null);
+        mEtLoginUsername.setText(holdUsername);
         if (!TextUtils.isEmpty(holdPwd)) {
             byte[] decode = Base64.decode(holdPwd, Base64.DEFAULT);
             try {
                 String tempPwd = new String(decode, 0, decode.length, "utf-8");
 
-                Log.e(TAG, "initData: --------------->tempPwd=" + tempPwd);
                 mEtLoginPwd.setText(tempPwd);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
@@ -218,9 +225,34 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         } else {
             mEtLoginPwd.setText(null);
         }
-        mHoldStatus = AppContext.get(HOLD_PWD_STATUS, false);
-        Log.e(TAG, "initData: --------------->" + mHoldStatus);
+
+        mHoldStatus = sp.getBoolean(HOLD_PWD_STATUS_KEY, false);
+
         updateHoldPwd(mHoldStatus);
+
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        String username = mEtLoginUsername.getText().toString().trim();
+        String pwd = mEtLoginPwd.getText().toString().trim();
+
+        SharedPreferences sp = SharedPreferencesUtils.createSp(UserConstants.HOLD_ACCOUNT, this);
+        SharedPreferences.Editor editor = SharedPreferencesUtils.getEditor(sp);
+        editor.putString(HOLD_USERNAME_KEY, username);
+        editor.putString(HOLD_PWD_KEY, toBase64(pwd));
+        editor.putBoolean(HOLD_PWD_STATUS_KEY, mHoldStatus);
+        SharedPreferencesUtils.commit(editor);
+
 
     }
 
@@ -244,8 +276,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 break;
             case R.id.bt_login_submit:
 
-                String tempUsername = "771297972@qq.com";//mEtLoginUsername.getText().toString().trim();
-                String tempPwd = "123456";//mEtLoginPwd.getText().toString().trim();
+                String tempUsername = mEtLoginUsername.getText().toString().trim();//"771297972@qq.com";
+                String tempPwd = mEtLoginPwd.getText().toString().trim();//"123456";
 
 
                 if (!TextUtils.isEmpty(tempUsername) && !TextUtils.isEmpty(tempPwd)) {
@@ -258,47 +290,56 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
                         String appToken = "123";//"765e06cc569b5b8ed41a4a8c979338c888d644f4";//Verifier.getPrivateToken(getApplication());
 
-                        OSChinaApi.login(tempUsername, Sha1toHex(tempPwd), appToken, new TextHttpResponseHandler() {
-                            @Override
-                            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
 
-                            }
-
-                            @Override
-                            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-
-                                Type type = new TypeToken<ResultBean<UserV2>>() {
-                                }.getType();
-
-                                Log.e(TAG, "onSuccess: --------->" + responseString);
-                                ResultBean<UserV2> resultBean = AppContext.createGson().fromJson(responseString, type);
-                                if (resultBean.isSuccess()) {
-
-                                    //1. 更新相关Cookie信息
-                                    ApiHttpClient.updateCookie(ApiHttpClient.getHttpClient(), headers);
-                                    //2. 更新本地用户缓存信息
-                                    UserV2 userV2 = resultBean.getResult();
-                                    Log.e(TAG, "onSuccess: -------------->" + userV2.toString());
-                                    boolean saveUserCache = UserCacheManager.initUserManager().saveUserCache(LoginActivity.this, userV2);
-                                    if (saveUserCache) {
-                                        //3. finish  进入用户中心页
-                                        finish();
-                                    }
-
-                                } else {
-                                    //更新失败因该是不进行任何的本地操作
-                                    // AppContext.getInstance().cleanLoginInfo();
-                                    // AppContext.getInstance().cleanLoginInfoV2();
+                        if (TDevice.hasInternet()) {
+                            OSChinaApi.login(tempUsername, Sha1toHex(tempPwd), appToken, new TextHttpResponseHandler() {
+                                @Override
+                                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                                    AppContext.showToast(getResources().getString(R.string.login_error), Toast.LENGTH_SHORT);
                                 }
 
-                            }
-                        });
+                                @Override
+                                public void onSuccess(int statusCode, Header[] headers, String responseString) {
 
+                                    try {
+                                        Type type = new TypeToken<ResultBean<UserV2>>() {
+                                        }.getType();
+
+                                        Log.e(TAG, "onSuccess: --------->" + responseString);
+                                        ResultBean<UserV2> resultBean = AppContext.createGson().fromJson(responseString, type);
+                                        if (resultBean.isSuccess()) {
+
+                                            //1. 更新相关Cookie信息
+                                            ApiHttpClient.updateCookie(ApiHttpClient.getHttpClient(), headers);
+                                            //2. 更新本地用户缓存信息
+                                            UserV2 userV2 = resultBean.getResult();
+                                            Log.e(TAG, "onSuccess: -------------->" + userV2.toString());
+                                            boolean saveUserCache = UserCacheManager.initUserManager().saveUserCache(LoginActivity.this, userV2);
+                                            if (saveUserCache) {
+                                                //3. finish  进入用户中心页
+                                                finish();
+                                            }
+
+                                        } else {
+                                            AppContext.showToast(getResources().getString(R.string.login_error), Toast.LENGTH_SHORT);
+                                            //更新失败因该是不进行任何的本地操作
+                                            // AppContext.getInstance().cleanLoginInfo();
+                                            // AppContext.getInstance().cleanLoginInfoV2();
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        onFailure(statusCode, headers, responseString, e);
+                                    }
+                                }
+                            });
+
+                        } else {
+                            AppContext.showToast(getResources().getString(R.string.footer_type_net_error), Toast.LENGTH_SHORT);
+                        }
 
                     } else {
                         AppContext.showToast(getString(R.string.hint_username_ok), Toast.LENGTH_SHORT);
                     }
-
                 } else {
                     AppContext.showToast(getString(R.string.hint_pwd_null), Toast.LENGTH_SHORT);
                 }
@@ -310,29 +351,19 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
                 if (!TextUtils.isEmpty(inputPwd)) {
 
-                    try {
-                        byte[] bytes = inputPwd.getBytes("utf-8");
-                        byte[] encode = Base64.encode(bytes, Base64.DEFAULT);
+                    inputPwd = toBase64(inputPwd);
 
-                        inputPwd = new String(encode, 0, encode.length, "utf-8");
+                    boolean holdStatus = this.mHoldStatus;
+                    holdStatus = !holdStatus;
+                    updateHoldPwd(holdStatus);
 
-                        AppContext.set(HOLD_PWD_KEY, inputPwd);
+                    this.mHoldStatus = holdStatus;
+                    SharedPreferences sp = SharedPreferencesUtils.createSp(UserConstants.HOLD_ACCOUNT, this);
+                    SharedPreferences.Editor editor = SharedPreferencesUtils.getEditor(sp);
+                    editor.putString(HOLD_PWD_KEY, inputPwd);
+                    editor.putBoolean(HOLD_PWD_STATUS_KEY, mHoldStatus);
+                    SharedPreferencesUtils.commit(editor);
 
-                        boolean holdStatus = this.mHoldStatus;
-                        if (holdStatus) {
-                            holdStatus = false;
-                        } else {
-                            holdStatus = true;
-                        }
-
-                        updateHoldPwd(holdStatus);
-                        this.mHoldStatus = holdStatus;
-
-                        AppContext.set(HOLD_PWD_STATUS, mHoldStatus);
-
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
                 } else {
                     AppContext.showToast(getString(R.string.hint_pwd_null), Toast.LENGTH_SHORT);
                 }
@@ -389,6 +420,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 break;
         }
 
+    }
+
+    @NonNull
+    private String toBase64(String inputPwd) {
+        if (!TextUtils.isEmpty(inputPwd)) {
+            try {
+                byte[] bytes = inputPwd.getBytes("utf-8");
+                byte[] encode = Base64.encode(bytes, Base64.DEFAULT);
+                inputPwd = new String(encode, 0, encode.length, "utf-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+        return inputPwd;
     }
 
     @NonNull

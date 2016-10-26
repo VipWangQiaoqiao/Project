@@ -3,16 +3,17 @@ package net.oschina.app.improve.account.activity.manager;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v4.content.SharedPreferencesCompat;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.improve.account.activity.constants.UserConstants;
 import net.oschina.app.improve.account.activity.service.UserService;
+import net.oschina.app.improve.account.activity.utils.SharedPreferencesUtils;
 import net.oschina.app.improve.bean.UserV2;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.tweet.fragments.TweetFragment;
+
 
 /**
  * Created by fei
@@ -25,41 +26,11 @@ public class UserCacheManager implements UserService {
     private UserCacheManager() {
     }
 
-    /**
-     * init editor
-     *
-     * @param sp sp
-     * @return editor
-     */
-    private SharedPreferences.Editor getEditor(SharedPreferences sp) {
-        return sp.edit();
-    }
-
-    /**
-     * init sp
-     *
-     * @param context context
-     * @return sp
-     */
-    private SharedPreferences createSp(Context context) {
-        return context.getSharedPreferences(UserConstants.USER_CACHE, Context.MODE_PRIVATE);
-    }
-
-    /**
-     * 官方写法 更加安全,可以参考
-     *
-     * @param edit editor
-     */
-    private void commit(SharedPreferences.Editor edit) {
-        //官方安全commit写法,值得学习里面的源代码
-        SharedPreferencesCompat.EditorCompat.getInstance().apply(edit);
-    }
-
     @Override
     public boolean saveUserCache(Context context, UserV2 userV2) {
 
-        SharedPreferences sp = createSp(context);
-        SharedPreferences.Editor edit = getEditor(sp);
+        SharedPreferences sp = SharedPreferencesUtils.createSp(UserConstants.USER_CACHE, context);
+        SharedPreferences.Editor edit = SharedPreferencesUtils.getEditor(sp);
 
         edit.putLong(UserConstants.UID, userV2.getId());
         edit.putString(UserConstants.NAME, userV2.getName());
@@ -84,25 +55,25 @@ public class UserCacheManager implements UserService {
         edit.putInt(UserConstants.ANSWER, userV2.getStatistics().getAnswer());
         edit.putInt(UserConstants.DISCUSS, userV2.getStatistics().getDiscuss());
 
-        commit(edit);
+        SharedPreferencesUtils.commit(edit);
         return true;
     }
 
     @Override
     public boolean deleteUserCache(Context context) {
 
-        SharedPreferences sp = createSp(context);
-        SharedPreferences.Editor edit = getEditor(sp);
+        SharedPreferences sp = SharedPreferencesUtils.createSp(UserConstants.USER_CACHE, context);
+        SharedPreferences.Editor edit = SharedPreferencesUtils.getEditor(sp);
         edit.clear();
-        commit(edit);
+        SharedPreferencesUtils.commit(edit);
         return true;
     }
 
     @Override
     public boolean updatePairUserCache(Context context, String key, Object value) {
 
-        SharedPreferences sp = createSp(context);
-        SharedPreferences.Editor edit = getEditor(sp);
+        SharedPreferences sp = SharedPreferencesUtils.createSp(UserConstants.USER_CACHE, context);
+        SharedPreferences.Editor edit = SharedPreferencesUtils.getEditor(sp);
 
         if (value instanceof Integer) {
             edit.putInt(key, (Integer) value);
@@ -115,7 +86,7 @@ public class UserCacheManager implements UserService {
         } else {
             edit.putFloat(key, (Float) value);
         }
-        commit(edit);
+        SharedPreferencesUtils.commit(edit);
         return true;
     }
 
@@ -133,7 +104,7 @@ public class UserCacheManager implements UserService {
 
     @Override
     public long loginId(Context context) {
-        SharedPreferences sp = createSp(context);
+        SharedPreferences sp = SharedPreferencesUtils.createSp(UserConstants.USER_CACHE, context);
         return sp.getLong(UserConstants.UID, 0);
     }
 
@@ -152,6 +123,7 @@ public class UserCacheManager implements UserService {
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         activityManager.killBackgroundProcesses("net.oschina.app.tweet.TweetPublishService");
         activityManager.killBackgroundProcesses("net.oschina.app.notice.NoticeServer");
+        //清除用户缓存
         deleteUserCache(context);
 
         return true;
@@ -169,7 +141,7 @@ public class UserCacheManager implements UserService {
 
     @Override
     public UserV2 getUserCache(Context context) {
-        SharedPreferences sp = createSp(context);
+        SharedPreferences sp = SharedPreferencesUtils.createSp(UserConstants.USER_CACHE, context);
         long uid = sp.getLong(UserConstants.UID, 0);
         if (uid > 0) {
             UserV2 userV2 = new UserV2();
