@@ -49,10 +49,10 @@
         android:theme="@style/App.Theme.Light"
         tools:replace="android:allowBackup">
         <activity
-            android:name=".AppStart"
+            android:name=".LaunchActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppStartLoad">
+            android:theme="@style/App.Theme.Launch">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
