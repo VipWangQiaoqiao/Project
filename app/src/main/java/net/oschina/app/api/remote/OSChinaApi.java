@@ -1953,12 +1953,13 @@ public class OSChinaApi {
 
     /**
      * 搜索
-     * @param catalog 搜索类型
-     * @param content 搜索内容
+     *
+     * @param catalog   搜索类型
+     * @param content   搜索内容
      * @param pageToken next page token
-     * @param handler handler
+     * @param handler   handler
      */
-    public static void search(int catalog, String content, String pageToken, TextHttpResponseHandler handler){
+    public static void search(int catalog, String content, String pageToken, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("catalog", catalog);
         params.put("content", content);
@@ -1984,5 +1985,30 @@ public class OSChinaApi {
 
         ApiHttpClient.post("action/apiv2/account_login", params, handler);
 
+    }
+
+    /**
+     * 获得首页数据
+     *
+     * @param api       动态api
+     * @param pageToken pageToken
+     * @param handler   handler
+     */
+    public static void getSubscription(String api, String pageToken, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        if (!TextUtils.isEmpty(pageToken)) {
+            params.put("pageToken", pageToken);
+        }
+        ApiHttpClient.getHttpClient().get(api, params, handler);
+    }
+
+    /**
+     * 获得banner
+     *
+     * @param api     动态api
+     * @param handler handler
+     */
+    public static void getBanner(String api, TextHttpResponseHandler handler) {
+        ApiHttpClient.getHttpClient().get(api, handler);
     }
 }
