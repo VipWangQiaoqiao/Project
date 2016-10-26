@@ -1,6 +1,6 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="Widget"/>
+    <style name="Widget" />
 
     <style name="Widget.ProgressBar">
         <item name="android:indeterminateDrawable">@drawable/progress_medium_holo</item>
@@ -501,14 +501,6 @@
         <item name="android:textSize">@dimen/text_size_12</item>
         <item name="android:layout_marginTop">@dimen/space_10</item>
     </style>
-
-    <style name="Theme.AppStartLoad" parent="android:Theme.Black.NoTitleBar.Fullscreen">
-        <item name="android:windowBackground">@mipmap/welcome</item>
-        <item name="android:windowNoTitle">true</item>
-    </style>
-
-    <!-- events list style start -->
-
 
     <!-- events title -->
     <style name="events_list_title">
