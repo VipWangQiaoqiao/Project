@@ -1,4 +1,4 @@
-package net.oschina.app.improve.main.subcription;
+package net.oschina.app.improve.main.subscription;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

@@ -6,10 +6,13 @@ import java.io.Serializable;
  * Created by thanatosx on 16/10/26.
  */
 
-public class SubTab implements Serializable{
+public class SubTab implements Serializable {
 
     public static final String TAG_NEW = "new";
     public static final String TAG_HOT = "hot";
+
+    public static final int BANNER_CATEGORY_NEWS = 1;
+    public static final int BANNER_CATEGORY_EVENT = 2;
 
     private String token;
     private String name;
@@ -23,7 +26,7 @@ public class SubTab implements Serializable{
     private Banner banner;
 
 
-    private static class Banner implements Serializable{
+    public class Banner implements Serializable {
         private int catalog;
         private String href;
 
