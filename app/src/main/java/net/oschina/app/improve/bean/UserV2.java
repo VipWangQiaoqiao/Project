@@ -81,6 +81,8 @@ public class UserV2 extends Author {
                     ", city='" + city + '\'' +
                     ", expertise='" + expertise + '\'' +
                     ", platform='" + platform + '\'' +
+                    ", company='" + company + '\'' +
+                    ", position='" + position + '\'' +
                     '}';
         }
     }
@@ -224,7 +226,9 @@ public class UserV2 extends Author {
 
     @Override
     public String toString() {
-        return "UserV2{" +
+        return "UserV2{" + "id=" + id +
+                ", name='" + name + '\'' +
+                ", portrait='" + portrait + '\'' +
                 "gender=" + gender +
                 ", desc='" + desc + '\'' +
                 ", relation=" + relation +

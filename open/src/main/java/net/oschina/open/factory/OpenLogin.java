@@ -108,7 +108,7 @@ public class OpenLogin<T> extends LoginFactory {
                 //Weibo
                 // 创建授权认证信息
                 String redirect_url = this.mRedirectUrl;
-                AuthInfo authInfo = new AuthInfo(context, mAppKey, redirect_url, null);//scope 为null  将加速登录
+                AuthInfo authInfo = new AuthInfo(context, mAppKey, redirect_url, "all");//scope 为null  将加速登录
                 SsoHandler ssoHandler = new SsoHandler(activity, authInfo);
                 ssoHandler.authorize(mWeiboAuthListener);
                 break;

@@ -9,6 +9,7 @@ import android.util.Log;
 
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.util.TLog;
 
 import java.util.HashMap;
@@ -23,7 +24,7 @@ public class NoticeUtils {
     }
 
     public static boolean bindToService(Context context,
-            ServiceConnection callback) {
+                                        ServiceConnection callback) {
         context.startService(new Intent(context, NoticeService.class));
         ServiceBinder sb = new ServiceBinder(callback);
         sConnectionMap.put(context, sb);
@@ -46,10 +47,10 @@ public class NoticeUtils {
         }
     }
 
-    public static void clearNotice(int type) {
+    public static void clearNotice(int type, Context context) {
         if (sService != null) {
             try {
-                sService.clearNotice(AppContext.getInstance().getLoginUid(),
+                sService.clearNotice((int) UserCacheManager.initUserManager().loginId(context),
                         type);
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -91,7 +92,7 @@ public class NoticeUtils {
 
         @Override
         public void onServiceConnected(ComponentName className,
-                android.os.IBinder service) {
+                                       android.os.IBinder service) {
             sService = INoticeService.Stub.asInterface(service);
             if (mCallback != null) {
                 mCallback.onServiceConnected(className, service);

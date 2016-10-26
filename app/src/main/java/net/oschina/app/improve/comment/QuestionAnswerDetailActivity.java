@@ -24,6 +24,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.CommentEX;
@@ -166,7 +167,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
                     Toast.makeText(QuestionAnswerDetailActivity.this, "请输入文字", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (!AppContext.getInstance().isLogin()) {
+                if (!UserCacheManager.initUserManager().isLogin(QuestionAnswerDetailActivity.this)) {
                     UIHelper.showLoginActivity(QuestionAnswerDetailActivity.this);
                     return;
                 }
@@ -311,7 +312,7 @@ public class QuestionAnswerDetailActivity extends BaseBackActivity {
             View.OnClickListener listener = new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-                    if (!AppContext.getInstance().isLogin()) {
+                    if (!UserCacheManager.initUserManager().isLogin(QuestionAnswerDetailActivity.this)) {
                         UIHelper.showLoginActivity(QuestionAnswerDetailActivity.this);
                         return;
                     }

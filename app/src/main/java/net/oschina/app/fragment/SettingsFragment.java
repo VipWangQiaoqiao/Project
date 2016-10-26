@@ -14,6 +14,7 @@ import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.improve.main.FeedBackActivity;
 import net.oschina.app.improve.main.update.CheckUpdateManager;
 import net.oschina.app.improve.widget.togglebutton.ToggleButton;
@@ -115,7 +116,7 @@ public class SettingsFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        boolean login = AppContext.getInstance().isLogin();
+        boolean login = UserCacheManager.initUserManager().isLogin(getContext().getApplicationContext());//AppContext.getInstance().isLogin();
         if (!login) {
             rlCancle.setVisibility(View.INVISIBLE);
             mSettingLineTop.setVisibility(View.INVISIBLE);
@@ -185,7 +186,8 @@ public class SettingsFragment extends BaseFragment {
                 // 清理所有缓存
                 UIHelper.clearAppCache(false);
                 // 注销操作
-                AppContext.getInstance().Logout();
+                //AppContext.getInstance().Logout();
+                UserCacheManager.initUserManager().logout(getApplication().getApplicationContext());
                 AppContext.showToastShort(R.string.tip_logout_success);
                 getActivity().finish();
                 break;
@@ -196,7 +198,7 @@ public class SettingsFragment extends BaseFragment {
     }
 
     private void onClickUpdate() {
-        new CheckUpdateManager(getActivity(),true).checkUpdate();
+        new CheckUpdateManager(getActivity(), true).checkUpdate();
     }
 
     private void onClickCleanCache() {

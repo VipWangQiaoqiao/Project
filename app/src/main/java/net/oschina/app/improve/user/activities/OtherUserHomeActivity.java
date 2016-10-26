@@ -31,6 +31,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.UserV2;
@@ -432,11 +433,11 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_pm:
-                if (user.getId() == AppContext.getInstance().getLoginUid()) {
+                if (user.getId() == UserCacheManager.initUserManager().loginId(this)) {
                     AppContext.showToast("不能给自己发送留言:)");
                     return true;
                 }
-                if (!AppContext.getInstance().isLogin()) {
+                if (!UserCacheManager.initUserManager().isLogin(this)) {
                     UIHelper.showLoginActivity(this);
                     return true;
                 }
@@ -444,7 +445,7 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
                 break;
             case R.id.menu_follow:
                 // 判断登录
-                if (!AppContext.getInstance().isLogin()) {
+                if (!UserCacheManager.initUserManager().isLogin(this)) {
                     UIHelper.showLoginActivity(this);
                     return true;
                 }

@@ -1,13 +1,18 @@
 package net.oschina.app.team.viewpagefragment;
 
-import java.io.ByteArrayInputStream;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
-import net.oschina.app.AppContext;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+
 import net.oschina.app.R;
 import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseViewPagerFragment;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamGit;
 import net.oschina.app.team.bean.TeamIssueCatalog;
@@ -22,13 +27,9 @@ import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
-import cz.msebera.android.httpclient.Header;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import java.io.ByteArrayInputStream;
 
-import com.loopj.android.http.AsyncHttpResponseHandler;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Team 任务列表viewpager
@@ -157,7 +158,7 @@ public class TeamIssueViewPageFragment extends BaseViewPagerFragment {
     }
 
     private void sendRequestCatalogList() {
-	int uid = AppContext.getInstance().getLoginUid();
+	int uid = (int) UserCacheManager.initUserManager().loginId(getContext());
 	OSChinaTeamApi.getTeamCatalogIssueList(uid, mTeamId, mProjectId, "",
 		handler);
     }

@@ -39,6 +39,7 @@ import net.oschina.app.base.BaseActivity;
 import net.oschina.app.bean.Friend;
 import net.oschina.app.bean.FriendsList;
 import net.oschina.app.cache.CacheManager;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -50,7 +51,6 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
 import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
-
 
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
@@ -787,7 +787,7 @@ public class SelectFriendsActivity extends BaseActivity {
      * 获取列表数据
      */
     private void requestData(boolean refresh) {
-        int uid = AppContext.getInstance().getLoginUid();
+        int uid = (int) UserCacheManager.initUserManager().loginId(this);
         String key = getCacheKey(uid);
         if (refresh) {
             // 读取新的数据

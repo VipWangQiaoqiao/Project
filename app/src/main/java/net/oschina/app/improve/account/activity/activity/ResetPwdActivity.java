@@ -1,5 +1,7 @@
-package net.oschina.app.improve.account.activity;
+package net.oschina.app.improve.account.activity.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,6 +30,17 @@ public class ResetPwdActivity extends BaseActivity implements View.OnClickListen
     ImageView mIvResetPwdDel;
     @Bind(R.id.bt_reset_submit)
     Button mBtResetSubmit;
+
+
+    /**
+     * show the resetPwdActivity
+     *
+     * @param context context
+     */
+    public static void show(Context context) {
+        Intent intent = new Intent(context, ResetPwdActivity.class);
+        context.startActivity(intent);
+    }
 
     @Override
     protected int getContentView() {

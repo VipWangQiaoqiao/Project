@@ -28,6 +28,7 @@ import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.User;
 import net.oschina.app.bean.UserInformation;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.StringUtils;
@@ -130,7 +131,7 @@ public class UserCenterFragment extends BaseFragment implements
 
         mHisUid = args.getInt("his_id", 0);
         mHisName = args.getString("his_name");
-        mUid = AppContext.getInstance().getLoginUid();
+        mUid = (int) UserCacheManager.initUserManager().loginId(getContext());
         ButterKnife.bind(this, view);
         initView(view);
 
@@ -154,11 +155,11 @@ public class UserCenterFragment extends BaseFragment implements
                 handleUserRelation();
                 break;
             case R.id.tv_private_message:
-                if (mHisUid == AppContext.getInstance().getLoginUid()) {
+                if (mHisUid == UserCacheManager.initUserManager().loginId(getContext())) {
                     AppContext.showToast("不能给自己发送留言:)");
                     return;
                 }
-                if (!AppContext.getInstance().isLogin()) {
+                if (!UserCacheManager.initUserManager().isLogin(getContext())) {
                     UIHelper.showLoginActivity(getActivity());
                     return;
                 }
@@ -322,8 +323,7 @@ public class UserCenterFragment extends BaseFragment implements
         if (mUser == null)
             return;
         // 判断登录
-        final AppContext ac = AppContext.getInstance();
-        if (!ac.isLogin()) {
+        if (!UserCacheManager.initUserManager().isLogin(getContext())) {
             UIHelper.showLoginActivity(getActivity());
             return;
         }

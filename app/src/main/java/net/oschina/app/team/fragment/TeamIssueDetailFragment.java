@@ -417,20 +417,20 @@ public class TeamIssueDetailFragment extends BaseFragment implements
             }
         }
         final int selIndex = index;
-        dialog = DialogHelp.getSingleChoiceDialog(getActivity(), "更改任务状态", items, selIndex, new 
+        dialog = DialogHelp.getSingleChoiceDialog(getActivity(), "更改任务状态", items, selIndex, new
                 DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if (i == selIndex) {
-                    dialog.dismiss();
-                    return;
-                }
-                mTeamIssue.setState(itemsEn[i].toString());
-                OSChinaTeamApi.changeIssueState(mTeam.getId(), mTeamIssue,
-                        "state", mChangeIssueHandler);
-                dialog.dismiss();
-            }
-        }).show();
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (i == selIndex) {
+                            dialog.dismiss();
+                            return;
+                        }
+                        mTeamIssue.setState(itemsEn[i].toString());
+                        OSChinaTeamApi.changeIssueState(mTeam.getId(), mTeamIssue,
+                                "state", mChangeIssueHandler, getContext());
+                        dialog.dismiss();
+                    }
+                }).show();
     }
 
     @Bind(R.id.ll_issue_childs)
@@ -515,7 +515,7 @@ public class TeamIssueDetailFragment extends BaseFragment implements
                         super.onFinish();
                         hideWaitDialog();
                     }
-                });
+                }, getContext());
     }
 
     private void switchChildIssueState(TeamIssue childIssue) {
@@ -607,7 +607,7 @@ public class TeamIssueDetailFragment extends BaseFragment implements
                         super.onFinish();
                         hideWaitDialog();
                     }
-                });
+                }, getContext());
     }
 
     @Override

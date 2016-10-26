@@ -3,12 +3,12 @@ package net.oschina.app.fragment;
 import android.view.View;
 import android.widget.AdapterView;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.adapter.UserFavoriteAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.Favorite;
 import net.oschina.app.bean.FavoriteList;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 
@@ -43,7 +43,7 @@ public class UserFavoriteFragment extends BaseListFragment<Favorite> {
 
     @Override
     protected void sendRequestData() {
-        OSChinaApi.getFavoriteList(AppContext.getInstance().getLoginUid(),
+        OSChinaApi.getFavoriteList((int) UserCacheManager.initUserManager().loginId(getContext()),
                 mCatalog, mCurrentPage, mHandler);
     }
 

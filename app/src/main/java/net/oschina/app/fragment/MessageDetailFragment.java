@@ -34,6 +34,7 @@ import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.User;
 import net.oschina.app.emoji.KJEmojiFragment;
 import net.oschina.app.emoji.OnSendClickListener;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
@@ -191,7 +192,7 @@ public class MessageDetailFragment extends BaseListFragment<MessageDetail> imple
         mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (AppContext.getInstance().isLogin()) {
+                if (UserCacheManager.initUserManager().isLogin(getContext())) {
                     requestData(false);
                 } else {
                     UIHelper.showLoginActivity(getActivity());
@@ -203,7 +204,7 @@ public class MessageDetailFragment extends BaseListFragment<MessageDetail> imple
     @Override
     protected void requestData(boolean refresh) {
         mErrorLayout.setErrorMessage("");
-        if (AppContext.getInstance().isLogin()) {
+        if (UserCacheManager.initUserManager().isLogin(getContext())) {
             super.requestData(refresh);
         } else {
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
@@ -357,7 +358,7 @@ public class MessageDetailFragment extends BaseListFragment<MessageDetail> imple
 
     @Override
     public void onClickSendButton(Editable str) {
-        if (!AppContext.getInstance().isLogin()) {
+        if (!UserCacheManager.initUserManager().isLogin(getContext())) {
             UIHelper.showLoginActivity(getActivity());
             return;
         }

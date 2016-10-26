@@ -22,6 +22,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.Tweet;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.service.ServerTaskUtils;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
@@ -39,9 +40,8 @@ import butterknife.ButterKnife;
 
 /**
  * 语音动弹发布界面
- * 
+ *
  * @author kymjs(kymjs123@gmail.com)
- * 
  */
 public class TweetRecordFragment extends BaseFragment {
 
@@ -117,7 +117,7 @@ public class TweetRecordFragment extends BaseFragment {
         mEtSpeech.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before,
-                    int count) {
+                                      int count) {
                 if (s.length() > MAX_LEN) {
                     mTvInputLen.setText("已达到最大长度");
                 } else {
@@ -128,7 +128,8 @@ public class TweetRecordFragment extends BaseFragment {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count,
-                    int after) {}
+                                          int after) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -143,11 +144,12 @@ public class TweetRecordFragment extends BaseFragment {
     }
 
     @Override
-    public void initData() {}
+    public void initData() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.item_tweet_pub_record,
                 container, false);
@@ -171,9 +173,9 @@ public class TweetRecordFragment extends BaseFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case R.id.public_menu_send:
-            handleSubmit(mBtnRecort.getCurrentAudioPath());
-            break;
+            case R.id.public_menu_send:
+                handleSubmit(mBtnRecort.getCurrentAudioPath());
+                break;
         }
         return true;
     }
@@ -186,7 +188,7 @@ public class TweetRecordFragment extends BaseFragment {
             AppContext.showToastShort(R.string.tip_network_error);
             return;
         }
-        if (!AppContext.getInstance().isLogin()) {
+        if (!UserCacheManager.initUserManager().isLogin(getContext())) {
             UIHelper.showLoginActivity(getActivity());
             return;
         }
@@ -205,7 +207,7 @@ public class TweetRecordFragment extends BaseFragment {
             strSpeech = body;
         }
         Tweet tweet = new Tweet();
-        tweet.setAuthorid(AppContext.getInstance().getLoginUid());
+        tweet.setAuthorid((int) UserCacheManager.initUserManager().loginId(getContext()));
         tweet.setAudioPath(audioPath);
         tweet.setBody(strSpeech);
         ServerTaskUtils.pubTweet(getActivity(), tweet);
