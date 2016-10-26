@@ -1953,12 +1953,13 @@ public class OSChinaApi {
 
     /**
      * 搜索
-     * @param catalog 搜索类型
-     * @param content 搜索内容
+     *
+     * @param catalog   搜索类型
+     * @param content   搜索内容
      * @param pageToken next page token
-     * @param handler handler
+     * @param handler   handler
      */
-    public static void search(int catalog, String content, String pageToken, TextHttpResponseHandler handler){
+    public static void search(int catalog, String content, String pageToken, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("catalog", catalog);
         params.put("content", content);
@@ -1984,5 +1985,48 @@ public class OSChinaApi {
 
         ApiHttpClient.post("action/apiv2/account_login", params, handler);
 
+    }
+
+    /**
+     * register one
+     *
+     * @param phone  phone number
+     * @param appToken  appToken
+     * @param smsCallType  smsCallType
+     * @param handler  handler
+     */
+
+    public static final int REGISTER_INTENT = 1;
+    public static final int RESET_PWD_INTENT = 2;
+
+    public static void sendSmsCode(String phone, String appToken, int intent, TextHttpResponseHandler handler) {
+
+        RequestParams params = new RequestParams();
+
+        params.put("phone", phone);
+        params.put("appToken", appToken);
+        params.put("intent", intent);
+
+        ApiHttpClient.post("action/apiv2/phone_send_code", params, handler);
+
+    }
+
+
+    /**
+     * validate and get phone token
+     *
+     * @param phoneNumber phoneNumber
+     * @param smsCode     smsCode
+     * @param appToken    appToken
+     * @param handler     handler
+     */
+    public static void validateRegisterInfo(String phoneNumber, String smsCode, String appToken, TextHttpResponseHandler handler) {
+
+        RequestParams params = new RequestParams();
+        params.put("phone", phoneNumber);
+        params.put("code", smsCode);
+        params.put("appToken", appToken);
+
+        ApiHttpClient.post("action/apiv2/phone_validate", params, handler);
     }
 }

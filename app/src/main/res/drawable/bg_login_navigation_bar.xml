@@ -8,7 +8,7 @@
 
     <item android:state_pressed="true">
         <shape>
-            <solid android:color="@color/list_item_background_pressed"/>
+            <solid android:color="@color/account_input_bg_color"/>
         </shape>
 
 

@@ -210,10 +210,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     protected void initData() {
         super.initData();
 
+        //初始化控件状态数据
         SharedPreferences sp = SharedPreferencesUtils.createSp(UserConstants.HOLD_ACCOUNT, this);
+
         String holdUsername = sp.getString(HOLD_USERNAME_KEY, null);
         String holdPwd = sp.getString(HOLD_PWD_KEY, null);
+        boolean holdStatus = sp.getBoolean(HOLD_PWD_STATUS_KEY, false);
+
         mEtLoginUsername.setText(holdUsername);
+
         if (!TextUtils.isEmpty(holdPwd)) {
             byte[] decode = Base64.decode(holdPwd, Base64.DEFAULT);
             try {
@@ -227,9 +232,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             mEtLoginPwd.setText(null);
         }
 
-        mHoldStatus = sp.getBoolean(HOLD_PWD_STATUS_KEY, false);
-
-        updateHoldPwd(mHoldStatus);
+        updateHoldPwd(holdStatus);
+        this.mHoldStatus = holdStatus;
 
     }
 
@@ -237,7 +241,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     @Override
     protected void onResume() {
         super.onResume();
-        initData();
+        //initData();
     }
 
     @Override
@@ -248,6 +252,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         this.mInputPwd = mEtLoginPwd.getText().toString().trim();
 
         SharedPreferences sp = SharedPreferencesUtils.createSp(UserConstants.HOLD_ACCOUNT, this);
+
         SharedPreferences.Editor editor = SharedPreferencesUtils.getEditor(sp);
         if (!TextUtils.isEmpty(username))
             editor.putString(HOLD_USERNAME_KEY, username);
@@ -258,6 +263,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         } else {
             editor.putString(HOLD_PWD_KEY, "");
         }
+
         editor.putBoolean(HOLD_PWD_STATUS_KEY, mHoldStatus);
         SharedPreferencesUtils.commit(editor);
 
@@ -355,20 +361,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 String inputPwd = mEtLoginPwd.getText().toString().trim();
 
                 if (!TextUtils.isEmpty(inputPwd)) {
-
                     mInputPwd = toBase64(inputPwd);
-
-                    boolean holdStatus = this.mHoldStatus;
-                    holdStatus = !holdStatus;
-                    updateHoldPwd(holdStatus);
-
-                    this.mHoldStatus = holdStatus;
-
-
-                } else {
-                    AppContext.showToast(getString(R.string.hint_pwd_null), Toast.LENGTH_SHORT);
                 }
-
+                mHoldStatus = !mHoldStatus;
+                updateHoldPwd(mHoldStatus);
                 break;
             case R.id.bt_login_register:
                 RegisterStepOneActivity.show(LoginActivity.this);
@@ -441,7 +437,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private String Sha1toHex(String tempPwd) {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
-            messageDigest.update(tempPwd.getBytes());
+            messageDigest.update(tempPwd.getBytes("utf-8"));
             byte[] bytes = messageDigest.digest();
 
             StringBuilder tempHex = new StringBuilder();
@@ -454,7 +450,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 tempHex.append(shaHex);
             }
             return tempHex.toString();
-        } catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
             e.printStackTrace();
         }
 
@@ -489,6 +485,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             ssoHandler.authorizeCallBack(requestCode, resultCode, data);
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 
     /**
@@ -560,6 +562,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     public void onFocusChange(View v, boolean hasFocus) {
 
         int id = v.getId();
+
         if (id == R.id.et_login_username) {
             if (hasFocus) {
                 mLlLoginUsername.setActivated(true);

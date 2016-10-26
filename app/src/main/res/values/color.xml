@@ -85,5 +85,6 @@
     <color name="login_line_color">#dededf</color>
     <color name="login_input_active">#31b968</color>
     <color name="login_other_color">#cacaca</color>
+    <color name="account_input_bg_color">#FF909192</color>
 
 </resources>

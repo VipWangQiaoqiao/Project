@@ -21,18 +21,25 @@ import butterknife.OnClick;
  * desc:
  */
 
-public class RetrieveActivity extends BaseActivity implements View.OnClickListener {
+public class RetrieveActivity extends BaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
     @Bind(R.id.ly_retrieve_bar)
     LinearLayout mLlRetrieveBar;
+
+    @Bind(R.id.ll_retrieve_tel)
+    LinearLayout mLlRetrieveTel;
     @Bind(R.id.et_retrieve_tel)
     EditText mEtRetrieveTel;
     @Bind(R.id.iv_retrieve_tel_del)
     ImageView mIvRetrieveTelDel;
+
+    @Bind(R.id.ll_retrieve_code)
+    LinearLayout mLlRetrieveCode;
     @Bind(R.id.et_retrieve_code_input)
     EditText mEtRetrieveCodeInput;
     @Bind(R.id.retrieve_sms_call)
     TextView mTvRetrieveSmsCall;
+
     @Bind(R.id.bt_retrieve_submit)
     Button mBtRetrieveSubmit;
     @Bind(R.id.tv_retrieve_label)
@@ -57,6 +64,11 @@ public class RetrieveActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void initWidget() {
         super.initWidget();
+
+        TextView tvLabel = (TextView) mLlRetrieveBar.findViewById(R.id.tv_navigation_label);
+        tvLabel.setText(R.string.retrieve_pwd_label);
+        mEtRetrieveTel.setOnFocusChangeListener(this);
+        mEtRetrieveCodeInput.setOnFocusChangeListener(this);
     }
 
     @Override
@@ -64,7 +76,8 @@ public class RetrieveActivity extends BaseActivity implements View.OnClickListen
         super.initData();
     }
 
-    @OnClick({R.id.ib_navigation_back, R.id.iv_retrieve_tel_del, R.id.retrieve_sms_call, R.id.bt_retrieve_submit, R.id.tv_retrieve_label})
+    @OnClick({R.id.ib_navigation_back, R.id.iv_retrieve_tel_del, R.id.retrieve_sms_call,
+            R.id.bt_retrieve_submit, R.id.tv_retrieve_label})
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -77,6 +90,7 @@ public class RetrieveActivity extends BaseActivity implements View.OnClickListen
             case R.id.retrieve_sms_call:
                 break;
             case R.id.bt_retrieve_submit:
+                ResetPwdActivity.show(this);
                 break;
             case R.id.tv_retrieve_label:
                 break;
@@ -84,5 +98,26 @@ public class RetrieveActivity extends BaseActivity implements View.OnClickListen
                 break;
         }
 
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        int id = v.getId();
+        switch (id) {
+            case R.id.et_retrieve_tel:
+                if (hasFocus) {
+                    mLlRetrieveTel.setActivated(true);
+                    mLlRetrieveCode.setActivated(false);
+                }
+                break;
+            case R.id.et_retrieve_code_input:
+                if (hasFocus) {
+                    mLlRetrieveCode.setActivated(true);
+                    mLlRetrieveTel.setActivated(false);
+                }
+                break;
+            default:
+                break;
+        }
     }
 }

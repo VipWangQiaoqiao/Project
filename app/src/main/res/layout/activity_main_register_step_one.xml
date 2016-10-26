@@ -18,12 +18,13 @@
         app:srcCompat="@mipmap/logo_osc"/>
 
     <LinearLayout
+        android:id="@+id/ll_register_phone"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
         android:layout_marginTop="32dp"
-        android:background="@drawable/bg_login_input"
+        android:background="@drawable/bg_login_input_ok"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -46,15 +47,16 @@
         <EditText
             android:id="@+id/et_register_username"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@null"
             android:hint="@string/register_input_username_hint"
-            android:inputType="textPersonName"
+            android:inputType="phone"
             android:maxLines="1"
             android:minLines="1"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
+            android:textColor="@color/white"
             android:textColorHint="@color/login_line_color"/>
 
         <ImageView
@@ -69,12 +71,13 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_register_sms_code"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/bg_login_input"
+        android:background="@drawable/bg_login_input_ok"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -89,23 +92,24 @@
 
         <View
             android:layout_width="1px"
-            android:layout_height="24dp"
+            android:layout_height="22dp"
             android:background="@color/login_line_color"/>
 
         <EditText
             android:id="@+id/et_register_auth_code"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_weight="1"
             android:background="@null"
             android:hint="@string/register_sms_auth_code"
-            android:inputType="textPersonName"
+            android:inputType="text"
             android:maxLines="1"
             android:minLines="1"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
+            android:textColor="@color/white"
             android:textColorHint="@color/login_line_color"/>
 
         <TextView
@@ -113,6 +117,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="16dp"
+            android:alpha="0.4"
             android:background="@drawable/bg_register_call_sms"
             android:gravity="center_vertical"
             android:paddingBottom="4dp"
@@ -133,7 +138,12 @@
         android:layout_marginRight="24dp"
         android:layout_marginTop="32dp"
         android:background="@drawable/bg_login_submit"
+        android:elevation="0dp"
+        android:outlineProvider="none"
+        android:shadowColor="@color/account_input_bg_color"
         android:text="@string/login_register_hint"
         android:textColor="@color/white"
-        android:textSize="20sp"/>
+        android:textSize="20sp"
+        android:translationZ="0dp"
+        tools:targetApi="lollipop"/>
 </LinearLayout>
