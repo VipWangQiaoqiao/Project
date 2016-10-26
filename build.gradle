@@ -4,7 +4,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.1'
+        classpath 'com.android.tools.build:gradle:2.2.2'
         classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.3.0'
     }
 }
@@ -23,4 +23,5 @@ ext {
     targetSdkVersion = 24
     versionCode = 267
     versionName = "v2.6.7(1610181630)"
+    supportVersion = '25.0.0'
 }
