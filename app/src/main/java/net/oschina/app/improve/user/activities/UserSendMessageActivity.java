@@ -17,6 +17,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseRecyclerViewActivity;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
@@ -73,7 +74,7 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
         mDialog = new ProgressDialog(this);
         mReceiver = (Author) getIntent().getSerializableExtra("receiver");
         setTitle(mReceiver.getName());
-        authorId = Long.parseLong(String.valueOf(AppContext.getInstance().getLoginUid()));
+        authorId = UserCacheManager.initUserManager().loginId(getContext());
         init();
     }
 
@@ -265,7 +266,7 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
             Message message = new Message();
             message.setType(Message.TYPE_IMAGE);
             Author author = new Author();
-            author.setId(AppContext.getInstance().getLoginId());
+            author.setId(UserCacheManager.initUserManager().loginId(getContext()));
             message.setSender(author);
             message.setResource(path);
             mSendQuent.put(getFileName(path), message);

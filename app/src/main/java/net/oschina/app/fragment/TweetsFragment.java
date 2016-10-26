@@ -21,9 +21,10 @@ import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetsList;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.ui.empty.EmptyLayout;
-import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
@@ -171,14 +172,14 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(isAdded()){
+            if (isAdded()) {
                 setupContent();
             }
         }
     };
 
     private void setupContent() {
-        if (AppContext.getInstance().isLogin()) {
+        if (UserCacheManager.initUserManager().isLogin(getContext())) {
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
             requestData(true);
         } else {
@@ -191,8 +192,8 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
     @Override
     protected void requestData(boolean refresh) {
         if (mCatalog > 0) {
-            if (AppContext.getInstance().isLogin()) {
-                mCatalog = AppContext.getInstance().getLoginUid();
+            if (UserCacheManager.initUserManager().isLogin(getContext())) {
+                mCatalog = (int) UserCacheManager.initUserManager().loginId(getContext());
                 super.requestData(refresh);
             } else {
                 mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
@@ -212,7 +213,7 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
             @Override
             public void onClick(View v) {
                 if (mCatalog > 0) {
-                    if (AppContext.getInstance().isLogin()) {
+                    if (UserCacheManager.initUserManager().isLogin(getContext())) {
                         mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
                         requestData(true);
                     } else {
@@ -239,7 +240,7 @@ public class TweetsFragment extends BaseListFragment<Tweet> implements
 
     private void handleLongClick(final Tweet tweet) {
         String[] items;
-        if (AppContext.getInstance().getLoginUid() == tweet.getAuthorid()) {
+        if (UserCacheManager.initUserManager().loginId(getContext()) == tweet.getAuthorid()) {
             items = new String[]{getString(R.string.copy),
                     getString(R.string.delete)};
         } else {

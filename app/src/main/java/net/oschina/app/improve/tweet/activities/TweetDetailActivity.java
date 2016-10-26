@@ -28,6 +28,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.emoji.InputHelper;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.ResultBean;
@@ -238,7 +239,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
                     Toast.makeText(TweetDetailActivity.this, "请输入文字", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (!AppContext.getInstance().isLogin()) {
+                if (!UserCacheManager.initUserManager().isLogin(TweetDetailActivity.this)) {
                     UIHelper.showLoginActivity(TweetDetailActivity.this);
                     return;
                 }

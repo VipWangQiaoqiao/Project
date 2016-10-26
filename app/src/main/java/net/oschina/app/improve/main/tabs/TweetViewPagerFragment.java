@@ -3,8 +3,8 @@ package net.oschina.app.improve.main.tabs;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.improve.base.fragments.BaseGeneralListFragment;
 import net.oschina.app.improve.base.fragments.BaseViewPagerFragment;
 import net.oschina.app.improve.tweet.fragments.TweetFragment;
@@ -54,7 +54,7 @@ public class TweetViewPagerFragment extends BaseViewPagerFragment implements OnT
         infoList[1] = new PagerInfo(titles[1], TweetFragment.class,
                 getBundle(TweetFragment.CATEGORY_TYPE, TweetFragment.TWEET_TYPE_HOT));
         infoList[2] = new PagerInfo(titles[2], TweetFragment.class,
-                getBundle(TweetFragment.CATEGORY_USER, AppContext.getInstance().getLoginUid()));
+                getBundle(TweetFragment.CATEGORY_USER, (int) UserCacheManager.initUserManager().loginId(getContext())));
 
         return infoList;
     }

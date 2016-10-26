@@ -1,23 +1,5 @@
 package net.oschina.app.service;
 
-import java.io.ByteArrayInputStream;
-import java.lang.ref.WeakReference;
-
-import net.oschina.app.AppConfig;
-import net.oschina.app.AppContext;
-import net.oschina.app.R;
-import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.bean.Constants;
-import net.oschina.app.bean.Notice;
-import net.oschina.app.bean.NoticeDetail;
-import net.oschina.app.bean.Result;
-import net.oschina.app.bean.ResultBean;
-import net.oschina.app.broadcast.AlarmReceiver;
-import net.oschina.app.ui.MainActivity;
-import net.oschina.app.util.UIHelper;
-import net.oschina.app.util.XmlUtils;
-
-import cz.msebera.android.httpclient.Header;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -34,6 +16,25 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
+
+import net.oschina.app.AppConfig;
+import net.oschina.app.AppContext;
+import net.oschina.app.R;
+import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.bean.Constants;
+import net.oschina.app.bean.Notice;
+import net.oschina.app.bean.NoticeDetail;
+import net.oschina.app.bean.Result;
+import net.oschina.app.bean.ResultBean;
+import net.oschina.app.broadcast.AlarmReceiver;
+import net.oschina.app.ui.MainActivity;
+import net.oschina.app.util.UIHelper;
+import net.oschina.app.util.XmlUtils;
+
+import java.io.ByteArrayInputStream;
+import java.lang.ref.WeakReference;
+
+import cz.msebera.android.httpclient.Header;
 
 public class NoticeService extends Service {
     public static final String INTENT_ACTION_GET = "net.oschina.app.service.GET_NOTICE";
@@ -53,7 +54,7 @@ public class NoticeService extends Service {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (Constants.INTENT_ACTION_NOTICE.equals(action)) {
-        	Notice notice = (Notice) intent.getSerializableExtra("notice_bean");
+                Notice notice = (Notice) intent.getSerializableExtra("notice_bean");
                 int atmeCount = notice.getAtmeCount();// @我
                 int msgCount = notice.getMsgCount();// 私信
                 int reviewCount = notice.getReviewCount();// 评论
@@ -131,7 +132,7 @@ public class NoticeService extends Service {
     /**
      * OSC采用轮询方式实现消息推送<br>
      * 每次被调用都去执行一次{@link #AlarmReceiver}onReceive()方法
-     * 
+     *
      * @return
      */
     private PendingIntent getOperationIntent() {
@@ -168,8 +169,7 @@ public class NoticeService extends Service {
         lastNotifiyCount = count;
 
         Resources res = getResources();
-        String contentTitle = res.getString(R.string.you_have_news_messages,
-                count);
+        String contentTitle = res.getString(R.string.you_have_news_messages, count + "");
         String contentText;
         StringBuffer sb = new StringBuffer();
         if (atmeCount > 0) {
@@ -179,14 +179,14 @@ public class NoticeService extends Service {
             sb.append(getString(R.string.letter_count, msgCount)).append(" ");
         }
         if (reviewCount > 0) {
-            sb.append(getString(R.string.review_count, reviewCount))
+            sb.append(getString(R.string.review_count, String.valueOf(reviewCount)))
                     .append(" ");
         }
         if (newFansCount > 0) {
-            sb.append(getString(R.string.fans_count, newFansCount));
+            sb.append(getString(R.string.fans_count, String.valueOf(newFansCount)));
         }
         if (newLikeCount > 0) {
-            sb.append(getString(R.string.like_count, newLikeCount));
+            sb.append(getString(R.string.like_count, String.valueOf(newLikeCount)));
         }
         contentText = sb.toString();
 
@@ -207,7 +207,7 @@ public class NoticeService extends Service {
                     + R.raw.notificationsound));
         }
         if (AppContext.get(AppConfig.KEY_NOTIFICATION_VIBRATION, true)) {
-            long[] vibrate = { 0, 10, 20, 30 };
+            long[] vibrate = {0, 10, 20, 30};
             builder.setVibrate(vibrate);
         }
 
@@ -223,7 +223,7 @@ public class NoticeService extends Service {
         public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
             try {
                 Notice notice = XmlUtils.toBean(NoticeDetail.class,
-                	arg2).getNotice();
+                        arg2).getNotice();
                 if (notice != null) {
                     UIHelper.sendBroadCast(NoticeService.this, notice);
                     if (AppContext.get(AppConfig.KEY_NOTIFICATION_ACCEPT, true)) {
@@ -243,11 +243,13 @@ public class NoticeService extends Service {
                 e.printStackTrace();
                 onFailure(arg0, arg1, arg2, e);
             }
-        };
+        }
+
+        ;
 
         @Override
         public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                Throwable arg3) {
+                              Throwable arg3) {
             arg3.printStackTrace();
         }
     };
@@ -271,14 +273,15 @@ public class NoticeService extends Service {
 
         @Override
         public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-                Throwable arg3) {}
+                              Throwable arg3) {
+        }
     };
 
     /**
      * 请求是否有新通知
      */
     private void requestNotice() {
-        OSChinaApi.getNotices(mGetNoticeHandler);
+        OSChinaApi.getNotices(mGetNoticeHandler, getApplicationContext());
     }
 
     private static class ServiceStub extends INoticeService.Stub {

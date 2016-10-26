@@ -1,13 +1,13 @@
 package net.oschina.app.team.fragment;
 
-import java.io.InputStream;
-import java.io.Serializable;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 
-import net.oschina.app.AppContext;
-import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.SimpleBackPage;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.team.adapter.TeamIssueCatalogAdapter;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamIssueCatalog;
@@ -16,12 +16,9 @@ import net.oschina.app.team.bean.TeamProject;
 import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
+
+import java.io.InputStream;
+import java.io.Serializable;
 
 /**
  * 任务分组列表
@@ -69,7 +66,7 @@ public class TeamIssueCatalogFragment extends
 
     @Override
     protected void sendRequestData() {
-	int uid = AppContext.getInstance().getLoginUid();
+	int uid = (int) UserCacheManager.initUserManager().loginId(getContext());
 	int teamId= mTeam.getId();
 	int projectId = mTeamProject.getGit().getId();
 	String source = mTeamProject.getSource();

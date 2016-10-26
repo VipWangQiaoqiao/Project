@@ -50,6 +50,7 @@ import net.oschina.app.fragment.FriendsFragment;
 import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.detail.activities.BlogDetailActivity;
 import net.oschina.app.improve.detail.activities.EventDetailActivity;
@@ -717,7 +718,7 @@ public class UIHelper {
      * @param notice
      */
     public static void sendBroadCast(Context context, Notice notice) {
-        if (!((AppContext) context.getApplicationContext()).isLogin()
+        if (!UserCacheManager.initUserManager().isLogin(context)
                 || notice == null)
             return;
         Intent intent = new Intent(Constants.INTENT_ACTION_NOTICE);
@@ -762,7 +763,7 @@ public class UIHelper {
      * @param context
      * @param uid
      */
-    public static void showUserBlog(Context context, int uid) {
+    public static void showUserBlog(Context context, long uid) {
         Bundle args = new Bundle();
         args.putLong(UserBlogFragment.BUNDLE_KEY_USER_ID, uid);
         showSimpleBack(context, SimpleBackPage.USER_BLOG, args);

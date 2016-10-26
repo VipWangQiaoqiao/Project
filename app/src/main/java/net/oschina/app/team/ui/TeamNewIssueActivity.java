@@ -24,6 +24,7 @@ import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamGit;
 import net.oschina.app.team.bean.TeamIssue;
@@ -186,7 +187,7 @@ public class TeamNewIssueActivity extends BaseActivity {
 
         RequestParams params = new RequestParams();
         params.put("teamid", mTeam.getId());
-        params.put("uid", AppContext.getInstance().getLoginUid());
+        params.put("uid", UserCacheManager.initUserManager().loginId(this));
         params.put("title", title);
         if (mTeamProject.getGit().getId() > 0) {
 
@@ -474,8 +475,7 @@ public class TeamNewIssueActivity extends BaseActivity {
     }
 
     private void tryToShowCatalogDialog() {
-        OSChinaTeamApi.getTeamCatalogIssueList(AppContext.getInstance()
-                        .getLoginUid(), mTeam.getId(), mTeamProject.getGit().getId(),
+        OSChinaTeamApi.getTeamCatalogIssueList((int) UserCacheManager.initUserManager().loginId(this), mTeam.getId(), mTeamProject.getGit().getId(),
                 mTeamProject.getSource(), new MySomeInfoHandler(
                         show_issue_catalog));
 
@@ -483,7 +483,7 @@ public class TeamNewIssueActivity extends BaseActivity {
 
     private void tryToShowToUserDilaog() {
         OSChinaTeamApi.getTeamProjectMemberList(mTeam.getId(), mTeamProject,
-                new MySomeInfoHandler(show_issue_touser));
+                new MySomeInfoHandler(show_issue_touser), getApplicationContext());
     }
 
     public class MySomeInfoHandler extends AsyncHttpResponseHandler {

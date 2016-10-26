@@ -17,9 +17,9 @@ import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.User;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.cache.DataCleanManager;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.tweet.fragments.TweetFragment;
-import net.oschina.app.improve.user.fragments.NewUserInfoFragment;
 import net.oschina.app.util.CyptoUtils;
 import net.oschina.app.util.MethodsCompat;
 import net.oschina.app.util.StringUtils;
@@ -242,23 +242,23 @@ public class AppContext extends BaseApplication {
      *
      * @return 用户Id
      */
-    @Deprecated
-    public int getLoginUid() {
-        return (int) loginUid;
-    }
+   // @Deprecated
+   // public int getLoginUid() {
+    //    return (int) loginUid;
+  //  }
 
     /**
      * 获取登陆用户Id
      *
      * @return 用户Id
      */
-    public long getLoginId() {
-        return loginUid;
-    }
+   // public long getLoginId() {
+       // return loginUid;
+  //  }
 
-    public boolean isLogin() {
-        return loginUid != 0;
-    }
+//    public boolean isLogin() {
+//        return loginUid != 0;
+//    }
 
     /**
      * 用户注销
@@ -272,7 +272,8 @@ public class AppContext extends BaseApplication {
         ApiHttpClient.destroy(this);
 
         CacheManager.deleteObject(context(), TweetFragment.CACHE_USER_TWEET);
-        CacheManager.deleteObject(context(), NewUserInfoFragment.CACHE_NAME);
+        UserCacheManager.initUserManager().deleteUserCache(this);
+       // CacheManager.deleteObject(context(), NewUserInfoFragment.CACHE_NAME);
 
         Intent intent = new Intent(Constants.INTENT_ACTION_LOGOUT);
         sendBroadcast(intent);
@@ -321,22 +322,22 @@ public class AppContext extends BaseApplication {
         return currentVersion >= VersionCode;
     }
 
-    public static String getTweetDraft() {
-        return getPreferences().getString(
-                KEY_TWEET_DRAFT + getInstance().getLoginUid(), "");
-    }
+//    public static String getTweetDraft() {
+//        return getPreferences().getString(
+//                KEY_TWEET_DRAFT + getInstance().getLoginUid(), "");
+//    }
 
     public static void setTweetDraft(String draft) {
-        set(KEY_TWEET_DRAFT + getInstance().getLoginUid(), draft);
+        set(KEY_TWEET_DRAFT + UserCacheManager.initUserManager().loginId(context()), draft);
     }
 
     public static String getNoteDraft() {
         return getPreferences().getString(
-                AppConfig.KEY_NOTE_DRAFT + getInstance().getLoginUid(), "");
+                AppConfig.KEY_NOTE_DRAFT + UserCacheManager.initUserManager().loginId(context()), "");
     }
 
     public static void setNoteDraft(String draft) {
-        set(AppConfig.KEY_NOTE_DRAFT + getInstance().getLoginUid(), draft);
+        set(AppConfig.KEY_NOTE_DRAFT + UserCacheManager.initUserManager().loginId(context()), draft);
     }
 
     public static boolean isFristStart() {
@@ -367,7 +368,7 @@ public class AppContext extends BaseApplication {
 
 
     public static GlideUrl getGlideUrlByUser(String url) {
-        if (AppContext.getInstance().isLogin()) {
+        if (UserCacheManager.initUserManager().isLogin(context())) {
             return new GlideUrl(url,
                     new LazyHeaders
                             .Builder()

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.adapter.FriendAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
@@ -14,6 +13,7 @@ import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.Friend;
 import net.oschina.app.bean.FriendsList;
 import net.oschina.app.bean.Notice;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
@@ -56,7 +56,7 @@ public class FriendsFragment extends BaseListFragment<Friend> {
     @Override
     public void onResume() {
         if (mCatalog == FriendsList.TYPE_FANS
-                && mUid == AppContext.getInstance().getLoginUid()) {
+                && mUid ==  UserCacheManager.initUserManager().loginId(getContext())) {
             refreshNotice();
         }
         super.onResume();
@@ -112,8 +112,8 @@ public class FriendsFragment extends BaseListFragment<Friend> {
     protected void onRefreshNetworkSuccess() {
         if ((NoticeViewPagerFragment.sCurrentPage == 3 || NoticeViewPagerFragment.sShowCount[3] > 0)
                 && mCatalog == FriendsList.TYPE_FANS
-                && mUid == AppContext.getInstance().getLoginUid()) {
-            NoticeUtils.clearNotice(Notice.TYPE_NEWFAN);
+                && mUid ==  UserCacheManager.initUserManager().loginId(getContext())) {
+            NoticeUtils.clearNotice(Notice.TYPE_NEWFAN,getContext());
             UIHelper.sendBroadcastForNotice(getActivity());
         }
     }

@@ -204,7 +204,7 @@ public class FeedBackFragment extends BaseFragment {
                 setPubMenuState(false);
                 dialog.show();
             }
-        });
+        },getContext());
     }
 
     private void setPubMenuState(boolean canOption) {
