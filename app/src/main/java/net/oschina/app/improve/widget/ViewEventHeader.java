@@ -29,6 +29,7 @@ import java.util.List;
  * Changed qiujuer
  * on 08-18
  */
+@Deprecated
 public class ViewEventHeader extends RelativeLayout implements ViewPager.OnPageChangeListener, Runnable {
     private ViewPager vp_event;
     private List<ViewEventBanner> banners = new ArrayList<>();
