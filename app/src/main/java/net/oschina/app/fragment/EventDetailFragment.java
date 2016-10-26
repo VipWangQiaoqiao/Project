@@ -22,7 +22,7 @@ import net.oschina.app.bean.PostDetail;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.SimpleBackPage;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.ui.EventApplyDialog;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.ThemeSwitchUtils;

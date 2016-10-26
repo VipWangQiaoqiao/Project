@@ -24,7 +24,7 @@ import net.oschina.app.R;
 import net.oschina.app.adapter.ViewHolder;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Constants;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.improve.base.adapter.BaseListAdapter;
 import net.oschina.app.improve.base.fragments.BaseGeneralListFragment;
 import net.oschina.app.improve.bean.Tweet;

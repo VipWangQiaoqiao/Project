@@ -18,7 +18,7 @@ import net.oschina.app.bean.Active;
 import net.oschina.app.bean.ActiveList;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.Notice;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.DialogHelp;

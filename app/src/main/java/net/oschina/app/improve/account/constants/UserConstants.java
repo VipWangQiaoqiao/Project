@@ -1,4 +1,4 @@
-package net.oschina.app.improve.account.activity.constants;
+package net.oschina.app.improve.account.constants;
 
 /**
  * Created by fei

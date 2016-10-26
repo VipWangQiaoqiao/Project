@@ -11,7 +11,7 @@ import net.oschina.app.bean.FavoriteList;
 import net.oschina.app.bean.Software;
 import net.oschina.app.bean.SoftwareDetail;
 import net.oschina.app.bean.Tweet;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.app.util.ThemeSwitchUtils;

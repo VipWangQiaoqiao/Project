@@ -14,7 +14,7 @@ import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.improve.main.FeedBackActivity;
 import net.oschina.app.improve.main.update.CheckUpdateManager;
 import net.oschina.app.improve.widget.togglebutton.ToggleButton;

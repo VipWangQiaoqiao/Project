@@ -17,7 +17,7 @@ import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.User;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.cache.DataCleanManager;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.tweet.fragments.TweetFragment;
 import net.oschina.app.util.CyptoUtils;

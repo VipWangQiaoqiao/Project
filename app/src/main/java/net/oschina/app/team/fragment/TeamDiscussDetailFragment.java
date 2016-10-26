@@ -18,7 +18,7 @@ import net.oschina.app.base.BeseHaveHeaderListFragment;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.emoji.OnSendClickListener;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.team.adapter.TeamReplyAdapter;
 import net.oschina.app.team.bean.TeamDiscuss;
 import net.oschina.app.team.bean.TeamDiscussDetail;

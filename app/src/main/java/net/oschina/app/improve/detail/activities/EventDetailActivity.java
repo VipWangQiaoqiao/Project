@@ -13,7 +13,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.EventApplyData;
 import net.oschina.app.bean.Result;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.improve.bean.EventDetail;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.detail.contract.EventDetailContract;

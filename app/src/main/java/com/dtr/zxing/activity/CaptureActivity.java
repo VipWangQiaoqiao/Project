@@ -52,7 +52,7 @@ import net.oschina.app.base.BaseActivity;
 import net.oschina.app.bean.BarCode;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.SingInResult;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.UIHelper;

@@ -1,4 +1,4 @@
-package net.oschina.app.improve.account.activity.activity;
+package net.oschina.app.improve.account.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,7 +24,7 @@ import butterknife.OnClick;
 public class RetrieveActivity extends BaseActivity implements View.OnClickListener {
 
     @Bind(R.id.ly_retrieve_bar)
-    LinearLayout mLlRetieveBar;
+    LinearLayout mLlRetrieveBar;
     @Bind(R.id.et_retrieve_tel)
     EditText mEtRetrieveTel;
     @Bind(R.id.iv_retrieve_tel_del)

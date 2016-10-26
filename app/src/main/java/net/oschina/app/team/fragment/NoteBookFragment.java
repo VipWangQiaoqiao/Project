@@ -30,7 +30,7 @@ import net.oschina.app.bean.NotebookDataList;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.bean.User;
 import net.oschina.app.db.NoteDatabase;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.team.adapter.NotebookAdapter;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.KJAnimations;

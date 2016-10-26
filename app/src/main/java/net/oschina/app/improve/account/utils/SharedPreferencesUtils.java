@@ -1,4 +1,4 @@
-package net.oschina.app.improve.account.activity.utils;
+package net.oschina.app.improve.account.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;

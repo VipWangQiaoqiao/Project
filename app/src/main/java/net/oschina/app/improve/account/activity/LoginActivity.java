@@ -1,4 +1,4 @@
-package net.oschina.app.improve.account.activity.activity;
+package net.oschina.app.improve.account.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -37,9 +37,9 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.improve.account.activity.constants.UserConstants;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
-import net.oschina.app.improve.account.activity.utils.SharedPreferencesUtils;
+import net.oschina.app.improve.account.constants.UserConstants;
+import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.account.utils.SharedPreferencesUtils;
 import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.bean.UserV2;
 import net.oschina.app.improve.bean.base.ResultBean;
@@ -272,7 +272,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         int id = v.getId();
         switch (id) {
             case R.id.tv_login_forget_pwd:
-                RegisterStepOneActivity.show(LoginActivity.this);
+                RetrieveActivity.show(LoginActivity.this);
                 break;
             case R.id.bt_login_submit:
 

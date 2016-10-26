@@ -14,7 +14,7 @@ import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.MessageDetail;
 import net.oschina.app.emoji.InputHelper;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.util.ChatImageDisplayer;
 import net.oschina.app.util.StringUtils;

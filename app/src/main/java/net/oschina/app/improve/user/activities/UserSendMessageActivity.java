@@ -17,7 +17,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseRecyclerViewActivity;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;

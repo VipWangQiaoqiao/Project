@@ -8,7 +8,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.bean.NotebookData;
 import net.oschina.app.db.NoteDatabase;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 
 import org.kymjs.kjframe.utils.KJLoger;
 import org.kymjs.kjframe.utils.SystemTool;

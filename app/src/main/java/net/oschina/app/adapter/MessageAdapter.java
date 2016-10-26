@@ -9,7 +9,7 @@ import android.widget.TextView;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Messages;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.MyLinkMovementMethod;
