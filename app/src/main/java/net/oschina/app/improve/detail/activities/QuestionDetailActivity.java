@@ -71,7 +71,7 @@ public class QuestionDetailActivity extends DetailActivity<QuestionDetail, Quest
 
     @Override
     public void toFavorite() {
-        int uid = requestCheck();
+        long uid = requestCheck();
         if (uid == 0)
             return;
         showWaitDialog(R.string.progress_submit);
@@ -141,7 +141,7 @@ public class QuestionDetailActivity extends DetailActivity<QuestionDetail, Quest
 
     @Override
     public void toSendComment(long id, long commentId, long commentAuthorId, String comment) {
-        int uid = requestCheck();
+        long uid = requestCheck();
         if (uid == 0)
             return;
 
@@ -192,7 +192,7 @@ public class QuestionDetailActivity extends DetailActivity<QuestionDetail, Quest
 
     @Override
     public void toReport() {
-        int uid = requestCheck();
+        long uid = requestCheck();
         if (uid == 0)
             return;
         toReport(getDataId(), getData().getHref(), Report.TYPE_QUESTION);

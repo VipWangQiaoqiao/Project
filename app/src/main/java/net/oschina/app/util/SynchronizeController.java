@@ -1,23 +1,23 @@
 package net.oschina.app.util;
 
-import java.util.List;
+import android.app.Activity;
 
-import net.oschina.app.AppContext;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.bean.NotebookData;
 import net.oschina.app.db.NoteDatabase;
-
-import cz.msebera.android.httpclient.Header;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 
 import org.kymjs.kjframe.utils.KJLoger;
 import org.kymjs.kjframe.utils.SystemTool;
 
-import android.app.Activity;
+import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
 import cz.msebera.android.httpclient.protocol.HTTP;
-
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 
 /**
  * 一个文件云同步解决方案（便签同步）
@@ -72,7 +72,7 @@ public class SynchronizeController {
             // sPreviousRefreshTime = currentTime;
         }
 
-        int uid = AppContext.getInstance().getLoginUid();
+        int uid = (int) UserCacheManager.initUserManager().loginId(null);
         StringBuilder jsonData = new StringBuilder();
         int size = localDatas.size();
         jsonData.append("{\"uid\":").append(uid).append(",\"stickys\":[");

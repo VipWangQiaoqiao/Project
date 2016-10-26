@@ -23,6 +23,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.base.PageBean;
@@ -159,7 +160,7 @@ public class CommentsActivity extends BaseBackActivity {
      *
      * @return 返回当前登录用户, 未登录或者未通过检查返回0
      */
-    private int requestCheck() {
+    private long requestCheck() {
         if (mId == 0) {
             AppContext.showToast("数据加载中...");
             return 0;
@@ -168,19 +169,19 @@ public class CommentsActivity extends BaseBackActivity {
             AppContext.showToastShort(R.string.tip_no_internet);
             return 0;
         }
-        if (!AppContext.getInstance().isLogin()) {
+        if (!UserCacheManager.initUserManager().isLogin(this)) {
             UIHelper.showLoginActivity(this);
             return 0;
         }
         // 返回当前登录用户ID
-        return AppContext.getInstance().getLoginUid();
+        return UserCacheManager.initUserManager().loginId(this);
     }
 
     /**
      * handle send comment
      */
     private void handleSendComment(int type, long id, final long commentId, long commentAuthorId, String content) {
-        int uid = requestCheck();
+        long uid = requestCheck();
         if (uid == 0)
             return;
 

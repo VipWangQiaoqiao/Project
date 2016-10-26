@@ -10,11 +10,11 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.MessageDetail;
 import net.oschina.app.emoji.InputHelper;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.util.ChatImageDisplayer;
 import net.oschina.app.util.StringUtils;
@@ -73,7 +73,7 @@ public class MessageDetailAdapter extends ListBaseAdapter<MessageDetail> {
         final MessageDetail item = mDatas.get(mDatas.size() - position - 1);
 
         int itemType = 0;
-        if (item.getAuthorId() == AppContext.getInstance().getLoginUid()) {
+        if (item.getAuthorId() == UserCacheManager.initUserManager().loginId(mContext)) {
             itemType = 1;
         }
         boolean needCreateView = false;

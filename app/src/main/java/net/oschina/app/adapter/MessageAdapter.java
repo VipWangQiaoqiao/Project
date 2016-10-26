@@ -6,10 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.ListBaseAdapter;
 import net.oschina.app.bean.Messages;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.widget.AvatarView;
 import net.oschina.app.widget.MyLinkMovementMethod;
@@ -41,7 +41,7 @@ public class MessageAdapter extends ListBaseAdapter<Messages> {
 
         final Messages item = (Messages) mDatas.get(position);
 
-        if (AppContext.getInstance().getLoginUid() == item.getSenderId()) {
+        if (UserCacheManager.initUserManager().loginId(mContext) == item.getSenderId()) {
             vh.sender.setVisibility(View.VISIBLE);
         } else {
             vh.sender.setVisibility(View.GONE);
@@ -58,8 +58,7 @@ public class MessageAdapter extends ListBaseAdapter<Messages> {
         MyURLSpan.parseLinkText(vh.content, span);
 
         vh.time.setText(StringUtils.formatSomeAgo(item.getPubDate()));
-        vh.count.setText(parent.getResources().getString(
-                R.string.message_count, item.getMessageCount()));
+        vh.count.setText(parent.getResources().getString(R.string.message_count, item.getMessageCount() + ""));
 
         vh.avatar.setAvatarUrl(item.getPortrait());
         vh.avatar.setUserInfo(item.getSenderId(), item.getSender());

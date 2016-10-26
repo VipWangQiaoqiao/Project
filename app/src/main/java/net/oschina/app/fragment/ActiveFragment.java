@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.ActiveAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
@@ -19,6 +18,7 @@ import net.oschina.app.bean.Active;
 import net.oschina.app.bean.ActiveList;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.Notice;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.DialogHelp;
@@ -103,7 +103,7 @@ public class ActiveFragment extends BaseListFragment<Active> implements
 
     @Override
     protected String getCacheKeyPrefix() {
-        return CACHE_KEY_PREFIX + mCatalog + AppContext.getInstance().getLoginUid();
+        return CACHE_KEY_PREFIX + mCatalog + UserCacheManager.initUserManager().loginId(getContext());
     }
 
     @Override
@@ -127,7 +127,7 @@ public class ActiveFragment extends BaseListFragment<Active> implements
         mErrorLayout.setOnLayoutClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (AppContext.getInstance().isLogin()) {
+                if (UserCacheManager.initUserManager().isLogin(getContext())) {
                     mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
                     requestData(false);
                 } else {
@@ -135,14 +135,14 @@ public class ActiveFragment extends BaseListFragment<Active> implements
                 }
             }
         });
-        if (AppContext.getInstance().isLogin()) {
+        if (UserCacheManager.initUserManager().isLogin(getContext())) {
             UIHelper.sendBroadcastForNotice(getActivity());
         }
     }
 
     @Override
     protected void requestData(boolean refresh) {
-        if (AppContext.getInstance().isLogin()) {
+        if (UserCacheManager.initUserManager().isLogin(getContext())) {
             mIsWatingLogin = false;
             super.requestData(refresh);
         } else {
@@ -154,20 +154,20 @@ public class ActiveFragment extends BaseListFragment<Active> implements
 
     @Override
     protected void sendRequestData() {
-        OSChinaApi.getActiveList(AppContext.getInstance().getLoginUid(),
+        OSChinaApi.getActiveList((int) UserCacheManager.initUserManager().loginId(getContext()),
                 mCatalog, mCurrentPage, mHandler);
     }
 
     @Override
     protected void onRefreshNetworkSuccess() {
-        if (AppContext.getInstance().isLogin()) {
+        if (UserCacheManager.initUserManager().isLogin(getContext())) {
             if (0 == NoticeViewPagerFragment.sCurrentPage) {
-                NoticeUtils.clearNotice(Notice.TYPE_ATME);
+                NoticeUtils.clearNotice(Notice.TYPE_ATME,getContext());
             } else if (1 == NoticeViewPagerFragment.sCurrentPage
                     || NoticeViewPagerFragment.sShowCount[1] > 0) { // 如果当前显示的是评论页，则发送评论页已被查看的Http请求
-                NoticeUtils.clearNotice(Notice.TYPE_COMMENT);
+                NoticeUtils.clearNotice(Notice.TYPE_COMMENT,getContext());
             } else {
-                NoticeUtils.clearNotice(Notice.TYPE_ATME);
+                NoticeUtils.clearNotice(Notice.TYPE_ATME,getContext());
             }
             UIHelper.sendBroadcastForNotice(getActivity());
         }

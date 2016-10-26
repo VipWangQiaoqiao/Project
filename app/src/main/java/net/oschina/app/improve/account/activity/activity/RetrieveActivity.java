@@ -1,4 +1,4 @@
-package net.oschina.app.improve.account.activity;
+package net.oschina.app.improve.account.activity.activity;
 
 import android.content.Context;
 import android.content.Intent;

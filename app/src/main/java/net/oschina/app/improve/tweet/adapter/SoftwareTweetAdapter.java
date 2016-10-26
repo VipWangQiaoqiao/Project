@@ -16,11 +16,10 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.Tweet;
-import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.bean.simple.TweetLikeReverse;
 import net.oschina.app.improve.comment.CommentsUtil;
 import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
@@ -113,7 +112,7 @@ public class SoftwareTweetAdapter extends BaseRecyclerAdapter<Tweet> implements 
      */
     private void requestEventDispatcher(final Tweet item) {
 
-        if (!AppContext.getInstance().isLogin()) {
+        if (!UserCacheManager.initUserManager().isLogin(mContext)) {
             UIHelper.showLoginActivity(mContext);
             return;
         }

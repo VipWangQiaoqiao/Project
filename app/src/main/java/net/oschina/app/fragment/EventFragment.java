@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.adapter.EventAdapter;
 import net.oschina.app.api.remote.OSChinaApi;
@@ -16,6 +15,7 @@ import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.Event;
 import net.oschina.app.bean.EventList;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
@@ -25,10 +25,9 @@ import java.io.Serializable;
 
 /**
  * 活动列表fragment
- * 
+ *
  * @author FireAnt（http://my.oschina.net/LittleDY）
  * @version 创建时间：2014年12月8日 下午5:17:32
- * 
  */
 public class EventFragment extends BaseListFragment<Event> {
 
@@ -94,7 +93,7 @@ public class EventFragment extends BaseListFragment<Event> {
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
             requestData(true);
         } else {
-            if (AppContext.getInstance().isLogin()) {
+            if (UserCacheManager.initUserManager().isLogin(getContext())) {
                 mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
                 requestData(true);
             } else {
@@ -111,8 +110,8 @@ public class EventFragment extends BaseListFragment<Event> {
             super.requestData(refresh);
             return;
         }
-        if (AppContext.getInstance().isLogin()) {
-            mCatalog = AppContext.getInstance().getLoginUid();
+        if (UserCacheManager.initUserManager().isLogin(getContext())) {
+            mCatalog = (int) UserCacheManager.initUserManager().loginId(getContext());
             super.requestData(refresh);
         } else {
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_ERROR);
@@ -142,7 +141,7 @@ public class EventFragment extends BaseListFragment<Event> {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
+                            long id) {
         Event event = mAdapter.getItem(position);
         if (event != null)
             UIHelper.showEventDetail(view.getContext(), event.getId());

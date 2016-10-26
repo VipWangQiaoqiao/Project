@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -25,8 +26,8 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.SimpleBackPage;
-import net.oschina.app.cache.CacheManager;
-import net.oschina.app.improve.app.AppOperator;
+import net.oschina.app.improve.account.activity.activity.LoginActivity;
+import net.oschina.app.improve.account.activity.manager.UserCacheManager;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.bean.UserV2;
 import net.oschina.app.improve.bean.base.ResultBean;
@@ -37,6 +38,7 @@ import net.oschina.app.improve.user.activities.UserFansActivity;
 import net.oschina.app.improve.user.activities.UserFollowsActivity;
 import net.oschina.app.improve.user.activities.UserMessageActivity;
 import net.oschina.app.improve.user.activities.UserTweetActivity;
+import net.oschina.app.improve.utils.StreamUtils;
 import net.oschina.app.improve.widget.SolarSystemView;
 import net.oschina.app.improve.widget.TitleBar;
 import net.oschina.app.interf.OnTabReselectListener;
@@ -50,7 +52,6 @@ import net.oschina.app.util.UIHelper;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Random;
@@ -70,7 +71,8 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class NewUserInfoFragment extends BaseFragment implements View.OnClickListener,
         EasyPermissions.PermissionCallbacks, NoticeManager.NoticeNotify, OnTabReselectListener {
 
-    public static final String CACHE_NAME = "NewUserInfoFragment";
+    private static final String TAG = "NewUserInfoFragment";
+    // public static final String CACHE_NAME = "NewUserInfoFragment";
 
     public static final int ACTION_TYPE_ALBUM = 0;
     public static final int ACTION_TYPE_PHOTO = 1;
@@ -124,7 +126,6 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     @Bind(R.id.user_info_notice_fans)
     View mFansView;
 
-    private net.oschina.app.bean.User mInfo;
     private boolean mIsUploadIcon;
     private ProgressDialog mDialog;
 
@@ -136,6 +137,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     private File mCacheFile;
 
     private UserV2 mUserInfo;
+
     private TextHttpResponseHandler textHandler = new TextHttpResponseHandler() {
 
         @Override
@@ -169,15 +171,13 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                 }.getType();
 
                 ResultBean resultBean = AppContext.createGson().fromJson(responseString, type);
+                Log.e(TAG, "onSuccess: ---->" + responseString);
                 if (resultBean.isSuccess()) {
                     UserV2 userInfo = (UserV2) resultBean.getResult();
                     updateView(userInfo);
-                    AppOperator.runOnThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            CacheManager.saveObject(getContext(), mUserInfo, CACHE_NAME);
-                        }
-                    });
+                    //缓存用户信息
+                    UserCacheManager.initUserManager().saveUserCache(getContext(), userInfo);
+                    Log.e(TAG, "onSuccess: ----------->" + userInfo.toString());
                 }
                 if (mIsUploadIcon) {
                     hideWaitDialog();
@@ -225,9 +225,13 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     protected void initData() {
         super.initData();
 
-        UserV2 userInfo = (UserV2) CacheManager.readObject(getActivity(), CACHE_NAME);
-        if (AppContext.getInstance().isLogin() && userInfo != null) {
-            updateView(userInfo);
+        UserV2 userV2 = UserCacheManager.initUserManager().getUserCache(getContext());
+        //(UserV2) CacheManager.readObject(getActivity(), CACHE_NAME);
+        this.mUserInfo = userV2;
+       // Log.e(TAG, "initData: --------->userV2="+userV2.toString());
+
+        if (isLogin()) {
+            updateView(userV2);
             if (TDevice.hasInternet()) {
                 sendRequestData();
             }
@@ -243,10 +247,10 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onResume() {
         super.onResume();
-        mInfo = AppContext.getInstance().getLoginUser();
+        Log.e(TAG, "onResume: --------->");
         mIsUploadIcon = false;
-        NoticeManager.bindNotify(this);
-        boolean login = AppContext.getInstance().isLogin();
+
+        boolean login = isLogin();
         if (!login) {
             hideView();
         } else {
@@ -254,16 +258,18 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                 sendRequestData();
             }
         }
+
+        NoticeManager.bindNotify(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        NoticeManager.unBindNotify(this);
-        boolean login = AppContext.getInstance().isLogin();
+        boolean login = isLogin();
         if (!login) {
             hideView();
         }
+        NoticeManager.unBindNotify(this);
     }
 
     /**
@@ -335,18 +341,21 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
     }
 
+    /**
+     * requestData
+     */
     private void sendRequestData() {
-        if (AppContext.getInstance().isLogin())
-            OSChinaApi.getUserInfo(textHandler);
+        if (isLogin())
+            OSChinaApi.getUserInfo(0, textHandler);
     }
 
     /**
      * init solar view
      */
     private void initSolar() {
-
-        if (mRoot != null) {
-            mRoot.post(new Runnable() {
+        View root = this.mRoot;
+        if (root != null) {
+            root.post(new Runnable() {
                 @Override
                 public void run() {
 
@@ -370,7 +379,6 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
                 }
             });
-
         }
     }
 
@@ -403,7 +411,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
      */
     private void hideView() {
         mCirclePortrait.setImageResource(R.mipmap.widget_dface);
-        mTvName.setText("点击头像登录");
+        mTvName.setText(R.string.user_hint_login);
         mIvGander.setVisibility(View.INVISIBLE);
         mTvSummary.setVisibility(View.INVISIBLE);
         mTvScore.setVisibility(View.INVISIBLE);
@@ -434,10 +442,10 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         if (id == R.id.iv_logo_setting) {
             UIHelper.showSetting(getActivity());
         } else {
-            if (!AppContext.getInstance().isLogin()) {
-                UIHelper.showLoginActivity(getActivity());
-                // LoginActivity.show(getActivity());
 
+            if (!isLogin()) {
+                //UIHelper.showLoginActivity(getActivity());
+                LoginActivity.show(getActivity());
                 return;
             }
 
@@ -460,7 +468,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                     }
                     break;
                 case R.id.ly_tweet:
-                    UserTweetActivity.show(getActivity(), AppContext.getInstance().getLoginUid());
+                    UserTweetActivity.show(getActivity(),UserCacheManager.initUserManager().loginId(getContext()));
                     break;
                 case R.id.ly_favorite:
 //                    UIHelper.showUserFavorite(getActivity(), AppContext.getInstance()
@@ -468,17 +476,16 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                     UserCollectionActivity.show(getActivity());
                     break;
                 case R.id.ly_following:
-                    UserFollowsActivity.show(getActivity(), AppContext.getInstance().getLoginUid());
+                    UserFollowsActivity.show(getActivity(), UserCacheManager.initUserManager().loginId(getContext()));
                     break;
                 case R.id.ly_follower:
-                    UserFansActivity.show(getActivity(), AppContext.getInstance().getLoginUid());
+                    UserFansActivity.show(getActivity(), UserCacheManager.initUserManager().loginId(getContext()));
                     break;
                 case R.id.rl_message:
                     UserMessageActivity.show(getActivity());
                     break;
                 case R.id.rl_blog:
-                    UIHelper.showUserBlog(getActivity(), AppContext.getInstance()
-                            .getLoginUid());
+                    UIHelper.showUserBlog(getActivity(), UserCacheManager.initUserManager().loginId(getContext()));
                     break;
                 case R.id.rl_info_avtivities:
                     Bundle bundle = new Bundle();
@@ -494,35 +501,51 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         }
     }
 
+    /**
+     * isLogin
+     *
+     * @return true/false
+     */
+    private boolean isLogin() {
+        return UserCacheManager.initUserManager().isLogin(getContext().getApplicationContext());
+    }
+
     private void showClickAvatar() {
-        if (mInfo == null) {
-            AppContext.showToast("");
-            return;
-        }
-        DialogHelp.getSelectDialog(getActivity(), getString(R.string.action_select), getResources().getStringArray(R.array.avatar_option), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if (i == 0) {
-                    handleSelectPicture();
-                } else {
-                    if (mUserInfo == null) return;
-                    UIHelper.showUserAvatar(getActivity(), mUserInfo.getPortrait());
+        if (!isLogin()) {
+            //UIHelper.showLoginActivity(getActivity());
+            LoginActivity.show(getActivity());
+        } else {
+            DialogHelp.getSelectDialog(getActivity(), getString(R.string.action_select), getResources().getStringArray(R.array.avatar_option), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    if (i == 0) {
+                        handleSelectPicture();
+                    } else {
+                        if (mUserInfo == null) return;
+                        UIHelper.showUserAvatar(getActivity(), mUserInfo.getPortrait());
+                    }
                 }
-            }
-        }).show();
+            }).show();
+        }
     }
 
     /**
      * show select-picture  dialog
      */
     private void handleSelectPicture() {
-        DialogHelp.getSelectDialog(getActivity(), getResources().getString(R.string.action_select_picture), getResources().getStringArray(R.array.choose_picture),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        goToSelectPicture(i);
-                    }
-                }).show();
+        if (!isLogin()) {
+            //UIHelper.showLoginActivity(getActivity());
+            LoginActivity.show(getActivity());
+        } else {
+            DialogHelp.getSelectDialog(getActivity(), getResources().getString(R.string.action_select_picture),
+                    getResources().getStringArray(R.array.choose_picture),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            goToSelectPicture(i);
+                        }
+                    }).show();
+        }
     }
 
     /**
@@ -652,6 +675,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     public File saveToCacheFile(Bitmap bmp, int quality) {
         //保存图片千万不能放在app自己的cache 目录下,不然系统裁决功能无法访问- - 这系统级的裁剪权限控制得比较高啊
         //getActivity().getApplication().getCacheDir().getPath()  这个是会出问题的
+
         File file = new File(org.kymjs.kjframe.utils.ImageUtils.getRandomFileName(FILE_SAVE_PATH));
         BufferedOutputStream outputStream = null;
         try {
@@ -661,13 +685,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (outputStream != null) {
-                try {
-                    outputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            StreamUtils.close(outputStream);
         }
         return file;
     }
@@ -687,7 +705,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
                 File file = saveToCacheFile(bitmap, 100);
                 Uri fromFile = Uri.fromFile(file);
-                bitmap.recycle();
+                bitmap.recycle();//记得释放bitmap
 
                 startActionCrop(fromFile);// 拍照后裁剪
                 break;
@@ -755,7 +773,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
     @Override
     public void onTabReselect() {
-        if (AppContext.getInstance().isLogin() && TDevice.hasInternet()) {
+        if (isLogin() && TDevice.hasInternet()) {
             sendRequestData();
         }
     }
