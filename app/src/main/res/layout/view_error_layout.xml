@@ -1,52 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/pageerrLayout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="?attr/layout_bg_normal">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_error"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/layout_bg_normal"
+    android:gravity="center"
+    android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+    <ImageView
+        android:id="@+id/img_error_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/ic_tip_fail"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="vertical">
+    <net.qiujuer.genius.ui.widget.Loading
+        android:id="@+id/animProgress"
+        android:layout_width="26dip"
+        android:layout_height="26dip"
+        app:gForegroundColor="?attr/colorPrimary" />
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal">
+    <TextView
+        android:id="@+id/tv_error_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10.0dip"
+        android:gravity="center"
+        android:lines="2"
+        android:text="@string/error_view_loading"
+        android:textColor="?attr/infoTextColor"
+        android:textSize="@dimen/font_14" />
 
-                <ImageView
-                    android:id="@+id/img_error_layout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@mipmap/pagefailed_bg"
-                    android:visibility="gone" />
-
-                <net.qiujuer.genius.ui.widget.Loading
-                    android:id="@+id/animProgress"
-                    android:layout_width="26dip"
-                    android:layout_height="26dip"
-                    app:gForegroundColor="?attr/colorPrimary" />
-            </RelativeLayout>
-
-            <TextView
-                android:id="@+id/tv_error_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10.0dip"
-                android:gravity="center"
-                android:lines="2"
-                android:text="@string/error_view_loading"
-                android:textColor="?attr/infoTextColor"
-                android:textSize="@dimen/font_14" />
-        </LinearLayout>
-    </RelativeLayout>
-
-</RelativeLayout>
+</LinearLayout>

@@ -1952,6 +1952,21 @@ public class OSChinaApi {
     }
 
     /**
+     * 搜索
+     * @param catalog 搜索类型
+     * @param content 搜索内容
+     * @param pageToken next page token
+     * @param handler handler
+     */
+    public static void search(int catalog, String content, String pageToken, TextHttpResponseHandler handler){
+        RequestParams params = new RequestParams();
+        params.put("catalog", catalog);
+        params.put("content", content);
+        params.put("pageToken", pageToken);
+        ApiHttpClient.get("action/apiv2/search", params, handler);
+    }
+
+    /**
      * login account
      *
      * @param username username
