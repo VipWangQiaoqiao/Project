@@ -12,6 +12,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Report;
+import net.oschina.app.improve.bean.Collection;
 import net.oschina.app.improve.bean.QuestionDetail;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.CommentEX;
@@ -91,10 +92,10 @@ public class QuestionDetailActivity extends DetailActivity<QuestionDetail, Quest
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
-                    Type type = new TypeToken<ResultBean<QuestionDetail>>() {
+                    Type type = new TypeToken<ResultBean<Collection>>() {
                     }.getType();
 
-                    ResultBean<QuestionDetail> resultBean = AppContext.createGson().fromJson(responseString, type);
+                    ResultBean<Collection> resultBean = AppContext.createGson().fromJson(responseString, type);
                     if (resultBean != null && resultBean.isSuccess()) {
                         questionDetail.setFavorite(!questionDetail.isFavorite());
                         mView.toFavoriteOk(questionDetail);
