@@ -306,6 +306,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter {
 
     public final void clear() {
         this.mItems.clear();
+        setState(STATE_HIDE, false);
         notifyDataSetChanged();
     }
 

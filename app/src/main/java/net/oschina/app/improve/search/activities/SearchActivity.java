@@ -4,8 +4,10 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -14,19 +16,26 @@ import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import net.oschina.app.R;
-import net.oschina.app.bean.SearchList;
-import net.oschina.app.fragment.SearchFragment;
 import net.oschina.app.improve.base.activities.BaseActivity;
+import net.oschina.app.improve.bean.News;
+import net.oschina.app.improve.search.fragments.SearchArticleFragment;
+import net.oschina.app.improve.search.fragments.SearchUserFragment;
 import net.oschina.app.util.TDevice;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +47,7 @@ import butterknife.OnClick;
  * Created by thanatos on 16/9/7.
  */
 
-public class SearchActivity extends BaseActivity {
+public class SearchActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
 
     @Bind(R.id.view_root) LinearLayout mViewRoot;
     @Bind(R.id.layout_tab) TabLayout mLayoutTab;
@@ -46,12 +55,74 @@ public class SearchActivity extends BaseActivity {
     @Bind(R.id.view_searcher) SearchView mViewSearch;
     @Bind(R.id.search_mag_icon) ImageView mSearchIcon;
     @Bind(R.id.search_edit_frame) LinearLayout mLayoutEditFrame;
+    @Bind(R.id.search_src_text) EditText mViewSearchEditor;
 
     private List<Pair<String, Fragment>> mPagerItems;
+    private QueryTimer mQueryTimer;
+
+    private static boolean isMiUi = false;
 
     public static void show(Context context){
         Intent intent = new Intent(context, SearchActivity.class);
         context.startActivity(intent);
+    }
+
+    public void setStatusBarDarkMode(boolean darkMode) {
+        if (isMiUi) {
+            Class<? extends Window> clazz = getWindow().getClass();
+            try {
+                int darkModeFlag;
+                Class<?> layoutParams = Class.forName("android.view.MiuiWindowManager$LayoutParams");
+                Field field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE");
+                darkModeFlag = field.getInt(layoutParams);
+                Method extraFlagField = clazz.getMethod("setExtraFlags", int.class, int.class);
+                extraFlagField.invoke(getWindow(), darkMode ? darkModeFlag : 0, darkModeFlag);
+            } catch (Exception e) {
+                // 这个API, MDZZ
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 静态域，获取系统版本是否基于MIUI
+     */
+    static {
+        try {
+            Class<?> sysClass = Class.forName("android.os.SystemProperties");
+            Method getStringMethod = sysClass.getDeclaredMethod("get", String.class);
+            String version = (String) getStringMethod.invoke(sysClass, "ro.miui.ui.version.name");
+            isMiUi = version.compareTo("V6") >= 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        // pass
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        String content = mViewSearch.getQuery().toString();
+        Log.d("oschina", "content: " + content + "");
+        if (TextUtils.isEmpty(content)) return;
+        doSearch(content);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+        // pass
+    }
+
+    public interface SearchAction{
+        void search(String content);
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -63,15 +134,20 @@ public class SearchActivity extends BaseActivity {
     protected void initWindow() {
         mPagerItems = new ArrayList<>();
 
-        mPagerItems.add(new Pair<>("软件", instantiate(SearchFragment.class, SearchList.CATALOG_SOFTWARE)));
-        mPagerItems.add(new Pair<>("问答", instantiate(SearchFragment.class, SearchList.CATALOG_POST)));
-        mPagerItems.add(new Pair<>("博客", instantiate(SearchFragment.class, SearchList.CATALOG_BLOG)));
-        mPagerItems.add(new Pair<>("新闻", instantiate(SearchFragment.class, SearchList.CATALOG_NEWS)));
-        mPagerItems.add(new Pair<>("人", instantiate(SearchFragment.class, SearchList.CATALOG_NEWS)));
+        mPagerItems.add(new Pair<>("软件", SearchArticleFragment.instantiate(this, News.TYPE_SOFTWARE)));
+        mPagerItems.add(new Pair<>("问答", SearchArticleFragment.instantiate(this, News.TYPE_QUESTION)));
+        mPagerItems.add(new Pair<>("博客", SearchArticleFragment.instantiate(this, News.TYPE_BLOG)));
+        mPagerItems.add(new Pair<>("新闻", SearchArticleFragment.instantiate(this, News.TYPE_NEWS)));
+        mPagerItems.add(new Pair<>("人", SearchUserFragment.instantiate(this)));
+
+        mQueryTimer = new QueryTimer();
     }
 
     @Override
     protected void initWidget() {
+        super.initWidget();
+        setStatusBarDarkMode(true);
+        mViewSearchEditor.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         mViewSearch.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
@@ -82,18 +158,22 @@ public class SearchActivity extends BaseActivity {
         });
         mViewSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
+            public boolean onQueryTextSubmit(final String query) {
                 if (TextUtils.isEmpty(query)) return false;
                 mLayoutTab.setVisibility(View.VISIBLE);
                 mViewPager.setVisibility(View.VISIBLE);
-                for (Pair<String, Fragment> pair : mPagerItems){
-                    ((SearchFragment) pair.second).search(query);
-                }
+//                if (!mQueryTimer.isCancelled()) mQueryTimer.cancel(true);
+                mViewPager.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        doSearch(query);
+                    }
+                });
                 return true;
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
+            public boolean onQueryTextChange(final String newText) {
                 if (TextUtils.isEmpty(newText)) {
                     mLayoutTab.setVisibility(View.GONE);
                     mViewPager.setVisibility(View.GONE);
@@ -102,9 +182,14 @@ public class SearchActivity extends BaseActivity {
                 if (!TDevice.isWifiOpen()) return false;
                 mLayoutTab.setVisibility(View.VISIBLE);
                 mViewPager.setVisibility(View.VISIBLE);
-                for (Pair<String, Fragment> pair : mPagerItems){
-                    ((SearchFragment) pair.second).search(newText);
-                }
+//                if (!mQueryTimer.isCancelled()) mQueryTimer.cancel(true);
+//                mQueryTimer.execute();
+                mViewPager.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        doSearch(newText);
+                    }
+                });
                 return true;
             }
         });
@@ -125,7 +210,8 @@ public class SearchActivity extends BaseActivity {
                 return mPagerItems.get(position).first;
             }
         });
-        mViewPager.setOffscreenPageLimit(5);
+        mViewPager.addOnPageChangeListener(this);
+        mViewPager.setOffscreenPageLimit(0);
         mLayoutTab.setupWithViewPager(mViewPager);
 
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mSearchIcon.getLayoutParams();
@@ -137,14 +223,19 @@ public class SearchActivity extends BaseActivity {
         mLayoutEditFrame.setLayoutParams(params1);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(getResources().getColor(R.color.day_colorPrimary));
+
             startAnimation();
         }else {
             mViewSearch.setIconified(false);
         }
     }
 
-    @OnClick(R.id.tv_cancel) void onClickCancle(){
+    private void doSearch(String query) {
+        SearchAction f = (SearchAction) mPagerItems.get(mViewPager.getCurrentItem()).second;
+        f.search(query);
+    }
+
+    @OnClick(R.id.tv_cancel) void onClickCancel(){
         supportFinish();
     }
 
@@ -187,12 +278,6 @@ public class SearchActivity extends BaseActivity {
         animator.start();
     }
 
-    private Fragment instantiate(Class<? extends Fragment> clazz, String catalog){
-        Bundle bundle = new Bundle();
-        bundle.putString(SearchFragment.BUNDLE_KEY_SEARCH_CATALOG, catalog);
-        return Fragment.instantiate(this, clazz.getName(), bundle);
-    }
-
     @Override
     public void onBackPressed() {
         supportFinish();
@@ -203,6 +288,29 @@ public class SearchActivity extends BaseActivity {
             endAnimation();
         }else {
             finish();
+        }
+    }
+
+    private class QueryTimer extends AsyncTask<Void, Void, Boolean>{
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            Log.d("oschina", "----------------------");
+            try {
+                Thread.sleep(1000);
+                return true;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean bool) {
+            super.onPostExecute(bool);
+            if (!bool) return;
+            Log.d("oschina", "=============");
+            doSearch(mViewSearch.getQuery().toString());
         }
     }
 }

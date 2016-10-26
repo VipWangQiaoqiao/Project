@@ -23,6 +23,8 @@ public class UserV2 extends Author {
         private String city;
         private String expertise;
         private String platform;
+        private String company;
+        private String position;
 
         public String getJoinDate() {
             return joinDate;
@@ -54,6 +56,22 @@ public class UserV2 extends Author {
 
         public void setPlatform(String platform) {
             this.platform = platform;
+        }
+
+        public String getCompany() {
+            return company;
+        }
+
+        public void setCompany(String company) {
+            this.company = company;
+        }
+
+        public String getPosition() {
+            return position;
+        }
+
+        public void setPosition(String position) {
+            this.position = position;
         }
 
         @Override

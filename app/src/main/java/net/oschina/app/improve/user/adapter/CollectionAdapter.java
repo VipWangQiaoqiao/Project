@@ -42,7 +42,7 @@ public class CollectionAdapter extends BaseRecyclerAdapter<Collection> {
             case News.TYPE_BLOG:
                 type = "博客";
                 break;
-            case News.TYPE_TRNSLATE:
+            case News.TYPE_TRANSLATE:
                 type = "翻译";
                 break;
             case News.TYPE_EVENT:
