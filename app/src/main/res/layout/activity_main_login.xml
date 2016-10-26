@@ -44,7 +44,7 @@
 
             <View
                 android:layout_width="1px"
-                android:layout_height="24dp"
+                android:layout_height="22dp"
                 android:background="@color/login_line_color"/>
 
             <EditText
@@ -91,7 +91,7 @@
 
             <View
                 android:layout_width="1px"
-                android:layout_height="24dp"
+                android:layout_height="22dp"
                 android:background="@color/login_line_color"/>
 
             <EditText

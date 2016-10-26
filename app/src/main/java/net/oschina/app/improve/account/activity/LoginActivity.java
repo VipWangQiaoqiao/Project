@@ -143,6 +143,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
         }
     };
+    private String mInputPwd;
 
 
     /**
@@ -244,15 +245,21 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         super.onPause();
 
         String username = mEtLoginUsername.getText().toString().trim();
-        String pwd = mEtLoginPwd.getText().toString().trim();
+        this.mInputPwd = mEtLoginPwd.getText().toString().trim();
 
         SharedPreferences sp = SharedPreferencesUtils.createSp(UserConstants.HOLD_ACCOUNT, this);
         SharedPreferences.Editor editor = SharedPreferencesUtils.getEditor(sp);
-        editor.putString(HOLD_USERNAME_KEY, username);
-        editor.putString(HOLD_PWD_KEY, toBase64(pwd));
+        if (!TextUtils.isEmpty(username))
+            editor.putString(HOLD_USERNAME_KEY, username);
+
+        if (mHoldStatus) {
+            if (!TextUtils.isEmpty(mInputPwd))
+                editor.putString(HOLD_PWD_KEY, toBase64(mInputPwd));
+        } else {
+            editor.putString(HOLD_PWD_KEY, "");
+        }
         editor.putBoolean(HOLD_PWD_STATUS_KEY, mHoldStatus);
         SharedPreferencesUtils.commit(editor);
-
 
     }
 
@@ -295,7 +302,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                             OSChinaApi.login(tempUsername, Sha1toHex(tempPwd), appToken, new TextHttpResponseHandler() {
                                 @Override
                                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                                    AppContext.showToast(getResources().getString(R.string.login_error), Toast.LENGTH_SHORT);
+                                    AppContext.showToast(responseString, Toast.LENGTH_SHORT);
                                 }
 
                                 @Override
@@ -305,7 +312,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                         Type type = new TypeToken<ResultBean<UserV2>>() {
                                         }.getType();
 
-                                        Log.e(TAG, "onSuccess: --------->" + responseString);
                                         ResultBean<UserV2> resultBean = AppContext.createGson().fromJson(responseString, type);
                                         if (resultBean.isSuccess()) {
 
@@ -313,7 +319,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                             ApiHttpClient.updateCookie(ApiHttpClient.getHttpClient(), headers);
                                             //2. 更新本地用户缓存信息
                                             UserV2 userV2 = resultBean.getResult();
-                                            Log.e(TAG, "onSuccess: -------------->" + userV2.toString());
                                             boolean saveUserCache = UserCacheManager.initUserManager().saveUserCache(LoginActivity.this, userV2);
                                             if (saveUserCache) {
                                                 //3. finish  进入用户中心页
@@ -321,7 +326,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                             }
 
                                         } else {
-                                            AppContext.showToast(getResources().getString(R.string.login_error), Toast.LENGTH_SHORT);
+                                            AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
                                             //更新失败因该是不进行任何的本地操作
                                             // AppContext.getInstance().cleanLoginInfo();
                                             // AppContext.getInstance().cleanLoginInfoV2();
@@ -351,18 +356,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
                 if (!TextUtils.isEmpty(inputPwd)) {
 
-                    inputPwd = toBase64(inputPwd);
+                    mInputPwd = toBase64(inputPwd);
 
                     boolean holdStatus = this.mHoldStatus;
                     holdStatus = !holdStatus;
                     updateHoldPwd(holdStatus);
 
                     this.mHoldStatus = holdStatus;
-                    SharedPreferences sp = SharedPreferencesUtils.createSp(UserConstants.HOLD_ACCOUNT, this);
-                    SharedPreferences.Editor editor = SharedPreferencesUtils.getEditor(sp);
-                    editor.putString(HOLD_PWD_KEY, inputPwd);
-                    editor.putBoolean(HOLD_PWD_STATUS_KEY, mHoldStatus);
-                    SharedPreferencesUtils.commit(editor);
+
 
                 } else {
                     AppContext.showToast(getString(R.string.hint_pwd_null), Toast.LENGTH_SHORT);

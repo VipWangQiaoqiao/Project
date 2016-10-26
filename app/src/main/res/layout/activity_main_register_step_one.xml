@@ -4,7 +4,7 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@android:color/darker_gray"
+              android:background="@mipmap/bg_login"
               android:fitsSystemWindows="true"
               android:orientation="vertical">
 
@@ -15,7 +15,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="48dp"
         android:contentDescription="@null"
-        app:srcCompat="@mipmap/ic_launcher"/>
+        app:srcCompat="@mipmap/logo_osc"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,18 +29,18 @@
 
         <ImageView
             android:id="@+id/iv_register_username_icon"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginLeft="16dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="14dp"
             android:contentDescription="@null"
-            app:srcCompat="@mipmap/actionbar_search_icon"
+            app:srcCompat="@mipmap/ic_singup_mobile"
             tools:ignore="RtlHardcoded"/>
 
         <View
-            android:layout_width="1dp"
-            android:layout_height="32dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_width="1px"
+            android:layout_height="22dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="14dp"
             android:background="@color/login_line_color"/>
 
         <EditText
@@ -64,7 +64,8 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:contentDescription="@null"
-            app:srcCompat="@mipmap/actionbar_search_icon"/>
+            android:visibility="invisible"
+            app:srcCompat="@mipmap/ic_edit_text_delbtn"/>
     </LinearLayout>
 
     <LinearLayout
@@ -79,16 +80,16 @@
 
         <ImageView
             android:id="@+id/iv_register_auth_code_icon"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="14dp"
             android:contentDescription="@null"
-            app:srcCompat="@mipmap/actionbar_search_icon"/>
+            app:srcCompat="@mipmap/ic_signup_sms"/>
 
         <View
-            android:layout_width="1dp"
-            android:layout_height="32dp"
+            android:layout_width="1px"
+            android:layout_height="24dp"
             android:background="@color/login_line_color"/>
 
         <EditText
