@@ -11,6 +11,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.bean.BlogDetail;
+import net.oschina.app.improve.bean.Collection;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.bean.simple.UserRelation;
@@ -73,10 +74,10 @@ public class BlogDetailActivity extends DetailActivity<BlogDetail, BlogDetailCon
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
-                    Type type = new TypeToken<ResultBean<BlogDetail>>() {
+                    Type type = new TypeToken<ResultBean<Collection>>() {
                     }.getType();
 
-                    ResultBean<BlogDetail> resultBean = AppContext.createGson().fromJson(responseString, type);
+                    ResultBean<Collection> resultBean = AppContext.createGson().fromJson(responseString, type);
                     if (resultBean != null && resultBean.isSuccess()) {
                         blogDetail.setFavorite(!blogDetail.isFavorite());
                         mView.toFavoriteOk(blogDetail);

@@ -10,6 +10,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.bean.Collection;
 import net.oschina.app.improve.bean.TranslationDetail;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.Comment;
@@ -87,10 +88,10 @@ public class TranslateDetailActivity extends DetailActivity<TranslationDetail, T
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
-                    Type type = new TypeToken<ResultBean<TranslationDetail>>() {
+                    Type type = new TypeToken<ResultBean<Collection>>() {
                     }.getType();
 
-                    ResultBean<TranslationDetail> resultBean = AppContext.createGson().fromJson(responseString, type);
+                    ResultBean<Collection> resultBean = AppContext.createGson().fromJson(responseString, type);
                     if (resultBean != null && resultBean.isSuccess()) {
                         translationDetail.setFavorite(!translationDetail.isFavorite());
                         mView.toFavoriteOk(translationDetail);
