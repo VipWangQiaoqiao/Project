@@ -2,10 +2,9 @@ package net.oschina.app.improve.search.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
+import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -46,26 +45,35 @@ public class SearchArticleFragment extends BaseRecyclerViewFragment<News>
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        catalog = getArguments().getInt(BUNDLE_KEY_CATALOG, News.TYPE_NEWS);
+    protected void initBundle(Bundle bundle) {
+        super.initBundle(bundle);
+        catalog = bundle.getInt(BUNDLE_KEY_CATALOG, News.TYPE_NEWS);
+    }
+
+    @Override
+    protected void initWidget(View root) {
+        super.initWidget(root);
+        mRefreshLayout.setRefreshing(false);
     }
 
     @Override
     protected BaseRecyclerAdapter<News> getRecyclerAdapter() {
-        // TODO add adapter
         return new SearchArticleAdapter(getContext());
     }
 
     @Override
     protected Type getType() {
-        return new TypeToken<ResultBean<PageBean<News>>>() {}.getType();
+        return new TypeToken<ResultBean<PageBean<News>>>() {
+        }.getType();
     }
 
     @Override
     protected void requestData() {
-        if (TextUtils.isEmpty(content)) return;
         super.requestData();
+        if (TextUtils.isEmpty(content)) {
+            mRefreshLayout.setRefreshing(false);
+            return;
+        }
         String token = mIsRefresh ? null : mBean.getNextPageToken();
         OSChinaApi.search(catalog, content, token, mHandler);
     }
@@ -74,7 +82,7 @@ public class SearchArticleFragment extends BaseRecyclerViewFragment<News>
     public void onItemClick(int position, long itemId) {
         super.onItemClick(position, itemId);
         News item = mAdapter.getItem(position);
-        switch (catalog){
+        switch (catalog) {
             case News.TYPE_BLOG:
                 BlogDetailActivity.show(getContext(), item.getId());
                 break;
