@@ -11,6 +11,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
+import net.oschina.app.R;
+
 /**
  * 下拉刷新上拉加载控件，目前适用于RecyclerView
  * Created by huanghaibin on 16-5-3.
@@ -66,10 +68,12 @@ public class RecyclerRefreshLayout extends SwipeRefreshLayout implements SwipeRe
      * 获取RecyclerView，后续支持AbsListView
      */
     private void getRecycleView() {
-        int child = getChildCount();
-        if (child > 0) {
+        if (getChildCount() > 0) {
             View childView = getChildAt(0);
-            if (childView instanceof RecyclerView) {
+            if (!(childView instanceof RecyclerView)) {
+                childView = findViewById(R.id.recyclerView);
+            }
+            if (childView != null && childView instanceof RecyclerView) {
                 mRecycleView = (RecyclerView) childView;
                 mRecycleView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                     @Override
