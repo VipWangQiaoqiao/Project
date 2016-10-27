@@ -553,7 +553,7 @@ public class LoginActivity extends BaseActivity implements IUiListener {
             hideWaitDialog();
             handleLoginSuccess();
         } else {
-            AppContext.getInstance().cleanLoginInfo();
+            //AppContext.getInstance().cleanLoginInfo();
             AppContext.showToast(loginUserBean.getResult().getErrorMessage());
         }
     }

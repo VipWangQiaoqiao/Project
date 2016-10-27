@@ -4,15 +4,14 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 
 import net.oschina.app.R;
-import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.improve.base.fragments.BaseGeneralListFragment;
 import net.oschina.app.improve.base.fragments.BaseViewPagerFragment;
 import net.oschina.app.improve.general.fragments.BlogFragment;
 import net.oschina.app.improve.general.fragments.EventFragment;
 import net.oschina.app.improve.general.fragments.NewsFragment;
 import net.oschina.app.improve.general.fragments.QuestionFragment;
+import net.oschina.app.improve.search.activities.SearchActivity;
 import net.oschina.app.interf.OnTabReselectListener;
-import net.oschina.app.util.UIHelper;
 
 /**
  * Created by fei
@@ -22,8 +21,6 @@ import net.oschina.app.util.UIHelper;
  * on 2016/9/5.
  */
 public class GeneralViewPagerFragment extends BaseViewPagerFragment implements OnTabReselectListener {
-
-
     @Override
     public void onTabReselect() {
 
@@ -57,7 +54,7 @@ public class GeneralViewPagerFragment extends BaseViewPagerFragment implements O
 
     @Override
     protected int getIconRes() {
-        return 0;
+        return R.mipmap.btn_search_normal;
     }
 
     @Override
@@ -65,7 +62,7 @@ public class GeneralViewPagerFragment extends BaseViewPagerFragment implements O
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UIHelper.showSimpleBack(getActivity(), SimpleBackPage.SEARCH);
+                SearchActivity.show(getContext());
             }
         };
     }
