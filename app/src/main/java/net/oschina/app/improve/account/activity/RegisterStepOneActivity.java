@@ -59,15 +59,18 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
     @Bind(R.id.bt_register_submit)
     Button mBtRegisterSubmit;
 
-    private boolean machPhoneNum;
+    private boolean mMachPhoneNum;
 
-    private int requestType = 1;
+    private int mRequestType = 1;//1. 请求发送验证码  2.请求phoneToken
 
     private String mPhoneNumber;
     private String mAppToken;
+    private String mSmsCode;
     private TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+
+            //AppContext.showToast(responseString, Toast.LENGTH_SHORT);
 
         }
 
@@ -75,7 +78,7 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
         public void onSuccess(int statusCode, Header[] headers, String responseString) {
 
             try {
-                switch (requestType) {
+                switch (mRequestType) {
                     //第一步请求发送验证码
                     case 1:
 
@@ -84,14 +87,10 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
                         ResultBean resultBean = AppContext.createGson().fromJson(responseString, type);
                         if (resultBean.isSuccess()) {
 
-                            String smsCode = mEtRegisterAuthCode.getText().toString().trim();
-                            if (!TextUtils.isEmpty(smsCode) && TDevice.hasInternet()) {
-                                requestType = 2;
-                                OSChinaApi.validateRegisterInfo(mPhoneNumber, smsCode, mAppToken, mHandler);
-                            }
-
+                            mSmsCode = mEtRegisterAuthCode.getText().toString().trim();
+                            mRequestType = 2;
                         } else {
-
+                            AppContext.showToast(resultBean.getMessage());
                         }
 
 
@@ -106,14 +105,13 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
 
                         if (phoneTokenResultBean.isSuccess()) {
 
-                            PhoneToken result = phoneTokenResultBean.getResult();
-                            if (result != null) {
-                                
-
+                            PhoneToken phoneToken = phoneTokenResultBean.getResult();
+                            if (phoneToken != null) {
+                                RegisterStepTwoActivity.show(RegisterStepOneActivity.this, phoneToken);
                             }
 
                         } else {
-
+                            AppContext.showToast(phoneTokenResultBean.getMessage());
                         }
 
                         break;
@@ -172,8 +170,8 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
                             mTvRegisterSmsCall.setAlpha(0.4f);
                         } else if (length == 11) {
                             String input = s.toString();
-                            machPhoneNum = AssimilateUtils.MachPhoneNum(input);
-                            if (machPhoneNum) {
+                            mMachPhoneNum = AssimilateUtils.MachPhoneNum(input);
+                            if (mMachPhoneNum) {
                                 mLlRegisterPhone.setBackgroundResource(R.drawable.bg_login_input_ok);
                                 mTvRegisterSmsCall.setAlpha(1.0f);
                             } else {
@@ -212,7 +210,7 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
                 mEtRegisterUsername.setText(null);
                 break;
             case R.id.tv_register_sms_call:
-                if (machPhoneNum && TDevice.hasInternet()) {
+                if (mMachPhoneNum && TDevice.hasInternet()) {
                     mPhoneNumber = mEtRegisterUsername.getText().toString().trim();
                     mAppToken = Verifier.getPrivateToken(getApplication());
                     OSChinaApi.sendSmsCode(mPhoneNumber, mAppToken, OSChinaApi.REGISTER_INTENT, mHandler);
@@ -221,7 +219,9 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
                 break;
             case R.id.bt_register_submit:
 
-                RegisterStepTwoActivity.show(RegisterStepOneActivity.this);
+                if (!TextUtils.isEmpty(mSmsCode) && TDevice.hasInternet()) {
+                    OSChinaApi.validateRegisterInfo(mPhoneNumber, mSmsCode, mAppToken, mHandler);
+                }
 
                 break;
             default:

@@ -52,7 +52,8 @@
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
             android:textColor="@color/white"
-            android:textColorHint="@color/login_line_color"/>
+            android:textColorHint="@color/login_line_color"
+            android:textSize="@dimen/font_16"/>
 
         <ImageView
             android:id="@+id/iv_register_username_del"
@@ -104,7 +105,8 @@
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
             android:textColor="@color/white"
-            android:textColorHint="@color/login_line_color"/>
+            android:textColorHint="@color/login_line_color"
+            android:textSize="@dimen/font_16"/>
 
     </LinearLayout>
 
@@ -164,7 +166,7 @@
         android:outlineProvider="none"
         android:text="@string/register_done_hint"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="@dimen/font_18"
         android:translationZ="0dp"
         tools:targetApi="lollipop"/>
 

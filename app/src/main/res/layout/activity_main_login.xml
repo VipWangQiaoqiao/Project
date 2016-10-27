@@ -66,7 +66,8 @@
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
                 android:textColor="@color/white"
-                android:textColorHint="@color/login_line_color"/>
+                android:textColorHint="@color/login_line_color"
+                android:textSize="@dimen/font_16"/>
         </LinearLayout>
 
         <LinearLayout
@@ -109,7 +110,8 @@
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
                 android:textColor="@color/white"
-                android:textColorHint="@color/login_line_color"/>
+                android:textColorHint="@color/login_line_color"
+                android:textSize="@dimen/font_16"/>
 
         </LinearLayout>
 
@@ -167,7 +169,7 @@
             android:outlineProvider="none"
             android:text="@string/login"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="@dimen/font_18"
             tools:targetApi="lollipop"/>
 
         <Button
@@ -182,7 +184,7 @@
             android:outlineProvider="none"
             android:text="@string/login_register_hint"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="@dimen/font_18"
             android:translationZ="0dp"
             tools:targetApi="lollipop"/>
 
@@ -193,61 +195,80 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_login_layer"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="bottom"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/bt_login_pull"
+        <View
+            android:id="@+id/ll_login_layer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@mipmap/bg_login_thirdpart"
-            android:text="@string/login_other_hint"
-            android:textColor="@color/login_other_color"
-            android:textSize="14sp"/>
+            android:layout_height="match_parent"
+            android:alpha="0"
+            android:background="@color/black_alpha_128"/>
 
         <LinearLayout
-            android:id="@+id/ll_login_options"
+            android:id="@+id/ll_login_pull"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:background="@color/white"
-            android:orientation="horizontal"
-            android:visibility="gone">
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@drawable/bg_login_thirdpart"
+            android:orientation="vertical"
+            android:translationY="80dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/lay_12"
+                android:gravity="center"
+                android:text="@string/login_other_hint"
+                android:textColor="@color/login_other_color"
+                android:textSize="14sp"/>
+
+            <LinearLayout
+                android:id="@+id/ll_login_options"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/lay_16"
+                android:visibility="visible">
 
 
-            <ImageButton
-                android:id="@+id/ib_login_weibo"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:background="@color/white"
-                android:contentDescription="@null"
-                android:src="@mipmap/ic_login_3party_weibo"/>
+                <ImageView
+                    android:id="@+id/ib_login_weibo"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:contentDescription="@null"
+                    android:padding="8dp"
+                    android:scaleType="centerInside"
+                    android:src="@mipmap/ic_login_3party_weibo"/>
 
-            <ImageButton
-                android:id="@+id/ib_login_wx"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:background="@color/white"
-                android:contentDescription="@null"
-                android:src="@mipmap/ic_login_3party_wechat"/>
+                <ImageView
+                    android:id="@+id/ib_login_wx"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:contentDescription="@null"
+                    android:padding="8dp"
+                    android:scaleType="centerInside"
+                    android:src="@mipmap/ic_login_3party_wechat"/>
 
-            <ImageButton
-                android:id="@+id/ib_login_qq"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:background="@color/white"
-                android:contentDescription="@null"
-                android:src="@mipmap/ic_login_3party_qq"/>
+                <ImageView
+                    android:id="@+id/ib_login_qq"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:contentDescription="@null"
+                    android:padding="8dp"
+                    android:scaleType="centerInside"
+                    android:src="@mipmap/ic_login_3party_qq"/>
 
+            </LinearLayout>
         </LinearLayout>
 
-    </LinearLayout>
+
+    </FrameLayout>
 
 
 </FrameLayout>

@@ -6,16 +6,22 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.tencent.mm.sdk.modelmsg.SendAuth;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Constants;
-import net.oschina.app.improve.main.MainActivity;
+import net.oschina.app.improve.account.manager.UserCacheManager;
+import net.oschina.app.improve.bean.UserV2;
+import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.util.TLog;
+
+import java.lang.reflect.Type;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -92,20 +98,33 @@ public class WXEntryActivity extends Activity {
                 //新版微信登录
                 if (!TextUtils.isEmpty(responseString)) {
 
-                    OSChinaApi.openLogin(2, responseString, new TextHttpResponseHandler() {
+                    OSChinaApi.openLogin(OSChinaApi.LOGIN_WECHART, responseString, new TextHttpResponseHandler() {
                         @Override
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+
+                            throwable.printStackTrace();
+                            Log.e(TAG, "onFailure: ----->" + statusCode);
 
                         }
 
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, String responseString) {
 
-                            Intent intent = new Intent(WXEntryActivity.this, MainActivity.class);
-                            startActivity(intent);
+                            Log.e(TAG, "onSuccess: ------>weichat=====" + responseString);
 
-                            finish();
+                            Type type = new TypeToken<ResultBean<UserV2>>() {
+                            }.getType();
 
+                            ResultBean<UserV2> resulBean = AppContext.createGson().fromJson(responseString, type);
+
+                            if (resulBean.isSuccess()) {
+                                UserV2 userV2 = resulBean.getResult();
+                                ApiHttpClient.updateCookie(ApiHttpClient.getHttpClient(), headers);
+                                boolean saveUserCache = UserCacheManager.initUserManager().saveUserCache(WXEntryActivity.this, userV2);
+                                if (saveUserCache) {
+                                    finish();
+                                }
+                            }
                         }
                     });
 

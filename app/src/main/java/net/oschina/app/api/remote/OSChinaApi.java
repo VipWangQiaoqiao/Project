@@ -1937,12 +1937,17 @@ public class OSChinaApi {
         ApiHttpClient.get("action/apiv2/favorites", params, handler);
     }
 
+
+    public static final String LOGIN_WEIBO = "weibo";
+    public static final String LOGIN_QQ = "qq";
+    public static final String LOGIN_WECHART = "wechat";
+
     /**
      * @param catalog  open catalog
      * @param openInfo openInfo
      * @param handler  handler
      */
-    public static void openLogin(int catalog, String openInfo, TextHttpResponseHandler handler) {
+    public static void openLogin(String catalog, String openInfo, TextHttpResponseHandler handler) {
         if (TextUtils.isEmpty(openInfo)) return;
         RequestParams params = new RequestParams();
         params.put("catalog", catalog);
@@ -1988,7 +1993,7 @@ public class OSChinaApi {
     }
 
     /**
-     * register one
+     * send  sms code
      *
      * @param phone  phone number
      * @param appToken  appToken
@@ -2028,5 +2033,31 @@ public class OSChinaApi {
         params.put("appToken", appToken);
 
         ApiHttpClient.post("action/apiv2/phone_validate", params, handler);
+    }
+
+    /**
+     * 获得首页数据
+     *
+     * @param api       动态api
+     * @param pageToken pageToken
+     * @param handler   handler
+     */
+
+    public static void getSubscription(String api, String pageToken, TextHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        if (!TextUtils.isEmpty(pageToken)) {
+            params.put("pageToken", pageToken);
+        }
+        ApiHttpClient.getHttpClient().get(api, params, handler);
+    }
+
+    /**
+     * 获得banner
+     *
+     * @param api     动态api
+     * @param handler handler
+     */
+    public static void getBanner(String api, TextHttpResponseHandler handler) {
+        ApiHttpClient.getHttpClient().get(api, handler);
     }
 }

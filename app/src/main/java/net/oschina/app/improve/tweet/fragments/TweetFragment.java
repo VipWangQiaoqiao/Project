@@ -24,6 +24,7 @@ import net.oschina.app.R;
 import net.oschina.app.adapter.ViewHolder;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Constants;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.improve.base.adapter.BaseListAdapter;
 import net.oschina.app.improve.base.fragments.BaseGeneralListFragment;
@@ -36,7 +37,6 @@ import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;
 import net.oschina.app.util.TDevice;
-import net.oschina.app.util.UIHelper;
 
 import org.json.JSONObject;
 
@@ -145,7 +145,7 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
 
     private void setupContent() {
         if (UserCacheManager.initUserManager().isLogin(getContext().getApplicationContext())) {
-            authorId =UserCacheManager.initUserManager().loginId(getContext());
+            authorId = UserCacheManager.initUserManager().loginId(getContext());
             mErrorLayout.setErrorType(EmptyLayout.NETWORK_LOADING);
             onRefreshing();
         } else {
@@ -196,7 +196,8 @@ public class TweetFragment extends BaseGeneralListFragment<Tweet> {
     @Override
     public void onClick(View v) {
         if (requestCategory == CATEGORY_USER && !UserCacheManager.initUserManager().isLogin(getContext())) {
-            UIHelper.showLoginActivity(getActivity());
+            //UIHelper.showLoginActivity(getActivity());
+            LoginActivity.show(getContext());
         } else {
             super.onClick(v);
         }

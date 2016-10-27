@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.oschina.app.R;
+import net.oschina.app.improve.account.bean.PhoneToken;
 import net.oschina.app.improve.base.activities.BaseActivity;
 
 import butterknife.Bind;
@@ -48,8 +49,9 @@ public class RegisterStepTwoActivity extends BaseActivity implements View.OnClic
      *
      * @param context context
      */
-    public static void show(Context context) {
+    public static void show(Context context, PhoneToken phoneToken) {
         Intent intent = new Intent(context, RegisterStepTwoActivity.class);
+        intent.putExtra("phoneToken", phoneToken);
         context.startActivity(intent);
     }
 

@@ -50,10 +50,6 @@
     @butterknife.* <methods>;
 }
 
--keep public class net.oschina.app.R$* {
- public static final int *;
-}
-
 -dontwarn com.thoughtworks.xstream.**
 -keep class com.thoughtworks.xstream.** { *; }
 
@@ -76,7 +72,6 @@
 -dontoptimize
 -dontwarn com.google.android.maps.**
 -dontwarn android.webkit.WebView
--dontwarn com.umeng.**
 -dontwarn com.tencent.weibo.sdk.**
 
 -keepattributes Exceptions,InnerClasses,Signature
@@ -84,27 +79,41 @@
 -keepattributes SourceFile,LineNumberTable
 
 -keep public interface com.tencent.**
--keep public interface com.umeng.socialize.**
--keep public interface com.umeng.socialize.sensor.**
--keep public interface com.umeng.scrshot.**
-
--keep public class com.umeng.socialize.* {*;}
 -keep public class javax.**
 -keep public class android.webkit.**
-
--keep class com.umeng.scrshot.**
 -keep public class com.tencent.** {*;}
--keep class com.sina.weibo.sdk.** {*;}
--keep class net.oschina.open.**{*;}
--keep class com.umeng.socialize.sensor.**
 
+-keep class com.sina.weibo.** {*;}
+-keep class net.oschina.open.**{*;}
 -keep class com.tencent.mm.sdk.modelmsg.WXMediaMessage {*;}
 -keep class com.tencent.mm.sdk.modelmsg.** implements com.tencent.mm.sdk.modelmsg.WXMediaMessage$IMediaObject {*;}
 
+# Glide Start
 -keep public class * implements com.bumptech.glide.module.GlideModule
 -keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
     **[] $VALUES;
     public *;
 }
+# Glide End
 
 #-dontwarn android.net.SSLCertificateSocketFactory
+
+# 友盟Start
+-keepclassmembers class * {
+   public <init> (org.json.JSONObject);
+}
+-keep public class net.oschina.app.R$*{
+    public static final int *;
+}
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+-dontwarn com.umeng.**
+-keep public interface com.umeng.socialize.**
+-keep public interface com.umeng.socialize.sensor.**
+-keep public interface com.umeng.scrshot.**
+-keep public class com.umeng.socialize.* {*;}
+-keep class com.umeng.scrshot.**
+-keep class com.umeng.socialize.sensor.**
+# 友盟End

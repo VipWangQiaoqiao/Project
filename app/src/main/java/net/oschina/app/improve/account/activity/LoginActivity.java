@@ -1,5 +1,8 @@
 package net.oschina.app.improve.account.activity;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,17 +12,14 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -43,13 +43,13 @@ import net.oschina.app.improve.account.utils.SharedPreferencesUtils;
 import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.bean.UserV2;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.main.MainActivity;
 import net.oschina.app.improve.share.constant.OpenConstant;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.open.constants.OpenConstants;
 import net.oschina.open.factory.OpenLogin;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -67,7 +67,7 @@ import cz.msebera.android.httpclient.Header;
  * desc:
  */
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener, WeiboAuthListener, IUiListener, View.OnFocusChangeListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener, IUiListener, View.OnFocusChangeListener {
 
     private static final String TAG = "LoginActivity";
 
@@ -96,19 +96,19 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     Button mTvLoginRegister;
 
     @Bind(R.id.ll_login_layer)
-    LinearLayout mLlLoginLayer;
-    @Bind(R.id.bt_login_pull)
-    Button mBtLoginPull;
+    View mLlLoginLayer;
+    @Bind(R.id.ll_login_pull)
+    LinearLayout mLlLoginPull;
 
     @Bind(R.id.ll_login_options)
     LinearLayout mLlLoginOptions;
 
     @Bind(R.id.ib_login_weibo)
-    ImageButton mIbLoginWeiBo;
+    ImageView mIbLoginWeiBo;
     @Bind(R.id.ib_login_wx)
-    ImageButton mIbLoginWx;
+    ImageView mIbLoginWx;
     @Bind(R.id.ib_login_qq)
-    ImageButton mImLoginQq;
+    ImageView mImLoginQq;
 
     private int openType;
     private boolean mHoldStatus;
@@ -121,29 +121,31 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
         @Override
         public void onSuccess(int statusCode, Header[] headers, String responseString) {
-
             Type type = new TypeToken<ResultBean<UserV2>>() {
             }.getType();
 
             GsonBuilder gsonBuilder = new GsonBuilder();
             ResultBean<UserV2> resultBean = gsonBuilder.create().fromJson(responseString, type);
-            if (resultBean != null && resultBean.isSuccess()) {
+            if (resultBean.isSuccess()) {
 
                 // 更新相关Cookie信息
                 ApiHttpClient.updateCookie(ApiHttpClient.getHttpClient(), headers);
 
                 UserV2 userV2 = resultBean.getResult();
 
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.putExtra("userInfo", userV2);
-                startActivity(intent);
-                finish();
-
+                if (userV2 != null) {
+                    boolean saveUserCache = UserCacheManager.initUserManager().saveUserCache(LoginActivity.this, userV2);
+                    if (saveUserCache)
+                        finish();
+                }
+            } else {
+                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
             }
 
         }
     };
     private String mInputPwd;
+    private SsoHandler mSsoHandler;
 
 
     /**
@@ -164,7 +166,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     @Override
     protected void initWidget() {
         super.initWidget();
-
+        mLlLoginLayer.setVisibility(View.GONE);
         mEtLoginUsername.setOnFocusChangeListener(this);
         mEtLoginUsername.addTextChangedListener(new TextWatcher() {
             @Override
@@ -175,10 +177,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                boolean b = AssimilateUtils.MachPhoneNum(s);
-                boolean email = AssimilateUtils.machEmail(s);
-                Log.e(TAG, "onTextChanged: ------------->phone=" + b + "  email=" + email);
 
             }
 
@@ -279,7 +277,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
 
     @OnClick({R.id.tv_login_forget_pwd, R.id.iv_login_hold_pwd, R.id.bt_login_submit, R.id.bt_login_register,
-            R.id.ib_login_weibo, R.id.ib_login_wx, R.id.ib_login_qq})
+            R.id.ll_login_pull, R.id.ib_login_weibo, R.id.ib_login_wx, R.id.ib_login_qq, R.id.ll_login_layer})
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -334,8 +332,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                         } else {
                                             AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
                                             //更新失败因该是不进行任何的本地操作
-                                            // AppContext.getInstance().cleanLoginInfo();
-                                            // AppContext.getInstance().cleanLoginInfoV2();
                                         }
                                     } catch (Exception e) {
                                         e.printStackTrace();
@@ -369,25 +365,92 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             case R.id.bt_login_register:
                 RegisterStepOneActivity.show(LoginActivity.this);
                 break;
-            case R.id.ib_login_weibo:
-                //新浪微博登录
+            case R.id.ll_login_layer:
+            case R.id.ll_login_pull:
+                mLlLoginPull.animate().cancel();
+                mLlLoginLayer.animate().cancel();
 
-                openType = OpenConstants.SINA;
+                int height = mLlLoginOptions.getHeight();
+                float progress = (mLlLoginLayer.getTag() != null && mLlLoginLayer.getTag() instanceof Float) ?
+                        (float) mLlLoginLayer.getTag() : 1;
+                int time = (int) (360 * progress);
 
-                OpenLogin<SsoHandler> ssoHandlerOpenLogin = new OpenLogin<>();
-                try {
-                    ssoHandlerOpenLogin.addAppKey(OpenConstant.WB_APP_KEY)
-                            .addRedirectUrl(OpenConstant.REDIRECT_URL)
-                            .addWeiboAuthListener(this)
-                            .toLogin(getApplicationContext(), LoginActivity.this, OpenConstants.SINA);
-                } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
+                if (mLlLoginPull.getTag() != null) {
+                    mLlLoginPull.setTag(null);
+                    startAnimator(height, progress, time);
+                } else {
+                    mLlLoginPull.setTag(true);
+                    mLlLoginPull.animate()
+                            .translationYBy(height * progress)
+                            .translationY(0)
+                            .setDuration(time)
+                            .start();
+                    mLlLoginLayer.animate()
+                            .alphaBy(1 - progress)
+                            .alpha(1)
+                            .setDuration(time)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationStart(Animator animation) {
+                                    mLlLoginLayer.setVisibility(View.VISIBLE);
+                                }
+
+                                @Override
+                                public void onAnimationCancel(Animator animation) {
+                                    if (animation instanceof ValueAnimator) {
+                                        mLlLoginLayer.setTag(((ValueAnimator) animation).getAnimatedValue());
+                                    }
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    if (animation instanceof ValueAnimator) {
+                                        mLlLoginLayer.setTag(((ValueAnimator) animation).getAnimatedValue());
+                                    }
+                                }
+                            })
+                            .start();
                 }
+                break;
+            case R.id.ib_login_weibo:
+                openType = OpenConstants.SINA;
+                //新浪微博登录
+                AuthInfo authInfo = new AuthInfo(this, OpenConstant.WB_APP_KEY, OpenConstant.REDIRECT_URL, null);
+                mSsoHandler = new SsoHandler(this, authInfo);
+                mSsoHandler.authorize(new WeiboAuthListener() {
+                    @Override
+                    public void onComplete(Bundle bundle) {
 
+                        Oauth2AccessToken oauth2AccessToken = Oauth2AccessToken.parseAccessToken(bundle);
+
+                        if (oauth2AccessToken.isSessionValid()) {
+                            try {
+                                JSONObject jsonObject = new JSONObject();
+                                jsonObject.put("openid", oauth2AccessToken.getUid());
+                                jsonObject.put("expires_in", oauth2AccessToken.getExpiresTime());
+                                jsonObject.put("refresh_token", oauth2AccessToken.getRefreshToken());
+                                jsonObject.put("access_token", oauth2AccessToken.getToken());
+                                OSChinaApi.openLogin(OSChinaApi.LOGIN_WEIBO, jsonObject.toString(), mHandler);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onWeiboException(WeiboException e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+                });
                 break;
             case R.id.ib_login_wx:
                 //微信登录
-
                 openType = OpenConstants.WECHAT;
 
                 OpenLogin<IWXAPI> iwxapiOpenLogin = new OpenLogin<>();
@@ -397,7 +460,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 } catch (NoSuchMethodException e) {
                     e.printStackTrace();
                 }
-
+                finish();
                 break;
             case R.id.ib_login_qq:
 
@@ -417,6 +480,36 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 break;
         }
 
+    }
+
+    private void startAnimator(int height, float progress, int time) {
+        mLlLoginPull.animate()
+                .translationYBy(height - height * progress)
+                .translationY(height)
+                .setDuration(time)
+                .start();
+
+        mLlLoginLayer.animate()
+                .alphaBy(1 * progress)
+                .alpha(0)
+                .setDuration(time)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                        if (animation instanceof ValueAnimator) {
+                            mLlLoginLayer.setTag(((ValueAnimator) animation).getAnimatedValue());
+                        }
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        if (animation instanceof ValueAnimator) {
+                            mLlLoginLayer.setTag(((ValueAnimator) animation).getAnimatedValue());
+                        }
+                        mLlLoginLayer.setVisibility(View.GONE);
+                    }
+                })
+                .start();
     }
 
     @NonNull
@@ -480,9 +573,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         if (openType == OpenConstants.SINA) {
             // SSO 授权回调
             // 重要：发起 SSO 登陆的 Activity 必须重写 onActivityResults
-            AuthInfo authInfo = new AuthInfo(getApplicationContext(), OpenConstant.WB_APP_KEY, OpenConstant.REDIRECT_URL, OpenConstant.SCOPE);
-            SsoHandler ssoHandler = new SsoHandler(LoginActivity.this, authInfo);
-            ssoHandler.authorizeCallBack(requestCode, resultCode, data);
+            if (mSsoHandler != null)
+                mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
         }
 
     }
@@ -494,47 +586,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
     /**
-     * sina  callback
-     *
-     * @param bundle bundle
-     */
-    @Override
-    public void onComplete(Bundle bundle) {
-        Log.e(TAG, "onComplete: -----------sina------->");
-
-        Oauth2AccessToken oauth2AccessToken = Oauth2AccessToken.parseAccessToken(bundle);
-
-        if (oauth2AccessToken.isSessionValid()) {
-            Gson gson = AppContext.createGson();
-            String openInfo = gson.toJson(oauth2AccessToken);
-            OSChinaApi.openLogin(3, openInfo, mHandler);
-
-        }
-
-    }
-
-    /**
-     * sina callback
-     */
-    @Override
-    public void onWeiboException(WeiboException e) {
-
-        Log.e(TAG, "onWeiboException: ---------------->");
-
-    }
-
-    /**
      * tencent callback
      *
      * @param o json
      */
     @Override
     public void onComplete(Object o) {
-
-        Log.e(TAG, "onComplete: -------->tencent------>" + o);
-
         JSONObject jsonObject = (JSONObject) o;
-        OSChinaApi.openLogin(1, jsonObject.toString(), mHandler);
+        OSChinaApi.openLogin(OSChinaApi.LOGIN_QQ, jsonObject.toString(), mHandler);
     }
 
     /**
@@ -549,12 +608,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
 
     /**
-     * tencent / sina callback
+     * tencent callback
      */
     @Override
     public void onCancel() {
-
-        Log.e(TAG, "onCancel: ------------->");
 
     }
 
@@ -568,15 +625,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 mLlLoginUsername.setActivated(true);
                 mLlLoginPwd.setActivated(false);
             }
-
-            Log.e(TAG, "onFocusChange: -----username->" + hasFocus);
         } else {
             if (hasFocus) {
                 mLlLoginPwd.setActivated(true);
                 mLlLoginUsername.setActivated(false);
             }
-
-            Log.e(TAG, "onFocusChange: ---pawd--->" + hasFocus);
         }
     }
 }
