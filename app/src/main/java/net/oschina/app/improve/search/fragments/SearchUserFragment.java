@@ -16,6 +16,7 @@ import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.search.activities.SearchActivity;
 import net.oschina.app.improve.search.adapters.SearchUserAdapter;
+import net.oschina.app.improve.user.activities.OtherUserHomeActivity;
 
 import java.lang.reflect.Type;
 
@@ -49,6 +50,12 @@ public class SearchUserFragment extends BaseRecyclerViewFragment<UserV2>
         if (TextUtils.isEmpty(content)) return;
         String token = mIsRefresh ? null : mBean.getNextPageToken();
         OSChinaApi.search(News.TYPE_FIND_PERSON, content, token, mHandler);
+    }
+
+    @Override
+    public void onItemClick(int position, long itemId) {
+        super.onItemClick(position, itemId);
+        OtherUserHomeActivity.show(getContext(), mAdapter.getItem(position).getId());
     }
 
     @Override

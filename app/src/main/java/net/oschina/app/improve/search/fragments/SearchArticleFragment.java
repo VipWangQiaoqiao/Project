@@ -15,6 +15,10 @@ import net.oschina.app.improve.base.fragments.BaseRecyclerViewFragment;
 import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
+import net.oschina.app.improve.detail.activities.BlogDetailActivity;
+import net.oschina.app.improve.detail.activities.NewsDetailActivity;
+import net.oschina.app.improve.detail.activities.QuestionDetailActivity;
+import net.oschina.app.improve.detail.activities.SoftwareDetailActivity;
 import net.oschina.app.improve.search.activities.SearchActivity;
 import net.oschina.app.improve.search.adapters.SearchArticleAdapter;
 
@@ -64,6 +68,26 @@ public class SearchArticleFragment extends BaseRecyclerViewFragment<News>
         super.requestData();
         String token = mIsRefresh ? null : mBean.getNextPageToken();
         OSChinaApi.search(catalog, content, token, mHandler);
+    }
+
+    @Override
+    public void onItemClick(int position, long itemId) {
+        super.onItemClick(position, itemId);
+        News item = mAdapter.getItem(position);
+        switch (catalog){
+            case News.TYPE_BLOG:
+                BlogDetailActivity.show(getContext(), item.getId());
+                break;
+            case News.TYPE_QUESTION:
+                QuestionDetailActivity.show(getContext(), item.getId());
+                break;
+            case News.TYPE_SOFTWARE:
+                SoftwareDetailActivity.show(getContext(), item.getId());
+                break;
+            case News.TYPE_NEWS:
+                NewsDetailActivity.show(getContext(), item.getId());
+                break;
+        }
     }
 
     @Override
