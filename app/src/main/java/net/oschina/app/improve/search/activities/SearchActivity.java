@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,7 +15,6 @@ import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -49,19 +47,26 @@ import butterknife.OnClick;
 
 public class SearchActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
 
-    @Bind(R.id.view_root) LinearLayout mViewRoot;
-    @Bind(R.id.layout_tab) TabLayout mLayoutTab;
-    @Bind(R.id.view_pager) ViewPager mViewPager;
-    @Bind(R.id.view_searcher) SearchView mViewSearch;
-    @Bind(R.id.search_mag_icon) ImageView mSearchIcon;
-    @Bind(R.id.search_edit_frame) LinearLayout mLayoutEditFrame;
-    @Bind(R.id.search_src_text) EditText mViewSearchEditor;
+    @Bind(R.id.view_root)
+    LinearLayout mViewRoot;
+    @Bind(R.id.layout_tab)
+    TabLayout mLayoutTab;
+    @Bind(R.id.view_pager)
+    ViewPager mViewPager;
+    @Bind(R.id.view_searcher)
+    SearchView mViewSearch;
+    @Bind(R.id.search_mag_icon)
+    ImageView mSearchIcon;
+    @Bind(R.id.search_edit_frame)
+    LinearLayout mLayoutEditFrame;
+    @Bind(R.id.search_src_text)
+    EditText mViewSearchEditor;
 
     private List<Pair<String, Fragment>> mPagerItems;
 
     private static boolean isMiUi = false;
 
-    public static void show(Context context){
+    public static void show(Context context) {
         Intent intent = new Intent(context, SearchActivity.class);
         context.startActivity(intent);
     }
@@ -104,9 +109,9 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
 
     @Override
     public void onPageSelected(int position) {
-        String content = mViewSearch.getQuery().toString();
+        String content = mSearchText;
         if (TextUtils.isEmpty(content)) return;
-        doSearch(content);
+        doSearch(content, false);
     }
 
     @Override
@@ -114,7 +119,7 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
         // pass
     }
 
-    public interface SearchAction{
+    public interface SearchAction {
         void search(String content);
     }
 
@@ -154,36 +159,13 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
         });
         mViewSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(final String query) {
-                if (TextUtils.isEmpty(query)) return false;
-                mLayoutTab.setVisibility(View.VISIBLE);
-                mViewPager.setVisibility(View.VISIBLE);
-                mViewPager.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        doSearch(query);
-                    }
-                });
-                return true;
+            public boolean onQueryTextSubmit(String query) {
+                return doSearch(query, false);
             }
 
             @Override
-            public boolean onQueryTextChange(final String newText) {
-                if (TextUtils.isEmpty(newText)) {
-                    mLayoutTab.setVisibility(View.GONE);
-                    mViewPager.setVisibility(View.GONE);
-                    return false;
-                };
-                if (!TDevice.isWifiOpen()) return false;
-                mLayoutTab.setVisibility(View.VISIBLE);
-                mViewPager.setVisibility(View.VISIBLE);
-                mViewPager.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        doSearch(newText);
-                    }
-                });
-                return true;
+            public boolean onQueryTextChange(String newText) {
+                return doSearch(newText, true);
             }
         });
 
@@ -218,22 +200,52 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
             startAnimation();
-        }else {
+        } else {
             mViewSearch.setIconified(false);
         }
     }
 
-    private void doSearch(String query) {
-        SearchAction f = (SearchAction) mPagerItems.get(mViewPager.getCurrentItem()).second;
-        f.search(query);
+
+    private String mSearchText;
+    private Runnable mSearchRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (TextUtils.isEmpty(mSearchText))
+                return;
+            SearchAction f = (SearchAction) mPagerItems.get(mViewPager.getCurrentItem()).second;
+            f.search(mSearchText);
+        }
+    };
+
+    private boolean doSearch(String query, boolean fromTextChange) {
+        mSearchText = query.trim();
+        // Always cancel all request
+        mViewPager.removeCallbacks(mSearchRunnable);
+        // Search is'nt empty
+        if (TextUtils.isEmpty(mSearchText)) {
+            mLayoutTab.setVisibility(View.GONE);
+            mViewPager.setVisibility(View.GONE);
+            return false;
+        }
+
+        // Check network is wifi, by auto option
+        if (fromTextChange && !TDevice.isWifiOpen()) return false;
+
+        mLayoutTab.setVisibility(View.VISIBLE);
+        mViewPager.setVisibility(View.VISIBLE);
+
+        // In this we delay 1 seconds
+        mViewPager.postDelayed(mSearchRunnable, fromTextChange ? 1000 : 0);
+        return true;
     }
 
-    @OnClick(R.id.tv_cancel) void onClickCancel(){
+    @OnClick(R.id.tv_cancel)
+    void onClickCancel() {
         supportFinish();
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    private void startAnimation(){
+    private void startAnimation() {
         mViewRoot.post(new Runnable() {
             @Override
             public void run() {
@@ -254,7 +266,7 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    private void endAnimation(){
+    private void endAnimation() {
         int w = mViewRoot.getWidth();
         int h = mViewRoot.getHeight();
         Animator animator = ViewAnimationUtils.createCircularReveal(
@@ -276,10 +288,10 @@ public class SearchActivity extends BaseActivity implements ViewPager.OnPageChan
         supportFinish();
     }
 
-    private void supportFinish(){
+    private void supportFinish() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             endAnimation();
-        }else {
+        } else {
             finish();
         }
     }

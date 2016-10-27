@@ -22,7 +22,6 @@ import com.umeng.analytics.MobclickAgent;
 
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
-import net.oschina.app.AppManager;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseApplication;
 import net.oschina.app.bean.Constants;
@@ -112,9 +111,6 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         initView();
-
-
-        AppManager.getAppManager().addActivity(this);
 
         handleIntent(getIntent());
 
@@ -225,7 +221,6 @@ public class MainActivity extends AppCompatActivity implements
         unregisterReceiver(mReceiver);
         mReceiver = null;
         NoticeUtils.tryToShutDown(this);
-        AppManager.getAppManager().removeActivity(this);
     }
 
     @Override
