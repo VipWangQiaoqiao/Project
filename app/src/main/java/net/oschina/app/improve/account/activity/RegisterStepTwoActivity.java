@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.oschina.app.R;
+import net.oschina.app.improve.account.bean.PhoneToken;
 import net.oschina.app.improve.base.activities.BaseActivity;
 
 import butterknife.Bind;
@@ -21,14 +22,19 @@ import butterknife.OnClick;
  * desc:
  */
 
-public class RegisterStepTwoActivity extends BaseActivity implements View.OnClickListener {
+public class RegisterStepTwoActivity extends BaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
     @Bind(R.id.ly_register_bar)
     LinearLayout mLlRegisterBar;
+
+    @Bind(R.id.ll_register_two_username)
+    LinearLayout mLlRegisterTwoUsername;
     @Bind(R.id.et_register_username)
     EditText mEtRegisterUsername;
     @Bind(R.id.iv_register_username_del)
     ImageView mIvRegisterUsernameDel;
+    @Bind(R.id.ll_register_two_pwd)
+    LinearLayout mLlRegisterTwoPwd;
     @Bind(R.id.et_register_pwd_input)
     EditText mEtRegisterPwd;
     @Bind(R.id.tv_register_man)
@@ -43,8 +49,9 @@ public class RegisterStepTwoActivity extends BaseActivity implements View.OnClic
      *
      * @param context context
      */
-    public static void show(Context context) {
+    public static void show(Context context, PhoneToken phoneToken) {
         Intent intent = new Intent(context, RegisterStepTwoActivity.class);
+        intent.putExtra("phoneToken", phoneToken);
         context.startActivity(intent);
     }
 
@@ -58,6 +65,11 @@ public class RegisterStepTwoActivity extends BaseActivity implements View.OnClic
     protected void initWidget() {
         super.initWidget();
 
+        TextView tvLabel = (TextView) mLlRegisterBar.findViewById(R.id.tv_navigation_label);
+        tvLabel.setText(R.string.login_register_hint);
+
+        mEtRegisterUsername.setOnFocusChangeListener(this);
+        mEtRegisterPwd.setOnFocusChangeListener(this);
     }
 
     @Override
@@ -90,4 +102,26 @@ public class RegisterStepTwoActivity extends BaseActivity implements View.OnClic
     }
 
 
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+
+        int id = v.getId();
+        switch (id) {
+            case R.id.et_register_username:
+                if (hasFocus) {
+                    mLlRegisterTwoUsername.setActivated(true);
+                    mLlRegisterTwoPwd.setActivated(false);
+                }
+                break;
+            case R.id.et_register_pwd_input:
+                if (hasFocus) {
+                    mLlRegisterTwoPwd.setActivated(true);
+                    mLlRegisterTwoUsername.setActivated(false);
+                }
+                break;
+            default:
+                break;
+        }
+
+    }
 }

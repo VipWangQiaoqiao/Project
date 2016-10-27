@@ -83,7 +83,7 @@
 -keep public class android.webkit.**
 -keep public class com.tencent.** {*;}
 
--keep class com.sina.weibo.sdk.** {*;}
+-keep class com.sina.weibo.** {*;}
 -keep class net.oschina.open.**{*;}
 -keep class com.tencent.mm.sdk.modelmsg.WXMediaMessage {*;}
 -keep class com.tencent.mm.sdk.modelmsg.** implements com.tencent.mm.sdk.modelmsg.WXMediaMessage$IMediaObject {*;}

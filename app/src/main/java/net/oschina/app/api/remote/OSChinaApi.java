@@ -1937,12 +1937,17 @@ public class OSChinaApi {
         ApiHttpClient.get("action/apiv2/favorites", params, handler);
     }
 
+
+    public static final String LOGIN_WEIBO = "weibo";
+    public static final String LOGIN_QQ = "qq";
+    public static final String LOGIN_WECHART = "wechat";
+
     /**
      * @param catalog  open catalog
      * @param openInfo openInfo
      * @param handler  handler
      */
-    public static void openLogin(int catalog, String openInfo, TextHttpResponseHandler handler) {
+    public static void openLogin(String catalog, String openInfo, TextHttpResponseHandler handler) {
         if (TextUtils.isEmpty(openInfo)) return;
         RequestParams params = new RequestParams();
         params.put("catalog", catalog);
@@ -1988,12 +1993,56 @@ public class OSChinaApi {
     }
 
     /**
+     * send  sms code
+     *
+     * @param phone  phone number
+     * @param appToken  appToken
+     * @param smsCallType  smsCallType
+     * @param handler  handler
+     */
+
+    public static final int REGISTER_INTENT = 1;
+    public static final int RESET_PWD_INTENT = 2;
+
+    public static void sendSmsCode(String phone, String appToken, int intent, TextHttpResponseHandler handler) {
+
+        RequestParams params = new RequestParams();
+
+        params.put("phone", phone);
+        params.put("appToken", appToken);
+        params.put("intent", intent);
+
+        ApiHttpClient.post("action/apiv2/phone_send_code", params, handler);
+
+    }
+
+
+    /**
+     * validate and get phone token
+     *
+     * @param phoneNumber phoneNumber
+     * @param smsCode     smsCode
+     * @param appToken    appToken
+     * @param handler     handler
+     */
+    public static void validateRegisterInfo(String phoneNumber, String smsCode, String appToken, TextHttpResponseHandler handler) {
+
+        RequestParams params = new RequestParams();
+        params.put("phone", phoneNumber);
+        params.put("code", smsCode);
+        params.put("appToken", appToken);
+
+        ApiHttpClient.post("action/apiv2/phone_validate", params, handler);
+    }
+
+    /**
      * 获得首页数据
      *
      * @param api       动态api
      * @param pageToken pageToken
      * @param handler   handler
      */
+
     public static void getSubscription(String api, String pageToken, TextHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         if (!TextUtils.isEmpty(pageToken)) {

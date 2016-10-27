@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.activities.BaseActivity;
@@ -20,10 +21,13 @@ import butterknife.OnClick;
  * desc:
  */
 
-public class ResetPwdActivity extends BaseActivity implements View.OnClickListener {
+public class ResetPwdActivity extends BaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
     @Bind(R.id.ly_reset_bar)
     LinearLayout mLlResetBar;
+
+    @Bind(R.id.ll_reset_pwd)
+    LinearLayout mLlResetPwd;
     @Bind(R.id.et_reset_pwd)
     EditText mEtResetPwd;
     @Bind(R.id.iv_reset_pwd_del)
@@ -50,6 +54,9 @@ public class ResetPwdActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void initWidget() {
         super.initWidget();
+        TextView tvLabel = (TextView) mLlResetBar.findViewById(R.id.tv_navigation_label);
+        tvLabel.setText(R.string.reset_pwd_label);
+        mEtResetPwd.setOnFocusChangeListener(this);
     }
 
     @Override
@@ -71,5 +78,12 @@ public class ResetPwdActivity extends BaseActivity implements View.OnClickListen
                 break;
         }
 
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (hasFocus) {
+            mLlResetPwd.setActivated(true);
+        }
     }
 }
