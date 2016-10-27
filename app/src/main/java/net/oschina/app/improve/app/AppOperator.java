@@ -1,5 +1,12 @@
 package net.oschina.app.improve.app;
 
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
+
+import net.oschina.app.AppContext;
+import net.oschina.app.api.ApiHttpClient;
+import net.oschina.app.improve.account.AccountHelper;
+
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -29,4 +36,16 @@ public final class AppOperator {
         getExecutor().execute(runnable);
     }
 
+    public static GlideUrl getGlideUrlByUser(String url) {
+        if (AccountHelper.isLogin()) {
+            return new GlideUrl(url,
+                    new LazyHeaders
+                            .Builder()
+                            .addHeader("Cookie",
+                                    ApiHttpClient.getCookieString(AppContext.getInstance()))
+                            .build());
+        } else {
+            return new GlideUrl(url);
+        }
+    }
 }
