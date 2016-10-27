@@ -179,6 +179,21 @@ public final class PicturesCompressor {
         return compressImage(srcPath, savePath, maxSize, minQuality, maxWidth, maxHeight, null, null, exactDecode);
     }
 
+    /**
+     * 压缩图片
+     *
+     * @param srcPath     原图地址
+     * @param savePath    存储地址
+     * @param maxSize     最大文件地址byte
+     * @param minQuality  最小质量
+     * @param maxWidth    最大宽度
+     * @param maxHeight   最大高度
+     * @param byteStorage 用于批量压缩时的buffer，不必要为null，
+     *                    需要时，推荐 {{@link #DEFAULT_BUFFER_SIZE}}
+     * @param options     批量压缩时复用参数，可调用 {{@link #createOptions()}} 得到
+     * @param exactDecode 是否精确解码， TRUE： 在4.4及其以上机器中能更节约内存
+     * @return 是否压缩成功
+     */
     public static boolean compressImage(final String srcPath,
                                         final String savePath,
                                         final long maxSize,
