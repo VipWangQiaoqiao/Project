@@ -19,11 +19,13 @@ public class LaunchActivity extends BaseActivity {
     @Override
     protected void initWindow() {
         super.initWindow();
+        /*
         // 防止第三方跳转时出现双实例
-        Activity aty = AppManager.getActivity(MainActivity.class);
+        Activity aty = get MainActivity.class;
         if (aty != null && !aty.isFinishing()) {
             finish();
         }
+        */
     }
 
     @Override
