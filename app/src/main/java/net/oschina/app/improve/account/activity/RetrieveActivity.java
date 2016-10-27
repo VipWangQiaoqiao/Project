@@ -313,11 +313,10 @@ public class RetrieveActivity extends BaseActivity implements View.OnClickListen
 
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
-                intent.setAction(Intent.CATEGORY_BROWSABLE);
+               // intent.setAction(Intent.CATEGORY_BROWSABLE);
                 Uri content_url = Uri.parse(UserConstants.RETRIEVE_PWD_URL);
                 intent.setData(content_url);
                 startActivity(intent);
-                finish();
                 break;
             default:
                 break;

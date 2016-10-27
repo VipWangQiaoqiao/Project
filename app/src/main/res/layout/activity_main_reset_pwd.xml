@@ -62,7 +62,8 @@
             android:layout_height="32dp"
             android:layout_marginRight="16dp"
             android:contentDescription="@null"
-            app:srcCompat="@mipmap/ic_edit_text_delbtn"
+            android:visibility="invisible"
+            app:srcCompat="@mipmap/ic_clear"
             tools:ignore="RtlHardcoded"/>
     </LinearLayout>
 

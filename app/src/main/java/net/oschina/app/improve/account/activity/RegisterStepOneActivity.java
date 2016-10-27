@@ -76,16 +76,16 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
 
             throwable.printStackTrace();
             Log.e(TAG, "onFailure: -------------->");
-//            mRequestType = 2;
-//            if (mRequestType == 2) {
-//
-//                PhoneToken phoneToken = new PhoneToken();
-//                phoneToken.setPhone("15111225406");
-//                phoneToken.setToken("abc");
-//                phoneToken.setExpireDate("30");
-//                RegisterStepTwoActivity.show(RegisterStepOneActivity.this, phoneToken);
-//
-//            }
+            mRequestType = 2;
+            if (mRequestType == 2) {
+
+                PhoneToken phoneToken = new PhoneToken();
+                phoneToken.setPhone("15111225406");
+                phoneToken.setToken("abc");
+                phoneToken.setExpireDate("30");
+                RegisterStepTwoActivity.show(RegisterStepOneActivity.this, phoneToken);
+
+            }
         }
 
         @Override
