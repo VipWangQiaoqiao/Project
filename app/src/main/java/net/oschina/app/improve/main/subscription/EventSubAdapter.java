@@ -35,8 +35,8 @@ public class EventSubAdapter extends BaseGeneralRecyclerAdapter<SubBean> {
         EventViewHolder vh = (EventViewHolder) holder;
         vh.tv_event_title.setText(item.getTitle());
         mCallBack.getImgLoader().load(item.getImage().getHref()).into(vh.iv_event);
-        vh.tv_event_pub_date.setText(StringUtils.getDateString(item.getExtra().get("startDate").toString()));
-        vh.tv_event_member.setText(item.getExtra().get("applyCount") + "人参与");
+        vh.tv_event_pub_date.setText(StringUtils.getDateString(item.getExtra().get("eventStartDate").toString()));
+        vh.tv_event_member.setText(item.getExtra().get("eventApplyCount") + "人参与");
         vh.tv_event_title.setTextColor(
                 AppContext.isOnReadedPostList(EventFragment.HISTORY_EVENT, item.getId() + "") ?
                         (mContext.getResources().getColor(R.color.count_text_color_light)) : (mContext.getResources().getColor(R.color.day_textColor)));
