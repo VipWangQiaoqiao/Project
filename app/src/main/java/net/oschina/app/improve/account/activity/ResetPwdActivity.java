@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.oschina.app.R;
+import net.oschina.app.improve.account.bean.PhoneToken;
 import net.oschina.app.improve.base.activities.BaseActivity;
 
 import butterknife.Bind;
@@ -41,8 +42,9 @@ public class ResetPwdActivity extends BaseActivity implements View.OnClickListen
      *
      * @param context context
      */
-    public static void show(Context context) {
+    public static void show(Context context, PhoneToken phoneToken) {
         Intent intent = new Intent(context, ResetPwdActivity.class);
+        intent.putExtra("phoneToken", phoneToken);
         context.startActivity(intent);
     }
 
