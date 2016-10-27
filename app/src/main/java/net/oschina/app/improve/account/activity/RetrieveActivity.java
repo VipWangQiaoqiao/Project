@@ -3,6 +3,7 @@ package net.oschina.app.improve.account.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -23,6 +24,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.bean.PhoneToken;
+import net.oschina.app.improve.account.constants.UserConstants;
 import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.utils.AssimilateUtils;
@@ -74,6 +76,17 @@ public class RetrieveActivity extends BaseActivity implements View.OnClickListen
     private TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+
+            mRequestType = 2;
+            if (mRequestType == 2) {
+
+                PhoneToken phoneToken = new PhoneToken();
+                phoneToken.setPhone("15111225406");
+                phoneToken.setToken("abc");
+                phoneToken.setExpireDate("30");
+                ResetPwdActivity.show(RetrieveActivity.this, phoneToken);
+
+            }
 
         }
 
@@ -274,23 +287,37 @@ public class RetrieveActivity extends BaseActivity implements View.OnClickListen
             case R.id.bt_retrieve_submit:
 
                 mSmsCode = mEtRetrieveCodeInput.getText().toString().trim();
-
-                if (!TextUtils.isEmpty(mSmsCode) && TDevice.hasInternet()) {
-                    mRequestType = 2;
-                    OSChinaApi.validateRegisterInfo(mPhoneNumber, mSmsCode, mAppToken, mHandler);
-                } else {
-                    AppContext.showToast(getString(R.string.tip_network_error));
+                if (TextUtils.isEmpty(mSmsCode)) {
+                    AppContext.showToast(getString(R.string.retrieve_pwd_sms_coe_error));
+                    return;
                 }
+
+                mPhoneNumber = mEtRetrieveTel.getText().toString().trim();
+
+                if (TextUtils.isEmpty(mPhoneNumber)) {
+                    AppContext.showToast(getString(R.string.hint_username_ok));
+                    return;
+                }
+                if (!TDevice.hasInternet()) {
+                    AppContext.showToast(getString(R.string.tip_network_error));
+                    return;
+                }
+                mRequestType = 2;
+                mAppToken = "123";//Verifier.getPrivateToken(getApplication());
+                OSChinaApi.validateRegisterInfo(mPhoneNumber, mSmsCode, mAppToken, mHandler);
+
                 break;
             case R.id.tv_retrieve_label:
 
                 //打开web进入邮箱找回密码
 
                 Intent intent = new Intent();
-                intent.setAction(Intent.CATEGORY_APP_BROWSER);
                 intent.setAction(Intent.ACTION_VIEW);
+                intent.setAction(Intent.CATEGORY_BROWSABLE);
+                Uri content_url = Uri.parse(UserConstants.RETRIEVE_PWD_URL);
+                intent.setData(content_url);
                 startActivity(intent);
-
+                finish();
                 break;
             default:
                 break;

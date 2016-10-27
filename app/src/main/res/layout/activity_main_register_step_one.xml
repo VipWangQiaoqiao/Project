@@ -69,7 +69,7 @@
             android:layout_marginRight="16dp"
             android:contentDescription="@null"
             android:visibility="invisible"
-            app:srcCompat="@mipmap/ic_edit_text_delbtn"/>
+            app:srcCompat="@mipmap/ic_clear"/>
     </LinearLayout>
 
     <LinearLayout

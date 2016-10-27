@@ -2039,12 +2039,12 @@ public class OSChinaApi {
     /**
      * register user info
      *
-     * @param username username
-     * @param password pwd
-     * @param gender   gender
-     * @param token    token
-     * @param appToken appToken
-     * @param handler  handler
+     * @param username   username
+     * @param password   pwd
+     * @param gender     gender
+     * @param phoneToken token
+     * @param appToken   appToken
+     * @param handler    handler
      */
     public static void register(String username, String password, int gender, String phoneToken, String appToken, TextHttpResponseHandler
             handler) {
@@ -2057,6 +2057,25 @@ public class OSChinaApi {
         params.put("appToken", appToken);
 
         ApiHttpClient.post("action/apiv2/account_register", params, handler);
+
+    }
+
+    /**
+     * reset pwd
+     *
+     * @param password   password
+     * @param phoneToken token
+     * @param appToken   appToken
+     * @param handler    handler
+     */
+    public static void resetPwd(String password, String phoneToken, String appToken, TextHttpResponseHandler handler) {
+
+        RequestParams params = new RequestParams();
+        params.put("password", password);
+        params.put("phoneToken", phoneToken);
+        params.put("appToken", appToken);
+
+        ApiHttpClient.post("action/apiv2/account_password_forgot", params, handler);
 
     }
 
@@ -2085,4 +2104,6 @@ public class OSChinaApi {
     public static void getBanner(String api, TextHttpResponseHandler handler) {
         ApiHttpClient.getHttpClient().get(api, handler);
     }
+
+
 }

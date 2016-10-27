@@ -45,6 +45,9 @@ import cz.msebera.android.httpclient.Header;
 public class RegisterStepTwoActivity extends BaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
     private static final String TAG = "RegisterStepTwoActivity";
+
+    public static final String PHONETOKEN_KEY = "phoneToken";
+
     @Bind(R.id.ly_register_bar)
     LinearLayout mLlRegisterBar;
 
@@ -125,7 +128,7 @@ public class RegisterStepTwoActivity extends BaseActivity implements View.OnClic
      */
     public static void show(Context context, PhoneToken phoneToken) {
         Intent intent = new Intent(context, RegisterStepTwoActivity.class);
-        intent.putExtra("mPhoneToken", phoneToken);
+        intent.putExtra(PHONETOKEN_KEY, phoneToken);
         context.startActivity(intent);
     }
 
@@ -195,7 +198,7 @@ public class RegisterStepTwoActivity extends BaseActivity implements View.OnClic
         super.initData();
 
         Intent intent = getIntent();
-        mPhoneToken = (PhoneToken) intent.getSerializableExtra("mPhoneToken");
+        mPhoneToken = (PhoneToken) intent.getSerializableExtra(PHONETOKEN_KEY);
         Log.e(TAG, "initData: ------------>" + mPhoneToken.toString());
 
     }
