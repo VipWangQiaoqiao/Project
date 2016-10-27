@@ -17,6 +17,7 @@ import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.User;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.cache.DataCleanManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.tweet.fragments.TweetFragment;
@@ -319,15 +320,5 @@ public class AppContext extends BaseApplication {
     }
 
 
-    public static GlideUrl getGlideUrlByUser(String url) {
-        if (UserCacheManager.initUserManager().isLogin(context())) {
-            return new GlideUrl(url,
-                    new LazyHeaders
-                            .Builder()
-                            .addHeader("Cookie", ApiHttpClient.getCookieString(AppContext.getInstance()))
-                            .build());
-        } else {
-            return new GlideUrl(url);
-        }
-    }
+
 }

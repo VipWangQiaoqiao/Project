@@ -26,7 +26,6 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
-import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseActivity;
@@ -158,7 +157,7 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
         Object urlOrPath;
         // Do load
         if (mNeedCookie)
-            urlOrPath = AppContext.getGlideUrlByUser(path);
+            urlOrPath = AppOperator.getGlideUrlByUser(path);
         else
             urlOrPath = path;
 
@@ -278,7 +277,7 @@ public class ImageGalleryActivity extends BaseActivity implements ViewPager.OnPa
 
             // Do load
             if (mNeedCookie)
-                loadImage(AppContext.getGlideUrlByUser(mImageSources[position]),
+                loadImage(AppOperator.getGlideUrlByUser(mImageSources[position]),
                         previewView, defaultView, loading);
             else
                 loadImage(mImageSources[position], previewView, defaultView, loading);
