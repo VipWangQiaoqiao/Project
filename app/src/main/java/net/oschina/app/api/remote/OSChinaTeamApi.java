@@ -8,7 +8,7 @@ import com.loopj.android.http.RequestParams;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.api.ApiHttpClient;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.team.bean.TeamIssue;
 import net.oschina.app.team.bean.TeamProject;
 

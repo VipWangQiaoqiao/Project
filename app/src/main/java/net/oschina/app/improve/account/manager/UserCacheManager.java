@@ -1,4 +1,4 @@
-package net.oschina.app.improve.account.activity.manager;
+package net.oschina.app.improve.account.manager;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -7,9 +7,9 @@ import android.content.SharedPreferences;
 import net.oschina.app.AppContext;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.cache.CacheManager;
-import net.oschina.app.improve.account.activity.constants.UserConstants;
-import net.oschina.app.improve.account.activity.service.UserService;
-import net.oschina.app.improve.account.activity.utils.SharedPreferencesUtils;
+import net.oschina.app.improve.account.constants.UserConstants;
+import net.oschina.app.improve.account.service.UserService;
+import net.oschina.app.improve.account.utils.SharedPreferencesUtils;
 import net.oschina.app.improve.bean.UserV2;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.tweet.fragments.TweetFragment;

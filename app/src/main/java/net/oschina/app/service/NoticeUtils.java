@@ -9,7 +9,7 @@ import android.util.Log;
 
 import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.util.TLog;
 
 import java.util.HashMap;

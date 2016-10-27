@@ -4,7 +4,7 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@android:color/darker_gray"
+              android:background="@mipmap/bg_login"
               android:fitsSystemWindows="true"
               android:orientation="vertical">
 
@@ -24,18 +24,18 @@
 
         <ImageView
             android:id="@+id/iv_register_username_icon"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginLeft="16dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="14dp"
             android:contentDescription="@null"
-            app:srcCompat="@mipmap/actionbar_search_icon"
+            app:srcCompat="@mipmap/ic_login_username"
             tools:ignore="RtlHardcoded"/>
 
         <View
-            android:layout_width="1dp"
-            android:layout_height="32dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_width="1px"
+            android:layout_height="24dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="14dp"
             android:background="@color/login_line_color"/>
 
         <EditText
@@ -59,7 +59,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:contentDescription="@null"
-            app:srcCompat="@mipmap/actionbar_search_icon"/>
+            app:srcCompat="@mipmap/ic_edit_text_delbtn"/>
     </LinearLayout>
 
     <LinearLayout

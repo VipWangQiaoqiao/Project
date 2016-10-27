@@ -19,7 +19,7 @@ import com.google.zxing.WriterException;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.util.QrCodeUtils;
 
 import org.kymjs.kjframe.utils.FileUtils;

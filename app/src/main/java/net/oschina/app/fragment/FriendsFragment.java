@@ -13,7 +13,7 @@ import net.oschina.app.bean.Entity;
 import net.oschina.app.bean.Friend;
 import net.oschina.app.bean.FriendsList;
 import net.oschina.app.bean.Notice;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;

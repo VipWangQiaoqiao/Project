@@ -10,7 +10,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.Apply;
 import net.oschina.app.bean.EventAppliesList;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;
 

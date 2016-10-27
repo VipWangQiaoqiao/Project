@@ -20,7 +20,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.improve.bean.BlogDetail;
 import net.oschina.app.improve.bean.UserV2;
 import net.oschina.app.improve.bean.simple.Comment;

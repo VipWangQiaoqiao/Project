@@ -21,7 +21,7 @@ import net.oschina.app.fragment.ActiveFragment;
 import net.oschina.app.fragment.FriendsFragment;
 import net.oschina.app.fragment.MessageFragment;
 import net.oschina.app.fragment.TweetsLikesFragment;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.ui.MainActivity;
 import net.oschina.app.widget.BadgeView;
 import net.oschina.app.widget.PagerSlidingTabStrip.OnPagerChangeLis;

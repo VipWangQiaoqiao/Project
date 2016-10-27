@@ -28,7 +28,7 @@
             android:layout_height="32dp"
             android:layout_marginLeft="16dp"
             android:contentDescription="@null"
-            app:srcCompat="@mipmap/actionbar_search_icon"
+            app:srcCompat="@mipmap/ic_singup_mobile"
             tools:ignore="RtlHardcoded"/>
 
         <View

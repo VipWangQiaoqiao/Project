@@ -337,6 +337,6 @@
     <string name="hint_pwd_null">当前用户名或密码为空…</string>
     <string name="hint_username_ok">请输入正确的手机号码</string>
     <string name="user_hint_login">点击头像登录</string>
-    <string name="login_error">登录失败,请重试...</string>
+    <string name="login_error">登录失败,请重试…</string>
 
 </resources>

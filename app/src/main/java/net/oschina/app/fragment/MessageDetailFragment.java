@@ -34,7 +34,7 @@ import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.User;
 import net.oschina.app.emoji.KJEmojiFragment;
 import net.oschina.app.emoji.OnSendClickListener;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.DialogHelp;
 import net.oschina.app.util.HTMLUtil;

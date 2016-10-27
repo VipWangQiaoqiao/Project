@@ -21,7 +21,7 @@ import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetsList;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.improve.tweet.activities.TweetDetailActivity;
 import net.oschina.app.interf.OnTabReselectListener;
 import net.oschina.app.ui.empty.EmptyLayout;

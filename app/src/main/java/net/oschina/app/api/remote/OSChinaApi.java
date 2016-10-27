@@ -17,7 +17,7 @@ import net.oschina.app.bean.EventApplyData;
 import net.oschina.app.bean.NewsList;
 import net.oschina.app.bean.Report;
 import net.oschina.app.bean.Tweet;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.util.StringUtils;
 

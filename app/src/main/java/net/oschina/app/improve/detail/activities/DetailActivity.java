@@ -21,7 +21,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Report;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.detail.contract.DetailContract;

@@ -11,7 +11,7 @@ import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.shake.ShakePresent;
 import net.oschina.app.util.TDevice;

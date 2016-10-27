@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import net.oschina.app.R;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.improve.base.fragments.BaseGeneralListFragment;
 import net.oschina.app.improve.base.fragments.BaseViewPagerFragment;
 import net.oschina.app.improve.tweet.fragments.TweetFragment;

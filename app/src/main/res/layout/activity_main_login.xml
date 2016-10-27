@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@mipmap/bg_login"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="16dp">
 
         <ImageView
             android:id="@+id/iv_login_logo"
@@ -34,16 +35,16 @@
 
             <ImageView
                 android:id="@+id/iv_login_username_icon"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="14dp"
+                android:layout_marginRight="14dp"
                 android:contentDescription="@null"
                 app:srcCompat="@mipmap/ic_singup_mobile"/>
 
             <View
-                android:layout_width="1dp"
-                android:layout_height="32dp"
+                android:layout_width="1px"
+                android:layout_height="22dp"
                 android:background="@color/login_line_color"/>
 
             <EditText
@@ -81,16 +82,16 @@
 
             <ImageView
                 android:id="@+id/iv_login_pwd_icon"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="14dp"
+                android:layout_marginRight="14dp"
                 android:contentDescription="@null"
                 app:srcCompat="@mipmap/ic_login_password"/>
 
             <View
-                android:layout_width="1dp"
-                android:layout_height="32dp"
+                android:layout_width="1px"
+                android:layout_height="22dp"
                 android:background="@color/login_line_color"/>
 
             <EditText
@@ -150,6 +151,11 @@
                 android:textSize="16sp"/>
         </LinearLayout>
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
         <Button
             android:id="@+id/bt_login_submit"
             android:layout_width="match_parent"
@@ -172,6 +178,11 @@
             android:text="@string/login_register_hint"
             android:textColor="@color/white"
             android:textSize="20sp"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"/>
 
     </LinearLayout>
 
@@ -196,7 +207,8 @@
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:background="@color/white"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
 
             <ImageButton

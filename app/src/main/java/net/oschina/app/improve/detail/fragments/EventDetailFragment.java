@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.bean.EventApplyData;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.improve.bean.Event;
 import net.oschina.app.improve.bean.EventDetail;
 import net.oschina.app.improve.detail.contract.EventDetailContract;
