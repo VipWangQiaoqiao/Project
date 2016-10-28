@@ -158,6 +158,12 @@ public class RegisterStepTwoActivity extends BaseActivity implements View.OnClic
             @Override
             public void afterTextChanged(Editable s) {
                 int length = s.length();
+                if (length > 0) {
+                    mIvRegisterUsernameDel.setVisibility(View.VISIBLE);
+                } else {
+                    mIvRegisterUsernameDel.setVisibility(View.INVISIBLE);
+                }
+
                 if (length > 12) {
                     AppContext.showToast(getResources().getString(R.string.register_username_error), Toast.LENGTH_SHORT);
                     mLlRegisterTwoUsername.setBackgroundResource(R.drawable.bg_login_input_error);

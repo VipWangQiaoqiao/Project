@@ -212,7 +212,7 @@ public class RetrieveActivity extends BaseActivity implements View.OnClickListen
 
             }
         });
-        mBtRetrieveSubmit.setAlpha(0.4f);
+        mBtRetrieveSubmit.setAlpha(0.6f);
         mEtRetrieveCodeInput.setOnFocusChangeListener(this);
         mEtRetrieveCodeInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -231,7 +231,7 @@ public class RetrieveActivity extends BaseActivity implements View.OnClickListen
                 if (length > 0) {
                     mBtRetrieveSubmit.setAlpha(1.0f);
                 } else {
-                    mBtRetrieveSubmit.setAlpha(0.4f);
+                    mBtRetrieveSubmit.setAlpha(0.6f);
                 }
 
             }
@@ -245,6 +245,10 @@ public class RetrieveActivity extends BaseActivity implements View.OnClickListen
         String phone = mEtRetrieveTel.getText().toString().trim();
         if (TextUtils.isEmpty(phone)) {
             mTvRetrieveSmsCall.setAlpha(0.4f);
+        }
+        String smsCode = mEtRetrieveCodeInput.getText().toString().trim();
+        if (TextUtils.isEmpty(smsCode)) {
+            mBtRetrieveSubmit.setAlpha(0.8f);
         }
     }
 
@@ -263,9 +267,10 @@ public class RetrieveActivity extends BaseActivity implements View.OnClickListen
             case R.id.retrieve_sms_call:
 
                 if (!mMachPhoneNum) {
-                    AppContext.showToast(getString(R.string.hint_username_ok), Toast.LENGTH_SHORT);
+                    AppContext.showToast(getString(R.string.retrieve_pwd_sms_coe_error), Toast.LENGTH_SHORT);
                     return;
                 }
+
                 if (!TDevice.hasInternet()) {
                     AppContext.showToast(getResources().getString(R.string.tip_network_error), Toast.LENGTH_SHORT);
                     return;
