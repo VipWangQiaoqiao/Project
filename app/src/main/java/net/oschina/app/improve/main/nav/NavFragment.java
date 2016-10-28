@@ -14,6 +14,7 @@ import android.view.View;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.fragments.BaseFragment;
+import net.oschina.app.improve.main.tabs.DynamicTabFragment;
 import net.oschina.app.improve.main.tabs.ExploreFragment;
 import net.oschina.app.improve.main.tabs.GeneralViewPagerFragment;
 import net.oschina.app.improve.main.tabs.TweetViewPagerFragment;
@@ -71,7 +72,8 @@ public class NavFragment extends BaseFragment implements View.OnClickListener, N
 
         mNavNews.init(R.drawable.tab_icon_new,
                 R.string.main_tab_name_news,
-                GeneralViewPagerFragment.class);
+                DynamicTabFragment.class);
+//                GeneralViewPagerFragment.class);
 
         mNavTweet.init(R.drawable.tab_icon_tweet,
                 R.string.main_tab_name_tweet,

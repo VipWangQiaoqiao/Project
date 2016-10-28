@@ -18,7 +18,7 @@ public class SubTab implements Serializable {
     private String name;
     private boolean fixed;
     private boolean needLogin;
-    private String tab;
+    private String tag;
     private int type;
     private int subtype;
     private int order;
@@ -45,6 +45,22 @@ public class SubTab implements Serializable {
         public void setHref(String href) {
             this.href = href;
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return this.token == null ? 0 : this.token.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj != null && obj instanceof SubTab){
+            SubTab tab = (SubTab) obj;
+            if (tab.getToken() == null) return false;
+            if (this.token == null) return false;
+            return tab.getToken().equals(this.token);
+        }
+        return false;
     }
 
     public String getToken() {
@@ -79,12 +95,12 @@ public class SubTab implements Serializable {
         this.needLogin = needLogin;
     }
 
-    public String getTab() {
-        return tab;
+    public String getTag() {
+        return tag;
     }
 
-    public void setTab(String tab) {
-        this.tab = tab;
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     public int getType() {

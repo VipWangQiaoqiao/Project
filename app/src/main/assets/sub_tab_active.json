@@ -1,0 +1,50 @@
+[
+    {
+        "token": "111111111111",
+        "name": "资讯",
+        "fixed": true,
+        "needLogin": false,
+        "type": 6,
+        "subtype": 1,
+        "order": 1,
+        "href": "https://www.oschina.net/action/apiv2/news",
+        "banner": {
+            "catalog": 1,
+            "href": "https://www.oschina.net/action/apiv2/banner?catalog=1"
+        }
+    },
+    {
+        "token": "222222222222",
+        "name": "推荐博客",
+        "fixed": false,
+        "needLogin": false,
+        "type": 3,
+        "subtype": 1,
+        "order": 2,
+        "href": "https://www.oschina.net/action/apiv2/blog?catalog=1"
+    },
+    {
+        "token": "5555555555",
+        "name": "技术问答",
+        "fixed": false,
+        "needLogin": false,
+        "type": 2,
+        "subtype": 1,
+        "order": 5,
+        "href": "https://www.oschina.net/action/apiv2/question?catalog=1"
+    },
+    {
+        "token": "10101010101010",
+        "name": "活动",
+        "fixed": false,
+        "needLogin": false,
+        "type": 5,
+        "subtype": 1,
+        "order": 10,
+        "href": "https://www.oschina.net/action/apiv2/event",
+        "banner": {
+            "catalog": 3,
+            "href": "https://www.oschina.net/action/apiv2/banner?catalog=3"
+        }
+    }
+]
