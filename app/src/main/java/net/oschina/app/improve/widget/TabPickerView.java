@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -206,31 +207,38 @@ public class TabPickerView extends FrameLayout {
         mActiveAdapter.setOnClickItemListener(new TabAdapter.OnSelectItemListener() {
             @Override
             public void onSelect(int position) {
+                // 先调用隐藏, 因为隐藏有保存,更新tab的动作
+                hide();
                 if (mTabPickingListener != null){
                     mTabPickingListener.onSelected(position);
                 }
-                hide();
             }
         });
         mActiveAdapter.setOnDoubleClickItemListener(new TabAdapter.OnSelectItemListener() {
             @Override
             public void onSelect(int position) {
-                SubTab tab = mActiveAdapter.removeItem(position);
+                SubTab tab = mActiveAdapter.getItem(position);
+                if (tab.isFixed()) return;
+                int oldCount = mActiveAdapter.getItemCount();
+                tab = mActiveAdapter.removeItem(position);
                 // 放到下面需要根据Original DataSet重排序
                 for (SubTab item : mTabManager.mOriginalDataSet) {
                     if (!item.getToken().equals(tab.getToken())) continue;
                     tab.setOrder(item.getOrder());
                     break;
                 }
-                for (int i = 0; i < mTabManager.mInactiveDataSet.size(); i++) {
+
+                int i = 0;
+                for (; i < mTabManager.mInactiveDataSet.size(); i++) {
                     SubTab item = mTabManager.mInactiveDataSet.get(i);
                     if (item.getOrder() < tab.getOrder()) continue;
-                    mTabManager.mInactiveDataSet.add(i, tab);
-                    mInactiveAdapter.notifyItemInserted(i);
                     break;
                 }
-                if (mSelectedIndex == position && position == mActiveAdapter.getItemCount()){
-                    --mSelectedIndex;
+                mTabManager.mInactiveDataSet.add(i, tab);
+                mInactiveAdapter.notifyItemInserted(i);
+
+                if (mSelectedIndex == position){
+                    mSelectedIndex = position == oldCount - 1 ? mSelectedIndex - 1 : mSelectedIndex;
                     mActiveAdapter.notifyItemChanged(mSelectedIndex);
                 }
                 if (mTabPickingListener != null){
@@ -254,7 +262,8 @@ public class TabPickerView extends FrameLayout {
             }
 
             @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                                  RecyclerView.ViewHolder target) {
                 int fromTargetIndex = viewHolder.getAdapterPosition();
                 int toTargetIndex = target.getAdapterPosition();
                 if (mActiveAdapter.getItem(toTargetIndex).isFixed()) return true;
@@ -352,7 +361,7 @@ public class TabPickerView extends FrameLayout {
         bubble.setPadding(dp6 / 2, 0, dp6 / 2, 0);
         bubble.setVisibility(GONE);
         bubble.setTag("mViewBubble");
-        bubble.setBackground(getContext().getResources().getDrawable(R.drawable.shape_bubble));
+        bubble.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.shape_bubble));
         bubble.setTextSize(TypedValue.COMPLEX_UNIT_SP, 8);
         bubble.setGravity(Gravity.CENTER);
 
@@ -379,7 +388,7 @@ public class TabPickerView extends FrameLayout {
                 getContext().getResources().getDisplayMetrics());
         view.setPadding(0, dp4, 0, dp4);
         view.setClickable(true);
-        view.setBackground(getContext().getResources().getDrawable(R.drawable.selector_dynamic_tab));
+        view.setBackgroundDrawable(getContext().getResources().getDrawable(R.drawable.selector_dynamic_tab));
 
         layout.addView(view);
         layout.addView(bubble);
@@ -406,7 +415,8 @@ public class TabPickerView extends FrameLayout {
      *
      * @param <VH>
      */
-    public abstract static class TabAdapter<T, VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
+    public abstract static class TabAdapter<T, VH extends RecyclerView.ViewHolder>
+            extends RecyclerView.Adapter<VH> {
 
         private OnSelectItemListener onClickItemListener;
         private OnSelectItemListener onDoubleClickItemListener;
