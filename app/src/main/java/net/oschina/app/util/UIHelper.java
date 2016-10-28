@@ -77,7 +77,6 @@ import net.oschina.app.team.fragment.TeamActiveFragment;
 import net.oschina.app.team.ui.TeamMainActivity;
 import net.oschina.app.team.ui.TeamNewIssueActivity;
 import net.oschina.app.ui.DetailActivity;
-import net.oschina.app.ui.LoginActivity;
 import net.oschina.app.ui.OSCPhotosActivity;
 import net.oschina.app.ui.SimpleBackActivity;
 import net.oschina.app.viewpagerfragment.FriendsViewPagerFragment;
@@ -125,7 +124,7 @@ public class UIHelper {
      * @param context
      */
     public static void showLoginActivity(Context context) {
-        Intent intent = new Intent(context, LoginActivity.class);
+        Intent intent = new Intent(context, net.oschina.app.improve.account.activity.LoginActivity.class);
         context.startActivity(intent);
     }
 
