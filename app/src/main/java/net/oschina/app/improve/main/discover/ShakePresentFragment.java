@@ -49,7 +49,7 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
         mTxtName = (TextView) mShakeView.findViewById(R.id.tv_name);
         mBtnShakeAgain.setOnClickListener(this);
         mBtnGet.setOnClickListener(this);
-        //mSpeedThreshold = 90;
+        mSpeedThreshold = 70;
         mCardView.setVisibility(View.GONE);
         mTvState.setText("摇一摇抢礼品");
     }
@@ -102,33 +102,38 @@ public class ShakePresentFragment extends BaseSensorFragment<ShakePresent> {
             if (mTimeHandler == null)
                 mTimeHandler = new Handler();
             mLoadingView.setVisibility(View.GONE);
-            mBtnShakeAgain.setTextColor(0xFFD8D8D8);
-            mTxtTime.setVisibility((mBean == null || mBean.getResult() == null) ? View.VISIBLE : View.INVISIBLE);
-            mTxtTime.setText(String.format("%s秒后可再摇一次", mDelayTime));
-            mTimeHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    --mDelayTime;
-                    if (mTxtTime == null)
-                        return;
-                    if (mBean == null || mBean.getResult() == null) {
-                        mTxtTime.setText(String.format("%s秒后可再摇一次", mDelayTime));
-                    } else {
-                        mBtnShakeAgain.setText(String.format("再摇一次(%s)", mDelayTime));
+            if (mBean != null && mBean.getCode() == 251) {//活动进行中，没摇到
+                mBtnShakeAgain.setTextColor(0xFFD8D8D8);
+                mTxtTime.setVisibility((mBean == null || mBean.getResult() == null) ? View.VISIBLE : View.INVISIBLE);
+                mTxtTime.setText(String.format("%s秒后可再摇一次", mDelayTime));
+                mTimeHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        --mDelayTime;
+                        if (mTxtTime == null)
+                            return;
+                        if (mBean == null || mBean.getResult() == null) {
+                            mTxtTime.setText(String.format("%s秒后可再摇一次", mDelayTime));
+                        } else {
+                            mBtnShakeAgain.setText(String.format("再摇一次(%s)", mDelayTime));
+                        }
+                        if (mDelayTime > 0)
+                            mTimeHandler.postDelayed(this, 1000);
+                        else {
+                            mBtnShakeAgain.setText("再摇一次");
+                            mBtnShakeAgain.setTextColor(0xFF111111);
+                            mTvState.setText("摇一摇抢礼品");
+                            mCanAgain = true;
+                            mTxtTime.setVisibility(View.INVISIBLE);
+                            mLoading = mBean != null && mBean.getResult() != null;
+                            mDelayTime = 5;
+                        }
                     }
-                    if (mDelayTime > 0)
-                        mTimeHandler.postDelayed(this, 1000);
-                    else {
-                        mBtnShakeAgain.setText("再摇一次");
-                        mBtnShakeAgain.setTextColor(0xFF111111);
-                        mTvState.setText("摇一摇抢礼品");
-                        mCanAgain = true;
-                        mTxtTime.setVisibility(View.INVISIBLE);
-                        mLoading = mBean != null && mBean.getResult() != null;
-                        mDelayTime = 5;
-                    }
-                }
-            }, 1000);
+                }, 1000);
+            } else {
+                mTvState.setText(mBean != null ? mBean.getMessage() : "很抱歉，出现未知错误");
+                mLoading = false;
+            }
         }
     }
 
