@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
-import net.oschina.app.improve.bean.UserV2;
+import net.oschina.app.improve.bean.User;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 
@@ -48,13 +48,13 @@ public class MyInformationFragmentDetail extends BaseFragment {
     @Bind(R.id.error_layout)
     EmptyLayout mErrorLayout;
 
-    private UserV2 userInfo;
+    private User userInfo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle arguments = getArguments();
-        userInfo = (UserV2) arguments.getSerializable("user_info");
+        userInfo = (User) arguments.getSerializable("user_info");
     }
 
     @Override

@@ -41,7 +41,7 @@ import net.oschina.app.improve.account.constants.UserConstants;
 import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.improve.account.utils.SharedPreferencesUtils;
 import net.oschina.app.improve.base.activities.BaseActivity;
-import net.oschina.app.improve.bean.UserV2;
+import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.share.constant.OpenConstant;
 import net.oschina.app.improve.utils.AssimilateUtils;
@@ -118,20 +118,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
         @Override
         public void onSuccess(int statusCode, Header[] headers, String responseString) {
-            Type type = new TypeToken<ResultBean<UserV2>>() {
+            Type type = new TypeToken<ResultBean<User>>() {
             }.getType();
 
             GsonBuilder gsonBuilder = new GsonBuilder();
-            ResultBean<UserV2> resultBean = gsonBuilder.create().fromJson(responseString, type);
+            ResultBean<User> resultBean = gsonBuilder.create().fromJson(responseString, type);
             if (resultBean.isSuccess()) {
 
                 // 更新相关Cookie信息
                 ApiHttpClient.updateCookie(ApiHttpClient.getHttpClient(), headers);
 
-                UserV2 userV2 = resultBean.getResult();
+                User user = resultBean.getResult();
 
-                if (userV2 != null) {
-                    boolean saveUserCache = UserCacheManager.initUserManager().saveUserCache(LoginActivity.this, userV2);
+                if (user != null) {
+                    boolean saveUserCache = UserCacheManager.initUserManager().saveUserCache(LoginActivity.this, user);
                     if (saveUserCache)
                         finish();
                 }
@@ -324,17 +324,17 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                 public void onSuccess(int statusCode, Header[] headers, String responseString) {
 
                                     try {
-                                        Type type = new TypeToken<ResultBean<UserV2>>() {
+                                        Type type = new TypeToken<ResultBean<User>>() {
                                         }.getType();
 
-                                        ResultBean<UserV2> resultBean = AppContext.createGson().fromJson(responseString, type);
+                                        ResultBean<User> resultBean = AppContext.createGson().fromJson(responseString, type);
                                         if (resultBean.isSuccess()) {
 
                                             //1. 更新相关Cookie信息
                                             ApiHttpClient.updateCookie(ApiHttpClient.getHttpClient(), headers);
                                             //2. 更新本地用户缓存信息
-                                            UserV2 userV2 = resultBean.getResult();
-                                            boolean saveUserCache = UserCacheManager.initUserManager().saveUserCache(LoginActivity.this, userV2);
+                                            User user = resultBean.getResult();
+                                            boolean saveUserCache = UserCacheManager.initUserManager().saveUserCache(LoginActivity.this, user);
                                             if (saveUserCache) {
                                                 //3. finish  进入用户中心页
                                                 finish();

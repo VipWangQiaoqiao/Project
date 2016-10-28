@@ -34,7 +34,6 @@ import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.bean.User;
-import net.oschina.app.improve.bean.UserV2;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.bean.simple.UserRelation;
@@ -93,13 +92,13 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
     @Bind(R.id.view_divider)
     View mDivider;
 
-    private UserV2 user;
+    private User user;
     private List<Pair<String, Fragment>> fragments;
     private TabLayoutOffsetChangeListener mOffsetChangerListener;
 
     public static void show(Context context, Author author) {
         if (author == null) return;
-        UserV2 user = new UserV2();
+        User user = new User();
         user.setId(author.getId());
         user.setName(author.getName());
         user.setPortrait(author.getPortrait());
@@ -108,32 +107,31 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
 
     public static void show(Context context, long id) {
         if (id <= 0) return;
-        UserV2 user = new UserV2();
+        User user = new User();
         user.setId((int) id);
         show(context, user);
     }
 
-    public static void show(Context context, String nick){
+    public static void show(Context context, String nick) {
         if (TextUtils.isEmpty(nick)) return;
-        UserV2 user = new UserV2();
+        User user = new User();
         user.setName(nick);
         show(context, user);
     }
 
     /**
-     *
      * @param context context
-     * @param id 无效值,随便填,只是用来区别{{@link #show(Context, String)}}方法的
-     * @param suffix 个性后缀
+     * @param id      无效值,随便填,只是用来区别{{@link #show(Context, String)}}方法的
+     * @param suffix  个性后缀
      */
-    public static void show(Context context, long id, String suffix){
+    public static void show(Context context, long id, String suffix) {
         if (TextUtils.isEmpty(suffix)) return;
-        UserV2 user = new UserV2();
+        User user = new User();
         user.setSuffix(suffix);
         show(context, user);
     }
 
-    public static void show(Context context, UserV2 user){
+    public static void show(Context context, User user) {
         if (user == null) return;
         Intent intent = new Intent(context, OtherUserHomeActivity.class);
         intent.putExtra(KEY_BUNDLE, user);
@@ -142,7 +140,7 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
 
     @Override
     protected boolean initBundle(Bundle bundle) {
-        user = (UserV2) bundle.getSerializable(KEY_BUNDLE);
+        user = (User) bundle.getSerializable(KEY_BUNDLE);
         if (user == null || (user.getId() <= 0 && TextUtils.isEmpty(user.getName())
                 && TextUtils.isEmpty(user.getSuffix()))) {
             Toast.makeText(this, "没有此用户", Toast.LENGTH_SHORT).show();
@@ -191,7 +189,7 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
 
                 int r = mPortrait.getWidth() / 2;
                 Random random = new Random(System.currentTimeMillis());
-                for (int i = 60, radius = r + i; ; i = (int) (i * 1.4), radius += i){
+                for (int i = 60, radius = r + i; ; i = (int) (i * 1.4), radius += i) {
                     SolarSystemView.Planet planet = new SolarSystemView.Planet();
                     planet.setClockwise(random.nextInt(10) % 2 == 0);
                     planet.setAngleRate((random.nextInt(35) + 1) / 1000.f);
@@ -215,18 +213,18 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
     }
 
     @SuppressWarnings("all")
-    private void injectDataToViewPager(){
+    private void injectDataToViewPager() {
         if (user.getId() <= 0) return;
 
         int t = 0, b = 0, a = 0, d = 0;
-        if (user.getStatistics() != null){
+        if (user.getStatistics() != null) {
             t = user.getStatistics().getTweet();
             b = user.getStatistics().getBlog();
             a = user.getStatistics().getAnswer();
             d = user.getStatistics().getDiscuss();
         }
 
-        if (fragments == null){
+        if (fragments == null) {
             fragments = new ArrayList<>();
             fragments.add(new Pair<>(
                     String.format("%s\n动弹", 0),
@@ -275,7 +273,7 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
             mTabLayout.getTabAt(1).setCustomView(getTabView(formatNumeric(b), "博客"));
             mTabLayout.getTabAt(2).setCustomView(getTabView(formatNumeric(a), "问答"));
             mTabLayout.getTabAt(3).setCustomView(getTabView(formatNumeric(d), "讨论"));
-        }else { // when request user detail info successfully
+        } else { // when request user detail info successfully
             setupTabText(mTabLayout.getTabAt(0), t);
             setupTabText(mTabLayout.getTabAt(1), b);
             setupTabText(mTabLayout.getTabAt(2), a);
@@ -284,15 +282,15 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
     }
 
     @SuppressWarnings("all")
-    private void setupTabText(TabLayout.Tab tab, int count){
+    private void setupTabText(TabLayout.Tab tab, int count) {
         View view = tab.getCustomView();
         if (view == null) return;
         TabViewHolder holder = (TabViewHolder) view.getTag();
         holder.mViewCount.setText(formatNumeric(count));
     }
 
-    private String formatNumeric(int count){
-        if (count > 1000){
+    private String formatNumeric(int count) {
+        if (count > 1000) {
             int a = count / 100;
             int b = a % 10;
             int c = a / 10;
@@ -300,12 +298,12 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
             if (c <= 9 && b != 0) str = c + "." + b;
             else str = String.valueOf(c);
             return str + "k";
-        }else {
+        } else {
             return String.valueOf(count);
         }
     }
 
-    private View getTabView(String cs, String tag){
+    private View getTabView(String cs, String tag) {
         View view = LayoutInflater.from(this).inflate(R.layout.tab_item_other_user, mTabLayout, false);
         TabViewHolder holder = new TabViewHolder(view);
         holder.mViewCount.setText(cs);
@@ -332,22 +330,22 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
         // TODO summary
         String desc = user.getDesc();
         mSummary.setText(TextUtils.isEmpty(desc) ? "这人很懒,什么都没写" : desc);
-        if (user.getStatistics() != null){
+        if (user.getStatistics() != null) {
             mScore.setText(String.format("积分 %s", user.getStatistics().getScore()));
             mCountFans.setText(String.format("粉丝 %s", user.getStatistics().getFans()));
             mCountFollow.setText(String.format("关注 %s", user.getStatistics().getFollow()));
-        }else {
+        } else {
             mScore.setText("积分 0");
             mCountFans.setText("粉丝 0");
             mCountFollow.setText("关注 0");
         }
 
         mGenderImage.setVisibility(View.VISIBLE);
-        if (user.getGender() == User.GENDER_MALE){
+        if (user.getGender() == User.GENDER_MALE) {
             mGenderImage.setImageResource(R.mipmap.ic_male);
-        }else if (user.getGender() == User.GENDER_FEMALE){
+        } else if (user.getGender() == User.GENDER_FEMALE) {
             mGenderImage.setImageResource(R.mipmap.ic_female);
-        }else {
+        } else {
             mGenderImage.setVisibility(View.GONE);
         }
 
@@ -365,11 +363,12 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                ResultBean<UserV2> result = AppContext.createGson().fromJson(
-                        responseString, new TypeToken<ResultBean<UserV2>>(){}.getType());
+                ResultBean<User> result = AppContext.createGson().fromJson(
+                        responseString, new TypeToken<ResultBean<User>>() {
+                        }.getType());
                 if (result.isSuccess() && result.getResult() == null) return;
                 user = result.getResult();
-                if (user == null){
+                if (user == null) {
                     Toast.makeText(OtherUserHomeActivity.this, "该用户不存在", Toast.LENGTH_SHORT).show();
                     finish();
                     return;
@@ -387,7 +386,7 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
     public boolean onCreateOptionsMenu(Menu menu) {
         // TODO make the user bean same
         net.oschina.app.bean.User mLoginUser = AppContext.getInstance().getLoginUser();
-        if (user.getId() > 0 && mLoginUser != null && mLoginUser.getId() != user.getId()){
+        if (user.getId() > 0 && mLoginUser != null && mLoginUser.getId() != user.getId()) {
             getMenuInflater().inflate(R.menu.menu_other_user, menu);
             MenuItem mFollowMenu = menu.getItem(1);
             if (mFollowMenu == null) return false;
@@ -463,7 +462,8 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
                     case User.RELATION_TYPE_NULL:
                         mDialogTitle = "确定关注Ta吗？";
                         break;
-                    default: return false;
+                    default:
+                        return false;
                 }
                 DialogHelp.getConfirmDialog(this, mDialogTitle, new DialogInterface.OnClickListener() {
                     @Override
@@ -477,8 +477,9 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
                             @Override
                             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                                 ResultBean<UserRelation> result = AppContext.createGson().fromJson(
-                                        responseString, new TypeToken<ResultBean<UserRelation>>(){}.getType());
-                                if (result.isSuccess()){
+                                        responseString, new TypeToken<ResultBean<UserRelation>>() {
+                                        }.getType());
+                                if (result.isSuccess()) {
                                     int relation = result.getResult().getRelation();
                                     switch (relation) {
                                         case User.RELATION_TYPE_BOTH:
@@ -495,7 +496,7 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
                                             break;
                                     }
                                     user.setRelation(relation);
-                                }else{
+                                } else {
                                     onFailure(statusCode, headers, responseString, null);
                                 }
                             }
@@ -507,11 +508,11 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
         return super.onOptionsItemSelected(item);
     }
 
-    private static class TabViewHolder{
+    private static class TabViewHolder {
         private TextView mViewCount;
         private TextView mViewTag;
 
-        public TabViewHolder(View view){
+        public TabViewHolder(View view) {
             mViewCount = (TextView) view.findViewById(R.id.tv_count);
             mViewTag = (TextView) view.findViewById(R.id.tv_tag);
         }
@@ -541,7 +542,7 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
                     Math.round(255 - Math.abs(verticalOffset) / (float) mScrollRange * 255));
         }
 
-        public void resetRange(){
+        public void resetRange() {
             mScrollRange = -1;
         }
     }

@@ -2,7 +2,7 @@ package net.oschina.app.improve.account.service;
 
 import android.content.Context;
 
-import net.oschina.app.improve.bean.UserV2;
+import net.oschina.app.improve.bean.User;
 
 /**
  * Created by fei
@@ -12,13 +12,13 @@ import net.oschina.app.improve.bean.UserV2;
 
 public interface UserService {
 
-    boolean saveUserCache(Context context, UserV2 userV2);
+    boolean saveUserCache(Context context, User user);
 
     boolean deleteUserCache(Context context);
 
     boolean updatePairUserCache(Context context, String key, Object value);
 
-    boolean updateUserCache(Context context, UserV2 userV2);
+    boolean updateUserCache(Context context, User user);
 
     boolean isLogin(Context context);
 
@@ -26,8 +26,8 @@ public interface UserService {
 
     boolean logout(Context context);
 
-    boolean login(Context context, UserV2 userV2);
+    boolean login(Context context, User user);
 
-    UserV2 getUserCache(Context context);
+    User getUserCache(Context context);
 
 }

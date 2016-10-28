@@ -17,7 +17,7 @@ import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.improve.account.manager.UserCacheManager;
-import net.oschina.app.improve.bean.UserV2;
+import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.util.TLog;
 
@@ -112,15 +112,15 @@ public class WXEntryActivity extends Activity {
 
                             Log.e(TAG, "onSuccess: ------>weichat=====" + responseString);
 
-                            Type type = new TypeToken<ResultBean<UserV2>>() {
+                            Type type = new TypeToken<ResultBean<User>>() {
                             }.getType();
 
-                            ResultBean<UserV2> resulBean = AppContext.createGson().fromJson(responseString, type);
+                            ResultBean<User> resulBean = AppContext.createGson().fromJson(responseString, type);
 
                             if (resulBean.isSuccess()) {
-                                UserV2 userV2 = resulBean.getResult();
+                                User user = resulBean.getResult();
                                 ApiHttpClient.updateCookie(ApiHttpClient.getHttpClient(), headers);
-                                boolean saveUserCache = UserCacheManager.initUserManager().saveUserCache(WXEntryActivity.this, userV2);
+                                boolean saveUserCache = UserCacheManager.initUserManager().saveUserCache(WXEntryActivity.this, user);
                                 if (saveUserCache) {
                                     finish();
                                 }

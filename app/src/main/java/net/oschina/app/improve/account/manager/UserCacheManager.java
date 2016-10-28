@@ -10,7 +10,7 @@ import net.oschina.app.cache.CacheManager;
 import net.oschina.app.improve.account.constants.UserConstants;
 import net.oschina.app.improve.account.service.UserService;
 import net.oschina.app.improve.account.utils.SharedPreferencesUtils;
-import net.oschina.app.improve.bean.UserV2;
+import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.tweet.fragments.TweetFragment;
 
@@ -27,33 +27,33 @@ public class UserCacheManager implements UserService {
     }
 
     @Override
-    public boolean saveUserCache(Context context, UserV2 userV2) {
+    public boolean saveUserCache(Context context, User user) {
 
         SharedPreferences sp = SharedPreferencesUtils.createSp(UserConstants.USER_CACHE, context);
         SharedPreferences.Editor edit = SharedPreferencesUtils.getEditor(sp);
 
-        edit.putLong(UserConstants.UID, userV2.getId());
-        edit.putString(UserConstants.NAME, userV2.getName());
-        edit.putString(UserConstants.PORTRAIT, userV2.getPortrait());
-        edit.putInt(UserConstants.GENDER, userV2.getGender());
-        edit.putString(UserConstants.DESC, userV2.getDesc());
-        edit.putInt(UserConstants.RELATION, userV2.getRelation());
+        edit.putLong(UserConstants.UID, user.getId());
+        edit.putString(UserConstants.NAME, user.getName());
+        edit.putString(UserConstants.PORTRAIT, user.getPortrait());
+        edit.putInt(UserConstants.GENDER, user.getGender());
+        edit.putString(UserConstants.DESC, user.getDesc());
+        edit.putInt(UserConstants.RELATION, user.getRelation());
 
-        edit.putString(UserConstants.JOIN_DATE, userV2.getMore().getJoinDate());
-        edit.putString(UserConstants.CITY, userV2.getMore().getCity());
-        edit.putString(UserConstants.EXPERTISE, userV2.getMore().getExpertise());
-        edit.putString(UserConstants.PLATFORM, userV2.getMore().getPlatform());
-        edit.putString(UserConstants.COMPANY, userV2.getMore().getCompany());
-        edit.putString(UserConstants.POSITION, userV2.getMore().getPosition());
+        edit.putString(UserConstants.JOIN_DATE, user.getMore().getJoinDate());
+        edit.putString(UserConstants.CITY, user.getMore().getCity());
+        edit.putString(UserConstants.EXPERTISE, user.getMore().getExpertise());
+        edit.putString(UserConstants.PLATFORM, user.getMore().getPlatform());
+        edit.putString(UserConstants.COMPANY, user.getMore().getCompany());
+        edit.putString(UserConstants.POSITION, user.getMore().getPosition());
 
-        edit.putInt(UserConstants.SCORE, userV2.getStatistics().getScore());
-        edit.putInt(UserConstants.TWEET, userV2.getStatistics().getTweet());
-        edit.putInt(UserConstants.COLLECT, userV2.getStatistics().getCollect());
-        edit.putInt(UserConstants.FANS, userV2.getStatistics().getFans());
-        edit.putInt(UserConstants.FOLLOW, userV2.getStatistics().getFollow());
-        edit.putInt(UserConstants.BLOG, userV2.getStatistics().getBlog());
-        edit.putInt(UserConstants.ANSWER, userV2.getStatistics().getAnswer());
-        edit.putInt(UserConstants.DISCUSS, userV2.getStatistics().getDiscuss());
+        edit.putInt(UserConstants.SCORE, user.getStatistics().getScore());
+        edit.putInt(UserConstants.TWEET, user.getStatistics().getTweet());
+        edit.putInt(UserConstants.COLLECT, user.getStatistics().getCollect());
+        edit.putInt(UserConstants.FANS, user.getStatistics().getFans());
+        edit.putInt(UserConstants.FOLLOW, user.getStatistics().getFollow());
+        edit.putInt(UserConstants.BLOG, user.getStatistics().getBlog());
+        edit.putInt(UserConstants.ANSWER, user.getStatistics().getAnswer());
+        edit.putInt(UserConstants.DISCUSS, user.getStatistics().getDiscuss());
 
         SharedPreferencesUtils.commit(edit);
         return true;
@@ -91,8 +91,8 @@ public class UserCacheManager implements UserService {
     }
 
     @Override
-    public boolean updateUserCache(Context context, UserV2 userV2) {
-        saveUserCache(context, userV2);
+    public boolean updateUserCache(Context context, User user) {
+        saveUserCache(context, user);
         return true;
     }
 
@@ -130,35 +130,35 @@ public class UserCacheManager implements UserService {
     }
 
     @Override
-    public boolean login(Context context, UserV2 userV2) {
+    public boolean login(Context context, User user) {
 
         //1.保存缓存
-        saveUserCache(context, userV2);
+        saveUserCache(context, user);
         //2.登陆成功,重新启动消息服务
         NoticeManager.init(context);
         return true;
     }
 
     @Override
-    public UserV2 getUserCache(Context context) {
+    public User getUserCache(Context context) {
         SharedPreferences sp = SharedPreferencesUtils.createSp(UserConstants.USER_CACHE, context);
         long uid = sp.getLong(UserConstants.UID, 0);
         if (uid > 0) {
-            UserV2 userV2 = new UserV2();
+            User user = new User();
             String name = sp.getString(UserConstants.NAME, null);
             String portrait = sp.getString(UserConstants.PORTRAIT, null);
             int gender = sp.getInt(UserConstants.GENDER, 0);
             String desc = sp.getString(UserConstants.DESC, null);
             int relation = sp.getInt(UserConstants.RELATION, 0);
 
-            userV2.setId(uid);
-            userV2.setName(name);
-            userV2.setPortrait(portrait);
-            userV2.setGender(gender);
-            userV2.setDesc(desc);
-            userV2.setRelation(relation);
+            user.setId(uid);
+            user.setName(name);
+            user.setPortrait(portrait);
+            user.setGender(gender);
+            user.setDesc(desc);
+            user.setRelation(relation);
 
-            UserV2.More more = new UserV2.More();
+            User.More more = new User.More();
 
             String joinDate = sp.getString(UserConstants.JOIN_DATE, null);
             String city = sp.getString(UserConstants.CITY, null);
@@ -174,10 +174,10 @@ public class UserCacheManager implements UserService {
             more.setCompany(company);
             more.setPosition(position);
 
-            userV2.setMore(more);
+            user.setMore(more);
 
 
-            UserV2.Statistics statistics = new UserV2.Statistics();
+            User.Statistics statistics = new User.Statistics();
 
             int score = sp.getInt(UserConstants.SCORE, 0);
             int tweet = sp.getInt(UserConstants.TWEET, 0);
@@ -197,9 +197,9 @@ public class UserCacheManager implements UserService {
             statistics.setAnswer(answer);
             statistics.setDiscuss(discuss);
 
-            userV2.setStatistics(statistics);
+            user.setStatistics(statistics);
 
-            return userV2;
+            return user;
         } else {
             return null;
         }
