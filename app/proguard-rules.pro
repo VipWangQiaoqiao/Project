@@ -36,6 +36,7 @@
 ##---------------End: proguard configuration for Gson  ----------
 
 -keep class net.oschina.app.** { *; }
+-keep class net.oschina.common.** { *; }
 
 
 -keep class butterknife.** { *; }
