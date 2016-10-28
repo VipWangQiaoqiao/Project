@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.SharedPreferencesCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -35,13 +36,11 @@ import com.tencent.tauth.UiError;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
-import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.constants.UserConstants;
-import net.oschina.app.improve.account.manager.UserCacheManager;
-import net.oschina.app.improve.account.utils.SharedPreferencesUtils;
 import net.oschina.app.improve.base.activities.BaseActivity;
-import net.oschina.app.improve.bean.UserV2;
+import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.share.constant.OpenConstant;
 import net.oschina.app.improve.utils.AssimilateUtils;
@@ -118,23 +117,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
         @Override
         public void onSuccess(int statusCode, Header[] headers, String responseString) {
-            Type type = new TypeToken<ResultBean<UserV2>>() {
+            Type type = new TypeToken<ResultBean<User>>() {
             }.getType();
 
             GsonBuilder gsonBuilder = new GsonBuilder();
-            ResultBean<UserV2> resultBean = gsonBuilder.create().fromJson(responseString, type);
+            ResultBean<User> resultBean = gsonBuilder.create().fromJson(responseString, type);
             if (resultBean.isSuccess()) {
-
-                // 更新相关Cookie信息
-                ApiHttpClient.updateCookie(ApiHttpClient.getHttpClient(), headers);
-
-                UserV2 userV2 = resultBean.getResult();
-
-                if (userV2 != null) {
-                    boolean saveUserCache = UserCacheManager.initUserManager().saveUserCache(LoginActivity.this, userV2);
-                    if (saveUserCache)
-                        finish();
-                }
+                User user = resultBean.getResult();
+                AccountHelper.login(user, headers);
+                finish();
             } else {
                 AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
             }
@@ -221,8 +212,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         super.initData();
 
         //初始化控件状态数据
-        SharedPreferences sp = SharedPreferencesUtils.createSp(UserConstants.HOLD_ACCOUNT, this);
-
+        SharedPreferences sp = getSharedPreferences(UserConstants.HOLD_ACCOUNT, Context.MODE_PRIVATE);
         String holdUsername = sp.getString(HOLD_USERNAME_KEY, null);
         String holdPwd = sp.getString(HOLD_PWD_KEY, null);
         boolean holdStatus = sp.getBoolean(HOLD_PWD_STATUS_KEY, false);
@@ -261,9 +251,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         String username = mEtLoginUsername.getText().toString().trim();
         this.mInputPwd = mEtLoginPwd.getText().toString().trim();
 
-        SharedPreferences sp = SharedPreferencesUtils.createSp(UserConstants.HOLD_ACCOUNT, this);
-
-        SharedPreferences.Editor editor = SharedPreferencesUtils.getEditor(sp);
+        SharedPreferences sp = getSharedPreferences(UserConstants.HOLD_ACCOUNT, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
         if (!TextUtils.isEmpty(username))
             editor.putString(HOLD_USERNAME_KEY, username);
 
@@ -275,7 +264,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         }
 
         editor.putBoolean(HOLD_PWD_STATUS_KEY, mHoldStatus);
-        SharedPreferencesUtils.commit(editor);
+        SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
 
     }
 
@@ -324,22 +313,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                 public void onSuccess(int statusCode, Header[] headers, String responseString) {
 
                                     try {
-                                        Type type = new TypeToken<ResultBean<UserV2>>() {
+                                        Type type = new TypeToken<ResultBean<User>>() {
                                         }.getType();
 
-                                        ResultBean<UserV2> resultBean = AppContext.createGson().fromJson(responseString, type);
+                                        ResultBean<User> resultBean = AppContext.createGson().fromJson(responseString, type);
                                         if (resultBean.isSuccess()) {
-
-                                            //1. 更新相关Cookie信息
-                                            ApiHttpClient.updateCookie(ApiHttpClient.getHttpClient(), headers);
-                                            //2. 更新本地用户缓存信息
-                                            UserV2 userV2 = resultBean.getResult();
-                                            boolean saveUserCache = UserCacheManager.initUserManager().saveUserCache(LoginActivity.this, userV2);
-                                            if (saveUserCache) {
-                                                //3. finish  进入用户中心页
-                                                finish();
-                                            }
-
+                                            User user = resultBean.getResult();
+                                            AccountHelper.login(user, headers);
+                                            finish();
                                         } else {
                                             int code = resultBean.getCode();
                                             if (code == 211) {

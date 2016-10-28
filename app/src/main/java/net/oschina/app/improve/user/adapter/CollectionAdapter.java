@@ -58,7 +58,7 @@ public class CollectionAdapter extends BaseRecyclerAdapter<Collection> {
         h.mTypeView.setText(type);
         h.mTitleView.setText(item.getTitle());
         h.mFavDateText.setText(StringUtils.formatSomeAgo(item.getFavDate()));
-        User user = item.getUser();
+        User user = item.getAuthorUser();
         h.mAuthorText.setText(user != null ? user.getName() : "匿名");
         h.mCommentCountText.setText(String.valueOf(item.getCommentCount()));
         h.mFavCountText.setText(String.valueOf(item.getFavCount()));

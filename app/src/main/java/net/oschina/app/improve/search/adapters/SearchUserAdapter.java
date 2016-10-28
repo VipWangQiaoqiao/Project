@@ -11,11 +11,9 @@ import com.bumptech.glide.Glide;
 
 import net.oschina.app.R;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
-import net.oschina.app.improve.bean.News;
-import net.oschina.app.improve.bean.UserV2;
+import net.oschina.app.improve.bean.User;
 
 import butterknife.Bind;
-import butterknife.BindInt;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -23,7 +21,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by thanatos on 16/10/24.
  */
 
-public class SearchUserAdapter extends BaseRecyclerAdapter<UserV2> {
+public class SearchUserAdapter extends BaseRecyclerAdapter<User> {
 
     public SearchUserAdapter(Context context){
         this(context, ONLY_FOOTER);
@@ -40,7 +38,7 @@ public class SearchUserAdapter extends BaseRecyclerAdapter<UserV2> {
     }
 
     @Override
-    protected void onBindDefaultViewHolder(RecyclerView.ViewHolder h, UserV2 item, int position) {
+    protected void onBindDefaultViewHolder(RecyclerView.ViewHolder h, User item, int position) {
         ViewHolder holder = (ViewHolder) h;
         Glide.with(mContext)
                 .load(item.getPortrait())

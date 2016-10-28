@@ -20,12 +20,11 @@ import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
-import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.bean.PhoneToken;
-import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.improve.base.activities.BaseActivity;
-import net.oschina.app.improve.bean.UserV2;
+import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.main.MainActivity;
 import net.oschina.app.util.TDevice;
@@ -78,25 +77,18 @@ public class RegisterStepTwoActivity extends BaseActivity implements View.OnClic
         public void onSuccess(int statusCode, Header[] headers, String responseString) {
 
 
-            Type type = new TypeToken<ResultBean<UserV2>>() {
+            Type type = new TypeToken<ResultBean<User>>() {
             }.getType();
-            ResultBean<UserV2> resultBean = AppContext.createGson().fromJson(responseString, type);
+            ResultBean<User> resultBean = AppContext.createGson().fromJson(responseString, type);
 
             if (resultBean.isSuccess()) {
-
-                UserV2 userV2 = resultBean.getResult();
-                if (userV2 != null) {
-                    ApiHttpClient.updateCookie(ApiHttpClient.getHttpClient(), headers);
-                    boolean saveUserCache = UserCacheManager.initUserManager().saveUserCache(RegisterStepTwoActivity.this, userV2);
-                    if (saveUserCache) {
-                        Intent intent = new Intent(RegisterStepTwoActivity.this, MainActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                        finish();
-                    }
-
-                }
-
+                User user = resultBean.getResult();
+                AccountHelper.login(user, headers);
+                // Kill and skip
+                Intent intent = new Intent(RegisterStepTwoActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
             } else {
                 int code = resultBean.getCode();
                 switch (code) {
