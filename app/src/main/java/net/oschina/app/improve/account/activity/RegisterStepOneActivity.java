@@ -70,21 +70,16 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
     private TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-            //AppContext.showToast(responseString, Toast.LENGTH_SHORT);
-
             throwable.printStackTrace();
             Log.e(TAG, "onFailure: -------------->");
 
-//            mRequestType = 2;
-//            if (mRequestType == 2) {
-//
-//                PhoneToken phoneToken = new PhoneToken();
-//                phoneToken.setPhone("15111225406");
-//                phoneToken.setToken("abc");
-//                phoneToken.setExpireDate("30");
-//                RegisterStepTwoActivity.show(RegisterStepOneActivity.this, phoneToken);
-//
-//            }
+            if (mRequestType == 2) {
+                PhoneToken phoneToken = new PhoneToken();
+                phoneToken.setPhone("15111225406");
+                phoneToken.setToken("abc");
+                phoneToken.setExpireDate("30");
+                RegisterStepTwoActivity.show(RegisterStepOneActivity.this, phoneToken);
+            }
         }
 
         @Override
@@ -104,7 +99,8 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
                         switch (code) {
                             case 1:
                                 //发送验证码成功,请求进入下一步
-                                mRequestType = 2;
+                                //意味着我们可以进行第二次请求了,获取phoneToken
+                                //mRequestType = 2;
                                 break;
                             case 218:
                                 //手机号已被注册,提示重新输入
@@ -131,7 +127,7 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
                         ResultBean<PhoneToken> phoneTokenResultBean = AppContext.createGson().fromJson(responseString, phoneType);
                         int smsCode = phoneTokenResultBean.getCode();
                         switch (smsCode) {
-                            case 1:
+                            case 1://注册成功,进行用户信息填写
                                 if (phoneTokenResultBean.isSuccess()) {
                                     PhoneToken phoneToken = phoneTokenResultBean.getResult();
                                     if (phoneToken != null) {
@@ -145,9 +141,8 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
                                     AppContext.showToast(phoneTokenResultBean.getMessage());
                                 }
                                 break;
-                            case 215:
-
-
+                            case 215://注册失败,手机验证码错误
+                                mLlRegisterSmsCode.setBackgroundResource(R.drawable.bg_login_input_error);
                                 break;
                             default:
                                 break;
@@ -338,8 +333,6 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
                 break;
             case R.id.bt_register_submit:
 
-                String phoneNumber = mEtRegisterUsername.getText().toString().trim();
-
                 if (!mMachPhoneNum) {
                     AppContext.showToast(getString(R.string.hint_username_ok), Toast.LENGTH_SHORT);
                     return;
@@ -358,6 +351,7 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
                 }
 
                 mRequestType = 2;
+                String phoneNumber = mEtRegisterUsername.getText().toString().trim();
                 String appToken = Verifier.getPrivateToken(getApplication());
                 OSChinaApi.validateRegisterInfo(phoneNumber, SmsCode, appToken, mHandler);
 

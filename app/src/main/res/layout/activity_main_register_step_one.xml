@@ -145,7 +145,7 @@
         android:elevation="0dp"
         android:outlineProvider="none"
         android:text="@string/login_register_hint"
-        android:textColor="@color/account_input_bg_color"
+        android:textColor="@color/account_lock_font_color"
         android:textSize="@dimen/font_18"
         android:translationZ="0dp"
         tools:targetApi="lollipop"/>
