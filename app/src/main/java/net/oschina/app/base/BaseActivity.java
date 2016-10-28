@@ -1,7 +1,6 @@
 package net.oschina.app.base;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +11,6 @@ import android.view.View;
 import com.umeng.analytics.MobclickAgent;
 
 import net.oschina.app.AppContext;
-import net.oschina.app.AppManager;
 import net.oschina.app.R;
 import net.oschina.app.interf.BaseViewInterface;
 import net.oschina.app.ui.dialog.CommonToast;
@@ -41,13 +39,6 @@ public abstract class BaseActivity extends AppCompatActivity implements
     protected ActionBar mActionBar;
 
     private final String packageName4Umeng = this.getClass().getName();
-    private Context mContext4Umeng;
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        AppManager.getAppManager().finishActivity(this);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +48,6 @@ public abstract class BaseActivity extends AppCompatActivity implements
         } else {
             setTheme(R.style.App_Theme_Light);
         }
-        AppManager.getAppManager().addActivity(this);
         onBeforeSetContentLayout();
         if (getLayoutId() != 0) {
             setContentView(getLayoutId());
@@ -85,10 +75,10 @@ public abstract class BaseActivity extends AppCompatActivity implements
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageStart(this.packageName4Umeng);
-        MobclickAgent.onResume(this.mContext4Umeng);
+        MobclickAgent.onPageEnd(this.packageName4Umeng);
+        MobclickAgent.onResume(this);
 
-        if (this.isFinishing()){
+        if (this.isFinishing()) {
             TDevice.hideSoftKeyboard(getCurrentFocus());
         }
     }
@@ -97,7 +87,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
         MobclickAgent.onPageStart(this.packageName4Umeng);
-        MobclickAgent.onResume(this.mContext4Umeng);
+        MobclickAgent.onResume(this);
     }
 
     protected void onBeforeSetContentLayout() {

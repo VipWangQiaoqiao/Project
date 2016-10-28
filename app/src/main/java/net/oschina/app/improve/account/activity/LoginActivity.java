@@ -1,25 +1,26 @@
-package net.oschina.app.improve.account.activity.activity;
+package net.oschina.app.improve.account.activity;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.SharedPreferencesCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -35,21 +36,19 @@ import com.tencent.tauth.UiError;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
-import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.improve.account.activity.constants.UserConstants;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
-import net.oschina.app.improve.account.activity.utils.SharedPreferencesUtils;
+import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.constants.UserConstants;
 import net.oschina.app.improve.base.activities.BaseActivity;
-import net.oschina.app.improve.bean.UserV2;
+import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.main.MainActivity;
 import net.oschina.app.improve.share.constant.OpenConstant;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.util.TDevice;
 import net.oschina.open.constants.OpenConstants;
 import net.oschina.open.factory.OpenLogin;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -67,7 +66,7 @@ import cz.msebera.android.httpclient.Header;
  * desc:
  */
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener, WeiboAuthListener, IUiListener, View.OnFocusChangeListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener, IUiListener, View.OnFocusChangeListener {
 
     private static final String TAG = "LoginActivity";
 
@@ -96,22 +95,19 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     Button mTvLoginRegister;
 
     @Bind(R.id.ll_login_layer)
-    LinearLayout mLlLoginLayer;
-    @Bind(R.id.bt_login_pull)
-    Button mBtLoginPull;
+    View mLlLoginLayer;
+    @Bind(R.id.ll_login_pull)
+    LinearLayout mLlLoginPull;
 
     @Bind(R.id.ll_login_options)
     LinearLayout mLlLoginOptions;
 
     @Bind(R.id.ib_login_weibo)
-    ImageButton mIbLoginWeiBo;
+    ImageView mIbLoginWeiBo;
     @Bind(R.id.ib_login_wx)
-    ImageButton mIbLoginWx;
+    ImageView mIbLoginWx;
     @Bind(R.id.ib_login_qq)
-    ImageButton mImLoginQq;
-
-    private int openType;
-    private boolean mHoldStatus;
+    ImageView mImLoginQq;
 
     private TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
         @Override
@@ -121,28 +117,26 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
         @Override
         public void onSuccess(int statusCode, Header[] headers, String responseString) {
-
-            Type type = new TypeToken<ResultBean<UserV2>>() {
+            Type type = new TypeToken<ResultBean<User>>() {
             }.getType();
 
             GsonBuilder gsonBuilder = new GsonBuilder();
-            ResultBean<UserV2> resultBean = gsonBuilder.create().fromJson(responseString, type);
-            if (resultBean != null && resultBean.isSuccess()) {
-
-                // 更新相关Cookie信息
-                ApiHttpClient.updateCookie(ApiHttpClient.getHttpClient(), headers);
-
-                UserV2 userV2 = resultBean.getResult();
-
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.putExtra("userInfo", userV2);
-                startActivity(intent);
+            ResultBean<User> resultBean = gsonBuilder.create().fromJson(responseString, type);
+            if (resultBean.isSuccess()) {
+                User user = resultBean.getResult();
+                AccountHelper.login(user, headers);
                 finish();
-
+            } else {
+                AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
             }
 
         }
     };
+
+    private int openType;
+    private boolean mHoldStatus;
+    private String mInputPwd;
+    private SsoHandler mSsoHandler;
 
 
     /**
@@ -163,26 +157,31 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     @Override
     protected void initWidget() {
         super.initWidget();
-
+        mLlLoginLayer.setVisibility(View.GONE);
         mEtLoginUsername.setOnFocusChangeListener(this);
         mEtLoginUsername.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
 
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                boolean b = AssimilateUtils.MachPhoneNum(s);
-                boolean email = AssimilateUtils.machEmail(s);
-                Log.e(TAG, "onTextChanged: ------------->phone=" + b + "  email=" + email);
-
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                String username = s.toString();
+                if (username.length() > 0) {
+                    if (AssimilateUtils.MachPhoneNum(username) || AssimilateUtils.machEmail(username)) {
+                        mLlLoginUsername.setBackgroundResource(R.drawable.bg_login_input_ok);
+                    } else {
+                        mLlLoginUsername.setBackgroundResource(R.drawable.bg_login_input_error);
+                    }
+                } else {
+                    mLlLoginUsername.setBackgroundResource(R.drawable.bg_login_input_ok);
+                }
 
             }
         });
@@ -200,7 +199,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                int length = s.length();
+                if (length > 0) {
+                    mLlLoginPwd.setBackgroundResource(R.drawable.bg_login_input_ok);
+                }
             }
         });
     }
@@ -209,10 +211,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     protected void initData() {
         super.initData();
 
-        SharedPreferences sp = SharedPreferencesUtils.createSp(UserConstants.HOLD_ACCOUNT, this);
+        //初始化控件状态数据
+        SharedPreferences sp = getSharedPreferences(UserConstants.HOLD_ACCOUNT, Context.MODE_PRIVATE);
         String holdUsername = sp.getString(HOLD_USERNAME_KEY, null);
         String holdPwd = sp.getString(HOLD_PWD_KEY, null);
+        boolean holdStatus = sp.getBoolean(HOLD_PWD_STATUS_KEY, false);
+
         mEtLoginUsername.setText(holdUsername);
+
         if (!TextUtils.isEmpty(holdPwd)) {
             byte[] decode = Base64.decode(holdPwd, Base64.DEFAULT);
             try {
@@ -226,9 +232,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             mEtLoginPwd.setText(null);
         }
 
-        mHoldStatus = sp.getBoolean(HOLD_PWD_STATUS_KEY, false);
-
-        updateHoldPwd(mHoldStatus);
+        updateHoldPwd(holdStatus);
+        this.mHoldStatus = holdStatus;
 
     }
 
@@ -236,7 +241,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     @Override
     protected void onResume() {
         super.onResume();
-        initData();
+        //initData();
     }
 
     @Override
@@ -244,15 +249,22 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         super.onPause();
 
         String username = mEtLoginUsername.getText().toString().trim();
-        String pwd = mEtLoginPwd.getText().toString().trim();
+        this.mInputPwd = mEtLoginPwd.getText().toString().trim();
 
-        SharedPreferences sp = SharedPreferencesUtils.createSp(UserConstants.HOLD_ACCOUNT, this);
-        SharedPreferences.Editor editor = SharedPreferencesUtils.getEditor(sp);
-        editor.putString(HOLD_USERNAME_KEY, username);
-        editor.putString(HOLD_PWD_KEY, toBase64(pwd));
+        SharedPreferences sp = getSharedPreferences(UserConstants.HOLD_ACCOUNT, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        if (!TextUtils.isEmpty(username))
+            editor.putString(HOLD_USERNAME_KEY, username);
+
+        if (mHoldStatus) {
+            if (!TextUtils.isEmpty(mInputPwd))
+                editor.putString(HOLD_PWD_KEY, toBase64(mInputPwd));
+        } else {
+            editor.putString(HOLD_PWD_KEY, "");
+        }
+
         editor.putBoolean(HOLD_PWD_STATUS_KEY, mHoldStatus);
-        SharedPreferencesUtils.commit(editor);
-
+        SharedPreferencesCompat.EditorCompat.getInstance().apply(editor);
 
     }
 
@@ -266,18 +278,18 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
 
     @OnClick({R.id.tv_login_forget_pwd, R.id.iv_login_hold_pwd, R.id.bt_login_submit, R.id.bt_login_register,
-            R.id.ib_login_weibo, R.id.ib_login_wx, R.id.ib_login_qq})
+            R.id.ll_login_pull, R.id.ib_login_weibo, R.id.ib_login_wx, R.id.ib_login_qq, R.id.ll_login_layer})
     @Override
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
             case R.id.tv_login_forget_pwd:
-                RegisterStepOneActivity.show(LoginActivity.this);
+                RetrieveActivity.show(LoginActivity.this);
                 break;
             case R.id.bt_login_submit:
 
-                String tempUsername = mEtLoginUsername.getText().toString().trim();//"771297972@qq.com";
-                String tempPwd = mEtLoginPwd.getText().toString().trim();//"123456";
+                String tempUsername = mEtLoginUsername.getText().toString().trim();
+                String tempPwd = mEtLoginPwd.getText().toString().trim();
 
 
                 if (!TextUtils.isEmpty(tempUsername) && !TextUtils.isEmpty(tempPwd)) {
@@ -290,41 +302,34 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
                         String appToken = "123";//"765e06cc569b5b8ed41a4a8c979338c888d644f4";//Verifier.getPrivateToken(getApplication());
 
-
                         if (TDevice.hasInternet()) {
                             OSChinaApi.login(tempUsername, Sha1toHex(tempPwd), appToken, new TextHttpResponseHandler() {
                                 @Override
                                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                                    AppContext.showToast(getResources().getString(R.string.login_error), Toast.LENGTH_SHORT);
+
                                 }
 
                                 @Override
                                 public void onSuccess(int statusCode, Header[] headers, String responseString) {
 
                                     try {
-                                        Type type = new TypeToken<ResultBean<UserV2>>() {
+                                        Type type = new TypeToken<ResultBean<User>>() {
                                         }.getType();
 
-                                        Log.e(TAG, "onSuccess: --------->" + responseString);
-                                        ResultBean<UserV2> resultBean = AppContext.createGson().fromJson(responseString, type);
+                                        ResultBean<User> resultBean = AppContext.createGson().fromJson(responseString, type);
                                         if (resultBean.isSuccess()) {
-
-                                            //1. 更新相关Cookie信息
-                                            ApiHttpClient.updateCookie(ApiHttpClient.getHttpClient(), headers);
-                                            //2. 更新本地用户缓存信息
-                                            UserV2 userV2 = resultBean.getResult();
-                                            Log.e(TAG, "onSuccess: -------------->" + userV2.toString());
-                                            boolean saveUserCache = UserCacheManager.initUserManager().saveUserCache(LoginActivity.this, userV2);
-                                            if (saveUserCache) {
-                                                //3. finish  进入用户中心页
-                                                finish();
-                                            }
-
+                                            User user = resultBean.getResult();
+                                            AccountHelper.login(user, headers);
+                                            finish();
                                         } else {
-                                            AppContext.showToast(getResources().getString(R.string.login_error), Toast.LENGTH_SHORT);
+                                            int code = resultBean.getCode();
+                                            if (code == 211) {
+                                                mLlLoginUsername.setBackgroundResource(R.drawable.bg_login_input_error);
+                                            } else if (code == 212) {
+                                                mLlLoginPwd.setBackgroundResource(R.drawable.bg_login_input_error);
+                                            }
+                                            AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
                                             //更新失败因该是不进行任何的本地操作
-                                            // AppContext.getInstance().cleanLoginInfo();
-                                            // AppContext.getInstance().cleanLoginInfoV2();
                                         }
                                     } catch (Exception e) {
                                         e.printStackTrace();
@@ -338,7 +343,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                         }
 
                     } else {
-                        AppContext.showToast(getString(R.string.hint_username_ok), Toast.LENGTH_SHORT);
+                        AppContext.showToast(getString(R.string.login_input_username_hint_error), Toast.LENGTH_SHORT);
                     }
                 } else {
                     AppContext.showToast(getString(R.string.hint_pwd_null), Toast.LENGTH_SHORT);
@@ -350,47 +355,100 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 String inputPwd = mEtLoginPwd.getText().toString().trim();
 
                 if (!TextUtils.isEmpty(inputPwd)) {
-
-                    inputPwd = toBase64(inputPwd);
-
-                    boolean holdStatus = this.mHoldStatus;
-                    holdStatus = !holdStatus;
-                    updateHoldPwd(holdStatus);
-
-                    this.mHoldStatus = holdStatus;
-                    SharedPreferences sp = SharedPreferencesUtils.createSp(UserConstants.HOLD_ACCOUNT, this);
-                    SharedPreferences.Editor editor = SharedPreferencesUtils.getEditor(sp);
-                    editor.putString(HOLD_PWD_KEY, inputPwd);
-                    editor.putBoolean(HOLD_PWD_STATUS_KEY, mHoldStatus);
-                    SharedPreferencesUtils.commit(editor);
-
-                } else {
-                    AppContext.showToast(getString(R.string.hint_pwd_null), Toast.LENGTH_SHORT);
+                    mInputPwd = toBase64(inputPwd);
                 }
-
+                mHoldStatus = !mHoldStatus;
+                updateHoldPwd(mHoldStatus);
                 break;
             case R.id.bt_login_register:
                 RegisterStepOneActivity.show(LoginActivity.this);
                 break;
-            case R.id.ib_login_weibo:
-                //新浪微博登录
+            case R.id.ll_login_layer:
+            case R.id.ll_login_pull:
+                mLlLoginPull.animate().cancel();
+                mLlLoginLayer.animate().cancel();
 
-                openType = OpenConstants.SINA;
+                int height = mLlLoginOptions.getHeight();
+                float progress = (mLlLoginLayer.getTag() != null && mLlLoginLayer.getTag() instanceof Float) ?
+                        (float) mLlLoginLayer.getTag() : 1;
+                int time = (int) (360 * progress);
 
-                OpenLogin<SsoHandler> ssoHandlerOpenLogin = new OpenLogin<>();
-                try {
-                    ssoHandlerOpenLogin.addAppKey(OpenConstant.WB_APP_KEY)
-                            .addRedirectUrl(OpenConstant.REDIRECT_URL)
-                            .addWeiboAuthListener(this)
-                            .toLogin(getApplicationContext(), LoginActivity.this, OpenConstants.SINA);
-                } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
+                if (mLlLoginPull.getTag() != null) {
+                    mLlLoginPull.setTag(null);
+                    startAnimator(height, progress, time);
+                } else {
+                    mLlLoginPull.setTag(true);
+                    mLlLoginPull.animate()
+                            .translationYBy(height * progress)
+                            .translationY(0)
+                            .setDuration(time)
+                            .start();
+                    mLlLoginLayer.animate()
+                            .alphaBy(1 - progress)
+                            .alpha(1)
+                            .setDuration(time)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationStart(Animator animation) {
+                                    mLlLoginLayer.setVisibility(View.VISIBLE);
+                                }
+
+                                @Override
+                                public void onAnimationCancel(Animator animation) {
+                                    if (animation instanceof ValueAnimator) {
+                                        mLlLoginLayer.setTag(((ValueAnimator) animation).getAnimatedValue());
+                                    }
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    if (animation instanceof ValueAnimator) {
+                                        mLlLoginLayer.setTag(((ValueAnimator) animation).getAnimatedValue());
+                                    }
+                                }
+                            })
+                            .start();
                 }
+                break;
+            case R.id.ib_login_weibo:
+                openType = OpenConstants.SINA;
+                //新浪微博登录
+                AuthInfo authInfo = new AuthInfo(this, OpenConstant.WB_APP_KEY, OpenConstant.REDIRECT_URL, null);
+                mSsoHandler = new SsoHandler(this, authInfo);
+                mSsoHandler.authorize(new WeiboAuthListener() {
+                    @Override
+                    public void onComplete(Bundle bundle) {
 
+                        Oauth2AccessToken oauth2AccessToken = Oauth2AccessToken.parseAccessToken(bundle);
+
+                        if (oauth2AccessToken.isSessionValid()) {
+                            try {
+                                JSONObject jsonObject = new JSONObject();
+                                jsonObject.put("openid", oauth2AccessToken.getUid());
+                                jsonObject.put("expires_in", oauth2AccessToken.getExpiresTime());
+                                jsonObject.put("refresh_token", oauth2AccessToken.getRefreshToken());
+                                jsonObject.put("access_token", oauth2AccessToken.getToken());
+                                OSChinaApi.openLogin(OSChinaApi.LOGIN_WEIBO, jsonObject.toString(), mHandler);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onWeiboException(WeiboException e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+                });
                 break;
             case R.id.ib_login_wx:
                 //微信登录
-
                 openType = OpenConstants.WECHAT;
 
                 OpenLogin<IWXAPI> iwxapiOpenLogin = new OpenLogin<>();
@@ -400,7 +458,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 } catch (NoSuchMethodException e) {
                     e.printStackTrace();
                 }
-
+                finish();
                 break;
             case R.id.ib_login_qq:
 
@@ -422,6 +480,36 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     }
 
+    private void startAnimator(int height, float progress, int time) {
+        mLlLoginPull.animate()
+                .translationYBy(height - height * progress)
+                .translationY(height)
+                .setDuration(time)
+                .start();
+
+        mLlLoginLayer.animate()
+                .alphaBy(1 * progress)
+                .alpha(0)
+                .setDuration(time)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                        if (animation instanceof ValueAnimator) {
+                            mLlLoginLayer.setTag(((ValueAnimator) animation).getAnimatedValue());
+                        }
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        if (animation instanceof ValueAnimator) {
+                            mLlLoginLayer.setTag(((ValueAnimator) animation).getAnimatedValue());
+                        }
+                        mLlLoginLayer.setVisibility(View.GONE);
+                    }
+                })
+                .start();
+    }
+
     @NonNull
     private String toBase64(String inputPwd) {
         if (!TextUtils.isEmpty(inputPwd)) {
@@ -440,7 +528,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private String Sha1toHex(String tempPwd) {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
-            messageDigest.update(tempPwd.getBytes());
+            messageDigest.update(tempPwd.getBytes("utf-8"));
             byte[] bytes = messageDigest.digest();
 
             StringBuilder tempHex = new StringBuilder();
@@ -453,7 +541,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 tempHex.append(shaHex);
             }
             return tempHex.toString();
-        } catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
             e.printStackTrace();
         }
 
@@ -483,41 +571,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         if (openType == OpenConstants.SINA) {
             // SSO 授权回调
             // 重要：发起 SSO 登陆的 Activity 必须重写 onActivityResults
-            AuthInfo authInfo = new AuthInfo(getApplicationContext(), OpenConstant.WB_APP_KEY, OpenConstant.REDIRECT_URL, OpenConstant.SCOPE);
-            SsoHandler ssoHandler = new SsoHandler(LoginActivity.this, authInfo);
-            ssoHandler.authorizeCallBack(requestCode, resultCode, data);
+            if (mSsoHandler != null)
+                mSsoHandler.authorizeCallBack(requestCode, resultCode, data);
         }
 
     }
 
-    /**
-     * sina  callback
-     *
-     * @param bundle bundle
-     */
     @Override
-    public void onComplete(Bundle bundle) {
-        Log.e(TAG, "onComplete: -----------sina------->");
-
-        Oauth2AccessToken oauth2AccessToken = Oauth2AccessToken.parseAccessToken(bundle);
-
-        if (oauth2AccessToken.isSessionValid()) {
-            Gson gson = AppContext.createGson();
-            String openInfo = gson.toJson(oauth2AccessToken);
-            OSChinaApi.openLogin(3, openInfo, mHandler);
-
-        }
-
-    }
-
-    /**
-     * sina callback
-     */
-    @Override
-    public void onWeiboException(WeiboException e) {
-
-        Log.e(TAG, "onWeiboException: ---------------->");
-
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 
     /**
@@ -527,11 +590,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
      */
     @Override
     public void onComplete(Object o) {
-
-        Log.e(TAG, "onComplete: -------->tencent------>" + o);
-
         JSONObject jsonObject = (JSONObject) o;
-        OSChinaApi.openLogin(1, jsonObject.toString(), mHandler);
+        OSChinaApi.openLogin(OSChinaApi.LOGIN_QQ, jsonObject.toString(), mHandler);
     }
 
     /**
@@ -546,12 +606,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
 
     /**
-     * tencent / sina callback
+     * tencent callback
      */
     @Override
     public void onCancel() {
-
-        Log.e(TAG, "onCancel: ------------->");
 
     }
 
@@ -559,20 +617,17 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     public void onFocusChange(View v, boolean hasFocus) {
 
         int id = v.getId();
+
         if (id == R.id.et_login_username) {
             if (hasFocus) {
                 mLlLoginUsername.setActivated(true);
                 mLlLoginPwd.setActivated(false);
             }
-
-            Log.e(TAG, "onFocusChange: -----username->" + hasFocus);
         } else {
             if (hasFocus) {
                 mLlLoginPwd.setActivated(true);
                 mLlLoginUsername.setActivated(false);
             }
-
-            Log.e(TAG, "onFocusChange: ---pawd--->" + hasFocus);
         }
     }
 }

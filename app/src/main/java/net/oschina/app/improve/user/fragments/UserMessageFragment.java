@@ -3,7 +3,7 @@ package net.oschina.app.improve.user.fragments;
 import com.google.gson.reflect.TypeToken;
 
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.base.fragments.BaseRecyclerViewFragment;
 import net.oschina.app.improve.bean.Message;

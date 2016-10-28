@@ -1,4 +1,4 @@
-package net.oschina.app.improve.account.activity.constants;
+package net.oschina.app.improve.account.constants;
 
 /**
  * Created by fei
@@ -34,5 +34,7 @@ public interface UserConstants {
     String BLOG = "blog";
     String ANSWER = "answer";
     String DISCUSS = "discuss";
+
+    String RETRIEVE_PWD_URL = "https://www.oschina.net/";
 
 }

@@ -2,11 +2,13 @@ package net.oschina.app.improve.main.tabs;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.View;
 
 import net.oschina.app.R;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.improve.base.fragments.BaseGeneralListFragment;
 import net.oschina.app.improve.base.fragments.BaseViewPagerFragment;
+import net.oschina.app.improve.search.activities.SearchActivity;
 import net.oschina.app.improve.tweet.fragments.TweetFragment;
 import net.oschina.app.interf.OnTabReselectListener;
 
@@ -62,5 +64,20 @@ public class TweetViewPagerFragment extends BaseViewPagerFragment implements OnT
     @Override
     protected int getTitleRes() {
         return R.string.main_tab_name_tweet;
+    }
+
+    @Override
+    protected int getIconRes() {
+        return R.mipmap.btn_search_normal;
+    }
+
+    @Override
+    protected View.OnClickListener getIconClickListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SearchActivity.show(getContext());
+            }
+        };
     }
 }

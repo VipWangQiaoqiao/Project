@@ -22,7 +22,7 @@ import net.oschina.app.bean.Messages;
 import net.oschina.app.bean.Notice;
 import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.service.NoticeUtils;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.DialogHelp;

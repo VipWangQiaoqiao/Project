@@ -12,7 +12,7 @@ import net.oschina.app.adapter.ViewPageFragmentAdapter;
 import net.oschina.app.api.remote.OSChinaTeamApi;
 import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseViewPagerFragment;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamGit;
 import net.oschina.app.team.bean.TeamIssueCatalog;

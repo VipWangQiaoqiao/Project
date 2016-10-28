@@ -36,7 +36,7 @@ import net.oschina.app.base.BaseActivity;
 import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.LoginUserBean;
 import net.oschina.app.bean.OpenIdCatalog;
-import net.oschina.app.improve.bean.UserV2;
+import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.share.constant.OpenConstant;
 import net.oschina.app.util.CyptoUtils;
@@ -181,12 +181,12 @@ public class LoginActivity extends BaseActivity implements IUiListener {
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
 
                 try {
-                    Type type = new TypeToken<ResultBean<UserV2>>() {
+                    Type type = new TypeToken<ResultBean<User>>() {
                     }.getType();
 
                     ResultBean resultBean = AppContext.createGson().fromJson(responseString, type);
                     if (resultBean.isSuccess()) {
-                        UserV2 userInfo = (UserV2) resultBean.getResult();
+                        User userInfo = (User) resultBean.getResult();
                        // CacheManager.saveObject(LoginActivity.this, userInfo, NewUserInfoFragment.CACHE_NAME);
                         finish();
                     }
@@ -553,7 +553,7 @@ public class LoginActivity extends BaseActivity implements IUiListener {
             hideWaitDialog();
             handleLoginSuccess();
         } else {
-            AppContext.getInstance().cleanLoginInfo();
+            //AppContext.getInstance().cleanLoginInfo();
             AppContext.showToast(loginUserBean.getResult().getErrorMessage());
         }
     }

@@ -13,7 +13,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseFragment;
 import net.oschina.app.bean.SimpleBackPage;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.team.bean.MyIssueState;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.ui.TeamMainActivity;

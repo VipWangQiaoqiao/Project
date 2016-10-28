@@ -20,9 +20,9 @@ import com.loopj.android.http.TextHttpResponseHandler;
 
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.bean.BlogDetail;
-import net.oschina.app.improve.bean.UserV2;
+import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.simple.Comment;
 import net.oschina.app.improve.behavior.FloatingAutoHideDownBehavior;
 import net.oschina.app.improve.comment.CommentsView;
@@ -258,7 +258,7 @@ public class BlogDetailFragment
         dialog.setOnClickRewardListener(new RewardDialog.OnClickRewardCallback() {
             @Override
             public void reward(float cast) {
-                UserV2 user = UserCacheManager.initUserManager().getUserCache(getContext());
+                User user = AccountHelper.getUser();
                 if (user == null || user.getId() <= 0) {
                     Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
                     return;

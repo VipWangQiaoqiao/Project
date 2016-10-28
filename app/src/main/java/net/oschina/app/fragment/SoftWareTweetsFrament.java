@@ -14,7 +14,7 @@ import net.oschina.app.base.BaseActivity;
 import net.oschina.app.base.BaseListFragment;
 import net.oschina.app.bean.Tweet;
 import net.oschina.app.bean.TweetsList;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.service.ServerTaskUtils;
 import net.oschina.app.util.UIHelper;
 import net.oschina.app.util.XmlUtils;

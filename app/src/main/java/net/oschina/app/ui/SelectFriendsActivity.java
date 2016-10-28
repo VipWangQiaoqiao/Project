@@ -39,7 +39,7 @@ import net.oschina.app.base.BaseActivity;
 import net.oschina.app.bean.Friend;
 import net.oschina.app.bean.FriendsList;
 import net.oschina.app.cache.CacheManager;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.ui.empty.EmptyLayout;
 import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TDevice;

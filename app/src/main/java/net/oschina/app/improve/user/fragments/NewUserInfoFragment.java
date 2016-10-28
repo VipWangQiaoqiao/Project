@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -26,10 +25,11 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.SimpleBackPage;
-import net.oschina.app.improve.account.activity.activity.LoginActivity;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.activity.LoginActivity;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.improve.base.fragments.BaseFragment;
-import net.oschina.app.improve.bean.UserV2;
+import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.notice.NoticeBean;
 import net.oschina.app.improve.notice.NoticeManager;
@@ -70,9 +70,6 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 public class NewUserInfoFragment extends BaseFragment implements View.OnClickListener,
         EasyPermissions.PermissionCallbacks, NoticeManager.NoticeNotify, OnTabReselectListener {
-
-    private static final String TAG = "NewUserInfoFragment";
-    // public static final String CACHE_NAME = "NewUserInfoFragment";
 
     public static final int ACTION_TYPE_ALBUM = 0;
     public static final int ACTION_TYPE_PHOTO = 1;
@@ -136,7 +133,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
 
     private File mCacheFile;
 
-    private UserV2 mUserInfo;
+    private User mUserInfo;
 
     private TextHttpResponseHandler textHandler = new TextHttpResponseHandler() {
 
@@ -167,17 +164,15 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                 if (mSolarSystem != null)
                     mSolarSystem.decelerate();
 
-                Type type = new TypeToken<ResultBean<UserV2>>() {
+                Type type = new TypeToken<ResultBean<User>>() {
                 }.getType();
 
                 ResultBean resultBean = AppContext.createGson().fromJson(responseString, type);
-                Log.e(TAG, "onSuccess: ---->" + responseString);
                 if (resultBean.isSuccess()) {
-                    UserV2 userInfo = (UserV2) resultBean.getResult();
+                    User userInfo = (User) resultBean.getResult();
                     updateView(userInfo);
                     //缓存用户信息
-                    UserCacheManager.initUserManager().saveUserCache(getContext(), userInfo);
-                    Log.e(TAG, "onSuccess: ----------->" + userInfo.toString());
+                    AccountHelper.updateUserCache(userInfo);
                 }
                 if (mIsUploadIcon) {
                     hideWaitDialog();
@@ -224,14 +219,10 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     @Override
     protected void initData() {
         super.initData();
-
-        UserV2 userV2 = UserCacheManager.initUserManager().getUserCache(getContext());
-        //(UserV2) CacheManager.readObject(getActivity(), CACHE_NAME);
-        this.mUserInfo = userV2;
-       // Log.e(TAG, "initData: --------->userV2="+userV2.toString());
-
+        User user = AccountHelper.getUser();
+        this.mUserInfo = user;
         if (isLogin()) {
-            updateView(userV2);
+            updateView(user);
             if (TDevice.hasInternet()) {
                 sendRequestData();
             }
@@ -247,7 +238,6 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onResume() {
         super.onResume();
-        Log.e(TAG, "onResume: --------->");
         mIsUploadIcon = false;
 
         boolean login = isLogin();
@@ -277,7 +267,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
      *
      * @param userInfo userInfo
      */
-    private void updateView(UserV2 userInfo) {
+    private void updateView(User userInfo) {
 
         setImageFromNet(mCirclePortrait, userInfo.getPortrait(), R.mipmap.widget_dface);
         mCirclePortrait.setVisibility(View.VISIBLE);
@@ -311,9 +301,13 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
         mTvFollowCount.setText(formatCount(userInfo.getStatistics().getFollow()));
         mTvFollowerCount.setText(formatCount(userInfo.getStatistics().getFans()));
 
-//        updateSolar(mPx, mPy);
-
         mUserInfo = userInfo;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mUserInfo = null;
     }
 
     /**
@@ -468,7 +462,7 @@ public class NewUserInfoFragment extends BaseFragment implements View.OnClickLis
                     }
                     break;
                 case R.id.ly_tweet:
-                    UserTweetActivity.show(getActivity(),UserCacheManager.initUserManager().loginId(getContext()));
+                    UserTweetActivity.show(getActivity(), UserCacheManager.initUserManager().loginId(getContext()));
                     break;
                 case R.id.ly_favorite:
 //                    UIHelper.showUserFavorite(getActivity(), AppContext.getInstance()

@@ -20,7 +20,7 @@ import net.oschina.app.emoji.EmojiKeyboardFragment;
 import net.oschina.app.emoji.Emojicon;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.emoji.OnEmojiClickListener;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.tweet.contract.TweetPublishContract;

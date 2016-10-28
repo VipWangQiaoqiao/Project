@@ -17,7 +17,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 import net.oschina.app.AppContext;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.util.UIHelper;
 
 import java.util.ArrayList;

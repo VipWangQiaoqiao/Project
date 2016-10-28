@@ -14,7 +14,8 @@ import net.oschina.app.AppConfig;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.base.BaseFragment;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.improve.main.FeedBackActivity;
 import net.oschina.app.improve.main.update.CheckUpdateManager;
 import net.oschina.app.improve.widget.togglebutton.ToggleButton;
@@ -186,8 +187,8 @@ public class SettingsFragment extends BaseFragment {
                 // 清理所有缓存
                 UIHelper.clearAppCache(false);
                 // 注销操作
-                //AppContext.getInstance().Logout();
-                UserCacheManager.initUserManager().logout(getApplication().getApplicationContext());
+                AccountHelper.logout();
+
                 AppContext.showToastShort(R.string.tip_logout_success);
                 getActivity().finish();
                 break;

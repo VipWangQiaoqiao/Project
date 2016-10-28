@@ -19,9 +19,17 @@ public class SubBean implements Serializable{
     private int type;
     private Author author;
     private Image image;
-    private Map<String,Object> cxtra;
+    private Map<String,Object> extra;
     private String[] tags;
     private Statistics statistics;
+
+    public boolean isOriginal(){
+        return true;
+    }
+
+    public boolean isRecommend(){
+        return true;
+    }
 
     public long getId() {
         return id;
@@ -87,12 +95,12 @@ public class SubBean implements Serializable{
         this.image = image;
     }
 
-    public Map<String, Object> getCxtra() {
-        return cxtra;
+    public Map<String, Object> getExtra() {
+        return extra;
     }
 
-    public void setCxtra(Map<String, Object> cxtra) {
-        this.cxtra = cxtra;
+    public void setExtra(Map<String, Object> extra) {
+        this.extra = extra;
     }
 
     public String[] getTags() {
@@ -132,7 +140,7 @@ public class SubBean implements Serializable{
         }
     }
 
-    private static class Statistics implements Serializable{
+    public static class Statistics implements Serializable{
         private int comment;
         private int view;
 

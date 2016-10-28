@@ -220,6 +220,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
         if (mAdapter.getItems().size() > 0) {
             mErrorLayout.setErrorType(EmptyLayout.HIDE_LAYOUT);
             mRefreshLayout.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.VISIBLE);
         } else {
             mErrorLayout.setErrorType(isNeedEmptyView() ? EmptyLayout.NODATA : EmptyLayout.HIDE_LAYOUT);
         }

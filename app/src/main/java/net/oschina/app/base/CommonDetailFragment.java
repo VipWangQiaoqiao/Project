@@ -27,7 +27,7 @@ import net.oschina.app.bean.Result;
 import net.oschina.app.bean.ResultBean;
 import net.oschina.app.cache.CacheManager;
 import net.oschina.app.emoji.OnSendClickListener;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.ui.DetailActivity;
 import net.oschina.app.ui.ReportDialog;
 import net.oschina.app.ui.ShareDialog;

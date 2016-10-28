@@ -4,18 +4,22 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 
+import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.tencent.mm.sdk.modelmsg.SendAuth;
 
+import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Constants;
-import net.oschina.app.improve.main.MainActivity;
-import net.oschina.app.util.TLog;
+import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.bean.User;
+import net.oschina.app.improve.bean.base.ResultBean;
+
+import java.lang.reflect.Type;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -24,7 +28,6 @@ import cz.msebera.android.httpclient.Header;
  * Created by zhangdeyi on 15/7/27.
  */
 public class WXEntryActivity extends Activity {
-
     public static final String EXTRA_LOGIN_WX = "extra_login_wx";
     public static final String ACTION_LOGIN_WX = "net.oschina.app.wx.action.wx_login";
 
@@ -79,38 +82,34 @@ public class WXEntryActivity extends Activity {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-
-                TLog.log("Test", responseString);
-
                 //这里是老板微信登录,新版完善了就可以删除掉
                 // Intent intent = new Intent(OpenIdCatalog.WECHAT);
                 //intent.putExtra(LoginBindActivityChooseActivity.BUNDLE_KEY_OPENIDINFO, openInfo);
                 //  sendBroadcast(intent);
 
-                Log.e(TAG, "onSuccess: ----------->" + responseString);
-
                 //新版微信登录
                 if (!TextUtils.isEmpty(responseString)) {
 
-                    OSChinaApi.openLogin(2, responseString, new TextHttpResponseHandler() {
+                    OSChinaApi.openLogin(OSChinaApi.LOGIN_WECHART, responseString, new TextHttpResponseHandler() {
                         @Override
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-
+                            throwable.printStackTrace();
                         }
 
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                            Type type = new TypeToken<ResultBean<User>>() {
+                            }.getType();
 
-                            Intent intent = new Intent(WXEntryActivity.this, MainActivity.class);
-                            startActivity(intent);
-
-                            finish();
-
+                            ResultBean<User> resulBean = AppContext.createGson().fromJson(responseString, type);
+                            if (resulBean.isSuccess()) {
+                                User user = resulBean.getResult();
+                                AccountHelper.login(user, headers);
+                                finish();
+                            }
                         }
                     });
-
                 }
-
             }
         });
     }

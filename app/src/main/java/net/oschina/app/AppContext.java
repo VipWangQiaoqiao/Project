@@ -1,25 +1,18 @@
 package net.oschina.app;
 
-import android.app.ActivityManager;
-import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.text.TextUtils;
 
-import com.bumptech.glide.load.model.GlideUrl;
-import com.bumptech.glide.load.model.LazyHeaders;
 import com.google.gson.Gson;
 
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.base.BaseApplication;
-import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.User;
-import net.oschina.app.cache.CacheManager;
 import net.oschina.app.cache.DataCleanManager;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.improve.notice.NoticeManager;
-import net.oschina.app.improve.tweet.fragments.TweetFragment;
 import net.oschina.app.util.CyptoUtils;
 import net.oschina.app.util.MethodsCompat;
 import net.oschina.app.util.StringUtils;
@@ -44,7 +37,6 @@ import static net.oschina.app.AppConfig.KEY_TWEET_DRAFT;
 public class AppContext extends BaseApplication {
     public static final int PAGE_SIZE = 20;// 默认分页大小
     private static AppContext instance;
-    private long loginUid;
 
     @Override
     public void onCreate() {
@@ -52,7 +44,6 @@ public class AppContext extends BaseApplication {
         instance = this;
 
         init();
-        initLogin();
     }
 
     private void init() {
@@ -69,15 +60,6 @@ public class AppContext extends BaseApplication {
 
         // Bitmap缓存地址
         HttpConfig.CACHEPATH = "OSChina/ImageCache";
-    }
-
-    private void initLogin() {
-        User user = getLoginUser();
-        if (null != user && user.getId() > 0) {
-            loginUid = user.getId();
-        } else {
-            this.cleanLoginInfo();
-        }
     }
 
     /**
@@ -158,7 +140,6 @@ public class AppContext extends BaseApplication {
      */
     @SuppressWarnings("serial")
     public void saveUserInfo(final User user) {
-        this.loginUid = user.getId();
         setProperties(new Properties() {
             {
                 setProperty("user.uid", String.valueOf(user.getId()));
@@ -228,61 +209,10 @@ public class AppContext extends BaseApplication {
     }
 
     /**
-     * 清除登录信息
-     */
-    public void cleanLoginInfo() {
-        this.loginUid = 0;
-        removeProperty("user.uid", "user.name", "user.face", "user.location",
-                "user.followers", "user.fans", "user.score",
-                "user.isRememberMe", "user.gender", "user.favoritecount");
-    }
-
-    /**
-     * 获取登陆用户Id, 已过时
-     *
-     * @return 用户Id
-     */
-   // @Deprecated
-   // public int getLoginUid() {
-    //    return (int) loginUid;
-  //  }
-
-    /**
-     * 获取登陆用户Id
-     *
-     * @return 用户Id
-     */
-   // public long getLoginId() {
-       // return loginUid;
-  //  }
-
-//    public boolean isLogin() {
-//        return loginUid != 0;
-//    }
-
-    /**
      * 用户注销
      */
     public void Logout() {
-        // 用户退出时清理红点并退出服务
-        NoticeManager.clear(this, NoticeManager.FLAG_CLEAR_ALL);
-        NoticeManager.exitServer(this);
-
-        cleanLoginInfo();
-        ApiHttpClient.destroy(this);
-
-        CacheManager.deleteObject(context(), TweetFragment.CACHE_USER_TWEET);
-        UserCacheManager.initUserManager().deleteUserCache(this);
-       // CacheManager.deleteObject(context(), NewUserInfoFragment.CACHE_NAME);
-
-        Intent intent = new Intent(Constants.INTENT_ACTION_LOGOUT);
-        sendBroadcast(intent);
-
-        this.loginUid = 0;
-
-        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        activityManager.killBackgroundProcesses("net.oschina.app.tweet.TweetPublishService");
-        activityManager.killBackgroundProcesses("net.oschina.app.notice.NoticeServer");
+        AccountHelper.logout();
     }
 
     /**
@@ -367,15 +297,4 @@ public class AppContext extends BaseApplication {
     }
 
 
-    public static GlideUrl getGlideUrlByUser(String url) {
-        if (UserCacheManager.initUserManager().isLogin(context())) {
-            return new GlideUrl(url,
-                    new LazyHeaders
-                            .Builder()
-                            .addHeader("Cookie", ApiHttpClient.getCookieString(AppContext.getInstance()))
-                            .build());
-        } else {
-            return new GlideUrl(url);
-        }
-    }
 }

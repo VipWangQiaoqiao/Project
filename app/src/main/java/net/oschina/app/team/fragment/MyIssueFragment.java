@@ -7,7 +7,7 @@ import android.widget.AdapterView;
 
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.base.BaseListFragment;
-import net.oschina.app.improve.account.activity.manager.UserCacheManager;
+import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.team.adapter.TeamIssueAdapter;
 import net.oschina.app.team.bean.Team;
 import net.oschina.app.team.bean.TeamIssue;
