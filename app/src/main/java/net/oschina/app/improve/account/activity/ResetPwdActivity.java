@@ -114,9 +114,12 @@ public class ResetPwdActivity extends BaseActivity implements View.OnClickListen
             public void afterTextChanged(Editable s) {
                 int length = s.length();
                 if (length > 6) {
+                    mIvResetPwdDel.setVisibility(View.VISIBLE);
                     mLlResetPwd.setBackgroundResource(R.drawable.bg_login_input_ok);
+                    mBtResetSubmit.setAlpha(1.0f);
                 } else {
                     mLlResetPwd.setBackgroundResource(R.drawable.bg_login_input_error);
+                    mBtResetSubmit.setAlpha(0.6f);
                 }
 
             }
@@ -146,9 +149,15 @@ public class ResetPwdActivity extends BaseActivity implements View.OnClickListen
                     AppContext.showToast(getString(R.string.reset_pwd_hint), Toast.LENGTH_SHORT);
                     return;
                 }
+                if (tempPwd.length() > 6) {
+                    AppContext.showToast(getString(R.string.reset_pwd_hint), Toast.LENGTH_SHORT);
+                    return;
+                }
                 if (!TDevice.hasInternet()) {
                     AppContext.showToast(getString(R.string.tip_network_error), Toast.LENGTH_SHORT);
+                    return;
                 }
+
 
                 String appToken = Verifier.getPrivateToken(getApplication());
                 OSChinaApi.resetPwd(tempPwd, mPhoneToken.getToken(), appToken, mHandler);

@@ -110,9 +110,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     @Bind(R.id.ib_login_qq)
     ImageView mImLoginQq;
 
-    private int openType;
-    private boolean mHoldStatus;
-
     private TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -144,6 +141,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
         }
     };
+
+    private int openType;
+    private boolean mHoldStatus;
     private String mInputPwd;
     private SsoHandler mSsoHandler;
 
@@ -172,7 +172,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-
             }
 
             @Override
@@ -182,6 +181,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
             @Override
             public void afterTextChanged(Editable s) {
+                String username = s.toString();
+                if (username.length() > 0) {
+                    if (AssimilateUtils.MachPhoneNum(username) || AssimilateUtils.machEmail(username)) {
+                        mLlLoginUsername.setBackgroundResource(R.drawable.bg_login_input_ok);
+                    } else {
+                        mLlLoginUsername.setBackgroundResource(R.drawable.bg_login_input_error);
+                    }
+                } else {
+                    mLlLoginUsername.setBackgroundResource(R.drawable.bg_login_input_ok);
+                }
 
             }
         });
@@ -199,7 +208,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                int length = s.length();
+                if (length > 0) {
+                    mLlLoginPwd.setBackgroundResource(R.drawable.bg_login_input_ok);
+                }
             }
         });
     }
@@ -287,8 +299,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 break;
             case R.id.bt_login_submit:
 
-                String tempUsername = mEtLoginUsername.getText().toString().trim();//"771297972@qq.com";
-                String tempPwd = mEtLoginPwd.getText().toString().trim();//"123456";
+                String tempUsername = mEtLoginUsername.getText().toString().trim();
+                String tempPwd = mEtLoginPwd.getText().toString().trim();
 
 
                 if (!TextUtils.isEmpty(tempUsername) && !TextUtils.isEmpty(tempPwd)) {
@@ -301,12 +313,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
                         String appToken = "123";//"765e06cc569b5b8ed41a4a8c979338c888d644f4";//Verifier.getPrivateToken(getApplication());
 
-
                         if (TDevice.hasInternet()) {
                             OSChinaApi.login(tempUsername, Sha1toHex(tempPwd), appToken, new TextHttpResponseHandler() {
                                 @Override
                                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                                    AppContext.showToast(responseString, Toast.LENGTH_SHORT);
+
                                 }
 
                                 @Override
@@ -330,6 +341,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                             }
 
                                         } else {
+                                            int code = resultBean.getCode();
+                                            if (code == 211) {
+                                                mLlLoginUsername.setBackgroundResource(R.drawable.bg_login_input_error);
+                                            } else if (code == 212) {
+                                                mLlLoginPwd.setBackgroundResource(R.drawable.bg_login_input_error);
+                                            }
                                             AppContext.showToast(resultBean.getMessage(), Toast.LENGTH_SHORT);
                                             //更新失败因该是不进行任何的本地操作
                                         }
@@ -345,7 +362,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                         }
 
                     } else {
-                        AppContext.showToast(getString(R.string.hint_username_ok), Toast.LENGTH_SHORT);
+                        AppContext.showToast(getString(R.string.login_input_username_hint_error), Toast.LENGTH_SHORT);
                     }
                 } else {
                     AppContext.showToast(getString(R.string.hint_pwd_null), Toast.LENGTH_SHORT);

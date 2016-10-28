@@ -212,6 +212,7 @@ public class RetrieveActivity extends BaseActivity implements View.OnClickListen
 
             }
         });
+        mBtRetrieveSubmit.setAlpha(0.6f);
         mEtRetrieveCodeInput.setOnFocusChangeListener(this);
         mEtRetrieveCodeInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -226,6 +227,12 @@ public class RetrieveActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public void afterTextChanged(Editable s) {
+                int length = s.length();
+                if (length > 0) {
+                    mBtRetrieveSubmit.setAlpha(1.0f);
+                } else {
+                    mBtRetrieveSubmit.setAlpha(0.6f);
+                }
 
             }
         });
@@ -234,6 +241,15 @@ public class RetrieveActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void initData() {
         super.initData();
+
+        String phone = mEtRetrieveTel.getText().toString().trim();
+        if (TextUtils.isEmpty(phone)) {
+            mTvRetrieveSmsCall.setAlpha(0.4f);
+        }
+        String smsCode = mEtRetrieveCodeInput.getText().toString().trim();
+        if (TextUtils.isEmpty(smsCode)) {
+            mBtRetrieveSubmit.setAlpha(0.8f);
+        }
     }
 
     @OnClick({R.id.ib_navigation_back, R.id.iv_retrieve_tel_del, R.id.retrieve_sms_call,
@@ -250,37 +266,41 @@ public class RetrieveActivity extends BaseActivity implements View.OnClickListen
                 break;
             case R.id.retrieve_sms_call:
 
-                if (mMachPhoneNum && TDevice.hasInternet()) {
+                if (!mMachPhoneNum) {
+                    AppContext.showToast(getString(R.string.retrieve_pwd_sms_coe_error), Toast.LENGTH_SHORT);
+                    return;
+                }
 
-                    if (mTvRetrieveSmsCall.getTag() == null) {
-                        mRequestType = 1;
-                        mTvRetrieveSmsCall.setAlpha(0.6f);
-                        mTvRetrieveSmsCall.setTag(true);
-                        new CountDownTimer(60 * 1000, 1000) {
+                if (!TDevice.hasInternet()) {
+                    AppContext.showToast(getResources().getString(R.string.tip_network_error), Toast.LENGTH_SHORT);
+                    return;
+                }
 
-                            @SuppressLint("DefaultLocale")
-                            @Override
-                            public void onTick(long millisUntilFinished) {
-                                mTvRetrieveSmsCall.setText(String.format("%s%s%d%s",
-                                        getResources().getString(R.string.register_sms_hint), "(", millisUntilFinished / 1000, ")"));
-                            }
+                if (mTvRetrieveSmsCall.getTag() == null) {
+                    mRequestType = 1;
+                    mTvRetrieveSmsCall.setAlpha(0.6f);
+                    mTvRetrieveSmsCall.setTag(true);
+                    new CountDownTimer(60 * 1000, 1000) {
 
-                            @Override
-                            public void onFinish() {
-                                mTvRetrieveSmsCall.setTag(null);
-                                mTvRetrieveSmsCall.setText(getResources().getString(R.string.register_sms_hint));
-                                mTvRetrieveSmsCall.setAlpha(1.0f);
-                            }
-                        }.start();
-                        mPhoneNumber = mEtRetrieveTel.getText().toString().trim();
-                        mAppToken = "123";//Verifier.getPrivateToken(getApplication());
-                        OSChinaApi.sendSmsCode(mPhoneNumber, mAppToken, OSChinaApi.REGISTER_INTENT, mHandler);
-                    } else {
-                        AppContext.showToast(getResources().getString(R.string.register_sms_wait_hint), Toast.LENGTH_SHORT);
-                    }
+                        @SuppressLint("DefaultLocale")
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                            mTvRetrieveSmsCall.setText(String.format("%s%s%d%s",
+                                    getResources().getString(R.string.register_sms_hint), "(", millisUntilFinished / 1000, ")"));
+                        }
 
+                        @Override
+                        public void onFinish() {
+                            mTvRetrieveSmsCall.setTag(null);
+                            mTvRetrieveSmsCall.setText(getResources().getString(R.string.register_sms_hint));
+                            mTvRetrieveSmsCall.setAlpha(1.0f);
+                        }
+                    }.start();
+                    mPhoneNumber = mEtRetrieveTel.getText().toString().trim();
+                    mAppToken = "123";//Verifier.getPrivateToken(getApplication());
+                    OSChinaApi.sendSmsCode(mPhoneNumber, mAppToken, OSChinaApi.REGISTER_INTENT, mHandler);
                 } else {
-                    AppContext.showToast(getResources().getString(R.string.footer_type_net_error), Toast.LENGTH_SHORT);
+                    AppContext.showToast(getResources().getString(R.string.register_sms_wait_hint), Toast.LENGTH_SHORT);
                 }
 
                 break;
@@ -313,7 +333,7 @@ public class RetrieveActivity extends BaseActivity implements View.OnClickListen
 
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
-               // intent.setAction(Intent.CATEGORY_BROWSABLE);
+                // intent.setAction(Intent.CATEGORY_BROWSABLE);
                 Uri content_url = Uri.parse(UserConstants.RETRIEVE_PWD_URL);
                 intent.setData(content_url);
                 startActivity(intent);

@@ -5,7 +5,7 @@
         <shape>
             <corners android:radius="26dp"/>
             <stroke android:width="1px" android:color="@color/white"/>
-            <solid android:color="@color/transparent"/>
+            <solid android:color="#1a1a1a1a"/>
         </shape>
     </item>
 
@@ -13,7 +13,7 @@
         <shape>
             <corners android:radius="26dp"/>
             <stroke android:width="1px" android:color="@color/white"/>
-            <solid android:color="#10010144"/>
+            <solid android:color="@color/transparent"/>
         </shape>
     </item>
 
