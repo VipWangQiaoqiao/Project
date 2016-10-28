@@ -17,14 +17,15 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseRecyclerViewActivity;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.Message;
+import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.PageBean;
 import net.oschina.app.improve.bean.base.ResultBean;
-import net.oschina.app.improve.bean.simple.Author;
 import net.oschina.app.improve.behavior.KeyboardInputDelegation;
 import net.oschina.app.improve.media.ImageGalleryActivity;
 import net.oschina.app.improve.media.SelectImageActivity;
@@ -52,12 +53,12 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
 
     EditText mViewInput;
     private long authorId;
-    private Author mReceiver;
+    private User mReceiver;
     private ProgressDialog mDialog;
     private boolean isFirstLoading = true;
     private Map<String, Message> mSendQuent = new HashMap<>();
 
-    public static void show(Context context, Author sender) {
+    public static void show(Context context, User sender) {
         Intent intent = new Intent(context, UserSendMessageActivity.class);
         intent.putExtra("receiver", sender);
         context.startActivity(intent);
@@ -72,7 +73,7 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
     protected void initData() {
         super.initData();
         mDialog = new ProgressDialog(this);
-        mReceiver = (Author) getIntent().getSerializableExtra("receiver");
+        mReceiver = (User) getIntent().getSerializableExtra("receiver");
         setTitle(mReceiver.getName());
         authorId = UserCacheManager.initUserManager().loginId(getContext());
         init();
@@ -265,9 +266,7 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
             OSChinaApi.pubMessage(mReceiver.getId(), file, new CallBack(getFileName(path)));
             Message message = new Message();
             message.setType(Message.TYPE_IMAGE);
-            Author author = new Author();
-            author.setId(UserCacheManager.initUserManager().loginId(getContext()));
-            message.setSender(author);
+            message.setSender(AccountHelper.getUser());
             message.setResource(path);
             mSendQuent.put(getFileName(path), message);
             mAdapter.addItem(message);
