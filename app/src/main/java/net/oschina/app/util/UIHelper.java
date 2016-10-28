@@ -50,6 +50,7 @@ import net.oschina.app.fragment.FriendsFragment;
 import net.oschina.app.fragment.MessageDetailFragment;
 import net.oschina.app.fragment.QuestionTagFragment;
 import net.oschina.app.fragment.SoftWareTweetsFrament;
+import net.oschina.app.improve.account.activity.LoginActivity;
 import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.detail.activities.BlogDetailActivity;
@@ -124,8 +125,9 @@ public class UIHelper {
      * @param context
      */
     public static void showLoginActivity(Context context) {
-        Intent intent = new Intent(context, net.oschina.app.improve.account.activity.LoginActivity.class);
-        context.startActivity(intent);
+        LoginActivity.show(context);
+        // Intent intent = new Intent(context, net.oschina.app.improve.account.activity.LoginActivity.class);
+        // context.startActivity(intent);
     }
 
     /**
