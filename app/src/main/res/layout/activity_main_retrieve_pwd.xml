@@ -53,6 +53,7 @@
             android:paddingRight="4dp"
             android:textColor="@color/white"
             android:textColorHint="@color/login_line_color"
+            android:textCursorDrawable="@null"
             android:textSize="@dimen/font_16"/>
 
         <ImageView
@@ -62,7 +63,8 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:contentDescription="@null"
-            app:srcCompat="@mipmap/ic_edit_text_delbtn"/>
+            android:visibility="invisible"
+            app:srcCompat="@mipmap/ic_clear"/>
     </LinearLayout>
 
     <LinearLayout
@@ -106,6 +108,7 @@
             android:paddingRight="4dp"
             android:textColor="@color/white"
             android:textColorHint="@color/login_line_color"
+            android:textCursorDrawable="@null"
             android:textSize="@dimen/font_16"/>
 
         <TextView
@@ -140,18 +143,42 @@
         android:textSize="@dimen/font_18"
         tools:targetApi="lollipop"/>
 
-    <TextView
-        android:id="@+id/tv_retrieve_label"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
         android:layout_marginTop="16dp"
-        android:elevation="0dp"
-        android:text="@string/retrieve_pwd_email_label"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:translationZ="0dp"
-        tools:targetApi="lollipop"/>
+        android:orientation="horizontal">
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="0dp"
+            android:text="@string/retrieve_pwd_email_label_one"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:translationZ="0dp"
+            tools:targetApi="lollipop"/>
+
+        <TextView
+            android:id="@+id/tv_retrieve_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="0dp"
+            android:paddingBottom="4dp"
+            android:paddingRight="4dp"
+            android:paddingTop="4dp"
+            android:text="@string/retrieve_pwd_email_label"
+            android:textColor="@color/login_input_active"
+            android:textSize="16sp"
+            android:translationZ="0dp"
+            tools:ignore="RtlSymmetry"
+            tools:targetApi="lollipop"/>
+
+
+    </LinearLayout>
+
 
 </LinearLayout>

@@ -2035,6 +2035,50 @@ public class OSChinaApi {
         ApiHttpClient.post("action/apiv2/phone_validate", params, handler);
     }
 
+
+    /**
+     * register user info
+     *
+     * @param username   username
+     * @param password   pwd
+     * @param gender     gender
+     * @param phoneToken token
+     * @param appToken   appToken
+     * @param handler    handler
+     */
+    public static void register(String username, String password, int gender, String phoneToken, String appToken, TextHttpResponseHandler
+            handler) {
+
+        RequestParams params = new RequestParams();
+        params.put("username", username);
+        params.put("password", password);
+        params.put("gender", gender);
+        params.put("phoneToken", phoneToken);
+        params.put("appToken", appToken);
+
+        ApiHttpClient.post("action/apiv2/account_register", params, handler);
+
+    }
+
+    /**
+     * reset pwd
+     *
+     * @param password   password
+     * @param phoneToken token
+     * @param appToken   appToken
+     * @param handler    handler
+     */
+    public static void resetPwd(String password, String phoneToken, String appToken, TextHttpResponseHandler handler) {
+
+        RequestParams params = new RequestParams();
+        params.put("password", password);
+        params.put("phoneToken", phoneToken);
+        params.put("appToken", appToken);
+
+        ApiHttpClient.post("action/apiv2/account_password_forgot", params, handler);
+
+    }
+
     /**
      * 获得首页数据
      *
@@ -2060,4 +2104,6 @@ public class OSChinaApi {
     public static void getBanner(String api, TextHttpResponseHandler handler) {
         ApiHttpClient.getHttpClient().get(api, handler);
     }
+
+
 }

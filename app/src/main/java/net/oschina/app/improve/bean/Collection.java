@@ -12,7 +12,7 @@ public class Collection implements Serializable{
     private int type;
     private String title;
     private String href;
-    private User user;
+    private User authorUser;
     private String favDate;
     private int favCount;
     private String body;
@@ -50,12 +50,12 @@ public class Collection implements Serializable{
         this.href = href;
     }
 
-    public User getUser() {
-        return user;
+    public User getAuthorUser() {
+        return authorUser;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAuthorUser(User authorUser) {
+        this.authorUser = authorUser;
     }
 
     public String getFavDate() {

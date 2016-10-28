@@ -53,6 +53,7 @@
             android:paddingRight="4dp"
             android:textColor="@color/white"
             android:textColorHint="@color/login_line_color"
+            android:textCursorDrawable="@null"
             android:textSize="@dimen/font_16"/>
 
         <ImageView
@@ -61,7 +62,8 @@
             android:layout_height="32dp"
             android:layout_marginRight="16dp"
             android:contentDescription="@null"
-            app:srcCompat="@mipmap/ic_edit_text_delbtn"
+            android:visibility="invisible"
+            app:srcCompat="@mipmap/ic_clear"
             tools:ignore="RtlHardcoded"/>
     </LinearLayout>
 
@@ -72,10 +74,11 @@
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
         android:layout_marginTop="64dp"
+        android:alpha="0.6"
         android:background="@drawable/bg_login_submit"
         android:elevation="0dp"
         android:outlineProvider="none"
-        android:text="@string/str_action_submit"
+        android:text="@string/reset_pwd_submit"
         android:textColor="@color/white"
         android:textSize="@dimen/font_18"
         android:translationZ="0dp"
