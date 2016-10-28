@@ -30,7 +30,6 @@ public final class AccountHelper {
 
     private AccountHelper(Application application) {
         this.application = application;
-        this.user = SharedPreferencesHelper.load(application, User.class);
     }
 
     public static void init(Application application) {
@@ -45,8 +44,9 @@ public final class AccountHelper {
         return getUser().getId();
     }
 
-    public static User getUser() {
-        TLog.error(instances.user.toString());
+    public synchronized static User getUser() {
+        if (instances.user == null)
+            instances.user = SharedPreferencesHelper.load(instances.application, User.class);
         return instances.user;
     }
 
