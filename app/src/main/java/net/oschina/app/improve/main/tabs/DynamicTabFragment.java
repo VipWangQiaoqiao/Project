@@ -15,7 +15,12 @@ import com.google.gson.reflect.TypeToken;
 import net.oschina.app.R;
 import net.oschina.app.improve.base.fragments.BaseFragment;
 import net.oschina.app.improve.base.fragments.BaseTitleFragment;
+import net.oschina.app.improve.bean.News;
 import net.oschina.app.improve.bean.SubTab;
+import net.oschina.app.improve.general.fragments.BlogFragment;
+import net.oschina.app.improve.general.fragments.EventFragment;
+import net.oschina.app.improve.general.fragments.NewsFragment;
+import net.oschina.app.improve.general.fragments.QuestionFragment;
 import net.oschina.app.improve.main.subscription.SubFragment;
 import net.oschina.app.improve.widget.TabPickerView;
 
@@ -119,7 +124,7 @@ public class DynamicTabFragment extends BaseTitleFragment {
             public void onInsert(SubTab tab) {
                 isChangeIndex = true;
                 mLayoutTab.addTab(mLayoutTab.newTab().setText(tab.getName()));
-                fragments.add(Pair.<SubTab, Fragment>create(tab, SubFragment.newInstance(getContext(), tab)));
+                fragments.add(Pair.<SubTab, Fragment>create(tab, instanceFragment(tab.getType())));
                 mViewPager.getAdapter().notifyDataSetChanged();
             }
 
@@ -158,7 +163,7 @@ public class DynamicTabFragment extends BaseTitleFragment {
         fragments = new ArrayList<>();
         for (SubTab tab : tabs){
             mLayoutTab.addTab(mLayoutTab.newTab().setText(tab.getName()));
-            fragments.add(Pair.<SubTab, Fragment>create(tab, SubFragment.newInstance(getContext(), tab)));
+            fragments.add(Pair.<SubTab, Fragment>create(tab, instanceFragment(tab.getType())));
         }
 
         mViewPager.setAdapter(new FragmentStatePagerAdapter(getFragmentManager()) {
@@ -178,6 +183,20 @@ public class DynamicTabFragment extends BaseTitleFragment {
             }
         });
         mLayoutTab.setupWithViewPager(mViewPager);
+    }
+
+    public Fragment instanceFragment(int type){
+        switch (type){
+            case News.TYPE_NEWS:
+                return new NewsFragment();
+            case News.TYPE_EVENT:
+                return new EventFragment();
+            case News.TYPE_QUESTION:
+                return new QuestionFragment();
+            case News.TYPE_BLOG:
+                return new BlogFragment();
+        }
+        throw new RuntimeException("Fuck you!!!!!");
     }
 
     @Override

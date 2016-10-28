@@ -51,7 +51,7 @@ public class SubFragment extends BaseRecyclerViewFragment<SubBean> {
 
     @Override
     public int getLayoutId() {
-        return R.layout.fragment_base_recycler_view;
+        return R.layout.fragment_sub;
     }
 
     @Override
