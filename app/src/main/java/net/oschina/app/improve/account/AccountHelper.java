@@ -15,6 +15,7 @@ import net.oschina.app.cache.CacheManager;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.notice.NoticeManager;
 import net.oschina.app.improve.tweet.fragments.TweetFragment;
+import net.oschina.app.util.TLog;
 import net.oschina.common.helper.SharedPreferencesHelper;
 
 import cz.msebera.android.httpclient.Header;
@@ -47,6 +48,7 @@ public final class AccountHelper {
     }
 
     public static User getUser() {
+        TLog.error(instances.user.toString());
         return instances.user;
     }
 

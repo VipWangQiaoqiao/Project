@@ -129,21 +129,30 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
                         }.getType();
 
                         ResultBean<PhoneToken> phoneTokenResultBean = AppContext.createGson().fromJson(responseString, phoneType);
-
-                        if (phoneTokenResultBean.isSuccess()) {
-
-                            PhoneToken phoneToken = phoneTokenResultBean.getResult();
-                            if (phoneToken != null) {
-                                if (mTimer != null) {
-                                    mTimer.onFinish();
-                                    mTimer.cancel();
+                        int smsCode = phoneTokenResultBean.getCode();
+                        switch (smsCode) {
+                            case 1:
+                                if (phoneTokenResultBean.isSuccess()) {
+                                    PhoneToken phoneToken = phoneTokenResultBean.getResult();
+                                    if (phoneToken != null) {
+                                        if (mTimer != null) {
+                                            mTimer.onFinish();
+                                            mTimer.cancel();
+                                        }
+                                        RegisterStepTwoActivity.show(RegisterStepOneActivity.this, phoneToken);
+                                    }
+                                } else {
+                                    AppContext.showToast(phoneTokenResultBean.getMessage());
                                 }
-                                RegisterStepTwoActivity.show(RegisterStepOneActivity.this, phoneToken);
-                            }
-                        } else {
-                            AppContext.showToast(phoneTokenResultBean.getMessage());
-                        }
+                                break;
+                            case 215:
 
+
+                                break;
+                            default:
+                                break;
+                        }
+                        AppContext.showToast(phoneTokenResultBean.getMessage());
                         break;
                     default:
                         break;
@@ -193,11 +202,28 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
                         }
                     }
 
+                    @SuppressWarnings("deprecation")
                     @Override
                     public void afterTextChanged(Editable s) {
                         int length = s.length();
                         String input = s.toString();
                         mMachPhoneNum = AssimilateUtils.MachPhoneNum(input);
+
+                        if (mMachPhoneNum) {
+                            String smsCode = mEtRegisterAuthCode.getText().toString().trim();
+
+                            if (!TextUtils.isEmpty(smsCode)) {
+                                mBtRegisterSubmit.setBackgroundResource(R.drawable.bg_login_submit);
+                                mBtRegisterSubmit.setTextColor(getResources().getColor(R.color.white));
+                            } else {
+                                mBtRegisterSubmit.setBackgroundResource(R.drawable.bg_login_submit_lock);
+                                mBtRegisterSubmit.setTextColor(getResources().getColor(R.color.account_lock_font_color));
+                            }
+                        } else {
+                            mBtRegisterSubmit.setBackgroundResource(R.drawable.bg_login_submit_lock);
+                            mBtRegisterSubmit.setTextColor(getResources().getColor(R.color.account_lock_font_color));
+                        }
+
                         if (length > 0 && length < 11) {
                             mLlRegisterPhone.setBackgroundResource(R.drawable.bg_login_input_error);
                             mTvRegisterSmsCall.setAlpha(0.4f);
@@ -221,6 +247,8 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
                             mTvRegisterSmsCall.setAlpha(0.4f);
                             mLlRegisterPhone.setBackgroundResource(R.drawable.bg_login_input_ok);
                         }
+
+
                     }
                 }
 
@@ -242,7 +270,7 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
             @Override
             public void afterTextChanged(Editable s) {
                 int length = s.length();
-                if (length > 0) {
+                if (length > 0 && mMachPhoneNum) {
                     mBtRegisterSubmit.setBackgroundResource(R.drawable.bg_login_submit);
                     mBtRegisterSubmit.setTextColor(getResources().getColor(R.color.white));
                 } else {
