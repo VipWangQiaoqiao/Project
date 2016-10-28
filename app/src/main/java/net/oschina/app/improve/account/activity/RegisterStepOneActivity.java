@@ -1,10 +1,13 @@
 package net.oschina.app.improve.account.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -69,9 +72,20 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
     private TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-
             //AppContext.showToast(responseString, Toast.LENGTH_SHORT);
 
+            throwable.printStackTrace();
+            Log.e(TAG, "onFailure: -------------->");
+            mRequestType = 2;
+            if (mRequestType == 2) {
+
+                PhoneToken phoneToken = new PhoneToken();
+                phoneToken.setPhone("15111225406");
+                phoneToken.setToken("abc");
+                phoneToken.setExpireDate("30");
+                RegisterStepTwoActivity.show(RegisterStepOneActivity.this, phoneToken);
+
+            }
         }
 
         @Override
@@ -82,13 +96,14 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
                     //第一步请求发送验证码
                     case 1:
 
+                        Log.e(TAG, "onSuccess: ------>收到手机验证码");
+
                         Type type = new TypeToken<ResultBean>() {
                         }.getType();
                         ResultBean resultBean = AppContext.createGson().fromJson(responseString, type);
                         if (resultBean.isSuccess()) {
-
-                            mSmsCode = mEtRegisterAuthCode.getText().toString().trim();
                             mRequestType = 2;
+                            //发送验证码成功
                         } else {
                             AppContext.showToast(resultBean.getMessage());
                         }
@@ -107,9 +122,9 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
 
                             PhoneToken phoneToken = phoneTokenResultBean.getResult();
                             if (phoneToken != null) {
+                                mTvRegisterSmsCall.setAlpha(1.0f);
                                 RegisterStepTwoActivity.show(RegisterStepOneActivity.this, phoneToken);
                             }
-
                         } else {
                             AppContext.showToast(phoneTokenResultBean.getMessage());
                         }
@@ -120,6 +135,7 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
                 }
 
             } catch (Exception e) {
+                e.printStackTrace();
                 onFailure(statusCode, headers, responseString, e);
             }
 
@@ -211,15 +227,45 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
                 break;
             case R.id.tv_register_sms_call:
                 if (mMachPhoneNum && TDevice.hasInternet()) {
-                    mPhoneNumber = mEtRegisterUsername.getText().toString().trim();
-                    mAppToken = Verifier.getPrivateToken(getApplication());
-                    OSChinaApi.sendSmsCode(mPhoneNumber, mAppToken, OSChinaApi.REGISTER_INTENT, mHandler);
+
+                    if (mTvRegisterSmsCall.getTag() == null) {
+                        mRequestType = 1;
+                        mTvRegisterSmsCall.setAlpha(0.6f);
+                        mTvRegisterSmsCall.setTag(true);
+                        new CountDownTimer(60 * 1000, 1000) {
+
+                            @SuppressLint("DefaultLocale")
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+                                mTvRegisterSmsCall.setText(String.format("%s%s%d%s",
+                                        getResources().getString(R.string.register_sms_hint), "(", millisUntilFinished / 1000, ")"));
+                            }
+
+                            @Override
+                            public void onFinish() {
+                                mTvRegisterSmsCall.setTag(null);
+                                mTvRegisterSmsCall.setText(getResources().getString(R.string.register_sms_hint));
+                                mTvRegisterSmsCall.setAlpha(0.4f);
+                            }
+                        }.start();
+                        mPhoneNumber = mEtRegisterUsername.getText().toString().trim();
+                        mAppToken = Verifier.getPrivateToken(getApplication());
+                        OSChinaApi.sendSmsCode(mPhoneNumber, mAppToken, OSChinaApi.REGISTER_INTENT, mHandler);
+                    } else {
+                        AppContext.showToast(getResources().getString(R.string.register_sms_wait_hint), Toast.LENGTH_SHORT);
+                    }
+
+                } else {
+                    AppContext.showToast(getResources().getString(R.string.footer_type_net_error), Toast.LENGTH_SHORT);
                 }
 
                 break;
             case R.id.bt_register_submit:
 
+                mSmsCode = mEtRegisterAuthCode.getText().toString().trim();
+
                 if (!TextUtils.isEmpty(mSmsCode) && TDevice.hasInternet()) {
+                    mRequestType = 2;
                     OSChinaApi.validateRegisterInfo(mPhoneNumber, mSmsCode, mAppToken, mHandler);
                 }
 
@@ -251,5 +297,9 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
         }
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }
