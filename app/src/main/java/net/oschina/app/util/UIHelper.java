@@ -126,8 +126,6 @@ public class UIHelper {
      */
     public static void showLoginActivity(Context context) {
         LoginActivity.show(context);
-        // Intent intent = new Intent(context, net.oschina.app.improve.account.activity.LoginActivity.class);
-        // context.startActivity(intent);
     }
 
     /**
