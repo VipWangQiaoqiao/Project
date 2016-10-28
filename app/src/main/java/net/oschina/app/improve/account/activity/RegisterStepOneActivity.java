@@ -245,7 +245,7 @@ public class RegisterStepOneActivity extends BaseActivity implements View.OnClic
                             public void onFinish() {
                                 mTvRegisterSmsCall.setTag(null);
                                 mTvRegisterSmsCall.setText(getResources().getString(R.string.register_sms_hint));
-                                mTvRegisterSmsCall.setAlpha(0.4f);
+                                mTvRegisterSmsCall.setAlpha(0.9f);
                             }
                         }.start();
                         mPhoneNumber = mEtRegisterUsername.getText().toString().trim();

@@ -332,7 +332,8 @@
     <string name="register_man_hint">男士</string>
     <string name="register_female_hint">女士</string>
     <string name="retrieve_pwd_step_hint">下一步</string>
-    <string name="retrieve_pwd_email_label">邮箱用户找回密码，请<a>点击这里</a></string>
+    <string name="retrieve_pwd_email_label_one">邮箱用户找回密码，请</string>
+    <string name="retrieve_pwd_email_label"><a>点击这里</a></string>
     <string name="reset_pwd_hint">请输入至少六位新密码</string>
     <string name="register_username_error">用户名太长&#8230;</string>
     <string name="hint_password">密码</string>
