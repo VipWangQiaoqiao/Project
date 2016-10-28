@@ -1,26 +1,18 @@
 package net.oschina.app;
 
-import android.app.ActivityManager;
-import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.text.TextUtils;
 
-import com.bumptech.glide.load.model.GlideUrl;
-import com.bumptech.glide.load.model.LazyHeaders;
 import com.google.gson.Gson;
 
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.base.BaseApplication;
-import net.oschina.app.bean.Constants;
 import net.oschina.app.bean.User;
-import net.oschina.app.cache.CacheManager;
 import net.oschina.app.cache.DataCleanManager;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.manager.UserCacheManager;
 import net.oschina.app.improve.notice.NoticeManager;
-import net.oschina.app.improve.tweet.fragments.TweetFragment;
 import net.oschina.app.util.CyptoUtils;
 import net.oschina.app.util.MethodsCompat;
 import net.oschina.app.util.StringUtils;
@@ -220,22 +212,7 @@ public class AppContext extends BaseApplication {
      * 用户注销
      */
     public void Logout() {
-        // 用户退出时清理红点并退出服务
-        NoticeManager.clear(this, NoticeManager.FLAG_CLEAR_ALL);
-        NoticeManager.exitServer(this);
-
-        ApiHttpClient.destroy(this);
-
-        CacheManager.deleteObject(context(), TweetFragment.CACHE_USER_TWEET);
-        UserCacheManager.initUserManager().deleteUserCache(this);
-        // CacheManager.deleteObject(context(), NewUserInfoFragment.CACHE_NAME);
-
-        Intent intent = new Intent(Constants.INTENT_ACTION_LOGOUT);
-        sendBroadcast(intent);
-
-        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        activityManager.killBackgroundProcesses("net.oschina.app.tweet.TweetPublishService");
-        activityManager.killBackgroundProcesses("net.oschina.app.notice.NoticeServer");
+        AccountHelper.logout();
     }
 
     /**
@@ -318,7 +295,6 @@ public class AppContext extends BaseApplication {
         gsonBuilder.setDateFormat("yyyy-MM-dd HH:mm:ss");
         return gsonBuilder.create();
     }
-
 
 
 }
