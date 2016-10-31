@@ -32,6 +32,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.SimpleBackPage;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
@@ -363,7 +364,7 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                ResultBean<User> result = AppContext.createGson().fromJson(
+                ResultBean<User> result = AppOperator.createGson().fromJson(
                         responseString, new TypeToken<ResultBean<User>>() {
                         }.getType());
                 if (result.isSuccess() && result.getResult() == null) return;
@@ -476,7 +477,7 @@ public class OtherUserHomeActivity extends BaseActivity implements View.OnClickL
 
                             @Override
                             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                                ResultBean<UserRelation> result = AppContext.createGson().fromJson(
+                                ResultBean<UserRelation> result = AppOperator.createGson().fromJson(
                                         responseString, new TypeToken<ResultBean<UserRelation>>() {
                                         }.getType());
                                 if (result.isSuccess()) {

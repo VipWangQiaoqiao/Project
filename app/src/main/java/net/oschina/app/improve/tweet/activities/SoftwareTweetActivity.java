@@ -18,6 +18,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseRecyclerViewActivity;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.Tweet;
@@ -149,7 +150,7 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
                     Type type = new TypeToken<ResultBean<Tweet>>() {
                     }.getType();
 
-                    ResultBean<Tweet> resultBean = AppContext.createGson().fromJson(responseString, type);
+                    ResultBean<Tweet> resultBean = AppOperator.createGson().fromJson(responseString, type);
 
                     if (resultBean.isSuccess()) {
                         onRefreshing();
@@ -239,7 +240,7 @@ public class SoftwareTweetActivity extends BaseRecyclerViewActivity<Tweet> {
                                     try {
                                         Type type = new TypeToken<ResultBean>() {
                                         }.getType();
-                                        ResultBean resultBean = AppContext.createGson().fromJson(responseString, type);
+                                        ResultBean resultBean = AppOperator.createGson().fromJson(responseString, type);
                                         if (resultBean.getCode() == 1) {
                                             Toast.makeText(SoftwareTweetActivity.this, "删除成功...", Toast.LENGTH_SHORT).show();
                                             onRefreshing();

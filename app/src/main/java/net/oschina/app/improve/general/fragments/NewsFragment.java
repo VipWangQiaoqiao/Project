@@ -151,7 +151,7 @@ public class NewsFragment extends BaseGeneralListFragment<News> {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
-                    final ResultBean<PageBean<Banner>> resultBean = AppContext.createGson().fromJson(responseString, new TypeToken<ResultBean<PageBean<Banner>>>() {
+                    final ResultBean<PageBean<Banner>> resultBean = AppOperator.createGson().fromJson(responseString, new TypeToken<ResultBean<PageBean<Banner>>>() {
                     }.getType());
                     if (resultBean != null && resultBean.isSuccess()) {
                         AppOperator.runOnThread(new Runnable() {

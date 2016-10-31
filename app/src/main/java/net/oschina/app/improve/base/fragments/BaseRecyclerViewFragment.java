@@ -81,7 +81,7 @@ public abstract class BaseRecyclerViewFragment<T> extends BaseFragment implement
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
-                    ResultBean<PageBean<T>> resultBean = AppContext.createGson().fromJson(responseString, getType());
+                    ResultBean<PageBean<T>> resultBean = AppOperator.createGson().fromJson(responseString, getType());
                     if (resultBean != null && resultBean.isSuccess() && resultBean.getResult().getItems() != null) {
                         int size = resultBean.getResult().getItems().size();
                         setListData(resultBean);

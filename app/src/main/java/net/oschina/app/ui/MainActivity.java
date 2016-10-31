@@ -192,9 +192,9 @@ public class MainActivity extends AppCompatActivity implements
         registerReceiver(mReceiver, filter);
         NoticeUtils.bindToService(this);
 
-        if (AppContext.isFristStart()) {
+        if (AppContext.isFirstStart()) {
             DataCleanManager.cleanInternalCache(AppContext.getInstance());
-            AppContext.setFristStart(false);
+            AppContext.setFirstStart(false);
         }
 
         checkUpdate();

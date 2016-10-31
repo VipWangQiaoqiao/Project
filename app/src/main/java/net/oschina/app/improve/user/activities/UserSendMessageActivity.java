@@ -201,7 +201,7 @@ public class UserSendMessageActivity extends BaseRecyclerViewActivity<Message> {
             Type type = new TypeToken<ResultBean<Message>>() {
             }.getType();
             try {
-                ResultBean<Message> resultBean = AppContext.createGson().fromJson(responseString, type);
+                ResultBean<Message> resultBean = AppOperator.createGson().fromJson(responseString, type);
                 if (resultBean.isSuccess()) {
                     if (filePath != null) {
                         Message message = mSendQuent.get(filePath);

@@ -96,7 +96,7 @@ public abstract class BaseListFragment<T> extends BaseFragment implements
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
-                    ResultBean<PageBean<T>> resultBean = AppContext.createGson().fromJson(responseString, getType());
+                    ResultBean<PageBean<T>> resultBean = AppOperator.createGson().fromJson(responseString, getType());
                     if (resultBean != null && resultBean.isSuccess() && resultBean.getResult().getItems() != null) {
                         onRequestSuccess(resultBean.getCode());
                         setListData(resultBean);

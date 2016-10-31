@@ -11,6 +11,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.Collection;
 import net.oschina.app.improve.bean.SoftwareDetail;
 import net.oschina.app.improve.bean.base.ResultBean;
@@ -127,7 +128,7 @@ public class SoftwareDetailActivity extends DetailActivity<SoftwareDetail, SoftD
                     Type type = new TypeToken<ResultBean<Collection>>() {
                     }.getType();
 
-                    ResultBean<Collection> resultBean = AppContext.createGson().fromJson(responseString, type);
+                    ResultBean<Collection> resultBean = AppOperator.createGson().fromJson(responseString, type);
                     if (resultBean != null && resultBean.isSuccess()) {
                         softwareDetail.setFavorite(!softwareDetail.isFavorite());
                         mView.toFavoriteOk(softwareDetail);

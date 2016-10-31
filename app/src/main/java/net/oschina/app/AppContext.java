@@ -1,21 +1,11 @@
 package net.oschina.app;
 
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.text.TextUtils;
-
-import com.google.gson.Gson;
-
 import net.oschina.app.api.ApiHttpClient;
 import net.oschina.app.base.BaseApplication;
 import net.oschina.app.bean.User;
 import net.oschina.app.cache.DataCleanManager;
 import net.oschina.app.improve.account.AccountHelper;
-import net.oschina.app.improve.account.AccountHelper;
-import net.oschina.app.improve.notice.NoticeManager;
-import net.oschina.app.util.CyptoUtils;
 import net.oschina.app.util.MethodsCompat;
-import net.oschina.app.util.StringUtils;
 import net.oschina.app.util.TLog;
 
 import org.kymjs.kjframe.Core;
@@ -23,11 +13,9 @@ import org.kymjs.kjframe.http.HttpConfig;
 import org.kymjs.kjframe.utils.KJLoger;
 
 import java.util.Properties;
-import java.util.UUID;
 
 import static net.oschina.app.AppConfig.KEY_FRITST_START;
 import static net.oschina.app.AppConfig.KEY_LOAD_IMAGE;
-import static net.oschina.app.AppConfig.KEY_NIGHT_MODE_SWITCH;
 import static net.oschina.app.AppConfig.KEY_TWEET_DRAFT;
 
 /**
@@ -71,15 +59,6 @@ public class AppContext extends BaseApplication {
         return instance;
     }
 
-    public boolean containsProperty(String key) {
-        Properties props = getProperties();
-        return props.containsKey(key);
-    }
-
-    public void setProperties(Properties ps) {
-        AppConfig.getAppConfig(this).set(ps);
-    }
-
     public Properties getProperties() {
         return AppConfig.getAppConfig(this).get();
     }
@@ -103,116 +82,12 @@ public class AppContext extends BaseApplication {
     }
 
     /**
-     * 获取App唯一标识
-     *
-     * @return
-     */
-    public String getAppId() {
-        String uniqueID = getProperty(AppConfig.CONF_APP_UNIQUEID);
-        if (TextUtils.isEmpty(uniqueID)) {
-            uniqueID = UUID.randomUUID().toString();
-            setProperty(AppConfig.CONF_APP_UNIQUEID, uniqueID);
-        }
-        return uniqueID;
-    }
-
-    /**
-     * 获取App安装包信息
-     *
-     * @return
-     */
-    public PackageInfo getPackageInfo() {
-        PackageInfo info = null;
-        try {
-            info = getPackageManager().getPackageInfo(getPackageName(), 0);
-        } catch (NameNotFoundException e) {
-            e.printStackTrace(System.err);
-        }
-        if (info == null)
-            info = new PackageInfo();
-        return info;
-    }
-
-    /**
-     * 保存登录信息
-     *
-     * @param user 用户信息
-     */
-    @SuppressWarnings("serial")
-    public void saveUserInfo(final User user) {
-        setProperties(new Properties() {
-            {
-                setProperty("user.uid", String.valueOf(user.getId()));
-                setProperty("user.name", user.getName());
-                setProperty("user.face", user.getPortrait());// 用户头像-文件名
-                setProperty("user.account", user.getAccount());
-                setProperty("user.pwd",
-                        CyptoUtils.encode("oschinaApp", user.getPwd()));
-                setProperty("user.location", user.getLocation());
-                setProperty("user.followers", String.valueOf(user.getFollowers()));
-                setProperty("user.fans", String.valueOf(user.getFans()));
-                setProperty("user.score", String.valueOf(user.getScore()));
-                setProperty("user.favoritecount",
-                        String.valueOf(user.getFavoritecount()));
-                setProperty("user.gender", String.valueOf(user.getGender()));
-                setProperty("user.isRememberMe",
-                        String.valueOf(user.isRememberMe()));// 是否记住我的信息
-            }
-        });
-
-        // 登陆成功,重新启动消息服务
-        NoticeManager.init(this);
-    }
-
-    /**
-     * 更新用户信息
-     *
-     * @param user
-     */
-    @SuppressWarnings("serial")
-    public void updateUserInfo(final User user) {
-        setProperties(new Properties() {
-            {
-                setProperty("user.name", user.getName());
-                setProperty("user.face", user.getPortrait());// 用户头像-文件名
-                setProperty("user.followers",
-                        String.valueOf(user.getFollowers()));
-                setProperty("user.fans", String.valueOf(user.getFans()));
-                setProperty("user.score", String.valueOf(user.getScore()));
-                setProperty("user.favoritecount",
-                        String.valueOf(user.getFavoritecount()));
-                setProperty("user.gender", String.valueOf(user.getGender()));
-            }
-        });
-    }
-
-    /**
      * 获得登录用户的信息
      *
-     * @return
+     * @deprecated
      */
     public User getLoginUser() {
-        User user = new User();
-        user.setId(StringUtils.toInt(getProperty("user.uid"), 0));
-        user.setName(getProperty("user.name"));
-        user.setPortrait(getProperty("user.face"));
-        user.setAccount(getProperty("user.account"));
-        user.setLocation(getProperty("user.location"));
-        user.setFollowers(StringUtils.toInt(getProperty("user.followers"), 0));
-        user.setFans(StringUtils.toInt(getProperty("user.fans"), 0));
-        user.setScore(StringUtils.toInt(getProperty("user.score"), 0));
-        user.setFavoritecount(StringUtils.toInt(
-                getProperty("user.favoritecount"), 0));
-        user.setRememberMe(StringUtils.toBool(getProperty("user.isRememberMe")));
-        user.setGender(getProperty("user.gender"));
-        return user;
-    }
-
-    /**
-     * 用户注销
-     */
-    public void Logout() {
-        AccountHelper.logout();
+        return new User();
     }
 
     /**
@@ -252,11 +127,6 @@ public class AppContext extends BaseApplication {
         return currentVersion >= VersionCode;
     }
 
-//    public static String getTweetDraft() {
-//        return getPreferences().getString(
-//                KEY_TWEET_DRAFT + getInstance().getLoginUid(), "");
-//    }
-
     public static void setTweetDraft(String draft) {
         set(KEY_TWEET_DRAFT + AccountHelper.getUserId(), draft);
     }
@@ -270,31 +140,29 @@ public class AppContext extends BaseApplication {
         set(AppConfig.KEY_NOTE_DRAFT + AccountHelper.getUserId(), draft);
     }
 
-    public static boolean isFristStart() {
+    public static boolean isFirstStart() {
         return getPreferences().getBoolean(KEY_FRITST_START, true);
     }
 
-    public static void setFristStart(boolean frist) {
+    public static void setFirstStart(boolean frist) {
         set(KEY_FRITST_START, frist);
     }
 
-    //夜间模式
+    /**
+     * 夜间模式
+     *
+     * @deprecated
+     */
     public static boolean getNightModeSwitch() {
-        //return getPreferences().getBoolean(KEY_NIGHT_MODE_SWITCH, false);
         return false;
     }
 
-    // 设置夜间模式
+    /**
+     * 设置夜间模式
+     *
+     * @deprecated
+     */
     public static void setNightModeSwitch(boolean on) {
-        set(KEY_NIGHT_MODE_SWITCH, on);
+        // Con't do thing
     }
-
-    public static Gson createGson() {
-        com.google.gson.GsonBuilder gsonBuilder = new com.google.gson.GsonBuilder();
-        //gsonBuilder.setExclusionStrategies(new SpecificClassExclusionStrategy(null, Model.class));
-        gsonBuilder.setDateFormat("yyyy-MM-dd HH:mm:ss");
-        return gsonBuilder.create();
-    }
-
-
 }
