@@ -14,6 +14,7 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.EventApplyData;
 import net.oschina.app.bean.Result;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.bean.Collection;
 import net.oschina.app.improve.bean.EventDetail;
 import net.oschina.app.improve.bean.base.ResultBean;
@@ -99,7 +100,7 @@ public class EventDetailActivity extends DetailActivity<EventDetail, EventDetail
                     Type type = new TypeToken<ResultBean<Collection>>() {
                     }.getType();
 
-                    ResultBean<Collection> resultBean = AppContext.createGson().fromJson(responseString, type);
+                    ResultBean<Collection> resultBean = AppOperator.createGson().fromJson(responseString, type);
                     if (resultBean != null && resultBean.isSuccess()) {
                         mDetail.setFavorite(!mDetail.isFavorite());
                         mView.toFavOk(mDetail);

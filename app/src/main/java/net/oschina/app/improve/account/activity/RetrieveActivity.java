@@ -26,6 +26,11 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.base.AccountBaseActivity;
 import net.oschina.app.improve.account.bean.PhoneToken;
 import net.oschina.app.improve.account.constants.UserConstants;
+<<<<<<< HEAD
+=======
+import net.oschina.app.improve.app.AppOperator;
+import net.oschina.app.improve.base.activities.BaseActivity;
+>>>>>>> a7a9a61ba3c2add989efb9022fad793183819957
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.utils.AssimilateUtils;
 import net.oschina.app.util.TDevice;
@@ -115,7 +120,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
 
                         Type type = new TypeToken<ResultBean>() {
                         }.getType();
-                        ResultBean resultBean = AppContext.createGson().fromJson(responseString, type);
+                        ResultBean resultBean = AppOperator.createGson().fromJson(responseString, type);
                         int code = resultBean.getCode();
                         switch (code) {
                             case 1:
@@ -144,7 +149,7 @@ public class RetrieveActivity extends AccountBaseActivity implements View.OnClic
                         Type phoneType = new TypeToken<ResultBean<PhoneToken>>() {
                         }.getType();
 
-                        ResultBean<PhoneToken> phoneTokenResultBean = AppContext.createGson().fromJson(responseString, phoneType);
+                        ResultBean<PhoneToken> phoneTokenResultBean = AppOperator.createGson().fromJson(responseString, phoneType);
 
                         int smsCode = phoneTokenResultBean.getCode();
                         switch (smsCode) {

@@ -24,6 +24,11 @@ import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
 import net.oschina.app.improve.account.base.AccountBaseActivity;
 import net.oschina.app.improve.account.bean.PhoneToken;
+<<<<<<< HEAD
+=======
+import net.oschina.app.improve.app.AppOperator;
+import net.oschina.app.improve.base.activities.BaseActivity;
+>>>>>>> a7a9a61ba3c2add989efb9022fad793183819957
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.main.MainActivity;
@@ -95,7 +100,7 @@ public class RegisterStepTwoActivity extends AccountBaseActivity implements View
 
             Type type = new TypeToken<ResultBean<User>>() {
             }.getType();
-            ResultBean<User> resultBean = AppContext.createGson().fromJson(responseString, type);
+            ResultBean<User> resultBean = AppOperator.createGson().fromJson(responseString, type);
 
             if (resultBean.isSuccess()) {
                 User user = resultBean.getResult();

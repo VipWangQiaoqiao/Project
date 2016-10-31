@@ -29,6 +29,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.emoji.InputHelper;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.ResultBean;
@@ -150,7 +151,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                ResultBean<TweetLike> result = AppContext.createGson().fromJson(
+                ResultBean<TweetLike> result = AppOperator.createGson().fromJson(
                         responseString, new TypeToken<ResultBean<TweetLike>>() {
                         }.getType());
                 if (result != null && result.isSuccess()) {
@@ -197,7 +198,7 @@ public class TweetDetailActivity extends BaseActivity implements TweetDetailCont
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                ResultBean<Tweet> result = AppContext.createGson().fromJson(
+                ResultBean<Tweet> result = AppOperator.createGson().fromJson(
                         responseString, new TypeToken<ResultBean<Tweet>>() {
                         }.getType());
                 if (result.isSuccess()) {

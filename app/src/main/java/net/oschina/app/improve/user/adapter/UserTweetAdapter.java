@@ -23,6 +23,7 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.emoji.InputHelper;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.adapter.BaseRecyclerAdapter;
 import net.oschina.app.improve.bean.Tweet;
 import net.oschina.app.improve.bean.base.ResultBean;
@@ -188,7 +189,7 @@ public class UserTweetAdapter extends BaseRecyclerAdapter<Tweet> {
             try {
                 Type type = new TypeToken<ResultBean<TweetLikeReverse>>() {
                 }.getType();
-                ResultBean<TweetLikeReverse> resultBean = AppContext.createGson().fromJson(responseString, type);
+                ResultBean<TweetLikeReverse> resultBean = AppOperator.createGson().fromJson(responseString, type);
                 Tweet tweet = getItem(position);
                 tweet.setLiked(resultBean.getResult().isLiked());
                 tweet.setLikeCount(resultBean.getResult().getLikeCount());

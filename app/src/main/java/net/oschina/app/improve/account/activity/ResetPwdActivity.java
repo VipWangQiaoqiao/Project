@@ -22,6 +22,11 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.base.AccountBaseActivity;
 import net.oschina.app.improve.account.bean.PhoneToken;
+<<<<<<< HEAD
+=======
+import net.oschina.app.improve.app.AppOperator;
+import net.oschina.app.improve.base.activities.BaseActivity;
+>>>>>>> a7a9a61ba3c2add989efb9022fad793183819957
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.util.TDevice;
 import net.oschina.common.verify.Verifier;
@@ -84,7 +89,7 @@ public class ResetPwdActivity extends AccountBaseActivity implements View.OnClic
 
             Type type = new TypeToken<ResultBean>() {
             }.getType();
-            ResultBean resultBean = AppContext.createGson().fromJson(responseString, type);
+            ResultBean resultBean = AppOperator.createGson().fromJson(responseString, type);
             if (resultBean.isSuccess()) {
                 LoginActivity.show(ResetPwdActivity.this);
                 finish();

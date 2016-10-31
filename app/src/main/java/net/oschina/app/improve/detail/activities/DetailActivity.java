@@ -22,6 +22,7 @@ import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.bean.Report;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.app.AppOperator;
 import net.oschina.app.improve.base.activities.BaseBackActivity;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.detail.contract.DetailContract;
@@ -215,7 +216,7 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
         ResultBean<Data> result;
         try {
             Type type = getDataType();
-            result = AppContext.createGson().fromJson(responseString, type);
+            result = AppOperator.createGson().fromJson(responseString, type);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
