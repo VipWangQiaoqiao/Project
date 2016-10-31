@@ -99,6 +99,30 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
         });
     }
 
+    public ProgressDialog showWaitDialog(int messageId) {
+        String message = getResources().getString(messageId);
+        if (mDialog == null) {
+            mDialog = DialogHelp.getWaitDialog(this, message);
+        }
+
+        mDialog.setMessage(message);
+        mDialog.show();
+
+        return mDialog;
+    }
+
+    public void hideWaitDialog() {
+        ProgressDialog dialog = mDialog;
+        if (dialog != null) {
+            mDialog = null;
+            try {
+                dialog.dismiss();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
     @Override
     protected void initData() {
         super.initData();
@@ -263,29 +287,7 @@ public abstract class DetailActivity<Data, DataView extends DetailContract.View>
         return true;
     }
 
-    public ProgressDialog showWaitDialog(int messageId) {
-        String message = getResources().getString(messageId);
-        if (mDialog == null) {
-            mDialog = DialogHelp.getWaitDialog(this, message);
-        }
 
-        mDialog.setMessage(message);
-        mDialog.show();
-
-        return mDialog;
-    }
-
-    public void hideWaitDialog() {
-        ProgressDialog dialog = mDialog;
-        if (dialog != null) {
-            mDialog = null;
-            try {
-                dialog.dismiss();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
 
     protected void toShare(String title, String content, String url) {
 

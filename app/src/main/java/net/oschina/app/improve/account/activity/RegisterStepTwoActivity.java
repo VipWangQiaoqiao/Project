@@ -22,9 +22,9 @@ import net.oschina.app.AppContext;
 import net.oschina.app.R;
 import net.oschina.app.api.remote.OSChinaApi;
 import net.oschina.app.improve.account.AccountHelper;
+import net.oschina.app.improve.account.base.AccountBaseActivity;
 import net.oschina.app.improve.account.bean.PhoneToken;
 import net.oschina.app.improve.app.AppOperator;
-import net.oschina.app.improve.base.activities.BaseActivity;
 import net.oschina.app.improve.bean.User;
 import net.oschina.app.improve.bean.base.ResultBean;
 import net.oschina.app.improve.main.MainActivity;
@@ -42,11 +42,11 @@ import cz.msebera.android.httpclient.Header;
  * desc:
  */
 
-public class RegisterStepTwoActivity extends BaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
+public class RegisterStepTwoActivity extends AccountBaseActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
     private static final String TAG = "RegisterStepTwoActivity";
 
-    public static final String PHONETOKEN_KEY = "phoneToken";
+    public static final String PHONE_TOKEN_KEY = "phoneToken";
 
     @Bind(R.id.ly_register_bar)
     LinearLayout mLlRegisterBar;
@@ -67,11 +67,27 @@ public class RegisterStepTwoActivity extends BaseActivity implements View.OnClic
     TextView mTvRegisterFemale;
     @Bind(R.id.bt_register_submit)
     Button mBtRegisterSubmit;
+
     private PhoneToken mPhoneToken;
+
     private TextHttpResponseHandler mHandler = new TextHttpResponseHandler() {
+
+
+        @Override
+        public void onStart() {
+            super.onStart();
+            showWaitDialog();
+        }
+
+        @Override
+        public void onFinish() {
+            super.onFinish();
+            hideWaitDialog();
+        }
+
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-
+            requestFailureHint(throwable);
         }
 
         @Override
@@ -95,11 +111,13 @@ public class RegisterStepTwoActivity extends BaseActivity implements View.OnClic
                 switch (code) {
                     case 216:
                         //phoneToken 已经失效
+                        finish();
                         break;
                     case 217:
                         mLlRegisterTwoUsername.setBackgroundResource(R.drawable.bg_login_input_error);
                         break;
                     case 218:
+                        finish();
                         break;
                     case 219:
                         mLlRegisterTwoPwd.setBackgroundResource(R.drawable.bg_login_input_error);
@@ -121,7 +139,7 @@ public class RegisterStepTwoActivity extends BaseActivity implements View.OnClic
      */
     public static void show(Context context, PhoneToken phoneToken) {
         Intent intent = new Intent(context, RegisterStepTwoActivity.class);
-        intent.putExtra(PHONETOKEN_KEY, phoneToken);
+        intent.putExtra(PHONE_TOKEN_KEY, phoneToken);
         context.startActivity(intent);
     }
 
@@ -218,7 +236,7 @@ public class RegisterStepTwoActivity extends BaseActivity implements View.OnClic
         super.initData();
 
         Intent intent = getIntent();
-        mPhoneToken = (PhoneToken) intent.getSerializableExtra(PHONETOKEN_KEY);
+        mPhoneToken = (PhoneToken) intent.getSerializableExtra(PHONE_TOKEN_KEY);
         Log.e(TAG, "initData: ------------>" + mPhoneToken.toString());
 
     }
@@ -265,47 +283,47 @@ public class RegisterStepTwoActivity extends BaseActivity implements View.OnClic
                     mTvRegisterMan.setCompoundDrawablesWithIntrinsicBounds(men, null, null, null);
                     mTvRegisterMan.setTag(null);
                 }
-
-
                 break;
             case R.id.bt_register_submit:
 
-                if (TDevice.hasInternet()) {
-
-                    String username = mEtRegisterUsername.getText().toString().trim();
-                    String pwd = mEtRegisterPwd.getText().toString().trim();
-
-                    if (TextUtils.isEmpty(username) && TextUtils.isEmpty(pwd)) {
-                        AppContext.showToast(getString(R.string.hint_pwd_null));
-                        return;
-                    } else {
-
-                        int gender = 0;
-
-                        Object isMan = mTvRegisterMan.getTag();
-                        if (isMan != null) {
-                            gender = 1;
-                        }
-
-                        Object isFemale = mTvRegisterFemale.getTag();
-                        if (isFemale != null) {
-                            gender = 2;
-                        }
-
-                        String appToken = "123";//Verifier.getPrivateToken(getApplication());
-
-                        OSChinaApi.register(username, pwd, gender, mPhoneToken.getToken(), appToken, mHandler);
-                    }
-                } else {
-                    AppContext.showToast(getResources().getString(R.string.tip_network_error));
-                }
-
+                requestRegisterUserInfo();
 
                 break;
             default:
                 break;
         }
 
+    }
+
+    private void requestRegisterUserInfo() {
+        if (TDevice.hasInternet()) {
+
+            String username = mEtRegisterUsername.getText().toString().trim();
+            String pwd = mEtRegisterPwd.getText().toString().trim();
+
+            if (TextUtils.isEmpty(username) || TextUtils.isEmpty(pwd)) {
+                AppContext.showToast(getString(R.string.hint_pwd_null));
+            } else {
+
+                int gender = 0;
+
+                Object isMan = mTvRegisterMan.getTag();
+                if (isMan != null) {
+                    gender = 1;
+                }
+
+                Object isFemale = mTvRegisterFemale.getTag();
+                if (isFemale != null) {
+                    gender = 2;
+                }
+
+                String appToken = "123";//Verifier.getPrivateToken(getApplication());
+
+                OSChinaApi.register(username, pwd, gender, mPhoneToken.getToken(), appToken, mHandler);
+            }
+        } else {
+            AppContext.showToast(getResources().getString(R.string.tip_network_error));
+        }
     }
 
 
